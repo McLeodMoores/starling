@@ -25,6 +25,7 @@ $.register_module({
                         fields: [
                             {type: 'select', name: 'Scheme Type', id: 'scheme',
                                 options: [
+                                    {name: 'Quandl Code', value: 'QUANDL'},
                                     {name: 'ActivFeed Ticker', value: 'ACTIVFEED_TICKER'},
                                     {name: 'Bloomberg Ticker', value: 'BLOOMBERG_TICKER'},
                                     {name: 'Bloomberg Ticker/Coupon/Maturity', value: 'BLOOMBERG_TCM'},

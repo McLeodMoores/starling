@@ -17,6 +17,7 @@
         <option value="ISIN" <#if scheme = 'ISIN'>selected</#if>>Isin</option>
         <option value="RIC" <#if scheme = 'RIC'>selected</#if>>Ric</option>
         <option value="SEDOL1" <#if scheme = 'SEDOL1'>selected</#if>>Sedol1</option>
+        <option value=
       </select>
     </@rowin>
     <@rowin label="Data provider"><input type="text" size="30" maxlength="80" name="dataProvider" value="${dataProvider}" /></@rowin>
