@@ -425,7 +425,7 @@ public class WebUiResource {
     String filename = String.format("%s-%s-%s.csv",
                                     view.getViewDefinitionId(),
                                     gridType.name().toLowerCase(),
-                                    time.toString(CSV_TIME_FORMAT));
+                                    time.format(CSV_TIME_FORMAT));
     response.addHeader("content-disposition", "attachment; filename=\"" + filename + "\"");
     return view.getAllGridData(gridType, TypeFormatter.Format.CELL);
   }

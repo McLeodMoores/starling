@@ -8,6 +8,7 @@
   <p>
     <@rowin label="Scheme type">
       <select name="idscheme">
+        <option value="QUANDL" <#if scheme = 'QUANDL'>selected</#if>>QUANDL</option>
         <option value="ACTIVFEED_TICKER" <#if scheme = 'ACTIVFEED_TICKER'>selected</#if>>ActivFeed Ticker</option>
       	<option value="" <#if scheme = ''>selected</#if>></option>
         <option value="BLOOMBERG_TICKER" <#if scheme = 'BLOOMBERG_TICKER'>selected</#if>>Bloomberg Ticker</option>

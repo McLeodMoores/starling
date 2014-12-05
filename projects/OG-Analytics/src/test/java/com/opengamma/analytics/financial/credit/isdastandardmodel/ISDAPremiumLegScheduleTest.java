@@ -198,9 +198,9 @@ public class ISDAPremiumLegScheduleTest {
     for (int i = 0; i < n; i++) {
       final LocalDate start = schedule.getAccStartDate(i);
       final LocalDate end = schedule.getAccEndDate(i);
-      System.out.print(start.toString(formatt) + " & ");
-      System.out.print(end.toString(formatt) + " & ");
-      System.out.print(schedule.getPaymentDate(i).toString(formatt) + " & ");
+      System.out.print(start.format(formatt) + " & ");
+      System.out.print(end.format(formatt) + " & ");
+      System.out.print(schedule.getPaymentDate(i).format(formatt) + " & ");
 
       final long firstJulianDate = start.getLong(JulianFields.MODIFIED_JULIAN_DAY);
       final long secondJulianDate = end.getLong(JulianFields.MODIFIED_JULIAN_DAY);

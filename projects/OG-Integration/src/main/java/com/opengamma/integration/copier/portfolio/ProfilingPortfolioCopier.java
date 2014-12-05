@@ -67,12 +67,12 @@ public class ProfilingPortfolioCopier implements PortfolioCopier {
         // stop loading on EOF
         break;
       }
-
-      _readTime += time.periodUntil(Instant.now(), ChronoUnit.MILLIS);
+      
+      _readTime += time.until(Instant.now(), ChronoUnit.MILLIS);
       time = Instant.now();
 
       // Is position and security data is available for the current row?
-          ManageablePosition position = next.getFirst();
+      ManageablePosition position = next.getFirst();
       ManageableSecurity[] securities = next.getSecond();
 
       // Is position and security data available for the current row?
@@ -108,7 +108,7 @@ public class ProfilingPortfolioCopier implements PortfolioCopier {
         }
       }
 
-      _writeTime += time.periodUntil(Instant.now(), ChronoUnit.MILLIS);
+      _writeTime += time.until(Instant.now(), ChronoUnit.MILLIS);
     }
 
     System.out.println("Read time: " + _readTime / 1000.0);

@@ -119,9 +119,9 @@ public class MarketDataSnapshotToolUtils {
       
 
     List<VersionInfo> snapshotVersions = snapshotUtils.snapshotVersionsByName(optionValue);
-    System.out.println(OffsetDateTime.now().toString(dateTimeFormatter));
+    System.out.println(OffsetDateTime.now().format(dateTimeFormatter));
 
-    int fieldWidth = OffsetDateTime.now().toString(dateTimeFormatter).length(); // Assumes all offset date times have same width
+    int fieldWidth = OffsetDateTime.now().format(dateTimeFormatter).length(); // Assumes all offset date times have same width
 
     header(fieldWidth);
     String id = TimeZone.getDefault().getID();
@@ -131,25 +131,25 @@ public class MarketDataSnapshotToolUtils {
       OffsetDateTime correctionFrom = versionInfo.getCorrectionFrom() != null ? OffsetDateTime.ofInstant(versionInfo.getCorrectionFrom(), ZoneId.of(id)) : null;
       OffsetDateTime correctionTo = versionInfo.getCorrectionTo() != null ? OffsetDateTime.ofInstant(versionInfo.getCorrectionTo(), ZoneId.of(id)) : null;
       if (versionFrom != null) {
-        System.out.print(versionFrom.toString(dateTimeFormatter));
+        System.out.print(versionFrom.format(dateTimeFormatter));
       } else {
         notSpecified(fieldWidth);
       }
       spaces();
       if (versionTo != null) {
-        System.out.print(versionTo.toString(dateTimeFormatter));
+        System.out.print(versionTo.format(dateTimeFormatter));
       } else {
         notSpecified(fieldWidth);
       }
       spaces();
       if (correctionFrom != null) {
-        System.out.print(correctionFrom.toString(dateTimeFormatter));
+        System.out.print(correctionFrom.format(dateTimeFormatter));
       } else {
         notSpecified(fieldWidth);
       }
       spaces();
       if (correctionTo != null) {
-        System.out.print(correctionTo.toString(dateTimeFormatter));
+        System.out.print(correctionTo.format(dateTimeFormatter));
       } else {
         notSpecified(fieldWidth);
       }

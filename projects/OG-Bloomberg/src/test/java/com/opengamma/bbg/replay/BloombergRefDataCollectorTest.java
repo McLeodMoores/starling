@@ -53,7 +53,7 @@ public class BloombergRefDataCollectorTest {
     File fieldListFile = new File(BloombergRefDataCollectorTest.class.getResource(FIELD_LIST_FILE).toURI());
     
     String outfileName = getClass().getSimpleName() + "-" + Thread.currentThread().getName() +
-        "-" + OffsetDateTime.now(ZoneOffset.UTC).toString(DateTimeFormatter.ofPattern("yyyyMMdd'T'HHmmss'Z'"));
+        "-" + OffsetDateTime.now(ZoneOffset.UTC).format(DateTimeFormatter.ofPattern("yyyyMMdd'T'HHmmss'Z'"));
     
     _outputFile = File.createTempFile(outfileName, null);
     _outputFile.deleteOnExit();

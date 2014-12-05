@@ -46,6 +46,7 @@
   <p>
     <@rowin label="Scheme type">
       <select name="idscheme">
+        <option value="QUANDL">QUANDL</option>
         <option value="ACTIVFEED_TICKER">ACTIVFEED_TICKER</option>
         <option value="BLOOMBERG_TICKER">BLOOMBERG_TICKER</option>
         <option value="BLOOMBERG_TCM">Bloomberg Ticker/Coupon/Maturity</option>

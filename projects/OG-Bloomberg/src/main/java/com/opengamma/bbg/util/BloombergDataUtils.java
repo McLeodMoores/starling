@@ -763,7 +763,7 @@ public final class BloombergDataUtils {
     StringBuilder sb = new StringBuilder();
     sb.append(tickerMarketSectorPair.getFirst())
         .append(' ')
-        .append(expiry.getExpiry().toString(expiryFormatter))
+        .append(expiry.getExpiry().format(expiryFormatter))
         .append(' ')
         .append(optionType == OptionType.PUT ? 'P' : 'C')
         .append(strikeString)
@@ -858,7 +858,7 @@ public final class BloombergDataUtils {
       // Again, note that we're not taking into account exchange trading hours.
       LocalDate expiryDate = LocalDate.of(year, s_monthCode.inverse().get(monthCode), 1).with(s_monthlyExpiryAdjuster);
       ZonedDateTime expiry = expiryDate.atTime(futureExpiryTime).atZoneSimilarLocal(futureExpiryTimeZone);
-      int quarters = (int) nextExpiry.periodUntil(expiry, MONTHS) / 3;
+      int quarters = (int) nextExpiry.until(expiry, MONTHS) / 3;
       int genericFutureNumber = quarters + 1;
       StringBuilder sb = new StringBuilder();
       sb.append(typeCode);
@@ -906,7 +906,7 @@ public final class BloombergDataUtils {
 
   public static String toBloombergDate(LocalDate localDate) {
     localDate = localDate.withYear(Math.min(9999, localDate.getYear()));
-    return localDate.toString(s_bloombergDateFormatter);
+    return localDate.format(s_bloombergDateFormatter);
   }
 
   /**

@@ -224,7 +224,7 @@ public class RedisLKVFileWriter implements Runnable {
 
   public File getOutputFile() {
     LocalDate today = LocalDate.now(OpenGammaClock.getInstance());
-    String dateStr = today.toString(DateTimeFormatter.ISO_LOCAL_DATE);
+    String dateStr = today.format(DateTimeFormatter.ISO_LOCAL_DATE);
     String[] dateParts = StringUtils.split(dateStr, "-");
     String year = dateParts[0];
     String month = dateParts[1];

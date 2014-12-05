@@ -47,7 +47,7 @@ public class ISDAStagedDataManager {
 
       final LocalDate testDate = LocalDate.parse(matcher.group(2), GRID_DATE_FORMAT);
       final String path = RESOURCE_DIR + File.separator + STAGED_CURVE_DIR + File.separator
-          + STAGED_CURVE_BASENAME + matcher.group(1) + "_" + testDate.toString(STAGED_DATE_FORMAT) + ".xml";
+          + STAGED_CURVE_BASENAME + matcher.group(1) + "_" + testDate.format(STAGED_DATE_FORMAT) + ".xml";
       is = getClass().getClassLoader().getResourceAsStream(path);
 
       if (is == null) {

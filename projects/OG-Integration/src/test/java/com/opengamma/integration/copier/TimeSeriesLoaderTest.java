@@ -244,7 +244,7 @@ public class TimeSeriesLoaderTest {
     for (Map.Entry<LocalDate, Double> entry : lddts) {
       Map<String, String> row = new HashMap<String, String>();
       row.put("id", EXISTING_HTSINFO_EXTERNALID.getValue());
-      row.put("date", entry.getKey().toString(dateFormat));
+      row.put("date", entry.getKey().format(dateFormat));
       row.put("value", entry.getValue().toString());
       stub = stub.thenReturn(row);
     }

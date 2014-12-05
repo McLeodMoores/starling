@@ -120,9 +120,9 @@ public class DbTimeTest extends AbstractDbTest {
           return rs.getString("ver");
         }
       }, 3);
-      assertEquals(super.toString() + " Instant " + retrieved1, OffsetDateTime.ofInstant(INSTANT1, ZoneOffset.UTC).toString(FORMAT), retrievedText1);
-      assertEquals(super.toString() + " Instant " + retrieved2, OffsetDateTime.ofInstant(INSTANT2, ZoneOffset.UTC).toString(FORMAT), retrievedText2);
-      assertEquals(super.toString() + " Instant " + retrieved2, OffsetDateTime.ofInstant(INSTANT3, ZoneOffset.UTC).toString(FORMAT), retrievedText3);
+      assertEquals(super.toString() + " Instant " + retrieved1, OffsetDateTime.ofInstant(INSTANT1, ZoneOffset.UTC).format(FORMAT), retrievedText1);
+      assertEquals(super.toString() + " Instant " + retrieved2, OffsetDateTime.ofInstant(INSTANT2, ZoneOffset.UTC).format(FORMAT), retrievedText2);
+      assertEquals(super.toString() + " Instant " + retrieved2, OffsetDateTime.ofInstant(INSTANT3, ZoneOffset.UTC).format(FORMAT), retrievedText3);
       
       // tidy up
       getDbConnector().getJdbcOperations().update(drop);

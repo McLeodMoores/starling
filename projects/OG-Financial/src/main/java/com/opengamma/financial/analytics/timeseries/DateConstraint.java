@@ -204,7 +204,7 @@ public abstract class DateConstraint {
     @Override
     public Period periodUntil(final DateConstraint other) {
       if (other instanceof LiteralDateConstraint) {
-        return _value.periodUntil(((LiteralDateConstraint) other)._value);
+        return _value.until(((LiteralDateConstraint) other)._value);
       } else {
         return super.periodUntil(other);
       }

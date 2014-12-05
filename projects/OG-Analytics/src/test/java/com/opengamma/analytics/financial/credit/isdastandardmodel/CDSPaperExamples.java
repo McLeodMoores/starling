@@ -111,7 +111,7 @@ public class CDSPaperExamples extends ISDABaseTest {
     final int n = PILLAR_DATES.length;
     for (int i = 0; i < n; i++) {
       final double t = CREDIT_CURVE.getTimeAtIndex(i);
-      System.out.println(PILLAR_DATES[i].toString(DATE_FORMATT) + "\t" + SPREADS[i] * TEN_THOUSAND + "\t" + t + "\t" + CREDIT_CURVE.getSurvivalProbability(t));
+      System.out.println(PILLAR_DATES[i].format(DATE_FORMATT) + "\t" + SPREADS[i] * TEN_THOUSAND + "\t" + t + "\t" + CREDIT_CURVE.getSurvivalProbability(t));
     }
   }
 
@@ -200,7 +200,7 @@ public class CDSPaperExamples extends ISDABaseTest {
 
     for (int i = 0; i < IMM_DATES.length; i = i + 2) {
       final LocalDate mat = IMM_DATES[i];
-      out.append("\\multicolumn{1}{|c|}{" + mat.toString(formatt) + "}");
+      out.append("\\multicolumn{1}{|c|}{" + mat.format(formatt) + "}");
       final CDSAnalytic cds = factory.makeCDS(TRADE_DATE, STARTDATE, mat);
       for (int j = 0; j < nPillars; j++) {
         final double sense = pricer.parSpreadCreditSensitivity(cds, YIELD_CURVE, CREDIT_CURVE, j);
@@ -240,7 +240,7 @@ public class CDSPaperExamples extends ISDABaseTest {
 
     for (int i = 0; i < nPillars; i++) {
       final LocalDate mat = PILLAR_DATES[i];
-      out.append("\\multicolumn{1}{|c|}{" + mat.toString(formatt) + "}");
+      out.append("\\multicolumn{1}{|c|}{" + mat.format(formatt) + "}");
       final CDSAnalytic cds = factory.makeCDS(TRADE_DATE, STARTDATE, mat);
       for (int j = 0; j < nPillars; j++) {
         final double sense = pricer.pvCreditSensitivity(cds, YIELD_CURVE, CREDIT_CURVE, coupon, j);
@@ -294,7 +294,7 @@ public class CDSPaperExamples extends ISDABaseTest {
 
     for (int i = 0; i < IMM_DATES.length; i = i + 2) {
       final LocalDate mat = IMM_DATES[i];
-      out.append("\\multicolumn{1}{|c|}{" + mat.toString(formatt) + "}");
+      out.append("\\multicolumn{1}{|c|}{" + mat.format(formatt) + "}");
       final CDSAnalytic cds = factory.makeCDS(TRADE_DATE, STARTDATE, mat);
 
       final double[] temp = new double[nPillars];
@@ -378,7 +378,7 @@ public class CDSPaperExamples extends ISDABaseTest {
     final String[] rowHeadings = new String[nMat];
     final double[][] data = new double[nMat][nPillars + 1];
     for (int i = 0; i < nMat; i++) {
-      rowHeadings[i] = MATURITIES_6M_STEP[i].toString(DATE_FORMATT);
+      rowHeadings[i] = MATURITIES_6M_STEP[i].format(DATE_FORMATT);
       System.arraycopy(analCS01[i], 0, data[i], 0, nPillars);
       double sum = 0;
       for (int j = 0; j < nPillars; j++) {
@@ -526,7 +526,7 @@ public class CDSPaperExamples extends ISDABaseTest {
     }
     System.out.print("\n");
     for (int i = 0; i < nMat; i++) {
-      System.out.print(MATURITIES_1Y_STEP[i].toString(DATE_FORMATT));
+      System.out.print(MATURITIES_1Y_STEP[i].format(DATE_FORMATT));
       for (int j = 0; j < nYCPoints; j++) {
         final double sense = PRICER_MARKIT_FIX.pvYieldSensitivity(cds[i], yc, CREDIT_CURVE, COUPON, j);
         System.out.print("\t" + sense);

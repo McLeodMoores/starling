@@ -143,7 +143,7 @@ public class ISDAModelDatasetsSheetReader extends ISDAModelDatasets {
     final int nCurvePoints = _parSpreadDates.length;
     final double[] negLogP = new double[nCurvePoints];
     for (int i = 0; i < nCurvePoints; i++) {
-      negLogP[i] = getDouble(_parSpreadDates[i].toString(DATE_TIME_PARSER), fields);
+      negLogP[i] = getDouble(_parSpreadDates[i].format(DATE_TIME_PARSER), fields);
     }
 
     final double[] t = new double[nCurvePoints];

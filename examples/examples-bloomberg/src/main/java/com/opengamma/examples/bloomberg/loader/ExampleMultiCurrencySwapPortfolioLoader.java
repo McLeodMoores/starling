@@ -245,7 +245,7 @@ public class ExampleMultiCurrencySwapPortfolioLoader extends AbstractTool<Integr
     final SwapSecurity swap = new SwapSecurity(tradeDateTime, tradeDateTime, maturityDateTime, counterparty, payLeg, receiveLeg);
     swap.addExternalId(ExternalId.of(ID_SCHEME, GUIDGenerator.generate().toString()));
     swap.setName("IR Swap " + ccy + " " + PortfolioLoaderHelper.NOTIONAL_FORMATTER.format(notional) + " " +
-      maturityDateTime.toString(PortfolioLoaderHelper.OUTPUT_DATE_FORMATTER) + " - " + payLegDescription + " / " + receiveLegDescription);
+      maturityDateTime.format(PortfolioLoaderHelper.OUTPUT_DATE_FORMATTER) + " - " + payLegDescription + " / " + receiveLegDescription);
     return swap;
   }
 

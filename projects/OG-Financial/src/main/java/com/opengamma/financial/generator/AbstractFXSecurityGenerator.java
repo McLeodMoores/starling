@@ -93,7 +93,7 @@ public abstract class AbstractFXSecurityGenerator<T extends ManageableSecurity> 
       return null;
     }
     final double callAmount = NOTIONAL * fxRate;
-    final String dateString = settlementDate.toString(DATE_FORMATTER);
+    final String dateString = settlementDate.format(DATE_FORMATTER);
     final BarrierType barrierType = bundle._up ? BarrierType.UP : BarrierType.DOWN;
     final BarrierDirection barrierDirection = BarrierDirection.KNOCK_IN;
     final MonitoringType monitoringType = MonitoringType.CONTINUOUS;
@@ -130,7 +130,7 @@ public abstract class AbstractFXSecurityGenerator<T extends ManageableSecurity> 
     sb.append(bundle._long ? "Long" : "Short");
     sb.append(" put ").append(putCurrency).append(' ').append(NOTIONAL_FORMATTER.format(putAmount));
     sb.append(", call ").append(callCurrency).append(' ').append(NOTIONAL_FORMATTER.format(callAmount));
-    sb.append(" on ").append(expiry.toString(DATE_FORMATTER));
+    sb.append(" on ").append(expiry.format(DATE_FORMATTER));
     security.setName(sb.toString());
     return security;
   }
@@ -145,7 +145,7 @@ public abstract class AbstractFXSecurityGenerator<T extends ManageableSecurity> 
     final double callAmount = NOTIONAL * fxRate;
     final Currency payCurrency = bundle._long ? bundle._secondCurrency : bundle._firstCurrency;
     final Currency receiveCurrency = bundle._long ? bundle._firstCurrency : bundle._secondCurrency;
-    final String dateString = forwardDate.toString(DATE_FORMATTER);
+    final String dateString = forwardDate.format(DATE_FORMATTER);
     final FXForwardSecurity fxForwardSecurity = new FXForwardSecurity(payCurrency, callAmount, receiveCurrency, putAmount, forwardDate, REGION);
     final String callAmountString = NOTIONAL_FORMATTER.format(callAmount);
     final String putAmountString = NOTIONAL_FORMATTER.format(putAmount);
@@ -163,7 +163,7 @@ public abstract class AbstractFXSecurityGenerator<T extends ManageableSecurity> 
     final double callAmount = NOTIONAL * fxRate;
     final Currency payCurrency = bundle._long ? bundle._secondCurrency : bundle._firstCurrency;
     final Currency receiveCurrency = bundle._long ? bundle._firstCurrency : bundle._secondCurrency;
-    final String dateString = forwardDate.toString(DATE_FORMATTER);
+    final String dateString = forwardDate.format(DATE_FORMATTER);
     final NonDeliverableFXForwardSecurity security = new NonDeliverableFXForwardSecurity(payCurrency, callAmount, receiveCurrency, putAmount, forwardDate, 
         REGION, getRandom(BOOLEAN_VALUES));
     
@@ -184,7 +184,7 @@ public abstract class AbstractFXSecurityGenerator<T extends ManageableSecurity> 
     }
     final double callAmount = NOTIONAL * fxRate;
     final Expiry expiry = new Expiry(settlementDate, ExpiryAccuracy.DAY_MONTH_YEAR);
-    final String dateString = settlementDate.toString(DATE_FORMATTER);
+    final String dateString = settlementDate.format(DATE_FORMATTER);
     final FXOptionSecurity fxOptionSecurity = new FXOptionSecurity(putCurrency, callCurrency, putAmount, callAmount, expiry, settlementDate, bundle._long, new EuropeanExerciseType());
     final String callAmountString = NOTIONAL_FORMATTER.format(callAmount);
     final String putAmountString = NOTIONAL_FORMATTER.format(putAmount);
@@ -203,7 +203,7 @@ public abstract class AbstractFXSecurityGenerator<T extends ManageableSecurity> 
     }
     final double callAmount = NOTIONAL * fxRate;
     final Expiry expiry = new Expiry(settlementDate, ExpiryAccuracy.DAY_MONTH_YEAR);
-    final String dateString = settlementDate.toString(DATE_FORMATTER);
+    final String dateString = settlementDate.format(DATE_FORMATTER);
     
     final NonDeliverableFXOptionSecurity optionSecurity = new NonDeliverableFXOptionSecurity(putCurrency, callCurrency, putAmount, callAmount, expiry, settlementDate, 
         getRandom(BOOLEAN_VALUES), new EuropeanExerciseType(), getRandom(BOOLEAN_VALUES));

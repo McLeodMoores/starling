@@ -150,5 +150,10 @@ public class IndexLoaderParserTest {
   public void testShortDays() {
     assertEquals(Tenor.THREE_DAYS, IndexLoader.decodeTenor("RANDOM INDEX 3 Days"));
   }
+  
+  @Test
+  public void testTurkey() {
+    assertEquals(Tenor.THREE_MONTHS, IndexLoader.decodeTenor("Bk Assn of Turkey Interbank 3M"));
+  }  
 
 }

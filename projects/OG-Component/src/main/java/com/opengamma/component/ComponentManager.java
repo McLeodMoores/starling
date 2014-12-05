@@ -29,6 +29,7 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.OpenGammaClock;
 import com.opengamma.util.PlatformConfigUtils;
 import com.opengamma.util.ResourceUtils;
+import com.opengamma.util.fudgemsg.ServletContextHolder;
 
 /**
  * Manages the process of loading and starting OpenGamma components.
@@ -376,8 +377,13 @@ public class ComponentManager {
   protected ComponentFactory loadFactory(String typeStr) {
     ComponentFactory factory;
     try {
-      Class<? extends ComponentFactory> cls = getClass().getClassLoader().loadClass(typeStr).asSubclass(ComponentFactory.class);
-      factory = cls.newInstance();
+      try {
+        Class<? extends ComponentFactory> cls = getClass().getClassLoader().loadClass(typeStr).asSubclass(ComponentFactory.class);
+        factory = cls.newInstance();
+      } catch (ClassNotFoundException ex) {
+        Class<? extends ComponentFactory> cls = ServletContextHolder.getContext().getClassLoader().loadClass(typeStr).asSubclass(ComponentFactory.class);
+        factory = cls.newInstance();
+      }
     } catch (ExceptionInInitializerError ex) {
       throw new ComponentConfigException("Error starting component factory: " + typeStr, ex);
     } catch (ClassNotFoundException ex) {

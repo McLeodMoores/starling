@@ -146,7 +146,7 @@ public class FederalFundsFutureSecurityDefinition extends FuturesSecurityDefinit
   public static FederalFundsFutureSecurityDefinition fromFedFund(final ZonedDateTime monthDate, final IndexON index, final Calendar calendar) {
     final double notionalFedFund = 5000000;
     final double accrualFedFund = 1.0 / 12.0;
-    return from(monthDate, index, notionalFedFund, accrualFedFund, "FF" + monthDate.toString(DateTimeFormatter.ofPattern("MMMyy")), calendar);
+    return from(monthDate, index, notionalFedFund, accrualFedFund, "FF" + monthDate.format(DateTimeFormatter.ofPattern("MMMyy")), calendar);
   }
 
   /**
@@ -215,7 +215,7 @@ public class FederalFundsFutureSecurityDefinition extends FuturesSecurityDefinit
 
   @Override
   public String toString() {
-    return _name + " - index: " + _index.toString() + " - start date: " + _fixingPeriodDates[0].toString(DateTimeFormatter.ofPattern("ddMMMyy"));
+    return _name + " - index: " + _index.toString() + " - start date: " + _fixingPeriodDates[0].format(DateTimeFormatter.ofPattern("ddMMMyy"));
   }
 
   /**

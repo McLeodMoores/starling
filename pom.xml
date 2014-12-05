@@ -282,7 +282,7 @@
       <dependency>
         <groupId>org.threeten</groupId>
         <artifactId>threetenbp</artifactId>
-        <version>0.8.1</version>
+        <version>1.1</version>
       </dependency>
       <dependency>
         <groupId>com.opengamma.external.json</groupId>
@@ -1001,6 +1001,16 @@
   <!-- ==================================================================== -->
   <distributionManagement>
     <repository>
+      <id>private</id>
+      <name>McLeod Moores private maven repository</name>
+      <url>http://maven.mcleodmoores.com:8081/content/repositories/private</url>
+    </repository>
+    <snapshotRepository>
+      <id>private-snapshot</id>
+      <name>McLeod Moores private maven snapshot repository</name>
+      <url>http://maven.mcleodmoores.com:8081/content/repositories/private-snapshot</url>
+    </snapshotRepository>
+    <!--repository>
       <id>og-public-release</id>
       <name>OpenGamma public maven repository</name>
       <url>${og-public-release.url}</url>
@@ -1009,7 +1019,7 @@
       <id>og-public-snapshot</id>
       <name>OpenGamma public snapshot maven repository</name>
       <url>${og-public-snapshot.url}</url>
-    </snapshotRepository>
+    </snapshotRepository-->
     <site>
       <id>og-public-site</id>
       <name>OpenGamma public site</name>

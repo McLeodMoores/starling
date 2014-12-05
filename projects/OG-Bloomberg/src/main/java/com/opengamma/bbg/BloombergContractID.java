@@ -120,7 +120,7 @@ public class BloombergContractID extends DirectBean {
     
     LocalDate expiry = LocalDate.of(year, month, 1);
     return ExternalSchemes.bloombergTickerSecurityId(String.format("%s %s %s%s %s", 
-        getContractCode(), expiry.toString(MONTH_YEAR_FORMATTER), optionType.name().charAt(0), getRoundedPrice(strike, 3), getMarketSector()).toUpperCase());
+        getContractCode(), expiry.format(MONTH_YEAR_FORMATTER), optionType.name().charAt(0), getRoundedPrice(strike, 3), getMarketSector()).toUpperCase());
   }
   
   protected String getRoundedPrice(final Double doubleValue, final int scale) {

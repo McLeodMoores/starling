@@ -23,7 +23,7 @@ public class ActualActualAFB extends ActualTypeDayCount {
   @Override
   public double getDayCountFraction(final LocalDate firstDate, final LocalDate secondDate) {
     testDates(firstDate, secondDate);
-    final long daysBetween = firstDate.periodUntil(secondDate, DAYS);
+    final long daysBetween = firstDate.until(secondDate, DAYS);
     final LocalDate oneYear = firstDate.plusYears(1);
     if (secondDate.isBefore(oneYear) || oneYear.equals(secondDate)) {
       final double daysInYear = secondDate.isLeapYear() && secondDate.getMonthValue() > 2 ? 366 : 365;

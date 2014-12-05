@@ -167,7 +167,7 @@ public class SwapSecurityGenerator extends SecurityGenerator<SwapSecurity> {
       receiveLegDescription = fixedLegDescription;
     }
     final SwapSecurity swap = new SwapSecurity(tradeDateTime, tradeDateTime, maturityDateTime, counterparty, payLeg, receiveLeg);
-    swap.setName("IR Swap " + ccy + " " + NOTIONAL_FORMATTER.format(notional) + " " + maturityDateTime.toString(DATE_FORMATTER) + " - " + payLegDescription + " / " + receiveLegDescription);
+    swap.setName("IR Swap " + ccy + " " + NOTIONAL_FORMATTER.format(notional) + " " + maturityDateTime.format(DATE_FORMATTER) + " - " + payLegDescription + " / " + receiveLegDescription);
     return swap;
   }
 

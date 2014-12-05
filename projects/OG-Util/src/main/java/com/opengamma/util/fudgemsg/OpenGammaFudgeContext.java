@@ -78,6 +78,7 @@ public final class OpenGammaFudgeContext {
       // hack to handle non-existent classpath directory entries
       List<UrlType> urlTypes = Lists.newArrayList(Vfs.getDefaultUrlTypes());
       urlTypes.add(0, new OGFileUrlType());
+      urlTypes.add(1, new OGJNDIUrlType());
       Vfs.setDefaultURLTypes(urlTypes);
       
       // init annotation reflector, which needs this class loader
@@ -91,8 +92,15 @@ public final class OpenGammaFudgeContext {
       } catch (Exception ex) {
         // ignore
       }
+      Set<URL> urls;
+      if (ServletContextHolder.getContext() == null) {
+        urls = ClasspathHelper.forManifest(ClasspathHelper.forJavaClassPath());
+      } else {
+        urls = ClasspathHelper.forManifest(ClasspathHelper.forWebInfLib(ServletContextHolder.getContext()));
+        loaders.add(ServletContextHolder.getContext().getClassLoader());
+      }
       Configuration config = new ConfigurationBuilder()
-        .setUrls(ClasspathHelper.forManifest(ClasspathHelper.forJavaClassPath()))
+        .setUrls(urls)
         .setScanners(new TypeAnnotationsScanner(), new FieldAnnotationsScanner(), new SubTypesScanner(false))
         .filterInputsBy(FilterBuilder.parse(AnnotationReflector.DEFAULT_ANNOTATION_REFLECTOR_FILTER))
         .addClassLoaders(loaders)
@@ -152,6 +160,31 @@ public final class OpenGammaFudgeContext {
     }
   }
 
+  private static final class OGJNDIUrlType implements UrlType {
+
+    @Override
+    public boolean matches(URL url) throws Exception {
+      return url.getProtocol().equals("jndi") && !url.toExternalForm().contains(".jar");
+    }
+
+    @Override
+    public Dir createDir(URL url) throws Exception {
+      File file = Vfs.getFile(url);
+      if (file == null || file.exists() == false) {
+        s_logger.warn("URL could not be resolved to a file: " + url);
+        return new EmptyDir(file);
+      } else {
+        return new SystemDir(file);
+      }
+    }
+
+    @Override
+    public String toString() {
+      return "directories (OGJNDIUrlType fix)";
+    }
+
+  }
+  
   //-------------------------------------------------------------------------
   // handle non-existent classpath directory entries
   private static final class EmptyDir implements Vfs.Dir {

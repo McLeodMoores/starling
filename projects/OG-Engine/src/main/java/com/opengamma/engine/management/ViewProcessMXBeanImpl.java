@@ -235,7 +235,7 @@ public class ViewProcessMXBeanImpl implements ViewProcessMXBean {
   @Override
   public Long getTimeSinceLastSuccessfulCycle() {
     return _lastSuccessfulCycleTimeStamp != null ?
-        _lastSuccessfulCycleTimeStamp.periodUntil(Instant.now(), ChronoUnit.MILLIS) :
+        _lastSuccessfulCycleTimeStamp.until(Instant.now(), ChronoUnit.MILLIS) :
         null;
   }
 

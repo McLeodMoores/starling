@@ -28,7 +28,7 @@ public class CashSecurityGenerator extends SecurityGenerator<CashSecurity> {
   protected String createName(final Currency currency, final double amount, final double rate, final ZonedDateTime maturity) {
     final StringBuilder sb = new StringBuilder();
     sb.append("Cash ").append(currency.getCode()).append(" ").append(NOTIONAL_FORMATTER.format(amount));
-    sb.append(" @ ").append(RATE_FORMATTER.format(rate)).append(", maturity ").append(maturity.toString(DATE_FORMATTER));
+    sb.append(" @ ").append(RATE_FORMATTER.format(rate)).append(", maturity ").append(maturity.format(DATE_FORMATTER));
     return sb.toString();
   }
 

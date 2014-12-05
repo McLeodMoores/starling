@@ -7,18 +7,18 @@ package com.opengamma.financial.analytics.curve;
 
 import org.threeten.bp.ZonedDateTime;
 
-import com.opengamma.DataNotFoundException;
 import com.opengamma.OpenGammaRuntimeException;
 import com.opengamma.analytics.financial.instrument.InstrumentDefinition;
 import com.opengamma.analytics.financial.instrument.cash.CashDefinition;
 import com.opengamma.analytics.financial.instrument.cash.DepositIborDefinition;
+import com.opengamma.analytics.financial.instrument.index.IborIndex;
 import com.opengamma.analytics.financial.schedule.ScheduleCalculator;
+import com.opengamma.core.convention.Convention;
 import com.opengamma.core.convention.ConventionSource;
 import com.opengamma.core.holiday.HolidaySource;
-import com.opengamma.core.link.ConventionLink;
-import com.opengamma.core.link.SecurityLink;
 import com.opengamma.core.marketdatasnapshot.SnapshotDataBundle;
 import com.opengamma.core.region.RegionSource;
+import com.opengamma.core.security.Security;
 import com.opengamma.core.security.SecuritySource;
 import com.opengamma.financial.analytics.conversion.CalendarUtils;
 import com.opengamma.financial.analytics.ircurve.strips.CashNode;
@@ -27,7 +27,6 @@ import com.opengamma.financial.convention.IborIndexConvention;
 import com.opengamma.financial.convention.businessday.BusinessDayConvention;
 import com.opengamma.financial.convention.calendar.Calendar;
 import com.opengamma.financial.convention.daycount.DayCount;
-import com.opengamma.financial.security.index.IborIndex;
 import com.opengamma.id.ExternalId;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
@@ -53,6 +52,8 @@ public class CashNodeConverter extends CurveNodeVisitorAdapter<InstrumentDefinit
   private final ExternalId _dataId;
   /** The valuation time */
   private final ZonedDateTime _valuationTime;
+  private SecuritySource _securitySource;
+  private ConventionSource _conventionSource;
 
   /**
    * @param securitySource The security source, not null
@@ -65,11 +66,15 @@ public class CashNodeConverter extends CurveNodeVisitorAdapter<InstrumentDefinit
    */
   public CashNodeConverter(final SecuritySource securitySource, final ConventionSource conventionSource, final HolidaySource holidaySource, final RegionSource regionSource,
       final SnapshotDataBundle marketData, final ExternalId dataId, final ZonedDateTime valuationTime) {
+    ArgumentChecker.notNull(securitySource, "security source");
+    ArgumentChecker.notNull(conventionSource, "convention source");
     ArgumentChecker.notNull(holidaySource, "holiday source");
     ArgumentChecker.notNull(regionSource, "region source");
     ArgumentChecker.notNull(marketData, "market data");
     ArgumentChecker.notNull(dataId, "data id");
     ArgumentChecker.notNull(valuationTime, "valuation time");
+    _securitySource = securitySource;
+    _conventionSource = conventionSource;
     _holidaySource = holidaySource;
     _regionSource = regionSource;
     _marketData = marketData;
@@ -87,40 +92,46 @@ public class CashNodeConverter extends CurveNodeVisitorAdapter<InstrumentDefinit
     }
     // Deposit
     try {
-      DepositConvention depositConvention =
-          ConventionLink.resolvable(cashNode.getConvention(), DepositConvention.class).resolve();
-
-      final Currency currency = depositConvention.getCurrency();
-      final Calendar calendar = CalendarUtils.getCalendar(_regionSource, _holidaySource, depositConvention.getRegionCalendar());
-      final BusinessDayConvention businessDayConvention = depositConvention.getBusinessDayConvention();
-      final boolean isEOM = depositConvention.isIsEOM();
-      final DayCount dayCount = depositConvention.getDayCount();
-      final int settlementDays = depositConvention.getSettlementDays();
+      final Convention convention = _conventionSource.getSingle(cashNode.getConvention()); 
+      if (convention instanceof DepositConvention) {
+        final DepositConvention depositConvention = (DepositConvention) convention;
+        final Currency currency = depositConvention.getCurrency();
+        final Calendar calendar = CalendarUtils.getCalendar(_regionSource, _holidaySource, depositConvention.getRegionCalendar());
+        final BusinessDayConvention businessDayConvention = depositConvention.getBusinessDayConvention();
+        final boolean isEOM = depositConvention.isIsEOM();
+        final DayCount dayCount = depositConvention.getDayCount();
+        final int settlementDays = depositConvention.getSettlementDays();
+        final ZonedDateTime spotDate = ScheduleCalculator.getAdjustedDate(_valuationTime, settlementDays, calendar);
+        final ZonedDateTime startDate = ScheduleCalculator.getAdjustedDate(spotDate, startTenor, businessDayConvention, calendar, isEOM);
+        final ZonedDateTime endDate = ScheduleCalculator.getAdjustedDate(startDate, maturityTenor, businessDayConvention, calendar, isEOM);
+        final double accrualFactor = dayCount.getDayCountFraction(startDate, endDate);
+        return new CashDefinition(currency, startDate, endDate, 1, rate, accrualFactor);
+      } 
+      throw new OpenGammaRuntimeException("Convention should be of type DepositConvention");
+    } catch (Exception e) { // If the convention is not found, try with the security
+      final Security security = _securitySource.getSingle(cashNode.getConvention().toBundle());
+      if (security == null) {
+        throw new OpenGammaRuntimeException("Could not find " + cashNode.getConvention() + " as a convention or a Ibor index");
+      }
+      if (!(security instanceof com.opengamma.financial.security.index.IborIndex)) {
+        throw new OpenGammaRuntimeException("Security should be of type IborIndex");
+      }
+      final com.opengamma.financial.security.index.IborIndex indexSecurity = (com.opengamma.financial.security.index.IborIndex) security; 
+      final IborIndexConvention indexConvention = _conventionSource.getSingle(indexSecurity.getConventionId(), IborIndexConvention.class);
+      if (indexConvention == null) {
+        throw new OpenGammaRuntimeException("Convention with id " + indexSecurity.getConventionId() + " was null");
+      }
+      final IborIndex index = ConverterUtils.indexIbor(indexSecurity.getName(), indexConvention, indexSecurity.getTenor());
+      final Currency currency = indexConvention.getCurrency();
+      final Calendar calendar = CalendarUtils.getCalendar(_regionSource, _holidaySource, indexConvention.getRegionCalendar());
+      final BusinessDayConvention businessDayConvention = indexConvention.getBusinessDayConvention();
+      final boolean isEOM = indexConvention.isIsEOM();
+      final DayCount dayCount = indexConvention.getDayCount();
+      final int settlementDays = indexConvention.getSettlementDays();
       final ZonedDateTime spotDate = ScheduleCalculator.getAdjustedDate(_valuationTime, settlementDays, calendar);
       final ZonedDateTime startDate = ScheduleCalculator.getAdjustedDate(spotDate, startTenor, businessDayConvention, calendar, isEOM);
       final ZonedDateTime endDate = ScheduleCalculator.getAdjustedDate(startDate, maturityTenor, businessDayConvention, calendar, isEOM);
       final double accrualFactor = dayCount.getDayCountFraction(startDate, endDate);
-      return new CashDefinition(currency, startDate, endDate, 1, rate, accrualFactor);
-
-    } catch (DataNotFoundException e) {
-      // If the convention is not found in the convention source
-      // then try with the security source.
-      IborIndex indexSecurity = SecurityLink.resolvable(cashNode.getConvention().toBundle(), IborIndex.class).resolve();
-
-      IborIndexConvention indexConvention =
-          ConventionLink.resolvable(indexSecurity.getConventionId(), IborIndexConvention.class).resolve();
-      Currency currency = indexConvention.getCurrency();
-      Calendar calendar = CalendarUtils.getCalendar(_regionSource, _holidaySource, indexConvention.getRegionCalendar());
-      BusinessDayConvention businessDayConvention = indexConvention.getBusinessDayConvention();
-      boolean isEOM = indexConvention.isIsEOM();
-      DayCount dayCount = indexConvention.getDayCount();
-      int settlementDays = indexConvention.getSettlementDays();
-      ZonedDateTime spotDate = ScheduleCalculator.getAdjustedDate(_valuationTime, settlementDays, calendar);
-      ZonedDateTime startDate = ScheduleCalculator.getAdjustedDate(spotDate, startTenor, businessDayConvention, calendar, isEOM);
-      ZonedDateTime endDate = ScheduleCalculator.getAdjustedDate(startDate, maturityTenor, businessDayConvention, calendar, isEOM);
-      double accrualFactor = dayCount.getDayCountFraction(startDate, endDate);
-      com.opengamma.analytics.financial.instrument.index.IborIndex index =
-          ConverterUtils.indexIbor(indexSecurity.getName(), indexConvention, indexSecurity.getTenor());
       return new DepositIborDefinition(currency, startDate, endDate, 1, rate, accrualFactor, index);
     }
   }
