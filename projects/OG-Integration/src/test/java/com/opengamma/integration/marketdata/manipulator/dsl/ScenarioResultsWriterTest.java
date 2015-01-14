@@ -56,8 +56,8 @@ public class ScenarioResultsWriterTest {
 
   private final String _scenario1Name = "scenario1Name";
   private final String _scenario2Name = "scenario2Name";
-  private final String _valuationTime1 = "2014-02-17T12:00Z";
-  private final String _valuationTime2 = "2013-02-17T12:00Z";
+  private final String _valuationTime1 = "2014-02-17T12:00:00Z";
+  private final String _valuationTime2 = "2013-02-17T12:00:00Z";
   private final String _id1 = "Tst~123";
   private final String _id2 = "Tst~234";
   private final String _param1Value1 = "param1Value1";

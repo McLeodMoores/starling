@@ -113,9 +113,9 @@ public class PortfolioLoaderToolTest extends AbstractDbTest {
   public void testLoadEquityPortfolio() throws IOException {
 
     final String data = "\"companyName\",\"currency\",\"exchange\",\"exchangeCode\",\"externalIdBundle\",\"name\",\"position:quantity\",\"securityType\",\"shortName\",\"trade:counterpartyExternalId\",\"trade:deal\",\"trade:premium\",\"trade:premiumCurrency\",\"trade:premiumDate\",\"trade:premiumTime\",\"trade:quantity\",\"trade:tradeDate\",\"trade:tradeTime\"\n" +
-        "\"EXXON MOBIL CORP\",\"USD\",\"NEW YORK STOCK EXCHANGE INC.\",\"XNYS\",\"BLOOMBERG_BUID~EQ0010054600001000, BLOOMBERG_TICKER~XOM US Equity, CUSIP~30231G102, ISIN~US30231G1022, SEDOL1~2326618\",\"EXXON MOBIL CORP\",\"1264\",\"EQUITY\",\"XOM\",\"CPID~123\",,,,,,,,\n" +
-        "\"APPLE INC\",\"USD\",\"NASDAQ/NGS (GLOBAL SELECT MARKET)\",\"XNGS\",\"BLOOMBERG_BUID~EQ0010169500001000, BLOOMBERG_TICKER~AAPL US Equity, CUSIP~037833100, ISIN~US0378331005, SEDOL1~2046251\",\"APPLE INC\",\"257\",\"EQUITY\",\"AAPL\",\"CPID~234\",,,,,,,,\n" +
-        "\"MICROSOFT CORP\",\"USD\",\"NASDAQ/NGS (GLOBAL SELECT MARKET)\",\"XNGS\",\"BLOOMBERG_BUID~EQ0010174300001000, BLOOMBERG_TICKER~MSFT US Equity, CUSIP~594918104, ISIN~US5949181045, SEDOL1~2588173\",\"MICROSOFT CORP\",\"3740\",\"EQUITY\",\"MSFT\",\"CPID~345\",,,,,,,,";
+        "\"EXXON MOBIL CORP\",\"USD\",\"NEW YORK STOCK EXCHANGE INC.\",\"XNYS\",\"BLOOMBERG_BUID~EQ0010054600001000, BLOOMBERG_TICKER~XOM US Equity, CUSIP~30231G102, ISIN~US30231G1022, SEDOL1~2326618\",\"EXXON MOBIL CORP\",\"1264\",\"EQUITY\",\"XOM\",\"CPID~123\",,,,,,1264,\"2050-01-01\",\n" +
+        "\"APPLE INC\",\"USD\",\"NASDAQ/NGS (GLOBAL SELECT MARKET)\",\"XNGS\",\"BLOOMBERG_BUID~EQ0010169500001000, BLOOMBERG_TICKER~AAPL US Equity, CUSIP~037833100, ISIN~US0378331005, SEDOL1~2046251\",\"APPLE INC\",\"257\",\"EQUITY\",\"AAPL\",\"CPID~234\",,,,,,257,\"2050-01-01\",\n" +
+        "\"MICROSOFT CORP\",\"USD\",\"NASDAQ/NGS (GLOBAL SELECT MARKET)\",\"XNGS\",\"BLOOMBERG_BUID~EQ0010174300001000, BLOOMBERG_TICKER~MSFT US Equity, CUSIP~594918104, ISIN~US5949181045, SEDOL1~2588173\",\"MICROSOFT CORP\",\"3740\",\"EQUITY\",\"MSFT\",\"CPID~345\",,,,,,3740,\"2050-01-01\",";
 
     doPortfolioLoadTest("Equity Portfolio", "Equity", data, 1, 3, 3);
   }
@@ -125,10 +125,10 @@ public class PortfolioLoaderToolTest extends AbstractDbTest {
   public void testLoadEquityPortfolioMultiplePositionsSameSecurity() throws IOException {
 
     final String data = "\"companyName\",\"currency\",\"exchange\",\"exchangeCode\",\"externalIdBundle\",\"name\",\"position:quantity\",\"securityType\",\"shortName\",\"trade:counterpartyExternalId\",\"trade:deal\",\"trade:premium\",\"trade:premiumCurrency\",\"trade:premiumDate\",\"trade:premiumTime\",\"trade:quantity\",\"trade:tradeDate\",\"trade:tradeTime\"\n" +
-        "\"EXXON MOBIL CORP\",\"USD\",\"NEW YORK STOCK EXCHANGE INC.\",\"XNYS\",\"BLOOMBERG_BUID~EQ0010054600001000, BLOOMBERG_TICKER~XOM US Equity, CUSIP~30231G102, ISIN~US30231G1022, SEDOL1~2326618\",\"EXXON MOBIL CORP\",\"1264\",\"EQUITY\",\"XOM\",\"CPID~123\",,,,,,,,\n" +
-        "\"APPLE INC\",\"USD\",\"NASDAQ/NGS (GLOBAL SELECT MARKET)\",\"XNGS\",\"BLOOMBERG_BUID~EQ0010169500001000, BLOOMBERG_TICKER~AAPL US Equity, CUSIP~037833100, ISIN~US0378331005, SEDOL1~2046251\",\"APPLE INC\",\"257\",\"EQUITY\",\"AAPL\",\"CPID~234\",,,,,,,,\n" +
-        "\"MICROSOFT CORP\",\"USD\",\"NASDAQ/NGS (GLOBAL SELECT MARKET)\",\"XNGS\",\"BLOOMBERG_BUID~EQ0010174300001000, BLOOMBERG_TICKER~MSFT US Equity, CUSIP~594918104, ISIN~US5949181045, SEDOL1~2588173\",\"MICROSOFT CORP\",\"3740\",\"EQUITY\",\"MSFT\",\"CPID~345\",,,,,,,,\n" +
-        "\"MICROSOFT CORP\",\"USD\",\"NASDAQ/NGS (GLOBAL SELECT MARKET)\",\"XNGS\",\"BLOOMBERG_BUID~EQ0010174300001000, BLOOMBERG_TICKER~MSFT US Equity, CUSIP~594918104, ISIN~US5949181045, SEDOL1~2588173\",\"MICROSOFT CORP\",\"3740\",\"EQUITY\",\"MSFT\",\"CPID~345\",,,,,,,,";
+        "\"EXXON MOBIL CORP\",\"USD\",\"NEW YORK STOCK EXCHANGE INC.\",\"XNYS\",\"BLOOMBERG_BUID~EQ0010054600001000, BLOOMBERG_TICKER~XOM US Equity, CUSIP~30231G102, ISIN~US30231G1022, SEDOL1~2326618\",\"EXXON MOBIL CORP\",\"1264\",\"EQUITY\",\"XOM\",\"CPID~123\",,,,,,1264,\"2050-01-01\",\n" +
+        "\"APPLE INC\",\"USD\",\"NASDAQ/NGS (GLOBAL SELECT MARKET)\",\"XNGS\",\"BLOOMBERG_BUID~EQ0010169500001000, BLOOMBERG_TICKER~AAPL US Equity, CUSIP~037833100, ISIN~US0378331005, SEDOL1~2046251\",\"APPLE INC\",\"257\",\"EQUITY\",\"AAPL\",\"CPID~234\",,,,,,257,\"2050-01-01\",\n" +
+        "\"MICROSOFT CORP\",\"USD\",\"NASDAQ/NGS (GLOBAL SELECT MARKET)\",\"XNGS\",\"BLOOMBERG_BUID~EQ0010174300001000, BLOOMBERG_TICKER~MSFT US Equity, CUSIP~594918104, ISIN~US5949181045, SEDOL1~2588173\",\"MICROSOFT CORP\",\"3740\",\"EQUITY\",\"MSFT\",\"CPID~345\",,,,,,3740,\"2050-01-01\",\n" +
+        "\"MICROSOFT CORP\",\"USD\",\"NASDAQ/NGS (GLOBAL SELECT MARKET)\",\"XNGS\",\"BLOOMBERG_BUID~EQ0010174300001000, BLOOMBERG_TICKER~MSFT US Equity, CUSIP~594918104, ISIN~US5949181045, SEDOL1~2588173\",\"MICROSOFT CORP\",\"3740\",\"EQUITY\",\"MSFT\",\"CPID~345\",,,,,,3740,\"2050-01-01\",";
 
     doPortfolioLoadTest("Equity Portfolio", "Equity", data, 1, 4, 3);
   }
@@ -137,7 +137,7 @@ public class PortfolioLoaderToolTest extends AbstractDbTest {
   public void testLoadEquityIndexFutureOptionPortfolio() throws IOException {
 
     final String data = "\"currency\",\"exchange\",\"exerciseType\",\"expiry\",\"externalIdBundle\",\"underlyingId\",\"optionType\",\"position:quantity\",\"securityType\",\"trade:counterpartyExternalId\",\"trade:deal\",\"trade:premium\",\"trade:premiumCurrency\",\"trade:premiumDate\",\"trade:premiumTime\",\"trade:quantity\",\"trade:tradeDate\",\"trade:tradeTime\"\n" +
-        "\"USD\",\"NEW YORK STOCK EXCHANGE INC.\",\"EX_TYPE\",\"2050-01-01T00:00:00+00:00[Europe/London]\",\"EIFO_ID~EIFO1234\",\"UNDERLYING_ID~ul9999\",\"PUT\",\"1264\",\"EQUITY_INDEX_FUTURE_OPTION\",\"CPID~123\",,,,,,,,\n";
+        "\"USD\",\"NEW YORK STOCK EXCHANGE INC.\",\"European\",\"2050-01-01T00:00Z\",\"EIFO_ID~EIFO1234\",\"UNDERLYING_ID~ul9999\",\"PUT\",\"1264\",\"EQUITY_INDEX_FUTURE_OPTION\",\"CPID~123\",,,,,,1264,\"2050-01-01\",\n";
 
     doPortfolioLoadTest("EquityIndexFutureOption Portfolio", "EquityIndexFutureOption", data, 1, 1, 1);
   }
@@ -146,7 +146,7 @@ public class PortfolioLoaderToolTest extends AbstractDbTest {
   public void testLoadEquityIndexDividendFutureOptionPortfolio() throws IOException {
 
     final String data = "\"currency\",\"exchange\",\"exerciseType\",\"expiry\",\"externalIdBundle\",\"underlyingId\",\"optionType\",\"position:quantity\",\"securityType\",\"trade:counterpartyExternalId\",\"trade:deal\",\"trade:premium\",\"trade:premiumCurrency\",\"trade:premiumDate\",\"trade:premiumTime\",\"trade:quantity\",\"trade:tradeDate\",\"trade:tradeTime\"\n" +
-        "\"USD\",\"NEW YORK STOCK EXCHANGE INC.\",\"EX_TYPE\",\"2050-01-01T00:00:00+00:00[Europe/London]\",\"EIFO_ID~EIFO1234\",\"UNDERLYING_ID~ul9999\",\"PUT\",\"1264\",\"EQUITY_INDEX_DIVIDEND_FUTURE_OPTION\",\"CPID~123\",,,,,,,,\n";
+        "\"USD\",\"NEW YORK STOCK EXCHANGE INC.\",\"European\",\"2050-01-01T00:00Z\",\"EIFO_ID~EIFO1234\",\"UNDERLYING_ID~ul9999\",\"PUT\",\"1264\",\"EQUITY_INDEX_DIVIDEND_FUTURE_OPTION\",\"CPID~123\",,,,,,1264,\"2050-01-01\",\n";
 
     doPortfolioLoadTest("EquityIndexDividendFutureOption Portfolio", "EquityIndexDividendFutureOption", data, 1, 1, 1);
   }
@@ -155,8 +155,8 @@ public class PortfolioLoaderToolTest extends AbstractDbTest {
   public void testLoadCashFlowPortfolio() throws IOException {
 
     final String data = "\"amount\",\"currency\",\"settlement\",\"externalIdBundle\",\"position:quantity\",\"securityType\",\"shortName\",\"trade:counterpartyExternalId\",\"trade:deal\",\"trade:premium\",\"trade:premiumCurrency\",\"trade:premiumDate\",\"trade:premiumTime\",\"trade:quantity\",\"trade:tradeDate\",\"trade:tradeTime\"\n" +
-        "150000,\"USD\",\"2014-01-01T00:00:00+00:00[Europe/London]\",\"SOME_ID~CF001\",\"4\",\"CASHFLOW\",,\"CPID~123\",,,,,,,,\n" +
-        "60000,\"EUR\",\"2014-02-02T00:00:00+00:00[Europe/London]\",\"SOME_ID~CF002\",\"2\",\"CASHFLOW\",,\"CPID~234\",,,,,,,,\n";
+        "150000,\"USD\",\"2014-01-01T00:00Z\",\"SOME_ID~CF001\",\"4\",\"CASHFLOW\",,\"CPID~123\",,,,,,4,\"2050-01-01\",\n" +
+        "60000,\"EUR\",\"2014-02-02T00:00Z\",\"SOME_ID~CF002\",\"2\",\"CASHFLOW\",,\"CPID~234\",,,,,,2,\"2050-01-01\",\n";
 
     doPortfolioLoadTest("Cashflow Portfolio", "CashFlow", data, 1, 2, 2);
   }
@@ -165,7 +165,7 @@ public class PortfolioLoaderToolTest extends AbstractDbTest {
   public void testLoadCommodityFutureOptionPortfolio() throws IOException {
 
     final String data = "\"currency\",\"tradingExchange\",\"settlementExchange\",\"exerciseType\",\"expiry\",\"externalIdBundle\",\"underlyingId\",\"optionType\",\"position:quantity\",\"securityType\",\"trade:counterpartyExternalId\",\"trade:deal\",\"trade:premium\",\"trade:premiumCurrency\",\"trade:premiumDate\",\"trade:premiumTime\",\"trade:quantity\",\"trade:tradeDate\",\"trade:tradeTime\"\n" +
-        "\"USD\",\"CME\",\"CME\",\"EX_TYPE\",\"2050-01-01T00:00:00+00:00[Europe/London]\",\"EIFO_ID~EIFO1234\",\"UNDERLYING_ID~ul9999\",\"PUT\",\"1264\",\"COMMODITY_FUTUREOPTION\",\"CPID~123\",,,,,,,,\n";
+        "\"USD\",\"CME\",\"CME\",\"European\",\"2050-01-01T00:00Z\",\"EIFO_ID~EIFO1234\",\"UNDERLYING_ID~ul9999\",\"PUT\",\"1264\",\"COMMODITY_FUTUREOPTION\",\"CPID~123\",,,,,,1264,\"2050-01-01\",\n";
 
     doPortfolioLoadTest("CommodityFutureOption Portfolio", "CommodityFutureOption", data, 1, 1, 1);
   }
@@ -174,7 +174,7 @@ public class PortfolioLoaderToolTest extends AbstractDbTest {
   public void testStandardCdsPortfolio() throws IOException {
 
     final String data = "adjustCashSettlementDate,adjustEffectiveDate,adjustMaturityDate,businessDayConvention,buy,cashSettlementDate,coupon,couponFrequency,dayCount,debtSeniority,effectiveDate,externalIdBundle,immAdjustMaturityDate,includeAccruedPremium,maturityDate,name,notional,position:quantity,protectionBuyer,protectionSeller,protectionStart,quotedSpread,recoveryRate,referenceEntity,regionId,restructuringClause,startDate,stubType,trade:counterpartyExternalId,trade:premium,trade:premiumCurrency,trade:premiumDate,trade:premiumTime,trade:quantity,trade:tradeDate,trade:tradeTime,upfrontAmount\n" +
-        "FALSE,FALSE,FALSE,Following,TRUE,2013-03-24T00:00:00.0Z,100,Semi-annual,ACT/360,SNRFOR,2013-03-21T00:00:00.0Z,CSV_LOADER~41355.6232870372,FALSE,TRUE,2020-03-20T00:00:00.0Z,STEM GBP 100 7Y,GBP 1000000,1,EXTERNAL_CODE~ProtBuyer_1,EXTERNAL_CODE~ProtSeller_1,TRUE,100,0.4,MARKIT_RED_CODE~5AB67W,FINANCIAL_REGION~CARIBBEAN,MR,2013-03-20T00:00:00.0Z,SHORT_START,EXTERNAL_CODE~ProtSeller_1,,,,,1,2013-03-22,,GBP 50000";
+        "FALSE,FALSE,FALSE,Following,TRUE,2013-03-24T00:00Z,100,Semi-annual,ACT/360,SNRFOR,2013-03-21T00:00:00.0Z,CSV_LOADER~41355.6232870372,FALSE,TRUE,2020-03-20T00:00:00.0Z,STEM GBP 100 7Y,GBP 1000000,1,EXTERNAL_CODE~ProtBuyer_1,EXTERNAL_CODE~ProtSeller_1,TRUE,100,0.4,MARKIT_RED_CODE~5AB67W,FINANCIAL_REGION~CARIBBEAN,MR,2013-03-20T00:00:00.0Z,SHORT_START,EXTERNAL_CODE~ProtSeller_1,,,,,1,2013-03-22,,GBP 50000";
 
     doPortfolioLoadTest("Standard CDS Portfolio", "StandardVanillaCDS", data, 1, 1, 1);
   }
@@ -192,7 +192,7 @@ public class PortfolioLoaderToolTest extends AbstractDbTest {
   public void testLoadFxFutureOptionPortfolio() throws IOException {
 
     final String data = "\"currency\",\"tradingExchange\",\"settlementExchange\",\"exerciseType\",\"expiry\",\"externalIdBundle\",\"underlyingId\",\"optionType\",\"position:quantity\",\"securityType\",\"trade:counterpartyExternalId\",\"trade:deal\",\"trade:premium\",\"trade:premiumCurrency\",\"trade:premiumDate\",\"trade:premiumTime\",\"trade:quantity\",\"trade:tradeDate\",\"trade:tradeTime\"\n" +
-        "\"USD\",\"CME\",\"CME\",\"EX_TYPE\",\"2050-01-01T00:00:00+00:00[Europe/London]\",\"EIFO_ID~EIFO1234\",\"UNDERLYING_ID~ul9999\",\"PUT\",\"1264\",\"FX_FUTUREOPTION\",\"CPID~123\",,,,,,,,\n";
+        "\"USD\",\"CME\",\"CME\",\"European\",\"2050-01-01T00:00:00+00:00[Europe/London]\",\"EIFO_ID~EIFO1234\",\"UNDERLYING_ID~ul9999\",\"PUT\",\"1264\",\"FX_FUTUREOPTION\",\"CPID~123\",,,,,,1264,\"2050-01-01\",\n";
 
     doPortfolioLoadTest("FxFutureOption Portfolio", "FxFutureOption", data, 1, 1, 1);
   }

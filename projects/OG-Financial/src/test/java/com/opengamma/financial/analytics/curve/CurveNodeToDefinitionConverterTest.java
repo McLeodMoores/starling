@@ -440,8 +440,7 @@ public class CurveNodeToDefinitionConverterTest {
     cashNode.accept(converter);
   }
 
-  // TODO - ideally this would throw a different exception - see PLAT-6588
-  @Test(expectedExceptions = ClassCastException.class)
+  @Test(expectedExceptions = OpenGammaRuntimeException.class)
   public void testWrongConventionTypeForCash() {
     final ExternalId marketDataId = ExternalId.of(SCHEME, "Data");
     final SnapshotDataBundle marketValues = new SnapshotDataBundle();

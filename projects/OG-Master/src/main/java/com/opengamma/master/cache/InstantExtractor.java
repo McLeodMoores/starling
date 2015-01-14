@@ -27,7 +27,7 @@ public class InstantExtractor implements AttributeExtractor {
   /**
    * The maximum instant.
    */
-  public static final Instant MAX_INSTANT = Instant.parse("9999-12-31T00:00Z");
+  public static final Instant MAX_INSTANT = Instant.parse("9999-12-31T00:00:00.000Z");
 
   @Override
   public Object attributeFor(Element element, String attributeName) throws AttributeExtractorException {

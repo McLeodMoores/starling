@@ -6,6 +6,7 @@
 package com.opengamma.financial.currency;
 
 import java.util.Collections;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -46,12 +47,14 @@ public abstract class AbstractCurrencyMatrix implements CurrencyMatrix, MutableU
 
   @Override
   public Set<Currency> getSourceCurrencies() {
-    return Collections.unmodifiableSet(_values.keySet());
+    Map<Currency, ConcurrentHashMap<Currency, CurrencyMatrixValue>> values = _values;
+    return Collections.unmodifiableSet(values.keySet());
   }
 
   @Override
   public Set<Currency> getTargetCurrencies() {
-    return Collections.unmodifiableSet(_targets.keySet());
+    Map<Currency, AtomicInteger> targets = _targets;
+    return Collections.unmodifiableSet(targets.keySet());
   }
 
   @Override

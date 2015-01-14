@@ -15,7 +15,7 @@
       <outputFileNameMapping>${artifact.artifactId}-${artifact.baseVersion}${dashClassifier?}.${artifact.extension}</outputFileNameMapping>
       <useStrictFiltering>true</useStrictFiltering>
       <excludes>
-        <exclude>com.opengamma.platform:og-server:pom</exclude>
+        <exclude>com.mcleodmoores.opengamma.platform:og-server:pom</exclude>
       </excludes>
     </dependencySet>
   </dependencySets>

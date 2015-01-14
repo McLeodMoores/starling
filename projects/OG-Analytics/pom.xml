@@ -8,7 +8,7 @@
   <parent>
     <groupId>com.mcleodmoores.opengamma.platform</groupId>
     <artifactId>og-platform-public</artifactId>
-    <version>2.2.0</version>
+    <version>1.0.0</version>
     <relativePath>..</relativePath>
   </parent>
   <artifactId>og-analytics</artifactId>
@@ -22,7 +22,7 @@
 
   <dependencies>
     <dependency>
-      <groupId>com.opengamma.platform</groupId>
+      <groupId>com.mcleodmoores.opengamma.platform</groupId>
       <artifactId>og-util</artifactId>
       <version>${project.version}</version>
       <exclusions>
@@ -182,7 +182,7 @@
     </dependency>
 
     <dependency>
-      <groupId>com.opengamma.platform</groupId>
+      <groupId>com.mcleodmoores.opengamma.platform</groupId>
       <artifactId>og-timeseries</artifactId>
       <version>${project.version}</version>
     </dependency>

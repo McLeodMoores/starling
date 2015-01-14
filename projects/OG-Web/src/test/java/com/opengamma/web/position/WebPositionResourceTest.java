@@ -38,11 +38,11 @@ public class WebPositionResourceTest extends AbstractWebPositionResourceTestCase
 
   @Test
   public void testGetPositionWithTrades() throws Exception {
-    final ManageableTrade trade = new ManageableTrade(BigDecimal.valueOf(50), SEC_ID, LocalDate.parse("2011-12-07"), OffsetTime.of(LocalTime.of(15, 4), ZONE_OFFSET), COUNTER_PARTY);
+    final ManageableTrade trade = new ManageableTrade(BigDecimal.valueOf(50), SEC_ID, LocalDate.parse("2011-12-07"), OffsetTime.of(LocalTime.of(15, 4, 0), ZONE_OFFSET), COUNTER_PARTY);
     trade.setPremium(10.0);
     trade.setPremiumCurrency(Currency.USD);
     trade.setPremiumDate(LocalDate.parse("2011-12-08"));
-    trade.setPremiumTime(OffsetTime.of(LocalTime.of(15, 4), ZONE_OFFSET));
+    trade.setPremiumTime(OffsetTime.of(LocalTime.of(15, 4, 0), ZONE_OFFSET));
 
     final ManageablePosition manageablePosition = new ManageablePosition(trade.getQuantity(), SEC_ID);
     manageablePosition.addTrade(trade);

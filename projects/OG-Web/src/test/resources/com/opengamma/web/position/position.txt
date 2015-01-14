@@ -11,9 +11,9 @@
     "trades": [
         {
             "id": "MemPos~2",
-            "trade_date_time": "2011-12-07 15:04:00 (+0100)",
+            "trade_date_time": "2011-12-07 15:04+01:00 (15:04+01:00)",
             "premium": "10 USD",
-            "premium_date_time": "2011-12-08 15:04:00 (+0100)",
+            "premium_date_time": "2011-12-08 15:04+01:00 (15:04+01:00)",
             "quantity": "50",
             "counterParty": "COUNTER_PARTY~BACS",
             "tradeDate": "2011-12-07"

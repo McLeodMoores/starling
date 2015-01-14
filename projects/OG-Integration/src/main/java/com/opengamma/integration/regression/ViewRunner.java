@@ -95,7 +95,7 @@ import com.opengamma.util.ArgumentChecker;
     String workingDir = System.getProperty("user.dir");
     String configFile = "classpath:fullstack/fullstack-examplessimulated-bin.properties";
     String projectName = "examples-simulated";
-    String version = "2.2.0-SNAPSHOT";
+    String version = "1.0.0-SNAPSHOT";
     String serverJar = projectName + "-" + version + ".jar";
     String classpath = "config:lib/" + serverJar;
     String logbackConfig = "-Dlogback.configurationFile=com/opengamma/util/warn-logback.xml";

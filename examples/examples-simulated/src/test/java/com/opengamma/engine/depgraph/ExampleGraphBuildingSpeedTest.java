@@ -57,6 +57,7 @@ import com.opengamma.util.test.TestGroup;
  * <p>
  * Although timings can be reported, the repeated attempts to build the graph are more useful to detect faults with the graph building algorithm - for example inconsistent behaviors.
  */
+@Test(groups = TestGroup.INTEGRATION)
 public class ExampleGraphBuildingSpeedTest {
 
   private static final Logger s_logger = LoggerFactory.getLogger(ExampleGraphBuildingSpeedTest.class);
