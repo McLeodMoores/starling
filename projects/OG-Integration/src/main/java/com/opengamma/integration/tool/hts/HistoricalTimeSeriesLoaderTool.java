@@ -11,6 +11,7 @@ import java.io.FileReader;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.slf4j.Logger;
@@ -42,6 +43,8 @@ public class HistoricalTimeSeriesLoaderTool extends AbstractTool<IntegrationTool
   public static final String TIME_SERIES_IDSCHEME_OPT = "i";
   /** Default value for the data provider */
   private static final String DEFAULT_DATA_PROVIDER = "DEFAULT";
+  private static final String HELP_HEADER = "Tool to load time series from the system data source from a text file, one line per identifier.";
+  private static final String HELP_FOOTER = null; // NOTE: jim 26-Jan-15 -- checked that printHelp code handles nulls okay.
 
   //-------------------------------------------------------------------------
   /**
@@ -117,5 +120,13 @@ public class HistoricalTimeSeriesLoaderTool extends AbstractTool<IntegrationTool
         
     return options;
   }
+  
+  protected void usage(final Options options) {
+    final HelpFormatter formatter = new HelpFormatter();
+    formatter.setWidth(120);
+    formatter.printHelp("historical-time-series-loader-tool.sh", HELP_HEADER, options, HELP_FOOTER, true);
+  }
+  
+  
 
 }

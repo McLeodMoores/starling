@@ -1,3 +1,7 @@
+McCleod Moores Fork 1.1.0
+-------------------------
+TODO: Release notes.
+
 McCleod Moores Fork 1.0.0
 -------------------------
 TODO: Release notes.
