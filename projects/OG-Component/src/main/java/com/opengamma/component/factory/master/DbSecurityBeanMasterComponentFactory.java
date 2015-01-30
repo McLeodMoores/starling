@@ -54,9 +54,9 @@ public class DbSecurityBeanMasterComponentFactory extends AbstractDocumentDbMast
   };
   static {
     Reflections reflections = AnnotationReflector.getDefaultReflector().getReflector();
-    Set<String> subTypes = reflections.getStore().getSubTypesOf(ManageableSecurity.class.getName());
-    for (final String subType : subTypes) {
-      Class<?> cls = ClassUtils.loadClassRuntime(subType, ManageableSecurity.class);
+    Set<Class<? extends ManageableSecurity>> subTypes = reflections.getSubTypesOf(ManageableSecurity.class);
+    for (final Class<? extends ManageableSecurity> subType : subTypes) {
+      Class<?> cls = ClassUtils.loadClassRuntime(subType.getName(), ManageableSecurity.class);
       SerDeserializers.INSTANCE.register(cls, DESERIALIZER);
     }
     SerDeserializers.INSTANCE.register(ManageableSecurity.class, DESERIALIZER);

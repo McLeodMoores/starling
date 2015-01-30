@@ -67,7 +67,7 @@ public class AnnotationScannerTask extends Task {
     }
     Set<String> classNames;
     try {
-      classNames = ClassNameAnnotationScannerUtils.scan(_classpath, getAnnotationClassName());
+      classNames = ClassNameAnnotationScannerUtils.scan(_classpath, Class.forName(getAnnotationClassName()));
     } catch (Exception e) {
       throw new BuildException("Error scanning for annotated classes", e);
     }

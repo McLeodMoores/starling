@@ -28,6 +28,7 @@ public class ArbitraryViewCycleExecutionSequenceFudgeBuilder implements FudgeBui
   @Override
   public MutableFudgeMsg buildMessage(FudgeSerializer serializer, ArbitraryViewCycleExecutionSequence object) {
     MutableFudgeMsg msg = serializer.newMessage();
+    msg.add(0, ArbitraryViewCycleExecutionSequence.class.getName());
     serializer.addToMessage(msg, SEQUENCE_FIELD, null, object.getRemainingSequence());
     return msg;
   }

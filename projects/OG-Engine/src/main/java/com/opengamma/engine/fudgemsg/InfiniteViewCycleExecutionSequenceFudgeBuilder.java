@@ -22,7 +22,9 @@ public class InfiniteViewCycleExecutionSequenceFudgeBuilder implements FudgeBuil
 
   @Override
   public MutableFudgeMsg buildMessage(FudgeSerializer serializer, InfiniteViewCycleExecutionSequence object) {
-    return serializer.newMessage();
+    MutableFudgeMsg msg = serializer.newMessage();
+    msg.add(0, InfiniteViewCycleExecutionSequence.class.getName());
+    return msg;
   }
 
   @Override

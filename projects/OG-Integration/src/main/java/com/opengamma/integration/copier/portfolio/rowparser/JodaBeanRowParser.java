@@ -528,13 +528,13 @@ public class JodaBeanRowParser extends RowParser {
 
   private Class<? extends Bean> getJodaBeanSubType(final String className) {
     final Reflections reflections = AnnotationReflector.getDefaultReflector().getReflector();
-    final Set<String> directBeanSubTypes = reflections.getStore().getSubTypesOf(Bean.class.getName());
+    final Set<Class<? extends Bean>> directBeanSubTypes = reflections.getSubTypesOf(Bean.class);
 
     Class<? extends Bean> theClass = null;
-    for (final String directBeanType : directBeanSubTypes) {
+    for (final Class<? extends Bean> directBeanType : directBeanSubTypes) {
       try {
-        if (directBeanType.endsWith("." + className)) {
-          theClass = Class.forName(directBeanType).asSubclass(Bean.class);
+        if (directBeanType.getName().endsWith("." + className)) {
+          theClass = directBeanType.asSubclass(Bean.class);
           break;
         }
       } catch (final Throwable ex) {
@@ -545,13 +545,13 @@ public class JodaBeanRowParser extends RowParser {
 
   private Class<? extends Bean> getFinancialSecurityClass(final String className) {
     final Reflections reflections = AnnotationReflector.getDefaultReflector().getReflector();
-    final Set<String> financialSecuritySubTypes = reflections.getStore().getSubTypesOf(FinancialSecurity.class.getName());
+    final Set<Class<? extends FinancialSecurity>> financialSecuritySubTypes = reflections.getSubTypesOf(FinancialSecurity.class);
 
     Class<? extends Bean> theClass = null;
-    for (final String securityType : financialSecuritySubTypes) {
+    for (final Class<? extends Bean> securityType : financialSecuritySubTypes) {
       try {
-        if (securityType.endsWith("." + className)) {
-          theClass = Class.forName(securityType).asSubclass(Bean.class);
+        if (securityType.getName().endsWith("." + className)) {
+          theClass = securityType.asSubclass(Bean.class);
           break;
         }
       } catch (final Throwable ex) {
@@ -570,10 +570,10 @@ public class JodaBeanRowParser extends RowParser {
     final Collection<Class<?>> subClasses = new ArrayList<Class<?>>();
 
     final Reflections reflections = AnnotationReflector.getDefaultReflector().getReflector();
-    final Set<String> subTypes = reflections.getStore().getSubTypesOf(beanClass.getName());
-    for (final String subType : subTypes) {
+    final Set<?> subTypes = reflections.getSubTypesOf(beanClass);
+    for (final Object subType : subTypes) {
       try {
-        subClasses.add(Class.forName(subType));
+        subClasses.add((Class<?>) subType);
       } catch (final Throwable ex) {
       }
     }

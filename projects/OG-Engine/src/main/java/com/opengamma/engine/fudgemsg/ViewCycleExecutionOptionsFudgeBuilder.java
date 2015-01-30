@@ -42,6 +42,7 @@ public class ViewCycleExecutionOptionsFudgeBuilder implements FudgeBuilder<ViewC
   @Override
   public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final ViewCycleExecutionOptions object) {
     final MutableFudgeMsg msg = serializer.newMessage();
+    FudgeSerializer.addClassHeader(msg, ViewCycleExecutionOptions.class);
     serializer.addToMessage(msg, NAME, null, object.getName());
     serializer.addToMessage(msg, VALUATION_TIME_FIELD, null, object.getValuationTime());
     for (final MarketDataSpecification spec : object.getMarketDataSpecifications()) {

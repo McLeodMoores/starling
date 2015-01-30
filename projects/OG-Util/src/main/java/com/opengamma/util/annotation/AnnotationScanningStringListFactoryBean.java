@@ -10,8 +10,10 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -103,10 +105,20 @@ public class AnnotationScanningStringListFactoryBean extends SingletonFactoryBea
     return stringList;
   }
 
+  @SuppressWarnings("unchecked")
   private Set<String> getByScanning(String annotationClassName) {
-    Set<String> annotated = AnnotationReflector.getDefaultReflector().getReflector().getStore().getTypesAnnotatedWith(annotationClassName);
+    Set<Class<?>> annotated;
+    try {
+      annotated = AnnotationReflector.getDefaultReflector().getReflector().getTypesAnnotatedWith((Class<? extends Annotation>) Class.forName(annotationClassName));
+    } catch (ClassNotFoundException ex) {
+      throw new OpenGammaRuntimeException("Annotation " + annotationClassName + " not found", ex);
+    }
+    Set<String> annotatedNames = new LinkedHashSet<String>();
+    for (Class<?> clazz : annotated) {
+      annotatedNames.add(clazz.getName());
+    }
     s_logger.debug("Found {} classes containing annotation: {}", annotated.size(), annotated);
-    return annotated;
+    return annotatedNames;
   }
 
 }

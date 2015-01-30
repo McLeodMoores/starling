@@ -29,6 +29,7 @@ public class CycleFragmentCompletedCallFudgeBuilder implements FudgeBuilder<Cycl
   @Override
   public MutableFudgeMsg buildMessage(FudgeSerializer serializer, CycleFragmentCompletedCall object) {
     MutableFudgeMsg msg = serializer.newMessage();
+    msg.add(0, CycleFragmentCompletedCall.class.getName());
     serializer.addToMessage(msg, FULL_FRAGMENT_FIELD, null, object.getFullFragment());
     serializer.addToMessage(msg, DELTA_FRAGMENT_FIELD, null, object.getDeltaFragment());
     return msg;

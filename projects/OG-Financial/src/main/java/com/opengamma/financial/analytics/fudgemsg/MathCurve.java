@@ -44,6 +44,7 @@ final class MathCurve {
 
     @Override
     protected void buildMessage(final FudgeSerializer serializer, final MutableFudgeMsg message, final ConstantDoublesCurve object) {
+      FudgeSerializer.addClassHeader(message, ConstantDoublesCurve.class);
       message.add(Y_VALUE_FIELD_NAME, null, object.getYValue(0.));
       message.add(CURVE_NAME_FIELD_NAME, null, object.getName());
     }
@@ -66,6 +67,7 @@ final class MathCurve {
 
     @Override
     protected void buildMessage(final FudgeSerializer serializer, final MutableFudgeMsg message, final InterpolatedDoublesCurve object) {
+      FudgeSerializer.addClassHeader(message, InterpolatedDoublesCurve.class);
       serializer.addToMessage(message, X_DATA_FIELD_NAME, null, object.getXDataAsPrimitive());
       serializer.addToMessage(message, Y_DATA_FIELD_NAME, null, object.getYDataAsPrimitive());
       serializer.addToMessage(message, INTERPOLATOR_FIELD_NAME, null, object.getInterpolator());
@@ -103,6 +105,7 @@ final class MathCurve {
 
     @Override
     protected void buildMessage(final FudgeSerializer serializer, final MutableFudgeMsg message, final FunctionalDoublesCurve object) {
+      FudgeSerializer.addClassHeader(message, FunctionalDoublesCurve.class);
       serializer.addToMessage(message, CURVE_NAME_FIELD_NAME, null, object.getName());
       serializer.addToMessage(message, CURVE_FUNCTION_FIELD_NAME, null, substituteObject(object.getFunction()));
       return;
@@ -120,6 +123,7 @@ final class MathCurve {
 
     @Override
     protected void buildMessage(final FudgeSerializer serializer, final MutableFudgeMsg message, final NodalDoublesCurve object) {
+      FudgeSerializer.addClassHeader(message, NodalDoublesCurve.class);
       serializer.addToMessage(message, X_DATA_FIELD_NAME, null, object.getXDataAsPrimitive());
       serializer.addToMessage(message, Y_DATA_FIELD_NAME, null, object.getYDataAsPrimitive());
       serializer.addToMessage(message, CURVE_NAME_FIELD_NAME, null, object.getName());
@@ -146,6 +150,7 @@ final class MathCurve {
 
     @Override
     protected void buildMessage(final FudgeSerializer serializer, final MutableFudgeMsg message, final NodalTenorDoubleCurve object) {
+      FudgeSerializer.addClassHeader(message, NodalTenorDoubleCurve.class);
       final ArrayList<String> tenorStrings = new ArrayList<>();
       for (final Tenor tenor : object.getXData()) {
         tenorStrings.add(tenor.getPeriod().toString());
@@ -188,6 +193,7 @@ final class MathCurve {
 
     @Override
     protected void buildMessage(final FudgeSerializer serializer, final MutableFudgeMsg message, final NodalObjectsCurve<?, ?> object) {
+      FudgeSerializer.addClassHeader(message, NodalObjectsCurve.class);
       final Object[] xs = object.getXData();
       final Object[] ys = object.getYData();
       final String curveName = object.getName();

@@ -31,7 +31,7 @@ public class FixedHistoricalMarketDataSpecificationFudgeBuilder implements Fudge
   @Override
   public MutableFudgeMsg buildMessage(FudgeSerializer serializer, FixedHistoricalMarketDataSpecification object) {
     final MutableFudgeMsg msg = serializer.newMessage();
-    msg.add(0, FixedHistoricalMarketDataSpecificationFudgeBuilder.class.getName());
+    msg.add(0, FixedHistoricalMarketDataSpecification.class.getName());
     if (object.getTimeSeriesResolverKey() != null) {
       msg.add(TIME_SERIES_RESOLVER_KEY_FIELD, object.getTimeSeriesResolverKey());
     }

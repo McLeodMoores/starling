@@ -26,6 +26,8 @@ import org.reflections.scanners.MethodParameterScanner;
 import org.reflections.scanners.TypeAnnotationsScanner;
 import org.threeten.bp.Instant;
 
+import com.opengamma.OpenGammaRuntimeException;
+
 /**
  * Scans the class path for classes that contain the given annotations.
  */
@@ -104,7 +106,7 @@ public final class ClasspathScanner {
    * @param annotationClass the annotation to search for
    * @return the cache, not null
    */
-  @SuppressWarnings("rawtypes")
+  @SuppressWarnings({"rawtypes", "unchecked" })
   public AnnotationCache scan(Class<? extends Annotation> annotationClass) {
     int scanners = 0;
     if (isScanClassAnnotations()) {
@@ -138,7 +140,16 @@ public final class ClasspathScanner {
     AnnotationReflector reflector = new AnnotationReflector(null, _urls, config);
     final HashSet<String> classNames = new HashSet<String>();
     if (isScanClassAnnotations()) {
-      classNames.addAll(reflector.getReflector().getStore().getTypesAnnotatedWith(annotationClass.getName()));
+      
+      Set<Class<?>> classes;
+      try {
+        classes = reflector.getReflector().getTypesAnnotatedWith((Class<? extends Annotation>) Class.forName(annotationClass.getName()));
+      } catch (ClassNotFoundException ex) {
+        throw new OpenGammaRuntimeException("Can't find class " + annotationClass, ex);
+      }
+      for (Class<?> clazz : classes) {
+        classNames.add(clazz.getName());
+      }
     }
     if (isScanFieldAnnotations()) {
       Set<Field> fields = reflector.getReflector().getFieldsAnnotatedWith(annotationClass);

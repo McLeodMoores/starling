@@ -7,6 +7,7 @@ package com.opengamma.util.fudgemsg;
 
 import java.io.File;
 import java.net.URL;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -92,7 +93,7 @@ public final class OpenGammaFudgeContext {
       } catch (Exception ex) {
         // ignore
       }
-      Set<URL> urls;
+      Collection<URL> urls;
       if (ServletContextHolder.getContext() == null) {
         urls = ClasspathHelper.forManifest(ClasspathHelper.forJavaClassPath());
       } else {

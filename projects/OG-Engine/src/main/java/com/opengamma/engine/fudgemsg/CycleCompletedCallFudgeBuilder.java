@@ -29,6 +29,7 @@ public class CycleCompletedCallFudgeBuilder implements FudgeBuilder<CycleComplet
   @Override
   public MutableFudgeMsg buildMessage(FudgeSerializer serializer, CycleCompletedCall object) {
     MutableFudgeMsg msg = serializer.newMessage();
+    msg.add(0, CycleCompletedCall.class.getName());
     ViewComputationResultModel fullResult = object.getFullResult();
     ViewDeltaResultModel deltaResult = object.getDeltaResult();
     serializer.addToMessage(msg, FULL_RESULT_FIELD, null, fullResult);
