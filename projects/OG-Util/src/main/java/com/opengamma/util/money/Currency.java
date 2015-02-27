@@ -20,6 +20,7 @@ import com.opengamma.id.ObjectIdentifiable;
 import com.opengamma.id.UniqueId;
 import com.opengamma.id.UniqueIdentifiable;
 import com.opengamma.util.ArgumentChecker;
+import com.opengamma.util.NamedInstance;
 import com.opengamma.util.PublicAPI;
 
 /**
@@ -30,7 +31,7 @@ import com.opengamma.util.PublicAPI;
  * This class is immutable and thread-safe.
  */
 @PublicAPI
-public final class Currency implements ObjectIdentifiable, UniqueIdentifiable, Comparable<Currency>, Serializable {
+public final class Currency implements ObjectIdentifiable, UniqueIdentifiable, Comparable<Currency>, NamedInstance, Serializable {
 
   /** Serialization version. */
   private static final long serialVersionUID = 1L;
@@ -98,7 +99,7 @@ public final class Currency implements ObjectIdentifiable, UniqueIdentifiable, C
   /**
    * The currency 'SKK' - Slovak Korona
    */
-  public static final Currency SKK = of("SKK"); 
+  public static final Currency SKK = of("SKK");
   /**
    * The currency 'ITL' - Italian Lira
    */
@@ -328,6 +329,11 @@ public final class Currency implements ObjectIdentifiable, UniqueIdentifiable, C
   @Override
   public String toString() {
     return _code;
+  }
+
+  @Override
+  public String getName() {
+    return getCode();
   }
 
 }

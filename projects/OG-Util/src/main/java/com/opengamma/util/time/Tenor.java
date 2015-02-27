@@ -16,11 +16,12 @@ import org.threeten.bp.Period;
 import org.threeten.bp.format.DateTimeParseException;
 
 import com.opengamma.util.ArgumentChecker;
+import com.opengamma.util.NamedInstance;
 
 /**
  * A tenor.
  */
-public class Tenor implements Comparable<Tenor>, Serializable {
+public class Tenor implements Comparable<Tenor>, NamedInstance, Serializable {
 
   /** Serialization version. */
   private static final long serialVersionUID = -6312355131513714559L;
@@ -452,6 +453,11 @@ public class Tenor implements Comparable<Tenor>, Serializable {
     }
     sb.append("]");
     return sb.toString();
+  }
+
+  @Override
+  public String getName() {
+    return toFormattedString();
   }
 
 }

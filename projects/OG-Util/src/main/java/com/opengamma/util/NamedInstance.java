@@ -3,15 +3,20 @@
  * 
  * Please see distribution for license.
  */
-package com.opengamma.financial.convention;
+package com.opengamma.util;
 
 /**
  * A named instance is a type where each instance is uniquely identified by a name.
- * DEPRECATED: this is here just to limit code changes
  * 
  * @see NamedInstanceFactory
- * @deprecated use com.opengamma.util.NamedInstance
  */
-@Deprecated
-public interface NamedInstance extends com.opengamma.util.NamedInstance {
+public interface NamedInstance {
+
+  /**
+   * Gets the name of the instance.
+   * 
+   * @return the name of this instance, not null
+   */
+  String getName();
+
 }

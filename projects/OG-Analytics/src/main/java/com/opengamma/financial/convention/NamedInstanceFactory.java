@@ -5,12 +5,12 @@
  */
 package com.opengamma.financial.convention;
 
-import java.util.Map;
-
 import com.opengamma.util.ClassUtils;
 
 /**
  * An interface for named instances.
+ * <p>
+ * DEPRECATED: Use com.opengamma.util.NamedInstanceFactory - this is here to minimize code changes.
  * <p>
  * A named instance is a type where each instance is uniquely identified by a name.
  * This factory provides access to all the instances.
@@ -19,36 +19,9 @@ import com.opengamma.util.ClassUtils;
  * named 'INSTANCE' accessible using {@link ClassUtils#singletonInstance(Class)}.
  * 
  * @param <T> type of objects returned
+ * @deprecated use com.opengamma.util.NamedInstanceFactory
  */
-public interface NamedInstanceFactory<T extends NamedInstance> {
-
-  /**
-   * Finds a named instance by name, ignoring case.
-   * 
-   * @param name  the name of the instance to find, not null
-   * @return the named instance, not null
-   * @throws IllegalArgumentException if the name is not found
-   */
-  T instance(String name);
-
-  /**
-   * Returns the map of available instances keyed by name, excluding alternate names.
-   * <p>
-   * A named instance may be registered under more than one name.
-   * Those additional names are excluded.
-   * 
-   * @return the unmodifiable map of named instances, not null
-   */
-  Map<String, T> instanceMap();
-
-  /**
-   * Returns the map of available instances keyed by name, including alternate names.
-   * <p>
-   * A named instance may be registered under more than one name.
-   * Those additional names are included.
-   * 
-   * @return the unmodifiable map of named instances, not null
-   */
-  Map<String, T> instanceMapWithAlternateNames();
+@Deprecated
+public interface NamedInstanceFactory<T extends NamedInstance> extends com.opengamma.util.NamedInstanceFactory<T> {
 
 }
