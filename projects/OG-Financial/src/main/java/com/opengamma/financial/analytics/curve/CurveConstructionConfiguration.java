@@ -131,6 +131,9 @@ public class CurveConstructionConfiguration extends DirectBean implements Serial
             }
           }
       );
+    } else {
+      _exogenousConfigurations = exogenousConfigurations;
+      _exogenousLinks = ImmutableList.of();
     }
   }
 
