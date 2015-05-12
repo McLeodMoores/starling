@@ -26,6 +26,7 @@ import org.threeten.bp.Instant;
 import org.threeten.bp.ZonedDateTime;
 
 import com.opengamma.util.ArgumentChecker;
+import org.joda.beans.BeanBuilder;
 
 /**
  * An indication of when something expires.
@@ -235,7 +236,7 @@ public final class Expiry implements ImmutableBean, Serializable {
     }
 
     @Override
-    public Expiry.Builder builder() {
+    public BeanBuilder<? extends Expiry> builder() {
       return new Expiry.Builder();
     }
 
@@ -346,7 +347,7 @@ public final class Expiry implements ImmutableBean, Serializable {
 
     @Override
     public Builder setString(MetaProperty<?> property, String value) {
-      super.set(property, value);
+      super.setString(property, value);
       return this;
     }
 

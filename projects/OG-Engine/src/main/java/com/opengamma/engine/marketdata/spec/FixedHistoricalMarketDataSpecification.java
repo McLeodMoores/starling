@@ -102,6 +102,7 @@ public class FixedHistoricalMarketDataSpecification extends HistoricalMarketData
    * Returns a builder that allows this bean to be mutated.
    * @return the mutable builder, not null
    */
+  @Override
   public Builder toBuilder() {
     return new Builder(this);
   }
@@ -122,7 +123,7 @@ public class FixedHistoricalMarketDataSpecification extends HistoricalMarketData
   @Override
   public int hashCode() {
     int hash = 7;
-    hash += hash * 31 + JodaBeanUtils.hashCode(getSnapshotDate());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getSnapshotDate());
     return hash ^ super.hashCode();
   }
 
@@ -287,7 +288,7 @@ public class FixedHistoricalMarketDataSpecification extends HistoricalMarketData
 
     @Override
     public Builder setString(MetaProperty<?> property, String value) {
-      super.set(property, value);
+      super.setString(property, value);
       return this;
     }
 
@@ -304,7 +305,7 @@ public class FixedHistoricalMarketDataSpecification extends HistoricalMarketData
 
     //-----------------------------------------------------------------------
     /**
-     * Sets the {@code snapshotDate} property in the builder.
+     * Sets the snapshotDate.
      * @param snapshotDate  the new value, not null
      * @return this, for chaining, not null
      */

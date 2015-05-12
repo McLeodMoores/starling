@@ -31,6 +31,7 @@ import com.opengamma.id.ObjectIdentifiable;
 import com.opengamma.id.UniqueId;
 import com.opengamma.id.UniqueIdentifiable;
 import com.opengamma.util.ArgumentChecker;
+import org.joda.beans.BeanBuilder;
 
 /**
  * Stores a pair of currencies without any implied ordering.
@@ -311,7 +312,7 @@ public final class UnorderedCurrencyPair implements ImmutableBean,
     }
 
     @Override
-    public UnorderedCurrencyPair.Builder builder() {
+    public BeanBuilder<? extends UnorderedCurrencyPair> builder() {
       return new UnorderedCurrencyPair.Builder();
     }
 
@@ -422,7 +423,7 @@ public final class UnorderedCurrencyPair implements ImmutableBean,
 
     @Override
     public Builder setString(MetaProperty<?> property, String value) {
-      super.set(property, value);
+      super.setString(property, value);
       return this;
     }
 

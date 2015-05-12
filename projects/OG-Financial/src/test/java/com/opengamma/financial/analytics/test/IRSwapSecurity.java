@@ -129,8 +129,8 @@ public final class IRSwapSecurity implements ImmutableBean {
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash += hash * 31 + JodaBeanUtils.hashCode(getSwapSecurity());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getRawInput());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getSwapSecurity());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getRawInput());
     return hash;
   }
 
@@ -310,7 +310,7 @@ public final class IRSwapSecurity implements ImmutableBean {
 
     @Override
     public Builder setString(MetaProperty<?> property, String value) {
-      super.set(property, value);
+      super.setString(property, value);
       return this;
     }
 
@@ -329,7 +329,7 @@ public final class IRSwapSecurity implements ImmutableBean {
 
     //-----------------------------------------------------------------------
     /**
-     * Sets the {@code swapSecurity} property in the builder.
+     * Sets the swapSecurity.
      * @param swapSecurity  the new value, not null
      * @return this, for chaining, not null
      */
@@ -340,7 +340,7 @@ public final class IRSwapSecurity implements ImmutableBean {
     }
 
     /**
-     * Sets the {@code rawInput} property in the builder.
+     * Sets the rawInput.
      * @param rawInput  the new value, not null
      * @return this, for chaining, not null
      */

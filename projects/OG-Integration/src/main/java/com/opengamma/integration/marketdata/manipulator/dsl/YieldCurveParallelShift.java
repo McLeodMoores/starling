@@ -147,8 +147,8 @@ public final class YieldCurveParallelShift implements StructureManipulator<Yield
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash += hash * 31 + JodaBeanUtils.hashCode(getShiftType());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getShift());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getShiftType());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getShift());
     return hash;
   }
 
@@ -328,7 +328,7 @@ public final class YieldCurveParallelShift implements StructureManipulator<Yield
 
     @Override
     public Builder setString(MetaProperty<?> property, String value) {
-      super.set(property, value);
+      super.setString(property, value);
       return this;
     }
 
@@ -347,7 +347,7 @@ public final class YieldCurveParallelShift implements StructureManipulator<Yield
 
     //-----------------------------------------------------------------------
     /**
-     * Sets the {@code shiftType} property in the builder.
+     * Sets how the shift should be applied
      * @param shiftType  the new value, not null
      * @return this, for chaining, not null
      */
@@ -358,7 +358,7 @@ public final class YieldCurveParallelShift implements StructureManipulator<Yield
     }
 
     /**
-     * Sets the {@code shift} property in the builder.
+     * Sets the shift to apply
      * @param shift  the new value
      * @return this, for chaining, not null
      */

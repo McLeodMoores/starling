@@ -218,11 +218,11 @@ public class CashFlowDetailsProvider implements ImmutableBean {
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash += hash * 31 + JodaBeanUtils.hashCode(getMulticurveProviderInterface());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getZonedDateTime());
-    hash += hash * 31 + JodaBeanUtils.hashCode(isFixed());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getDefinition());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getType());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getMulticurveProviderInterface());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getZonedDateTime());
+    hash = hash * 31 + JodaBeanUtils.hashCode(isFixed());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getDefinition());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getType());
     return hash;
   }
 
@@ -488,7 +488,7 @@ public class CashFlowDetailsProvider implements ImmutableBean {
 
     @Override
     public Builder setString(MetaProperty<?> property, String value) {
-      super.set(property, value);
+      super.setString(property, value);
       return this;
     }
 
@@ -505,7 +505,7 @@ public class CashFlowDetailsProvider implements ImmutableBean {
 
     //-----------------------------------------------------------------------
     /**
-     * Sets the {@code multicurveProviderInterface} property in the builder.
+     * Sets the MulticurveProviderInterface bundle
      * @param multicurveProviderInterface  the new value, not null
      * @return this, for chaining, not null
      */
@@ -516,7 +516,7 @@ public class CashFlowDetailsProvider implements ImmutableBean {
     }
 
     /**
-     * Sets the {@code zonedDateTime} property in the builder.
+     * Sets the valuation time
      * @param zonedDateTime  the new value, not null
      * @return this, for chaining, not null
      */
@@ -527,7 +527,7 @@ public class CashFlowDetailsProvider implements ImmutableBean {
     }
 
     /**
-     * Sets the {@code fixed} property in the builder.
+     * Sets boolean, whether the leg is fixed or floating
      * @param fixed  the new value, not null
      * @return this, for chaining, not null
      */
@@ -538,7 +538,7 @@ public class CashFlowDetailsProvider implements ImmutableBean {
     }
 
     /**
-     * Sets the {@code definition} property in the builder.
+     * Sets the swap definition
      * @param definition  the new value, not null
      * @return this, for chaining, not null
      */
@@ -549,7 +549,7 @@ public class CashFlowDetailsProvider implements ImmutableBean {
     }
 
     /**
-     * Sets the {@code type} property in the builder.
+     * Sets the PayReceiveType, whether the leg is pay or receive
      * @param type  the new value, not null
      * @return this, for chaining, not null
      */

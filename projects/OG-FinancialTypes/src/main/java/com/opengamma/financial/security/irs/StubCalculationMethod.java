@@ -377,15 +377,15 @@ public final class StubCalculationMethod implements ImmutableBean {
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash += hash * 31 + JodaBeanUtils.hashCode(getType());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getFirstStubRate());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getLastStubRate());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getFirstStubEndDate());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getLastStubEndDate());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getFirstStubStartReferenceRateId());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getFirstStubEndReferenceRateId());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getLastStubStartReferenceRateId());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getLastStubEndReferenceRateId());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getType());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getFirstStubRate());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getLastStubRate());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getFirstStubEndDate());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getLastStubEndDate());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getFirstStubStartReferenceRateId());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getFirstStubEndReferenceRateId());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getLastStubStartReferenceRateId());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getLastStubEndReferenceRateId());
     return hash;
   }
 
@@ -747,7 +747,7 @@ public final class StubCalculationMethod implements ImmutableBean {
 
     @Override
     public Builder setString(MetaProperty<?> property, String value) {
-      super.set(property, value);
+      super.setString(property, value);
       return this;
     }
 
@@ -773,7 +773,7 @@ public final class StubCalculationMethod implements ImmutableBean {
 
     //-----------------------------------------------------------------------
     /**
-     * Sets the {@code type} property in the builder.
+     * Sets the stub type.
      * @param type  the new value, not null
      * @return this, for chaining, not null
      */
@@ -784,7 +784,7 @@ public final class StubCalculationMethod implements ImmutableBean {
     }
 
     /**
-     * Sets the {@code firstStubRate} property in the builder.
+     * Sets the first stub rate. Setting this will override any interpolation. This is an optional field.
      * @param firstStubRate  the new value
      * @return this, for chaining, not null
      */
@@ -794,7 +794,7 @@ public final class StubCalculationMethod implements ImmutableBean {
     }
 
     /**
-     * Sets the {@code lastStubRate} property in the builder.
+     * Sets the last stub rate. Setting this will override any interpolation. This is an optional field.
      * @param lastStubRate  the new value
      * @return this, for chaining, not null
      */
@@ -804,7 +804,7 @@ public final class StubCalculationMethod implements ImmutableBean {
     }
 
     /**
-     * Sets the {@code firstStubEndDate} property in the builder.
+     * Sets the date at which the first stub period ends and regular coupon periods begin. This is an optional field, unless stub type is BOTH.
      * @param firstStubEndDate  the new value
      * @return this, for chaining, not null
      */
@@ -814,7 +814,7 @@ public final class StubCalculationMethod implements ImmutableBean {
     }
 
     /**
-     * Sets the {@code lastStubEndDate} property in the builder.
+     * Sets the date at which the regular coupon periods ends and last stub period begins. This is an optional field, unless stub type is BOTH.
      * @param lastStubEndDate  the new value
      * @return this, for chaining, not null
      */
@@ -824,7 +824,7 @@ public final class StubCalculationMethod implements ImmutableBean {
     }
 
     /**
-     * Sets the {@code firstStubStartReferenceRateId} property in the builder.
+     * Sets the External Id which corresponds to the first index rate. This is an optional field.
      * @param firstStubStartReferenceRateId  the new value
      * @return this, for chaining, not null
      */
@@ -834,7 +834,7 @@ public final class StubCalculationMethod implements ImmutableBean {
     }
 
     /**
-     * Sets the {@code firstStubEndReferenceRateId} property in the builder.
+     * Sets the External Id which corresponds to the end index rate for the first stub. This is an optional field.
      * @param firstStubEndReferenceRateId  the new value
      * @return this, for chaining, not null
      */
@@ -844,7 +844,7 @@ public final class StubCalculationMethod implements ImmutableBean {
     }
 
     /**
-     * Sets the {@code lastStubStartReferenceRateId} property in the builder.
+     * Sets the External Id which corresponds to the start index rate for the last stub. This is an optional field.
      * @param lastStubStartReferenceRateId  the new value
      * @return this, for chaining, not null
      */
@@ -854,7 +854,7 @@ public final class StubCalculationMethod implements ImmutableBean {
     }
 
     /**
-     * Sets the {@code lastStubEndReferenceRateId} property in the builder.
+     * Sets the External Id which corresponds to the end index rate for the last stub. This is an optional field.
      * @param lastStubEndReferenceRateId  the new value
      * @return this, for chaining, not null
      */

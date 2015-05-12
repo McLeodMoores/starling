@@ -187,10 +187,10 @@ public class TargetProperty extends DirectBean {
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash += hash * 31 + JodaBeanUtils.hashCode(getId());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getTargetSpecification());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getPropertyKey());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getPropertyValue());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getId());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getTargetSpecification());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getPropertyKey());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getPropertyValue());
     return hash;
   }
 

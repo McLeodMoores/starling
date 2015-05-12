@@ -357,11 +357,11 @@ public final class CalculationResults implements ImmutableBean {
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash += hash * 31 + JodaBeanUtils.hashCode(getValues());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getViewDefinitionName());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getSnapshotName());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getValuationTime());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getVersion());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getValues());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getViewDefinitionName());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getSnapshotName());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getValuationTime());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getVersion());
     return hash;
   }
 
@@ -539,7 +539,7 @@ public final class CalculationResults implements ImmutableBean {
    */
   public static final class Builder extends DirectFieldsBeanBuilder<CalculationResults> {
 
-    private Map<CalculationResultKey, CalculatedValue> _values = new HashMap<CalculationResultKey, CalculatedValue>();
+    private Map<CalculationResultKey, CalculatedValue> _values = ImmutableMap.of();
     private String _viewDefinitionName;
     private String _snapshotName;
     private Instant _valuationTime;
@@ -556,7 +556,7 @@ public final class CalculationResults implements ImmutableBean {
      * @param beanToCopy  the bean to copy from, not null
      */
     private Builder(CalculationResults beanToCopy) {
-      this._values = new HashMap<CalculationResultKey, CalculatedValue>(beanToCopy.getValues());
+      this._values = ImmutableMap.copyOf(beanToCopy.getValues());
       this._viewDefinitionName = beanToCopy.getViewDefinitionName();
       this._snapshotName = beanToCopy.getSnapshotName();
       this._valuationTime = beanToCopy.getValuationTime();
@@ -621,7 +621,7 @@ public final class CalculationResults implements ImmutableBean {
 
     @Override
     public Builder setString(MetaProperty<?> property, String value) {
-      super.set(property, value);
+      super.setString(property, value);
       return this;
     }
 
@@ -643,7 +643,7 @@ public final class CalculationResults implements ImmutableBean {
 
     //-----------------------------------------------------------------------
     /**
-     * Sets the {@code values} property in the builder.
+     * Sets the values.
      * @param values  the new value, not null
      * @return this, for chaining, not null
      */
@@ -654,7 +654,7 @@ public final class CalculationResults implements ImmutableBean {
     }
 
     /**
-     * Sets the {@code viewDefinitionName} property in the builder.
+     * Sets the viewDefinitionName.
      * @param viewDefinitionName  the new value, not null
      * @return this, for chaining, not null
      */
@@ -665,7 +665,7 @@ public final class CalculationResults implements ImmutableBean {
     }
 
     /**
-     * Sets the {@code snapshotName} property in the builder.
+     * Sets the snapshotName.
      * @param snapshotName  the new value, not null
      * @return this, for chaining, not null
      */
@@ -676,7 +676,7 @@ public final class CalculationResults implements ImmutableBean {
     }
 
     /**
-     * Sets the {@code valuationTime} property in the builder.
+     * Sets the valuationTime.
      * @param valuationTime  the new value, not null
      * @return this, for chaining, not null
      */
@@ -687,7 +687,7 @@ public final class CalculationResults implements ImmutableBean {
     }
 
     /**
-     * Sets the {@code version} property in the builder.
+     * Sets the version.
      * @param version  the new value
      * @return this, for chaining, not null
      */

@@ -174,8 +174,8 @@ public final class YieldCurveBucketedShiftManipulator implements ImmutableBean, 
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash += hash * 31 + JodaBeanUtils.hashCode(getShiftType());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getShifts());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getShiftType());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getShifts());
     return hash;
   }
 
@@ -311,7 +311,7 @@ public final class YieldCurveBucketedShiftManipulator implements ImmutableBean, 
      */
     private Builder(YieldCurveBucketedShiftManipulator beanToCopy) {
       this._shiftType = beanToCopy.getShiftType();
-      this._shifts = (beanToCopy.getShifts() != null ? new ArrayList<YieldCurveBucketedShift>(beanToCopy.getShifts()) : null);
+      this._shifts = beanToCopy.getShifts();
     }
 
     //-----------------------------------------------------------------------
@@ -357,7 +357,7 @@ public final class YieldCurveBucketedShiftManipulator implements ImmutableBean, 
 
     @Override
     public Builder setString(MetaProperty<?> property, String value) {
-      super.set(property, value);
+      super.setString(property, value);
       return this;
     }
 
@@ -376,7 +376,7 @@ public final class YieldCurveBucketedShiftManipulator implements ImmutableBean, 
 
     //-----------------------------------------------------------------------
     /**
-     * Sets the {@code shiftType} property in the builder.
+     * Sets shift type
      * @param shiftType  the new value
      * @return this, for chaining, not null
      */
@@ -386,13 +386,23 @@ public final class YieldCurveBucketedShiftManipulator implements ImmutableBean, 
     }
 
     /**
-     * Sets the {@code shifts} property in the builder.
+     * Sets shifts to apply
      * @param shifts  the new value
      * @return this, for chaining, not null
      */
     public Builder shifts(List<YieldCurveBucketedShift> shifts) {
       this._shifts = shifts;
       return this;
+    }
+
+    /**
+     * Sets the {@code shifts} property in the builder
+     * from an array of objects.
+     * @param shifts  the new value
+     * @return this, for chaining, not null
+     */
+    public Builder shifts(YieldCurveBucketedShift... shifts) {
+      return shifts(ImmutableList.copyOf(shifts));
     }
 
     //-----------------------------------------------------------------------

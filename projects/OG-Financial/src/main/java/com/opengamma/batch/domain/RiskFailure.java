@@ -356,16 +356,16 @@ public class RiskFailure extends DirectBean {
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash += hash * 31 + JodaBeanUtils.hashCode(getId());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getCalculationConfigurationId());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getName());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getValueRequirementId());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getValueSpecificationId());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getFunctionUniqueId());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getComputationTargetId());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getRunId());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getEvalInstant());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getComputeNodeId());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getId());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getCalculationConfigurationId());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getName());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getValueRequirementId());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getValueSpecificationId());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getFunctionUniqueId());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getComputationTargetId());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getRunId());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getEvalInstant());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getComputeNodeId());
     return hash;
   }
 

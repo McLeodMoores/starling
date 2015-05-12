@@ -176,9 +176,9 @@ public final class FuturePriceCurveDefinition<X> implements ImmutableBean {
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash += hash * 31 + JodaBeanUtils.hashCode(getName());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getTarget());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getXs());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getName());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getTarget());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getXs());
     return hash;
   }
 
@@ -324,7 +324,7 @@ public final class FuturePriceCurveDefinition<X> implements ImmutableBean {
 
     private String _name;
     private UniqueIdentifiable _target;
-    private List<X> _xs = new ArrayList<X>();
+    private List<X> _xs = ImmutableList.of();
 
     /**
      * Restricted constructor.
@@ -339,7 +339,7 @@ public final class FuturePriceCurveDefinition<X> implements ImmutableBean {
     private Builder(FuturePriceCurveDefinition<X> beanToCopy) {
       this._name = beanToCopy.getName();
       this._target = beanToCopy.getTarget();
-      this._xs = new ArrayList<X>(beanToCopy.getXs());
+      this._xs = beanToCopy.getXs();
     }
 
     //-----------------------------------------------------------------------
@@ -390,7 +390,7 @@ public final class FuturePriceCurveDefinition<X> implements ImmutableBean {
 
     @Override
     public Builder<X> setString(MetaProperty<?> property, String value) {
-      super.set(property, value);
+      super.setString(property, value);
       return this;
     }
 
@@ -410,7 +410,7 @@ public final class FuturePriceCurveDefinition<X> implements ImmutableBean {
 
     //-----------------------------------------------------------------------
     /**
-     * Sets the {@code name} property in the builder.
+     * Sets the definition name.
      * @param name  the new value, not null
      * @return this, for chaining, not null
      */
@@ -421,7 +421,7 @@ public final class FuturePriceCurveDefinition<X> implements ImmutableBean {
     }
 
     /**
-     * Sets the {@code target} property in the builder.
+     * Sets the target.
      * @param target  the new value, not null
      * @return this, for chaining, not null
      */
@@ -432,7 +432,7 @@ public final class FuturePriceCurveDefinition<X> implements ImmutableBean {
     }
 
     /**
-     * Sets the {@code xs} property in the builder.
+     * Sets the definition values.
      * @param xs  the new value, not null
      * @return this, for chaining, not null
      */
@@ -440,6 +440,16 @@ public final class FuturePriceCurveDefinition<X> implements ImmutableBean {
       JodaBeanUtils.notNull(xs, "xs");
       this._xs = xs;
       return this;
+    }
+
+    /**
+     * Sets the {@code xs} property in the builder
+     * from an array of objects.
+     * @param xs  the new value, not null
+     * @return this, for chaining, not null
+     */
+    public Builder<X> xs(X... xs) {
+      return xs(ImmutableList.copyOf(xs));
     }
 
     //-----------------------------------------------------------------------

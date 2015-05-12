@@ -23,6 +23,7 @@ import org.joda.beans.impl.direct.DirectMetaBean;
 import org.joda.beans.impl.direct.DirectMetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 
+import com.google.common.collect.ImmutableSet;
 import com.opengamma.engine.marketdata.manipulator.DistinctMarketDataSelector;
 import com.opengamma.engine.marketdata.manipulator.SelectorResolver;
 import com.opengamma.engine.target.ComputationTargetType;
@@ -173,8 +174,8 @@ public final class SpotRateSelector implements DistinctMarketDataSelector, Immut
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash += hash * 31 + JodaBeanUtils.hashCode(getCalcConfigNames());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getCurrencyPairs());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getCalcConfigNames());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getCurrencyPairs());
     return hash;
   }
 
@@ -310,8 +311,8 @@ public final class SpotRateSelector implements DistinctMarketDataSelector, Immut
      * @param beanToCopy  the bean to copy from, not null
      */
     private Builder(SpotRateSelector beanToCopy) {
-      this._calcConfigNames = (beanToCopy.getCalcConfigNames() != null ? new HashSet<String>(beanToCopy.getCalcConfigNames()) : null);
-      this._currencyPairs = (beanToCopy.getCurrencyPairs() != null ? new HashSet<CurrencyPair>(beanToCopy.getCurrencyPairs()) : null);
+      this._calcConfigNames = (beanToCopy.getCalcConfigNames() != null ? ImmutableSet.copyOf(beanToCopy.getCalcConfigNames()) : null);
+      this._currencyPairs = (beanToCopy.getCurrencyPairs() != null ? ImmutableSet.copyOf(beanToCopy.getCurrencyPairs()) : null);
     }
 
     //-----------------------------------------------------------------------
@@ -357,7 +358,7 @@ public final class SpotRateSelector implements DistinctMarketDataSelector, Immut
 
     @Override
     public Builder setString(MetaProperty<?> property, String value) {
-      super.set(property, value);
+      super.setString(property, value);
       return this;
     }
 
@@ -376,7 +377,7 @@ public final class SpotRateSelector implements DistinctMarketDataSelector, Immut
 
     //-----------------------------------------------------------------------
     /**
-     * Sets the {@code calcConfigNames} property in the builder.
+     * Sets calc configs to which this selector will apply, null will match any config.
      * @param calcConfigNames  the new value
      * @return this, for chaining, not null
      */
@@ -386,13 +387,33 @@ public final class SpotRateSelector implements DistinctMarketDataSelector, Immut
     }
 
     /**
-     * Sets the {@code currencyPairs} property in the builder.
+     * Sets the {@code calcConfigNames} property in the builder
+     * from an array of objects.
+     * @param calcConfigNames  the new value
+     * @return this, for chaining, not null
+     */
+    public Builder calcConfigNames(String... calcConfigNames) {
+      return calcConfigNames(ImmutableSet.copyOf(calcConfigNames));
+    }
+
+    /**
+     * Sets the currencyPairs.
      * @param currencyPairs  the new value
      * @return this, for chaining, not null
      */
     public Builder currencyPairs(Set<CurrencyPair> currencyPairs) {
       this._currencyPairs = currencyPairs;
       return this;
+    }
+
+    /**
+     * Sets the {@code currencyPairs} property in the builder
+     * from an array of objects.
+     * @param currencyPairs  the new value
+     * @return this, for chaining, not null
+     */
+    public Builder currencyPairs(CurrencyPair... currencyPairs) {
+      return currencyPairs(ImmutableSet.copyOf(currencyPairs));
     }
 
     //-----------------------------------------------------------------------

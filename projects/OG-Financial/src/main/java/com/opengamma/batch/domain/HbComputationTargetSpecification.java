@@ -256,11 +256,11 @@ public class HbComputationTargetSpecification extends DirectBean {
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash += hash * 31 + JodaBeanUtils.hashCode(getId());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getType());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getUidScheme());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getUidValue());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getUidVersion());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getId());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getType());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getUidScheme());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getUidValue());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getUidVersion());
     return hash;
   }
 

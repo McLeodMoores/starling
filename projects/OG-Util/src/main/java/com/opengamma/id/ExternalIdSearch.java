@@ -14,6 +14,7 @@ import java.util.NoSuchElementException;
 import java.util.Set;
 
 import org.joda.beans.Bean;
+import org.joda.beans.BeanBuilder;
 import org.joda.beans.BeanDefinition;
 import org.joda.beans.ImmutableBean;
 import org.joda.beans.JodaBeanUtils;
@@ -426,8 +427,8 @@ public final class ExternalIdSearch implements ImmutableBean, Iterable<ExternalI
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash += hash * 31 + JodaBeanUtils.hashCode(getExternalIds());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getSearchType());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getExternalIds());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getSearchType());
     return hash;
   }
 
@@ -488,7 +489,7 @@ public final class ExternalIdSearch implements ImmutableBean, Iterable<ExternalI
     }
 
     @Override
-    public ExternalIdSearch.Builder builder() {
+    public BeanBuilder<? extends ExternalIdSearch> builder() {
       return new ExternalIdSearch.Builder();
     }
 
@@ -548,7 +549,7 @@ public final class ExternalIdSearch implements ImmutableBean, Iterable<ExternalI
    */
   private static final class Builder extends DirectFieldsBeanBuilder<ExternalIdSearch> {
 
-    private Set<ExternalId> _externalIds = new HashSet<ExternalId>();
+    private Set<ExternalId> _externalIds = ImmutableSet.of();
     private ExternalIdSearchType _searchType;
 
     /**
@@ -600,7 +601,7 @@ public final class ExternalIdSearch implements ImmutableBean, Iterable<ExternalI
 
     @Override
     public Builder setString(MetaProperty<?> property, String value) {
-      super.set(property, value);
+      super.setString(property, value);
       return this;
     }
 

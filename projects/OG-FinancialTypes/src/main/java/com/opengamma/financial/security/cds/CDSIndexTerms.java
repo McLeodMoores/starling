@@ -28,6 +28,7 @@ import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 import com.google.common.collect.ImmutableSortedSet;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.time.Tenor;
+import org.joda.beans.BeanBuilder;
 
 /**
  * Immutable set of tenors that represents the CreditDefaultSwapIndex security terms
@@ -155,7 +156,7 @@ public final class CDSIndexTerms
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash += hash * 31 + JodaBeanUtils.hashCode(getTenors());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getTenors());
     return hash;
   }
 
@@ -207,7 +208,7 @@ public final class CDSIndexTerms
     }
 
     @Override
-    public CDSIndexTerms.Builder builder() {
+    public BeanBuilder<? extends CDSIndexTerms> builder() {
       return new CDSIndexTerms.Builder();
     }
 
@@ -257,7 +258,7 @@ public final class CDSIndexTerms
    */
   private static final class Builder extends DirectFieldsBeanBuilder<CDSIndexTerms> {
 
-    private SortedSet<Tenor> _tenors = new TreeSet<Tenor>();
+    private SortedSet<Tenor> _tenors = ImmutableSortedSet.of();
 
     /**
      * Restricted constructor.
@@ -303,7 +304,7 @@ public final class CDSIndexTerms
 
     @Override
     public Builder setString(MetaProperty<?> property, String value) {
-      super.set(property, value);
+      super.setString(property, value);
       return this;
     }
 

@@ -124,7 +124,7 @@ public class MarketDataScaling implements StructureManipulator<Double>, Immutabl
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash += hash * 31 + JodaBeanUtils.hashCode(getScalingFactor());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getScalingFactor());
     return hash;
   }
 
@@ -286,7 +286,7 @@ public class MarketDataScaling implements StructureManipulator<Double>, Immutabl
 
     @Override
     public Builder setString(MetaProperty<?> property, String value) {
-      super.set(property, value);
+      super.setString(property, value);
       return this;
     }
 
@@ -304,7 +304,7 @@ public class MarketDataScaling implements StructureManipulator<Double>, Immutabl
 
     //-----------------------------------------------------------------------
     /**
-     * Sets the {@code scalingFactor} property in the builder.
+     * Sets scaling factor applied to the market data value.
      * @param scalingFactor  the new value
      * @return this, for chaining, not null
      */

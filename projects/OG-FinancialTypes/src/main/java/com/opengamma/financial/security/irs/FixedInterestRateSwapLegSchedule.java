@@ -202,10 +202,10 @@ public final class FixedInterestRateSwapLegSchedule implements ImmutableBean {
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash += hash * 31 + JodaBeanUtils.hashCode(getConvention());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getDates());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getPaymentDates());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getCalculationDates());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getConvention());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getDates());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getPaymentDates());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getCalculationDates());
     return hash;
   }
 
@@ -437,7 +437,7 @@ public final class FixedInterestRateSwapLegSchedule implements ImmutableBean {
 
     @Override
     public Builder setString(MetaProperty<?> property, String value) {
-      super.set(property, value);
+      super.setString(property, value);
       return this;
     }
 
@@ -458,7 +458,7 @@ public final class FixedInterestRateSwapLegSchedule implements ImmutableBean {
 
     //-----------------------------------------------------------------------
     /**
-     * Sets the {@code convention} property in the builder.
+     * Sets the convention.
      * @param convention  the new value
      * @return this, for chaining, not null
      */
@@ -468,31 +468,31 @@ public final class FixedInterestRateSwapLegSchedule implements ImmutableBean {
     }
 
     /**
-     * Sets the {@code dates} property in the builder.
+     * Sets the periods for which custom dates are provided.
      * @param dates  the new value
      * @return this, for chaining, not null
      */
-    public Builder dates(int[] dates) {
+    public Builder dates(int... dates) {
       this._dates = dates;
       return this;
     }
 
     /**
-     * Sets the {@code paymentDates} property in the builder.
+     * Sets the custom payment dates.
      * @param paymentDates  the new value
      * @return this, for chaining, not null
      */
-    public Builder paymentDates(LocalDate[] paymentDates) {
+    public Builder paymentDates(LocalDate... paymentDates) {
       this._paymentDates = paymentDates;
       return this;
     }
 
     /**
-     * Sets the {@code calculationDates} property in the builder.
+     * Sets the custom calculation dates.
      * @param calculationDates  the new value
      * @return this, for chaining, not null
      */
-    public Builder calculationDates(LocalDate[] calculationDates) {
+    public Builder calculationDates(LocalDate... calculationDates) {
       this._calculationDates = calculationDates;
       return this;
     }

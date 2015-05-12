@@ -128,8 +128,8 @@ public final class CombinedMarketDataSpecification implements ImmutableBean, Mar
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash += hash * 31 + JodaBeanUtils.hashCode(getPreferredSpecification());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getFallbackSpecification());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getPreferredSpecification());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getFallbackSpecification());
     return hash;
   }
 
@@ -309,7 +309,7 @@ public final class CombinedMarketDataSpecification implements ImmutableBean, Mar
 
     @Override
     public Builder setString(MetaProperty<?> property, String value) {
-      super.set(property, value);
+      super.setString(property, value);
       return this;
     }
 
@@ -328,7 +328,7 @@ public final class CombinedMarketDataSpecification implements ImmutableBean, Mar
 
     //-----------------------------------------------------------------------
     /**
-     * Sets the {@code preferredSpecification} property in the builder.
+     * Sets the preferredSpecification.
      * @param preferredSpecification  the new value, not null
      * @return this, for chaining, not null
      */
@@ -339,7 +339,7 @@ public final class CombinedMarketDataSpecification implements ImmutableBean, Mar
     }
 
     /**
-     * Sets the {@code fallbackSpecification} property in the builder.
+     * Sets the fallbackSpecification.
      * @param fallbackSpecification  the new value, not null
      * @return this, for chaining, not null
      */

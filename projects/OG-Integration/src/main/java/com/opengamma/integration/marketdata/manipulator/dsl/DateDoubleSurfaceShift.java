@@ -117,6 +117,7 @@ public final class DateDoubleSurfaceShift extends VolatilitySurfaceShiftManipula
    * Returns a builder that allows this bean to be mutated.
    * @return the mutable builder, not null
    */
+  @Override
   public Builder toBuilder() {
     return new Builder(this);
   }
@@ -138,8 +139,8 @@ public final class DateDoubleSurfaceShift extends VolatilitySurfaceShiftManipula
   @Override
   public int hashCode() {
     int hash = 7;
-    hash += hash * 31 + JodaBeanUtils.hashCode(getYValues());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getXValues());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getYValues());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getXValues());
     return hash ^ super.hashCode();
   }
 
@@ -271,7 +272,7 @@ public final class DateDoubleSurfaceShift extends VolatilitySurfaceShiftManipula
   public static final class Builder extends VolatilitySurfaceShiftManipulator.Builder {
 
     private double[] _yValues;
-    private List<Period> _xValues = new ArrayList<Period>();
+    private List<Period> _xValues = ImmutableList.of();
 
     /**
      * Restricted constructor.
@@ -285,7 +286,7 @@ public final class DateDoubleSurfaceShift extends VolatilitySurfaceShiftManipula
      */
     private Builder(DateDoubleSurfaceShift beanToCopy) {
       this._yValues = beanToCopy.getYValues().clone();
-      this._xValues = new ArrayList<Period>(beanToCopy.getXValues());
+      this._xValues = ImmutableList.copyOf(beanToCopy.getXValues());
     }
 
     //-----------------------------------------------------------------------
@@ -332,7 +333,7 @@ public final class DateDoubleSurfaceShift extends VolatilitySurfaceShiftManipula
 
     @Override
     public Builder setString(MetaProperty<?> property, String value) {
-      super.set(property, value);
+      super.setString(property, value);
       return this;
     }
 
@@ -349,18 +350,18 @@ public final class DateDoubleSurfaceShift extends VolatilitySurfaceShiftManipula
 
     //-----------------------------------------------------------------------
     /**
-     * Sets the {@code yValues} property in the builder.
+     * Sets the yValues.
      * @param yValues  the new value, not null
      * @return this, for chaining, not null
      */
-    public Builder yValues(double[] yValues) {
+    public Builder yValues(double... yValues) {
       JodaBeanUtils.notNull(yValues, "yValues");
       this._yValues = yValues;
       return this;
     }
 
     /**
-     * Sets the {@code xValues} property in the builder.
+     * Sets the xValues.
      * @param xValues  the new value, not null
      * @return this, for chaining, not null
      */
@@ -368,6 +369,16 @@ public final class DateDoubleSurfaceShift extends VolatilitySurfaceShiftManipula
       JodaBeanUtils.notNull(xValues, "xValues");
       this._xValues = xValues;
       return this;
+    }
+
+    /**
+     * Sets the {@code xValues} property in the builder
+     * from an array of objects.
+     * @param xValues  the new value, not null
+     * @return this, for chaining, not null
+     */
+    public Builder xValues(Period... xValues) {
+      return xValues(ImmutableList.copyOf(xValues));
     }
 
     //-----------------------------------------------------------------------

@@ -199,9 +199,9 @@ public class BatchGetRequest extends DirectBean {
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash += hash * 31 + JodaBeanUtils.hashCode(getBatchId());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getDataPagingRequest());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getErrorPagingRequest());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getBatchId());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getDataPagingRequest());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getErrorPagingRequest());
     return hash;
   }
 

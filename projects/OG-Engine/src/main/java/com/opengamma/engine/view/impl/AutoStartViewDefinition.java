@@ -142,8 +142,8 @@ public final class AutoStartViewDefinition implements ImmutableBean {
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash += hash * 31 + JodaBeanUtils.hashCode(getViewDefinitionId());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getExecutionOptions());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getViewDefinitionId());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getExecutionOptions());
     return hash;
   }
 
@@ -323,7 +323,7 @@ public final class AutoStartViewDefinition implements ImmutableBean {
 
     @Override
     public Builder setString(MetaProperty<?> property, String value) {
-      super.set(property, value);
+      super.setString(property, value);
       return this;
     }
 
@@ -342,7 +342,7 @@ public final class AutoStartViewDefinition implements ImmutableBean {
 
     //-----------------------------------------------------------------------
     /**
-     * Sets the {@code viewDefinitionId} property in the builder.
+     * Sets identifier for the view definition to be started.
      * @param viewDefinitionId  the new value
      * @return this, for chaining, not null
      */
@@ -352,7 +352,7 @@ public final class AutoStartViewDefinition implements ImmutableBean {
     }
 
     /**
-     * Sets the {@code executionOptions} property in the builder.
+     * Sets execution options to be used when starting the view.
      * @param executionOptions  the new value
      * @return this, for chaining, not null
      */

@@ -44,7 +44,13 @@ public class ViewDefinition implements Serializable, UniqueIdentifiable, Mutable
   private static final Logger s_logger = LoggerFactory.getLogger(ViewDefinition.class);
 
   private static final long serialVersionUID = 1L;
-
+  
+  /**
+   * Default Calculation Configuration name (shows as unlabeled in UI for clarity).
+   * You should use this when you don't care about having multiple calculation configurations.
+   */
+  public static final String DEFAULT_CALCULATION_CONFIGURATION_NAME = "Default";
+  
   private UniqueId _uniqueIdentifier;
   private final String _name;
   private final UniqueId _portfolioId;

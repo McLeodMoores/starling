@@ -262,9 +262,9 @@ public final class FailureResult<T>
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash += hash * 31 + JodaBeanUtils.hashCode(getFailures());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getStatus());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getMessage());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getFailures());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getStatus());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getMessage());
     return hash;
   }
 
@@ -408,7 +408,7 @@ public final class FailureResult<T>
    */
   public static final class Builder<T> extends DirectFieldsBeanBuilder<FailureResult<T>> {
 
-    private Set<Failure> _failures = new HashSet<Failure>();
+    private Set<Failure> _failures = ImmutableSet.of();
     private FailureStatus _status;
     private String _message;
 
@@ -423,7 +423,7 @@ public final class FailureResult<T>
      * @param beanToCopy  the bean to copy from, not null
      */
     private Builder(FailureResult<T> beanToCopy) {
-      this._failures = new HashSet<Failure>(beanToCopy.getFailures());
+      this._failures = beanToCopy.getFailures();
       this._status = beanToCopy.getStatus();
       this._message = beanToCopy.getMessage();
     }
@@ -476,7 +476,7 @@ public final class FailureResult<T>
 
     @Override
     public Builder<T> setString(MetaProperty<?> property, String value) {
-      super.set(property, value);
+      super.setString(property, value);
       return this;
     }
 
@@ -496,7 +496,7 @@ public final class FailureResult<T>
 
     //-----------------------------------------------------------------------
     /**
-     * Sets the {@code failures} property in the builder.
+     * Sets the set of failure instances.
      * @param failures  the new value, not null
      * @return this, for chaining, not null
      */
@@ -507,7 +507,17 @@ public final class FailureResult<T>
     }
 
     /**
-     * Sets the {@code status} property in the builder.
+     * Sets the {@code failures} property in the builder
+     * from an array of objects.
+     * @param failures  the new value, not null
+     * @return this, for chaining, not null
+     */
+    public Builder<T> failures(Failure... failures) {
+      return failures(ImmutableSet.copyOf(failures));
+    }
+
+    /**
+     * Sets the failure status.
      * @param status  the new value, not null
      * @return this, for chaining, not null
      */
@@ -518,7 +528,7 @@ public final class FailureResult<T>
     }
 
     /**
-     * Sets the {@code message} property in the builder.
+     * Sets the failure message.
      * @param message  the new value, not null
      * @return this, for chaining, not null
      */

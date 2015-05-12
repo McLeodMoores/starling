@@ -35,6 +35,7 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.opengamma.id.ExternalId;
 import com.opengamma.util.ArgumentChecker;
+import org.joda.beans.BeanBuilder;
 
 /**
  * Immutable set of {@link CreditDefaultSwapIndexComponent} that
@@ -281,8 +282,7 @@ public final class CDSIndexComponentBundle
     }
     if (obj != null && obj.getClass() == this.getClass()) {
       CDSIndexComponentBundle other = (CDSIndexComponentBundle) obj;
-      return JodaBeanUtils.equal(getComponents(), other.getComponents()) &&
-          JodaBeanUtils.equal(getRedCodeMapping(), other.getRedCodeMapping());
+      return JodaBeanUtils.equal(getComponents(), other.getComponents());
     }
     return false;
   }
@@ -290,8 +290,7 @@ public final class CDSIndexComponentBundle
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash += hash * 31 + JodaBeanUtils.hashCode(getComponents());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getRedCodeMapping());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getComponents());
     return hash;
   }
 
@@ -353,7 +352,7 @@ public final class CDSIndexComponentBundle
     }
 
     @Override
-    public CDSIndexComponentBundle.Builder builder() {
+    public BeanBuilder<? extends CDSIndexComponentBundle> builder() {
       return new CDSIndexComponentBundle.Builder();
     }
 
@@ -413,7 +412,7 @@ public final class CDSIndexComponentBundle
    */
   private static final class Builder extends DirectFieldsBeanBuilder<CDSIndexComponentBundle> {
 
-    private SortedSet<CreditDefaultSwapIndexComponent> _components = new TreeSet<CreditDefaultSwapIndexComponent>();
+    private SortedSet<CreditDefaultSwapIndexComponent> _components = ImmutableSortedSet.of();
 
     /**
      * Restricted constructor.
@@ -459,7 +458,7 @@ public final class CDSIndexComponentBundle
 
     @Override
     public Builder setString(MetaProperty<?> property, String value) {
-      super.set(property, value);
+      super.setString(property, value);
       return this;
     }
 

@@ -162,7 +162,7 @@ public final class CurveKey implements ImmutableBean, StructuredMarketDataKey, C
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash += hash * 31 + JodaBeanUtils.hashCode(getName());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getName());
     return hash;
   }
 
@@ -316,7 +316,7 @@ public final class CurveKey implements ImmutableBean, StructuredMarketDataKey, C
 
     @Override
     public Builder setString(MetaProperty<?> property, String value) {
-      super.set(property, value);
+      super.setString(property, value);
       return this;
     }
 
@@ -334,7 +334,7 @@ public final class CurveKey implements ImmutableBean, StructuredMarketDataKey, C
 
     //-----------------------------------------------------------------------
     /**
-     * Sets the {@code name} property in the builder.
+     * Sets the curve name.
      * @param name  the new value
      * @return this, for chaining, not null
      */

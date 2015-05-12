@@ -152,9 +152,9 @@ public class ComputeNode extends DirectBean {
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash += hash * 31 + JodaBeanUtils.hashCode(getId());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getComputeHost());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getNodeName());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getId());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getComputeHost());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getNodeName());
     return hash;
   }
 

@@ -166,8 +166,8 @@ public final class LinkIdentifier<I, T> implements ImmutableBean {
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash += hash * 31 + JodaBeanUtils.hashCode(getIdentifier());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getType());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getIdentifier());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getType());
     return hash;
   }
 
@@ -356,7 +356,7 @@ public final class LinkIdentifier<I, T> implements ImmutableBean {
 
     @Override
     public Builder<I, T> setString(MetaProperty<?> property, String value) {
-      super.set(property, value);
+      super.setString(property, value);
       return this;
     }
 
@@ -375,7 +375,7 @@ public final class LinkIdentifier<I, T> implements ImmutableBean {
 
     //-----------------------------------------------------------------------
     /**
-     * Sets the {@code identifier} property in the builder.
+     * Sets the identifier for the linked object, not null.
      * @param identifier  the new value, not null
      * @return this, for chaining, not null
      */
@@ -386,7 +386,7 @@ public final class LinkIdentifier<I, T> implements ImmutableBean {
     }
 
     /**
-     * Sets the {@code type} property in the builder.
+     * Sets the class of the object being linked to, not null.
      * @param type  the new value, not null
      * @return this, for chaining, not null
      */

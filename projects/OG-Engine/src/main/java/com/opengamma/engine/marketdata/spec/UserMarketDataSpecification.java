@@ -120,7 +120,7 @@ public final class UserMarketDataSpecification implements ImmutableBean, MarketD
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash += hash * 31 + JodaBeanUtils.hashCode(getUserSnapshotId());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getUserSnapshotId());
     return hash;
   }
 
@@ -274,7 +274,7 @@ public final class UserMarketDataSpecification implements ImmutableBean, MarketD
 
     @Override
     public Builder setString(MetaProperty<?> property, String value) {
-      super.set(property, value);
+      super.setString(property, value);
       return this;
     }
 
@@ -292,7 +292,7 @@ public final class UserMarketDataSpecification implements ImmutableBean, MarketD
 
     //-----------------------------------------------------------------------
     /**
-     * Sets the {@code userSnapshotId} property in the builder.
+     * Sets the userSnapshotId.
      * @param userSnapshotId  the new value, not null
      * @return this, for chaining, not null
      */

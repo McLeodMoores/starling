@@ -205,10 +205,10 @@ public final class CalculatedValue implements ImmutableBean {
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash += hash * 31 + JodaBeanUtils.hashCode(getValue());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getSpecificationProperties());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getTargetType());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getTargetName());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getValue());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getSpecificationProperties());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getTargetType());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getTargetName());
     return hash;
   }
 
@@ -440,7 +440,7 @@ public final class CalculatedValue implements ImmutableBean {
 
     @Override
     public Builder setString(MetaProperty<?> property, String value) {
-      super.set(property, value);
+      super.setString(property, value);
       return this;
     }
 
@@ -461,7 +461,7 @@ public final class CalculatedValue implements ImmutableBean {
 
     //-----------------------------------------------------------------------
     /**
-     * Sets the {@code value} property in the builder.
+     * Sets the calculated value.
      * @param value  the new value, not null
      * @return this, for chaining, not null
      */
@@ -472,7 +472,7 @@ public final class CalculatedValue implements ImmutableBean {
     }
 
     /**
-     * Sets the {@code specificationProperties} property in the builder.
+     * Sets the properties of the value's {@code ValueSpecification}.
      * @param specificationProperties  the new value, not null
      * @return this, for chaining, not null
      */
@@ -483,7 +483,7 @@ public final class CalculatedValue implements ImmutableBean {
     }
 
     /**
-     * Sets the {@code targetType} property in the builder.
+     * Sets the targetType.
      * @param targetType  the new value, not null
      * @return this, for chaining, not null
      */
@@ -494,7 +494,7 @@ public final class CalculatedValue implements ImmutableBean {
     }
 
     /**
-     * Sets the {@code targetName} property in the builder.
+     * Sets the targetName.
      * @param targetName  the new value
      * @return this, for chaining, not null
      */

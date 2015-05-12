@@ -25,6 +25,7 @@ import org.joda.beans.impl.direct.DirectMetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 
 import com.opengamma.util.ArgumentChecker;
+import org.joda.beans.BeanBuilder;
 
 /**
  * Class representing an Industry Classification Benchmark (ICB).
@@ -157,7 +158,7 @@ public final class ICBCode implements ImmutableBean, Serializable {
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash += hash * 31 + JodaBeanUtils.hashCode(getCode());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getCode());
     return hash;
   }
 
@@ -208,7 +209,7 @@ public final class ICBCode implements ImmutableBean, Serializable {
     }
 
     @Override
-    public ICBCode.Builder builder() {
+    public BeanBuilder<? extends ICBCode> builder() {
       return new ICBCode.Builder();
     }
 
@@ -303,7 +304,7 @@ public final class ICBCode implements ImmutableBean, Serializable {
 
     @Override
     public Builder setString(MetaProperty<?> property, String value) {
-      super.set(property, value);
+      super.setString(property, value);
       return this;
     }
 

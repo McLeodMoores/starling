@@ -106,7 +106,7 @@ public final class ResultContainer implements ImmutableBean {
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash += hash * 31 + JodaBeanUtils.hashCode(getResult());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getResult());
     return hash;
   }
 
@@ -261,7 +261,7 @@ public final class ResultContainer implements ImmutableBean {
 
     @Override
     public Builder setString(MetaProperty<?> property, String value) {
-      super.set(property, value);
+      super.setString(property, value);
       return this;
     }
 
@@ -279,7 +279,7 @@ public final class ResultContainer implements ImmutableBean {
 
     //-----------------------------------------------------------------------
     /**
-     * Sets the {@code result} property in the builder.
+     * Sets the result.
      * @param result  the new value, not null
      * @return this, for chaining, not null
      */

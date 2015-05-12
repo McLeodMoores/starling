@@ -248,8 +248,8 @@ public final class VolatilitySurfaceIndexShifts implements StructureManipulator<
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash += hash * 31 + JodaBeanUtils.hashCode(getShiftType());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getShifts());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getShiftType());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getShifts());
     return hash;
   }
 
@@ -371,7 +371,7 @@ public final class VolatilitySurfaceIndexShifts implements StructureManipulator<
   public static final class Builder extends DirectFieldsBeanBuilder<VolatilitySurfaceIndexShifts> {
 
     private ScenarioShiftType _shiftType;
-    private List<Double> _shifts = new ArrayList<Double>();
+    private List<Double> _shifts = ImmutableList.of();
 
     /**
      * Restricted constructor.
@@ -385,7 +385,7 @@ public final class VolatilitySurfaceIndexShifts implements StructureManipulator<
      */
     private Builder(VolatilitySurfaceIndexShifts beanToCopy) {
       this._shiftType = beanToCopy.getShiftType();
-      this._shifts = new ArrayList<Double>(beanToCopy.getShifts());
+      this._shifts = ImmutableList.copyOf(beanToCopy.getShifts());
     }
 
     //-----------------------------------------------------------------------
@@ -431,7 +431,7 @@ public final class VolatilitySurfaceIndexShifts implements StructureManipulator<
 
     @Override
     public Builder setString(MetaProperty<?> property, String value) {
-      super.set(property, value);
+      super.setString(property, value);
       return this;
     }
 
@@ -450,7 +450,7 @@ public final class VolatilitySurfaceIndexShifts implements StructureManipulator<
 
     //-----------------------------------------------------------------------
     /**
-     * Sets the {@code shiftType} property in the builder.
+     * Sets the shiftType.
      * @param shiftType  the new value, not null
      * @return this, for chaining, not null
      */
@@ -461,7 +461,7 @@ public final class VolatilitySurfaceIndexShifts implements StructureManipulator<
     }
 
     /**
-     * Sets the {@code shifts} property in the builder.
+     * Sets the shifts.
      * @param shifts  the new value, not null
      * @return this, for chaining, not null
      */
@@ -469,6 +469,16 @@ public final class VolatilitySurfaceIndexShifts implements StructureManipulator<
       JodaBeanUtils.notNull(shifts, "shifts");
       this._shifts = shifts;
       return this;
+    }
+
+    /**
+     * Sets the {@code shifts} property in the builder
+     * from an array of objects.
+     * @param shifts  the new value, not null
+     * @return this, for chaining, not null
+     */
+    public Builder shifts(Double... shifts) {
+      return shifts(ImmutableList.copyOf(shifts));
     }
 
     //-----------------------------------------------------------------------

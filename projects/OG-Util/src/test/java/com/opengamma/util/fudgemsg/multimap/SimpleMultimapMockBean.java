@@ -110,7 +110,7 @@ public class SimpleMultimapMockBean implements ImmutableBean {
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash += hash * 31 + JodaBeanUtils.hashCode(getSimpleMultimap());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getSimpleMultimap());
     return hash;
   }
 
@@ -220,7 +220,7 @@ public class SimpleMultimapMockBean implements ImmutableBean {
    */
   public static class Builder extends DirectFieldsBeanBuilder<SimpleMultimapMockBean> {
 
-    private Multimap<String, String> _simpleMultimap = ArrayListMultimap.create();
+    private Multimap<String, String> _simpleMultimap = ImmutableMultimap.of();
 
     /**
      * Restricted constructor.
@@ -233,7 +233,7 @@ public class SimpleMultimapMockBean implements ImmutableBean {
      * @param beanToCopy  the bean to copy from, not null
      */
     protected Builder(SimpleMultimapMockBean beanToCopy) {
-      this._simpleMultimap = ArrayListMultimap.create(beanToCopy.getSimpleMultimap());
+      this._simpleMultimap = ImmutableMultimap.copyOf(beanToCopy.getSimpleMultimap());
     }
 
     //-----------------------------------------------------------------------
@@ -274,7 +274,7 @@ public class SimpleMultimapMockBean implements ImmutableBean {
 
     @Override
     public Builder setString(MetaProperty<?> property, String value) {
-      super.set(property, value);
+      super.setString(property, value);
       return this;
     }
 
@@ -291,7 +291,7 @@ public class SimpleMultimapMockBean implements ImmutableBean {
 
     //-----------------------------------------------------------------------
     /**
-     * Sets the {@code simpleMultimap} property in the builder.
+     * Sets the simpleMultimap.
      * @param simpleMultimap  the new value, not null
      * @return this, for chaining, not null
      */

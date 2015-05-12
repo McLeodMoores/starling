@@ -154,9 +154,9 @@ public final class VolatilitySurfaceShift implements ImmutableBean {
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash += hash * 31 + JodaBeanUtils.hashCode(getX());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getY());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getShift());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getX());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getY());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getShift());
     return hash;
   }
 
@@ -362,7 +362,7 @@ public final class VolatilitySurfaceShift implements ImmutableBean {
 
     @Override
     public Builder setString(MetaProperty<?> property, String value) {
-      super.set(property, value);
+      super.setString(property, value);
       return this;
     }
 
@@ -382,7 +382,7 @@ public final class VolatilitySurfaceShift implements ImmutableBean {
 
     //-----------------------------------------------------------------------
     /**
-     * Sets the {@code x} property in the builder.
+     * Sets the x.
      * @param x  the new value, not null
      * @return this, for chaining, not null
      */
@@ -393,7 +393,7 @@ public final class VolatilitySurfaceShift implements ImmutableBean {
     }
 
     /**
-     * Sets the {@code y} property in the builder.
+     * Sets the y.
      * @param y  the new value, not null
      * @return this, for chaining, not null
      */
@@ -404,7 +404,7 @@ public final class VolatilitySurfaceShift implements ImmutableBean {
     }
 
     /**
-     * Sets the {@code shift} property in the builder.
+     * Sets the shift.
      * @param shift  the new value, not null
      * @return this, for chaining, not null
      */

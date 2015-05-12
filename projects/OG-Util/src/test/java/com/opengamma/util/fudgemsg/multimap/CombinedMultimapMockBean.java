@@ -145,9 +145,9 @@ public class CombinedMultimapMockBean implements ImmutableBean {
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash += hash * 31 + JodaBeanUtils.hashCode(getSetMultimap());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getListMultimap());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getNoTypeMultimap());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getSetMultimap());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getListMultimap());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getNoTypeMultimap());
     return hash;
   }
 
@@ -297,9 +297,9 @@ public class CombinedMultimapMockBean implements ImmutableBean {
    */
   public static class Builder extends DirectFieldsBeanBuilder<CombinedMultimapMockBean> {
 
-    private SetMultimap<String, String> _setMultimap = HashMultimap.create();
-    private ListMultimap<String, String> _listMultimap = ArrayListMultimap.create();
-    private Multimap<String, String> _noTypeMultimap = ArrayListMultimap.create();
+    private SetMultimap<String, String> _setMultimap = ImmutableSetMultimap.of();
+    private ListMultimap<String, String> _listMultimap = ImmutableListMultimap.of();
+    private Multimap<String, String> _noTypeMultimap = ImmutableMultimap.of();
 
     /**
      * Restricted constructor.
@@ -312,9 +312,9 @@ public class CombinedMultimapMockBean implements ImmutableBean {
      * @param beanToCopy  the bean to copy from, not null
      */
     protected Builder(CombinedMultimapMockBean beanToCopy) {
-      this._setMultimap = HashMultimap.create(beanToCopy.getSetMultimap());
-      this._listMultimap = ArrayListMultimap.create(beanToCopy.getListMultimap());
-      this._noTypeMultimap = ArrayListMultimap.create(beanToCopy.getNoTypeMultimap());
+      this._setMultimap = ImmutableSetMultimap.copyOf(beanToCopy.getSetMultimap());
+      this._listMultimap = ImmutableListMultimap.copyOf(beanToCopy.getListMultimap());
+      this._noTypeMultimap = ImmutableMultimap.copyOf(beanToCopy.getNoTypeMultimap());
     }
 
     //-----------------------------------------------------------------------
@@ -365,7 +365,7 @@ public class CombinedMultimapMockBean implements ImmutableBean {
 
     @Override
     public Builder setString(MetaProperty<?> property, String value) {
-      super.set(property, value);
+      super.setString(property, value);
       return this;
     }
 
@@ -382,7 +382,7 @@ public class CombinedMultimapMockBean implements ImmutableBean {
 
     //-----------------------------------------------------------------------
     /**
-     * Sets the {@code setMultimap} property in the builder.
+     * Sets the setMultimap.
      * @param setMultimap  the new value, not null
      * @return this, for chaining, not null
      */
@@ -393,7 +393,7 @@ public class CombinedMultimapMockBean implements ImmutableBean {
     }
 
     /**
-     * Sets the {@code listMultimap} property in the builder.
+     * Sets the listMultimap.
      * @param listMultimap  the new value, not null
      * @return this, for chaining, not null
      */
@@ -404,7 +404,7 @@ public class CombinedMultimapMockBean implements ImmutableBean {
     }
 
     /**
-     * Sets the {@code noTypeMultimap} property in the builder.
+     * Sets the noTypeMultimap.
      * @param noTypeMultimap  the new value, not null
      * @return this, for chaining, not null
      */

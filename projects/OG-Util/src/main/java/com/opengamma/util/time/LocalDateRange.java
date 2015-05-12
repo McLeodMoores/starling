@@ -26,6 +26,7 @@ import org.threeten.bp.LocalDate;
 import org.threeten.bp.temporal.TemporalAdjuster;
 
 import com.opengamma.util.ArgumentChecker;
+import org.joda.beans.BeanBuilder;
 
 /**
  * A range of dates.
@@ -253,8 +254,8 @@ public final class LocalDateRange implements ImmutableBean, Serializable {
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash += hash * 31 + JodaBeanUtils.hashCode(getStartDateInclusive());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getEndDateInclusive());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getStartDateInclusive());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getEndDateInclusive());
     return hash;
   }
 
@@ -304,7 +305,7 @@ public final class LocalDateRange implements ImmutableBean, Serializable {
     }
 
     @Override
-    public LocalDateRange.Builder builder() {
+    public BeanBuilder<? extends LocalDateRange> builder() {
       return new LocalDateRange.Builder();
     }
 
@@ -415,7 +416,7 @@ public final class LocalDateRange implements ImmutableBean, Serializable {
 
     @Override
     public Builder setString(MetaProperty<?> property, String value) {
-      super.set(property, value);
+      super.setString(property, value);
       return this;
     }
 

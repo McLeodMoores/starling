@@ -221,9 +221,9 @@ public final class MultipleFailureResult<T> extends Result<T> implements Immutab
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash += hash * 31 + JodaBeanUtils.hashCode(getFailures());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getStatus());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getMessage());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getFailures());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getStatus());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getMessage());
     return hash;
   }
 
@@ -367,7 +367,7 @@ public final class MultipleFailureResult<T> extends Result<T> implements Immutab
    */
   public static final class Builder<T> extends DirectFieldsBeanBuilder<MultipleFailureResult<T>> {
 
-    private Set<Failure> _failures = new HashSet<Failure>();
+    private Set<Failure> _failures = ImmutableSet.of();
     private FailureStatus _status;
     private String _message;
 
@@ -382,7 +382,7 @@ public final class MultipleFailureResult<T> extends Result<T> implements Immutab
      * @param beanToCopy  the bean to copy from, not null
      */
     private Builder(MultipleFailureResult<T> beanToCopy) {
-      this._failures = new HashSet<Failure>(beanToCopy.getFailures());
+      this._failures = beanToCopy.getFailures();
       this._status = beanToCopy.getStatus();
       this._message = beanToCopy.getMessage();
     }
@@ -435,7 +435,7 @@ public final class MultipleFailureResult<T> extends Result<T> implements Immutab
 
     @Override
     public Builder<T> setString(MetaProperty<?> property, String value) {
-      super.set(property, value);
+      super.setString(property, value);
       return this;
     }
 
@@ -455,7 +455,7 @@ public final class MultipleFailureResult<T> extends Result<T> implements Immutab
 
     //-----------------------------------------------------------------------
     /**
-     * Sets the {@code failures} property in the builder.
+     * Sets the failures.
      * @param failures  the new value, not null
      * @return this, for chaining, not null
      */
@@ -466,7 +466,17 @@ public final class MultipleFailureResult<T> extends Result<T> implements Immutab
     }
 
     /**
-     * Sets the {@code status} property in the builder.
+     * Sets the {@code failures} property in the builder
+     * from an array of objects.
+     * @param failures  the new value, not null
+     * @return this, for chaining, not null
+     */
+    public Builder<T> failures(Failure... failures) {
+      return failures(ImmutableSet.copyOf(failures));
+    }
+
+    /**
+     * Sets the status.
      * @param status  the new value, not null
      * @return this, for chaining, not null
      */
@@ -477,7 +487,7 @@ public final class MultipleFailureResult<T> extends Result<T> implements Immutab
     }
 
     /**
-     * Sets the {@code message} property in the builder.
+     * Sets the message.
      * @param message  the new value, not null
      * @return this, for chaining, not null
      */

@@ -216,10 +216,10 @@ public final class SpotRateScaling implements StructureManipulator<Double>, Immu
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash += hash * 31 + JodaBeanUtils.hashCode(getScalingFactor());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getMinRate());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getMaxRate());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getCurrencyPairs());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getScalingFactor());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getMinRate());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getMaxRate());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getCurrencyPairs());
     return hash;
   }
 
@@ -381,7 +381,7 @@ public final class SpotRateScaling implements StructureManipulator<Double>, Immu
     private Double _scalingFactor;
     private double _minRate;
     private double _maxRate;
-    private Set<CurrencyPair> _currencyPairs = new HashSet<CurrencyPair>();
+    private Set<CurrencyPair> _currencyPairs = ImmutableSet.of();
 
     /**
      * Restricted constructor.
@@ -397,7 +397,7 @@ public final class SpotRateScaling implements StructureManipulator<Double>, Immu
       this._scalingFactor = beanToCopy.getScalingFactor();
       this._minRate = beanToCopy.getMinRate();
       this._maxRate = beanToCopy.getMaxRate();
-      this._currencyPairs = new HashSet<CurrencyPair>(beanToCopy.getCurrencyPairs());
+      this._currencyPairs = ImmutableSet.copyOf(beanToCopy.getCurrencyPairs());
     }
 
     //-----------------------------------------------------------------------
@@ -453,7 +453,7 @@ public final class SpotRateScaling implements StructureManipulator<Double>, Immu
 
     @Override
     public Builder setString(MetaProperty<?> property, String value) {
-      super.set(property, value);
+      super.setString(property, value);
       return this;
     }
 
@@ -474,7 +474,7 @@ public final class SpotRateScaling implements StructureManipulator<Double>, Immu
 
     //-----------------------------------------------------------------------
     /**
-     * Sets the {@code scalingFactor} property in the builder.
+     * Sets the scalingFactor.
      * @param scalingFactor  the new value, not null
      * @return this, for chaining, not null
      */
@@ -485,7 +485,7 @@ public final class SpotRateScaling implements StructureManipulator<Double>, Immu
     }
 
     /**
-     * Sets the {@code minRate} property in the builder.
+     * Sets the minRate.
      * @param minRate  the new value
      * @return this, for chaining, not null
      */
@@ -495,7 +495,7 @@ public final class SpotRateScaling implements StructureManipulator<Double>, Immu
     }
 
     /**
-     * Sets the {@code maxRate} property in the builder.
+     * Sets the maxRate.
      * @param maxRate  the new value
      * @return this, for chaining, not null
      */
@@ -505,7 +505,7 @@ public final class SpotRateScaling implements StructureManipulator<Double>, Immu
     }
 
     /**
-     * Sets the {@code currencyPairs} property in the builder.
+     * Sets the currencyPairs.
      * @param currencyPairs  the new value, not null
      * @return this, for chaining, not null
      */
@@ -513,6 +513,16 @@ public final class SpotRateScaling implements StructureManipulator<Double>, Immu
       JodaBeanUtils.notNull(currencyPairs, "currencyPairs");
       this._currencyPairs = currencyPairs;
       return this;
+    }
+
+    /**
+     * Sets the {@code currencyPairs} property in the builder
+     * from an array of objects.
+     * @param currencyPairs  the new value, not null
+     * @return this, for chaining, not null
+     */
+    public Builder currencyPairs(CurrencyPair... currencyPairs) {
+      return currencyPairs(ImmutableSet.copyOf(currencyPairs));
     }
 
     //-----------------------------------------------------------------------

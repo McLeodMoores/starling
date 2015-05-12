@@ -121,7 +121,7 @@ public final class CreditCurveDataKeyMap implements ImmutableBean {
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash += hash * 31 + JodaBeanUtils.hashCode(getKeyMap());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getKeyMap());
     return hash;
   }
 
@@ -223,7 +223,7 @@ public final class CreditCurveDataKeyMap implements ImmutableBean {
    */
   public static final class Builder extends DirectFieldsBeanBuilder<CreditCurveDataKeyMap> {
 
-    private Map<CreditCurveDataKey, CreditCurveDataKey> _keyMap = new HashMap<CreditCurveDataKey, CreditCurveDataKey>();
+    private Map<CreditCurveDataKey, CreditCurveDataKey> _keyMap = ImmutableMap.of();
 
     /**
      * Restricted constructor.
@@ -236,7 +236,7 @@ public final class CreditCurveDataKeyMap implements ImmutableBean {
      * @param beanToCopy  the bean to copy from, not null
      */
     private Builder(CreditCurveDataKeyMap beanToCopy) {
-      this._keyMap = new HashMap<CreditCurveDataKey, CreditCurveDataKey>(beanToCopy.getKeyMap());
+      this._keyMap = beanToCopy.getKeyMap();
     }
 
     //-----------------------------------------------------------------------
@@ -277,7 +277,7 @@ public final class CreditCurveDataKeyMap implements ImmutableBean {
 
     @Override
     public Builder setString(MetaProperty<?> property, String value) {
-      super.set(property, value);
+      super.setString(property, value);
       return this;
     }
 
@@ -295,7 +295,8 @@ public final class CreditCurveDataKeyMap implements ImmutableBean {
 
     //-----------------------------------------------------------------------
     /**
-     * Sets the {@code keyMap} property in the builder.
+     * Sets a map containing mappings from source (security) credit keys to
+     * target (credit curve) credit keys.
      * @param keyMap  the new value, not null
      * @return this, for chaining, not null
      */

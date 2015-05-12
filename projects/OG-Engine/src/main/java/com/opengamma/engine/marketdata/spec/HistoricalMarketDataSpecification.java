@@ -131,7 +131,7 @@ public class HistoricalMarketDataSpecification implements ImmutableBean, MarketD
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash += hash * 31 + JodaBeanUtils.hashCode(getTimeSeriesResolverKey());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getTimeSeriesResolverKey());
     return hash;
   }
 
@@ -293,7 +293,7 @@ public class HistoricalMarketDataSpecification implements ImmutableBean, MarketD
 
     @Override
     public Builder setString(MetaProperty<?> property, String value) {
-      super.set(property, value);
+      super.setString(property, value);
       return this;
     }
 
@@ -310,7 +310,7 @@ public class HistoricalMarketDataSpecification implements ImmutableBean, MarketD
 
     //-----------------------------------------------------------------------
     /**
-     * Sets the {@code timeSeriesResolverKey} property in the builder.
+     * Sets the timeseries resolver key, a null value means to use the system default (see {@link HistoricalTimeSeriesResolver#resolve}).
      * @param timeSeriesResolverKey  the new value
      * @return this, for chaining, not null
      */

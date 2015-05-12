@@ -171,7 +171,7 @@ public final class SuccessResult<T> extends Result<T> implements ImmutableBean {
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash += hash * 31 + JodaBeanUtils.hashCode(getValue());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getValue());
     return hash;
   }
 
@@ -331,7 +331,7 @@ public final class SuccessResult<T> extends Result<T> implements ImmutableBean {
 
     @Override
     public Builder<T> setString(MetaProperty<?> property, String value) {
-      super.set(property, value);
+      super.setString(property, value);
       return this;
     }
 
@@ -349,7 +349,7 @@ public final class SuccessResult<T> extends Result<T> implements ImmutableBean {
 
     //-----------------------------------------------------------------------
     /**
-     * Sets the {@code value} property in the builder.
+     * Sets the result of the calculation.
      * @param value  the new value, not null
      * @return this, for chaining, not null
      */

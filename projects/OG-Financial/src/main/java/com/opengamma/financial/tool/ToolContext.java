@@ -41,6 +41,7 @@ import com.opengamma.master.convention.ConventionMaster;
 import com.opengamma.master.exchange.ExchangeMaster;
 import com.opengamma.master.historicaltimeseries.HistoricalTimeSeriesLoader;
 import com.opengamma.master.historicaltimeseries.HistoricalTimeSeriesMaster;
+import com.opengamma.master.historicaltimeseries.HistoricalTimeSeriesResolver;
 import com.opengamma.master.holiday.HolidayMaster;
 import com.opengamma.master.legalentity.LegalEntityMaster;
 import com.opengamma.master.marketdatasnapshot.MarketDataSnapshotMaster;
@@ -204,7 +205,11 @@ public class ToolContext extends DirectBean implements Closeable {
    */
   @PropertyDefinition
   private HistoricalTimeSeriesLoader _historicalTimeSeriesLoader;
-
+  /**
+   * The time-series resolver.
+   */
+  @PropertyDefinition
+  private HistoricalTimeSeriesResolver _historicalTimeSeriesResolver;
   /**
    * The view processor.
    */
@@ -967,6 +972,31 @@ public class ToolContext extends DirectBean implements Closeable {
 
   //-----------------------------------------------------------------------
   /**
+   * Gets the time-series resolver.
+   * @return the value of the property
+   */
+  public HistoricalTimeSeriesResolver getHistoricalTimeSeriesResolver() {
+    return _historicalTimeSeriesResolver;
+  }
+
+  /**
+   * Sets the time-series resolver.
+   * @param historicalTimeSeriesResolver  the new value of the property
+   */
+  public void setHistoricalTimeSeriesResolver(HistoricalTimeSeriesResolver historicalTimeSeriesResolver) {
+    this._historicalTimeSeriesResolver = historicalTimeSeriesResolver;
+  }
+
+  /**
+   * Gets the the {@code historicalTimeSeriesResolver} property.
+   * @return the property, not null
+   */
+  public final Property<HistoricalTimeSeriesResolver> historicalTimeSeriesResolver() {
+    return metaBean().historicalTimeSeriesResolver().createProperty(this);
+  }
+
+  //-----------------------------------------------------------------------
+  /**
    * Gets the view processor.
    * @return the value of the property
    */
@@ -1081,6 +1111,7 @@ public class ToolContext extends DirectBean implements Closeable {
           JodaBeanUtils.equal(getSecurityLoader(), other.getSecurityLoader()) &&
           JodaBeanUtils.equal(getHistoricalTimeSeriesProvider(), other.getHistoricalTimeSeriesProvider()) &&
           JodaBeanUtils.equal(getHistoricalTimeSeriesLoader(), other.getHistoricalTimeSeriesLoader()) &&
+          JodaBeanUtils.equal(getHistoricalTimeSeriesResolver(), other.getHistoricalTimeSeriesResolver()) &&
           JodaBeanUtils.equal(getViewProcessor(), other.getViewProcessor()) &&
           JodaBeanUtils.equal(getAvaliableOutputsProvider(), other.getAvaliableOutputsProvider()) &&
           JodaBeanUtils.equal(getFunctionConfigSource(), other.getFunctionConfigSource());
@@ -1091,43 +1122,44 @@ public class ToolContext extends DirectBean implements Closeable {
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash += hash * 31 + JodaBeanUtils.hashCode(getContextManager());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getBatchMaster());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getConfigMaster());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getExchangeMaster());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getHolidayMaster());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getRegionMaster());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getSecurityMaster());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getPositionMaster());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getPortfolioMaster());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getLegalEntityMaster());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getHistoricalTimeSeriesMaster());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getMarketDataSnapshotMaster());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getConventionMaster());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getConfigSource());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getExchangeSource());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getHolidaySource());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getRegionSource());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getSecuritySource());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getPositionSource());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getLegalEntitySource());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getHistoricalTimeSeriesSource());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getMarketDataSnapshotSource());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getConventionBundleSource());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getConventionSource());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getSecurityProvider());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getSecurityLoader());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getHistoricalTimeSeriesProvider());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getHistoricalTimeSeriesLoader());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getViewProcessor());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getAvaliableOutputsProvider());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getFunctionConfigSource());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getContextManager());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getBatchMaster());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getConfigMaster());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getExchangeMaster());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getHolidayMaster());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getRegionMaster());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getSecurityMaster());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getPositionMaster());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getPortfolioMaster());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getLegalEntityMaster());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getHistoricalTimeSeriesMaster());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getMarketDataSnapshotMaster());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getConventionMaster());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getConfigSource());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getExchangeSource());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getHolidaySource());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getRegionSource());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getSecuritySource());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getPositionSource());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getLegalEntitySource());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getHistoricalTimeSeriesSource());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getMarketDataSnapshotSource());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getConventionBundleSource());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getConventionSource());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getSecurityProvider());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getSecurityLoader());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getHistoricalTimeSeriesProvider());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getHistoricalTimeSeriesLoader());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getHistoricalTimeSeriesResolver());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getViewProcessor());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getAvaliableOutputsProvider());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getFunctionConfigSource());
     return hash;
   }
 
   @Override
   public String toString() {
-    StringBuilder buf = new StringBuilder(1024);
+    StringBuilder buf = new StringBuilder(1056);
     buf.append("ToolContext{");
     int len = buf.length();
     toString(buf);
@@ -1167,6 +1199,7 @@ public class ToolContext extends DirectBean implements Closeable {
     buf.append("securityLoader").append('=').append(JodaBeanUtils.toString(getSecurityLoader())).append(',').append(' ');
     buf.append("historicalTimeSeriesProvider").append('=').append(JodaBeanUtils.toString(getHistoricalTimeSeriesProvider())).append(',').append(' ');
     buf.append("historicalTimeSeriesLoader").append('=').append(JodaBeanUtils.toString(getHistoricalTimeSeriesLoader())).append(',').append(' ');
+    buf.append("historicalTimeSeriesResolver").append('=').append(JodaBeanUtils.toString(getHistoricalTimeSeriesResolver())).append(',').append(' ');
     buf.append("viewProcessor").append('=').append(JodaBeanUtils.toString(getViewProcessor())).append(',').append(' ');
     buf.append("avaliableOutputsProvider").append('=').append(JodaBeanUtils.toString(getAvaliableOutputsProvider())).append(',').append(' ');
     buf.append("functionConfigSource").append('=').append(JodaBeanUtils.toString(getFunctionConfigSource())).append(',').append(' ');
@@ -1323,6 +1356,11 @@ public class ToolContext extends DirectBean implements Closeable {
     private final MetaProperty<HistoricalTimeSeriesLoader> _historicalTimeSeriesLoader = DirectMetaProperty.ofReadWrite(
         this, "historicalTimeSeriesLoader", ToolContext.class, HistoricalTimeSeriesLoader.class);
     /**
+     * The meta-property for the {@code historicalTimeSeriesResolver} property.
+     */
+    private final MetaProperty<HistoricalTimeSeriesResolver> _historicalTimeSeriesResolver = DirectMetaProperty.ofReadWrite(
+        this, "historicalTimeSeriesResolver", ToolContext.class, HistoricalTimeSeriesResolver.class);
+    /**
      * The meta-property for the {@code viewProcessor} property.
      */
     private final MetaProperty<ViewProcessor> _viewProcessor = DirectMetaProperty.ofReadWrite(
@@ -1370,6 +1408,7 @@ public class ToolContext extends DirectBean implements Closeable {
         "securityLoader",
         "historicalTimeSeriesProvider",
         "historicalTimeSeriesLoader",
+        "historicalTimeSeriesResolver",
         "viewProcessor",
         "avaliableOutputsProvider",
         "functionConfigSource");
@@ -1439,6 +1478,8 @@ public class ToolContext extends DirectBean implements Closeable {
           return _historicalTimeSeriesProvider;
         case 157715905:  // historicalTimeSeriesLoader
           return _historicalTimeSeriesLoader;
+        case -946313676:  // historicalTimeSeriesResolver
+          return _historicalTimeSeriesResolver;
         case -1697555603:  // viewProcessor
           return _viewProcessor;
         case -1252442368:  // avaliableOutputsProvider
@@ -1690,6 +1731,14 @@ public class ToolContext extends DirectBean implements Closeable {
     }
 
     /**
+     * The meta-property for the {@code historicalTimeSeriesResolver} property.
+     * @return the meta-property, not null
+     */
+    public final MetaProperty<HistoricalTimeSeriesResolver> historicalTimeSeriesResolver() {
+      return _historicalTimeSeriesResolver;
+    }
+
+    /**
      * The meta-property for the {@code viewProcessor} property.
      * @return the meta-property, not null
      */
@@ -1773,6 +1822,8 @@ public class ToolContext extends DirectBean implements Closeable {
           return ((ToolContext) bean).getHistoricalTimeSeriesProvider();
         case 157715905:  // historicalTimeSeriesLoader
           return ((ToolContext) bean).getHistoricalTimeSeriesLoader();
+        case -946313676:  // historicalTimeSeriesResolver
+          return ((ToolContext) bean).getHistoricalTimeSeriesResolver();
         case -1697555603:  // viewProcessor
           return ((ToolContext) bean).getViewProcessor();
         case -1252442368:  // avaliableOutputsProvider
@@ -1869,6 +1920,9 @@ public class ToolContext extends DirectBean implements Closeable {
           return;
         case 157715905:  // historicalTimeSeriesLoader
           ((ToolContext) bean).setHistoricalTimeSeriesLoader((HistoricalTimeSeriesLoader) newValue);
+          return;
+        case -946313676:  // historicalTimeSeriesResolver
+          ((ToolContext) bean).setHistoricalTimeSeriesResolver((HistoricalTimeSeriesResolver) newValue);
           return;
         case -1697555603:  // viewProcessor
           ((ToolContext) bean).setViewProcessor((ViewProcessor) newValue);

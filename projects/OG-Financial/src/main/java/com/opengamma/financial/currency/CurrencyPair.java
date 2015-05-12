@@ -31,6 +31,7 @@ import com.opengamma.id.UniqueId;
 import com.opengamma.id.UniqueIdentifiable;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
+import org.joda.beans.BeanBuilder;
 
 /**
  * An ordered pair of currencies for quoting rates in FX deals.
@@ -261,8 +262,8 @@ public final class CurrencyPair implements ImmutableBean, UniqueIdentifiable {
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash += hash * 31 + JodaBeanUtils.hashCode(getBase());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getCounter());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getBase());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getCounter());
     return hash;
   }
 
@@ -312,7 +313,7 @@ public final class CurrencyPair implements ImmutableBean, UniqueIdentifiable {
     }
 
     @Override
-    public CurrencyPair.Builder builder() {
+    public BeanBuilder<? extends CurrencyPair> builder() {
       return new CurrencyPair.Builder();
     }
 
@@ -423,7 +424,7 @@ public final class CurrencyPair implements ImmutableBean, UniqueIdentifiable {
 
     @Override
     public Builder setString(MetaProperty<?> property, String value) {
-      super.set(property, value);
+      super.setString(property, value);
       return this;
     }
 

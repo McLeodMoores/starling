@@ -146,8 +146,8 @@ public class MarketDataSearchResult extends DirectBean {
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash += hash * 31 + JodaBeanUtils.hashCode(getPaging());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getMarketDatas());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getPaging());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getMarketDatas());
     return hash;
   }
 

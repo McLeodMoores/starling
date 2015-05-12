@@ -125,8 +125,8 @@ public final class YieldCurveDataPointShift implements ImmutableBean {
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash += hash * 31 + JodaBeanUtils.hashCode(getTenor());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getShift());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getTenor());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getShift());
     return hash;
   }
 
@@ -306,7 +306,7 @@ public final class YieldCurveDataPointShift implements ImmutableBean {
 
     @Override
     public Builder setString(MetaProperty<?> property, String value) {
-      super.set(property, value);
+      super.setString(property, value);
       return this;
     }
 
@@ -325,7 +325,7 @@ public final class YieldCurveDataPointShift implements ImmutableBean {
 
     //-----------------------------------------------------------------------
     /**
-     * Sets the {@code tenor} property in the builder.
+     * Sets the tenor of the shift
      * @param tenor  the new value, not null
      * @return this, for chaining, not null
      */
@@ -336,7 +336,7 @@ public final class YieldCurveDataPointShift implements ImmutableBean {
     }
 
     /**
-     * Sets the {@code shift} property in the builder.
+     * Sets the shift magnitude
      * @param shift  the new value
      * @return this, for chaining, not null
      */

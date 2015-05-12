@@ -169,10 +169,10 @@ public final class HistoricalShockMarketDataSpecification implements ImmutableBe
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash += hash * 31 + JodaBeanUtils.hashCode(getShockType());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getHistoricalSpecification1());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getHistoricalSpecification2());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getBaseSpecification());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getShockType());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getHistoricalSpecification1());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getHistoricalSpecification2());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getBaseSpecification());
     return hash;
   }
 
@@ -404,7 +404,7 @@ public final class HistoricalShockMarketDataSpecification implements ImmutableBe
 
     @Override
     public Builder setString(MetaProperty<?> property, String value) {
-      super.set(property, value);
+      super.setString(property, value);
       return this;
     }
 
@@ -425,7 +425,7 @@ public final class HistoricalShockMarketDataSpecification implements ImmutableBe
 
     //-----------------------------------------------------------------------
     /**
-     * Sets the {@code shockType} property in the builder.
+     * Sets the shockType.
      * @param shockType  the new value, not null
      * @return this, for chaining, not null
      */
@@ -436,7 +436,7 @@ public final class HistoricalShockMarketDataSpecification implements ImmutableBe
     }
 
     /**
-     * Sets the {@code historicalSpecification1} property in the builder.
+     * Sets the historicalSpecification1.
      * @param historicalSpecification1  the new value, not null
      * @return this, for chaining, not null
      */
@@ -447,7 +447,7 @@ public final class HistoricalShockMarketDataSpecification implements ImmutableBe
     }
 
     /**
-     * Sets the {@code historicalSpecification2} property in the builder.
+     * Sets the historicalSpecification2.
      * @param historicalSpecification2  the new value, not null
      * @return this, for chaining, not null
      */
@@ -458,7 +458,7 @@ public final class HistoricalShockMarketDataSpecification implements ImmutableBe
     }
 
     /**
-     * Sets the {@code baseSpecification} property in the builder.
+     * Sets the baseSpecification.
      * @param baseSpecification  the new value, not null
      * @return this, for chaining, not null
      */

@@ -102,7 +102,7 @@ public class RiskValueRequirement extends RiskValueProperties {
   @Override
   public int hashCode() {
     int hash = 7;
-    hash += hash * 31 + JodaBeanUtils.hashCode(getSpecification());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getSpecification());
     return hash ^ super.hashCode();
   }
 

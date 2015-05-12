@@ -151,8 +151,7 @@ public final class RegressionTestResults implements ImmutableBean {
       RegressionTestResults other = (RegressionTestResults) obj;
       return JodaBeanUtils.equal(getBaseVersion(), other.getBaseVersion()) &&
           JodaBeanUtils.equal(getTestVersion(), other.getTestVersion()) &&
-          JodaBeanUtils.equal(getDifferences(), other.getDifferences()) &&
-          JodaBeanUtils.equal(getStatus(), other.getStatus());
+          JodaBeanUtils.equal(getDifferences(), other.getDifferences());
     }
     return false;
   }
@@ -160,10 +159,9 @@ public final class RegressionTestResults implements ImmutableBean {
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash += hash * 31 + JodaBeanUtils.hashCode(getBaseVersion());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getTestVersion());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getDifferences());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getStatus());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getBaseVersion());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getTestVersion());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getDifferences());
     return hash;
   }
 
@@ -324,7 +322,7 @@ public final class RegressionTestResults implements ImmutableBean {
 
     private String _baseVersion;
     private String _testVersion;
-    private List<CalculationDifference> _differences = new ArrayList<CalculationDifference>();
+    private List<CalculationDifference> _differences = ImmutableList.of();
 
     /**
      * Restricted constructor.
@@ -339,7 +337,7 @@ public final class RegressionTestResults implements ImmutableBean {
     private Builder(RegressionTestResults beanToCopy) {
       this._baseVersion = beanToCopy.getBaseVersion();
       this._testVersion = beanToCopy.getTestVersion();
-      this._differences = new ArrayList<CalculationDifference>(beanToCopy.getDifferences());
+      this._differences = ImmutableList.copyOf(beanToCopy.getDifferences());
     }
 
     //-----------------------------------------------------------------------
@@ -390,7 +388,7 @@ public final class RegressionTestResults implements ImmutableBean {
 
     @Override
     public Builder setString(MetaProperty<?> property, String value) {
-      super.set(property, value);
+      super.setString(property, value);
       return this;
     }
 
@@ -410,7 +408,7 @@ public final class RegressionTestResults implements ImmutableBean {
 
     //-----------------------------------------------------------------------
     /**
-     * Sets the {@code baseVersion} property in the builder.
+     * Sets the baseVersion.
      * @param baseVersion  the new value, not null
      * @return this, for chaining, not null
      */
@@ -421,7 +419,7 @@ public final class RegressionTestResults implements ImmutableBean {
     }
 
     /**
-     * Sets the {@code testVersion} property in the builder.
+     * Sets the testVersion.
      * @param testVersion  the new value, not null
      * @return this, for chaining, not null
      */
@@ -432,7 +430,7 @@ public final class RegressionTestResults implements ImmutableBean {
     }
 
     /**
-     * Sets the {@code differences} property in the builder.
+     * Sets the differences.
      * @param differences  the new value, not null
      * @return this, for chaining, not null
      */
@@ -440,6 +438,16 @@ public final class RegressionTestResults implements ImmutableBean {
       JodaBeanUtils.notNull(differences, "differences");
       this._differences = differences;
       return this;
+    }
+
+    /**
+     * Sets the {@code differences} property in the builder
+     * from an array of objects.
+     * @param differences  the new value, not null
+     * @return this, for chaining, not null
+     */
+    public Builder differences(CalculationDifference... differences) {
+      return differences(ImmutableList.copyOf(differences));
     }
 
     //-----------------------------------------------------------------------

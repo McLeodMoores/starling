@@ -156,7 +156,7 @@ public class ResolvableConventionLink<T extends Convention> extends ConventionLi
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash += hash * 31 + JodaBeanUtils.hashCode(getIdentifier());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getIdentifier());
     return hash;
   }
 
@@ -324,7 +324,7 @@ public class ResolvableConventionLink<T extends Convention> extends ConventionLi
 
     @Override
     public Builder<T> setString(MetaProperty<?> property, String value) {
-      super.set(property, value);
+      super.setString(property, value);
       return this;
     }
 
@@ -342,7 +342,7 @@ public class ResolvableConventionLink<T extends Convention> extends ConventionLi
 
     //-----------------------------------------------------------------------
     /**
-     * Sets the {@code identifier} property in the builder.
+     * Sets the identifier.
      * @param identifier  the new value, not null
      * @return this, for chaining, not null
      */

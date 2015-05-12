@@ -244,11 +244,11 @@ public class BatchRunSearchRequest extends DirectBean {
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash += hash * 31 + JodaBeanUtils.hashCode(getPagingRequest());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getMarketDataUid());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getViewDefinitionUid());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getVersionCorrection());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getValuationTime());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getPagingRequest());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getMarketDataUid());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getViewDefinitionUid());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getVersionCorrection());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getValuationTime());
     return hash;
   }
 

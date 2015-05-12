@@ -29,6 +29,7 @@ import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 
 import com.google.common.collect.ImmutableMap;
 import com.opengamma.util.PublicSPI;
+import org.joda.beans.BeanBuilder;
 
 /**
  * Result of permission checks for a set of permissions for a user.
@@ -250,9 +251,9 @@ public final class PermissionCheckProviderResult implements ImmutableBean {
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash += hash * 31 + JodaBeanUtils.hashCode(getCheckedPermissions());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getAuthenticationError());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getAuthorizationError());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getCheckedPermissions());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getAuthenticationError());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getAuthorizationError());
     return hash;
   }
 
@@ -322,7 +323,7 @@ public final class PermissionCheckProviderResult implements ImmutableBean {
     }
 
     @Override
-    public PermissionCheckProviderResult.Builder builder() {
+    public BeanBuilder<? extends PermissionCheckProviderResult> builder() {
       return new PermissionCheckProviderResult.Builder();
     }
 
@@ -392,7 +393,7 @@ public final class PermissionCheckProviderResult implements ImmutableBean {
    */
   private static final class Builder extends DirectFieldsBeanBuilder<PermissionCheckProviderResult> {
 
-    private Map<String, Boolean> _checkedPermissions = new HashMap<String, Boolean>();
+    private Map<String, Boolean> _checkedPermissions = ImmutableMap.of();
     private String _authenticationError;
     private String _authorizationError;
 
@@ -450,7 +451,7 @@ public final class PermissionCheckProviderResult implements ImmutableBean {
 
     @Override
     public Builder setString(MetaProperty<?> property, String value) {
-      super.set(property, value);
+      super.setString(property, value);
       return this;
     }
 

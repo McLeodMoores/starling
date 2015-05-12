@@ -123,7 +123,7 @@ public class DbBatchMasterComponentFactory extends AbstractDbMasterComponentFact
   @Override
   public int hashCode() {
     int hash = 7;
-    hash += hash * 31 + JodaBeanUtils.hashCode(getComputationTargetResolver());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getComputationTargetResolver());
     return hash ^ super.hashCode();
   }
 

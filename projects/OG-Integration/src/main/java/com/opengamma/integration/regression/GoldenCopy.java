@@ -167,10 +167,10 @@ public final class GoldenCopy implements ImmutableBean {
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash += hash * 31 + JodaBeanUtils.hashCode(getSnapshotName());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getViewName());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getValuationTime());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getCalculationResults());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getSnapshotName());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getViewName());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getValuationTime());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getCalculationResults());
     return hash;
   }
 
@@ -402,7 +402,7 @@ public final class GoldenCopy implements ImmutableBean {
 
     @Override
     public Builder setString(MetaProperty<?> property, String value) {
-      super.set(property, value);
+      super.setString(property, value);
       return this;
     }
 
@@ -423,7 +423,7 @@ public final class GoldenCopy implements ImmutableBean {
 
     //-----------------------------------------------------------------------
     /**
-     * Sets the {@code snapshotName} property in the builder.
+     * Sets the snapshotName.
      * @param snapshotName  the new value
      * @return this, for chaining, not null
      */
@@ -433,7 +433,7 @@ public final class GoldenCopy implements ImmutableBean {
     }
 
     /**
-     * Sets the {@code viewName} property in the builder.
+     * Sets the viewName.
      * @param viewName  the new value
      * @return this, for chaining, not null
      */
@@ -443,7 +443,7 @@ public final class GoldenCopy implements ImmutableBean {
     }
 
     /**
-     * Sets the {@code valuationTime} property in the builder.
+     * Sets the valuationTime.
      * @param valuationTime  the new value
      * @return this, for chaining, not null
      */
@@ -453,7 +453,7 @@ public final class GoldenCopy implements ImmutableBean {
     }
 
     /**
-     * Sets the {@code calculationResults} property in the builder.
+     * Sets the calculationResults.
      * @param calculationResults  the new value
      * @return this, for chaining, not null
      */

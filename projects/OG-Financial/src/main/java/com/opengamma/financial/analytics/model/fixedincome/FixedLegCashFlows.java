@@ -27,6 +27,7 @@ import org.joda.beans.impl.direct.DirectMetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 import org.threeten.bp.LocalDate;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.CurrencyAmount;
@@ -336,9 +337,7 @@ public class FixedLegCashFlows implements ImmutableBean, SwapLegCashFlows {
           JodaBeanUtils.equal(getPaymentFractions(), other.getPaymentFractions()) &&
           JodaBeanUtils.equal(getPaymentAmounts(), other.getPaymentAmounts()) &&
           JodaBeanUtils.equal(getNotionals(), other.getNotionals()) &&
-          JodaBeanUtils.equal(getFixedRates(), other.getFixedRates()) &&
-          JodaBeanUtils.equal(getDiscountedPaymentAmounts(), other.getDiscountedPaymentAmounts()) &&
-          (getNumberOfCashFlows() == other.getNumberOfCashFlows());
+          JodaBeanUtils.equal(getFixedRates(), other.getFixedRates());
     }
     return false;
   }
@@ -346,16 +345,14 @@ public class FixedLegCashFlows implements ImmutableBean, SwapLegCashFlows {
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash += hash * 31 + JodaBeanUtils.hashCode(getAccrualStart());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getAccrualEnd());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getDiscountFactors());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getPaymentTimes());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getPaymentFractions());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getPaymentAmounts());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getNotionals());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getFixedRates());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getDiscountedPaymentAmounts());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getNumberOfCashFlows());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getAccrualStart());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getAccrualEnd());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getDiscountFactors());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getPaymentTimes());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getPaymentFractions());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getPaymentAmounts());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getNotionals());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getFixedRates());
     return hash;
   }
 
@@ -644,14 +641,14 @@ public class FixedLegCashFlows implements ImmutableBean, SwapLegCashFlows {
    */
   public static class Builder extends DirectFieldsBeanBuilder<FixedLegCashFlows> {
 
-    private List<LocalDate> _accrualStart = new ArrayList<LocalDate>();
-    private List<LocalDate> _accrualEnd = new ArrayList<LocalDate>();
-    private List<Double> _discountFactors = new ArrayList<Double>();
-    private List<Double> _paymentTimes = new ArrayList<Double>();
-    private List<Double> _paymentFractions = new ArrayList<Double>();
-    private List<CurrencyAmount> _paymentAmounts = new ArrayList<CurrencyAmount>();
-    private List<CurrencyAmount> _notionals = new ArrayList<CurrencyAmount>();
-    private List<Double> _fixedRates = new ArrayList<Double>();
+    private List<LocalDate> _accrualStart = ImmutableList.of();
+    private List<LocalDate> _accrualEnd = ImmutableList.of();
+    private List<Double> _discountFactors = ImmutableList.of();
+    private List<Double> _paymentTimes = ImmutableList.of();
+    private List<Double> _paymentFractions = ImmutableList.of();
+    private List<CurrencyAmount> _paymentAmounts = ImmutableList.of();
+    private List<CurrencyAmount> _notionals = ImmutableList.of();
+    private List<Double> _fixedRates = ImmutableList.of();
 
     /**
      * Restricted constructor.
@@ -664,14 +661,14 @@ public class FixedLegCashFlows implements ImmutableBean, SwapLegCashFlows {
      * @param beanToCopy  the bean to copy from, not null
      */
     protected Builder(FixedLegCashFlows beanToCopy) {
-      this._accrualStart = new ArrayList<LocalDate>(beanToCopy.getAccrualStart());
-      this._accrualEnd = new ArrayList<LocalDate>(beanToCopy.getAccrualEnd());
-      this._discountFactors = new ArrayList<Double>(beanToCopy.getDiscountFactors());
-      this._paymentTimes = new ArrayList<Double>(beanToCopy.getPaymentTimes());
-      this._paymentFractions = new ArrayList<Double>(beanToCopy.getPaymentFractions());
-      this._paymentAmounts = new ArrayList<CurrencyAmount>(beanToCopy.getPaymentAmounts());
-      this._notionals = new ArrayList<CurrencyAmount>(beanToCopy.getNotionals());
-      this._fixedRates = new ArrayList<Double>(beanToCopy.getFixedRates());
+      this._accrualStart = ImmutableList.copyOf(beanToCopy.getAccrualStart());
+      this._accrualEnd = ImmutableList.copyOf(beanToCopy.getAccrualEnd());
+      this._discountFactors = ImmutableList.copyOf(beanToCopy.getDiscountFactors());
+      this._paymentTimes = ImmutableList.copyOf(beanToCopy.getPaymentTimes());
+      this._paymentFractions = ImmutableList.copyOf(beanToCopy.getPaymentFractions());
+      this._paymentAmounts = ImmutableList.copyOf(beanToCopy.getPaymentAmounts());
+      this._notionals = ImmutableList.copyOf(beanToCopy.getNotionals());
+      this._fixedRates = ImmutableList.copyOf(beanToCopy.getFixedRates());
     }
 
     //-----------------------------------------------------------------------
@@ -747,7 +744,7 @@ public class FixedLegCashFlows implements ImmutableBean, SwapLegCashFlows {
 
     @Override
     public Builder setString(MetaProperty<?> property, String value) {
-      super.set(property, value);
+      super.setString(property, value);
       return this;
     }
 
@@ -772,7 +769,7 @@ public class FixedLegCashFlows implements ImmutableBean, SwapLegCashFlows {
 
     //-----------------------------------------------------------------------
     /**
-     * Sets the {@code accrualStart} property in the builder.
+     * Sets an array of accrual start dates.
      * @param accrualStart  the new value, not null
      * @return this, for chaining, not null
      */
@@ -783,7 +780,17 @@ public class FixedLegCashFlows implements ImmutableBean, SwapLegCashFlows {
     }
 
     /**
-     * Sets the {@code accrualEnd} property in the builder.
+     * Sets the {@code accrualStart} property in the builder
+     * from an array of objects.
+     * @param accrualStart  the new value, not null
+     * @return this, for chaining, not null
+     */
+    public Builder accrualStart(LocalDate... accrualStart) {
+      return accrualStart(ImmutableList.copyOf(accrualStart));
+    }
+
+    /**
+     * Sets an array of accrual end dates.
      * @param accrualEnd  the new value, not null
      * @return this, for chaining, not null
      */
@@ -794,7 +801,17 @@ public class FixedLegCashFlows implements ImmutableBean, SwapLegCashFlows {
     }
 
     /**
-     * Sets the {@code discountFactors} property in the builder.
+     * Sets the {@code accrualEnd} property in the builder
+     * from an array of objects.
+     * @param accrualEnd  the new value, not null
+     * @return this, for chaining, not null
+     */
+    public Builder accrualEnd(LocalDate... accrualEnd) {
+      return accrualEnd(ImmutableList.copyOf(accrualEnd));
+    }
+
+    /**
+     * Sets an array of discount factors for the payments.
      * @param discountFactors  the new value, not null
      * @return this, for chaining, not null
      */
@@ -805,7 +822,17 @@ public class FixedLegCashFlows implements ImmutableBean, SwapLegCashFlows {
     }
 
     /**
-     * Sets the {@code paymentTimes} property in the builder.
+     * Sets the {@code discountFactors} property in the builder
+     * from an array of objects.
+     * @param discountFactors  the new value, not null
+     * @return this, for chaining, not null
+     */
+    public Builder discountFactors(Double... discountFactors) {
+      return discountFactors(ImmutableList.copyOf(discountFactors));
+    }
+
+    /**
+     * Sets an array of payment times.
      * @param paymentTimes  the new value, not null
      * @return this, for chaining, not null
      */
@@ -816,7 +843,17 @@ public class FixedLegCashFlows implements ImmutableBean, SwapLegCashFlows {
     }
 
     /**
-     * Sets the {@code paymentFractions} property in the builder.
+     * Sets the {@code paymentTimes} property in the builder
+     * from an array of objects.
+     * @param paymentTimes  the new value, not null
+     * @return this, for chaining, not null
+     */
+    public Builder paymentTimes(Double... paymentTimes) {
+      return paymentTimes(ImmutableList.copyOf(paymentTimes));
+    }
+
+    /**
+     * Sets an array of payment year fractions.
      * @param paymentFractions  the new value, not null
      * @return this, for chaining, not null
      */
@@ -827,7 +864,17 @@ public class FixedLegCashFlows implements ImmutableBean, SwapLegCashFlows {
     }
 
     /**
-     * Sets the {@code paymentAmounts} property in the builder.
+     * Sets the {@code paymentFractions} property in the builder
+     * from an array of objects.
+     * @param paymentFractions  the new value, not null
+     * @return this, for chaining, not null
+     */
+    public Builder paymentFractions(Double... paymentFractions) {
+      return paymentFractions(ImmutableList.copyOf(paymentFractions));
+    }
+
+    /**
+     * Sets an array of payment amounts.
      * @param paymentAmounts  the new value, not null
      * @return this, for chaining, not null
      */
@@ -838,7 +885,17 @@ public class FixedLegCashFlows implements ImmutableBean, SwapLegCashFlows {
     }
 
     /**
-     * Sets the {@code notionals} property in the builder.
+     * Sets the {@code paymentAmounts} property in the builder
+     * from an array of objects.
+     * @param paymentAmounts  the new value, not null
+     * @return this, for chaining, not null
+     */
+    public Builder paymentAmounts(CurrencyAmount... paymentAmounts) {
+      return paymentAmounts(ImmutableList.copyOf(paymentAmounts));
+    }
+
+    /**
+     * Sets an array of notionals.
      * @param notionals  the new value, not null
      * @return this, for chaining, not null
      */
@@ -849,7 +906,17 @@ public class FixedLegCashFlows implements ImmutableBean, SwapLegCashFlows {
     }
 
     /**
-     * Sets the {@code fixedRates} property in the builder.
+     * Sets the {@code notionals} property in the builder
+     * from an array of objects.
+     * @param notionals  the new value, not null
+     * @return this, for chaining, not null
+     */
+    public Builder notionals(CurrencyAmount... notionals) {
+      return notionals(ImmutableList.copyOf(notionals));
+    }
+
+    /**
+     * Sets an array of fixed rates.
      * @param fixedRates  the new value, not null
      * @return this, for chaining, not null
      */
@@ -857,6 +924,16 @@ public class FixedLegCashFlows implements ImmutableBean, SwapLegCashFlows {
       JodaBeanUtils.notNull(fixedRates, "fixedRates");
       this._fixedRates = fixedRates;
       return this;
+    }
+
+    /**
+     * Sets the {@code fixedRates} property in the builder
+     * from an array of objects.
+     * @param fixedRates  the new value, not null
+     * @return this, for chaining, not null
+     */
+    public Builder fixedRates(Double... fixedRates) {
+      return fixedRates(ImmutableList.copyOf(fixedRates));
     }
 
     //-----------------------------------------------------------------------

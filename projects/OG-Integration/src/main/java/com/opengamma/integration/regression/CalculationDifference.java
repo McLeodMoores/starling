@@ -25,6 +25,7 @@ import org.joda.beans.impl.direct.DirectMetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 import org.threeten.bp.Instant;
 
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSortedMap;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
@@ -401,8 +402,7 @@ public final class CalculationDifference implements ImmutableBean {
           JodaBeanUtils.equal(getOnlyBase(), other.getOnlyBase()) &&
           JodaBeanUtils.equal(getOnlyTest(), other.getOnlyTest()) &&
           JodaBeanUtils.equal(getDifferent(), other.getDifferent()) &&
-          JodaBeanUtils.equal(getDifferentProperties(), other.getDifferentProperties()) &&
-          JodaBeanUtils.equal(getStatus(), other.getStatus());
+          JodaBeanUtils.equal(getDifferentProperties(), other.getDifferentProperties());
     }
     return false;
   }
@@ -410,17 +410,16 @@ public final class CalculationDifference implements ImmutableBean {
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash += hash * 31 + JodaBeanUtils.hashCode(getEqualResultCount());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getViewDefinitionName());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getSnapshotName());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getValuationTime());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getBaseVersion());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getTestVersion());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getOnlyBase());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getOnlyTest());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getDifferent());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getDifferentProperties());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getStatus());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getEqualResultCount());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getViewDefinitionName());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getSnapshotName());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getValuationTime());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getBaseVersion());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getTestVersion());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getOnlyBase());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getOnlyTest());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getDifferent());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getDifferentProperties());
     return hash;
   }
 
@@ -721,10 +720,10 @@ public final class CalculationDifference implements ImmutableBean {
     private Instant _valuationTime;
     private String _baseVersion;
     private String _testVersion;
-    private Map<CalculationResultKey, CalculatedValue> _onlyBase = new HashMap<CalculationResultKey, CalculatedValue>();
-    private Map<CalculationResultKey, CalculatedValue> _onlyTest = new HashMap<CalculationResultKey, CalculatedValue>();
-    private Map<CalculationResultKey, Pair<CalculatedValue, CalculatedValue>> _different = new HashMap<CalculationResultKey, Pair<CalculatedValue, CalculatedValue>>();
-    private Map<CalculationResultKey, Pair<CalculatedValue, CalculatedValue>> _differentProperties = new HashMap<CalculationResultKey, Pair<CalculatedValue, CalculatedValue>>();
+    private Map<CalculationResultKey, CalculatedValue> _onlyBase = ImmutableMap.of();
+    private Map<CalculationResultKey, CalculatedValue> _onlyTest = ImmutableMap.of();
+    private Map<CalculationResultKey, Pair<CalculatedValue, CalculatedValue>> _different = ImmutableMap.of();
+    private Map<CalculationResultKey, Pair<CalculatedValue, CalculatedValue>> _differentProperties = ImmutableMap.of();
 
     /**
      * Restricted constructor.
@@ -743,10 +742,10 @@ public final class CalculationDifference implements ImmutableBean {
       this._valuationTime = beanToCopy.getValuationTime();
       this._baseVersion = beanToCopy.getBaseVersion();
       this._testVersion = beanToCopy.getTestVersion();
-      this._onlyBase = new HashMap<CalculationResultKey, CalculatedValue>(beanToCopy.getOnlyBase());
-      this._onlyTest = new HashMap<CalculationResultKey, CalculatedValue>(beanToCopy.getOnlyTest());
-      this._different = new HashMap<CalculationResultKey, Pair<CalculatedValue, CalculatedValue>>(beanToCopy.getDifferent());
-      this._differentProperties = new HashMap<CalculationResultKey, Pair<CalculatedValue, CalculatedValue>>(beanToCopy.getDifferentProperties());
+      this._onlyBase = ImmutableMap.copyOf(beanToCopy.getOnlyBase());
+      this._onlyTest = ImmutableMap.copyOf(beanToCopy.getOnlyTest());
+      this._different = ImmutableMap.copyOf(beanToCopy.getDifferent());
+      this._differentProperties = ImmutableMap.copyOf(beanToCopy.getDifferentProperties());
     }
 
     //-----------------------------------------------------------------------
@@ -832,7 +831,7 @@ public final class CalculationDifference implements ImmutableBean {
 
     @Override
     public Builder setString(MetaProperty<?> property, String value) {
-      super.set(property, value);
+      super.setString(property, value);
       return this;
     }
 
@@ -859,7 +858,7 @@ public final class CalculationDifference implements ImmutableBean {
 
     //-----------------------------------------------------------------------
     /**
-     * Sets the {@code equalResultCount} property in the builder.
+     * Sets the equalResultCount.
      * @param equalResultCount  the new value
      * @return this, for chaining, not null
      */
@@ -869,7 +868,7 @@ public final class CalculationDifference implements ImmutableBean {
     }
 
     /**
-     * Sets the {@code viewDefinitionName} property in the builder.
+     * Sets the viewDefinitionName.
      * @param viewDefinitionName  the new value, not null
      * @return this, for chaining, not null
      */
@@ -880,7 +879,7 @@ public final class CalculationDifference implements ImmutableBean {
     }
 
     /**
-     * Sets the {@code snapshotName} property in the builder.
+     * Sets the snapshotName.
      * @param snapshotName  the new value, not null
      * @return this, for chaining, not null
      */
@@ -891,7 +890,7 @@ public final class CalculationDifference implements ImmutableBean {
     }
 
     /**
-     * Sets the {@code valuationTime} property in the builder.
+     * Sets the valuationTime.
      * @param valuationTime  the new value, not null
      * @return this, for chaining, not null
      */
@@ -902,7 +901,7 @@ public final class CalculationDifference implements ImmutableBean {
     }
 
     /**
-     * Sets the {@code baseVersion} property in the builder.
+     * Sets the baseVersion.
      * @param baseVersion  the new value, not null
      * @return this, for chaining, not null
      */
@@ -913,7 +912,7 @@ public final class CalculationDifference implements ImmutableBean {
     }
 
     /**
-     * Sets the {@code testVersion} property in the builder.
+     * Sets the testVersion.
      * @param testVersion  the new value, not null
      * @return this, for chaining, not null
      */
@@ -924,7 +923,7 @@ public final class CalculationDifference implements ImmutableBean {
     }
 
     /**
-     * Sets the {@code onlyBase} property in the builder.
+     * Sets the onlyBase.
      * @param onlyBase  the new value, not null
      * @return this, for chaining, not null
      */
@@ -935,7 +934,7 @@ public final class CalculationDifference implements ImmutableBean {
     }
 
     /**
-     * Sets the {@code onlyTest} property in the builder.
+     * Sets the onlyTest.
      * @param onlyTest  the new value, not null
      * @return this, for chaining, not null
      */
@@ -946,7 +945,7 @@ public final class CalculationDifference implements ImmutableBean {
     }
 
     /**
-     * Sets the {@code different} property in the builder.
+     * Sets the different.
      * @param different  the new value, not null
      * @return this, for chaining, not null
      */
@@ -957,7 +956,7 @@ public final class CalculationDifference implements ImmutableBean {
     }
 
     /**
-     * Sets the {@code differentProperties} property in the builder.
+     * Sets the differentProperties.
      * @param differentProperties  the new value, not null
      * @return this, for chaining, not null
      */

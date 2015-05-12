@@ -110,7 +110,7 @@ public class ListMultimapMockBean implements ImmutableBean {
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash += hash * 31 + JodaBeanUtils.hashCode(getListMultimap());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getListMultimap());
     return hash;
   }
 
@@ -220,7 +220,7 @@ public class ListMultimapMockBean implements ImmutableBean {
    */
   public static class Builder extends DirectFieldsBeanBuilder<ListMultimapMockBean> {
 
-    private ListMultimap<String, String> _listMultimap = ArrayListMultimap.create();
+    private ListMultimap<String, String> _listMultimap = ImmutableListMultimap.of();
 
     /**
      * Restricted constructor.
@@ -233,7 +233,7 @@ public class ListMultimapMockBean implements ImmutableBean {
      * @param beanToCopy  the bean to copy from, not null
      */
     protected Builder(ListMultimapMockBean beanToCopy) {
-      this._listMultimap = ArrayListMultimap.create(beanToCopy.getListMultimap());
+      this._listMultimap = ImmutableListMultimap.copyOf(beanToCopy.getListMultimap());
     }
 
     //-----------------------------------------------------------------------
@@ -274,7 +274,7 @@ public class ListMultimapMockBean implements ImmutableBean {
 
     @Override
     public Builder setString(MetaProperty<?> property, String value) {
-      super.set(property, value);
+      super.setString(property, value);
       return this;
     }
 
@@ -291,7 +291,7 @@ public class ListMultimapMockBean implements ImmutableBean {
 
     //-----------------------------------------------------------------------
     /**
-     * Sets the {@code listMultimap} property in the builder.
+     * Sets the listMultimap.
      * @param listMultimap  the new value, not null
      * @return this, for chaining, not null
      */

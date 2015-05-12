@@ -160,9 +160,9 @@ public class CreditCurveData implements ImmutableBean {
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash += hash * 31 + JodaBeanUtils.hashCode(getCurveConventionLink());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getCdsQuotes());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getRecoveryRate());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getCurveConventionLink());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getCdsQuotes());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getRecoveryRate());
     return hash;
   }
 
@@ -312,7 +312,7 @@ public class CreditCurveData implements ImmutableBean {
   public static class Builder extends DirectFieldsBeanBuilder<CreditCurveData> {
 
     private ConventionLink<IsdaCreditCurveConvention> _curveConventionLink;
-    private SortedMap<Tenor, CdsQuote> _cdsQuotes = new TreeMap<Tenor, CdsQuote>();
+    private SortedMap<Tenor, CdsQuote> _cdsQuotes = ImmutableSortedMap.of();
     private double _recoveryRate;
 
     /**
@@ -327,7 +327,7 @@ public class CreditCurveData implements ImmutableBean {
      */
     protected Builder(CreditCurveData beanToCopy) {
       this._curveConventionLink = beanToCopy.getCurveConventionLink();
-      this._cdsQuotes = new TreeMap<Tenor, CdsQuote>(beanToCopy.getCdsQuotes());
+      this._cdsQuotes = beanToCopy.getCdsQuotes();
       this._recoveryRate = beanToCopy.getRecoveryRate();
     }
 
@@ -379,7 +379,7 @@ public class CreditCurveData implements ImmutableBean {
 
     @Override
     public Builder setString(MetaProperty<?> property, String value) {
-      super.set(property, value);
+      super.setString(property, value);
       return this;
     }
 
@@ -396,7 +396,7 @@ public class CreditCurveData implements ImmutableBean {
 
     //-----------------------------------------------------------------------
     /**
-     * Sets the {@code curveConventionLink} property in the builder.
+     * Sets the credit curve convention to apply when bootstrapping the curve.
      * @param curveConventionLink  the new value, not null
      * @return this, for chaining, not null
      */
@@ -407,7 +407,7 @@ public class CreditCurveData implements ImmutableBean {
     }
 
     /**
-     * Sets the {@code cdsQuotes} property in the builder.
+     * Sets the set of cds quotes to use to bootstrap the curve, indexed by tenor.
      * @param cdsQuotes  the new value, not null
      * @return this, for chaining, not null
      */
@@ -418,7 +418,7 @@ public class CreditCurveData implements ImmutableBean {
     }
 
     /**
-     * Sets the {@code recoveryRate} property in the builder.
+     * Sets the recovery rate, expressed as a fractional amount. e.g. 0.4 = 40%.
      * @param recoveryRate  the new value
      * @return this, for chaining, not null
      */

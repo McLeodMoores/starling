@@ -208,9 +208,9 @@ public final class AnalyticsEnvironment implements ImmutableBean {
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash += hash * 31 + JodaBeanUtils.hashCode(getModelDayCount());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getFixedAnnuityDefinitionBuilder());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getFloatingAnnuityDefinitionBuilder());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getModelDayCount());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getFixedAnnuityDefinitionBuilder());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getFloatingAnnuityDefinitionBuilder());
     return hash;
   }
 
@@ -416,7 +416,7 @@ public final class AnalyticsEnvironment implements ImmutableBean {
 
     @Override
     public Builder setString(MetaProperty<?> property, String value) {
-      super.set(property, value);
+      super.setString(property, value);
       return this;
     }
 
@@ -436,7 +436,10 @@ public final class AnalyticsEnvironment implements ImmutableBean {
 
     //-----------------------------------------------------------------------
     /**
-     * Sets the {@code modelDayCount} property in the builder.
+     * Sets the model daycount. Used to compute fractions of a year when obtaining values from a curve.
+     * Different to the daycount used to price an instrument, which
+     * comes from the instrument or a convention.
+     * @see DayCount
      * @param modelDayCount  the new value, not null
      * @return this, for chaining, not null
      */
@@ -447,7 +450,8 @@ public final class AnalyticsEnvironment implements ImmutableBean {
     }
 
     /**
-     * Sets the {@code fixedAnnuityDefinitionBuilder} property in the builder.
+     * Sets builder for generating fixed annuities
+     * @see FixedAnnuityDefinitionBuilder
      * @param fixedAnnuityDefinitionBuilder  the new value, not null
      * @return this, for chaining, not null
      */
@@ -458,7 +462,8 @@ public final class AnalyticsEnvironment implements ImmutableBean {
     }
 
     /**
-     * Sets the {@code floatingAnnuityDefinitionBuilder} property in the builder.
+     * Sets builder for generating floating (Ibor, OIS etc) annuities.
+     * @see FloatingAnnuityDefinitionBuilder
      * @param floatingAnnuityDefinitionBuilder  the new value, not null
      * @return this, for chaining, not null
      */

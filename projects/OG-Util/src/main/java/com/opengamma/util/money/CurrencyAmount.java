@@ -27,6 +27,7 @@ import org.joda.convert.FromString;
 import org.joda.convert.ToString;
 
 import com.opengamma.util.ArgumentChecker;
+import org.joda.beans.BeanBuilder;
 
 /**
  * An amount of a currency.
@@ -269,8 +270,8 @@ public final class CurrencyAmount implements ImmutableBean, Serializable {
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash += hash * 31 + JodaBeanUtils.hashCode(getCurrency());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getAmount());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getCurrency());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getAmount());
     return hash;
   }
 
@@ -320,7 +321,7 @@ public final class CurrencyAmount implements ImmutableBean, Serializable {
     }
 
     @Override
-    public CurrencyAmount.Builder builder() {
+    public BeanBuilder<? extends CurrencyAmount> builder() {
       return new CurrencyAmount.Builder();
     }
 
@@ -431,7 +432,7 @@ public final class CurrencyAmount implements ImmutableBean, Serializable {
 
     @Override
     public Builder setString(MetaProperty<?> property, String value) {
-      super.set(property, value);
+      super.setString(property, value);
       return this;
     }
 

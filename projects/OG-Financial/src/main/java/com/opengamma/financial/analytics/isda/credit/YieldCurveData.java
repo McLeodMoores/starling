@@ -316,16 +316,16 @@ public final class YieldCurveData implements ImmutableBean {
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash += hash * 31 + JodaBeanUtils.hashCode(getCurrency());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getCurveDayCount());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getCurveBusinessDayConvention());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getCashDayCount());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getSwapDayCount());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getSpotDate());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getCalendar());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getSwapFixedLegInterval());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getCashData());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getSwapData());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getCurrency());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getCurveDayCount());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getCurveBusinessDayConvention());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getCashDayCount());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getSwapDayCount());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getSpotDate());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getCalendar());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getSwapFixedLegInterval());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getCashData());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getSwapData());
     return hash;
   }
 
@@ -607,8 +607,8 @@ public final class YieldCurveData implements ImmutableBean {
     private LocalDate _spotDate;
     private Calendar _calendar;
     private Tenor _swapFixedLegInterval;
-    private SortedMap<Tenor, Double> _cashData = new TreeMap<Tenor, Double>();
-    private SortedMap<Tenor, Double> _swapData = new TreeMap<Tenor, Double>();
+    private SortedMap<Tenor, Double> _cashData = ImmutableSortedMap.of();
+    private SortedMap<Tenor, Double> _swapData = ImmutableSortedMap.of();
 
     /**
      * Restricted constructor.
@@ -629,8 +629,8 @@ public final class YieldCurveData implements ImmutableBean {
       this._spotDate = beanToCopy.getSpotDate();
       this._calendar = beanToCopy.getCalendar();
       this._swapFixedLegInterval = beanToCopy.getSwapFixedLegInterval();
-      this._cashData = new TreeMap<Tenor, Double>(beanToCopy.getCashData());
-      this._swapData = new TreeMap<Tenor, Double>(beanToCopy.getSwapData());
+      this._cashData = beanToCopy.getCashData();
+      this._swapData = beanToCopy.getSwapData();
     }
 
     //-----------------------------------------------------------------------
@@ -716,7 +716,7 @@ public final class YieldCurveData implements ImmutableBean {
 
     @Override
     public Builder setString(MetaProperty<?> property, String value) {
-      super.set(property, value);
+      super.setString(property, value);
       return this;
     }
 
@@ -743,7 +743,7 @@ public final class YieldCurveData implements ImmutableBean {
 
     //-----------------------------------------------------------------------
     /**
-     * Sets the {@code currency} property in the builder.
+     * Sets currency of the yield curve.
      * @param currency  the new value, not null
      * @return this, for chaining, not null
      */
@@ -754,7 +754,7 @@ public final class YieldCurveData implements ImmutableBean {
     }
 
     /**
-     * Sets the {@code curveDayCount} property in the builder.
+     * Sets day count for the yield curve.
      * @param curveDayCount  the new value, not null
      * @return this, for chaining, not null
      */
@@ -765,7 +765,7 @@ public final class YieldCurveData implements ImmutableBean {
     }
 
     /**
-     * Sets the {@code curveBusinessDayConvention} property in the builder.
+     * Sets business day convention (aka bad day convention).
      * @param curveBusinessDayConvention  the new value, not null
      * @return this, for chaining, not null
      */
@@ -776,7 +776,7 @@ public final class YieldCurveData implements ImmutableBean {
     }
 
     /**
-     * Sets the {@code cashDayCount} property in the builder.
+     * Sets day count for the money market instruments.
      * @param cashDayCount  the new value, not null
      * @return this, for chaining, not null
      */
@@ -787,7 +787,7 @@ public final class YieldCurveData implements ImmutableBean {
     }
 
     /**
-     * Sets the {@code swapDayCount} property in the builder.
+     * Sets day count for the swaps.
      * @param swapDayCount  the new value, not null
      * @return this, for chaining, not null
      */
@@ -798,7 +798,8 @@ public final class YieldCurveData implements ImmutableBean {
     }
 
     /**
-     * Sets the {@code spotDate} property in the builder.
+     * Sets yield curve spot date. This is the start date for instruments
+     * defined on the curve and used in calibration.
      * @param spotDate  the new value, not null
      * @return this, for chaining, not null
      */
@@ -809,7 +810,7 @@ public final class YieldCurveData implements ImmutableBean {
     }
 
     /**
-     * Sets the {@code calendar} property in the builder.
+     * Sets calendar for use in calibration.
      * @param calendar  the new value, not null
      * @return this, for chaining, not null
      */
@@ -820,7 +821,7 @@ public final class YieldCurveData implements ImmutableBean {
     }
 
     /**
-     * Sets the {@code swapFixedLegInterval} property in the builder.
+     * Sets contract payment interval for fixed legs on swap instruments.
      * @param swapFixedLegInterval  the new value, not null
      * @return this, for chaining, not null
      */
@@ -831,7 +832,9 @@ public final class YieldCurveData implements ImmutableBean {
     }
 
     /**
-     * Sets the {@code cashData} property in the builder.
+     * Sets tenor-rate mappings for cash data.
+     * Rates should be in fractions (e.g. 0.01 = 1%).
+     * The set of tenors must be distinct from the swap tenors.
      * @param cashData  the new value, not null
      * @return this, for chaining, not null
      */
@@ -842,7 +845,9 @@ public final class YieldCurveData implements ImmutableBean {
     }
 
     /**
-     * Sets the {@code swapData} property in the builder.
+     * Sets tenor-rate mappings for swap data.
+     * Rates should be in fractions (e.g. 0.01 = 1%).
+     * The set of tenors must be distinct from the cash tenors.
      * @param swapData  the new value, not null
      * @return this, for chaining, not null
      */

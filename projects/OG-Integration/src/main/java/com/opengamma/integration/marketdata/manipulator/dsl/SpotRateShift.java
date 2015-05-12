@@ -251,11 +251,11 @@ public final class SpotRateShift implements StructureManipulator<Double>, Immuta
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash += hash * 31 + JodaBeanUtils.hashCode(getShiftType());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getShiftAmount());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getMinRate());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getMaxRate());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getCurrencyPairs());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getShiftType());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getShiftAmount());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getMinRate());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getMaxRate());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getCurrencyPairs());
     return hash;
   }
 
@@ -437,7 +437,7 @@ public final class SpotRateShift implements StructureManipulator<Double>, Immuta
     private double _shiftAmount;
     private double _minRate;
     private double _maxRate;
-    private Set<CurrencyPair> _currencyPairs = new HashSet<CurrencyPair>();
+    private Set<CurrencyPair> _currencyPairs = ImmutableSet.of();
 
     /**
      * Restricted constructor.
@@ -454,7 +454,7 @@ public final class SpotRateShift implements StructureManipulator<Double>, Immuta
       this._shiftAmount = beanToCopy.getShiftAmount();
       this._minRate = beanToCopy.getMinRate();
       this._maxRate = beanToCopy.getMaxRate();
-      this._currencyPairs = new HashSet<CurrencyPair>(beanToCopy.getCurrencyPairs());
+      this._currencyPairs = ImmutableSet.copyOf(beanToCopy.getCurrencyPairs());
     }
 
     //-----------------------------------------------------------------------
@@ -515,7 +515,7 @@ public final class SpotRateShift implements StructureManipulator<Double>, Immuta
 
     @Override
     public Builder setString(MetaProperty<?> property, String value) {
-      super.set(property, value);
+      super.setString(property, value);
       return this;
     }
 
@@ -537,7 +537,7 @@ public final class SpotRateShift implements StructureManipulator<Double>, Immuta
 
     //-----------------------------------------------------------------------
     /**
-     * Sets the {@code shiftType} property in the builder.
+     * Sets how the shift amount should be applied.
      * @param shiftType  the new value, not null
      * @return this, for chaining, not null
      */
@@ -548,7 +548,7 @@ public final class SpotRateShift implements StructureManipulator<Double>, Immuta
     }
 
     /**
-     * Sets the {@code shiftAmount} property in the builder.
+     * Sets the shiftAmount.
      * @param shiftAmount  the new value
      * @return this, for chaining, not null
      */
@@ -558,7 +558,7 @@ public final class SpotRateShift implements StructureManipulator<Double>, Immuta
     }
 
     /**
-     * Sets the {@code minRate} property in the builder.
+     * Sets the minRate.
      * @param minRate  the new value, not null
      * @return this, for chaining, not null
      */
@@ -569,7 +569,7 @@ public final class SpotRateShift implements StructureManipulator<Double>, Immuta
     }
 
     /**
-     * Sets the {@code maxRate} property in the builder.
+     * Sets the maxRate.
      * @param maxRate  the new value, not null
      * @return this, for chaining, not null
      */
@@ -580,7 +580,7 @@ public final class SpotRateShift implements StructureManipulator<Double>, Immuta
     }
 
     /**
-     * Sets the {@code currencyPairs} property in the builder.
+     * Sets the currencyPairs.
      * @param currencyPairs  the new value, not null
      * @return this, for chaining, not null
      */
@@ -588,6 +588,16 @@ public final class SpotRateShift implements StructureManipulator<Double>, Immuta
       JodaBeanUtils.notNull(currencyPairs, "currencyPairs");
       this._currencyPairs = currencyPairs;
       return this;
+    }
+
+    /**
+     * Sets the {@code currencyPairs} property in the builder
+     * from an array of objects.
+     * @param currencyPairs  the new value, not null
+     * @return this, for chaining, not null
+     */
+    public Builder currencyPairs(CurrencyPair... currencyPairs) {
+      return currencyPairs(ImmutableSet.copyOf(currencyPairs));
     }
 
     //-----------------------------------------------------------------------

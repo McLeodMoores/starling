@@ -6,9 +6,9 @@
   <modelVersion>4.0.0</modelVersion>
   
   <parent>
-    <groupId>com.opengamma</groupId>
+    <groupId>com.mcleodmoores.opengamma</groupId>
     <artifactId>corporate-parent</artifactId>
-    <version>1.1.8</version>
+    <version>1.1.0-SNAPSHOT</version>
     <relativePath></relativePath>
   </parent>  
   <groupId>com.mcleodmoores.opengamma.platform</groupId>
@@ -1284,7 +1284,9 @@
     <maven-surefire-plugin.version>2.17</maven-surefire-plugin.version>
     <maven-surefire-report-plugin.version>2.17</maven-surefire-report-plugin.version>
     <jacoco-maven-plugin.version>0.7.0.201403182114</jacoco-maven-plugin.version>
-    <joda-beans.version>1.0</joda-beans.version>
+    <joda-beans.version>1.6-SNAPSHOT</joda-beans.version>
+    <joda.beans.indent>2</joda.beans.indent>
+    <joda.beans.prefix>_</joda.beans.prefix>
     <fudge-java.version>0.3.9.20-MM</fudge-java.version>
     <fudge-proto.version>0.3.9.7</fudge-proto.version>
     <og.spring.version>3.2.3.RELEASE</og.spring.version>

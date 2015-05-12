@@ -169,7 +169,7 @@ public final class ResolvableSecurityLink<T extends Security> extends SecurityLi
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash += hash * 31 + JodaBeanUtils.hashCode(getLinkIdentifier());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getLinkIdentifier());
     return hash;
   }
 
@@ -329,7 +329,7 @@ public final class ResolvableSecurityLink<T extends Security> extends SecurityLi
 
     @Override
     public Builder<T> setString(MetaProperty<?> property, String value) {
-      super.set(property, value);
+      super.setString(property, value);
       return this;
     }
 
@@ -347,7 +347,7 @@ public final class ResolvableSecurityLink<T extends Security> extends SecurityLi
 
     //-----------------------------------------------------------------------
     /**
-     * Sets the {@code linkIdentifier} property in the builder.
+     * Sets the identification data for the object being linked to, not null.
      * @param linkIdentifier  the new value, not null
      * @return this, for chaining, not null
      */

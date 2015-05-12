@@ -164,7 +164,7 @@ public class ResolvableConfigLink<T> extends ConfigLink<T> implements ImmutableB
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash += hash * 31 + JodaBeanUtils.hashCode(getIdentifier());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getIdentifier());
     return hash;
   }
 
@@ -332,7 +332,7 @@ public class ResolvableConfigLink<T> extends ConfigLink<T> implements ImmutableB
 
     @Override
     public Builder<T> setString(MetaProperty<?> property, String value) {
-      super.set(property, value);
+      super.setString(property, value);
       return this;
     }
 
@@ -350,7 +350,7 @@ public class ResolvableConfigLink<T> extends ConfigLink<T> implements ImmutableB
 
     //-----------------------------------------------------------------------
     /**
-     * Sets the {@code identifier} property in the builder.
+     * Sets the identification data for the object being linked to.
      * @param identifier  the new value, not null
      * @return this, for chaining, not null
      */

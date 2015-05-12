@@ -167,7 +167,7 @@ public final class ResolvedSecurityLink<S extends Security>
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash += hash * 31 + JodaBeanUtils.hashCode(getValue());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getValue());
     return hash;
   }
 
@@ -327,7 +327,7 @@ public final class ResolvedSecurityLink<S extends Security>
 
     @Override
     public Builder<S> setString(MetaProperty<?> property, String value) {
-      super.set(property, value);
+      super.setString(property, value);
       return this;
     }
 
@@ -345,7 +345,7 @@ public final class ResolvedSecurityLink<S extends Security>
 
     //-----------------------------------------------------------------------
     /**
-     * Sets the {@code value} property in the builder.
+     * Sets the security instance.
      * @param value  the new value, not null
      * @return this, for chaining, not null
      */

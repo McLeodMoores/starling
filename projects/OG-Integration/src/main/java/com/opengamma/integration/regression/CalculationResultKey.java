@@ -266,11 +266,11 @@ public final class CalculationResultKey implements ImmutableBean, Comparable<Cal
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash += hash * 31 + JodaBeanUtils.hashCode(getCalcConfigName());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getValueName());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getProperties());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getPath());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getTargetId());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getCalcConfigName());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getValueName());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getProperties());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getPath());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getTargetId());
     return hash;
   }
 
@@ -468,7 +468,7 @@ public final class CalculationResultKey implements ImmutableBean, Comparable<Cal
       this._calcConfigName = beanToCopy.getCalcConfigName();
       this._valueName = beanToCopy.getValueName();
       this._properties = beanToCopy.getProperties();
-      this._path = (beanToCopy.getPath() != null ? new ArrayList<String>(beanToCopy.getPath()) : null);
+      this._path = (beanToCopy.getPath() != null ? ImmutableList.copyOf(beanToCopy.getPath()) : null);
       this._targetId = beanToCopy.getTargetId();
     }
 
@@ -530,7 +530,7 @@ public final class CalculationResultKey implements ImmutableBean, Comparable<Cal
 
     @Override
     public Builder setString(MetaProperty<?> property, String value) {
-      super.set(property, value);
+      super.setString(property, value);
       return this;
     }
 
@@ -552,7 +552,7 @@ public final class CalculationResultKey implements ImmutableBean, Comparable<Cal
 
     //-----------------------------------------------------------------------
     /**
-     * Sets the {@code calcConfigName} property in the builder.
+     * Sets the calcConfigName.
      * @param calcConfigName  the new value, not null
      * @return this, for chaining, not null
      */
@@ -563,7 +563,7 @@ public final class CalculationResultKey implements ImmutableBean, Comparable<Cal
     }
 
     /**
-     * Sets the {@code valueName} property in the builder.
+     * Sets the valueName.
      * @param valueName  the new value, not null
      * @return this, for chaining, not null
      */
@@ -574,7 +574,7 @@ public final class CalculationResultKey implements ImmutableBean, Comparable<Cal
     }
 
     /**
-     * Sets the {@code properties} property in the builder.
+     * Sets the properties.
      * @param properties  the new value, not null
      * @return this, for chaining, not null
      */
@@ -585,7 +585,7 @@ public final class CalculationResultKey implements ImmutableBean, Comparable<Cal
     }
 
     /**
-     * Sets the {@code path} property in the builder.
+     * Sets the path.
      * @param path  the new value
      * @return this, for chaining, not null
      */
@@ -595,7 +595,17 @@ public final class CalculationResultKey implements ImmutableBean, Comparable<Cal
     }
 
     /**
-     * Sets the {@code targetId} property in the builder.
+     * Sets the {@code path} property in the builder
+     * from an array of objects.
+     * @param path  the new value
+     * @return this, for chaining, not null
+     */
+    public Builder path(String... path) {
+      return path(ImmutableList.copyOf(path));
+    }
+
+    /**
+     * Sets the targetId.
      * @param targetId  the new value
      * @return this, for chaining, not null
      */

@@ -173,7 +173,7 @@ public final class ScenarioDslParameters implements ImmutableBean, ScenarioParam
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash += hash * 31 + JodaBeanUtils.hashCode(getScript());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getScript());
     return hash;
   }
 
@@ -327,7 +327,7 @@ public final class ScenarioDslParameters implements ImmutableBean, ScenarioParam
 
     @Override
     public Builder setString(MetaProperty<?> property, String value) {
-      super.set(property, value);
+      super.setString(property, value);
       return this;
     }
 
@@ -345,7 +345,7 @@ public final class ScenarioDslParameters implements ImmutableBean, ScenarioParam
 
     //-----------------------------------------------------------------------
     /**
-     * Sets the {@code script} property in the builder.
+     * Sets the script that populates the parameters.
      * @param script  the new value, not empty
      * @return this, for chaining, not null
      */

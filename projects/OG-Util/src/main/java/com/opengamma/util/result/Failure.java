@@ -227,10 +227,10 @@ public final class Failure implements ImmutableBean {
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash += hash * 31 + JodaBeanUtils.hashCode(getStatus());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getMessage());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getStackTrace());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getCauseType());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getStatus());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getMessage());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getStackTrace());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getCauseType());
     return hash;
   }
 
@@ -464,7 +464,7 @@ public final class Failure implements ImmutableBean {
 
     @Override
     public Builder setString(MetaProperty<?> property, String value) {
-      super.set(property, value);
+      super.setString(property, value);
       return this;
     }
 
@@ -485,7 +485,7 @@ public final class Failure implements ImmutableBean {
 
     //-----------------------------------------------------------------------
     /**
-     * Sets the {@code status} property in the builder.
+     * Sets the status associated with the failure.
      * @param status  the new value, not null
      * @return this, for chaining, not null
      */
@@ -496,7 +496,7 @@ public final class Failure implements ImmutableBean {
     }
 
     /**
-     * Sets the {@code message} property in the builder.
+     * Sets the error message associated with the failure.
      * @param message  the new value, not null
      * @return this, for chaining, not null
      */
@@ -507,7 +507,9 @@ public final class Failure implements ImmutableBean {
     }
 
     /**
-     * Sets the {@code stackTrace} property in the builder.
+     * Sets stack trace where the failure occurred.
+     * If the failure was caused by an {@code Exception} its stack trace is used, otherwise it's the
+     * location where the failure was created.
      * @param stackTrace  the new value, not null
      * @return this, for chaining, not null
      */
@@ -518,7 +520,7 @@ public final class Failure implements ImmutableBean {
     }
 
     /**
-     * Sets the {@code causeType} property in the builder.
+     * Sets the type of the exception that caused the failure, null if it wasn't caused by an exception.
      * @param causeType  the new value
      * @return this, for chaining, not null
      */

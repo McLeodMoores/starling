@@ -158,9 +158,9 @@ public final class CreditCurveDataSnapshot implements NamedSnapshot, ImmutableBe
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash += hash * 31 + JodaBeanUtils.hashCode(getUniqueId());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getName());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getCreditCurves());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getUniqueId());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getName());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getCreditCurves());
     return hash;
   }
 
@@ -302,7 +302,7 @@ public final class CreditCurveDataSnapshot implements NamedSnapshot, ImmutableBe
 
     private UniqueId _uniqueId;
     private String _name;
-    private Map<CreditCurveDataKey, CreditCurveData> _creditCurves = new HashMap<CreditCurveDataKey, CreditCurveData>();
+    private Map<CreditCurveDataKey, CreditCurveData> _creditCurves = ImmutableMap.of();
 
     /**
      * Restricted constructor.
@@ -317,7 +317,7 @@ public final class CreditCurveDataSnapshot implements NamedSnapshot, ImmutableBe
     private Builder(CreditCurveDataSnapshot beanToCopy) {
       this._uniqueId = beanToCopy.getUniqueId();
       this._name = beanToCopy.getName();
-      this._creditCurves = new HashMap<CreditCurveDataKey, CreditCurveData>(beanToCopy.getCreditCurves());
+      this._creditCurves = beanToCopy.getCreditCurves();
     }
 
     //-----------------------------------------------------------------------
@@ -368,7 +368,7 @@ public final class CreditCurveDataSnapshot implements NamedSnapshot, ImmutableBe
 
     @Override
     public Builder setString(MetaProperty<?> property, String value) {
-      super.set(property, value);
+      super.setString(property, value);
       return this;
     }
 
@@ -388,7 +388,7 @@ public final class CreditCurveDataSnapshot implements NamedSnapshot, ImmutableBe
 
     //-----------------------------------------------------------------------
     /**
-     * Sets the {@code uniqueId} property in the builder.
+     * Sets the unique id of the snapshot.
      * @param uniqueId  the new value
      * @return this, for chaining, not null
      */
@@ -398,7 +398,7 @@ public final class CreditCurveDataSnapshot implements NamedSnapshot, ImmutableBe
     }
 
     /**
-     * Sets the {@code name} property in the builder.
+     * Sets the name of the snapshot.
      * @param name  the new value, not null
      * @return this, for chaining, not null
      */
@@ -409,7 +409,7 @@ public final class CreditCurveDataSnapshot implements NamedSnapshot, ImmutableBe
     }
 
     /**
-     * Sets the {@code creditCurves} property in the builder.
+     * Sets the full set of credit curves defined by the snapshot.
      * @param creditCurves  the new value, not null
      * @return this, for chaining, not null
      */

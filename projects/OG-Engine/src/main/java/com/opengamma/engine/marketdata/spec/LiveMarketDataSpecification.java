@@ -129,7 +129,7 @@ public final class LiveMarketDataSpecification implements ImmutableBean, MarketD
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash += hash * 31 + JodaBeanUtils.hashCode(getDataSource());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getDataSource());
     return hash;
   }
 
@@ -283,7 +283,7 @@ public final class LiveMarketDataSpecification implements ImmutableBean, MarketD
 
     @Override
     public Builder setString(MetaProperty<?> property, String value) {
-      super.set(property, value);
+      super.setString(property, value);
       return this;
     }
 
@@ -301,7 +301,7 @@ public final class LiveMarketDataSpecification implements ImmutableBean, MarketD
 
     //-----------------------------------------------------------------------
     /**
-     * Sets the {@code dataSource} property in the builder.
+     * Sets the data source
      * @param dataSource  the new value
      * @return this, for chaining, not null
      */

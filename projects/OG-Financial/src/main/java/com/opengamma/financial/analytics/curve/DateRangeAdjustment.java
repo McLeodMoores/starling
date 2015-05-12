@@ -116,7 +116,7 @@ public class DateRangeAdjustment implements ImmutableBean {
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash += hash * 31 + JodaBeanUtils.hashCode(getAdjustments());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getAdjustments());
     return hash;
   }
 
@@ -226,7 +226,7 @@ public class DateRangeAdjustment implements ImmutableBean {
    */
   public static class Builder extends DirectFieldsBeanBuilder<DateRangeAdjustment> {
 
-    private Map<LocalDateRange, Double> _adjustments = new HashMap<LocalDateRange, Double>();
+    private Map<LocalDateRange, Double> _adjustments = ImmutableMap.of();
 
     /**
      * Restricted constructor.
@@ -239,7 +239,7 @@ public class DateRangeAdjustment implements ImmutableBean {
      * @param beanToCopy  the bean to copy from, not null
      */
     protected Builder(DateRangeAdjustment beanToCopy) {
-      this._adjustments = new HashMap<LocalDateRange, Double>(beanToCopy.getAdjustments());
+      this._adjustments = ImmutableMap.copyOf(beanToCopy.getAdjustments());
     }
 
     //-----------------------------------------------------------------------
@@ -280,7 +280,7 @@ public class DateRangeAdjustment implements ImmutableBean {
 
     @Override
     public Builder setString(MetaProperty<?> property, String value) {
-      super.set(property, value);
+      super.setString(property, value);
       return this;
     }
 
@@ -297,7 +297,7 @@ public class DateRangeAdjustment implements ImmutableBean {
 
     //-----------------------------------------------------------------------
     /**
-     * Sets the {@code adjustments} property in the builder.
+     * Sets the adjustments.
      * @param adjustments  the new value, not null
      * @return this, for chaining, not null
      */

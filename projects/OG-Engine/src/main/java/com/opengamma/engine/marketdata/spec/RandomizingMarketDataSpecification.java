@@ -193,10 +193,10 @@ public final class RandomizingMarketDataSpecification implements ImmutableBean, 
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash += hash * 31 + JodaBeanUtils.hashCode(getUnderlying());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getUpdateProbability());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getMaxPercentageChange());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getAverageCycleInterval());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getUnderlying());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getUpdateProbability());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getMaxPercentageChange());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getAverageCycleInterval());
     return hash;
   }
 
@@ -428,7 +428,7 @@ public final class RandomizingMarketDataSpecification implements ImmutableBean, 
 
     @Override
     public Builder setString(MetaProperty<?> property, String value) {
-      super.set(property, value);
+      super.setString(property, value);
       return this;
     }
 
@@ -449,7 +449,7 @@ public final class RandomizingMarketDataSpecification implements ImmutableBean, 
 
     //-----------------------------------------------------------------------
     /**
-     * Sets the {@code underlying} property in the builder.
+     * Sets the underlying.
      * @param underlying  the new value, not null
      * @return this, for chaining, not null
      */
@@ -460,7 +460,7 @@ public final class RandomizingMarketDataSpecification implements ImmutableBean, 
     }
 
     /**
-     * Sets the {@code updateProbability} property in the builder.
+     * Sets the updateProbability.
      * @param updateProbability  the new value, not null
      * @return this, for chaining, not null
      */
@@ -471,7 +471,7 @@ public final class RandomizingMarketDataSpecification implements ImmutableBean, 
     }
 
     /**
-     * Sets the {@code maxPercentageChange} property in the builder.
+     * Sets the maxPercentageChange.
      * @param maxPercentageChange  the new value, not null
      * @return this, for chaining, not null
      */
@@ -482,7 +482,7 @@ public final class RandomizingMarketDataSpecification implements ImmutableBean, 
     }
 
     /**
-     * Sets the {@code averageCycleInterval} property in the builder.
+     * Sets the averageCycleInterval.
      * @param averageCycleInterval  the new value, not null
      * @return this, for chaining, not null
      */

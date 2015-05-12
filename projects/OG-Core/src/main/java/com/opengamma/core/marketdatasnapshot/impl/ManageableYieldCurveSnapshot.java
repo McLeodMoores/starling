@@ -175,8 +175,8 @@ public final class ManageableYieldCurveSnapshot implements ImmutableBean, YieldC
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash += hash * 31 + JodaBeanUtils.hashCode(getValuationTime());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getValues());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getValuationTime());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getValues());
     return hash;
   }
 
@@ -356,7 +356,7 @@ public final class ManageableYieldCurveSnapshot implements ImmutableBean, YieldC
 
     @Override
     public Builder setString(MetaProperty<?> property, String value) {
-      super.set(property, value);
+      super.setString(property, value);
       return this;
     }
 
@@ -375,7 +375,7 @@ public final class ManageableYieldCurveSnapshot implements ImmutableBean, YieldC
 
     //-----------------------------------------------------------------------
     /**
-     * Sets the {@code valuationTime} property in the builder.
+     * Sets the valuation instant.
      * @param valuationTime  the new value, not null
      * @return this, for chaining, not null
      */
@@ -386,7 +386,7 @@ public final class ManageableYieldCurveSnapshot implements ImmutableBean, YieldC
     }
 
     /**
-     * Sets the {@code values} property in the builder.
+     * Sets the values.
      * @param values  the new value, not null
      * @return this, for chaining, not null
      */

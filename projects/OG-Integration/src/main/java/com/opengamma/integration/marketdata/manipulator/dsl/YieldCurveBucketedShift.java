@@ -146,9 +146,9 @@ public final class YieldCurveBucketedShift implements ImmutableBean {
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash += hash * 31 + JodaBeanUtils.hashCode(getStart());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getEnd());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getShift());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getStart());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getEnd());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getShift());
     return hash;
   }
 
@@ -354,7 +354,7 @@ public final class YieldCurveBucketedShift implements ImmutableBean {
 
     @Override
     public Builder setString(MetaProperty<?> property, String value) {
-      super.set(property, value);
+      super.setString(property, value);
       return this;
     }
 
@@ -374,7 +374,7 @@ public final class YieldCurveBucketedShift implements ImmutableBean {
 
     //-----------------------------------------------------------------------
     /**
-     * Sets the {@code start} property in the builder.
+     * Sets period between the valuation date and the start of the shift
      * @param start  the new value, not null
      * @return this, for chaining, not null
      */
@@ -385,7 +385,7 @@ public final class YieldCurveBucketedShift implements ImmutableBean {
     }
 
     /**
-     * Sets the {@code end} property in the builder.
+     * Sets period between the valuation date and the end of the shift
      * @param end  the new value, not null
      * @return this, for chaining, not null
      */
@@ -396,7 +396,7 @@ public final class YieldCurveBucketedShift implements ImmutableBean {
     }
 
     /**
-     * Sets the {@code shift} property in the builder.
+     * Sets shift magnitude
      * @param shift  the new value
      * @return this, for chaining, not null
      */

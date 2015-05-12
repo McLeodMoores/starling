@@ -35,6 +35,7 @@ import com.google.common.collect.ImmutableSortedSet;
 import com.google.common.collect.Sets;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.PublicAPI;
+import org.joda.beans.BeanBuilder;
 
 /**
  * An immutable bundle of external identifiers.
@@ -563,7 +564,7 @@ public final class ExternalIdBundle implements ImmutableBean, Iterable<ExternalI
     }
 
     @Override
-    public ExternalIdBundle.Builder builder() {
+    public BeanBuilder<? extends ExternalIdBundle> builder() {
       return new ExternalIdBundle.Builder();
     }
 
@@ -613,7 +614,7 @@ public final class ExternalIdBundle implements ImmutableBean, Iterable<ExternalI
    */
   private static final class Builder extends DirectFieldsBeanBuilder<ExternalIdBundle> {
 
-    private SortedSet<ExternalId> _externalIds = new TreeSet<ExternalId>();
+    private SortedSet<ExternalId> _externalIds = ImmutableSortedSet.of();
 
     /**
      * Restricted constructor.
@@ -659,7 +660,7 @@ public final class ExternalIdBundle implements ImmutableBean, Iterable<ExternalI
 
     @Override
     public Builder setString(MetaProperty<?> property, String value) {
-      super.set(property, value);
+      super.setString(property, value);
       return this;
     }
 

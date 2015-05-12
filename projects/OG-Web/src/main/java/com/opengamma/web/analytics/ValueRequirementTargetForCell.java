@@ -140,8 +140,8 @@ public final class ValueRequirementTargetForCell implements ImmutableBean {
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash += hash * 31 + JodaBeanUtils.hashCode(getColumnSet());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getValueRequirement());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getColumnSet());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getValueRequirement());
     return hash;
   }
 
@@ -321,7 +321,7 @@ public final class ValueRequirementTargetForCell implements ImmutableBean {
 
     @Override
     public Builder setString(MetaProperty<?> property, String value) {
-      super.set(property, value);
+      super.setString(property, value);
       return this;
     }
 
@@ -340,7 +340,7 @@ public final class ValueRequirementTargetForCell implements ImmutableBean {
 
     //-----------------------------------------------------------------------
     /**
-     * Sets the {@code columnSet} property in the builder.
+     * Sets name of the Column Set/Calc Config.
      * @param columnSet  the new value
      * @return this, for chaining, not null
      */
@@ -350,7 +350,7 @@ public final class ValueRequirementTargetForCell implements ImmutableBean {
     }
 
     /**
-     * Sets the {@code valueRequirement} property in the builder.
+     * Sets valueSpecification for cell.
      * @param valueRequirement  the new value
      * @return this, for chaining, not null
      */

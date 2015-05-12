@@ -193,7 +193,7 @@ public final class HistoricalTimeSeriesRating implements ImmutableBean {
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash += hash * 31 + JodaBeanUtils.hashCode(getRules());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getRules());
     return hash;
   }
 
@@ -295,7 +295,7 @@ public final class HistoricalTimeSeriesRating implements ImmutableBean {
    */
   public static final class Builder extends DirectFieldsBeanBuilder<HistoricalTimeSeriesRating> {
 
-    private Set<HistoricalTimeSeriesRatingRule> _rules = new HashSet<HistoricalTimeSeriesRatingRule>();
+    private Set<HistoricalTimeSeriesRatingRule> _rules = ImmutableSet.of();
 
     /**
      * Restricted constructor.
@@ -308,7 +308,7 @@ public final class HistoricalTimeSeriesRating implements ImmutableBean {
      * @param beanToCopy  the bean to copy from, not null
      */
     private Builder(HistoricalTimeSeriesRating beanToCopy) {
-      this._rules = new HashSet<HistoricalTimeSeriesRatingRule>(beanToCopy.getRules());
+      this._rules = beanToCopy.getRules();
     }
 
     //-----------------------------------------------------------------------
@@ -349,7 +349,7 @@ public final class HistoricalTimeSeriesRating implements ImmutableBean {
 
     @Override
     public Builder setString(MetaProperty<?> property, String value) {
-      super.set(property, value);
+      super.setString(property, value);
       return this;
     }
 
@@ -367,7 +367,7 @@ public final class HistoricalTimeSeriesRating implements ImmutableBean {
 
     //-----------------------------------------------------------------------
     /**
-     * Sets the {@code rules} property in the builder.
+     * Sets the set of rules.
      * @param rules  the new value, not null
      * @return this, for chaining, not null
      */
@@ -375,6 +375,16 @@ public final class HistoricalTimeSeriesRating implements ImmutableBean {
       JodaBeanUtils.notNull(rules, "rules");
       this._rules = rules;
       return this;
+    }
+
+    /**
+     * Sets the {@code rules} property in the builder
+     * from an array of objects.
+     * @param rules  the new value, not null
+     * @return this, for chaining, not null
+     */
+    public Builder rules(HistoricalTimeSeriesRatingRule... rules) {
+      return rules(ImmutableSet.copyOf(rules));
     }
 
     //-----------------------------------------------------------------------

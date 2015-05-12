@@ -24,6 +24,7 @@ import org.joda.beans.impl.direct.DirectMetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 
 import com.opengamma.util.ArgumentChecker;
+import org.joda.beans.BeanBuilder;
 
 /**
  * Simple immutable description of a range of results.
@@ -366,8 +367,8 @@ public final class Paging implements ImmutableBean {
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash += hash * 31 + JodaBeanUtils.hashCode(getRequest());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getTotalItems());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getRequest());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getTotalItems());
     return hash;
   }
 
@@ -417,7 +418,7 @@ public final class Paging implements ImmutableBean {
     }
 
     @Override
-    public Paging.Builder builder() {
+    public BeanBuilder<? extends Paging> builder() {
       return new Paging.Builder();
     }
 
@@ -528,7 +529,7 @@ public final class Paging implements ImmutableBean {
 
     @Override
     public Builder setString(MetaProperty<?> property, String value) {
-      super.set(property, value);
+      super.setString(property, value);
       return this;
     }
 

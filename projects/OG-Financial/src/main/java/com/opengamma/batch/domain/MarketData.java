@@ -216,10 +216,10 @@ public class MarketData extends DirectBean implements ObjectIdentifiable {
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash += hash * 31 + JodaBeanUtils.hashCode(getId());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getBaseUidScheme());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getBaseUidValue());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getBaseUidVersion());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getId());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getBaseUidScheme());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getBaseUidValue());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getBaseUidVersion());
     return hash;
   }
 

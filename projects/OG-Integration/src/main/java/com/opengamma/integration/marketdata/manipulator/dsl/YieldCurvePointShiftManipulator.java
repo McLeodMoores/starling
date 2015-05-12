@@ -167,8 +167,8 @@ public final class YieldCurvePointShiftManipulator implements ImmutableBean, Str
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash += hash * 31 + JodaBeanUtils.hashCode(getShiftType());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getPointShifts());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getShiftType());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getPointShifts());
     return hash;
   }
 
@@ -290,7 +290,7 @@ public final class YieldCurvePointShiftManipulator implements ImmutableBean, Str
   public static final class Builder extends DirectFieldsBeanBuilder<YieldCurvePointShiftManipulator> {
 
     private ScenarioShiftType _shiftType;
-    private List<YieldCurvePointShift> _pointShifts = new ArrayList<YieldCurvePointShift>();
+    private List<YieldCurvePointShift> _pointShifts = ImmutableList.of();
 
     /**
      * Restricted constructor.
@@ -304,7 +304,7 @@ public final class YieldCurvePointShiftManipulator implements ImmutableBean, Str
      */
     private Builder(YieldCurvePointShiftManipulator beanToCopy) {
       this._shiftType = beanToCopy.getShiftType();
-      this._pointShifts = new ArrayList<YieldCurvePointShift>(beanToCopy.getPointShifts());
+      this._pointShifts = beanToCopy.getPointShifts();
     }
 
     //-----------------------------------------------------------------------
@@ -350,7 +350,7 @@ public final class YieldCurvePointShiftManipulator implements ImmutableBean, Str
 
     @Override
     public Builder setString(MetaProperty<?> property, String value) {
-      super.set(property, value);
+      super.setString(property, value);
       return this;
     }
 
@@ -369,7 +369,7 @@ public final class YieldCurvePointShiftManipulator implements ImmutableBean, Str
 
     //-----------------------------------------------------------------------
     /**
-     * Sets the {@code shiftType} property in the builder.
+     * Sets shift type
      * @param shiftType  the new value, not null
      * @return this, for chaining, not null
      */
@@ -380,7 +380,7 @@ public final class YieldCurvePointShiftManipulator implements ImmutableBean, Str
     }
 
     /**
-     * Sets the {@code pointShifts} property in the builder.
+     * Sets the list of point shifts to apply
      * @param pointShifts  the new value, not null
      * @return this, for chaining, not null
      */
@@ -388,6 +388,16 @@ public final class YieldCurvePointShiftManipulator implements ImmutableBean, Str
       JodaBeanUtils.notNull(pointShifts, "pointShifts");
       this._pointShifts = pointShifts;
       return this;
+    }
+
+    /**
+     * Sets the {@code pointShifts} property in the builder
+     * from an array of objects.
+     * @param pointShifts  the new value, not null
+     * @return this, for chaining, not null
+     */
+    public Builder pointShifts(YieldCurvePointShift... pointShifts) {
+      return pointShifts(ImmutableList.copyOf(pointShifts));
     }
 
     //-----------------------------------------------------------------------

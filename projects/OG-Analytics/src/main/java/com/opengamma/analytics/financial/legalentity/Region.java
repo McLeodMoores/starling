@@ -28,6 +28,7 @@ import com.google.common.collect.ImmutableSet;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.i18n.Country;
 import com.opengamma.util.money.Currency;
+import org.joda.beans.BeanBuilder;
 
 /**
  *
@@ -176,9 +177,9 @@ public final class Region implements ImmutableBean, Serializable {
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash += hash * 31 + JodaBeanUtils.hashCode(getName());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getCountries());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getCurrencies());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getName());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getCountries());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getCurrencies());
     return hash;
   }
 
@@ -249,7 +250,7 @@ public final class Region implements ImmutableBean, Serializable {
     }
 
     @Override
-    public Region.Builder builder() {
+    public BeanBuilder<? extends Region> builder() {
       return new Region.Builder();
     }
 
@@ -320,8 +321,8 @@ public final class Region implements ImmutableBean, Serializable {
   private static final class Builder extends DirectFieldsBeanBuilder<Region> {
 
     private String _name;
-    private Set<Country> _countries = new HashSet<Country>();
-    private Set<Currency> _currencies = new HashSet<Currency>();
+    private Set<Country> _countries = ImmutableSet.of();
+    private Set<Currency> _currencies = ImmutableSet.of();
 
     /**
      * Restricted constructor.
@@ -377,7 +378,7 @@ public final class Region implements ImmutableBean, Serializable {
 
     @Override
     public Builder setString(MetaProperty<?> property, String value) {
-      super.set(property, value);
+      super.setString(property, value);
       return this;
     }
 

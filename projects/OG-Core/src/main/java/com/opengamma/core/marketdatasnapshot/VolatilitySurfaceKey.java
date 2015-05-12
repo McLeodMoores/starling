@@ -267,11 +267,11 @@ public final class VolatilitySurfaceKey implements ImmutableBean, StructuredMark
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash += hash * 31 + JodaBeanUtils.hashCode(getTarget());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getName());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getInstrumentType());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getQuoteType());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getQuoteUnits());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getTarget());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getName());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getInstrumentType());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getQuoteType());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getQuoteUnits());
     return hash;
   }
 
@@ -529,7 +529,7 @@ public final class VolatilitySurfaceKey implements ImmutableBean, StructuredMark
 
     @Override
     public Builder setString(MetaProperty<?> property, String value) {
-      super.set(property, value);
+      super.setString(property, value);
       return this;
     }
 
@@ -551,7 +551,7 @@ public final class VolatilitySurfaceKey implements ImmutableBean, StructuredMark
 
     //-----------------------------------------------------------------------
     /**
-     * Sets the {@code target} property in the builder.
+     * Sets the target.
      * @param target  the new value, not null
      * @return this, for chaining, not null
      */
@@ -562,7 +562,7 @@ public final class VolatilitySurfaceKey implements ImmutableBean, StructuredMark
     }
 
     /**
-     * Sets the {@code name} property in the builder.
+     * Sets the surface name.
      * @param name  the new value
      * @return this, for chaining, not null
      */
@@ -572,7 +572,7 @@ public final class VolatilitySurfaceKey implements ImmutableBean, StructuredMark
     }
 
     /**
-     * Sets the {@code instrumentType} property in the builder.
+     * Sets the instrument type.
      * @param instrumentType  the new value
      * @return this, for chaining, not null
      */
@@ -582,7 +582,7 @@ public final class VolatilitySurfaceKey implements ImmutableBean, StructuredMark
     }
 
     /**
-     * Sets the {@code quoteType} property in the builder.
+     * Sets the quote type.
      * @param quoteType  the new value
      * @return this, for chaining, not null
      */
@@ -592,7 +592,7 @@ public final class VolatilitySurfaceKey implements ImmutableBean, StructuredMark
     }
 
     /**
-     * Sets the {@code quoteUnits} property in the builder.
+     * Sets the quote units.
      * @param quoteUnits  the new value
      * @return this, for chaining, not null
      */

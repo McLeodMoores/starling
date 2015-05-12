@@ -145,7 +145,7 @@ public final class ResolvedConventionLink<C extends Convention> extends Conventi
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash += hash * 31 + JodaBeanUtils.hashCode(getConvention());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getConvention());
     return hash;
   }
 
@@ -305,7 +305,7 @@ public final class ResolvedConventionLink<C extends Convention> extends Conventi
 
     @Override
     public Builder<C> setString(MetaProperty<?> property, String value) {
-      super.set(property, value);
+      super.setString(property, value);
       return this;
     }
 
@@ -323,7 +323,7 @@ public final class ResolvedConventionLink<C extends Convention> extends Conventi
 
     //-----------------------------------------------------------------------
     /**
-     * Sets the {@code convention} property in the builder.
+     * Sets the convention instance.
      * @param convention  the new value, not null
      * @return this, for chaining, not null
      */

@@ -351,11 +351,11 @@ public class IndexCDSSecurity extends FinancialSecurity {
   @Override
   public int hashCode() {
     int hash = 7;
-    hash += hash * 31 + JodaBeanUtils.hashCode(getTradeDate());
-    hash += hash * 31 + JodaBeanUtils.hashCode(isBuyProtection());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getUnderlyingIndex());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getIndexTenor());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getNotional());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getTradeDate());
+    hash = hash * 31 + JodaBeanUtils.hashCode(isBuyProtection());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getUnderlyingIndex());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getIndexTenor());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getNotional());
     return hash ^ super.hashCode();
   }
 

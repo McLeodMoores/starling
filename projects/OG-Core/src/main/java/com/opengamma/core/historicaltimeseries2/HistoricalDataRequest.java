@@ -198,13 +198,13 @@ public final class HistoricalDataRequest implements ImmutableBean {
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash += hash * 31 + JodaBeanUtils.hashCode(getBundle());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getField());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getFrom());
-    hash += hash * 31 + JodaBeanUtils.hashCode(isFromInclusive());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getTo());
-    hash += hash * 31 + JodaBeanUtils.hashCode(isToInclusive());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getResolver());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getBundle());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getField());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getFrom());
+    hash = hash * 31 + JodaBeanUtils.hashCode(isFromInclusive());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getTo());
+    hash = hash * 31 + JodaBeanUtils.hashCode(isToInclusive());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getResolver());
     return hash;
   }
 
@@ -514,7 +514,7 @@ public final class HistoricalDataRequest implements ImmutableBean {
 
     @Override
     public Builder setString(MetaProperty<?> property, String value) {
-      super.set(property, value);
+      super.setString(property, value);
       return this;
     }
 
@@ -538,7 +538,7 @@ public final class HistoricalDataRequest implements ImmutableBean {
 
     //-----------------------------------------------------------------------
     /**
-     * Sets the {@code bundle} property in the builder.
+     * Sets the bundle.
      * @param bundle  the new value
      * @return this, for chaining, not null
      */
@@ -548,7 +548,7 @@ public final class HistoricalDataRequest implements ImmutableBean {
     }
 
     /**
-     * Sets the {@code field} property in the builder.
+     * Sets the field.
      * @param field  the new value
      * @return this, for chaining, not null
      */
@@ -558,7 +558,7 @@ public final class HistoricalDataRequest implements ImmutableBean {
     }
 
     /**
-     * Sets the {@code from} property in the builder.
+     * Sets the from.
      * @param from  the new value
      * @return this, for chaining, not null
      */
@@ -568,7 +568,7 @@ public final class HistoricalDataRequest implements ImmutableBean {
     }
 
     /**
-     * Sets the {@code fromInclusive} property in the builder.
+     * Sets the fromInclusive.
      * @param fromInclusive  the new value
      * @return this, for chaining, not null
      */
@@ -578,7 +578,7 @@ public final class HistoricalDataRequest implements ImmutableBean {
     }
 
     /**
-     * Sets the {@code to} property in the builder.
+     * Sets the to.
      * @param to  the new value
      * @return this, for chaining, not null
      */
@@ -588,7 +588,7 @@ public final class HistoricalDataRequest implements ImmutableBean {
     }
 
     /**
-     * Sets the {@code toInclusive} property in the builder.
+     * Sets the toInclusive.
      * @param toInclusive  the new value
      * @return this, for chaining, not null
      */
@@ -598,7 +598,7 @@ public final class HistoricalDataRequest implements ImmutableBean {
     }
 
     /**
-     * Sets the {@code resolver} property in the builder.
+     * Sets the resolver.
      * @param resolver  the new value
      * @return this, for chaining, not null
      */

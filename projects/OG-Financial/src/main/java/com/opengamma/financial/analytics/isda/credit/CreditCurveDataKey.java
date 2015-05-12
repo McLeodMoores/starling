@@ -189,10 +189,10 @@ public final class CreditCurveDataKey implements ImmutableBean {
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash += hash * 31 + JodaBeanUtils.hashCode(getCurveName());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getCurrency());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getSeniority());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getRestructuring());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getCurveName());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getCurrency());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getSeniority());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getRestructuring());
     return hash;
   }
 
@@ -424,7 +424,7 @@ public final class CreditCurveDataKey implements ImmutableBean {
 
     @Override
     public Builder setString(MetaProperty<?> property, String value) {
-      super.set(property, value);
+      super.setString(property, value);
       return this;
     }
 
@@ -445,7 +445,15 @@ public final class CreditCurveDataKey implements ImmutableBean {
 
     //-----------------------------------------------------------------------
     /**
-     * Sets the {@code curveName} property in the builder.
+     * Sets the name of the curve.
+     * 
+     * Commonly the name will refer to the legal entity being
+     * priced, but this is not mandatory. Ability to use free-form
+     * labels allows the user to specify more abstract curves
+     * which can be used to price a set of legal entities, e.g.
+     * all triple-A entities in a certain currency. This may be
+     * desirable when no observable liquid quotes exist for the
+     * entity.
      * @param curveName  the new value, not empty
      * @return this, for chaining, not null
      */
@@ -456,7 +464,7 @@ public final class CreditCurveDataKey implements ImmutableBean {
     }
 
     /**
-     * Sets the {@code currency} property in the builder.
+     * Sets the currency.
      * @param currency  the new value, not null
      * @return this, for chaining, not null
      */
@@ -467,7 +475,7 @@ public final class CreditCurveDataKey implements ImmutableBean {
     }
 
     /**
-     * Sets the {@code seniority} property in the builder.
+     * Sets the seniority of the referenced debt.
      * @param seniority  the new value
      * @return this, for chaining, not null
      */
@@ -477,7 +485,7 @@ public final class CreditCurveDataKey implements ImmutableBean {
     }
 
     /**
-     * Sets the {@code restructuring} property in the builder.
+     * Sets the restructuring clause.
      * @param restructuring  the new value
      * @return this, for chaining, not null
      */

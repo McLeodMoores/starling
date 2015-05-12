@@ -233,9 +233,9 @@ public final class Rate implements ImmutableBean {
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash += hash * 31 + JodaBeanUtils.hashCode(getDates());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getRates());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getTypes());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getDates());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getRates());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getTypes());
     return hash;
   }
 
@@ -441,7 +441,7 @@ public final class Rate implements ImmutableBean {
 
     @Override
     public Builder setString(MetaProperty<?> property, String value) {
-      super.set(property, value);
+      super.setString(property, value);
       return this;
     }
 
@@ -461,31 +461,33 @@ public final class Rate implements ImmutableBean {
 
     //-----------------------------------------------------------------------
     /**
-     * Sets the {@code dates} property in the builder.
+     * Sets the periods for which custom spreads are required.
+     * If a period is looked for but is not present then
+     * the value from the previous period will be used.
      * @param dates  the new value
      * @return this, for chaining, not null
      */
-    public Builder dates(int[] dates) {
+    public Builder dates(int... dates) {
       this._dates = dates;
       return this;
     }
 
     /**
-     * Sets the {@code rates} property in the builder.
+     * Sets the custom rates.
      * @param rates  the new value
      * @return this, for chaining, not null
      */
-    public Builder rates(double[] rates) {
+    public Builder rates(double... rates) {
       this._rates = rates;
       return this;
     }
 
     /**
-     * Sets the {@code types} property in the builder.
+     * Sets the adjustment types for each step. Either Delta or absolute.
      * @param types  the new value
      * @return this, for chaining, not null
      */
-    public Builder types(ShiftType[] types) {
+    public Builder types(ShiftType... types) {
       this._types = types;
       return this;
     }

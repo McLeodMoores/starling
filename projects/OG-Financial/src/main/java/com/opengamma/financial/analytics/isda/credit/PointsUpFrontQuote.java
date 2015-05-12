@@ -146,8 +146,8 @@ public class PointsUpFrontQuote implements CdsQuote, ImmutableBean {
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash += hash * 31 + JodaBeanUtils.hashCode(getCoupon());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getPointsUpFront());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getCoupon());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getPointsUpFront());
     return hash;
   }
 
@@ -335,7 +335,7 @@ public class PointsUpFrontQuote implements CdsQuote, ImmutableBean {
 
     @Override
     public Builder setString(MetaProperty<?> property, String value) {
-      super.set(property, value);
+      super.setString(property, value);
       return this;
     }
 
@@ -352,7 +352,7 @@ public class PointsUpFrontQuote implements CdsQuote, ImmutableBean {
 
     //-----------------------------------------------------------------------
     /**
-     * Sets the {@code coupon} property in the builder.
+     * Sets the coupon of the quote, denoted as a fractional amount.
      * @param coupon  the new value
      * @return this, for chaining, not null
      */
@@ -362,7 +362,7 @@ public class PointsUpFrontQuote implements CdsQuote, ImmutableBean {
     }
 
     /**
-     * Sets the {@code pointsUpFront} property in the builder.
+     * Sets the points up front, denoted as a fractional amount.
      * @param pointsUpFront  the new value
      * @return this, for chaining, not null
      */

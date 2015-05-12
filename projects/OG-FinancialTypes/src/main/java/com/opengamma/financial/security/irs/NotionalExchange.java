@@ -150,9 +150,9 @@ public final class NotionalExchange implements ImmutableBean {
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash += hash * 31 + JodaBeanUtils.hashCode(isExchangeFinalNotional());
-    hash += hash * 31 + JodaBeanUtils.hashCode(isExchangeInitialNotional());
-    hash += hash * 31 + JodaBeanUtils.hashCode(isExchangeInterimNotional());
+    hash = hash * 31 + JodaBeanUtils.hashCode(isExchangeFinalNotional());
+    hash = hash * 31 + JodaBeanUtils.hashCode(isExchangeInitialNotional());
+    hash = hash * 31 + JodaBeanUtils.hashCode(isExchangeInterimNotional());
     return hash;
   }
 
@@ -358,7 +358,7 @@ public final class NotionalExchange implements ImmutableBean {
 
     @Override
     public Builder setString(MetaProperty<?> property, String value) {
-      super.set(property, value);
+      super.setString(property, value);
       return this;
     }
 
@@ -378,7 +378,7 @@ public final class NotionalExchange implements ImmutableBean {
 
     //-----------------------------------------------------------------------
     /**
-     * Sets the {@code exchangeFinalNotional} property in the builder.
+     * Sets exchange the final notional
      * @param exchangeFinalNotional  the new value, not null
      * @return this, for chaining, not null
      */
@@ -389,7 +389,7 @@ public final class NotionalExchange implements ImmutableBean {
     }
 
     /**
-     * Sets the {@code exchangeInitialNotional} property in the builder.
+     * Sets exchange the initial notional
      * @param exchangeInitialNotional  the new value, not null
      * @return this, for chaining, not null
      */
@@ -400,7 +400,7 @@ public final class NotionalExchange implements ImmutableBean {
     }
 
     /**
-     * Sets the {@code exchangeInterimNotional} property in the builder.
+     * Sets exchange the interim notional
      * @param exchangeInterimNotional  the new value, not null
      * @return this, for chaining, not null
      */

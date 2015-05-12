@@ -162,9 +162,9 @@ public class YieldCurveDataSnapshot implements NamedSnapshot, ImmutableBean {
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash += hash * 31 + JodaBeanUtils.hashCode(getUniqueId());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getName());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getYieldCurves());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getUniqueId());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getName());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getYieldCurves());
     return hash;
   }
 
@@ -314,7 +314,7 @@ public class YieldCurveDataSnapshot implements NamedSnapshot, ImmutableBean {
 
     private UniqueId _uniqueId;
     private String _name;
-    private Map<Currency, YieldCurveData> _yieldCurves = new HashMap<Currency, YieldCurveData>();
+    private Map<Currency, YieldCurveData> _yieldCurves = ImmutableMap.of();
 
     /**
      * Restricted constructor.
@@ -329,7 +329,7 @@ public class YieldCurveDataSnapshot implements NamedSnapshot, ImmutableBean {
     protected Builder(YieldCurveDataSnapshot beanToCopy) {
       this._uniqueId = beanToCopy.getUniqueId();
       this._name = beanToCopy.getName();
-      this._yieldCurves = new HashMap<Currency, YieldCurveData>(beanToCopy.getYieldCurves());
+      this._yieldCurves = ImmutableMap.copyOf(beanToCopy.getYieldCurves());
     }
 
     //-----------------------------------------------------------------------
@@ -380,7 +380,7 @@ public class YieldCurveDataSnapshot implements NamedSnapshot, ImmutableBean {
 
     @Override
     public Builder setString(MetaProperty<?> property, String value) {
-      super.set(property, value);
+      super.setString(property, value);
       return this;
     }
 
@@ -397,7 +397,7 @@ public class YieldCurveDataSnapshot implements NamedSnapshot, ImmutableBean {
 
     //-----------------------------------------------------------------------
     /**
-     * Sets the {@code uniqueId} property in the builder.
+     * Sets unique id for this snapshot.
      * @param uniqueId  the new value
      * @return this, for chaining, not null
      */
@@ -407,7 +407,7 @@ public class YieldCurveDataSnapshot implements NamedSnapshot, ImmutableBean {
     }
 
     /**
-     * Sets the {@code name} property in the builder.
+     * Sets name for this snapshot.
      * @param name  the new value, not null
      * @return this, for chaining, not null
      */
@@ -418,7 +418,7 @@ public class YieldCurveDataSnapshot implements NamedSnapshot, ImmutableBean {
     }
 
     /**
-     * Sets the {@code yieldCurves} property in the builder.
+     * Sets yield curve data, indexed by currency.
      * @param yieldCurves  the new value, not null
      * @return this, for chaining, not null
      */

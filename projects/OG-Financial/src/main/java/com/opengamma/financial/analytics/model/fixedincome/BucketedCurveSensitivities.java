@@ -127,7 +127,7 @@ public final class BucketedCurveSensitivities implements ImmutableBean {
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash += hash * 31 + JodaBeanUtils.hashCode(getSensitivities());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getSensitivities());
     return hash;
   }
 
@@ -229,7 +229,7 @@ public final class BucketedCurveSensitivities implements ImmutableBean {
    */
   public static final class Builder extends DirectFieldsBeanBuilder<BucketedCurveSensitivities> {
 
-    private Map<Pair<String, Currency>, DoubleLabelledMatrix1D> _sensitivities = new HashMap<Pair<String, Currency>, DoubleLabelledMatrix1D>();
+    private Map<Pair<String, Currency>, DoubleLabelledMatrix1D> _sensitivities = ImmutableMap.of();
 
     /**
      * Restricted constructor.
@@ -242,7 +242,7 @@ public final class BucketedCurveSensitivities implements ImmutableBean {
      * @param beanToCopy  the bean to copy from, not null
      */
     private Builder(BucketedCurveSensitivities beanToCopy) {
-      this._sensitivities = new HashMap<Pair<String, Currency>, DoubleLabelledMatrix1D>(beanToCopy.getSensitivities());
+      this._sensitivities = ImmutableMap.copyOf(beanToCopy.getSensitivities());
     }
 
     //-----------------------------------------------------------------------
@@ -283,7 +283,7 @@ public final class BucketedCurveSensitivities implements ImmutableBean {
 
     @Override
     public Builder setString(MetaProperty<?> property, String value) {
-      super.set(property, value);
+      super.setString(property, value);
       return this;
     }
 
@@ -301,7 +301,7 @@ public final class BucketedCurveSensitivities implements ImmutableBean {
 
     //-----------------------------------------------------------------------
     /**
-     * Sets the {@code sensitivities} property in the builder.
+     * Sets sensitivities as a map keyed by a {@link Pair} of curve name and currency, and holding the curve sensitivities
      * @param sensitivities  the new value, not null
      * @return this, for chaining, not null
      */

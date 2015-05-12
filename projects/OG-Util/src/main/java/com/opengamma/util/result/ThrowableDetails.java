@@ -172,9 +172,9 @@ public final class ThrowableDetails implements ImmutableBean {
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash += hash * 31 + JodaBeanUtils.hashCode(getType());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getMessage());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getStackTrace());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getType());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getMessage());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getStackTrace());
     return hash;
   }
 
@@ -382,7 +382,7 @@ public final class ThrowableDetails implements ImmutableBean {
 
     @Override
     public Builder setString(MetaProperty<?> property, String value) {
-      super.set(property, value);
+      super.setString(property, value);
       return this;
     }
 
@@ -402,7 +402,7 @@ public final class ThrowableDetails implements ImmutableBean {
 
     //-----------------------------------------------------------------------
     /**
-     * Sets the {@code type} property in the builder.
+     * Sets the type of the throwable.
      * @param type  the new value, not null
      * @return this, for chaining, not null
      */
@@ -413,7 +413,7 @@ public final class ThrowableDetails implements ImmutableBean {
     }
 
     /**
-     * Sets the {@code message} property in the builder.
+     * Sets the message of the throwable or the class name if there is no message.
      * @param message  the new value, not null
      * @return this, for chaining, not null
      */
@@ -424,7 +424,7 @@ public final class ThrowableDetails implements ImmutableBean {
     }
 
     /**
-     * Sets the {@code stackTrace} property in the builder.
+     * Sets the stack trace of the throwable.
      * @param stackTrace  the new value, not null
      * @return this, for chaining, not null
      */

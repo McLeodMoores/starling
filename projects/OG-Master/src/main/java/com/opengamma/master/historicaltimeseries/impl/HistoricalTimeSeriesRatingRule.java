@@ -170,9 +170,9 @@ public final class HistoricalTimeSeriesRatingRule implements ImmutableBean {
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash += hash * 31 + JodaBeanUtils.hashCode(getFieldName());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getFieldValue());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getRating());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getFieldName());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getFieldValue());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getRating());
     return hash;
   }
 
@@ -378,7 +378,7 @@ public final class HistoricalTimeSeriesRatingRule implements ImmutableBean {
 
     @Override
     public Builder setString(MetaProperty<?> property, String value) {
-      super.set(property, value);
+      super.setString(property, value);
       return this;
     }
 
@@ -398,7 +398,7 @@ public final class HistoricalTimeSeriesRatingRule implements ImmutableBean {
 
     //-----------------------------------------------------------------------
     /**
-     * Sets the {@code fieldName} property in the builder.
+     * Sets the field name.
      * @param fieldName  the new value, not null
      * @return this, for chaining, not null
      */
@@ -409,7 +409,7 @@ public final class HistoricalTimeSeriesRatingRule implements ImmutableBean {
     }
 
     /**
-     * Sets the {@code fieldValue} property in the builder.
+     * Sets the field value.
      * @param fieldValue  the new value, not null
      * @return this, for chaining, not null
      */
@@ -420,7 +420,7 @@ public final class HistoricalTimeSeriesRatingRule implements ImmutableBean {
     }
 
     /**
-     * Sets the {@code rating} property in the builder.
+     * Sets the rating.
      * @param rating  the new value
      * @return this, for chaining, not null
      */

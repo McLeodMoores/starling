@@ -115,7 +115,7 @@ public final class RegressionReferenceData implements ImmutableBean {
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash += hash * 31 + JodaBeanUtils.hashCode(getReferenceData());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getReferenceData());
     return hash;
   }
 
@@ -217,7 +217,7 @@ public final class RegressionReferenceData implements ImmutableBean {
    */
   public static final class Builder extends DirectFieldsBeanBuilder<RegressionReferenceData> {
 
-    private Map<String, ReferenceData> _referenceData = new HashMap<String, ReferenceData>();
+    private Map<String, ReferenceData> _referenceData = ImmutableMap.of();
 
     /**
      * Restricted constructor.
@@ -230,7 +230,7 @@ public final class RegressionReferenceData implements ImmutableBean {
      * @param beanToCopy  the bean to copy from, not null
      */
     private Builder(RegressionReferenceData beanToCopy) {
-      this._referenceData = new HashMap<String, ReferenceData>(beanToCopy.getReferenceData());
+      this._referenceData = beanToCopy.getReferenceData();
     }
 
     //-----------------------------------------------------------------------
@@ -271,7 +271,7 @@ public final class RegressionReferenceData implements ImmutableBean {
 
     @Override
     public Builder setString(MetaProperty<?> property, String value) {
-      super.set(property, value);
+      super.setString(property, value);
       return this;
     }
 
@@ -289,7 +289,7 @@ public final class RegressionReferenceData implements ImmutableBean {
 
     //-----------------------------------------------------------------------
     /**
-     * Sets the {@code referenceData} property in the builder.
+     * Sets the referenceData.
      * @param referenceData  the new value, not null
      * @return this, for chaining, not null
      */

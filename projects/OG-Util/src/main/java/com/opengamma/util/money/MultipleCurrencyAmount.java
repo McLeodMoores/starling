@@ -31,6 +31,7 @@ import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 
 import com.google.common.collect.ImmutableSortedMap;
 import com.opengamma.util.ArgumentChecker;
+import org.joda.beans.BeanBuilder;
 
 /**
  * A map of currency amounts keyed by currency.
@@ -427,7 +428,7 @@ public final class MultipleCurrencyAmount implements ImmutableBean,
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash += hash * 31 + JodaBeanUtils.hashCode(getCurrencyAmountMap());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getCurrencyAmountMap());
     return hash;
   }
 
@@ -470,7 +471,7 @@ public final class MultipleCurrencyAmount implements ImmutableBean,
     }
 
     @Override
-    public MultipleCurrencyAmount.Builder builder() {
+    public BeanBuilder<? extends MultipleCurrencyAmount> builder() {
       return new MultipleCurrencyAmount.Builder();
     }
 
@@ -520,7 +521,7 @@ public final class MultipleCurrencyAmount implements ImmutableBean,
    */
   private static final class Builder extends DirectFieldsBeanBuilder<MultipleCurrencyAmount> {
 
-    private SortedMap<Currency, CurrencyAmount> _currencyAmountMap = new TreeMap<Currency, CurrencyAmount>();
+    private SortedMap<Currency, CurrencyAmount> _currencyAmountMap = ImmutableSortedMap.of();
 
     /**
      * Restricted constructor.
@@ -566,7 +567,7 @@ public final class MultipleCurrencyAmount implements ImmutableBean,
 
     @Override
     public Builder setString(MetaProperty<?> property, String value) {
-      super.set(property, value);
+      super.setString(property, value);
       return this;
     }
 

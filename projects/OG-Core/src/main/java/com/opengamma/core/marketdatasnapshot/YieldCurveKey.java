@@ -183,8 +183,8 @@ public final class YieldCurveKey implements ImmutableBean, StructuredMarketDataK
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash += hash * 31 + JodaBeanUtils.hashCode(getCurrency());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getName());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getCurrency());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getName());
     return hash;
   }
 
@@ -364,7 +364,7 @@ public final class YieldCurveKey implements ImmutableBean, StructuredMarketDataK
 
     @Override
     public Builder setString(MetaProperty<?> property, String value) {
-      super.set(property, value);
+      super.setString(property, value);
       return this;
     }
 
@@ -383,7 +383,7 @@ public final class YieldCurveKey implements ImmutableBean, StructuredMarketDataK
 
     //-----------------------------------------------------------------------
     /**
-     * Sets the {@code currency} property in the builder.
+     * Sets the currency.
      * @param currency  the new value, not null
      * @return this, for chaining, not null
      */
@@ -394,7 +394,7 @@ public final class YieldCurveKey implements ImmutableBean, StructuredMarketDataK
     }
 
     /**
-     * Sets the {@code name} property in the builder.
+     * Sets the curve name.
      * @param name  the new value, not null
      * @return this, for chaining, not null
      */

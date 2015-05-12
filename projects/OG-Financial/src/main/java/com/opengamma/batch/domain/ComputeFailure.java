@@ -210,11 +210,11 @@ public class ComputeFailure extends DirectBean {
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash += hash * 31 + JodaBeanUtils.hashCode(getId());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getFunctionId());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getExceptionClass());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getExceptionMsg());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getStackTrace());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getId());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getFunctionId());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getExceptionClass());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getExceptionMsg());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getStackTrace());
     return hash;
   }
 

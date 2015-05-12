@@ -166,7 +166,7 @@ public class DateSet implements ImmutableBean {
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash += hash * 31 + JodaBeanUtils.hashCode(getDates());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getDates());
     return hash;
   }
 
@@ -276,7 +276,7 @@ public class DateSet implements ImmutableBean {
    */
   public static class Builder extends DirectFieldsBeanBuilder<DateSet> {
 
-    private SortedSet<LocalDate> _dates = new TreeSet<LocalDate>();
+    private SortedSet<LocalDate> _dates = ImmutableSortedSet.of();
 
     /**
      * Restricted constructor.
@@ -289,7 +289,7 @@ public class DateSet implements ImmutableBean {
      * @param beanToCopy  the bean to copy from, not null
      */
     protected Builder(DateSet beanToCopy) {
-      this._dates = new TreeSet<LocalDate>(beanToCopy.getDates());
+      this._dates = ImmutableSortedSet.copyOfSorted(beanToCopy.getDates());
     }
 
     //-----------------------------------------------------------------------
@@ -330,7 +330,7 @@ public class DateSet implements ImmutableBean {
 
     @Override
     public Builder setString(MetaProperty<?> property, String value) {
-      super.set(property, value);
+      super.setString(property, value);
       return this;
     }
 
@@ -347,7 +347,7 @@ public class DateSet implements ImmutableBean {
 
     //-----------------------------------------------------------------------
     /**
-     * Sets the {@code dates} property in the builder.
+     * Sets the dates.
      * @param dates  the new value, not null
      * @return this, for chaining, not null
      */
@@ -355,6 +355,16 @@ public class DateSet implements ImmutableBean {
       JodaBeanUtils.notNull(dates, "dates");
       this._dates = dates;
       return this;
+    }
+
+    /**
+     * Sets the {@code dates} property in the builder
+     * from an array of objects.
+     * @param dates  the new value, not null
+     * @return this, for chaining, not null
+     */
+    public Builder dates(LocalDate... dates) {
+      return dates(ImmutableSortedSet.copyOf(dates));
     }
 
     //-----------------------------------------------------------------------

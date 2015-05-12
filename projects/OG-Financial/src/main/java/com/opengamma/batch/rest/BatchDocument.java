@@ -530,19 +530,19 @@ public class BatchDocument extends DirectBean {
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash += hash * 31 + JodaBeanUtils.hashCode(getBatchId());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getObservationDate());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getObservationTime());
-    hash += hash * 31 + JodaBeanUtils.hashCode(isComplete());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getMasterProcessHost());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getCreationInstant());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getStartInstant());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getEndInstant());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getNumRestarts());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getDataPaging());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getData());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getErrorsPaging());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getErrors());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getBatchId());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getObservationDate());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getObservationTime());
+    hash = hash * 31 + JodaBeanUtils.hashCode(isComplete());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getMasterProcessHost());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getCreationInstant());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getStartInstant());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getEndInstant());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getNumRestarts());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getDataPaging());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getData());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getErrorsPaging());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getErrors());
     return hash;
   }
 

@@ -415,11 +415,11 @@ public final class MarketDataSnapshotSaver implements ImmutableBean {
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash += hash * 31 + JodaBeanUtils.hashCode(getViewProcessor());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getConfigMaster());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getMarketDataSnapshotMaster());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getSnapshotter());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getMarketDataTimeoutMillis());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getViewProcessor());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getConfigMaster());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getMarketDataSnapshotMaster());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getSnapshotter());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getMarketDataTimeoutMillis());
     return hash;
   }
 
@@ -677,7 +677,7 @@ public final class MarketDataSnapshotSaver implements ImmutableBean {
 
     @Override
     public Builder setString(MetaProperty<?> property, String value) {
-      super.set(property, value);
+      super.setString(property, value);
       return this;
     }
 
@@ -699,7 +699,7 @@ public final class MarketDataSnapshotSaver implements ImmutableBean {
 
     //-----------------------------------------------------------------------
     /**
-     * Sets the {@code viewProcessor} property in the builder.
+     * Sets the view processor.
      * @param viewProcessor  the new value, not null
      * @return this, for chaining, not null
      */
@@ -710,7 +710,7 @@ public final class MarketDataSnapshotSaver implements ImmutableBean {
     }
 
     /**
-     * Sets the {@code configMaster} property in the builder.
+     * Sets the config master.
      * @param configMaster  the new value, not null
      * @return this, for chaining, not null
      */
@@ -721,7 +721,7 @@ public final class MarketDataSnapshotSaver implements ImmutableBean {
     }
 
     /**
-     * Sets the {@code marketDataSnapshotMaster} property in the builder.
+     * Sets the market data snapshot master.
      * @param marketDataSnapshotMaster  the new value, not null
      * @return this, for chaining, not null
      */
@@ -732,7 +732,7 @@ public final class MarketDataSnapshotSaver implements ImmutableBean {
     }
 
     /**
-     * Sets the {@code snapshotter} property in the builder.
+     * Sets the market data snapshotter.
      * @param snapshotter  the new value, not null
      * @return this, for chaining, not null
      */
@@ -743,7 +743,7 @@ public final class MarketDataSnapshotSaver implements ImmutableBean {
     }
 
     /**
-     * Sets the {@code marketDataTimeoutMillis} property in the builder.
+     * Sets the maximum time to wait, in milliseconds, for market data to populate the snapshot.
      * @param marketDataTimeoutMillis  the new value
      * @return this, for chaining, not null
      */

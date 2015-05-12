@@ -146,8 +146,8 @@ public class FlatSpreadQuote implements CdsQuote, ImmutableBean {
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash += hash * 31 + JodaBeanUtils.hashCode(getCoupon());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getQuotedSpread());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getCoupon());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getQuotedSpread());
     return hash;
   }
 
@@ -335,7 +335,7 @@ public class FlatSpreadQuote implements CdsQuote, ImmutableBean {
 
     @Override
     public Builder setString(MetaProperty<?> property, String value) {
-      super.set(property, value);
+      super.setString(property, value);
       return this;
     }
 
@@ -352,7 +352,7 @@ public class FlatSpreadQuote implements CdsQuote, ImmutableBean {
 
     //-----------------------------------------------------------------------
     /**
-     * Sets the {@code coupon} property in the builder.
+     * Sets the coupon of the spread, denoted as a fractional amount.
      * @param coupon  the new value
      * @return this, for chaining, not null
      */
@@ -362,7 +362,7 @@ public class FlatSpreadQuote implements CdsQuote, ImmutableBean {
     }
 
     /**
-     * Sets the {@code quotedSpread} property in the builder.
+     * Sets the quoted spread, denoted as a fractional amount.
      * @param quotedSpread  the new value
      * @return this, for chaining, not null
      */

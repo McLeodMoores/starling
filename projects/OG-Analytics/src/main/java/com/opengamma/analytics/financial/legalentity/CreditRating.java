@@ -11,6 +11,7 @@ import java.util.NoSuchElementException;
 import java.util.Set;
 
 import org.joda.beans.Bean;
+import org.joda.beans.BeanBuilder;
 import org.joda.beans.BeanDefinition;
 import org.joda.beans.ImmutableBean;
 import org.joda.beans.ImmutableConstructor;
@@ -185,10 +186,10 @@ public final class CreditRating implements ImmutableBean, Serializable {
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash += hash * 31 + JodaBeanUtils.hashCode(getRating());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getRatingDescription());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getAgencyName());
-    hash += hash * 31 + JodaBeanUtils.hashCode(isLongTerm());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getRating());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getRatingDescription());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getAgencyName());
+    hash = hash * 31 + JodaBeanUtils.hashCode(isLongTerm());
     return hash;
   }
 
@@ -266,7 +267,7 @@ public final class CreditRating implements ImmutableBean, Serializable {
     }
 
     @Override
-    public CreditRating.Builder builder() {
+    public BeanBuilder<? extends CreditRating> builder() {
       return new CreditRating.Builder();
     }
 
@@ -409,7 +410,7 @@ public final class CreditRating implements ImmutableBean, Serializable {
 
     @Override
     public Builder setString(MetaProperty<?> property, String value) {
-      super.set(property, value);
+      super.setString(property, value);
       return this;
     }
 

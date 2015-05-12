@@ -134,8 +134,8 @@ public final class IdMappings implements ImmutableBean {
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash += hash * 31 + JodaBeanUtils.hashCode(getIds());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getMaxId());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getIds());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getMaxId());
     return hash;
   }
 
@@ -256,7 +256,7 @@ public final class IdMappings implements ImmutableBean {
    */
   public static final class Builder extends DirectFieldsBeanBuilder<IdMappings> {
 
-    private Map<ObjectId, Integer> _ids = new HashMap<ObjectId, Integer>();
+    private Map<ObjectId, Integer> _ids = ImmutableMap.of();
     private int _maxId;
 
     /**
@@ -270,7 +270,7 @@ public final class IdMappings implements ImmutableBean {
      * @param beanToCopy  the bean to copy from, not null
      */
     private Builder(IdMappings beanToCopy) {
-      this._ids = new HashMap<ObjectId, Integer>(beanToCopy.getIds());
+      this._ids = beanToCopy.getIds();
       this._maxId = beanToCopy.getMaxId();
     }
 
@@ -317,7 +317,7 @@ public final class IdMappings implements ImmutableBean {
 
     @Override
     public Builder setString(MetaProperty<?> property, String value) {
-      super.set(property, value);
+      super.setString(property, value);
       return this;
     }
 
@@ -336,7 +336,7 @@ public final class IdMappings implements ImmutableBean {
 
     //-----------------------------------------------------------------------
     /**
-     * Sets the {@code ids} property in the builder.
+     * Sets the ids.
      * @param ids  the new value, not null
      * @return this, for chaining, not null
      */
@@ -347,7 +347,7 @@ public final class IdMappings implements ImmutableBean {
     }
 
     /**
-     * Sets the {@code maxId} property in the builder.
+     * Sets the maxId.
      * @param maxId  the new value
      * @return this, for chaining, not null
      */

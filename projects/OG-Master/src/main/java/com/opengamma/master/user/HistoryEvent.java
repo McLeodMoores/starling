@@ -248,11 +248,11 @@ public class HistoryEvent implements ImmutableBean, Comparable<HistoryEvent> {
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash += hash * 31 + JodaBeanUtils.hashCode(getType());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getUniqueId());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getUserName());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getInstant());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getChanges());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getType());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getUniqueId());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getUserName());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getInstant());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getChanges());
     return hash;
   }
 
@@ -442,7 +442,7 @@ public class HistoryEvent implements ImmutableBean, Comparable<HistoryEvent> {
     private UniqueId _uniqueId;
     private String _userName;
     private Instant _instant;
-    private List<String> _changes = new ArrayList<String>();
+    private List<String> _changes = ImmutableList.of();
 
     /**
      * Restricted constructor.
@@ -459,7 +459,7 @@ public class HistoryEvent implements ImmutableBean, Comparable<HistoryEvent> {
       this._uniqueId = beanToCopy.getUniqueId();
       this._userName = beanToCopy.getUserName();
       this._instant = beanToCopy.getInstant();
-      this._changes = new ArrayList<String>(beanToCopy.getChanges());
+      this._changes = beanToCopy.getChanges();
     }
 
     //-----------------------------------------------------------------------
@@ -520,7 +520,7 @@ public class HistoryEvent implements ImmutableBean, Comparable<HistoryEvent> {
 
     @Override
     public Builder setString(MetaProperty<?> property, String value) {
-      super.set(property, value);
+      super.setString(property, value);
       return this;
     }
 
@@ -537,7 +537,7 @@ public class HistoryEvent implements ImmutableBean, Comparable<HistoryEvent> {
 
     //-----------------------------------------------------------------------
     /**
-     * Sets the {@code type} property in the builder.
+     * Sets the type of event.
      * @param type  the new value, not null
      * @return this, for chaining, not null
      */
@@ -548,7 +548,7 @@ public class HistoryEvent implements ImmutableBean, Comparable<HistoryEvent> {
     }
 
     /**
-     * Sets the {@code uniqueId} property in the builder.
+     * Sets the unique identifier of the version.
      * @param uniqueId  the new value, not null
      * @return this, for chaining, not null
      */
@@ -559,7 +559,7 @@ public class HistoryEvent implements ImmutableBean, Comparable<HistoryEvent> {
     }
 
     /**
-     * Sets the {@code userName} property in the builder.
+     * Sets the user that performed the event.
      * @param userName  the new value, not null
      * @return this, for chaining, not null
      */
@@ -570,7 +570,7 @@ public class HistoryEvent implements ImmutableBean, Comparable<HistoryEvent> {
     }
 
     /**
-     * Sets the {@code instant} property in the builder.
+     * Sets the instant that the event occurred.
      * @param instant  the new value, not null
      * @return this, for chaining, not null
      */
@@ -581,7 +581,10 @@ public class HistoryEvent implements ImmutableBean, Comparable<HistoryEvent> {
     }
 
     /**
-     * Sets the {@code changes} property in the builder.
+     * Sets the changes that occurred.
+     * This list is a description of the important changes that occurred.
+     * Not all changes are included, each master selects those it wants to expose.
+     * It is not the intention to allow the recreation of an old version of the master.
      * @param changes  the new value, not null
      * @return this, for chaining, not null
      */
@@ -589,6 +592,16 @@ public class HistoryEvent implements ImmutableBean, Comparable<HistoryEvent> {
       JodaBeanUtils.notNull(changes, "changes");
       this._changes = changes;
       return this;
+    }
+
+    /**
+     * Sets the {@code changes} property in the builder
+     * from an array of objects.
+     * @param changes  the new value, not null
+     * @return this, for chaining, not null
+     */
+    public Builder changes(String... changes) {
+      return changes(ImmutableList.copyOf(changes));
     }
 
     //-----------------------------------------------------------------------

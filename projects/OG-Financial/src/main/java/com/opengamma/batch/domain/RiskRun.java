@@ -660,23 +660,23 @@ public class RiskRun extends DirectBean implements ObjectIdentifiable {
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash += hash * 31 + JodaBeanUtils.hashCode(getId());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getMarketData());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getCreateInstant());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getStartInstant());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getEndInstant());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getValuationTime());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getNumRestarts());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getCalculationConfigurations());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getProperties());
-    hash += hash * 31 + JodaBeanUtils.hashCode(isComplete());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getVersionCorrection());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getViewDefinitionUidScheme());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getViewDefinitionUidValue());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getViewDefinitionUidVersion());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getSnapshotMode());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getComputationTargetResolver());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getName());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getId());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getMarketData());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getCreateInstant());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getStartInstant());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getEndInstant());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getValuationTime());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getNumRestarts());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getCalculationConfigurations());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getProperties());
+    hash = hash * 31 + JodaBeanUtils.hashCode(isComplete());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getVersionCorrection());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getViewDefinitionUidScheme());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getViewDefinitionUidValue());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getViewDefinitionUidVersion());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getSnapshotMode());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getComputationTargetResolver());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getName());
     return hash;
   }
 

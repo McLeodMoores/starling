@@ -228,10 +228,10 @@ public final class VolatilityCubeKey implements ImmutableBean, StructuredMarketD
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash += hash * 31 + JodaBeanUtils.hashCode(getDefinitionName());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getSpecificationName());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getQuoteType());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getQuoteUnits());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getDefinitionName());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getSpecificationName());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getQuoteType());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getQuoteUnits());
     return hash;
   }
 
@@ -463,7 +463,7 @@ public final class VolatilityCubeKey implements ImmutableBean, StructuredMarketD
 
     @Override
     public Builder setString(MetaProperty<?> property, String value) {
-      super.set(property, value);
+      super.setString(property, value);
       return this;
     }
 
@@ -484,7 +484,7 @@ public final class VolatilityCubeKey implements ImmutableBean, StructuredMarketD
 
     //-----------------------------------------------------------------------
     /**
-     * Sets the {@code definitionName} property in the builder.
+     * Sets the cube definition name.
      * @param definitionName  the new value
      * @return this, for chaining, not null
      */
@@ -494,7 +494,7 @@ public final class VolatilityCubeKey implements ImmutableBean, StructuredMarketD
     }
 
     /**
-     * Sets the {@code specificationName} property in the builder.
+     * Sets the cube specification name.
      * @param specificationName  the new value
      * @return this, for chaining, not null
      */
@@ -504,7 +504,7 @@ public final class VolatilityCubeKey implements ImmutableBean, StructuredMarketD
     }
 
     /**
-     * Sets the {@code quoteType} property in the builder.
+     * Sets the quote type.
      * @param quoteType  the new value
      * @return this, for chaining, not null
      */
@@ -514,7 +514,7 @@ public final class VolatilityCubeKey implements ImmutableBean, StructuredMarketD
     }
 
     /**
-     * Sets the {@code quoteUnits} property in the builder.
+     * Sets the quote units.
      * @param quoteUnits  the new value
      * @return this, for chaining, not null
      */

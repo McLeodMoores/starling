@@ -20,6 +20,7 @@ import org.joda.beans.impl.direct.DirectFieldsBeanBuilder;
 import org.joda.beans.impl.direct.DirectMetaBean;
 import org.joda.beans.impl.direct.DirectMetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
+import org.joda.beans.BeanBuilder;
 
 /**
  * A cache key used to hold the user ID and IP address for Bloomberg authentication.
@@ -122,8 +123,8 @@ public final class IdentityCacheKey implements ImmutableBean {
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash += hash * 31 + JodaBeanUtils.hashCode(getIpAddress());
-    hash += hash * 31 + JodaBeanUtils.hashCode(getUserId());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getIpAddress());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getUserId());
     return hash;
   }
 
@@ -183,7 +184,7 @@ public final class IdentityCacheKey implements ImmutableBean {
     }
 
     @Override
-    public IdentityCacheKey.Builder builder() {
+    public BeanBuilder<? extends IdentityCacheKey> builder() {
       return new IdentityCacheKey.Builder();
     }
 
@@ -294,7 +295,7 @@ public final class IdentityCacheKey implements ImmutableBean {
 
     @Override
     public Builder setString(MetaProperty<?> property, String value) {
-      super.set(property, value);
+      super.setString(property, value);
       return this;
     }
 

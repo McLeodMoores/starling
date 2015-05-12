@@ -25,6 +25,7 @@ import org.joda.beans.impl.direct.DirectMetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 
 import com.opengamma.util.ArgumentChecker;
+import org.joda.beans.BeanBuilder;
 
 /**
  * Class representing a Global Industry Classification Standard Code (GICS).
@@ -212,7 +213,7 @@ public final class GICSCode implements ImmutableBean, Serializable {
   @Override
   public int hashCode() {
     int hash = getClass().hashCode();
-    hash += hash * 31 + JodaBeanUtils.hashCode(getCode());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getCode());
     return hash;
   }
 
@@ -263,7 +264,7 @@ public final class GICSCode implements ImmutableBean, Serializable {
     }
 
     @Override
-    public GICSCode.Builder builder() {
+    public BeanBuilder<? extends GICSCode> builder() {
       return new GICSCode.Builder();
     }
 
@@ -358,7 +359,7 @@ public final class GICSCode implements ImmutableBean, Serializable {
 
     @Override
     public Builder setString(MetaProperty<?> property, String value) {
-      super.set(property, value);
+      super.setString(property, value);
       return this;
     }
 
