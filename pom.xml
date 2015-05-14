@@ -41,6 +41,16 @@
   <!-- duplicated from corporate-pom to ensure this pom builds from scratch -->
   <repositories>
     <repository>
+      <id>private</id>
+      <name>McLeod Moores private maven repository</name>
+      <url>http://maven.mcleodmoores.com:8081/content/repositories/private</url>
+    </repository>
+    <snapshotRepository>
+      <id>private-snapshot</id>
+      <name>McLeod Moores private maven snapshot repository</name>
+      <url>http://maven.mcleodmoores.com:8081/content/repositories/private-snapshot</url>
+    </snapshotRepository>
+    <repository>
       <id>og-public</id>
       <name>OG Public</name>
       <url>http://maven.opengamma.com/nexus/content/groups/public</url>
