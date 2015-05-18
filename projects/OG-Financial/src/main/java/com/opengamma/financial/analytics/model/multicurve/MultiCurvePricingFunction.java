@@ -248,20 +248,24 @@ public abstract class MultiCurvePricingFunction extends AbstractFunction {
         for (final String curveExposureConfig : curveExposureConfigs) {
           final Set<String> curveConstructionConfigurationNames = _instrumentExposuresProvider.getCurveConstructionConfigurationsForConfig(curveExposureConfig, target.getTrade());
           for (final String curveConstructionConfigurationName : curveConstructionConfigurationNames) {
-            final ValueProperties inputConstraints = commonCurveConstraints.get().copy().with(CURVE_CONSTRUCTION_CONFIG, curveConstructionConfigurationName).get();
-            requirements.add(new ValueRequirement(CURVE_BUNDLE, ComputationTargetSpecification.NULL, inputConstraints));
-            requirements.add(new ValueRequirement(JACOBIAN_BUNDLE, ComputationTargetSpecification.NULL, inputConstraints));
+            final ValueProperties curveBundleConstraints = commonCurveConstraints.copy()
+                .with(CURVE_CONSTRUCTION_CONFIG, curveConstructionConfigurationName)
+                .get();
+            requirements.add(new ValueRequirement(CURVE_BUNDLE, ComputationTargetSpecification.NULL, curveBundleConstraints));
+            requirements.add(new ValueRequirement(JACOBIAN_BUNDLE, ComputationTargetSpecification.NULL, curveBundleConstraints));
             final CurveConstructionConfiguration curveConstructionConfiguration = _curveConstructionConfigurationSource.getCurveConstructionConfiguration(curveConstructionConfigurationName);
             if (curveConstructionConfiguration == null) {
               s_logger.error("Could not get curve construction configuration called {} from config master", curveConstructionConfigurationName);
               return null;
             }
             final String[] curveNames = CurveUtils.getCurveNamesForConstructionConfiguration(curveConstructionConfiguration);
+            final ValueProperties fxMatrixProperties = ValueProperties.builder()
+                .with(CURVE_CONSTRUCTION_CONFIG, curveConstructionConfigurationNames)
+                .get();
+            requirements.add(new ValueRequirement(FX_MATRIX, ComputationTargetSpecification.NULL, fxMatrixProperties));
             for (final String curveName : curveNames) {
               final ValueProperties curveProperties = ValueProperties.builder().with(CURVE, curveName).get();
               requirements.add(new ValueRequirement(CURVE_DEFINITION, ComputationTargetSpecification.NULL, curveProperties));
-              requirements.add(new ValueRequirement(FX_MATRIX, ComputationTargetSpecification.NULL, ValueProperties.with(CURVE_CONSTRUCTION_CONFIG, curveConstructionConfigurationNames)
-                  .get()));
             }
           }
         }

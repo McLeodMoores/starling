@@ -16,6 +16,7 @@ import static com.opengamma.engine.value.ValueRequirementNames.CURVE_MARKET_DATA
 import static com.opengamma.engine.value.ValueRequirementNames.CURVE_SPECIFICATION;
 import static com.opengamma.engine.value.ValueRequirementNames.FX_MATRIX;
 import static com.opengamma.engine.value.ValueRequirementNames.JACOBIAN_BUNDLE;
+import static com.opengamma.engine.value.ValueRequirementNames.YIELD_CURVE;
 import static com.opengamma.financial.analytics.model.curve.CurveCalculationPropertyNamesAndValues.PROPERTY_CURVE_TYPE;
 import static com.opengamma.financial.analytics.model.curve.CurveCalculationPropertyNamesAndValues.ROOT_FINDING;
 import static com.opengamma.financial.analytics.model.curve.interestrate.MultiYieldCurvePropertiesAndDefaults.PROPERTY_ROOT_FINDER_ABSOLUTE_TOLERANCE;
@@ -274,18 +275,18 @@ public abstract class MultiCurveFunction<T extends ParameterProviderInterface, U
       //To ensure that the ValueProperties matches the one created in getBundleProperties, the currencies are extracted
       //from the fx matrix and given to the ValueProperties if they exist. This change results in the base classes
       //needing to remove the curve sensitivity currencies from the curve ValueProperties
-      Set<String> currencies = new HashSet();
-      for (Currency currency : fxMatrix.getCurrencies().keySet()) {
+      final Set<String> currencies = new HashSet<>();
+      for (final Currency currency : fxMatrix.getCurrencies().keySet()) {
         currencies.add(currency.toString());
       }
-      String[] sensitivityCurrencies = currencies.toArray(new String[currencies.size()]);
+      final String[] sensitivityCurrencies = currencies.toArray(new String[currencies.size()]);
       final ValueProperties.Builder propertiesBuilder = desiredValues.iterator().next().getConstraints().copy()
           .withoutAny(CURVE)
           .with(CURVE, Arrays.asList(_curveNames));
       if (!currencies.isEmpty()) {
         propertiesBuilder.with(CURVE_SENSITIVITY_CURRENCY, sensitivityCurrencies);
       }
-      ValueProperties properties  = propertiesBuilder.get();
+      final ValueProperties properties  = propertiesBuilder.get();
 
       final double absoluteTolerance = Double.parseDouble(Iterables.getOnlyElement(properties.getValues(PROPERTY_ROOT_FINDER_ABSOLUTE_TOLERANCE)));
       final double relativeTolerance = Double.parseDouble(Iterables.getOnlyElement(properties.getValues(PROPERTY_ROOT_FINDER_RELATIVE_TOLERANCE)));
@@ -368,6 +369,9 @@ public abstract class MultiCurveFunction<T extends ParameterProviderInterface, U
               }
               composedConstraints.withOptional(desiredConstraintProperty);
             }
+          }
+          if (!exogenousRequirement.getValueName().equals(YIELD_CURVE)) {
+            composedConstraints.withoutAny(CURVE);
           }
           requirements.add(new ValueRequirement(valueName, targetReq, composedConstraints.get()));
         }
