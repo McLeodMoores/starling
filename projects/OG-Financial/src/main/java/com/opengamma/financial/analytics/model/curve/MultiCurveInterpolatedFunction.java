@@ -116,9 +116,9 @@ public class MultiCurveInterpolatedFunction extends
   }
 
   @Override
-  public CompiledFunctionDefinition getCompiledFunction(ZonedDateTime earliestInvocation, ZonedDateTime latestInvocation, String[] curveNames,
-                                                        Set<ValueRequirement> exogenousRequirements, CurveConstructionConfiguration curveConstructionConfiguration,
-                                                        String[] currencies) {
+  public CompiledFunctionDefinition getCompiledFunction(final ZonedDateTime earliestInvocation, final ZonedDateTime latestInvocation, final String[] curveNames,
+                                                        final Set<ValueRequirement> exogenousRequirements, final CurveConstructionConfiguration curveConstructionConfiguration,
+                                                        final String[] currencies) {
     return new MultiCurveInterpolatedCompiledFunctionDefinition(earliestInvocation, latestInvocation, curveNames, exogenousRequirements, curveConstructionConfiguration, currencies);
   }
 
@@ -137,10 +137,10 @@ public class MultiCurveInterpolatedFunction extends
      * @param curveConstructionConfiguration The curve construction configuration, not null
      * @param currencies The set of currencies to which the curves produce sensitivities
      */
-    protected MultiCurveInterpolatedCompiledFunctionDefinition(ZonedDateTime earliestInvocation, ZonedDateTime latestInvocation,
-                                                            String[] curveNames, Set<ValueRequirement> exogenousRequirements,
-                                                            CurveConstructionConfiguration curveConstructionConfiguration,
-                                                            String[] currencies) {
+    protected MultiCurveInterpolatedCompiledFunctionDefinition(final ZonedDateTime earliestInvocation, final ZonedDateTime latestInvocation,
+                                                            final String[] curveNames, final Set<ValueRequirement> exogenousRequirements,
+                                                            final CurveConstructionConfiguration curveConstructionConfiguration,
+                                                            final String[] currencies) {
       super(earliestInvocation, latestInvocation, curveNames, ValueRequirementNames.YIELD_CURVE, exogenousRequirements, currencies);
       ArgumentChecker.notNull(curveConstructionConfiguration, "curve construction configuration");
       _curveConstructionConfiguration = curveConstructionConfiguration;

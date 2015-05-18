@@ -57,7 +57,6 @@ import com.opengamma.core.holiday.HolidaySource;
 import com.opengamma.core.legalentity.LegalEntitySource;
 import com.opengamma.core.marketdatasnapshot.SnapshotDataBundle;
 import com.opengamma.core.region.RegionSource;
-import com.opengamma.core.security.Security;
 import com.opengamma.core.security.SecuritySource;
 import com.opengamma.engine.ComputationTargetSpecification;
 import com.opengamma.engine.function.CompiledFunctionDefinition;
@@ -72,7 +71,6 @@ import com.opengamma.financial.OpenGammaExecutionContext;
 import com.opengamma.financial.analytics.curve.BillNodeConverter;
 import com.opengamma.financial.analytics.curve.BondNodeConverter;
 import com.opengamma.financial.analytics.curve.CashNodeConverter;
-import com.opengamma.financial.analytics.curve.ConverterUtils;
 import com.opengamma.financial.analytics.curve.CurveConstructionConfiguration;
 import com.opengamma.financial.analytics.curve.CurveDefinition;
 import com.opengamma.financial.analytics.curve.CurveGroupConfiguration;
@@ -94,9 +92,6 @@ import com.opengamma.financial.analytics.ircurve.strips.CurveNodeVisitor;
 import com.opengamma.financial.analytics.ircurve.strips.CurveNodeWithIdentifier;
 import com.opengamma.financial.analytics.timeseries.HistoricalTimeSeriesBundle;
 import com.opengamma.financial.convention.ConventionBundleSource;
-import com.opengamma.financial.convention.IborIndexConvention;
-import com.opengamma.financial.convention.OvernightIndexConvention;
-import com.opengamma.financial.security.index.OvernightIndex;
 import com.opengamma.id.ExternalId;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
@@ -237,25 +232,11 @@ public class IssuerProviderDiscountingFunction extends
           } // Node points - end
           for (final CurveTypeConfiguration type : entry.getValue()) { // Type - start
             if (type instanceof DiscountingCurveTypeConfiguration) {
-              final String reference = ((DiscountingCurveTypeConfiguration) type).getReference();
-              try {
-                final Currency currency = Currency.of(reference);
-                //should this map check that the curve name has not already been entered?
-                discountingMap.put(curveName, currency);
-              } catch (final IllegalArgumentException e) {
-                throw new OpenGammaRuntimeException("Cannot handle reference type " + reference + " for discounting curves");
-              }
+              discountingMap.put(curveName, CurveUtils.getCurrencyFromConfiguration((DiscountingCurveTypeConfiguration) type));
             } else if (type instanceof IborCurveTypeConfiguration) {
-              final IborCurveTypeConfiguration ibor = (IborCurveTypeConfiguration) type;
-              final Security sec = securitySource.getSingle(ibor.getConvention().toBundle());
-              final com.opengamma.financial.security.index.IborIndex indexSecurity = (com.opengamma.financial.security.index.IborIndex) sec;
-              final IborIndexConvention indexConvention = conventionSource.getSingle(indexSecurity.getConventionId(), IborIndexConvention.class);
-              iborIndexList.add(ConverterUtils.indexIbor(indexSecurity.getName(), indexConvention, indexSecurity.getTenor()));
+              iborIndexList.add(CurveUtils.getIborIndexFromConfiguration((IborCurveTypeConfiguration) type, securitySource, conventionSource));
             } else if (type instanceof OvernightCurveTypeConfiguration) {
-              final OvernightCurveTypeConfiguration overnight = (OvernightCurveTypeConfiguration) type;
-              final OvernightIndex overnightIndex = (OvernightIndex) securitySource.getSingle(overnight.getConvention().toBundle());
-              final OvernightIndexConvention overnightConvention = conventionSource.getSingle(overnightIndex.getConventionId(), OvernightIndexConvention.class);
-              overnightIndexList.add(ConverterUtils.indexON(overnightIndex.getName(), overnightConvention));
+              overnightIndexList.add(CurveUtils.getOvernightIndexFromConfiguration((OvernightCurveTypeConfiguration) type, securitySource, conventionSource));
             } else if (type instanceof IssuerCurveTypeConfiguration) {
               final IssuerCurveTypeConfiguration issuer = (IssuerCurveTypeConfiguration) type;
               issuerMap.put(curveName, Pairs.<Object, LegalEntityFilter<LegalEntity>>of(issuer.getKeys(), issuer.getFilters()));

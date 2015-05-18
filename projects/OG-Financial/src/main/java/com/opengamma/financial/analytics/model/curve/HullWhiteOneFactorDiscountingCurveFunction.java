@@ -53,7 +53,6 @@ import com.opengamma.core.convention.ConventionSource;
 import com.opengamma.core.holiday.HolidaySource;
 import com.opengamma.core.marketdatasnapshot.SnapshotDataBundle;
 import com.opengamma.core.region.RegionSource;
-import com.opengamma.core.security.Security;
 import com.opengamma.core.security.SecuritySource;
 import com.opengamma.engine.ComputationTarget;
 import com.opengamma.engine.ComputationTargetSpecification;
@@ -68,7 +67,6 @@ import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.financial.OpenGammaExecutionContext;
 import com.opengamma.financial.analytics.curve.CashNodeConverter;
-import com.opengamma.financial.analytics.curve.ConverterUtils;
 import com.opengamma.financial.analytics.curve.CurveConstructionConfiguration;
 import com.opengamma.financial.analytics.curve.CurveDefinition;
 import com.opengamma.financial.analytics.curve.CurveGroupConfiguration;
@@ -91,9 +89,6 @@ import com.opengamma.financial.analytics.ircurve.strips.CurveNodeWithIdentifier;
 import com.opengamma.financial.analytics.ircurve.strips.DeliverableSwapFutureNode;
 import com.opengamma.financial.analytics.ircurve.strips.RateFutureNode;
 import com.opengamma.financial.analytics.timeseries.HistoricalTimeSeriesBundle;
-import com.opengamma.financial.convention.IborIndexConvention;
-import com.opengamma.financial.convention.OvernightIndexConvention;
-import com.opengamma.financial.security.index.OvernightIndex;
 import com.opengamma.id.ExternalId;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
@@ -125,9 +120,10 @@ public class HullWhiteOneFactorDiscountingCurveFunction extends
     return new MyCompiledFunctionDefinition(earliestInvokation, latestInvokation, curveNames, exogenousRequirements, curveConstructionConfiguration);
   }
 
-  public CompiledFunctionDefinition getCompiledFunction(ZonedDateTime earliestInvokation, ZonedDateTime latestInvokation, String[] curveNames,
-                                                        Set<ValueRequirement> exogenousRequirements, CurveConstructionConfiguration curveConstructionConfiguration,
-                                                        String[] currencies) {
+  @Override
+  public CompiledFunctionDefinition getCompiledFunction(final ZonedDateTime earliestInvokation, final ZonedDateTime latestInvokation, final String[] curveNames,
+                                                        final Set<ValueRequirement> exogenousRequirements, final CurveConstructionConfiguration curveConstructionConfiguration,
+                                                        final String[] currencies) {
     return new MyCompiledFunctionDefinition(earliestInvokation, latestInvokation, curveNames, exogenousRequirements, curveConstructionConfiguration, currencies);
   }
 
@@ -175,12 +171,12 @@ public class HullWhiteOneFactorDiscountingCurveFunction extends
      * @param curveConstructionConfiguration The curve construction configuration, not null
      * @param currencies The set of currencies to which the curves produce sensitivities
      */
-    protected MyCompiledFunctionDefinition(ZonedDateTime earliestInvokation,
-                                        ZonedDateTime latestInvokation,
-                                        String[] curveNames,
-                                        Set<ValueRequirement> exogenousRequirements,
-                                        CurveConstructionConfiguration curveConstructionConfiguration,
-                                        String[] currencies) {
+    protected MyCompiledFunctionDefinition(final ZonedDateTime earliestInvokation,
+                                        final ZonedDateTime latestInvokation,
+                                        final String[] curveNames,
+                                        final Set<ValueRequirement> exogenousRequirements,
+                                        final CurveConstructionConfiguration curveConstructionConfiguration,
+                                        final String[] currencies) {
 
       super(earliestInvokation, latestInvokation, curveNames, ValueRequirementNames.YIELD_CURVE, exogenousRequirements, currencies);
       ArgumentChecker.notNull(curveConstructionConfiguration, "curve construction configuration");
@@ -233,7 +229,7 @@ public class HullWhiteOneFactorDiscountingCurveFunction extends
               marketData = 0.99;
             }
             if (node.getCurveNode() instanceof RateFutureNode) {
-              parameterGuessForCurves[k] = (1 - marketData);
+              parameterGuessForCurves[k] = 1 - marketData;
             } else {
               if (node.getCurveNode() instanceof DeliverableSwapFutureNode) {
                 parameterGuessForCurves[k] = 0.01d; // Implementation note: The relation between price, coupon and rate is complex. There is no good initial guess.
@@ -247,25 +243,11 @@ public class HullWhiteOneFactorDiscountingCurveFunction extends
           } // Node points - end
           for (final CurveTypeConfiguration type : entry.getValue()) { // Type - start
             if (type instanceof DiscountingCurveTypeConfiguration) {
-              final String reference = ((DiscountingCurveTypeConfiguration) type).getReference();
-              try {
-                final Currency currency = Currency.of(reference);
-                //should this map check that the curve name has not already been entered?
-                discountingMap.put(curveName, currency);
-              } catch (final IllegalArgumentException e) {
-                throw new OpenGammaRuntimeException("Cannot handle reference type " + reference + " for discounting curves");
-              }
+              discountingMap.put(curveName, CurveUtils.getCurrencyFromConfiguration((DiscountingCurveTypeConfiguration) type));
             } else if (type instanceof IborCurveTypeConfiguration) {
-              final IborCurveTypeConfiguration ibor = (IborCurveTypeConfiguration) type;
-              final Security sec = securitySource.getSingle(ibor.getConvention().toBundle()); 
-              final com.opengamma.financial.security.index.IborIndex indexSecurity = (com.opengamma.financial.security.index.IborIndex) sec;
-              final IborIndexConvention indexConvention = conventionSource.getSingle(indexSecurity.getConventionId(), IborIndexConvention.class);
-              iborIndexList.add(ConverterUtils.indexIbor(indexSecurity.getName(), indexConvention, indexSecurity.getTenor()));
+              iborIndexList.add(CurveUtils.getIborIndexFromConfiguration((IborCurveTypeConfiguration) type, securitySource, conventionSource));
             } else if (type instanceof OvernightCurveTypeConfiguration) {
-              final OvernightCurveTypeConfiguration overnight = (OvernightCurveTypeConfiguration) type;
-              final OvernightIndex overnightIndex = (OvernightIndex) securitySource.getSingle(overnight.getConvention().toBundle());
-              final OvernightIndexConvention overnightConvention = conventionSource.getSingle(overnightIndex.getConventionId(), OvernightIndexConvention.class);
-              overnightIndexList.add(ConverterUtils.indexON(overnightIndex.getName(), overnightConvention));
+              overnightIndexList.add(CurveUtils.getOvernightIndexFromConfiguration((OvernightCurveTypeConfiguration) type, securitySource, conventionSource));
             } else {
               throw new OpenGammaRuntimeException("Cannot handle " + type.getClass());
             }
