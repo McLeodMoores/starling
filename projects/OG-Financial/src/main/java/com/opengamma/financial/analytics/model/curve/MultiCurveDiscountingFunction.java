@@ -10,6 +10,7 @@ import static com.opengamma.engine.value.ValuePropertyNames.CURVE_CONSTRUCTION_C
 import static com.opengamma.engine.value.ValuePropertyNames.CURVE_SENSITIVITY_CURRENCY;
 import static com.opengamma.engine.value.ValueRequirementNames.YIELD_CURVE;
 import static com.opengamma.financial.analytics.model.curve.CurveCalculationPropertyNamesAndValues.DISCOUNTING;
+import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -28,6 +29,7 @@ import com.opengamma.analytics.financial.curve.interestrate.generator.GeneratorC
 import com.opengamma.analytics.financial.curve.interestrate.generator.GeneratorCurveYieldInterpolatedAnchorNode;
 import com.opengamma.analytics.financial.curve.interestrate.generator.GeneratorYDCurve;
 import com.opengamma.analytics.financial.forex.method.FXMatrix;
+import com.opengamma.analytics.financial.forex.method.FXMatrixUtils;
 import com.opengamma.analytics.financial.instrument.InstrumentDefinition;
 import com.opengamma.analytics.financial.instrument.index.IborIndex;
 import com.opengamma.analytics.financial.instrument.index.IndexON;
@@ -99,15 +101,13 @@ import com.opengamma.util.money.Currency;
 import com.opengamma.util.tuple.Pair;
 import com.opengamma.util.tuple.Pairs;
 
-import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
-
 /**
  * Produces yield curves using the discounting method.
  */
 public class MultiCurveDiscountingFunction extends
-    MultiCurveFunction<MulticurveProviderInterface, MulticurveDiscountBuildingRepository, GeneratorYDCurve, MulticurveSensitivity> {
+MultiCurveFunction<MulticurveProviderInterface, MulticurveDiscountBuildingRepository, GeneratorYDCurve, MulticurveSensitivity> {
   /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(MultiCurveDiscountingFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(MultiCurveDiscountingFunction.class);
   /** The calculator */
   private static final ParSpreadMarketQuoteDiscountingCalculator PSMQC = ParSpreadMarketQuoteDiscountingCalculator.getInstance();
   /** The sensitivity calculator */
@@ -246,20 +246,30 @@ public class MultiCurveDiscountingFunction extends
             } else if (type instanceof IborCurveTypeConfiguration) {
               final IborCurveTypeConfiguration ibor = (IborCurveTypeConfiguration) type;
               final Security sec = securitySource.getSingle(ibor.getConvention().toBundle());
+              final IborIndex iborIndex;
               if (sec == null) {
-                throw new OpenGammaRuntimeException("Cannot find Ibor index " + ibor.getConvention());
+                LOGGER.info("Cannot find Ibor index security with id {}: using convention" + ibor.getConvention());
+                final IborIndexConvention indexConvention = conventionSource.getSingle(ibor.getConvention(), IborIndexConvention.class);
+                iborIndex = ConverterUtils.indexIbor(indexConvention.getName(), indexConvention, ibor.getTenor());
+              } else {
+                final com.opengamma.financial.security.index.IborIndex indexSecurity = (com.opengamma.financial.security.index.IborIndex) sec;
+                final IborIndexConvention indexConvention = conventionSource.getSingle(indexSecurity.getConventionId(), IborIndexConvention.class);
+                iborIndex = ConverterUtils.indexIbor(indexConvention.getName(), indexConvention, indexSecurity.getTenor());
               }
-              final com.opengamma.financial.security.index.IborIndex indexSecurity = (com.opengamma.financial.security.index.IborIndex) sec;
-              final IborIndexConvention indexConvention = conventionSource.getSingle(indexSecurity.getConventionId(), IborIndexConvention.class);
-              iborIndexList.add(ConverterUtils.indexIbor(indexSecurity.getName(), indexConvention, indexSecurity.getTenor()));
+              iborIndexList.add(iborIndex);
             } else if (type instanceof OvernightCurveTypeConfiguration) {
               final OvernightCurveTypeConfiguration overnight = (OvernightCurveTypeConfiguration) type;
               final OvernightIndex overnightIndex = (OvernightIndex) securitySource.getSingle(overnight.getConvention().toBundle());
+              final IndexON onIndex;
               if (overnightIndex == null) {
-                throw new OpenGammaRuntimeException("Cannot find overnight index " + overnight.getConvention());
+                LOGGER.info("Cannot find overnight index security with id {}: using convention" + overnight.getConvention());
+                final OvernightIndexConvention indexConvention = conventionSource.getSingle(overnight.getConvention(), OvernightIndexConvention.class);
+                onIndex = ConverterUtils.indexON(indexConvention.getName(), indexConvention);
+              } else {
+                final OvernightIndexConvention indexConvention = conventionSource.getSingle(overnightIndex.getConventionId(), OvernightIndexConvention.class);
+                onIndex = ConverterUtils.indexON(indexConvention.getName(), indexConvention);
               }
-              final OvernightIndexConvention overnightConvention = conventionSource.getSingle(overnightIndex.getConventionId(), OvernightIndexConvention.class);
-              overnightIndexList.add(ConverterUtils.indexON(overnightIndex.getName(), overnightConvention));
+              overnightIndexList.add(onIndex);
             } else {
               throw new OpenGammaRuntimeException("Cannot handle " + type.getClass());
             }
@@ -286,12 +296,13 @@ public class MultiCurveDiscountingFunction extends
     @Override
     protected MulticurveProviderInterface getKnownData(final FunctionInputs inputs) {
       final FXMatrix fxMatrix = (FXMatrix) inputs.getValue(ValueRequirementNames.FX_MATRIX);
-      MulticurveProviderDiscount knownData;
+      final MulticurveProviderDiscount knownData;
       if (getExogenousRequirements().isEmpty()) {
-        knownData = new MulticurveProviderDiscount(fxMatrix);
+        knownData = new MulticurveProviderDiscount();
       } else {
-        knownData = (MulticurveProviderDiscount) inputs.getValue(ValueRequirementNames.CURVE_BUNDLE);
-        knownData.setForexMatrix(fxMatrix);
+        knownData = ((MulticurveProviderDiscount) inputs.getValue(ValueRequirementNames.CURVE_BUNDLE)).copy();
+        final FXMatrix knownFxMatrix = knownData.getFxRates();
+        knownData.setForexMatrix(FXMatrixUtils.merge(fxMatrix, knownFxMatrix));
       }
       return knownData;
     }
@@ -362,7 +373,7 @@ public class MultiCurveDiscountingFunction extends
             .get();
         final YieldAndDiscountCurve curve = provider.getCurve(curveName);
         if (curve == null) {
-          s_logger.error("Could not get curve called {} from configuration {}", curveName, getCurveConstructionConfigurationName());
+          LOGGER.error("Could not get curve called {} from configuration {}", curveName, getCurveConstructionConfigurationName());
         } else {
           final ValueSpecification curveSpec = new ValueSpecification(YIELD_CURVE, ComputationTargetSpecification.NULL, curveProperties);
           result.add(new ComputedValue(curveSpec, curve));
