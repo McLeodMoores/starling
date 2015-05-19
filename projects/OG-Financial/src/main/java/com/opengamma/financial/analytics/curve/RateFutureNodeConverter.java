@@ -114,10 +114,8 @@ public class RateFutureNodeConverter extends CurveNodeVisitorAdapter<InstrumentD
   private InstrumentDefinition<?> getInterestRateFuture(final RateFutureNode rateFuture, final InterestRateFutureConvention futureConvention,
       final Double price) {
     final String expiryCalculatorName = futureConvention.getExpiryConvention().getValue();
-    final com.opengamma.financial.security.index.IborIndex indexSecurity = 
-        (com.opengamma.financial.security.index.IborIndex) _securitySource.getSingle(futureConvention.getIndexConvention().toBundle()); 
-    final IborIndexConvention indexConvention = _conventionSource.getSingle(indexSecurity.getConventionId(), IborIndexConvention.class);
-    final IborIndex index = ConverterUtils.indexIbor(indexSecurity.getName(), indexConvention, indexSecurity.getTenor());
+    final IborIndexConvention indexConvention = _conventionSource.getSingle(futureConvention.getIndexConvention(), IborIndexConvention.class);
+    final IborIndex index = ConverterUtils.indexIbor(indexConvention.getName(), indexConvention, rateFuture.getUnderlyingTenor());
     final Period indexTenor = rateFuture.getUnderlyingTenor().getPeriod();
     final double paymentAccrualFactor = indexTenor.toTotalMonths() / 12.; //TODO don't use this method
     final Calendar fixingCalendar = CalendarUtils.getCalendar(_regionSource, _holidaySource, indexConvention.getFixingCalendar());

@@ -6,6 +6,7 @@
 package com.opengamma.financial.analytics.curve.exposure;
 
 import com.opengamma.OpenGammaRuntimeException;
+import com.opengamma.core.id.ExternalSchemes;
 import com.opengamma.core.security.SecuritySource;
 import com.opengamma.util.ArgumentChecker;
 
@@ -48,6 +49,8 @@ public class ExposureFunctionFactory {
         return new TradeAttributeExposureFunction();
       case UnderlyingExposureFunction.NAME:
         return new UnderlyingExposureFunction(securitySource);
+      case IdSchemeExposureFunction.NAME:
+        return new IdSchemeExposureFunction(ExternalSchemes.ISIN.getName());
       default:
         throw new OpenGammaRuntimeException("Could not get exposure function called " + name);
     }

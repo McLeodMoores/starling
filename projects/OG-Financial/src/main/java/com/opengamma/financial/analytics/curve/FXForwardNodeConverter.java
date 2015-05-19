@@ -23,7 +23,6 @@ import com.opengamma.financial.convention.calendar.Calendar;
 import com.opengamma.id.ExternalId;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
-import com.opengamma.util.time.Tenor;
 
 /**
  * Convert a Forex Forward node into an Instrument definition.
@@ -85,15 +84,14 @@ public class FXForwardNodeConverter extends CurveNodeVisitorAdapter<InstrumentDe
     final FXSpotConvention spotConvention = underlyingConvention;
     final Currency payCurrency = fxForward.getPayCurrency();
     final Currency receiveCurrency = fxForward.getReceiveCurrency();
-    final Tenor forwardTenor = fxForward.getMaturityTenor();
     final double payAmount = 1;
     final double receiveAmount = forward;
     final int settlementDays = spotConvention.getSettlementDays();
     final ExternalId settlementRegion = forwardConvention.getSettlementRegion();
     final Calendar settlementCalendar = CalendarUtils.getCalendar(_regionSource, _holidaySource, settlementRegion);
     final ZonedDateTime spotDate = ScheduleCalculator.getAdjustedDate(_valuationTime, settlementDays, settlementCalendar);
-    final ZonedDateTime exchangeDate = ScheduleCalculator.getAdjustedDate(spotDate, forwardTenor.getPeriod(), forwardConvention.getBusinessDayConvention(), settlementCalendar,
-        forwardConvention.isIsEOM());
+    final ZonedDateTime exchangeDate = ScheduleCalculator.getAdjustedDate(spotDate, fxForward.getMaturityTenor(), forwardConvention.getBusinessDayConvention(),
+        settlementCalendar, forwardConvention.isIsEOM());
     return ForexDefinition.fromAmounts(payCurrency, receiveCurrency, exchangeDate, payAmount, -receiveAmount);
   }
 
