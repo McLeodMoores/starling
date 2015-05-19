@@ -12,11 +12,17 @@ import java.util.Map;
 
 import com.opengamma.analytics.financial.interestrate.bond.definition.BillSecurity;
 import com.opengamma.analytics.financial.provider.description.interestrate.IssuerProviderInterface;
+import com.opengamma.analytics.financial.provider.description.interestrate.IssuerProviderIssuerDecoratedSpread;
 import com.opengamma.analytics.financial.provider.sensitivity.multicurve.MulticurveSensitivity;
 import com.opengamma.analytics.financial.provider.sensitivity.multicurve.MultipleCurrencyMulticurveSensitivity;
+import com.opengamma.analytics.math.function.Function1D;
+import com.opengamma.analytics.math.rootfinding.BracketRoot;
+import com.opengamma.analytics.math.rootfinding.BrentSingleRootFinder;
+import com.opengamma.analytics.math.rootfinding.RealSingleRootFinder;
 import com.opengamma.financial.convention.yield.SimpleYieldConvention;
 import com.opengamma.financial.convention.yield.YieldConvention;
 import com.opengamma.util.ArgumentChecker;
+import com.opengamma.util.money.Currency;
 import com.opengamma.util.money.MultipleCurrencyAmount;
 import com.opengamma.util.tuple.DoublesPair;
 
@@ -30,6 +36,18 @@ public final class BillSecurityDiscountingMethod {
    * The unique instance of the class.
    */
   private static final BillSecurityDiscountingMethod INSTANCE = new BillSecurityDiscountingMethod();
+  /**
+   * The root bracket used for yield finding.
+   */
+  private static final BracketRoot BRACKETER = new BracketRoot();
+  /**
+   * The root finder used for yield finding.
+   */
+  private static final RealSingleRootFinder ROOT_FINDER = new BrentSingleRootFinder();
+  /**
+   * Brackets a root
+   */
+  private static final BracketRoot ROOT_BRACKETER = new BracketRoot();
 
   /**
    * Return the class instance.
@@ -192,6 +210,54 @@ public final class BillSecurityDiscountingMethod {
     resultMapCredit.put(issuer.getName(bill.getIssuerEntity()), listDiscounting);
     final MulticurveSensitivity result = MulticurveSensitivity.ofYieldDiscounting(resultMapCredit);
     return MultipleCurrencyMulticurveSensitivity.of(bill.getCurrency(), result);
+  }
+
+  /**
+   * Computes a bill z-spread from the curves and a present value.
+   * The z-spread is a parallel shift applied to the discounting curve associated to the bill (Issuer Entity) to match the present value.
+   * @param bill The bill.
+   * @param issuerMulticurves The issuer and multi-curves provider.
+   * @param pv The target present value.
+   * @return The z-spread.
+   */
+  public double zSpreadFromCurvesAndPV(final BillSecurity bill, final IssuerProviderInterface issuerMulticurves, final MultipleCurrencyAmount pv) {
+    ArgumentChecker.notNull(bill, "bill");
+    ArgumentChecker.notNull(issuerMulticurves, "Issuer and multi-curves provider");
+    final Currency ccy = bill.getCurrency();
+
+    final Function1D<Double, Double> residual = new Function1D<Double, Double>() {
+      @Override
+      public Double evaluate(final Double z) {
+        return presentValueFromZSpread(bill, issuerMulticurves, z).getAmount(ccy) - pv.getAmount(ccy);
+      }
+    };
+
+    final double[] range = ROOT_BRACKETER.getBracketedPoints(residual, -0.01, 0.01); // Starting range is [-1%, 1%]
+    return ROOT_FINDER.getRoot(residual, range[0], range[1]);
+  }
+
+  /**
+   * Computes the present value of a bill security from z-spread. The z-spread is a parallel shift applied to the discounting curve associated to the bill (Issuer Entity).
+   * The parallel shift is done in the curve convention.
+   * @param bill The bill security.
+   * @param issuerMulticurves The issuer and multi-curves provider.
+   * @param zSpread The z-spread.
+   * @return The present value.
+   */
+  public MultipleCurrencyAmount presentValueFromZSpread(final BillSecurity bill, final IssuerProviderInterface issuerMulticurves, final double zSpread) {
+    final IssuerProviderInterface issuerShifted = new IssuerProviderIssuerDecoratedSpread(issuerMulticurves, bill.getIssuerEntity(), zSpread);
+    return presentValue(bill, issuerShifted);
+  }
+
+  /**
+   * Computes a bill z-spread from the curves and a yield.
+   * @param bill The bill.
+   * @param issuerMulticurves The issuer and multi-curves provider.
+   * @param yield The yield.
+   * @return The z-spread.
+   */
+  public double zSpreadFromCurvesAndYield(final BillSecurity bill, final IssuerProviderInterface issuerMulticurves, final double yield) {
+    return zSpreadFromCurvesAndPV(bill, issuerMulticurves, presentValueFromYield(bill, yield, issuerMulticurves));
   }
 
 }

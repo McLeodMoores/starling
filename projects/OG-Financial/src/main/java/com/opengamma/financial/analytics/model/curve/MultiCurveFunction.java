@@ -525,7 +525,8 @@ public abstract class MultiCurveFunction<T extends ParameterProviderInterface, U
           .withAny(PROPERTY_ROOT_FINDER_RELATIVE_TOLERANCE)
           .withAny(PROPERTY_ROOT_FINDER_MAX_ITERATIONS)
           .with(CURVE, curveNames);
-      if (sensitivityCurrencies != null) {
+      //TODO
+      if (sensitivityCurrencies != null && sensitivityCurrencies.length > 0) {
         builder.with(CURVE_SENSITIVITY_CURRENCY, sensitivityCurrencies);
       }
       return builder.get();

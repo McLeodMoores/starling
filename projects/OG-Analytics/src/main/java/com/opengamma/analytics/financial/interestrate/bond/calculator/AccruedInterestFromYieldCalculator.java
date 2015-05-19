@@ -6,6 +6,8 @@
 package com.opengamma.analytics.financial.interestrate.bond.calculator;
 
 import com.opengamma.analytics.financial.interestrate.InstrumentDerivativeVisitorAdapter;
+import com.opengamma.analytics.financial.interestrate.bond.definition.BillSecurity;
+import com.opengamma.analytics.financial.interestrate.bond.definition.BillTransaction;
 import com.opengamma.analytics.financial.interestrate.bond.definition.BondCapitalIndexedSecurity;
 import com.opengamma.analytics.financial.interestrate.bond.definition.BondCapitalIndexedTransaction;
 import com.opengamma.analytics.financial.interestrate.bond.definition.BondFixedSecurity;
@@ -34,6 +36,20 @@ public final class AccruedInterestFromYieldCalculator extends InstrumentDerivati
    * Private constructor
    */
   private AccruedInterestFromYieldCalculator() {
+  }
+
+  @Override
+  public Double visitBillTransaction(final BillTransaction bill, final Double yield) {
+    ArgumentChecker.notNull(bill, "bill");
+    ArgumentChecker.notNull(yield, "yield");
+    return 0.;
+  }
+
+  @Override
+  public Double visitBillSecurity(final BillSecurity bill, final Double yield) {
+    ArgumentChecker.notNull(bill, "bill");
+    ArgumentChecker.notNull(yield, "yield");
+    return 0.;
   }
 
   @Override

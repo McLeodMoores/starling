@@ -6,6 +6,8 @@
 package com.opengamma.analytics.financial.interestrate.bond.calculator;
 
 import com.opengamma.analytics.financial.interestrate.InstrumentDerivativeVisitorAdapter;
+import com.opengamma.analytics.financial.interestrate.bond.definition.BillSecurity;
+import com.opengamma.analytics.financial.interestrate.bond.definition.BillTransaction;
 import com.opengamma.analytics.financial.interestrate.bond.definition.BondCapitalIndexedSecurity;
 import com.opengamma.analytics.financial.interestrate.bond.definition.BondCapitalIndexedTransaction;
 import com.opengamma.analytics.financial.interestrate.bond.definition.BondFixedSecurity;
@@ -40,6 +42,19 @@ public final class ModifiedDurationFromYieldCalculator extends InstrumentDerivat
 
   private static final BondCapitalIndexedSecurityDiscountingMethod METHOD_INFLATION_BOND_SECURITY = BondCapitalIndexedSecurityDiscountingMethod.getInstance();
 
+
+  @Override
+  public Double visitBillTransaction(final BillTransaction bill, final Double yield) {
+    ArgumentChecker.notNull(bill, "bill");
+    return bill.getBillPurchased().getEndTime();
+  }
+
+  @Override
+  public Double visitBillSecurity(final BillSecurity bill, final Double yield) {
+    ArgumentChecker.notNull(bill, "bill");
+    return bill.getEndTime();
+  }
+
   @Override
   public Double visitBondFixedSecurity(final BondFixedSecurity bond, final Double yield) {
     ArgumentChecker.notNull(bond, "bond");
@@ -60,7 +75,6 @@ public final class ModifiedDurationFromYieldCalculator extends InstrumentDerivat
   public Double visitBondCapitalIndexedTransaction(final BondCapitalIndexedTransaction<?> bond, final Double yield) {
     ArgumentChecker.notNull(bond, "bond");
     ArgumentChecker.notNull(yield, "yield");
-    ArgumentChecker.notNull(bond.getBondStandard() instanceof BondCapitalIndexedSecurity<?>, "the bond should be a BondCapitalIndexedSecurity");
     final BondCapitalIndexedSecurity<?> bondSecurity = bond.getBondStandard();
     return METHOD_INFLATION_BOND_SECURITY.modifiedDurationFromYieldFiniteDifference(bondSecurity, yield);
   }
@@ -69,7 +83,6 @@ public final class ModifiedDurationFromYieldCalculator extends InstrumentDerivat
   public Double visitBondCapitalIndexedSecurity(final BondCapitalIndexedSecurity<?> bond, final Double yield) {
     ArgumentChecker.notNull(bond, "bond");
     ArgumentChecker.notNull(yield, "yield");
-    ArgumentChecker.notNull(bond instanceof BondCapitalIndexedSecurity<?>, "the bond should be a BondCapitalIndexedSecurity");
     return METHOD_INFLATION_BOND_SECURITY.modifiedDurationFromYieldFiniteDifference(bond, yield);
   }
 }

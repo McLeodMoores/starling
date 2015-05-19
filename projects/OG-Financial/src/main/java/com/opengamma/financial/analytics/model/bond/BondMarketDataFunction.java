@@ -24,7 +24,7 @@ import com.opengamma.financial.security.FinancialSecurityTypes;
 import com.opengamma.financial.security.bond.BondSecurity;
 
 /**
- * 
+ *
  */
 public abstract class BondMarketDataFunction extends NonCompiledInvoker {
 
@@ -36,9 +36,16 @@ public abstract class BondMarketDataFunction extends NonCompiledInvoker {
   }
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs,
-      final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
-    final BondSecurity security = target.getValue(FinancialSecurityTypes.BOND_SECURITY);
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
+    final BondSecurity security;
+    if (target.getType() == ComputationTargetType.TRADE) {
+      security = (BondSecurity) target.getTrade().getSecurity();
+    } else if (target.getSecurity() instanceof BondSecurity) {
+      security = (BondSecurity) target.getSecurity();
+    } else {
+      throw new OpenGammaRuntimeException("Unexpected target type " + target.getType());
+    }
     final Object value = inputs.getValue(_requirementName);
     if (value == null) {
       throw new OpenGammaRuntimeException("Could not get " + _requirementName);
@@ -47,14 +54,16 @@ public abstract class BondMarketDataFunction extends NonCompiledInvoker {
   }
 
   @Override
-  public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context,
-      final ComputationTarget target, final ValueRequirement desiredValue) {
+  public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
+    if (target.getType() == ComputationTargetType.TRADE) {
+      return Collections.singleton(new ValueRequirement(_requirementName, ComputationTargetType.SECURITY, target.getTrade().getSecurity().getUniqueId()));
+    }
     return Collections.singleton(new ValueRequirement(_requirementName, target.toSpecification()));
   }
 
   @Override
   public ComputationTargetType getTargetType() {
-    return FinancialSecurityTypes.BOND_SECURITY;
+    return FinancialSecurityTypes.BOND_SECURITY.or(ComputationTargetType.TRADE);
   }
 
   protected abstract Set<ComputedValue> getComputedValues(final FunctionExecutionContext context, final double value, final BondSecurity security, final ComputationTargetSpecification target);

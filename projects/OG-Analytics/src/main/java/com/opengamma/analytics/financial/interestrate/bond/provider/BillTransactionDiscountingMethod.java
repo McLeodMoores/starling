@@ -77,7 +77,7 @@ public final class BillTransactionDiscountingMethod {
     final Currency ccy = bill.getCurrency();
     final MultipleCurrencyAmount pvSecurity = METHOD_SECURITY.presentValueFromYield(bill.getBillStandard(), yield, issuer);
     final double pvSettle = bill.getSettlementAmount() * issuer.getMulticurveProvider().getDiscountFactor(ccy, bill.getBillPurchased().getSettlementTime());
-    return pvSecurity.plus(MultipleCurrencyAmount.of(bill.getCurrency(), pvSettle));
+    return pvSecurity.plus(MultipleCurrencyAmount.of(bill.getCurrency(), pvSettle)).multipliedBy(bill.getQuantity());
   }
 
   /**
@@ -105,7 +105,7 @@ public final class BillTransactionDiscountingMethod {
     final List<DoublesPair> listDsc = new ArrayList<>();
     listDsc.add(DoublesPair.of(bill.getBillPurchased().getSettlementTime(), -bill.getBillPurchased().getSettlementTime() * dfDscSettle * dfDscSettleBar));
     resultMapDsc.put(issuer.getMulticurveProvider().getName(ccy), listDsc);
-    return MultipleCurrencyMulticurveSensitivity.of(ccy, result.plus(MulticurveSensitivity.ofYieldDiscounting(resultMapDsc)));
+    return MultipleCurrencyMulticurveSensitivity.of(ccy, result.plus(MulticurveSensitivity.ofYieldDiscounting(resultMapDsc))).multipliedBy(bill.getQuantity());
   }
 
   /**

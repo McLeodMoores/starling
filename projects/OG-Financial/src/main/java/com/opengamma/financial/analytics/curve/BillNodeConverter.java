@@ -71,7 +71,7 @@ public class BillNodeConverter extends CurveNodeVisitorAdapter<InstrumentDefinit
     ArgumentChecker.notNull(regionSource, "region source");
     ArgumentChecker.notNull(holidaySource, "holiday source");
     ArgumentChecker.notNull(securitySource, "security source");
-    ArgumentChecker.notNull(legalEntitySource, "legalEntitySource");
+    //ArgumentChecker.notNull(legalEntitySource, "legalEntitySource");
     ArgumentChecker.notNull(marketData, "market data");
     ArgumentChecker.notNull(dataId, "data id");
     ArgumentChecker.notNull(valuationTime, "valuation time");
@@ -105,27 +105,34 @@ public class BillNodeConverter extends CurveNodeVisitorAdapter<InstrumentDefinit
     final ExternalIdBundle identifiers = security.getExternalIdBundle();
     // TODO: [PLAT-5905] Add legal entity to node.
     // Legal Entity
-    final com.opengamma.core.legalentity.LegalEntity legalEntityFromSource = _legalEntitySource.getSingle(billSecurity.getLegalEntityId());
-    final Collection<Rating> ratings = legalEntityFromSource.getRatings();
-    final String ticker;
-    if (identifiers != null) {
-      final String isin = identifiers.getValue(ExternalSchemes.ISIN);
-      ticker = isin == null ? null : isin;
-    } else {
-      ticker = null;
-    }
-    final String shortName = legalEntityFromSource.getName();
-    Set<CreditRating> creditRatings = null;
-    for (final Rating rating : ratings) {
-      if (creditRatings == null) {
-        creditRatings = new HashSet<>();
+    final LegalEntity legalEntity;
+    if (_legalEntitySource != null) {
+      final com.opengamma.core.legalentity.LegalEntity legalEntityFromSource = _legalEntitySource.getSingle(billSecurity.getLegalEntityId());
+      final Collection<Rating> ratings = legalEntityFromSource.getRatings();
+      final String ticker;
+      if (identifiers != null) {
+        final String isin = identifiers.getValue(ExternalSchemes.ISIN);
+        ticker = isin == null ? null : isin;
+      } else {
+        ticker = null;
       }
-      //TODO seniority level needs to go into the credit rating
-      creditRatings.add(CreditRating.of(rating.getRater(), rating.getScore().toString(), true));
+      final String shortName = legalEntityFromSource.getName();
+      Set<CreditRating> creditRatings = null;
+      for (final Rating rating : ratings) {
+        if (creditRatings == null) {
+          creditRatings = new HashSet<>();
+        }
+        //TODO seniority level needs to go into the credit rating
+        creditRatings.add(CreditRating.of(rating.getRater(), rating.getScore().toString(), true));
+      }
+      final Region region = Region.of(regionId.getValue(), Country.of(regionId.getValue()), billSecurity.getCurrency());
+      legalEntity = new LegalEntity(ticker, shortName, creditRatings, null, region);
+    } else {
+      final Region region = Region.of(regionId.getValue(), Country.of(regionId.getValue()), billSecurity.getCurrency());
+      legalEntity = new LegalEntity(null, "", null, null, region);
     }
-    final Region region = Region.of(regionId.getValue(), Country.of(regionId.getValue()), billSecurity.getCurrency());
-    final LegalEntity legalEntity = new LegalEntity(ticker, shortName, creditRatings, null, region);
-    final BillSecurityDefinition securityDefinition = new BillSecurityDefinition(currency, maturityDate, 1, settlementDays, calendar, yieldConvention, dayCount, legalEntity);
+    final BillSecurityDefinition securityDefinition = new BillSecurityDefinition(currency, maturityDate, 1, settlementDays, calendar,
+        yieldConvention, dayCount, legalEntity);
     return BillTransactionDefinition.fromYield(securityDefinition, 1, _valuationTime, yield, calendar);
   }
 
