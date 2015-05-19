@@ -179,6 +179,12 @@ public class BondAndBondFutureTradeWithEntityConverter extends FinancialSecurity
     return getFixedCouponBond(security, legalEntity);
   }
 
+  @Override
+  public InstrumentDefinition<?> visitBillSecurity(final BillSecurity security) {
+    final LegalEntity legalEntity = getLegalEntityForBill(Collections.<String, String>emptyMap(), security);
+    return getBill(security, legalEntity);
+  }
+
   /**
    * Converts a bond or bond future trade into a {@link InstrumentDefinition}.
    * @param trade The trade, not null. Must be a {@link BondSecurity}, {@link BondFutureSecurity}, {@link BillSecurity}
@@ -247,8 +253,13 @@ public class BondAndBondFutureTradeWithEntityConverter extends FinancialSecurity
     final ZonedDateTime settlementDate = trade.getPremiumDate().atTime(settleTime).atZoneSameInstant(ZoneOffset.UTC);
     if (security instanceof BillSecurity) {
       final BillSecurity billSecurity = (BillSecurity) security;
-      final com.opengamma.core.legalentity.LegalEntity legalEntityFromSource = _legalEntitySource.getSingle(billSecurity.getLegalEntityId());
-      final LegalEntity legalEntity = convertToAnalyticsLegalEntity(legalEntityFromSource, security);
+      final LegalEntity legalEntity;
+      if (_legalEntitySource != null) {
+        final com.opengamma.core.legalentity.LegalEntity legalEntityFromSource = _legalEntitySource.getSingle(billSecurity.getLegalEntityId());
+        legalEntity = convertToAnalyticsLegalEntity(legalEntityFromSource, security);
+      } else {
+        legalEntity = getLegalEntityForBill(Collections.<String, String>emptyMap(), billSecurity);
+      }
       final BillSecurityDefinition underlying = getBill(billSecurity, legalEntity);
       return new BillTransactionDefinition(underlying, quantity, settlementDate, price);
     }
@@ -315,6 +326,32 @@ public class BondAndBondFutureTradeWithEntityConverter extends FinancialSecurity
       region = Region.of(security.getIssuerDomicile(), Country.of(security.getIssuerDomicile()), security.getCurrency());
     }
     final LegalEntity legalEntity = new LegalEntity(ticker, shortName, creditRatings, sector, region);
+    return legalEntity;
+  }
+
+  /**
+   * Constructs a legal entity for a {@link BillSecurity}
+   * @param tradeAttributes The trade attributes
+   * @param security The bill security
+   * @return A legal entity
+   */
+  public static LegalEntity getLegalEntityForBill(final Map<String, String> tradeAttributes, final BillSecurity security) {
+    final ExternalIdBundle identifiers = security.getExternalIdBundle();
+    final String ticker;
+    if (identifiers != null) {
+      final String isin = identifiers.getValue(ExternalSchemes.ISIN);
+      ticker = isin == null ? null : isin;
+    } else {
+      ticker = null;
+    }
+    final String regionName = security.getRegionId().getValue();
+    final Region region;
+    if (regionName.equals("SNAT")) { // Supranational
+      region = Region.of(regionName, null, security.getCurrency());
+    } else {
+      region = Region.of(regionName, Country.of(regionName), security.getCurrency());
+    }
+    final LegalEntity legalEntity = new LegalEntity(ticker, ticker, null, null, region);
     return legalEntity;
   }
 

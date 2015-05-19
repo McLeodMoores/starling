@@ -6,6 +6,7 @@
 package com.opengamma.financial.security;
 
 import com.opengamma.engine.target.ObjectComputationTargetType;
+import com.opengamma.financial.security.bond.BillSecurity;
 import com.opengamma.financial.security.bond.BondSecurity;
 import com.opengamma.financial.security.bond.CorporateBondSecurity;
 import com.opengamma.financial.security.bond.GovernmentBondSecurity;
@@ -80,6 +81,11 @@ public class FinancialSecurityTypes {
    * The Agricultural Future security type.
    */
   public static final ObjectComputationTargetType<AgricultureFutureSecurity> AGRICULTURE_FUTURE_SECURITY = ObjectComputationTargetType.of(AgricultureFutureSecurity.class);
+
+  /**
+   * The Bill security type.
+   */
+  public static final ObjectComputationTargetType<BillSecurity> BILL_SECURITY = ObjectComputationTargetType.of(BillSecurity.class);
 
   /**
    * The Bond Future Option security type.

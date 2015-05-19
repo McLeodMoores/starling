@@ -16,7 +16,7 @@ import com.opengamma.engine.function.FunctionExecutionContext;
 import com.opengamma.engine.value.ComputedValue;
 import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
-import com.opengamma.financial.security.bond.BondSecurity;
+import com.opengamma.financial.security.FinancialSecurity;
 
 /**
  *
@@ -28,7 +28,7 @@ public class BondMarketDirtyPriceFunction extends BondMarketDataFunction {
   }
 
   @Override
-  protected Set<ComputedValue> getComputedValues(final FunctionExecutionContext context, final double value, final BondSecurity security, final ComputationTargetSpecification target) {
+  protected Set<ComputedValue> getComputedValues(final FunctionExecutionContext context, final double value, final FinancialSecurity security, final ComputationTargetSpecification target) {
     final ValueSpecification specification = new ValueSpecification(ValueRequirementNames.MARKET_DIRTY_PRICE, target, createValueProperties().get());
     return Collections.singleton(new ComputedValue(specification, value * 100));
   }

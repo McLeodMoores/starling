@@ -33,6 +33,7 @@ import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.financial.OpenGammaCompilationContext;
 import com.opengamma.financial.analytics.model.BondAndBondFutureFunctionUtils;
 import com.opengamma.financial.security.FinancialSecurity;
+import com.opengamma.financial.security.bond.BillSecurity;
 import com.opengamma.financial.security.bond.BondSecurity;
 import com.opengamma.master.historicaltimeseries.HistoricalTimeSeriesResolver;
 import com.opengamma.util.ArgumentChecker;
@@ -78,7 +79,8 @@ public abstract class BondFromYieldFunction<T> extends AbstractFunction.NonCompi
 
   @Override
   public boolean canApplyTo(final FunctionCompilationContext context, final ComputationTarget target) {
-    return target.getTrade().getSecurity() instanceof BondSecurity;
+    final Security security = target.getTrade().getSecurity();
+    return security instanceof BondSecurity || security instanceof BillSecurity;
   }
 
   @Override

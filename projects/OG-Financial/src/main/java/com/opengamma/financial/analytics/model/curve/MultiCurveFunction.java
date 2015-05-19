@@ -27,6 +27,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.slf4j.Logger;
@@ -39,6 +40,7 @@ import org.threeten.bp.ZoneOffset;
 import org.threeten.bp.ZonedDateTime;
 
 import com.google.common.collect.Iterables;
+import com.google.common.collect.Sets;
 import com.opengamma.OpenGammaRuntimeException;
 import com.opengamma.analytics.financial.forex.method.FXMatrix;
 import com.opengamma.analytics.financial.instrument.InstrumentDefinition;
@@ -219,6 +221,8 @@ public abstract class MultiCurveFunction<T extends ParameterProviderInterface, U
   protected abstract class CurveCompiledFunctionDefinition extends AbstractInvokingCompiledFunction {
     /** The curve names */
     private final String[] _curveNames;
+    /** The currencies */
+    private final String[] _currencies;
     /** The exogenous requirements */
     private final Set<ValueRequirement> _exogenousRequirements;
     /** The set of results */
@@ -262,6 +266,7 @@ public abstract class MultiCurveFunction<T extends ParameterProviderInterface, U
       }
       _results.add(new ValueSpecification(CURVE_BUNDLE, ComputationTargetSpecification.NULL, properties));
       _results.add(new ValueSpecification(JACOBIAN_BUNDLE, ComputationTargetSpecification.NULL, properties));
+      _currencies = currencies;
     }
 
     @Override
@@ -271,23 +276,19 @@ public abstract class MultiCurveFunction<T extends ParameterProviderInterface, U
       final T knownData = getKnownData(inputs);
       final Clock snapshotClock = executionContext.getValuationClock();
       final ZonedDateTime now = ZonedDateTime.now(snapshotClock);
-
-      //To ensure that the ValueProperties matches the one created in getBundleProperties, the currencies are extracted
-      //from the fx matrix and given to the ValueProperties if they exist. This change results in the base classes
-      //needing to remove the curve sensitivity currencies from the curve ValueProperties
-      final Set<String> currencies = new HashSet<>();
-      for (final Currency currency : fxMatrix.getCurrencies().keySet()) {
-        currencies.add(currency.toString());
-      }
-      final String[] sensitivityCurrencies = currencies.toArray(new String[currencies.size()]);
       final ValueProperties.Builder propertiesBuilder = desiredValues.iterator().next().getConstraints().copy()
           .withoutAny(CURVE)
           .with(CURVE, Arrays.asList(_curveNames));
-      if (!currencies.isEmpty()) {
-        propertiesBuilder.with(CURVE_SENSITIVITY_CURRENCY, sensitivityCurrencies);
+      //TODO remove and use input properties
+      final Set<String> currencies = new HashSet<>();
+      currencies.addAll(Sets.newHashSet(_currencies));
+      for (final Map.Entry<Currency, Integer> entry : fxMatrix.getCurrencies().entrySet()) {
+        currencies.add(entry.getKey().getCode());
+      }
+      if (_currencies != null && _currencies.length > 0) {
+        propertiesBuilder.with(CURVE_SENSITIVITY_CURRENCY, currencies.toArray(new String[currencies.size()]));
       }
       final ValueProperties properties  = propertiesBuilder.get();
-
       final double absoluteTolerance = Double.parseDouble(Iterables.getOnlyElement(properties.getValues(PROPERTY_ROOT_FINDER_ABSOLUTE_TOLERANCE)));
       final double relativeTolerance = Double.parseDouble(Iterables.getOnlyElement(properties.getValues(PROPERTY_ROOT_FINDER_RELATIVE_TOLERANCE)));
       final int maxIterations = Integer.parseInt(Iterables.getOnlyElement(properties.getValues(PROPERTY_ROOT_FINDER_MAX_ITERATIONS)));

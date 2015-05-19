@@ -11,6 +11,7 @@ import java.util.Set;
 import org.apache.commons.lang.Validate;
 
 import com.opengamma.OpenGammaRuntimeException;
+import com.opengamma.core.id.ExternalSchemes;
 import com.opengamma.engine.ComputationTarget;
 import com.opengamma.engine.ComputationTargetSpecification;
 import com.opengamma.engine.function.AbstractFunction.NonCompiledInvoker;
@@ -20,8 +21,11 @@ import com.opengamma.engine.function.FunctionInputs;
 import com.opengamma.engine.target.ComputationTargetType;
 import com.opengamma.engine.value.ComputedValue;
 import com.opengamma.engine.value.ValueRequirement;
+import com.opengamma.financial.security.FinancialSecurity;
 import com.opengamma.financial.security.FinancialSecurityTypes;
+import com.opengamma.financial.security.bond.BillSecurity;
 import com.opengamma.financial.security.bond.BondSecurity;
+import com.opengamma.id.ExternalIdBundle;
 
 /**
  *
@@ -38,34 +42,35 @@ public abstract class BondMarketDataFunction extends NonCompiledInvoker {
   @Override
   public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
       final Set<ValueRequirement> desiredValues) {
-    final BondSecurity security;
+    final FinancialSecurity security;
     if (target.getType() == ComputationTargetType.TRADE) {
-      security = (BondSecurity) target.getTrade().getSecurity();
-    } else if (target.getSecurity() instanceof BondSecurity) {
-      security = (BondSecurity) target.getSecurity();
+      security = (FinancialSecurity) target.getTrade().getSecurity();
+    } else if (target.getSecurity() instanceof BondSecurity || target.getSecurity() instanceof BillSecurity) {
+      security = (FinancialSecurity) target.getSecurity();
     } else {
       throw new OpenGammaRuntimeException("Unexpected target type " + target.getType());
     }
     final Object value = inputs.getValue(_requirementName);
-    if (value == null) {
-      throw new OpenGammaRuntimeException("Could not get " + _requirementName);
-    }
     return getComputedValues(executionContext, (Double) value, security, target.toSpecification());
   }
 
   @Override
   public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
     if (target.getType() == ComputationTargetType.TRADE) {
-      return Collections.singleton(new ValueRequirement(_requirementName, ComputationTargetType.SECURITY, target.getTrade().getSecurity().getUniqueId()));
+      final FinancialSecurity security = (FinancialSecurity) target.getTrade().getSecurity();
+      final ExternalIdBundle id = security.getExternalIdBundle().withoutScheme(ExternalSchemes.ISIN);
+      return Collections.singleton(new ValueRequirement(_requirementName, ComputationTargetType.PRIMITIVE, id));
     }
-    return Collections.singleton(new ValueRequirement(_requirementName, target.toSpecification()));
+    final FinancialSecurity security = (FinancialSecurity) target.getSecurity();
+    final ExternalIdBundle id = security.getExternalIdBundle().withoutScheme(ExternalSchemes.ISIN);
+    return Collections.singleton(new ValueRequirement(_requirementName, ComputationTargetType.PRIMITIVE, id));
   }
 
   @Override
   public ComputationTargetType getTargetType() {
-    return FinancialSecurityTypes.BOND_SECURITY.or(ComputationTargetType.TRADE);
+    return FinancialSecurityTypes.BOND_SECURITY.or(FinancialSecurityTypes.BILL_SECURITY).or(ComputationTargetType.TRADE);
   }
 
-  protected abstract Set<ComputedValue> getComputedValues(final FunctionExecutionContext context, final double value, final BondSecurity security, final ComputationTargetSpecification target);
+  protected abstract Set<ComputedValue> getComputedValues(final FunctionExecutionContext context, final double value, final FinancialSecurity security, final ComputationTargetSpecification target);
 
 }

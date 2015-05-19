@@ -26,8 +26,8 @@ import org.threeten.bp.ZonedDateTime;
 
 import com.google.common.collect.Iterables;
 import com.opengamma.analytics.financial.interestrate.InstrumentDerivative;
-import com.opengamma.analytics.financial.interestrate.bond.definition.BondFixedTransaction;
 import com.opengamma.analytics.financial.provider.description.interestrate.IssuerProvider;
+import com.opengamma.core.security.Security;
 import com.opengamma.engine.ComputationTarget;
 import com.opengamma.engine.ComputationTargetSpecification;
 import com.opengamma.engine.function.AbstractFunction;
@@ -43,6 +43,7 @@ import com.opengamma.financial.analytics.curve.exposure.ConfigDBInstrumentExposu
 import com.opengamma.financial.analytics.curve.exposure.InstrumentExposuresProvider;
 import com.opengamma.financial.analytics.model.BondAndBondFutureFunctionUtils;
 import com.opengamma.financial.security.FinancialSecurity;
+import com.opengamma.financial.security.bond.BillSecurity;
 import com.opengamma.financial.security.bond.BondSecurity;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.async.AsynchronousExecution;
@@ -79,10 +80,9 @@ public abstract class BondFromYieldAndCurvesFunction extends AbstractFunction.No
     final ZonedDateTime now = ZonedDateTime.now(executionContext.getValuationClock());
     final Double yield = (Double) inputs.getValue(MARKET_YTM);
     final InstrumentDerivative derivative = BondAndBondFutureFunctionUtils.getBondOrBondFutureDerivative(executionContext, target, now, null);
-    final BondFixedTransaction bond = (BondFixedTransaction) derivative;
     final IssuerProvider issuerCurves = (IssuerProvider) inputs.getValue(CURVE_BUNDLE);
     final ValueSpecification spec = new ValueSpecification(_valueRequirementName, target.toSpecification(), properties);
-    return getResult(inputs, bond, issuerCurves, yield, spec);
+    return getResult(inputs, derivative, issuerCurves, yield, spec);
   }
 
   @Override
@@ -92,7 +92,8 @@ public abstract class BondFromYieldAndCurvesFunction extends AbstractFunction.No
 
   @Override
   public boolean canApplyTo(final FunctionCompilationContext context, final ComputationTarget target) {
-    return target.getTrade().getSecurity() instanceof BondSecurity;
+    final Security security = target.getTrade().getSecurity();
+    return security instanceof BondSecurity || security instanceof BillSecurity;
   }
 
   @Override
@@ -123,10 +124,13 @@ public abstract class BondFromYieldAndCurvesFunction extends AbstractFunction.No
       for (final String curveExposureConfig : curveExposureConfigs) {
         final Set<String> curveConstructionConfigurationNames = _instrumentExposuresProvider.getCurveConstructionConfigurationsForConfig(curveExposureConfig, target.getTrade());
         for (final String curveConstructionConfigurationName : curveConstructionConfigurationNames) {
-          final ValueProperties properties = ValueProperties.builder().with(CURVE_CONSTRUCTION_CONFIG, curveConstructionConfigurationName)
+          final ValueProperties properties = ValueProperties.builder()
+              .with(CURVE_CONSTRUCTION_CONFIG, curveConstructionConfigurationName)
               .with(PROPERTY_ROOT_FINDER_ABSOLUTE_TOLERANCE, constraints.getValues(PROPERTY_ROOT_FINDER_ABSOLUTE_TOLERANCE))
               .with(PROPERTY_ROOT_FINDER_RELATIVE_TOLERANCE, constraints.getValues(PROPERTY_ROOT_FINDER_RELATIVE_TOLERANCE))
-              .with(PROPERTY_ROOT_FINDER_MAX_ITERATIONS, constraints.getValues(PROPERTY_ROOT_FINDER_MAX_ITERATIONS)).with(PROPERTY_CURVE_TYPE, curveTypes).get();
+              .with(PROPERTY_ROOT_FINDER_MAX_ITERATIONS, constraints.getValues(PROPERTY_ROOT_FINDER_MAX_ITERATIONS))
+              .with(PROPERTY_CURVE_TYPE, curveTypes)
+              .get();
           requirements.add(new ValueRequirement(CURVE_BUNDLE, ComputationTargetSpecification.NULL, properties));
         }
       }
@@ -144,20 +148,25 @@ public abstract class BondFromYieldAndCurvesFunction extends AbstractFunction.No
    * @return The properties
    */
   protected ValueProperties.Builder getResultProperties(final ComputationTarget target) {
-    return createValueProperties().with(CALCULATION_METHOD, YIELD_METHOD).withAny(CURVE_EXPOSURES).withAny(PROPERTY_CURVE_TYPE).withAny(PROPERTY_ROOT_FINDER_ABSOLUTE_TOLERANCE)
-        .withAny(PROPERTY_ROOT_FINDER_RELATIVE_TOLERANCE).withAny(PROPERTY_ROOT_FINDER_MAX_ITERATIONS);
+    return createValueProperties()
+        .with(CALCULATION_METHOD, YIELD_METHOD)
+        .withAny(CURVE_EXPOSURES)
+        .withAny(PROPERTY_CURVE_TYPE)
+        .withAny(PROPERTY_ROOT_FINDER_ABSOLUTE_TOLERANCE)
+        .withAny(PROPERTY_ROOT_FINDER_RELATIVE_TOLERANCE)
+        .withAny(PROPERTY_ROOT_FINDER_MAX_ITERATIONS);
   }
 
   /**
    * Calculates the result.
    *
    * @param inputs The function inputs
-   * @param bond The bond transaction
+   * @param derivative The instrument transaction
    * @param issuerCurves The issuer and discounting curves
    * @param yield The yield of the bond
    * @param spec The result specification
    * @return The set of results
    */
-  protected abstract Set<ComputedValue> getResult(FunctionInputs inputs, BondFixedTransaction bond, IssuerProvider issuerCurves, double yield, ValueSpecification spec);
+  protected abstract Set<ComputedValue> getResult(FunctionInputs inputs, InstrumentDerivative derivative, IssuerProvider issuerCurves, double yield, ValueSpecification spec);
 
 }

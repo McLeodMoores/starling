@@ -1,14 +1,16 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.timeseries;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Set;
 
 import org.fudgemsg.FudgeField;
 import org.fudgemsg.FudgeMsg;
@@ -47,27 +49,27 @@ public final class HistoricalTimeSeriesBundle {
     }
 
     private void addImpl(final ExternalIdBundle ids, final HistoricalTimeSeries hts) {
-      for (ExternalId id : ids) {
+      for (final ExternalId id : ids) {
         addImpl(id, hts);
       }
     }
-    
+
     /*
-     * Added synchronized here because the hashmap was getting corrupted by concurrent access. 
+     * Added synchronized here because the hashmap was getting corrupted by concurrent access.
      */
     private synchronized void lookup() {
       if (_lookup != null) {
         return;
       }
       _lookup = new HashMap<ExternalId, HistoricalTimeSeries>();
-      for (Map.Entry<ExternalIdBundle, HistoricalTimeSeries> e : _timeSeries.entrySet()) {
+      for (final Map.Entry<ExternalIdBundle, HistoricalTimeSeries> e : _timeSeries.entrySet()) {
         addImpl(e.getKey(), e.getValue());
       }
     }
 
     public HistoricalTimeSeries get(final ExternalIdBundle bundle) {
       lookup();
-      for (ExternalId id : bundle) {
+      for (final ExternalId id : bundle) {
         final HistoricalTimeSeries hts = getImpl(id);
         if (hts != null) {
           return hts;
@@ -82,7 +84,7 @@ public final class HistoricalTimeSeriesBundle {
     }
 
     /*
-     * Added synchronized here because the hashmap was getting corrupted by concurrent access. 
+     * Added synchronized here because the hashmap was getting corrupted by concurrent access.
      */
     public synchronized void add(final ExternalIdBundle bundle, final HistoricalTimeSeries timeSeries) {
       _timeSeries.put(bundle, timeSeries);
@@ -90,11 +92,11 @@ public final class HistoricalTimeSeriesBundle {
         addImpl(bundle, timeSeries);
       }
     }
-    
+
     public int size() {
       return _timeSeries.size();
     }
-    
+
     @Override
     public Iterator<HistoricalTimeSeries> iterator() {
       return _timeSeries.values().iterator();
@@ -102,7 +104,7 @@ public final class HistoricalTimeSeriesBundle {
 
     public MutableFudgeMsg toFudgeMsg(final FudgeSerializer context) {
       final MutableFudgeMsg msg = context.newMessage();
-      for (Map.Entry<ExternalIdBundle, HistoricalTimeSeries> data : _timeSeries.entrySet()) {
+      for (final Map.Entry<ExternalIdBundle, HistoricalTimeSeries> data : _timeSeries.entrySet()) {
         context.addToMessageWithClassHeaders(msg, null, 1, data.getKey(), ExternalIdBundle.class);
         context.addToMessageWithClassHeaders(msg, null, 2, data.getValue(), HistoricalTimeSeries.class);
       }
@@ -157,7 +159,7 @@ public final class HistoricalTimeSeriesBundle {
     }
     return e.get(ids);
   }
-  
+
   public int size(final String field) {
     ArgumentChecker.notNull(field, "field");
     final Entry e = _data.get(field);
@@ -166,11 +168,20 @@ public final class HistoricalTimeSeriesBundle {
     }
     return e.size();
   }
-  
+
+  public synchronized Set<String> getFields() {
+    return Collections.unmodifiableSet(_data.keySet());
+  }
+
+  public synchronized Map<ExternalIdBundle, HistoricalTimeSeries> getEntryForField(final String field) {
+    final Entry entry = _data.get(field);
+    return Collections.unmodifiableMap(entry._timeSeries);
+  }
+
   /**
    * Gets an iterator for the time-series stored under the given field name. This iterates over the time-series in the
    * same order as they were added.
-   * 
+   *
    * @param field  the data field, not null
    * @return an iterator, not null
    */
@@ -185,9 +196,9 @@ public final class HistoricalTimeSeriesBundle {
 
   protected HistoricalTimeSeriesBundle apply(final Function3<String, ExternalIdBundle, HistoricalTimeSeries, HistoricalTimeSeries> function) {
     final HistoricalTimeSeriesBundle result = new HistoricalTimeSeriesBundle();
-    for (Map.Entry<String, Entry> fieldTimeSeries : _data.entrySet()) {
+    for (final Map.Entry<String, Entry> fieldTimeSeries : _data.entrySet()) {
       final Entry newEntry = new Entry();
-      for (Map.Entry<ExternalIdBundle, HistoricalTimeSeries> timeSeries : fieldTimeSeries.getValue()._timeSeries.entrySet()) {
+      for (final Map.Entry<ExternalIdBundle, HistoricalTimeSeries> timeSeries : fieldTimeSeries.getValue()._timeSeries.entrySet()) {
         newEntry._timeSeries.put(timeSeries.getKey(), function.execute(fieldTimeSeries.getKey(), timeSeries.getKey(), timeSeries.getValue()));
       }
       result._data.put(fieldTimeSeries.getKey(), newEntry);
@@ -197,7 +208,7 @@ public final class HistoricalTimeSeriesBundle {
 
   public MutableFudgeMsg toFudgeMsg(final FudgeSerializer context) {
     final MutableFudgeMsg msg = context.newMessage();
-    for (Map.Entry<String, Entry> entry : _data.entrySet()) {
+    for (final Map.Entry<String, Entry> entry : _data.entrySet()) {
       msg.add(entry.getKey(), entry.getValue().toFudgeMsg(context));
     }
     return msg;
@@ -205,7 +216,7 @@ public final class HistoricalTimeSeriesBundle {
 
   public static HistoricalTimeSeriesBundle fromFudgeMsg(final FudgeDeserializer context, final FudgeMsg msg) {
     final HistoricalTimeSeriesBundle bundle = new HistoricalTimeSeriesBundle();
-    for (FudgeField field : msg) {
+    for (final FudgeField field : msg) {
       if (field.getValue() instanceof FudgeMsg) {
         bundle._data.put(field.getName(), Entry.fromFudgeMsg(context, (FudgeMsg) field.getValue()));
       }
