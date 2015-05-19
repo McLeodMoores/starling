@@ -8,6 +8,12 @@ package com.opengamma.financial.analytics.model.curve;
 import static com.opengamma.engine.value.ValuePropertyNames.CURVE;
 import static com.opengamma.engine.value.ValuePropertyNames.CURVE_CONSTRUCTION_CONFIG;
 import static com.opengamma.engine.value.ValuePropertyNames.CURVE_SENSITIVITY_CURRENCY;
+import static com.opengamma.engine.value.ValueRequirementNames.CURVE_BUNDLE;
+import static com.opengamma.engine.value.ValueRequirementNames.CURVE_DEFINITION;
+import static com.opengamma.engine.value.ValueRequirementNames.CURVE_INSTRUMENT_CONVERSION_HISTORICAL_TIME_SERIES;
+import static com.opengamma.engine.value.ValueRequirementNames.CURVE_MARKET_DATA;
+import static com.opengamma.engine.value.ValueRequirementNames.CURVE_SPECIFICATION;
+import static com.opengamma.engine.value.ValueRequirementNames.FX_MATRIX;
 import static com.opengamma.engine.value.ValueRequirementNames.JACOBIAN_BUNDLE;
 import static com.opengamma.engine.value.ValueRequirementNames.YIELD_CURVE;
 import static com.opengamma.financial.analytics.model.curve.CurveCalculationPropertyNamesAndValues.DISCOUNTING;
@@ -26,10 +32,15 @@ import org.threeten.bp.ZonedDateTime;
 
 import com.google.common.collect.LinkedListMultimap;
 import com.opengamma.OpenGammaRuntimeException;
+import com.opengamma.analytics.financial.curve.interestrate.generator.GeneratorCurveYieldConstant;
 import com.opengamma.analytics.financial.curve.interestrate.generator.GeneratorCurveYieldInterpolated;
 import com.opengamma.analytics.financial.curve.interestrate.generator.GeneratorYDCurve;
 import com.opengamma.analytics.financial.forex.method.FXMatrix;
 import com.opengamma.analytics.financial.instrument.InstrumentDefinition;
+import com.opengamma.analytics.financial.instrument.bond.BillSecurityDefinition;
+import com.opengamma.analytics.financial.instrument.bond.BillTransactionDefinition;
+import com.opengamma.analytics.financial.instrument.bond.BondFixedSecurityDefinition;
+import com.opengamma.analytics.financial.instrument.bond.BondFixedTransactionDefinition;
 import com.opengamma.analytics.financial.instrument.index.IborIndex;
 import com.opengamma.analytics.financial.instrument.index.IndexON;
 import com.opengamma.analytics.financial.interestrate.InstrumentDerivative;
@@ -58,6 +69,7 @@ import com.opengamma.core.legalentity.LegalEntitySource;
 import com.opengamma.core.marketdatasnapshot.SnapshotDataBundle;
 import com.opengamma.core.region.RegionSource;
 import com.opengamma.core.security.SecuritySource;
+import com.opengamma.core.value.MarketDataRequirementNames;
 import com.opengamma.engine.ComputationTargetSpecification;
 import com.opengamma.engine.function.CompiledFunctionDefinition;
 import com.opengamma.engine.function.FunctionExecutionContext;
@@ -68,9 +80,13 @@ import com.opengamma.engine.value.ValueRequirement;
 import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.financial.OpenGammaExecutionContext;
+import com.opengamma.financial.analytics.conversion.BondAndBondFutureTradeWithEntityConverter;
+import com.opengamma.financial.analytics.curve.AbstractCurveDefinition;
+import com.opengamma.financial.analytics.curve.AbstractCurveSpecification;
 import com.opengamma.financial.analytics.curve.BillNodeConverter;
 import com.opengamma.financial.analytics.curve.BondNodeConverter;
 import com.opengamma.financial.analytics.curve.CashNodeConverter;
+import com.opengamma.financial.analytics.curve.ConstantCurveSpecification;
 import com.opengamma.financial.analytics.curve.CurveConstructionConfiguration;
 import com.opengamma.financial.analytics.curve.CurveDefinition;
 import com.opengamma.financial.analytics.curve.CurveGroupConfiguration;
@@ -91,7 +107,7 @@ import com.opengamma.financial.analytics.curve.SwapNodeConverter;
 import com.opengamma.financial.analytics.ircurve.strips.CurveNodeVisitor;
 import com.opengamma.financial.analytics.ircurve.strips.CurveNodeWithIdentifier;
 import com.opengamma.financial.analytics.timeseries.HistoricalTimeSeriesBundle;
-import com.opengamma.financial.convention.ConventionBundleSource;
+import com.opengamma.financial.security.FinancialSecurity;
 import com.opengamma.id.ExternalId;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
@@ -191,7 +207,7 @@ public class IssuerProviderDiscountingFunction extends
           .with(CURVE_CONSTRUCTION_CONFIG, _curveConstructionConfiguration.getName())
           .get();
       final HistoricalTimeSeriesBundle timeSeries =
-          (HistoricalTimeSeriesBundle) inputs.getValue(new ValueRequirement(ValueRequirementNames.CURVE_INSTRUMENT_CONVERSION_HISTORICAL_TIME_SERIES,
+          (HistoricalTimeSeriesBundle) inputs.getValue(new ValueRequirement(CURVE_INSTRUMENT_CONVERSION_HISTORICAL_TIME_SERIES,
               ComputationTargetSpecification.NULL, curveConstructionProperties));
       final int nGroups = _curveConstructionConfiguration.getCurveGroups().size();
       final MultiCurveBundle<GeneratorYDCurve>[] curveBundles = new MultiCurveBundle[nGroups];
@@ -210,26 +226,65 @@ public class IssuerProviderDiscountingFunction extends
           final List<IndexON> overnightIndexList = new ArrayList<>();
           final String curveName = entry.getKey();
           final ValueProperties properties = ValueProperties.builder().with(CURVE, curveName).get();
-          final CurveSpecification specification =
-              (CurveSpecification) inputs.getValue(new ValueRequirement(ValueRequirementNames.CURVE_SPECIFICATION, ComputationTargetSpecification.NULL, properties));
-          final CurveDefinition definition =
-              (CurveDefinition) inputs.getValue(new ValueRequirement(ValueRequirementNames.CURVE_DEFINITION, ComputationTargetSpecification.NULL, properties));
+          final AbstractCurveSpecification specification =
+              (AbstractCurveSpecification) inputs.getValue(new ValueRequirement(CURVE_SPECIFICATION, ComputationTargetSpecification.NULL, properties));
+          final AbstractCurveDefinition definition =
+              (AbstractCurveDefinition) inputs.getValue(new ValueRequirement(CURVE_DEFINITION, ComputationTargetSpecification.NULL, properties));
           final SnapshotDataBundle snapshot =
-              (SnapshotDataBundle) inputs.getValue(new ValueRequirement(ValueRequirementNames.CURVE_MARKET_DATA, ComputationTargetSpecification.NULL, properties));
-          final int nNodes = specification.getNodes().size();
-          final InstrumentDerivative[] derivativesForCurve = new InstrumentDerivative[nNodes];
-          final double[] parameterGuessForCurves = new double[nNodes];
-          int k = 0;
-          for (final CurveNodeWithIdentifier node : specification.getNodes()) { // Node points - start
-            final Double marketData = snapshot.getDataPoint(node.getIdentifier());
-            if (marketData == null) {
-              throw new OpenGammaRuntimeException("Could not get market data for " + node.getIdentifier());
+              (SnapshotDataBundle) inputs.getValue(new ValueRequirement(CURVE_MARKET_DATA, ComputationTargetSpecification.NULL, properties));
+          final InstrumentDerivative[] derivativesForCurve;
+          final double[] parameterGuessForCurves;
+          if (specification instanceof CurveSpecification) {
+            final CurveSpecification curveSpecification = (CurveSpecification) specification;
+            final int nNodes = curveSpecification.getNodes().size();
+            derivativesForCurve = new InstrumentDerivative[nNodes];
+            parameterGuessForCurves = new double[nNodes];
+            int k = 0;
+            for (final CurveNodeWithIdentifier node : curveSpecification.getNodes()) { // Node points - start
+              final Double marketData = snapshot.getDataPoint(node.getIdentifier());
+              if (marketData == null) {
+                throw new OpenGammaRuntimeException("Could not get market data for " + node.getIdentifier());
+              }
+              parameterGuessForCurves[k] = 0.02; // TODO: [PlAT-5883] Get a better starting point.
+              final InstrumentDefinition<?> definitionForNode = node.getCurveNode().accept(getCurveNodeConverter(context,
+                  snapshot, node.getIdentifier(), timeSeries, now, fx));
+              derivativesForCurve[k++] = getCurveNodeConverter(conventionSource).getDerivative(node, definitionForNode, now, timeSeries);
             }
-            parameterGuessForCurves[k] = 0.02; // TODO: [PlAT-5883] Get a better starting point.
-            final InstrumentDefinition<?> definitionForNode = node.getCurveNode().accept(getCurveNodeConverter(context,
-                snapshot, node.getIdentifier(), timeSeries, now, fx));
-            derivativesForCurve[k++] = getCurveNodeConverter(conventionSource).getDerivative(node, definitionForNode, now, timeSeries);
-          } // Node points - end
+            final GeneratorYDCurve generator = getGenerator((CurveDefinition) definition, now.toLocalDate());
+            singleCurves[j++] = new SingleCurveBundle<>(curveName, derivativesForCurve, generator.initialGuess(parameterGuessForCurves), generator);
+          } else if (specification instanceof ConstantCurveSpecification) {
+            // TODO fix this
+            final ConstantCurveSpecification constantSpecification = (ConstantCurveSpecification) specification;
+            if (!constantSpecification.getDataField().equals(MarketDataRequirementNames.YIELD_YIELD_TO_MATURITY_MID)) {
+              throw new OpenGammaRuntimeException("Cannot handle field " + constantSpecification.getDataField());
+            }
+            derivativesForCurve = new InstrumentDerivative[1];
+            parameterGuessForCurves = new double[] {0.03};
+            final FinancialSecurity security = (FinancialSecurity) securitySource.getSingle(constantSpecification.getIdentifier().toBundle());
+            final HolidaySource holidaySource = OpenGammaExecutionContext.getHolidaySource(context);
+            final RegionSource regionSource = OpenGammaExecutionContext.getRegionSource(context);
+            final BondAndBondFutureTradeWithEntityConverter converter = new BondAndBondFutureTradeWithEntityConverter(holidaySource, conventionSource,
+                regionSource, securitySource, null);
+            final InstrumentDefinition<?> instrumentDefinition = security.accept(converter);
+            final InstrumentDefinition<?> transaction;
+            final Double marketData = snapshot.getDataPoint(constantSpecification.getIdentifier());
+            if (marketData == null) {
+              throw new OpenGammaRuntimeException("Could not get market data for " + constantSpecification.getIdentifier());
+            }
+            if (instrumentDefinition instanceof BondFixedSecurityDefinition) {
+              transaction = BondFixedTransactionDefinition.fromYield((BondFixedSecurityDefinition) instrumentDefinition, 1, now, marketData);
+            } else if (instrumentDefinition instanceof BillSecurityDefinition) {
+              transaction = BillTransactionDefinition.fromYield((BillSecurityDefinition) instrumentDefinition, 1, now, marketData, null);
+            } else {
+              throw new OpenGammaRuntimeException("Cannot handle definitions of type " + instrumentDefinition.getClass());
+            }
+            final InstrumentDerivative derivative = transaction.toDerivative(now);
+            final GeneratorCurveYieldConstant generator = new GeneratorCurveYieldConstant();
+            singleCurves[j++] = new SingleCurveBundle<GeneratorYDCurve>(curveName, new InstrumentDerivative[] {derivative},
+                generator.initialGuess(parameterGuessForCurves), generator);
+          } else {
+            throw new OpenGammaRuntimeException("Cannot handle specifications of type " + specification.getClass() + ": " + specification);
+          }
           for (final CurveTypeConfiguration type : entry.getValue()) { // Type - start
             if (type instanceof DiscountingCurveTypeConfiguration) {
               discountingMap.put(curveName, CurveUtils.getCurrencyFromConfiguration((DiscountingCurveTypeConfiguration) type));
@@ -250,8 +305,6 @@ public class IssuerProviderDiscountingFunction extends
           if (!overnightIndexList.isEmpty()) {
             forwardONMap.put(curveName, overnightIndexList.toArray(new IndexON[overnightIndexList.size()]));
           }
-          final GeneratorYDCurve generator = getGenerator(definition, now.toLocalDate());
-          singleCurves[j++] = new SingleCurveBundle<>(curveName, derivativesForCurve, generator.initialGuess(parameterGuessForCurves), generator);
         }
         final MultiCurveBundle<GeneratorYDCurve> groupBundle = new MultiCurveBundle<>(singleCurves);
         curveBundles[i++] = groupBundle;
@@ -277,13 +330,13 @@ public class IssuerProviderDiscountingFunction extends
 
     @Override
     protected IssuerProviderInterface getKnownData(final FunctionInputs inputs) {
-      final FXMatrix fxMatrix = (FXMatrix) inputs.getValue(ValueRequirementNames.FX_MATRIX);
+      final FXMatrix fxMatrix = (FXMatrix) inputs.getValue(FX_MATRIX);
       //TODO requires that the discounting curves are supplied externally
       IssuerProviderDiscount knownData;
       if (getExogenousRequirements().isEmpty()) {
         knownData = new IssuerProviderDiscount(fxMatrix);
       } else {
-        knownData = new IssuerProviderDiscount((MulticurveProviderDiscount) inputs.getValue(ValueRequirementNames.CURVE_BUNDLE));
+        knownData = new IssuerProviderDiscount((MulticurveProviderDiscount) inputs.getValue(CURVE_BUNDLE));
         knownData.getMulticurveProvider().setForexMatrix(fxMatrix);
       }
       return knownData;
@@ -312,14 +365,13 @@ public class IssuerProviderDiscountingFunction extends
         final SnapshotDataBundle marketData, final ExternalId dataId, final HistoricalTimeSeriesBundle historicalData,
         final ZonedDateTime valuationTime, final FXMatrix fx) {
       final ConventionSource conventionSource = OpenGammaExecutionContext.getConventionSource(context);
-      final ConventionBundleSource conventionBundleSource = OpenGammaExecutionContext.getConventionBundleSource(context);
       final HolidaySource holidaySource = OpenGammaExecutionContext.getHolidaySource(context);
       final RegionSource regionSource = OpenGammaExecutionContext.getRegionSource(context);
       final SecuritySource securitySource = OpenGammaExecutionContext.getSecuritySource(context);
       final LegalEntitySource legalEntitySource = OpenGammaExecutionContext.getLegalEntitySource(context);
       return CurveNodeVisitorAdapter.<InstrumentDefinition<?>>builder()
           .billNodeVisitor(new BillNodeConverter(holidaySource, regionSource, securitySource, legalEntitySource, marketData, dataId, valuationTime))
-          .bondNodeVisitor(new BondNodeConverter(conventionBundleSource, holidaySource, regionSource, securitySource, marketData, dataId, valuationTime))
+          .bondNodeVisitor(new BondNodeConverter(conventionSource, holidaySource, regionSource, securitySource, marketData, dataId, valuationTime))
           .cashNodeVisitor(new CashNodeConverter(securitySource, conventionSource, holidaySource, regionSource, marketData, dataId, valuationTime))
           .fraNode(new FRANodeConverter(securitySource, conventionSource, holidaySource, regionSource, marketData, dataId, valuationTime))
           .fxForwardNode(new FXForwardNodeConverter(conventionSource, holidaySource, regionSource, marketData, dataId, valuationTime))
