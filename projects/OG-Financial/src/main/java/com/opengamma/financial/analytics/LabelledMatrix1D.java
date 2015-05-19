@@ -392,5 +392,22 @@ public abstract class LabelledMatrix1D<S extends Comparable<? super S>, T> {
     }
     return getMatrix(_keys, _labels, values);
   }
+  
+  public String toString() {
+    StringBuilder sb = new StringBuilder();
+    Object[] labels = getLabels();
+    double[] values = getValues();
+    sb.append("LabelledMatrix1D[");
+    for (int i = 0; i < labels.length; i++) {
+      sb.append(labels[i]);
+      sb.append("=");
+      sb.append(values[i]);
+      if (i < labels.length - 1) {
+        sb.append(", ");
+      }
+    }
+    sb.append("]");
+    return sb.toString();
+  }
 
 }
