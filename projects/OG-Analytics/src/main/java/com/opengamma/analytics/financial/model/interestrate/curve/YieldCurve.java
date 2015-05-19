@@ -121,5 +121,8 @@ public class YieldCurve extends YieldAndDiscountCurve {
     final YieldCurve other = (YieldCurve) obj;
     return ObjectUtils.equals(_curve, other._curve);
   }
-
+  
+  public String toString() {
+    return "YieldCurve[" + _curve.toString() + "]";
+  }
 }
