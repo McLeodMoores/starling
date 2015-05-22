@@ -2,6 +2,10 @@
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
  *
  * Please see distribution for license.
+ *
+ * Modified by McLeod Moores Software Limited.
+ *
+ * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.financial.analytics.curve;
 
@@ -25,7 +29,6 @@ import com.opengamma.financial.analytics.ircurve.strips.CalendarSwapNode;
 import com.opengamma.financial.analytics.ircurve.strips.CashNode;
 import com.opengamma.financial.analytics.ircurve.strips.ContinuouslyCompoundedRateNode;
 import com.opengamma.financial.analytics.ircurve.strips.CreditSpreadNode;
-import com.opengamma.financial.analytics.ircurve.strips.CurveNode;
 import com.opengamma.financial.analytics.ircurve.strips.CurveNodeVisitor;
 import com.opengamma.financial.analytics.ircurve.strips.DeliverableSwapFutureNode;
 import com.opengamma.financial.analytics.ircurve.strips.DiscountFactorNode;
@@ -69,6 +72,7 @@ import com.opengamma.financial.convention.VanillaIborLegConvention;
 import com.opengamma.financial.convention.VanillaIborLegRollDateConvention;
 import com.opengamma.financial.security.bond.BillSecurity;
 import com.opengamma.financial.security.bond.BondSecurity;
+import com.opengamma.financial.security.index.IborIndex;
 import com.opengamma.financial.security.index.OvernightIndex;
 import com.opengamma.financial.security.index.PriceIndex;
 import com.opengamma.id.VersionCorrection;
@@ -76,9 +80,15 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
 
 /**
- * Returns all of the currencies relevant for a {@link CurveNode}. This information is pulled from
- * the convention(s) associated with the node. Returns null if there are no currencies applicable
+ * Returns all of the currencies relevant for a {@link com.opengamma.financial.analytics.ircurve.strips.CurveNode}.
+ * This information is pulled from the convention(s) associated with the node. Returns null if there are no currencies applicable
  * to the curve node.
+ * <p>
+ * This code differs from the base OpenGamma release in the way that it handles indices (ibor, overnight and price). The
+ * convention source is first searched and then the security source is searched only if no convention is found. This is to
+ * remove the requirement to have a security for each underlying, which is overly restrictive in cases where all useful
+ * information comes from the convention. However, backwards compatibility is maintained in the case where a security is loaded but not
+ * an underlying convention
  */
 public class CurveNodeCurrencyVisitor implements CurveNodeVisitor<Set<Currency>>, FinancialConventionVisitor<Set<Currency>> {
   /** The logger */
@@ -147,7 +157,8 @@ public class CurveNodeCurrencyVisitor implements CurveNodeVisitor<Set<Currency>>
       throw new OpenGammaRuntimeException("Config source was null");
     }
     final CurveNodeIdMapper idMapper = _configSource.getSingle(CurveNodeIdMapper.class, node.getCurveNodeIdMapperName(), VersionCorrection.LATEST);
-    final Security security = _securitySource.getSingle(idMapper.getBillNodeId(null, node.getMaturityTenor()).toBundle()); // curve date is not relevant for bills
+    final Security security =
+        _securitySource.getSingle(idMapper.getBillNodeId(null, node.getMaturityTenor()).toBundle()); // curve date is not relevant for bills
     if (security == null) {
       throw new OpenGammaRuntimeException("Security underlying bill node " + node + " was not present in security master");
     }
@@ -163,7 +174,8 @@ public class CurveNodeCurrencyVisitor implements CurveNodeVisitor<Set<Currency>>
       throw new OpenGammaRuntimeException("Config source was null");
     }
     final CurveNodeIdMapper idMapper = _configSource.getSingle(CurveNodeIdMapper.class, node.getCurveNodeIdMapperName(), VersionCorrection.LATEST);
-    final Security security = _securitySource.getSingle(idMapper.getBondNodeId(null, node.getMaturityTenor()).toBundle()); // curve date is not relevant for bonds
+    final Security security =
+        _securitySource.getSingle(idMapper.getBondNodeId(null, node.getMaturityTenor()).toBundle()); // curve date is not relevant for bonds
     if (security == null) {
       throw new OpenGammaRuntimeException("Security underlying bond node " + node + " was not present in security master");
     }
@@ -189,7 +201,7 @@ public class CurveNodeCurrencyVisitor implements CurveNodeVisitor<Set<Currency>>
       // then try with the security source.
       final Security security = _securitySource.getSingle(node.getConvention().toBundle());
       if (security == null) {
-        throw new OpenGammaRuntimeException("Cash node in curve points to " + node.getConvention() + " which has not been loaded. Load by putting identifier into 'Add security' dialog.");
+        throw new OpenGammaRuntimeException("Could not get security with id " + node.getConvention());
       }
       if (security instanceof com.opengamma.financial.security.index.IborIndex) {
         final com.opengamma.financial.security.index.IborIndex indexSecurity = (com.opengamma.financial.security.index.IborIndex) security;
@@ -266,18 +278,28 @@ public class CurveNodeCurrencyVisitor implements CurveNodeVisitor<Set<Currency>>
     final FinancialConvention convention = _conventionSource.getSingle(node.getFutureConvention(), FinancialConvention.class);
     if (convention instanceof InterestRateFutureConvention) {
       final InterestRateFutureConvention irFutureConvention = (InterestRateFutureConvention) convention;
-      final IborIndexConvention indexConvention = _conventionSource.getSingle(irFutureConvention.getIndexConvention(), IborIndexConvention.class);
-      if (indexConvention == null) {
-        throw new OpenGammaRuntimeException("Convention with id " + irFutureConvention.getIndexConvention() + " was null");
+      try {
+        final IborIndexConvention indexConvention = _conventionSource.getSingle(irFutureConvention.getIndexConvention(), IborIndexConvention.class);
+        return indexConvention.accept(this);
+      } catch (final DataNotFoundException e) {
+        final Security security = _securitySource.getSingle(irFutureConvention.getIndexConvention().toBundle());
+        if (security instanceof IborIndex) {
+          return _conventionSource.getSingle(((IborIndex) security).getConventionId(), IborIndexConvention.class).accept(this);
+        }
+        throw new OpenGammaRuntimeException("Could not get security or convention with id " + irFutureConvention.getIndexConvention());
       }
-      return indexConvention.accept(this);
     } else if (convention instanceof FederalFundsFutureConvention) {
       final FederalFundsFutureConvention ffFutureConvention = (FederalFundsFutureConvention) convention;
-      final OvernightIndexConvention indexConvention = _conventionSource.getSingle(ffFutureConvention.getIndexConvention(), OvernightIndexConvention.class);
-      if (indexConvention == null) {
-        throw new OpenGammaRuntimeException("Convention with id " + ffFutureConvention.getIndexConvention() + " was null");
+      try {
+        final OvernightIndexConvention indexConvention = _conventionSource.getSingle(ffFutureConvention.getIndexConvention(), OvernightIndexConvention.class);
+        return indexConvention.accept(this);
+      } catch (final DataNotFoundException e) {
+        final Security security = _securitySource.getSingle(ffFutureConvention.getIndexConvention().toBundle());
+        if (security instanceof OvernightIndex) {
+          return _conventionSource.getSingle(((OvernightIndex) security).getConventionId(), IborIndexConvention.class).accept(this);
+        }
+        throw new OpenGammaRuntimeException("Could not get security or convention with id " + ffFutureConvention.getIndexConvention());
       }
-      return indexConvention.accept(this);
     }
     throw new OpenGammaRuntimeException("Unhandled convention type " + convention);
   }
@@ -323,12 +345,14 @@ public class CurveNodeCurrencyVisitor implements CurveNodeVisitor<Set<Currency>>
   public Set<Currency> visitCompoundingIborLegConvention(final CompoundingIborLegConvention convention) {
     final Security sec = _securitySource.getSingle(convention.getIborIndexConvention().toBundle());
     if (sec == null) {
-      throw new OpenGammaRuntimeException("CurveNodeCurrencyVisitor.visitCompoundingIborLegConvention: Ibor index with id " + convention.getIborIndexConvention() + " was null");
+      throw new OpenGammaRuntimeException("CurveNodeCurrencyVisitor.visitCompoundingIborLegConvention: Ibor index with id "
+          + convention.getIborIndexConvention() + " was null");
     }
     final com.opengamma.financial.security.index.IborIndex indexSecurity = (com.opengamma.financial.security.index.IborIndex) sec;
     final IborIndexConvention indexConvention = _conventionSource.getSingle(indexSecurity.getConventionId(), IborIndexConvention.class);
     if (indexConvention == null) {
-      throw new OpenGammaRuntimeException("CurveNodeCurrencyVisitor.visitCompoundingIborLegConvention: Convention with id " + indexSecurity.getConventionId() + " was null");
+      throw new OpenGammaRuntimeException("CurveNodeCurrencyVisitor.visitCompoundingIborLegConvention: Convention with id "
+          + indexSecurity.getConventionId() + " was null");
     }
     return indexConvention.accept(this);
   }
@@ -402,15 +426,18 @@ public class CurveNodeCurrencyVisitor implements CurveNodeVisitor<Set<Currency>>
   public Set<Currency> visitInflationLegConvention(final InflationLegConvention convention) {
     final Security sec = _securitySource.getSingle(convention.getPriceIndexConvention().toBundle());
     if (sec == null) {
-      throw new OpenGammaRuntimeException("CurveNodeCurrencyVisitor.visitInflationLegConvention: index with id " + convention.getPriceIndexConvention() + " was null");
+      throw new OpenGammaRuntimeException("CurveNodeCurrencyVisitor.visitInflationLegConvention: index with id "
+          + convention.getPriceIndexConvention() + " was null");
     }
     if (!(sec instanceof PriceIndex)) {
-      throw new OpenGammaRuntimeException("CurveNodeCurrencyVisitor.visitInflationLegConvention: index with id " + convention.getPriceIndexConvention() + " not of type PriceIndex");
+      throw new OpenGammaRuntimeException("CurveNodeCurrencyVisitor.visitInflationLegConvention: index with id "
+          + convention.getPriceIndexConvention() + " not of type PriceIndex");
     }
     final PriceIndex indexSecurity = (PriceIndex) sec;
     final PriceIndexConvention indexConvention = _conventionSource.getSingle(indexSecurity.getConventionId(), PriceIndexConvention.class);
     if (indexConvention == null) {
-      throw new OpenGammaRuntimeException("CurveNodeCurrencyVisitor.visitInflationLegConvention: Convention with id " + indexSecurity.getConventionId() + " was null");
+      throw new OpenGammaRuntimeException("CurveNodeCurrencyVisitor.visitInflationLegConvention: Convention with id "
+          + indexSecurity.getConventionId() + " was null");
     }
     return indexConvention.accept(this);
   }
@@ -506,12 +533,14 @@ public class CurveNodeCurrencyVisitor implements CurveNodeVisitor<Set<Currency>>
   public Set<Currency> visitVanillaIborLegRollDateConvention(final VanillaIborLegRollDateConvention convention) {
     final Security sec = _securitySource.getSingle(convention.getIborIndexConvention().toBundle());
     if (sec == null) {
-      throw new OpenGammaRuntimeException("CurveNodeCurrencyVisitor.visitVanillaIborLegRollDateConvention: Ibor index with id " + convention.getIborIndexConvention() + " was null");
+      throw new OpenGammaRuntimeException("CurveNodeCurrencyVisitor.visitVanillaIborLegRollDateConvention: Ibor index with id "
+          + convention.getIborIndexConvention() + " was null");
     }
     final com.opengamma.financial.security.index.IborIndex indexSecurity = (com.opengamma.financial.security.index.IborIndex) sec;
     final IborIndexConvention indexConvention = _conventionSource.getSingle(indexSecurity.getConventionId(), IborIndexConvention.class);
     if (indexConvention == null) {
-      throw new OpenGammaRuntimeException("CurveNodeCurrencyVisitor.visitVanillaIborLegRollDateConvention: Convention with id " + indexSecurity.getConventionId() + " was null");
+      throw new OpenGammaRuntimeException("CurveNodeCurrencyVisitor.visitVanillaIborLegRollDateConvention: Convention with id "
+          + indexSecurity.getConventionId() + " was null");
     }
     return indexConvention.accept(this);
   }
