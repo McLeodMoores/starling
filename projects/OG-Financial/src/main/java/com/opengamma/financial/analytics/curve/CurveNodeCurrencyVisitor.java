@@ -250,7 +250,7 @@ public class CurveNodeCurrencyVisitor implements CurveNodeVisitor<Set<Currency>>
   @Override
   public Set<Currency> visitFRANode(final FRANode node) {
     try {
-      final FinancialConvention convention = _conventionSource.getSingle(node.getConvention(), FinancialConvention.class);
+      final FinancialConvention convention = _conventionSource.getSingle(node.getConvention(), IborIndexConvention.class);
       return convention.accept(this);
     } catch (final DataNotFoundException e) {
       // If the convention is not found in the convention source then try the convention referenced in the underlying security
@@ -319,8 +319,11 @@ public class CurveNodeCurrencyVisitor implements CurveNodeVisitor<Set<Currency>>
 
   @Override
   public Set<Currency> visitZeroCouponInflationNode(final ZeroCouponInflationNode node) {
-    final FinancialConvention convention = _conventionSource.getSingle(node.getInflationLegConvention(), InflationLegConvention.class);
-    return convention.accept(this);
+    final FinancialConvention inflationLegConvention = _conventionSource.getSingle(node.getInflationLegConvention(), FinancialConvention.class);
+    final FinancialConvention fixedLegConvention = _conventionSource.getSingle(node.getFixedLegConvention(), FinancialConvention.class);
+    final Set<Currency> currencies = new HashSet<>(inflationLegConvention.accept(this));
+    currencies.addAll(fixedLegConvention.accept(this));
+    return currencies;
   }
 
   @Override
@@ -408,7 +411,7 @@ public class CurveNodeCurrencyVisitor implements CurveNodeVisitor<Set<Currency>>
   @Override
   public Set<Currency> visitIMMFRAConvention(final RollDateFRAConvention convention) {
     try {
-      final FinancialConvention indexConvention = _conventionSource.getSingle(convention.getIndexConvention(), FinancialConvention.class);
+      final FinancialConvention indexConvention = _conventionSource.getSingle(convention.getIndexConvention(), IborIndexConvention.class);
       return indexConvention.accept(this);
     } catch (final DataNotFoundException e) {
       // If the convention is not found in the convention source then try the convention referenced in the underlying security
@@ -437,22 +440,22 @@ public class CurveNodeCurrencyVisitor implements CurveNodeVisitor<Set<Currency>>
 
   @Override
   public Set<Currency> visitInflationLegConvention(final InflationLegConvention convention) {
-    final Security sec = _securitySource.getSingle(convention.getPriceIndexConvention().toBundle());
-    if (sec == null) {
-      throw new OpenGammaRuntimeException("CurveNodeCurrencyVisitor.visitInflationLegConvention: index with id "
-          + convention.getPriceIndexConvention() + " was null");
+    try {
+      final FinancialConvention indexConvention = _conventionSource.getSingle(convention.getPriceIndexConvention(), PriceIndexConvention.class);
+      return indexConvention.accept(this);
+    } catch (final DataNotFoundException e) {
+      // If the convention is not found in the convention source then try the convention referenced in the underlying security
+      final Security sec = _securitySource.getSingle(convention.getPriceIndexConvention().toBundle());
+      if (sec == null) {
+        throw new OpenGammaRuntimeException("Could not get underlying security for InflationLegConvention with id "
+            + convention.getPriceIndexConvention() + " from source");
+      }
+      if (sec instanceof PriceIndex) {
+        final PriceIndex indexSecurity = (PriceIndex) sec;
+        return _conventionSource.getSingle(indexSecurity.getConventionId(), PriceIndexConvention.class).accept(this);
+      }
+      throw new OpenGammaRuntimeException("Underlying security with id " + convention.getPriceIndexConvention() + " was not a PriceIndex: have " + sec);
     }
-    if (!(sec instanceof PriceIndex)) {
-      throw new OpenGammaRuntimeException("CurveNodeCurrencyVisitor.visitInflationLegConvention: index with id "
-          + convention.getPriceIndexConvention() + " not of type PriceIndex");
-    }
-    final PriceIndex indexSecurity = (PriceIndex) sec;
-    final PriceIndexConvention indexConvention = _conventionSource.getSingle(indexSecurity.getConventionId(), PriceIndexConvention.class);
-    if (indexConvention == null) {
-      throw new OpenGammaRuntimeException("CurveNodeCurrencyVisitor.visitInflationLegConvention: Convention with id "
-          + indexSecurity.getConventionId() + " was null");
-    }
-    return indexConvention.accept(this);
   }
 
   @Override
@@ -531,7 +534,7 @@ public class CurveNodeCurrencyVisitor implements CurveNodeVisitor<Set<Currency>>
   @Override
   public Set<Currency> visitVanillaIborLegConvention(final VanillaIborLegConvention convention) {
     try {
-      final FinancialConvention indexConvention = _conventionSource.getSingle(convention.getIborIndexConvention(), FinancialConvention.class);
+      final FinancialConvention indexConvention = _conventionSource.getSingle(convention.getIborIndexConvention(), IborIndexConvention.class);
       return indexConvention.accept(this);
     } catch (final DataNotFoundException e) {
       // If the convention is not found in the convention source then try the convention referenced in the underlying security
@@ -552,7 +555,7 @@ public class CurveNodeCurrencyVisitor implements CurveNodeVisitor<Set<Currency>>
   @Override
   public Set<Currency> visitVanillaIborLegRollDateConvention(final VanillaIborLegRollDateConvention convention) {
     try {
-      final FinancialConvention indexConvention = _conventionSource.getSingle(convention.getIborIndexConvention(), FinancialConvention.class);
+      final FinancialConvention indexConvention = _conventionSource.getSingle(convention.getIborIndexConvention(), IborIndexConvention.class);
       return indexConvention.accept(this);
     } catch (final DataNotFoundException e) {
       // If the convention is not found in the convention source then try the convention referenced in the underlying security

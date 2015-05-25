@@ -9,13 +9,13 @@ import static com.opengamma.financial.analytics.curve.CurveNodeCurrencyVisitorTe
 import static com.opengamma.financial.analytics.curve.CurveNodeCurrencyVisitorTest.US;
 import static org.testng.Assert.assertEquals;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.testng.annotations.Test;
 import org.threeten.bp.LocalTime;
 
+import com.google.common.collect.Sets;
 import com.opengamma.DataNotFoundException;
 import com.opengamma.OpenGammaRuntimeException;
 import com.opengamma.core.convention.Convention;
@@ -55,16 +55,16 @@ public class RollDateSwapNodeCurrencyVisitorTest {
   /** The id of the underlying LIBOR security */
   private static final ExternalId LIBOR_SECURITY_ID = ExternalId.of(SCHEME, "USDLIBOR3M");
   /** The pay leg convention */
-  private static final SwapFixedLegConvention PAY_LEG_CONVENTION = new SwapFixedLegConvention("USD Fixed Swap Leg",
-      PAY_LEG_CONVENTION_ID.toBundle(), Tenor.SIX_MONTHS, DayCounts.ACT_360, BusinessDayConventions.MODIFIED_FOLLOWING, Currency.USD,
+  private static final SwapFixedLegConvention PAY_LEG_CONVENTION = new SwapFixedLegConvention("EUR Fixed Swap Leg",
+      PAY_LEG_CONVENTION_ID.toBundle(), Tenor.SIX_MONTHS, DayCounts.ACT_360, BusinessDayConventions.MODIFIED_FOLLOWING, Currency.EUR,
       US, 2, false, StubType.NONE, false, 0);
   /** The receive leg convention */
   private static final VanillaIborLegRollDateConvention RECEIVE_LEG_CONVENTION = new VanillaIborLegRollDateConvention("USD Float Swap Leg",
       RECEIVE_LEG_CONVENTION_ID.toBundle(), LIBOR_CONVENTION_ID, false, Tenor.THREE_MONTHS, StubType.NONE, false, 0);
   /** The LIBOR convention */
-  private static final IborIndexConvention LIBOR_CONVENTION = new IborIndexConvention("USD LIBOR", PAY_LEG_CONVENTION_ID.toBundle(),
+  private static final IborIndexConvention LIBOR_CONVENTION = new IborIndexConvention("USD LIBOR", LIBOR_CONVENTION_ID.toBundle(),
       DayCounts.ACT_360, BusinessDayConventions.MODIFIED_FOLLOWING, 2, false, Currency.USD, LocalTime.of(11, 0), "", US, US, "");
-  /** The FRA convention */
+  /** The swap convention */
   private static final RollDateSwapConvention SWAP_CONVENTION = new RollDateSwapConvention("USD IMM Swap", SWAP_CONVENTION_ID.toBundle(),
       PAY_LEG_CONVENTION_ID, RECEIVE_LEG_CONVENTION_ID, ExternalId.of(SCHEME, "Roll date"));
   /** The LIBOR security */
@@ -202,7 +202,7 @@ public class RollDateSwapNodeCurrencyVisitorTest {
     securities.put(LIBOR_SECURITY_ID.toBundle(), LIBOR_SECURITY);
     final SecuritySource securitySource = new MySecuritySource(securities);
     final RollDateSwapNode node = new RollDateSwapNode(Tenor.THREE_MONTHS, 1, 2, SWAP_CONVENTION_ID, CNIM_NAME);
-    assertEquals(node.accept(new CurveNodeCurrencyVisitor(conventionSource, securitySource)), Collections.singleton(Currency.USD));
+    assertEquals(node.accept(new CurveNodeCurrencyVisitor(conventionSource, securitySource)), Sets.newHashSet(Currency.EUR, Currency.USD));
   }
 
   /**
@@ -218,6 +218,6 @@ public class RollDateSwapNodeCurrencyVisitorTest {
     final ConventionSource conventionSource = new TestConventionSource(conventions);
     final RollDateSwapNode node = new RollDateSwapNode(Tenor.THREE_MONTHS, 1, 2, SWAP_CONVENTION_ID, CNIM_NAME);
     // don't need the security to be in the source
-    assertEquals(node.accept(new CurveNodeCurrencyVisitor(conventionSource, EMPTY_SECURITY_SOURCE)), Collections.singleton(Currency.USD));
+    assertEquals(node.accept(new CurveNodeCurrencyVisitor(conventionSource, EMPTY_SECURITY_SOURCE)), Sets.newHashSet(Currency.EUR, Currency.USD));
   }
 }

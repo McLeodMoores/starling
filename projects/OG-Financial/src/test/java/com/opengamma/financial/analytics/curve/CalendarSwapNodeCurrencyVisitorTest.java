@@ -9,13 +9,13 @@ import static com.opengamma.financial.analytics.curve.CurveNodeCurrencyVisitorTe
 import static com.opengamma.financial.analytics.curve.CurveNodeCurrencyVisitorTest.US;
 import static org.testng.Assert.assertEquals;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.testng.annotations.Test;
 import org.threeten.bp.LocalTime;
 
+import com.google.common.collect.Sets;
 import com.opengamma.DataNotFoundException;
 import com.opengamma.OpenGammaRuntimeException;
 import com.opengamma.core.convention.Convention;
@@ -51,8 +51,8 @@ public class CalendarSwapNodeCurrencyVisitorTest {
   private static final SwapConvention SWAP_CONVENTION = new SwapConvention("USD Calendar Swap", SWAP_CONVENTION_ID.toBundle(),
       PAY_LEG_CONVENTION_ID, RECEIVE_LEG_CONVENTION_ID);
   /** The pay leg convention */
-  private static final SwapFixedLegConvention PAY_LEG_CONVENTION = new SwapFixedLegConvention("USD Fixed Swap Leg",
-      PAY_LEG_CONVENTION_ID.toBundle(), Tenor.SIX_MONTHS, DayCounts.ACT_360, BusinessDayConventions.MODIFIED_FOLLOWING, Currency.USD,
+  private static final SwapFixedLegConvention PAY_LEG_CONVENTION = new SwapFixedLegConvention("EUR Fixed Swap Leg",
+      PAY_LEG_CONVENTION_ID.toBundle(), Tenor.SIX_MONTHS, DayCounts.ACT_360, BusinessDayConventions.MODIFIED_FOLLOWING, Currency.EUR,
       US, 2, false, StubType.NONE, false, 0);
   /** The receive leg convention */
   private static final VanillaIborLegConvention RECEIVE_LEG_CONVENTION = new VanillaIborLegConvention("USD Float Swap Leg",
@@ -126,6 +126,6 @@ public class CalendarSwapNodeCurrencyVisitorTest {
     conventions.put(SWAP_CONVENTION_ID, SWAP_CONVENTION);
     final ConventionSource conventionSource = new TestConventionSource(conventions);
     final CalendarSwapNode node = new CalendarSwapNode("DATES", Tenor.ONE_YEAR, 1, 10, SWAP_CONVENTION_ID, CNIM_NAME);
-    assertEquals(node.accept(new CurveNodeCurrencyVisitor(conventionSource, EMPTY_SECURITY_SOURCE)), Collections.singleton(Currency.USD));
+    assertEquals(node.accept(new CurveNodeCurrencyVisitor(conventionSource, EMPTY_SECURITY_SOURCE)), Sets.newHashSet(Currency.EUR, Currency.USD));
   }
 }
