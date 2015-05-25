@@ -490,12 +490,14 @@ public class CurveNodeCurrencyVisitorTest {
     assertEquals(node.accept(VISITOR), Collections.emptySet());
   }
 
+  /**
+   * Tests that both currencies are returned for FX forward nodes.
+   */
   @Test
   public void testFXForwardNode() {
     final FXForwardNode node = new FXForwardNode(Tenor.ONE_DAY, Tenor.ONE_YEAR, FX_FORWARD_ID, Currency.EUR, Currency.AUD, SCHEME);
     final Set<Currency> currencies = node.accept(VISITOR);
-    assertEquals(2, currencies.size());
-    assertEquals(Sets.newHashSet(Currency.EUR, Currency.AUD), currencies);
+    assertEquals(currencies, Sets.newHashSet(Currency.EUR, Currency.AUD));
   }
 
   @Test

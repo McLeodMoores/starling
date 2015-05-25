@@ -289,28 +289,10 @@ public class CurveNodeCurrencyVisitor implements CurveNodeVisitor<Set<Currency>>
     final FinancialConvention convention = _conventionSource.getSingle(node.getFutureConvention(), FinancialConvention.class);
     if (convention instanceof InterestRateFutureConvention) {
       final InterestRateFutureConvention irFutureConvention = (InterestRateFutureConvention) convention;
-      try {
-        final IborIndexConvention indexConvention = _conventionSource.getSingle(irFutureConvention.getIndexConvention(), IborIndexConvention.class);
-        return indexConvention.accept(this);
-      } catch (final DataNotFoundException e) {
-        final Security security = _securitySource.getSingle(irFutureConvention.getIndexConvention().toBundle());
-        if (security instanceof IborIndex) {
-          return _conventionSource.getSingle(((IborIndex) security).getConventionId(), IborIndexConvention.class).accept(this);
-        }
-        throw new OpenGammaRuntimeException("Could not get security or convention with id " + irFutureConvention.getIndexConvention());
-      }
+      return irFutureConvention.accept(this);
     } else if (convention instanceof FederalFundsFutureConvention) {
       final FederalFundsFutureConvention ffFutureConvention = (FederalFundsFutureConvention) convention;
-      try {
-        final OvernightIndexConvention indexConvention = _conventionSource.getSingle(ffFutureConvention.getIndexConvention(), OvernightIndexConvention.class);
-        return indexConvention.accept(this);
-      } catch (final DataNotFoundException e) {
-        final Security security = _securitySource.getSingle(ffFutureConvention.getIndexConvention().toBundle());
-        if (security instanceof OvernightIndex) {
-          return _conventionSource.getSingle(((OvernightIndex) security).getConventionId(), IborIndexConvention.class).accept(this);
-        }
-        throw new OpenGammaRuntimeException("Could not get security or convention with id " + ffFutureConvention.getIndexConvention());
-      }
+      return ffFutureConvention.accept(this);
     }
     throw new OpenGammaRuntimeException("Unhandled convention type " + convention);
   }
@@ -386,9 +368,16 @@ public class CurveNodeCurrencyVisitor implements CurveNodeVisitor<Set<Currency>>
 
   @Override
   public Set<Currency> visitFederalFundsFutureConvention(final FederalFundsFutureConvention convention) {
-    final OvernightIndex index = (OvernightIndex) _securitySource.getSingle(convention.getIndexConvention().toBundle());
-    final FinancialConvention underlyingConvention = _conventionSource.getSingle(index.getConventionId(), FinancialConvention.class);
-    return underlyingConvention.accept(this);
+    try {
+      final OvernightIndexConvention indexConvention = _conventionSource.getSingle(convention.getIndexConvention(), OvernightIndexConvention.class);
+      return indexConvention.accept(this);
+    } catch (final DataNotFoundException e) {
+      final Security security = _securitySource.getSingle(convention.getIndexConvention().toBundle());
+      if (security instanceof OvernightIndex) {
+        return _conventionSource.getSingle(((OvernightIndex) security).getConventionId(), OvernightIndexConvention.class).accept(this);
+      }
+      throw new OpenGammaRuntimeException("Could not get security or convention with id " + convention.getIndexConvention());
+    }
   }
 
   @Override
@@ -455,8 +444,16 @@ public class CurveNodeCurrencyVisitor implements CurveNodeVisitor<Set<Currency>>
 
   @Override
   public Set<Currency> visitInterestRateFutureConvention(final InterestRateFutureConvention convention) {
-    final FinancialConvention underlyingConvention = _conventionSource.getSingle(convention.getIndexConvention(), FinancialConvention.class);
-    return underlyingConvention.accept(this);
+    try {
+      final IborIndexConvention indexConvention = _conventionSource.getSingle(convention.getIndexConvention(), IborIndexConvention.class);
+      return indexConvention.accept(this);
+    } catch (final DataNotFoundException e) {
+      final Security security = _securitySource.getSingle(convention.getIndexConvention().toBundle());
+      if (security instanceof IborIndex) {
+        return _conventionSource.getSingle(((IborIndex) security).getConventionId(), IborIndexConvention.class).accept(this);
+      }
+      throw new OpenGammaRuntimeException("Could not get security or convention with id " + convention.getIndexConvention());
+    }
   }
 
   @Override
