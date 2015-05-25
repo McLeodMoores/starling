@@ -40,6 +40,8 @@ import com.opengamma.util.time.Tenor;
  * Tests retrieving the currency from cash nodes.
  */
 public class CashNodeCurrencyVisitorTest {
+  /** The curve node id mapper name */
+  private static final String CNIM_NAME = "CNIM";
   /** The id for a 1M USD deposit convention */
   private static final ExternalId DEPOSIT_1M_ID = ExternalId.of(SCHEME, "USD 1m Deposit");
   /** A 1M USD deposit convention */
@@ -82,8 +84,8 @@ public class CashNodeCurrencyVisitorTest {
    * Tests the behaviour when there is no convention or security available from the sources.
    */
   @Test(expectedExceptions = OpenGammaRuntimeException.class)
-  public void testNullDepositConvention() {
-    final CashNode node = new CashNode(Tenor.ONE_DAY, Tenor.ONE_WEEK, DEPOSIT_1M_ID, SCHEME);
+  public void testNoConventionOrSecurity() {
+    final CashNode node = new CashNode(Tenor.ONE_DAY, Tenor.ONE_WEEK, DEPOSIT_1M_ID, CNIM_NAME);
     node.accept(new CurveNodeCurrencyVisitor(EMPTY_CONVENTION_SOURCE, EMPTY_SECURITY_SOURCE));
   }
 
@@ -97,7 +99,7 @@ public class CashNodeCurrencyVisitorTest {
     priceIndex.setExternalIdBundle(priceIndexId.toBundle());
     final Map<ExternalIdBundle, Security> securities = new HashMap<>();
     securities.put(priceIndexId.toBundle(), priceIndex);
-    final CashNode node = new CashNode(Tenor.ONE_DAY, Tenor.ONE_WEEK, priceIndexId, SCHEME);
+    final CashNode node = new CashNode(Tenor.ONE_DAY, Tenor.ONE_WEEK, priceIndexId, CNIM_NAME);
     node.accept(new CurveNodeCurrencyVisitor(EMPTY_CONVENTION_SOURCE, new MySecuritySource(securities)));
   }
 
@@ -111,7 +113,7 @@ public class CashNodeCurrencyVisitorTest {
     conventions.put(LIBOR_CONVENTION_ID, LIBOR_CONVENTION);
     final Map<ExternalIdBundle, Security> securities = new HashMap<>();
     securities.put(LIBOR_SECURITY_ID.toBundle(), LIBOR_SECURITY);
-    final CashNode node = new CashNode(Tenor.of(Period.ZERO), Tenor.ONE_MONTH, LIBOR_SECURITY_ID, SCHEME);
+    final CashNode node = new CashNode(Tenor.of(Period.ZERO), Tenor.ONE_MONTH, LIBOR_SECURITY_ID, CNIM_NAME);
     final Set<Currency> currencies = node.accept(new CurveNodeCurrencyVisitor(new TestConventionSource(conventions), new MySecuritySource(securities)));
     assertEquals(currencies.size(), 1);
     assertEquals(currencies.iterator().next(), Currency.USD);
@@ -125,7 +127,7 @@ public class CashNodeCurrencyVisitorTest {
   public void testLiborFromConventionOnly() {
     final Map<ExternalId, Convention> conventions = new HashMap<>();
     conventions.put(LIBOR_CONVENTION_ID, LIBOR_CONVENTION);
-    final CashNode node = new CashNode(Tenor.of(Period.ZERO), Tenor.ONE_MONTH, LIBOR_CONVENTION_ID, SCHEME);
+    final CashNode node = new CashNode(Tenor.of(Period.ZERO), Tenor.ONE_MONTH, LIBOR_CONVENTION_ID, CNIM_NAME);
     final Set<Currency> currencies = node.accept(new CurveNodeCurrencyVisitor(new TestConventionSource(conventions), EMPTY_SECURITY_SOURCE));
     assertEquals(currencies.size(), 1);
     assertEquals(currencies.iterator().next(), Currency.USD);
@@ -141,7 +143,7 @@ public class CashNodeCurrencyVisitorTest {
     conventions.put(OVERNIGHT_CONVENTION_ID, OVERNIGHT_CONVENTION);
     final Map<ExternalIdBundle, Security> securities = new HashMap<>();
     securities.put(OVERNIGHT_SECURITY_ID.toBundle(), OVERNIGHT_SECURITY);
-    final CashNode node = new CashNode(Tenor.of(Period.ZERO), Tenor.ON, OVERNIGHT_SECURITY_ID, SCHEME);
+    final CashNode node = new CashNode(Tenor.of(Period.ZERO), Tenor.ON, OVERNIGHT_SECURITY_ID, CNIM_NAME);
     final Set<Currency> currencies = node.accept(new CurveNodeCurrencyVisitor(new TestConventionSource(conventions), new MySecuritySource(securities)));
     assertEquals(currencies.size(), 1);
     assertEquals(currencies.iterator().next(), Currency.USD);
@@ -155,7 +157,7 @@ public class CashNodeCurrencyVisitorTest {
   public void testOvernightFromConventionOnly() {
     final Map<ExternalId, Convention> conventions = new HashMap<>();
     conventions.put(OVERNIGHT_CONVENTION_ID, OVERNIGHT_CONVENTION);
-    final CashNode node = new CashNode(Tenor.of(Period.ZERO), Tenor.ON, OVERNIGHT_CONVENTION_ID, SCHEME);
+    final CashNode node = new CashNode(Tenor.of(Period.ZERO), Tenor.ON, OVERNIGHT_CONVENTION_ID, CNIM_NAME);
     final Set<Currency> currencies = node.accept(new CurveNodeCurrencyVisitor(new TestConventionSource(conventions), EMPTY_SECURITY_SOURCE));
     assertEquals(currencies.size(), 1);
     assertEquals(currencies.iterator().next(), Currency.USD);
@@ -168,7 +170,7 @@ public class CashNodeCurrencyVisitorTest {
   public void testDeposit() {
     final Map<ExternalId, Convention> conventions = new HashMap<>();
     conventions.put(DEPOSIT_1M_ID, DEPOSIT_1M);
-    final CashNode node = new CashNode(Tenor.ONE_DAY, Tenor.ONE_WEEK, DEPOSIT_1M_ID, SCHEME);
+    final CashNode node = new CashNode(Tenor.ONE_DAY, Tenor.ONE_WEEK, DEPOSIT_1M_ID, CNIM_NAME);
     final Set<Currency> currencies = node.accept(new CurveNodeCurrencyVisitor(new TestConventionSource(conventions), EMPTY_SECURITY_SOURCE));
     assertEquals(currencies.size(), 1);
     assertEquals(currencies.iterator().next(), Currency.USD);

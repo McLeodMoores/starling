@@ -157,6 +157,9 @@ public class CurveNodeCurrencyVisitor implements CurveNodeVisitor<Set<Currency>>
       throw new OpenGammaRuntimeException("Config source was null");
     }
     final CurveNodeIdMapper idMapper = _configSource.getSingle(CurveNodeIdMapper.class, node.getCurveNodeIdMapperName(), VersionCorrection.LATEST);
+    if (idMapper == null) {
+      throw new OpenGammaRuntimeException("CurveNodeIdMapper called " + node.getCurveNodeIdMapperName() + " was not present in config master");
+    }
     final Security security =
         _securitySource.getSingle(idMapper.getBillNodeId(null, node.getMaturityTenor()).toBundle()); // curve date is not relevant for bills
     if (security == null) {

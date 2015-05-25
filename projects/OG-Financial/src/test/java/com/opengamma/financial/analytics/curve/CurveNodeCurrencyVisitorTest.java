@@ -24,6 +24,8 @@ import com.google.common.collect.Sets;
 import com.opengamma.OpenGammaRuntimeException;
 import com.opengamma.analytics.financial.interestrate.CompoundingType;
 import com.opengamma.core.change.ChangeManager;
+import com.opengamma.core.config.ConfigSource;
+import com.opengamma.core.config.impl.ConfigItem;
 import com.opengamma.core.convention.Convention;
 import com.opengamma.core.convention.ConventionSource;
 import com.opengamma.core.id.ExternalSchemes;
@@ -87,6 +89,8 @@ public class CurveNodeCurrencyVisitorTest {
   protected static final SecuritySource EMPTY_SECURITY_SOURCE = new MySecuritySource(Collections.<ExternalIdBundle, Security>emptyMap());
   /** An empty convention source. */
   protected static final ConventionSource EMPTY_CONVENTION_SOURCE = new TestConventionSource(Collections.<ExternalId, Convention>emptyMap());
+  /** An empty config source. */
+  protected static final ConfigSource EMPTY_CONFIG_SOURCE = new MyConfigSource(Collections.<String, Object>emptyMap());
 
   /** The id for a USD fixed swap leg convention */
   private static final ExternalId FIXED_LEG_ID = ExternalId.of(SCHEME, "USD Swap Fixed Leg");
@@ -609,5 +613,75 @@ public class CurveNodeCurrencyVisitorTest {
   }
 
 
+  /**
+   * A simplified local version of a ConfigSource for tests.
+   */
+  //TODO replace with a proper MockConfigSource
+  protected static class MyConfigSource implements ConfigSource {
+    /** Config source as a map for tests **/
+    private final Map<String, Object> _map;
 
+    public MyConfigSource(final Map<String, Object> map) {
+      _map = map;
+    }
+
+    @Override
+    public Map<UniqueId, ConfigItem<?>> get(final Collection<UniqueId> uniqueIds) {
+      return null;
+    }
+
+    @Override
+    public Map<ObjectId, ConfigItem<?>> get(final Collection<ObjectId> objectIds, final VersionCorrection versionCorrection) {
+      return null;
+    }
+
+    @Override
+    public ChangeManager changeManager() {
+      return null;
+    }
+
+    @Override
+    public ConfigItem<?> get(final UniqueId uniqueId) {
+      return null;
+    }
+
+    @Override
+    public ConfigItem<?> get(final ObjectId objectId, final VersionCorrection versionCorrection) {
+      return null;
+    }
+
+    @Override
+    public <R> Collection<ConfigItem<R>> get(final Class<R> clazz, final String configName, final VersionCorrection versionCorrection) {
+      return null;
+    }
+
+    @Override
+    public <R> Collection<ConfigItem<R>> getAll(final Class<R> clazz, final VersionCorrection versionCorrection) {
+      return null;
+    }
+
+    @Override
+    public <R> R getConfig(final Class<R> clazz, final UniqueId uniqueId) {
+      return null;
+    }
+
+    @Override
+    public <R> R getConfig(final Class<R> clazz, final ObjectId objectId, final VersionCorrection versionCorrection) {
+      return null;
+    }
+
+    @Override
+    public <R> R getSingle(final Class<R> clazz, final String configName, final VersionCorrection versionCorrection) {
+      final Object config = _map.get(configName);
+      if (config != null && config.getClass().equals(clazz)) {
+        return (R) config;
+      }
+      return null;
+    }
+
+    @Override
+    public <R> R getLatestByName(final Class<R> clazz, final String name) {
+      return null;
+    }
+  }
 }
