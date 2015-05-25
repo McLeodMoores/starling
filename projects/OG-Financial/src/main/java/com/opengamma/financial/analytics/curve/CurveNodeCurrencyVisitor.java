@@ -158,12 +158,12 @@ public class CurveNodeCurrencyVisitor implements CurveNodeVisitor<Set<Currency>>
     }
     final CurveNodeIdMapper idMapper = _configSource.getSingle(CurveNodeIdMapper.class, node.getCurveNodeIdMapperName(), VersionCorrection.LATEST);
     if (idMapper == null) {
-      throw new OpenGammaRuntimeException("CurveNodeIdMapper called " + node.getCurveNodeIdMapperName() + " was not present in config master");
+      throw new OpenGammaRuntimeException("CurveNodeIdMapper called " + node.getCurveNodeIdMapperName() + " was not present in config source");
     }
     final Security security =
         _securitySource.getSingle(idMapper.getBillNodeId(null, node.getMaturityTenor()).toBundle()); // curve date is not relevant for bills
     if (security == null) {
-      throw new OpenGammaRuntimeException("Security underlying bill node " + node + " was not present in security master");
+      throw new OpenGammaRuntimeException("Security underlying bill node " + node + " was not present in security source");
     }
     if (security instanceof BillSecurity) {
       return Collections.singleton(((BillSecurity) security).getCurrency());
@@ -178,12 +178,12 @@ public class CurveNodeCurrencyVisitor implements CurveNodeVisitor<Set<Currency>>
     }
     final CurveNodeIdMapper idMapper = _configSource.getSingle(CurveNodeIdMapper.class, node.getCurveNodeIdMapperName(), VersionCorrection.LATEST);
     if (idMapper == null) {
-      throw new OpenGammaRuntimeException("CurveNodeIdMapper called " + node.getCurveNodeIdMapperName() + " was not present in config master");
+      throw new OpenGammaRuntimeException("CurveNodeIdMapper called " + node.getCurveNodeIdMapperName() + " was not present in config source");
     }
     final Security security =
         _securitySource.getSingle(idMapper.getBondNodeId(null, node.getMaturityTenor()).toBundle()); // curve date is not relevant for bonds
     if (security == null) {
-      throw new OpenGammaRuntimeException("Security underlying bond node " + node + " was not present in security master");
+      throw new OpenGammaRuntimeException("Security underlying bond node " + node + " was not present in security soource");
     }
     if (security instanceof BondSecurity) {
       return Collections.singleton(((BondSecurity) security).getCurrency());
