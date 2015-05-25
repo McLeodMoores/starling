@@ -37,7 +37,7 @@ import com.opengamma.util.money.Currency;
 import com.opengamma.util.time.Tenor;
 
 /**
- * Tests retrieving the currency from cash nodes.
+ * Tests the retrieval of a currency from cash nodes.
  */
 public class CashNodeCurrencyVisitorTest {
   /** The curve node id mapper name */
