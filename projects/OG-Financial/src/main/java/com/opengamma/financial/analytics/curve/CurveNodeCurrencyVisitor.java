@@ -203,14 +203,14 @@ public class CurveNodeCurrencyVisitor implements CurveNodeVisitor<Set<Currency>>
       if (security == null) {
         throw new OpenGammaRuntimeException("Could not get security with id " + node.getConvention());
       }
-      if (security instanceof com.opengamma.financial.security.index.IborIndex) {
-        final com.opengamma.financial.security.index.IborIndex indexSecurity = (com.opengamma.financial.security.index.IborIndex) security;
+      if (security instanceof IborIndex) {
+        final IborIndex indexSecurity = (IborIndex) security;
         final IborIndexConvention indexConvention = _conventionSource.getSingle(indexSecurity.getConventionId(), IborIndexConvention.class);
         return indexConvention.accept(this);
-        /* } else if (security instanceof com.opengamma.financial.security.index.OvernightIndex) { // is this necessary/a good idea?
-        final com.opengamma.financial.security.index.OvernightIndex indexSecurity = (com.opengamma.financial.security.index.OvernightIndex) security;
-        final IborIndexConvention indexConvention = _conventionSource.getSingle(indexSecurity.getConventionId(), IborIndexConvention.class);
-        return indexConvention.accept(this);*/
+      } else if (security instanceof OvernightIndex) {
+        final OvernightIndex indexSecurity = (OvernightIndex) security;
+        final OvernightIndexConvention indexConvention = _conventionSource.getSingle(indexSecurity.getConventionId(), OvernightIndexConvention.class);
+        return indexConvention.accept(this);
       }
       throw new OpenGammaRuntimeException("Security should be of type IborIndex or OvernightIndex, was " + security);
     }
