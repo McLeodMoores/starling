@@ -33,7 +33,7 @@ import com.opengamma.util.money.Currency;
 import com.opengamma.util.time.Tenor;
 
 /**
- *
+ * Tests the retrieval of a currency from deliverable swap future nodes.
  */
 public class DeliverableSwapFututureNodeCurrencyVisitorTest {
   /** The curve node id mapper name */

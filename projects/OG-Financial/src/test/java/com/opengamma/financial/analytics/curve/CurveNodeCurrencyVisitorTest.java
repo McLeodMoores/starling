@@ -35,7 +35,6 @@ import com.opengamma.core.security.SecuritySource;
 import com.opengamma.financial.analytics.ircurve.strips.ContinuouslyCompoundedRateNode;
 import com.opengamma.financial.analytics.ircurve.strips.CreditSpreadNode;
 import com.opengamma.financial.analytics.ircurve.strips.DiscountFactorNode;
-import com.opengamma.financial.analytics.ircurve.strips.FRANode;
 import com.opengamma.financial.analytics.ircurve.strips.FXForwardNode;
 import com.opengamma.financial.analytics.ircurve.strips.InflationNodeType;
 import com.opengamma.financial.analytics.ircurve.strips.PeriodicallyCompoundedRateNode;
@@ -260,15 +259,9 @@ public class CurveNodeCurrencyVisitorTest {
   /**
    * Tests the behaviour when the security source is null.
    */
-  @Test
+  @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullSecuritySource() {
     new CurveNodeCurrencyVisitor(EMPTY_CONVENTION_SOURCE, null);
-  }
-
-  @Test(expectedExceptions = OpenGammaRuntimeException.class)
-  public void testNullFRAConvention() {
-    final FRANode node = new FRANode(Tenor.ONE_DAY, Tenor.THREE_MONTHS, USDLIBOR3M_ID, SCHEME);
-    node.accept(EMPTY_CONVENTIONS);
   }
 
   @Test(expectedExceptions = OpenGammaRuntimeException.class)
@@ -495,14 +488,6 @@ public class CurveNodeCurrencyVisitorTest {
   public void testPeriodicallyCompoundedRateNode() {
     final PeriodicallyCompoundedRateNode node = new PeriodicallyCompoundedRateNode(SCHEME, Tenor.TWELVE_MONTHS, 2);
     assertEquals(node.accept(VISITOR), Collections.emptySet());
-  }
-
-  @Test
-  public void testFRANode() {
-    final FRANode node = new FRANode(Tenor.ONE_DAY, Tenor.THREE_MONTHS, USDLIBOR3M_ID, SCHEME);
-    final Set<Currency> currencies = node.accept(VISITOR);
-    assertEquals(1, currencies.size());
-    assertEquals(Currency.USD, currencies.iterator().next());
   }
 
   @Test

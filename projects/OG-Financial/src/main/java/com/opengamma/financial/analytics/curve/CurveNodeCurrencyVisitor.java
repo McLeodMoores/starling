@@ -203,8 +203,7 @@ public class CurveNodeCurrencyVisitor implements CurveNodeVisitor<Set<Currency>>
       final FinancialConvention convention = _conventionSource.getSingle(node.getConvention(), FinancialConvention.class);
       return convention.accept(this);
     } catch (final DataNotFoundException e) {
-      // If the convention is not found in the convention source
-      // then try with the security source.
+      // If the convention is not found in the convention source then try the convention referenced in the underlying security
       final Security security = _securitySource.getSingle(node.getConvention().toBundle());
       if (security == null) {
         throw new OpenGammaRuntimeException("Could not get security with id " + node.getConvention());
@@ -250,16 +249,22 @@ public class CurveNodeCurrencyVisitor implements CurveNodeVisitor<Set<Currency>>
 
   @Override
   public Set<Currency> visitFRANode(final FRANode node) {
-    final Security sec = _securitySource.getSingle(node.getConvention().toBundle());
-    if (sec == null) {
-      throw new OpenGammaRuntimeException("CurveNodeCurrencyVisitor.visitFRANode: Ibor index with id " + node.getConvention() + " was null");
+    try {
+      final FinancialConvention convention = _conventionSource.getSingle(node.getConvention(), FinancialConvention.class);
+      return convention.accept(this);
+    } catch (final DataNotFoundException e) {
+      // If the convention is not found in the convention source then try the convention referenced in the underlying security
+      final Security sec = _securitySource.getSingle(node.getConvention().toBundle());
+      if (sec == null) {
+        throw new OpenGammaRuntimeException("Could not get underlying security for FRANode with id " + node.getConvention() + " from source");
+      }
+      if (sec instanceof IborIndex) {
+        final IborIndex indexSecurity = (IborIndex) sec;
+        final IborIndexConvention indexConvention = _conventionSource.getSingle(indexSecurity.getConventionId(), IborIndexConvention.class);
+        return indexConvention.accept(this);
+      }
+      throw new OpenGammaRuntimeException("Underlying security with id " + node.getConvention() + " was not an IborIndex: have " + sec);
     }
-    final com.opengamma.financial.security.index.IborIndex indexSecurity = (com.opengamma.financial.security.index.IborIndex) sec;
-    final IborIndexConvention indexConvention = _conventionSource.getSingle(indexSecurity.getConventionId(), IborIndexConvention.class);
-    if (indexConvention == null) {
-      throw new OpenGammaRuntimeException("CurveNodeCurrencyVisitor.visitFRANode: Convention with id " + indexSecurity.getConventionId() + " was null");
-    }
-    return indexConvention.accept(this);
   }
 
   @Override
@@ -515,24 +520,23 @@ public class CurveNodeCurrencyVisitor implements CurveNodeVisitor<Set<Currency>>
 
   @Override
   public Set<Currency> visitVanillaIborLegConvention(final VanillaIborLegConvention convention) {
-    final Security sec = _securitySource.getSingle(convention.getIborIndexConvention().toBundle());
-    if (sec != null) {
-      final com.opengamma.financial.security.index.IborIndex indexSecurity = (com.opengamma.financial.security.index.IborIndex) sec;
-      final IborIndexConvention indexConvention = _conventionSource.getSingle(indexSecurity.getConventionId(), IborIndexConvention.class);
-      if (indexConvention == null) {
-        throw new OpenGammaRuntimeException("VanillaIborLegConvention: Convention with id " + indexSecurity.getConventionId()
-            + " was not found");
-      }
+    try {
+      final FinancialConvention indexConvention = _conventionSource.getSingle(convention.getIborIndexConvention(), FinancialConvention.class);
       return indexConvention.accept(this);
+    } catch (final DataNotFoundException e) {
+      // If the convention is not found in the convention source then try the convention referenced in the underlying security
+      final Security sec = _securitySource.getSingle(convention.getIborIndexConvention().toBundle());
+      if (sec == null) {
+        throw new OpenGammaRuntimeException("Could not get underlying security for VanillaIborLegConvention with id "
+            + convention.getIborIndexConvention() + " from source");
+      }
+      if (sec instanceof IborIndex) {
+        final IborIndex indexSecurity = (IborIndex) sec;
+        final IborIndexConvention indexConvention = _conventionSource.getSingle(indexSecurity.getConventionId(), IborIndexConvention.class);
+        return indexConvention.accept(this);
+      }
+      throw new OpenGammaRuntimeException("Underlying security with id " + convention.getIborIndexConvention() + " was not an IborIndex: have " + sec);
     }
-    LOGGER.info("VanillaIborLegConvention: Ibor index security with id " + convention.getIborIndexConvention()
-        + " was not found: trying convention");
-    final IborIndexConvention indexConvention = _conventionSource.getSingle(convention.getIborIndexConvention(), IborIndexConvention.class);
-    if (indexConvention == null) {
-      throw new OpenGammaRuntimeException("VanillaIborLegConvention: Convention with id " + convention.getIborIndexConvention()
-          + " was not found");
-    }
-    return indexConvention.accept(this);
   }
 
   @Override

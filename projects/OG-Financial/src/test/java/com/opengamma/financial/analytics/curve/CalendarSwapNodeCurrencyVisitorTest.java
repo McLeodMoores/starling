@@ -17,6 +17,7 @@ import org.testng.annotations.Test;
 import org.threeten.bp.LocalTime;
 
 import com.opengamma.DataNotFoundException;
+import com.opengamma.OpenGammaRuntimeException;
 import com.opengamma.core.convention.Convention;
 import com.opengamma.core.convention.ConventionSource;
 import com.opengamma.financial.analytics.ircurve.strips.CalendarSwapNode;
@@ -99,9 +100,10 @@ public class CalendarSwapNodeCurrencyVisitorTest {
   }
 
   /**
-   * Tests the behaviour when the underlying index convention is not found.
+   * Tests the behaviour when the underlying index convention is not found and there is no underlying ibor index security
+   * in the security source.
    */
-  @Test(expectedExceptions = DataNotFoundException.class)
+  @Test(expectedExceptions = OpenGammaRuntimeException.class)
   public void testNoIndexConvention() {
     final Map<ExternalId, Convention> conventions = new HashMap<>();
     conventions.put(PAY_LEG_CONVENTION_ID, PAY_LEG_CONVENTION);
