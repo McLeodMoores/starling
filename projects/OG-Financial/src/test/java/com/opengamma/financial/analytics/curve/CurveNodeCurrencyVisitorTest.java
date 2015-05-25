@@ -9,7 +9,8 @@
  */
 package com.opengamma.financial.analytics.curve;
 
-import static org.testng.AssertJUnit.assertEquals;
+
+import static org.testng.Assert.assertEquals;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -37,6 +38,7 @@ import com.opengamma.financial.analytics.ircurve.strips.DiscountFactorNode;
 import com.opengamma.financial.analytics.ircurve.strips.FRANode;
 import com.opengamma.financial.analytics.ircurve.strips.FXForwardNode;
 import com.opengamma.financial.analytics.ircurve.strips.InflationNodeType;
+import com.opengamma.financial.analytics.ircurve.strips.PeriodicallyCompoundedRateNode;
 import com.opengamma.financial.analytics.ircurve.strips.RateFutureNode;
 import com.opengamma.financial.analytics.ircurve.strips.RollDateFRANode;
 import com.opengamma.financial.analytics.ircurve.strips.RollDateSwapNode;
@@ -247,9 +249,20 @@ public class CurveNodeCurrencyVisitorTest {
     VISITOR = new CurveNodeCurrencyVisitor(CONVENTION_SOURCE, SECURITY_SOURCE);
   }
 
+  /**
+   * Tests the behaviour when the convention source is null.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullConventionSource() {
     new CurveNodeCurrencyVisitor(null, null);
+  }
+
+  /**
+   * Tests the behaviour when the security source is null.
+   */
+  @Test
+  public void testNullSecuritySource() {
+    new CurveNodeCurrencyVisitor(EMPTY_CONVENTION_SOURCE, null);
   }
 
   @Test(expectedExceptions = OpenGammaRuntimeException.class)
@@ -448,22 +461,40 @@ public class CurveNodeCurrencyVisitorTest {
     node.accept(visitor);
   }
 
+  /**
+   * Tests that a continuously compounded rate node does not return a currency.
+   */
   @Test
   public void testContinuouslyCompoundedRateNode() {
     final ContinuouslyCompoundedRateNode node = new ContinuouslyCompoundedRateNode(SCHEME, Tenor.TWELVE_MONTHS);
-    assertEquals(0, node.accept(VISITOR).size());
+    assertEquals(node.accept(VISITOR), Collections.emptySet());
   }
 
+  /**
+   * Tests that a credit spread node does not return a currency.
+   */
   @Test
   public void testCreditSpreadNode() {
     final CreditSpreadNode node = new CreditSpreadNode(SCHEME, Tenor.THREE_MONTHS);
-    assertEquals(0, node.accept(VISITOR).size());
+    assertEquals(node.accept(VISITOR), Collections.emptySet());
   }
 
+  /**
+   * Tests that a discount factor node does not return a currency.
+   */
   @Test
   public void testDiscountFactorNode() {
     final DiscountFactorNode node = new DiscountFactorNode(SCHEME, Tenor.FIVE_YEARS);
-    assertEquals(0, node.accept(VISITOR).size());
+    assertEquals(node.accept(VISITOR), Collections.emptySet());
+  }
+
+  /**
+   * Tests that a periodically compounded rate node does not return a currency.
+   */
+  @Test
+  public void testPeriodicallyCompoundedRateNode() {
+    final PeriodicallyCompoundedRateNode node = new PeriodicallyCompoundedRateNode(SCHEME, Tenor.TWELVE_MONTHS, 2);
+    assertEquals(node.accept(VISITOR), Collections.emptySet());
   }
 
   @Test
