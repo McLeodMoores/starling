@@ -70,10 +70,12 @@ public class RateFutureNodeCurrencyVisitorTest {
       FED_FUNDS_CONVENTION_ID.toBundle(), ExternalId.of(SCHEME, "EOM"), US, OVERNIGHT_CONVENTION_ID, 1250000);
   /** The LIBOR security */
   private static final IborIndex LIBOR_SECURITY = new IborIndex("USD 3M LIBOR", Tenor.THREE_MONTHS, LIBOR_CONVENTION_ID);
+  static {
+    LIBOR_SECURITY.addExternalId(LIBOR_SECURITY_ID);
+  }
   /** The overnight security */
   private static final OvernightIndex OVERNIGHT_SECURITY = new OvernightIndex("USD FED FUNDS", OVERNIGHT_CONVENTION_ID);
   static {
-    LIBOR_SECURITY.addExternalId(LIBOR_SECURITY_ID);
     OVERNIGHT_SECURITY.addExternalId(OVERNIGHT_SECURITY_ID);
   }
 

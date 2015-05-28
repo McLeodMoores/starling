@@ -14,16 +14,12 @@ import static org.testng.Assert.assertEquals;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
 import org.testng.annotations.Test;
-import org.threeten.bp.LocalTime;
 
 import com.google.common.collect.Sets;
-import com.opengamma.OpenGammaRuntimeException;
-import com.opengamma.analytics.financial.interestrate.CompoundingType;
 import com.opengamma.core.change.ChangeManager;
 import com.opengamma.core.config.ConfigSource;
 import com.opengamma.core.config.impl.ConfigItem;
@@ -36,24 +32,10 @@ import com.opengamma.financial.analytics.ircurve.strips.ContinuouslyCompoundedRa
 import com.opengamma.financial.analytics.ircurve.strips.CreditSpreadNode;
 import com.opengamma.financial.analytics.ircurve.strips.DiscountFactorNode;
 import com.opengamma.financial.analytics.ircurve.strips.FXForwardNode;
-import com.opengamma.financial.analytics.ircurve.strips.InflationNodeType;
 import com.opengamma.financial.analytics.ircurve.strips.PeriodicallyCompoundedRateNode;
-import com.opengamma.financial.analytics.ircurve.strips.SwapNode;
-import com.opengamma.financial.analytics.ircurve.strips.ZeroCouponInflationNode;
-import com.opengamma.financial.convention.CMSLegConvention;
-import com.opengamma.financial.convention.CompoundingIborLegConvention;
-import com.opengamma.financial.convention.IborIndexConvention;
-import com.opengamma.financial.convention.MockConvention;
-import com.opengamma.financial.convention.OISLegConvention;
-import com.opengamma.financial.convention.OvernightIndexConvention;
-import com.opengamma.financial.convention.StubType;
-import com.opengamma.financial.convention.SwapFixedLegConvention;
-import com.opengamma.financial.convention.SwapIndexConvention;
-import com.opengamma.financial.convention.VanillaIborLegConvention;
+import com.opengamma.financial.convention.BondConvention;
+import com.opengamma.financial.convention.EquityConvention;
 import com.opengamma.financial.convention.businessday.BusinessDayConventions;
-import com.opengamma.financial.convention.daycount.DayCounts;
-import com.opengamma.financial.security.index.IborIndex;
-import com.opengamma.financial.security.index.OvernightIndex;
 import com.opengamma.id.ExternalId;
 import com.opengamma.id.ExternalIdBundle;
 import com.opengamma.id.ObjectId;
@@ -83,134 +65,11 @@ public class CurveNodeCurrencyVisitorTest {
   /** An empty config source. */
   protected static final ConfigSource EMPTY_CONFIG_SOURCE = new MyConfigSource(Collections.<String, Object>emptyMap());
 
-  /** The id for a USD fixed swap leg convention */
-  private static final ExternalId FIXED_LEG_ID = ExternalId.of(SCHEME, "USD Swap Fixed Leg");
-  /** The name of the USD LIBOR convention */
-  private static final String USDLIBOR_CONVENTION_NAME = "ICE LIBOR USD";
-  /** The id for a quarterly USD floating swap leg convention */
-  private static final ExternalId SWAP_3M_IBOR_ID = ExternalId.of(SCHEME, "USD 3m Floating Leg");
-  /** The id for a semi-annual USD floating swap leg convention */
-  private static final ExternalId SWAP_6M_EURIBOR_ID = ExternalId.of(SCHEME, "EUR 6m Floating Leg");
-  /** The id for a USD overnight index convention */
-  private static final ExternalId OVERNIGHT_CONVENTION_ID = ExternalId.of(SCHEME, "USD Overnight");
-  /** The id for a OIS USD swap leg convention */
-  private static final ExternalId OIS_ID = ExternalId.of(SCHEME, "USD OIS Leg");
-  /** The id for a FX forward convention */
   private static final ExternalId FX_FORWARD_ID = ExternalId.of(SCHEME, "FX Forward");
-  /** The id for a 3M swap index convention */
-  private static final ExternalId SWAP_INDEX_ID = ExternalId.of(SCHEME, "3M Swap Index");
-  /** The id for a USD CMS swap leg convention */
-  private static final ExternalId CMS_SWAP_ID = ExternalId.of(SCHEME, "USD CMS");
-  /** The id for a USD compounded LIBOR leg convention */
-  private static final ExternalId COMPOUNDING_IBOR_ID = ExternalId.of(SCHEME, "USD Compounding Libor");
-  /** The id for a USD price index convention */
-  private static final ExternalId PRICE_INDEX_US_CONVENTION_ID = ExternalId.of(SCHEME, "USD CPI");
-  /** The id for a USD zero-coupon inflation swap leg convention */
-  private static final ExternalId ZERO_COUPON_INFLATION_ID = ExternalId.of(SCHEME, "ZCI");
-  /** The name of the USD overnight index */
-  private static final String USD_OVERNIGHT_NAME = "Fed Funds Effective Rate";
-  /** A USD overnight index security */
-  private static final OvernightIndex USD_OVERNIGHT = new OvernightIndex(USD_OVERNIGHT_NAME, OVERNIGHT_CONVENTION_ID);
-  /** The id for the USD overnight rate */
-  private static final ExternalId USD_OVERNIGHT_ID = ExternalSchemes.bloombergTickerSecurityId("FEDL1 Index");
-  /** The id for a USD LIBOR index convention */
-  private static final ExternalId USDLIBOR_CONVENTION_ID = ExternalId.of(SCHEME, USDLIBOR_CONVENTION_NAME);
-  /** A USD LIBOR index convention */
-  private static final IborIndexConvention USDLIBOR_CONVENTION = new IborIndexConvention(USDLIBOR_CONVENTION_NAME, ExternalIdBundle.of(USDLIBOR_CONVENTION_ID),
-      DayCounts.ACT_360, BusinessDayConventions.MODIFIED_FOLLOWING, 2, false, Currency.USD, LocalTime.of(11, 0), "US", US, US, "Page");
-  /** The name of a 1M USD LIBOR index security */
-  private static final String USDLIBOR1M_NAME = "USDLIBOR1M";
-  /** A 1M USD LIBOR index security */
-  private static final IborIndex USDLIBOR1M = new IborIndex(USDLIBOR1M_NAME, "ICE LIBOR 1M - USD", Tenor.ONE_MONTH, USDLIBOR_CONVENTION_ID);
-  /** A 1M USD LIBOR ticker */
-  private static final ExternalId USDLIBOR1M_ID = ExternalSchemes.bloombergTickerSecurityId("US0001M Index");
-  /** The name of a 3M USD LIBOR index security */
-  private static final String USDLIBOR3M_NAME = "USDLIBOR3M";
-  /** A 3M USD LIBOR index security */
-  private static final IborIndex USDLIBOR3M = new IborIndex(USDLIBOR3M_NAME, "ICE LIBOR 3M - USD", Tenor.THREE_MONTHS, USDLIBOR_CONVENTION_ID);
-  /** A 3M USD LIBOR ticker */
-  private static final ExternalId USDLIBOR3M_ID = ExternalSchemes.bloombergTickerSecurityId("US0003M Index");
-  /** The name of a 6M USD LIBOR index security */
-  private static final String USDLIBOR6M_NAME = "USDLIBOR6M";
-  /** A 6M USD LIBOR index security */
-  private static final IborIndex USDLIBOR6M = new IborIndex(USDLIBOR6M_NAME, "ICE LIBOR 6M - USD", Tenor.SIX_MONTHS, USDLIBOR_CONVENTION_ID);
-  /** A 6M USD LIBOR ticker */
-  private static final ExternalId USDLIBOR6M_ID = ExternalSchemes.bloombergTickerSecurityId("US0006M Index");
-  /** The name of a EURIBOR convention */
-  private static final String EURIBOR_CONVENTION_NAME = "EUR Euribor";
-  /** The id of a EURIBOR convention */
-  private static final ExternalId EURIBOR_CONVENTION_ID = ExternalId.of(SCHEME, EURIBOR_CONVENTION_NAME);
-  /** A EURIBOR convention */
-  private static final IborIndexConvention EURIBOR_CONVENTION = new IborIndexConvention(EURIBOR_CONVENTION_NAME, ExternalIdBundle.of(EURIBOR_CONVENTION_ID),
-      DayCounts.ACT_360, BusinessDayConventions.MODIFIED_FOLLOWING, 2, false, Currency.EUR, LocalTime.of(11, 0), "EU", EU, EU, "Page");
-  /** The name of a 1M EURIBOR index security */
-  private static final String EURIBOR1M_NAME = "EURIBOR1M";
-  /** A 1M EURIBOR index security */
-  private static final IborIndex EURIBOR1M = new IborIndex(EURIBOR1M_NAME, "EURIBOR 1M ACT/360", Tenor.ONE_MONTH, EURIBOR_CONVENTION_ID);
-  /** A 1M EURIBOR ticker */
-  private static final ExternalId EURIBOR1M_ID = ExternalSchemes.bloombergTickerSecurityId("EUR001M Index");
-  /** The name of a 3M EURIBOR index security */
-  private static final String EURIBOR3M_NAME = "EURIBOR3M";
-  /** A 3M EURIBOR index security */
-  private static final IborIndex EURIBOR3M = new IborIndex(EURIBOR3M_NAME, "EURIBOR 3M ACT/360", Tenor.THREE_MONTHS, EURIBOR_CONVENTION_ID);
-  /** A 3M EURIBOR ticker */
-  private static final ExternalId EURIBOR3M_ID = ExternalSchemes.bloombergTickerSecurityId("EUR003M Index");
-  /** The name of a 6M EURIBOR index security */
-  private static final String EURIBOR6M_NAME = "EURIBOR6M";
-  /** A 6M EURIBOR index security */
-  private static final IborIndex EURIBOR6M = new IborIndex(EURIBOR6M_NAME, "EURIBOR 6M ACT/360", Tenor.SIX_MONTHS, EURIBOR_CONVENTION_ID);
-  /** A 6M EURIBOR ticker */
-  private static final ExternalId EURIBOR6M_ID = ExternalSchemes.bloombergTickerSecurityId("EUR006M Index");
-
-  private static final SwapFixedLegConvention FIXED_LEG = new SwapFixedLegConvention("USD Swap Fixed Leg", ExternalId.of(SCHEME, "USD Swap Fixed Leg").toBundle(),
-      Tenor.SIX_MONTHS, DayCounts.ACT_360, BusinessDayConventions.MODIFIED_FOLLOWING, Currency.USD, NYLON, 2, false, StubType.NONE, false, 2);
-  private static final VanillaIborLegConvention SWAP_3M_LIBOR = new VanillaIborLegConvention("USD 3m Floating Leg", ExternalId.of(SCHEME, "USD 3m Floating Leg").toBundle(),
-      USDLIBOR3M_ID, false, SCHEME, Tenor.THREE_MONTHS, 2, false, StubType.NONE, false, 2);
-  private static final VanillaIborLegConvention SWAP_6M_EURIBOR = new VanillaIborLegConvention("EUR 6m Floating Leg", ExternalId.of(SCHEME, "EUR 6m Floating Leg").toBundle(),
-      EURIBOR3M_ID, false, SCHEME, Tenor.SIX_MONTHS, 2, false, StubType.NONE, false,2 );
-  private static final OISLegConvention OIS = new OISLegConvention("USD OIS Leg", ExternalId.of(SCHEME, "USD OIS Leg").toBundle(), USD_OVERNIGHT_ID,
-      Tenor.ONE_YEAR, BusinessDayConventions.MODIFIED_FOLLOWING, 2, false, StubType.NONE, false, 1);
-  private static final OvernightIndexConvention OVERNIGHT = new OvernightIndexConvention("USD Overnight", ExternalId.of(SCHEME, "USD Overnight").toBundle(),
-      DayCounts.ACT_360, 1, Currency.USD, NYLON);
-  private static final SwapIndexConvention SWAP_INDEX = new SwapIndexConvention("3M Swap Index", ExternalId.of(SCHEME, "3M Swap Index").toBundle(), LocalTime.of(11, 0),
-      SWAP_3M_IBOR_ID);
-  private static final CompoundingIborLegConvention COMPOUNDING_IBOR = new CompoundingIborLegConvention("USD Compounding Libor", ExternalId.of(SCHEME, "USD Compounding Libor").toBundle(),
-      USDLIBOR3M_ID, Tenor.THREE_MONTHS, CompoundingType.COMPOUNDING, Tenor.ONE_MONTH, StubType.SHORT_START, 2, false, StubType.LONG_START, true, 1);
-  private static final CMSLegConvention CMS = new CMSLegConvention("USD CMS", ExternalId.of(SCHEME, "USD CMS").toBundle(), SWAP_INDEX_ID, Tenor.SIX_MONTHS, false);
-  private static final Map<ExternalId, Convention> CONVENTIONS = new HashMap<>();
-  private static final ConventionSource CONVENTION_SOURCE;
   private static final CurveNodeCurrencyVisitor VISITOR;
 
-
-  private static final Map<ExternalIdBundle, Security> SECURITY_MAP = new HashMap<>();
-  private static final SecuritySource SECURITY_SOURCE;
-
-
-  private static final CurveNodeCurrencyVisitor EMPTY_CONVENTIONS = new CurveNodeCurrencyVisitor(new TestConventionSource(Collections.<ExternalId, Convention>emptyMap()),
-      new MySecuritySource(new HashMap<ExternalIdBundle, Security>()));
-
   static {
-    CONVENTIONS.put(FIXED_LEG_ID, FIXED_LEG);
-    CONVENTIONS.put(SWAP_3M_IBOR_ID, SWAP_3M_LIBOR);
-    CONVENTIONS.put(OIS_ID, OIS);
-    CONVENTIONS.put(OVERNIGHT_CONVENTION_ID, OVERNIGHT);
-    CONVENTIONS.put(SWAP_INDEX_ID, SWAP_INDEX);
-    CONVENTIONS.put(CMS_SWAP_ID, CMS);
-    CONVENTIONS.put(SWAP_6M_EURIBOR_ID, SWAP_6M_EURIBOR);
-    CONVENTIONS.put(COMPOUNDING_IBOR_ID, COMPOUNDING_IBOR);
-    CONVENTIONS.put(EURIBOR_CONVENTION_ID, EURIBOR_CONVENTION);
-    CONVENTIONS.put(USDLIBOR_CONVENTION_ID, USDLIBOR_CONVENTION);
-    CONVENTION_SOURCE = new TestConventionSource(CONVENTIONS);
-    // Security map. Used for index.
-    SECURITY_MAP.put(USD_OVERNIGHT_ID.toBundle(), USD_OVERNIGHT);
-    SECURITY_MAP.put(USDLIBOR1M_ID.toBundle(), USDLIBOR1M);
-    SECURITY_MAP.put(USDLIBOR3M_ID.toBundle(), USDLIBOR3M);
-    SECURITY_MAP.put(USDLIBOR6M_ID.toBundle(), USDLIBOR6M);
-    SECURITY_MAP.put(EURIBOR1M_ID.toBundle(), EURIBOR1M);
-    SECURITY_MAP.put(EURIBOR3M_ID.toBundle(), EURIBOR3M);
-    SECURITY_MAP.put(EURIBOR6M_ID.toBundle(), EURIBOR6M);
-    SECURITY_SOURCE = new MySecuritySource(SECURITY_MAP);
-    VISITOR = new CurveNodeCurrencyVisitor(CONVENTION_SOURCE, SECURITY_SOURCE);
+    VISITOR = new CurveNodeCurrencyVisitor(EMPTY_CONVENTION_SOURCE, EMPTY_SECURITY_SOURCE);
   }
 
   /**
@@ -227,103 +86,6 @@ public class CurveNodeCurrencyVisitorTest {
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullSecuritySource() {
     new CurveNodeCurrencyVisitor(EMPTY_CONVENTION_SOURCE, null);
-  }
-
-  @Test(expectedExceptions = OpenGammaRuntimeException.class)
-  public void testNullSwapPayConvention() {
-    final SwapNode node = new SwapNode(Tenor.ONE_DAY, Tenor.TEN_YEARS, FIXED_LEG_ID, SWAP_3M_IBOR_ID, SCHEME);
-    node.accept(EMPTY_CONVENTIONS);
-  }
-
-  @Test(expectedExceptions = OpenGammaRuntimeException.class)
-  public void testNullSwapReceiveConvention() {
-    final Map<ExternalId, Convention> map = new HashMap<>();
-    map.put(FIXED_LEG_ID, FIXED_LEG);
-    final CurveNodeCurrencyVisitor visitor = new CurveNodeCurrencyVisitor(new TestConventionSource(map), SECURITY_SOURCE);
-    final SwapNode node = new SwapNode(Tenor.ONE_DAY, Tenor.TEN_YEARS, FIXED_LEG_ID, SWAP_3M_IBOR_ID, SCHEME);
-    node.accept(visitor);
-  }
-
-  @Test(expectedExceptions = OpenGammaRuntimeException.class)
-  public void testNullIborUnderlyingConvention() {
-    final Map<ExternalId, Convention> map = new HashMap<>();
-    map.put(FIXED_LEG_ID, FIXED_LEG);
-    map.put(SWAP_3M_IBOR_ID, SWAP_3M_LIBOR);
-    final CurveNodeCurrencyVisitor visitor = new CurveNodeCurrencyVisitor(new TestConventionSource(map), SECURITY_SOURCE);
-    final SwapNode node = new SwapNode(Tenor.ONE_DAY, Tenor.TEN_YEARS, FIXED_LEG_ID, SWAP_3M_IBOR_ID, SCHEME);
-    node.accept(visitor);
-  }
-
-  @Test(expectedExceptions = OpenGammaRuntimeException.class)
-  public void testNullCMSIndexUnderlyingConvention() {
-    final Map<ExternalId, Convention> map = new HashMap<>();
-    map.put(FIXED_LEG_ID, FIXED_LEG);
-    map.put(SWAP_INDEX_ID, SWAP_INDEX);
-    final CurveNodeCurrencyVisitor visitor = new CurveNodeCurrencyVisitor(new TestConventionSource(map), SECURITY_SOURCE);
-    final SwapNode node = new SwapNode(Tenor.ONE_DAY, Tenor.TEN_YEARS, FIXED_LEG_ID, SWAP_INDEX_ID, SCHEME);
-    node.accept(visitor);
-  }
-
-  @Test(expectedExceptions = OpenGammaRuntimeException.class)
-  public void testNullCMSUnderlyingConvention() {
-    final Map<ExternalId, Convention> map = new HashMap<>();
-    map.put(FIXED_LEG_ID, FIXED_LEG);
-    map.put(CMS_SWAP_ID, CMS);
-    final CurveNodeCurrencyVisitor visitor = new CurveNodeCurrencyVisitor(new TestConventionSource(map), SECURITY_SOURCE);
-    final SwapNode node = new SwapNode(Tenor.ONE_DAY, Tenor.TEN_YEARS, FIXED_LEG_ID, CMS_SWAP_ID, SCHEME);
-    node.accept(visitor);
-  }
-
-  @Test(expectedExceptions = OpenGammaRuntimeException.class)
-  public void testNullOISUnderlyingConvention() {
-    final Map<ExternalId, Convention> map = new HashMap<>();
-    map.put(FIXED_LEG_ID, FIXED_LEG);
-    map.put(OIS_ID, OIS);
-    final CurveNodeCurrencyVisitor visitor = new CurveNodeCurrencyVisitor(new TestConventionSource(map), SECURITY_SOURCE);
-    final SwapNode node = new SwapNode(Tenor.ONE_DAY, Tenor.TEN_YEARS, FIXED_LEG_ID, OIS_ID, SCHEME);
-    node.accept(visitor);
-  }
-
-  @Test(expectedExceptions = OpenGammaRuntimeException.class)
-  public void testNullFixedLegConvention() {
-    final Map<ExternalId, Convention> map = new HashMap<>();
-    map.put(OIS_ID, OIS);
-    final CurveNodeCurrencyVisitor visitor = new CurveNodeCurrencyVisitor(new TestConventionSource(map), SECURITY_SOURCE);
-    final SwapNode node = new SwapNode(Tenor.ONE_DAY, Tenor.TEN_YEARS, FIXED_LEG_ID, OIS_ID, SCHEME);
-    node.accept(visitor);
-  }
-
-  @Test(expectedExceptions = OpenGammaRuntimeException.class)
-  public void testNullCompoundingIborLegConvention() {
-    final Map<ExternalId, Convention> map = new HashMap<>();
-    final CompoundingIborLegConvention compoundingIbor = new CompoundingIborLegConvention("USD Compounding Libor", ExternalId.of(SCHEME, "USD Compounding Libor").toBundle(),
-        USDLIBOR3M_ID, Tenor.THREE_MONTHS, CompoundingType.COMPOUNDING, Tenor.ONE_MONTH, StubType.SHORT_START, 2, false, StubType.LONG_START, true, 1);
-    map.put(FIXED_LEG_ID, FIXED_LEG);
-    map.put(COMPOUNDING_IBOR_ID, compoundingIbor);
-    final CurveNodeCurrencyVisitor visitor = new CurveNodeCurrencyVisitor(new TestConventionSource(map), SECURITY_SOURCE);
-    final SwapNode node = new SwapNode(Tenor.ONE_DAY, Tenor.TEN_YEARS, FIXED_LEG_ID, COMPOUNDING_IBOR_ID, SCHEME);
-    node.accept(visitor);
-  }
-
-  @Test(expectedExceptions = OpenGammaRuntimeException.class)
-  public void testWrongUnderlyingCompoundingIborLegConvention() {
-    final Map<ExternalId, Convention> map = new HashMap<>();
-    map.put(FIXED_LEG_ID, FIXED_LEG);
-    map.put(COMPOUNDING_IBOR_ID, COMPOUNDING_IBOR);
-    final CurveNodeCurrencyVisitor visitor = new CurveNodeCurrencyVisitor(new TestConventionSource(map), SECURITY_SOURCE);
-    final SwapNode node = new SwapNode(Tenor.ONE_DAY, Tenor.TEN_YEARS, FIXED_LEG_ID, COMPOUNDING_IBOR_ID, SCHEME);
-    node.accept(visitor);
-  }
-
-  @Test(expectedExceptions = IllegalStateException.class)
-  public void testUnhandledConvention() {
-    final Convention convention = new MockConvention(UniqueId.of("Convention", "Test"), "Mock", ExternalIdBundle.of("A", "B"), Currency.GBP);
-    final Map<ExternalId, Convention> map = new HashMap<>();
-    map.put(FIXED_LEG_ID, FIXED_LEG);
-    map.put(ExternalId.of("A", "B"), convention);
-    final CurveNodeCurrencyVisitor visitor = new CurveNodeCurrencyVisitor(new TestConventionSource(map), SECURITY_SOURCE);
-    final SwapNode node = new SwapNode(Tenor.ONE_DAY, Tenor.TEN_YEARS, FIXED_LEG_ID, ExternalId.of("A", "B"), SCHEME);
-    node.accept(visitor);
   }
 
   /**
@@ -372,36 +134,22 @@ public class CurveNodeCurrencyVisitorTest {
     assertEquals(currencies, Sets.newHashSet(Currency.EUR, Currency.AUD));
   }
 
+  /**
+   * Tests that a bond convention does not return a currency.
+   */
   @Test
-  public void testSwapNode() {
-    SwapNode node = new SwapNode(Tenor.ONE_DAY, Tenor.TEN_YEARS, FIXED_LEG_ID, SWAP_3M_IBOR_ID, SCHEME);
-    Set<Currency> currencies = node.accept(VISITOR);
-    assertEquals(1, currencies.size());
-    assertEquals(Currency.USD, currencies.iterator().next());
-    node = new SwapNode(Tenor.ONE_DAY, Tenor.TEN_YEARS, FIXED_LEG_ID, OIS_ID, SCHEME);
-    currencies = node.accept(VISITOR);
-    assertEquals(1, currencies.size());
-    assertEquals(Currency.USD, currencies.iterator().next());
-    node = new SwapNode(Tenor.ONE_DAY, Tenor.TEN_YEARS, FIXED_LEG_ID, CMS_SWAP_ID, SCHEME);
-    currencies = node.accept(VISITOR);
-    assertEquals(1, currencies.size());
-    assertEquals(Currency.USD, currencies.iterator().next());
-    node = new SwapNode(Tenor.ONE_DAY, Tenor.TEN_YEARS, FIXED_LEG_ID, COMPOUNDING_IBOR_ID, SCHEME);
-    currencies = node.accept(VISITOR);
-    assertEquals(1, currencies.size());
-    assertEquals(Currency.USD, currencies.iterator().next());
-    node = new SwapNode(Tenor.ONE_DAY, Tenor.TEN_YEARS, SWAP_3M_IBOR_ID, SWAP_6M_EURIBOR_ID, SCHEME);
-    currencies = node.accept(VISITOR);
-    assertEquals(2, currencies.size());
-    assertEquals(Sets.newHashSet(Currency.EUR, Currency.USD), currencies);
+  public void testBondConvention() {
+    final BondConvention convention = new BondConvention("Bond", ExternalIdBundle.of(SCHEME, "Bond"), 7, 2, BusinessDayConventions.FOLLOWING, true, true);
+    assertEquals(convention.accept(VISITOR), Collections.emptySet());
   }
 
+  /**
+   * Tests that an equity convention does not return a currency.
+   */
   @Test
-  public void testZeroCouponInflationNode() {
-    final ZeroCouponInflationNode node = new ZeroCouponInflationNode(Tenor.EIGHT_YEARS, ZERO_COUPON_INFLATION_ID, FIXED_LEG_ID, InflationNodeType.INTERPOLATED, "TEST");
-    final Set<Currency> currencies = node.accept(VISITOR);
-    assertEquals(1, currencies.size());
-    assertEquals(Currency.USD, currencies.iterator().next());
+  public void testEquityConvention() {
+    final EquityConvention convention = new EquityConvention("Equity", ExternalIdBundle.of(SCHEME, "Equity"), 7);
+    assertEquals(convention.accept(VISITOR), Collections.emptySet());
   }
 
   /**

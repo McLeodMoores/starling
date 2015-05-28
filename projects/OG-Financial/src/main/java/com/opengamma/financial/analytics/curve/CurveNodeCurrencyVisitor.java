@@ -13,9 +13,6 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.google.common.collect.Sets;
 import com.opengamma.DataNotFoundException;
 import com.opengamma.OpenGammaRuntimeException;
@@ -91,8 +88,6 @@ import com.opengamma.util.money.Currency;
  * an underlying convention
  */
 public class CurveNodeCurrencyVisitor implements CurveNodeVisitor<Set<Currency>>, FinancialConventionVisitor<Set<Currency>> {
-  /** The logger */
-  private static final Logger LOGGER = LoggerFactory.getLogger(CurveNodeCurrencyVisitor.class);
   /** The security source */
   private final SecuritySource _securitySource;
   /** The convention source */
@@ -333,24 +328,29 @@ public class CurveNodeCurrencyVisitor implements CurveNodeVisitor<Set<Currency>>
 
   @Override
   public Set<Currency> visitCMSLegConvention(final CMSLegConvention convention) {
-    final FinancialConvention underlyingConvention = _conventionSource.getSingle(convention.getSwapIndexConvention(), FinancialConvention.class);
+    final FinancialConvention underlyingConvention = _conventionSource.getSingle(convention.getSwapIndexConvention(), SwapIndexConvention.class);
     return underlyingConvention.accept(this);
   }
 
   @Override
   public Set<Currency> visitCompoundingIborLegConvention(final CompoundingIborLegConvention convention) {
-    final Security sec = _securitySource.getSingle(convention.getIborIndexConvention().toBundle());
-    if (sec == null) {
-      throw new OpenGammaRuntimeException("CurveNodeCurrencyVisitor.visitCompoundingIborLegConvention: Ibor index with id "
-          + convention.getIborIndexConvention() + " was null");
+    try {
+      final FinancialConvention indexConvention = _conventionSource.getSingle(convention.getIborIndexConvention(), IborIndexConvention.class);
+      return indexConvention.accept(this);
+    } catch (final DataNotFoundException e) {
+      // If the convention is not found in the convention source then try the convention referenced in the underlying security
+      final Security sec = _securitySource.getSingle(convention.getIborIndexConvention().toBundle());
+      if (sec == null) {
+        throw new OpenGammaRuntimeException("Could not get underlying security for CompoundingIborLegConvention with id "
+            + convention.getIborIndexConvention() + " from source");
+      }
+      if (sec instanceof IborIndex) {
+        final IborIndex indexSecurity = (IborIndex) sec;
+        final IborIndexConvention indexConvention = _conventionSource.getSingle(indexSecurity.getConventionId(), IborIndexConvention.class);
+        return indexConvention.accept(this);
+      }
+      throw new OpenGammaRuntimeException("Underlying security with id " + convention.getIborIndexConvention() + " was not an IborIndex: have " + sec);
     }
-    final com.opengamma.financial.security.index.IborIndex indexSecurity = (com.opengamma.financial.security.index.IborIndex) sec;
-    final IborIndexConvention indexConvention = _conventionSource.getSingle(indexSecurity.getConventionId(), IborIndexConvention.class);
-    if (indexConvention == null) {
-      throw new OpenGammaRuntimeException("CurveNodeCurrencyVisitor.visitCompoundingIborLegConvention: Convention with id "
-          + indexSecurity.getConventionId() + " was null");
-    }
-    return indexConvention.accept(this);
   }
 
   @Override
@@ -474,26 +474,68 @@ public class CurveNodeCurrencyVisitor implements CurveNodeVisitor<Set<Currency>>
 
   @Override
   public Set<Currency> visitOISLegConvention(final OISLegConvention convention) {
-    final OvernightIndex index = (OvernightIndex) _securitySource.getSingle(convention.getOvernightIndexConvention().toBundle());
-    if (index == null) {
-      throw new OpenGammaRuntimeException("Overnight index with id " + convention.getOvernightIndexConvention() + " not found in security source.");
+    try {
+      final FinancialConvention indexConvention = _conventionSource.getSingle(convention.getOvernightIndexConvention(), OvernightIndexConvention.class);
+      return indexConvention.accept(this);
+    } catch (final DataNotFoundException e) {
+      // If the convention is not found in the convention source then try the convention referenced in the underlying security
+      final Security sec = _securitySource.getSingle(convention.getOvernightIndexConvention().toBundle());
+      if (sec == null) {
+        throw new OpenGammaRuntimeException("Could not get underlying security for OISLegConvention with id "
+            + convention.getOvernightIndexConvention() + " from source");
+      }
+      if (sec instanceof OvernightIndex) {
+        final OvernightIndex indexSecurity = (OvernightIndex) sec;
+        final OvernightIndexConvention indexConvention = _conventionSource.getSingle(indexSecurity.getConventionId(), OvernightIndexConvention.class);
+        return indexConvention.accept(this);
+      }
+      throw new OpenGammaRuntimeException("Underlying security with id " + convention.getOvernightIndexConvention()
+          + " was not an OvernightIndex: have " + sec);
     }
-    final FinancialConvention underlyingConvention = _conventionSource.getSingle(index.getConventionId(), FinancialConvention.class);
-    return underlyingConvention.accept(this);
   }
 
   @Override
   public Set<Currency> visitONCompoundedLegRollDateConvention(final ONCompoundedLegRollDateConvention convention) {
-    final OvernightIndex index = (OvernightIndex) _securitySource.getSingle(convention.getOvernightIndexConvention().toBundle());
-    final FinancialConvention underlyingConvention = _conventionSource.getSingle(index.getConventionId(), FinancialConvention.class);
-    return underlyingConvention.accept(this);
+    try {
+      final FinancialConvention indexConvention = _conventionSource.getSingle(convention.getOvernightIndexConvention(), OvernightIndexConvention.class);
+      return indexConvention.accept(this);
+    } catch (final DataNotFoundException e) {
+      // If the convention is not found in the convention source then try the convention referenced in the underlying security
+      final Security sec = _securitySource.getSingle(convention.getOvernightIndexConvention().toBundle());
+      if (sec == null) {
+        throw new OpenGammaRuntimeException("Could not get underlying security for ONCompoundedLegRollDateConvention with id "
+            + convention.getOvernightIndexConvention() + " from source");
+      }
+      if (sec instanceof OvernightIndex) {
+        final OvernightIndex indexSecurity = (OvernightIndex) sec;
+        final OvernightIndexConvention indexConvention = _conventionSource.getSingle(indexSecurity.getConventionId(), OvernightIndexConvention.class);
+        return indexConvention.accept(this);
+      }
+      throw new OpenGammaRuntimeException("Underlying security with id " + convention.getOvernightIndexConvention()
+          + " was not an OvernightIndex: have " + sec);
+    }
   }
 
   @Override
   public Set<Currency> visitONArithmeticAverageLegConvention(final ONArithmeticAverageLegConvention convention) {
-    final OvernightIndex index = (OvernightIndex) _securitySource.getSingle(convention.getOvernightIndexConvention().toBundle());
-    final FinancialConvention underlyingConvention = _conventionSource.getSingle(index.getConventionId(), FinancialConvention.class);
-    return underlyingConvention.accept(this);
+    try {
+      final FinancialConvention indexConvention = _conventionSource.getSingle(convention.getOvernightIndexConvention(), OvernightIndexConvention.class);
+      return indexConvention.accept(this);
+    } catch (final DataNotFoundException e) {
+      // If the convention is not found in the convention source then try the convention referenced in the underlying security
+      final Security sec = _securitySource.getSingle(convention.getOvernightIndexConvention().toBundle());
+      if (sec == null) {
+        throw new OpenGammaRuntimeException("Could not get underlying security for ONArithmeticAverageLegConvention with id "
+            + convention.getOvernightIndexConvention() + " from source");
+      }
+      if (sec instanceof OvernightIndex) {
+        final OvernightIndex indexSecurity = (OvernightIndex) sec;
+        final OvernightIndexConvention indexConvention = _conventionSource.getSingle(indexSecurity.getConventionId(), OvernightIndexConvention.class);
+        return indexConvention.accept(this);
+      }
+      throw new OpenGammaRuntimeException("Underlying security with id " + convention.getOvernightIndexConvention()
+          + " was not an OvernightIndex: have " + sec);
+    }
   }
 
   @Override
@@ -527,6 +569,7 @@ public class CurveNodeCurrencyVisitor implements CurveNodeVisitor<Set<Currency>>
 
   @Override
   public Set<Currency> visitSwapIndexConvention(final SwapIndexConvention convention) {
+    // TODO swap index security?
     final FinancialConvention underlyingConvention = _conventionSource.getSingle(convention.getSwapConvention(), FinancialConvention.class);
     return underlyingConvention.accept(this);
   }

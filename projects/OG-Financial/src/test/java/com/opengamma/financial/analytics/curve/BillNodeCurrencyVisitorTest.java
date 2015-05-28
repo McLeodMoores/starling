@@ -35,7 +35,6 @@ import com.opengamma.util.time.DateUtils;
 import com.opengamma.util.time.Expiry;
 import com.opengamma.util.time.Tenor;
 
-
 /**
  * Tests the retrieval of a currency from bill nodes.
  */
