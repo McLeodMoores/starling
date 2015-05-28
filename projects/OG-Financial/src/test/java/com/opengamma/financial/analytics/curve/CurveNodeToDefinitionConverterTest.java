@@ -577,7 +577,7 @@ public class CurveNodeToDefinitionConverterTest {
     swapNode.accept(converter);
   }
 
-  @Test(expectedExceptions = OpenGammaRuntimeException.class)
+  @Test(expectedExceptions = ClassCastException.class)
   public void testWrongSwapFloatLegIborConvention() {
     final ExternalId marketDataId = ExternalId.of(SCHEME, "Data");
     final SnapshotDataBundle marketValues = new SnapshotDataBundle();
@@ -623,7 +623,7 @@ public class CurveNodeToDefinitionConverterTest {
     node.accept(converter);
   }
 
-  @Test(expectedExceptions = OpenGammaRuntimeException.class)
+  @Test(expectedExceptions = ClassCastException.class)
   public void testWrongConventionForFXForward() {
     final ExternalId marketDataId = ExternalId.of(SCHEME, "Data");
     final SnapshotDataBundle marketValues = new SnapshotDataBundle();
@@ -635,7 +635,7 @@ public class CurveNodeToDefinitionConverterTest {
     node.accept(converter);
   }
 
-  @Test(expectedExceptions = OpenGammaRuntimeException.class)
+  @Test(expectedExceptions = ClassCastException.class)
   public void testWrongUnderlyingConventionForFXForward() {
     final ExternalId marketDataId = ExternalId.of(SCHEME, "Data");
     final SnapshotDataBundle marketValues = new SnapshotDataBundle();
