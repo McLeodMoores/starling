@@ -2,6 +2,10 @@
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
  *
  * Please see distribution for license.
+ *
+ * Modified by McLeod Moores Software Limited.
+ *
+ * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.analytics.financial.interestrate.bond.provider;
 
@@ -41,7 +45,6 @@ import com.opengamma.util.money.Currency;
 import com.opengamma.util.money.MultipleCurrencyAmount;
 import com.opengamma.util.test.TestGroup;
 import com.opengamma.util.time.DateUtils;
-
 /**
  * Tests related to the pricing of bills transactions by discounting.
  */
@@ -91,10 +94,10 @@ public class BillTransactionDiscountingMethodTest {
   private static final double TOLERANCE_SPREAD = 1.0E-8;
   private static final double TOLERANCE_SPREAD_DELTA = 1.0E-6;
 
-  @Test
   /**
    * Tests the present value against explicit computation.
    */
+  @Test
   public void presentValue() {
     final MultipleCurrencyAmount pvTransactionComputed = METHOD_TRANSACTION.presentValue(BILL_TRA, ISSUER_MULTICURVE);
     MultipleCurrencyAmount pvSecurity = METHOD_SECURITY.presentValue(BILL_TRA.getBillPurchased(), ISSUER_MULTICURVE);
@@ -103,37 +106,38 @@ public class BillTransactionDiscountingMethodTest {
     assertEquals("Bill Security: discounting method - present value", pvSecurity.getAmount(EUR) + pvSettle, pvTransactionComputed.getAmount(EUR), TOLERANCE_PV);
   }
 
-  @Test
   /**
    * Tests the present value against explicit computation.
    */
+  @Test
   public void presentValueFromYield() {
     final MultipleCurrencyAmount pvTransactionComputed = METHOD_TRANSACTION.presentValueFromYield(BILL_TRA, YIELD, ISSUER_MULTICURVE);
     final MultipleCurrencyAmount pvSecurity = METHOD_SECURITY.presentValue(BILL_TRA.getBillStandard(), ISSUER_MULTICURVE);
     final double pvSettle = ISSUER_MULTICURVE.getMulticurveProvider().getDiscountFactor(BILL_TRA.getCurrency(), BILL_TRA.getBillPurchased().getSettlementTime())
         * BILL_TRA.getSettlementAmount();
-    final MultipleCurrencyAmount pvTransactionExpected = pvSecurity.plus(MultipleCurrencyAmount.of(BILL_TRA.getCurrency(), pvSettle));
-    assertEquals("Bill Security: discounting method - present value from yield", pvTransactionExpected.getAmount(EUR), pvTransactionComputed.getAmount(EUR), TOLERANCE_PV_DELTA);
+    final MultipleCurrencyAmount pvTransactionExpected = pvSecurity.plus(MultipleCurrencyAmount.of(BILL_TRA.getCurrency(), pvSettle)).multipliedBy(QUANTITY);
+    assertEquals("Bill Security: discounting method - present value from yield", pvTransactionExpected.getAmount(EUR), pvTransactionComputed.getAmount(EUR),
+        TOLERANCE_PV_DELTA * QUANTITY);
   }
 
-  @Test
   /**
    * Tests the present value: Method vs Calculator
    */
+  @Test
   public void presentValueMethodVsCalculator() {
     final MultipleCurrencyAmount pvMethod = METHOD_TRANSACTION.presentValue(BILL_TRA, ISSUER_MULTICURVE);
     final MultipleCurrencyAmount pvCalculator = BILL_TRA.accept(PVIC, ISSUER_MULTICURVE);
     assertEquals("Bill Security: discounting method - present value", pvMethod.getAmount(EUR), pvCalculator.getAmount(EUR), TOLERANCE_PV);
   }
 
-  @Test
   /**
    * Tests present value curve sensitivity.
    */
+  @Test
   public void presentValueCurveSensitivity() {
     final MultipleCurrencyParameterSensitivity pvpsDepositExact = PS_PVI_C.calculateSensitivity(BILL_TRA, ISSUER_MULTICURVE, ISSUER_MULTICURVE.getAllNames());
-    final MultipleCurrencyParameterSensitivity pvpsDepositFD = PS_PVI_FDC.calculateSensitivity(BILL_TRA, ISSUER_MULTICURVE);
-    AssertSensitivityObjects.assertEquals("DepositCounterpartDiscountingMethod: presentValueCurveSensitivity ", pvpsDepositExact, pvpsDepositFD, TOLERANCE_PV_DELTA);
+    final MultipleCurrencyParameterSensitivity pvpsDepositFD = PS_PVI_FDC.calculateSensitivity(BILL_TRA, ISSUER_MULTICURVE).multipliedBy(QUANTITY);
+    AssertSensitivityObjects.assertEquals("BillTransactionDiscountingMethod: presentValueCurveSensitivity ", pvpsDepositExact, pvpsDepositFD, TOLERANCE_PV_DELTA * QUANTITY);
   }
 
   @Test
@@ -143,10 +147,10 @@ public class BillTransactionDiscountingMethodTest {
     AssertSensitivityObjects.assertEquals("Bill Security: discounting method - curve sensitivity", pvcsMethod, pvcsCalculator, TOLERANCE_PV_DELTA);
   }
 
-  @Test
   /**
    * Tests the par spread.
    */
+  @Test
   public void parSpread() {
     final double spread = METHOD_TRANSACTION.parSpread(BILL_TRA, ISSUER_MULTICURVE);
     final BillTransactionDefinition bill0Definition = BillTransactionDefinition.fromYield(BILL_SEC_DEFINITION, QUANTITY, SETTLE_DATE, YIELD + spread, CALENDAR);
@@ -155,40 +159,40 @@ public class BillTransactionDiscountingMethodTest {
     assertEquals("Bill Security: discounting method - par spread", 0, pv0.getAmount(EUR), TOLERANCE_PV);
   }
 
-  @Test
   /**
    * Tests the par spread (Method vs Calculator).
    */
+  @Test
   public void parSpreadMethodVsCalculator() {
     final double spreadMethod = METHOD_TRANSACTION.parSpread(BILL_TRA, ISSUER_MULTICURVE);
     final double spreadCalculator = BILL_TRA.accept(PSMQIDC, ISSUER_MULTICURVE);
     assertEquals("Bill Security: discounting method - par spread", spreadMethod, spreadCalculator, TOLERANCE_SPREAD);
   }
 
-  @Test
   /**
    * Tests the par spread (Method vs Calculator).
    */
+  @Test
   public void parSpreadCalculatorVsCalculator2() {
     final double spreadCalculator = BILL_TRA.accept(PSMQIDC, ISSUER_MULTICURVE);
     final double spreadCalculator2 = BILL_TRA.accept(PSRIDC, ISSUER_MULTICURVE);
     assertEquals("Bill Security: discounting method - par spread", spreadCalculator, spreadCalculator2, TOLERANCE_SPREAD);
   }
 
-  @Test
   /**
    * Tests parSpread curve sensitivity.
    */
+  @Test
   public void parSpreadCurveSensitivity() {
     final SimpleParameterSensitivity pspsDepositExact = PS_PSMQ_C.calculateSensitivity(BILL_TRA, ISSUER_MULTICURVE, ISSUER_MULTICURVE.getAllNames());
     final SimpleParameterSensitivity pspsDepositFD = PS_PSMQ_FDC.calculateSensitivity(BILL_TRA, ISSUER_MULTICURVE);
-    AssertSensitivityObjects.assertEquals("DepositCounterpartDiscountingMethod: presentValueCurveSensitivity ", pspsDepositExact, pspsDepositFD, TOLERANCE_PV_DELTA);
+    AssertSensitivityObjects.assertEquals("BillTransactionDiscountingMethod: presentValueCurveSensitivity ", pspsDepositExact, pspsDepositFD, TOLERANCE_PV_DELTA);
   }
 
-  @Test
   /**
    * Tests the par spread curve sensitivity  (Method vs Calculator).
    */
+  @Test
   public void parSpreadCurveSensitivityMethodVsCalculator() {
     final MulticurveSensitivity pscsMethod = METHOD_TRANSACTION.parSpreadCurveSensitivity(BILL_TRA, ISSUER_MULTICURVE);
     final MulticurveSensitivity pscsCalculator = BILL_TRA.accept(PSMQCSIDC, ISSUER_MULTICURVE);

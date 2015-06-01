@@ -2,6 +2,10 @@
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
  *
  * Please see distribution for license.
+ *
+ * Modified by McLeod Moores Software Limited.
+ *
+ * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.financial.analytics.curve;
 
@@ -10,6 +14,7 @@ import org.threeten.bp.Period;
 import org.threeten.bp.ZoneId;
 import org.threeten.bp.ZonedDateTime;
 
+import com.opengamma.DataNotFoundException;
 import com.opengamma.OpenGammaRuntimeException;
 import com.opengamma.analytics.financial.instrument.InstrumentDefinition;
 import com.opengamma.analytics.financial.instrument.future.FederalFundsFutureSecurityDefinition;
@@ -71,15 +76,15 @@ public class RateFutureNodeConverter extends CurveNodeVisitorAdapter<InstrumentD
    * @param dataId The id of the market data, not null
    * @param valuationTime The valuation time, not null
    */
-  public RateFutureNodeConverter(final SecuritySource securitySource, final ConventionSource conventionSource, final HolidaySource holidaySource, final RegionSource regionSource,
-      final SnapshotDataBundle marketData, final ExternalId dataId, final ZonedDateTime valuationTime) {
-    ArgumentChecker.notNull(securitySource, "security source");
-    ArgumentChecker.notNull(conventionSource, "convention source");
-    ArgumentChecker.notNull(holidaySource, "holiday source");
-    ArgumentChecker.notNull(regionSource, "region source");
-    ArgumentChecker.notNull(marketData, "market data");
-    ArgumentChecker.notNull(dataId, "data id");
-    ArgumentChecker.notNull(valuationTime, "valuation time");
+  public RateFutureNodeConverter(final SecuritySource securitySource, final ConventionSource conventionSource, final HolidaySource holidaySource,
+      final RegionSource regionSource, final SnapshotDataBundle marketData, final ExternalId dataId, final ZonedDateTime valuationTime) {
+    ArgumentChecker.notNull(securitySource, "securitySource");
+    ArgumentChecker.notNull(conventionSource, "conventionSource");
+    ArgumentChecker.notNull(holidaySource, "holidaySource");
+    ArgumentChecker.notNull(regionSource, "regionSource");
+    ArgumentChecker.notNull(marketData, "marketData");
+    ArgumentChecker.notNull(dataId, "dataId");
+    ArgumentChecker.notNull(valuationTime, "valuationTime");
     _securitySource = securitySource;
     _conventionSource = conventionSource;
     _holidaySource = holidaySource;
@@ -114,7 +119,18 @@ public class RateFutureNodeConverter extends CurveNodeVisitorAdapter<InstrumentD
   private InstrumentDefinition<?> getInterestRateFuture(final RateFutureNode rateFuture, final InterestRateFutureConvention futureConvention,
       final Double price) {
     final String expiryCalculatorName = futureConvention.getExpiryConvention().getValue();
-    final IborIndexConvention indexConvention = _conventionSource.getSingle(futureConvention.getIndexConvention(), IborIndexConvention.class);
+    IborIndexConvention indexConvention;
+    try {
+      indexConvention = _conventionSource.getSingle(futureConvention.getIndexConvention(), IborIndexConvention.class);
+    } catch (final DataNotFoundException e1) {
+      final Security security = _securitySource.getSingle(futureConvention.getIndexConvention().toBundle());
+      if (security instanceof com.opengamma.financial.security.index.IborIndex) {
+        final com.opengamma.financial.security.index.IborIndex indexSecurity = (com.opengamma.financial.security.index.IborIndex) security;
+        indexConvention = _conventionSource.getSingle(indexSecurity.getConventionId(), IborIndexConvention.class);
+      } else {
+        throw new OpenGammaRuntimeException("Security with id " + futureConvention.getIndexConvention() + " was not an IborIndex");
+      }
+    }
     final IborIndex index = ConverterUtils.indexIbor(indexConvention.getName(), indexConvention, rateFuture.getUnderlyingTenor());
     final Period indexTenor = rateFuture.getUnderlyingTenor().getPeriod();
     final double paymentAccrualFactor = indexTenor.toTotalMonths() / 12.; //TODO don't use this method
@@ -124,9 +140,12 @@ public class RateFutureNodeConverter extends CurveNodeVisitorAdapter<InstrumentD
     final ZonedDateTime startDate = _valuationTime.plus(rateFuture.getStartTenor().getPeriod());
     final LocalTime time = startDate.toLocalTime();
     final ZoneId timeZone = startDate.getZone();
-    final ZonedDateTime expiryDate = ZonedDateTime.of(expiryCalculator.getExpiryDate(rateFuture.getFutureNumber(), startDate.toLocalDate(), regionCalendar), time, timeZone);
-    final InterestRateFutureSecurityDefinition securityDefinition = new InterestRateFutureSecurityDefinition(expiryDate, index, 1, paymentAccrualFactor, "", fixingCalendar);
-    final InterestRateFutureTransactionDefinition transactionDefinition = new InterestRateFutureTransactionDefinition(securityDefinition, 1, _valuationTime, price);
+    final ZonedDateTime expiryDate = ZonedDateTime.of(expiryCalculator.getExpiryDate(rateFuture.getFutureNumber(), startDate.toLocalDate(), regionCalendar),
+        time, timeZone);
+    final InterestRateFutureSecurityDefinition securityDefinition = new InterestRateFutureSecurityDefinition(expiryDate, index, 1, paymentAccrualFactor, "",
+        fixingCalendar);
+    final InterestRateFutureTransactionDefinition transactionDefinition = new InterestRateFutureTransactionDefinition(securityDefinition, 1, _valuationTime,
+        price);
     return transactionDefinition;
   }
 
@@ -140,23 +159,31 @@ public class RateFutureNodeConverter extends CurveNodeVisitorAdapter<InstrumentD
   private InstrumentDefinition<?> getFederalFundsFuture(final RateFutureNode rateFuture, final FederalFundsFutureConvention futureConvention,
       final Double price) {
     final String expiryCalculatorName = futureConvention.getExpiryConvention().getValue();
-    final Security sec = _securitySource.getSingle(futureConvention.getIndexConvention().toBundle());
-    if (sec == null) {
-      throw new OpenGammaRuntimeException("Overnight index with id " + futureConvention.getIndexConvention() + " was null");
+    OvernightIndexConvention indexConvention;
+    try {
+      indexConvention = _conventionSource.getSingle(futureConvention.getIndexConvention(), OvernightIndexConvention.class);
+    } catch (final DataNotFoundException e1) {
+      final Security security = _securitySource.getSingle(futureConvention.getIndexConvention().toBundle());
+      if (security instanceof OvernightIndex) {
+        final OvernightIndex indexSecurity = (OvernightIndex) security;
+        indexConvention = _conventionSource.getSingle(indexSecurity.getConventionId(), OvernightIndexConvention.class);
+      } else {
+        throw new OpenGammaRuntimeException("Security with id " + futureConvention.getIndexConvention() + " was not an OvernightIndex");
+      }
     }
-    final OvernightIndex index = (OvernightIndex) sec;
-    final OvernightIndexConvention indexConvention = _conventionSource.getSingle(index.getConventionId(), OvernightIndexConvention.class);
-    final IndexON indexON = ConverterUtils.indexON(index.getName(), indexConvention);
+    final IndexON indexON = ConverterUtils.indexON(indexConvention.getName(), indexConvention);
     final double paymentAccrualFactor = 1 / 12.;
     final Calendar calendar = CalendarUtils.getCalendar(_regionSource, _holidaySource, indexConvention.getRegionCalendar());
     final ExchangeTradedInstrumentExpiryCalculator expiryCalculator = ExchangeTradedInstrumentExpiryCalculatorFactory.getCalculator(expiryCalculatorName);
     final ZonedDateTime startDate = _valuationTime.plus(rateFuture.getStartTenor().getPeriod());
     final LocalTime time = startDate.toLocalTime();
     final ZoneId timeZone = startDate.getZone();
-    final ZonedDateTime expiryDate = ZonedDateTime.of(expiryCalculator.getExpiryDate(rateFuture.getFutureNumber(), startDate.toLocalDate(), calendar), time, timeZone);
+    final ZonedDateTime expiryDate = ZonedDateTime.of(expiryCalculator.getExpiryDate(rateFuture.getFutureNumber(), startDate.toLocalDate(), calendar),
+        time, timeZone);
     final FederalFundsFutureSecurityDefinition securityDefinition = FederalFundsFutureSecurityDefinition.from(expiryDate,
         indexON, 1, paymentAccrualFactor, "", calendar);
-    final FederalFundsFutureTransactionDefinition transactionDefinition = new FederalFundsFutureTransactionDefinition(securityDefinition, 1, _valuationTime, price);
+    final FederalFundsFutureTransactionDefinition transactionDefinition = new FederalFundsFutureTransactionDefinition(securityDefinition, 1,
+        _valuationTime, price);
     return transactionDefinition;
   }
 }

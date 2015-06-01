@@ -9,7 +9,6 @@ import java.util.Collection;
 import java.util.Map;
 
 import com.opengamma.DataNotFoundException;
-import com.opengamma.OpenGammaRuntimeException;
 import com.opengamma.core.change.ChangeManager;
 import com.opengamma.core.convention.Convention;
 import com.opengamma.core.convention.ConventionSource;
@@ -31,24 +30,20 @@ public class TestConventionSource implements ConventionSource {
 
   @Override
   public Convention getSingle(final ExternalId identifier) {
-    Convention convention = _conventions.get(identifier);
+    final Convention convention = _conventions.get(identifier);
     if (convention == null) {
       throw new DataNotFoundException("No convention found: " + identifier);
     }
     return convention;
   }
 
-  @SuppressWarnings("unchecked")
   @Override
   public <T extends Convention> T getSingle(final ExternalId identifier, final Class<T> clazz) {
     final Convention convention = _conventions.get(identifier);
     if (convention == null) {
       throw new DataNotFoundException("No convention found: " + identifier);
     }
-    if (clazz.isAssignableFrom(convention.getClass())) {
-      return (T) convention;
-    }
-    throw new OpenGammaRuntimeException("Convention for " + identifier + " was not of expected type " + clazz);
+    return clazz.cast(convention);
   }
 
   @Override
@@ -57,14 +52,14 @@ public class TestConventionSource implements ConventionSource {
   }
 
   @Override
-  public Collection<Convention> get(ExternalIdBundle bundle, VersionCorrection versionCorrection) {
+  public Collection<Convention> get(final ExternalIdBundle bundle, final VersionCorrection versionCorrection) {
     return null;
   }
 
   @Override
-  public Convention getSingle(ExternalIdBundle bundle, VersionCorrection versionCorrection) {
-    for (ExternalId id : bundle) {
-      Convention convention = _conventions.get(id);
+  public Convention getSingle(final ExternalIdBundle bundle, final VersionCorrection versionCorrection) {
+    for (final ExternalId id : bundle) {
+      final Convention convention = _conventions.get(id);
       if (convention != null) {
         return convention;
       }
@@ -73,32 +68,32 @@ public class TestConventionSource implements ConventionSource {
   }
 
   @Override
-  public Map<ExternalIdBundle, Collection<Convention>> getAll(Collection<ExternalIdBundle> bundles, VersionCorrection versionCorrection) {
+  public Map<ExternalIdBundle, Collection<Convention>> getAll(final Collection<ExternalIdBundle> bundles, final VersionCorrection versionCorrection) {
     return null;
   }
 
   @Override
-  public Map<ExternalIdBundle, Convention> getSingle(Collection<ExternalIdBundle> bundles, VersionCorrection versionCorrection) {
+  public Map<ExternalIdBundle, Convention> getSingle(final Collection<ExternalIdBundle> bundles, final VersionCorrection versionCorrection) {
     return null;
   }
 
   @Override
-  public Convention get(UniqueId uniqueId) {
+  public Convention get(final UniqueId uniqueId) {
     return null;
   }
 
   @Override
-  public Convention get(ObjectId objectId, VersionCorrection versionCorrection) {
+  public Convention get(final ObjectId objectId, final VersionCorrection versionCorrection) {
     return null;
   }
 
   @Override
-  public Map<UniqueId, Convention> get(Collection<UniqueId> uniqueIds) {
+  public Map<UniqueId, Convention> get(final Collection<UniqueId> uniqueIds) {
     return null;
   }
 
   @Override
-  public Map<ObjectId, Convention> get(Collection<ObjectId> objectIds, VersionCorrection versionCorrection) {
+  public Map<ObjectId, Convention> get(final Collection<ObjectId> objectIds, final VersionCorrection versionCorrection) {
     return null;
   }
 
@@ -108,27 +103,27 @@ public class TestConventionSource implements ConventionSource {
   }
 
   @Override
-  public <T extends Convention> T get(UniqueId uniqueId, Class<T> type) {
+  public <T extends Convention> T get(final UniqueId uniqueId, final Class<T> type) {
     return null;
   }
 
   @Override
-  public <T extends Convention> T get(ObjectId objectId, VersionCorrection versionCorrection, Class<T> type) {
+  public <T extends Convention> T get(final ObjectId objectId, final VersionCorrection versionCorrection, final Class<T> type) {
     return null;
   }
 
   @Override
-  public <T extends Convention> T getSingle(ExternalIdBundle bundle, VersionCorrection versionCorrection, Class<T> type) {
+  public <T extends Convention> T getSingle(final ExternalIdBundle bundle, final VersionCorrection versionCorrection, final Class<T> type) {
     return null;
   }
 
   @Override
-  public Collection<Convention> get(ExternalIdBundle bundle) {
+  public Collection<Convention> get(final ExternalIdBundle bundle) {
     return null;
   }
 
   @Override
-  public Convention getSingle(ExternalIdBundle bundle) {
+  public Convention getSingle(final ExternalIdBundle bundle) {
     return null;
   }
 
