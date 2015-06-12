@@ -20,6 +20,7 @@ import org.joda.beans.impl.direct.DirectMetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 
 import com.opengamma.core.holiday.Holiday;
+import com.opengamma.core.holiday.WeekendTypeProvider;
 import com.opengamma.id.ExternalId;
 import com.opengamma.id.UniqueId;
 import com.opengamma.master.AbstractDocument;
@@ -79,7 +80,11 @@ public class HolidayDocument extends AbstractDocument implements Serializable {
   public HolidayDocument(final Holiday holiday) {
     ArgumentChecker.notNull(holiday, "holiday");
     setUniqueId(holiday.getUniqueId());
-    setHoliday(new ManageableHoliday(holiday));
+    if (holiday instanceof WeekendTypeProvider) {
+      setHoliday(new ManageableHolidayWithWeekend(holiday, ((WeekendTypeProvider) holiday).getWeekendType()));
+    } else {
+      setHoliday(new ManageableHoliday(holiday));
+    }
     createName();
   }
 
@@ -93,7 +98,7 @@ public class HolidayDocument extends AbstractDocument implements Serializable {
    * Creates a name based on the holiday.
    */
   public void createName() {
-    ManageableHoliday holiday = getHoliday();
+    final ManageableHoliday holiday = getHoliday();
     switch (holiday.getType()) {
       case BANK:
         setName(holiday.getRegionExternalId().getValue());
