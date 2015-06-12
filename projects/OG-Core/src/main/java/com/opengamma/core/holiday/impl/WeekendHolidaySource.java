@@ -1,7 +1,11 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
+ *
+ * Modified by McLeod Moores Software Limited.
+ *
+ * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.core.holiday.impl;
 
@@ -26,7 +30,10 @@ import com.opengamma.util.money.Currency;
  * Simple implementation of {@code HolidaySource} where the only holidays are weekends.
  * <p>
  * This is designed for testing.
+ * @deprecated This source hard-codes weekend days to be Saturday and Sunday. This information
+ * should be supplied from a {@link com.opengamma.core.holiday.WeekendTypeProvider}.
  */
+@Deprecated
 public class WeekendHolidaySource extends AbstractSource<Holiday> implements HolidaySource {
 
   @Override
@@ -40,13 +47,13 @@ public class WeekendHolidaySource extends AbstractSource<Holiday> implements Hol
   }
 
   @Override
-  public Collection<Holiday> get(HolidayType holidayType,
-                                 ExternalIdBundle regionOrExchangeIds) {
+  public Collection<Holiday> get(final HolidayType holidayType,
+                                 final ExternalIdBundle regionOrExchangeIds) {
     return ImmutableSet.of();
   }
 
   @Override
-  public Collection<Holiday> get(Currency currency) {
+  public Collection<Holiday> get(final Currency currency) {
     return ImmutableSet.of();
   }
 
