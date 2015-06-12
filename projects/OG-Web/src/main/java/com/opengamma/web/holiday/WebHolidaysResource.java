@@ -2,6 +2,10 @@
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
  *
  * Please see distribution for license.
+ *
+ * Modified by McLeod Moores Software Limited.
+ *
+ * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.web.holiday;
 
@@ -49,6 +53,7 @@ import com.opengamma.util.paging.PagingRequest;
 import com.opengamma.web.WebPaging;
 import com.opengamma.web.analytics.rest.MasterType;
 import com.opengamma.web.analytics.rest.SubscribeMaster;
+import com.sun.jersey.api.client.ClientResponse.Status;
 
 /**
  * RESTful resource for all holidays.
@@ -67,19 +72,27 @@ public class WebHolidaysResource extends AbstractWebHolidayResource {
   }
 
   //-------------------------------------------------------------------------
+  /**
+   * Searches for a list of holidays from the master. The list could have been constrained
+   * (e.g. by name fragment).
+   * @param pgIdx  the page index
+   * @param pgNum  the page number
+   * @param pgSze  the page size
+   * @param sort  the sorting parameter
+   * @param name  the name
+   * @param type  the type
+   * @param currencyISO  the currency
+   * @param holidayIdStrs  the holiday identifiers
+   * @param uriInfo  the uri info
+   * @return  the holiday list
+   */
   @GET
   @Produces(MediaType.TEXT_HTML)
   @SubscribeMaster(MasterType.HOLIDAY)
-  public String getHTML(
-      @QueryParam("pgIdx") final Integer pgIdx,
-      @QueryParam("pgNum") final Integer pgNum,
-      @QueryParam("pgSze") final Integer pgSze,
-      @QueryParam("sort") final String sort,
-      @QueryParam("name") final String name,
-      @QueryParam("type") final String type,
-      @QueryParam("currency") final String currencyISO,
-      @QueryParam("holidayId") final List<String> holidayIdStrs,
-      @Context final UriInfo uriInfo) {
+  public String getHTML(@QueryParam("pgIdx") final Integer pgIdx, @QueryParam("pgNum") final Integer pgNum,
+      @QueryParam("pgSze") final Integer pgSze, @QueryParam("sort") final String sort, @QueryParam("name") final String name,
+      @QueryParam("type") final String type, @QueryParam("currency") final String currencyISO,
+      @QueryParam("holidayId") final List<String> holidayIdStrs, @Context final UriInfo uriInfo) {
     final PagingRequest pr = buildPagingRequest(pgIdx, pgNum, pgSze);
     final HolidaySearchSortOrder so = buildSortOrder(sort, HolidaySearchSortOrder.NAME_ASC);
     final FlexiBean out = createSearchResultData(pr, so, name, type, currencyISO, holidayIdStrs, uriInfo);
@@ -157,8 +170,43 @@ public class WebHolidaysResource extends AbstractWebHolidayResource {
     }
   }
 
-  private FlexiBean createSearchResultData(final PagingRequest pr, final HolidaySearchSortOrder sort, final String name, final String type, final String currencyISO,
-      final List<String> holidayIdStrs, final UriInfo uriInfo) {
+  @POST
+  @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+  @Produces(MediaType.APPLICATION_JSON)
+  public Response postJSON(
+      @FormParam("name") final String name,
+      @FormParam("holidayJSON") final String json,
+      @FormParam("holidayXML") final String xml,
+      @FormParam("type") final String typeName) {
+    final String trimmedName = StringUtils.trimToNull(name);
+    final String trimmedJson = StringUtils.trimToNull(json);
+    final String trimmedXml = StringUtils.trimToNull(xml);
+
+    Response result = null;
+    if (trimmedName == null || trimmedJson == null && trimmedXml == null) {
+      result = Response.status(Status.BAD_REQUEST).build();
+    } else {
+      ManageableHoliday holiday = null;
+      if (trimmedJson != null) {
+        holiday = (ManageableHoliday) parseJSON(trimmedJson);
+      } else if (trimmedXml != null) {
+        holiday = parseXML(trimmedXml, ManageableHoliday.class);
+      }
+      if (holiday == null) {
+        result = Response.status(Status.BAD_REQUEST).build();
+      } else {
+        final HolidayDocument doc = new HolidayDocument(holiday);
+        doc.setName(trimmedName);
+        final HolidayDocument added = data().getHolidayMaster().add(doc);
+        final URI uri = data().getUriInfo().getAbsolutePathBuilder().path(added.getUniqueId().toLatest().toString()).build();
+        result = Response.created(uri).build();
+      }
+    }
+    return result;
+  }
+
+  private FlexiBean createSearchResultData(final PagingRequest pr, final HolidaySearchSortOrder sort, final String name,
+      final String type, final String currencyISO, final List<String> holidayIdStrs, final UriInfo uriInfo) {
     final FlexiBean out = createRootData();
 
     final HolidaySearchRequest searchRequest = new HolidaySearchRequest();

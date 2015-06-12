@@ -2,6 +2,10 @@
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
  *
  * Please see distribution for license.
+ *
+ * Modified by McLeod Moores Software Limited.
+ *
+ * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.web.holiday;
 
@@ -29,6 +33,7 @@ import org.joda.beans.impl.flexi.FlexiBean;
 import com.opengamma.id.UniqueId;
 import com.opengamma.master.holiday.HolidayDocument;
 import com.opengamma.master.holiday.ManageableHoliday;
+import com.opengamma.util.ArgumentChecker;
 
 /**
  * RESTful resource for a holiday.
@@ -45,6 +50,10 @@ public class WebHolidayResource extends AbstractWebHolidayResource {
   }
 
   //-------------------------------------------------------------------------
+  /**
+   * Gets the holiday as XML.
+   * @return  the holiday
+   */
   @GET
   @Produces(MediaType.TEXT_HTML)
   public String getHTML() {
@@ -54,9 +63,15 @@ public class WebHolidayResource extends AbstractWebHolidayResource {
     return getFreemarker().build(HTML_DIR + "holiday.ftl", out);
   }
 
+  /**
+   * Gets the holiday as JSON.
+   * @param request  the request, not null
+   * @return  the holiday
+   */
   @GET
   @Produces(MediaType.APPLICATION_JSON)
   public Response getJSON(@Context final Request request) {
+    ArgumentChecker.notNull(request, "request");
     final EntityTag etag = new EntityTag(data().getHoliday().getUniqueId().toString());
     final ResponseBuilder builder = request.evaluatePreconditions(etag);
     if (builder != null) {
@@ -70,6 +85,12 @@ public class WebHolidayResource extends AbstractWebHolidayResource {
   }
 
   //-------------------------------------------------------------------------
+  /**
+   * Stores a new or updated holiday in the master.
+   * @param name  the holiday name
+   * @param xml  the bean XML
+   * @return  the response
+   */
   @PUT
   @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
   @Produces(MediaType.TEXT_HTML)
@@ -103,6 +124,42 @@ public class WebHolidayResource extends AbstractWebHolidayResource {
     return Response.status(Status.FORBIDDEN).entity(getHTML()).build();
   }
 
+  /**
+   * Stores a new or updated holiday in the master.
+   * @param name  the holiday name
+   * @param json  the bean JSON
+   * @param xml  the bean XML
+   * @return  the response
+   */
+  @PUT
+  @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+  @Produces(MediaType.APPLICATION_JSON)
+  public Response putJSON(@FormParam("name") final String name, @FormParam("holidayJSON") final String json,
+      @FormParam("holidayXML") final String xml) {
+    if (!data().getHoliday().isLatest()) {
+      return Response.status(Status.FORBIDDEN).entity(getHTML()).build();
+    }
+    final String trimmedName = StringUtils.trimToNull(name);
+    final String trimmedJson = StringUtils.trimToNull(json);
+    final String trimmedXml = StringUtils.trimToNull(xml);
+    // JSON allows a null holiday to just change the name
+    if (trimmedName == null) {
+      return Response.status(Status.BAD_REQUEST).build();
+    }
+    ManageableHoliday holidayValue = null;
+    if (trimmedJson != null) {
+      holidayValue = (ManageableHoliday) parseJSON(trimmedJson);
+    } else if (trimmedXml != null) {
+      holidayValue = parseXML(trimmedXml, ManageableHoliday.class);
+    }
+    updateHoliday(trimmedName, holidayValue);
+    return Response.ok().build();
+  }
+
+  /**
+   * Deletes a holiday from the master.
+   * @return  the response
+   */
   @DELETE
   @Produces(MediaType.TEXT_HTML)
   public Response deleteHTML() {
@@ -115,7 +172,11 @@ public class WebHolidayResource extends AbstractWebHolidayResource {
     return Response.status(Status.FORBIDDEN).entity(getHTML()).build();
   }
 
-  @DELETE
+  /**
+   * Deletes a holiday from the master.
+   * @return  the response
+   */
+    @DELETE
   @Produces(MediaType.APPLICATION_JSON)
   public Response deleteJSON() {
     final HolidayDocument doc = data().getHoliday();
@@ -141,6 +202,10 @@ public class WebHolidayResource extends AbstractWebHolidayResource {
   }
 
   //-------------------------------------------------------------------------
+  /**
+   * Gets a version resource for holidays.
+   * @return  the versions resource
+   */
   @Path("versions")
   public WebHolidayVersionsResource findVersions() {
     return new WebHolidayVersionsResource(this);
@@ -167,6 +232,12 @@ public class WebHolidayResource extends AbstractWebHolidayResource {
     return data.getUriInfo().getBaseUriBuilder().path(WebHolidayResource.class).build(holidayId);
   }
 
+  /**
+   * Updates a holiday
+   * @param name  the holiday name
+   * @param snapshot  the updated holiday
+   * @return  the URI
+   */
   private URI updateHoliday(final String name, final ManageableHoliday snapshot) {
     final HolidayDocument oldDoc = data().getHoliday();
     HolidayDocument doc = new HolidayDocument(snapshot);

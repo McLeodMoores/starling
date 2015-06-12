@@ -2,6 +2,10 @@
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
  *
  * Please see distribution for license.
+ *
+ * Modified by McLeod Moores Software Limited.
+ *
+ * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.web.holiday;
 
@@ -22,11 +26,11 @@ public abstract class AbstractWebHolidayResource
     extends AbstractPerRequestWebResource<WebHolidayData> {
 
   /**
-   * HTML ftl directory
+   * HTML ftl directory.
    */
   protected static final String HTML_DIR = "holidays/html/";
   /**
-   * JSON ftl directory
+   * JSON ftl directory.
    */
   protected static final String JSON_DIR = "holidays/json/";
 
@@ -67,6 +71,10 @@ public abstract class AbstractWebHolidayResource
     return out;
   }
 
+  /**
+   * Returns a holiday type provider.
+   * @return  the provider
+   */
   public HolidayTypesProvider getHolidayTypesProvider() {
     return HolidayTypesProvider.getInstance();
   }
