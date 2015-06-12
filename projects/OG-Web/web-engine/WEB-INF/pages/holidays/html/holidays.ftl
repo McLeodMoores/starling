@@ -1,6 +1,5 @@
 <#escape x as x?html>
-<@page title="Holidays">
-
+<@page title="Holidays" jquery=true aceXmlEditor=true>
 
 <#-- SECTION Holiday search -->
 <@section title="Holiday search" if=searchRequest??>
@@ -35,19 +34,27 @@
 </@section>
 
 
-<#-- SECTION Add holiday >
+<#-- SECTION Add holiday -->
 <@section title="Add holiday">
-  <@form method="POST" action="${uris.holidays()}">
+  <@form method="POST" action="${uris.holidays()}" id="addForm">
   <p>
-    <@rowin label="Name"><input type="text" size="30" maxlength="80" name="name" value="" /></@rowin>
-    <@rowin label="Scheme type"><input type="text" size="30" maxlength="80" name="idscheme" value="" /></@rowin>
-    <@rowin label="Scheme id"><input type="text" size="30" maxlength="80" name="idvalue" value="" /></@rowin>
-    <@rowin label="Region type"><input type="text" size="30" maxlength="80" name="regionscheme" value="" /></@rowin>
-    <@rowin label="Region id"><input type="text" size="30" maxlength="80" name="regionvalue" value="" /></@rowin>
+    <@rowin label="Name"><input type="text" size="30" name="name" value="" /></@rowin>
+    <@rowin label="Type">
+      <select name="type">
+        <option value=""></option>
+        <#list holidayDescriptionMap?keys as key><option value="${key}">${holidayDescriptionMap[key]}</option></#list>
+      </select>
+    </@rowin>
+    <@rowin>
+      <div id="ace-xml-editor"></div>
+    </@rowin>
+    <input type="hidden" name="holidayxml" id="holiday-xml"/>
     <@rowin><input type="submit" value="Add" /></@rowin>
+    
+    <#noescape><@xmlEditorScript formId="addForm" inputId="holiday-xml"></@xmlEditorScript></#noescape>  
   </p>
   </@form>
-</@section-->
+</@section>
 
 
 <#-- SECTION Links -->

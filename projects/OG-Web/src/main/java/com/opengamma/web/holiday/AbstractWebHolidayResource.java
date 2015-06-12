@@ -32,7 +32,7 @@ public abstract class AbstractWebHolidayResource
 
   /**
    * Creates the resource.
-   * 
+   *
    * @param holidayMaster  the holiday master, not null
    */
   protected AbstractWebHolidayResource(final HolidayMaster holidayMaster) {
@@ -43,7 +43,7 @@ public abstract class AbstractWebHolidayResource
 
   /**
    * Creates the resource.
-   * 
+   *
    * @param parent  the parent resource, not null
    */
   protected AbstractWebHolidayResource(final AbstractWebHolidayResource parent) {
@@ -53,18 +53,21 @@ public abstract class AbstractWebHolidayResource
   //-------------------------------------------------------------------------
   /**
    * Creates the output root data.
-   * 
+   *
    * @return the output root data, not null
    */
   @Override
   protected FlexiBean createRootData() {
-    FlexiBean out = super.createRootData();
+    final FlexiBean out = super.createRootData();
     out.put("uris", new WebHolidayUris(data()));
-    WebExchangeData exchangeData = new WebExchangeData(data().getUriInfo());
+    final WebExchangeData exchangeData = new WebExchangeData(data().getUriInfo());
     out.put("exchangeUris", new WebExchangeUris(exchangeData));
-    WebRegionData regionData = new WebRegionData(data().getUriInfo());
+    final WebRegionData regionData = new WebRegionData(data().getUriInfo());
     out.put("regionUris", new WebRegionUris(regionData));
     return out;
   }
 
+  public HolidayTypesProvider getHolidayTypesProvider() {
+    return HolidayTypesProvider.getInstance();
+  }
 }

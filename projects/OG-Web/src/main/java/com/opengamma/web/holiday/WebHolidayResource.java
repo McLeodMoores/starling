@@ -6,10 +6,12 @@
 package com.opengamma.web.holiday;
 
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
 
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
@@ -18,15 +20,15 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
+import javax.ws.rs.core.Response.Status;
 
+import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.commons.lang.StringUtils;
 import org.joda.beans.impl.flexi.FlexiBean;
-import org.threeten.bp.LocalDate;
-import org.threeten.bp.Year;
 
 import com.opengamma.id.UniqueId;
 import com.opengamma.master.holiday.HolidayDocument;
-import com.opengamma.util.tuple.Pair;
-import com.opengamma.util.tuple.Pairs;
+import com.opengamma.master.holiday.ManageableHoliday;
 
 /**
  * RESTful resource for a holiday.
@@ -46,51 +48,95 @@ public class WebHolidayResource extends AbstractWebHolidayResource {
   @GET
   @Produces(MediaType.TEXT_HTML)
   public String getHTML() {
-    FlexiBean out = createRootData();
+    final FlexiBean out = createRootData();
+    final HolidayDocument doc = data().getHoliday();
+    out.put("holidayXml", StringEscapeUtils.escapeJava(createBeanXML(doc.getHoliday())));
     return getFreemarker().build(HTML_DIR + "holiday.ftl", out);
   }
 
   @GET
   @Produces(MediaType.APPLICATION_JSON)
-  public Response getHTML(@Context Request request) {
-    EntityTag etag = new EntityTag(data().getHoliday().getUniqueId().toString());
-    ResponseBuilder builder = request.evaluatePreconditions(etag);
+  public Response getJSON(@Context final Request request) {
+    final EntityTag etag = new EntityTag(data().getHoliday().getUniqueId().toString());
+    final ResponseBuilder builder = request.evaluatePreconditions(etag);
     if (builder != null) {
       return builder.build();
     }
-    FlexiBean out = createRootData();
-    String json = getFreemarker().build(JSON_DIR + "holiday.ftl", out);
+    final FlexiBean out = createRootData();
+    final HolidayDocument doc = data().getHoliday();
+    out.put("holidayXML", StringEscapeUtils.escapeJava(createBeanXML(doc.getHoliday())));
+    final String json = getFreemarker().build(JSON_DIR + "holiday.ftl", out);
     return Response.ok(json).tag(etag).build();
   }
 
   //-------------------------------------------------------------------------
+  @PUT
+  @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+  @Produces(MediaType.TEXT_HTML)
+  public Response putHTML(@FormParam("name") final String name, @FormParam("holidayxml") final String xml) {
+    if (data().getHoliday().isLatest()) {
+      final String trimmedName = StringUtils.trimToNull(name);
+      final String trimmedXml = StringUtils.trimToNull(xml);
+      if (trimmedName == null || trimmedXml == null) {
+        final FlexiBean out = createRootData();
+        if (trimmedName == null) {
+          out.put("err_nameMissing", true);
+        }
+        if (trimmedXml == null) {
+          out.put("err_xmlMissing", true);
+        }
+        final String html = getFreemarker().build(HTML_DIR + "holiday-update.ftl", out);
+        return Response.ok(html).build();
+      }
+      try {
+        final ManageableHoliday holiday = parseXML(xml, data().getHoliday().getHoliday().getClass());
+        final URI uri = updateHoliday(name, holiday);
+        return Response.seeOther(uri).build();
+      } catch (final Exception ex) {
+        final FlexiBean out = createRootData();
+        out.put("holidayXml", StringEscapeUtils.escapeJava(StringUtils.defaultString(xml)));
+        out.put("err_holidayXmlMsg", StringUtils.defaultString(ex.getMessage()));
+        final String html = getFreemarker().build(HTML_DIR + "holiday-update.ftl", out);
+        return Response.ok(html).build();
+      }
+    }
+    return Response.status(Status.FORBIDDEN).entity(getHTML()).build();
+  }
+
+  @DELETE
+  @Produces(MediaType.TEXT_HTML)
+  public Response deleteHTML() {
+    final HolidayDocument doc = data().getHoliday();
+    if (doc.isLatest()) {
+      data().getHolidayMaster().remove(doc.getUniqueId());
+      final URI uri = WebHolidayResource.uri(data());
+      return Response.seeOther(uri).build();
+    }
+    return Response.status(Status.FORBIDDEN).entity(getHTML()).build();
+  }
+
+  @DELETE
+  @Produces(MediaType.APPLICATION_JSON)
+  public Response deleteJSON() {
+    final HolidayDocument doc = data().getHoliday();
+    if (doc.isLatest()) {
+      data().getHolidayMaster().remove(doc.getUniqueId());
+    }
+    return Response.ok().build();
+  }
+
   /**
    * Creates the output root data.
    * @return the output root data, not null
    */
+  @Override
   protected FlexiBean createRootData() {
-    FlexiBean out = super.createRootData();
-    HolidayDocument doc = data().getHoliday();
+    final FlexiBean out = super.createRootData();
+    final HolidayDocument doc = data().getHoliday();
     out.put("holidayDoc", doc);
     out.put("holiday", doc.getHoliday());
+    out.put("holidayDescriptionMap", getHolidayTypesProvider().getDescription(doc.getHoliday().getType().name()));
     out.put("deleted", !doc.isLatest());
-    List<Pair<Year, List<LocalDate>>> map = new ArrayList<Pair<Year, List<LocalDate>>>();
-    List<LocalDate> dates = doc.getHoliday().getHolidayDates();
-    if (dates.size() > 0) {
-      int year = dates.get(0).getYear();
-      int start = 0;
-      int pos = 0;
-      for ( ; pos < dates.size(); pos++) {
-        if (dates.get(pos).getYear() == year) {
-          continue;
-        }
-        map.add(Pairs.of(Year.of(year), dates.subList(start, pos)));
-        year = dates.get(pos).getYear();
-        start = pos;
-      }
-      map.add(Pairs.of(Year.of(year), dates.subList(start, pos)));
-    }
-    out.put("holidayDatesByYear", map);
     return out;
   }
 
@@ -117,8 +163,17 @@ public class WebHolidayResource extends AbstractWebHolidayResource {
    * @return the URI, not null
    */
   public static URI uri(final WebHolidayData data, final UniqueId overrideHolidayId) {
-    String holidayId = data.getBestHolidayUriId(overrideHolidayId);
+    final String holidayId = data.getBestHolidayUriId(overrideHolidayId);
     return data.getUriInfo().getBaseUriBuilder().path(WebHolidayResource.class).build(holidayId);
   }
 
+  private URI updateHoliday(final String name, final ManageableHoliday snapshot) {
+    final HolidayDocument oldDoc = data().getHoliday();
+    HolidayDocument doc = new HolidayDocument(snapshot);
+    doc.setName(name);
+    doc.setUniqueId(oldDoc.getUniqueId());
+    doc = data().getHolidayMaster().update(doc);
+    data().setHoliday(doc);
+    return WebHolidayResource.uri(data());
+  }
 }

@@ -6,8 +6,6 @@
 package com.opengamma.web.holiday;
 
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -21,13 +19,9 @@ import javax.ws.rs.core.Response.ResponseBuilder;
 
 import org.apache.commons.lang.StringUtils;
 import org.joda.beans.impl.flexi.FlexiBean;
-import org.threeten.bp.LocalDate;
-import org.threeten.bp.Year;
 
 import com.opengamma.id.UniqueId;
 import com.opengamma.master.holiday.HolidayDocument;
-import com.opengamma.util.tuple.Pair;
-import com.opengamma.util.tuple.Pairs;
 
 /**
  * RESTful resource for a version of a holiday.
@@ -45,15 +39,22 @@ public class WebHolidayVersionResource extends AbstractWebHolidayResource {
   }
 
   @GET
+  @Produces(MediaType.TEXT_HTML)
+  public String getHTML() {
+    final FlexiBean out = createRootData();
+    return getFreemarker().build(HTML_DIR + "holidayversion.ftl", out);
+  }
+
+  @GET
   @Produces(MediaType.APPLICATION_JSON)
-  public Response getJSON(@Context Request request) {
-    EntityTag etag = new EntityTag(data().getVersioned().getUniqueId().toString());
-    ResponseBuilder builder = request.evaluatePreconditions(etag);
+  public Response getJSON(@Context final Request request) {
+    final EntityTag etag = new EntityTag(data().getVersioned().getUniqueId().toString());
+    final ResponseBuilder builder = request.evaluatePreconditions(etag);
     if (builder != null) {
       return builder.build();
     }
-    FlexiBean out = createRootData();
-    String json = getFreemarker().build(JSON_DIR + "holiday.ftl", out);
+    final FlexiBean out = createRootData();
+    final String json = getFreemarker().build(JSON_DIR + "holidayversion.ftl", out);
     return Response.ok(json).tag(etag).build();
   }
 
@@ -62,32 +63,17 @@ public class WebHolidayVersionResource extends AbstractWebHolidayResource {
    * Creates the output root data.
    * @return the output root data, not null
    */
+  @Override
   protected FlexiBean createRootData() {
-    FlexiBean out = super.createRootData();
-    HolidayDocument latestDoc = data().getHoliday();
-    HolidayDocument versionedHoliday = data().getVersioned();
+    final FlexiBean out = super.createRootData();
+    final HolidayDocument latestDoc = data().getHoliday();
+    final HolidayDocument versionedHoliday = data().getVersioned();
     out.put("latestHolidayDoc", latestDoc);
     out.put("latestHoliday", latestDoc.getHoliday());
     out.put("holidayDoc", versionedHoliday);
     out.put("holiday", versionedHoliday.getHoliday());
+    out.put("holidayDescriptionMap", getHolidayTypesProvider().getDescription(versionedHoliday.getHoliday().getType().name()));
     out.put("deleted", !latestDoc.isLatest());
-    List<Pair<Year, List<LocalDate>>> map = new ArrayList<Pair<Year, List<LocalDate>>>();
-    List<LocalDate> dates = versionedHoliday.getHoliday().getHolidayDates();
-    if (dates.size() > 0) {
-      int year = dates.get(0).getYear();
-      int start = 0;
-      int pos = 0;
-      for ( ; pos < dates.size(); pos++) {
-        if (dates.get(pos).getYear() == year) {
-          continue;
-        }
-        map.add(Pairs.of(Year.of(year), dates.subList(start, pos)));
-        year = dates.get(pos).getYear();
-        start = pos;
-      }
-      map.add(Pairs.of(Year.of(year), dates.subList(start, pos)));
-    }
-    out.put("holidayDatesByYear", map);
     return out;
   }
 
@@ -108,8 +94,8 @@ public class WebHolidayVersionResource extends AbstractWebHolidayResource {
    * @return the URI, not null
    */
   public static URI uri(final WebHolidayData data, final UniqueId overrideVersionId) {
-    String holidayId = data.getBestHolidayUriId(null);
-    String versionId = StringUtils.defaultString(overrideVersionId != null ? overrideVersionId.getVersion() : data.getUriVersionId());
+    final String holidayId = data.getBestHolidayUriId(null);
+    final String versionId = StringUtils.defaultString(overrideVersionId != null ? overrideVersionId.getVersion() : data.getUriVersionId());
     return data.getUriInfo().getBaseUriBuilder().path(WebHolidayVersionResource.class).build(holidayId, versionId);
   }
 

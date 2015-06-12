@@ -23,7 +23,7 @@ public class WebHolidayUris {
    * Creates an instance.
    * @param data  the web data, not null
    */
-  public WebHolidayUris(WebHolidayData data) {
+  public WebHolidayUris(final WebHolidayData data) {
     _data = data;
   }
 
@@ -60,5 +60,31 @@ public class WebHolidayUris {
   public URI holiday(final UniqueId holidayId) {
     return WebHolidayResource.uri(_data, holidayId);
   }
+
+  /**
+   * Gets the URI.
+   * @return the URI
+   */
+  public URI holidayVersions() {
+    return WebHolidayVersionsResource.uri(_data);
+  }
+
+  /**
+   * Gets the URI.
+   * @return the URI
+   */
+  public URI holidayVersion() {
+    return WebHolidayVersionResource.uri(_data);
+  }
+
+  /**
+   * Gets the URI.
+   * @param holidayId  the holiday id, not null
+   * @return the URI
+   */
+  public URI holidayVersion(final UniqueId holidayId) {
+    return WebHolidayVersionResource.uri(_data, holidayId);
+  }
+
 
 }
