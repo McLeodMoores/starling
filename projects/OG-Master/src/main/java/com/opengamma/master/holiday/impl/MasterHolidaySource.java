@@ -2,6 +2,10 @@
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
  *
  * Please see distribution for license.
+ *
+ * Modified by McLeod Moores Software Limited.
+ *
+ * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.master.holiday.impl;
 
@@ -18,6 +22,8 @@ import com.google.common.collect.ImmutableList;
 import com.opengamma.core.holiday.Holiday;
 import com.opengamma.core.holiday.HolidaySource;
 import com.opengamma.core.holiday.HolidayType;
+import com.opengamma.core.holiday.WeekendTypeProvider;
+import com.opengamma.core.holiday.impl.SimpleHoliday;
 import com.opengamma.id.ExternalId;
 import com.opengamma.id.ExternalIdBundle;
 import com.opengamma.id.VersionCorrection;
@@ -36,16 +42,23 @@ import com.opengamma.util.money.Currency;
 /**
  * A {@code HolidaySource} implemented using an underlying {@code HolidayMaster}.
  * <p>
- * The {@link HolidaySource} interface provides holidays to the application via a narrow API. This class provides the source on top of a standard {@link HolidayMaster}.
+ * The {@link HolidaySource} interface provides holidays to the application via a narrow API. This class provides the source on
+ * top of a standard {@link HolidayMaster}.
+ * <p>
+ * Previously, this source hard-coded the weekend to be Saturday and Sunday. Now the holiday is checked and if it is a
+ * {@link WeekendTypeProvider}, the provider is used to determine if a day is a weekend. If this information is not available
+ * from a holiday, the previous hard-coding is used.
  */
 @PublicSPI
 public class MasterHolidaySource extends AbstractMasterSource<Holiday, HolidayDocument, HolidayMaster> implements HolidaySource {
+  /** True if the holiday calendars should be cached */
   private final boolean _cacheHolidayCalendars;
-  private final ConcurrentMap<HolidaySearchRequest, List<LocalDate>> _cachedHolidays = new ConcurrentHashMap<HolidaySearchRequest, List<LocalDate>>();
+  /** The cached holiday objects */
+  private final ConcurrentMap<HolidaySearchRequest, Holiday> _cachedHolidays = new ConcurrentHashMap<>();
 
   /**
    * Creates an instance with an underlying master.
-   * 
+   *
    * @param master the master, not null
    */
   public MasterHolidaySource(final HolidayMaster master) {
@@ -54,7 +67,7 @@ public class MasterHolidaySource extends AbstractMasterSource<Holiday, HolidayDo
 
   /**
    * Creates an instance with an underlying master.
-   * 
+   *
    * @param master the master, not null
    * @param cacheCalendars whether all calendars should be cached
    */
@@ -64,63 +77,63 @@ public class MasterHolidaySource extends AbstractMasterSource<Holiday, HolidayDo
   }
 
   @Override
-  public Collection<Holiday> get(HolidayType holidayType,
-                                 ExternalIdBundle regionOrExchangeIds) {
-    HolidaySearchRequest request = createNonCurrencySearchRequest(holidayType, regionOrExchangeIds);
+  public Collection<Holiday> get(final HolidayType holidayType,
+                                 final ExternalIdBundle regionOrExchangeIds) {
+    final HolidaySearchRequest request = createNonCurrencySearchRequest(holidayType, regionOrExchangeIds);
     return processDocuments(getMaster().search(request));
   }
 
   @Override
-  public Collection<Holiday> get(Currency currency) {
-    HolidaySearchRequest request = createCurrencySearchRequest(currency);
+  public Collection<Holiday> get(final Currency currency) {
+    final HolidaySearchRequest request = createCurrencySearchRequest(currency);
     return processDocuments(getMaster().search(request));
   }
 
-  private Collection<Holiday> processDocuments(HolidaySearchResult search) {
+  private Collection<Holiday> processDocuments(final HolidaySearchResult search) {
     return ImmutableList.<Holiday>copyOf(search.getHolidays());
   }
 
   @Override
-  public boolean isHoliday(LocalDate dateToCheck, Currency currency) {
-    HolidaySearchRequest request = createCurrencySearchRequest(currency);
+  public boolean isHoliday(final LocalDate dateToCheck, final Currency currency) {
+    final HolidaySearchRequest request = createCurrencySearchRequest(currency);
     return isHoliday(request, dateToCheck);
   }
 
   @Override
-  public boolean isHoliday(LocalDate dateToCheck, HolidayType holidayType, ExternalIdBundle regionOrExchangeIds) {
-    HolidaySearchRequest request = createNonCurrencySearchRequest(holidayType, regionOrExchangeIds);
+  public boolean isHoliday(final LocalDate dateToCheck, final HolidayType holidayType, final ExternalIdBundle regionOrExchangeIds) {
+    final HolidaySearchRequest request = createNonCurrencySearchRequest(holidayType, regionOrExchangeIds);
     return isHoliday(request, dateToCheck);
   }
 
   private VersionCorrection getVersionCorrection() {
-    ServiceContext serviceContext = ThreadLocalServiceContext.getInstance();
+    final ServiceContext serviceContext = ThreadLocalServiceContext.getInstance();
     return serviceContext.get(VersionCorrectionProvider.class).getConfigVersionCorrection();
   }
 
-  private HolidaySearchRequest createCurrencySearchRequest(Currency currency) {
+  private HolidaySearchRequest createCurrencySearchRequest(final Currency currency) {
     return createdVersionCorrectedSearchRequest(new HolidaySearchRequest(currency));
   }
 
-  private HolidaySearchRequest createNonCurrencySearchRequest(HolidayType holidayType,
-                                                              ExternalIdBundle regionOrExchangeIds) {
+  private HolidaySearchRequest createNonCurrencySearchRequest(final HolidayType holidayType,
+                                                              final ExternalIdBundle regionOrExchangeIds) {
     return createdVersionCorrectedSearchRequest(new HolidaySearchRequest(holidayType, regionOrExchangeIds));
   }
 
-  private HolidaySearchRequest createdVersionCorrectedSearchRequest(HolidaySearchRequest searchRequest) {
+  private HolidaySearchRequest createdVersionCorrectedSearchRequest(final HolidaySearchRequest searchRequest) {
     searchRequest.setVersionCorrection(getVersionCorrection());
     return searchRequest;
   }
 
   @Override
   public boolean isHoliday(final LocalDate dateToCheck, final HolidayType holidayType, final ExternalId regionOrExchangeId) {
-    HolidaySearchRequest request = new HolidaySearchRequest(holidayType, ExternalIdBundle.of(regionOrExchangeId));
+    final HolidaySearchRequest request = new HolidaySearchRequest(holidayType, ExternalIdBundle.of(regionOrExchangeId));
     return isHoliday(request, dateToCheck);
   }
 
   //-------------------------------------------------------------------------
   /**
    * Checks if the specified date is a holiday.
-   * 
+   *
    * @param request the request to search base on, not null
    * @param dateToCheck the date to check, not null
    * @return true if the date is a holiday
@@ -128,45 +141,76 @@ public class MasterHolidaySource extends AbstractMasterSource<Holiday, HolidayDo
   protected boolean isHoliday(final HolidaySearchRequest request, final LocalDate dateToCheck) {
     ArgumentChecker.notNull(request, "request");
     ArgumentChecker.notNull(dateToCheck, "dateToCheck");
-    if (isWeekend(dateToCheck)) {
-      return true;
-    }
-    HolidaySearchRequest cacheKey = request.clone();
-
+    final HolidaySearchRequest cacheKey = request.clone();
     if (_cacheHolidayCalendars) {
-      List<LocalDate> cachedDates = _cachedHolidays.get(cacheKey);
-      if (cachedDates != null) {
-        if (cachedDates.isEmpty()) {
+      final Holiday cachedHoliday = _cachedHolidays.get(cacheKey);
+      if (cachedHoliday != null) {
+        // note that the weekend check has been moved into this section rather than being short-circuited
+        // above, as different countries can have different weekend days
+        if (cachedHoliday instanceof WeekendTypeProvider) {
+          if (((WeekendTypeProvider) cachedHoliday).getWeekendType().isWeekend(dateToCheck)) {
+            return true;
+          }
+        } else {
+          // backwards compatibility
+          if (isWeekend(dateToCheck)) {
+            return true;
+          }
+        }
+        final List<LocalDate> cachedDates = cachedHoliday.getHolidayDates();
+        if (cachedDates == null || cachedDates.isEmpty()) {
           // Sign that we couldn't find anything.
           return false;
         }
         return isHoliday(cachedDates, dateToCheck);
       }
     }
-
-    HolidayDocument doc;
+    final HolidayDocument doc;
     if (_cacheHolidayCalendars) {
       // get all holidays and cache
-      doc = getMaster().search(cacheKey).getFirstDocument();
-      if (doc == null) {
-        _cachedHolidays.put(cacheKey, Collections.<LocalDate>emptyList());
+      final HolidaySearchResult result = getMaster().search(cacheKey);
+      if (result == null) {
+        doc = null;
       } else {
-        _cachedHolidays.put(cacheKey, doc.getHoliday().getHolidayDates());
+        doc = result.getFirstDocument();
+      }
+      if (doc != null) {
+        _cachedHolidays.put(cacheKey, doc.getHoliday());
+      } else {
+        // preserves old behaviour, which cached an empty list of dates
+        _cachedHolidays.put(cacheKey, new SimpleHoliday());
+        return false;
       }
     } else {
       // Not caching, search for this date only.
       request.setDateToCheck(dateToCheck);
-      doc = getMaster().search(request).getFirstDocument();
+      final HolidaySearchResult result = getMaster().search(request);
+      if (result != null) {
+        doc = result.getFirstDocument();
+      } else {
+        doc = null;
+      }
+    }
+    if (doc != null && doc.getHoliday() instanceof WeekendTypeProvider) {
+      if (((WeekendTypeProvider) doc.getHoliday()).getWeekendType().isWeekend(dateToCheck)) {
+        return true;
+      }
+    } else {
+      // backwards compatibility
+      if (isWeekend(dateToCheck)) {
+        return true;
+      }
     }
     return isHoliday(doc, dateToCheck);
   }
 
   /**
    * Checks if the specified date is a holiday.
-   * 
+   *
    * @param doc document retrieved from underlying holiday master, may be null
    * @param dateToCheck the date to check, not null
-   * @return false if nothing was retrieved from underlying holiday master. Otherwise, true if and only if the date is a holiday based on the underlying holiday master
+   * @return false if nothing was retrieved from underlying holiday master. Otherwise, true if and only if
+   * the date is a holiday based on the underlying holiday master
    */
   protected boolean isHoliday(final HolidayDocument doc, final LocalDate dateToCheck) {
     if (doc == null) {
@@ -175,18 +219,27 @@ public class MasterHolidaySource extends AbstractMasterSource<Holiday, HolidayDo
     return Collections.binarySearch(doc.getHoliday().getHolidayDates(), dateToCheck) >= 0;
   }
 
+  /**
+   * Returns true if a date is present in a list of holiday dates. Note that this method
+   * does not include weekends.
+   * @param dates  the dates, not null
+   * @param dateToCheck  the date to check, not null
+   * @return true if the date is present in the list of holiday dates
+   */
   protected boolean isHoliday(final List<LocalDate> dates, final LocalDate dateToCheck) {
     return Collections.binarySearch(dates, dateToCheck) >= 0;
   }
 
   /**
    * Checks if the date is at the weekend, defined as a Saturday or Sunday.
-   * 
+   *
    * @param date the date to check, not null
    * @return true if it is a weekend
+   * @deprecated The weekend dates should be returned from a {@link WeekendTypeProvider} object.
    */
-  protected boolean isWeekend(LocalDate date) {
-    return (date.getDayOfWeek() == DayOfWeek.SATURDAY || date.getDayOfWeek() == DayOfWeek.SUNDAY);
+  @Deprecated
+  protected boolean isWeekend(final LocalDate date) {
+    return date.getDayOfWeek() == DayOfWeek.SATURDAY || date.getDayOfWeek() == DayOfWeek.SUNDAY;
   }
 
 }
