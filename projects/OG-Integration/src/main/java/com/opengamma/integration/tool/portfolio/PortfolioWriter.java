@@ -229,6 +229,9 @@ public class PortfolioWriter {
   }
   
   private boolean portfolioEqual(Portfolio portfolio, ManageablePortfolio existingPortfolio) {
+    if (existingPortfolio == null) {
+      return false;
+    }
     if (!portfolio.getName().equals(existingPortfolio.getName())) {
       return false;
     }
@@ -317,12 +320,17 @@ public class PortfolioWriter {
             addedOrUpdatedDoc = _positionMaster.add(new PositionDocument(manageablePosition));
           }
           added.add(addedOrUpdatedDoc.getPosition());
-          for (PortfolioNode child : portfolioNode.getChildNodes()) {
-            added.addAll(persistPositions(child));
-          }
+
         }
       }
       s_logger.info("Added/updated position {}", position);
+    }
+    if (_updateIfExists) {
+      for (PortfolioNode child : portfolioNode.getChildNodes()) {
+        added.addAll(persistPositions(child));
+      }
+    } else {
+      s_logger.warn("Not recursing to sub-nodes to preserve legacy behaviour, use alternate constructor with updateIfExists flag set to true");
     }
     return added;
   }
