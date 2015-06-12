@@ -2,6 +2,10 @@
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
  *
  * Please see distribution for license.
+ *
+ * Modified by McLeod Moores Software Limited.
+ *
+ * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.masterdb.holiday;
 
@@ -24,6 +28,8 @@ import org.threeten.bp.LocalDate;
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.Timer;
 import com.opengamma.core.holiday.HolidayType;
+import com.opengamma.core.holiday.WeekendType;
+import com.opengamma.core.holiday.WeekendTypeProvider;
 import com.opengamma.elsql.ElSqlBundle;
 import com.opengamma.id.ExternalId;
 import com.opengamma.id.ExternalIdSearch;
@@ -44,6 +50,7 @@ import com.opengamma.master.holiday.HolidaySearchRequest;
 import com.opengamma.master.holiday.HolidaySearchResult;
 import com.opengamma.master.holiday.HolidaySearchSortOrder;
 import com.opengamma.master.holiday.ManageableHoliday;
+import com.opengamma.master.holiday.ManageableHolidayWithWeekend;
 import com.opengamma.masterdb.AbstractDocumentDbMaster;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.db.DbConnector;
@@ -93,10 +100,10 @@ public class DbHolidayMaster extends AbstractDocumentDbMaster<HolidayDocument> i
   // so that they actually do something.
   // -----------------------------------------------------------------
   private Timer _insertTimer = new Timer();
-  
+
   /**
    * Creates an instance.
-   * 
+   *
    * @param dbConnector  the database connector, not null
    */
   public DbHolidayMaster(final DbConnector dbConnector) {
@@ -105,16 +112,16 @@ public class DbHolidayMaster extends AbstractDocumentDbMaster<HolidayDocument> i
   }
 
   @Override
-  public void registerMetrics(MetricRegistry summaryRegistry, MetricRegistry detailedRegistry, String namePrefix) {
+  public void registerMetrics(final MetricRegistry summaryRegistry, final MetricRegistry detailedRegistry, final String namePrefix) {
     super.registerMetrics(summaryRegistry, detailedRegistry, namePrefix);
     _insertTimer = summaryRegistry.timer(namePrefix + ".insert");
   }
 
   //-------------------------------------------------------------------------
   @Override
-  public HolidayMetaDataResult metaData(HolidayMetaDataRequest request) {
+  public HolidayMetaDataResult metaData(final HolidayMetaDataRequest request) {
     ArgumentChecker.notNull(request, "request");
-    HolidayMetaDataResult result = new HolidayMetaDataResult();
+    final HolidayMetaDataResult result = new HolidayMetaDataResult();
     if (request.isHolidayTypes()) {
       result.getHolidayTypes().addAll(Arrays.asList(HolidayType.values()));
     }
@@ -128,21 +135,21 @@ public class DbHolidayMaster extends AbstractDocumentDbMaster<HolidayDocument> i
     ArgumentChecker.notNull(request.getPagingRequest(), "request.pagingRequest");
     ArgumentChecker.notNull(request.getVersionCorrection(), "request.versionCorrection");
     s_logger.debug("search {}", request);
-    
+
     final VersionCorrection vc = request.getVersionCorrection().withLatestFixed(now());
     final HolidaySearchResult result = new HolidaySearchResult(vc);
-    
-    ExternalIdSearch regionSearch = request.getRegionExternalIdSearch();
-    ExternalIdSearch exchangeSearch = request.getExchangeExternalIdSearch();
-    ExternalIdSearch customSearch = request.getCustomExternalIdSearch();
-    String currencyISO = (request.getCurrency() != null ? request.getCurrency().getCode() : null);
-    if ((request.getHolidayObjectIds() != null && request.getHolidayObjectIds().size() == 0) ||
+
+    final ExternalIdSearch regionSearch = request.getRegionExternalIdSearch();
+    final ExternalIdSearch exchangeSearch = request.getExchangeExternalIdSearch();
+    final ExternalIdSearch customSearch = request.getCustomExternalIdSearch();
+    final String currencyISO = request.getCurrency() != null ? request.getCurrency().getCode() : null;
+    if (request.getHolidayObjectIds() != null && request.getHolidayObjectIds().size() == 0 ||
         ExternalIdSearch.canMatch(regionSearch) == false ||
         ExternalIdSearch.canMatch(exchangeSearch) == false) {
       result.setPaging(Paging.of(request.getPagingRequest(), 0));
       return result;
     }
-    
+
     final DbMapSqlParameterSource args = createParameterSource()
       .addTimestamp("version_as_of_instant", vc.getVersionAsOf())
       .addTimestamp("corrected_to_instant", vc.getCorrectedTo())
@@ -158,7 +165,7 @@ public class DbHolidayMaster extends AbstractDocumentDbMaster<HolidayDocument> i
         throw new IllegalArgumentException("Unsupported search type: " + regionSearch.getSearchType());
       }
       int i = 0;
-      for (ExternalId idKey : regionSearch.getExternalIds()) {
+      for (final ExternalId idKey : regionSearch.getExternalIds()) {
         args.addValue("region_scheme" + i, idKey.getScheme().getName());
         args.addValue("region_value" + i, idKey.getValue());
         i++;
@@ -170,7 +177,7 @@ public class DbHolidayMaster extends AbstractDocumentDbMaster<HolidayDocument> i
         throw new IllegalArgumentException("Unsupported search type: " + exchangeSearch.getSearchType());
       }
       int i = 0;
-      for (ExternalId idKey : exchangeSearch.getExternalIds()) {
+      for (final ExternalId idKey : exchangeSearch.getExternalIds()) {
         args.addValue("exchange_scheme" + i, idKey.getScheme().getName());
         args.addValue("exchange_value" + i, idKey.getValue());
         i++;
@@ -182,7 +189,7 @@ public class DbHolidayMaster extends AbstractDocumentDbMaster<HolidayDocument> i
         throw new IllegalArgumentException("Unsupported search type: " + customSearch.getSearchType());
       }
       int i = 0;
-      for (ExternalId idKey : customSearch.getExternalIds()) {
+      for (final ExternalId idKey : customSearch.getExternalIds()) {
         args.addValue("custom_scheme" + i, idKey.getScheme().getName());
         args.addValue("custom_value" + i, idKey.getValue());
         i++;
@@ -190,8 +197,8 @@ public class DbHolidayMaster extends AbstractDocumentDbMaster<HolidayDocument> i
       args.addValue("sql_search_custom_ids", sqlSelectIdKeys(request.getCustomExternalIdSearch(), "custom"));
     }
     if (request.getHolidayObjectIds() != null) {
-      StringBuilder buf = new StringBuilder(request.getHolidayObjectIds().size() * 10);
-      for (ObjectId objectId : request.getHolidayObjectIds()) {
+      final StringBuilder buf = new StringBuilder(request.getHolidayObjectIds().size() * 10);
+      for (final ObjectId objectId : request.getHolidayObjectIds()) {
         checkScheme(objectId);
         buf.append(extractOid(objectId)).append(", ");
       }
@@ -201,7 +208,7 @@ public class DbHolidayMaster extends AbstractDocumentDbMaster<HolidayDocument> i
     args.addValue("sort_order", ORDER_BY_MAP.get(request.getSortOrder()));
     args.addValue("paging_offset", request.getPagingRequest().getFirstItem());
     args.addValue("paging_fetch", request.getPagingRequest().getPagingSize());
-    
+
     final String[] sql = {getElSqlBundle().getSql("Search", args), getElSqlBundle().getSql("SearchCount", args)};
     doSearch(request.getPagingRequest(), sql, args, new HolidayDocumentExtractor(), result);
     return result;
@@ -211,13 +218,13 @@ public class DbHolidayMaster extends AbstractDocumentDbMaster<HolidayDocument> i
    * Gets the SQL to search for ids.
    * <p>
    * This is too complex for the elsql mechanism.
-   * 
+   *
    * @param bundle  the bundle, not null
    * @param type  the type to search for, not null
    * @return the SQL search and count, not null
    */
   protected String sqlSelectIdKeys(final ExternalIdSearch bundle, final String type) {
-    List<String> list = new ArrayList<String>();
+    final List<String> list = new ArrayList<String>();
     for (int i = 0; i < bundle.size(); i++) {
       list.add("(" + type + "_scheme = :" + type + "_scheme" + i + " AND " + type + "_value = :" + type + "_value" + i + ") ");
     }
@@ -245,7 +252,7 @@ public class DbHolidayMaster extends AbstractDocumentDbMaster<HolidayDocument> i
   //-------------------------------------------------------------------------
   /**
    * Inserts a new document.
-   * 
+   *
    * @param document  the document, not null
    * @return the new document, not null
    */
@@ -271,10 +278,10 @@ public class DbHolidayMaster extends AbstractDocumentDbMaster<HolidayDocument> i
       default:
         throw new IllegalArgumentException("Holiday type not set");
     }
-    
+
     try (Timer.Context context = _insertTimer.time()) {
       final long docId = nextId("hol_holiday_seq");
-      final long docOid = (document.getUniqueId() != null ? extractOid(document.getUniqueId()) : docId);
+      final long docOid = document.getUniqueId() != null ? extractOid(document.getUniqueId()) : docId;
       // the arguments for inserting into the holiday table
       final ManageableHoliday holiday = document.getHoliday();
       final DbMapSqlParameterSource docArgs = createParameterSource()
@@ -312,10 +319,13 @@ public class DbHolidayMaster extends AbstractDocumentDbMaster<HolidayDocument> i
             Types.VARCHAR)
         .addValue("currency_iso",
             holiday.getCurrency() != null ? holiday.getCurrency().getCode() : null,
+            Types.VARCHAR)
+        .addValue("weekend_type",
+            holiday instanceof WeekendTypeProvider ? ((WeekendTypeProvider) holiday).getWeekendType().name() : null,
             Types.VARCHAR);
       // the arguments for inserting into the date table
       final List<DbMapSqlParameterSource> dateList = new ArrayList<DbMapSqlParameterSource>();
-      for (LocalDate date : holiday.getHolidayDates()) {
+      for (final LocalDate date : holiday.getHolidayDates()) {
         final DbMapSqlParameterSource dateArgs = createParameterSource()
           .addValue("doc_id", docId)
           .addDate("hol_date", date);
@@ -331,7 +341,7 @@ public class DbHolidayMaster extends AbstractDocumentDbMaster<HolidayDocument> i
       document.setUniqueId(uniqueId);
       return document;
     }
-    
+
   }
 
   //-------------------------------------------------------------------------
@@ -341,7 +351,7 @@ public class DbHolidayMaster extends AbstractDocumentDbMaster<HolidayDocument> i
   protected final class HolidayDocumentExtractor implements ResultSetExtractor<List<HolidayDocument>> {
     private long _lastDocId = -1;
     private ManageableHoliday _holiday;
-    private List<HolidayDocument> _documents = new ArrayList<HolidayDocument>();
+    private final List<HolidayDocument> _documents = new ArrayList<HolidayDocument>();
 
     @Override
     public List<HolidayDocument> extractData(final ResultSet rs) throws SQLException, DataAccessException {
@@ -374,8 +384,9 @@ public class DbHolidayMaster extends AbstractDocumentDbMaster<HolidayDocument> i
       final String customScheme = rs.getString("CUSTOM_SCHEME");
       final String customValue = rs.getString("CUSTOM_VALUE");
       final String currencyISO = rs.getString("CURRENCY_ISO");
-      UniqueId uniqueId = createUniqueId(docOid, docId);
-      ManageableHoliday holiday = new ManageableHoliday();
+      final String weekendType = rs.getString("WEEKEND_TYPE");
+      final UniqueId uniqueId = createUniqueId(docOid, docId);
+      final ManageableHoliday holiday = weekendType == null ? new ManageableHoliday() : new ManageableHolidayWithWeekend();
       holiday.setUniqueId(uniqueId);
       holiday.setType(HolidayType.valueOf(type));
       if (regionScheme != null && regionValue != null) {
@@ -390,7 +401,10 @@ public class DbHolidayMaster extends AbstractDocumentDbMaster<HolidayDocument> i
       if (currencyISO != null) {
         holiday.setCurrency(Currency.of(currencyISO));
       }
-      HolidayDocument doc = new HolidayDocument(holiday);
+      if (weekendType != null) {
+        ((ManageableHolidayWithWeekend) holiday).setWeekendType(WeekendType.valueOf(weekendType));
+      }
+      final HolidayDocument doc = new HolidayDocument(holiday);
       doc.setVersionFromInstant(DbDateUtils.fromSqlTimestamp(versionFrom));
       doc.setVersionToInstant(DbDateUtils.fromSqlTimestampNullFarFuture(versionTo));
       doc.setCorrectionFromInstant(DbDateUtils.fromSqlTimestamp(correctionFrom));
@@ -406,8 +420,8 @@ public class DbHolidayMaster extends AbstractDocumentDbMaster<HolidayDocument> i
   }
 
   @Override
-  protected AbstractHistoryResult<HolidayDocument> historyByVersionsCorrections(AbstractHistoryRequest request) {
-    HolidayHistoryRequest historyRequest = new HolidayHistoryRequest();
+  protected AbstractHistoryResult<HolidayDocument> historyByVersionsCorrections(final AbstractHistoryRequest request) {
+    final HolidayHistoryRequest historyRequest = new HolidayHistoryRequest();
     historyRequest.setCorrectionsFromInstant(request.getCorrectionsFromInstant());
     historyRequest.setCorrectionsToInstant(request.getCorrectionsToInstant());
     historyRequest.setVersionsFromInstant(request.getVersionsFromInstant());
