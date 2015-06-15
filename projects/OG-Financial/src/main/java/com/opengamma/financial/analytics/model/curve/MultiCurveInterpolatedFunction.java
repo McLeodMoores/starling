@@ -320,6 +320,9 @@ public class MultiCurveInterpolatedFunction extends
         knownData = new MulticurveProviderDiscount(fxMatrix);
       } else {
         knownData = (MulticurveProviderDiscount) inputs.getValue(ValueRequirementNames.CURVE_BUNDLE);
+        if (knownData == null) {
+          throw new OpenGammaRuntimeException("Could not get known data: exogenous requirements were " + getExogenousRequirements());
+        }
         knownData.setForexMatrix(fxMatrix);
       }
       return knownData;
