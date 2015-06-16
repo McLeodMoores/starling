@@ -2,6 +2,10 @@
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
  *
  * Please see distribution for license.
+ *
+ * Modified by McLeod Moores Software Limited.
+ *
+ * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.web.holiday;
 
@@ -40,21 +44,32 @@ public class WebHolidayVersionsResource extends AbstractWebHolidayResource {
   }
 
   @GET
+  public String getHTML() {
+    final HolidayHistoryRequest request = new HolidayHistoryRequest(data().getHoliday().getUniqueId());
+    final HolidayHistoryResult result = data().getHolidayMaster().history(request);
+
+    final FlexiBean out = createRootData();
+    out.put("versionsResult", result);
+    out.put("versions", result.getHolidays());
+    return getFreemarker().build(HTML_DIR + "holidayversions.ftl", out);
+  }
+
+  @GET
   @Produces(MediaType.APPLICATION_JSON)
   public Response getJSON(
-      @QueryParam("pgIdx") Integer pgIdx,
-      @QueryParam("pgNum") Integer pgNum,
-      @QueryParam("pgSze") Integer pgSze) {
-    PagingRequest pr = buildPagingRequest(pgIdx, pgNum, pgSze);
-    HolidayHistoryRequest request = new HolidayHistoryRequest(data().getHoliday().getUniqueId());
+      @QueryParam("pgIdx") final Integer pgIdx,
+      @QueryParam("pgNum") final Integer pgNum,
+      @QueryParam("pgSze") final Integer pgSze) {
+    final PagingRequest pr = buildPagingRequest(pgIdx, pgNum, pgSze);
+    final HolidayHistoryRequest request = new HolidayHistoryRequest(data().getHoliday().getUniqueId());
     request.setPagingRequest(pr);
-    HolidayHistoryResult result = data().getHolidayMaster().history(request);
-    
-    FlexiBean out = createRootData();
+    final HolidayHistoryResult result = data().getHolidayMaster().history(request);
+
+    final FlexiBean out = createRootData();
     out.put("versionsResult", result);
     out.put("versions", result.getHolidays());
     out.put("paging", new WebPaging(result.getPaging(), data().getUriInfo()));
-    String json = getFreemarker().build(JSON_DIR + "holidayversions.ftl", out);
+    final String json = getFreemarker().build(JSON_DIR + "holidayversions.ftl", out);
     return Response.ok(json).build();
   }
 
@@ -63,26 +78,28 @@ public class WebHolidayVersionsResource extends AbstractWebHolidayResource {
    * Creates the output root data.
    * @return the output root data, not null
    */
+  @Override
   protected FlexiBean createRootData() {
-    FlexiBean out = super.createRootData();
-    HolidayDocument doc = data().getHoliday();
+    final FlexiBean out = super.createRootData();
+    final HolidayDocument doc = data().getHoliday();
     out.put("holidayDoc", doc);
     out.put("holiday", doc.getHoliday());
+    out.put("holidayDescription", getHolidayTypesProvider().getDescription(doc.getHoliday().getType().name()));
     out.put("deleted", !doc.isLatest());
     return out;
   }
 
   //-------------------------------------------------------------------------
   @Path("{versionId}")
-  public WebHolidayVersionResource findVersion(@PathParam("versionId") String idStr) {
+  public WebHolidayVersionResource findVersion(@PathParam("versionId") final String idStr) {
     data().setUriVersionId(idStr);
-    HolidayDocument doc = data().getHoliday();
-    UniqueId combined = doc.getUniqueId().withVersion(idStr);
-    if (doc.getUniqueId().equals(combined) == false) {
-      HolidayDocument versioned = data().getHolidayMaster().get(combined);
-      data().setVersioned(versioned);
-    } else {
+    final HolidayDocument doc = data().getHoliday();
+    final UniqueId combined = doc.getUniqueId().withVersion(idStr);
+    if (doc.getUniqueId().equals(combined)) {
       data().setVersioned(doc);
+    } else {
+      final HolidayDocument versioned = data().getHolidayMaster().get(combined);
+      data().setVersioned(versioned);
     }
     return new WebHolidayVersionResource(this);
   }
@@ -94,7 +111,7 @@ public class WebHolidayVersionsResource extends AbstractWebHolidayResource {
    * @return the URI, not null
    */
   public static URI uri(final WebHolidayData data) {
-    String holidayId = data.getBestHolidayUriId(null);
+    final String holidayId = data.getBestHolidayUriId(null);
     return data.getUriInfo().getBaseUriBuilder().path(WebHolidayVersionsResource.class).build(holidayId);
   }
 

@@ -2,6 +2,10 @@
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
  *
  * Please see distribution for license.
+ *
+ * Modified by McLeod Moores Software Limited.
+ *
+ * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.web.holiday;
 
@@ -22,17 +26,17 @@ public abstract class AbstractWebHolidayResource
     extends AbstractPerRequestWebResource<WebHolidayData> {
 
   /**
-   * HTML ftl directory
+   * HTML ftl directory.
    */
   protected static final String HTML_DIR = "holidays/html/";
   /**
-   * JSON ftl directory
+   * JSON ftl directory.
    */
   protected static final String JSON_DIR = "holidays/json/";
 
   /**
    * Creates the resource.
-   * 
+   *
    * @param holidayMaster  the holiday master, not null
    */
   protected AbstractWebHolidayResource(final HolidayMaster holidayMaster) {
@@ -43,7 +47,7 @@ public abstract class AbstractWebHolidayResource
 
   /**
    * Creates the resource.
-   * 
+   *
    * @param parent  the parent resource, not null
    */
   protected AbstractWebHolidayResource(final AbstractWebHolidayResource parent) {
@@ -53,18 +57,25 @@ public abstract class AbstractWebHolidayResource
   //-------------------------------------------------------------------------
   /**
    * Creates the output root data.
-   * 
+   *
    * @return the output root data, not null
    */
   @Override
   protected FlexiBean createRootData() {
-    FlexiBean out = super.createRootData();
+    final FlexiBean out = super.createRootData();
     out.put("uris", new WebHolidayUris(data()));
-    WebExchangeData exchangeData = new WebExchangeData(data().getUriInfo());
+    final WebExchangeData exchangeData = new WebExchangeData(data().getUriInfo());
     out.put("exchangeUris", new WebExchangeUris(exchangeData));
-    WebRegionData regionData = new WebRegionData(data().getUriInfo());
+    final WebRegionData regionData = new WebRegionData(data().getUriInfo());
     out.put("regionUris", new WebRegionUris(regionData));
     return out;
   }
 
+  /**
+   * Returns a holiday type provider.
+   * @return  the provider
+   */
+  public HolidayTypesProvider getHolidayTypesProvider() {
+    return HolidayTypesProvider.getInstance();
+  }
 }
