@@ -23,6 +23,7 @@ import com.opengamma.component.ComponentInfo;
 import com.opengamma.component.ComponentRepository;
 import com.opengamma.component.factory.AbstractComponentFactory;
 import com.opengamma.component.factory.ComponentInfoAttributes;
+import com.opengamma.id.ObjectIdSupplier;
 import com.opengamma.master.position.PositionMaster;
 import com.opengamma.master.position.impl.DataPositionMasterResource;
 import com.opengamma.master.position.impl.InMemoryPositionMaster;
@@ -45,6 +46,11 @@ public class InMemoryPositionMasterComponentFactory extends AbstractComponentFac
   @PropertyDefinition
   private boolean _publishRest = true;
   /**
+   * Optional scheme to use for unique and object ids on this master.  If not set, the default will be used.
+   */
+  @PropertyDefinition
+  private String _idScheme;
+  /**
    * Whether to clone results in the underlying master. True by default.
    */
   @PropertyDefinition
@@ -53,12 +59,21 @@ public class InMemoryPositionMasterComponentFactory extends AbstractComponentFac
 
   @Override
   public void init(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) {
-    final InMemoryPositionMaster master = new InMemoryPositionMaster();
+    final InMemoryPositionMaster master;
+    if (_idScheme == null) {
+      master = new InMemoryPositionMaster();
+    } else {
+      master = new InMemoryPositionMaster(new ObjectIdSupplier(_idScheme));
+    }
     master.setCloneResults(isCloneResults());
     final ComponentInfo info = new ComponentInfo(PositionMaster.class, getClassifier());
     info.addAttribute(ComponentInfoAttributes.LEVEL, 1);
     info.addAttribute(ComponentInfoAttributes.REMOTE_CLIENT_JAVA, RemotePositionMaster.class);
-    info.addAttribute(ComponentInfoAttributes.UNIQUE_ID_SCHEME, InMemoryPositionMaster.DEFAULT_OID_SCHEME);
+    if (_idScheme == null) {
+      info.addAttribute(ComponentInfoAttributes.UNIQUE_ID_SCHEME, InMemoryPositionMaster.DEFAULT_OID_SCHEME);
+    } else {
+      info.addAttribute(ComponentInfoAttributes.UNIQUE_ID_SCHEME, _idScheme);
+    }
     repo.registerComponent(info, master);
 
     if (isPublishRest()) {
@@ -138,6 +153,31 @@ public class InMemoryPositionMasterComponentFactory extends AbstractComponentFac
 
   //-----------------------------------------------------------------------
   /**
+   * Gets optional scheme to use for unique and object ids on this master.  If not set, the default will be used.
+   * @return the value of the property
+   */
+  public String getIdScheme() {
+    return _idScheme;
+  }
+
+  /**
+   * Sets optional scheme to use for unique and object ids on this master.  If not set, the default will be used.
+   * @param idScheme  the new value of the property
+   */
+  public void setIdScheme(String idScheme) {
+    this._idScheme = idScheme;
+  }
+
+  /**
+   * Gets the the {@code idScheme} property.
+   * @return the property, not null
+   */
+  public final Property<String> idScheme() {
+    return metaBean().idScheme().createProperty(this);
+  }
+
+  //-----------------------------------------------------------------------
+  /**
    * Gets whether to clone results in the underlying master. True by default.
    * @return the value of the property
    */
@@ -176,6 +216,7 @@ public class InMemoryPositionMasterComponentFactory extends AbstractComponentFac
       InMemoryPositionMasterComponentFactory other = (InMemoryPositionMasterComponentFactory) obj;
       return JodaBeanUtils.equal(getClassifier(), other.getClassifier()) &&
           (isPublishRest() == other.isPublishRest()) &&
+          JodaBeanUtils.equal(getIdScheme(), other.getIdScheme()) &&
           (isCloneResults() == other.isCloneResults()) &&
           super.equals(obj);
     }
@@ -187,13 +228,14 @@ public class InMemoryPositionMasterComponentFactory extends AbstractComponentFac
     int hash = 7;
     hash = hash * 31 + JodaBeanUtils.hashCode(getClassifier());
     hash = hash * 31 + JodaBeanUtils.hashCode(isPublishRest());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getIdScheme());
     hash = hash * 31 + JodaBeanUtils.hashCode(isCloneResults());
     return hash ^ super.hashCode();
   }
 
   @Override
   public String toString() {
-    StringBuilder buf = new StringBuilder(128);
+    StringBuilder buf = new StringBuilder(160);
     buf.append("InMemoryPositionMasterComponentFactory{");
     int len = buf.length();
     toString(buf);
@@ -209,6 +251,7 @@ public class InMemoryPositionMasterComponentFactory extends AbstractComponentFac
     super.toString(buf);
     buf.append("classifier").append('=').append(JodaBeanUtils.toString(getClassifier())).append(',').append(' ');
     buf.append("publishRest").append('=').append(JodaBeanUtils.toString(isPublishRest())).append(',').append(' ');
+    buf.append("idScheme").append('=').append(JodaBeanUtils.toString(getIdScheme())).append(',').append(' ');
     buf.append("cloneResults").append('=').append(JodaBeanUtils.toString(isCloneResults())).append(',').append(' ');
   }
 
@@ -233,6 +276,11 @@ public class InMemoryPositionMasterComponentFactory extends AbstractComponentFac
     private final MetaProperty<Boolean> _publishRest = DirectMetaProperty.ofReadWrite(
         this, "publishRest", InMemoryPositionMasterComponentFactory.class, Boolean.TYPE);
     /**
+     * The meta-property for the {@code idScheme} property.
+     */
+    private final MetaProperty<String> _idScheme = DirectMetaProperty.ofReadWrite(
+        this, "idScheme", InMemoryPositionMasterComponentFactory.class, String.class);
+    /**
      * The meta-property for the {@code cloneResults} property.
      */
     private final MetaProperty<Boolean> _cloneResults = DirectMetaProperty.ofReadWrite(
@@ -244,6 +292,7 @@ public class InMemoryPositionMasterComponentFactory extends AbstractComponentFac
         this, (DirectMetaPropertyMap) super.metaPropertyMap(),
         "classifier",
         "publishRest",
+        "idScheme",
         "cloneResults");
 
     /**
@@ -259,6 +308,8 @@ public class InMemoryPositionMasterComponentFactory extends AbstractComponentFac
           return _classifier;
         case -614707837:  // publishRest
           return _publishRest;
+        case -661606752:  // idScheme
+          return _idScheme;
         case 199795673:  // cloneResults
           return _cloneResults;
       }
@@ -298,6 +349,14 @@ public class InMemoryPositionMasterComponentFactory extends AbstractComponentFac
     }
 
     /**
+     * The meta-property for the {@code idScheme} property.
+     * @return the meta-property, not null
+     */
+    public final MetaProperty<String> idScheme() {
+      return _idScheme;
+    }
+
+    /**
      * The meta-property for the {@code cloneResults} property.
      * @return the meta-property, not null
      */
@@ -313,6 +372,8 @@ public class InMemoryPositionMasterComponentFactory extends AbstractComponentFac
           return ((InMemoryPositionMasterComponentFactory) bean).getClassifier();
         case -614707837:  // publishRest
           return ((InMemoryPositionMasterComponentFactory) bean).isPublishRest();
+        case -661606752:  // idScheme
+          return ((InMemoryPositionMasterComponentFactory) bean).getIdScheme();
         case 199795673:  // cloneResults
           return ((InMemoryPositionMasterComponentFactory) bean).isCloneResults();
       }
@@ -327,6 +388,9 @@ public class InMemoryPositionMasterComponentFactory extends AbstractComponentFac
           return;
         case -614707837:  // publishRest
           ((InMemoryPositionMasterComponentFactory) bean).setPublishRest((Boolean) newValue);
+          return;
+        case -661606752:  // idScheme
+          ((InMemoryPositionMasterComponentFactory) bean).setIdScheme((String) newValue);
           return;
         case 199795673:  // cloneResults
           ((InMemoryPositionMasterComponentFactory) bean).setCloneResults((Boolean) newValue);
