@@ -133,6 +133,9 @@ public class PortfolioWriter {
         existingSecurities = walkPositionOrTrade(trade, existingSecurities);
       }
     }
+    for (PortfolioNode childNode : node.getChildNodes()) {
+      existingSecurities = walkPortfolioForSecurities(childNode, existingSecurities);
+    }
     return existingSecurities;
   }
 
@@ -193,14 +196,21 @@ public class PortfolioWriter {
 
   private UniqueId insertPortfolio(Portfolio portfolio, ManageablePortfolio manageablePortfolio, UniqueId previousId) {
     UniqueId uid;
-    
-    List<ManageablePosition> positions = persistPositions(portfolio);
+    List<ManageablePosition> manageablePositions = new ArrayList<>();
+    ManageablePortfolio managebalePortfolio = persistPositions(portfolio, manageablePositions);
 
     String portfolioName = portfolio.getName();
 
     PortfolioDocument portfolioDocument = new PortfolioDocument();
     if (!portfolioEqual(portfolio, manageablePortfolio)) {
-      portfolioDocument.setPortfolio(createPortfolio(portfolioName, positions));
+      if (!_updateIfExists) {
+        s_logger.warn("Persisting a flat portfolio structure, use alternate constructor with updateIfExists flag set to true");
+        s_logger.warn("This mode is retained purely for backwards compatibility.");
+        // legacy mode ignores incoming portfolio structure and creates a flat portfolio.
+        portfolioDocument.setPortfolio(createPortfolio(portfolioName, manageablePositions));
+      } else {
+        portfolioDocument.setPortfolio(managebalePortfolio);
+      }
       if (previousId != null) {
         portfolioDocument.setUniqueId(previousId);
       }
@@ -276,12 +286,24 @@ public class PortfolioWriter {
     return true;
   }
 
-  private List<ManageablePosition> persistPositions(Portfolio portfolio) {
-    return persistPositions(portfolio.getRootNode());
+  /**
+   * Build a manageable portfolio structure (but don't persist yet), and persist positions as we go.  We also build up
+   * a list of managable positions persisted to allow the creation of flat portfolios when in legacy mode (_updateIfExists==false)
+   * @param portfolio  the simple portfolio containing the structure we want
+   * @param legacyList  an empty arraylist to be filled with manageable portfolios
+   * @return the constructed manageable portfolio, not persisted yet.
+   */
+  private ManageablePortfolio persistPositions(final Portfolio portfolio, final List<ManageablePosition> legacyList) {
+    ManageablePortfolio manageablePortfolio = new ManageablePortfolio();
+    manageablePortfolio.setName(portfolio.getName());
+    manageablePortfolio.setAttributes(portfolio.getAttributes());
+    manageablePortfolio.setRootNode(persistPositions(portfolio.getRootNode(), legacyList));
+    return manageablePortfolio;
   }
     
-  private List<ManageablePosition> persistPositions(final PortfolioNode portfolioNode) {
-    List<ManageablePosition> added = new ArrayList<>();
+  private ManageablePortfolioNode persistPositions(final PortfolioNode portfolioNode, final List<ManageablePosition> legacyList) {
+    ManageablePortfolioNode manageablePortfolioNode = new ManageablePortfolioNode();
+    manageablePortfolioNode.setName(portfolioNode.getName());
     for (Position position : portfolioNode.getPositions()) {
       if (position.getSecurityLink() == null || position.getSecurityLink().getExternalId().isEmpty()) {
         throw new OpenGammaRuntimeException("Unable to persist position with no security external id: " + position);
@@ -297,7 +319,8 @@ public class PortfolioWriter {
           s_logger.warn("Persisting a new copy of existing position, use alternate constructor with updateIfExists flag set to true");
           s_logger.warn("This mode is retained purely for backwards compatibility.");
           PositionDocument addedDoc = _positionMaster.add(new PositionDocument(manageablePosition));
-          added.add(addedDoc.getPosition());
+          manageablePortfolioNode.addPosition(addedDoc.getObjectId());
+          legacyList.add(addedDoc.getPosition());
         } else {
           PositionDocument addedOrUpdatedDoc;
           if (position.getUniqueId() != null) {
@@ -319,20 +342,20 @@ public class PortfolioWriter {
             // doesn't exist
             addedOrUpdatedDoc = _positionMaster.add(new PositionDocument(manageablePosition));
           }
-          added.add(addedOrUpdatedDoc.getPosition());
-
+          manageablePortfolioNode.addPosition(addedOrUpdatedDoc.getObjectId());
+          legacyList.add(addedOrUpdatedDoc.getPosition());
         }
       }
       s_logger.info("Added/updated position {}", position);
     }
     if (_updateIfExists) {
       for (PortfolioNode child : portfolioNode.getChildNodes()) {
-        added.addAll(persistPositions(child));
+        manageablePortfolioNode.addChildNode(persistPositions(child, legacyList));
       }
     } else {
       s_logger.warn("Not recursing to sub-nodes to preserve legacy behaviour, use alternate constructor with updateIfExists flag set to true");
     }
-    return added;
+    return manageablePortfolioNode;
   }
 
   private List<ManageableTrade> convertTrades(Position position) {
@@ -357,4 +380,5 @@ public class PortfolioWriter {
 
     return new ManageablePortfolio(portfolioName, rootNode);
   }
+  
 }
