@@ -2,6 +2,10 @@
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
  *
  * Please see distribution for license.
+ *
+ * Modified by McLeod Moores Software Limited.
+ *
+ * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.financial.convention;
 
@@ -44,9 +48,18 @@ public class FXSpotConvention extends FinancialConvention {
   private int _settlementDays;
   /**
    * The settlement region.
+   * @deprecated  both regions and US holidays should be considered when calculating
+   * the settlement date
    */
-  @PropertyDefinition
+  @PropertyDefinition(set = "manual")
+  @Deprecated
   private ExternalId _settlementRegion;
+  /**
+   * True if intermediate US holidays should be considered when calculating the settlement
+   * date.
+   */
+  @PropertyDefinition(set = "manual")
+  private Boolean _useIntermediateUsHolidays;
 
   /**
    * Creates an instance.
@@ -56,24 +69,75 @@ public class FXSpotConvention extends FinancialConvention {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param name  the convention name, not null
    * @param externalIdBundle  the external identifiers for this convention, not null
    * @param settlementDays  the number of settlement days
    * @param settlementRegion  the settlement region, can be null
    */
-  public FXSpotConvention(
-      final String name, final ExternalIdBundle externalIdBundle, final int settlementDays,
+  @Deprecated
+  public FXSpotConvention(final String name, final ExternalIdBundle externalIdBundle, final int settlementDays,
       final ExternalId settlementRegion) {
     super(name, externalIdBundle);
     setSettlementDays(settlementDays);
     setSettlementRegion(settlementRegion);
+    setUseIntermediateUsHolidays(null);
   }
 
+  /**
+   * Creates an instance.
+   *
+   * @param name  the convention name, not null
+   * @param externalIdBundle  the external identifiers for this convention, not null
+   * @param settlementDays  the number of settlement days
+   * @param useIntermediateUsHolidays  true if US holidays between the maturity date and settlement date should be 
+   * considered when calculating the settlement date
+   */
+  public FXSpotConvention(final String name, final ExternalIdBundle externalIdBundle, final int settlementDays,
+      final boolean useIntermediateUsHolidays) {
+    super(name, externalIdBundle);
+    setSettlementDays(settlementDays);
+    setSettlementRegion(null);
+    setUseIntermediateUsHolidays(useIntermediateUsHolidays);
+  }
+
+  /**
+   * Tests that either the settlementRegion field or the useIntermediateUsHolidays fields are set, not
+   * both.
+   * @param settlementRegion  the settlementRegion
+   * @param useIntermediateUsHolidays  the use intermediate US holidays flag
+   */
+  private static void checkConsistentSettlement(final ExternalId settlementRegion, final Boolean useIntermediateUsHolidays) {
+    if (settlementRegion != null && useIntermediateUsHolidays != null) {
+      throw new IllegalStateException("Cannot set settlement region and the useIntermediateUsHolidays field");
+    } 
+  }
+  
+  /**
+   * Sets the settlement region.
+   * @deprecated  both regions and US holidays should be considered when calculating
+   * the settlement date
+   * @param settlementRegion  the new value of the property
+   */
+  @Deprecated
+  public void setSettlementRegion(final ExternalId settlementRegion) {
+    checkConsistentSettlement(settlementRegion, getUseIntermediateUsHolidays());
+    this._settlementRegion = settlementRegion;
+  }
+
+  /**
+   * Sets true if intermediate US holidays should be used to calculate the settlement date.
+   * @param useIntermediateUsHolidays  the new value of the property
+   */
+  public void setUseIntermediateUsHolidays(final Boolean useIntermediateUsHolidays) {
+    checkConsistentSettlement(getSettlementRegion(), useIntermediateUsHolidays);
+    this._useIntermediateUsHolidays = useIntermediateUsHolidays;
+  }
+  
   //-------------------------------------------------------------------------
   /**
    * Gets the type identifying this convention.
-   * 
+   *
    * @return the {@link #TYPE} constant, not null
    */
   @Override
@@ -141,26 +205,43 @@ public class FXSpotConvention extends FinancialConvention {
   //-----------------------------------------------------------------------
   /**
    * Gets the settlement region.
+   * @deprecated  both regions and US holidays should be considered when calculating
+   * the settlement date
    * @return the value of the property
    */
+  @Deprecated
   public ExternalId getSettlementRegion() {
     return _settlementRegion;
   }
 
   /**
-   * Sets the settlement region.
-   * @param settlementRegion  the new value of the property
+   * Gets the the {@code settlementRegion} property.
+   * @deprecated  both regions and US holidays should be considered when calculating
+   * the settlement date
+   * @return the property, not null
    */
-  public void setSettlementRegion(ExternalId settlementRegion) {
-    this._settlementRegion = settlementRegion;
+  @Deprecated
+  public final Property<ExternalId> settlementRegion() {
+    return metaBean().settlementRegion().createProperty(this);
+  }
+
+  //-----------------------------------------------------------------------
+  /**
+   * Gets true if intermediate US holidays should be considered when calculating the settlement
+   * date.
+   * @return the value of the property
+   */
+  public Boolean getUseIntermediateUsHolidays() {
+    return _useIntermediateUsHolidays;
   }
 
   /**
-   * Gets the the {@code settlementRegion} property.
+   * Gets the the {@code useIntermediateUsHolidays} property.
+   * date.
    * @return the property, not null
    */
-  public final Property<ExternalId> settlementRegion() {
-    return metaBean().settlementRegion().createProperty(this);
+  public final Property<Boolean> useIntermediateUsHolidays() {
+    return metaBean().useIntermediateUsHolidays().createProperty(this);
   }
 
   //-----------------------------------------------------------------------
@@ -178,6 +259,7 @@ public class FXSpotConvention extends FinancialConvention {
       FXSpotConvention other = (FXSpotConvention) obj;
       return (getSettlementDays() == other.getSettlementDays()) &&
           JodaBeanUtils.equal(getSettlementRegion(), other.getSettlementRegion()) &&
+          JodaBeanUtils.equal(getUseIntermediateUsHolidays(), other.getUseIntermediateUsHolidays()) &&
           super.equals(obj);
     }
     return false;
@@ -188,12 +270,13 @@ public class FXSpotConvention extends FinancialConvention {
     int hash = 7;
     hash = hash * 31 + JodaBeanUtils.hashCode(getSettlementDays());
     hash = hash * 31 + JodaBeanUtils.hashCode(getSettlementRegion());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getUseIntermediateUsHolidays());
     return hash ^ super.hashCode();
   }
 
   @Override
   public String toString() {
-    StringBuilder buf = new StringBuilder(96);
+    StringBuilder buf = new StringBuilder(128);
     buf.append("FXSpotConvention{");
     int len = buf.length();
     toString(buf);
@@ -209,6 +292,7 @@ public class FXSpotConvention extends FinancialConvention {
     super.toString(buf);
     buf.append("settlementDays").append('=').append(JodaBeanUtils.toString(getSettlementDays())).append(',').append(' ');
     buf.append("settlementRegion").append('=').append(JodaBeanUtils.toString(getSettlementRegion())).append(',').append(' ');
+    buf.append("useIntermediateUsHolidays").append('=').append(JodaBeanUtils.toString(getUseIntermediateUsHolidays())).append(',').append(' ');
   }
 
   //-----------------------------------------------------------------------
@@ -232,12 +316,18 @@ public class FXSpotConvention extends FinancialConvention {
     private final MetaProperty<ExternalId> _settlementRegion = DirectMetaProperty.ofReadWrite(
         this, "settlementRegion", FXSpotConvention.class, ExternalId.class);
     /**
+     * The meta-property for the {@code useIntermediateUsHolidays} property.
+     */
+    private final MetaProperty<Boolean> _useIntermediateUsHolidays = DirectMetaProperty.ofReadWrite(
+        this, "useIntermediateUsHolidays", FXSpotConvention.class, Boolean.class);
+    /**
      * The meta-properties.
      */
     private final Map<String, MetaProperty<?>> _metaPropertyMap$ = new DirectMetaPropertyMap(
         this, (DirectMetaPropertyMap) super.metaPropertyMap(),
         "settlementDays",
-        "settlementRegion");
+        "settlementRegion",
+        "useIntermediateUsHolidays");
 
     /**
      * Restricted constructor.
@@ -252,6 +342,8 @@ public class FXSpotConvention extends FinancialConvention {
           return _settlementDays;
         case -534226563:  // settlementRegion
           return _settlementRegion;
+        case -1741761511:  // useIntermediateUsHolidays
+          return _useIntermediateUsHolidays;
       }
       return super.metaPropertyGet(propertyName);
     }
@@ -282,10 +374,20 @@ public class FXSpotConvention extends FinancialConvention {
 
     /**
      * The meta-property for the {@code settlementRegion} property.
+     * @deprecated  both regions and US holidays should be considered when calculating
      * @return the meta-property, not null
      */
+    @Deprecated
     public final MetaProperty<ExternalId> settlementRegion() {
       return _settlementRegion;
+    }
+
+    /**
+     * The meta-property for the {@code useIntermediateUsHolidays} property.
+     * @return the meta-property, not null
+     */
+    public final MetaProperty<Boolean> useIntermediateUsHolidays() {
+      return _useIntermediateUsHolidays;
     }
 
     //-----------------------------------------------------------------------
@@ -296,6 +398,8 @@ public class FXSpotConvention extends FinancialConvention {
           return ((FXSpotConvention) bean).getSettlementDays();
         case -534226563:  // settlementRegion
           return ((FXSpotConvention) bean).getSettlementRegion();
+        case -1741761511:  // useIntermediateUsHolidays
+          return ((FXSpotConvention) bean).getUseIntermediateUsHolidays();
       }
       return super.propertyGet(bean, propertyName, quiet);
     }
@@ -308,6 +412,9 @@ public class FXSpotConvention extends FinancialConvention {
           return;
         case -534226563:  // settlementRegion
           ((FXSpotConvention) bean).setSettlementRegion((ExternalId) newValue);
+          return;
+        case -1741761511:  // useIntermediateUsHolidays
+          ((FXSpotConvention) bean).setUseIntermediateUsHolidays((Boolean) newValue);
           return;
       }
       super.propertySet(bean, propertyName, newValue, quiet);

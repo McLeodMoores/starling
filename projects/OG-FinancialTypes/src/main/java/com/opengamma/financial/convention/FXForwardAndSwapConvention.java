@@ -2,6 +2,10 @@
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
  *
  * Please see distribution for license.
+ *
+ * Modified by McLeod Moores Software Limited.
+ *
+ * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.financial.convention;
 
@@ -55,7 +59,10 @@ public class FXForwardAndSwapConvention extends FinancialConvention {
   private boolean _isEOM;
   /**
    * The settlement region.
+   * @deprecated  both regions and US holidays should be considered when calculating
+   * the settlement date. The appropriate information is found in the spot convention.
    */
+  @Deprecated
   @PropertyDefinition(validate = "notNull")
   private ExternalId _settlementRegion;
 
@@ -208,16 +215,22 @@ public class FXForwardAndSwapConvention extends FinancialConvention {
   //-----------------------------------------------------------------------
   /**
    * Gets the settlement region.
+   * @deprecated  both regions and US holidays should be considered when calculating
+   * the settlement date. The appropriate information is found in the spot convention.
    * @return the value of the property, not null
    */
+  @Deprecated
   public ExternalId getSettlementRegion() {
     return _settlementRegion;
   }
 
   /**
    * Sets the settlement region.
+   * @deprecated  both regions and US holidays should be considered when calculating
+   * the settlement date. The appropriate information is found in the spot convention.
    * @param settlementRegion  the new value of the property, not null
    */
+  @Deprecated
   public void setSettlementRegion(ExternalId settlementRegion) {
     JodaBeanUtils.notNull(settlementRegion, "settlementRegion");
     this._settlementRegion = settlementRegion;
@@ -225,8 +238,11 @@ public class FXForwardAndSwapConvention extends FinancialConvention {
 
   /**
    * Gets the the {@code settlementRegion} property.
+   * @deprecated  both regions and US holidays should be considered when calculating
+   * the settlement date. The appropriate information is found in the spot convention.
    * @return the property, not null
    */
+  @Deprecated
   public final Property<ExternalId> settlementRegion() {
     return metaBean().settlementRegion().createProperty(this);
   }
@@ -388,8 +404,10 @@ public class FXForwardAndSwapConvention extends FinancialConvention {
 
     /**
      * The meta-property for the {@code settlementRegion} property.
+     * @deprecated  both regions and US holidays should be considered when calculating
      * @return the meta-property, not null
      */
+    @Deprecated
     public final MetaProperty<ExternalId> settlementRegion() {
       return _settlementRegion;
     }
