@@ -2,6 +2,10 @@
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
  *
  * Please see distribution for license.
+ *
+ * Modified by McLeod Moores Software Limited.
+ *
+ * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.engine;
 
@@ -16,7 +20,6 @@ import com.opengamma.core.change.ChangeManager;
 import com.opengamma.core.change.DummyChangeManager;
 import com.opengamma.core.security.AbstractSecuritySource;
 import com.opengamma.core.security.Security;
-import com.opengamma.core.security.SecuritySource;
 import com.opengamma.id.ExternalId;
 import com.opengamma.id.ExternalIdBundle;
 import com.opengamma.id.IdUtils;
@@ -32,7 +35,7 @@ import com.opengamma.util.ArgumentChecker;
  * This class is intended for testing scenarios.
  * It is not thread-safe and must not be used in production.
  */
-public class InMemorySecuritySource extends AbstractSecuritySource implements SecuritySource {
+public class InMemorySecuritySource extends AbstractSecuritySource {
 
   /**
    * The securities keyed by identifier.
@@ -52,9 +55,9 @@ public class InMemorySecuritySource extends AbstractSecuritySource implements Se
 
   //-------------------------------------------------------------------------
   @Override
-  public Security get(UniqueId uniqueId) {
+  public Security get(final UniqueId uniqueId) {
     ArgumentChecker.notNull(uniqueId, "uniqueId");
-    Security security = _securities.get(uniqueId.getObjectId());
+    final Security security = _securities.get(uniqueId.getObjectId());
     if (security == null) {
       throw new DataNotFoundException("Security not found: " + uniqueId);
     }
@@ -62,10 +65,10 @@ public class InMemorySecuritySource extends AbstractSecuritySource implements Se
   }
 
   @Override
-  public Security get(ObjectId objectId, VersionCorrection versionCorrection) {
+  public Security get(final ObjectId objectId, final VersionCorrection versionCorrection) {
     ArgumentChecker.notNull(objectId, "objectId");
     ArgumentChecker.notNull(versionCorrection, "versionCorrection");
-    Security security = _securities.get(objectId);
+    final Security security = _securities.get(objectId);
     if (security == null) {
       throw new DataNotFoundException("Security not found: " + objectId);
     }
@@ -73,19 +76,19 @@ public class InMemorySecuritySource extends AbstractSecuritySource implements Se
   }
 
   @Override
-  public Collection<Security> get(ExternalIdBundle bundle) {
+  public Collection<Security> get(final ExternalIdBundle bundle) {
     ArgumentChecker.notNull(bundle, "bundle");
-    List<Security> result = new ArrayList<Security>();
-    for (Security sec : _securities.values()) {
+    final List<Security> result = new ArrayList<Security>();
+    for (final Security sec : _securities.values()) {
       if (sec.getExternalIdBundle().containsAny(bundle)) {
         result.add(sec);
       }
     }
     return result;
   }
-  
+
   @Override
-  public Collection<Security> get(ExternalIdBundle bundle, VersionCorrection versionCorrection) {
+  public Collection<Security> get(final ExternalIdBundle bundle, final VersionCorrection versionCorrection) {
     ArgumentChecker.notNull(bundle, "bundle");
     ArgumentChecker.notNull(versionCorrection, "versionCorrection");
     // Mock source doesn't support versioning
@@ -93,26 +96,27 @@ public class InMemorySecuritySource extends AbstractSecuritySource implements Se
   }
 
   @Override
-  public Security getSingle(ExternalIdBundle bundle) {
+  public Security getSingle(final ExternalIdBundle bundle) {
     ArgumentChecker.notNull(bundle, "bundle");
-    for (ExternalId secId : bundle.getExternalIds()) {
-      for (Security sec : _securities.values()) {
+    for (final ExternalId secId : bundle.getExternalIds()) {
+      for (final Security sec : _securities.values()) {
         if (sec.getExternalIdBundle().contains(secId)) {
           return sec;
         }
       }
     }
+    // TODO should this throw DataNotFoundException?
     return null;
   }
-  
+
   @Override
-  public Security getSingle(ExternalIdBundle bundle, VersionCorrection versionCorrection) {
+  public Security getSingle(final ExternalIdBundle bundle, final VersionCorrection versionCorrection) {
     ArgumentChecker.notNull(bundle, "bundle");
     ArgumentChecker.notNull(versionCorrection, "versionCorrection");
     // Mock source doesn't support versioning
     return getSingle(bundle);
   }
-  
+
   //-------------------------------------------------------------------------
   @Override
   public ChangeManager changeManager() {
@@ -121,11 +125,11 @@ public class InMemorySecuritySource extends AbstractSecuritySource implements Se
 
   //-------------------------------------------------------------------------
   /**
-   * Adds a security to the master.
-   * 
+   * Adds a security to the source.
+   *
    * @param security  the security to add, not null
    */
-  public void addSecurity(Security security) {
+  public void addSecurity(final Security security) {
     ArgumentChecker.notNull(security, "security");
     IdUtils.setInto(security, _uidSupplier.get());
     _securities.put(security.getUniqueId().getObjectId(), security);
