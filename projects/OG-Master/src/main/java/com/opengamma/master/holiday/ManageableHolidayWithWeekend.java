@@ -20,14 +20,16 @@ import org.threeten.bp.LocalDate;
 
 import com.opengamma.core.holiday.Holiday;
 import com.opengamma.core.holiday.HolidayType;
-import com.opengamma.core.holiday.WeekendTypeProvider;
 import com.opengamma.core.holiday.WeekendType;
+import com.opengamma.core.holiday.WeekendTypeProvider;
 import com.opengamma.id.ExternalId;
 import com.opengamma.util.PublicSPI;
 import com.opengamma.util.money.Currency;
 
 /**
- *
+ * The manageable implementation of a set of holiday dates.
+ * <p>
+ * This implementation is used by the holiday master to store the data.
  */
 @PublicSPI
 @BeanDefinition
