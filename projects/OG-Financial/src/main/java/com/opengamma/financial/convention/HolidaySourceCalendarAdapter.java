@@ -2,6 +2,10 @@
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
  *
  * Please see distribution for license.
+ *
+ * Modified by McLeod Moores Software Limited.
+ *
+ * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.financial.convention;
 
@@ -26,7 +30,11 @@ import com.opengamma.util.money.Currency;
 
 /**
  * Temporary adapter to make the existing Calendar interface work with the holiday repository.  THIS MUST BE REFACTORED.
+ * @deprecated  {@link Calendar} is deprecated in the analytics library, as it is not possible to distinguish between
+ * weekends and holidays. {@link com.opengamma.financial.calendar.HolidaySourceWorkingDayCalendarAdapter} could be used instead,
+ * although its behaviour when there is a missing holiday is different.
  */
+@Deprecated
 public class HolidaySourceCalendarAdapter implements Calendar, Serializable {
 
   /** Serialization version. */
@@ -90,7 +98,7 @@ public class HolidaySourceCalendarAdapter implements Calendar, Serializable {
   public String getConventionName() {
     return getName();
   }
-  
+
   @Override
   public String getName() {
     switch (_type) {
@@ -146,7 +154,7 @@ public class HolidaySourceCalendarAdapter implements Calendar, Serializable {
               return false;
             }
           }
-          
+
         }
         return true;
       case CURRENCY:
@@ -175,11 +183,11 @@ public class HolidaySourceCalendarAdapter implements Calendar, Serializable {
   public int hashCode() {
     final int prime = 31;
     int result = 1;
-    result = prime * result + ((_currencies == null) ? 0 : _currencies.hashCode());
-    result = prime * result + ((_exchange == null) ? 0 : _exchange.hashCode());
+    result = prime * result + (_currencies == null ? 0 : _currencies.hashCode());
+    result = prime * result + (_exchange == null ? 0 : _exchange.hashCode());
     result = prime * result + _holidaySource.hashCode();
     result = prime * result + _regions.hashCode();
-    result = prime * result + ((_type == null) ? 0 : _type.hashCode());
+    result = prime * result + (_type == null ? 0 : _type.hashCode());
     return result;
   }
 
