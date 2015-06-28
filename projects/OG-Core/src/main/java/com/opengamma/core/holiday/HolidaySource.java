@@ -30,9 +30,10 @@ import com.opengamma.util.money.Currency;
  * <p>
  * The original implementation has methods that are used to determine whether a date is a holiday,
  * with some of the implementations hard-coding the weekend days to be Saturday or Sunday. Although
- * these implementations have been retained, the correct way to determine whether a date is a holiday
- * or weekend is to use implementations of {@link Holiday} that are {@link WeekendTypeProvider}s and
- * use a {@link WorkingDayCalculator}.
+ * this functionality has been retained, the correct way to determine whether a date is a holiday
+ * or weekend is to use implementations of {@link Holiday} that are {@link WeekendTypeProvider}s
+ * and determine whether a date is a holiday or weekend after the holiday has been retrieved from
+ * the source.
  */
 @PublicSPI
 public interface HolidaySource extends Source<Holiday> {
@@ -41,21 +42,23 @@ public interface HolidaySource extends Source<Holiday> {
    * Returns the collection of holiday records for a particular
    * holiday type and region/exchange. Note that when attempting
    * to determine whether a particular date is a holiday for a
-   * region/exchange, a weekend check should be done before
-   * calling this method.
+   * region/exchange, the weekends might not be part of the holiday
+   * if they are not {@link WeekendTypeProvider}s, and so the weekend
+   * should be handled separately.
    *
    * @param holidayType  the type of holiday, must not be CURRENCY, not null
    * @param regionOrExchangeIds  the regions or exchanges to check, not null
    * @return the collection of holiday records, not null
    */
-  Collection<Holiday> get(HolidayType holidayType,
-                          ExternalIdBundle regionOrExchangeIds);
+  Collection<Holiday> get(HolidayType holidayType, ExternalIdBundle regionOrExchangeIds);
 
   /**
    * Returns the collection of holiday records for a particular
-   * currency. Note that when attempting to determine whether a
-   * particular date is a holiday for a currency, a weekend check
-   * should be done before calling this method.
+   * currency. Note that when attempting
+   * to determine whether a particular date is a holiday for a
+   * currency, the weekends might not be part of the holiday
+   * if they are not {@link WeekendTypeProvider}s, and so the weekend
+   * should be handled separately.
    *
    * @param currency  the currency to check, not null
    * @return the collection of holiday records, not null
@@ -68,7 +71,7 @@ public interface HolidaySource extends Source<Holiday> {
    * @param dateToCheck the date to check, not null
    * @param currency  the currency to check, not null
    * @return true if it is a holiday
-   * @deprecated  Use a {@link WorkingDayCalculator}
+   * @deprecated  the source should not determine whether the date is a holiday or not
    */
   @Deprecated
   boolean isHoliday(LocalDate dateToCheck, Currency currency);
@@ -80,7 +83,7 @@ public interface HolidaySource extends Source<Holiday> {
    * @param holidayType  the type of holiday, must not be CURRENCY, not null
    * @param regionOrExchangeIds  the regions or exchanges to check, not null
    * @return true if it is a holiday
-   * @deprecated  Use a {@link WorkingDayCalculator}
+   * @deprecated  the source should not determine whether the date is a holiday or not
    */
   @Deprecated
   boolean isHoliday(LocalDate dateToCheck, HolidayType holidayType, ExternalIdBundle regionOrExchangeIds);
@@ -92,7 +95,7 @@ public interface HolidaySource extends Source<Holiday> {
    * @param holidayType  the type of holiday, must not be CURRENCY, not null
    * @param regionOrExchangeId  the region or exchange to check, not null
    * @return true if it is a holiday
-   * @deprecated Use a {@link WorkingDayCalculator}
+   * @deprecated  the source should not determine whether the date is a holiday or not
    */
   @Deprecated
   boolean isHoliday(LocalDate dateToCheck, HolidayType holidayType, ExternalId regionOrExchangeId);

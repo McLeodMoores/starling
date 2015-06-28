@@ -27,7 +27,7 @@ import com.opengamma.id.UniqueId;
 import com.opengamma.util.money.Currency;
 
 /**
- *
+ * An adapter for {@link Holiday}s that do not contain information about which days are weekends.
  */
 @BeanDefinition
 public class HolidayWithWeekendAdapter extends DirectBean implements Holiday, WeekendTypeProvider, Serializable, MutableUniqueIdentifiable {

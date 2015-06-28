@@ -21,7 +21,14 @@ import com.opengamma.core.holiday.WeekendType;
 import com.opengamma.core.holiday.WeekendTypeProvider;
 
 /**
- *
+ * A simple implementation of {@link com.opengamma.core.holiday.Holiday} that contains explicit
+ * information about weekends. This class should be used in preference to {@link SimpleHoliday},
+ * as it is incorrect for some countries to assume that weekend days are Saturday and Sunday.
+ * <p>
+ * This is the simplest possible implementation of the {@link com.opengamma.core.holiday.Holiday} interface.
+ * <p>
+ * This class is mutable and not thread-safe.
+ * It is intended to be used in the engine via the read-only {@code com.opengamma.core.holiday.Holiday} interface.
  */
 @BeanDefinition
 public class SimpleHolidayWithWeekend extends SimpleHoliday implements WeekendTypeProvider {
