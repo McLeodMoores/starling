@@ -87,7 +87,7 @@ CREATE TABLE exg_schema_version (
     version_key NVARCHAR2(32) NOT NULL,
     version_value NVARCHAR2(255) NOT NULL
 );
-INSERT INTO exg_schema_version (version_key, version_value) VALUES ('schema_patch', '46');
+INSERT INTO exg_schema_version (version_key, version_value) VALUES ('schema_patch', '47');
 
 
 CREATE SEQUENCE exg_exchange_seq
