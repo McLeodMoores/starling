@@ -21,7 +21,10 @@ import com.opengamma.util.money.Currency;
  * Utilities and constants for {@code Calendar}.
  * <p>
  * This is a thread-safe static utility class.
+ * @deprecated  {@link Calendar} is deprecated in the analytics library, as it is not possible to distinguish between
+ * weekends and holidays.
  */
+@Deprecated
 public class CalendarUtils {
 
   /**
@@ -34,9 +37,9 @@ public class CalendarUtils {
   //-------------------------------------------------------------------------
   public static Calendar getCalendar(final RegionSource regionSource, final HolidaySource holidaySource,
       final ExternalId regionId) {
-    String separator = getMultipleRegionSeparator(regionId);
+    final String separator = getMultipleRegionSeparator(regionId);
     if (separator != null) {
-      String[] regions = regionId.getValue().split(separator);
+      final String[] regions = regionId.getValue().split(separator);
       final Set<Region> resultRegions = new HashSet<>();
       for (final String region : regions) {
         if (regionId.isScheme(ExternalSchemes.FINANCIAL)) {
@@ -50,19 +53,19 @@ public class CalendarUtils {
     final Region region = regionSource.getHighestLevelRegion(regionId); // we've checked that they are the same.
     return new HolidaySourceCalendarAdapter(holidaySource, region);
   }
-  
+
   /**
    * Returns the escaped separator character for parsing multiple regions
-   * 
+   *
    * @param regionId the region id to parse.
    * @return the escaped separator charactor.
    */
-  private static String getMultipleRegionSeparator(ExternalId regionId) {
+  private static String getMultipleRegionSeparator(final ExternalId regionId) {
     if (!(regionId.isScheme(ExternalSchemes.FINANCIAL) || regionId.isScheme(ExternalSchemes.ISDA_HOLIDAY))) {
       return null;
     }
-    
-    String regions = regionId.getValue();
+
+    final String regions = regionId.getValue();
     if (regions.contains("+")) {
       return "\\+";
     } else if (regions.contains(",")) {
