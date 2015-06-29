@@ -86,10 +86,10 @@ public class ThreeLegBasisSwapCurrencyVisitorTest {
   @Test(expectedExceptions = DataNotFoundException.class)
   public void testNoPayConvention() {
     final InMemoryConventionSource conventionSource = new InMemoryConventionSource();
-    conventionSource.addConvention(EURIBOR_3M_CONVENTION);
-    conventionSource.addConvention(EURIBOR_6M_CONVENTION);
-    conventionSource.addConvention(RECEIVE_LEG_CONVENTION);
-    conventionSource.addConvention(SPREAD_LEG_CONVENTION);
+    conventionSource.addConvention(EURIBOR_3M_CONVENTION.clone());
+    conventionSource.addConvention(EURIBOR_6M_CONVENTION.clone());
+    conventionSource.addConvention(RECEIVE_LEG_CONVENTION.clone());
+    conventionSource.addConvention(SPREAD_LEG_CONVENTION.clone());
     final ThreeLegBasisSwapNode node = new ThreeLegBasisSwapNode(Tenor.ONE_MONTH, Tenor.TEN_YEARS, PAY_LEG_CONVENTION_ID, RECEIVE_LEG_CONVENTION_ID,
         SPREAD_LEG_CONVENTION_ID, CNIM_NAME);
     node.accept(new CurveNodeCurrencyVisitor(conventionSource, EMPTY_SECURITY_SOURCE));
@@ -101,10 +101,10 @@ public class ThreeLegBasisSwapCurrencyVisitorTest {
   @Test(expectedExceptions = DataNotFoundException.class)
   public void testNoReceiveConvention() {
     final InMemoryConventionSource conventionSource = new InMemoryConventionSource();
-    conventionSource.addConvention(EURIBOR_3M_CONVENTION);
-    conventionSource.addConvention(EURIBOR_6M_CONVENTION);
-    conventionSource.addConvention(PAY_LEG_CONVENTION);
-    conventionSource.addConvention(SPREAD_LEG_CONVENTION);
+    conventionSource.addConvention(EURIBOR_3M_CONVENTION.clone());
+    conventionSource.addConvention(EURIBOR_6M_CONVENTION.clone());
+    conventionSource.addConvention(PAY_LEG_CONVENTION.clone());
+    conventionSource.addConvention(SPREAD_LEG_CONVENTION.clone());
     final ThreeLegBasisSwapNode node = new ThreeLegBasisSwapNode(Tenor.ONE_MONTH, Tenor.TEN_YEARS, PAY_LEG_CONVENTION_ID, RECEIVE_LEG_CONVENTION_ID,
         SPREAD_LEG_CONVENTION_ID, CNIM_NAME);
     node.accept(new CurveNodeCurrencyVisitor(conventionSource, EMPTY_SECURITY_SOURCE));
@@ -116,10 +116,10 @@ public class ThreeLegBasisSwapCurrencyVisitorTest {
   @Test(expectedExceptions = DataNotFoundException.class)
   public void testNoSpreadConvention() {
     final InMemoryConventionSource conventionSource = new InMemoryConventionSource();
-    conventionSource.addConvention(EURIBOR_3M_CONVENTION);
-    conventionSource.addConvention(EURIBOR_6M_CONVENTION);
-    conventionSource.addConvention(PAY_LEG_CONVENTION);
-    conventionSource.addConvention(RECEIVE_LEG_CONVENTION);
+    conventionSource.addConvention(EURIBOR_3M_CONVENTION.clone());
+    conventionSource.addConvention(EURIBOR_6M_CONVENTION.clone());
+    conventionSource.addConvention(PAY_LEG_CONVENTION.clone());
+    conventionSource.addConvention(RECEIVE_LEG_CONVENTION.clone());
     final ThreeLegBasisSwapNode node = new ThreeLegBasisSwapNode(Tenor.ONE_MONTH, Tenor.TEN_YEARS, PAY_LEG_CONVENTION_ID, RECEIVE_LEG_CONVENTION_ID,
         SPREAD_LEG_CONVENTION_ID, CNIM_NAME);
     node.accept(new CurveNodeCurrencyVisitor(conventionSource, EMPTY_SECURITY_SOURCE));
@@ -131,11 +131,11 @@ public class ThreeLegBasisSwapCurrencyVisitorTest {
   @Test
   public void test() {
     final InMemoryConventionSource conventionSource = new InMemoryConventionSource();
-    conventionSource.addConvention(EURIBOR_3M_CONVENTION);
-    conventionSource.addConvention(EURIBOR_6M_CONVENTION);
-    conventionSource.addConvention(PAY_LEG_CONVENTION);
-    conventionSource.addConvention(RECEIVE_LEG_CONVENTION);
-    conventionSource.addConvention(SPREAD_LEG_CONVENTION);
+    conventionSource.addConvention(EURIBOR_3M_CONVENTION.clone());
+    conventionSource.addConvention(EURIBOR_6M_CONVENTION.clone());
+    conventionSource.addConvention(PAY_LEG_CONVENTION.clone());
+    conventionSource.addConvention(RECEIVE_LEG_CONVENTION.clone());
+    conventionSource.addConvention(SPREAD_LEG_CONVENTION.clone());
     final ThreeLegBasisSwapNode node = new ThreeLegBasisSwapNode(Tenor.ONE_MONTH, Tenor.TEN_YEARS, PAY_LEG_CONVENTION_ID, RECEIVE_LEG_CONVENTION_ID,
         SPREAD_LEG_CONVENTION_ID, CNIM_NAME);
     assertEquals(node.accept(new CurveNodeCurrencyVisitor(conventionSource, EMPTY_SECURITY_SOURCE)),

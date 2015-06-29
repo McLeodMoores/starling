@@ -9,8 +9,6 @@ import static com.opengamma.financial.analytics.curve.CurveNodeCurrencyVisitorTe
 import static com.opengamma.financial.analytics.curve.CurveNodeCurrencyVisitorTest.US;
 import static org.testng.Assert.assertEquals;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Set;
 
 import org.testng.annotations.Test;
@@ -19,9 +17,8 @@ import org.threeten.bp.Period;
 
 import com.opengamma.OpenGammaRuntimeException;
 import com.opengamma.core.id.ExternalSchemes;
-import com.opengamma.core.security.Security;
 import com.opengamma.engine.InMemoryConventionSource;
-import com.opengamma.financial.analytics.curve.CurveNodeCurrencyVisitorTest.MySecuritySource;
+import com.opengamma.engine.InMemorySecuritySource;
 import com.opengamma.financial.analytics.ircurve.strips.CashNode;
 import com.opengamma.financial.convention.DepositConvention;
 import com.opengamma.financial.convention.IborIndexConvention;
@@ -32,7 +29,6 @@ import com.opengamma.financial.security.index.IborIndex;
 import com.opengamma.financial.security.index.OvernightIndex;
 import com.opengamma.financial.security.index.PriceIndex;
 import com.opengamma.id.ExternalId;
-import com.opengamma.id.ExternalIdBundle;
 import com.opengamma.util.money.Currency;
 import com.opengamma.util.time.Tenor;
 
@@ -97,10 +93,10 @@ public class CashNodeCurrencyVisitorTest {
     final ExternalId priceIndexId = ExternalId.of(SCHEME, "USD CPI");
     final PriceIndex priceIndex = new PriceIndex("USD CPI", priceIndexId);
     priceIndex.setExternalIdBundle(priceIndexId.toBundle());
-    final Map<ExternalIdBundle, Security> securities = new HashMap<>();
-    securities.put(priceIndexId.toBundle(), priceIndex);
     final CashNode node = new CashNode(Tenor.ONE_DAY, Tenor.ONE_WEEK, priceIndexId, CNIM_NAME);
-    node.accept(new CurveNodeCurrencyVisitor(EMPTY_CONVENTION_SOURCE, new MySecuritySource(securities)));
+    final InMemorySecuritySource securitySource = new InMemorySecuritySource();
+    securitySource.addSecurity(priceIndex);
+    node.accept(new CurveNodeCurrencyVisitor(EMPTY_CONVENTION_SOURCE, securitySource));
   }
 
   /**
@@ -111,10 +107,10 @@ public class CashNodeCurrencyVisitorTest {
   public void testLiborFromSecurityAndConvention() {
     final InMemoryConventionSource conventionSource = new InMemoryConventionSource();
     conventionSource.addConvention(LIBOR_CONVENTION.clone());
-    final Map<ExternalIdBundle, Security> securities = new HashMap<>();
-    securities.put(LIBOR_SECURITY_ID.toBundle(), LIBOR_SECURITY);
+    final InMemorySecuritySource securitySource = new InMemorySecuritySource();
+    securitySource.addSecurity(LIBOR_SECURITY.clone());
     final CashNode node = new CashNode(Tenor.of(Period.ZERO), Tenor.ONE_MONTH, LIBOR_SECURITY_ID, CNIM_NAME);
-    final Set<Currency> currencies = node.accept(new CurveNodeCurrencyVisitor(conventionSource, new MySecuritySource(securities)));
+    final Set<Currency> currencies = node.accept(new CurveNodeCurrencyVisitor(conventionSource, securitySource));
     assertEquals(currencies.size(), 1);
     assertEquals(currencies.iterator().next(), Currency.USD);
   }
@@ -141,10 +137,10 @@ public class CashNodeCurrencyVisitorTest {
   public void testOvernightFromSecurityAndConvention() {
     final InMemoryConventionSource conventionSource = new InMemoryConventionSource();
     conventionSource.addConvention(OVERNIGHT_CONVENTION.clone());
-    final Map<ExternalIdBundle, Security> securities = new HashMap<>();
-    securities.put(OVERNIGHT_SECURITY_ID.toBundle(), OVERNIGHT_SECURITY);
+    final InMemorySecuritySource securitySource = new InMemorySecuritySource();
+    securitySource.addSecurity(OVERNIGHT_SECURITY.clone());
     final CashNode node = new CashNode(Tenor.of(Period.ZERO), Tenor.ON, OVERNIGHT_SECURITY_ID, CNIM_NAME);
-    final Set<Currency> currencies = node.accept(new CurveNodeCurrencyVisitor(conventionSource, new MySecuritySource(securities)));
+    final Set<Currency> currencies = node.accept(new CurveNodeCurrencyVisitor(conventionSource, securitySource));
     assertEquals(currencies.size(), 1);
     assertEquals(currencies.iterator().next(), Currency.USD);
   }

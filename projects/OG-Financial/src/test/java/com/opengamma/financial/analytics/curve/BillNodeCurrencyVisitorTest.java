@@ -16,10 +16,8 @@ import org.testng.annotations.Test;
 
 import com.opengamma.OpenGammaRuntimeException;
 import com.opengamma.core.config.ConfigSource;
-import com.opengamma.core.security.Security;
-import com.opengamma.core.security.SecuritySource;
-import com.opengamma.financial.analytics.curve.CurveNodeCurrencyVisitorTest.MyConfigSource;
-import com.opengamma.financial.analytics.curve.CurveNodeCurrencyVisitorTest.MySecuritySource;
+import com.opengamma.core.config.impl.ConfigItem;
+import com.opengamma.engine.InMemorySecuritySource;
 import com.opengamma.financial.analytics.ircurve.CurveInstrumentProvider;
 import com.opengamma.financial.analytics.ircurve.StaticCurveInstrumentProvider;
 import com.opengamma.financial.analytics.ircurve.strips.BillNode;
@@ -29,6 +27,9 @@ import com.opengamma.financial.security.bond.BillSecurity;
 import com.opengamma.financial.security.cash.CashSecurity;
 import com.opengamma.id.ExternalId;
 import com.opengamma.id.ExternalIdBundle;
+import com.opengamma.master.config.ConfigDocument;
+import com.opengamma.master.config.impl.InMemoryConfigMaster;
+import com.opengamma.master.config.impl.MasterConfigSource;
 import com.opengamma.master.security.ManageableSecurity;
 import com.opengamma.util.money.Currency;
 import com.opengamma.util.time.DateUtils;
@@ -73,7 +74,9 @@ public class BillNodeCurrencyVisitorTest {
         .name(CNIM_NAME)
         .billNodeIds(Collections.<Tenor, CurveInstrumentProvider>singletonMap(Tenor.TWO_YEARS, CURVE_INSTRUMENT_PROVIDER))
         .build();
-    final ConfigSource configSource = new MyConfigSource(Collections.<String, Object>singletonMap(CNIM_NAME, cnim));
+    final InMemoryConfigMaster configMaster = new InMemoryConfigMaster();
+    configMaster.add(new ConfigDocument(ConfigItem.of(cnim, CNIM_NAME)));
+    final ConfigSource configSource = new MasterConfigSource(configMaster);
     node.accept(new CurveNodeCurrencyVisitor(EMPTY_CONVENTION_SOURCE, EMPTY_SECURITY_SOURCE, configSource));
   }
 
@@ -87,7 +90,9 @@ public class BillNodeCurrencyVisitorTest {
         .name(CNIM_NAME)
         .billNodeIds(Collections.<Tenor, CurveInstrumentProvider>singletonMap(Tenor.ONE_YEAR, CURVE_INSTRUMENT_PROVIDER))
         .build();
-    final ConfigSource configSource = new MyConfigSource(Collections.<String, Object>singletonMap(CNIM_NAME, cnim));
+    final InMemoryConfigMaster configMaster = new InMemoryConfigMaster();
+    configMaster.add(new ConfigDocument(ConfigItem.of(cnim, CNIM_NAME)));
+    final ConfigSource configSource = new MasterConfigSource(configMaster);
     node.accept(new CurveNodeCurrencyVisitor(EMPTY_CONVENTION_SOURCE, EMPTY_SECURITY_SOURCE, configSource));
   }
 
@@ -101,16 +106,17 @@ public class BillNodeCurrencyVisitorTest {
         .name(CNIM_NAME)
         .billNodeIds(Collections.<Tenor, CurveInstrumentProvider>singletonMap(Tenor.ONE_YEAR, CURVE_INSTRUMENT_PROVIDER))
         .build();
-    final ConfigSource configSource = new MyConfigSource(Collections.<String, Object>singletonMap(CNIM_NAME, cnim));
+    final InMemoryConfigMaster configMaster = new InMemoryConfigMaster();
+    configMaster.add(new ConfigDocument(ConfigItem.of(cnim, CNIM_NAME)));
+    final ConfigSource configSource = new MasterConfigSource(configMaster);
     final Currency currency = Currency.USD;
     final ManageableSecurity security =
         new CashSecurity(currency, US, DateUtils.getUTCDate(2014, 1, 1), DateUtils.getUTCDate(2016, 1, 1), DayCounts.ACT_360, 0.01, 1000);
     security.setExternalIdBundle(ExternalIdBundle.of(SCHEME, "ISIN"));
-    final SecuritySource securitySource =
-        new MySecuritySource(Collections.<ExternalIdBundle, Security>singletonMap(ExternalIdBundle.of(SCHEME, "ISIN"), security));
+    final InMemorySecuritySource securitySource = new InMemorySecuritySource();
+    securitySource.addSecurity(security);
     assertEquals(node.accept(new CurveNodeCurrencyVisitor(EMPTY_CONVENTION_SOURCE, securitySource, configSource)), Collections.singleton(currency));
   }
-
 
   /**
    * Tests that the correct currency is returned if the security and curve node id mapper are present in the sources.
@@ -122,13 +128,15 @@ public class BillNodeCurrencyVisitorTest {
         .name(CNIM_NAME)
         .billNodeIds(Collections.<Tenor, CurveInstrumentProvider>singletonMap(Tenor.ONE_YEAR, CURVE_INSTRUMENT_PROVIDER))
         .build();
-    final ConfigSource configSource = new MyConfigSource(Collections.<String, Object>singletonMap(CNIM_NAME, cnim));
+    final InMemoryConfigMaster configMaster = new InMemoryConfigMaster();
+    configMaster.add(new ConfigDocument(ConfigItem.of(cnim, CNIM_NAME)));
+    final ConfigSource configSource = new MasterConfigSource(configMaster);
     final Currency currency = Currency.USD;
     final ManageableSecurity security = new BillSecurity(currency, new Expiry(DateUtils.getUTCDate(2015, 12, 1)), DateUtils.getUTCDate(2015, 1, 1), 1000, 2, US,
         SimpleYieldConvention.US_STREET, DayCounts.ACT_360, US);
     security.setExternalIdBundle(ExternalIdBundle.of(SCHEME, "ISIN"));
-    final SecuritySource securitySource =
-        new MySecuritySource(Collections.<ExternalIdBundle, Security>singletonMap(ExternalIdBundle.of(SCHEME, "ISIN"), security));
+    final InMemorySecuritySource securitySource = new InMemorySecuritySource();
+    securitySource.addSecurity(security);
     assertEquals(node.accept(new CurveNodeCurrencyVisitor(EMPTY_CONVENTION_SOURCE, securitySource, configSource)), Collections.singleton(currency));
   }
 }

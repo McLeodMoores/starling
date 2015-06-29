@@ -8,18 +8,13 @@ import static com.opengamma.financial.analytics.curve.CurveNodeCurrencyVisitorTe
 import static com.opengamma.financial.analytics.curve.CurveNodeCurrencyVisitorTest.US;
 import static org.testng.Assert.assertEquals;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.testng.annotations.Test;
 
 import com.google.common.collect.Sets;
 import com.opengamma.DataNotFoundException;
 import com.opengamma.OpenGammaRuntimeException;
-import com.opengamma.core.security.Security;
-import com.opengamma.core.security.SecuritySource;
 import com.opengamma.engine.InMemoryConventionSource;
-import com.opengamma.financial.analytics.curve.CurveNodeCurrencyVisitorTest.MySecuritySource;
+import com.opengamma.engine.InMemorySecuritySource;
 import com.opengamma.financial.analytics.ircurve.strips.InflationNodeType;
 import com.opengamma.financial.analytics.ircurve.strips.ZeroCouponInflationNode;
 import com.opengamma.financial.convention.InflationLegConvention;
@@ -31,7 +26,6 @@ import com.opengamma.financial.convention.daycount.DayCounts;
 import com.opengamma.financial.security.index.OvernightIndex;
 import com.opengamma.financial.security.index.PriceIndex;
 import com.opengamma.id.ExternalId;
-import com.opengamma.id.ExternalIdBundle;
 import com.opengamma.util.money.Currency;
 import com.opengamma.util.time.Tenor;
 
@@ -72,7 +66,7 @@ public class ZeroCouponInflationNodeCurrencyVisitorTest {
   @Test(expectedExceptions = DataNotFoundException.class)
   public void testNoInflationLegConvention() {
     final InMemoryConventionSource conventionSource = new InMemoryConventionSource();
-    conventionSource.addConvention(FIXED_LEG_CONVENTION);
+    conventionSource.addConvention(FIXED_LEG_CONVENTION.clone());
     final ZeroCouponInflationNode node = new ZeroCouponInflationNode(Tenor.TEN_YEARS, INFLATION_LEG_CONVENTION_ID, FIXED_LEG_CONVENTION_ID,
         InflationNodeType.INTERPOLATED, CNIM_NAME);
     node.accept(new CurveNodeCurrencyVisitor(conventionSource, EMPTY_SECURITY_SOURCE));
@@ -84,7 +78,7 @@ public class ZeroCouponInflationNodeCurrencyVisitorTest {
   @Test(expectedExceptions = DataNotFoundException.class)
   public void testNoFixedLegConvention() {
     final InMemoryConventionSource conventionSource = new InMemoryConventionSource();
-    conventionSource.addConvention(INFLATION_LEG_CONVENTION);
+    conventionSource.addConvention(INFLATION_LEG_CONVENTION.clone());
     final ZeroCouponInflationNode node = new ZeroCouponInflationNode(Tenor.TEN_YEARS, INFLATION_LEG_CONVENTION_ID, FIXED_LEG_CONVENTION_ID,
         InflationNodeType.INTERPOLATED, CNIM_NAME);
     node.accept(new CurveNodeCurrencyVisitor(conventionSource, EMPTY_SECURITY_SOURCE));
@@ -98,8 +92,8 @@ public class ZeroCouponInflationNodeCurrencyVisitorTest {
     final InMemoryConventionSource conventionSource = new InMemoryConventionSource();
     final SwapFixedLegConvention priceIndexConvention = FIXED_LEG_CONVENTION.clone();
     priceIndexConvention.setExternalIdBundle(PRICE_INDEX_CONVENTION_ID.toBundle());
-    conventionSource.addConvention(FIXED_LEG_CONVENTION);
-    conventionSource.addConvention(INFLATION_LEG_CONVENTION);
+    conventionSource.addConvention(FIXED_LEG_CONVENTION.clone());
+    conventionSource.addConvention(INFLATION_LEG_CONVENTION.clone());
     conventionSource.addConvention(priceIndexConvention);
     final ZeroCouponInflationNode node = new ZeroCouponInflationNode(Tenor.TEN_YEARS, INFLATION_LEG_CONVENTION_ID, FIXED_LEG_CONVENTION_ID,
         InflationNodeType.INTERPOLATED, CNIM_NAME);
@@ -112,8 +106,8 @@ public class ZeroCouponInflationNodeCurrencyVisitorTest {
   @Test(expectedExceptions = OpenGammaRuntimeException.class)
   public void testNoUnderlyingSecurity() {
     final InMemoryConventionSource conventionSource = new InMemoryConventionSource();
-    conventionSource.addConvention(FIXED_LEG_CONVENTION);
-    conventionSource.addConvention(INFLATION_LEG_CONVENTION);
+    conventionSource.addConvention(FIXED_LEG_CONVENTION.clone());
+    conventionSource.addConvention(INFLATION_LEG_CONVENTION.clone());
     final ZeroCouponInflationNode node = new ZeroCouponInflationNode(Tenor.TEN_YEARS, INFLATION_LEG_CONVENTION_ID, FIXED_LEG_CONVENTION_ID,
         InflationNodeType.INTERPOLATED, CNIM_NAME);
     node.accept(new CurveNodeCurrencyVisitor(conventionSource, EMPTY_SECURITY_SOURCE));
@@ -128,12 +122,12 @@ public class ZeroCouponInflationNodeCurrencyVisitorTest {
     // note that the convention references the price index security id
     final InflationLegConvention inflationLegConvention = new InflationLegConvention("USD Zero Coupon Swap Leg",
         INFLATION_LEG_CONVENTION_ID.toBundle(), BusinessDayConventions.MODIFIED_FOLLOWING, DayCounts.ACT_360, false, 1, 0, PRICE_INDEX_ID);
-    conventionSource.addConvention(FIXED_LEG_CONVENTION);
+    conventionSource.addConvention(FIXED_LEG_CONVENTION.clone());
     conventionSource.addConvention(inflationLegConvention);
     final OvernightIndex overnightIndex = new OvernightIndex("USD Overnight", PRICE_INDEX_ID);
-    final Map<ExternalIdBundle, Security> securities = new HashMap<>();
-    securities.put(PRICE_INDEX_ID.toBundle(), overnightIndex);
-    final SecuritySource securitySource = new MySecuritySource(securities);
+    overnightIndex.setExternalIdBundle(PRICE_INDEX_ID.toBundle());
+    final InMemorySecuritySource securitySource = new InMemorySecuritySource();
+    securitySource.addSecurity(overnightIndex);
     final ZeroCouponInflationNode node = new ZeroCouponInflationNode(Tenor.TEN_YEARS, INFLATION_LEG_CONVENTION_ID, FIXED_LEG_CONVENTION_ID,
         InflationNodeType.INTERPOLATED, CNIM_NAME);
     node.accept(new CurveNodeCurrencyVisitor(conventionSource, securitySource));
@@ -148,11 +142,10 @@ public class ZeroCouponInflationNodeCurrencyVisitorTest {
     // note that the convention references the price index security id
     final InflationLegConvention inflationLegConvention = new InflationLegConvention("USD Zero Coupon Swap Leg",
         INFLATION_LEG_CONVENTION_ID.toBundle(), BusinessDayConventions.MODIFIED_FOLLOWING, DayCounts.ACT_360, false, 1, 0, PRICE_INDEX_ID);
-    conventionSource.addConvention(FIXED_LEG_CONVENTION);
+    conventionSource.addConvention(FIXED_LEG_CONVENTION.clone());
     conventionSource.addConvention(inflationLegConvention);
-    final Map<ExternalIdBundle, Security> securities = new HashMap<>();
-    securities.put(PRICE_INDEX_ID.toBundle(), PRICE_INDEX);
-    final SecuritySource securitySource = new MySecuritySource(securities);
+    final InMemorySecuritySource securitySource = new InMemorySecuritySource();
+    securitySource.addSecurity(PRICE_INDEX);
     final ZeroCouponInflationNode node = new ZeroCouponInflationNode(Tenor.TEN_YEARS, INFLATION_LEG_CONVENTION_ID, FIXED_LEG_CONVENTION_ID,
         InflationNodeType.INTERPOLATED, CNIM_NAME);
     node.accept(new CurveNodeCurrencyVisitor(conventionSource, securitySource));
@@ -167,12 +160,11 @@ public class ZeroCouponInflationNodeCurrencyVisitorTest {
     // note that the convention references the price index security id
     final InflationLegConvention inflationLegConvention = new InflationLegConvention("USD Zero Coupon Swap Leg",
         INFLATION_LEG_CONVENTION_ID.toBundle(), BusinessDayConventions.MODIFIED_FOLLOWING, DayCounts.ACT_360, false, 1, 0, PRICE_INDEX_ID);
-    conventionSource.addConvention(FIXED_LEG_CONVENTION);
+    conventionSource.addConvention(FIXED_LEG_CONVENTION.clone());
     conventionSource.addConvention(inflationLegConvention);
-    conventionSource.addConvention(PRICE_INDEX_CONVENTION);
-    final Map<ExternalIdBundle, Security> securities = new HashMap<>();
-    securities.put(PRICE_INDEX_ID.toBundle(), PRICE_INDEX);
-    final SecuritySource securitySource = new MySecuritySource(securities);
+    conventionSource.addConvention(PRICE_INDEX_CONVENTION.clone());
+    final InMemorySecuritySource securitySource = new InMemorySecuritySource();
+    securitySource.addSecurity(PRICE_INDEX);
     final ZeroCouponInflationNode node = new ZeroCouponInflationNode(Tenor.TEN_YEARS, INFLATION_LEG_CONVENTION_ID, FIXED_LEG_CONVENTION_ID,
         InflationNodeType.INTERPOLATED, CNIM_NAME);
     assertEquals(node.accept(new CurveNodeCurrencyVisitor(conventionSource, securitySource)), Sets.newHashSet(Currency.EUR, Currency.USD));
@@ -184,9 +176,9 @@ public class ZeroCouponInflationNodeCurrencyVisitorTest {
   @Test
   public void test() {
     final InMemoryConventionSource conventionSource = new InMemoryConventionSource();
-    conventionSource.addConvention(FIXED_LEG_CONVENTION);
-    conventionSource.addConvention(INFLATION_LEG_CONVENTION);
-    conventionSource.addConvention(PRICE_INDEX_CONVENTION);
+    conventionSource.addConvention(FIXED_LEG_CONVENTION.clone());
+    conventionSource.addConvention(INFLATION_LEG_CONVENTION.clone());
+    conventionSource.addConvention(PRICE_INDEX_CONVENTION.clone());
     final ZeroCouponInflationNode node = new ZeroCouponInflationNode(Tenor.TEN_YEARS, INFLATION_LEG_CONVENTION_ID, FIXED_LEG_CONVENTION_ID,
         InflationNodeType.INTERPOLATED, CNIM_NAME);
     assertEquals(node.accept(new CurveNodeCurrencyVisitor(conventionSource, EMPTY_SECURITY_SOURCE)), Sets.newHashSet(Currency.EUR, Currency.USD));
