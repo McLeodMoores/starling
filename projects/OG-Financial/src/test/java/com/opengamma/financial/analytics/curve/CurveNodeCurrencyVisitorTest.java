@@ -12,22 +12,18 @@ package com.opengamma.financial.analytics.curve;
 
 import static org.testng.Assert.assertEquals;
 
-import java.util.Collection;
 import java.util.Collections;
-import java.util.Map;
 import java.util.Set;
 
 import org.testng.annotations.Test;
 
 import com.google.common.collect.Sets;
-import com.opengamma.core.change.ChangeManager;
 import com.opengamma.core.config.ConfigSource;
-import com.opengamma.core.config.impl.ConfigItem;
 import com.opengamma.core.convention.ConventionSource;
 import com.opengamma.core.id.ExternalSchemes;
-import com.opengamma.core.security.Security;
 import com.opengamma.core.security.SecuritySource;
 import com.opengamma.engine.InMemoryConventionSource;
+import com.opengamma.engine.InMemorySecuritySource;
 import com.opengamma.financial.analytics.ircurve.strips.ContinuouslyCompoundedRateNode;
 import com.opengamma.financial.analytics.ircurve.strips.CreditSpreadNode;
 import com.opengamma.financial.analytics.ircurve.strips.DiscountFactorNode;
@@ -38,9 +34,8 @@ import com.opengamma.financial.convention.EquityConvention;
 import com.opengamma.financial.convention.businessday.BusinessDayConventions;
 import com.opengamma.id.ExternalId;
 import com.opengamma.id.ExternalIdBundle;
-import com.opengamma.id.ObjectId;
-import com.opengamma.id.UniqueId;
-import com.opengamma.id.VersionCorrection;
+import com.opengamma.master.config.impl.InMemoryConfigMaster;
+import com.opengamma.master.config.impl.MasterConfigSource;
 import com.opengamma.util.money.Currency;
 import com.opengamma.util.test.TestGroup;
 import com.opengamma.util.time.Tenor;
@@ -59,13 +54,14 @@ public class CurveNodeCurrencyVisitorTest {
   /** NY+LON holidays. */
   protected static final ExternalId NYLON = ExternalSchemes.financialRegionId("US+GB");
   /** An empty security source. */
-  protected static final SecuritySource EMPTY_SECURITY_SOURCE = new MySecuritySource(Collections.<ExternalIdBundle, Security>emptyMap());
+  protected static final SecuritySource EMPTY_SECURITY_SOURCE = new InMemorySecuritySource();
   /** An empty convention source. */
   protected static final ConventionSource EMPTY_CONVENTION_SOURCE = new InMemoryConventionSource();
   /** An empty config source. */
-  protected static final ConfigSource EMPTY_CONFIG_SOURCE = new MyConfigSource(Collections.<String, Object>emptyMap());
-
+  protected static final ConfigSource EMPTY_CONFIG_SOURCE = new MasterConfigSource(new InMemoryConfigMaster());
+  /** The id for FX forward conventions */
   private static final ExternalId FX_FORWARD_ID = ExternalId.of(SCHEME, "FX Forward");
+  /** Gets the currencies from a curve node */
   private static final CurveNodeCurrencyVisitor VISITOR;
 
   static {
@@ -150,151 +146,5 @@ public class CurveNodeCurrencyVisitorTest {
   public void testEquityConvention() {
     final EquityConvention convention = new EquityConvention("Equity", ExternalIdBundle.of(SCHEME, "Equity"), 7);
     assertEquals(convention.accept(VISITOR), Collections.emptySet());
-  }
-
-  /**
-   * A simplified local version of a SecuritySource for tests.
-   */
-  //TODO replace with a proper MockSecuritySource
-  protected static class MySecuritySource implements SecuritySource {
-
-    /** Security source as a map for tests **/
-    private final Map<ExternalIdBundle, Security> _map;
-
-    /**
-     * @param map The map of id/Security
-     */
-    public MySecuritySource(final Map<ExternalIdBundle, Security> map) {
-      super();
-      _map = map;
-    }
-
-    @Override
-    public Collection<Security> get(final ExternalIdBundle bundle, final VersionCorrection versionCorrection) {
-      return null;
-    }
-
-    @Override
-    public Map<ExternalIdBundle, Collection<Security>> getAll(final Collection<ExternalIdBundle> bundles, final VersionCorrection versionCorrection) {
-      return null;
-    }
-
-    @Override
-    public Collection<Security> get(final ExternalIdBundle bundle) {
-      return null;
-    }
-
-    @Override
-    public Security getSingle(final ExternalIdBundle bundle) {
-      return _map.get(bundle);
-    }
-
-    @Override
-    public Security getSingle(final ExternalIdBundle bundle, final VersionCorrection versionCorrection) {
-      return null;
-    }
-
-    @Override
-    public Map<ExternalIdBundle, Security> getSingle(final Collection<ExternalIdBundle> bundles, final VersionCorrection versionCorrection) {
-      return null;
-    }
-
-    @Override
-    public Security get(final UniqueId uniqueId) {
-      return null;
-    }
-
-    @Override
-    public Security get(final ObjectId objectId, final VersionCorrection versionCorrection) {
-      return null;
-    }
-
-    @Override
-    public Map<UniqueId, Security> get(final Collection<UniqueId> uniqueIds) {
-      return null;
-    }
-
-    @Override
-    public Map<ObjectId, Security> get(final Collection<ObjectId> objectIds, final VersionCorrection versionCorrection) {
-      return null;
-    }
-
-    @Override
-    public ChangeManager changeManager() {
-      return null;
-    }
-
-  }
-
-  /**
-   * A simplified local version of a ConfigSource for tests.
-   */
-  //TODO replace with a proper MockConfigSource
-  protected static class MyConfigSource implements ConfigSource {
-    /** Config source as a map for tests **/
-    private final Map<String, Object> _map;
-
-    public MyConfigSource(final Map<String, Object> map) {
-      _map = map;
-    }
-
-    @Override
-    public Map<UniqueId, ConfigItem<?>> get(final Collection<UniqueId> uniqueIds) {
-      return null;
-    }
-
-    @Override
-    public Map<ObjectId, ConfigItem<?>> get(final Collection<ObjectId> objectIds, final VersionCorrection versionCorrection) {
-      return null;
-    }
-
-    @Override
-    public ChangeManager changeManager() {
-      return null;
-    }
-
-    @Override
-    public ConfigItem<?> get(final UniqueId uniqueId) {
-      return null;
-    }
-
-    @Override
-    public ConfigItem<?> get(final ObjectId objectId, final VersionCorrection versionCorrection) {
-      return null;
-    }
-
-    @Override
-    public <R> Collection<ConfigItem<R>> get(final Class<R> clazz, final String configName, final VersionCorrection versionCorrection) {
-      return null;
-    }
-
-    @Override
-    public <R> Collection<ConfigItem<R>> getAll(final Class<R> clazz, final VersionCorrection versionCorrection) {
-      return null;
-    }
-
-    @Override
-    public <R> R getConfig(final Class<R> clazz, final UniqueId uniqueId) {
-      return null;
-    }
-
-    @Override
-    public <R> R getConfig(final Class<R> clazz, final ObjectId objectId, final VersionCorrection versionCorrection) {
-      return null;
-    }
-
-    @Override
-    public <R> R getSingle(final Class<R> clazz, final String configName, final VersionCorrection versionCorrection) {
-      final Object config = _map.get(configName);
-      if (config != null && config.getClass().equals(clazz)) {
-        return (R) config;
-      }
-      return null;
-    }
-
-    @Override
-    public <R> R getLatestByName(final Class<R> clazz, final String name) {
-      return null;
-    }
   }
 }
