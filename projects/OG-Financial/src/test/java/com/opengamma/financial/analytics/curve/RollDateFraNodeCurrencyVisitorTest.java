@@ -19,9 +19,9 @@ import org.threeten.bp.LocalTime;
 import com.opengamma.DataNotFoundException;
 import com.opengamma.OpenGammaRuntimeException;
 import com.opengamma.core.convention.Convention;
-import com.opengamma.core.convention.ConventionSource;
 import com.opengamma.core.security.Security;
 import com.opengamma.core.security.SecuritySource;
+import com.opengamma.engine.InMemoryConventionSource;
 import com.opengamma.financial.analytics.curve.CurveNodeCurrencyVisitorTest.MySecuritySource;
 import com.opengamma.financial.analytics.ircurve.strips.RollDateFRANode;
 import com.opengamma.financial.convention.IborIndexConvention;
@@ -73,9 +73,8 @@ public class RollDateFraNodeCurrencyVisitorTest {
    */
   @Test(expectedExceptions = OpenGammaRuntimeException.class)
   public void testNoIndexConventionOrSecurity() {
-    final Map<ExternalId, Convention> conventions = new HashMap<>();
-    conventions.put(FRA_CONVENTION_ID, FRA_CONVENTION);
-    final ConventionSource conventionSource = new TestConventionSource(conventions);
+    final InMemoryConventionSource conventionSource = new InMemoryConventionSource();
+    conventionSource.addConvention(FRA_CONVENTION);
     final RollDateFRANode node = new RollDateFRANode(Tenor.THREE_MONTHS, Tenor.THREE_MONTHS, 1, 2, FRA_CONVENTION_ID, CNIM_NAME);
     node.accept(new CurveNodeCurrencyVisitor(conventionSource, EMPTY_SECURITY_SOURCE));
   }
@@ -85,9 +84,10 @@ public class RollDateFraNodeCurrencyVisitorTest {
    */
   @Test(expectedExceptions = ClassCastException.class)
   public void testWrongConventionType() {
-    final Map<ExternalId, Convention> conventions = new HashMap<>();
-    conventions.put(FRA_CONVENTION_ID, LIBOR_CONVENTION);
-    final ConventionSource conventionSource = new TestConventionSource(conventions);
+    final InMemoryConventionSource conventionSource = new InMemoryConventionSource();
+    final IborIndexConvention liborConvention = LIBOR_CONVENTION.clone();
+    liborConvention.setExternalIdBundle(FRA_CONVENTION_ID.toBundle());
+    conventionSource.addConvention(liborConvention);
     final RollDateFRANode node = new RollDateFRANode(Tenor.THREE_MONTHS, Tenor.THREE_MONTHS, 1, 2, FRA_CONVENTION_ID, CNIM_NAME);
     node.accept(new CurveNodeCurrencyVisitor(conventionSource, EMPTY_SECURITY_SOURCE));
   }
@@ -97,11 +97,11 @@ public class RollDateFraNodeCurrencyVisitorTest {
    */
   @Test(expectedExceptions = OpenGammaRuntimeException.class)
   public void testWrongUnderlyingSecurityType() {
+    final InMemoryConventionSource conventionSource = new InMemoryConventionSource();
     final RollDateFRAConvention fraConvention = new RollDateFRAConvention("USD IMM FRA", FRA_CONVENTION_ID.toBundle(),
         LIBOR_SECURITY_ID, ExternalId.of(SCHEME, "Roll date"));
     final Map<ExternalId, Convention> conventions = new HashMap<>();
     conventions.put(FRA_CONVENTION_ID, fraConvention);
-    final ConventionSource conventionSource = new TestConventionSource(conventions);
     final OvernightIndex overnightSecurity = new OvernightIndex("USD Overnight", LIBOR_CONVENTION_ID);
     overnightSecurity.addExternalId(LIBOR_SECURITY_ID);
     final Map<ExternalIdBundle, Security> securities = new HashMap<>();
@@ -118,12 +118,11 @@ public class RollDateFraNodeCurrencyVisitorTest {
    */
   @Test(expectedExceptions = DataNotFoundException.class)
   public void testNoConventionFromSecurity() {
+    final InMemoryConventionSource conventionSource = new InMemoryConventionSource();
     // note that the underlying convention id is the ibor index security id
     final RollDateFRAConvention fraConvention = new RollDateFRAConvention("USD IMM FRA", FRA_CONVENTION_ID.toBundle(),
         LIBOR_SECURITY_ID, ExternalId.of(SCHEME, "Roll date"));
-    final Map<ExternalId, Convention> conventions = new HashMap<>();
-    conventions.put(FRA_CONVENTION_ID, fraConvention);
-    final ConventionSource conventionSource = new TestConventionSource(conventions);
+    conventionSource.addConvention(fraConvention);
     final Map<ExternalIdBundle, Security> securities = new HashMap<>();
     securities.put(LIBOR_SECURITY_ID.toBundle(), LIBOR_SECURITY);
     final SecuritySource securitySource = new MySecuritySource(securities);
@@ -137,13 +136,12 @@ public class RollDateFraNodeCurrencyVisitorTest {
    */
   @Test
   public void testConventionFromSecurity() {
+    final InMemoryConventionSource conventionSource = new InMemoryConventionSource();
     // note that the underlying convention id is the ibor index security id
     final RollDateFRAConvention fraConvention = new RollDateFRAConvention("USD IMM FRA", FRA_CONVENTION_ID.toBundle(),
         LIBOR_SECURITY_ID, ExternalId.of(SCHEME, "Roll date"));
-    final Map<ExternalId, Convention> conventions = new HashMap<>();
-    conventions.put(FRA_CONVENTION_ID, fraConvention);
-    conventions.put(LIBOR_CONVENTION_ID, LIBOR_CONVENTION);
-    final ConventionSource conventionSource = new TestConventionSource(conventions);
+    conventionSource.addConvention(fraConvention);
+    conventionSource.addConvention(LIBOR_CONVENTION);
     final Map<ExternalIdBundle, Security> securities = new HashMap<>();
     securities.put(LIBOR_SECURITY_ID.toBundle(), LIBOR_SECURITY);
     final SecuritySource securitySource = new MySecuritySource(securities);
@@ -157,10 +155,9 @@ public class RollDateFraNodeCurrencyVisitorTest {
    */
   @Test
   public void testFromConvention() {
-    final Map<ExternalId, Convention> conventions = new HashMap<>();
-    conventions.put(FRA_CONVENTION_ID, FRA_CONVENTION);
-    conventions.put(LIBOR_CONVENTION_ID, LIBOR_CONVENTION);
-    final ConventionSource conventionSource = new TestConventionSource(conventions);
+    final InMemoryConventionSource conventionSource = new InMemoryConventionSource();
+    conventionSource.addConvention(FRA_CONVENTION);
+    conventionSource.addConvention(LIBOR_CONVENTION);
     final RollDateFRANode node = new RollDateFRANode(Tenor.THREE_MONTHS, Tenor.THREE_MONTHS, 1, 2, FRA_CONVENTION_ID, CNIM_NAME);
     // don't need security to be in source
     assertEquals(node.accept(new CurveNodeCurrencyVisitor(conventionSource, EMPTY_SECURITY_SOURCE)), Collections.singleton(Currency.USD));

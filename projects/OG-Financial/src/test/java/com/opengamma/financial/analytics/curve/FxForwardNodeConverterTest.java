@@ -7,10 +7,13 @@ import static org.testng.Assert.assertEquals;
 
 import org.testng.annotations.Test;
 import org.threeten.bp.LocalDate;
+import org.threeten.bp.LocalTime;
 import org.threeten.bp.Period;
 import org.threeten.bp.ZonedDateTime;
 
+import com.opengamma.OpenGammaRuntimeException;
 import com.opengamma.analytics.financial.forex.definition.ForexDefinition;
+import com.opengamma.analytics.financial.instrument.InstrumentDefinition;
 import com.opengamma.core.holiday.HolidayType;
 import com.opengamma.core.holiday.impl.SimpleHoliday;
 import com.opengamma.core.id.ExternalSchemes;
@@ -19,10 +22,13 @@ import com.opengamma.core.region.impl.SimpleRegion;
 import com.opengamma.engine.InMemoryConventionSource;
 import com.opengamma.engine.InMemoryHolidaySource;
 import com.opengamma.engine.InMemoryRegionSource;
+import com.opengamma.financial.analytics.ircurve.strips.CurveNodeVisitor;
 import com.opengamma.financial.analytics.ircurve.strips.FXForwardNode;
 import com.opengamma.financial.convention.FXForwardAndSwapConvention;
 import com.opengamma.financial.convention.FXSpotConvention;
+import com.opengamma.financial.convention.IborIndexConvention;
 import com.opengamma.financial.convention.businessday.BusinessDayConventions;
+import com.opengamma.financial.convention.daycount.DayCounts;
 import com.opengamma.id.ExternalId;
 import com.opengamma.util.i18n.Country;
 import com.opengamma.util.money.Currency;
@@ -89,6 +95,8 @@ public class FxForwardNodeConverterTest {
   private static final SimpleHoliday EMPTY_HOLIDAYS = new SimpleHoliday();
   /** A convention source */
   private static final InMemoryConventionSource CONVENTION_SOURCE = new InMemoryConventionSource();
+  /** An empty holiday source */
+  private static final InMemoryHolidaySource HOLIDAY_SOURCE = new InMemoryHolidaySource();
   /** The legacy GBP/EUR spot convention id */
   private static final ExternalId LEGACY_GBPEUR_SPOT_ID = ExternalId.of(SCHEME, "Legacy GBP/EUR Spot");
   /** The legacy GBP/EUR forward convention id */
@@ -183,6 +191,83 @@ public class FxForwardNodeConverterTest {
     DATA.setDataPoint(USDSAR_DATA_ID, 3.75);
     DATA.setDataPoint(USDMXN_DATA_ID, 15.5);
     EMPTY_HOLIDAYS.setType(HolidayType.CURRENCY);
+  }
+
+  /**
+   * Tests the behaviour when the FX forward convention is not found.
+   */
+  @Test(expectedExceptions = OpenGammaRuntimeException.class)
+  public void testMissingFxForwardConvention() {
+    final ExternalId marketDataId = ExternalId.of(SCHEME, "Data");
+    final SnapshotDataBundle marketValues = new SnapshotDataBundle();
+    final double forward = 1.5;
+    marketValues.setDataPoint(marketDataId, forward);
+    final FXForwardNode node = new FXForwardNode(Tenor.of(Period.ZERO), Tenor.ONE_YEAR, GBPEUR_FORWARD_ID, Currency.EUR, Currency.GBP, CNIM_NAME);
+    final InMemoryConventionSource conventionSource = new InMemoryConventionSource();
+    final CurveNodeVisitor<InstrumentDefinition<?>> converter = new FXForwardNodeConverter(conventionSource, HOLIDAY_SOURCE, REGION_SOURCE,
+        marketValues, marketDataId, ZonedDateTime.now());
+    node.accept(converter);
+  }
+
+  /**
+   * Tests the behaviour when the FX spot convention is not found.
+   */
+  @Test(expectedExceptions = OpenGammaRuntimeException.class)
+  public void testMissingFxSpotConvention() {
+    final ExternalId marketDataId = ExternalId.of(SCHEME, "Data");
+    final SnapshotDataBundle marketValues = new SnapshotDataBundle();
+    final double forward = 1.5;
+    marketValues.setDataPoint(marketDataId, forward);
+    final FXForwardNode node = new FXForwardNode(Tenor.of(Period.ZERO), Tenor.ONE_YEAR, GBPEUR_FORWARD_ID, Currency.GBP, Currency.EUR, CNIM_NAME);
+    final InMemoryConventionSource conventionSource = new InMemoryConventionSource();
+    conventionSource.addConvention(GBPEUR_FORWARD);
+    final CurveNodeVisitor<InstrumentDefinition<?>> converter = new FXForwardNodeConverter(conventionSource, HOLIDAY_SOURCE, REGION_SOURCE,
+        marketValues, marketDataId, ZonedDateTime.now());
+    node.accept(converter);
+  }
+
+  /**
+   * Tests the behaviour when the id in the node does not reference a FX forward convention.
+   */
+  @Test(expectedExceptions = ClassCastException.class)
+  public void testWrongConventionForFxForward() {
+    final ExternalId marketDataId = ExternalId.of(SCHEME, "Data");
+    final SnapshotDataBundle marketValues = new SnapshotDataBundle();
+    final double forward = 1.5;
+    marketValues.setDataPoint(marketDataId, forward);
+    final ExternalId liborId = ExternalId.of(SCHEME, "LIBOR");
+    final IborIndexConvention libor = new IborIndexConvention("Test", liborId.toBundle(), DayCounts.ACT_360, BusinessDayConventions.MODIFIED_FOLLOWING,
+        2, false, Currency.USD, LocalTime.of(11, 0), "US", US_REGION_ID, US_REGION_ID, "");
+    final InMemoryConventionSource conventionSource = new InMemoryConventionSource();
+    conventionSource.addConvention(libor);
+    final FXForwardNode node = new FXForwardNode(Tenor.of(Period.ZERO), Tenor.ONE_YEAR, liborId, Currency.USD, Currency.MXN, CNIM_NAME);
+    final CurveNodeVisitor<InstrumentDefinition<?>> converter = new FXForwardNodeConverter(conventionSource, HOLIDAY_SOURCE, REGION_SOURCE,
+        marketValues, marketDataId, ZonedDateTime.now());
+    node.accept(converter);
+  }
+
+  /**
+   * Tests the behaviour when the underlying convention id does not reference a FX spot convention.
+   */
+  @Test(expectedExceptions = ClassCastException.class)
+  public void testWrongUnderlyingConventionForFxForward() {
+    final ExternalId marketDataId = ExternalId.of(SCHEME, "Data");
+    final SnapshotDataBundle marketValues = new SnapshotDataBundle();
+    final double forward = 1.5;
+    marketValues.setDataPoint(marketDataId, forward);
+    final ExternalId liborId = ExternalId.of(SCHEME, "LIBOR");
+    final IborIndexConvention libor = new IborIndexConvention("Test", liborId.toBundle(), DayCounts.ACT_360, BusinessDayConventions.MODIFIED_FOLLOWING,
+        2, false, Currency.USD, LocalTime.of(11, 0), "US", US_REGION_ID, US_REGION_ID, "");
+    final FXForwardAndSwapConvention fxForward = new FXForwardAndSwapConvention("FX Forward", USDMXN_FORWARD_ID.toBundle(), liborId,
+        BusinessDayConventions.MODIFIED_FOLLOWING, false, US_REGION_ID);
+    final FXForwardNode node = new FXForwardNode(Tenor.of(Period.ZERO), Tenor.ONE_YEAR, USDMXN_FORWARD_ID,
+        Currency.USD, Currency.MXN, CNIM_NAME);
+    final InMemoryConventionSource conventionSource = new InMemoryConventionSource();
+    conventionSource.addConvention(fxForward);
+    conventionSource.addConvention(libor);
+    final CurveNodeVisitor<InstrumentDefinition<?>> converter = new FXForwardNodeConverter(conventionSource, HOLIDAY_SOURCE, REGION_SOURCE,
+        marketValues, marketDataId, ZonedDateTime.now());
+    node.accept(converter);
   }
 
   /**

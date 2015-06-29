@@ -23,11 +23,11 @@ import com.google.common.collect.Sets;
 import com.opengamma.core.change.ChangeManager;
 import com.opengamma.core.config.ConfigSource;
 import com.opengamma.core.config.impl.ConfigItem;
-import com.opengamma.core.convention.Convention;
 import com.opengamma.core.convention.ConventionSource;
 import com.opengamma.core.id.ExternalSchemes;
 import com.opengamma.core.security.Security;
 import com.opengamma.core.security.SecuritySource;
+import com.opengamma.engine.InMemoryConventionSource;
 import com.opengamma.financial.analytics.ircurve.strips.ContinuouslyCompoundedRateNode;
 import com.opengamma.financial.analytics.ircurve.strips.CreditSpreadNode;
 import com.opengamma.financial.analytics.ircurve.strips.DiscountFactorNode;
@@ -61,7 +61,7 @@ public class CurveNodeCurrencyVisitorTest {
   /** An empty security source. */
   protected static final SecuritySource EMPTY_SECURITY_SOURCE = new MySecuritySource(Collections.<ExternalIdBundle, Security>emptyMap());
   /** An empty convention source. */
-  protected static final ConventionSource EMPTY_CONVENTION_SOURCE = new TestConventionSource(Collections.<ExternalId, Convention>emptyMap());
+  protected static final ConventionSource EMPTY_CONVENTION_SOURCE = new InMemoryConventionSource();
   /** An empty config source. */
   protected static final ConfigSource EMPTY_CONFIG_SOURCE = new MyConfigSource(Collections.<String, Object>emptyMap());
 

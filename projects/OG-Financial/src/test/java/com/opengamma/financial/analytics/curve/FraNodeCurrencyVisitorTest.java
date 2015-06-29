@@ -18,10 +18,9 @@ import org.threeten.bp.LocalTime;
 
 import com.opengamma.DataNotFoundException;
 import com.opengamma.OpenGammaRuntimeException;
-import com.opengamma.core.convention.Convention;
-import com.opengamma.core.convention.ConventionSource;
 import com.opengamma.core.security.Security;
 import com.opengamma.core.security.SecuritySource;
+import com.opengamma.engine.InMemoryConventionSource;
 import com.opengamma.financial.analytics.curve.CurveNodeCurrencyVisitorTest.MySecuritySource;
 import com.opengamma.financial.analytics.ircurve.strips.FRANode;
 import com.opengamma.financial.convention.IborIndexConvention;
@@ -97,9 +96,8 @@ public class FraNodeCurrencyVisitorTest {
    */
   @Test
   public void testConventionFromSecurity() {
-    final Map<ExternalId, Convention> conventions = new HashMap<>();
-    conventions.put(LIBOR_CONVENTION_ID, LIBOR_CONVENTION);
-    final ConventionSource conventionSource = new TestConventionSource(conventions);
+    final InMemoryConventionSource conventionSource = new InMemoryConventionSource();
+    conventionSource.addConvention(LIBOR_CONVENTION);
     final Map<ExternalIdBundle, Security> securities = new HashMap<>();
     securities.put(LIBOR_SECURITY_ID.toBundle(), LIBOR_SECURITY);
     final SecuritySource securitySource = new MySecuritySource(securities);
@@ -113,9 +111,8 @@ public class FraNodeCurrencyVisitorTest {
    */
   @Test
   public void testFromConvention() {
-    final Map<ExternalId, Convention> conventions = new HashMap<>();
-    conventions.put(LIBOR_CONVENTION_ID, LIBOR_CONVENTION);
-    final ConventionSource conventionSource = new TestConventionSource(conventions);
+    final InMemoryConventionSource conventionSource = new InMemoryConventionSource();
+    conventionSource.addConvention(LIBOR_CONVENTION);
     final FRANode node = new FRANode(Tenor.THREE_MONTHS, Tenor.SIX_MONTHS, LIBOR_CONVENTION_ID, CNIM_NAME);
     // don't need security to be in source
     assertEquals(node.accept(new CurveNodeCurrencyVisitor(conventionSource, EMPTY_SECURITY_SOURCE)), Collections.singleton(Currency.USD));

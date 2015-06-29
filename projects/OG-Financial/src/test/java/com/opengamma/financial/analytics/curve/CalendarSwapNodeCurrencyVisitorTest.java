@@ -9,17 +9,13 @@ import static com.opengamma.financial.analytics.curve.CurveNodeCurrencyVisitorTe
 import static com.opengamma.financial.analytics.curve.CurveNodeCurrencyVisitorTest.US;
 import static org.testng.Assert.assertEquals;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.testng.annotations.Test;
 import org.threeten.bp.LocalTime;
 
 import com.google.common.collect.Sets;
 import com.opengamma.DataNotFoundException;
 import com.opengamma.OpenGammaRuntimeException;
-import com.opengamma.core.convention.Convention;
-import com.opengamma.core.convention.ConventionSource;
+import com.opengamma.engine.InMemoryConventionSource;
 import com.opengamma.financial.analytics.ircurve.strips.CalendarSwapNode;
 import com.opengamma.financial.convention.IborIndexConvention;
 import com.opengamma.financial.convention.StubType;
@@ -76,11 +72,10 @@ public class CalendarSwapNodeCurrencyVisitorTest {
    */
   @Test(expectedExceptions = DataNotFoundException.class)
   public void testNoPayConvention() {
-    final Map<ExternalId, Convention> conventions = new HashMap<>();
-    conventions.put(LIBOR_CONVENTION_ID, LIBOR_CONVENTION);
-    conventions.put(RECEIVE_LEG_CONVENTION_ID, RECEIVE_LEG_CONVENTION);
-    conventions.put(SWAP_CONVENTION_ID, SWAP_CONVENTION);
-    final ConventionSource conventionSource = new TestConventionSource(conventions);
+    final InMemoryConventionSource conventionSource = new InMemoryConventionSource(); //new TestConventionSource(conventions);
+    conventionSource.addConvention(LIBOR_CONVENTION.clone());
+    conventionSource.addConvention(RECEIVE_LEG_CONVENTION.clone());
+    conventionSource.addConvention(SWAP_CONVENTION.clone());
     final CalendarSwapNode node = new CalendarSwapNode("DATES", Tenor.ONE_YEAR, 1, 10, SWAP_CONVENTION_ID, CNIM_NAME);
     node.accept(new CurveNodeCurrencyVisitor(conventionSource, EMPTY_SECURITY_SOURCE));
   }
@@ -90,11 +85,10 @@ public class CalendarSwapNodeCurrencyVisitorTest {
    */
   @Test(expectedExceptions = DataNotFoundException.class)
   public void testNoReceiveConvention() {
-    final Map<ExternalId, Convention> conventions = new HashMap<>();
-    conventions.put(LIBOR_CONVENTION_ID, LIBOR_CONVENTION);
-    conventions.put(PAY_LEG_CONVENTION_ID, PAY_LEG_CONVENTION);
-    conventions.put(SWAP_CONVENTION_ID, SWAP_CONVENTION);
-    final ConventionSource conventionSource = new TestConventionSource(conventions);
+    final InMemoryConventionSource conventionSource = new InMemoryConventionSource();
+    conventionSource.addConvention(LIBOR_CONVENTION.clone());
+    conventionSource.addConvention(PAY_LEG_CONVENTION.clone());
+    conventionSource.addConvention(SWAP_CONVENTION.clone());
     final CalendarSwapNode node = new CalendarSwapNode("DATES", Tenor.ONE_YEAR, 1, 10, SWAP_CONVENTION_ID, CNIM_NAME);
     node.accept(new CurveNodeCurrencyVisitor(conventionSource, EMPTY_SECURITY_SOURCE));
   }
@@ -105,11 +99,10 @@ public class CalendarSwapNodeCurrencyVisitorTest {
    */
   @Test(expectedExceptions = OpenGammaRuntimeException.class)
   public void testNoIndexConvention() {
-    final Map<ExternalId, Convention> conventions = new HashMap<>();
-    conventions.put(PAY_LEG_CONVENTION_ID, PAY_LEG_CONVENTION);
-    conventions.put(RECEIVE_LEG_CONVENTION_ID, RECEIVE_LEG_CONVENTION);
-    conventions.put(SWAP_CONVENTION_ID, SWAP_CONVENTION);
-    final ConventionSource conventionSource = new TestConventionSource(conventions);
+    final InMemoryConventionSource conventionSource = new InMemoryConventionSource();
+    conventionSource.addConvention(RECEIVE_LEG_CONVENTION.clone());
+    conventionSource.addConvention(PAY_LEG_CONVENTION.clone());
+    conventionSource.addConvention(SWAP_CONVENTION.clone());
     final CalendarSwapNode node = new CalendarSwapNode("DATES", Tenor.ONE_YEAR, 1, 10, SWAP_CONVENTION_ID, CNIM_NAME);
     node.accept(new CurveNodeCurrencyVisitor(conventionSource, EMPTY_SECURITY_SOURCE));
   }
@@ -119,12 +112,11 @@ public class CalendarSwapNodeCurrencyVisitorTest {
    */
   @Test
   public void test() {
-    final Map<ExternalId, Convention> conventions = new HashMap<>();
-    conventions.put(LIBOR_CONVENTION_ID, LIBOR_CONVENTION);
-    conventions.put(PAY_LEG_CONVENTION_ID, PAY_LEG_CONVENTION);
-    conventions.put(RECEIVE_LEG_CONVENTION_ID, RECEIVE_LEG_CONVENTION);
-    conventions.put(SWAP_CONVENTION_ID, SWAP_CONVENTION);
-    final ConventionSource conventionSource = new TestConventionSource(conventions);
+    final InMemoryConventionSource conventionSource = new InMemoryConventionSource();
+    conventionSource.addConvention(LIBOR_CONVENTION.clone());
+    conventionSource.addConvention(RECEIVE_LEG_CONVENTION.clone());
+    conventionSource.addConvention(PAY_LEG_CONVENTION.clone());
+    conventionSource.addConvention(SWAP_CONVENTION.clone());
     final CalendarSwapNode node = new CalendarSwapNode("DATES", Tenor.ONE_YEAR, 1, 10, SWAP_CONVENTION_ID, CNIM_NAME);
     assertEquals(node.accept(new CurveNodeCurrencyVisitor(conventionSource, EMPTY_SECURITY_SOURCE)), Sets.newHashSet(Currency.EUR, Currency.USD));
   }

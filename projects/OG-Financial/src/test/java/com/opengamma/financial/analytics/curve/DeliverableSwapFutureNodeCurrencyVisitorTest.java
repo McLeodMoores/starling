@@ -9,15 +9,12 @@ import static com.opengamma.financial.analytics.curve.CurveNodeCurrencyVisitorTe
 import static org.testng.Assert.assertEquals;
 
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.testng.annotations.Test;
 import org.threeten.bp.LocalTime;
 
 import com.opengamma.DataNotFoundException;
-import com.opengamma.core.convention.Convention;
-import com.opengamma.core.convention.ConventionSource;
+import com.opengamma.engine.InMemoryConventionSource;
 import com.opengamma.financial.analytics.ircurve.strips.DeliverableSwapFutureNode;
 import com.opengamma.financial.convention.DeliverablePriceQuotedSwapFutureConvention;
 import com.opengamma.financial.convention.IborIndexConvention;
@@ -35,7 +32,7 @@ import com.opengamma.util.time.Tenor;
 /**
  * Tests the retrieval of a currency from deliverable swap future nodes.
  */
-public class DeliverableSwapFututureNodeCurrencyVisitorTest {
+public class DeliverableSwapFutureNodeCurrencyVisitorTest {
   /** The curve node id mapper name */
   private static final String CNIM_NAME = "CNIM";
   /** The id of the deliverable swap future convention */
@@ -72,12 +69,11 @@ public class DeliverableSwapFututureNodeCurrencyVisitorTest {
    */
   @Test(expectedExceptions = DataNotFoundException.class)
   public void testNoPayConvention() {
-    final Map<ExternalId, Convention> conventions = new HashMap<>();
-    conventions.put(LIBOR_CONVENTION_ID, LIBOR_CONVENTION);
-    conventions.put(PAY_LEG_CONVENTION_ID, PAY_LEG_CONVENTION);
-    conventions.put(RECEIVE_LEG_CONVENTION_ID, RECEIVE_LEG_CONVENTION);
-    conventions.put(SWAP_CONVENTION_ID, SWAP_CONVENTION);
-    final ConventionSource conventionSource = new TestConventionSource(conventions);
+    final InMemoryConventionSource conventionSource = new InMemoryConventionSource();
+    conventionSource.addConvention(LIBOR_CONVENTION);
+    conventionSource.addConvention(PAY_LEG_CONVENTION);
+    conventionSource.addConvention(RECEIVE_LEG_CONVENTION);
+    conventionSource.addConvention(SWAP_CONVENTION);
     final DeliverableSwapFutureNode node = new DeliverableSwapFutureNode(1, Tenor.THREE_MONTHS, Tenor.THREE_MONTHS,
         Tenor.TEN_YEARS, DSF_CONVENTION_ID, SWAP_CONVENTION_ID, CNIM_NAME);
     node.accept(new CurveNodeCurrencyVisitor(conventionSource, EMPTY_SECURITY_SOURCE));
@@ -88,13 +84,12 @@ public class DeliverableSwapFututureNodeCurrencyVisitorTest {
    */
   @Test
   public void test() {
-    final Map<ExternalId, Convention> conventions = new HashMap<>();
-    conventions.put(LIBOR_CONVENTION_ID, LIBOR_CONVENTION);
-    conventions.put(PAY_LEG_CONVENTION_ID, PAY_LEG_CONVENTION);
-    conventions.put(RECEIVE_LEG_CONVENTION_ID, RECEIVE_LEG_CONVENTION);
-    conventions.put(SWAP_CONVENTION_ID, SWAP_CONVENTION);
-    conventions.put(DSF_CONVENTION_ID, DSF_CONVENTION);
-    final ConventionSource conventionSource = new TestConventionSource(conventions);
+    final InMemoryConventionSource conventionSource = new InMemoryConventionSource();
+    conventionSource.addConvention(LIBOR_CONVENTION);
+    conventionSource.addConvention(PAY_LEG_CONVENTION);
+    conventionSource.addConvention(RECEIVE_LEG_CONVENTION);
+    conventionSource.addConvention(SWAP_CONVENTION);
+    conventionSource.addConvention(DSF_CONVENTION);
     final DeliverableSwapFutureNode node = new DeliverableSwapFutureNode(1, Tenor.THREE_MONTHS, Tenor.THREE_MONTHS,
         Tenor.TEN_YEARS, DSF_CONVENTION_ID, SWAP_CONVENTION_ID, CNIM_NAME);
     assertEquals(node.accept(new CurveNodeCurrencyVisitor(conventionSource, EMPTY_SECURITY_SOURCE)), Collections.singleton(Currency.USD));

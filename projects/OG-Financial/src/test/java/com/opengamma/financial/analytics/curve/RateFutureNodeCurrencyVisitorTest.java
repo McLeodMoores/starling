@@ -18,10 +18,9 @@ import org.threeten.bp.LocalTime;
 
 import com.opengamma.DataNotFoundException;
 import com.opengamma.OpenGammaRuntimeException;
-import com.opengamma.core.convention.Convention;
-import com.opengamma.core.convention.ConventionSource;
 import com.opengamma.core.security.Security;
 import com.opengamma.core.security.SecuritySource;
+import com.opengamma.engine.InMemoryConventionSource;
 import com.opengamma.financial.analytics.curve.CurveNodeCurrencyVisitorTest.MySecuritySource;
 import com.opengamma.financial.analytics.ircurve.strips.RateFutureNode;
 import com.opengamma.financial.convention.FXSpotConvention;
@@ -93,9 +92,8 @@ public class RateFutureNodeCurrencyVisitorTest {
    */
   @Test(expectedExceptions = OpenGammaRuntimeException.class)
   public void testUnhandledConventionType() {
-    final Map<ExternalId, Convention> conventions = new HashMap<>();
-    conventions.put(STIR_CONVENTION_ID, new FXSpotConvention("FX", STIR_CONVENTION_ID.toBundle(), 2, US));
-    final ConventionSource conventionSource = new TestConventionSource(conventions);
+    final InMemoryConventionSource conventionSource = new InMemoryConventionSource();
+    conventionSource.addConvention(new FXSpotConvention("FX", STIR_CONVENTION_ID.toBundle(), 2, false));
     final RateFutureNode node = new RateFutureNode(1, Tenor.ONE_DAY, Tenor.THREE_MONTHS, Tenor.THREE_MONTHS, STIR_CONVENTION_ID, CNIM_NAME);
     node.accept(new CurveNodeCurrencyVisitor(conventionSource, EMPTY_SECURITY_SOURCE));
   }
@@ -106,9 +104,8 @@ public class RateFutureNodeCurrencyVisitorTest {
    */
   @Test(expectedExceptions = OpenGammaRuntimeException.class)
   public void testNoUnderlyingsAvailableForStirConvention() {
-    final Map<ExternalId, Convention> conventions = new HashMap<>();
-    conventions.put(STIR_CONVENTION_ID, STIR_CONVENTION);
-    final ConventionSource conventionSource = new TestConventionSource(conventions);
+    final InMemoryConventionSource conventionSource = new InMemoryConventionSource();
+    conventionSource.addConvention(STIR_CONVENTION);
     final RateFutureNode node = new RateFutureNode(1, Tenor.ONE_DAY, Tenor.THREE_MONTHS, Tenor.THREE_MONTHS, STIR_CONVENTION_ID, CNIM_NAME);
     node.accept(new CurveNodeCurrencyVisitor(conventionSource, EMPTY_SECURITY_SOURCE));
   }
@@ -119,9 +116,8 @@ public class RateFutureNodeCurrencyVisitorTest {
    */
   @Test(expectedExceptions = OpenGammaRuntimeException.class)
   public void testNoUnderlyingsAvailableForFedFundsConvention() {
-    final Map<ExternalId, Convention> conventions = new HashMap<>();
-    conventions.put(FED_FUNDS_CONVENTION_ID, FED_FUNDS_CONVENTION);
-    final ConventionSource conventionSource = new TestConventionSource(conventions);
+    final InMemoryConventionSource conventionSource = new InMemoryConventionSource();
+    conventionSource.addConvention(FED_FUNDS_CONVENTION);
     final RateFutureNode node = new RateFutureNode(1, Tenor.ONE_DAY, Tenor.THREE_MONTHS, Tenor.THREE_MONTHS, FED_FUNDS_CONVENTION_ID, CNIM_NAME);
     node.accept(new CurveNodeCurrencyVisitor(conventionSource, EMPTY_SECURITY_SOURCE));
   }
@@ -132,10 +128,9 @@ public class RateFutureNodeCurrencyVisitorTest {
    */
   @Test
   public void testUnderlyingsConventionAvailableForStirConvention() {
-    final Map<ExternalId, Convention> conventions = new HashMap<>();
-    conventions.put(STIR_CONVENTION_ID, STIR_CONVENTION);
-    conventions.put(LIBOR_CONVENTION_ID, LIBOR_CONVENTION);
-    final ConventionSource conventionSource = new TestConventionSource(conventions);
+    final InMemoryConventionSource conventionSource = new InMemoryConventionSource();
+    conventionSource.addConvention(STIR_CONVENTION);
+    conventionSource.addConvention(LIBOR_CONVENTION);
     final RateFutureNode node = new RateFutureNode(1, Tenor.ONE_DAY, Tenor.THREE_MONTHS, Tenor.THREE_MONTHS, STIR_CONVENTION_ID, CNIM_NAME);
     assertEquals(node.accept(new CurveNodeCurrencyVisitor(conventionSource, EMPTY_SECURITY_SOURCE)), Collections.singleton(Currency.USD));
   }
@@ -146,10 +141,9 @@ public class RateFutureNodeCurrencyVisitorTest {
    */
   @Test
   public void testUnderlyingsConventionAvailableForFedFundsConvention() {
-    final Map<ExternalId, Convention> conventions = new HashMap<>();
-    conventions.put(FED_FUNDS_CONVENTION_ID, FED_FUNDS_CONVENTION);
-    conventions.put(OVERNIGHT_CONVENTION_ID, OVERNIGHT_CONVENTION);
-    final ConventionSource conventionSource = new TestConventionSource(conventions);
+    final InMemoryConventionSource conventionSource = new InMemoryConventionSource();
+    conventionSource.addConvention(FED_FUNDS_CONVENTION);
+    conventionSource.addConvention(OVERNIGHT_CONVENTION);
     final RateFutureNode node = new RateFutureNode(1, Tenor.ONE_DAY, Tenor.THREE_MONTHS, Tenor.THREE_MONTHS, FED_FUNDS_CONVENTION_ID, CNIM_NAME);
     assertEquals(node.accept(new CurveNodeCurrencyVisitor(conventionSource, EMPTY_SECURITY_SOURCE)), Collections.singleton(Currency.USD));
   }
@@ -160,9 +154,8 @@ public class RateFutureNodeCurrencyVisitorTest {
    */
   @Test(expectedExceptions = OpenGammaRuntimeException.class)
   public void testWrongSecurityTypeForStirConvention() {
-    final Map<ExternalId, Convention> conventions = new HashMap<>();
-    conventions.put(STIR_CONVENTION_ID, STIR_CONVENTION);
-    final ConventionSource conventionSource = new TestConventionSource(conventions);
+    final InMemoryConventionSource conventionSource = new InMemoryConventionSource();
+    conventionSource.addConvention(STIR_CONVENTION);
     final Map<ExternalIdBundle, Security> securities = new HashMap<>();
     securities.put(LIBOR_SECURITY_ID.toBundle(), OVERNIGHT_SECURITY);
     final SecuritySource securitySource = new MySecuritySource(securities);
@@ -176,9 +169,8 @@ public class RateFutureNodeCurrencyVisitorTest {
    */
   @Test(expectedExceptions = OpenGammaRuntimeException.class)
   public void testWrongSecurityTypeForFedFundsConvention() {
-    final Map<ExternalId, Convention> conventions = new HashMap<>();
-    conventions.put(FED_FUNDS_CONVENTION_ID, FED_FUNDS_CONVENTION);
-    final ConventionSource conventionSource = new TestConventionSource(conventions);
+    final InMemoryConventionSource conventionSource = new InMemoryConventionSource();
+    conventionSource.addConvention(FED_FUNDS_CONVENTION);
     final Map<ExternalIdBundle, Security> securities = new HashMap<>();
     securities.put(OVERNIGHT_SECURITY_ID.toBundle(), LIBOR_SECURITY);
     final SecuritySource securitySource = new MySecuritySource(securities);
@@ -195,10 +187,9 @@ public class RateFutureNodeCurrencyVisitorTest {
     // convention uses the LIBOR security id
     final InterestRateFutureConvention stirConvention = new InterestRateFutureConvention("USD STIR Future",
         STIR_CONVENTION_ID.toBundle(), ExternalId.of(SCHEME, "IMM"), US, LIBOR_SECURITY_ID);
-    final Map<ExternalId, Convention> conventions = new HashMap<>();
-    conventions.put(STIR_CONVENTION_ID, stirConvention);
-    conventions.put(LIBOR_CONVENTION_ID, LIBOR_CONVENTION);
-    final ConventionSource conventionSource = new TestConventionSource(conventions);
+    final InMemoryConventionSource conventionSource = new InMemoryConventionSource();
+    conventionSource.addConvention(stirConvention);
+    conventionSource.addConvention(LIBOR_CONVENTION);
     final Map<ExternalIdBundle, Security> securities = new HashMap<>();
     securities.put(LIBOR_SECURITY_ID.toBundle(), LIBOR_SECURITY);
     final SecuritySource securitySource = new MySecuritySource(securities);
@@ -215,10 +206,9 @@ public class RateFutureNodeCurrencyVisitorTest {
     // convention uses the overnight security id
     final FederalFundsFutureConvention fedFundsConvention = new FederalFundsFutureConvention("USD FED FUNDS Future",
         FED_FUNDS_CONVENTION_ID.toBundle(), ExternalId.of(SCHEME, "EOM"), US, OVERNIGHT_SECURITY_ID, 1250000);
-    final Map<ExternalId, Convention> conventions = new HashMap<>();
-    conventions.put(FED_FUNDS_CONVENTION_ID, fedFundsConvention);
-    conventions.put(OVERNIGHT_CONVENTION_ID, OVERNIGHT_CONVENTION);
-    final ConventionSource conventionSource = new TestConventionSource(conventions);
+    final InMemoryConventionSource conventionSource = new InMemoryConventionSource();
+    conventionSource.addConvention(fedFundsConvention);
+    conventionSource.addConvention(OVERNIGHT_CONVENTION);
     final Map<ExternalIdBundle, Security> securities = new HashMap<>();
     securities.put(OVERNIGHT_SECURITY_ID.toBundle(), OVERNIGHT_SECURITY);
     final SecuritySource securitySource = new MySecuritySource(securities);
@@ -234,10 +224,9 @@ public class RateFutureNodeCurrencyVisitorTest {
   public void testWrongConventionTypeFromSecurityForStirConvention() {
     final InterestRateFutureConvention stirConvention = new InterestRateFutureConvention("USD STIR Future",
         STIR_CONVENTION_ID.toBundle(), ExternalId.of(SCHEME, "IMM"), US, LIBOR_SECURITY_ID);
-    final Map<ExternalId, Convention> conventions = new HashMap<>();
-    conventions.put(STIR_CONVENTION_ID, stirConvention);
-    conventions.put(OVERNIGHT_CONVENTION_ID, OVERNIGHT_CONVENTION);
-    final ConventionSource conventionSource = new TestConventionSource(conventions);
+    final InMemoryConventionSource conventionSource = new InMemoryConventionSource();
+    conventionSource.addConvention(stirConvention);
+    conventionSource.addConvention(OVERNIGHT_CONVENTION);
     final Map<ExternalIdBundle, Security> securities = new HashMap<>();
     final IborIndex liborSecurity = new IborIndex("USD 3M LIBOR", Tenor.THREE_MONTHS, OVERNIGHT_CONVENTION_ID);
     liborSecurity.addExternalId(LIBOR_SECURITY_ID);
@@ -255,10 +244,9 @@ public class RateFutureNodeCurrencyVisitorTest {
   public void testWrongConventionTypeFromSecurityForFedFundsConvention() {
     final FederalFundsFutureConvention fedFundsConvention = new FederalFundsFutureConvention("USD FED FUNDS Future",
         FED_FUNDS_CONVENTION_ID.toBundle(), ExternalId.of(SCHEME, "EOM"), US, OVERNIGHT_SECURITY_ID, 1250000);
-    final Map<ExternalId, Convention> conventions = new HashMap<>();
-    conventions.put(FED_FUNDS_CONVENTION_ID, fedFundsConvention);
-    conventions.put(LIBOR_CONVENTION_ID, LIBOR_CONVENTION);
-    final ConventionSource conventionSource = new TestConventionSource(conventions);
+    final InMemoryConventionSource conventionSource = new InMemoryConventionSource();
+    conventionSource.addConvention(fedFundsConvention);
+    conventionSource.addConvention(LIBOR_CONVENTION);
     final Map<ExternalIdBundle, Security> securities = new HashMap<>();
     final OvernightIndex overnightSecurity = new OvernightIndex("USD FED FUNDS", LIBOR_CONVENTION_ID);
     overnightSecurity.addExternalId(OVERNIGHT_SECURITY_ID);

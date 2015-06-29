@@ -18,10 +18,9 @@ import org.threeten.bp.LocalTime;
 import com.google.common.collect.Sets;
 import com.opengamma.DataNotFoundException;
 import com.opengamma.OpenGammaRuntimeException;
-import com.opengamma.core.convention.Convention;
-import com.opengamma.core.convention.ConventionSource;
 import com.opengamma.core.security.Security;
 import com.opengamma.core.security.SecuritySource;
+import com.opengamma.engine.InMemoryConventionSource;
 import com.opengamma.financial.analytics.curve.CurveNodeCurrencyVisitorTest.MySecuritySource;
 import com.opengamma.financial.analytics.ircurve.strips.RollDateSwapNode;
 import com.opengamma.financial.convention.IborIndexConvention;
@@ -87,9 +86,10 @@ public class RollDateSwapNodeCurrencyVisitorTest {
    */
   @Test(expectedExceptions = ClassCastException.class)
   public void testWrongConventionType() {
-    final Map<ExternalId, Convention> conventions = new HashMap<>();
-    conventions.put(SWAP_CONVENTION_ID, LIBOR_CONVENTION);
-    final ConventionSource conventionSource = new TestConventionSource(conventions);
+    final InMemoryConventionSource conventionSource = new InMemoryConventionSource();
+    final IborIndexConvention liborConvention = LIBOR_CONVENTION.clone();
+    liborConvention.setExternalIdBundle(SWAP_CONVENTION_ID.toBundle());
+    conventionSource.addConvention(liborConvention);
     final RollDateSwapNode node = new RollDateSwapNode(Tenor.THREE_MONTHS, 1, 2, SWAP_CONVENTION_ID, CNIM_NAME);
     node.accept(new CurveNodeCurrencyVisitor(conventionSource, EMPTY_SECURITY_SOURCE));
   }
@@ -99,10 +99,9 @@ public class RollDateSwapNodeCurrencyVisitorTest {
    */
   @Test(expectedExceptions = DataNotFoundException.class)
   public void testNoPayConvention() {
-    final Map<ExternalId, Convention> conventions = new HashMap<>();
-    conventions.put(SWAP_CONVENTION_ID, SWAP_CONVENTION);
-    conventions.put(RECEIVE_LEG_CONVENTION_ID, RECEIVE_LEG_CONVENTION);
-    final ConventionSource conventionSource = new TestConventionSource(conventions);
+    final InMemoryConventionSource conventionSource = new InMemoryConventionSource();
+    conventionSource.addConvention(SWAP_CONVENTION);
+    conventionSource.addConvention(RECEIVE_LEG_CONVENTION);
     final RollDateSwapNode node = new RollDateSwapNode(Tenor.THREE_MONTHS, 1, 2, SWAP_CONVENTION_ID, CNIM_NAME);
     node.accept(new CurveNodeCurrencyVisitor(conventionSource, EMPTY_SECURITY_SOURCE));
   }
@@ -112,10 +111,9 @@ public class RollDateSwapNodeCurrencyVisitorTest {
    */
   @Test(expectedExceptions = DataNotFoundException.class)
   public void testNoReceiveConvention() {
-    final Map<ExternalId, Convention> conventions = new HashMap<>();
-    conventions.put(SWAP_CONVENTION_ID, SWAP_CONVENTION);
-    conventions.put(PAY_LEG_CONVENTION_ID, PAY_LEG_CONVENTION);
-    final ConventionSource conventionSource = new TestConventionSource(conventions);
+    final InMemoryConventionSource conventionSource = new InMemoryConventionSource();
+    conventionSource.addConvention(SWAP_CONVENTION);
+    conventionSource.addConvention(PAY_LEG_CONVENTION);
     final RollDateSwapNode node = new RollDateSwapNode(Tenor.THREE_MONTHS, 1, 2, SWAP_CONVENTION_ID, CNIM_NAME);
     node.accept(new CurveNodeCurrencyVisitor(conventionSource, EMPTY_SECURITY_SOURCE));
   }
@@ -125,11 +123,10 @@ public class RollDateSwapNodeCurrencyVisitorTest {
    */
   @Test(expectedExceptions = OpenGammaRuntimeException.class)
   public void testNoIndexConventionOrSecurity() {
-    final Map<ExternalId, Convention> conventions = new HashMap<>();
-    conventions.put(SWAP_CONVENTION_ID, SWAP_CONVENTION);
-    conventions.put(PAY_LEG_CONVENTION_ID, PAY_LEG_CONVENTION);
-    conventions.put(RECEIVE_LEG_CONVENTION_ID, RECEIVE_LEG_CONVENTION);
-    final ConventionSource conventionSource = new TestConventionSource(conventions);
+    final InMemoryConventionSource conventionSource = new InMemoryConventionSource();
+    conventionSource.addConvention(SWAP_CONVENTION);
+    conventionSource.addConvention(PAY_LEG_CONVENTION);
+    conventionSource.addConvention(RECEIVE_LEG_CONVENTION);
     final RollDateSwapNode node = new RollDateSwapNode(Tenor.THREE_MONTHS, 1, 2, SWAP_CONVENTION_ID, CNIM_NAME);
     node.accept(new CurveNodeCurrencyVisitor(conventionSource, EMPTY_SECURITY_SOURCE));
   }
@@ -139,16 +136,15 @@ public class RollDateSwapNodeCurrencyVisitorTest {
    */
   @Test(expectedExceptions = OpenGammaRuntimeException.class)
   public void testWrongUnderlyingSecurityType() {
+    final InMemoryConventionSource conventionSource = new InMemoryConventionSource();
     // note that the underlying id refers to the security
     final VanillaIborLegRollDateConvention receiveLegConvention = new VanillaIborLegRollDateConvention("USD Float Swap Leg",
         RECEIVE_LEG_CONVENTION_ID.toBundle(), LIBOR_SECURITY_ID, false, Tenor.THREE_MONTHS, StubType.NONE, false, 0);
     final RollDateSwapConvention swapConvention = new RollDateSwapConvention("USD IMM Swap", SWAP_CONVENTION_ID.toBundle(),
         PAY_LEG_CONVENTION_ID, RECEIVE_LEG_CONVENTION_ID, ExternalId.of(SCHEME, "Roll date"));
-    final Map<ExternalId, Convention> conventions = new HashMap<>();
-    conventions.put(SWAP_CONVENTION_ID, swapConvention);
-    conventions.put(PAY_LEG_CONVENTION_ID, PAY_LEG_CONVENTION);
-    conventions.put(RECEIVE_LEG_CONVENTION_ID, receiveLegConvention);
-    final ConventionSource conventionSource = new TestConventionSource(conventions);
+    conventionSource.addConvention(swapConvention);
+    conventionSource.addConvention(PAY_LEG_CONVENTION);
+    conventionSource.addConvention(receiveLegConvention);
     final OvernightIndex overnightSecurity = new OvernightIndex("USD Overnight", PAY_LEG_CONVENTION_ID);
     overnightSecurity.addExternalId(LIBOR_SECURITY_ID);
     final Map<ExternalIdBundle, Security> securities = new HashMap<>();
@@ -164,16 +160,15 @@ public class RollDateSwapNodeCurrencyVisitorTest {
    */
   @Test(expectedExceptions = DataNotFoundException.class)
   public void testNoConventionFromSecurity() {
+    final InMemoryConventionSource conventionSource = new InMemoryConventionSource();
     // note that the underlying id refers to the security
     final VanillaIborLegRollDateConvention receiveLegConvention = new VanillaIborLegRollDateConvention("USD Float Swap Leg",
         RECEIVE_LEG_CONVENTION_ID.toBundle(), LIBOR_SECURITY_ID, false, Tenor.THREE_MONTHS, StubType.NONE, false, 0);
     final RollDateSwapConvention swapConvention = new RollDateSwapConvention("USD IMM Swap", SWAP_CONVENTION_ID.toBundle(),
         PAY_LEG_CONVENTION_ID, RECEIVE_LEG_CONVENTION_ID, ExternalId.of(SCHEME, "Roll date"));
-    final Map<ExternalId, Convention> conventions = new HashMap<>();
-    conventions.put(SWAP_CONVENTION_ID, swapConvention);
-    conventions.put(PAY_LEG_CONVENTION_ID, PAY_LEG_CONVENTION);
-    conventions.put(RECEIVE_LEG_CONVENTION_ID, receiveLegConvention);
-    final ConventionSource conventionSource = new TestConventionSource(conventions);
+    conventionSource.addConvention(swapConvention);
+    conventionSource.addConvention(PAY_LEG_CONVENTION);
+    conventionSource.addConvention(receiveLegConvention);
     final Map<ExternalIdBundle, Security> securities = new HashMap<>();
     securities.put(LIBOR_SECURITY_ID.toBundle(), LIBOR_SECURITY);
     final SecuritySource securitySource = new MySecuritySource(securities);
@@ -187,17 +182,16 @@ public class RollDateSwapNodeCurrencyVisitorTest {
    */
   @Test
   public void testConventionFromSecurity() {
+    final InMemoryConventionSource conventionSource = new InMemoryConventionSource();
     // note that the underlying id refers to the security
     final VanillaIborLegRollDateConvention receiveLegConvention = new VanillaIborLegRollDateConvention("USD Float Swap Leg",
         RECEIVE_LEG_CONVENTION_ID.toBundle(), LIBOR_SECURITY_ID, false, Tenor.THREE_MONTHS, StubType.NONE, false, 0);
     final RollDateSwapConvention swapConvention = new RollDateSwapConvention("USD IMM Swap", SWAP_CONVENTION_ID.toBundle(),
         PAY_LEG_CONVENTION_ID, RECEIVE_LEG_CONVENTION_ID, ExternalId.of(SCHEME, "Roll date"));
-    final Map<ExternalId, Convention> conventions = new HashMap<>();
-    conventions.put(SWAP_CONVENTION_ID, swapConvention);
-    conventions.put(PAY_LEG_CONVENTION_ID, PAY_LEG_CONVENTION);
-    conventions.put(RECEIVE_LEG_CONVENTION_ID, receiveLegConvention);
-    conventions.put(LIBOR_CONVENTION_ID, LIBOR_CONVENTION);
-    final ConventionSource conventionSource = new TestConventionSource(conventions);
+    conventionSource.addConvention(swapConvention);
+    conventionSource.addConvention(PAY_LEG_CONVENTION);
+    conventionSource.addConvention(receiveLegConvention);
+    conventionSource.addConvention(LIBOR_CONVENTION);
     final Map<ExternalIdBundle, Security> securities = new HashMap<>();
     securities.put(LIBOR_SECURITY_ID.toBundle(), LIBOR_SECURITY);
     final SecuritySource securitySource = new MySecuritySource(securities);
@@ -210,12 +204,11 @@ public class RollDateSwapNodeCurrencyVisitorTest {
    */
   @Test
   public void testFromConvention() {
-    final Map<ExternalId, Convention> conventions = new HashMap<>();
-    conventions.put(SWAP_CONVENTION_ID, SWAP_CONVENTION);
-    conventions.put(PAY_LEG_CONVENTION_ID, PAY_LEG_CONVENTION);
-    conventions.put(RECEIVE_LEG_CONVENTION_ID, RECEIVE_LEG_CONVENTION);
-    conventions.put(LIBOR_CONVENTION_ID, LIBOR_CONVENTION);
-    final ConventionSource conventionSource = new TestConventionSource(conventions);
+    final InMemoryConventionSource conventionSource = new InMemoryConventionSource();
+    conventionSource.addConvention(SWAP_CONVENTION);
+    conventionSource.addConvention(PAY_LEG_CONVENTION);
+    conventionSource.addConvention(RECEIVE_LEG_CONVENTION);
+    conventionSource.addConvention(LIBOR_CONVENTION);
     final RollDateSwapNode node = new RollDateSwapNode(Tenor.THREE_MONTHS, 1, 2, SWAP_CONVENTION_ID, CNIM_NAME);
     // don't need the security to be in the source
     assertEquals(node.accept(new CurveNodeCurrencyVisitor(conventionSource, EMPTY_SECURITY_SOURCE)), Sets.newHashSet(Currency.EUR, Currency.USD));

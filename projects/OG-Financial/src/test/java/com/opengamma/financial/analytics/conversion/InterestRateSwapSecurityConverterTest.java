@@ -1,3 +1,12 @@
+/**
+ * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
+ *
+ * Please see distribution for license.
+ *
+ * Modified by McLeod Moores Software Limited.
+ *
+ * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
+ */
 package com.opengamma.financial.analytics.conversion;
 
 
@@ -32,8 +41,8 @@ import com.opengamma.core.holiday.HolidayType;
 import com.opengamma.core.id.ExternalSchemes;
 import com.opengamma.core.security.Security;
 import com.opengamma.core.security.SecuritySource;
+import com.opengamma.engine.InMemoryConventionSource;
 import com.opengamma.financial.analytics.curve.ConverterUtils;
-import com.opengamma.financial.analytics.curve.TestConventionSource;
 import com.opengamma.financial.convention.IborIndexConvention;
 import com.opengamma.financial.convention.StubType;
 import com.opengamma.financial.convention.SwapFixedLegConvention;
@@ -74,19 +83,19 @@ public class InterestRateSwapSecurityConverterTest {
   private static final String USDLIBOR_30_360_CONVENTION_NAME = "USD Libor 30/360";
   private static final ExternalId USDLIBOR_30_360_ID = ExternalId.of(SCHEME, USDLIBOR_30_360_CONVENTION_NAME);
   private static final ExternalId LEG_USDLIBOR3M_ID = ExternalId.of(SCHEME, "USD 3m Floating Leg");
-  private static final ExternalId LEG_USDLIBOR6M_ID = ExternalId.of(SCHEME, "USD 6m Floating Leg");  
-  
+  private static final ExternalId LEG_USDLIBOR6M_ID = ExternalId.of(SCHEME, "USD 6m Floating Leg");
+
   // LIBOR Index
   private static final String USDLIBOR1M_NAME = "USDLIBOR1M";
-  private static final com.opengamma.financial.security.index.IborIndex USDLIBOR1M = 
+  private static final com.opengamma.financial.security.index.IborIndex USDLIBOR1M =
       new com.opengamma.financial.security.index.IborIndex(USDLIBOR1M_NAME, "ICE LIBOR 1M - USD", Tenor.ONE_MONTH, USDLIBOR_ACT_360_CONVENTION_ID);
   private static final ExternalId USDLIBOR1M_ID = ExternalId.of(TICKER, "USDLIBOR1M");
   private static final String USDLIBOR3M_NAME = "USDLIBOR3M";
-  private static final com.opengamma.financial.security.index.IborIndex USDLIBOR3M = 
+  private static final com.opengamma.financial.security.index.IborIndex USDLIBOR3M =
       new com.opengamma.financial.security.index.IborIndex(USDLIBOR3M_NAME, "ICE LIBOR 3M - USD", Tenor.THREE_MONTHS, USDLIBOR_ACT_360_CONVENTION_ID);
   private static final ExternalId USDLIBOR3M_ID = ExternalId.of(TICKER, "USDLIBOR3M");
   private static final String USDLIBOR6M_NAME = "USDLIBOR6M";
-  private static final com.opengamma.financial.security.index.IborIndex USDLIBOR6M = 
+  private static final com.opengamma.financial.security.index.IborIndex USDLIBOR6M =
       new com.opengamma.financial.security.index.IborIndex(USDLIBOR6M_NAME, "ICE LIBOR 6M - USD", Tenor.SIX_MONTHS, USDLIBOR_ACT_360_CONVENTION_ID);
   private static final ExternalId USDLIBOR6M_ID = ExternalId.of(TICKER, "USDLIBOR6M");
   private static final SwapFixedLegConvention FIXED_LEG = new SwapFixedLegConvention("USD Swap Fixed Leg", ExternalIdBundle.of(ExternalId.of(SCHEME, "USD Swap Fixed Leg")),
@@ -102,21 +111,21 @@ public class InterestRateSwapSecurityConverterTest {
   private static final IborIndexConvention LIBOR_30_360 = new IborIndexConvention(USDLIBOR_30_360_CONVENTION_NAME, ExternalIdBundle.of(USDLIBOR_30_360_ID),
       THIRTY_360, MODIFIED_FOLLOWING, 2, false, Currency.USD, LocalTime.of(11, 0), "US", US, US, "Page");
 
-  
 
-  private static final Map<ExternalId, Convention> CONVENTIONS = new HashMap<>();
+
+  //private static final Map<ExternalId, Convention> CONVENTIONS = new HashMap<>();
   private static final Map<ExternalIdBundle, Security> SECURITY_MAP = new HashMap<>();
   private static final SecuritySource SECURITY_SOURCE;
-  private static final ConventionSource CONVENTION_SOURCE;
+  private static final InMemoryConventionSource CONVENTION_SOURCE = new InMemoryConventionSource();
   private static final HolidaySource HOLIDAY_SOURCE;
-  
+
   static {
-    CONVENTIONS.put(FIXED_LEG_ID, FIXED_LEG);
-    CONVENTIONS.put(FIXED_LEG_PAY_LAG_ID, FIXED_LEG_PAY_LAG);
-    CONVENTIONS.put(USDLIBOR_ACT_360_CONVENTION_ID, USDLIBOR_ACT_360);
-    CONVENTIONS.put(USDLIBOR_30_360_ID, LIBOR_30_360);
-    CONVENTIONS.put(LEG_USDLIBOR3M_ID, LEG_USDLIBOR3M);
-    CONVENTIONS.put(LEG_USDLIBOR6M_ID, LEG_USDLIBOR6M);
+    CONVENTION_SOURCE.addConvention(FIXED_LEG);
+    CONVENTION_SOURCE.addConvention(FIXED_LEG_PAY_LAG);
+    CONVENTION_SOURCE.addConvention(USDLIBOR_ACT_360);
+    CONVENTION_SOURCE.addConvention(LIBOR_30_360);
+    CONVENTION_SOURCE.addConvention(LEG_USDLIBOR3M);
+    CONVENTION_SOURCE.addConvention(LEG_USDLIBOR6M);
 
     // Security map. Used for index.
     SECURITY_MAP.put(USDLIBOR1M_ID.toBundle(), USDLIBOR1M);
@@ -124,26 +133,25 @@ public class InterestRateSwapSecurityConverterTest {
     SECURITY_MAP.put(USDLIBOR6M_ID.toBundle(), USDLIBOR6M);
 
     SECURITY_SOURCE = new MySecuritySource(SECURITY_MAP);
-    CONVENTION_SOURCE = new TestConventionSource(CONVENTIONS);
     HOLIDAY_SOURCE = new MockHolidaySource();
   }
 
 
   @Test
   public void testShortStartStubCouponResolution() {
-    
-    StubCalculationMethod.Builder shortStubBuilder = StubCalculationMethod.builder()
+
+    final StubCalculationMethod.Builder shortStubBuilder = StubCalculationMethod.builder()
         .type(StubType.SHORT_START)
         .firstStubEndDate(LocalDate.of(2014, 6, 18))
         .firstStubStartReferenceRateId(ExternalId.of(TICKER, USDLIBOR1M_NAME))
         .firstStubEndReferenceRateId(ExternalId.of(TICKER, USDLIBOR3M_NAME));
-    
-    InterestRateSwapNotional notional = new InterestRateSwapNotional(Currency.USD, 1000000);
-    PeriodFrequency freq3m = PeriodFrequency.of(Period.ofMonths(3));
-    Set<ExternalId> calendarUSNY = Sets.newHashSet(ExternalId.of(ExternalSchemes.ISDA_HOLIDAY, "USNY"));
-    List<InterestRateSwapLeg> legs = new ArrayList<>();
-            
-    FloatingInterestRateSwapLeg receiveLeg = new FloatingInterestRateSwapLeg();
+
+    final InterestRateSwapNotional notional = new InterestRateSwapNotional(Currency.USD, 1000000);
+    final PeriodFrequency freq3m = PeriodFrequency.of(Period.ofMonths(3));
+    final Set<ExternalId> calendarUSNY = Sets.newHashSet(ExternalId.of(ExternalSchemes.ISDA_HOLIDAY, "USNY"));
+    final List<InterestRateSwapLeg> legs = new ArrayList<>();
+
+    final FloatingInterestRateSwapLeg receiveLeg = new FloatingInterestRateSwapLeg();
     receiveLeg.setNotional(notional);
     receiveLeg.setDayCountConvention(DayCounts.ACT_360);
     receiveLeg.setPaymentDateFrequency(freq3m);
@@ -162,37 +170,37 @@ public class InterestRateSwapSecurityConverterTest {
     receiveLeg.setFloatingReferenceRateId(ExternalId.of(TICKER, USDLIBOR3M_NAME));
     receiveLeg.setPayReceiveType(PayReceiveType.RECEIVE);
     receiveLeg.setStubCalculationMethod(shortStubBuilder.build());
-    
+
     legs.add(receiveLeg);
-      
-    InterestRateSwapSecurityConverter conv = new InterestRateSwapSecurityConverter(HOLIDAY_SOURCE, CONVENTION_SOURCE, SECURITY_SOURCE);    
-    Pair<CouponStub, CouponStub> stubs = conv.parseStubs(receiveLeg.getStubCalculationMethod());
-    CouponStub firstStub = stubs.getFirst();
-    
-    IborIndex firstIborIndex = (IborIndex) getIborIndex(ExternalId.of(TICKER, USDLIBOR1M_NAME), SECURITY_SOURCE, CONVENTION_SOURCE);
-    IborIndex secondIborIndex = (IborIndex) getIborIndex(ExternalId.of(TICKER, USDLIBOR3M_NAME), SECURITY_SOURCE, CONVENTION_SOURCE);
-    StubType stubType = StubType.SHORT_START;
-            
+
+    final InterestRateSwapSecurityConverter conv = new InterestRateSwapSecurityConverter(HOLIDAY_SOURCE, CONVENTION_SOURCE, SECURITY_SOURCE);
+    final Pair<CouponStub, CouponStub> stubs = conv.parseStubs(receiveLeg.getStubCalculationMethod());
+    final CouponStub firstStub = stubs.getFirst();
+
+    final IborIndex firstIborIndex = (IborIndex) getIborIndex(ExternalId.of(TICKER, USDLIBOR1M_NAME), SECURITY_SOURCE, CONVENTION_SOURCE);
+    final IborIndex secondIborIndex = (IborIndex) getIborIndex(ExternalId.of(TICKER, USDLIBOR3M_NAME), SECURITY_SOURCE, CONVENTION_SOURCE);
+    final StubType stubType = StubType.SHORT_START;
+
     Assert.assertEquals(firstStub.getStubType(), stubType);
     Assert.assertEquals(firstStub.getFirstIborIndex(), firstIborIndex);
     Assert.assertEquals(firstStub.getSecondIborIndex(), secondIborIndex);
   }
-  
+
   @Test
   public void testLongStartStubCouponResolution() {
-    
-    StubCalculationMethod.Builder shortStubBuilder = StubCalculationMethod.builder()
+
+    final StubCalculationMethod.Builder shortStubBuilder = StubCalculationMethod.builder()
         .type(StubType.LONG_START)
         .firstStubEndDate(LocalDate.of(2014, 6, 18))
         .firstStubStartReferenceRateId(ExternalId.of(TICKER, USDLIBOR3M_NAME))
         .firstStubEndReferenceRateId(ExternalId.of(TICKER, USDLIBOR6M_NAME));
-    
-    InterestRateSwapNotional notional = new InterestRateSwapNotional(Currency.USD, 1000000);
-    PeriodFrequency freq3m = PeriodFrequency.of(Period.ofMonths(3));
-    Set<ExternalId> calendarUSNY = Sets.newHashSet(ExternalId.of(ExternalSchemes.ISDA_HOLIDAY, "USNY"));
-    List<InterestRateSwapLeg> legs = new ArrayList<>();
-            
-    FloatingInterestRateSwapLeg receiveLeg = new FloatingInterestRateSwapLeg();
+
+    final InterestRateSwapNotional notional = new InterestRateSwapNotional(Currency.USD, 1000000);
+    final PeriodFrequency freq3m = PeriodFrequency.of(Period.ofMonths(3));
+    final Set<ExternalId> calendarUSNY = Sets.newHashSet(ExternalId.of(ExternalSchemes.ISDA_HOLIDAY, "USNY"));
+    final List<InterestRateSwapLeg> legs = new ArrayList<>();
+
+    final FloatingInterestRateSwapLeg receiveLeg = new FloatingInterestRateSwapLeg();
     receiveLeg.setNotional(notional);
     receiveLeg.setDayCountConvention(DayCounts.ACT_360);
     receiveLeg.setPaymentDateFrequency(freq3m);
@@ -211,37 +219,37 @@ public class InterestRateSwapSecurityConverterTest {
     receiveLeg.setFloatingReferenceRateId(ExternalId.of(TICKER, USDLIBOR3M_NAME));
     receiveLeg.setPayReceiveType(PayReceiveType.RECEIVE);
     receiveLeg.setStubCalculationMethod(shortStubBuilder.build());
-    
+
     legs.add(receiveLeg);
-      
-    InterestRateSwapSecurityConverter conv = new InterestRateSwapSecurityConverter(HOLIDAY_SOURCE, CONVENTION_SOURCE, SECURITY_SOURCE);    
-    Pair<CouponStub, CouponStub> stubs = conv.parseStubs(receiveLeg.getStubCalculationMethod());
-    CouponStub firstStub = stubs.getFirst();
-    
-    IborIndex firstIborIndex = (IborIndex) getIborIndex(ExternalId.of(TICKER, USDLIBOR3M_NAME), SECURITY_SOURCE, CONVENTION_SOURCE);
-    IborIndex secondIborIndex = (IborIndex) getIborIndex(ExternalId.of(TICKER, USDLIBOR6M_NAME), SECURITY_SOURCE, CONVENTION_SOURCE);
-    StubType stubType = StubType.LONG_START;
-            
+
+    final InterestRateSwapSecurityConverter conv = new InterestRateSwapSecurityConverter(HOLIDAY_SOURCE, CONVENTION_SOURCE, SECURITY_SOURCE);
+    final Pair<CouponStub, CouponStub> stubs = conv.parseStubs(receiveLeg.getStubCalculationMethod());
+    final CouponStub firstStub = stubs.getFirst();
+
+    final IborIndex firstIborIndex = (IborIndex) getIborIndex(ExternalId.of(TICKER, USDLIBOR3M_NAME), SECURITY_SOURCE, CONVENTION_SOURCE);
+    final IborIndex secondIborIndex = (IborIndex) getIborIndex(ExternalId.of(TICKER, USDLIBOR6M_NAME), SECURITY_SOURCE, CONVENTION_SOURCE);
+    final StubType stubType = StubType.LONG_START;
+
     Assert.assertEquals(firstStub.getStubType(), stubType);
     Assert.assertEquals(firstStub.getFirstIborIndex(), firstIborIndex);
     Assert.assertEquals(firstStub.getSecondIborIndex(), secondIborIndex);
   }
-  
+
   @Test
   public void testShortEndStubCouponResolution() {
-    
-    StubCalculationMethod.Builder shortStubBuilder = StubCalculationMethod.builder()
+
+    final StubCalculationMethod.Builder shortStubBuilder = StubCalculationMethod.builder()
         .type(StubType.SHORT_END)
         .lastStubEndDate(LocalDate.of(2014, 6, 18))
         .lastStubStartReferenceRateId(ExternalId.of(TICKER, USDLIBOR1M_NAME))
         .lastStubEndReferenceRateId(ExternalId.of(TICKER, USDLIBOR3M_NAME));
-    
-    InterestRateSwapNotional notional = new InterestRateSwapNotional(Currency.USD, 1000000);
-    PeriodFrequency freq3m = PeriodFrequency.of(Period.ofMonths(3));
-    Set<ExternalId> calendarUSNY = Sets.newHashSet(ExternalId.of(ExternalSchemes.ISDA_HOLIDAY, "USNY"));
-    List<InterestRateSwapLeg> legs = new ArrayList<>();
-            
-    FloatingInterestRateSwapLeg receiveLeg = new FloatingInterestRateSwapLeg();
+
+    final InterestRateSwapNotional notional = new InterestRateSwapNotional(Currency.USD, 1000000);
+    final PeriodFrequency freq3m = PeriodFrequency.of(Period.ofMonths(3));
+    final Set<ExternalId> calendarUSNY = Sets.newHashSet(ExternalId.of(ExternalSchemes.ISDA_HOLIDAY, "USNY"));
+    final List<InterestRateSwapLeg> legs = new ArrayList<>();
+
+    final FloatingInterestRateSwapLeg receiveLeg = new FloatingInterestRateSwapLeg();
     receiveLeg.setNotional(notional);
     receiveLeg.setDayCountConvention(DayCounts.ACT_360);
     receiveLeg.setPaymentDateFrequency(freq3m);
@@ -260,37 +268,37 @@ public class InterestRateSwapSecurityConverterTest {
     receiveLeg.setFloatingReferenceRateId(ExternalId.of(TICKER, USDLIBOR3M_NAME));
     receiveLeg.setPayReceiveType(PayReceiveType.RECEIVE);
     receiveLeg.setStubCalculationMethod(shortStubBuilder.build());
-    
+
     legs.add(receiveLeg);
-      
-    InterestRateSwapSecurityConverter conv = new InterestRateSwapSecurityConverter(HOLIDAY_SOURCE, CONVENTION_SOURCE, SECURITY_SOURCE);    
-    Pair<CouponStub, CouponStub> stubs = conv.parseStubs(receiveLeg.getStubCalculationMethod());
-    CouponStub secondStub = stubs.getSecond();
-    
-    IborIndex firstIborIndex = (IborIndex) getIborIndex(ExternalId.of(TICKER, USDLIBOR1M_NAME), SECURITY_SOURCE, CONVENTION_SOURCE);
-    IborIndex secondIborIndex = (IborIndex) getIborIndex(ExternalId.of(TICKER, USDLIBOR3M_NAME), SECURITY_SOURCE, CONVENTION_SOURCE);
-    StubType stubType = StubType.SHORT_END;
-            
+
+    final InterestRateSwapSecurityConverter conv = new InterestRateSwapSecurityConverter(HOLIDAY_SOURCE, CONVENTION_SOURCE, SECURITY_SOURCE);
+    final Pair<CouponStub, CouponStub> stubs = conv.parseStubs(receiveLeg.getStubCalculationMethod());
+    final CouponStub secondStub = stubs.getSecond();
+
+    final IborIndex firstIborIndex = (IborIndex) getIborIndex(ExternalId.of(TICKER, USDLIBOR1M_NAME), SECURITY_SOURCE, CONVENTION_SOURCE);
+    final IborIndex secondIborIndex = (IborIndex) getIborIndex(ExternalId.of(TICKER, USDLIBOR3M_NAME), SECURITY_SOURCE, CONVENTION_SOURCE);
+    final StubType stubType = StubType.SHORT_END;
+
     Assert.assertEquals(secondStub.getStubType(), stubType);
     Assert.assertEquals(secondStub.getFirstIborIndex(), firstIborIndex);
     Assert.assertEquals(secondStub.getSecondIborIndex(), secondIborIndex);
   }
-  
+
   @Test
   public void testLongEndStubCouponResolution() {
-    
-    StubCalculationMethod.Builder shortStubBuilder = StubCalculationMethod.builder()
+
+    final StubCalculationMethod.Builder shortStubBuilder = StubCalculationMethod.builder()
         .type(StubType.LONG_END)
         .lastStubEndDate(LocalDate.of(2014, 6, 18))
         .lastStubStartReferenceRateId(ExternalId.of(TICKER, USDLIBOR3M_NAME))
         .lastStubEndReferenceRateId(ExternalId.of(TICKER, USDLIBOR6M_NAME));
-    
-    InterestRateSwapNotional notional = new InterestRateSwapNotional(Currency.USD, 1000000);
-    PeriodFrequency freq3m = PeriodFrequency.of(Period.ofMonths(3));
-    Set<ExternalId> calendarUSNY = Sets.newHashSet(ExternalId.of(ExternalSchemes.ISDA_HOLIDAY, "USNY"));
-    List<InterestRateSwapLeg> legs = new ArrayList<>();
-            
-    FloatingInterestRateSwapLeg receiveLeg = new FloatingInterestRateSwapLeg();
+
+    final InterestRateSwapNotional notional = new InterestRateSwapNotional(Currency.USD, 1000000);
+    final PeriodFrequency freq3m = PeriodFrequency.of(Period.ofMonths(3));
+    final Set<ExternalId> calendarUSNY = Sets.newHashSet(ExternalId.of(ExternalSchemes.ISDA_HOLIDAY, "USNY"));
+    final List<InterestRateSwapLeg> legs = new ArrayList<>();
+
+    final FloatingInterestRateSwapLeg receiveLeg = new FloatingInterestRateSwapLeg();
     receiveLeg.setNotional(notional);
     receiveLeg.setDayCountConvention(DayCounts.ACT_360);
     receiveLeg.setPaymentDateFrequency(freq3m);
@@ -309,40 +317,40 @@ public class InterestRateSwapSecurityConverterTest {
     receiveLeg.setFloatingReferenceRateId(ExternalId.of(TICKER, USDLIBOR3M_NAME));
     receiveLeg.setPayReceiveType(PayReceiveType.RECEIVE);
     receiveLeg.setStubCalculationMethod(shortStubBuilder.build());
-    
+
     legs.add(receiveLeg);
-      
-    InterestRateSwapSecurityConverter conv = new InterestRateSwapSecurityConverter(HOLIDAY_SOURCE, CONVENTION_SOURCE, SECURITY_SOURCE);    
-    Pair<CouponStub, CouponStub> stubs = conv.parseStubs(receiveLeg.getStubCalculationMethod());
-    CouponStub secondStub = stubs.getSecond();
-    
-    IborIndex firstIborIndex = (IborIndex) getIborIndex(ExternalId.of(TICKER, USDLIBOR3M_NAME), SECURITY_SOURCE, CONVENTION_SOURCE);
-    IborIndex secondIborIndex = (IborIndex) getIborIndex(ExternalId.of(TICKER, USDLIBOR6M_NAME), SECURITY_SOURCE, CONVENTION_SOURCE);
-    StubType stubType = StubType.LONG_END;
-            
+
+    final InterestRateSwapSecurityConverter conv = new InterestRateSwapSecurityConverter(HOLIDAY_SOURCE, CONVENTION_SOURCE, SECURITY_SOURCE);
+    final Pair<CouponStub, CouponStub> stubs = conv.parseStubs(receiveLeg.getStubCalculationMethod());
+    final CouponStub secondStub = stubs.getSecond();
+
+    final IborIndex firstIborIndex = (IborIndex) getIborIndex(ExternalId.of(TICKER, USDLIBOR3M_NAME), SECURITY_SOURCE, CONVENTION_SOURCE);
+    final IborIndex secondIborIndex = (IborIndex) getIborIndex(ExternalId.of(TICKER, USDLIBOR6M_NAME), SECURITY_SOURCE, CONVENTION_SOURCE);
+    final StubType stubType = StubType.LONG_END;
+
     Assert.assertEquals(secondStub.getStubType(), stubType);
     Assert.assertEquals(secondStub.getFirstIborIndex(), firstIborIndex);
     Assert.assertEquals(secondStub.getSecondIborIndex(), secondIborIndex);
   }
-  
+
   @Test
   public void testBothStubCouponResolution() {
-    
-    StubCalculationMethod.Builder shortStubBuilder = StubCalculationMethod.builder()
+
+    final StubCalculationMethod.Builder shortStubBuilder = StubCalculationMethod.builder()
         .type(StubType.BOTH)
-        .firstStubEndDate(LocalDate.of(2014,6,18))        
+        .firstStubEndDate(LocalDate.of(2014,6,18))
         .firstStubStartReferenceRateId(ExternalId.of(TICKER, USDLIBOR1M_NAME))
         .firstStubEndReferenceRateId(ExternalId.of(TICKER, USDLIBOR6M_NAME))
         .lastStubEndDate(LocalDate.of(2014, 6, 18))
         .lastStubStartReferenceRateId(ExternalId.of(TICKER, USDLIBOR3M_NAME))
         .lastStubEndReferenceRateId(ExternalId.of(TICKER, USDLIBOR6M_NAME));
-    
-    InterestRateSwapNotional notional = new InterestRateSwapNotional(Currency.USD, 1000000);
-    PeriodFrequency freq3m = PeriodFrequency.of(Period.ofMonths(3));
-    Set<ExternalId> calendarUSNY = Sets.newHashSet(ExternalId.of(ExternalSchemes.ISDA_HOLIDAY, "USNY"));
-    List<InterestRateSwapLeg> legs = new ArrayList<>();
-            
-    FloatingInterestRateSwapLeg receiveLeg = new FloatingInterestRateSwapLeg();
+
+    final InterestRateSwapNotional notional = new InterestRateSwapNotional(Currency.USD, 1000000);
+    final PeriodFrequency freq3m = PeriodFrequency.of(Period.ofMonths(3));
+    final Set<ExternalId> calendarUSNY = Sets.newHashSet(ExternalId.of(ExternalSchemes.ISDA_HOLIDAY, "USNY"));
+    final List<InterestRateSwapLeg> legs = new ArrayList<>();
+
+    final FloatingInterestRateSwapLeg receiveLeg = new FloatingInterestRateSwapLeg();
     receiveLeg.setNotional(notional);
     receiveLeg.setDayCountConvention(DayCounts.ACT_360);
     receiveLeg.setPaymentDateFrequency(freq3m);
@@ -361,45 +369,45 @@ public class InterestRateSwapSecurityConverterTest {
     receiveLeg.setFloatingReferenceRateId(ExternalId.of(TICKER, USDLIBOR3M_NAME));
     receiveLeg.setPayReceiveType(PayReceiveType.RECEIVE);
     receiveLeg.setStubCalculationMethod(shortStubBuilder.build());
-    
+
     legs.add(receiveLeg);
-      
-    InterestRateSwapSecurityConverter conv = new InterestRateSwapSecurityConverter(HOLIDAY_SOURCE, CONVENTION_SOURCE, SECURITY_SOURCE);    
-    Pair<CouponStub, CouponStub> stubs = conv.parseStubs(receiveLeg.getStubCalculationMethod());
-    CouponStub firstStub = stubs.getFirst();
-    CouponStub secondStub = stubs.getSecond();
-    
-    IborIndex firstStartIborIndex = (IborIndex) getIborIndex(ExternalId.of(TICKER, USDLIBOR1M_NAME), SECURITY_SOURCE, CONVENTION_SOURCE);
-    IborIndex firstEndIborIndex = (IborIndex) getIborIndex(ExternalId.of(TICKER, USDLIBOR6M_NAME), SECURITY_SOURCE, CONVENTION_SOURCE);
-    
-    IborIndex lastStartIborIndex = (IborIndex) getIborIndex(ExternalId.of(TICKER, USDLIBOR3M_NAME), SECURITY_SOURCE, CONVENTION_SOURCE);
-    IborIndex lastEndIborIndex = (IborIndex) getIborIndex(ExternalId.of(TICKER, USDLIBOR6M_NAME), SECURITY_SOURCE, CONVENTION_SOURCE);    
-    
-    StubType stubType = StubType.BOTH;
-            
+
+    final InterestRateSwapSecurityConverter conv = new InterestRateSwapSecurityConverter(HOLIDAY_SOURCE, CONVENTION_SOURCE, SECURITY_SOURCE);
+    final Pair<CouponStub, CouponStub> stubs = conv.parseStubs(receiveLeg.getStubCalculationMethod());
+    final CouponStub firstStub = stubs.getFirst();
+    final CouponStub secondStub = stubs.getSecond();
+
+    final IborIndex firstStartIborIndex = (IborIndex) getIborIndex(ExternalId.of(TICKER, USDLIBOR1M_NAME), SECURITY_SOURCE, CONVENTION_SOURCE);
+    final IborIndex firstEndIborIndex = (IborIndex) getIborIndex(ExternalId.of(TICKER, USDLIBOR6M_NAME), SECURITY_SOURCE, CONVENTION_SOURCE);
+
+    final IborIndex lastStartIborIndex = (IborIndex) getIborIndex(ExternalId.of(TICKER, USDLIBOR3M_NAME), SECURITY_SOURCE, CONVENTION_SOURCE);
+    final IborIndex lastEndIborIndex = (IborIndex) getIborIndex(ExternalId.of(TICKER, USDLIBOR6M_NAME), SECURITY_SOURCE, CONVENTION_SOURCE);
+
+    final StubType stubType = StubType.BOTH;
+
     Assert.assertEquals(firstStub.getStubType(), stubType);
     Assert.assertEquals(firstStub.getFirstIborIndex(), firstStartIborIndex);
     Assert.assertEquals(firstStub.getSecondIborIndex(), firstEndIborIndex);
-    
+
     Assert.assertEquals(secondStub.getStubType(), stubType);
     Assert.assertEquals(secondStub.getFirstIborIndex(), lastStartIborIndex);
     Assert.assertEquals(secondStub.getSecondIborIndex(), lastEndIborIndex);
   }
-  
-  
+
+
   @Test(expectedExceptions = OpenGammaRuntimeException.class)
   public void testStubBadlyDefinedShortStart() {
-    
-    StubCalculationMethod.Builder shortStubBuilder = StubCalculationMethod.builder()
+
+    final StubCalculationMethod.Builder shortStubBuilder = StubCalculationMethod.builder()
         .type(StubType.SHORT_START)
         .firstStubStartReferenceRateId(ExternalId.of(TICKER, USDLIBOR1M_NAME));
-    
-    InterestRateSwapNotional notional = new InterestRateSwapNotional(Currency.USD, 1000000);
-    PeriodFrequency freq3m = PeriodFrequency.of(Period.ofMonths(3));
-    Set<ExternalId> calendarUSNY = Sets.newHashSet(ExternalId.of(ExternalSchemes.ISDA_HOLIDAY, "USNY"));
-    List<InterestRateSwapLeg> legs = new ArrayList<>();
-            
-    FloatingInterestRateSwapLeg receiveLeg = new FloatingInterestRateSwapLeg();
+
+    final InterestRateSwapNotional notional = new InterestRateSwapNotional(Currency.USD, 1000000);
+    final PeriodFrequency freq3m = PeriodFrequency.of(Period.ofMonths(3));
+    final Set<ExternalId> calendarUSNY = Sets.newHashSet(ExternalId.of(ExternalSchemes.ISDA_HOLIDAY, "USNY"));
+    final List<InterestRateSwapLeg> legs = new ArrayList<>();
+
+    final FloatingInterestRateSwapLeg receiveLeg = new FloatingInterestRateSwapLeg();
     receiveLeg.setNotional(notional);
     receiveLeg.setDayCountConvention(DayCounts.ACT_360);
     receiveLeg.setPaymentDateFrequency(freq3m);
@@ -418,26 +426,26 @@ public class InterestRateSwapSecurityConverterTest {
     receiveLeg.setFloatingReferenceRateId(ExternalId.of(TICKER, USDLIBOR3M_NAME));
     receiveLeg.setPayReceiveType(PayReceiveType.RECEIVE);
     receiveLeg.setStubCalculationMethod(shortStubBuilder.build());
-    
+
     legs.add(receiveLeg);
-      
-    InterestRateSwapSecurityConverter conv = new InterestRateSwapSecurityConverter(HOLIDAY_SOURCE, CONVENTION_SOURCE, SECURITY_SOURCE);    
-    Pair<CouponStub, CouponStub> stubs = conv.parseStubs(receiveLeg.getStubCalculationMethod());
+
+    final InterestRateSwapSecurityConverter conv = new InterestRateSwapSecurityConverter(HOLIDAY_SOURCE, CONVENTION_SOURCE, SECURITY_SOURCE);
+    final Pair<CouponStub, CouponStub> stubs = conv.parseStubs(receiveLeg.getStubCalculationMethod());
   }
-  
+
   @Test(expectedExceptions = OpenGammaRuntimeException.class)
   public void testStubBadlyDefinedShortLast() {
-    
-    StubCalculationMethod.Builder shortStubBuilder = StubCalculationMethod.builder()
+
+    final StubCalculationMethod.Builder shortStubBuilder = StubCalculationMethod.builder()
         .type(StubType.SHORT_END)
         .lastStubStartReferenceRateId(ExternalId.of(TICKER, USDLIBOR1M_NAME));
-    
-    InterestRateSwapNotional notional = new InterestRateSwapNotional(Currency.USD, 1000000);
-    PeriodFrequency freq3m = PeriodFrequency.of(Period.ofMonths(3));
-    Set<ExternalId> calendarUSNY = Sets.newHashSet(ExternalId.of(ExternalSchemes.ISDA_HOLIDAY, "USNY"));
-    List<InterestRateSwapLeg> legs = new ArrayList<>();
-            
-    FloatingInterestRateSwapLeg receiveLeg = new FloatingInterestRateSwapLeg();
+
+    final InterestRateSwapNotional notional = new InterestRateSwapNotional(Currency.USD, 1000000);
+    final PeriodFrequency freq3m = PeriodFrequency.of(Period.ofMonths(3));
+    final Set<ExternalId> calendarUSNY = Sets.newHashSet(ExternalId.of(ExternalSchemes.ISDA_HOLIDAY, "USNY"));
+    final List<InterestRateSwapLeg> legs = new ArrayList<>();
+
+    final FloatingInterestRateSwapLeg receiveLeg = new FloatingInterestRateSwapLeg();
     receiveLeg.setNotional(notional);
     receiveLeg.setDayCountConvention(DayCounts.ACT_360);
     receiveLeg.setPaymentDateFrequency(freq3m);
@@ -456,26 +464,26 @@ public class InterestRateSwapSecurityConverterTest {
     receiveLeg.setFloatingReferenceRateId(ExternalId.of(TICKER, USDLIBOR3M_NAME));
     receiveLeg.setPayReceiveType(PayReceiveType.RECEIVE);
     receiveLeg.setStubCalculationMethod(shortStubBuilder.build());
-    
+
     legs.add(receiveLeg);
-      
-    InterestRateSwapSecurityConverter conv = new InterestRateSwapSecurityConverter(HOLIDAY_SOURCE, CONVENTION_SOURCE, SECURITY_SOURCE);    
-    Pair<CouponStub, CouponStub> stubs = conv.parseStubs(receiveLeg.getStubCalculationMethod());
-  }    
-  
+
+    final InterestRateSwapSecurityConverter conv = new InterestRateSwapSecurityConverter(HOLIDAY_SOURCE, CONVENTION_SOURCE, SECURITY_SOURCE);
+    final Pair<CouponStub, CouponStub> stubs = conv.parseStubs(receiveLeg.getStubCalculationMethod());
+  }
+
   @Test(expectedExceptions = OpenGammaRuntimeException.class)
   public void testStubBadlyDefinedLongStart() {
-    
-    StubCalculationMethod.Builder shortStubBuilder = StubCalculationMethod.builder()
+
+    final StubCalculationMethod.Builder shortStubBuilder = StubCalculationMethod.builder()
         .type(StubType.LONG_START)
         .firstStubStartReferenceRateId(ExternalId.of(TICKER, USDLIBOR1M_NAME));
-    
-    InterestRateSwapNotional notional = new InterestRateSwapNotional(Currency.USD, 1000000);
-    PeriodFrequency freq3m = PeriodFrequency.of(Period.ofMonths(3));
-    Set<ExternalId> calendarUSNY = Sets.newHashSet(ExternalId.of(ExternalSchemes.ISDA_HOLIDAY, "USNY"));
-    List<InterestRateSwapLeg> legs = new ArrayList<>();
-            
-    FloatingInterestRateSwapLeg receiveLeg = new FloatingInterestRateSwapLeg();
+
+    final InterestRateSwapNotional notional = new InterestRateSwapNotional(Currency.USD, 1000000);
+    final PeriodFrequency freq3m = PeriodFrequency.of(Period.ofMonths(3));
+    final Set<ExternalId> calendarUSNY = Sets.newHashSet(ExternalId.of(ExternalSchemes.ISDA_HOLIDAY, "USNY"));
+    final List<InterestRateSwapLeg> legs = new ArrayList<>();
+
+    final FloatingInterestRateSwapLeg receiveLeg = new FloatingInterestRateSwapLeg();
     receiveLeg.setNotional(notional);
     receiveLeg.setDayCountConvention(DayCounts.ACT_360);
     receiveLeg.setPaymentDateFrequency(freq3m);
@@ -494,27 +502,27 @@ public class InterestRateSwapSecurityConverterTest {
     receiveLeg.setFloatingReferenceRateId(ExternalId.of(TICKER, USDLIBOR3M_NAME));
     receiveLeg.setPayReceiveType(PayReceiveType.RECEIVE);
     receiveLeg.setStubCalculationMethod(shortStubBuilder.build());
-    
+
     legs.add(receiveLeg);
-      
-    InterestRateSwapSecurityConverter conv = new InterestRateSwapSecurityConverter(HOLIDAY_SOURCE, CONVENTION_SOURCE, SECURITY_SOURCE);    
-    Pair<CouponStub, CouponStub> stubs = conv.parseStubs(receiveLeg.getStubCalculationMethod());
+
+    final InterestRateSwapSecurityConverter conv = new InterestRateSwapSecurityConverter(HOLIDAY_SOURCE, CONVENTION_SOURCE, SECURITY_SOURCE);
+    final Pair<CouponStub, CouponStub> stubs = conv.parseStubs(receiveLeg.getStubCalculationMethod());
   }
-  
+
   @Test(expectedExceptions = OpenGammaRuntimeException.class)
   public void testStubUndefinedIndexId() {
-    
-    StubCalculationMethod.Builder shortStubBuilder = StubCalculationMethod.builder()
+
+    final StubCalculationMethod.Builder shortStubBuilder = StubCalculationMethod.builder()
         .type(StubType.SHORT_END)
         .lastStubStartReferenceRateId(ExternalId.of(TICKER, "ZARJIBAR3M"))
         .lastStubEndReferenceRateId(ExternalId.of(TICKER, "ZARJIBAR12M"));
-    
-    InterestRateSwapNotional notional = new InterestRateSwapNotional(Currency.USD, 1000000);
-    PeriodFrequency freq3m = PeriodFrequency.of(Period.ofMonths(3));
-    Set<ExternalId> calendarUSNY = Sets.newHashSet(ExternalId.of(ExternalSchemes.ISDA_HOLIDAY, "USNY"));
-    List<InterestRateSwapLeg> legs = new ArrayList<>();
-            
-    FloatingInterestRateSwapLeg receiveLeg = new FloatingInterestRateSwapLeg();
+
+    final InterestRateSwapNotional notional = new InterestRateSwapNotional(Currency.USD, 1000000);
+    final PeriodFrequency freq3m = PeriodFrequency.of(Period.ofMonths(3));
+    final Set<ExternalId> calendarUSNY = Sets.newHashSet(ExternalId.of(ExternalSchemes.ISDA_HOLIDAY, "USNY"));
+    final List<InterestRateSwapLeg> legs = new ArrayList<>();
+
+    final FloatingInterestRateSwapLeg receiveLeg = new FloatingInterestRateSwapLeg();
     receiveLeg.setNotional(notional);
     receiveLeg.setDayCountConvention(DayCounts.ACT_360);
     receiveLeg.setPaymentDateFrequency(freq3m);
@@ -533,32 +541,32 @@ public class InterestRateSwapSecurityConverterTest {
     receiveLeg.setFloatingReferenceRateId(ExternalId.of(TICKER, USDLIBOR3M_NAME));
     receiveLeg.setPayReceiveType(PayReceiveType.RECEIVE);
     receiveLeg.setStubCalculationMethod(shortStubBuilder.build());
-    
+
     legs.add(receiveLeg);
-      
-    InterestRateSwapSecurityConverter conv = new InterestRateSwapSecurityConverter(HOLIDAY_SOURCE, CONVENTION_SOURCE, SECURITY_SOURCE);    
-    Pair<CouponStub, CouponStub> stubs = conv.parseStubs(receiveLeg.getStubCalculationMethod());
+
+    final InterestRateSwapSecurityConverter conv = new InterestRateSwapSecurityConverter(HOLIDAY_SOURCE, CONVENTION_SOURCE, SECURITY_SOURCE);
+    final Pair<CouponStub, CouponStub> stubs = conv.parseStubs(receiveLeg.getStubCalculationMethod());
   }
-    
-  private IndexDeposit getIborIndex(ExternalId indexId, SecuritySource securitySource, ConventionSource conventionSource) {
+
+  private IndexDeposit getIborIndex(final ExternalId indexId, final SecuritySource securitySource, final ConventionSource conventionSource) {
     // try security lookup
     final Security sec = securitySource.getSingle(indexId.toBundle());
     if (sec != null) {
       final com.opengamma.financial.security.index.IborIndex indexSecurity = (com.opengamma.financial.security.index.IborIndex) sec;
-      IborIndexConvention indexConvention = conventionSource.getSingle(indexSecurity.getConventionId(), IborIndexConvention.class);
+      final IborIndexConvention indexConvention = conventionSource.getSingle(indexSecurity.getConventionId(), IborIndexConvention.class);
       return ConverterUtils.indexIbor(indexSecurity.getName(), indexConvention, indexSecurity.getTenor());
     }
-    
+
     // Fallback to convention lookup for old behaviour
-    Convention iborLegConvention = conventionSource.getSingle(indexId);
+    final Convention iborLegConvention = conventionSource.getSingle(indexId);
     if (!(iborLegConvention instanceof VanillaIborLegConvention)) {
       throw new OpenGammaRuntimeException("Could not resolve an index convention for rate reference id: " + indexId.getValue());
     }
-    Convention iborConvention = conventionSource.getSingle(((VanillaIborLegConvention) iborLegConvention).getIborIndexConvention());
+    final Convention iborConvention = conventionSource.getSingle(((VanillaIborLegConvention) iborLegConvention).getIborIndexConvention());
     if (iborConvention == null) {
       throw new OpenGammaRuntimeException("Convention not found for " + ((VanillaIborLegConvention) iborLegConvention).getIborIndexConvention());
     }
-    IborIndexConvention iborIndexConvention = (IborIndexConvention) iborConvention;
+    final IborIndexConvention iborIndexConvention = (IborIndexConvention) iborConvention;
 
     return new IborIndex(iborIndexConvention.getCurrency(),
         ((VanillaIborLegConvention) iborLegConvention).getResetTenor().getPeriod(),
@@ -573,65 +581,65 @@ public class InterestRateSwapSecurityConverterTest {
    * A simplified local version of a HolidaySource for tests.
    */
   private static class MySecuritySource implements SecuritySource {
-    
+
     /** Security source as a map for tests **/
     private final Map<ExternalIdBundle, Security> _map;
-    
+
     /**
      * @param map The map of id/Security
      */
-    public MySecuritySource(Map<ExternalIdBundle, Security> map) {
+    public MySecuritySource(final Map<ExternalIdBundle, Security> map) {
       super();
       _map = map;
     }
 
     @Override
-    public Collection<Security> get(ExternalIdBundle bundle, VersionCorrection versionCorrection) {
+    public Collection<Security> get(final ExternalIdBundle bundle, final VersionCorrection versionCorrection) {
       return null;
     }
 
     @Override
-    public Map<ExternalIdBundle, Collection<Security>> getAll(Collection<ExternalIdBundle> bundles, VersionCorrection versionCorrection) {
+    public Map<ExternalIdBundle, Collection<Security>> getAll(final Collection<ExternalIdBundle> bundles, final VersionCorrection versionCorrection) {
       return null;
     }
 
     @Override
-    public Collection<Security> get(ExternalIdBundle bundle) {
+    public Collection<Security> get(final ExternalIdBundle bundle) {
       return null;
     }
 
     @Override
-    public Security getSingle(ExternalIdBundle bundle) {
+    public Security getSingle(final ExternalIdBundle bundle) {
       return _map.get(bundle);
     }
 
     @Override
-    public Security getSingle(ExternalIdBundle bundle, VersionCorrection versionCorrection) {
+    public Security getSingle(final ExternalIdBundle bundle, final VersionCorrection versionCorrection) {
       return null;
     }
 
     @Override
-    public Map<ExternalIdBundle, Security> getSingle(Collection<ExternalIdBundle> bundles, VersionCorrection versionCorrection) {
+    public Map<ExternalIdBundle, Security> getSingle(final Collection<ExternalIdBundle> bundles, final VersionCorrection versionCorrection) {
       return null;
     }
 
     @Override
-    public Security get(UniqueId uniqueId) {
+    public Security get(final UniqueId uniqueId) {
       return null;
     }
 
     @Override
-    public Security get(ObjectId objectId, VersionCorrection versionCorrection) {
+    public Security get(final ObjectId objectId, final VersionCorrection versionCorrection) {
       return null;
     }
 
     @Override
-    public Map<UniqueId, Security> get(Collection<UniqueId> uniqueIds) {
+    public Map<UniqueId, Security> get(final Collection<UniqueId> uniqueIds) {
       return null;
     }
 
     @Override
-    public Map<ObjectId, Security> get(Collection<ObjectId> objectIds, VersionCorrection versionCorrection) {
+    public Map<ObjectId, Security> get(final Collection<ObjectId> objectIds, final VersionCorrection versionCorrection) {
       return null;
     }
 
@@ -639,9 +647,9 @@ public class InterestRateSwapSecurityConverterTest {
     public ChangeManager changeManager() {
       return null;
     }
-    
+
   }
-  
+
   public static class MockHolidaySource extends AbstractSource<Holiday> implements HolidaySource {
 
     /**
@@ -650,8 +658,8 @@ public class InterestRateSwapSecurityConverterTest {
     private final ConcurrentMap<LocalDate, Boolean> _nonWorkingDay = new ConcurrentHashMap<>();
 
     public MockHolidaySource() {
-      int startYear = 2013;
-      int endYear = 2063;
+      final int startYear = 2013;
+      final int endYear = 2063;
       for (int loopy = startYear; loopy <= endYear; loopy++) {
         addNonWorkingDay(LocalDate.of(loopy, 1, 1));
         addNonWorkingDay(LocalDate.of(loopy, 7, 4));
@@ -681,12 +689,12 @@ public class InterestRateSwapSecurityConverterTest {
       addNonWorkingDay(LocalDate.of(2017, 11, 23));
     }
 
-    private void addNonWorkingDay(LocalDate date) {
+    private void addNonWorkingDay(final LocalDate date) {
       _nonWorkingDay.put(date, true);
     }
 
-    private boolean isHoliday(LocalDate dateToCheck) {
-      DayOfWeek day = dateToCheck.getDayOfWeek();
+    private boolean isHoliday(final LocalDate dateToCheck) {
+      final DayOfWeek day = dateToCheck.getDayOfWeek();
       if (day.equals(DayOfWeek.SATURDAY) || day.equals(DayOfWeek.SUNDAY)) {
         return true;
       }
@@ -694,37 +702,37 @@ public class InterestRateSwapSecurityConverterTest {
     }
 
     @Override
-    public boolean isHoliday(LocalDate dateToCheck, Currency currency) {
+    public boolean isHoliday(final LocalDate dateToCheck, final Currency currency) {
       return isHoliday(dateToCheck);
     }
 
     @Override
-    public boolean isHoliday(LocalDate dateToCheck, HolidayType holidayType, ExternalIdBundle regionOrExchangeIds) {
+    public boolean isHoliday(final LocalDate dateToCheck, final HolidayType holidayType, final ExternalIdBundle regionOrExchangeIds) {
       return isHoliday(dateToCheck);
     }
 
     @Override
-    public boolean isHoliday(LocalDate dateToCheck, HolidayType holidayType, ExternalId regionOrExchangeId) {
+    public boolean isHoliday(final LocalDate dateToCheck, final HolidayType holidayType, final ExternalId regionOrExchangeId) {
       return isHoliday(dateToCheck);
     }
 
     @Override
-    public Holiday get(UniqueId uniqueId) {
+    public Holiday get(final UniqueId uniqueId) {
       throw new UnsupportedOperationException();
     }
 
     @Override
-    public Holiday get(ObjectId objectId, VersionCorrection versionCorrection) {
+    public Holiday get(final ObjectId objectId, final VersionCorrection versionCorrection) {
       throw new UnsupportedOperationException();
     }
 
     @Override
-    public Collection<Holiday> get(HolidayType holidayType, ExternalIdBundle regionOrExchangeIds) {
+    public Collection<Holiday> get(final HolidayType holidayType, final ExternalIdBundle regionOrExchangeIds) {
       return null;
     }
 
     @Override
-    public Collection<Holiday> get(Currency currency) {
+    public Collection<Holiday> get(final Currency currency) {
       return null;
     }
   }

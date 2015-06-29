@@ -18,10 +18,9 @@ import com.google.common.collect.Sets;
 import com.opengamma.DataNotFoundException;
 import com.opengamma.OpenGammaRuntimeException;
 import com.opengamma.analytics.financial.interestrate.CompoundingType;
-import com.opengamma.core.convention.Convention;
-import com.opengamma.core.convention.ConventionSource;
 import com.opengamma.core.security.Security;
 import com.opengamma.core.security.SecuritySource;
+import com.opengamma.engine.InMemoryConventionSource;
 import com.opengamma.financial.analytics.curve.CurveNodeCurrencyVisitorTest.MySecuritySource;
 import com.opengamma.financial.analytics.ircurve.strips.SwapNode;
 import com.opengamma.financial.convention.CMSLegConvention;
@@ -122,9 +121,8 @@ public class SwapNodeCurrencyVisitorTest {
    */
   @Test(expectedExceptions = DataNotFoundException.class)
   public void testNoPayLegConvention() {
-    final Map<ExternalId, Convention> conventions = new HashMap<>();
-    conventions.put(VANILLA_IBOR_LEG_CONVENTION_ID, VANILLA_IBOR_LEG_CONVENTION);
-    final ConventionSource conventionSource = new TestConventionSource(conventions);
+    final InMemoryConventionSource conventionSource = new InMemoryConventionSource();
+    conventionSource.addConvention(VANILLA_IBOR_LEG_CONVENTION);
     final SwapNode node = new SwapNode(Tenor.ONE_YEAR, Tenor.TEN_YEARS, FIXED_LEG_CONVENTION_ID, VANILLA_IBOR_LEG_CONVENTION_ID, CNIM_NAME);
     node.accept(new CurveNodeCurrencyVisitor(conventionSource, EMPTY_SECURITY_SOURCE));
   }
@@ -134,9 +132,8 @@ public class SwapNodeCurrencyVisitorTest {
    */
   @Test(expectedExceptions = DataNotFoundException.class)
   public void testNoReceiveLegConvention() {
-    final Map<ExternalId, Convention> conventions = new HashMap<>();
-    conventions.put(FIXED_LEG_CONVENTION_ID, FIXED_LEG_CONVENTION);
-    final ConventionSource conventionSource = new TestConventionSource(conventions);
+    final InMemoryConventionSource conventionSource = new InMemoryConventionSource();
+    conventionSource.addConvention(FIXED_LEG_CONVENTION);
     final SwapNode node = new SwapNode(Tenor.ONE_YEAR, Tenor.TEN_YEARS, FIXED_LEG_CONVENTION_ID, VANILLA_IBOR_LEG_CONVENTION_ID, CNIM_NAME);
     node.accept(new CurveNodeCurrencyVisitor(conventionSource, EMPTY_SECURITY_SOURCE));
   }
@@ -146,10 +143,9 @@ public class SwapNodeCurrencyVisitorTest {
    */
   @Test(expectedExceptions = OpenGammaRuntimeException.class)
   public void testNoSwapIndexConvention() {
-    final Map<ExternalId, Convention> conventions = new HashMap<>();
-    conventions.put(FIXED_LEG_CONVENTION_ID, FIXED_LEG_CONVENTION);
-    conventions.put(CMS_LEG_CONVENTION_ID, CMS_LEG_CONVENTION);
-    final ConventionSource conventionSource = new TestConventionSource(conventions);
+    final InMemoryConventionSource conventionSource = new InMemoryConventionSource();
+    conventionSource.addConvention(FIXED_LEG_CONVENTION);
+    conventionSource.addConvention(CMS_LEG_CONVENTION);
     final SwapNode node = new SwapNode(Tenor.ONE_YEAR, Tenor.TEN_YEARS, FIXED_LEG_CONVENTION_ID, CMS_LEG_CONVENTION_ID, CNIM_NAME);
     node.accept(new CurveNodeCurrencyVisitor(conventionSource, EMPTY_SECURITY_SOURCE));
   }
@@ -159,10 +155,9 @@ public class SwapNodeCurrencyVisitorTest {
    */
   @Test(expectedExceptions = OpenGammaRuntimeException.class)
   public void testNoIborIndexConventionOrSecurityForCompoundingLeg() {
-    final Map<ExternalId, Convention> conventions = new HashMap<>();
-    conventions.put(FIXED_LEG_CONVENTION_ID, FIXED_LEG_CONVENTION);
-    conventions.put(COMPOUNDING_LIBOR_LEG_CONVENTION_ID, COMPOUNDING_LIBOR_LEG_CONVENTION);
-    final ConventionSource conventionSource = new TestConventionSource(conventions);
+    final InMemoryConventionSource conventionSource = new InMemoryConventionSource();
+    conventionSource.addConvention(FIXED_LEG_CONVENTION);
+    conventionSource.addConvention(COMPOUNDING_LIBOR_LEG_CONVENTION);
     final SwapNode node = new SwapNode(Tenor.ONE_YEAR, Tenor.TEN_YEARS, FIXED_LEG_CONVENTION_ID, COMPOUNDING_LIBOR_LEG_CONVENTION_ID, CNIM_NAME);
     node.accept(new CurveNodeCurrencyVisitor(conventionSource, EMPTY_SECURITY_SOURCE));
   }
@@ -172,14 +167,13 @@ public class SwapNodeCurrencyVisitorTest {
    */
   @Test(expectedExceptions = OpenGammaRuntimeException.class)
   public void testWrongUnderlyingSecurityTypeForVanillaLeg() {
+    final InMemoryConventionSource conventionSource = new InMemoryConventionSource();
     // note that the convention refers to the security
     final VanillaIborLegConvention compoundingLiborLegConvention = new VanillaIborLegConvention("USD LIBOR Swap Leg",
         VANILLA_IBOR_LEG_CONVENTION_ID.toBundle(), LIBOR_SECURITY_ID, false, InterpolationMethod.NONE.name(), Tenor.THREE_MONTHS,
         2, false, StubType.NONE, false, 2);
-    final Map<ExternalId, Convention> conventions = new HashMap<>();
-    conventions.put(FIXED_LEG_CONVENTION_ID, FIXED_LEG_CONVENTION);
-    conventions.put(VANILLA_IBOR_LEG_CONVENTION_ID, compoundingLiborLegConvention);
-    final ConventionSource conventionSource = new TestConventionSource(conventions);
+    conventionSource.addConvention(FIXED_LEG_CONVENTION);
+    conventionSource.addConvention(compoundingLiborLegConvention);
     final Map<ExternalIdBundle, Security> securities = new HashMap<>();
     securities.put(LIBOR_SECURITY_ID.toBundle(), OVERNIGHT_SECURITY);
     final SecuritySource securitySource = new MySecuritySource(securities);
@@ -192,14 +186,13 @@ public class SwapNodeCurrencyVisitorTest {
    */
   @Test(expectedExceptions = OpenGammaRuntimeException.class)
   public void testWrongUnderlyingSecurityTypeForCompoundingLeg() {
+    final InMemoryConventionSource conventionSource = new InMemoryConventionSource();
     // note that the convention refers to the security
     final CompoundingIborLegConvention compoundingLiborLegConvention = new CompoundingIborLegConvention("USD Compounding LIBOR Swap Leg",
         COMPOUNDING_LIBOR_LEG_CONVENTION_ID.toBundle(), LIBOR_SECURITY_ID, Tenor.ONE_YEAR, CompoundingType.COMPOUNDING, Tenor.SIX_MONTHS, StubType.NONE,
         2, false, StubType.NONE, false, 0);
-    final Map<ExternalId, Convention> conventions = new HashMap<>();
-    conventions.put(FIXED_LEG_CONVENTION_ID, FIXED_LEG_CONVENTION);
-    conventions.put(COMPOUNDING_LIBOR_LEG_CONVENTION_ID, compoundingLiborLegConvention);
-    final ConventionSource conventionSource = new TestConventionSource(conventions);
+    conventionSource.addConvention(FIXED_LEG_CONVENTION);
+    conventionSource.addConvention(compoundingLiborLegConvention);
     final Map<ExternalIdBundle, Security> securities = new HashMap<>();
     securities.put(LIBOR_SECURITY_ID.toBundle(), OVERNIGHT_SECURITY);
     final SecuritySource securitySource = new MySecuritySource(securities);
@@ -212,15 +205,14 @@ public class SwapNodeCurrencyVisitorTest {
    */
   @Test
   public void testConventionFromUnderlyingSecurityForCompoundingLeg() {
+    final InMemoryConventionSource conventionSource = new InMemoryConventionSource();
     // note that the convention refers to the security
     final CompoundingIborLegConvention compoundingLiborLegConvention = new CompoundingIborLegConvention("USD Compounding LIBOR Swap Leg",
         COMPOUNDING_LIBOR_LEG_CONVENTION_ID.toBundle(), LIBOR_SECURITY_ID, Tenor.ONE_YEAR, CompoundingType.COMPOUNDING, Tenor.SIX_MONTHS, StubType.NONE,
         2, false, StubType.NONE, false, 0);
-    final Map<ExternalId, Convention> conventions = new HashMap<>();
-    conventions.put(FIXED_LEG_CONVENTION_ID, FIXED_LEG_CONVENTION);
-    conventions.put(COMPOUNDING_LIBOR_LEG_CONVENTION_ID, compoundingLiborLegConvention);
-    conventions.put(LIBOR_CONVENTION_ID, LIBOR_CONVENTION);
-    final ConventionSource conventionSource = new TestConventionSource(conventions);
+    conventionSource.addConvention(FIXED_LEG_CONVENTION);
+    conventionSource.addConvention(compoundingLiborLegConvention);
+    conventionSource.addConvention(LIBOR_CONVENTION);
     final Map<ExternalIdBundle, Security> securities = new HashMap<>();
     securities.put(LIBOR_SECURITY_ID.toBundle(), LIBOR_SECURITY);
     final SecuritySource securitySource = new MySecuritySource(securities);
@@ -233,11 +225,10 @@ public class SwapNodeCurrencyVisitorTest {
    */
   @Test
   public void testUnderlyingConventionForCompoundingLeg() {
-    final Map<ExternalId, Convention> conventions = new HashMap<>();
-    conventions.put(FIXED_LEG_CONVENTION_ID, FIXED_LEG_CONVENTION);
-    conventions.put(COMPOUNDING_LIBOR_LEG_CONVENTION_ID, COMPOUNDING_LIBOR_LEG_CONVENTION);
-    conventions.put(LIBOR_CONVENTION_ID, LIBOR_CONVENTION);
-    final ConventionSource conventionSource = new TestConventionSource(conventions);
+    final InMemoryConventionSource conventionSource = new InMemoryConventionSource();
+    conventionSource.addConvention(FIXED_LEG_CONVENTION);
+    conventionSource.addConvention(COMPOUNDING_LIBOR_LEG_CONVENTION);
+    conventionSource.addConvention(LIBOR_CONVENTION);
     final Map<ExternalIdBundle, Security> securities = new HashMap<>();
     securities.put(LIBOR_SECURITY_ID.toBundle(), LIBOR_SECURITY);
     final SecuritySource securitySource = new MySecuritySource(securities);
@@ -250,10 +241,9 @@ public class SwapNodeCurrencyVisitorTest {
    */
   @Test(expectedExceptions = OpenGammaRuntimeException.class)
   public void testNoOvernightIndexConventionOrSecurityForOisConvention() {
-    final Map<ExternalId, Convention> conventions = new HashMap<>();
-    conventions.put(FIXED_LEG_CONVENTION_ID, FIXED_LEG_CONVENTION);
-    conventions.put(OIS_LEG_CONVENTION_ID, OIS_LEG_CONVENTION);
-    final ConventionSource conventionSource = new TestConventionSource(conventions);
+    final InMemoryConventionSource conventionSource = new InMemoryConventionSource();
+    conventionSource.addConvention(FIXED_LEG_CONVENTION);
+    conventionSource.addConvention(OIS_LEG_CONVENTION);
     final SwapNode node = new SwapNode(Tenor.ONE_YEAR, Tenor.TEN_YEARS, FIXED_LEG_CONVENTION_ID, OIS_LEG_CONVENTION_ID, CNIM_NAME);
     node.accept(new CurveNodeCurrencyVisitor(conventionSource, EMPTY_SECURITY_SOURCE));
   }
@@ -263,13 +253,12 @@ public class SwapNodeCurrencyVisitorTest {
    */
   @Test(expectedExceptions = OpenGammaRuntimeException.class)
   public void testWrongUnderlyingSecurityTypeForOisLeg() {
+    final InMemoryConventionSource conventionSource = new InMemoryConventionSource();
     // note that the convention refers to the security
     final OISLegConvention oisLegConvention = new OISLegConvention("USD OIS Leg", OIS_LEG_CONVENTION_ID.toBundle(),
         OVERNIGHT_SECURITY_ID, Tenor.ONE_YEAR, BusinessDayConventions.MODIFIED_FOLLOWING, 2, false, StubType.NONE, false, 0);
-    final Map<ExternalId, Convention> conventions = new HashMap<>();
-    conventions.put(FIXED_LEG_CONVENTION_ID, FIXED_LEG_CONVENTION);
-    conventions.put(OIS_LEG_CONVENTION_ID, oisLegConvention);
-    final ConventionSource conventionSource = new TestConventionSource(conventions);
+    conventionSource.addConvention(FIXED_LEG_CONVENTION);
+    conventionSource.addConvention(oisLegConvention);
     final Map<ExternalIdBundle, Security> securities = new HashMap<>();
     securities.put(OVERNIGHT_SECURITY_ID.toBundle(), LIBOR_SECURITY);
     final SecuritySource securitySource = new MySecuritySource(securities);
@@ -282,14 +271,13 @@ public class SwapNodeCurrencyVisitorTest {
    */
   @Test
   public void testConventionFromUnderlyingSecurityForOisLeg() {
+    final InMemoryConventionSource conventionSource = new InMemoryConventionSource();
     // note that the convention refers to the security
     final OISLegConvention oisLegConvention = new OISLegConvention("USD OIS Leg", OIS_LEG_CONVENTION_ID.toBundle(),
         OVERNIGHT_SECURITY_ID, Tenor.ONE_YEAR, BusinessDayConventions.MODIFIED_FOLLOWING, 2, false, StubType.NONE, false, 0);
-    final Map<ExternalId, Convention> conventions = new HashMap<>();
-    conventions.put(FIXED_LEG_CONVENTION_ID, FIXED_LEG_CONVENTION);
-    conventions.put(OIS_LEG_CONVENTION_ID, oisLegConvention);
-    conventions.put(OVERNIGHT_CONVENTION_ID, OVERNIGHT_CONVENTION);
-    final ConventionSource conventionSource = new TestConventionSource(conventions);
+    conventionSource.addConvention(FIXED_LEG_CONVENTION);
+    conventionSource.addConvention(oisLegConvention);
+    conventionSource.addConvention(OVERNIGHT_CONVENTION);
     final Map<ExternalIdBundle, Security> securities = new HashMap<>();
     securities.put(OVERNIGHT_SECURITY_ID.toBundle(), OVERNIGHT_SECURITY);
     final SecuritySource securitySource = new MySecuritySource(securities);
@@ -302,11 +290,10 @@ public class SwapNodeCurrencyVisitorTest {
    */
   @Test
   public void testUnderlyingConventionForOisLeg() {
-    final Map<ExternalId, Convention> conventions = new HashMap<>();
-    conventions.put(FIXED_LEG_CONVENTION_ID, FIXED_LEG_CONVENTION);
-    conventions.put(OIS_LEG_CONVENTION_ID, OIS_LEG_CONVENTION);
-    conventions.put(OVERNIGHT_CONVENTION_ID, OVERNIGHT_CONVENTION);
-    final ConventionSource conventionSource = new TestConventionSource(conventions);
+    final InMemoryConventionSource conventionSource = new InMemoryConventionSource();
+    conventionSource.addConvention(FIXED_LEG_CONVENTION);
+    conventionSource.addConvention(OIS_LEG_CONVENTION);
+    conventionSource.addConvention(OVERNIGHT_CONVENTION);
     final Map<ExternalIdBundle, Security> securities = new HashMap<>();
     securities.put(OVERNIGHT_SECURITY_ID.toBundle(), OVERNIGHT_SECURITY);
     final SecuritySource securitySource = new MySecuritySource(securities);
@@ -319,10 +306,9 @@ public class SwapNodeCurrencyVisitorTest {
    */
   @Test(expectedExceptions = OpenGammaRuntimeException.class)
   public void testNoOvernightIndexConventionOrSecurityForOnCompoundedRollDateLeg() {
-    final Map<ExternalId, Convention> conventions = new HashMap<>();
-    conventions.put(FIXED_LEG_CONVENTION_ID, FIXED_LEG_CONVENTION);
-    conventions.put(ON_COMPOUNDED_LEG_CONVENTION_ID, ON_COMPOUNDED_LEG_CONVENTION);
-    final ConventionSource conventionSource = new TestConventionSource(conventions);
+    final InMemoryConventionSource conventionSource = new InMemoryConventionSource();
+    conventionSource.addConvention(FIXED_LEG_CONVENTION);
+    conventionSource.addConvention(ON_COMPOUNDED_LEG_CONVENTION);
     final SwapNode node = new SwapNode(Tenor.ONE_YEAR, Tenor.TEN_YEARS, FIXED_LEG_CONVENTION_ID, ON_COMPOUNDED_LEG_CONVENTION_ID, CNIM_NAME);
     node.accept(new CurveNodeCurrencyVisitor(conventionSource, EMPTY_SECURITY_SOURCE));
   }
@@ -332,14 +318,13 @@ public class SwapNodeCurrencyVisitorTest {
    */
   @Test(expectedExceptions = OpenGammaRuntimeException.class)
   public void testWrongUnderlyingSecurityTypeForOnCompoundedRollDateLeg() {
+    final InMemoryConventionSource conventionSource = new InMemoryConventionSource();
     // note that the convention refers to the security
     final ONCompoundedLegRollDateConvention onCompoundedLegConvention =
         new ONCompoundedLegRollDateConvention("USD Overnight Compounded Swap Leg", ON_COMPOUNDED_LEG_CONVENTION_ID.toBundle(), OVERNIGHT_SECURITY_ID,
             Tenor.ONE_YEAR, StubType.NONE, false, 0);
-    final Map<ExternalId, Convention> conventions = new HashMap<>();
-    conventions.put(FIXED_LEG_CONVENTION_ID, FIXED_LEG_CONVENTION);
-    conventions.put(ON_COMPOUNDED_LEG_CONVENTION_ID, onCompoundedLegConvention);
-    final ConventionSource conventionSource = new TestConventionSource(conventions);
+    conventionSource.addConvention(FIXED_LEG_CONVENTION);
+    conventionSource.addConvention(onCompoundedLegConvention);
     final Map<ExternalIdBundle, Security> securities = new HashMap<>();
     securities.put(OVERNIGHT_SECURITY_ID.toBundle(), LIBOR_SECURITY);
     final SecuritySource securitySource = new MySecuritySource(securities);
@@ -352,15 +337,14 @@ public class SwapNodeCurrencyVisitorTest {
    */
   @Test
   public void testConventionFromUnderlyingSecurityForOnCompoundedRollDateLeg() {
+    final InMemoryConventionSource conventionSource = new InMemoryConventionSource();
     // note that the convention refers to the security
     final ONCompoundedLegRollDateConvention onCompoundedLegConvention =
         new ONCompoundedLegRollDateConvention("USD Overnight Compounded Swap Leg", ON_COMPOUNDED_LEG_CONVENTION_ID.toBundle(), OVERNIGHT_SECURITY_ID,
             Tenor.ONE_YEAR, StubType.NONE, false, 0);
-    final Map<ExternalId, Convention> conventions = new HashMap<>();
-    conventions.put(FIXED_LEG_CONVENTION_ID, FIXED_LEG_CONVENTION);
-    conventions.put(ON_COMPOUNDED_LEG_CONVENTION_ID, onCompoundedLegConvention);
-    conventions.put(OVERNIGHT_CONVENTION_ID, OVERNIGHT_CONVENTION);
-    final ConventionSource conventionSource = new TestConventionSource(conventions);
+    conventionSource.addConvention(FIXED_LEG_CONVENTION);
+    conventionSource.addConvention(onCompoundedLegConvention);
+    conventionSource.addConvention(OVERNIGHT_CONVENTION);
     final Map<ExternalIdBundle, Security> securities = new HashMap<>();
     securities.put(OVERNIGHT_SECURITY_ID.toBundle(), OVERNIGHT_SECURITY);
     final SecuritySource securitySource = new MySecuritySource(securities);
@@ -373,11 +357,10 @@ public class SwapNodeCurrencyVisitorTest {
    */
   @Test
   public void testUnderlyingConventionForOnCompoundedRollDateLeg() {
-    final Map<ExternalId, Convention> conventions = new HashMap<>();
-    conventions.put(FIXED_LEG_CONVENTION_ID, FIXED_LEG_CONVENTION);
-    conventions.put(ON_COMPOUNDED_LEG_CONVENTION_ID, ON_COMPOUNDED_LEG_CONVENTION);
-    conventions.put(OVERNIGHT_CONVENTION_ID, OVERNIGHT_CONVENTION);
-    final ConventionSource conventionSource = new TestConventionSource(conventions);
+    final InMemoryConventionSource conventionSource = new InMemoryConventionSource();
+    conventionSource.addConvention(FIXED_LEG_CONVENTION);
+    conventionSource.addConvention(ON_COMPOUNDED_LEG_CONVENTION);
+    conventionSource.addConvention(OVERNIGHT_CONVENTION);
     final Map<ExternalIdBundle, Security> securities = new HashMap<>();
     securities.put(OVERNIGHT_SECURITY_ID.toBundle(), OVERNIGHT_SECURITY);
     final SecuritySource securitySource = new MySecuritySource(securities);
@@ -390,10 +373,9 @@ public class SwapNodeCurrencyVisitorTest {
    */
   @Test(expectedExceptions = OpenGammaRuntimeException.class)
   public void testNoOvernightIndexConventionOrSecurityForOnAverageLeg() {
-    final Map<ExternalId, Convention> conventions = new HashMap<>();
-    conventions.put(FIXED_LEG_CONVENTION_ID, FIXED_LEG_CONVENTION);
-    conventions.put(ON_AVERAGE_LEG_CONVENTION_ID, ON_AVERAGE_LEG_CONVENTION);
-    final ConventionSource conventionSource = new TestConventionSource(conventions);
+    final InMemoryConventionSource conventionSource = new InMemoryConventionSource();
+    conventionSource.addConvention(FIXED_LEG_CONVENTION);
+    conventionSource.addConvention(ON_AVERAGE_LEG_CONVENTION);
     final SwapNode node = new SwapNode(Tenor.ONE_YEAR, Tenor.TEN_YEARS, FIXED_LEG_CONVENTION_ID, ON_AVERAGE_LEG_CONVENTION_ID, CNIM_NAME);
     node.accept(new CurveNodeCurrencyVisitor(conventionSource, EMPTY_SECURITY_SOURCE));
   }
@@ -403,14 +385,13 @@ public class SwapNodeCurrencyVisitorTest {
    */
   @Test(expectedExceptions = OpenGammaRuntimeException.class)
   public void testWrongUnderlyingSecurityTypeForOnAverageLeg() {
+    final InMemoryConventionSource conventionSource = new InMemoryConventionSource();
     // note that the convention refers to the security
     final ONArithmeticAverageLegConvention onAverageLegConvention = new ONArithmeticAverageLegConvention("USD Overnight Average Swap Leg",
         ON_AVERAGE_LEG_CONVENTION_ID.toBundle(), OVERNIGHT_SECURITY_ID, Tenor.ONE_YEAR, BusinessDayConventions.MODIFIED_FOLLOWING, 2, false, StubType.NONE,
         false, 0);
-    final Map<ExternalId, Convention> conventions = new HashMap<>();
-    conventions.put(FIXED_LEG_CONVENTION_ID, FIXED_LEG_CONVENTION);
-    conventions.put(ON_AVERAGE_LEG_CONVENTION_ID, onAverageLegConvention);
-    final ConventionSource conventionSource = new TestConventionSource(conventions);
+    conventionSource.addConvention(FIXED_LEG_CONVENTION);
+    conventionSource.addConvention(onAverageLegConvention);
     final Map<ExternalIdBundle, Security> securities = new HashMap<>();
     securities.put(OVERNIGHT_SECURITY_ID.toBundle(), LIBOR_SECURITY);
     final SecuritySource securitySource = new MySecuritySource(securities);
@@ -423,15 +404,14 @@ public class SwapNodeCurrencyVisitorTest {
    */
   @Test
   public void testConventionFromUnderlyingSecurityForOnAverageLeg() {
+    final InMemoryConventionSource conventionSource = new InMemoryConventionSource();
     // note that the convention refers to the security
     final ONArithmeticAverageLegConvention onAverageLegConvention = new ONArithmeticAverageLegConvention("USD Overnight Average Swap Leg",
         ON_AVERAGE_LEG_CONVENTION_ID.toBundle(), OVERNIGHT_SECURITY_ID, Tenor.ONE_YEAR, BusinessDayConventions.MODIFIED_FOLLOWING, 2, false, StubType.NONE,
         false, 0);
-    final Map<ExternalId, Convention> conventions = new HashMap<>();
-    conventions.put(FIXED_LEG_CONVENTION_ID, FIXED_LEG_CONVENTION);
-    conventions.put(ON_AVERAGE_LEG_CONVENTION_ID, onAverageLegConvention);
-    conventions.put(OVERNIGHT_CONVENTION_ID, OVERNIGHT_CONVENTION);
-    final ConventionSource conventionSource = new TestConventionSource(conventions);
+    conventionSource.addConvention(FIXED_LEG_CONVENTION);
+    conventionSource.addConvention(onAverageLegConvention);
+    conventionSource.addConvention(OVERNIGHT_CONVENTION);
     final Map<ExternalIdBundle, Security> securities = new HashMap<>();
     securities.put(OVERNIGHT_SECURITY_ID.toBundle(), OVERNIGHT_SECURITY);
     final SecuritySource securitySource = new MySecuritySource(securities);
@@ -444,11 +424,10 @@ public class SwapNodeCurrencyVisitorTest {
    */
   @Test
   public void testUnderlyingConventionForOnAverageLeg() {
-    final Map<ExternalId, Convention> conventions = new HashMap<>();
-    conventions.put(FIXED_LEG_CONVENTION_ID, FIXED_LEG_CONVENTION);
-    conventions.put(ON_AVERAGE_LEG_CONVENTION_ID, ON_AVERAGE_LEG_CONVENTION);
-    conventions.put(OVERNIGHT_CONVENTION_ID, OVERNIGHT_CONVENTION);
-    final ConventionSource conventionSource = new TestConventionSource(conventions);
+    final InMemoryConventionSource conventionSource = new InMemoryConventionSource();
+    conventionSource.addConvention(FIXED_LEG_CONVENTION);
+    conventionSource.addConvention(ON_AVERAGE_LEG_CONVENTION);
+    conventionSource.addConvention(OVERNIGHT_CONVENTION);
     final Map<ExternalIdBundle, Security> securities = new HashMap<>();
     securities.put(OVERNIGHT_SECURITY_ID.toBundle(), OVERNIGHT_SECURITY);
     final SecuritySource securitySource = new MySecuritySource(securities);
