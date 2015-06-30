@@ -31,8 +31,6 @@ import com.opengamma.analytics.financial.instrument.annuity.AnnuityCouponFixedDe
 import com.opengamma.analytics.financial.instrument.annuity.AnnuityCouponIborDefinition;
 import com.opengamma.analytics.financial.instrument.annuity.AnnuityDefinition;
 import com.opengamma.analytics.financial.instrument.annuity.AnnuityDefinitionBuilder;
-import com.opengamma.analytics.financial.instrument.cash.CashDefinition;
-import com.opengamma.analytics.financial.instrument.cash.DepositIborDefinition;
 import com.opengamma.analytics.financial.instrument.fra.ForwardRateAgreementDefinition;
 import com.opengamma.analytics.financial.instrument.future.FederalFundsFutureSecurityDefinition;
 import com.opengamma.analytics.financial.instrument.future.FederalFundsFutureTransactionDefinition;
@@ -74,8 +72,6 @@ import com.opengamma.engine.InMemorySecuritySource;
 import com.opengamma.financial.analytics.CalendarECBSettlements;
 import com.opengamma.financial.analytics.TargetWorkingDayCalendar;
 import com.opengamma.financial.analytics.ircurve.strips.CalendarSwapNode;
-import com.opengamma.financial.analytics.ircurve.strips.CashNode;
-import com.opengamma.financial.analytics.ircurve.strips.CurveNode;
 import com.opengamma.financial.analytics.ircurve.strips.CurveNodeVisitor;
 import com.opengamma.financial.analytics.ircurve.strips.DeliverableSwapFutureNode;
 import com.opengamma.financial.analytics.ircurve.strips.FRANode;
@@ -136,7 +132,6 @@ import com.opengamma.util.time.Tenor;
 public class CurveNodeToDefinitionConverterTest {
   private static final SimpleHoliday WEEKEND_ONLY_HOLIDAYS = new SimpleHolidayWithWeekend(Collections.<LocalDate>emptySet(), WeekendType.SATURDAY_SUNDAY);
   private static final MondayToFridayCalendar CALENDAR = new MondayToFridayCalendar("Weekend");
-  //private static final Calendar TARGET = new CalendarTarget("TARGET");
   private static final String SCHEME = "Test";
   private static final BusinessDayConvention MODIFIED_FOLLOWING = BusinessDayConventions.MODIFIED_FOLLOWING;
   private static final BusinessDayConvention FOLLOWING = BusinessDayConventions.FOLLOWING;
@@ -471,30 +466,6 @@ public class CurveNodeToDefinitionConverterTest {
   }
 
   @Test(expectedExceptions = OpenGammaRuntimeException.class)
-  public void testNoConventionForCash() {
-    final ExternalId marketDataId = ExternalId.of(SCHEME, "Data");
-    final SnapshotDataBundle marketValues = new SnapshotDataBundle();
-    final double rate = 0.0012345;
-    marketValues.setDataPoint(marketDataId, rate);
-    final CashNode cashNode = new CashNode(Tenor.ONE_DAY, Tenor.FIVE_MONTHS, ExternalId.of(SCHEME, "Test"), "Mapper");
-    final CurveNodeVisitor<InstrumentDefinition<?>> converter = new CashNodeConverter(SECURITY_SOURCE, CONVENTION_SOURCE, HOLIDAY_SOURCE, REGION_SOURCE,
-        marketValues, marketDataId, NOW);
-    cashNode.accept(converter);
-  }
-
-  @Test(expectedExceptions = OpenGammaRuntimeException.class)
-  public void testWrongConventionTypeForCash() {
-    final ExternalId marketDataId = ExternalId.of(SCHEME, "Data");
-    final SnapshotDataBundle marketValues = new SnapshotDataBundle();
-    final double rate = 0.0012345;
-    marketValues.setDataPoint(marketDataId, rate);
-    final CashNode cashNode = new CashNode(Tenor.ONE_DAY, Tenor.FIVE_MONTHS, FIXED_LEG_ID, "Mapper");
-    final CurveNodeVisitor<InstrumentDefinition<?>> converter = new CashNodeConverter(SECURITY_SOURCE, CONVENTION_SOURCE, HOLIDAY_SOURCE, REGION_SOURCE,
-        marketValues, marketDataId, NOW);
-    cashNode.accept(converter);
-  }
-
-  @Test(expectedExceptions = OpenGammaRuntimeException.class)
   public void testNoConventionForFRA() {
     final ExternalId marketDataId = ExternalId.of(SCHEME, "Data");
     final SnapshotDataBundle marketValues = new SnapshotDataBundle();
@@ -633,118 +604,6 @@ public class CurveNodeToDefinitionConverterTest {
     final CurveNodeVisitor<InstrumentDefinition<?>> converter = new SwapNodeConverter(SECURITY_SOURCE, conventionSource, HOLIDAY_SOURCE, REGION_SOURCE,
         marketValues, marketDataId, NOW, FX_MATRIX);
     swapNode.accept(converter);
-  }
-
-  @Test
-  public void testOneDayDeposit() {
-    final ExternalId marketDataId = ExternalId.of(SCHEME, "US1d");
-    final double rate = 0.0012345;
-    final SnapshotDataBundle marketValues = new SnapshotDataBundle();
-    marketValues.setDataPoint(marketDataId, rate);
-    final ZonedDateTime now = DateUtils.getUTCDate(2013, 5, 1);
-    final CurveNodeVisitor<InstrumentDefinition<?>> converter = new CashNodeConverter(SECURITY_SOURCE, CONVENTION_SOURCE, HOLIDAY_SOURCE, REGION_SOURCE, marketValues, marketDataId, now);
-    // P0D-P1D
-    final CurveNode cashNode = new CashNode(Tenor.of(Period.ZERO), Tenor.ONE_DAY, DEPOSIT_1D_ID, "Mapper");
-    final InstrumentDefinition<?> definition = cashNode.accept(converter);
-    assertTrue("CashNode: converter with P0D-P1D", definition instanceof CashDefinition);
-    final CashDefinition cash = (CashDefinition) definition;
-    final CashDefinition expectedCash = new CashDefinition(Currency.USD, DateUtils.getUTCDate(2013, 5, 1), DateUtils.getUTCDate(2013, 5, 2), 1, rate, 1. / 360);
-    assertEquals("CashNode: converter with P0D-P1D", expectedCash, cash);
-    // P0D-ON
-    final CurveNode cashNodeON = new CashNode(Tenor.of(Period.ZERO), Tenor.ON, DEPOSIT_1D_ID, "Mapper");
-    final InstrumentDefinition<?> definitionON = cashNodeON.accept(converter);
-    assertTrue("CashNode: converter with P0D-ON", definitionON instanceof CashDefinition);
-    final CashDefinition cashON = (CashDefinition) definitionON;
-    final CashDefinition expectedCashON = new CashDefinition(Currency.USD, DateUtils.getUTCDate(2013, 5, 1), DateUtils.getUTCDate(2013, 5, 2), 1, rate, 1. / 360);
-    assertEquals("CashNode: converter with P0D-ON", expectedCashON, cashON);
-    // P1D-ON
-    final CurveNode cashNode1DON = new CashNode(Tenor.ONE_DAY, Tenor.ON, DEPOSIT_1D_ID, "Mapper");
-    final InstrumentDefinition<?> definition1DON = cashNode1DON.accept(converter);
-    assertTrue("CashNode: converter with P1D-ON", definition1DON instanceof CashDefinition);
-    final CashDefinition cash1DON = (CashDefinition) definition1DON;
-    final CashDefinition expectedCash1DON = new CashDefinition(Currency.USD, DateUtils.getUTCDate(2013, 5, 2), DateUtils.getUTCDate(2013, 5, 3), 1, rate, 1. / 360);
-    assertEquals("CashNode: converter with P1D-ON", expectedCash1DON, cash1DON);
-    // ON-ON
-    final CurveNode cashNodeONON = new CashNode(Tenor.ONE_DAY, Tenor.ON, DEPOSIT_1D_ID, "Mapper");
-    final InstrumentDefinition<?> definitionONON = cashNodeONON.accept(converter);
-    assertTrue("CashNode: converter with P1D-ON", definitionONON instanceof CashDefinition);
-    final CashDefinition cashONON = (CashDefinition) definitionONON;
-    final CashDefinition expectedCashONON = new CashDefinition(Currency.USD, DateUtils.getUTCDate(2013, 5, 2), DateUtils.getUTCDate(2013, 5, 3), 1, rate, 1. / 360);
-    assertEquals("CashNode: converter with P1D-ON", expectedCashONON, cashONON);
-    // POD-TN(WE)
-    final ZonedDateTime now2 = DateUtils.getUTCDate(2013, 12, 20);
-    final CurveNodeVisitor<InstrumentDefinition<?>> converter2 = new CashNodeConverter(SECURITY_SOURCE, CONVENTION_SOURCE, HOLIDAY_SOURCE, REGION_SOURCE, marketValues, marketDataId, now2);
-    final CurveNode cashNode0DTN = new CashNode(Tenor.of(Period.ZERO), Tenor.TN, DEPOSIT_1D_ID, "Mapper");
-    final InstrumentDefinition<?> definition0DTN = cashNode0DTN.accept(converter2);
-    assertTrue("CashNode: converter with P0D-TN", definition0DTN instanceof CashDefinition);
-    final CashDefinition cash0DTN = (CashDefinition) definition0DTN;
-    final CashDefinition expectedCash0DTN = new CashDefinition(Currency.USD, DateUtils.getUTCDate(2013, 12, 20), DateUtils.getUTCDate(2013, 12, 24), 1, rate, 4. / 360);
-    assertEquals("CashNode: converter with P0D-TN", expectedCash0DTN, cash0DTN);
-  }
-
-  @Test
-  public void testOneMonthDeposit() {
-    final ExternalId marketDataId = ExternalId.of(SCHEME, "US1d");
-    final double rate = 0.0012345;
-    final SnapshotDataBundle marketValues = new SnapshotDataBundle();
-    marketValues.setDataPoint(marketDataId, rate);
-    ZonedDateTime now = DateUtils.getUTCDate(2013, 2, 4);
-    CurveNode cashNode = new CashNode(Tenor.of(Period.ZERO), Tenor.ONE_MONTH, DEPOSIT_1M_ID, "Mapper");
-    CurveNodeVisitor<InstrumentDefinition<?>> converter = new CashNodeConverter(SECURITY_SOURCE, CONVENTION_SOURCE, HOLIDAY_SOURCE, REGION_SOURCE, marketValues, marketDataId, now);
-    InstrumentDefinition<?> definition = cashNode.accept(converter);
-    assertTrue(definition instanceof CashDefinition);
-    CashDefinition cash = (CashDefinition) definition;
-    CashDefinition expectedCash = new CashDefinition(Currency.USD, DateUtils.getUTCDate(2013, 2, 6), DateUtils.getUTCDate(2013, 3, 6), 1, rate, 28. / 360);
-    assertEquals(expectedCash, cash);
-    now = DateUtils.getUTCDate(2013, 5, 2);
-    converter = new CashNodeConverter(SECURITY_SOURCE, CONVENTION_SOURCE, HOLIDAY_SOURCE, REGION_SOURCE, marketValues, marketDataId, now);
-    cashNode = new CashNode(Tenor.of(Period.ZERO), Tenor.ONE_MONTH, DEPOSIT_1M_ID, "Mapper");
-    definition = cashNode.accept(converter);
-    assertTrue(definition instanceof CashDefinition);
-    cash = (CashDefinition) definition;
-    expectedCash = new CashDefinition(Currency.USD, DateUtils.getUTCDate(2013, 5, 6), DateUtils.getUTCDate(2013, 6, 6), 1, rate, 31. / 360);
-    assertEquals(expectedCash, cash);
-    now = DateUtils.getUTCDate(2013, 5, 7);
-    converter = new CashNodeConverter(SECURITY_SOURCE, CONVENTION_SOURCE, HOLIDAY_SOURCE, REGION_SOURCE, marketValues, marketDataId, now);
-    cashNode = new CashNode(Tenor.ONE_MONTH, Tenor.THREE_MONTHS, DEPOSIT_1M_ID, "Mapper");
-    definition = cashNode.accept(converter);
-    assertTrue(definition instanceof CashDefinition);
-    cash = (CashDefinition) definition;
-    expectedCash = new CashDefinition(Currency.USD, DateUtils.getUTCDate(2013, 6, 10), DateUtils.getUTCDate(2013, 9, 10), 1, rate, 92. / 360);
-    assertEquals(expectedCash, cash);
-  }
-
-  @Test
-  public void testLibor() {
-    final ExternalId marketDataId = ExternalId.of(SCHEME, "US3mLibor");
-    final double rate = 0.0012345;
-    final SnapshotDataBundle marketValues = new SnapshotDataBundle();
-    marketValues.setDataPoint(marketDataId, rate);
-    final ZonedDateTime now = DateUtils.getUTCDate(2013, 2, 4);
-    // 3M node on 3M index
-    CurveNode iborNode = new CashNode(Tenor.of(Period.ZERO), Tenor.THREE_MONTHS, USDLIBOR3M_ID, "Mapper");
-    final CurveNodeVisitor<InstrumentDefinition<?>> converter = new CashNodeConverter(SECURITY_SOURCE, CONVENTION_SOURCE, HOLIDAY_SOURCE, REGION_SOURCE, marketValues, marketDataId, now);
-    InstrumentDefinition<?> definition = iborNode.accept(converter);
-    assertTrue(definition instanceof DepositIborDefinition);
-    final IborIndex ibor3m = ConverterUtils.indexIbor(USDLIBOR3M_NAME, USDLIBOR_ACT_360, Tenor.THREE_MONTHS);
-    DepositIborDefinition ibor = (DepositIborDefinition) definition;
-    DepositIborDefinition expectedLibor = new DepositIborDefinition(Currency.USD, DateUtils.getUTCDate(2013, 2, 6), DateUtils.getUTCDate(2013, 5, 6), 1, rate, 89d / 360d, ibor3m);
-    assertEquals("CurveNodeToDefinitionConverter: Libir fixing 3M", expectedLibor, ibor);
-    // 6M Node on 6M index
-    iborNode = new CashNode(Tenor.of(Period.ZERO), Tenor.SIX_MONTHS, USDLIBOR6M_ID, "Mapper");
-    definition = iborNode.accept(converter);
-    assertTrue(definition instanceof DepositIborDefinition);
-    ibor = (DepositIborDefinition) definition;
-    final IborIndex ibor6m = ConverterUtils.indexIbor(USDLIBOR6M_NAME, USDLIBOR_ACT_360, Tenor.SIX_MONTHS);
-    expectedLibor = new DepositIborDefinition(Currency.USD, DateUtils.getUTCDate(2013, 2, 6), DateUtils.getUTCDate(2013, 8, 6), 1, rate, 181d / 360d, ibor6m);
-    assertEquals(expectedLibor, ibor);
-    // 3M node on 6M index
-    iborNode = new CashNode(Tenor.of(Period.ZERO), Tenor.THREE_MONTHS, USDLIBOR6M_ID, "Mapper");
-    definition = iborNode.accept(converter);
-    assertTrue(definition instanceof DepositIborDefinition);
-    ibor = (DepositIborDefinition) definition;
-    expectedLibor = new DepositIborDefinition(Currency.USD, DateUtils.getUTCDate(2013, 2, 6), DateUtils.getUTCDate(2013, 5, 6), 1, rate, 89d / 360d, ibor6m);
-    assertEquals(expectedLibor, ibor);
   }
 
   @Test
