@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project
+    xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>com.mcleodmoores.opengamma.platform</groupId>
+    <artifactId>og-platform-public</artifactId>
+    <version>1.1.0-SNAPSHOT</version>
+    <relativePath>..</relativePath>
+  </parent>
+  <artifactId>mm-finmath</artifactId>
+  <packaging>jar</packaging>
+  <name>MM-Finmath</name>
+  <description>McLeod Moores Finmath library integration</description>
+
+  <scm>
+    <url>https://github.com/OpenGamma/OG-Platform/tree/master/projects/MM-Finmath</url>
+  </scm>
+
+  <dependencies>
+    <dependency>
+      <groupId>com.mcleodmoores.opengamma.platform</groupId>
+      <artifactId>og-financial-types</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.mcleodmoores.opengamma.platform</groupId>
+      <artifactId>og-provider</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.mcleodmoores.opengamma.platform</groupId>
+      <artifactId>og-engine</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.mcleodmoores.opengamma.platform</groupId>
+      <artifactId>og-analytics</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.poi</groupId>
+      <artifactId>poi</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>de.odysseus.juel</groupId>
+      <artifactId>juel-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>de.odysseus.juel</groupId>
+      <artifactId>juel-impl</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.antlr</groupId>
+      <artifactId>antlr</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.activemq</groupId>
+      <artifactId>activemq-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.activemq</groupId>
+      <artifactId>activemq-pool</artifactId>
+    </dependency>
+  </dependencies>
+
+  <properties>
+  </properties>
+
+</project>
