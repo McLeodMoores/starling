@@ -3,8 +3,10 @@
  */
 package com.opengamma.engine;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.opengamma.DataNotFoundException;
@@ -46,6 +48,18 @@ public class InMemoryConventionSource extends AbstractSourceWithExternalBundle<C
     ArgumentChecker.notNull(bundle, "bundle");
     ArgumentChecker.notNull(versionCorrection, "versionCorrection");
     return get(bundle);
+  }
+
+  @Override
+  public Collection<Convention> get(final ExternalIdBundle bundle) {
+    ArgumentChecker.notNull(bundle, "bundle");
+    final List<Convention> result = new ArrayList<>();
+    for (final Convention convention : _conventions.values()) {
+      if (convention.getExternalIdBundle().containsAny(bundle)) {
+        result.add(convention);
+      }
+    }
+    return result;
   }
 
   @Override

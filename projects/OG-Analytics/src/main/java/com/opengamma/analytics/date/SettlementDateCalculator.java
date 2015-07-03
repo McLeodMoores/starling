@@ -16,7 +16,7 @@ public interface SettlementDateCalculator<T extends WorkingDayCalendar> {
   /**
    * Calculates the settlement date.
    * @param date  the date, not null
-   * @param daysToSettle  the number of days to settle, not negative
+   * @param daysToSettle  the number of days to settle
    * @param calendar  the working day calendar, not null
    * @return  the settlement date
    */

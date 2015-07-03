@@ -8,7 +8,7 @@ import org.threeten.bp.LocalDate;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Settlement days for FX trades where one of the currencies is a Latin American currency (excluding BRL) are calculated
+ * Settlement dates for FX trades where one of the currencies is a Latin American currency (excluding BRL) are calculated
  * using the following rules:
  * <ul>
  *  <li> Move to the next non-weekend day.
