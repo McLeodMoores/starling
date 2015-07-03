@@ -10,18 +10,14 @@ import static com.opengamma.financial.analytics.curve.CurveNodeCurrencyVisitorTe
 import static org.testng.Assert.assertEquals;
 
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.testng.annotations.Test;
 import org.threeten.bp.LocalTime;
 
 import com.opengamma.DataNotFoundException;
 import com.opengamma.OpenGammaRuntimeException;
-import com.opengamma.core.security.Security;
-import com.opengamma.core.security.SecuritySource;
 import com.opengamma.engine.InMemoryConventionSource;
-import com.opengamma.financial.analytics.curve.CurveNodeCurrencyVisitorTest.MySecuritySource;
+import com.opengamma.engine.InMemorySecuritySource;
 import com.opengamma.financial.analytics.ircurve.strips.FRANode;
 import com.opengamma.financial.convention.IborIndexConvention;
 import com.opengamma.financial.convention.businessday.BusinessDayConventions;
@@ -29,7 +25,6 @@ import com.opengamma.financial.convention.daycount.DayCounts;
 import com.opengamma.financial.security.index.IborIndex;
 import com.opengamma.financial.security.index.OvernightIndex;
 import com.opengamma.id.ExternalId;
-import com.opengamma.id.ExternalIdBundle;
 import com.opengamma.util.money.Currency;
 import com.opengamma.util.time.Tenor;
 
@@ -68,9 +63,8 @@ public class FraNodeCurrencyVisitorTest {
   public void testWrongUnderlyingSecurity() {
     final OvernightIndex overnightSecurity = new OvernightIndex("USD Overnight", LIBOR_CONVENTION_ID);
     overnightSecurity.addExternalId(LIBOR_SECURITY_ID);
-    final Map<ExternalIdBundle, Security> securities = new HashMap<>();
-    securities.put(LIBOR_SECURITY_ID.toBundle(), overnightSecurity);
-    final SecuritySource securitySource = new MySecuritySource(securities);
+    final InMemorySecuritySource securitySource = new InMemorySecuritySource();
+    securitySource.addSecurity(overnightSecurity);
     // note that the convention id is the id of the security
     final FRANode node = new FRANode(Tenor.THREE_MONTHS, Tenor.SIX_MONTHS, LIBOR_SECURITY_ID, CNIM_NAME);
     node.accept(new CurveNodeCurrencyVisitor(EMPTY_CONVENTION_SOURCE, securitySource));
@@ -82,9 +76,8 @@ public class FraNodeCurrencyVisitorTest {
    */
   @Test(expectedExceptions = DataNotFoundException.class)
   public void testNoConventionFromSecurity() {
-    final Map<ExternalIdBundle, Security> securities = new HashMap<>();
-    securities.put(LIBOR_SECURITY_ID.toBundle(), LIBOR_SECURITY);
-    final SecuritySource securitySource = new MySecuritySource(securities);
+    final InMemorySecuritySource securitySource = new InMemorySecuritySource();
+    securitySource.addSecurity(LIBOR_SECURITY.clone());
     // note that the convention id is the id of the security
     final FRANode node = new FRANode(Tenor.THREE_MONTHS, Tenor.SIX_MONTHS, LIBOR_SECURITY_ID, CNIM_NAME);
     node.accept(new CurveNodeCurrencyVisitor(EMPTY_CONVENTION_SOURCE, securitySource));
@@ -98,9 +91,8 @@ public class FraNodeCurrencyVisitorTest {
   public void testConventionFromSecurity() {
     final InMemoryConventionSource conventionSource = new InMemoryConventionSource();
     conventionSource.addConvention(LIBOR_CONVENTION);
-    final Map<ExternalIdBundle, Security> securities = new HashMap<>();
-    securities.put(LIBOR_SECURITY_ID.toBundle(), LIBOR_SECURITY);
-    final SecuritySource securitySource = new MySecuritySource(securities);
+    final InMemorySecuritySource securitySource = new InMemorySecuritySource();
+    securitySource.addSecurity(LIBOR_SECURITY.clone());
     // note that the convention id is the id of the security
     final FRANode node = new FRANode(Tenor.THREE_MONTHS, Tenor.SIX_MONTHS, LIBOR_SECURITY_ID, CNIM_NAME);
     assertEquals(node.accept(new CurveNodeCurrencyVisitor(conventionSource, securitySource)), Collections.singleton(Currency.USD));

@@ -8,9 +8,6 @@ import static com.opengamma.financial.analytics.curve.CurveNodeCurrencyVisitorTe
 import static com.opengamma.financial.analytics.curve.CurveNodeCurrencyVisitorTest.US;
 import static org.testng.Assert.assertEquals;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.testng.annotations.Test;
 import org.threeten.bp.LocalTime;
 
@@ -18,10 +15,8 @@ import com.google.common.collect.Sets;
 import com.opengamma.DataNotFoundException;
 import com.opengamma.OpenGammaRuntimeException;
 import com.opengamma.analytics.financial.interestrate.CompoundingType;
-import com.opengamma.core.security.Security;
-import com.opengamma.core.security.SecuritySource;
 import com.opengamma.engine.InMemoryConventionSource;
-import com.opengamma.financial.analytics.curve.CurveNodeCurrencyVisitorTest.MySecuritySource;
+import com.opengamma.engine.InMemorySecuritySource;
 import com.opengamma.financial.analytics.ircurve.strips.SwapNode;
 import com.opengamma.financial.convention.CMSLegConvention;
 import com.opengamma.financial.convention.CompoundingIborLegConvention;
@@ -39,7 +34,6 @@ import com.opengamma.financial.security.index.IborIndex;
 import com.opengamma.financial.security.index.OvernightIndex;
 import com.opengamma.financial.security.swap.InterpolationMethod;
 import com.opengamma.id.ExternalId;
-import com.opengamma.id.ExternalIdBundle;
 import com.opengamma.util.money.Currency;
 import com.opengamma.util.time.Tenor;
 
@@ -122,7 +116,7 @@ public class SwapNodeCurrencyVisitorTest {
   @Test(expectedExceptions = DataNotFoundException.class)
   public void testNoPayLegConvention() {
     final InMemoryConventionSource conventionSource = new InMemoryConventionSource();
-    conventionSource.addConvention(VANILLA_IBOR_LEG_CONVENTION);
+    conventionSource.addConvention(VANILLA_IBOR_LEG_CONVENTION.clone());
     final SwapNode node = new SwapNode(Tenor.ONE_YEAR, Tenor.TEN_YEARS, FIXED_LEG_CONVENTION_ID, VANILLA_IBOR_LEG_CONVENTION_ID, CNIM_NAME);
     node.accept(new CurveNodeCurrencyVisitor(conventionSource, EMPTY_SECURITY_SOURCE));
   }
@@ -133,7 +127,7 @@ public class SwapNodeCurrencyVisitorTest {
   @Test(expectedExceptions = DataNotFoundException.class)
   public void testNoReceiveLegConvention() {
     final InMemoryConventionSource conventionSource = new InMemoryConventionSource();
-    conventionSource.addConvention(FIXED_LEG_CONVENTION);
+    conventionSource.addConvention(FIXED_LEG_CONVENTION.clone());
     final SwapNode node = new SwapNode(Tenor.ONE_YEAR, Tenor.TEN_YEARS, FIXED_LEG_CONVENTION_ID, VANILLA_IBOR_LEG_CONVENTION_ID, CNIM_NAME);
     node.accept(new CurveNodeCurrencyVisitor(conventionSource, EMPTY_SECURITY_SOURCE));
   }
@@ -144,8 +138,8 @@ public class SwapNodeCurrencyVisitorTest {
   @Test(expectedExceptions = OpenGammaRuntimeException.class)
   public void testNoSwapIndexConvention() {
     final InMemoryConventionSource conventionSource = new InMemoryConventionSource();
-    conventionSource.addConvention(FIXED_LEG_CONVENTION);
-    conventionSource.addConvention(CMS_LEG_CONVENTION);
+    conventionSource.addConvention(FIXED_LEG_CONVENTION.clone());
+    conventionSource.addConvention(CMS_LEG_CONVENTION.clone());
     final SwapNode node = new SwapNode(Tenor.ONE_YEAR, Tenor.TEN_YEARS, FIXED_LEG_CONVENTION_ID, CMS_LEG_CONVENTION_ID, CNIM_NAME);
     node.accept(new CurveNodeCurrencyVisitor(conventionSource, EMPTY_SECURITY_SOURCE));
   }
@@ -156,8 +150,8 @@ public class SwapNodeCurrencyVisitorTest {
   @Test(expectedExceptions = OpenGammaRuntimeException.class)
   public void testNoIborIndexConventionOrSecurityForCompoundingLeg() {
     final InMemoryConventionSource conventionSource = new InMemoryConventionSource();
-    conventionSource.addConvention(FIXED_LEG_CONVENTION);
-    conventionSource.addConvention(COMPOUNDING_LIBOR_LEG_CONVENTION);
+    conventionSource.addConvention(FIXED_LEG_CONVENTION.clone());
+    conventionSource.addConvention(COMPOUNDING_LIBOR_LEG_CONVENTION.clone());
     final SwapNode node = new SwapNode(Tenor.ONE_YEAR, Tenor.TEN_YEARS, FIXED_LEG_CONVENTION_ID, COMPOUNDING_LIBOR_LEG_CONVENTION_ID, CNIM_NAME);
     node.accept(new CurveNodeCurrencyVisitor(conventionSource, EMPTY_SECURITY_SOURCE));
   }
@@ -172,11 +166,12 @@ public class SwapNodeCurrencyVisitorTest {
     final VanillaIborLegConvention compoundingLiborLegConvention = new VanillaIborLegConvention("USD LIBOR Swap Leg",
         VANILLA_IBOR_LEG_CONVENTION_ID.toBundle(), LIBOR_SECURITY_ID, false, InterpolationMethod.NONE.name(), Tenor.THREE_MONTHS,
         2, false, StubType.NONE, false, 2);
-    conventionSource.addConvention(FIXED_LEG_CONVENTION);
+    conventionSource.addConvention(FIXED_LEG_CONVENTION.clone());
     conventionSource.addConvention(compoundingLiborLegConvention);
-    final Map<ExternalIdBundle, Security> securities = new HashMap<>();
-    securities.put(LIBOR_SECURITY_ID.toBundle(), OVERNIGHT_SECURITY);
-    final SecuritySource securitySource = new MySecuritySource(securities);
+    final OvernightIndex overnightSecurity = OVERNIGHT_SECURITY.clone();
+    overnightSecurity.setExternalIdBundle(LIBOR_SECURITY_ID.toBundle());
+    final InMemorySecuritySource securitySource = new InMemorySecuritySource();
+    securitySource.addSecurity(overnightSecurity);
     final SwapNode node = new SwapNode(Tenor.ONE_YEAR, Tenor.TEN_YEARS, FIXED_LEG_CONVENTION_ID, VANILLA_IBOR_LEG_CONVENTION_ID, CNIM_NAME);
     node.accept(new CurveNodeCurrencyVisitor(conventionSource, securitySource));
   }
@@ -191,11 +186,12 @@ public class SwapNodeCurrencyVisitorTest {
     final CompoundingIborLegConvention compoundingLiborLegConvention = new CompoundingIborLegConvention("USD Compounding LIBOR Swap Leg",
         COMPOUNDING_LIBOR_LEG_CONVENTION_ID.toBundle(), LIBOR_SECURITY_ID, Tenor.ONE_YEAR, CompoundingType.COMPOUNDING, Tenor.SIX_MONTHS, StubType.NONE,
         2, false, StubType.NONE, false, 0);
-    conventionSource.addConvention(FIXED_LEG_CONVENTION);
+    conventionSource.addConvention(FIXED_LEG_CONVENTION.clone());
     conventionSource.addConvention(compoundingLiborLegConvention);
-    final Map<ExternalIdBundle, Security> securities = new HashMap<>();
-    securities.put(LIBOR_SECURITY_ID.toBundle(), OVERNIGHT_SECURITY);
-    final SecuritySource securitySource = new MySecuritySource(securities);
+    final OvernightIndex overnightSecurity = OVERNIGHT_SECURITY.clone();
+    overnightSecurity.setExternalIdBundle(LIBOR_SECURITY_ID.toBundle());
+    final InMemorySecuritySource securitySource = new InMemorySecuritySource();
+    securitySource.addSecurity(overnightSecurity);
     final SwapNode node = new SwapNode(Tenor.ONE_YEAR, Tenor.TEN_YEARS, FIXED_LEG_CONVENTION_ID, COMPOUNDING_LIBOR_LEG_CONVENTION_ID, CNIM_NAME);
     node.accept(new CurveNodeCurrencyVisitor(conventionSource, securitySource));
   }
@@ -210,12 +206,11 @@ public class SwapNodeCurrencyVisitorTest {
     final CompoundingIborLegConvention compoundingLiborLegConvention = new CompoundingIborLegConvention("USD Compounding LIBOR Swap Leg",
         COMPOUNDING_LIBOR_LEG_CONVENTION_ID.toBundle(), LIBOR_SECURITY_ID, Tenor.ONE_YEAR, CompoundingType.COMPOUNDING, Tenor.SIX_MONTHS, StubType.NONE,
         2, false, StubType.NONE, false, 0);
-    conventionSource.addConvention(FIXED_LEG_CONVENTION);
+    conventionSource.addConvention(FIXED_LEG_CONVENTION.clone());
     conventionSource.addConvention(compoundingLiborLegConvention);
-    conventionSource.addConvention(LIBOR_CONVENTION);
-    final Map<ExternalIdBundle, Security> securities = new HashMap<>();
-    securities.put(LIBOR_SECURITY_ID.toBundle(), LIBOR_SECURITY);
-    final SecuritySource securitySource = new MySecuritySource(securities);
+    conventionSource.addConvention(LIBOR_CONVENTION.clone());
+    final InMemorySecuritySource securitySource = new InMemorySecuritySource();
+    securitySource.addSecurity(LIBOR_SECURITY.clone());
     final SwapNode node = new SwapNode(Tenor.ONE_YEAR, Tenor.TEN_YEARS, FIXED_LEG_CONVENTION_ID, COMPOUNDING_LIBOR_LEG_CONVENTION_ID, CNIM_NAME);
     assertEquals(node.accept(new CurveNodeCurrencyVisitor(conventionSource, securitySource)), Sets.newHashSet(Currency.USD, Currency.EUR));
   }
@@ -226,12 +221,11 @@ public class SwapNodeCurrencyVisitorTest {
   @Test
   public void testUnderlyingConventionForCompoundingLeg() {
     final InMemoryConventionSource conventionSource = new InMemoryConventionSource();
-    conventionSource.addConvention(FIXED_LEG_CONVENTION);
-    conventionSource.addConvention(COMPOUNDING_LIBOR_LEG_CONVENTION);
-    conventionSource.addConvention(LIBOR_CONVENTION);
-    final Map<ExternalIdBundle, Security> securities = new HashMap<>();
-    securities.put(LIBOR_SECURITY_ID.toBundle(), LIBOR_SECURITY);
-    final SecuritySource securitySource = new MySecuritySource(securities);
+    conventionSource.addConvention(FIXED_LEG_CONVENTION.clone());
+    conventionSource.addConvention(COMPOUNDING_LIBOR_LEG_CONVENTION.clone());
+    conventionSource.addConvention(LIBOR_CONVENTION.clone());
+    final InMemorySecuritySource securitySource = new InMemorySecuritySource();
+    securitySource.addSecurity(LIBOR_SECURITY.clone());
     final SwapNode node = new SwapNode(Tenor.ONE_YEAR, Tenor.TEN_YEARS, FIXED_LEG_CONVENTION_ID, COMPOUNDING_LIBOR_LEG_CONVENTION_ID, CNIM_NAME);
     assertEquals(node.accept(new CurveNodeCurrencyVisitor(conventionSource, securitySource)), Sets.newHashSet(Currency.USD, Currency.EUR));
   }
@@ -242,8 +236,8 @@ public class SwapNodeCurrencyVisitorTest {
   @Test(expectedExceptions = OpenGammaRuntimeException.class)
   public void testNoOvernightIndexConventionOrSecurityForOisConvention() {
     final InMemoryConventionSource conventionSource = new InMemoryConventionSource();
-    conventionSource.addConvention(FIXED_LEG_CONVENTION);
-    conventionSource.addConvention(OIS_LEG_CONVENTION);
+    conventionSource.addConvention(FIXED_LEG_CONVENTION.clone());
+    conventionSource.addConvention(OIS_LEG_CONVENTION.clone());
     final SwapNode node = new SwapNode(Tenor.ONE_YEAR, Tenor.TEN_YEARS, FIXED_LEG_CONVENTION_ID, OIS_LEG_CONVENTION_ID, CNIM_NAME);
     node.accept(new CurveNodeCurrencyVisitor(conventionSource, EMPTY_SECURITY_SOURCE));
   }
@@ -257,11 +251,12 @@ public class SwapNodeCurrencyVisitorTest {
     // note that the convention refers to the security
     final OISLegConvention oisLegConvention = new OISLegConvention("USD OIS Leg", OIS_LEG_CONVENTION_ID.toBundle(),
         OVERNIGHT_SECURITY_ID, Tenor.ONE_YEAR, BusinessDayConventions.MODIFIED_FOLLOWING, 2, false, StubType.NONE, false, 0);
-    conventionSource.addConvention(FIXED_LEG_CONVENTION);
+    conventionSource.addConvention(FIXED_LEG_CONVENTION.clone());
     conventionSource.addConvention(oisLegConvention);
-    final Map<ExternalIdBundle, Security> securities = new HashMap<>();
-    securities.put(OVERNIGHT_SECURITY_ID.toBundle(), LIBOR_SECURITY);
-    final SecuritySource securitySource = new MySecuritySource(securities);
+    final IborIndex indexSecurity = LIBOR_SECURITY.clone();
+    indexSecurity.setExternalIdBundle(OVERNIGHT_SECURITY_ID.toBundle());
+    final InMemorySecuritySource securitySource = new InMemorySecuritySource();
+    securitySource.addSecurity(indexSecurity);
     final SwapNode node = new SwapNode(Tenor.ONE_YEAR, Tenor.TEN_YEARS, FIXED_LEG_CONVENTION_ID, OIS_LEG_CONVENTION_ID, CNIM_NAME);
     node.accept(new CurveNodeCurrencyVisitor(conventionSource, securitySource));
   }
@@ -275,12 +270,11 @@ public class SwapNodeCurrencyVisitorTest {
     // note that the convention refers to the security
     final OISLegConvention oisLegConvention = new OISLegConvention("USD OIS Leg", OIS_LEG_CONVENTION_ID.toBundle(),
         OVERNIGHT_SECURITY_ID, Tenor.ONE_YEAR, BusinessDayConventions.MODIFIED_FOLLOWING, 2, false, StubType.NONE, false, 0);
-    conventionSource.addConvention(FIXED_LEG_CONVENTION);
+    conventionSource.addConvention(FIXED_LEG_CONVENTION.clone());
     conventionSource.addConvention(oisLegConvention);
-    conventionSource.addConvention(OVERNIGHT_CONVENTION);
-    final Map<ExternalIdBundle, Security> securities = new HashMap<>();
-    securities.put(OVERNIGHT_SECURITY_ID.toBundle(), OVERNIGHT_SECURITY);
-    final SecuritySource securitySource = new MySecuritySource(securities);
+    conventionSource.addConvention(OVERNIGHT_CONVENTION.clone());
+    final InMemorySecuritySource securitySource = new InMemorySecuritySource();
+    securitySource.addSecurity(OVERNIGHT_SECURITY.clone());
     final SwapNode node = new SwapNode(Tenor.ONE_YEAR, Tenor.TEN_YEARS, FIXED_LEG_CONVENTION_ID, OIS_LEG_CONVENTION_ID, CNIM_NAME);
     assertEquals(node.accept(new CurveNodeCurrencyVisitor(conventionSource, securitySource)), Sets.newHashSet(Currency.USD, Currency.EUR));
   }
@@ -291,12 +285,11 @@ public class SwapNodeCurrencyVisitorTest {
   @Test
   public void testUnderlyingConventionForOisLeg() {
     final InMemoryConventionSource conventionSource = new InMemoryConventionSource();
-    conventionSource.addConvention(FIXED_LEG_CONVENTION);
-    conventionSource.addConvention(OIS_LEG_CONVENTION);
-    conventionSource.addConvention(OVERNIGHT_CONVENTION);
-    final Map<ExternalIdBundle, Security> securities = new HashMap<>();
-    securities.put(OVERNIGHT_SECURITY_ID.toBundle(), OVERNIGHT_SECURITY);
-    final SecuritySource securitySource = new MySecuritySource(securities);
+    conventionSource.addConvention(FIXED_LEG_CONVENTION.clone());
+    conventionSource.addConvention(OIS_LEG_CONVENTION.clone());
+    conventionSource.addConvention(OVERNIGHT_CONVENTION.clone());
+    final InMemorySecuritySource securitySource = new InMemorySecuritySource();
+    securitySource.addSecurity(OVERNIGHT_SECURITY.clone());
     final SwapNode node = new SwapNode(Tenor.ONE_YEAR, Tenor.TEN_YEARS, FIXED_LEG_CONVENTION_ID, OIS_LEG_CONVENTION_ID, CNIM_NAME);
     assertEquals(node.accept(new CurveNodeCurrencyVisitor(conventionSource, securitySource)), Sets.newHashSet(Currency.USD, Currency.EUR));
   }
@@ -307,8 +300,8 @@ public class SwapNodeCurrencyVisitorTest {
   @Test(expectedExceptions = OpenGammaRuntimeException.class)
   public void testNoOvernightIndexConventionOrSecurityForOnCompoundedRollDateLeg() {
     final InMemoryConventionSource conventionSource = new InMemoryConventionSource();
-    conventionSource.addConvention(FIXED_LEG_CONVENTION);
-    conventionSource.addConvention(ON_COMPOUNDED_LEG_CONVENTION);
+    conventionSource.addConvention(FIXED_LEG_CONVENTION.clone());
+    conventionSource.addConvention(ON_COMPOUNDED_LEG_CONVENTION.clone());
     final SwapNode node = new SwapNode(Tenor.ONE_YEAR, Tenor.TEN_YEARS, FIXED_LEG_CONVENTION_ID, ON_COMPOUNDED_LEG_CONVENTION_ID, CNIM_NAME);
     node.accept(new CurveNodeCurrencyVisitor(conventionSource, EMPTY_SECURITY_SOURCE));
   }
@@ -323,11 +316,12 @@ public class SwapNodeCurrencyVisitorTest {
     final ONCompoundedLegRollDateConvention onCompoundedLegConvention =
         new ONCompoundedLegRollDateConvention("USD Overnight Compounded Swap Leg", ON_COMPOUNDED_LEG_CONVENTION_ID.toBundle(), OVERNIGHT_SECURITY_ID,
             Tenor.ONE_YEAR, StubType.NONE, false, 0);
-    conventionSource.addConvention(FIXED_LEG_CONVENTION);
+    conventionSource.addConvention(FIXED_LEG_CONVENTION.clone());
     conventionSource.addConvention(onCompoundedLegConvention);
-    final Map<ExternalIdBundle, Security> securities = new HashMap<>();
-    securities.put(OVERNIGHT_SECURITY_ID.toBundle(), LIBOR_SECURITY);
-    final SecuritySource securitySource = new MySecuritySource(securities);
+    final IborIndex indexSecurity = LIBOR_SECURITY.clone();
+    indexSecurity.setExternalIdBundle(OVERNIGHT_SECURITY_ID.toBundle());
+    final InMemorySecuritySource securitySource = new InMemorySecuritySource();
+    securitySource.addSecurity(indexSecurity);
     final SwapNode node = new SwapNode(Tenor.ONE_YEAR, Tenor.TEN_YEARS, FIXED_LEG_CONVENTION_ID, ON_COMPOUNDED_LEG_CONVENTION_ID, CNIM_NAME);
     node.accept(new CurveNodeCurrencyVisitor(conventionSource, securitySource));
   }
@@ -342,12 +336,11 @@ public class SwapNodeCurrencyVisitorTest {
     final ONCompoundedLegRollDateConvention onCompoundedLegConvention =
         new ONCompoundedLegRollDateConvention("USD Overnight Compounded Swap Leg", ON_COMPOUNDED_LEG_CONVENTION_ID.toBundle(), OVERNIGHT_SECURITY_ID,
             Tenor.ONE_YEAR, StubType.NONE, false, 0);
-    conventionSource.addConvention(FIXED_LEG_CONVENTION);
+    conventionSource.addConvention(FIXED_LEG_CONVENTION.clone());
     conventionSource.addConvention(onCompoundedLegConvention);
-    conventionSource.addConvention(OVERNIGHT_CONVENTION);
-    final Map<ExternalIdBundle, Security> securities = new HashMap<>();
-    securities.put(OVERNIGHT_SECURITY_ID.toBundle(), OVERNIGHT_SECURITY);
-    final SecuritySource securitySource = new MySecuritySource(securities);
+    conventionSource.addConvention(OVERNIGHT_CONVENTION.clone());
+    final InMemorySecuritySource securitySource = new InMemorySecuritySource();
+    securitySource.addSecurity(OVERNIGHT_SECURITY.clone());
     final SwapNode node = new SwapNode(Tenor.ONE_YEAR, Tenor.TEN_YEARS, FIXED_LEG_CONVENTION_ID, ON_COMPOUNDED_LEG_CONVENTION_ID, CNIM_NAME);
     assertEquals(node.accept(new CurveNodeCurrencyVisitor(conventionSource, securitySource)), Sets.newHashSet(Currency.USD, Currency.EUR));
   }
@@ -358,12 +351,11 @@ public class SwapNodeCurrencyVisitorTest {
   @Test
   public void testUnderlyingConventionForOnCompoundedRollDateLeg() {
     final InMemoryConventionSource conventionSource = new InMemoryConventionSource();
-    conventionSource.addConvention(FIXED_LEG_CONVENTION);
-    conventionSource.addConvention(ON_COMPOUNDED_LEG_CONVENTION);
-    conventionSource.addConvention(OVERNIGHT_CONVENTION);
-    final Map<ExternalIdBundle, Security> securities = new HashMap<>();
-    securities.put(OVERNIGHT_SECURITY_ID.toBundle(), OVERNIGHT_SECURITY);
-    final SecuritySource securitySource = new MySecuritySource(securities);
+    conventionSource.addConvention(FIXED_LEG_CONVENTION.clone());
+    conventionSource.addConvention(ON_COMPOUNDED_LEG_CONVENTION.clone());
+    conventionSource.addConvention(OVERNIGHT_CONVENTION.clone());
+    final InMemorySecuritySource securitySource = new InMemorySecuritySource();
+    securitySource.addSecurity(OVERNIGHT_SECURITY.clone());
     final SwapNode node = new SwapNode(Tenor.ONE_YEAR, Tenor.TEN_YEARS, FIXED_LEG_CONVENTION_ID, ON_COMPOUNDED_LEG_CONVENTION_ID, CNIM_NAME);
     assertEquals(node.accept(new CurveNodeCurrencyVisitor(conventionSource, securitySource)), Sets.newHashSet(Currency.USD, Currency.EUR));
   }
@@ -374,8 +366,8 @@ public class SwapNodeCurrencyVisitorTest {
   @Test(expectedExceptions = OpenGammaRuntimeException.class)
   public void testNoOvernightIndexConventionOrSecurityForOnAverageLeg() {
     final InMemoryConventionSource conventionSource = new InMemoryConventionSource();
-    conventionSource.addConvention(FIXED_LEG_CONVENTION);
-    conventionSource.addConvention(ON_AVERAGE_LEG_CONVENTION);
+    conventionSource.addConvention(FIXED_LEG_CONVENTION.clone());
+    conventionSource.addConvention(ON_AVERAGE_LEG_CONVENTION.clone());
     final SwapNode node = new SwapNode(Tenor.ONE_YEAR, Tenor.TEN_YEARS, FIXED_LEG_CONVENTION_ID, ON_AVERAGE_LEG_CONVENTION_ID, CNIM_NAME);
     node.accept(new CurveNodeCurrencyVisitor(conventionSource, EMPTY_SECURITY_SOURCE));
   }
@@ -390,11 +382,12 @@ public class SwapNodeCurrencyVisitorTest {
     final ONArithmeticAverageLegConvention onAverageLegConvention = new ONArithmeticAverageLegConvention("USD Overnight Average Swap Leg",
         ON_AVERAGE_LEG_CONVENTION_ID.toBundle(), OVERNIGHT_SECURITY_ID, Tenor.ONE_YEAR, BusinessDayConventions.MODIFIED_FOLLOWING, 2, false, StubType.NONE,
         false, 0);
-    conventionSource.addConvention(FIXED_LEG_CONVENTION);
+    conventionSource.addConvention(FIXED_LEG_CONVENTION.clone());
     conventionSource.addConvention(onAverageLegConvention);
-    final Map<ExternalIdBundle, Security> securities = new HashMap<>();
-    securities.put(OVERNIGHT_SECURITY_ID.toBundle(), LIBOR_SECURITY);
-    final SecuritySource securitySource = new MySecuritySource(securities);
+    final IborIndex indexSecurity = LIBOR_SECURITY.clone();
+    indexSecurity.setExternalIdBundle(OVERNIGHT_SECURITY_ID.toBundle());
+    final InMemorySecuritySource securitySource = new InMemorySecuritySource();
+    securitySource.addSecurity(indexSecurity);
     final SwapNode node = new SwapNode(Tenor.ONE_YEAR, Tenor.TEN_YEARS, FIXED_LEG_CONVENTION_ID, ON_AVERAGE_LEG_CONVENTION_ID, CNIM_NAME);
     node.accept(new CurveNodeCurrencyVisitor(conventionSource, securitySource));
   }
@@ -409,12 +402,11 @@ public class SwapNodeCurrencyVisitorTest {
     final ONArithmeticAverageLegConvention onAverageLegConvention = new ONArithmeticAverageLegConvention("USD Overnight Average Swap Leg",
         ON_AVERAGE_LEG_CONVENTION_ID.toBundle(), OVERNIGHT_SECURITY_ID, Tenor.ONE_YEAR, BusinessDayConventions.MODIFIED_FOLLOWING, 2, false, StubType.NONE,
         false, 0);
-    conventionSource.addConvention(FIXED_LEG_CONVENTION);
+    conventionSource.addConvention(FIXED_LEG_CONVENTION.clone());
     conventionSource.addConvention(onAverageLegConvention);
-    conventionSource.addConvention(OVERNIGHT_CONVENTION);
-    final Map<ExternalIdBundle, Security> securities = new HashMap<>();
-    securities.put(OVERNIGHT_SECURITY_ID.toBundle(), OVERNIGHT_SECURITY);
-    final SecuritySource securitySource = new MySecuritySource(securities);
+    conventionSource.addConvention(OVERNIGHT_CONVENTION.clone());
+    final InMemorySecuritySource securitySource = new InMemorySecuritySource();
+    securitySource.addSecurity(OVERNIGHT_SECURITY);
     final SwapNode node = new SwapNode(Tenor.ONE_YEAR, Tenor.TEN_YEARS, FIXED_LEG_CONVENTION_ID, ON_AVERAGE_LEG_CONVENTION_ID, CNIM_NAME);
     assertEquals(node.accept(new CurveNodeCurrencyVisitor(conventionSource, securitySource)), Sets.newHashSet(Currency.USD, Currency.EUR));
   }
@@ -425,12 +417,11 @@ public class SwapNodeCurrencyVisitorTest {
   @Test
   public void testUnderlyingConventionForOnAverageLeg() {
     final InMemoryConventionSource conventionSource = new InMemoryConventionSource();
-    conventionSource.addConvention(FIXED_LEG_CONVENTION);
-    conventionSource.addConvention(ON_AVERAGE_LEG_CONVENTION);
-    conventionSource.addConvention(OVERNIGHT_CONVENTION);
-    final Map<ExternalIdBundle, Security> securities = new HashMap<>();
-    securities.put(OVERNIGHT_SECURITY_ID.toBundle(), OVERNIGHT_SECURITY);
-    final SecuritySource securitySource = new MySecuritySource(securities);
+    conventionSource.addConvention(FIXED_LEG_CONVENTION.clone());
+    conventionSource.addConvention(ON_AVERAGE_LEG_CONVENTION.clone());
+    conventionSource.addConvention(OVERNIGHT_CONVENTION.clone());
+    final InMemorySecuritySource securitySource = new InMemorySecuritySource();
+    securitySource.addSecurity(OVERNIGHT_SECURITY);
     final SwapNode node = new SwapNode(Tenor.ONE_YEAR, Tenor.TEN_YEARS, FIXED_LEG_CONVENTION_ID, ON_AVERAGE_LEG_CONVENTION_ID, CNIM_NAME);
     assertEquals(node.accept(new CurveNodeCurrencyVisitor(conventionSource, securitySource)), Sets.newHashSet(Currency.USD, Currency.EUR));
   }

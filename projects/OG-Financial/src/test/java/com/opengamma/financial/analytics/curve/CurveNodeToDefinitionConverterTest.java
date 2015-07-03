@@ -13,10 +13,8 @@ import static com.opengamma.financial.convention.initializer.PerCurrencyConventi
 import static org.testng.AssertJUnit.assertEquals;
 import static org.testng.AssertJUnit.assertTrue;
 
-import java.util.Collection;
+import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -25,7 +23,6 @@ import org.threeten.bp.LocalTime;
 import org.threeten.bp.Period;
 import org.threeten.bp.ZonedDateTime;
 
-import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.opengamma.OpenGammaRuntimeException;
 import com.opengamma.analytics.financial.forex.method.FXMatrix;
@@ -34,8 +31,6 @@ import com.opengamma.analytics.financial.instrument.annuity.AnnuityCouponFixedDe
 import com.opengamma.analytics.financial.instrument.annuity.AnnuityCouponIborDefinition;
 import com.opengamma.analytics.financial.instrument.annuity.AnnuityDefinition;
 import com.opengamma.analytics.financial.instrument.annuity.AnnuityDefinitionBuilder;
-import com.opengamma.analytics.financial.instrument.cash.CashDefinition;
-import com.opengamma.analytics.financial.instrument.cash.DepositIborDefinition;
 import com.opengamma.analytics.financial.instrument.fra.ForwardRateAgreementDefinition;
 import com.opengamma.analytics.financial.instrument.future.FederalFundsFutureSecurityDefinition;
 import com.opengamma.analytics.financial.instrument.future.FederalFundsFutureTransactionDefinition;
@@ -60,27 +55,23 @@ import com.opengamma.analytics.financial.instrument.swap.SwapMultilegDefinition;
 import com.opengamma.analytics.financial.interestrate.CompoundingType;
 import com.opengamma.analytics.financial.schedule.ScheduleCalculator;
 import com.opengamma.core.DateSet;
-import com.opengamma.core.change.ChangeManager;
-import com.opengamma.core.change.DummyChangeManager;
 import com.opengamma.core.config.ConfigSource;
 import com.opengamma.core.config.impl.ConfigItem;
 import com.opengamma.core.convention.ConventionSource;
-import com.opengamma.core.holiday.Holiday;
-import com.opengamma.core.holiday.HolidaySource;
-import com.opengamma.core.holiday.HolidayType;
+import com.opengamma.core.holiday.WeekendType;
+import com.opengamma.core.holiday.impl.SimpleHoliday;
+import com.opengamma.core.holiday.impl.SimpleHolidayWithWeekend;
 import com.opengamma.core.id.ExternalSchemes;
 import com.opengamma.core.marketdatasnapshot.SnapshotDataBundle;
-import com.opengamma.core.region.Region;
-import com.opengamma.core.region.RegionSource;
 import com.opengamma.core.region.impl.SimpleRegion;
-import com.opengamma.core.security.Security;
 import com.opengamma.core.security.SecuritySource;
 import com.opengamma.engine.InMemoryConventionSource;
+import com.opengamma.engine.InMemoryHolidaySource;
+import com.opengamma.engine.InMemoryRegionSource;
+import com.opengamma.engine.InMemorySecuritySource;
 import com.opengamma.financial.analytics.CalendarECBSettlements;
-import com.opengamma.financial.analytics.CalendarTarget;
+import com.opengamma.financial.analytics.TargetWorkingDayCalendar;
 import com.opengamma.financial.analytics.ircurve.strips.CalendarSwapNode;
-import com.opengamma.financial.analytics.ircurve.strips.CashNode;
-import com.opengamma.financial.analytics.ircurve.strips.CurveNode;
 import com.opengamma.financial.analytics.ircurve.strips.CurveNodeVisitor;
 import com.opengamma.financial.analytics.ircurve.strips.DeliverableSwapFutureNode;
 import com.opengamma.financial.analytics.ircurve.strips.FRANode;
@@ -122,8 +113,6 @@ import com.opengamma.financial.convention.rolldate.RollDateAdjusterFactory;
 import com.opengamma.financial.security.index.OvernightIndex;
 import com.opengamma.id.ExternalId;
 import com.opengamma.id.ExternalIdBundle;
-import com.opengamma.id.ObjectId;
-import com.opengamma.id.UniqueId;
 import com.opengamma.id.VersionCorrection;
 import com.opengamma.master.config.ConfigDocument;
 import com.opengamma.master.config.ConfigMaster;
@@ -141,9 +130,8 @@ import com.opengamma.util.time.Tenor;
  */
 @Test(groups = TestGroup.UNIT)
 public class CurveNodeToDefinitionConverterTest {
-
+  private static final SimpleHoliday WEEKEND_ONLY_HOLIDAYS = new SimpleHolidayWithWeekend(Collections.<LocalDate>emptySet(), WeekendType.SATURDAY_SUNDAY);
   private static final MondayToFridayCalendar CALENDAR = new MondayToFridayCalendar("Weekend");
-  private static final Calendar TARGET = new CalendarTarget("TARGET");
   private static final String SCHEME = "Test";
   private static final BusinessDayConvention MODIFIED_FOLLOWING = BusinessDayConventions.MODIFIED_FOLLOWING;
   private static final BusinessDayConvention FOLLOWING = BusinessDayConventions.FOLLOWING;
@@ -180,18 +168,36 @@ public class CurveNodeToDefinitionConverterTest {
   private static final ExternalId IMM_1M_FUTURE_EXPIRY_CONVENTION = ExternalId.of(SCHEME, IMMFutureAndFutureOptionMonthlyExpiryCalculator.NAME);
   private static final ExternalId FIXED_IBOR_3M_SWAP_ID = ExternalId.of(SCHEME, "Swap");
   // LIBOR Index
+  /** 1M LIBOR index name */
   private static final String USDLIBOR1M_NAME = "USDLIBOR1M";
+  /** 1M LIBOR index ticker */
+  private static final ExternalId USDLIBOR1M_ID = ExternalId.of(BBG_TICKER, "US0001M Index");
+  /** 1M LIBOR index security */
   private static final com.opengamma.financial.security.index.IborIndex USDLIBOR1M =
       new com.opengamma.financial.security.index.IborIndex(USDLIBOR1M_NAME, "ICE LIBOR 1M - USD", Tenor.ONE_MONTH, USDLIBOR_ACT_360_CONVENTION_ID);
-  private static final ExternalId USDLIBOR1M_ID = ExternalId.of(BBG_TICKER, "US0001M Index");
+  static {
+    USDLIBOR1M.addExternalId(USDLIBOR1M_ID);
+  }
+  /** 3M LIBOR index name */
   private static final String USDLIBOR3M_NAME = "USDLIBOR3M";
+  /** 3M LIBOR index ticker */
+  private static final ExternalId USDLIBOR3M_ID = ExternalId.of(BBG_TICKER, "US0003M Index");
+  /** 3M LIBOR index security */
   private static final com.opengamma.financial.security.index.IborIndex USDLIBOR3M =
       new com.opengamma.financial.security.index.IborIndex(USDLIBOR3M_NAME, "ICE LIBOR 3M - USD", Tenor.THREE_MONTHS, USDLIBOR_ACT_360_CONVENTION_ID);
-  private static final ExternalId USDLIBOR3M_ID = ExternalId.of(BBG_TICKER, "US0003M Index");
+  static {
+    USDLIBOR3M.addExternalId(USDLIBOR3M_ID);
+  }
+  /** 6M LIBOR index name */
   private static final String USDLIBOR6M_NAME = "USDLIBOR6M";
+  /** 6M LIBOR index ticker */
+  private static final ExternalId USDLIBOR6M_ID = ExternalId.of(BBG_TICKER, "US0006M Index");
+  /** 6M LIBOR index security */
   private static final com.opengamma.financial.security.index.IborIndex USDLIBOR6M =
       new com.opengamma.financial.security.index.IborIndex(USDLIBOR6M_NAME, "ICE LIBOR 6M - USD", Tenor.SIX_MONTHS, USDLIBOR_ACT_360_CONVENTION_ID);
-  private static final ExternalId USDLIBOR6M_ID = ExternalId.of(BBG_TICKER, "US0006M Index");
+  static {
+    USDLIBOR6M.addExternalId(USDLIBOR6M_ID);
+  }
   private static final SwapFixedLegConvention FIXED_LEG = new SwapFixedLegConvention("USD Swap Fixed Leg", ExternalIdBundle.of(ExternalId.of(SCHEME, "USD Swap Fixed Leg")),
       Tenor.SIX_MONTHS, ACT_360, MODIFIED_FOLLOWING, Currency.USD, NYLON, 2, false, StubType.NONE, false, 0);
   private static final SwapFixedLegConvention FIXED_LEG_PAY_LAG = new SwapFixedLegConvention("USD Swap Fixed Leg Pay Lag", FIXED_LEG_PAY_LAG_ID.toBundle(),
@@ -210,9 +216,16 @@ public class CurveNodeToDefinitionConverterTest {
   private static final CompoundingIborLegConvention LIBOR_1M_CMP_FLAT_3M = new CompoundingIborLegConvention(LIBOR_1M_CMP_FLAT_3M_NAME,
       ExternalIdBundle.of(LIBOR_1M_CMP_FLAT_3M_ID), USDLIBOR1M_ID, Tenor.THREE_MONTHS, CompoundingType.FLAT_COMPOUNDING,
       Tenor.ONE_MONTH, StubType.SHORT_START, 2, false, StubType.LONG_START, false, 0);
+  // Fed funds
+  /** Fed fund index name */
   private static final String USD_FEDFUND_INDEX_NAME = "Fed Funds Effective Rate";
-  private static final OvernightIndex USD_FEDFUND_INDEX = new OvernightIndex(USD_FEDFUND_INDEX_NAME, USD_OVERNIGHT_CONVENTION_ID);
+  /** Fed fund ticker */
   private static final ExternalId USD_FEDFUND_INDEX_ID = ExternalId.of(BBG_TICKER, "FEDL1 Index");
+  /** Fed fund index security */
+  private static final OvernightIndex USD_FEDFUND_INDEX = new OvernightIndex(USD_FEDFUND_INDEX_NAME, USD_OVERNIGHT_CONVENTION_ID);
+  static {
+    USD_FEDFUND_INDEX.addExternalId(USD_FEDFUND_INDEX_ID);
+  }
   private static final OISLegConvention LEG_ON_CMP = new OISLegConvention("USD OIS Leg", ExternalIdBundle.of(ExternalId.of(SCHEME, "USD OIS Leg")), USD_FEDFUND_INDEX_ID,
       Tenor.ONE_YEAR, MODIFIED_FOLLOWING, 2, false, StubType.NONE, false, 2);
   private static final ONArithmeticAverageLegConvention ON_AA = new ONArithmeticAverageLegConvention(ON_AA_NAME, ExternalIdBundle.of(ExternalId.of(SCHEME, ON_AA_NAME)),
@@ -284,20 +297,37 @@ public class CurveNodeToDefinitionConverterTest {
   private static final ExternalId EURIBOR_CONVENTION_ID = ExternalId.of(SCHEME, EURIBOR_CONVENTION_NAME);
   private static final IborIndexConvention EURIBOR_CONVENTION = new IborIndexConvention(EURIBOR_CONVENTION_NAME, ExternalIdBundle.of(EURIBOR_CONVENTION_ID),
       ACT_360, MODIFIED_FOLLOWING, 2, false, Currency.EUR, LocalTime.of(11, 0), "EU", EU, EU, "Page");
-
+  // EURIBOR Index
+  /** 1M EURIBOR index name */
   private static final String EURIBOR1M_NAME = "EURIBOR1M";
+  /** 1M EURIBOR index ticker */
+  private static final ExternalId EURIBOR1M_ID = ExternalId.of(BBG_TICKER, "EUR001M Index");
+  /** 1M EURIBOR index security */
   private static final com.opengamma.financial.security.index.IborIndex EURIBOR1M =
       new com.opengamma.financial.security.index.IborIndex(EURIBOR1M_NAME, "EURIBOR 1M ACT/360", Tenor.ONE_MONTH, EURIBOR_CONVENTION_ID);
-  private static final ExternalId EURIBOR1M_ID = ExternalId.of(BBG_TICKER, "EUR001M Index");
+  static {
+    EURIBOR1M.addExternalId(EURIBOR1M_ID);
+  }
+  /** 3M EURIBOR index name */
   private static final String EURIBOR3M_NAME = "EURIBOR3M";
+  /** 3M EURIBOR index ticker */
+  private static final ExternalId EURIBOR3M_ID = ExternalId.of(BBG_TICKER, "EUR003M Index");
+  /** 3M EURIBOR index security */
   private static final com.opengamma.financial.security.index.IborIndex EURIBOR3M =
       new com.opengamma.financial.security.index.IborIndex(EURIBOR3M_NAME, "EURIBOR 3M ACT/360", Tenor.THREE_MONTHS, EURIBOR_CONVENTION_ID);
-  private static final ExternalId EURIBOR3M_ID = ExternalId.of(BBG_TICKER, "EUR003M Index");
+  static {
+    EURIBOR3M.addExternalId(EURIBOR3M_ID);
+  }
+  /** 6M EURIBOR index name */
   private static final String EURIBOR6M_NAME = "EURIBOR6M";
+  /** 6M EURIBOR index ticker */
+  private static final ExternalId EURIBOR6M_ID = ExternalId.of(BBG_TICKER, "EUR006M Index");
+  /** 6M EURIBOR index security */
   private static final com.opengamma.financial.security.index.IborIndex EURIBOR6M =
       new com.opengamma.financial.security.index.IborIndex(EURIBOR6M_NAME, "EURIBOR 6M ACT/360", Tenor.SIX_MONTHS, EURIBOR_CONVENTION_ID);
-  private static final ExternalId EURIBOR6M_ID = ExternalId.of(BBG_TICKER, "EUR006M Index");
-
+  static {
+    EURIBOR6M.addExternalId(EURIBOR6M_ID);
+  }
   private static final String LEG_EURIBOR3M_NAME = "EUR Euribor 3M";
   private static final ExternalId LEG_EURIBOR3M_ID = ExternalId.of(SCHEME, LEG_EURIBOR3M_NAME);
   private static final VanillaIborLegConvention LEG_EURIBOR3M = new VanillaIborLegConvention(LEG_EURIBOR3M_NAME, ExternalIdBundle.of(LEG_EURIBOR3M_ID),
@@ -309,12 +339,17 @@ public class CurveNodeToDefinitionConverterTest {
 
   private static final String EUR_OVERNIGHT_CONVENTION_NAME = "EUR Overnight";
   private static final ExternalId EUR_OVERNIGHT_CONVENTION_ID = ExternalId.of(SCHEME, EUR_OVERNIGHT_CONVENTION_NAME);
-  private static final OvernightIndexConvention EUR_OVERNIGHT_CONVENTION = new OvernightIndexConvention(EUR_OVERNIGHT_CONVENTION_NAME, ExternalIdBundle.of(EUR_OVERNIGHT_CONVENTION_ID),
-      ACT_360, 0, Currency.EUR, EU);
+  private static final OvernightIndexConvention EUR_OVERNIGHT_CONVENTION = new OvernightIndexConvention(EUR_OVERNIGHT_CONVENTION_NAME,
+      ExternalIdBundle.of(EUR_OVERNIGHT_CONVENTION_ID), ACT_360, 0, Currency.EUR, EU);
+  /** EONIA index name */
   private static final String EUR_EONIA_INDEX_NAME = "EUR EONIA";
+  /** EONIA ticker */
   private static final ExternalId EUR_EONIA_INDEX_ID = ExternalId.of(BBG_TICKER, "EONIA Index");
+  /** EONIA security */
   private static final OvernightIndex EUR_EONIA_INDEX = new OvernightIndex(EUR_EONIA_INDEX_NAME, EUR_OVERNIGHT_CONVENTION_ID);
-
+  static {
+    EUR_EONIA_INDEX.addExternalId(EUR_EONIA_INDEX_ID);
+  }
   private static final String EUR_1Y_ON_CMP_NAME = "EUR 1Y ON Cmp";
   private static final ExternalId EUR_1Y_ON_CMP_ID = ExternalId.of(SCHEME, EUR_1Y_ON_CMP_NAME);
   private static final OISLegConvention EUR_1Y_ON_CMP = new OISLegConvention(EUR_1Y_ON_CMP_NAME, ExternalIdBundle.of(EUR_1Y_ON_CMP_ID), EUR_EONIA_INDEX_ID,
@@ -329,18 +364,16 @@ public class CurveNodeToDefinitionConverterTest {
   private static final ExternalId EUR_SWAP_1Y_ONCMP_ID = ExternalId.of(SCHEME, EUR_SWAP_1Y_ONCMP_NAME);
   private static final SwapConvention EUR_SWAP_1Y_ONCMP = new SwapConvention(EUR_SWAP_1Y_ONCMP_NAME, ExternalIdBundle.of(EUR_SWAP_1Y_ONCMP_ID), EUR1Y_FIXED_ID, EUR_1Y_ON_CMP_ID);
 
-  private static final Map<ExternalIdBundle, Security> SECURITY_MAP = new HashMap<>();
-  private static final SecuritySource SECURITY_SOURCE;
+  private static final InMemorySecuritySource SECURITY_SOURCE = new InMemorySecuritySource();
   private static final ConfigSource CONFIG_SOURCE;
   private static final ConfigMaster CONFIG_MASTER;
-  private static final InMemoryConventionSource CONVENTION_SOURCE;
-  private static final HolidaySource HOLIDAY_SOURCE;
-  private static final RegionSource REGION_SOURCE;
+  private static final InMemoryConventionSource CONVENTION_SOURCE = new InMemoryConventionSource();
+  private static final InMemoryHolidaySource HOLIDAY_SOURCE = new InMemoryHolidaySource();
+  private static final InMemoryRegionSource REGION_SOURCE = new InMemoryRegionSource();
   private static final ZonedDateTime NOW = DateUtils.getUTCDate(2013, 5, 1);
   private static final FXMatrix FX_MATRIX = new FXMatrix(Currency.EUR, Currency.USD, 1.30d);
 
   static {
-    CONVENTION_SOURCE = new InMemoryConventionSource();
     CONVENTION_SOURCE.addConvention(DEPOSIT_1D);
     CONVENTION_SOURCE.addConvention(DEPOSIT_1M);
     CONVENTION_SOURCE.addConvention(FIXED_LEG);
@@ -377,27 +410,39 @@ public class CurveNodeToDefinitionConverterTest {
     CONVENTION_SOURCE.addConvention(LEG_EURIBOR6M);
     CONVENTION_SOURCE.addConvention(EUR1Y_FIXED);
     CONVENTION_SOURCE.addConvention(EUR_SWAP_1Y_ONCMP);
-    // Security map. Used for index.
-    SECURITY_MAP.put(USD_FEDFUND_INDEX_ID.toBundle(), USD_FEDFUND_INDEX);
-    SECURITY_MAP.put(USDLIBOR1M_ID.toBundle(), USDLIBOR1M);
-    SECURITY_MAP.put(USDLIBOR3M_ID.toBundle(), USDLIBOR3M);
-    SECURITY_MAP.put(USDLIBOR6M_ID.toBundle(), USDLIBOR6M);
-    SECURITY_MAP.put(EUR_EONIA_INDEX_ID.toBundle(), EUR_EONIA_INDEX);
-    SECURITY_MAP.put(EURIBOR1M_ID.toBundle(), EURIBOR1M);
-    SECURITY_MAP.put(EURIBOR3M_ID.toBundle(), EURIBOR3M);
-    SECURITY_MAP.put(EURIBOR6M_ID.toBundle(), EURIBOR6M);
+    // Holidays
+    HOLIDAY_SOURCE.addHoliday(US, WEEKEND_ONLY_HOLIDAYS);
+    HOLIDAY_SOURCE.addHoliday(EU, WEEKEND_ONLY_HOLIDAYS);
+    HOLIDAY_SOURCE.addHoliday(GB, WEEKEND_ONLY_HOLIDAYS);
+    // Regions
+    final SimpleRegion usRegion = new SimpleRegion();
+    final SimpleRegion euRegion = new SimpleRegion();
+    final SimpleRegion gbRegion = new SimpleRegion();
+    usRegion.addExternalId(US);
+    euRegion.addExternalId(EU);
+    gbRegion.addExternalId(GB);
+    REGION_SOURCE.addRegion(usRegion);
+    REGION_SOURCE.addRegion(euRegion);
+    REGION_SOURCE.addRegion(gbRegion);
+    // Securities
+    SECURITY_SOURCE.addSecurity(USD_FEDFUND_INDEX);
+    SECURITY_SOURCE.addSecurity(USDLIBOR1M);
+    SECURITY_SOURCE.addSecurity(USDLIBOR3M);
+    SECURITY_SOURCE.addSecurity(USDLIBOR6M);
+    SECURITY_SOURCE.addSecurity(EUR_EONIA_INDEX);
+    SECURITY_SOURCE.addSecurity(EURIBOR1M);
+    SECURITY_SOURCE.addSecurity(EURIBOR3M);
+    SECURITY_SOURCE.addSecurity(EURIBOR6M);
 
-    SECURITY_SOURCE = new MySecuritySource(SECURITY_MAP);
-    HOLIDAY_SOURCE = new MyHolidaySource(new ExternalId[] {US, EU, GB}, new Calendar[] {CALENDAR, CALENDAR, CALENDAR});
-    REGION_SOURCE = new MyRegionSource(new ExternalId[] {US, EU, GB}, new String[] {"US", "EU", "GB"});
     CONFIG_MASTER = new InMemoryConfigMaster();
     CONFIG_SOURCE = new MasterConfigSource(CONFIG_MASTER);
 
-    final DateSet ecbCalendar = DateSet.of(Sets.newTreeSet(Lists.newArrayList(LocalDate.of(2013, 5, 8), LocalDate.of(2013, 10, 9), LocalDate.of(2013, 11, 13), LocalDate.of(2013, 12, 11),
-                                                                        LocalDate.of(2014, 1, 15), LocalDate.of(2014, 2, 12), LocalDate.of(2014, 3, 12), LocalDate.of(2014, 4, 9),
-                                                                        LocalDate.of(2014, 5, 14), LocalDate.of(2014, 6, 11), LocalDate.of(2014, 7, 9), LocalDate.of(2014, 8, 13),
-                                                                        LocalDate.of(2014, 9, 10), LocalDate.of(2014, 10, 8), LocalDate.of(2014, 11, 12), LocalDate.of(2014, 12, 10),
-                                                                        LocalDate.of(2015, 1, 8), LocalDate.of(2015, 2, 11))));
+    final DateSet ecbCalendar =
+        DateSet.of(Sets.newTreeSet(Arrays.asList(LocalDate.of(2013, 5, 8), LocalDate.of(2013, 10, 9), LocalDate.of(2013, 11, 13), LocalDate.of(2013, 12, 11),
+            LocalDate.of(2014, 1, 15), LocalDate.of(2014, 2, 12), LocalDate.of(2014, 3, 12), LocalDate.of(2014, 4, 9),
+            LocalDate.of(2014, 5, 14), LocalDate.of(2014, 6, 11), LocalDate.of(2014, 7, 9), LocalDate.of(2014, 8, 13),
+            LocalDate.of(2014, 9, 10), LocalDate.of(2014, 10, 8), LocalDate.of(2014, 11, 12), LocalDate.of(2014, 12, 10),
+            LocalDate.of(2015, 1, 8), LocalDate.of(2015, 2, 11))));
     CONFIG_MASTER.add(new ConfigDocument(ConfigItem.of(ecbCalendar, "ECB Settlement Calendar")));
   }
 
@@ -418,30 +463,6 @@ public class CurveNodeToDefinitionConverterTest {
         .with(ConventionSource.class, CONVENTION_SOURCE)
         .with(SecuritySource.class, SECURITY_SOURCE);
     ThreadLocalServiceContext.init(serviceContext);
-  }
-
-  @Test(expectedExceptions = OpenGammaRuntimeException.class)
-  public void testNoConventionForCash() {
-    final ExternalId marketDataId = ExternalId.of(SCHEME, "Data");
-    final SnapshotDataBundle marketValues = new SnapshotDataBundle();
-    final double rate = 0.0012345;
-    marketValues.setDataPoint(marketDataId, rate);
-    final CashNode cashNode = new CashNode(Tenor.ONE_DAY, Tenor.FIVE_MONTHS, ExternalId.of(SCHEME, "Test"), "Mapper");
-    final CurveNodeVisitor<InstrumentDefinition<?>> converter = new CashNodeConverter(SECURITY_SOURCE, CONVENTION_SOURCE, HOLIDAY_SOURCE, REGION_SOURCE,
-        marketValues, marketDataId, NOW);
-    cashNode.accept(converter);
-  }
-
-  @Test(expectedExceptions = OpenGammaRuntimeException.class)
-  public void testWrongConventionTypeForCash() {
-    final ExternalId marketDataId = ExternalId.of(SCHEME, "Data");
-    final SnapshotDataBundle marketValues = new SnapshotDataBundle();
-    final double rate = 0.0012345;
-    marketValues.setDataPoint(marketDataId, rate);
-    final CashNode cashNode = new CashNode(Tenor.ONE_DAY, Tenor.FIVE_MONTHS, FIXED_LEG_ID, "Mapper");
-    final CurveNodeVisitor<InstrumentDefinition<?>> converter = new CashNodeConverter(SECURITY_SOURCE, CONVENTION_SOURCE, HOLIDAY_SOURCE, REGION_SOURCE,
-        marketValues, marketDataId, NOW);
-    cashNode.accept(converter);
   }
 
   @Test(expectedExceptions = OpenGammaRuntimeException.class)
@@ -583,118 +604,6 @@ public class CurveNodeToDefinitionConverterTest {
     final CurveNodeVisitor<InstrumentDefinition<?>> converter = new SwapNodeConverter(SECURITY_SOURCE, conventionSource, HOLIDAY_SOURCE, REGION_SOURCE,
         marketValues, marketDataId, NOW, FX_MATRIX);
     swapNode.accept(converter);
-  }
-
-  @Test
-  public void testOneDayDeposit() {
-    final ExternalId marketDataId = ExternalId.of(SCHEME, "US1d");
-    final double rate = 0.0012345;
-    final SnapshotDataBundle marketValues = new SnapshotDataBundle();
-    marketValues.setDataPoint(marketDataId, rate);
-    final ZonedDateTime now = DateUtils.getUTCDate(2013, 5, 1);
-    final CurveNodeVisitor<InstrumentDefinition<?>> converter = new CashNodeConverter(SECURITY_SOURCE, CONVENTION_SOURCE, HOLIDAY_SOURCE, REGION_SOURCE, marketValues, marketDataId, now);
-    // P0D-P1D
-    final CurveNode cashNode = new CashNode(Tenor.of(Period.ZERO), Tenor.ONE_DAY, DEPOSIT_1D_ID, "Mapper");
-    final InstrumentDefinition<?> definition = cashNode.accept(converter);
-    assertTrue("CashNode: converter with P0D-P1D", definition instanceof CashDefinition);
-    final CashDefinition cash = (CashDefinition) definition;
-    final CashDefinition expectedCash = new CashDefinition(Currency.USD, DateUtils.getUTCDate(2013, 5, 1), DateUtils.getUTCDate(2013, 5, 2), 1, rate, 1. / 360);
-    assertEquals("CashNode: converter with P0D-P1D", expectedCash, cash);
-    // P0D-ON
-    final CurveNode cashNodeON = new CashNode(Tenor.of(Period.ZERO), Tenor.ON, DEPOSIT_1D_ID, "Mapper");
-    final InstrumentDefinition<?> definitionON = cashNodeON.accept(converter);
-    assertTrue("CashNode: converter with P0D-ON", definitionON instanceof CashDefinition);
-    final CashDefinition cashON = (CashDefinition) definitionON;
-    final CashDefinition expectedCashON = new CashDefinition(Currency.USD, DateUtils.getUTCDate(2013, 5, 1), DateUtils.getUTCDate(2013, 5, 2), 1, rate, 1. / 360);
-    assertEquals("CashNode: converter with P0D-ON", expectedCashON, cashON);
-    // P1D-ON
-    final CurveNode cashNode1DON = new CashNode(Tenor.ONE_DAY, Tenor.ON, DEPOSIT_1D_ID, "Mapper");
-    final InstrumentDefinition<?> definition1DON = cashNode1DON.accept(converter);
-    assertTrue("CashNode: converter with P1D-ON", definition1DON instanceof CashDefinition);
-    final CashDefinition cash1DON = (CashDefinition) definition1DON;
-    final CashDefinition expectedCash1DON = new CashDefinition(Currency.USD, DateUtils.getUTCDate(2013, 5, 2), DateUtils.getUTCDate(2013, 5, 3), 1, rate, 1. / 360);
-    assertEquals("CashNode: converter with P1D-ON", expectedCash1DON, cash1DON);
-    // ON-ON
-    final CurveNode cashNodeONON = new CashNode(Tenor.ONE_DAY, Tenor.ON, DEPOSIT_1D_ID, "Mapper");
-    final InstrumentDefinition<?> definitionONON = cashNodeONON.accept(converter);
-    assertTrue("CashNode: converter with P1D-ON", definitionONON instanceof CashDefinition);
-    final CashDefinition cashONON = (CashDefinition) definitionONON;
-    final CashDefinition expectedCashONON = new CashDefinition(Currency.USD, DateUtils.getUTCDate(2013, 5, 2), DateUtils.getUTCDate(2013, 5, 3), 1, rate, 1. / 360);
-    assertEquals("CashNode: converter with P1D-ON", expectedCashONON, cashONON);
-    // POD-TN(WE)
-    final ZonedDateTime now2 = DateUtils.getUTCDate(2013, 12, 20);
-    final CurveNodeVisitor<InstrumentDefinition<?>> converter2 = new CashNodeConverter(SECURITY_SOURCE, CONVENTION_SOURCE, HOLIDAY_SOURCE, REGION_SOURCE, marketValues, marketDataId, now2);
-    final CurveNode cashNode0DTN = new CashNode(Tenor.of(Period.ZERO), Tenor.TN, DEPOSIT_1D_ID, "Mapper");
-    final InstrumentDefinition<?> definition0DTN = cashNode0DTN.accept(converter2);
-    assertTrue("CashNode: converter with P0D-TN", definition0DTN instanceof CashDefinition);
-    final CashDefinition cash0DTN = (CashDefinition) definition0DTN;
-    final CashDefinition expectedCash0DTN = new CashDefinition(Currency.USD, DateUtils.getUTCDate(2013, 12, 20), DateUtils.getUTCDate(2013, 12, 24), 1, rate, 4. / 360);
-    assertEquals("CashNode: converter with P0D-TN", expectedCash0DTN, cash0DTN);
-  }
-
-  @Test
-  public void testOneMonthDeposit() {
-    final ExternalId marketDataId = ExternalId.of(SCHEME, "US1d");
-    final double rate = 0.0012345;
-    final SnapshotDataBundle marketValues = new SnapshotDataBundle();
-    marketValues.setDataPoint(marketDataId, rate);
-    ZonedDateTime now = DateUtils.getUTCDate(2013, 2, 4);
-    CurveNode cashNode = new CashNode(Tenor.of(Period.ZERO), Tenor.ONE_MONTH, DEPOSIT_1M_ID, "Mapper");
-    CurveNodeVisitor<InstrumentDefinition<?>> converter = new CashNodeConverter(SECURITY_SOURCE, CONVENTION_SOURCE, HOLIDAY_SOURCE, REGION_SOURCE, marketValues, marketDataId, now);
-    InstrumentDefinition<?> definition = cashNode.accept(converter);
-    assertTrue(definition instanceof CashDefinition);
-    CashDefinition cash = (CashDefinition) definition;
-    CashDefinition expectedCash = new CashDefinition(Currency.USD, DateUtils.getUTCDate(2013, 2, 6), DateUtils.getUTCDate(2013, 3, 6), 1, rate, 28. / 360);
-    assertEquals(expectedCash, cash);
-    now = DateUtils.getUTCDate(2013, 5, 2);
-    converter = new CashNodeConverter(SECURITY_SOURCE, CONVENTION_SOURCE, HOLIDAY_SOURCE, REGION_SOURCE, marketValues, marketDataId, now);
-    cashNode = new CashNode(Tenor.of(Period.ZERO), Tenor.ONE_MONTH, DEPOSIT_1M_ID, "Mapper");
-    definition = cashNode.accept(converter);
-    assertTrue(definition instanceof CashDefinition);
-    cash = (CashDefinition) definition;
-    expectedCash = new CashDefinition(Currency.USD, DateUtils.getUTCDate(2013, 5, 6), DateUtils.getUTCDate(2013, 6, 6), 1, rate, 31. / 360);
-    assertEquals(expectedCash, cash);
-    now = DateUtils.getUTCDate(2013, 5, 7);
-    converter = new CashNodeConverter(SECURITY_SOURCE, CONVENTION_SOURCE, HOLIDAY_SOURCE, REGION_SOURCE, marketValues, marketDataId, now);
-    cashNode = new CashNode(Tenor.ONE_MONTH, Tenor.THREE_MONTHS, DEPOSIT_1M_ID, "Mapper");
-    definition = cashNode.accept(converter);
-    assertTrue(definition instanceof CashDefinition);
-    cash = (CashDefinition) definition;
-    expectedCash = new CashDefinition(Currency.USD, DateUtils.getUTCDate(2013, 6, 10), DateUtils.getUTCDate(2013, 9, 10), 1, rate, 92. / 360);
-    assertEquals(expectedCash, cash);
-  }
-
-  @Test
-  public void testLibor() {
-    final ExternalId marketDataId = ExternalId.of(SCHEME, "US3mLibor");
-    final double rate = 0.0012345;
-    final SnapshotDataBundle marketValues = new SnapshotDataBundle();
-    marketValues.setDataPoint(marketDataId, rate);
-    final ZonedDateTime now = DateUtils.getUTCDate(2013, 2, 4);
-    // 3M node on 3M index
-    CurveNode iborNode = new CashNode(Tenor.of(Period.ZERO), Tenor.THREE_MONTHS, USDLIBOR3M_ID, "Mapper");
-    final CurveNodeVisitor<InstrumentDefinition<?>> converter = new CashNodeConverter(SECURITY_SOURCE, CONVENTION_SOURCE, HOLIDAY_SOURCE, REGION_SOURCE, marketValues, marketDataId, now);
-    InstrumentDefinition<?> definition = iborNode.accept(converter);
-    assertTrue(definition instanceof DepositIborDefinition);
-    final IborIndex ibor3m = ConverterUtils.indexIbor(USDLIBOR3M_NAME, USDLIBOR_ACT_360, Tenor.THREE_MONTHS);
-    DepositIborDefinition ibor = (DepositIborDefinition) definition;
-    DepositIborDefinition expectedLibor = new DepositIborDefinition(Currency.USD, DateUtils.getUTCDate(2013, 2, 6), DateUtils.getUTCDate(2013, 5, 6), 1, rate, 89d / 360d, ibor3m);
-    assertEquals("CurveNodeToDefinitionConverter: Libir fixing 3M", expectedLibor, ibor);
-    // 6M Node on 6M index
-    iborNode = new CashNode(Tenor.of(Period.ZERO), Tenor.SIX_MONTHS, USDLIBOR6M_ID, "Mapper");
-    definition = iborNode.accept(converter);
-    assertTrue(definition instanceof DepositIborDefinition);
-    ibor = (DepositIborDefinition) definition;
-    final IborIndex ibor6m = ConverterUtils.indexIbor(USDLIBOR6M_NAME, USDLIBOR_ACT_360, Tenor.SIX_MONTHS);
-    expectedLibor = new DepositIborDefinition(Currency.USD, DateUtils.getUTCDate(2013, 2, 6), DateUtils.getUTCDate(2013, 8, 6), 1, rate, 181d / 360d, ibor6m);
-    assertEquals(expectedLibor, ibor);
-    // 3M node on 6M index
-    iborNode = new CashNode(Tenor.of(Period.ZERO), Tenor.THREE_MONTHS, USDLIBOR6M_ID, "Mapper");
-    definition = iborNode.accept(converter);
-    assertTrue(definition instanceof DepositIborDefinition);
-    ibor = (DepositIborDefinition) definition;
-    expectedLibor = new DepositIborDefinition(Currency.USD, DateUtils.getUTCDate(2013, 2, 6), DateUtils.getUTCDate(2013, 5, 6), 1, rate, 89d / 360d, ibor6m);
-    assertEquals(expectedLibor, ibor);
   }
 
   @Test
@@ -1003,10 +912,13 @@ public class CurveNodeToDefinitionConverterTest {
     //regionMap.put(ecbId.toBundle(), region);
     //final Map<ExternalIdBundle, Calendar> calendarMap = new HashMap<>();
     //calendarMap.put(ecbId.toBundle(), ecb);
-    final RegionSource regionSource = new MyRegionSource(new ExternalId[] {US, EU, GB}, new String[] {"US", "EU", "GB"}, new HashMap<ExternalIdBundle, Region>());
-    final HolidaySource holidaySource = new MyHolidaySource(new ExternalId[] {US, EU, GB}, new Calendar[] {CALENDAR, TARGET, CALENDAR}, new HashMap<ExternalIdBundle, Calendar>());
+    final InMemoryHolidaySource holidaySource = new InMemoryHolidaySource();
+    holidaySource.addHoliday(US, WEEKEND_ONLY_HOLIDAYS);
+    holidaySource.addHoliday(EU, TargetWorkingDayCalendar.TARGET_HOLIDAY);
+    holidaySource.addHoliday(GB, WEEKEND_ONLY_HOLIDAYS);
     final ConfigSourceQuery<DateSet> calendarQuery = new ConfigSourceQuery<>(CONFIG_SOURCE, DateSet.class, VersionCorrection.LATEST);
-    final CurveNodeVisitor<InstrumentDefinition<?>> converter = new CalendarSwapNodeConverter(SECURITY_SOURCE, CONVENTION_SOURCE, holidaySource, regionSource, marketValues, marketDataId, now, calendarQuery);
+    final CurveNodeVisitor<InstrumentDefinition<?>> converter = new CalendarSwapNodeConverter(SECURITY_SOURCE, CONVENTION_SOURCE, holidaySource, REGION_SOURCE,
+        marketValues, marketDataId, now, calendarQuery);
     final Period startPeriod = Period.ofDays(1);
     final CalendarSwapNode swapNode = new CalendarSwapNode(ecbName, Tenor.of(startPeriod), startNumber, endNumber, EUR_SWAP_1Y_ONCMP_ID, false, SCHEME, "CalendarSwapNode0204");
     final InstrumentDefinition<?> definition = swapNode.accept(converter);
@@ -1379,268 +1291,6 @@ public class CurveNodeToDefinitionConverterTest {
     final SwapFuturesPriceDeliverableSecurityDefinition securityDefinition = new SwapFuturesPriceDeliverableSecurityDefinition(DateUtils.getUTCDate(2013, 6, 17), underlying, 1);
     final SwapFuturesPriceDeliverableTransactionDefinition transaction = new SwapFuturesPriceDeliverableTransactionDefinition(securityDefinition, 1, NOW, price);
     assertEquals(transaction, definition);
-  }
-
-//  private IndexON index(final OvernightIndex index) {
-//    final OvernightIndexConvention convention = (OvernightIndexConvention) CONVENTION_SOURCE.getSingle(index.getConventionId());
-//    return new IndexON(index.getName(), convention.getCurrency(), convention.getDayCount(), convention.getPublicationLag());
-//  }
-
-
-  /**
-   * A simplified local version of a HolidaySource for tests.
-   */
-  private static class MySecuritySource implements SecuritySource {
-
-    /** Security source as a map for tests **/
-    private final Map<ExternalIdBundle, Security> _map;
-
-    /**
-     * @param map The map of id/Security
-     */
-    public MySecuritySource(final Map<ExternalIdBundle, Security> map) {
-      super();
-      _map = map;
-    }
-
-    @Override
-    public Collection<Security> get(final ExternalIdBundle bundle, final VersionCorrection versionCorrection) {
-      return null;
-    }
-
-    @Override
-    public Map<ExternalIdBundle, Collection<Security>> getAll(final Collection<ExternalIdBundle> bundles, final VersionCorrection versionCorrection) {
-      return null;
-    }
-
-    @Override
-    public Collection<Security> get(final ExternalIdBundle bundle) {
-      return null;
-    }
-
-    @Override
-    public Security getSingle(final ExternalIdBundle bundle) {
-      return _map.get(bundle);
-    }
-
-    @Override
-    public Security getSingle(final ExternalIdBundle bundle, final VersionCorrection versionCorrection) {
-      return _map.containsKey(bundle) ? _map.get(bundle) : null;
-    }
-
-    @Override
-    public Map<ExternalIdBundle, Security> getSingle(final Collection<ExternalIdBundle> bundles, final VersionCorrection versionCorrection) {
-      return null;
-    }
-
-    @Override
-    public Security get(final UniqueId uniqueId) {
-      return null;
-    }
-
-    @Override
-    public Security get(final ObjectId objectId, final VersionCorrection versionCorrection) {
-      return null;
-    }
-
-    @Override
-    public Map<UniqueId, Security> get(final Collection<UniqueId> uniqueIds) {
-      return null;
-    }
-
-    @Override
-    public Map<ObjectId, Security> get(final Collection<ObjectId> objectIds, final VersionCorrection versionCorrection) {
-      return null;
-    }
-
-    @Override
-    public ChangeManager changeManager() {
-      return null;
-    }
-
-  }
-
-
-  /**
-   * A simplified local version of a HolidaySource for tests.
-   */
-  private static class MyHolidaySource implements HolidaySource {
-    private final Map<ExternalIdBundle, Calendar> _map;
-
-    public MyHolidaySource(final ExternalId[] ids, final Calendar[] calendars) {
-      _map = new HashMap<>();
-      init(ids, calendars, _map);
-    }
-
-    public MyHolidaySource(final ExternalId[] ids, final Calendar[] calendars, final Map<ExternalIdBundle, Calendar> map) {
-      _map = map;
-      init(ids, calendars, map);
-    }
-
-    private static void init(final ExternalId[] ids, final Calendar[] calendars, final Map<ExternalIdBundle, Calendar> map) {
-      final int nbRegion = calendars.length;
-      for(int loopc=0; loopc<nbRegion; loopc++) {
-        map.put(ExternalIdBundle.of(ids[loopc]), calendars[loopc]);
-      }
-    }
-
-    @Override
-    public Holiday get(final UniqueId uniqueId) {
-      return null;
-    }
-
-    @Override
-    public Holiday get(final ObjectId objectId, final VersionCorrection versionCorrection) {
-      return null;
-    }
-
-    @Override
-    public Collection<Holiday> get(final HolidayType holidayType,
-                                   final ExternalIdBundle regionOrExchangeIds) {
-      throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public Collection<Holiday> get(final Currency currency) {
-      throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public Map<UniqueId, Holiday> get(final Collection<UniqueId> uniqueIds) {
-      return Collections.emptyMap();
-    }
-
-    @Override
-    public Map<ObjectId, Holiday> get(final Collection<ObjectId> objectIds, final VersionCorrection versionCorrection) {
-      return Collections.emptyMap();
-    }
-
-    @Override
-    public boolean isHoliday(final LocalDate dateToCheck, final Currency currency) {
-      return false;
-    }
-
-    @Override
-    public boolean isHoliday(final LocalDate dateToCheck, final HolidayType holidayType, final ExternalIdBundle regionOrExchangeIds) {
-      return !_map.get(regionOrExchangeIds).isWorkingDay(dateToCheck);
-    }
-
-    @Override
-    public boolean isHoliday(final LocalDate dateToCheck, final HolidayType holidayType, final ExternalId regionOrExchangeId) {
-      return false;
-    }
-
-  }
-
-  /**
-   * A simplified local version of a RegionSource for tests.
-   */
-  private static class MyRegionSource implements RegionSource {
-    private final Map<ExternalIdBundle, Region> _map;
-
-    public MyRegionSource(final ExternalId[] ids, final String[] countryId) {
-      _map = new HashMap<>();
-      init(ids, countryId, _map);
-    }
-
-    public MyRegionSource(final ExternalId[] ids, final String[] countryId, final Map<ExternalIdBundle, Region> map) {
-      _map = map;
-      init(ids, countryId, map);
-    }
-
-    private static void init(final ExternalId[] ids, final String[] countryId, final Map<ExternalIdBundle, Region> map) {
-      final int nbRegion = countryId.length;
-      for(int loopr=0; loopr<nbRegion; loopr++) {
-        final SimpleRegion region = new SimpleRegion();
-        final ExternalId id = ExternalSchemes.financialRegionId(countryId[loopr]);
-        region.addExternalId(id);
-        region.setUniqueId(UniqueId.of(UniqueId.EXTERNAL_SCHEME.getName(), id.getValue()));
-        map.put(ExternalIdBundle.of(ids[loopr]), region);
-      }
-    }
-
-    @Override
-    public Collection<Region> get(final ExternalIdBundle bundle, final VersionCorrection versionCorrection) {
-      return Collections.singleton(_map.get(bundle));
-    }
-
-    @Override
-    public Map<ExternalIdBundle, Collection<Region>> getAll(final Collection<ExternalIdBundle> bundles, final VersionCorrection versionCorrection) {
-      final Map<ExternalIdBundle, Collection<Region>> result = new HashMap<>();
-      for (final ExternalIdBundle bundle : bundles) {
-        final Region region = _map.get(bundle);
-        if (region != null) {
-          result.put(bundle, Collections.singleton(region));
-        }
-      }
-      return result;
-    }
-
-    @Override
-    public Collection<Region> get(final ExternalIdBundle bundle) {
-      final Region region = _map.get(bundle);
-      if (region != null) {
-        return Collections.singleton(region);
-      }
-      return Collections.emptySet();
-    }
-
-    @Override
-    public Region getSingle(final ExternalIdBundle bundle) {
-      return _map.get(bundle);
-    }
-
-    @Override
-    public Region getSingle(final ExternalIdBundle bundle, final VersionCorrection versionCorrection) {
-      return _map.get(bundle);
-    }
-
-    @Override
-    public Map<ExternalIdBundle, Region> getSingle(final Collection<ExternalIdBundle> bundles, final VersionCorrection versionCorrection) {
-      final Map<ExternalIdBundle, Region> result = new HashMap<>();
-      for (final ExternalIdBundle bundle : bundles) {
-        final Region region = _map.get(bundle);
-        if (region != null) {
-          result.put(bundle, region);
-        }
-      }
-      return result;
-    }
-
-    @Override
-    public Region get(final UniqueId uniqueId) {
-      return null;
-    }
-
-    @Override
-    public Region get(final ObjectId objectId, final VersionCorrection versionCorrection) {
-      return null;
-    }
-
-    @Override
-    public Map<UniqueId, Region> get(final Collection<UniqueId> uniqueIds) {
-      return null;
-    }
-
-    @Override
-    public Map<ObjectId, Region> get(final Collection<ObjectId> objectIds, final VersionCorrection versionCorrection) {
-      return null;
-    }
-
-    @Override
-    public ChangeManager changeManager() {
-      return DummyChangeManager.INSTANCE;
-    }
-
-    @Override
-    public Region getHighestLevelRegion(final ExternalId externalId) {
-      return _map.get(ExternalIdBundle.of(externalId));
-    }
-
-    @Override
-    public Region getHighestLevelRegion(final ExternalIdBundle bundle) {
-      return _map.get(bundle);
-    }
   }
 
 }
