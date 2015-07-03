@@ -203,10 +203,12 @@ public class InMemoryConfigMaster implements ConfigMaster {
   @Override
   public void remove(final ObjectIdentifiable objectIdentifiable) {
     ArgumentChecker.notNull(objectIdentifiable, "objectIdentifiable");
+    // we do this before because we get called back to see what the 'old' version was to determine the type of config being removed.
+    Instant now = Instant.now();
+    _changeManager.entityChanged(ChangeType.REMOVED, objectIdentifiable.getObjectId(), Instant.MIN.plusNanos(1), now, now); // start needs to be min + 1 because change provider does -1 nano.
     if (_store.remove(objectIdentifiable.getObjectId()) == null) {
       throw new DataNotFoundException("Config not found: " + objectIdentifiable);
     }
-    _changeManager.entityChanged(ChangeType.REMOVED, objectIdentifiable.getObjectId(), null, null, Instant.now());
   }
 
   //-------------------------------------------------------------------------
