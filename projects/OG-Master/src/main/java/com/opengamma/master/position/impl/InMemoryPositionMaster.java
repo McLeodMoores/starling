@@ -34,6 +34,7 @@ import com.opengamma.master.position.PositionHistoryResult;
 import com.opengamma.master.position.PositionMaster;
 import com.opengamma.master.position.PositionSearchRequest;
 import com.opengamma.master.position.PositionSearchResult;
+import com.opengamma.master.security.ManageableSecurityLink;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.paging.Paging;
 
@@ -114,7 +115,9 @@ public class InMemoryPositionMaster extends SimpleAbstractInMemoryMaster<Positio
   private PositionDocument clonePositionDocument(final PositionDocument document) {
     if (isCloneResults()) {
       final PositionDocument clone = JodaBeanUtils.clone(document);
-      clone.setPosition(new ManageablePosition(document.getPosition()));
+      final ManageablePosition clonedPosition = new ManageablePosition(document.getPosition());
+      clonedPosition.setSecurityLink(new ManageableSecurityLink(document.getPosition().getSecurityLink().getExternalId()));
+      clone.setPosition(clonedPosition);
       return clone;
     } else {
       return document;
@@ -153,6 +156,10 @@ public class InMemoryPositionMaster extends SimpleAbstractInMemoryMaster<Positio
       final UniqueId uniqueId = objectId.atVersion("");
       final ManageableTrade origTrade = trades.get(i);
       final ManageableTrade clonedTrade = clonedTrades.get(i);
+      final ManageableSecurityLink origLink = origTrade.getSecurityLink();
+      if (origLink.getTarget() != null) { // unlink otherwise we're storing a copy in memory here.  This causes issues.
+        clonedTrade.setSecurityLink(new ManageableSecurityLink(origLink.getTarget().getExternalIdBundle()));
+      }
       clonedTrade.setUniqueId(uniqueId);
       origTrade.setUniqueId(uniqueId);
       clonedTrade.setParentPositionId(parentPositionId);

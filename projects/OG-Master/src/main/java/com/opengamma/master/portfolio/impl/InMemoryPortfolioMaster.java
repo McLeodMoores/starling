@@ -232,6 +232,7 @@ public class InMemoryPortfolioMaster extends SimpleAbstractInMemoryMaster<Portfo
     }
     
     final PortfolioDocument clonedDoc = clonePortfolioDocument(document);
+    setDocumentId(document, clonedDoc, uniqueId); // BUGFIX: could inject portfolio in document with unique id not set.
     removeNodes(storedDocument.getPortfolio().getRootNode());
     
     setVersionTimes(document, clonedDoc, now, null, now, null);

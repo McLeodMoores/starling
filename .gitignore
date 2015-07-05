@@ -24,6 +24,7 @@ common/deploy.properties
 !/projects/OG-EngineDB
 !/projects/OG-Examples
 !/projects/OG-Financial
+!/projects/MM-Finmath
 !/projects/OG-FinancialTypes
 !/projects/OG-Install
 !/projects/OG-Integration
