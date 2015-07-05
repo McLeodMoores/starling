@@ -3,7 +3,7 @@
  */
 package com.mcleodmoores.integration.finmath.serialization.fudge;
 
-import static com.mcleodmoores.testutils.FinmathSerializationTestUtils.assertCurveEquals;
+import static com.mcleodmoores.integration.finmath.testutils.FinmathSerializationTestUtils.assertCurveEquals;
 import static org.testng.Assert.fail;
 
 import java.util.Calendar;
@@ -35,7 +35,7 @@ import org.threeten.bp.LocalDate;
 import com.mcleodmoores.integration.finmath.adapter.ActActAfbFinmathDayCount;
 import com.mcleodmoores.integration.finmath.adapter.FinmathDateUtils;
 import com.mcleodmoores.integration.finmath.adapter.TargetBusinessDayCalendar;
-import com.mcleodmoores.testutils.FinancialTestBase;
+import com.mcleodmoores.integration.finmath.testutils.FinancialTestBase;
 
 /**
  * Unit tests for {@link FinmathCurveBuilders}.

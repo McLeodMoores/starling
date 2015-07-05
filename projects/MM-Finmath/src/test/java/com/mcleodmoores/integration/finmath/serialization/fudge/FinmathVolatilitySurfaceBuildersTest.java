@@ -3,7 +3,7 @@
  */
 package com.mcleodmoores.integration.finmath.serialization.fudge;
 
-import static com.mcleodmoores.testutils.FinmathSerializationTestUtils.assertSurfaceEquals;
+import static com.mcleodmoores.integration.finmath.testutils.FinmathSerializationTestUtils.assertSurfaceEquals;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.fail;
 
@@ -31,7 +31,8 @@ import org.testng.annotations.Test;
 import org.threeten.bp.LocalDate;
 
 import com.mcleodmoores.integration.finmath.adapter.FinmathDateUtils;
-import com.mcleodmoores.testutils.FinancialTestBase;
+import com.mcleodmoores.integration.finmath.testutils.FinancialTestBase;
+
 /**
  * Unit tests for {@link FinmathVolatilitySurfaceBuilders}.
  */

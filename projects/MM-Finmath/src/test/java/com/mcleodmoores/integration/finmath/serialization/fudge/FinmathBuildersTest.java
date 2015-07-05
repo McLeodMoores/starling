@@ -3,8 +3,8 @@
  */
 package com.mcleodmoores.integration.finmath.serialization.fudge;
 
-import static com.mcleodmoores.testutils.FinmathSerializationTestUtils.assertCurveEquals;
-import static com.mcleodmoores.testutils.FinmathSerializationTestUtils.assertSurfaceEquals;
+import static com.mcleodmoores.integration.finmath.testutils.FinmathSerializationTestUtils.assertCurveEquals;
+import static com.mcleodmoores.integration.finmath.testutils.FinmathSerializationTestUtils.assertSurfaceEquals;
 import static org.testng.Assert.assertEquals;
 import static org.testng.internal.junit.ArrayAsserts.assertArrayEquals;
 
@@ -30,7 +30,7 @@ import org.threeten.bp.LocalDate;
 
 import com.mcleodmoores.integration.finmath.adapter.ActActAfbFinmathDayCount;
 import com.mcleodmoores.integration.finmath.adapter.FinmathDateUtils;
-import com.mcleodmoores.testutils.FinancialTestBase;
+import com.mcleodmoores.integration.finmath.testutils.FinancialTestBase;
 
 /**
  * Unit tests for {@link FinmathBuilders}.
@@ -118,7 +118,7 @@ public class FinmathBuildersTest extends FinancialTestBase {
     final DayCountConventionInterface dayCount = new ActActAfbFinmathDayCount();
     final Schedule schedule = new Schedule(referenceDate, periods, dayCount);
     final Schedule cycled = cycleObject(Schedule.class, schedule);
-    assertEquals(FinmathDateUtils.convertToLocalDate(schedule.getReferenceDate()), FinmathDateUtils.convertToLocalDate((cycled.getReferenceDate())));
+    assertEquals(FinmathDateUtils.convertToLocalDate(schedule.getReferenceDate()), FinmathDateUtils.convertToLocalDate(cycled.getReferenceDate()));
     final List<Period> cycledPeriods = cycled.getPeriods();
     assertEquals(periods.size(), cycledPeriods.size());
     for (int i = 0; i < periods.size(); i++) {

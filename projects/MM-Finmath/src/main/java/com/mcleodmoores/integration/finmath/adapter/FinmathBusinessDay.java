@@ -9,7 +9,7 @@ import net.finmath.time.businessdaycalendar.BusinessdayCalendarInterface;
 
 import org.joda.convert.FromStringFactory;
 
-import com.mcleodmoores.convention.BusinessDay;
+import com.mcleodmoores.integration.finmath.convention.BusinessDay;
 
 /**
  * Top-level wrapper for {@link BusinessdayCalendarInterface} classes.
@@ -69,7 +69,7 @@ public abstract class FinmathBusinessDay implements BusinessDay, BusinessdayCale
   public int hashCode() {
     final int prime = 31;
     int result = 1;
-    result = prime * result + ((_name == null) ? 0 : _name.hashCode());
+    result = prime * result + (_name == null ? 0 : _name.hashCode());
     // doesn't make sense to wrap a calendar
     return result;
   }

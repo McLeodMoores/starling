@@ -10,7 +10,7 @@ import net.finmath.time.daycount.DayCountConventionInterface;
 
 import org.joda.convert.FromStringFactory;
 
-import com.mcleodmoores.convention.DayCount;
+import com.mcleodmoores.integration.finmath.convention.DayCount;
 
 /**
  * Top-level wrapper for {@link DayCountConventionInterface} classes.
@@ -59,8 +59,8 @@ public abstract class FinmathDayCount implements DayCount, DayCountConventionInt
   public int hashCode() {
     final int prime = 31;
     int result = 1;
-    result = prime * result + ((_name == null) ? 0 : _name.hashCode());
-    result = prime * result + ((_dayCount == null) ? 0 : _dayCount.getClass().getName().hashCode());
+    result = prime * result + (_name == null ? 0 : _name.hashCode());
+    result = prime * result + (_dayCount == null ? 0 : _dayCount.getClass().getName().hashCode());
     // don't use day-count directly because hashCode() is not implemented
     return result;
   }

@@ -44,7 +44,11 @@ public class CurveFunctions extends AbstractFunctionConfigurationBean {
   public static class Providers extends VersionedFunctionConfigurationBean {
     private ConfigMaster _configMaster;
 
-    public void setConfigMaster(final ConfigMaster configMaster){
+    /**
+     *
+     * @param configMaster
+     */
+    public void setConfigMaster(final ConfigMaster configMaster) {
       ArgumentChecker.notNull(configMaster, "configMaster");
       _configMaster = configMaster;
     }

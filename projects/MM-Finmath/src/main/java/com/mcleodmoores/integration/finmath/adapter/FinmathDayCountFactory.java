@@ -5,7 +5,7 @@ package com.mcleodmoores.integration.finmath.adapter;
 
 import org.joda.convert.FromString;
 
-import com.opengamma.financial.convention.AbstractNamedInstanceFactory;
+import com.opengamma.util.AbstractNamedInstanceFactory;
 
 /**
  * A factory for {@link FinmathDayCount} instances. The class mappings are stored in FinmathDayCount.properties

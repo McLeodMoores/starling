@@ -3,7 +3,7 @@
  */
 package com.mcleodmoores.integration.finmath.serialization;
 
-import static com.mcleodmoores.testutils.FinmathSerializationTestUtils.assertCurveEquals;
+import static com.mcleodmoores.integration.finmath.testutils.FinmathSerializationTestUtils.assertCurveEquals;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotEquals;
 import static org.testng.Assert.assertNull;

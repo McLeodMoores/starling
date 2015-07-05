@@ -18,7 +18,7 @@ import net.finmath.time.businessdaycalendar.BusinessdayCalendar;
 import org.testng.annotations.Test;
 import org.threeten.bp.LocalDate;
 
-import com.mcleodmoores.testutils.TestCalendar;
+import com.mcleodmoores.integration.finmath.testutils.TestCalendar;
 
 /**
  * Unit tests for {@link BusinessDayCalendarAdapter}.
