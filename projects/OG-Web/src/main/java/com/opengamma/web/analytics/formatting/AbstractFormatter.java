@@ -15,30 +15,30 @@ import com.opengamma.util.ArgumentChecker;
  * Abstract {@link TypeFormatter} that implements {@link #getDataTypeForValue} by delegating to {@link #getDataType()}.
  * @param <T> Type of object formatted by the formatter
  */
-/* package */ abstract class AbstractFormatter<T> implements TypeFormatter<T> {
+public abstract class AbstractFormatter<T> implements TypeFormatter<T> {
 
   private final Class<T> _type;
   private final Map<Format, Formatter<T>> _formatters = Maps.newHashMap();
-  
-  protected AbstractFormatter(Class<T> type) {
+
+  protected AbstractFormatter(final Class<T> type) {
     ArgumentChecker.notNull(type, "type");
     _type = type;
   }
 
-  protected void addFormatter(Formatter<T> formatter) {
+  protected void addFormatter(final Formatter<T> formatter) {
     _formatters.put(formatter.getFormat(), formatter);
   }
 
   @Override
-  public Object format(T value, ValueSpecification valueSpec, Format format, Object inlineKey) {
+  public Object format(final T value, final ValueSpecification valueSpec, final Format format, final Object inlineKey) {
     if (format == Format.CELL) {
       return formatCell(value, valueSpec, inlineKey);
     }
-    Formatter<T> formatter = _formatters.get(format);
+    final Formatter<T> formatter = _formatters.get(format);
     if (formatter != null) {
       return formatter.format(value, valueSpec, inlineKey);
-    } 
-    return new MissingValueFormatter(format + " format not supported for " + value.getClass().getSimpleName());    
+    }
+    return new MissingValueFormatter(format + " format not supported for " + value.getClass().getSimpleName());
   }
 
   @Override
@@ -48,12 +48,12 @@ import com.opengamma.util.ArgumentChecker;
 
   /**
    * Returns the same format type as {@link #getDataType()}.
-   * 
+   *
    * @param value The value
    * @return The format type returned by {@link #getDataType()}
    */
   @Override
-  public DataType getDataTypeForValue(T value) {
+  public DataType getDataTypeForValue(final T value) {
     return getDataType();
   }
 
@@ -65,7 +65,7 @@ import com.opengamma.util.ArgumentChecker;
   abstract static class Formatter<T> {
     private final Format _format;
 
-    Formatter(Format format) {
+    Formatter(final Format format) {
       _format = format;
     }
 
