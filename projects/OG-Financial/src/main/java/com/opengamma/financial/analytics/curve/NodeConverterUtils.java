@@ -2,6 +2,10 @@
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
  *
  * Please see distribution for license.
+ *
+ * Modified by McLeod Moores Software Limited.
+ *
+ * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.financial.analytics.curve;
 
@@ -63,15 +67,23 @@ import com.opengamma.financial.security.swap.SwapLeg;
 import com.opengamma.id.ExternalId;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
+import com.opengamma.util.time.Tenor;
 import com.opengamma.util.tuple.Triple;
 
 /**
  * Utilities to convert the nodes used in curve construction to OG-Analytics objects.
  */
-public class NodeConverterUtils {
+@SuppressWarnings("deprecation")
+public final class NodeConverterUtils {
 
   /** The convention used to adjust date after roll date adjuster. **/
   private static final BusinessDayConvention FOLLOWING = BusinessDayConventions.FOLLOWING;
+
+  /**
+   * Restricted constructor
+   */
+  private NodeConverterUtils() {
+  }
 
   /**
    * Creates a {@link SwapDefinition} from the pay and receive conventions of a swap.
@@ -91,8 +103,8 @@ public class NodeConverterUtils {
    * @return A swap definition
    */
   public static SwapDefinition getSwapDefinition(
-      final FinancialConvention payLegConvention, final FinancialConvention receiveLegConvention, final Period startTenor, final Period maturityTenor, 
-      final SecuritySource securitySource, final RegionSource regionSource, final HolidaySource holidaySource, final ConventionSource conventionSource, 
+      final FinancialConvention payLegConvention, final FinancialConvention receiveLegConvention, final Period startTenor, final Period maturityTenor,
+      final SecuritySource securitySource, final RegionSource regionSource, final HolidaySource holidaySource, final ConventionSource conventionSource,
       final SnapshotDataBundle marketData, final ExternalId dataId, final ZonedDateTime valuationTime, final FXMatrix fx) {
     ArgumentChecker.notNull(payLegConvention, "pay leg convention");
     ArgumentChecker.notNull(receiveLegConvention, "receive leg convention");
@@ -114,11 +126,13 @@ public class NodeConverterUtils {
     ArgumentChecker.isTrue(ccySetRec.size() == 1, "More than one currency for one leg");
     final Currency ccyPay = ccySetPay.iterator().next();
     final Currency ccyRec = ccySetRec.iterator().next();
-    final boolean isXCcy = !(ccyPay.equals(ccyRec));
+    final boolean isXCcy = !ccyPay.equals(ccyRec);
     final double notionalRec = fx.getFxRate(ccyPay, ccyRec);
-    final AnnuityDefinition<? extends PaymentDefinition> payLeg = getSwapLeg(payLegConvention, startTenor, maturityTenor, securitySource, regionSource, holidaySource,
+    final AnnuityDefinition<? extends PaymentDefinition> payLeg =
+        getSwapLeg(payLegConvention, startTenor, maturityTenor, securitySource, regionSource, holidaySource,
         conventionSource, marketData, dataId, valuationTime, true, isFloatFloat, isXCcy, 1.0);
-    final AnnuityDefinition<? extends PaymentDefinition> receiveLeg = getSwapLeg(receiveLegConvention, startTenor, maturityTenor, securitySource, regionSource, holidaySource,
+    final AnnuityDefinition<? extends PaymentDefinition> receiveLeg =
+        getSwapLeg(receiveLegConvention, startTenor, maturityTenor, securitySource, regionSource, holidaySource,
         conventionSource, marketData, dataId, valuationTime, false, isFloatFloat, isXCcy, notionalRec);
     return new SwapDefinition(payLeg, receiveLeg);
   }
@@ -142,8 +156,8 @@ public class NodeConverterUtils {
    */
   public static SwapDefinition getSwapRollDateDefinition(
       final FinancialConvention payLegConvention, final FinancialConvention receiveLegConvention, final ZonedDateTime unadjustedStartDate,
-      final int startNumberRollDate, final int endNumberRollDate, final RollDateAdjuster adjuster, 
-      final SecuritySource securitySource, final RegionSource regionSource, final HolidaySource holidaySource, final ConventionSource conventionSource, 
+      final int startNumberRollDate, final int endNumberRollDate, final RollDateAdjuster adjuster,
+      final SecuritySource securitySource, final RegionSource regionSource, final HolidaySource holidaySource, final ConventionSource conventionSource,
       final SnapshotDataBundle marketData, final ExternalId dataId, final ZonedDateTime valuationTime) {
     ArgumentChecker.notNull(payLegConvention, "pay leg convention");
     ArgumentChecker.notNull(receiveLegConvention, "receive leg convention");
@@ -155,9 +169,11 @@ public class NodeConverterUtils {
     ArgumentChecker.notNull(dataId, "data id");
     ArgumentChecker.notNull(valuationTime, "valuation time");
     final boolean isFloatFloat = isFloatFloatRoll(payLegConvention, receiveLegConvention);
-    final AnnuityDefinition<? extends PaymentDefinition> payLeg = getRollDateSwapLeg(payLegConvention, unadjustedStartDate, startNumberRollDate, endNumberRollDate, adjuster, 
+    final AnnuityDefinition<? extends PaymentDefinition> payLeg =
+        getRollDateSwapLeg(payLegConvention, unadjustedStartDate, startNumberRollDate, endNumberRollDate, adjuster,
         securitySource, regionSource, holidaySource, conventionSource, marketData, dataId, valuationTime, true, isFloatFloat);
-    final AnnuityDefinition<? extends PaymentDefinition> receiveLeg = getRollDateSwapLeg(receiveLegConvention, unadjustedStartDate, startNumberRollDate, endNumberRollDate, adjuster, 
+    final AnnuityDefinition<? extends PaymentDefinition> receiveLeg =
+        getRollDateSwapLeg(receiveLegConvention, unadjustedStartDate, startNumberRollDate, endNumberRollDate, adjuster,
         securitySource, regionSource, holidaySource, conventionSource, marketData, dataId, valuationTime, false, isFloatFloat);
     return new SwapDefinition(payLeg, receiveLeg);
   }
@@ -182,7 +198,7 @@ public class NodeConverterUtils {
   public static SwapDefinition getSwapCalendarDefinition(
       final FinancialConvention payLegConvention, final FinancialConvention receiveLegConvention, final ZonedDateTime unadjustedStartDate,
       final int startDateNumber, final int endDateNumber, final DateSet calendarStartEndDate,
-      final SecuritySource securitySource, final RegionSource regionSource, final HolidaySource holidaySource, final ConventionSource conventionSource, 
+      final SecuritySource securitySource, final RegionSource regionSource, final HolidaySource holidaySource, final ConventionSource conventionSource,
       final SnapshotDataBundle marketData, final ExternalId dataId, final ZonedDateTime valuationTime) {
     ArgumentChecker.notNull(payLegConvention, "pay leg convention");
     ArgumentChecker.notNull(receiveLegConvention, "receive leg convention");
@@ -194,9 +210,11 @@ public class NodeConverterUtils {
     ArgumentChecker.notNull(dataId, "data id");
     ArgumentChecker.notNull(valuationTime, "valuation time");
     final boolean isFloatFloat = isFloatFloatRoll(payLegConvention, receiveLegConvention);
-    final AnnuityDefinition<? extends PaymentDefinition> payLeg = getCalendarSwapLeg(payLegConvention, unadjustedStartDate, startDateNumber, endDateNumber, calendarStartEndDate, 
+    final AnnuityDefinition<? extends PaymentDefinition> payLeg =
+        getCalendarSwapLeg(payLegConvention, unadjustedStartDate, startDateNumber, endDateNumber, calendarStartEndDate,
         securitySource, regionSource, holidaySource, conventionSource, marketData, dataId, valuationTime, true, isFloatFloat);
-    final AnnuityDefinition<? extends PaymentDefinition> receiveLeg = getCalendarSwapLeg(receiveLegConvention, unadjustedStartDate, startDateNumber, endDateNumber, calendarStartEndDate, 
+    final AnnuityDefinition<? extends PaymentDefinition> receiveLeg =
+        getCalendarSwapLeg(receiveLegConvention, unadjustedStartDate, startDateNumber, endDateNumber, calendarStartEndDate,
         securitySource, regionSource, holidaySource, conventionSource, marketData, dataId, valuationTime, false, isFloatFloat);
     return new SwapDefinition(payLeg, receiveLeg);
   }
@@ -221,12 +239,13 @@ public class NodeConverterUtils {
    * @throws UnsupportedOperationException If the convention type has not been implemented
    */
   public static AnnuityDefinition<? extends PaymentDefinition> getSwapLeg(
-      final FinancialConvention legConvention, final Period startTenor, final Period maturityTenor, 
-      final SecuritySource securitySource, final RegionSource regionSource, final HolidaySource holidaySource, final ConventionSource conventionSource, 
+      final FinancialConvention legConvention, final Period startTenor, final Period maturityTenor,
+      final SecuritySource securitySource, final RegionSource regionSource, final HolidaySource holidaySource, final ConventionSource conventionSource,
       final SnapshotDataBundle marketData, final ExternalId dataId,
       final ZonedDateTime valuationTime, final boolean isPayer, final boolean isMarketDataSpread, final boolean isXCcy, final double notional) {
 
-    final FinancialConventionVisitor<AnnuityDefinition<? extends PaymentDefinition>> visitor = new FinancialConventionVisitorAdapter<AnnuityDefinition<? extends PaymentDefinition>>() {
+    final FinancialConventionVisitor<AnnuityDefinition<? extends PaymentDefinition>> visitor =
+        new FinancialConventionVisitorAdapter<AnnuityDefinition<? extends PaymentDefinition>>() {
 
       @Override
       public AnnuityDefinition<? extends PaymentDefinition> visitONArithmeticAverageLegConvention(final ONArithmeticAverageLegConvention convention) {
@@ -267,7 +286,7 @@ public class NodeConverterUtils {
         if (isXCcy) {
           throw new NotImplementedException("Cross-currency Ibor compounded leg not implemented.");
         }
-        final Security sec = securitySource.getSingle(convention.getIborIndexConvention().toBundle()); 
+        final Security sec = securitySource.getSingle(convention.getIborIndexConvention().toBundle());
         if (sec == null) {
           throw new OpenGammaRuntimeException("Ibor index with id " + convention.getIborIndexConvention() + " was null");
         }
@@ -304,7 +323,7 @@ public class NodeConverterUtils {
         switch (compound) {
           case COMPOUNDING:
             return AnnuityDefinitionBuilder.couponIborCompounding(startDate, maturityDate, paymentTenor, notional, index, stubComp, isPayer,
-              index.getBusinessDayConvention(), eom, calendar, stubLeg);
+                index.getBusinessDayConvention(), eom, calendar, stubLeg);
           case FLAT_COMPOUNDING:
             return AnnuityDefinitionBuilder.couponIborCompoundingFlatSpread(startDate, maturityDate, paymentTenor, notional, 0.0, index, stubComp, isPayer,
                 index.getBusinessDayConvention(), eom, calendar, stubLeg);
@@ -375,16 +394,27 @@ public class NodeConverterUtils {
 
       @Override
       public AnnuityDefinition<? extends PaymentDefinition> visitVanillaIborLegConvention(final VanillaIborLegConvention convention) {
-        final Security sec = securitySource.getSingle(convention.getIborIndexConvention().toBundle()); 
-        if (sec == null) {
-          throw new OpenGammaRuntimeException("Ibor index with id " + convention.getIborIndexConvention() + " was null");
-        }
-        final com.opengamma.financial.security.index.IborIndex indexSecurity = (com.opengamma.financial.security.index.IborIndex) sec;
-        final IborIndexConvention indexConvention = conventionSource.getSingle(indexSecurity.getConventionId(), IborIndexConvention.class);
-        final IborIndex index = ConverterUtils.indexIbor(indexSecurity.getName(), indexConvention, indexSecurity.getTenor());
-        final Calendar calendar = CalendarUtils.getCalendar(regionSource, holidaySource, indexConvention.getRegionCalendar());
-        final boolean eomLeg = convention.isIsEOM();
+        final Security sec = securitySource.getSingle(convention.getIborIndexConvention().toBundle());
         final Period indexTenor = convention.getResetTenor().getPeriod();
+        final IborIndex index;
+        final Calendar calendar;
+        if (sec == null) {
+          final IborIndexConvention indexConvention = conventionSource.getSingle(convention.getIborIndexConvention(), IborIndexConvention.class);
+          if (indexConvention == null) {
+            throw new OpenGammaRuntimeException("Could not get ibor index convention with id " + convention.getIborIndexConvention());
+          }
+          index = ConverterUtils.indexIbor(indexConvention.getName(), indexConvention, Tenor.of(indexTenor));
+          calendar = CalendarUtils.getCalendar(regionSource, holidaySource, indexConvention.getRegionCalendar());
+        } else {
+          final com.opengamma.financial.security.index.IborIndex indexSecurity = (com.opengamma.financial.security.index.IborIndex) sec;
+          final IborIndexConvention indexConvention = conventionSource.getSingle(indexSecurity.getConventionId(), IborIndexConvention.class);
+          if (indexConvention == null) {
+            throw new OpenGammaRuntimeException("Could not get ibor index convention with id " + indexSecurity.getConventionId());
+          }
+          index = ConverterUtils.indexIbor(indexSecurity.getName(), indexConvention, indexSecurity.getTenor());
+          calendar = CalendarUtils.getCalendar(regionSource, holidaySource, indexConvention.getRegionCalendar());
+        }
+        final boolean eomLeg = convention.isIsEOM();
         final int spotLagLeg = convention.getSettlementDays();
         final ZonedDateTime spotDateLeg = ScheduleCalculator.getAdjustedDate(valuationTime, spotLagLeg, calendar);
         final ZonedDateTime startDate = ScheduleCalculator.getAdjustedDate(spotDateLeg, startTenor, index.getBusinessDayConvention(), calendar, eomLeg);
@@ -433,8 +463,8 @@ public class NodeConverterUtils {
    * @throws UnsupportedOperationException If the convention type has not been implemented
    */
   private static AnnuityDefinition<? extends PaymentDefinition> getRollDateSwapLeg(
-      final FinancialConvention legConvention, final ZonedDateTime unadjustedStartDate, final int rollDateStartNumber, final int rollDateEndNumber, final RollDateAdjuster adjuster, 
-      final SecuritySource securitySource, final RegionSource regionSource, final HolidaySource holidaySource, final ConventionSource conventionSource, 
+      final FinancialConvention legConvention, final ZonedDateTime unadjustedStartDate, final int rollDateStartNumber, final int rollDateEndNumber, final RollDateAdjuster adjuster,
+      final SecuritySource securitySource, final RegionSource regionSource, final HolidaySource holidaySource, final ConventionSource conventionSource,
       final SnapshotDataBundle marketData, final ExternalId dataId, final ZonedDateTime valuationTime, final boolean isPayer,
       final boolean isMarketDataSpread) {
     final FinancialConventionVisitor<AnnuityDefinition<? extends PaymentDefinition>> visitor = new FinancialConventionVisitorAdapter<AnnuityDefinition<? extends PaymentDefinition>>() {
@@ -460,7 +490,7 @@ public class NodeConverterUtils {
       @SuppressWarnings("synthetic-access")
       @Override
       public AnnuityDefinition<? extends PaymentDefinition> visitVanillaIborLegRollDateConvention(final VanillaIborLegRollDateConvention convention) {
-        final Security sec = securitySource.getSingle(convention.getIborIndexConvention().toBundle()); 
+        final Security sec = securitySource.getSingle(convention.getIborIndexConvention().toBundle());
         if (sec == null) {
           throw new OpenGammaRuntimeException("Ibor index with id " + convention.getIborIndexConvention() + " was null");
         }
@@ -515,11 +545,14 @@ public class NodeConverterUtils {
   }
 
   private static AnnuityDefinition<? extends PaymentDefinition> getCalendarSwapLeg(
-      final FinancialConvention legConvention, final ZonedDateTime unadjustedStartDate, final int calendarDateStartOffset, final int calendarDateEndOffset, final DateSet offsetDates,
-      final SecuritySource securitySource, final RegionSource regionSource, final HolidaySource holidaySource, final ConventionSource conventionSource, 
-      final SnapshotDataBundle marketData, final ExternalId dataId, final ZonedDateTime valuationTime, final boolean isPayer, final boolean isMarketDataSpread) {
+      final FinancialConvention legConvention, final ZonedDateTime unadjustedStartDate, final int calendarDateStartOffset,
+      final int calendarDateEndOffset, final DateSet offsetDates,
+      final SecuritySource securitySource, final RegionSource regionSource, final HolidaySource holidaySource, final ConventionSource conventionSource,
+      final SnapshotDataBundle marketData, final ExternalId dataId, final ZonedDateTime valuationTime, final boolean isPayer,
+      final boolean isMarketDataSpread) {
 
-    final FinancialConventionVisitor<AnnuityDefinition<? extends PaymentDefinition>> visitor = new FinancialConventionVisitorAdapter<AnnuityDefinition<? extends PaymentDefinition>>() {
+    final FinancialConventionVisitor<AnnuityDefinition<? extends PaymentDefinition>> visitor =
+        new FinancialConventionVisitorAdapter<AnnuityDefinition<? extends PaymentDefinition>>() {
 
       @SuppressWarnings("synthetic-access")
       @Override
@@ -553,11 +586,11 @@ public class NodeConverterUtils {
           if (spread == null) {
             throw new OpenGammaRuntimeException("Could not get market data for " + dataId);
           }
-          return AnnuityDefinitionBuilder.couponONSimpleCompoundedSpreadSimplified(effectiveDateTime, maturityDateTime, paymentPeriod, 1.0d, spread, indexON, isPayer,
-              businessDayConvention, eomLeg, calendar, stub, paymentLag);
+          return AnnuityDefinitionBuilder.couponONSimpleCompoundedSpreadSimplified(effectiveDateTime, maturityDateTime, paymentPeriod, 1.0d,
+              spread, indexON, isPayer, businessDayConvention, eomLeg, calendar, stub, paymentLag);
         }
-        return AnnuityDefinitionBuilder.couponONSimpleCompoundedSpreadSimplified(effectiveDateTime, maturityDateTime, paymentPeriod, 1.0d, 0.0d, indexON, isPayer,
-            businessDayConvention, eomLeg, calendar, stub, paymentLag);
+        return AnnuityDefinitionBuilder.couponONSimpleCompoundedSpreadSimplified(effectiveDateTime, maturityDateTime, paymentPeriod, 1.0d, 0.0d,
+            indexON, isPayer, businessDayConvention, eomLeg, calendar, stub, paymentLag);
       }
 
       @SuppressWarnings("synthetic-access")
@@ -586,8 +619,8 @@ public class NodeConverterUtils {
         final ZonedDateTime maturityDateTime = maturityDate.atStartOfDay(ZoneId.of("UTC"));
         final StubType stub = convention.getStubType();
         final Period paymentPeriod = convention.getPaymentTenor().getPeriod();
-        return AnnuityDefinitionBuilder.couponFixed(currency, effectiveDateTime, maturityDateTime, paymentPeriod, calendar, dayCount, businessDayConvention, eomLeg,
-              1.0d, rate, isPayer, stub, paymentLag);
+        return AnnuityDefinitionBuilder.couponFixed(currency, effectiveDateTime, maturityDateTime, paymentPeriod, calendar, dayCount,
+            businessDayConvention, eomLeg, 1.0d, rate, isPayer, stub, paymentLag);
       }
 
     };
@@ -596,7 +629,8 @@ public class NodeConverterUtils {
   }
 
   /**
-   * Constructs an {@link AnnuityDefinition} from the pay and receive conventions of a swap.
+   * Constructs an {@link AnnuityDefinition} from the pay and receive conventions of a swap. If the convention type has not been implemented,
+   * throws an exception
    * @param legConvention The leg convention
    * @param startTenor The start tenor of the swap
    * @param maturityTenor The maturity tenor of the swap
@@ -609,7 +643,6 @@ public class NodeConverterUtils {
    * @param isPayer True if the leg is to be paid
    * @param isMarketDataSpread True if the market data is a spread paid on a floating leg
    * @return An annuity definition
-   * @throws UnsupportedOperationException If the convention type has not been implemented
    */
   public static Triple<? extends SwapLeg, ZonedDateTime, ZonedDateTime> createSwapLeg(
       final FinancialConvention legConvention, final Period startTenor,  final Period maturityTenor, final RegionSource regionSource,
@@ -631,7 +664,8 @@ public class NodeConverterUtils {
         final BusinessDayConvention businessDayConvention = convention.getBusinessDayConvention();
         final ZonedDateTime startDate = ScheduleCalculator.getAdjustedDate(spotDateLeg, startTenor, businessDayConvention, calendar, eomLeg);
         final ZonedDateTime maturityDate = startDate.plus(maturityTenor);
-        final ExternalId indexId = ExternalId.of("UNKNOWN", indexConvention.getName()); // TODO: The proper Id of the ON index should be provided but is currently not available.
+        final ExternalId indexId = ExternalId.of("UNKNOWN", indexConvention.getName());
+        // TODO: The proper Id of the ON index should be provided but is currently not available.
         if (!isPayer && isMarketDataSpread) {
           final Double spread = marketData.getDataPoint(dataId);
           if (spread == null) {
@@ -639,15 +673,15 @@ public class NodeConverterUtils {
           }
           return Triple.of(
               new FloatingSpreadIRLeg(dayCount, PeriodFrequency.of(paymentPeriod), indexConvention.getRegionCalendar(), businessDayConvention,
-              new InterestRateNotional(currency, 1), eomLeg, indexId, FloatingRateType.OVERNIGHT_ARITHMETIC_AVERAGE, spread),
-              startDate,
-              maturityDate);
+                  new InterestRateNotional(currency, 1), eomLeg, indexId, FloatingRateType.OVERNIGHT_ARITHMETIC_AVERAGE, spread),
+                  startDate,
+                  maturityDate);
         }
         return Triple.of(
             new FloatingInterestRateLeg(dayCount, PeriodFrequency.of(paymentPeriod), indexConvention.getRegionCalendar(), businessDayConvention,
-            new InterestRateNotional(currency, 1), eomLeg, indexId, FloatingRateType.OVERNIGHT_ARITHMETIC_AVERAGE),
-            startDate,
-            maturityDate);
+                new InterestRateNotional(currency, 1), eomLeg, indexId, FloatingRateType.OVERNIGHT_ARITHMETIC_AVERAGE),
+                startDate,
+                maturityDate);
       }
 
       @Override
@@ -657,18 +691,19 @@ public class NodeConverterUtils {
         final Currency currency = indexConvention.getCurrency();
         final DayCount dayCount = indexConvention.getDayCount();
         final BusinessDayConvention businessDayConvention = indexConvention.getBusinessDayConvention();
-//        final boolean eomIndex = indexConvention.isIsEOM();
+        //        final boolean eomIndex = indexConvention.isIsEOM();
         final boolean eomLeg = convention.isIsEOM();
-//        final Period indexTenor = convention.getCompositionTenor().getPeriod();
-//        final Period paymentTenor = convention.getPaymentTenor().getPeriod();
-//        final int spotLag = indexConvention.getSettlementDays();
-//        final IborIndex iborIndex = new IborIndex(currency, indexTenor, spotLag, dayCount, businessDayConvention, eomIndex, indexConvention.getName());
+        //        final Period indexTenor = convention.getCompositionTenor().getPeriod();
+        //        final Period paymentTenor = convention.getPaymentTenor().getPeriod();
+        //        final int spotLag = indexConvention.getSettlementDays();
+        //        final IborIndex iborIndex = new IborIndex(currency, indexTenor, spotLag, dayCount, businessDayConvention, eomIndex,
+        // indexConvention.getName());
         final int spotLagLeg = convention.getSettlementDays();
         final ZonedDateTime spotDateLeg = ScheduleCalculator.getAdjustedDate(valuationTime, spotLagLeg, calendar);
         final ZonedDateTime startDate = ScheduleCalculator.getAdjustedDate(spotDateLeg, startTenor, businessDayConvention, calendar, eomLeg);
-//        final StubType stubLeg = convention.getStubTypeLeg();
-//        final StubType stubComp = convention.getStubTypeCompound();
-//        final boolean eom = convention.isIsEOM();
+        //        final StubType stubLeg = convention.getStubTypeLeg();
+        //        final StubType stubComp = convention.getStubTypeCompound();
+        //        final boolean eom = convention.isIsEOM();
         final ZonedDateTime maturityDate = startDate.plus(maturityTenor);
         final Period paymentPeriod = convention.getPaymentTenor().getPeriod();
         if (!isPayer && isMarketDataSpread) {
@@ -677,22 +712,22 @@ public class NodeConverterUtils {
             throw new OpenGammaRuntimeException("Could not get market data for " + dataId);
           }
           return Triple.of(new FloatingSpreadIRLeg(dayCount,
-                                         PeriodFrequency.of(paymentPeriod),
-                                         indexConvention.getRegionCalendar(),
-                                         businessDayConvention,
-                                         new InterestRateNotional(currency, 1),
-                                         eomLeg,
-                                         dataId,
-                                         FloatingRateType.IBOR,
-                                         spread), startDate, maturityDate);
+              PeriodFrequency.of(paymentPeriod),
+              indexConvention.getRegionCalendar(),
+              businessDayConvention,
+              new InterestRateNotional(currency, 1),
+              eomLeg,
+              dataId,
+              FloatingRateType.IBOR,
+              spread), startDate, maturityDate);
         }
         return Triple.of(new FloatingInterestRateLeg(dayCount,
-                                           PeriodFrequency.of(paymentPeriod),
-                                           indexConvention.getRegionCalendar(),
-                                           businessDayConvention,
-                                           new InterestRateNotional(currency, 1),
-                                           eomLeg,
-                                           dataId, FloatingRateType.IBOR), startDate, maturityDate);
+            PeriodFrequency.of(paymentPeriod),
+            indexConvention.getRegionCalendar(),
+            businessDayConvention,
+            new InterestRateNotional(currency, 1),
+            eomLeg,
+            dataId, FloatingRateType.IBOR), startDate, maturityDate);
       }
 
       @Override
@@ -708,29 +743,30 @@ public class NodeConverterUtils {
         final BusinessDayConvention businessDayConvention = convention.getBusinessDayConvention();
         final ZonedDateTime startDate = ScheduleCalculator.getAdjustedDate(spotDateLeg, startTenor, businessDayConvention, calendar, eomLeg);
         final ZonedDateTime maturityDate = startDate.plus(maturityTenor);
-        final ExternalId indexId = ExternalId.of("UNKNOWN", indexConvention.getName()); // TODO: The proper Id of the ON index should be provided but is currently not available.
+        final ExternalId indexId = ExternalId.of("UNKNOWN", indexConvention.getName());
+        // TODO: The proper Id of the ON index should be provided but is currently not available.
         if (!isPayer && isMarketDataSpread) {
           final Double spread = marketData.getDataPoint(dataId);
           if (spread == null) {
             throw new OpenGammaRuntimeException("Could not get market data for " + dataId);
           }
           return Triple.of(new FloatingSpreadIRLeg(dayCount,
-                                         PeriodFrequency.of(paymentPeriod),
-                                         indexConvention.getRegionCalendar(),
-                                         businessDayConvention,
-                                         new InterestRateNotional(currency, 1),
-                                         eomLeg,
-                                         indexId,
-                                         FloatingRateType.OIS,
-                                         spread), startDate, maturityDate);
+              PeriodFrequency.of(paymentPeriod),
+              indexConvention.getRegionCalendar(),
+              businessDayConvention,
+              new InterestRateNotional(currency, 1),
+              eomLeg,
+              indexId,
+              FloatingRateType.OIS,
+              spread), startDate, maturityDate);
         }
         return Triple.of(new FloatingInterestRateLeg(dayCount,
-                                           PeriodFrequency.of(paymentPeriod),
-                                           indexConvention.getRegionCalendar(),
-                                           businessDayConvention,
-                                           new InterestRateNotional(currency, 1),
-                                           eomLeg,
-                                           indexId, FloatingRateType.OIS), startDate, maturityDate);
+            PeriodFrequency.of(paymentPeriod),
+            indexConvention.getRegionCalendar(),
+            businessDayConvention,
+            new InterestRateNotional(currency, 1),
+            eomLeg,
+            indexId, FloatingRateType.OIS), startDate, maturityDate);
       }
 
       @Override
@@ -747,17 +783,17 @@ public class NodeConverterUtils {
         final int spotLagLeg = convention.getSettlementDays();
         final ZonedDateTime spotDateLeg = ScheduleCalculator.getAdjustedDate(valuationTime, spotLagLeg, calendar);
         final ZonedDateTime startDate = ScheduleCalculator.getAdjustedDate(spotDateLeg, startTenor, businessDayConvention, calendar, eomLeg);
-//        final StubType stub = convention.getStubType();
+        //        final StubType stub = convention.getStubType();
         final ZonedDateTime maturityDate = startDate.plus(maturityTenor);
         final Period paymentPeriod = convention.getPaymentTenor().getPeriod();
 
         return Triple.of(new FixedInterestRateLeg(dayCount,
-                                 PeriodFrequency.of(paymentPeriod),
-                                 convention.getRegionCalendar(),
-                                 businessDayConvention,
-                                 new InterestRateNotional(currency, 1),
-                                 eomLeg,
-                                 rate), startDate, maturityDate);
+            PeriodFrequency.of(paymentPeriod),
+            convention.getRegionCalendar(),
+            businessDayConvention,
+            new InterestRateNotional(currency, 1),
+            eomLeg,
+            rate), startDate, maturityDate);
       }
 
       @Override
@@ -767,16 +803,17 @@ public class NodeConverterUtils {
         final Currency currency = indexConvention.getCurrency();
         final DayCount dayCount = indexConvention.getDayCount();
         final BusinessDayConvention businessDayConvention = indexConvention.getBusinessDayConvention();
-//        final boolean eomIndex = indexConvention.isIsEOM();
+        //        final boolean eomIndex = indexConvention.isIsEOM();
         final boolean eomLeg = convention.isIsEOM();
-//        final Period indexTenor = convention.getResetTenor().getPeriod();
-//        final int spotLag = indexConvention.getSettlementDays();
-//        final IborIndex iborIndex = new IborIndex(currency, indexTenor, spotLag, dayCount, businessDayConvention, eomIndex, indexConvention.getName());
+        //        final Period indexTenor = convention.getResetTenor().getPeriod();
+        //        final int spotLag = indexConvention.getSettlementDays();
+        //        final IborIndex iborIndex = new IborIndex(currency, indexTenor, spotLag, dayCount, businessDayConvention, eomIndex,
+        // indexConvention.getName());
         final int spotLagLeg = convention.getSettlementDays();
         final ZonedDateTime spotDateLeg = ScheduleCalculator.getAdjustedDate(valuationTime, spotLagLeg, calendar);
         final ZonedDateTime startDate = ScheduleCalculator.getAdjustedDate(spotDateLeg, startTenor, businessDayConvention, calendar, eomLeg);
-//        final StubType stub = convention.getStubType();
-//        final boolean eom = convention.isIsEOM();
+        //        final StubType stub = convention.getStubType();
+        //        final boolean eom = convention.isIsEOM();
         final ZonedDateTime maturityDate = startDate.plus(maturityTenor);
         if (!isPayer && isMarketDataSpread) {
           final Double spread = marketData.getDataPoint(dataId);
@@ -784,56 +821,56 @@ public class NodeConverterUtils {
             throw new OpenGammaRuntimeException("Could not get market data for " + dataId);
           }
           return Triple.of(new FloatingSpreadIRLeg(dayCount,
-                                         PeriodFrequency.of(convention.getResetTenor().getPeriod()),
-                                         indexConvention.getRegionCalendar(),
-                                         businessDayConvention,
-                                         new InterestRateNotional(currency, 1),
-                                         eomLeg,
-                                         dataId, // TODO: Should it be the Ibor Id, not the rate source?
-                                         FloatingRateType.IBOR,
-                                         spread), startDate, maturityDate);
+              PeriodFrequency.of(convention.getResetTenor().getPeriod()),
+              indexConvention.getRegionCalendar(),
+              businessDayConvention,
+              new InterestRateNotional(currency, 1),
+              eomLeg,
+              dataId, // TODO: Should it be the Ibor Id, not the rate source?
+              FloatingRateType.IBOR,
+              spread), startDate, maturityDate);
         }
         return Triple.of(new FloatingInterestRateLeg(dayCount,
-                                           PeriodFrequency.of(convention.getResetTenor().getPeriod()),
-                                           indexConvention.getRegionCalendar(),
-                                           businessDayConvention,
-                                           new InterestRateNotional(currency, 1),
-                                           eomLeg,
-                                           dataId, FloatingRateType.IBOR), startDate, maturityDate);
+            PeriodFrequency.of(convention.getResetTenor().getPeriod()),
+            indexConvention.getRegionCalendar(),
+            businessDayConvention,
+            new InterestRateNotional(currency, 1),
+            eomLeg,
+            dataId, FloatingRateType.IBOR), startDate, maturityDate);
       }
     };
     return legConvention.accept(visitor);
   }
 
   /**
-   * Determines if a swap is float / float
+   * Determines if a swap is float / float.
    * @param payLegConvention The pay leg convention
    * @param receiveLegConvention The receive leg convention
    * @return True if both legs are floating
    */
   public static boolean isFloatFloat(final Convention payLegConvention, final Convention receiveLegConvention) {
-    final boolean isFloatFloat = ((payLegConvention instanceof VanillaIborLegConvention) ||
-                                  (payLegConvention instanceof OISLegConvention) ||
-                                  (payLegConvention instanceof CompoundingIborLegConvention) ||
-                                  (payLegConvention instanceof ONArithmeticAverageLegConvention))
-        && ((receiveLegConvention instanceof VanillaIborLegConvention) ||
-            (receiveLegConvention instanceof OISLegConvention) ||
-            (receiveLegConvention instanceof CompoundingIborLegConvention) ||
-            (receiveLegConvention instanceof ONArithmeticAverageLegConvention));
+    final boolean isFloatFloat = (payLegConvention instanceof VanillaIborLegConvention
+        || payLegConvention instanceof OISLegConvention
+        || payLegConvention instanceof CompoundingIborLegConvention
+        || payLegConvention instanceof ONArithmeticAverageLegConvention)
+        && (receiveLegConvention instanceof VanillaIborLegConvention
+            || receiveLegConvention instanceof OISLegConvention
+            || receiveLegConvention instanceof CompoundingIborLegConvention
+            || receiveLegConvention instanceof ONArithmeticAverageLegConvention);
     return isFloatFloat;
   }
 
   /**
-   * Determines if a swap is float / float for swaps with roll date conventions
+   * Determines if a swap is float / float for swaps with roll date conventions.
    * @param payLegConvention The pay leg convention
    * @param receiveLegConvention The receive leg convention
    * @return True if both legs are floating
    */
   private static boolean isFloatFloatRoll(final Convention payLegConvention, final Convention receiveLegConvention) {
-    final boolean isFloatFloat = ((payLegConvention instanceof VanillaIborLegRollDateConvention) ||
-        (payLegConvention instanceof ONCompoundedLegRollDateConvention))
-        && ((receiveLegConvention instanceof VanillaIborLegRollDateConvention) ||
-            (receiveLegConvention instanceof ONCompoundedLegRollDateConvention));
+    final boolean isFloatFloat = (payLegConvention instanceof VanillaIborLegRollDateConvention
+        || payLegConvention instanceof ONCompoundedLegRollDateConvention)
+        && (receiveLegConvention instanceof VanillaIborLegRollDateConvention
+            || receiveLegConvention instanceof ONCompoundedLegRollDateConvention);
     return isFloatFloat;
   }
 
