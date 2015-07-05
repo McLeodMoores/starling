@@ -229,6 +229,54 @@ public abstract class AbstractPortfolioGeneratorTool {
     return getInstance(getClassContext(), security);
   }
 
+  public void run(final ToolContext context, final String portfolioName, final AbstractPortfolioGeneratorTool instance, final boolean write, final Currency[] currencies) {
+    instance.setToolContext(context);
+    instance.setCounterPartyGenerator(getCounterPartyGenerator());
+    instance.setRandom(new SecureRandom());
+    final SecuritySource securitySource;
+    if (write) {
+      s_logger.info("Creating database security writer");
+      securitySource = context.getSecuritySource();
+      instance.setSecurityPersister(new MasterSecurityPersister(context.getSecurityMaster()));
+    } else {
+      s_logger.info("Using dummy security writer");
+      final InMemorySecurityPersister securityPersister = new InMemorySecurityPersister();
+      instance.setSecurityPersister(securityPersister);
+      securitySource = securityPersister.getSecuritySource();
+    }
+    if (currencies != null && currencies.length > 0) {
+      instance.setCurrencies(currencies);
+    }
+    s_logger.info("Creating portfolio {}", portfolioName);
+    final Portfolio portfolio = instance.createPortfolio(portfolioName);
+    if (write) {
+      s_logger.info("Writing portfolio to the database");
+      final ManageablePortfolio newPortfolio = new ManageablePortfolio(portfolio.getName());
+      newPortfolio.setAttributes(portfolio.getAttributes());
+      newPortfolio.setRootNode(createPortfolioNode(context.getPositionMaster(), portfolio.getRootNode()));
+      final PortfolioSearchRequest request = new PortfolioSearchRequest();
+      request.setDepth(0);
+      request.setIncludePositions(false);
+      request.setName(portfolio.getName());
+      final PortfolioSearchResult result = context.getPortfolioMaster().search(request);
+      PortfolioDocument document = result.getFirstDocument();
+      if (document != null) {
+        s_logger.info("Overwriting portfolio {}", document.getUniqueId());
+        document.setPortfolio(newPortfolio);
+        context.getPortfolioMaster().update(document);
+      } else {
+        document = new PortfolioDocument(newPortfolio);
+        context.getPortfolioMaster().add(document);
+      }
+    } else {
+      if (s_logger.isDebugEnabled()) {
+        s_logger.debug("Portfolio {}", portfolioName);
+        writePortfolio(securitySource, portfolio.getRootNode(), "");
+      }
+    }
+  }
+
+
   public void run(final ToolContext context, final String portfolioName, final String security, final boolean write, final Currency[] currencies) {
     final AbstractPortfolioGeneratorTool instance = getInstance(security);
     instance.setToolContext(context);
@@ -343,5 +391,6 @@ public abstract class AbstractPortfolioGeneratorTool {
     run(context, commandLine.getOptionValue(PORTFOLIO_OPT), commandLine.getOptionValue(SECURITY_OPT),
         commandLine.hasOption(WRITE_OPT), parseCurrencies(commandLine));
   }
+
 
 }
