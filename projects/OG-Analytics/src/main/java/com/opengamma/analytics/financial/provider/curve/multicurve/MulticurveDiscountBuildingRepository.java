@@ -2,6 +2,10 @@
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
  *
  * Please see distribution for license.
+ *
+ * Modified by McLeod Moores Software Limited.
+ *
+ * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.analytics.financial.provider.curve.multicurve;
 
@@ -75,7 +79,8 @@ public class MulticurveDiscountBuildingRepository {
     _toleranceAbs = toleranceAbs;
     _toleranceRel = toleranceRel;
     _stepMaximum = stepMaximum;
-    _rootFinder = new BroydenVectorRootFinder(_toleranceAbs, _toleranceRel, _stepMaximum, DecompositionFactory.getDecomposition(DecompositionFactory.SV_COLT_NAME));
+    _rootFinder = new BroydenVectorRootFinder(_toleranceAbs, _toleranceRel, _stepMaximum,
+        DecompositionFactory.getDecomposition(DecompositionFactory.SV_COLT_NAME));
     // TODO: [PLAT-5761] make the root finder flexible.
     // TODO: create a way to select the SensitivityMatrixMulticurve calculator (with underlying curve or not)
   }
@@ -89,7 +94,8 @@ public class MulticurveDiscountBuildingRepository {
    * @param forwardIborMap The forward curves names map.
    * @param forwardONMap The forward curves names map.
    * @param generatorsMap The generators map.
-   * @param calculator The calculator of the value on which the calibration is done (usually ParSpreadMarketQuoteCalculator (recommended) or converted present value).
+   * @param calculator The calculator of the value on which the calibration is done (usually ParSpreadMarketQuoteCalculator
+   * (recommended) or converted present value).
    * @param sensitivityCalculator The parameter sensitivity calculator.
    * @return The new curves and the calibrated parameters.
    */
@@ -97,7 +103,8 @@ public class MulticurveDiscountBuildingRepository {
       final LinkedHashMap<String, Currency> discountingMap, final LinkedHashMap<String, IborIndex[]> forwardIborMap, final LinkedHashMap<String, IndexON[]> forwardONMap,
       final LinkedHashMap<String, GeneratorYDCurve> generatorsMap, final InstrumentDerivativeVisitor<MulticurveProviderInterface, Double> calculator,
       final InstrumentDerivativeVisitor<MulticurveProviderInterface, MulticurveSensitivity> sensitivityCalculator) {
-    final GeneratorMulticurveProviderDiscount generator = new GeneratorMulticurveProviderDiscount(knownData, discountingMap, forwardIborMap, forwardONMap, generatorsMap);
+    final GeneratorMulticurveProviderDiscount generator = new GeneratorMulticurveProviderDiscount(knownData, discountingMap, forwardIborMap, forwardONMap,
+        generatorsMap);
     final MulticurveDiscountBuildingData data = new MulticurveDiscountBuildingData(instruments, generator);
     final Function1D<DoubleMatrix1D, DoubleMatrix1D> curveCalculator = new MulticurveDiscountFinderFunction(calculator, data);
     final Function1D<DoubleMatrix1D, DoubleMatrix2D> jacobianCalculator = new MulticurveDiscountFinderJacobian(
@@ -111,8 +118,8 @@ public class MulticurveDiscountBuildingRepository {
    * Construct the CurveBuildingBlock associated to all the curve built so far and updates the CurveBuildingBlockBundle.
    * @param instruments The instruments used for the block calibration.
    * @param multicurves The known curves including the current unit.
-   * @param currentCurvesArray
-   * @param blockBundle
+   * @param currentCurvesList The list of current curves
+   * @param blockBundle The curve building block bundle
    * @param sensitivityCalculator The parameter sensitivity calculator for the value on which the calibration is done
   (usually ParSpreadMarketQuoteDiscountingProviderCalculator (recommended) or converted present value).
    * @return The part of the inverse Jacobian matrix associated to each curve. Only the part for the curve in the current unit (not the previous units).
@@ -121,7 +128,8 @@ public class MulticurveDiscountBuildingRepository {
   private void updateBlockBundle(final InstrumentDerivative[] instruments, final MulticurveProviderDiscount multicurves, final List<String> currentCurvesList,
       final CurveBuildingBlockBundle blockBundle, final InstrumentDerivativeVisitor<MulticurveProviderInterface, MulticurveSensitivity> sensitivityCalculator) {
     // Sensitivity calculator
-    final ParameterSensitivityMulticurveUnderlyingMatrixCalculator parameterSensitivityCalculator = new ParameterSensitivityMulticurveUnderlyingMatrixCalculator(sensitivityCalculator);
+    final ParameterSensitivityMulticurveUnderlyingMatrixCalculator parameterSensitivityCalculator =
+        new ParameterSensitivityMulticurveUnderlyingMatrixCalculator(sensitivityCalculator);
     int loopc;
     final LinkedHashMap<String, Pair<Integer, Integer>> mapBlockOut = new LinkedHashMap<>();
     // Curve names manipulation
@@ -130,12 +138,13 @@ public class MulticurveDiscountBuildingRepository {
     final LinkedHashSet<String> currentCurves = new LinkedHashSet<>(currentCurvesList);
     final LinkedHashSet<String> beforeCurveName = new LinkedHashSet<>(allCurveName1);
     beforeCurveName.removeAll(currentCurves);
+    final LinkedHashSet<String> beforeCurveNameCopy = new LinkedHashSet<>(allCurveName1);
     final LinkedHashSet<String> allCurveName = new LinkedHashSet<>(beforeCurveName);
     allCurveName.addAll(currentCurves); // Manipulation to ensure that the new curves are at the end.
-    //Implementation note : if blockBundle don't contain a block for a specific curve then we remove this curve from  beforeCurveName. 
+    //Implementation note : if blockBundle don't contain a block for a specific curve then we remove this curve from  beforeCurveName.
     //Because we can't compute the total bundle without the block for each curve. So we are computing a total bundle without this curve.
-    for (final String name : beforeCurveName) {
-      if (!(blockBundle.getData().containsKey(name))) {
+    for (final String name : beforeCurveNameCopy) {
+      if (!blockBundle.getData().containsKey(name)) {
         beforeCurveName.remove(name);
       }
     }
@@ -204,7 +213,8 @@ public class MulticurveDiscountBuildingRepository {
           if (thisBlockCurves.contains(name2)) { // If not, the matrix stay with 0
             final Integer start = thisBlock.getStart(name2);
             for (int loopp = 0; loopp < nbParametersBefore[loopc]; loopp++) {
-              System.arraycopy(thisMatrix[loopp], start, transition[startIndexBefore[loopc] + loopp], startIndexBefore[loopc2], thisBlock.getNbParameters(name2));
+              System.arraycopy(thisMatrix[loopp], start, transition[startIndexBefore[loopc] + loopp], startIndexBefore[loopc2],
+                  thisBlock.getNbParameters(name2));
             }
           }
           loopc2++;
@@ -252,17 +262,21 @@ public class MulticurveDiscountBuildingRepository {
    * @param discountingMap The discounting curves names map.
    * @param forwardIborMap The forward curves names map.
    * @param forwardONMap The forward curves names map.
-   * @param calculator The calculator of the value on which the calibration is done (usually ParSpreadMarketQuoteCalculator (recommended) or converted present value).
+   * @param calculator The calculator of the value on which the calibration is done (usually ParSpreadMarketQuoteCalculator
+   * (recommended) or converted present value).
    * @param sensitivityCalculator The parameter sensitivity calculator.
-   * @return A pair with the calibrated yield curve bundle (including the known data) and the CurveBuildingBlockBundle with the relevant inverse Jacobian Matrix.
+   * @return A pair with the calibrated yield curve bundle (including the known data) and the CurveBuildingBlockBundle with the
+   * relevant inverse Jacobian Matrix.
    */
 
   public Pair<MulticurveProviderDiscount, CurveBuildingBlockBundle> makeCurvesFromDerivatives(final MultiCurveBundle<GeneratorYDCurve>[] curveBundles,
       final MulticurveProviderDiscount knownData,
-      final LinkedHashMap<String, Currency> discountingMap, final LinkedHashMap<String, IborIndex[]> forwardIborMap, final LinkedHashMap<String, IndexON[]> forwardONMap,
+      final LinkedHashMap<String, Currency> discountingMap, final LinkedHashMap<String, IborIndex[]> forwardIborMap,
+      final LinkedHashMap<String, IndexON[]> forwardONMap,
       final InstrumentDerivativeVisitor<MulticurveProviderInterface, Double> calculator,
       final InstrumentDerivativeVisitor<MulticurveProviderInterface, MulticurveSensitivity> sensitivityCalculator) {
-    return makeCurvesFromDerivatives(curveBundles, knownData, new CurveBuildingBlockBundle(), discountingMap, forwardIborMap, forwardONMap, calculator, sensitivityCalculator);
+    return makeCurvesFromDerivatives(curveBundles, knownData, new CurveBuildingBlockBundle(), discountingMap, forwardIborMap, forwardONMap,
+        calculator, sensitivityCalculator);
   }
 
   /**
@@ -273,13 +287,16 @@ public class MulticurveDiscountBuildingRepository {
    * @param discountingMap The discounting curves names map.
    * @param forwardIborMap The forward curves names map.
    * @param forwardONMap The forward curves names map.
-   * @param calculator The calculator of the value on which the calibration is done (usually ParSpreadMarketQuoteCalculator (recommended) or converted present value).
+   * @param calculator The calculator of the value on which the calibration is done (usually ParSpreadMarketQuoteCalculator
+   * (recommended) or converted present value).
    * @param sensitivityCalculator The parameter sensitivity calculator.
-   * @return A pair with the calibrated yield curve bundle (including the known data) and the CurveBuildingBlockBundle with the relevant inverse Jacobian Matrix.
+   * @return A pair with the calibrated yield curve bundle (including the known data) and the CurveBuildingBlockBundle with
+   * the relevant inverse Jacobian Matrix.
    */
   public Pair<MulticurveProviderDiscount, CurveBuildingBlockBundle> makeCurvesFromDerivatives(final MultiCurveBundle<GeneratorYDCurve>[] curveBundles,
       final MulticurveProviderDiscount knownData, final CurveBuildingBlockBundle knownBlockBundle,
-      final LinkedHashMap<String, Currency> discountingMap, final LinkedHashMap<String, IborIndex[]> forwardIborMap, final LinkedHashMap<String, IndexON[]> forwardONMap,
+      final LinkedHashMap<String, Currency> discountingMap, final LinkedHashMap<String, IborIndex[]> forwardIborMap,
+      final LinkedHashMap<String, IndexON[]> forwardONMap,
       final InstrumentDerivativeVisitor<MulticurveProviderInterface, Double> calculator,
       final InstrumentDerivativeVisitor<MulticurveProviderInterface, MulticurveSensitivity> sensitivityCalculator) {
     ArgumentChecker.notNull(curveBundles, "curve bundles");
@@ -332,5 +349,4 @@ public class MulticurveDiscountBuildingRepository {
     }
     return ObjectsPair.of(knownSoFarData, totalBundle);
   }
-
 }
