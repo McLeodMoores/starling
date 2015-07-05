@@ -2,6 +2,10 @@
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
  *
  * Please see distribution for license.
+ *
+ * Modified by McLeod Moores Software Limited.
+ *
+ * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.financial.analytics.conversion;
 
@@ -17,7 +21,7 @@ import com.opengamma.analytics.financial.equity.future.definition.IndexFutureDef
 import com.opengamma.analytics.financial.instrument.InstrumentDefinitionVisitorAdapter;
 import com.opengamma.analytics.financial.instrument.InstrumentDefinitionWithData;
 import com.opengamma.analytics.financial.instrument.future.BondFutureDefinition;
-import com.opengamma.core.convention.ConventionSource;
+import com.opengamma.analytics.financial.instrument.future.InterestRateFutureTransactionDefinition;
 import com.opengamma.core.holiday.HolidaySource;
 import com.opengamma.core.position.Trade;
 import com.opengamma.core.region.RegionSource;
@@ -30,22 +34,20 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.time.DateUtils;
 
 /**
- * Visits a Trade containing a {@link FutureSecurity} (OG-Financial)
- * Converts it to an {@link InstrumentDefinitionWithData} (OG-Analytics)
- * @deprecated Use the version that takes a {@link ConventionSource}
+ * Visits a Trade containing a {@link FutureSecurity} (OG-Financial) and
+ * converts it to an {@link InstrumentDefinitionWithData} (OG-Analytics).
+ * @deprecated Use the version that takes a {@link com.opengamma.core.convention.ConventionSource}
  */
 @Deprecated
 public class FutureTradeConverterDeprecated {
-
-  /**
-   * The security converter (to convert the trade underlying).
-   */
+  /** Used when the trade date is not set */
+  private static final ZonedDateTime EARLIEST_DATE = DateUtils.getUTCDate(1900, 1, 1);
+  /** The security converter (to convert the trade underlying) */
   private final FutureSecurityConverterDeprecated _futureSecurityConverter;
-  
+  /** The trade converter */
   private final InterestRateFutureTradeConverterDeprecated _irFutureTradeConverter;
 
   /**
-   * Constructor.
    * @param securitySource The security source.
    * @param holidaySource The holiday source.
    * @param conventionSource The convention source.
@@ -56,18 +58,18 @@ public class FutureTradeConverterDeprecated {
     final BondSecurityConverter bondConverter = new BondSecurityConverter(holidaySource, conventionSource, regionSource);
     final BondFutureSecurityConverter bondFutureConverter = new BondFutureSecurityConverter(securitySource, bondConverter);
     _futureSecurityConverter = new FutureSecurityConverterDeprecated(bondFutureConverter);
-    
-    final InterestRateFutureSecurityConverterDeprecated irFutureSecurityConverter = new InterestRateFutureSecurityConverterDeprecated(holidaySource, conventionSource, regionSource);
+    final InterestRateFutureSecurityConverterDeprecated irFutureSecurityConverter = new InterestRateFutureSecurityConverterDeprecated(holidaySource,
+        conventionSource, regionSource);
     _irFutureTradeConverter = new InterestRateFutureTradeConverterDeprecated(irFutureSecurityConverter);
   }
 
   /**
-   * Converts a futures Trade to a Definition
+   * Converts a futures Trade to a Definition.
    * @param trade The trade
    * @return EquityFutureDefinition
    */
   public InstrumentDefinitionWithData<?, Double> convert(final Trade trade) {
-    ArgumentChecker.notNull(trade, "trade");
+    ArgumentChecker.notNull(trade, "trade"); //$NON-NLS-1$
     final Security security = trade.getSecurity();
     if (security instanceof FutureSecurity) {
       final InstrumentDefinitionWithData<?, Double> securityDefinition;
@@ -80,8 +82,8 @@ public class FutureTradeConverterDeprecated {
       if (trade.getPremium() != null) {
         tradePremium = trade.getPremium(); // TODO: The trade price is stored in the trade premium. This has to be corrected.
       }
-      ZonedDateTime tradeDate = DateUtils.getUTCDate(1900, 1, 1);
-      if ((trade.getTradeDate() != null) && trade.getTradeTime() != null && (trade.getTradeTime().toLocalTime() != null)) {
+      ZonedDateTime tradeDate = EARLIEST_DATE;
+      if (trade.getTradeDate() != null && trade.getTradeTime() != null && trade.getTradeTime().toLocalTime() != null) {
         tradeDate = trade.getTradeDate().atTime(trade.getTradeTime().toLocalTime()).atZone(ZoneOffset.UTC); //TODO get the real time zone
       }
       final InstrumentDefinitionWithData<?, Double> tradeDefinition = securityToTrade(securityDefinition, tradePremium, tradeDate);
@@ -97,53 +99,57 @@ public class FutureTradeConverterDeprecated {
    * @param tradeDate The trade date.
    * @return The tradeDefinition.
    */
-  private static InstrumentDefinitionWithData<?, Double> securityToTrade(final InstrumentDefinitionWithData<?, Double> securityDefinition, final Double tradePrice,
-      final ZonedDateTime tradeDate) {
+  private static InstrumentDefinitionWithData<?, Double> securityToTrade(final InstrumentDefinitionWithData<?, Double> securityDefinition,
+      final Double tradePrice, final ZonedDateTime tradeDate) {
 
     final InstrumentDefinitionVisitorAdapter<InstrumentDefinitionWithData<?, Double>, InstrumentDefinitionWithData<?, Double>> visitor =
         new InstrumentDefinitionVisitorAdapter<InstrumentDefinitionWithData<?, Double>, InstrumentDefinitionWithData<?, Double>>() {
 
-          @Override
-          public InstrumentDefinitionWithData<?, Double> visitAgricultureFutureDefinition(final AgricultureFutureDefinition futures) {
-            return new AgricultureFutureDefinition(futures.getExpiryDate(), futures.getUnderlying(), futures.getUnitAmount(), null, null,
-                1.0, futures.getUnitName(), futures.getSettlementType(), tradePrice, futures.getCurrency(), futures.getSettlementDate());
-          }
+      @Override
+      public InstrumentDefinitionWithData<?, Double> visitAgricultureFutureDefinition(final AgricultureFutureDefinition futures) {
+        return new AgricultureFutureDefinition(futures.getExpiryDate(), futures.getUnderlying(), futures.getUnitAmount(), null, null,
+            1.0, futures.getUnitName(), futures.getSettlementType(), tradePrice, futures.getCurrency(), futures.getSettlementDate());
+      }
 
-          @Override
-          public InstrumentDefinitionWithData<?, Double> visitEnergyFutureDefinition(final EnergyFutureDefinition futures) {
-            return new EnergyFutureDefinition(futures.getExpiryDate(), futures.getUnderlying(), futures.getUnitAmount(), null, null,
-                1.0, futures.getUnitName(), futures.getSettlementType(), tradePrice, futures.getCurrency(), futures.getSettlementDate());
-          }
+      @Override
+      public InstrumentDefinitionWithData<?, Double> visitEnergyFutureDefinition(final EnergyFutureDefinition futures) {
+        return new EnergyFutureDefinition(futures.getExpiryDate(), futures.getUnderlying(), futures.getUnitAmount(), null, null,
+            1.0, futures.getUnitName(), futures.getSettlementType(), tradePrice, futures.getCurrency(), futures.getSettlementDate());
+      }
 
-          @Override
-          public InstrumentDefinitionWithData<?, Double> visitMetalFutureDefinition(final MetalFutureDefinition futures) {
-            return new MetalFutureDefinition(futures.getExpiryDate(), futures.getUnderlying(), futures.getUnitAmount(), null, null,
-                1.0, futures.getUnitName(), futures.getSettlementType(), tradePrice, futures.getCurrency(), futures.getSettlementDate());
-          }
+      @Override
+      public InstrumentDefinitionWithData<?, Double> visitMetalFutureDefinition(final MetalFutureDefinition futures) {
+        return new MetalFutureDefinition(futures.getExpiryDate(), futures.getUnderlying(), futures.getUnitAmount(), null, null,
+            1.0, futures.getUnitName(), futures.getSettlementType(), tradePrice, futures.getCurrency(), futures.getSettlementDate());
+      }
 
-          @Override
-          public InstrumentDefinitionWithData<?, Double> visitEquityIndexDividendFutureDefinition(final EquityIndexDividendFutureDefinition futures) {
-            return new EquityFutureDefinition(futures.getExpiryDate(), futures.getSettlementDate(), tradePrice, futures.getCurrency(), futures.getUnitAmount());
-          }
+      @Override
+      public InstrumentDefinitionWithData<?, Double> visitEquityIndexDividendFutureDefinition(final EquityIndexDividendFutureDefinition futures) {
+        return new EquityFutureDefinition(futures.getExpiryDate(), futures.getSettlementDate(), tradePrice, futures.getCurrency(), futures.getUnitAmount());
+      }
 
-          @Override
-          public InstrumentDefinitionWithData<?, Double> visitEquityFutureDefinition(final EquityFutureDefinition futures) {
-            return new EquityFutureDefinition(futures.getExpiryDate(), futures.getSettlementDate(), tradePrice, futures.getCurrency(), futures.getUnitAmount());
-          }
+      @Override
+      public InstrumentDefinitionWithData<?, Double> visitEquityFutureDefinition(final EquityFutureDefinition futures) {
+        return new EquityFutureDefinition(futures.getExpiryDate(), futures.getSettlementDate(), tradePrice, futures.getCurrency(), futures.getUnitAmount());
+      }
 
-          @Override
-          public InstrumentDefinitionWithData<?, Double> visitBondFutureDefinition(final BondFutureDefinition futures) {
-            return futures;
-          }
+      @Override
+      public InstrumentDefinitionWithData<?, Double> visitBondFutureDefinition(final BondFutureDefinition futures) {
+        return futures;
+      }
 
-          @Override
-          public InstrumentDefinitionWithData<?, Double> visitIndexFutureDefinition(final IndexFutureDefinition futures) {
-            return new IndexFutureDefinition(futures.getExpiryDate(), futures.getSettlementDate(), tradePrice, futures.getCurrency(), futures.getUnitAmount(), futures.getUnderlying());
-          }
+      @Override
+      public InstrumentDefinitionWithData<?, Double> visitIndexFutureDefinition(final IndexFutureDefinition futures) {
+        return new IndexFutureDefinition(futures.getExpiryDate(), futures.getSettlementDate(), tradePrice, futures.getCurrency(),
+            futures.getUnitAmount(), futures.getUnderlying());
+      }
 
-        };
+      @Override
+      public InstrumentDefinitionWithData<?, Double> visitInterestRateFutureTransactionDefinition(final InterestRateFutureTransactionDefinition future) {
+        return securityDefinition;
+      }
+    };
 
     return securityDefinition.accept(visitor);
   }
-
 }
