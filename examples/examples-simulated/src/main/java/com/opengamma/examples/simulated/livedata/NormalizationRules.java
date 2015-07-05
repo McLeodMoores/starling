@@ -2,8 +2,11 @@
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
  *
  * Please see distribution for license.
+ *
+ * Modified by McLeod Moores Software Limited.
+ *
+ * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
  */
-
 package com.opengamma.examples.simulated.livedata;
 
 import java.util.ArrayList;
@@ -26,8 +29,8 @@ public final class NormalizationRules {
   }
 
   public static NormalizationRuleSet getMarketValueNormalization() {
-    final List<NormalizationRule> rules = new ArrayList<NormalizationRule>();
-    
+    final List<NormalizationRule> rules = new ArrayList<>();
+
     rules.add(new FieldNameChange("LAST_PRICE", MarketDataRequirementNames.LAST));
     rules.add(new FieldNameChange("BID", MarketDataRequirementNames.BID));
     rules.add(new FieldNameChange("ASK", MarketDataRequirementNames.ASK));
@@ -40,7 +43,9 @@ public final class NormalizationRules {
     rules.add(new FieldNameChange("YLD_CNV_MID", MarketDataRequirementNames.YIELD_CONVENTION_MID));
     rules.add(new FieldNameChange("YLD_YTM_MID", MarketDataRequirementNames.YIELD_YIELD_TO_MATURITY_MID));
     rules.add(new FieldNameChange("PX_DIRTY_MID", MarketDataRequirementNames.DIRTY_PRICE_MID));
-    
+    rules.add(new FieldNameChange("LAST_IMPVOL", MarketDataRequirementNames.IMPLIED_VOLATILITY));
+    rules.add(new FieldNameChange("LAST_YIELD", MarketDataRequirementNames.YIELD_YIELD_TO_MATURITY_MID));
+
     rules.add(new MarketValueCalculator());
     rules.add(new FieldHistoryUpdater());
     return new NormalizationRuleSet(StandardRules.getOpenGammaRuleSetId(), "", rules);

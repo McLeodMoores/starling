@@ -2,6 +2,10 @@
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
  *
  * Please see distribution for license.
+ *
+ * Modified by McLeod Moores Software Limited.
+ *
+ * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.examples.simulated.livedata;
 
@@ -11,6 +15,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
@@ -48,7 +53,7 @@ import com.opengamma.util.fudgemsg.OpenGammaFudgeContext;
 /**
  * An ultra-simple market data simulator, we load the initial values from a CSV file (with a header row)
  * and the format
- * <identification-scheme>, <identifier-value>, <requirement-name>, <value>
+ * identification-scheme, identifier-value, requirement-name, value
  * typically, for last price, you'd use "Market_Value" @see MarketDataRequirementNames
  */
 public class ExampleLiveDataServer extends StandardLiveDataServer {
@@ -250,7 +255,7 @@ public class ExampleLiveDataServer extends StandardLiveDataServer {
     private final Random _random = new Random();
 
     private double wiggleValue(final double value, final double centre) {
-      return (9 * value + centre) / 10 + (_random.nextGaussian() * (value * _scalingFactor));
+      return (9 * value + centre) / 10 + _random.nextGaussian() * (value * _scalingFactor);
     }
 
     @Override
@@ -265,12 +270,17 @@ public class ExampleLiveDataServer extends StandardLiveDataServer {
             for (final FudgeField field : lastValues) {
               final double lastValue = (Double) field.getValue();
               final double baseValue = baseValues.getDouble(field.getName());
-              final double value = wiggleValue(lastValue, baseValue);
-              nextValues.add(field.getName(), value);
+              final List<FudgeField> allFields = baseValues.getAllFields();
+              if (allFields.size() == 1 && allFields.get(0).getName().equals("LAST_IMPVOL")) {
+                nextValues.add(field.getName(), baseValue);
+              } else {
+                final double value = wiggleValue(lastValue, baseValue);
+                nextValues.add(field.getName(), value);
+              }
             }
             _marketValues.put(identifier, nextValues);
             liveDataReceived(identifier, nextValues);
-            s_logger.debug("{} lastValues: {} nextValues: {}", identifier, lastValues, nextValues);
+            s_logger.debug("{} lastValues: {} nextValues: {}", new Object[] {identifier, lastValues, nextValues});
           } else {
             s_logger.error("Active subscription for {} is missing in example market data server initial database", identifier);
           }

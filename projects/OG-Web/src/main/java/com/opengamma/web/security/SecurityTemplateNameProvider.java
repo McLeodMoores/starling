@@ -1,7 +1,11 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
+ *
+ * Modified by McLeod Moores Software Limited.
+ *
+ * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.web.security;
 
@@ -73,7 +77,7 @@ public class SecurityTemplateNameProvider extends FinancialSecurityVisitorSameVa
   /**
    * Default constructor.
    */
-  SecurityTemplateNameProvider() {
+  public SecurityTemplateNameProvider() {
     super("default-security.ftl");
   }
 
@@ -103,7 +107,7 @@ public class SecurityTemplateNameProvider extends FinancialSecurityVisitorSameVa
   }
 
   @Override
-  public String visitInflationBondSecurity(InflationBondSecurity security) {
+  public String visitInflationBondSecurity(final InflationBondSecurity security) {
     return getBond();
   }
 
