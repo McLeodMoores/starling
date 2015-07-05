@@ -2,6 +2,10 @@
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
  *
  * Please see distribution for license.
+ *
+ * Modified by McLeod Moores Software Limited.
+ *
+ * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.web.analytics.formatting;
 
@@ -180,27 +184,27 @@ import com.opengamma.web.server.conversion.PercentageValueSignificantFiguresForm
 
   private final ResultsFormatter.CurrencyDisplay _currencyDisplay;
 
-  /* package */ BigDecimalFormatter(ResultsFormatter.CurrencyDisplay currencyDisplay) {
+  /* package */ BigDecimalFormatter(final ResultsFormatter.CurrencyDisplay currencyDisplay) {
     super(BigDecimal.class);
     ArgumentChecker.notNull(currencyDisplay, "currencyDisplay");
     _currencyDisplay = currencyDisplay;
     addFormatter(new Formatter<BigDecimal>(Format.HISTORY) {
       @Override
-      Object format(BigDecimal value, ValueSpecification valueSpec, Object inlineKey) {
-        return getFormatter(valueSpec).getRoundedValue(value);
+      protected Object formatValue(final BigDecimal value, final ValueSpecification valueSpec, final Object inlineKey) {
+        return getDoubleValueFormatter(valueSpec).getRoundedValue(value);
       }
     });
     addFormatter(new Formatter<BigDecimal>(Format.EXPANDED) {
       @Override
-      Object format(BigDecimal value, ValueSpecification valueSpec, Object inlineKey) {
+      protected Object formatValue(final BigDecimal value, final ValueSpecification valueSpec, final Object inlineKey) {
         return formatCell(value, valueSpec, inlineKey);
       }
     });
   }
-  
-  private static void addBulkConversion(String valueRequirementFieldNamePattern, DoubleValueFormatter conversionSettings) {
-    Pattern pattern = Pattern.compile(valueRequirementFieldNamePattern);
-    for (Field field : ValueRequirementNames.class.getFields()) {
+
+  private static void addBulkConversion(final String valueRequirementFieldNamePattern, final DoubleValueFormatter conversionSettings) {
+    final Pattern pattern = Pattern.compile(valueRequirementFieldNamePattern);
+    for (final Field field : ValueRequirementNames.class.getFields()) {
       if ((field.getModifiers() & (Modifier.STATIC | Modifier.PUBLIC)) == (Modifier.STATIC | Modifier.PUBLIC) &&
           field.isSynthetic() == false &&
           String.class.equals(field.getType()) && pattern.matcher(field.getName()).matches()) {
@@ -208,18 +212,18 @@ import com.opengamma.web.server.conversion.PercentageValueSignificantFiguresForm
         try {
           fieldValue = (String) field.get(null);
           s_formatters.put(fieldValue, conversionSettings);
-        } catch (Exception e) {
+        } catch (final Exception e) {
           s_logger.debug("Unexpected exception initializing formatter", e);
         }
       }
     }
   }
 
-  private static DoubleValueFormatter getFormatter(ValueSpecification valueSpec) {
+  private static DoubleValueFormatter getDoubleValueFormatter(final ValueSpecification valueSpec) {
     if (valueSpec == null) {
       return s_defaultFormatter;
     }
-    DoubleValueFormatter valueNameFormatter = s_formatters.get(valueSpec.getValueName());
+    final DoubleValueFormatter valueNameFormatter = s_formatters.get(valueSpec.getValueName());
     if (valueNameFormatter != null) {
       return valueNameFormatter;
     } else {
@@ -236,16 +240,16 @@ import com.opengamma.web.server.conversion.PercentageValueSignificantFiguresForm
   }
 
   @Override
-  public String formatCell(BigDecimal value, ValueSpecification valueSpec, Object inlineKey) {
-    DoubleValueFormatter formatter = getFormatter(valueSpec);
-    String formattedNumber = formatter.format(value);
+  public String formatCell(final BigDecimal value, final ValueSpecification valueSpec, final Object inlineKey) {
+    final DoubleValueFormatter formatter = getDoubleValueFormatter(valueSpec);
+    final String formattedNumber = formatter.format(value);
     return formatter.isCurrencyAmount() && _currencyDisplay == DISPLAY_CURRENCY ?
         formatWithCurrency(formattedNumber, valueSpec) :
         formattedNumber;
   }
 
-  private String formatWithCurrency(String formattedNumber, ValueSpecification valueSpec) {
-    Set<String> currencyValues = valueSpec.getProperties().getValues(ValuePropertyNames.CURRENCY);
+  private String formatWithCurrency(final String formattedNumber, final ValueSpecification valueSpec) {
+    final Set<String> currencyValues = valueSpec.getProperties().getValues(ValuePropertyNames.CURRENCY);
     return currencyValues == null || currencyValues.isEmpty() ?
         formattedNumber :
         currencyValues.iterator().next() + " " + formattedNumber;

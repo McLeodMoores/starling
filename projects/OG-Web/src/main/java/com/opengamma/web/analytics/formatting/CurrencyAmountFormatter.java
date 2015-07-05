@@ -2,6 +2,10 @@
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
  *
  * Please see distribution for license.
+ *
+ * Modified by McLeod Moores Software Limited.
+ *
+ * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.web.analytics.formatting;
 
@@ -19,8 +23,8 @@ import com.opengamma.util.money.CurrencyAmount;
   private final BigDecimalFormatter _bigDecimalFormatter;
   private final ResultsFormatter.CurrencyDisplay _currencyDisplay;
 
-  /* package */ CurrencyAmountFormatter(ResultsFormatter.CurrencyDisplay currencyDisplay,
-                                        BigDecimalFormatter bigDecimalFormatter) {
+  /* package */ CurrencyAmountFormatter(final ResultsFormatter.CurrencyDisplay currencyDisplay,
+                                        final BigDecimalFormatter bigDecimalFormatter) {
     super(CurrencyAmount.class);
     ArgumentChecker.notNull(bigDecimalFormatter, "bigDecimalFormatter");
     ArgumentChecker.notNull(currencyDisplay, "currencyDisplay");
@@ -28,41 +32,41 @@ import com.opengamma.util.money.CurrencyAmount;
     _currencyDisplay = currencyDisplay;
     addFormatter(new Formatter<CurrencyAmount>(Format.EXPANDED) {
       @Override
-      Object format(CurrencyAmount value, ValueSpecification valueSpec, Object inlineKey) {
+      protected Object formatValue(final CurrencyAmount value, final ValueSpecification valueSpec, final Object inlineKey) {
         return formatExpanded(value, valueSpec);
       }
     });
     addFormatter(new Formatter<CurrencyAmount>(Format.HISTORY) {
       @Override
-      Object format(CurrencyAmount value, ValueSpecification valueSpec, Object inlineKey) {
+      protected Object formatValue(final CurrencyAmount value, final ValueSpecification valueSpec, final Object inlineKey) {
         return formatHistory(value, valueSpec);
       }
     });
   }
 
   @Override
-  public String formatCell(CurrencyAmount value, ValueSpecification valueSpec, Object inlineKey) {
-    double amount = value.getAmount();
-    BigDecimal bigDecimal = convertToBigDecimal(amount);
+  public String formatCell(final CurrencyAmount value, final ValueSpecification valueSpec, final Object inlineKey) {
+    final double amount = value.getAmount();
+    final BigDecimal bigDecimal = convertToBigDecimal(amount);
     return bigDecimal == null ?
         Double.toString(amount) :
         formatValue(value, valueSpec, inlineKey, bigDecimal);
   }
 
-  private String formatValue(CurrencyAmount value,
-                             ValueSpecification valueSpec,
-                             Object inlineKey,
-                             BigDecimal bigDecimal) {
+  private String formatValue(final CurrencyAmount value,
+                             final ValueSpecification valueSpec,
+                             final Object inlineKey,
+                             final BigDecimal bigDecimal) {
 
-    String prefix = _currencyDisplay == ResultsFormatter.CurrencyDisplay.DISPLAY_CURRENCY ?
+    final String prefix = _currencyDisplay == ResultsFormatter.CurrencyDisplay.DISPLAY_CURRENCY ?
         value.getCurrency().getCode() + " " :
         "";
     return prefix + _bigDecimalFormatter.formatCell(bigDecimal, valueSpec, inlineKey);
   }
 
-  private Object formatExpanded(CurrencyAmount value, ValueSpecification valueSpec) {
-    double amount = value.getAmount();
-    BigDecimal bigDecimal = convertToBigDecimal(amount);
+  private Object formatExpanded(final CurrencyAmount value, final ValueSpecification valueSpec) {
+    final double amount = value.getAmount();
+    final BigDecimal bigDecimal = convertToBigDecimal(amount);
     if (bigDecimal == null) {
       return Double.toString(amount);
     } else {
@@ -70,9 +74,9 @@ import com.opengamma.util.money.CurrencyAmount;
     }
   }
 
-  private Object formatHistory(CurrencyAmount history, ValueSpecification valueSpec) {
-    double amount = history.getAmount();
-    BigDecimal bigDecimal = convertToBigDecimal(amount);
+  private Object formatHistory(final CurrencyAmount history, final ValueSpecification valueSpec) {
+    final double amount = history.getAmount();
+    final BigDecimal bigDecimal = convertToBigDecimal(amount);
     if (bigDecimal == null) {
       return null;
     } else {
@@ -89,7 +93,7 @@ import com.opengamma.util.money.CurrencyAmount;
    * @param value A double value, not null
    * @return The value converted to a {@link BigDecimal}, null if the value is infinite or not a number
    */
-  private static BigDecimal convertToBigDecimal(Double value) {
+  private static BigDecimal convertToBigDecimal(final Double value) {
     if (Double.isInfinite(value) || Double.isNaN(value)) {
       return null;
     } else {

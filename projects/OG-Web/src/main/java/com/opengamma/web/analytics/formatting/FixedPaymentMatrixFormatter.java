@@ -2,6 +2,10 @@
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
  *
  * Please see distribution for license.
+ *
+ * Modified by McLeod Moores Software Limited.
+ *
+ * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.web.analytics.formatting;
 
@@ -31,7 +35,7 @@ import com.opengamma.util.money.MultipleCurrencyAmount;
     super(FixedPaymentMatrix.class);
     addFormatter(new Formatter<FixedPaymentMatrix>(Format.EXPANDED) {
       @Override
-      Map<String, Object> format(FixedPaymentMatrix value, ValueSpecification valueSpec, Object inlineKey) {
+      protected Map<String, Object> formatValue(final FixedPaymentMatrix value, final ValueSpecification valueSpec, final Object inlineKey) {
         return formatExpanded(value, valueSpec);
       }
     });
@@ -39,24 +43,24 @@ import com.opengamma.util.money.MultipleCurrencyAmount;
   }
 
   @Override
-  public String formatCell(FixedPaymentMatrix value, ValueSpecification valueSpec, Object inlineKey) {
+  public String formatCell(final FixedPaymentMatrix value, final ValueSpecification valueSpec, final Object inlineKey) {
     return "FixedPaymentMatrix (" + value.getDatesAsArray().length + ")";
   }
 
-  private Map<String, Object> formatExpanded(FixedPaymentMatrix value, ValueSpecification valueSpec) {
-    Map<LocalDate, MultipleCurrencyAmount> values = value.getValues();
-    int columnCount = value.getMaxCurrencyAmounts();
-    int rowCount = values.size();
-    
-    Map<String, Object> results = Maps.newHashMap();
-    String[] xLabels = new String[columnCount];
-    String[] yLabels = new String[rowCount];
-    String[][] matrix = new String[rowCount][columnCount];
+  private Map<String, Object> formatExpanded(final FixedPaymentMatrix value, final ValueSpecification valueSpec) {
+    final Map<LocalDate, MultipleCurrencyAmount> values = value.getValues();
+    final int columnCount = value.getMaxCurrencyAmounts();
+    final int rowCount = values.size();
+
+    final Map<String, Object> results = Maps.newHashMap();
+    final String[] xLabels = new String[columnCount];
+    final String[] yLabels = new String[rowCount];
+    final String[][] matrix = new String[rowCount][columnCount];
     int row = 0;
     Arrays.fill(yLabels, StringUtils.EMPTY);
-    for (Map.Entry<LocalDate, MultipleCurrencyAmount> entry : values.entrySet()) {
+    for (final Map.Entry<LocalDate, MultipleCurrencyAmount> entry : values.entrySet()) {
       yLabels[row] = entry.getKey().toString();
-      CurrencyAmount[] ca = entry.getValue().getCurrencyAmounts();
+      final CurrencyAmount[] ca = entry.getValue().getCurrencyAmounts();
       for (int i = 0; i < columnCount; i++) {
         matrix[row][i] = _caFormatter.formatCell(ca[i], valueSpec, null);
       }

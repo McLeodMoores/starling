@@ -2,6 +2,10 @@
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
  *
  * Please see distribution for license.
+ *
+ * Modified by McLeod Moores Software Limited.
+ *
+ * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.web.analytics.formatting;
 
@@ -23,7 +27,7 @@ class ISDACompliantYieldCurveFormatter extends AbstractFormatter<ISDACompliantYi
     super(ISDACompliantYieldCurve.class);
     addFormatter(new Formatter<ISDACompliantYieldCurve>(Format.EXPANDED) {
       @Override
-      Object format(ISDACompliantYieldCurve value, ValueSpecification valueSpec, Object inlineKey) {
+      protected Object formatValue(final ISDACompliantYieldCurve value, final ValueSpecification valueSpec, final Object inlineKey) {
         return formatExpanded(value);
       }
     });
@@ -31,10 +35,10 @@ class ISDACompliantYieldCurveFormatter extends AbstractFormatter<ISDACompliantYi
 
   //-------------------------------------------------------------------------
   @Override
-  public List<Double[]> formatCell(ISDACompliantYieldCurve value, ValueSpecification valueSpec, Object inlineKey) {
-    List<Double[]> data = new ArrayList<>();
-    double[] xData = value.getT();
-    double[] yData = value.getKnotZeroRates();
+  public List<Double[]> formatCell(final ISDACompliantYieldCurve value, final ValueSpecification valueSpec, final Object inlineKey) {
+    final List<Double[]> data = new ArrayList<>();
+    final double[] xData = value.getT();
+    final double[] yData = value.getKnotZeroRates();
     for (int i = 0; i < xData.length; i++) {
       data.add(new Double[] {xData[i], yData[i] });
     }
@@ -42,7 +46,7 @@ class ISDACompliantYieldCurveFormatter extends AbstractFormatter<ISDACompliantYi
   }
 
   // This should really interpolate the curve
-  private List<Double[]> formatExpanded(ISDACompliantYieldCurve value) {
+  private List<Double[]> formatExpanded(final ISDACompliantYieldCurve value) {
     return formatCell(value, null, null);
   }
 

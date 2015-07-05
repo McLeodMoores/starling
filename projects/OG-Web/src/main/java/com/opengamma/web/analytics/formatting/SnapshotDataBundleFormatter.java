@@ -2,6 +2,10 @@
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
  *
  * Please see distribution for license.
+ *
+ * Modified by McLeod Moores Software Limited.
+ *
+ * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.web.analytics.formatting;
 
@@ -40,14 +44,14 @@ import com.opengamma.util.ArgumentChecker;
     _doubleFormatter = doubleFormatter;
     addFormatter(new Formatter<SnapshotDataBundle>(Format.EXPANDED) {
       @Override
-      Map<String, Object> format(final SnapshotDataBundle value, final ValueSpecification valueSpec, Object inlineKey) {
+      protected Map<String, Object> formatValue(final SnapshotDataBundle value, final ValueSpecification valueSpec, final Object inlineKey) {
         return formatExpanded(value, valueSpec);
       }
     });
   }
 
   @Override
-  public String formatCell(final SnapshotDataBundle bundle, final ValueSpecification valueSpec, Object inlineKey) {
+  public String formatCell(final SnapshotDataBundle bundle, final ValueSpecification valueSpec, final Object inlineKey) {
     return "Data Bundle (" + bundle.size() + " points)";
   }
 
@@ -56,7 +60,7 @@ import com.opengamma.util.ArgumentChecker;
     final Map<String, Object> resultsMap = Maps.newHashMap();
     for (final Map.Entry<ExternalIdBundle, Double> entry : bundle.getDataPointSet()) {
       final ExternalId id = _orderConfig.getPreferred(entry.getKey());
-      final String idStr = (id != null) ? id.toString() : "";
+      final String idStr = id != null ? id.toString() : "";
       final String formattedValue = _doubleFormatter.formatCell(entry.getValue(), valueSpec, null);
       results.add(ImmutableList.of(idStr, formattedValue));
     }

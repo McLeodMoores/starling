@@ -2,6 +2,10 @@
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
  *
  * Please see distribution for license.
+ *
+ * Modified by McLeod Moores Software Limited.
+ *
+ * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.web.analytics.formatting;
 
@@ -23,42 +27,42 @@ import com.opengamma.engine.value.ValueSpecification;
     super(BlackVolatilitySurfaceMoneynessFcnBackedByGrid.class);
     addFormatter(new Formatter<BlackVolatilitySurfaceMoneynessFcnBackedByGrid>(Format.EXPANDED) {
       @Override
-      Object format(BlackVolatilitySurfaceMoneynessFcnBackedByGrid value,
-                    ValueSpecification valueSpec,
-                    Object inlineKey) {
+      protected Object formatValue(final BlackVolatilitySurfaceMoneynessFcnBackedByGrid value,
+                    final ValueSpecification valueSpec,
+                    final Object inlineKey) {
         return formatExpanded(value);
       }
     });
   }
 
   @Override
-  public Object formatCell(BlackVolatilitySurfaceMoneynessFcnBackedByGrid value,
-                           ValueSpecification valueSpec,
-                           Object inlineKey) {
+  public Object formatCell(final BlackVolatilitySurfaceMoneynessFcnBackedByGrid value,
+                           final ValueSpecification valueSpec,
+                           final Object inlineKey) {
     return SurfaceFormatterUtils.formatCell(value.getSurface());
   }
 
-  private Object formatExpanded(BlackVolatilitySurfaceMoneynessFcnBackedByGrid value) {
-    SmileSurfaceDataBundle gridData = value.getGridData();
-    Set<Double> strikes = new TreeSet<Double>();
-    for (double[] outer : gridData.getStrikes()) {
-      for (double inner : outer) {
+  private Object formatExpanded(final BlackVolatilitySurfaceMoneynessFcnBackedByGrid value) {
+    final SmileSurfaceDataBundle gridData = value.getGridData();
+    final Set<Double> strikes = new TreeSet<Double>();
+    for (final double[] outer : gridData.getStrikes()) {
+      for (final double inner : outer) {
         strikes.add(inner);
       }
     }
-    List<Double> vol = Lists.newArrayList();
+    final List<Double> vol = Lists.newArrayList();
     // x values (outer loop of vol) strikes
     // y values (inner loop of vol) expiries
-    List<Double> expiries = Lists.newArrayListWithCapacity(gridData.getExpiries().length);
-    for (double expiry : gridData.getExpiries()) {
+    final List<Double> expiries = Lists.newArrayListWithCapacity(gridData.getExpiries().length);
+    for (final double expiry : gridData.getExpiries()) {
       expiries.add(expiry);
     }
-    for (Double strike : strikes) {
-      for (Double expiry : expiries) {
+    for (final Double strike : strikes) {
+      for (final Double expiry : expiries) {
         vol.add(value.getVolatility(expiry, strike));
       }
     }
-    Map<String, Object> results = Maps.newHashMap();
+    final Map<String, Object> results = Maps.newHashMap();
     results.put(SurfaceFormatterUtils.X_VALUES, expiries);
     results.put(SurfaceFormatterUtils.X_LABELS, SurfaceFormatterUtils.getAxisLabels(expiries));
     results.put(SurfaceFormatterUtils.X_TITLE, "Time to Expiry");

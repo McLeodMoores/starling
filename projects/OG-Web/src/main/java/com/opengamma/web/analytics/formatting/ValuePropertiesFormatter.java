@@ -2,6 +2,10 @@
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
  *
  * Please see distribution for license.
+ *
+ * Modified by McLeod Moores Software Limited.
+ *
+ * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.web.analytics.formatting;
 
@@ -26,20 +30,20 @@ import com.opengamma.engine.value.ValueSpecification;
     super(ValueProperties.class);
     addFormatter(new Formatter<ValueProperties>(Format.EXPANDED) {
       @Override
-      Map<String, Object> format(ValueProperties properties, ValueSpecification valueSpec, Object inlineKey) {
-        Set<String> names = properties.getProperties();
-        List<List<String>> matrix = Lists.newArrayListWithCapacity(names.size());
-        List<String> yLabels = Lists.newArrayListWithCapacity(names.size());
-        for (String name : names) {
-          Set<String> values = properties.getValues(name);
-          boolean optional = properties.isOptional(name);
-          List<String> row = Lists.newArrayListWithCapacity(2);
+      protected Map<String, Object> formatValue(final ValueProperties properties, final ValueSpecification valueSpec, final Object inlineKey) {
+        final Set<String> names = properties.getProperties();
+        final List<List<String>> matrix = Lists.newArrayListWithCapacity(names.size());
+        final List<String> yLabels = Lists.newArrayListWithCapacity(names.size());
+        for (final String name : names) {
+          final Set<String> values = properties.getValues(name);
+          final boolean optional = properties.isOptional(name);
+          final List<String> row = Lists.newArrayListWithCapacity(2);
           row.add(StringUtils.join(values, ", "));
           row.add(optional ? "true" : "false");
           matrix.add(row);
           yLabels.add(name);
         }
-        Map<String, Object> output = Maps.newHashMap();
+        final Map<String, Object> output = Maps.newHashMap();
         output.put(LabelledMatrix2DFormatter.MATRIX, matrix);
         // TODO it would be good if the UI could handle a label for the first column: "Property"
         output.put(LabelledMatrix2DFormatter.X_LABELS, Lists.newArrayList("Property", "Value", "Optional"));
@@ -50,7 +54,7 @@ import com.opengamma.engine.value.ValueSpecification;
   }
 
   @Override
-  public Object formatCell(ValueProperties properties, ValueSpecification valueSpec, Object inlineKey) {
+  public Object formatCell(final ValueProperties properties, final ValueSpecification valueSpec, final Object inlineKey) {
     return "Value Properties (" + properties.getProperties().size() + ")";
   }
 

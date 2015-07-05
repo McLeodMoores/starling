@@ -2,6 +2,10 @@
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
  *
  * Please see distribution for license.
+ *
+ * Modified by McLeod Moores Software Limited.
+ *
+ * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.web.analytics.formatting;
 
@@ -56,14 +60,14 @@ import com.opengamma.util.money.CurrencyAmount;
     _rateFormatter = rateFormatter;
     addFormatter(new Formatter<FixedSwapLegDetails>(Format.EXPANDED) {
       @Override
-      Map<String, Object> format(FixedSwapLegDetails value, ValueSpecification valueSpec, Object inlineKey) {
+      protected Map<String, Object> formatValue(final FixedSwapLegDetails value, final ValueSpecification valueSpec, final Object inlineKey) {
         return formatExpanded(value, valueSpec);
       }
     });
   }
 
   @Override
-  public String formatCell(FixedSwapLegDetails value, ValueSpecification valueSpec, Object inlineKey) {
+  public String formatCell(final FixedSwapLegDetails value, final ValueSpecification valueSpec, final Object inlineKey) {
     return "Fixed Swap Leg Details (" + value.getNumberOfCashFlows() + ")";
   }
 
@@ -73,14 +77,14 @@ import com.opengamma.util.money.CurrencyAmount;
    * @param valueSpec The value specification
    * @return The expanded format.
    */
-  /* package */ Map<String, Object> formatExpanded(FixedSwapLegDetails value, ValueSpecification valueSpec) {
-    int rowCount = value.getNumberOfCashFlows();
-    String[] yLabels = new String[rowCount];
+  /* package */ Map<String, Object> formatExpanded(final FixedSwapLegDetails value, final ValueSpecification valueSpec) {
+    final int rowCount = value.getNumberOfCashFlows();
+    final String[] yLabels = new String[rowCount];
     Arrays.fill(yLabels, "");
-    Map<String, Object> results = new HashMap<>();
+    final Map<String, Object> results = new HashMap<>();
     results.put(X_LABELS, COLUMN_LABELS);
     results.put(Y_LABELS, yLabels);
-    Object[][] values = new Object[rowCount][COLUMN_COUNT];
+    final Object[][] values = new Object[rowCount][COLUMN_COUNT];
     for (int i = 0; i < rowCount; i++) {
       values[i][0] = value.getAccrualStart()[i] == null ? "-" : value.getAccrualStart()[i].toString();
       values[i][1] = value.getAccrualEnd()[i] == null ? "-" : value.getAccrualEnd()[i].toString();
@@ -89,7 +93,7 @@ import com.opengamma.util.money.CurrencyAmount;
       values[i][4] = value.getPaymentFractions()[i];
       values[i][5] = _caFormatter.formatCell(value.getPaymentAmounts()[i], valueSpec, null);
       values[i][6] = _caFormatter.formatCell(value.getNotionals()[i], valueSpec, null);
-      values[i][7] = _rateFormatter.formatCell(value.getFixedRates()[i], valueSpec, null); 
+      values[i][7] = _rateFormatter.formatCell(value.getFixedRates()[i], valueSpec, null);
       values[i][8] = _caFormatter.formatCell(value.getDiscountedPaymentAmounts()[i], valueSpec, null);
     }
     results.put(MATRIX, values);

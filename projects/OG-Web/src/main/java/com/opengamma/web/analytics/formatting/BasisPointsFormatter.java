@@ -1,7 +1,11 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
+ *
+ * Modified by McLeod Moores Software Limited.
+ *
+ * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.web.analytics.formatting;
 
@@ -15,12 +19,12 @@ import com.opengamma.web.analytics.formatting.ResultsFormatter.CurrencyDisplay;
  */
 public class BasisPointsFormatter extends AbstractFormatter<Double> {
   /** Percentage symbol */
-  private static final String UNIT = " bp";  
+  private static final String UNIT = " bp";
   /** The underlying double formatter */
   private final AbstractFormatter<BigDecimal> _bigDecimalFormatter;
-  
+
   /**
-   * @param bigDecimalFormatter A BigDecimal formatter, not null
+   *
    */
   /* package */ BasisPointsFormatter() {
     super(Double.class);
@@ -28,17 +32,17 @@ public class BasisPointsFormatter extends AbstractFormatter<Double> {
     addFormatter(new Formatter<Double>(Format.HISTORY) {
 
       @Override
-      Object format(final Double value, final ValueSpecification valueSpec, final Object inlineKey) {
+      protected Object formatValue(final Double value, final ValueSpecification valueSpec, final Object inlineKey) {
         return formatHistory(value, valueSpec);
       }
     });
     addFormatter(new Formatter<Double>(Format.EXPANDED) {
 
       @Override
-      Object format(final Double value, final ValueSpecification valueSpec, final Object inlineKey) {
+      protected Object formatValue(final Double value, final ValueSpecification valueSpec, final Object inlineKey) {
         return formatExpanded(value, valueSpec);
       }
-      
+
     });
   }
 
@@ -66,7 +70,7 @@ public class BasisPointsFormatter extends AbstractFormatter<Double> {
     }
     return result.toString() + UNIT;
   }
-  
+
   /**
    * Expands the format.
    * @param value The value
@@ -81,21 +85,21 @@ public class BasisPointsFormatter extends AbstractFormatter<Double> {
     }
     return result.toString() + UNIT;
   }
-  
+
   @Override
   public DataType getDataType() {
     return DataType.STRING;
   }
-  
+
   /**
    * Converts a Double to a BigDecimal
    * @param value The value
    * @return A BigDecimal
    */
-  private static BigDecimal convertToBigDecimal(Double value) {
+  private static BigDecimal convertToBigDecimal(final Double value) {
     if (Double.isInfinite(value) || Double.isNaN(value)) {
       return null;
-    } 
+    }
     return new BigDecimal(Double.valueOf(10000. * value).toString());
   }
 }

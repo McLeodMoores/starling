@@ -2,6 +2,10 @@
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
  *
  * Please see distribution for license.
+ *
+ * Modified by McLeod Moores Software Limited.
+ *
+ * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.web.analytics.formatting;
 
@@ -26,7 +30,7 @@ public abstract class AbstractFormatter<T> implements TypeFormatter<T> {
   }
 
   protected void addFormatter(final Formatter<T> formatter) {
-    _formatters.put(formatter.getFormat(), formatter);
+    _formatters.put(formatter.getFormatter(), formatter);
   }
 
   @Override
@@ -36,7 +40,7 @@ public abstract class AbstractFormatter<T> implements TypeFormatter<T> {
     }
     final Formatter<T> formatter = _formatters.get(format);
     if (formatter != null) {
-      return formatter.format(value, valueSpec, inlineKey);
+      return formatter.formatValue(value, valueSpec, inlineKey);
     }
     return new MissingValueFormatter(format + " format not supported for " + value.getClass().getSimpleName());
   }
@@ -62,18 +66,28 @@ public abstract class AbstractFormatter<T> implements TypeFormatter<T> {
    * A formatter element.
    * @param <T>  the formatter type
    */
-  abstract static class Formatter<T> {
+  public abstract static class Formatter<T> {
     private final Format _format;
 
-    Formatter(final Format format) {
+    protected Formatter(final Format format) {
       _format = format;
     }
 
-    Format getFormat() {
+    protected Format getFormatter() {
       return _format;
     }
 
-    abstract Object format(T value, ValueSpecification valueSpec, Object inlineKey);
+    @Deprecated
+    /* package */ Format getFormat() {
+      return _format;
+    }
+
+    protected abstract Object formatValue(T value, ValueSpecification valueSpec, Object inlineKey);
+
+    @Deprecated
+    /* package */ Object format(final T value, final ValueSpecification valueSpec, final Object inlineKey) {
+      return formatValue(value, valueSpec, inlineKey);
+    }
   }
 
 }

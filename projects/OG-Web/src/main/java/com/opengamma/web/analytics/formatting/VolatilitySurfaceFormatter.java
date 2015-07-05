@@ -2,6 +2,10 @@
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
  *
  * Please see distribution for license.
+ *
+ * Modified by McLeod Moores Software Limited.
+ *
+ * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.web.analytics.formatting;
 
@@ -28,18 +32,18 @@ import com.opengamma.engine.value.ValueSpecification;
     super(VolatilitySurface.class);
     addFormatter(new Formatter<VolatilitySurface>(Format.EXPANDED) {
       @Override
-      Object format(VolatilitySurface value, ValueSpecification valueSpec, Object inlineKey) {
+      protected Object formatValue(final VolatilitySurface value, final ValueSpecification valueSpec, final Object inlineKey) {
         return SurfaceFormatterUtils.formatExpanded(value.getSurface());
       }
     });
   }
 
   @Override
-  public String formatCell(VolatilitySurface value, ValueSpecification valueSpec, Object inlineKey) {
-    Surface<Double, Double, Double> inputSurface = value.getSurface();
+  public String formatCell(final VolatilitySurface value, final ValueSpecification valueSpec, final Object inlineKey) {
+    final Surface<Double, Double, Double> inputSurface = value.getSurface();
     if (inputSurface instanceof DoublesSurface) {
-      Set<Double> uniqueXValues = Sets.newHashSet(inputSurface.getXData());
-      Set<Double> uniqueYValues = Sets.newHashSet(inputSurface.getYData());
+      final Set<Double> uniqueXValues = Sets.newHashSet(inputSurface.getXData());
+      final Set<Double> uniqueYValues = Sets.newHashSet(inputSurface.getYData());
       return "Volatility Surface (" + uniqueXValues.size() + " x " + uniqueYValues.size() + ")";
     } else if (inputSurface instanceof ConstantDoublesSurface) {
       return "Constant Volatility Surface (z = " + inputSurface.getZValue(0.0, 0.0) + ")";
@@ -61,7 +65,7 @@ import com.opengamma.engine.value.ValueSpecification;
   }
 
   @Override
-  public DataType getDataTypeForValue(VolatilitySurface value) {
+  public DataType getDataTypeForValue(final VolatilitySurface value) {
     return SurfaceFormatterUtils.getDataType(value.getSurface());
   }
 }

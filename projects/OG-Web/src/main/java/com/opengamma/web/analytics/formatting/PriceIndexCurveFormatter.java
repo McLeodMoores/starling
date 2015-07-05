@@ -2,6 +2,10 @@
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
  *
  * Please see distribution for license.
+ *
+ * Modified by McLeod Moores Software Limited.
+ *
+ * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.web.analytics.formatting;
 
@@ -29,29 +33,29 @@ import com.opengamma.financial.analytics.ircurve.YieldCurveInterpolatingFunction
     super(PriceIndexCurve.class);
     addFormatter(new Formatter<PriceIndexCurve>(Format.EXPANDED) {
       @Override
-      Object format(PriceIndexCurve value, ValueSpecification valueSpec, Object inlineKey) {
+      protected Object formatValue(final PriceIndexCurve value, final ValueSpecification valueSpec, final Object inlineKey) {
         return formatExpanded(value);
       }
     });
   }
 
   @Override
-  public List<Double[]> formatCell(PriceIndexCurve value, ValueSpecification valueSpec, Object inlineKey) {
+  public List<Double[]> formatCell(final PriceIndexCurve value, final ValueSpecification valueSpec, final Object inlineKey) {
     if (value.getCurve() instanceof InterpolatedDoublesCurve) {
-      InterpolatedDoublesCurve interpolatedCurve = (InterpolatedDoublesCurve) value.getCurve();
-      List<Double[]> data = new ArrayList<Double[]>();
-      double[] xData = interpolatedCurve.getXDataAsPrimitive();
-      double[] yData = interpolatedCurve.getYDataAsPrimitive();
+      final InterpolatedDoublesCurve interpolatedCurve = (InterpolatedDoublesCurve) value.getCurve();
+      final List<Double[]> data = new ArrayList<Double[]>();
+      final double[] xData = interpolatedCurve.getXDataAsPrimitive();
+      final double[] yData = interpolatedCurve.getYDataAsPrimitive();
       for (int i = 0; i < interpolatedCurve.size(); i++) {
         data.add(new Double[] {xData[i], yData[i]});
       }
       return data;
     } else if (value.getCurve() instanceof FunctionalDoublesCurve) {
-      FunctionalDoublesCurve curve = (FunctionalDoublesCurve) value.getCurve();
-      int n = 34;
-      List<Double[]> data = new ArrayList<Double[]>();
-      double[] xData = new double[n];
-      double[] yData = new double[n];
+      final FunctionalDoublesCurve curve = (FunctionalDoublesCurve) value.getCurve();
+      final int n = 34;
+      final List<Double[]> data = new ArrayList<Double[]>();
+      final double[] xData = new double[n];
+      final double[] yData = new double[n];
       for (int i = 0; i < n; i++) {
         if (i == 0) {
           xData[0] = 1. / 12;
@@ -74,11 +78,11 @@ import com.opengamma.financial.analytics.ircurve.YieldCurveInterpolatingFunction
     }
   }
 
-  private List<Double[]> formatExpanded(PriceIndexCurve value) {
-    NodalDoublesCurve detailedCurve = YieldCurveInterpolatingFunction.interpolateCurve(value.getCurve());
-    List<Double[]> detailedData = new ArrayList<Double[]>();
-    Double[] xs = detailedCurve.getXData();
-    Double[] ys = detailedCurve.getYData();
+  private List<Double[]> formatExpanded(final PriceIndexCurve value) {
+    final NodalDoublesCurve detailedCurve = YieldCurveInterpolatingFunction.interpolateCurve(value.getCurve());
+    final List<Double[]> detailedData = new ArrayList<Double[]>();
+    final Double[] xs = detailedCurve.getXData();
+    final Double[] ys = detailedCurve.getYData();
     for (int i = 0; i < ys.length; i++) {
       detailedData.add(new Double[]{xs[i], ys[i]});
     }

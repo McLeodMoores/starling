@@ -2,6 +2,10 @@
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
  *
  * Please see distribution for license.
+ *
+ * Modified by McLeod Moores Software Limited.
+ *
+ * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.web.analytics.formatting;
 
@@ -24,32 +28,32 @@ import com.opengamma.financial.analytics.ircurve.YieldCurveInterpolatingFunction
     super(YieldCurve.class);
     addFormatter(new Formatter<YieldCurve>(Format.EXPANDED) {
       @Override
-      Object format(YieldCurve value, ValueSpecification valueSpec, Object inlineKey) {
+      protected Object formatValue(final YieldCurve value, final ValueSpecification valueSpec, final Object inlineKey) {
         return formatExpanded(value);
       }
     });
   }
 
   @Override
-  public List<Double[]> formatCell(YieldCurve value, ValueSpecification valueSpec, Object inlineKey) {
+  public List<Double[]> formatCell(final YieldCurve value, final ValueSpecification valueSpec, final Object inlineKey) {
     if (value.getCurve() instanceof InterpolatedDoublesCurve) {
-      InterpolatedDoublesCurve interpolatedCurve = (InterpolatedDoublesCurve) value.getCurve();
-      List<Double[]> data = new ArrayList<Double[]>();
-      double[] xData = interpolatedCurve.getXDataAsPrimitive();
-      double[] yData = interpolatedCurve.getYDataAsPrimitive();
+      final InterpolatedDoublesCurve interpolatedCurve = (InterpolatedDoublesCurve) value.getCurve();
+      final List<Double[]> data = new ArrayList<Double[]>();
+      final double[] xData = interpolatedCurve.getXDataAsPrimitive();
+      final double[] yData = interpolatedCurve.getYDataAsPrimitive();
       for (int i = 0; i < interpolatedCurve.size(); i++) {
         data.add(new Double[] {xData[i], yData[i]});
       }
       return data;
-    } 
+    }
     return getSampledCurve(value.getCurve());
   }
 
-  private List<Double[]> formatExpanded(YieldCurve value) {
-    NodalDoublesCurve detailedCurve = YieldCurveInterpolatingFunction.interpolateCurve(value.getCurve());
-    List<Double[]> detailedData = new ArrayList<Double[]>();
-    Double[] xs = detailedCurve.getXData();
-    Double[] ys = detailedCurve.getYData();
+  private List<Double[]> formatExpanded(final YieldCurve value) {
+    final NodalDoublesCurve detailedCurve = YieldCurveInterpolatingFunction.interpolateCurve(value.getCurve());
+    final List<Double[]> detailedData = new ArrayList<Double[]>();
+    final Double[] xs = detailedCurve.getXData();
+    final Double[] ys = detailedCurve.getYData();
     for (int i = 0; i < ys.length; i++) {
       detailedData.add(new Double[]{xs[i], ys[i]});
     }
@@ -60,12 +64,12 @@ import com.opengamma.financial.analytics.ircurve.YieldCurveInterpolatingFunction
   public DataType getDataType() {
     return DataType.CURVE;
   }
-  
-  private List<Double[]> getSampledCurve(DoublesCurve curve) {
-    int n = 34;
-    List<Double[]> data = new ArrayList<Double[]>();
-    double[] xData = new double[n];
-    double[] yData = new double[n];
+
+  private List<Double[]> getSampledCurve(final DoublesCurve curve) {
+    final int n = 34;
+    final List<Double[]> data = new ArrayList<Double[]>();
+    final double[] xData = new double[n];
+    final double[] yData = new double[n];
     for (int i = 0; i < n; i++) {
       if (i == 0) {
         xData[0] = 1. / 12;

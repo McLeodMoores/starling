@@ -2,6 +2,10 @@
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
  *
  * Please see distribution for license.
+ *
+ * Modified by McLeod Moores Software Limited.
+ *
+ * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.web.analytics.formatting;
 
@@ -26,16 +30,16 @@ import com.opengamma.financial.currency.CurrencyPairs;
     super(CurrencyPairs.class);
     addFormatter(new Formatter<CurrencyPairs>(Format.EXPANDED) {
       @Override
-      Object format(CurrencyPairs pairs, ValueSpecification valueSpec, Object inlineKey) {
+      protected Object formatValue(final CurrencyPairs pairs, final ValueSpecification valueSpec, final Object inlineKey) {
         return formatExpanded(pairs);
       }
     });
   }
 
-  private Map<String, Object> formatExpanded(CurrencyPairs currencyPairs) {
-    Set<CurrencyPair> pairs = currencyPairs.getPairs();
-    List<String> pairNames = Lists.newArrayListWithCapacity(pairs.size());
-    for (CurrencyPair pair : pairs) {
+  private Map<String, Object> formatExpanded(final CurrencyPairs currencyPairs) {
+    final Set<CurrencyPair> pairs = currencyPairs.getPairs();
+    final List<String> pairNames = Lists.newArrayListWithCapacity(pairs.size());
+    for (final CurrencyPair pair : pairs) {
       pairNames.add(pair.getName());
     }
     Collections.sort(pairNames);
@@ -43,7 +47,7 @@ import com.opengamma.financial.currency.CurrencyPairs;
   }
 
   @Override
-  public Object formatCell(CurrencyPairs pairs, ValueSpecification valueSpec, Object inlineKey) {
+  public Object formatCell(final CurrencyPairs pairs, final ValueSpecification valueSpec, final Object inlineKey) {
     return "Currency Pairs (" + pairs.getPairs().size() + ")";
   }
 

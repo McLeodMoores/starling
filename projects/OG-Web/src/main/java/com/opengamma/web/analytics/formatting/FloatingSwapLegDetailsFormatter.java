@@ -2,6 +2,10 @@
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
  *
  * Please see distribution for license.
+ *
+ * Modified by McLeod Moores Software Limited.
+ *
+ * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.web.analytics.formatting;
 
@@ -73,7 +77,7 @@ import com.opengamma.util.money.CurrencyAmount;
     _basisPointFormatter = basisPointFormatter;
     addFormatter(new Formatter<FloatingSwapLegDetails>(Format.EXPANDED) {
       @Override
-      Map<String, Object> format(final FloatingSwapLegDetails value, final ValueSpecification valueSpec, final Object inlineKey) {
+      protected Map<String, Object> formatValue(final FloatingSwapLegDetails value, final ValueSpecification valueSpec, final Object inlineKey) {
         return formatExpanded(value, valueSpec);
       }
     });

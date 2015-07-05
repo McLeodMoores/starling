@@ -1,7 +1,11 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
+ *
+ * Modified by McLeod Moores Software Limited.
+ *
+ * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.web.analytics.formatting;
 
@@ -22,21 +26,21 @@ import com.opengamma.util.money.Currency;
   /* package */ static final String Y_LABELS = "yLabels";
   /** matrix */
   /* package */ static final String MATRIX = "matrix";
-  
+
   /**
    * Protected constructor.
    */
   /* package */ FXMatrixFormatter() {
     super(FXMatrix.class);
     addFormatter(new Formatter<FXMatrix>(Format.EXPANDED) {
-      
+
       @Override
-      Map<String, Object> format(final FXMatrix value, final ValueSpecification valueSpec, final Object inlineKey) {
+      protected Map<String, Object> formatValue(final FXMatrix value, final ValueSpecification valueSpec, final Object inlineKey) {
         return formatExpanded(value);
       }
     });
   }
-  
+
   @Override
   public String formatCell(final FXMatrix value, final ValueSpecification valueSpec, final Object inlineKey) {
     if (value.getCurrencies().isEmpty()) {
@@ -44,12 +48,12 @@ import com.opengamma.util.money.Currency;
     }
     return "FX Matrix (" + value.getRates()[0].length + " x " + value.getRates().length + ")";
   }
-  
+
   @Override
   public DataType getDataType() {
-    return DataType.LABELLED_MATRIX_2D;    
+    return DataType.LABELLED_MATRIX_2D;
   }
-  
+
   /**
    * Formats the FX matrix as a 2D labelled matrix.
    * @param value The FX matrix
@@ -76,5 +80,5 @@ import com.opengamma.util.money.Currency;
     results.put(MATRIX, matrix);
     return results;
   }
-  
+
 }

@@ -2,6 +2,10 @@
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
  *
  * Please see distribution for license.
+ *
+ * Modified by McLeod Moores Software Limited.
+ *
+ * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.web.analytics.formatting;
 
@@ -28,11 +32,11 @@ import com.opengamma.util.ArgumentChecker;
   private final ExternalIdOrderConfig _orderConfig;
   private final DoubleFormatter _doubleFormatter;
 
-  /* package */ YieldCurveDataFormatter(DoubleFormatter doubleFormatter) {
+  /* package */ YieldCurveDataFormatter(final DoubleFormatter doubleFormatter) {
     this(ExternalIdOrderConfig.DEFAULT_CONFIG, doubleFormatter);
   }
 
-  /* package */ YieldCurveDataFormatter(ExternalIdOrderConfig config, DoubleFormatter doubleFormatter) {
+  /* package */ YieldCurveDataFormatter(final ExternalIdOrderConfig config, final DoubleFormatter doubleFormatter) {
     super(YieldCurveData.class);
     ArgumentChecker.notNull(config, "config");
     ArgumentChecker.notNull(doubleFormatter, "doubleFormatter");
@@ -40,24 +44,24 @@ import com.opengamma.util.ArgumentChecker;
     _doubleFormatter = doubleFormatter;
     addFormatter(new Formatter<YieldCurveData>(Format.EXPANDED) {
       @Override
-      Map<String, Object> format(YieldCurveData value, ValueSpecification valueSpec, Object inlineKey) {
+      protected Map<String, Object> formatValue(final YieldCurveData value, final ValueSpecification valueSpec, final Object inlineKey) {
         return formatExpanded(value, valueSpec);
       }
     });
   }
 
   @Override
-  public String formatCell(YieldCurveData curveData, ValueSpecification valueSpec, Object inlineKey) {
+  public String formatCell(final YieldCurveData curveData, final ValueSpecification valueSpec, final Object inlineKey) {
     return "Data Bundle (" + curveData.getDataPoints().size() + " points)";
   }
 
-  private Map<String, Object> formatExpanded(YieldCurveData curveData, ValueSpecification valueSpec) {
-    List<List<String>> results = Lists.newArrayListWithCapacity(curveData.getDataPoints().size());
-    Map<String, Object> resultsMap = Maps.newHashMap();
-    for (Map.Entry<ExternalIdBundle, Double> entry : curveData.getDataPoints().entrySet()) {
-      ExternalId id = _orderConfig.getPreferred(entry.getKey());
-      String idStr = (id != null) ? id.toString() : "";
-      String formattedValue = _doubleFormatter.formatCell(entry.getValue(), valueSpec, null);
+  private Map<String, Object> formatExpanded(final YieldCurveData curveData, final ValueSpecification valueSpec) {
+    final List<List<String>> results = Lists.newArrayListWithCapacity(curveData.getDataPoints().size());
+    final Map<String, Object> resultsMap = Maps.newHashMap();
+    for (final Map.Entry<ExternalIdBundle, Double> entry : curveData.getDataPoints().entrySet()) {
+      final ExternalId id = _orderConfig.getPreferred(entry.getKey());
+      final String idStr = id != null ? id.toString() : "";
+      final String formattedValue = _doubleFormatter.formatCell(entry.getValue(), valueSpec, null);
       results.add(ImmutableList.of(idStr, formattedValue));
     }
     resultsMap.put(DATA, results);

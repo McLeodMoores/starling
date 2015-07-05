@@ -2,6 +2,10 @@
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
  *
  * Please see distribution for license.
+ *
+ * Modified by McLeod Moores Software Limited.
+ *
+ * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.web.analytics.formatting;
 
@@ -18,20 +22,20 @@ import com.opengamma.engine.value.ValueSpecification;
     super(MissingOutput.class);
     addFormatter(new Formatter<MissingOutput>(Format.HISTORY) {
       @Override
-      Object format(MissingOutput value, ValueSpecification valueSpec, Object inlineKey) {
+      protected Object formatValue(final MissingOutput value, final ValueSpecification valueSpec, final Object inlineKey) {
         return null;
       }
     });
     addFormatter(new Formatter<MissingOutput>(Format.EXPANDED) {
       @Override
-      Object format(MissingOutput value, ValueSpecification valueSpec, Object inlineKey) {
+      protected Object formatValue(final MissingOutput value, final ValueSpecification valueSpec, final Object inlineKey) {
         return value.toString();
       }
     });
   }
 
   @Override
-  public Object formatCell(MissingOutput value, ValueSpecification valueSpec, Object inlineKey) {
+  public Object formatCell(final MissingOutput value, final ValueSpecification valueSpec, final Object inlineKey) {
     return value.toString();
   }
 
@@ -39,5 +43,5 @@ import com.opengamma.engine.value.ValueSpecification;
   public DataType getDataType() {
     return DataType.STRING;
   }
-  
+
 }

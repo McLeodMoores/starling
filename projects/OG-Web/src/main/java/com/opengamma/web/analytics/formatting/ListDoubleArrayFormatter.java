@@ -2,6 +2,10 @@
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
  *
  * Please see distribution for license.
+ *
+ * Modified by McLeod Moores Software Limited.
+ *
+ * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.web.analytics.formatting;
 
@@ -24,15 +28,15 @@ import com.opengamma.engine.value.ValueSpecification;
     super(List.class);
     addFormatter(new Formatter<List>(Format.EXPANDED) {
       @Override
-      Object format(List value, ValueSpecification valueSpec, Object inlineKey) {
+      protected Object formatValue(final List value, final ValueSpecification valueSpec, final Object inlineKey) {
         return value;
       }
     });
   }
 
   @Override
-  public Object formatCell(List value, ValueSpecification valueSpec, Object inlineKey) {
-    int rowCount = value.size();
+  public Object formatCell(final List value, final ValueSpecification valueSpec, final Object inlineKey) {
+    final int rowCount = value.size();
     int colCount;
     if (rowCount == 0) {
       colCount = 0;

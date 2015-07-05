@@ -2,6 +2,10 @@
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
  *
  * Please see distribution for license.
+ *
+ * Modified by McLeod Moores Software Limited.
+ *
+ * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.web.analytics.formatting;
 
@@ -17,27 +21,27 @@ import com.opengamma.util.ArgumentChecker;
 
   private final BigDecimalFormatter _bigDecimalFormatter;
 
-  DoubleFormatter(BigDecimalFormatter bigDecimalFormatter) {
+  DoubleFormatter(final BigDecimalFormatter bigDecimalFormatter) {
     super(Double.class);
     ArgumentChecker.notNull(bigDecimalFormatter, "bigDecimalFormatter");
     _bigDecimalFormatter = bigDecimalFormatter;
     addFormatter(new Formatter<Double>(Format.HISTORY) {
       @Override
-      Object format(Double value, ValueSpecification valueSpec, Object inlineKey) {
+      protected Object formatValue(final Double value, final ValueSpecification valueSpec, final Object inlineKey) {
         return formatHistory(value, valueSpec);
       }
     });
     addFormatter(new Formatter<Double>(Format.EXPANDED) {
       @Override
-      Object format(Double value, ValueSpecification valueSpec, Object inlineKey) {
+      protected Object formatValue(final Double value, final ValueSpecification valueSpec, final Object inlineKey) {
         return formatExpanded(value, valueSpec);
       }
     });
   }
 
   @Override
-  public String formatCell(Double value, ValueSpecification valueSpec, Object inlineKey) {
-    BigDecimal bigDecimal = convertToBigDecimal(value);
+  public String formatCell(final Double value, final ValueSpecification valueSpec, final Object inlineKey) {
+    final BigDecimal bigDecimal = convertToBigDecimal(value);
     if (bigDecimal == null) {
       return Double.toString(value);
     } else {
@@ -45,8 +49,8 @@ import com.opengamma.util.ArgumentChecker;
     }
   }
 
-  private Object formatExpanded(Double value, ValueSpecification valueSpec) {
-    BigDecimal bigDecimal = convertToBigDecimal(value);
+  private Object formatExpanded(final Double value, final ValueSpecification valueSpec) {
+    final BigDecimal bigDecimal = convertToBigDecimal(value);
     if (bigDecimal == null) {
       return Double.toString(value);
     } else {
@@ -54,8 +58,8 @@ import com.opengamma.util.ArgumentChecker;
     }
   }
 
-  private Object formatHistory(Double history, ValueSpecification valueSpec) {
-    BigDecimal bigDecimal = convertToBigDecimal(history);
+  private Object formatHistory(final Double history, final ValueSpecification valueSpec) {
+    final BigDecimal bigDecimal = convertToBigDecimal(history);
     if (bigDecimal == null) {
       return null;
     } else {
@@ -68,7 +72,7 @@ import com.opengamma.util.ArgumentChecker;
     return DataType.DOUBLE;
   }
 
-  private static BigDecimal convertToBigDecimal(Double value) {
+  private static BigDecimal convertToBigDecimal(final Double value) {
     if (Double.isInfinite(value) || Double.isNaN(value)) {
       return null;
     } else {

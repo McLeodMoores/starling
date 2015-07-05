@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
  *
  * Please see distribution for license.
@@ -23,7 +23,7 @@ class ISDACompliantCurveFormatter extends AbstractFormatter<ISDACompliantCurve> 
     super(ISDACompliantCurve.class);
     addFormatter(new Formatter<ISDACompliantCurve>(Format.EXPANDED) {
       @Override
-      Object format(ISDACompliantCurve value, ValueSpecification valueSpec, Object inlineKey) {
+      protected Object formatValue(final ISDACompliantCurve value, final ValueSpecification valueSpec, final Object inlineKey) {
         return formatExpanded(value);
       }
     });
@@ -31,10 +31,10 @@ class ISDACompliantCurveFormatter extends AbstractFormatter<ISDACompliantCurve> 
 
   //-------------------------------------------------------------------------
   @Override
-  public List<Double[]> formatCell(ISDACompliantCurve value, ValueSpecification valueSpec, Object inlineKey) {
-    List<Double[]> data = new ArrayList<>();
-    double[] xData = value.getT();
-    double[] yData = value.getKnotZeroRates();
+  public List<Double[]> formatCell(final ISDACompliantCurve value, final ValueSpecification valueSpec, final Object inlineKey) {
+    final List<Double[]> data = new ArrayList<>();
+    final double[] xData = value.getT();
+    final double[] yData = value.getKnotZeroRates();
     for (int i = 0; i < xData.length; i++) {
       data.add(new Double[] {xData[i], yData[i] });
     }
@@ -42,7 +42,7 @@ class ISDACompliantCurveFormatter extends AbstractFormatter<ISDACompliantCurve> 
   }
 
   // This should really interpolate the curve
-  private List<Double[]> formatExpanded(ISDACompliantCurve value) {
+  private List<Double[]> formatExpanded(final ISDACompliantCurve value) {
     return formatCell(value, null, null);
   }
 

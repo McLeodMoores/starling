@@ -2,6 +2,10 @@
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
  *
  * Please see distribution for license.
+ *
+ * Modified by McLeod Moores Software Limited.
+ *
+ * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.web.analytics.formatting;
 
@@ -23,32 +27,32 @@ import com.opengamma.util.ArgumentChecker;
   /* package */ static final String X_LABELS = "xLabels";
   /* package */ static final String Y_LABELS = "yLabels";
   /* package */ static final String MATRIX = "matrix";
-  
+
   private final DoubleFormatter _doubleFormatter;
 
-  /* package */ LabelledMatrix2DFormatter(DoubleFormatter doubleFormatter) {
+  /* package */ LabelledMatrix2DFormatter(final DoubleFormatter doubleFormatter) {
     super(LabelledMatrix2D.class);
     ArgumentChecker.notNull(doubleFormatter, "doubleFormatter");
     _doubleFormatter = doubleFormatter;
     addFormatter(new Formatter<LabelledMatrix2D>(Format.EXPANDED) {
       @Override
-      Map<String, Object> format(LabelledMatrix2D value, ValueSpecification valueSpec, Object inlineKey) {
+      protected Map<String, Object> formatValue(final LabelledMatrix2D value, final ValueSpecification valueSpec, final Object inlineKey) {
         return formatExpanded(value, valueSpec);
       }
     });
   }
 
   @Override
-  public String formatCell(LabelledMatrix2D value, ValueSpecification valueSpec, Object inlineKey) {
+  public String formatCell(final LabelledMatrix2D value, final ValueSpecification valueSpec, final Object inlineKey) {
     return "Matrix (" + value.getYKeys().length + " x " + value.getXKeys().length + ")";
   }
 
-  private Map<String, Object> formatExpanded(LabelledMatrix2D value, ValueSpecification valueSpec) {
-    Map<String, Object> results = Maps.newHashMap();
-    int rowCount = value.getYKeys().length;
-    int columnCount = value.getXKeys().length;
-    String[] xLabels = new String[columnCount];
-    String[] yLabels = new String[rowCount];
+  private Map<String, Object> formatExpanded(final LabelledMatrix2D value, final ValueSpecification valueSpec) {
+    final Map<String, Object> results = Maps.newHashMap();
+    final int rowCount = value.getYKeys().length;
+    final int columnCount = value.getXKeys().length;
+    final String[] xLabels = new String[columnCount];
+    final String[] yLabels = new String[rowCount];
     for (int i = 0; i < xLabels.length; i++) {
       xLabels[i] = value.getXLabels()[i].toString();
     }
@@ -57,12 +61,12 @@ import com.opengamma.util.ArgumentChecker;
       yLabels[i] = value.getYLabels()[i].toString();
     }
     results.put(Y_LABELS, yLabels);
-    List<List<String>> values = Lists.newArrayListWithCapacity(value.getValues().length);
+    final List<List<String>> values = Lists.newArrayListWithCapacity(value.getValues().length);
     for (int y = 0; y < value.getValues().length; y++) {
-      double[] xValues = value.getValues()[y];
-      List<String> rowValues = Lists.newArrayListWithCapacity(xValues.length);
-      for (int x = 0; x < xValues.length; x++) {
-        String formattedValue = _doubleFormatter.formatCell(xValues[x], valueSpec, null);
+      final double[] xValues = value.getValues()[y];
+      final List<String> rowValues = Lists.newArrayListWithCapacity(xValues.length);
+      for (final double xValue : xValues) {
+        final String formattedValue = _doubleFormatter.formatCell(xValue, valueSpec, null);
         rowValues.add(formattedValue);
       }
       values.add(rowValues);

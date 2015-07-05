@@ -2,6 +2,10 @@
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
  *
  * Please see distribution for license.
+ *
+ * Modified by McLeod Moores Software Limited.
+ *
+ * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.web.analytics.formatting;
 
@@ -29,27 +33,27 @@ import com.opengamma.engine.value.ValueSpecification;
     super(ForwardCurve.class);
     addFormatter(new Formatter<ForwardCurve>(Format.EXPANDED) {
       @Override
-      Object format(ForwardCurve value, ValueSpecification valueSpec, Object inlineKey) {
+      protected Object formatValue(final ForwardCurve value, final ValueSpecification valueSpec, final Object inlineKey) {
         return formatExpanded(value);
       }
     });
   }
 
   @Override
-  public List<Double[]> formatCell(ForwardCurve value, ValueSpecification valueSpec, Object inlineKey) {
-    List<Double[]> data = new ArrayList<Double[]>();
+  public List<Double[]> formatCell(final ForwardCurve value, final ValueSpecification valueSpec, final Object inlineKey) {
+    final List<Double[]> data = new ArrayList<Double[]>();
     if (value.getForwardCurve() instanceof InterpolatedDoublesCurve) {
-      InterpolatedDoublesCurve interpolatedCurve = (InterpolatedDoublesCurve) value.getForwardCurve();
-      double[] xData = interpolatedCurve.getXDataAsPrimitive();
-      double[] yData = interpolatedCurve.getYDataAsPrimitive();
+      final InterpolatedDoublesCurve interpolatedCurve = (InterpolatedDoublesCurve) value.getForwardCurve();
+      final double[] xData = interpolatedCurve.getXDataAsPrimitive();
+      final double[] yData = interpolatedCurve.getYDataAsPrimitive();
       for (int i = 0; i < interpolatedCurve.size(); i++) {
         data.add(new Double[] {xData[i], yData[i]});
       }
       return data;
     } else if (value.getForwardCurve() instanceof FunctionalDoublesCurve) {
-      FunctionalDoublesCurve functionalCurve = (FunctionalDoublesCurve) value.getForwardCurve();
+      final FunctionalDoublesCurve functionalCurve = (FunctionalDoublesCurve) value.getForwardCurve();
       for (int i = 0; i < 30; i++) {
-        double x = i;
+        final double x = i;
         data.add(new Double[] {x, functionalCurve.getYValue(x)});
       }
       return data;
@@ -59,8 +63,8 @@ import com.opengamma.engine.value.ValueSpecification;
     }
   }
 
-  private List<Double[]> formatExpanded(ForwardCurve value) {
-    Curve<Double, Double> forwardCurve = value.getForwardCurve();
+  private List<Double[]> formatExpanded(final ForwardCurve value) {
+    final Curve<Double, Double> forwardCurve = value.getForwardCurve();
     if (forwardCurve instanceof FunctionalDoublesCurve) {
       return formatFunctionalDoubleCurve((FunctionalDoublesCurve) forwardCurve);
     } else if (forwardCurve instanceof InterpolatedDoublesCurve) {
@@ -69,10 +73,10 @@ import com.opengamma.engine.value.ValueSpecification;
     throw new IllegalArgumentException("Unable to format forward curve of type " + forwardCurve.getClass().getName());
   }
 
-  private List<Double[]> formatInterpolatedDoubleCurve(InterpolatedDoublesCurve detailedCurve) {
-    List<Double[]> detailedData = Lists.newArrayList();
-    Double[] xs = detailedCurve.getXData();
-    double eps = (xs[xs.length - 1] - xs[0]) / 100;
+  private List<Double[]> formatInterpolatedDoubleCurve(final InterpolatedDoublesCurve detailedCurve) {
+    final List<Double[]> detailedData = Lists.newArrayList();
+    final Double[] xs = detailedCurve.getXData();
+    final double eps = (xs[xs.length - 1] - xs[0]) / 100;
     double x = 0;
     for (int i = 0; i < 100; i++) {
       detailedData.add(new Double[]{x, detailedCurve.getYValue(x)});
@@ -81,10 +85,10 @@ import com.opengamma.engine.value.ValueSpecification;
     return detailedData;
   }
 
-  private List<Double[]> formatFunctionalDoubleCurve(FunctionalDoublesCurve detailedCurve) {
-    List<Double[]> detailedData = Lists.newArrayList();
+  private List<Double[]> formatFunctionalDoubleCurve(final FunctionalDoublesCurve detailedCurve) {
+    final List<Double[]> detailedData = Lists.newArrayList();
     for (int i = 0; i < 100; i++) {
-      double x = 3 * i / 10.;
+      final double x = 3 * i / 10.;
       detailedData.add(new Double[]{x, detailedCurve.getYValue(x)});
     }
     return detailedData;

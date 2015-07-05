@@ -2,6 +2,10 @@
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
  *
  * Please see distribution for license.
+ *
+ * Modified by McLeod Moores Software Limited.
+ *
+ * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.web.analytics.formatting;
 
@@ -16,14 +20,14 @@ import com.opengamma.engine.value.ValueSpecification;
     super(Double[][].class);
     addFormatter(new Formatter<Double[][]>(Format.EXPANDED) {
       @Override
-      Object format(Double[][] value, ValueSpecification valueSpec, Object inlineKey) {
+      protected Object formatValue(final Double[][] value, final ValueSpecification valueSpec, final Object inlineKey) {
         return value;
       }
     });
   }
 
   @Override
-  public Object formatCell(Double[][] value, ValueSpecification valueSpec, Object inlineKey) {
+  public Object formatCell(final Double[][] value, final ValueSpecification valueSpec, final Object inlineKey) {
     int rowCount;
     int colCount;
     rowCount = value.length;

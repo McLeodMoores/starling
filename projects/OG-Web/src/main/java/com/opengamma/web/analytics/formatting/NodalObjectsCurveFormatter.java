@@ -2,6 +2,10 @@
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
  *
  * Please see distribution for license.
+ *
+ * Modified by McLeod Moores Software Limited.
+ *
+ * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.web.analytics.formatting;
 
@@ -29,21 +33,21 @@ import com.opengamma.util.time.Tenor;
     super(NodalObjectsCurve.class);
     addFormatter(new Formatter<NodalObjectsCurve>(Format.EXPANDED) {
       @Override
-      Object format(NodalObjectsCurve value, ValueSpecification valueSpec, Object inlineKey) {
+      protected Object formatValue(final NodalObjectsCurve value, final ValueSpecification valueSpec, final Object inlineKey) {
         return formatExpanded(value);
       }
     });
   }
 
   @Override
-  public List<Double[]> formatCell(NodalObjectsCurve value, ValueSpecification valueSpec, Object inlineKey) {
-    if (value.size() != 0 && (value.getXData()[0] instanceof Tenor) && (value.getYData()[0] instanceof Double)) {
+  public List<Double[]> formatCell(final NodalObjectsCurve value, final ValueSpecification valueSpec, final Object inlineKey) {
+    if (value.size() != 0 && value.getXData()[0] instanceof Tenor && value.getYData()[0] instanceof Double) {
       final Tenor[] tenors = (Tenor[]) value.getXData();
       final Object[] ys = value.getYData();
       ParallelArrayBinarySort.parallelBinarySort(tenors, ys);
-      List<Double[]> data = new ArrayList<>();
+      final List<Double[]> data = new ArrayList<>();
       for (int i = 0; i < tenors.length; i++) {
-        double x = tenors[i].getPeriod().get(ChronoUnit.YEARS);
+        final double x = tenors[i].getPeriod().get(ChronoUnit.YEARS);
         data.add(new Double[] {x, (Double) ys[i]});
       }
       return data;
@@ -53,17 +57,17 @@ import com.opengamma.util.time.Tenor;
     }
   }
 
-  private List<Double[]> formatExpanded(NodalObjectsCurve value) {
-    if (value.size() != 0 && (value.getXData()[0] instanceof Tenor) && (value.getYData()[0] instanceof Double)) {
+  private List<Double[]> formatExpanded(final NodalObjectsCurve value) {
+    if (value.size() != 0 && value.getXData()[0] instanceof Tenor && value.getYData()[0] instanceof Double) {
       final Tenor[] tenors = (Tenor[]) value.getXData();
       final Object[] ys = value.getYData();
       ParallelArrayBinarySort.parallelBinarySort(tenors, ys);
-      int dataLength = tenors.length;
-      Double[] xs = new Double[dataLength];
+      final int dataLength = tenors.length;
+      final Double[] xs = new Double[dataLength];
       for (int i = 0; i < dataLength; i++) {
         xs[i] = (double) tenors[i].getPeriod().get(ChronoUnit.YEARS);
       }
-      List<Double[]> detailedData = new ArrayList<>();
+      final List<Double[]> detailedData = new ArrayList<>();
       for (int i = 0; i < ys.length; i++) {
         detailedData.add(new Double[]{xs[i], (Double) ys[i]});
       }

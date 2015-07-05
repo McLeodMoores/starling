@@ -2,6 +2,10 @@
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
  *
  * Please see distribution for license.
+ *
+ * Modified by McLeod Moores Software Limited.
+ *
+ * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.web.analytics.formatting;
 
@@ -29,37 +33,37 @@ import com.opengamma.util.ArgumentChecker;
 
   private final DoubleFormatter _doubleFormatter;
 
-  LabelledMatrix1DFormatter(DoubleFormatter doubleFormatter) {
+  LabelledMatrix1DFormatter(final DoubleFormatter doubleFormatter) {
     super(LabelledMatrix1D.class);
     ArgumentChecker.notNull(doubleFormatter, "doubleFormatter");
     _doubleFormatter = doubleFormatter;
     addFormatter(new Formatter<LabelledMatrix1D>(Format.EXPANDED) {
       @Override
-      Object format(LabelledMatrix1D value, ValueSpecification valueSpec, Object inlineKey) {
+      protected Object formatValue(final LabelledMatrix1D value, final ValueSpecification valueSpec, final Object inlineKey) {
         return formatExpanded(value, valueSpec);
       }
     });
   }
 
   @Override
-  public String formatCell(LabelledMatrix1D value, ValueSpecification valueSpec, Object inlineKey) {
+  public String formatCell(final LabelledMatrix1D value, final ValueSpecification valueSpec, final Object inlineKey) {
     return "Vector (" + value.getKeys().length + ")";
   }
 
-  private Map<String, Object> formatExpanded(LabelledMatrix1D value, ValueSpecification valueSpec) {
-    Map<String, Object> resultsMap = Maps.newHashMap();
-    int length = value.getKeys().length;
-    List<List<String>> results = Lists.newArrayListWithCapacity(length);
+  private Map<String, Object> formatExpanded(final LabelledMatrix1D value, final ValueSpecification valueSpec) {
+    final Map<String, Object> resultsMap = Maps.newHashMap();
+    final int length = value.getKeys().length;
+    final List<List<String>> results = Lists.newArrayListWithCapacity(length);
     for (int i = 0; i < length; i++) {
-      Object labelObject = value.getLabels()[i];
-      String label = labelObject instanceof ExternalId ? ((ExternalId) labelObject).getValue() : labelObject.toString();
-      String formattedValue = _doubleFormatter.formatCell(value.getValues()[i], valueSpec, null);
-      List<String> rowResults = ImmutableList.of(label, formattedValue);
+      final Object labelObject = value.getLabels()[i];
+      final String label = labelObject instanceof ExternalId ? ((ExternalId) labelObject).getValue() : labelObject.toString();
+      final String formattedValue = _doubleFormatter.formatCell(value.getValues()[i], valueSpec, null);
+      final List<String> rowResults = ImmutableList.of(label, formattedValue);
       results.add(rowResults);
     }
     resultsMap.put(DATA, results);
-    String labelsTitle = value.getLabelsTitle() != null ? value.getLabelsTitle() : LABEL;
-    String valuesTitle = value.getValuesTitle() != null ? value.getValuesTitle() : VALUE;
+    final String labelsTitle = value.getLabelsTitle() != null ? value.getLabelsTitle() : LABEL;
+    final String valuesTitle = value.getValuesTitle() != null ? value.getValuesTitle() : VALUE;
     resultsMap.put(LABELS, ImmutableList.of(labelsTitle, valuesTitle));
     return resultsMap;
   }

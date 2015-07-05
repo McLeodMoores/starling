@@ -2,6 +2,10 @@
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
  *
  * Please see distribution for license.
+ *
+ * Modified by McLeod Moores Software Limited.
+ *
+ * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.web.analytics.formatting;
 
@@ -18,14 +22,14 @@ import com.opengamma.engine.value.ValueSpecification;
     super(LocalVolatilitySurfaceMoneyness.class);
     addFormatter(new Formatter<LocalVolatilitySurfaceMoneyness>(Format.EXPANDED) {
       @Override
-      Object format(LocalVolatilitySurfaceMoneyness value, ValueSpecification valueSpec, Object inlineKey) {
+      protected Object formatValue(final LocalVolatilitySurfaceMoneyness value, final ValueSpecification valueSpec, final Object inlineKey) {
         return SurfaceFormatterUtils.formatExpanded(value.getSurface());
       }
     });
   }
 
   @Override
-  public Object formatCell(LocalVolatilitySurfaceMoneyness value, ValueSpecification valueSpec, Object inlineKey) {
+  public Object formatCell(final LocalVolatilitySurfaceMoneyness value, final ValueSpecification valueSpec, final Object inlineKey) {
     return SurfaceFormatterUtils.formatCell(value.getSurface());
   }
 
@@ -41,7 +45,7 @@ import com.opengamma.engine.value.ValueSpecification;
   }
 
   @Override
-  public DataType getDataTypeForValue(LocalVolatilitySurfaceMoneyness value) {
+  public DataType getDataTypeForValue(final LocalVolatilitySurfaceMoneyness value) {
     return SurfaceFormatterUtils.getDataType(value.getSurface());
   }
 }

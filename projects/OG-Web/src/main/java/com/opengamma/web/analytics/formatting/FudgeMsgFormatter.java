@@ -2,6 +2,10 @@
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
  *
  * Please see distribution for license.
+ *
+ * Modified by McLeod Moores Software Limited.
+ *
+ * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.web.analytics.formatting;
 
@@ -24,31 +28,31 @@ import com.opengamma.engine.value.ValueSpecification;
 /*package*/ class FudgeMsgFormatter extends AbstractFormatter<FudgeMsg> {
 
   private static final Comparator<FudgeField> s_nameComparator;
-  
+
   static {
     s_nameComparator = new Comparator<FudgeField>() {
       @Override
-      public int compare(FudgeField msg1, FudgeField msg2) {
+      public int compare(final FudgeField msg1, final FudgeField msg2) {
         return msg1.getName().compareTo(msg2.getName());
       }
     };
-    
+
   }
-  
+
   /*package*/ FudgeMsgFormatter() {
     super(FudgeMsg.class);
     addFormatter(new Formatter<FudgeMsg>(Format.EXPANDED) {
       @Override
-      Map<String, Object> format(FudgeMsg msg, ValueSpecification valueSpec, Object inlineKey) {
-        int fieldCount = msg.getNumFields();
-        List<List<String>> matrix = Lists.newArrayListWithCapacity(fieldCount);
-        List<String> yLabels = Lists.newArrayListWithCapacity(fieldCount);
+      protected Map<String, Object> formatValue(final FudgeMsg msg, final ValueSpecification valueSpec, final Object inlineKey) {
+        final int fieldCount = msg.getNumFields();
+        final List<List<String>> matrix = Lists.newArrayListWithCapacity(fieldCount);
+        final List<String> yLabels = Lists.newArrayListWithCapacity(fieldCount);
         // Sorting fields to ensure a consistent order for display purposes.
         // This could change the meaning of the Fudge message so assumes no repeated fields.
-        List<FudgeField> orderedFields = new ArrayList<FudgeField>(msg.getAllFields());
+        final List<FudgeField> orderedFields = new ArrayList<FudgeField>(msg.getAllFields());
         Collections.sort(orderedFields, s_nameComparator);
-        for (FudgeField field : orderedFields) {
-          List<String> row = Lists.newArrayListWithCapacity(2);
+        for (final FudgeField field : orderedFields) {
+          final List<String> row = Lists.newArrayListWithCapacity(2);
           row.add(field.getType().getJavaType().getSimpleName());
           String displayValue;
           if (field.getValue() == null) {
@@ -62,7 +66,7 @@ import com.opengamma.engine.value.ValueSpecification;
           matrix.add(row);
           yLabels.add(field.getName());
         }
-        Map<String, Object> output = Maps.newHashMap();
+        final Map<String, Object> output = Maps.newHashMap();
         output.put(LabelledMatrix2DFormatter.MATRIX, matrix);
         output.put(LabelledMatrix2DFormatter.X_LABELS, Lists.newArrayList("Name", "Type", "Value"));
         output.put(LabelledMatrix2DFormatter.Y_LABELS, yLabels);
@@ -72,7 +76,7 @@ import com.opengamma.engine.value.ValueSpecification;
   }
 
   @Override
-  public Object formatCell(FudgeMsg value, ValueSpecification valueSpec, Object inlineKey) {
+  public Object formatCell(final FudgeMsg value, final ValueSpecification valueSpec, final Object inlineKey) {
     return "Fudge Message (" + value.getAllFields().size() + " fields)";
   }
 
