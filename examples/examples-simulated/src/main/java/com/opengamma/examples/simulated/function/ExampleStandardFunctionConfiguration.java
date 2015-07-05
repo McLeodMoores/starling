@@ -2,40 +2,45 @@
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
  *
  * Please see distribution for license.
+ *
+ * Modified by McLeod Moores Software Limited.
+ *
+ * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.examples.simulated.function;
 
-import java.util.List;
+import static com.opengamma.engine.value.ValuePropertyNames.DIVIDEND_TYPE_NONE;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.InitializingBean;
+
+import com.opengamma.analytics.math.interpolation.Interpolator1DFactory;
 import com.opengamma.engine.function.config.CombiningFunctionConfigurationSource;
-import com.opengamma.engine.function.config.FunctionConfiguration;
 import com.opengamma.engine.function.config.FunctionConfigurationSource;
-import com.opengamma.financial.analytics.model.forex.defaultproperties.FXForwardPropertiesFunctions;
-import com.opengamma.financial.analytics.model.forex.defaultproperties.FXOptionPropertiesFunctions;
-import com.opengamma.financial.analytics.model.option.AnalyticOptionDefaultCurveFunction;
-import com.opengamma.financial.analytics.model.pnl.PNLFunctions;
-import com.opengamma.financial.currency.CurrencyMatrixConfigPopulator;
-import com.opengamma.financial.currency.CurrencyMatrixLookupFunction;
+import com.opengamma.financial.analytics.model.curve.forward.ForwardCurveValuePropertyNames;
+import com.opengamma.financial.analytics.model.equity.option.OptionFunctions;
+import com.opengamma.financial.analytics.model.volatility.surface.black.BlackVolatilitySurfacePropertyNamesAndValues;
 import com.opengamma.lambdava.functions.Function1;
 import com.opengamma.web.spring.StandardFunctionConfiguration;
 
 /**
- * Constructs a standard function repository.
+ * A function configuration that extends the standard OpenGamma configuration by adding default
+ * values for
  */
-@SuppressWarnings("deprecation")
 public class ExampleStandardFunctionConfiguration extends StandardFunctionConfiguration {
+  /** The logger */
+  private static final Logger LOGGER = LoggerFactory.getLogger(ExampleStandardFunctionConfiguration.class);
+
+  /** A map from equity ticker strings to equity ticker default values */
+  private final Map<String, EquityInfo> _perEquityInfo = new HashMap<>();
 
   /**
-   * Gets an instance of the example function configuration.
-   * 
-   * @return Gets the instance
-   */
-  public static FunctionConfigurationSource instance() {
-    return new ExampleStandardFunctionConfiguration().getObjectCreating();
-  }
-
-  /**
-   * The function configuration.
+   * Default constructor. Sets default values for the mark to market, cost of carry field, tolerances
+   * for yield curve construction and equity option defaults.
    */
   public ExampleStandardFunctionConfiguration() {
     setMark2MarketField("CLOSE");
@@ -43,250 +48,486 @@ public class ExampleStandardFunctionConfiguration extends StandardFunctionConfig
     setAbsoluteTolerance(0.0001);
     setRelativeTolerance(0.0001);
     setMaximumIterations(1000);
+    setEquityOptionInfo();
   }
 
-  @Override
-  protected CurrencyInfo audCurrencyInfo() {
-    final CurrencyInfo i = super.audCurrencyInfo();
-    i.setCurveConfiguration(null, "DefaultThreeCurveAUDConfig");
-    i.setCurveConfiguration("model/fxforward", "AUDFX");
-    i.setCurveConfiguration("mode/fxoption/black", "DefaultThreeCurveAUDConfig");
-    i.setCurveName(null, "Discounting");
-    i.setCurveName("model/fxforward", "DEFAULT");
-    i.setCurveName("model/fxoption/black", "Discounting");
-    return i;
-  }
-
-  @Override
-  protected CurrencyInfo chfCurrencyInfo() {
-    final CurrencyInfo i = super.chfCurrencyInfo();
-    i.setCurveConfiguration(null, "DefaultTwoCurveCHFConfig");
-    i.setCurveConfiguration("model/fxforward", "CHFFX");
-    i.setCurveConfiguration("model/swaption/black", "DefaultTwoCurveCHFConfig");
-    i.setCurveConfiguration("model/fxoption/black", "DefaultTwoCurveCHFConfig");
-    i.setCurveName(null, "Discounting");
-    i.setCurveName("model/fxforward", "DEFAULT");
-    i.setCurveName("model/fxoption/black", "Discounting");
-    i.setSurfaceName("model/swaption/black", "PROVIDER2");
-    return i;
-  }
-
-  @Override
-  protected CurrencyInfo eurCurrencyInfo() {
-    final CurrencyInfo i = super.eurCurrencyInfo();
-    i.setCurveConfiguration(null, "DefaultTwoCurveEURConfig");
-    i.setCurveConfiguration("mode/future", "DefaultTwoCurveEURConfig");
-    i.setCurveConfiguration("model/fxforward", "EURFX");
-    i.setCurveConfiguration("model/fxoption/black", "DefaultTwoCurveEURConfig");
-    i.setCurveConfiguration("model/swaption/black", "DefaultTwoCurveEURConfig");
-    i.setCurveName(null, "Discounting");
-    i.setCurveName("model/fxforward", "DEFAULT");
-    i.setCurveName("model/fxoption/black", "Discounting");
-    i.setSurfaceName("model/swaption/black", "PROVIDER2");
-    return i;
-  }
-
-  @Override
-  protected CurrencyInfo gbpCurrencyInfo() {
-    final CurrencyInfo i = super.gbpCurrencyInfo();
-    i.setCurveConfiguration(null, "DefaultTwoCurveGBPConfig");
-    i.setCurveConfiguration("model/fxforward", "GBPFX");
-    i.setCurveConfiguration("model/fxoption/black", "DefaultTwoCurveGBPConfig");
-    i.setCurveConfiguration("model/swaption/black", "DefaultTwoCurveGBPConfig");
-    i.setCurveName(null, "Discounting");
-    i.setCurveName("model/fxforward", "DEFAULT");
-    i.setCurveName("model/fxoption/black", "Discounting");
-    i.setSurfaceName("model/swaption/black", "PROVIDER1");
-    return i;
-  }
-
-  @Override
-  protected CurrencyInfo jpyCurrencyInfo() {
-    final CurrencyInfo i = super.jpyCurrencyInfo();
-    i.setCurveConfiguration(null, "DefaultTwoCurveJPYConfig");
-    i.setCurveConfiguration("model/fxforward", "JPYFX");
-    i.setCurveConfiguration("model/fxforward/black", "DefaultTwoCurveJPYConfig");
-    i.setCurveConfiguration("model/swaption/black", "DefaultTwoCurveJPYConfig");
-    i.setCurveName(null, "Discounting");
-    i.setCurveName("model/fxforward", "DEFAULT");
-    i.setCurveName("model/fxoption/black", "Discounting");
-    i.setSurfaceName("model/swaption/black", "PROVIDER3");
-    return i;
-  }
-
-  @Override
-  protected CurrencyInfo usdCurrencyInfo() {
-    final CurrencyInfo i = super.usdCurrencyInfo();
-    i.setCurveConfiguration(null, "DefaultTwoCurveUSDConfig");
-    i.setCurveConfiguration("model/fxforward", "DefaultTwoCurveUSDConfig");
-    i.setCurveConfiguration("model/fxforward/black", "DefaultTwoCurveUSDConfig");
-    i.setCurveConfiguration("model/swaption/black", "DefaultTwoCurveUSDConfig");
-    i.setCurveConfiguration("model/bond/riskFree", "DefaultTwoCurveUSDConfig");
-    i.setCurveConfiguration("model/bond/credit", "DefaultTwoCurveUSDConfig");
-    i.setCurveName(null, "Discounting");
-    i.setCurveName("model/fxforward", "Discounting");
-    i.setCurveName("model/fxoption/black", "Discounting");
-    i.setCurveName("model/bond/riskFree", "Discounting");
-    i.setCurveName("model/bond/credit", "Discounting");
-    i.setCubeDefinitionName("model/sabrcube", "USD PROVIDER1");
-    i.setCubeSpecificationName("model/sabrcube", "USD PROVIDER1");
-    i.setSurfaceDefinitionName("model/sabrcube", "US FWD SWAP PROVIDER1");
-    i.setSurfaceSpecificationName("model/sabrcube", "US FWD SWAP PROVIDER1");
-    i.setForwardCurveName(null, "Forward3M");
-    i.setSurfaceName(null, "SECONDARY");
-    i.setSurfaceName("model/swaption/black", "PROVIDER1");
-    return i;
-  }
-
-  @Override
-  protected CurrencyPairInfo usdEurCurrencyPairInfo() {
-    final CurrencyPairInfo i = super.usdEurCurrencyPairInfo();
-    i.setCurveName("model/volatility/surface/black", "Discounting");
-    i.setSurfaceName("model/volatility/surface/black", "DEFAULT");
-    i.setSurfaceName("model/fxoption/black", "DEFAULT");
-    i.setForwardCurveName("model/fxforward", "DEFAULT");
-    return i;
-  }
-
-  @Override
-  protected CurrencyPairInfo usdJpyCurrencyPairInfo() {
-    final CurrencyPairInfo i = super.usdJpyCurrencyPairInfo();
-    i.setSurfaceName("model/fxoption/black", "DEFAULT");
-    i.setForwardCurveName("model/fxforward", "DEFAULT");
-    return i;
-  }
-
-  @Override
-  protected CurrencyPairInfo usdChfCurrencyPairInfo() {
-    final CurrencyPairInfo i = super.usdJpyCurrencyPairInfo();
-    i.setSurfaceName("model/fxoption/black", "DEFAULT");
-    i.setForwardCurveName("model/fxforward", "DEFAULT");
-    return i;
-  }
-
-  @Override
-  protected CurrencyPairInfo usdAudCurrencyPairInfo() {
-    final CurrencyPairInfo i = super.usdJpyCurrencyPairInfo();
-    i.setSurfaceName("model/fxoption/black", "DEFAULT");
-    i.setForwardCurveName("model/fxforward", "DEFAULT");
-    return i;
-  }
-
-  @Override
-  protected CurrencyPairInfo usdGbpCurrencyPairInfo() {
-    final CurrencyPairInfo i = super.usdJpyCurrencyPairInfo();
-    i.setSurfaceName("model/fxoption/black", "DEFAULT");
-    i.setForwardCurveName("model/fxforward", "DEFAULT");
-    return i;
-  }
-
-  @Override
-  protected CurrencyPairInfo eurGbpCurrencyPairInfo() {
-    final CurrencyPairInfo i = super.usdJpyCurrencyPairInfo();
-    i.setSurfaceName("model/fxoption/black", "DEFAULT");
-    i.setForwardCurveName("model/fxforward", "DEFAULT");
-    return i;
-  }
-
-  @Override
-  protected CurrencyPairInfo chfJpyCurrencyPairInfo() {
-    final CurrencyPairInfo i = super.usdJpyCurrencyPairInfo();
-    i.setSurfaceName("model/fxoption/black", "DEFAULT");
-    i.setForwardCurveName("model/fxforward", "DEFAULT");
-    return i;
-  }
-
-  @Override
-  protected void addCurrencyConversionFunctions(final List<FunctionConfiguration> functionConfigs) {
-    super.addCurrencyConversionFunctions(functionConfigs);
-    functionConfigs.add(functionConfiguration(CurrencyMatrixLookupFunction.class, CurrencyMatrixConfigPopulator.SYNTHETIC_LIVE_DATA));
-  }
-
-  @Override
-  protected FunctionConfigurationSource forexFunctions() {
-    final FXForwardPropertiesFunctions fxForwardDefaults = new FXForwardPropertiesFunctions();
-    setForexForwardDefaults(fxForwardDefaults);
-    final FunctionConfigurationSource fxForwardRepository = getRepository(fxForwardDefaults);
-    final FXOptionPropertiesFunctions fxOptionDefaults = new FXOptionPropertiesFunctions();
-    setForexOptionDefaults(fxOptionDefaults);
-    final FunctionConfigurationSource fxOptionRepository = getRepository(fxOptionDefaults);
-    return CombiningFunctionConfigurationSource.of(fxForwardRepository, fxOptionRepository);
-  }
-
-  protected void setForexOptionDefaults(final FXOptionPropertiesFunctions defaults) {
-    defaults.setPerCurrencyInfo(getCurrencyInfo(new Function1<CurrencyInfo, FXOptionPropertiesFunctions.CurrencyInfo>() {
-      @Override
-      public FXOptionPropertiesFunctions.CurrencyInfo execute(final CurrencyInfo i) {
-        final FXOptionPropertiesFunctions.CurrencyInfo d = new FXOptionPropertiesFunctions.CurrencyInfo();
-        setForexOptionDefaults(i, d);
-        return d;
-      }
-    }));
-    defaults.setPerCurrencyPairInfo(getCurrencyPairInfo(new Function1<CurrencyPairInfo, FXOptionPropertiesFunctions.CurrencyPairInfo>() {
-      @Override
-      public FXOptionPropertiesFunctions.CurrencyPairInfo execute(final CurrencyPairInfo i) {
-        final FXOptionPropertiesFunctions.CurrencyPairInfo d = new FXOptionPropertiesFunctions.CurrencyPairInfo();
-        setForexOptionDefaults(i, d);
-        return d;
-      }
-    }));
-
-  }
-
-  protected void setForexForwardDefaults(final FXForwardPropertiesFunctions defaults) {
-    defaults.setPerCurrencyInfo(getCurrencyInfo(new Function1<CurrencyInfo, FXForwardPropertiesFunctions.CurrencyInfo>() {
-      @Override
-      public FXForwardPropertiesFunctions.CurrencyInfo execute(final CurrencyInfo i) {
-        final FXForwardPropertiesFunctions.CurrencyInfo d = new FXForwardPropertiesFunctions.CurrencyInfo();
-        setForexForwardDefaults(i, d);
-        return d;
-      }
-    }));
-    defaults.setPerCurrencyPairInfo(getCurrencyPairInfo(new Function1<CurrencyPairInfo, FXForwardPropertiesFunctions.CurrencyPairInfo>() {
-      @Override
-      public FXForwardPropertiesFunctions.CurrencyPairInfo execute(final CurrencyPairInfo i) {
-        final FXForwardPropertiesFunctions.CurrencyPairInfo d = new FXForwardPropertiesFunctions.CurrencyPairInfo();
-        setForexForwardDefaults(i, d);
-        return d;
-      }
-    }));
-
-  }
-
-  protected void setForexForwardDefaults(final CurrencyInfo i, final FXForwardPropertiesFunctions.CurrencyInfo defaults) {
-    defaults.setCurveConfiguration(i.getCurveConfiguration("model/fxforward"));
-    defaults.setDiscountingCurve(i.getCurveName("model/fxforward"));
-  }
-
-  protected void setForexForwardDefaults(final CurrencyPairInfo i, final FXForwardPropertiesFunctions.CurrencyPairInfo defaults) {
-    defaults.setForwardCurveName(i.getForwardCurveName("model/fxforward"));
-  }
-
-  protected void setForexOptionDefaults(final CurrencyInfo i, final FXOptionPropertiesFunctions.CurrencyInfo defaults) {
-    defaults.setCurveConfiguration(i.getCurveConfiguration("model/fxoption/black"));
-    defaults.setDiscountingCurve(i.getCurveName("model/fxoption/black"));
-  }
-
-  protected void setForexOptionDefaults(final CurrencyPairInfo i, final FXOptionPropertiesFunctions.CurrencyPairInfo defaults) {
-    defaults.setSurfaceName(i.getSurfaceName("model/fxoption/black"));
-  }
-
-  @Override
-  protected void addAllConfigurations(final List<FunctionConfiguration> functions) {
-    super.addAllConfigurations(functions);
-    functions.add(functionConfiguration(AnalyticOptionDefaultCurveFunction.class, "SECONDARY"));
-  }
-
-  @Override
-  protected void setPNLFunctionDefaults(final PNLFunctions.Defaults defaults) {
-    super.setPNLFunctionDefaults(defaults);
-    defaults.setCurveName("SECONDARY");
-    defaults.setPayCurveName("SECONDARY");
-    defaults.setReceiveCurveName("SECONDARY");
+  /**
+   * Gets an instance of this function configuration.
+   * @return The instance
+   */
+  public static FunctionConfigurationSource instance() {
+    return new ExampleStandardFunctionConfiguration().getObjectCreating();
   }
 
   @Override
   protected FunctionConfigurationSource createObject() {
-    return CombiningFunctionConfigurationSource.of(super.createObject(), curveFunctions());
+    return CombiningFunctionConfigurationSource.of(super.createObject(), multicurvePricingFunctions());
+  }
+
+  /**
+   * Sets defaults for AAPL equity options.
+   */
+  protected void setEquityOptionInfo() {
+    setEquityOptionInfo("AAPL", "USD");
+  }
+
+  /**
+   * Creates empty default per-equity information objects for equity options.
+   * @param ticker The equity ticker
+   * @param curveCurrency The currency target of the discounting curve (usually, but not necessarily,
+   * the currency of the equity).
+   */
+  protected void setEquityOptionInfo(final String ticker, final String curveCurrency) {
+    final EquityInfo i = defaultEquityInfo(ticker);
+    final String discountingCurveConfigName = "DefaultTwoCurve" + curveCurrency + "Config";
+    i.setDiscountingCurve("model/equityoption", "Discounting");
+    i.setDiscountingCurveConfig("model/equityoption", discountingCurveConfigName);
+    i.setDiscountingCurveCurrency("model/equityoption", curveCurrency);
+    i.setDividendType("model/equityoption", DIVIDEND_TYPE_NONE);
+    i.setForwardCurve("model/equityoption", "Discounting");
+    i.setForwardCurveCalculationMethod("model/equityoption", ForwardCurveValuePropertyNames.PROPERTY_YIELD_CURVE_IMPLIED_METHOD);
+    i.setForwardCurveInterpolator("model/equityoption", Interpolator1DFactory.DOUBLE_QUADRATIC);
+    i.setForwardCurveLeftExtrapolator("model/equityoption", Interpolator1DFactory.LINEAR_EXTRAPOLATOR);
+    i.setForwardCurveRightExtrapolator("model/equityoption", Interpolator1DFactory.LINEAR_EXTRAPOLATOR);
+    i.setSurfaceCalculationMethod("model/equityoption", BlackVolatilitySurfacePropertyNamesAndValues.INTERPOLATED_BLACK_LOGNORMAL);
+    i.setSurfaceInterpolationMethod("model/equityoption", BlackVolatilitySurfacePropertyNamesAndValues.SPLINE);
+    i.setVolatilitySurface("model/equityoption", "DEFAULT");
+    setEquityInfo(ticker, i);
+  }
+
+  @Override
+  protected FunctionConfigurationSource equityOptionFunctions() {
+    final OptionFunctions.EquityForwardDefaults forwardCurveDefaults = new OptionFunctions.EquityForwardDefaults();
+    setEquityOptionForwardCurveDefaults(forwardCurveDefaults);
+    final OptionFunctions.EquityOptionDefaults surfaceDefaults = new OptionFunctions.EquityOptionDefaults();
+    setEquityOptionSurfaceDefaults(surfaceDefaults);
+    final FunctionConfigurationSource forwardCurveRepository = getRepository(forwardCurveDefaults);
+    final FunctionConfigurationSource surfaceRepository = getRepository(surfaceDefaults);
+    return CombiningFunctionConfigurationSource.of(forwardCurveRepository, surfaceRepository);
+  }
+
+  /**
+   * Sets the per-equity forward curve defaults for equity option functions.
+   * @param defaults The object containing the default values
+   */
+  protected void setEquityOptionForwardCurveDefaults(final OptionFunctions.EquityForwardDefaults defaults) {
+    defaults.setPerEquityInfo(getEquityInfo(new Function1<EquityInfo, OptionFunctions.EquityInfo>() {
+      @Override
+      public OptionFunctions.EquityInfo execute(final EquityInfo i) {
+        final OptionFunctions.EquityInfo d = new OptionFunctions.EquityInfo();
+        setEquityOptionForwardCurveDefaults(i, d);
+        return d;
+      }
+    }));
+  }
+
+  /**
+   * Sets the paths for the per-equity ticker default values for the forward curve used
+   * in pricing equity options. The keys are:
+   * <ul>
+   * <li> Forward curve interpolator = model/equityoption
+   * <li> Forward curve left extrapolator = model/equityoption
+   * <li> Forward curve right extrapolator = model/equityoption
+   * <li> Forward curve = model/equityoption
+   * <li> Forward curve calculation method = model/equityoption
+   * <li> Discounting curve = model/equityoption
+   * <li> Discounting curve configuration = model/equityoption
+   * <li> Discounting curve currency = model/equityoption
+   * <li> Dividend type = model/equityoption
+   * </ul>
+   * @param i The per-equity info
+   * @param defaults The object containing the default values
+   */
+  protected void setEquityOptionForwardCurveDefaults(final EquityInfo i, final OptionFunctions.EquityInfo defaults) {
+    defaults.setForwardCurveInterpolator(i.getForwardCurveInterpolator("model/equityoption"));
+    defaults.setForwardCurveLeftExtrapolator(i.getForwardCurveLeftExtrapolator("model/equityoption"));
+    defaults.setForwardCurveRightExtrapolator(i.getForwardCurveRightExtrapolator("model/equityoption"));
+    defaults.setForwardCurve(i.getForwardCurve("model/equityoption"));
+    defaults.setForwardCurveCalculationMethod(i.getForwardCurveCalculationMethod("model/equityoption"));
+    defaults.setDiscountingCurve(i.getDiscountingCurve("model/equityoption"));
+    defaults.setDiscountingCurveConfig(i.getDiscountingCurveConfig("model/equityoption"));
+    defaults.setDiscountingCurveCurrency(i.getDiscountingCurveCurrency("model/equityoption"));
+    defaults.setDividendType(i.getDiscountingCurve("model/equityoption"));
+  }
+
+  /**
+   * Sets the per-equity surface defaults for equity option functions.
+   * @param defaults The object containing the default values
+   */
+  protected void setEquityOptionSurfaceDefaults(final OptionFunctions.EquityOptionDefaults defaults) {
+    defaults.setPerEquityInfo(getEquityInfo(new Function1<EquityInfo, OptionFunctions.EquityInfo>() {
+      @Override
+      public OptionFunctions.EquityInfo execute(final EquityInfo i) {
+        final OptionFunctions.EquityInfo d = new OptionFunctions.EquityInfo();
+        setEquityOptionSurfaceDefaults(i, d);
+        return d;
+      }
+    }));
+  }
+
+  /**
+   * Sets the paths for the per-equity ticker default values for the surface used
+   * in pricing equity options. The keys are:
+   * <ul>
+   * <li> Surface calculation method = model/equityoption
+   * <li> Discounting curve name = model/equityoption
+   * <li> Discounting curve calculation config = model/equityoption
+   * <li> Volatility surface name = model/equityoption
+   * <li> Surface interpolation method = model/equityoption
+   * <li> Forward curve name = model/equityoption
+   * <li> Forward curve calculation method = model/equityoption
+   * </ul>
+   * @param i The per-equity info
+   * @param defaults The object containing the default values
+   */
+  protected void setEquityOptionSurfaceDefaults(final EquityInfo i, final OptionFunctions.EquityInfo defaults) {
+    defaults.setSurfaceCalculationMethod(i.getSurfaceCalculationMethod("model/equityoption"));
+    defaults.setDiscountingCurve(i.getDiscountingCurve("model/equityoption"));
+    defaults.setDiscountingCurveConfig(i.getDiscountingCurveConfig("model/equityoption"));
+    defaults.setVolatilitySurface(i.getVolatilitySurface("model/equityoption"));
+    defaults.setSurfaceInterpolationMethod(i.getSurfaceInterpolationMethod("model/equityoption"));
+    defaults.setForwardCurve(i.getForwardCurve("model/equityoption"));
+    defaults.setForwardCurveCalculationMethod(i.getForwardCurveCalculationMethod("model/equityoption"));
+  }
+
+  /**
+   * Sets the map of equity tickers to per-equity ticker default values.
+   * @param perEquityInfo A map of equity tickers to per-equity default values.
+   */
+  public void setPerEquityInfo(final Map<String, EquityInfo> perEquityInfo) {
+    _perEquityInfo.clear();
+    _perEquityInfo.putAll(perEquityInfo);
+  }
+
+  /**
+   * Gets the map of equity tickers to per-equity ticker default values.
+   * @return The map of equity tickers to per-equity ticker default values
+   */
+  public Map<String, EquityInfo> getPerEquityInfo() {
+    return _perEquityInfo;
+  }
+
+  /**
+   * Sets per-equity default values for an equity ticker.
+   * @param equity The equity ticker
+   * @param info The per-equity ticker default values
+   */
+  public void setEquityInfo(final String equity, final EquityInfo info) {
+    _perEquityInfo.put(equity, info);
+  }
+
+  /**
+   * Gets the per-equity default values for an equity ticker.
+   * @param equity The equity ticker
+   * @return The per-equity default values
+   */
+  public EquityInfo getEquityInfo(final String equity) {
+    return _perEquityInfo.get(equity);
+  }
+
+  /**
+   * Creates a per-equity default information object for an equity string.
+   * @param equity The equity string
+   * @return An empty per-equity info object
+   */
+  protected EquityInfo defaultEquityInfo(final String equity) {
+    return new EquityInfo(equity);
+  }
+
+  /**
+   * Gets the equity ticker information for a given filter.
+   * @param <T> The type of the object that contains default values for an equity ticker
+   * @param filter The filter
+   * @return T The object that contains default values for an equity ticker
+   */
+  protected <T> Map<String, T> getEquityInfo(final Function1<EquityInfo, T> filter) {
+    final Map<String, T> result = new HashMap<>();
+    for (final Map.Entry<String, EquityInfo> e : getPerEquityInfo().entrySet()) {
+      final T entry = filter.execute(e.getValue());
+      if (entry instanceof InitializingBean) {
+        try {
+          ((InitializingBean) entry).afterPropertiesSet();
+        } catch (final Exception ex) {
+          LOGGER.debug("Skipping {}", e.getKey());
+          LOGGER.trace("Caught exception", e);
+          continue;
+        }
+      }
+      if (entry != null) {
+        result.put(e.getKey(), entry);
+      }
+    }
+    return result;
+  }
+
+
+  /**
+   * Constants for a particular equity ticker.
+   */
+  public static class EquityInfo {
+    /** The equity ticker */
+    private final String _equity;
+    /** The discounting curve name. Usually the default value of the
+     * {@link com.opengamma.financial.analytics.model.equity.option.EquityOptionFunction#PROPERTY_DISCOUNTING_CURVE_NAME} property */
+    private final Value _discountingCurve = new Value();
+    /** The discounting curve calculation configuration name. Usually the default value of the
+     * {@link com.opengamma.financial.analytics.model.equity.option.EquityOptionFunction#PROPERTY_DISCOUNTING_CURVE_CONFIG} property */
+    private final Value _discountingCurveConfig = new Value();
+    /** The discounting curve currency. Usually the default value of the {@link com.opengamma.engine.value.ValuePropertyNames#CURVE_CURRENCY} property */
+    private final Value _discountingCurveCurrency = new Value();
+    /** The volatility surface name. Usually the default value of the {@link com.opengamma.engine.value.ValuePropertyNames#SURFACE} property */
+    private final Value _volatilitySurface = new Value();
+    /** The volatility surface calculation method. Usually the default value of the
+     * {@link com.opengamma.engine.value.ValuePropertyNames#SURFACE_CALCULATION_METHOD} property */
+    private final Value _surfaceCalculationMethod = new Value();
+    /** The volatility surface interpolation method name. Usually the default value of the
+     * {@link com.opengamma.financial.analytics.model.volatility.surface.black.BlackVolatilitySurfacePropertyNamesAndValues#PROPERTY_SMILE_INTERPOLATOR}
+     * property */
+    private final Value _surfaceInterpolationMethod = new Value();
+    /** The forward curve name. Usually the default value of the
+     * {@link com.opengamma.financial.analytics.model.curve.forward.ForwardCurveValuePropertyNames#PROPERTY_FORWARD_CURVE_NAME} property */
+    private final Value _forwardCurve = new Value();
+    /** The forward curve interpolator */
+    private final Value _forwardCurveInterpolator = new Value();
+    /** The forward curve left extrapolator */
+    private final Value _forwardCurveLeftExtrapolator = new Value();
+    /** The forward curve right extrapolator */
+    private final Value _forwardCurveRightExtrapolator = new Value();
+    /** The forward curve calculation method name. Usually the default value of the
+     * {@link com.opengamma.financial.analytics.model.curve.forward.ForwardCurveValuePropertyNames#PROPERTY_FORWARD_CURVE_CALCULATION_METHOD} property */
+    private final Value _forwardCurveCalculationMethod = new Value();
+    /** The dividend type. Usually the default value of the {@link com.opengamma.engine.value.ValuePropertyNames#DIVIDEND_TYPE} property */
+    private final Value _dividendType = new Value();
+
+    /**
+     * @param equity The equity ticker.
+     */
+    public EquityInfo(final String equity) {
+      _equity = equity;
+    }
+
+    /**
+     * Gets the equity id.
+     * @return The equity id
+     */
+    public String getEquity() {
+      return _equity;
+    }
+
+    /**
+     * Sets the discounting curve name for a key.
+     * @param key The key
+     * @param discountingCurve The discounting curve name
+     */
+    public void setDiscountingCurve(final String key, final String discountingCurve) {
+      _discountingCurve.set(key, discountingCurve);
+    }
+
+    /**
+     * Gets the discounting curve name for a key.
+     * @param key The key
+     * @return The discounting curve name
+     */
+    public String getDiscountingCurve(final String key) {
+      return _discountingCurve.get(key);
+    }
+
+    /**
+     * Sets the discounting curve configuration name.
+     * @param key The key
+     * @param discountingCurveConfig The discounting curve configuration name
+     */
+    public void setDiscountingCurveConfig(final String key, final String discountingCurveConfig) {
+      _discountingCurveConfig.set(key, discountingCurveConfig);
+    }
+
+    /**
+     * Gets the discounting curve configuration name for a key.
+     * @param key The key
+     * @return The discounting curve configuration name
+     */
+    public String getDiscountingCurveConfig(final String key) {
+      return _discountingCurveConfig.get(key);
+    }
+
+    /**
+     * Sets the discounting curve currency.
+     * @param key The key
+     * @param discountingCurveCurrency The discounting curve currency
+     */
+    public void setDiscountingCurveCurrency(final String key, final String discountingCurveCurrency) {
+      _discountingCurveCurrency.set(key, discountingCurveCurrency);
+    }
+
+    /**
+     * Gets the discounting curve currency for a key.
+     * @param key The key
+     * @return The discounting curve currency
+     */
+    public String getDiscountingCurveCurrency(final String key) {
+      return _discountingCurveCurrency.get(key);
+    }
+
+    /**
+     * Sets the volatility surface name for a key.
+     * @param key The key
+     * @param volatilitySurface The volatility surface name
+     */
+    public void setVolatilitySurface(final String key, final String volatilitySurface) {
+      _volatilitySurface.set(key, volatilitySurface);
+    }
+
+    /**
+     * Gets the volatility surface name for a key.
+     * @param key The key
+     * @return The volatility surface name
+     */
+    public String getVolatilitySurface(final String key) {
+      return _volatilitySurface.get(key);
+    }
+
+    /**
+     * Sets the volatility surface calculation method for a key.
+     * @param key The key
+     * @param surfaceCalculationMethod The volatility surface calculation method
+     */
+    public void setSurfaceCalculationMethod(final String key, final String surfaceCalculationMethod) {
+      _surfaceCalculationMethod.set(key, surfaceCalculationMethod);
+    }
+
+    /**
+     * Gets the volatility surface calculation method for a key.
+     * @param key The key
+     * @return The volatility surface calculation method
+     */
+    public String getSurfaceCalculationMethod(final String key) {
+      return _surfaceCalculationMethod.get(key);
+    }
+
+    /**
+     * Sets the volatility surface interpolation method for a key.
+     * @param key The key
+     * @param surfaceInterpolationMethod The volatility surface interpolation method
+     */
+    public void setSurfaceInterpolationMethod(final String key, final String surfaceInterpolationMethod) {
+      _surfaceInterpolationMethod.set(key, surfaceInterpolationMethod);
+    }
+
+    /**
+     * Gets the volatility surface interpolation method for a key.
+     * @param key The key
+     * @return The volatility surface interpolation method
+     */
+    public String getSurfaceInterpolationMethod(final String key) {
+      return _surfaceInterpolationMethod.get(key);
+    }
+
+    /**
+     * Sets the forward curve name for a key.
+     * @param key The key
+     * @param forwardCurve The forward curve name
+     */
+    public void setForwardCurve(final String key, final String forwardCurve) {
+      _forwardCurve.set(key, forwardCurve);
+    }
+
+    /**
+     * Gets the forward curve name for a key.
+     * @param key The key
+     * @return The forward curve name
+     */
+    public String getForwardCurve(final String key) {
+      return _forwardCurve.get(key);
+    }
+
+    /**
+     * Sets the forward curve interpolator name for a key.
+     * @param key The key
+     * @param forwardCurveInterpolator The forward curve interpolator name
+     */
+    public void setForwardCurveInterpolator(final String key, final String forwardCurveInterpolator) {
+      _forwardCurveInterpolator.set(key, forwardCurveInterpolator);
+    }
+
+    /**
+     * Gets the forward curve interpolator name for a key.
+     * @param key The key
+     * @return The forward curve interpolator name
+     */
+    public String getForwardCurveInterpolator(final String key) {
+      return _forwardCurveInterpolator.get(key);
+    }
+
+    /**
+     * Sets the forward curve left extrapolator name for a key.
+     * @param key The key
+     * @param forwardCurveLeftExtrapolator The forward curve left extrapolator name
+     */
+    public void setForwardCurveLeftExtrapolator(final String key, final String forwardCurveLeftExtrapolator) {
+      _forwardCurveLeftExtrapolator.set(key, forwardCurveLeftExtrapolator);
+    }
+
+    /**
+     * Gets the forward curve name for a key.
+     * @param key The key
+     * @return The forward curve name
+     */
+    public String getForwardCurveLeftExtrapolator(final String key) {
+      return _forwardCurveLeftExtrapolator.get(key);
+    }
+
+    /**
+     * Sets the forward curve right extrapolator name for a key.
+     * @param key The key
+     * @param forwardCurveRightExtrapolator The forward curve right extrapolator name
+     */
+    public void setForwardCurveRightExtrapolator(final String key, final String forwardCurveRightExtrapolator) {
+      _forwardCurveRightExtrapolator.set(key, forwardCurveRightExtrapolator);
+    }
+
+    /**
+     * Gets the forward curve right extrapolator name for a key.
+     * @param key The key
+     * @return The forward curve right extrapolator name
+     */
+    public String getForwardCurveRightExtrapolator(final String key) {
+      return _forwardCurveRightExtrapolator.get(key);
+    }
+
+    /**
+     * Sets the forward curve calculation method for a key.
+     * @param key The key
+     * @param forwardCurveCalculationMethod The forward curve calculation method
+     */
+    public void setForwardCurveCalculationMethod(final String key, final String forwardCurveCalculationMethod) {
+      _forwardCurveCalculationMethod.set(key, forwardCurveCalculationMethod);
+    }
+
+    /**
+     * Gets the forward curve calculation method for a key.
+     * @param key The key
+     * @return The forward curve calculation method
+     */
+    public String getForwardCurveCalculationMethod(final String key) {
+      return _forwardCurveCalculationMethod.get(key);
+    }
+
+    /**
+     * Sets the dividend type for a key.
+     * @param key The key
+     * @param dividendType The dividend type
+     */
+    public void setDividendType(final String key, final String dividendType) {
+      _dividendType.set(key, dividendType);
+    }
+
+    /**
+     * Gets the dividend type for a key.
+     * @param key The key
+     * @return The dividend type
+     */
+    public String getDividendType(final String key) {
+      return _dividendType.get(key);
+    }
   }
 }

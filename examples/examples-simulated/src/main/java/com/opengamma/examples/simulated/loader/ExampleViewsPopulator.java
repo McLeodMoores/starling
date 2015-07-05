@@ -2,6 +2,10 @@
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
  *
  * Please see distribution for license.
+ *
+ * Modified by McLeod Moores Software Limited.
+ *
+ * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.examples.simulated.loader;
 
@@ -10,26 +14,28 @@ import static com.opengamma.engine.value.ValuePropertyNames.CURRENCY;
 import static com.opengamma.engine.value.ValuePropertyNames.CURVE;
 import static com.opengamma.engine.value.ValuePropertyNames.CURVE_CALCULATION_CONFIG;
 import static com.opengamma.engine.value.ValuePropertyNames.CURVE_CALCULATION_METHOD;
+import static com.opengamma.engine.value.ValuePropertyNames.CURVE_CONSTRUCTION_CONFIG;
 import static com.opengamma.engine.value.ValuePropertyNames.CURVE_CURRENCY;
 import static com.opengamma.engine.value.ValuePropertyNames.CURVE_EXPOSURES;
-import static com.opengamma.engine.value.ValuePropertyNames.CURVE_SENSITIVITY_CURRENCY;
+import static com.opengamma.engine.value.ValuePropertyNames.SCALE;
 import static com.opengamma.engine.value.ValuePropertyNames.SURFACE;
-import static com.opengamma.engine.value.ValueRequirementNames.ASSET_LEG_PV;
 import static com.opengamma.engine.value.ValueRequirementNames.BOND_DETAILS;
 import static com.opengamma.engine.value.ValueRequirementNames.BUCKETED_PV01;
+import static com.opengamma.engine.value.ValueRequirementNames.CAPM_BETA;
 import static com.opengamma.engine.value.ValueRequirementNames.CLEAN_PRICE;
+import static com.opengamma.engine.value.ValueRequirementNames.CONVEXITY;
 import static com.opengamma.engine.value.ValueRequirementNames.DELTA;
 import static com.opengamma.engine.value.ValueRequirementNames.FAIR_VALUE;
 import static com.opengamma.engine.value.ValueRequirementNames.FORWARD;
-import static com.opengamma.engine.value.ValueRequirementNames.FUNDING_LEG_DETAILS;
-import static com.opengamma.engine.value.ValueRequirementNames.FUNDING_LEG_PV;
 import static com.opengamma.engine.value.ValueRequirementNames.FX_CURRENCY_EXPOSURE;
 import static com.opengamma.engine.value.ValueRequirementNames.GAMMA;
 import static com.opengamma.engine.value.ValueRequirementNames.GAMMA_PV01;
+import static com.opengamma.engine.value.ValueRequirementNames.HISTORICAL_VAR;
+import static com.opengamma.engine.value.ValueRequirementNames.JENSENS_ALPHA;
 import static com.opengamma.engine.value.ValueRequirementNames.MACAULAY_DURATION;
 import static com.opengamma.engine.value.ValueRequirementNames.MODIFIED_DURATION;
-import static com.opengamma.engine.value.ValueRequirementNames.NOTIONAL;
 import static com.opengamma.engine.value.ValueRequirementNames.PAR_RATE;
+import static com.opengamma.engine.value.ValueRequirementNames.PNL;
 import static com.opengamma.engine.value.ValueRequirementNames.PRESENT_VALUE;
 import static com.opengamma.engine.value.ValueRequirementNames.PRESENT_VALUE_SABR_ALPHA_NODE_SENSITIVITY;
 import static com.opengamma.engine.value.ValueRequirementNames.PRESENT_VALUE_SABR_ALPHA_SENSITIVITY;
@@ -40,7 +46,10 @@ import static com.opengamma.engine.value.ValueRequirementNames.PRESENT_VALUE_SAB
 import static com.opengamma.engine.value.ValueRequirementNames.PV01;
 import static com.opengamma.engine.value.ValueRequirementNames.RHO;
 import static com.opengamma.engine.value.ValueRequirementNames.SECURITY_IMPLIED_VOLATILITY;
+import static com.opengamma.engine.value.ValueRequirementNames.SHARPE_RATIO;
 import static com.opengamma.engine.value.ValueRequirementNames.THETA;
+import static com.opengamma.engine.value.ValueRequirementNames.TOTAL_RISK_ALPHA;
+import static com.opengamma.engine.value.ValueRequirementNames.TREYNOR_RATIO;
 import static com.opengamma.engine.value.ValueRequirementNames.VALUE_DELTA;
 import static com.opengamma.engine.value.ValueRequirementNames.VALUE_GAMMA;
 import static com.opengamma.engine.value.ValueRequirementNames.VALUE_GAMMA_P;
@@ -58,10 +67,10 @@ import static com.opengamma.engine.value.ValueRequirementNames.YIELD_CURVE;
 import static com.opengamma.engine.value.ValueRequirementNames.YIELD_CURVE_JACOBIAN;
 import static com.opengamma.engine.value.ValueRequirementNames.YIELD_CURVE_NODE_SENSITIVITIES;
 import static com.opengamma.engine.value.ValueRequirementNames.YTM;
+import static com.opengamma.engine.value.ValueRequirementNames.Z_SPREAD;
 import static com.opengamma.examples.simulated.tool.ExampleDatabasePopulator.AUD_SWAP_PORFOLIO_NAME;
-import static com.opengamma.examples.simulated.tool.ExampleDatabasePopulator.BOND_TRS_PORTFOLIO_NAME;
+import static com.opengamma.examples.simulated.tool.ExampleDatabasePopulator.BONDS_PORTFOLIO_NAME;
 import static com.opengamma.examples.simulated.tool.ExampleDatabasePopulator.EQUITY_OPTION_PORTFOLIO_NAME;
-import static com.opengamma.examples.simulated.tool.ExampleDatabasePopulator.EQUITY_TRS_PORTFOLIO_NAME;
 import static com.opengamma.examples.simulated.tool.ExampleDatabasePopulator.EUR_SWAP_PORTFOLIO_NAME;
 import static com.opengamma.examples.simulated.tool.ExampleDatabasePopulator.FUTURE_PORTFOLIO_NAME;
 import static com.opengamma.examples.simulated.tool.ExampleDatabasePopulator.FX_FORWARD_PORTFOLIO_NAME;
@@ -69,11 +78,19 @@ import static com.opengamma.examples.simulated.tool.ExampleDatabasePopulator.FX_
 import static com.opengamma.examples.simulated.tool.ExampleDatabasePopulator.MIXED_CMS_PORTFOLIO_NAME;
 import static com.opengamma.examples.simulated.tool.ExampleDatabasePopulator.MULTI_CURRENCY_SWAPTION_PORTFOLIO_NAME;
 import static com.opengamma.examples.simulated.tool.ExampleDatabasePopulator.MULTI_CURRENCY_SWAP_PORTFOLIO_NAME;
+import static com.opengamma.examples.simulated.tool.ExampleDatabasePopulator.OIS_PORTFOLIO_NAME;
 import static com.opengamma.examples.simulated.tool.ExampleDatabasePopulator.SWAPTION_PORTFOLIO_NAME;
 import static com.opengamma.examples.simulated.tool.ExampleDatabasePopulator.US_GOVERNMENT_BOND_PORTFOLIO_NAME;
 import static com.opengamma.examples.simulated.tool.ExampleDatabasePopulator.VANILLA_FX_OPTION_PORTFOLIO_NAME;
+import static com.opengamma.financial.analytics.model.CalculationPropertyNamesAndValues.BAW_METHOD;
+import static com.opengamma.financial.analytics.model.CalculationPropertyNamesAndValues.BLACK_METHOD;
+import static com.opengamma.financial.analytics.model.CalculationPropertyNamesAndValues.DISCOUNTING;
+import static com.opengamma.financial.analytics.model.CalculationPropertyNamesAndValues.FORWARD_POINTS;
 import static com.opengamma.financial.analytics.model.CalculationPropertyNamesAndValues.HISTORICAL_REALIZED_VARIANCE;
 import static com.opengamma.financial.analytics.model.CalculationPropertyNamesAndValues.PROPERTY_REALIZED_VARIANCE_METHOD;
+import static com.opengamma.financial.analytics.model.InstrumentTypeProperties.FOREX;
+import static com.opengamma.financial.analytics.model.InstrumentTypeProperties.PROPERTY_SURFACE_INSTRUMENT_TYPE;
+import static com.opengamma.financial.analytics.model.InstrumentTypeProperties.SWAPTION_ATM;
 import static com.opengamma.financial.analytics.model.InterpolatedDataProperties.LEFT_X_EXTRAPOLATOR_NAME;
 import static com.opengamma.financial.analytics.model.InterpolatedDataProperties.RIGHT_X_EXTRAPOLATOR_NAME;
 import static com.opengamma.financial.analytics.model.InterpolatedDataProperties.X_INTERPOLATOR_NAME;
@@ -99,17 +116,12 @@ import com.opengamma.component.tool.AbstractTool;
 import com.opengamma.core.config.impl.ConfigItem;
 import com.opengamma.engine.ComputationTargetSpecification;
 import com.opengamma.engine.value.ValueProperties;
-import com.opengamma.engine.value.ValuePropertyNames;
 import com.opengamma.engine.value.ValueRequirement;
-import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.view.ViewCalculationConfiguration;
 import com.opengamma.engine.view.ViewCalculationConfiguration.MergedOutput;
 import com.opengamma.engine.view.ViewCalculationConfiguration.MergedOutputAggregationType;
 import com.opengamma.engine.view.ViewDefinition;
-import com.opengamma.financial.analytics.model.CalculationPropertyNamesAndValues;
-import com.opengamma.financial.analytics.model.InstrumentTypeProperties;
 import com.opengamma.financial.analytics.model.bond.BondFunction;
-import com.opengamma.financial.analytics.model.curve.interestrate.MarketInstrumentImpliedYieldCurveFunction;
 import com.opengamma.financial.analytics.model.sabrcube.SABRFunction;
 import com.opengamma.financial.currency.CurrencyConversionFunction;
 import com.opengamma.financial.security.bond.BondSecurity;
@@ -117,14 +129,11 @@ import com.opengamma.financial.security.capfloor.CapFloorCMSSpreadSecurity;
 import com.opengamma.financial.security.capfloor.CapFloorSecurity;
 import com.opengamma.financial.security.equity.EquitySecurity;
 import com.opengamma.financial.security.future.FutureSecurity;
-import com.opengamma.financial.security.future.IndexFutureSecurity;
 import com.opengamma.financial.security.fx.FXForwardSecurity;
 import com.opengamma.financial.security.fx.FXVolatilitySwapSecurity;
 import com.opengamma.financial.security.option.EquityOptionSecurity;
 import com.opengamma.financial.security.option.FXOptionSecurity;
 import com.opengamma.financial.security.option.SwaptionSecurity;
-import com.opengamma.financial.security.swap.BondTotalReturnSwapSecurity;
-import com.opengamma.financial.security.swap.EquityTotalReturnSwapSecurity;
 import com.opengamma.financial.security.swap.SwapSecurity;
 import com.opengamma.financial.tool.ToolContext;
 import com.opengamma.id.UniqueId;
@@ -139,32 +148,37 @@ import com.opengamma.util.tuple.Pair;
 import com.opengamma.util.tuple.Pairs;
 
 /**
- * Example code to create a set of example views.
- * <p>
- * It is designed to run against the HSQLDB example database.
+ * Creates view definitions that use simulated market data and OpenGamma integration functions.
  */
+@SuppressWarnings("deprecation")
 @Scriptable
 public class ExampleViewsPopulator extends AbstractTool<ToolContext> {
-
-  /** Name of the default calculation configurations */
+  /** Name of the default calculation configurations. */
   private static final String DEFAULT_CALC_CONFIG = "Default";
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(ExampleViewsPopulator.class);
-  /** A list of currencies */
-  private static final Currency[] s_swapCurrencies = new Currency[] {
+  private static final Logger LOGGER = LoggerFactory.getLogger(ExampleViewsPopulator.class);
+  /** A list of currencies. */
+  private static final Currency[] SWAP_CURRENCIES = new Currency[] {
     Currency.USD,
     Currency.GBP,
     Currency.EUR,
     Currency.JPY,
     Currency.CHF };
-  /** A list of curve configuration names */
-  private static final String[] s_curveConfigNames = new String[] {
+  /** A list of OIS currencies */
+  private static final Currency[] OIS_CURRENCIES = new Currency[] {
+    Currency.USD,
+    Currency.GBP,
+    Currency.EUR,
+    Currency.JPY };
+  /** A list of curve configuration names. */
+  private static final String[] CURVE_CONFIG_NAMES = new String[] {
     "DefaultTwoCurveUSDConfig",
     "DefaultTwoCurveGBPConfig",
     "DefaultTwoCurveEURConfig",
     "DefaultTwoCurveJPYConfig",
-    "DefaultTwoCurveCHFConfig" };
-  /** A list of currency pairs */
+    "DefaultTwoCurveCHFConfig"
+  };
+  /** A list of currency pairs. */
   public static final UnorderedCurrencyPair[] CURRENCY_PAIRS = new UnorderedCurrencyPair[] {
     UnorderedCurrencyPair.of(Currency.USD, Currency.EUR),
     UnorderedCurrencyPair.of(Currency.USD, Currency.CHF),
@@ -173,14 +187,22 @@ public class ExampleViewsPopulator extends AbstractTool<ToolContext> {
     UnorderedCurrencyPair.of(Currency.USD, Currency.JPY),
     UnorderedCurrencyPair.of(Currency.GBP, Currency.EUR),
     UnorderedCurrencyPair.of(Currency.CHF, Currency.JPY) };
-  /** Map of currencies to swaption surface / cube names */
+  /** Map of currencies to swaption surface / cube names. */
   public static final Map<Currency, String> SWAPTION_CURRENCY_CONFIGS = new HashMap<>();
-  /** Map of countries to swaption surface / cube names */
+  /** Map of countries to swaption surface / cube names. */
   public static final Map<String, String> SWAPTION_COUNTRY_CONFIGS = new HashMap<>();
-  /** Map of currencies to curves */
+  /** Map of currencies to curves. */
   public static final Map<Currency, Pair<String, String>> SWAPTION_CURVES = new HashMap<>();
   /** List of (curve construction configuration, curve definition) pairs for bond TRS issuers */
   private static final List<Pair<String, String>> BOND_TRS_ISSUER_CURVES = new ArrayList<>();
+  /** The default maximum delta calculation period */
+  private static final long MAX_DELTA_PERIOD = 500L;
+  /** The default maximum full calculation period */
+  private static final long MAX_FULL_PERIOD = 500L;
+  /** The default minimum delta calculation period */
+  private static final long MIN_DELTA_PERIOD = 500L;
+  /** The default minimum full calculation period */
+  private static final long MIN_FULL_PERIOD = 500L;
 
   static {
     SWAPTION_CURRENCY_CONFIGS.put(Currency.USD, "PROVIDER1");
@@ -204,102 +226,148 @@ public class ExampleViewsPopulator extends AbstractTool<ToolContext> {
   //-------------------------------------------------------------------------
   /**
    * Main method to run the tool.
-   * 
+   *
    * @param args  the standard tool arguments, not null
    */
-  public static void main(final String[] args) { // CSIGNORE
+  public static void main(final String[] args) {
     new ExampleViewsPopulator().invokeAndTerminate(args);
   }
 
   //-------------------------------------------------------------------------
   @Override
   protected void doRun() {
-    storeViewDefinition(getEquityViewDefinition(ExampleEquityPortfolioLoader.PORTFOLIO_NAME));
-    storeViewDefinition(getMultiCurrencySwapViewDefinitionWithSeparateOutputs(MULTI_CURRENCY_SWAP_PORTFOLIO_NAME));
-    storeViewDefinition(getMultiCurrencySwapViewDefinition(MULTI_CURRENCY_SWAP_PORTFOLIO_NAME));
-    storeViewDefinition(getAUDSwapView1Definition(AUD_SWAP_PORFOLIO_NAME));
-    storeViewDefinition(getAUDSwapView2Definition(AUD_SWAP_PORFOLIO_NAME));
-    storeViewDefinition(getAUDSwapView3Definition(AUD_SWAP_PORFOLIO_NAME));
-    storeViewDefinition(getSwaptionParityViewDefinition(SWAPTION_PORTFOLIO_NAME));
-    storeViewDefinition(getFXOptionViewDefinition(VANILLA_FX_OPTION_PORTFOLIO_NAME, "FX Option View"));
-    storeViewDefinition(getFXOptionGreeksViewDefinition(VANILLA_FX_OPTION_PORTFOLIO_NAME, "FX Option Greeks View"));
-    storeViewDefinition(getATMSwaptionViewDefinition(MULTI_CURRENCY_SWAPTION_PORTFOLIO_NAME, "Swaption Black Pricing View"));
-    storeViewDefinition(getSABRExtrapolationViewDefinition(MIXED_CMS_PORTFOLIO_NAME));
-    storeViewDefinition(getEURFixedIncomeViewDefinition(EUR_SWAP_PORTFOLIO_NAME, "EUR Swap Desk View"));
-    storeViewDefinition(getFXForwardViewDefinition(FX_FORWARD_PORTFOLIO_NAME, "FX Forward View"));
-    storeViewDefinition(getEquityOptionViewDefinition(EQUITY_OPTION_PORTFOLIO_NAME, "Equity Option View"));
-    storeViewDefinition(getFutureViewDefinition(FUTURE_PORTFOLIO_NAME, "Futures View"));
-    storeViewDefinition(getBondViewDefinition(US_GOVERNMENT_BOND_PORTFOLIO_NAME, "Government Bond View"));
-    storeViewDefinition(getFXVolatilitySwapViewDefinition(FX_VOLATILITY_SWAP_PORTFOLIO_NAME, "FX Volatility Swap View"));
-    storeViewDefinition(getBondTotalReturnSwapViewDefinition(BOND_TRS_PORTFOLIO_NAME, "Bond TRS View"));
-    storeViewDefinition(getEquityTotalReturnSwapViewDefinition(EQUITY_TRS_PORTFOLIO_NAME, "Equity TRS View"));
+    storeViewDefinition(getSyntheticEquityViewDefinition(ExampleEquityPortfolioLoader.PORTFOLIO_NAME));
+    storeViewDefinition(getSyntheticMultiCurrencySwapViewDefinitionWithSeparateOutputs(MULTI_CURRENCY_SWAP_PORTFOLIO_NAME));
+    storeViewDefinition(getSyntheticMultiCurrencySwapViewDefinition(MULTI_CURRENCY_SWAP_PORTFOLIO_NAME));
+    storeViewDefinition(getSyntheticAudSwapView1Definition(AUD_SWAP_PORFOLIO_NAME));
+    storeViewDefinition(getSyntheticAudSwapView2Definition(AUD_SWAP_PORFOLIO_NAME));
+    storeViewDefinition(getSyntheticAudSwapView3Definition(AUD_SWAP_PORFOLIO_NAME));
+    storeViewDefinition(getSyntheticSwaptionParityViewDefinition(SWAPTION_PORTFOLIO_NAME));
+    storeViewDefinition(getSyntheticFxOptionViewDefinitio(VANILLA_FX_OPTION_PORTFOLIO_NAME, "FX Option View"));
+    storeViewDefinition(getSyntheticFxOptionGreeksViewDefinition(VANILLA_FX_OPTION_PORTFOLIO_NAME, "FX Option Greeks View"));
+    storeViewDefinition(getSyntheticAtmSwaptionViewDefinition(MULTI_CURRENCY_SWAPTION_PORTFOLIO_NAME, "Swaption Black Pricing View"));
+    storeViewDefinition(getSyntheticSabrExtrapolationViewDefinition(MIXED_CMS_PORTFOLIO_NAME));
+    storeViewDefinition(getSyntheticEurFixedIncomeViewDefinition(EUR_SWAP_PORTFOLIO_NAME, "EUR Swap Desk View"));
+    storeViewDefinition(getSyntheticFxForwardViewDefinition(FX_FORWARD_PORTFOLIO_NAME, "FX Forward View"));
+    storeViewDefinition(getSyntheticFutureViewDefinition(FUTURE_PORTFOLIO_NAME, "Futures View"));
+    storeViewDefinition(getSyntheticBondViewDefinition(US_GOVERNMENT_BOND_PORTFOLIO_NAME, "Government Bond View"));
+    storeViewDefinition(getSyntheticFxVolatilitySwapViewDefinition(FX_VOLATILITY_SWAP_PORTFOLIO_NAME, "FX Volatility Swap View"));
+    storeViewDefinition(getSyntheticOisViewDefinition(OIS_PORTFOLIO_NAME, "OIS View"));
+    storeViewDefinition(getSyntheticMultiCountryBondViewDefinition(BONDS_PORTFOLIO_NAME, "Bond Portfolio View"));
+    storeViewDefinition(getSyntheticEquityOptionViewDefinition(EQUITY_OPTION_PORTFOLIO_NAME, "Equity Option View"));
   }
 
-  private ViewDefinition getEquityViewDefinition(final String portfolioName) {
+  /**
+   * Creates a view definition for a portfolio containing only equities that produces:
+   * <ul>
+   * <li> ValueRequirementNames#FAIR_VALUE
+   * <li> ValueRequirementNames#CAPM_BETA
+   * <li> ValueRequirementNames#HISTORICAL_VAR
+   * <li> ValueRequirementNames#SHARPE_RATIO
+   * <li> ValueRequirementNames#TREYNOR_RATIO
+   * <li> ValueRequirementNames#JENSENS_ALPHA
+   * <li> ValueRequirementNames#TOTAL_RISK_ALPHA
+   * <li> ValueRequirementNames#PNL
+   * </ul>
+   * @param portfolioName The portfolio name
+   * @return The view definition
+   */
+  private ViewDefinition getSyntheticEquityViewDefinition(final String portfolioName) {
     final UniqueId portfolioId = getPortfolioId(portfolioName).toLatest();
     final ViewDefinition viewDefinition = new ViewDefinition(portfolioName + " View", portfolioId, UserPrincipal.getTestUser());
     viewDefinition.setDefaultCurrency(Currency.USD);
-    viewDefinition.setMaxFullCalculationPeriod(30000L);
-    viewDefinition.setMinFullCalculationPeriod(500L);
-    viewDefinition.setMinDeltaCalculationPeriod(500L);
-    viewDefinition.setMaxDeltaCalculationPeriod(30000L);
+    final long maxPeriod = 30000L;
+    viewDefinition.setMaxFullCalculationPeriod(maxPeriod);
+    viewDefinition.setMinFullCalculationPeriod(MIN_FULL_PERIOD);
+    viewDefinition.setMinDeltaCalculationPeriod(MIN_DELTA_PERIOD);
+    viewDefinition.setMaxDeltaCalculationPeriod(maxPeriod);
 
     final ViewCalculationConfiguration defaultCalc = new ViewCalculationConfiguration(viewDefinition, DEFAULT_CALC_CONFIG);
-    addValueRequirements(defaultCalc, EquitySecurity.SECURITY_TYPE, new String[] {ValueRequirementNames.FAIR_VALUE, ValueRequirementNames.CAPM_BETA, ValueRequirementNames.HISTORICAL_VAR,
-      ValueRequirementNames.SHARPE_RATIO, ValueRequirementNames.TREYNOR_RATIO, ValueRequirementNames.JENSENS_ALPHA, ValueRequirementNames.TOTAL_RISK_ALPHA, ValueRequirementNames.PNL });
+    final String[] valueRequirementNames = new String[] {
+        FAIR_VALUE,
+        CAPM_BETA,
+        HISTORICAL_VAR,
+        SHARPE_RATIO,
+        TREYNOR_RATIO,
+        JENSENS_ALPHA,
+        TOTAL_RISK_ALPHA,
+        PNL };
+    addValueRequirements(defaultCalc, EquitySecurity.SECURITY_TYPE, valueRequirementNames);
     viewDefinition.addViewCalculationConfiguration(defaultCalc);
     return viewDefinition;
   }
 
-  private ViewDefinition getMultiCurrencySwapViewDefinitionWithSeparateOutputs(final String portfolioName) {
+  /**
+   * Creates a view definition for a swap portfolio that produces:
+   * <ul>
+   * <li> ValueRequirementNames#PRESENT_VALUE
+   * <li> ValueRequirementNames#PV01 for named curves
+   * <li> ValueRequirementNames#YIELD_CURVE_NODE_SENSITIVITIES for named curves
+   * <li> ValueRequirementNames#YIELD_CURVE
+   * </ul>
+   * The curve-specific risk outputs are not collapsed into a single column.
+   * @param portfolioName The portfolio name
+   * @return The view definition
+   */
+  private ViewDefinition getSyntheticMultiCurrencySwapViewDefinitionWithSeparateOutputs(final String portfolioName) {
     final UniqueId portfolioId = getPortfolioId(portfolioName).toLatest();
     final ViewDefinition viewDefinition = new ViewDefinition(portfolioName + " View (outputs by ccy)", portfolioId, UserPrincipal.getTestUser());
     viewDefinition.setDefaultCurrency(Currency.USD);
-    viewDefinition.setMaxDeltaCalculationPeriod(500L);
-    viewDefinition.setMaxFullCalculationPeriod(500L);
-    viewDefinition.setMinDeltaCalculationPeriod(500L);
-    viewDefinition.setMinFullCalculationPeriod(500L);
+    viewDefinition.setMaxDeltaCalculationPeriod(MAX_DELTA_PERIOD);
+    viewDefinition.setMaxFullCalculationPeriod(MAX_FULL_PERIOD);
+    viewDefinition.setMinDeltaCalculationPeriod(MIN_DELTA_PERIOD);
+    viewDefinition.setMinFullCalculationPeriod(MIN_FULL_PERIOD);
     final ViewCalculationConfiguration defaultCalConfig = new ViewCalculationConfiguration(viewDefinition, DEFAULT_CALC_CONFIG);
     defaultCalConfig.addPortfolioRequirementName(SwapSecurity.SECURITY_TYPE, PAR_RATE);
-    // The name "Default" has no special meaning, but means that the currency conversion function can never be used and so we get the instrument's natural currency
+    // The name "Default" has no special meaning, but means that the currency conversion function can never be used
+    // and so we get the instrument's natural currency
     defaultCalConfig.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, PRESENT_VALUE,
         ValueProperties.with(CurrencyConversionFunction.ORIGINAL_CURRENCY, "Default").withOptional(CurrencyConversionFunction.ORIGINAL_CURRENCY).get());
     defaultCalConfig.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, PRESENT_VALUE, ValueProperties.with(CURRENCY, "USD").get());
-    for (int i = 0; i < s_swapCurrencies.length; i++) {
-      final Currency ccy = s_swapCurrencies[i];
+    for (int i = 0; i < SWAP_CURRENCIES.length; i++) {
+      final Currency ccy = SWAP_CURRENCIES[i];
       final String ccyCode = ccy.getCode();
-      defaultCalConfig.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, PV01, ValueProperties.with(CURVE, "Discounting").with(CURVE_CURRENCY, ccyCode).get());
-      defaultCalConfig.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, YIELD_CURVE_NODE_SENSITIVITIES, ValueProperties.with(CURVE, "Discounting").with(CURVE_CURRENCY, ccyCode).get());
-      defaultCalConfig.addSpecificRequirement(new ValueRequirement(YIELD_CURVE, ComputationTargetSpecification.of(ccy), ValueProperties.with(CURVE, "Discounting")
-          .with(CURVE_CALCULATION_CONFIG, s_curveConfigNames[i]).get()));
-      if (ccyCode.equals("USD")) {
-        defaultCalConfig.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, YIELD_CURVE_NODE_SENSITIVITIES, ValueProperties.with(CURVE, "Forward3M").with(CURVE_CURRENCY, ccyCode).get());
-        defaultCalConfig.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, PV01, ValueProperties.with(CURVE, "Forward3M").with(CURVE_CURRENCY, ccyCode).get());
-        defaultCalConfig.addSpecificRequirement(new ValueRequirement(YIELD_CURVE, ComputationTargetSpecification.of(ccy), ValueProperties.with(CURVE, "Forward3M")
-            .with(CURVE_CALCULATION_CONFIG, s_curveConfigNames[i]).get()));
-      } else {
-        defaultCalConfig.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, PV01, ValueProperties.with(CURVE, "Forward6M").with(CURVE_CURRENCY, ccyCode).get());
-        defaultCalConfig.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, YIELD_CURVE_NODE_SENSITIVITIES, ValueProperties.with(CURVE, "Forward6M").with(ValuePropertyNames.CURVE_CURRENCY, ccyCode)
-            .get());
-        defaultCalConfig.addSpecificRequirement(new ValueRequirement(YIELD_CURVE, ComputationTargetSpecification.of(ccy), ValueProperties.with(CURVE, "Forward6M")
-            .with(CURVE_CALCULATION_CONFIG, s_curveConfigNames[i]).get()));
-      }
+      final ComputationTargetSpecification currencyTarget = ComputationTargetSpecification.of(ccy);
+      final String forwardCurveName = ccyCode.equals("USD") ? "Forward3M" : "Forward6M";
+      final ValueProperties discountingRiskProperties = ValueProperties.with(CURVE, "Discounting").with(CURVE_CURRENCY, ccyCode).get();
+      final ValueProperties discountingCurveProperties = ValueProperties.with(CURVE, "Discounting").with(CURVE_CALCULATION_CONFIG, CURVE_CONFIG_NAMES[i]).get();
+      final ValueProperties forwardRiskProperties = ValueProperties.with(CURVE, forwardCurveName).with(CURVE_CURRENCY, ccyCode).get();
+      final ValueProperties forwardCurveProperties = ValueProperties.with(CURVE, forwardCurveName).with(CURVE_CALCULATION_CONFIG, CURVE_CONFIG_NAMES[i]).get();
+      defaultCalConfig.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, PV01, discountingRiskProperties);
+      defaultCalConfig.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, YIELD_CURVE_NODE_SENSITIVITIES, discountingRiskProperties);
+      defaultCalConfig.addSpecificRequirement(new ValueRequirement(YIELD_CURVE, currencyTarget, discountingCurveProperties));
+      defaultCalConfig.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, YIELD_CURVE_NODE_SENSITIVITIES, forwardRiskProperties);
+      defaultCalConfig.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, PV01, forwardRiskProperties);
+      defaultCalConfig.addSpecificRequirement(new ValueRequirement(YIELD_CURVE, currencyTarget, forwardCurveProperties));
     }
     viewDefinition.addViewCalculationConfiguration(defaultCalConfig);
     return viewDefinition;
   }
 
-  private ViewDefinition getMultiCurrencySwapViewDefinition(final String portfolioName) {
+  /**
+   * Creates a view definition for a swap portfolio that produces:
+   * <ul>
+   * <li> ValueRequirementNames#PRESENT_VALUE
+   * <li> ValueRequirementNames#PV01 for named curves
+   * <li> ValueRequirementNames#YIELD_CURVE_NODE_SENSITIVITIES for named curves
+   * <li> ValueRequirementNames#YIELD_CURVE
+   * </ul>
+   * The curve-specific risk outputs are not collapsed into a single column.
+   * @param portfolioName The portfolio name
+   * @return The view definition
+   */
+  private ViewDefinition getSyntheticMultiCurrencySwapViewDefinition(final String portfolioName) {
     final UniqueId portfolioId = getPortfolioId(portfolioName).toLatest();
     final ViewDefinition viewDefinition = new ViewDefinition(portfolioName + " View", portfolioId, UserPrincipal.getTestUser());
     viewDefinition.setDefaultCurrency(Currency.USD);
-    viewDefinition.setMaxDeltaCalculationPeriod(500L);
-    viewDefinition.setMaxFullCalculationPeriod(500L);
-    viewDefinition.setMinDeltaCalculationPeriod(500L);
-    viewDefinition.setMinFullCalculationPeriod(500L);
+    viewDefinition.setMaxDeltaCalculationPeriod(MAX_DELTA_PERIOD);
+    viewDefinition.setMaxFullCalculationPeriod(MAX_FULL_PERIOD);
+    viewDefinition.setMinDeltaCalculationPeriod(MIN_DELTA_PERIOD);
+    viewDefinition.setMinFullCalculationPeriod(MIN_FULL_PERIOD);
     final ViewCalculationConfiguration defaultCalcConfig = new ViewCalculationConfiguration(viewDefinition, DEFAULT_CALC_CONFIG);
     defaultCalcConfig.addPortfolioRequirementName(SwapSecurity.SECURITY_TYPE, PAR_RATE);
-    // The name "Default" has no special meaning, but means that the currency conversion function can never be used and so we get the instrument's natural currency
+    // The name "Default" has no special meaning, but means that the currency conversion function can never be
+    // used and so we get the instrument's natural currency
     defaultCalcConfig.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, PRESENT_VALUE,
         ValueProperties.with(CurrencyConversionFunction.ORIGINAL_CURRENCY, "Default").withOptional(CurrencyConversionFunction.ORIGINAL_CURRENCY).get());
     defaultCalcConfig.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, PRESENT_VALUE, ValueProperties.with(CURRENCY, "USD").get());
@@ -307,25 +375,21 @@ public class ExampleViewsPopulator extends AbstractTool<ToolContext> {
     final MergedOutput discountingYCNSOutput = new MergedOutput("Discounting Bucketed PV01", MergedOutputAggregationType.LINEAR);
     final MergedOutput forwardPV01Output = new MergedOutput("Forward PV01", MergedOutputAggregationType.LINEAR);
     final MergedOutput forwardYCNSOutput = new MergedOutput("Forward Bucketed PV01", MergedOutputAggregationType.LINEAR);
-    for (int i = 0; i < s_swapCurrencies.length; i++) {
-      final Currency ccy = s_swapCurrencies[i];
+    for (int i = 0; i < SWAP_CURRENCIES.length; i++) {
+      final Currency ccy = SWAP_CURRENCIES[i];
       final String ccyCode = ccy.getCode();
-      discountingPV01Output.addMergedRequirement(PV01, ValueProperties.with(CURVE, "Discounting").with(CURVE_CURRENCY, ccyCode).get());
-      discountingYCNSOutput.addMergedRequirement(YIELD_CURVE_NODE_SENSITIVITIES, ValueProperties.with(CURVE, "Discounting").with(CURVE_CURRENCY, ccyCode).get());
-      defaultCalcConfig.addSpecificRequirement(new ValueRequirement(YIELD_CURVE, ComputationTargetSpecification.of(ccy), ValueProperties.with(CURVE, "Discounting")
-          .with(CURVE_CALCULATION_CONFIG, s_curveConfigNames[i]).get()));
-
-      if (ccyCode.equals("USD")) {
-        forwardYCNSOutput.addMergedRequirement(YIELD_CURVE_NODE_SENSITIVITIES, ValueProperties.with(CURVE, "Forward3M").with(CURVE_CURRENCY, ccyCode).get());
-        forwardPV01Output.addMergedRequirement(PV01, ValueProperties.with(CURVE, "Forward3M").with(CURVE_CURRENCY, ccyCode).get());
-        defaultCalcConfig.addSpecificRequirement(new ValueRequirement(YIELD_CURVE, ComputationTargetSpecification.of(ccy), ValueProperties.with(CURVE, "Forward3M")
-            .with(CURVE_CALCULATION_CONFIG, s_curveConfigNames[i]).get()));
-      } else {
-        forwardYCNSOutput.addMergedRequirement(YIELD_CURVE_NODE_SENSITIVITIES, ValueProperties.with(CURVE, "Forward6M").with(ValuePropertyNames.CURVE_CURRENCY, ccyCode).get());
-        forwardPV01Output.addMergedRequirement(PV01, ValueProperties.with(CURVE, "Forward6M").with(CURVE_CURRENCY, ccyCode).get());
-        defaultCalcConfig.addSpecificRequirement(new ValueRequirement(YIELD_CURVE, ComputationTargetSpecification.of(ccy), ValueProperties.with(CURVE, "Forward6M")
-            .with(CURVE_CALCULATION_CONFIG, s_curveConfigNames[i]).get()));
-      }
+      final ComputationTargetSpecification currencyTarget = ComputationTargetSpecification.of(ccy);
+      final String forwardCurveName = ccyCode.equals("USD") ? "Forward3M" : "Forward6M";
+      final ValueProperties discountingRiskProperties = ValueProperties.with(CURVE, "Discounting").with(CURVE_CURRENCY, ccyCode).get();
+      final ValueProperties discountingCurveProperties = ValueProperties.with(CURVE, "Discounting").with(CURVE_CALCULATION_CONFIG, CURVE_CONFIG_NAMES[i]).get();
+      final ValueProperties forwardRiskProperties = ValueProperties.with(CURVE, forwardCurveName).with(CURVE_CURRENCY, ccyCode).get();
+      final ValueProperties forwardCurveProperties = ValueProperties.with(CURVE, forwardCurveName).with(CURVE_CALCULATION_CONFIG, CURVE_CONFIG_NAMES[i]).get();
+      discountingPV01Output.addMergedRequirement(PV01, discountingRiskProperties);
+      discountingYCNSOutput.addMergedRequirement(YIELD_CURVE_NODE_SENSITIVITIES, discountingRiskProperties);
+      defaultCalcConfig.addSpecificRequirement(new ValueRequirement(YIELD_CURVE, currencyTarget, discountingCurveProperties));
+      forwardYCNSOutput.addMergedRequirement(YIELD_CURVE_NODE_SENSITIVITIES, forwardRiskProperties);
+      forwardPV01Output.addMergedRequirement(PV01, forwardRiskProperties);
+      defaultCalcConfig.addSpecificRequirement(new ValueRequirement(YIELD_CURVE, currencyTarget, forwardCurveProperties));
     }
     defaultCalcConfig.addMergedOutput(discountingPV01Output);
     defaultCalcConfig.addMergedOutput(discountingYCNSOutput);
@@ -335,22 +399,39 @@ public class ExampleViewsPopulator extends AbstractTool<ToolContext> {
     return viewDefinition;
   }
 
-  private ViewDefinition getFXOptionViewDefinition(final String portfolioName, final String viewName) {
+  /**
+   * Creates a view definition for an FX option portfolio that produces:
+   * <ul>
+   * <li> ValueRequirementNames#VOLATILITY_SURFACE_DATA
+   * <li> ValueRequirementNames#VEGA_QUOTE_MATRIX
+   * <li> ValueRequirementNames#VEGA_MATRIX
+   * <li> ValueRequirementNames#YIELD_CURVE_NODE_SENSITIVITIES
+   * <li> ValueRequirementNames#PRESENT_VALUE
+   * <li> ValueRequirementNames#FX_CURRENCY_EXPOSURE
+   * </ul>
+   * @param portfolioName The portfolio name
+   * @param viewName The view name
+   * @return The view definition
+   */
+  private ViewDefinition getSyntheticFxOptionViewDefinitio(final String portfolioName, final String viewName) {
     final UniqueId portfolioId = getPortfolioId(portfolioName).toLatest();
     final ViewDefinition viewDefinition = new ViewDefinition(viewName, portfolioId, UserPrincipal.getTestUser());
     viewDefinition.setDefaultCurrency(Currency.USD);
-    viewDefinition.setMaxDeltaCalculationPeriod(500L);
-    viewDefinition.setMaxFullCalculationPeriod(500L);
-    viewDefinition.setMinDeltaCalculationPeriod(500L);
-    viewDefinition.setMinFullCalculationPeriod(500L);
+    viewDefinition.setMaxDeltaCalculationPeriod(MAX_DELTA_PERIOD);
+    viewDefinition.setMaxFullCalculationPeriod(MAX_FULL_PERIOD);
+    viewDefinition.setMinDeltaCalculationPeriod(MIN_DELTA_PERIOD);
+    viewDefinition.setMinFullCalculationPeriod(MIN_FULL_PERIOD);
     final ViewCalculationConfiguration defaultCalculationConfig = new ViewCalculationConfiguration(viewDefinition, DEFAULT_CALC_CONFIG);
     final Set<Currency> ccysAdded = new HashSet<>();
     for (final UnorderedCurrencyPair pair : CURRENCY_PAIRS) {
       final ComputationTargetSpecification target = ComputationTargetSpecification.of(pair.getUniqueId());
-      final ValueProperties properties = ValueProperties.builder().with(SURFACE, "DEFAULT").with(InstrumentTypeProperties.PROPERTY_SURFACE_INSTRUMENT_TYPE, InstrumentTypeProperties.FOREX).get();
-      defaultCalculationConfig.addSpecificRequirement(new ValueRequirement(VOLATILITY_SURFACE_DATA, target, properties));
-      defaultCalculationConfig.addPortfolioRequirement(FXOptionSecurity.SECURITY_TYPE, VEGA_QUOTE_MATRIX, properties);
-      defaultCalculationConfig.addPortfolioRequirement(FXOptionSecurity.SECURITY_TYPE, VEGA_MATRIX, properties);
+      final ValueProperties surfaceProperties = ValueProperties.builder()
+          .with(SURFACE, "DEFAULT")
+          .with(PROPERTY_SURFACE_INSTRUMENT_TYPE, FOREX)
+          .get();
+      defaultCalculationConfig.addSpecificRequirement(new ValueRequirement(VOLATILITY_SURFACE_DATA, target, surfaceProperties));
+      defaultCalculationConfig.addPortfolioRequirement(FXOptionSecurity.SECURITY_TYPE, VEGA_QUOTE_MATRIX, surfaceProperties);
+      defaultCalculationConfig.addPortfolioRequirement(FXOptionSecurity.SECURITY_TYPE, VEGA_MATRIX, surfaceProperties);
       if (!ccysAdded.contains(pair.getFirstCurrency())) {
         final String ccy = pair.getFirstCurrency().getCode();
         final ValueProperties curveProperties = ValueProperties.builder().with(CURVE, "Discounting").with(CURVE_CURRENCY, ccy).get();
@@ -364,26 +445,47 @@ public class ExampleViewsPopulator extends AbstractTool<ToolContext> {
         ccysAdded.add(pair.getSecondCurrency());
       }
     }
-    final ValueProperties currencyProperty = ValueProperties.builder().with(ValuePropertyNames.CURRENCY, "USD").get();
+    final ValueProperties currencyProperty = ValueProperties.builder().with(CURRENCY, "USD").get();
     defaultCalculationConfig.addPortfolioRequirement(FXOptionSecurity.SECURITY_TYPE, PRESENT_VALUE, currencyProperty);
     defaultCalculationConfig.addPortfolioRequirement(FXOptionSecurity.SECURITY_TYPE, FX_CURRENCY_EXPOSURE, ValueProperties.builder().get());
     viewDefinition.addViewCalculationConfiguration(defaultCalculationConfig);
     return viewDefinition;
   }
 
-  private ViewDefinition getFXOptionGreeksViewDefinition(final String portfolioName, final String viewName) {
+  /**
+   * Creates a view definition for an FX option portfolio that produces:
+   * <ul>
+   * <li> ValueRequirementNames#PRESENT_VALUE
+   * <li> ValueRequirementNames#VALUE_DELTA
+   * <li> ValueRequirementNames#VALUE_VEGA
+   * <li> ValueRequirementNames#VALUE_GAMMA_P
+   * <li> ValueRequirementNames#VALUE_RHO
+   * <li> ValueRequirementNames#VALUE_PHI
+   * <li> ValueRequirementNames#VALUE_VOMMA
+   * <li> ValueRequirementNames#VALUE_VANNA
+   * <li> ValueRequirementNames#VALUE_THETA
+   * <li> ValueRequirementNames#SECURITY_IMPLIED_VOLATILITY
+   * </ul>
+   * @param portfolioName The portfolio name
+   * @param viewName The view name
+   * @return The view definition
+   */
+  private ViewDefinition getSyntheticFxOptionGreeksViewDefinition(final String portfolioName, final String viewName) {
     final UniqueId portfolioId = getPortfolioId(portfolioName).toLatest();
     final ViewDefinition viewDefinition = new ViewDefinition(viewName, portfolioId, UserPrincipal.getTestUser());
     viewDefinition.setDefaultCurrency(Currency.USD);
-    viewDefinition.setMaxDeltaCalculationPeriod(500L);
-    viewDefinition.setMaxFullCalculationPeriod(500L);
-    viewDefinition.setMinDeltaCalculationPeriod(500L);
-    viewDefinition.setMinFullCalculationPeriod(500L);
+    viewDefinition.setMaxDeltaCalculationPeriod(MAX_DELTA_PERIOD);
+    viewDefinition.setMaxFullCalculationPeriod(MAX_FULL_PERIOD);
+    viewDefinition.setMinDeltaCalculationPeriod(MIN_DELTA_PERIOD);
+    viewDefinition.setMinFullCalculationPeriod(MIN_FULL_PERIOD);
     final ViewCalculationConfiguration defaultCalculationConfig = new ViewCalculationConfiguration(viewDefinition, DEFAULT_CALC_CONFIG);
-    final ValueProperties currencyProperty = ValueProperties.builder().with(ValuePropertyNames.CURRENCY, "USD").get();
+    final ValueProperties currencyProperty = ValueProperties.builder().with(CURRENCY, "USD").get();
+    final ValueProperties vegaProperty = currencyProperty.copy()
+        .with(SCALE, "100.")
+        .get();
     defaultCalculationConfig.addPortfolioRequirement(FXOptionSecurity.SECURITY_TYPE, PRESENT_VALUE, currencyProperty);
     defaultCalculationConfig.addPortfolioRequirement(FXOptionSecurity.SECURITY_TYPE, VALUE_DELTA, currencyProperty);
-    defaultCalculationConfig.addPortfolioRequirement(FXOptionSecurity.SECURITY_TYPE, VALUE_VEGA, currencyProperty);
+    defaultCalculationConfig.addPortfolioRequirement(FXOptionSecurity.SECURITY_TYPE, VALUE_VEGA, vegaProperty);
     defaultCalculationConfig.addPortfolioRequirement(FXOptionSecurity.SECURITY_TYPE, VALUE_GAMMA, currencyProperty);
     defaultCalculationConfig.addPortfolioRequirement(FXOptionSecurity.SECURITY_TYPE, VALUE_GAMMA_P, currencyProperty);
     defaultCalculationConfig.addPortfolioRequirement(FXOptionSecurity.SECURITY_TYPE, VALUE_RHO, currencyProperty);
@@ -403,20 +505,20 @@ public class ExampleViewsPopulator extends AbstractTool<ToolContext> {
    * @param viewName The view name
    * @return The view definition
    */
-  private ViewDefinition getFXVolatilitySwapViewDefinition(final String portfolioName, final String viewName) {
+  private ViewDefinition getSyntheticFxVolatilitySwapViewDefinition(final String portfolioName, final String viewName) {
     final UniqueId portfolioId = getPortfolioId(portfolioName).toLatest();
     final ViewDefinition viewDefinition = new ViewDefinition(viewName, portfolioId, UserPrincipal.getTestUser());
     viewDefinition.setDefaultCurrency(Currency.USD);
-    viewDefinition.setMaxDeltaCalculationPeriod(500L);
-    viewDefinition.setMaxFullCalculationPeriod(500L);
-    viewDefinition.setMinDeltaCalculationPeriod(500L);
-    viewDefinition.setMinFullCalculationPeriod(500L);
+    viewDefinition.setMaxDeltaCalculationPeriod(MAX_DELTA_PERIOD);
+    viewDefinition.setMaxFullCalculationPeriod(MAX_FULL_PERIOD);
+    viewDefinition.setMinDeltaCalculationPeriod(MIN_DELTA_PERIOD);
+    viewDefinition.setMinFullCalculationPeriod(MIN_FULL_PERIOD);
     final ViewCalculationConfiguration defaultCalculationConfig = new ViewCalculationConfiguration(viewDefinition, DEFAULT_CALC_CONFIG);
     for (final UnorderedCurrencyPair pair : CURRENCY_PAIRS) {
       final ComputationTargetSpecification target = ComputationTargetSpecification.of(pair.getUniqueId());
       final ValueProperties properties = ValueProperties.builder()
           .with(SURFACE, "DEFAULT")
-          .with(InstrumentTypeProperties.PROPERTY_SURFACE_INSTRUMENT_TYPE, InstrumentTypeProperties.FOREX)
+          .with(PROPERTY_SURFACE_INSTRUMENT_TYPE, FOREX)
           .get();
       defaultCalculationConfig.addSpecificRequirement(new ValueRequirement(VOLATILITY_SURFACE_DATA, target, properties));
     }
@@ -433,108 +535,170 @@ public class ExampleViewsPopulator extends AbstractTool<ToolContext> {
     return viewDefinition;
   }
 
-  private ViewDefinition getAUDSwapView1Definition(final String portfolioName) {
+  /**
+   * Creates a view definition for a portfolio of AUD swaps where the curve configuration generates the
+   * three yield curves (discounting, 3m forward and 6m forward) simultaneously. This view produces:
+   * <ul>
+   * <li> ValueRequirementNames#PRESENT_VALUE
+   * <li> ValueRequirementNames#YIELD_CURVE_NODE_SENSITIVITIES
+   * <li> ValueRequirementNames#YIELD_CURVE
+   * </ul>
+   * @param portfolioName The portfolio name
+   * @return The view definition
+   */
+  private ViewDefinition getSyntheticAudSwapView1Definition(final String portfolioName) {
     final UniqueId portfolioId = getPortfolioId(portfolioName).toLatest();
     final ViewDefinition viewDefinition = new ViewDefinition("AUD Swaps (3m / 6m basis) (1)", portfolioId, UserPrincipal.getTestUser());
     viewDefinition.setDefaultCurrency(Currency.AUD);
-    viewDefinition.setMaxDeltaCalculationPeriod(500L);
-    viewDefinition.setMaxFullCalculationPeriod(500L);
-    viewDefinition.setMinDeltaCalculationPeriod(500L);
-    viewDefinition.setMinFullCalculationPeriod(500L);
+    viewDefinition.setMaxDeltaCalculationPeriod(MAX_DELTA_PERIOD);
+    viewDefinition.setMaxFullCalculationPeriod(MAX_FULL_PERIOD);
+    viewDefinition.setMinDeltaCalculationPeriod(MIN_DELTA_PERIOD);
+    viewDefinition.setMinFullCalculationPeriod(MIN_FULL_PERIOD);
     final String curveConfig = "DefaultThreeCurveAUDConfig";
     final ViewCalculationConfiguration defaultCalConfig = new ViewCalculationConfiguration(viewDefinition, DEFAULT_CALC_CONFIG);
     defaultCalConfig.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, PRESENT_VALUE, ValueProperties.with(CURVE_CALCULATION_CONFIG, curveConfig).get());
-    defaultCalConfig.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, YIELD_CURVE_NODE_SENSITIVITIES, ValueProperties.with(CURVE, "Discounting").with(CURVE_CALCULATION_CONFIG, curveConfig).get());
-    defaultCalConfig.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, YIELD_CURVE_NODE_SENSITIVITIES, ValueProperties.with(CURVE, "ForwardBasis3M").with(CURVE_CALCULATION_CONFIG, curveConfig)
-        .get());
-    defaultCalConfig.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, YIELD_CURVE_NODE_SENSITIVITIES, ValueProperties.with(CURVE, "ForwardBasis6M").with(CURVE_CALCULATION_CONFIG, curveConfig)
-        .get());
-    defaultCalConfig.addSpecificRequirement(new ValueRequirement(YIELD_CURVE, ComputationTargetSpecification.of(Currency.AUD), ValueProperties.with(CURVE, "Discounting")
-        .with(CURVE_CALCULATION_METHOD, PAR_RATE_STRING).with(CURVE_CALCULATION_CONFIG, curveConfig).get()));
-    defaultCalConfig.addSpecificRequirement(new ValueRequirement(YIELD_CURVE, ComputationTargetSpecification.of(Currency.AUD), ValueProperties.with(CURVE, "ForwardBasis3M")
-        .with(CURVE_CALCULATION_METHOD, PAR_RATE_STRING).with(CURVE_CALCULATION_CONFIG, curveConfig).get()));
-    defaultCalConfig.addSpecificRequirement(new ValueRequirement(YIELD_CURVE, ComputationTargetSpecification.of(Currency.AUD), ValueProperties.with(CURVE, "ForwardBasis6M")
-        .with(CURVE_CALCULATION_METHOD, PAR_RATE_STRING).with(CURVE_CALCULATION_CONFIG, curveConfig).get()));
-    defaultCalConfig.addSpecificRequirement(new ValueRequirement(YIELD_CURVE_JACOBIAN, ComputationTargetSpecification.of(Currency.AUD), ValueProperties.with(CURVE_CALCULATION_METHOD, PAR_RATE_STRING)
-        .with(CURVE_CALCULATION_CONFIG, curveConfig).get()));
+    defaultCalConfig.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, YIELD_CURVE_NODE_SENSITIVITIES,
+        ValueProperties.with(CURVE, "Discounting").with(CURVE_CALCULATION_CONFIG, curveConfig).get());
+    defaultCalConfig.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, YIELD_CURVE_NODE_SENSITIVITIES,
+        ValueProperties.with(CURVE, "ForwardBasis3M").with(CURVE_CALCULATION_CONFIG, curveConfig).get());
+    defaultCalConfig.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, YIELD_CURVE_NODE_SENSITIVITIES,
+        ValueProperties.with(CURVE, "ForwardBasis6M").with(CURVE_CALCULATION_CONFIG, curveConfig).get());
+    final ComputationTargetSpecification currencyTarget = ComputationTargetSpecification.of(Currency.AUD);
+    defaultCalConfig.addSpecificRequirement(new ValueRequirement(YIELD_CURVE, currencyTarget,
+        ValueProperties.with(CURVE, "Discounting").with(CURVE_CALCULATION_METHOD, PAR_RATE_STRING).with(CURVE_CALCULATION_CONFIG, curveConfig).get()));
+    defaultCalConfig.addSpecificRequirement(new ValueRequirement(YIELD_CURVE, currencyTarget,
+        ValueProperties.with(CURVE, "ForwardBasis3M").with(CURVE_CALCULATION_METHOD, PAR_RATE_STRING).with(CURVE_CALCULATION_CONFIG, curveConfig).get()));
+    defaultCalConfig.addSpecificRequirement(new ValueRequirement(YIELD_CURVE, currencyTarget,
+        ValueProperties.with(CURVE, "ForwardBasis6M").with(CURVE_CALCULATION_METHOD, PAR_RATE_STRING).with(CURVE_CALCULATION_CONFIG, curveConfig).get()));
+    defaultCalConfig.addSpecificRequirement(new ValueRequirement(YIELD_CURVE_JACOBIAN, currencyTarget,
+        ValueProperties.with(CURVE_CALCULATION_METHOD, PAR_RATE_STRING).with(CURVE_CALCULATION_CONFIG, curveConfig).get()));
     viewDefinition.addViewCalculationConfiguration(defaultCalConfig);
     return viewDefinition;
   }
 
-  private ViewDefinition getAUDSwapView2Definition(final String portfolioName) {
+  /**
+   * Creates a view definition for a portfolio of AUD swaps where the curve configuration generates
+   * the discounting curve and uses this as an exogenous input into the3m and 6m forward curve calculation.
+   * This view produces:
+   * <ul>
+   * <li> ValueRequirementNames#PRESENT_VALUE
+   * <li> ValueRequirementNames#YIELD_CURVE_NODE_SENSITIVITIES
+   * <li> ValueRequirementNames#YIELD_CURVE
+   * </ul>
+   * @param portfolioName The portfolio name
+   * @return The view definition
+   */
+  private ViewDefinition getSyntheticAudSwapView2Definition(final String portfolioName) {
     final UniqueId portfolioId = getPortfolioId(portfolioName).toLatest();
     final ViewDefinition viewDefinition = new ViewDefinition("AUD Swaps (3m / 6m basis) (2)", portfolioId, UserPrincipal.getTestUser());
     viewDefinition.setDefaultCurrency(Currency.AUD);
-    viewDefinition.setMaxDeltaCalculationPeriod(500L);
-    viewDefinition.setMaxFullCalculationPeriod(500L);
-    viewDefinition.setMinDeltaCalculationPeriod(500L);
-    viewDefinition.setMinFullCalculationPeriod(500L);
+    viewDefinition.setMaxDeltaCalculationPeriod(MAX_DELTA_PERIOD);
+    viewDefinition.setMaxFullCalculationPeriod(MAX_FULL_PERIOD);
+    viewDefinition.setMinDeltaCalculationPeriod(MIN_DELTA_PERIOD);
+    viewDefinition.setMinFullCalculationPeriod(MIN_FULL_PERIOD);
     final String curveConfig = "ForwardFromDiscountingAUDConfig";
     final ViewCalculationConfiguration defaultCalConfig = new ViewCalculationConfiguration(viewDefinition, DEFAULT_CALC_CONFIG);
     defaultCalConfig.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, PRESENT_VALUE, ValueProperties.with(CURVE_CALCULATION_CONFIG, curveConfig).get());
-    defaultCalConfig.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, YIELD_CURVE_NODE_SENSITIVITIES, ValueProperties.with(CURVE, "ForwardBasis3M").with(CURVE_CALCULATION_CONFIG, curveConfig)
-        .get());
-    defaultCalConfig.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, YIELD_CURVE_NODE_SENSITIVITIES, ValueProperties.with(CURVE, "ForwardBasis6M").with(CURVE_CALCULATION_CONFIG, curveConfig)
-        .get());
-    defaultCalConfig.addSpecificRequirement(new ValueRequirement(YIELD_CURVE, ComputationTargetSpecification.of(Currency.AUD), ValueProperties.with(CURVE, "Discounting")
-        .with(CURVE_CALCULATION_METHOD, PAR_RATE_STRING).with(CURVE_CALCULATION_CONFIG, curveConfig).get()));
-    defaultCalConfig.addSpecificRequirement(new ValueRequirement(YIELD_CURVE, ComputationTargetSpecification.of(Currency.AUD), ValueProperties.with(CURVE, "ForwardBasis3M")
-        .with(CURVE_CALCULATION_METHOD, PAR_RATE_STRING).with(CURVE_CALCULATION_CONFIG, curveConfig).get()));
-    defaultCalConfig.addSpecificRequirement(new ValueRequirement(YIELD_CURVE, ComputationTargetSpecification.of(Currency.AUD), ValueProperties.with(CURVE, "ForwardBasis6M")
-        .with(CURVE_CALCULATION_METHOD, PAR_RATE_STRING).with(CURVE_CALCULATION_CONFIG, curveConfig).get()));
-    defaultCalConfig.addSpecificRequirement(new ValueRequirement(YIELD_CURVE_JACOBIAN, ComputationTargetSpecification.of(Currency.AUD), ValueProperties.with(CURVE_CALCULATION_METHOD, PAR_RATE_STRING)
-        .with(CURVE_CALCULATION_CONFIG, curveConfig).get()));
+    defaultCalConfig.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, YIELD_CURVE_NODE_SENSITIVITIES,
+        ValueProperties.with(CURVE, "ForwardBasis3M").with(CURVE_CALCULATION_CONFIG, curveConfig).get());
+    defaultCalConfig.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, YIELD_CURVE_NODE_SENSITIVITIES,
+        ValueProperties.with(CURVE, "ForwardBasis6M").with(CURVE_CALCULATION_CONFIG, curveConfig).get());
+    final ComputationTargetSpecification currencyTarget = ComputationTargetSpecification.of(Currency.AUD);
+    defaultCalConfig.addSpecificRequirement(new ValueRequirement(YIELD_CURVE, currencyTarget,
+        ValueProperties.with(CURVE, "Discounting").with(CURVE_CALCULATION_METHOD, PAR_RATE_STRING).with(CURVE_CALCULATION_CONFIG, curveConfig).get()));
+    defaultCalConfig.addSpecificRequirement(new ValueRequirement(YIELD_CURVE, currencyTarget,
+        ValueProperties.with(CURVE, "ForwardBasis3M").with(CURVE_CALCULATION_METHOD, PAR_RATE_STRING).with(CURVE_CALCULATION_CONFIG, curveConfig).get()));
+    defaultCalConfig.addSpecificRequirement(new ValueRequirement(YIELD_CURVE, currencyTarget,
+        ValueProperties.with(CURVE, "ForwardBasis6M").with(CURVE_CALCULATION_METHOD, PAR_RATE_STRING).with(CURVE_CALCULATION_CONFIG, curveConfig).get()));
+    defaultCalConfig.addSpecificRequirement(new ValueRequirement(YIELD_CURVE_JACOBIAN, currencyTarget,
+        ValueProperties.with(CURVE_CALCULATION_METHOD, PAR_RATE_STRING).with(CURVE_CALCULATION_CONFIG, curveConfig).get()));
     viewDefinition.addViewCalculationConfiguration(defaultCalConfig);
     return viewDefinition;
   }
 
-  private ViewDefinition getAUDSwapView3Definition(final String portfolioName) {
+  /**
+   * Creates a view definition for a portfolio of AUD swaps where the pricing uses a single
+   * yield curve for both discounting and forward rates. This view produces:
+   * <ul>
+   * <li> ValueRequirementNames#PRESENT_VALUE
+   * <li> ValueRequirementNames#YIELD_CURVE_NODE_SENSITIVITIES
+   * <li> ValueRequirementNames#YIELD_CURVE
+   * </ul>
+   * @param portfolioName The portfolio name
+   * @return The view definition
+   */
+  private ViewDefinition getSyntheticAudSwapView3Definition(final String portfolioName) {
     final UniqueId portfolioId = getPortfolioId(portfolioName).toLatest();
     final ViewDefinition viewDefinition = new ViewDefinition("AUD Swaps (no basis)", portfolioId, UserPrincipal.getTestUser());
     viewDefinition.setDefaultCurrency(Currency.AUD);
-    viewDefinition.setMaxDeltaCalculationPeriod(500L);
-    viewDefinition.setMaxFullCalculationPeriod(500L);
-    viewDefinition.setMinDeltaCalculationPeriod(500L);
-    viewDefinition.setMinFullCalculationPeriod(500L);
+    viewDefinition.setMaxDeltaCalculationPeriod(MAX_DELTA_PERIOD);
+    viewDefinition.setMaxFullCalculationPeriod(MAX_FULL_PERIOD);
+    viewDefinition.setMinDeltaCalculationPeriod(MIN_DELTA_PERIOD);
+    viewDefinition.setMinFullCalculationPeriod(MIN_FULL_PERIOD);
     final String curveConfig = "SingleAUDConfig";
     final ViewCalculationConfiguration defaultCalConfig = new ViewCalculationConfiguration(viewDefinition, DEFAULT_CALC_CONFIG);
-    defaultCalConfig.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, PRESENT_VALUE, ValueProperties.with(CURVE_CALCULATION_CONFIG, curveConfig).get());
-    defaultCalConfig.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, YIELD_CURVE_NODE_SENSITIVITIES, ValueProperties.with(CURVE, "Single").with(CURVE_CALCULATION_CONFIG, curveConfig).get());
-    defaultCalConfig.addSpecificRequirement(new ValueRequirement(YIELD_CURVE, ComputationTargetSpecification.of(Currency.AUD), ValueProperties.with(CURVE, "Single")
-        .with(CURVE_CALCULATION_METHOD, PAR_RATE_STRING).with(CURVE_CALCULATION_CONFIG, curveConfig).get()));
-    defaultCalConfig.addSpecificRequirement(new ValueRequirement(YIELD_CURVE_JACOBIAN, ComputationTargetSpecification.of(Currency.AUD), ValueProperties.with(CURVE_CALCULATION_METHOD, PAR_RATE_STRING)
-        .with(CURVE_CALCULATION_CONFIG, curveConfig).get()));
+    defaultCalConfig.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, PRESENT_VALUE,
+        ValueProperties.with(CURVE_CALCULATION_CONFIG, curveConfig).get());
+    defaultCalConfig.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, YIELD_CURVE_NODE_SENSITIVITIES,
+        ValueProperties.with(CURVE, "Single").with(CURVE_CALCULATION_CONFIG, curveConfig).get());
+    final ComputationTargetSpecification currencyTarget = ComputationTargetSpecification.of(Currency.AUD);
+    defaultCalConfig.addSpecificRequirement(new ValueRequirement(YIELD_CURVE, currencyTarget,
+        ValueProperties.with(CURVE, "Single").with(CURVE_CALCULATION_METHOD, PAR_RATE_STRING).with(CURVE_CALCULATION_CONFIG, curveConfig).get()));
+    defaultCalConfig.addSpecificRequirement(new ValueRequirement(YIELD_CURVE_JACOBIAN, currencyTarget,
+        ValueProperties.with(CURVE_CALCULATION_METHOD, PAR_RATE_STRING).with(CURVE_CALCULATION_CONFIG, curveConfig).get()));
     viewDefinition.addViewCalculationConfiguration(defaultCalConfig);
     return viewDefinition;
   }
 
-  private ViewDefinition getATMSwaptionViewDefinition(final String portfolioName, final String viewName) {
+  /**
+   * Creates a view definition for swaptions priced using the Black method (i.e. no smile).
+   * This view produces:
+   * <ul>
+   * <li> ValueRequirementNames#PRESENT_VALUE
+   * <li> ValueRequirementNames#YIELD_CURVE_NODE_SENSITIVITIES
+   * <li> ValueRequirementNames#PV01
+   * <li> ValueRequirementNames#BUCKETED_PV01
+   * <li> ValueRequirementNames#VOLATILITY_SURFACE_DATA
+   * </ul>
+   * @param portfolioName The portfolio name
+   * @param viewName The view name
+   * @return The view definition
+   */
+  private ViewDefinition getSyntheticAtmSwaptionViewDefinition(final String portfolioName, final String viewName) {
     final UniqueId portfolioId = getPortfolioId(portfolioName).toLatest();
     final ViewDefinition viewDefinition = new ViewDefinition(viewName, portfolioId, UserPrincipal.getTestUser());
     viewDefinition.setDefaultCurrency(Currency.USD);
-    viewDefinition.setMaxDeltaCalculationPeriod(500L);
-    viewDefinition.setMaxFullCalculationPeriod(500L);
-    viewDefinition.setMinDeltaCalculationPeriod(500L);
-    viewDefinition.setMinFullCalculationPeriod(500L);
+    viewDefinition.setMaxDeltaCalculationPeriod(MAX_DELTA_PERIOD);
+    viewDefinition.setMaxFullCalculationPeriod(MAX_FULL_PERIOD);
+    viewDefinition.setMinDeltaCalculationPeriod(MIN_DELTA_PERIOD);
+    viewDefinition.setMinFullCalculationPeriod(MIN_FULL_PERIOD);
     final ViewCalculationConfiguration defaultCalculationConfig = new ViewCalculationConfiguration(viewDefinition, DEFAULT_CALC_CONFIG);
     for (final Map.Entry<Currency, String> entry : SWAPTION_CURRENCY_CONFIGS.entrySet()) {
       final ComputationTargetSpecification target = ComputationTargetSpecification.of(entry.getKey().getUniqueId());
-      final ValueProperties properties = ValueProperties.builder().with(SURFACE, entry.getValue())
-          .with(InstrumentTypeProperties.PROPERTY_SURFACE_INSTRUMENT_TYPE, InstrumentTypeProperties.SWAPTION_ATM).get();
-      defaultCalculationConfig.addSpecificRequirement(new ValueRequirement(VOLATILITY_SURFACE_DATA, target, properties));
+      final ValueProperties surfaceProperties = ValueProperties.builder()
+          .with(SURFACE, entry.getValue())
+          .with(PROPERTY_SURFACE_INSTRUMENT_TYPE, SWAPTION_ATM)
+          .get();
+      defaultCalculationConfig.addSpecificRequirement(new ValueRequirement(VOLATILITY_SURFACE_DATA, target, surfaceProperties));
     }
     for (final Map.Entry<Currency, Pair<String, String>> entry : SWAPTION_CURVES.entrySet()) {
-      ValueProperties properties = ValueProperties.builder().with(ValuePropertyNames.CURVE, entry.getValue().getFirst()).with(ValuePropertyNames.CURVE_CURRENCY, entry.getKey().getCode())
-          .with(ValuePropertyNames.CALCULATION_METHOD, CalculationPropertyNamesAndValues.BLACK_METHOD).get();
+      ValueProperties properties = ValueProperties.builder()
+          .with(CURVE, entry.getValue().getFirst())
+          .with(CURVE_CURRENCY, entry.getKey().getCode())
+          .with(CALCULATION_METHOD, BLACK_METHOD)
+          .get();
       defaultCalculationConfig.addPortfolioRequirement(SwaptionSecurity.SECURITY_TYPE, YIELD_CURVE_NODE_SENSITIVITIES, properties);
       defaultCalculationConfig.addPortfolioRequirement(SwaptionSecurity.SECURITY_TYPE, BUCKETED_PV01, properties);
       defaultCalculationConfig.addPortfolioRequirement(SwaptionSecurity.SECURITY_TYPE, PV01, properties);
-      properties = ValueProperties.builder().with(ValuePropertyNames.CURVE, entry.getValue().getSecond()).with(ValuePropertyNames.CURVE_CURRENCY, entry.getKey().getCode())
-          .with(ValuePropertyNames.CALCULATION_METHOD, CalculationPropertyNamesAndValues.BLACK_METHOD).get();
+      properties = ValueProperties.builder()
+          .with(CURVE, entry.getValue().getSecond())
+          .with(CURVE_CURRENCY, entry.getKey().getCode())
+          .with(CALCULATION_METHOD, BLACK_METHOD)
+          .get();
       defaultCalculationConfig.addPortfolioRequirement(SwaptionSecurity.SECURITY_TYPE, YIELD_CURVE_NODE_SENSITIVITIES, properties);
       defaultCalculationConfig.addPortfolioRequirement(SwaptionSecurity.SECURITY_TYPE, PV01, properties);
     }
-    final ValueProperties calculationMethodProperty = ValueProperties.builder().with(ValuePropertyNames.CALCULATION_METHOD, CalculationPropertyNamesAndValues.BLACK_METHOD).get();
+    final ValueProperties calculationMethodProperty = ValueProperties.builder().with(CALCULATION_METHOD, BLACK_METHOD).get();
     defaultCalculationConfig.addPortfolioRequirement(SwaptionSecurity.SECURITY_TYPE, PRESENT_VALUE, calculationMethodProperty);
     defaultCalculationConfig.addPortfolioRequirement(SwaptionSecurity.SECURITY_TYPE, VALUE_VEGA, calculationMethodProperty);
     defaultCalculationConfig.addPortfolioRequirement(SwaptionSecurity.SECURITY_TYPE, SECURITY_IMPLIED_VOLATILITY, ValueProperties.builder().get());
@@ -542,338 +706,487 @@ public class ExampleViewsPopulator extends AbstractTool<ToolContext> {
     return viewDefinition;
   }
 
-  private ViewDefinition getSABRExtrapolationViewDefinition(final String portfolioName) {
+  /**
+   * Creates a view definition for cap/floor CMS spreads, cap/floors and CMS swaps that are priced using SABR with and without extrapolation.
+   * The view produces:
+   * <ul>
+   * <li> ValueRequirementNames#PRESENT_VALUE
+   * <li> ValueRequirementNames#PRESENT_VALUE_SABR_ALPHA_SENSITIVITY
+   * <li> ValueRequirementNames#PRESENT_VALUE_SABR_NU_SENSITIVITY
+   * <li> ValueRequirementNames#PRESENT_VALUE_SABR_RHO_SENSITIVITY
+   * <li> ValueRequirementNames#YIELD_CURVE_NODE_SENSITIVITIES
+   * </ul>
+   * for both calculation methods.
+   * @param portfolioName The portfolio name
+   * @return The view definition
+   */
+  private ViewDefinition getSyntheticSabrExtrapolationViewDefinition(final String portfolioName) {
     final UniqueId portfolioId = getPortfolioId(portfolioName).toLatest();
     final ViewDefinition viewDefinition = new ViewDefinition("Constant Maturity Swap View", portfolioId, UserPrincipal.getTestUser());
     viewDefinition.setDefaultCurrency(Currency.USD);
-    viewDefinition.setMaxDeltaCalculationPeriod(500L);
-    viewDefinition.setMaxFullCalculationPeriod(500L);
-    viewDefinition.setMinDeltaCalculationPeriod(500L);
-    viewDefinition.setMinFullCalculationPeriod(500L);
+    viewDefinition.setMaxDeltaCalculationPeriod(MAX_DELTA_PERIOD);
+    viewDefinition.setMaxFullCalculationPeriod(MAX_FULL_PERIOD);
+    viewDefinition.setMinDeltaCalculationPeriod(MIN_DELTA_PERIOD);
+    viewDefinition.setMinFullCalculationPeriod(MIN_FULL_PERIOD);
     final String curveConfig = "DefaultTwoCurveUSDConfig";
     final ViewCalculationConfiguration noExtrapolationConfig = new ViewCalculationConfiguration(viewDefinition, "No Extrapolation");
     final ViewCalculationConfiguration rightExtrapolationConfig = new ViewCalculationConfiguration(viewDefinition, "Right Extrapolation");
     final String[] securityTypes = new String[] {CapFloorCMSSpreadSecurity.SECURITY_TYPE, CapFloorSecurity.SECURITY_TYPE, SwapSecurity.SECURITY_TYPE };
     for (final String securityType : securityTypes) {
-      noExtrapolationConfig.addPortfolioRequirement(securityType, PRESENT_VALUE,
-          ValueProperties.with(CURVE_CALCULATION_CONFIG, curveConfig).with(CALCULATION_METHOD, SABRFunction.SABR_NO_EXTRAPOLATION).get());
-      noExtrapolationConfig.addPortfolioRequirement(securityType, PRESENT_VALUE_SABR_ALPHA_SENSITIVITY,
-          ValueProperties.with(CURVE_CALCULATION_CONFIG, curveConfig).with(CALCULATION_METHOD, SABRFunction.SABR_NO_EXTRAPOLATION).get());
-      noExtrapolationConfig.addPortfolioRequirement(securityType, PRESENT_VALUE_SABR_NU_SENSITIVITY,
-          ValueProperties.with(CURVE_CALCULATION_CONFIG, curveConfig).with(CALCULATION_METHOD, SABRFunction.SABR_NO_EXTRAPOLATION).get());
-      noExtrapolationConfig.addPortfolioRequirement(securityType, PRESENT_VALUE_SABR_RHO_SENSITIVITY,
-          ValueProperties.with(CURVE_CALCULATION_CONFIG, curveConfig).with(CALCULATION_METHOD, SABRFunction.SABR_NO_EXTRAPOLATION).get());
+      final ValueProperties noExtrapolationProperties = ValueProperties.builder()
+          .with(CURVE_CALCULATION_CONFIG, curveConfig)
+          .with(CALCULATION_METHOD, SABRFunction.SABR_NO_EXTRAPOLATION)
+          .get();
+      final ValueProperties rightExtrapolationProperties = ValueProperties.builder()
+          .with(CURVE_CALCULATION_CONFIG, curveConfig)
+          .with(CALCULATION_METHOD, SABRFunction.SABR_RIGHT_EXTRAPOLATION)
+          .get();
+      noExtrapolationConfig.addPortfolioRequirement(securityType, PRESENT_VALUE, noExtrapolationProperties);
+      noExtrapolationConfig.addPortfolioRequirement(securityType, PRESENT_VALUE_SABR_ALPHA_SENSITIVITY, noExtrapolationProperties);
+      noExtrapolationConfig.addPortfolioRequirement(securityType, PRESENT_VALUE_SABR_NU_SENSITIVITY, noExtrapolationProperties);
+      noExtrapolationConfig.addPortfolioRequirement(securityType, PRESENT_VALUE_SABR_RHO_SENSITIVITY, noExtrapolationProperties);
       noExtrapolationConfig.addPortfolioRequirement(securityType, YIELD_CURVE_NODE_SENSITIVITIES,
-          ValueProperties.with(CURVE, "Discounting").with(CURVE_CALCULATION_CONFIG, curveConfig).with(CALCULATION_METHOD, SABRFunction.SABR_NO_EXTRAPOLATION).get());
+          noExtrapolationProperties.copy().with(CURVE, "Discounting").get());
       noExtrapolationConfig.addPortfolioRequirement(securityType, YIELD_CURVE_NODE_SENSITIVITIES,
-          ValueProperties.with(CURVE, "Forward3M").with(CURVE_CALCULATION_CONFIG, curveConfig).with(CALCULATION_METHOD, SABRFunction.SABR_NO_EXTRAPOLATION).get());
-      rightExtrapolationConfig.addPortfolioRequirement(securityType, PRESENT_VALUE,
-          ValueProperties.with(CURVE_CALCULATION_CONFIG, curveConfig).with(CALCULATION_METHOD, SABRFunction.SABR_RIGHT_EXTRAPOLATION).get());
-      rightExtrapolationConfig.addPortfolioRequirement(securityType, PRESENT_VALUE_SABR_ALPHA_SENSITIVITY,
-          ValueProperties.with(CURVE_CALCULATION_CONFIG, curveConfig).with(CALCULATION_METHOD, SABRFunction.SABR_RIGHT_EXTRAPOLATION).get());
-      rightExtrapolationConfig.addPortfolioRequirement(securityType, PRESENT_VALUE_SABR_NU_SENSITIVITY,
-          ValueProperties.with(CURVE_CALCULATION_CONFIG, curveConfig).with(CALCULATION_METHOD, SABRFunction.SABR_RIGHT_EXTRAPOLATION).get());
-      rightExtrapolationConfig.addPortfolioRequirement(securityType, PRESENT_VALUE_SABR_RHO_SENSITIVITY,
-          ValueProperties.with(CURVE_CALCULATION_CONFIG, curveConfig).with(CALCULATION_METHOD, SABRFunction.SABR_RIGHT_EXTRAPOLATION).get());
+          noExtrapolationProperties.copy().with(CURVE, "Forward3M").get());
+      rightExtrapolationConfig.addPortfolioRequirement(securityType, PRESENT_VALUE, rightExtrapolationProperties);
+      rightExtrapolationConfig.addPortfolioRequirement(securityType, PRESENT_VALUE_SABR_ALPHA_SENSITIVITY, rightExtrapolationProperties);
+      rightExtrapolationConfig.addPortfolioRequirement(securityType, PRESENT_VALUE_SABR_NU_SENSITIVITY, rightExtrapolationProperties);
+      rightExtrapolationConfig.addPortfolioRequirement(securityType, PRESENT_VALUE_SABR_RHO_SENSITIVITY, rightExtrapolationProperties);
       rightExtrapolationConfig.addPortfolioRequirement(securityType, YIELD_CURVE_NODE_SENSITIVITIES,
-          ValueProperties.with(CURVE, "Discounting").with(CURVE_CALCULATION_CONFIG, curveConfig).with(CALCULATION_METHOD, SABRFunction.SABR_RIGHT_EXTRAPOLATION).get());
+          rightExtrapolationProperties.copy().with(CURVE, "Discounting").get());
       rightExtrapolationConfig.addPortfolioRequirement(securityType, YIELD_CURVE_NODE_SENSITIVITIES,
-          ValueProperties.with(CURVE, "Forward3M").with(CURVE_CALCULATION_CONFIG, curveConfig).with(CALCULATION_METHOD, SABRFunction.SABR_RIGHT_EXTRAPOLATION).get());
+          rightExtrapolationProperties.copy().with(CURVE, "Forward3M").get());
     }
     viewDefinition.addViewCalculationConfiguration(noExtrapolationConfig);
     viewDefinition.addViewCalculationConfiguration(rightExtrapolationConfig);
     return viewDefinition;
   }
 
-  private ViewDefinition getSwaptionParityViewDefinition(final String portfolioName) {
+  /**
+   * Creates a view definition for a portfolio containing swaps and swaptions that demonstrates
+   * swap / swaption parity using the SABR model with right extrapolation. This view produces:
+   * <ul>
+   * <li> ValueRequirementNames#PRESENT_VALUE
+   * <li> ValueRequirementNames#PRESENT_VALUE_SABR_ALPHA_SENSITIVITY
+   * <li> ValueRequirementNames#PRESENT_VALUE_SABR_NU_SENSITIVITY
+   * <li> ValueRequirementNames#PRESENT_VALUE_SABR_RHO_SENSITIVITY
+   * <li> ValueRequirementNames#YIELD_CURVE_NODE_SENSITIVITIES
+   * <li> ValueRequirementNames#BUCKETED_PV01
+   * <li> ValueRequirementNames#YIELD_CURVE
+   * </ul>
+   * @param portfolioName The portfolio name
+   * @return The view definition
+   */
+  private ViewDefinition getSyntheticSwaptionParityViewDefinition(final String portfolioName) {
     final UniqueId portfolioId = getPortfolioId(portfolioName).toLatest();
     final ViewDefinition viewDefinition = new ViewDefinition("Swap / Swaption Parity", portfolioId, UserPrincipal.getTestUser());
     viewDefinition.setDefaultCurrency(Currency.USD);
-    viewDefinition.setMaxDeltaCalculationPeriod(500L);
-    viewDefinition.setMaxFullCalculationPeriod(500L);
-    viewDefinition.setMinDeltaCalculationPeriod(500L);
-    viewDefinition.setMinFullCalculationPeriod(500L);
+    viewDefinition.setMaxDeltaCalculationPeriod(MAX_DELTA_PERIOD);
+    viewDefinition.setMaxFullCalculationPeriod(MAX_FULL_PERIOD);
+    viewDefinition.setMinDeltaCalculationPeriod(MIN_DELTA_PERIOD);
+    viewDefinition.setMinFullCalculationPeriod(MIN_FULL_PERIOD);
     final String curveConfig = "DefaultTwoCurveUSDConfig";
     final ViewCalculationConfiguration defaultCalConfig = new ViewCalculationConfiguration(viewDefinition, DEFAULT_CALC_CONFIG);
     viewDefinition.addViewCalculationConfiguration(defaultCalConfig);
 
-    defaultCalConfig.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, PRESENT_VALUE,
-        ValueProperties.with(CURVE_CALCULATION_CONFIG, curveConfig).with(CALCULATION_METHOD, SABRFunction.SABR_RIGHT_EXTRAPOLATION).withOptional(CALCULATION_METHOD).get());
-    defaultCalConfig.addPortfolioRequirement(SwaptionSecurity.SECURITY_TYPE, PRESENT_VALUE,
-        ValueProperties.with(CURVE_CALCULATION_CONFIG, curveConfig).with(CALCULATION_METHOD, SABRFunction.SABR_RIGHT_EXTRAPOLATION).withOptional(CALCULATION_METHOD).get());
+    final ValueProperties sabrProperties = ValueProperties.builder()
+        .with(CURVE_CALCULATION_CONFIG, curveConfig)
+        .with(CALCULATION_METHOD, SABRFunction.SABR_RIGHT_EXTRAPOLATION)
+        .withOptional(CALCULATION_METHOD)
+        .get();
+    final ValueProperties discountingCurveProperties = sabrProperties.copy().with(CURVE, "Discounting").get();
+    final ValueProperties forwardCurveProperties = sabrProperties.copy().with(CURVE, "Forward3M").get();
 
-    defaultCalConfig.addPortfolioRequirement(SwaptionSecurity.SECURITY_TYPE, PRESENT_VALUE_SABR_ALPHA_NODE_SENSITIVITY,
-        ValueProperties.with(CURVE_CALCULATION_CONFIG, curveConfig).with(CALCULATION_METHOD, SABRFunction.SABR_RIGHT_EXTRAPOLATION).withOptional(CALCULATION_METHOD).get());
-    defaultCalConfig.addPortfolioRequirement(SwaptionSecurity.SECURITY_TYPE, PRESENT_VALUE_SABR_RHO_NODE_SENSITIVITY,
-        ValueProperties.with(CURVE_CALCULATION_CONFIG, curveConfig).with(CALCULATION_METHOD, SABRFunction.SABR_RIGHT_EXTRAPOLATION).withOptional(CALCULATION_METHOD).get());
-    defaultCalConfig.addPortfolioRequirement(SwaptionSecurity.SECURITY_TYPE, PRESENT_VALUE_SABR_NU_NODE_SENSITIVITY,
-        ValueProperties.with(CURVE_CALCULATION_CONFIG, curveConfig).with(CALCULATION_METHOD, SABRFunction.SABR_RIGHT_EXTRAPOLATION).withOptional(CALCULATION_METHOD).get());
+    defaultCalConfig.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, PRESENT_VALUE, sabrProperties);
+    defaultCalConfig.addPortfolioRequirement(SwaptionSecurity.SECURITY_TYPE, PRESENT_VALUE, sabrProperties);
 
-    defaultCalConfig.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, YIELD_CURVE_NODE_SENSITIVITIES,
-        ValueProperties.with(CURVE, "Discounting").with(CURVE_CALCULATION_CONFIG, curveConfig).with(CALCULATION_METHOD, SABRFunction.SABR_RIGHT_EXTRAPOLATION).withOptional(CALCULATION_METHOD).get());
-    defaultCalConfig.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, YIELD_CURVE_NODE_SENSITIVITIES,
-        ValueProperties.with(CURVE, "Forward3M").with(CURVE_CALCULATION_CONFIG, curveConfig).with(CALCULATION_METHOD, SABRFunction.SABR_RIGHT_EXTRAPOLATION).withOptional(CALCULATION_METHOD).get());
-    defaultCalConfig.addPortfolioRequirement(SwaptionSecurity.SECURITY_TYPE, YIELD_CURVE_NODE_SENSITIVITIES, ValueProperties.with(CURVE, "Discounting").with(CURVE_CALCULATION_CONFIG, curveConfig)
-        .with(CALCULATION_METHOD, SABRFunction.SABR_RIGHT_EXTRAPOLATION).withOptional(CALCULATION_METHOD).get());
-    defaultCalConfig.addPortfolioRequirement(SwaptionSecurity.SECURITY_TYPE, YIELD_CURVE_NODE_SENSITIVITIES,
-        ValueProperties.with(CURVE, "Forward3M").with(CURVE_CALCULATION_CONFIG, curveConfig).with(CALCULATION_METHOD, SABRFunction.SABR_RIGHT_EXTRAPOLATION).withOptional(CALCULATION_METHOD).get());
+    defaultCalConfig.addPortfolioRequirement(SwaptionSecurity.SECURITY_TYPE, PRESENT_VALUE_SABR_ALPHA_NODE_SENSITIVITY, sabrProperties);
+    defaultCalConfig.addPortfolioRequirement(SwaptionSecurity.SECURITY_TYPE, PRESENT_VALUE_SABR_RHO_NODE_SENSITIVITY, sabrProperties);
+    defaultCalConfig.addPortfolioRequirement(SwaptionSecurity.SECURITY_TYPE, PRESENT_VALUE_SABR_NU_NODE_SENSITIVITY, sabrProperties);
 
-    defaultCalConfig.addPortfolioRequirement(SwaptionSecurity.SECURITY_TYPE, BUCKETED_PV01,
-        ValueProperties.with(CURVE, "Forward3M").with(CURVE_CALCULATION_CONFIG, curveConfig).with(CALCULATION_METHOD, SABRFunction.SABR_RIGHT_EXTRAPOLATION).withOptional(CALCULATION_METHOD).get());
+    defaultCalConfig.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, YIELD_CURVE_NODE_SENSITIVITIES, discountingCurveProperties);
+    defaultCalConfig.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, YIELD_CURVE_NODE_SENSITIVITIES, forwardCurveProperties);
+    defaultCalConfig.addPortfolioRequirement(SwaptionSecurity.SECURITY_TYPE, YIELD_CURVE_NODE_SENSITIVITIES, discountingCurveProperties);
+    defaultCalConfig.addPortfolioRequirement(SwaptionSecurity.SECURITY_TYPE, YIELD_CURVE_NODE_SENSITIVITIES, forwardCurveProperties);
+    defaultCalConfig.addPortfolioRequirement(SwaptionSecurity.SECURITY_TYPE, BUCKETED_PV01, discountingCurveProperties);
+    defaultCalConfig.addPortfolioRequirement(SwaptionSecurity.SECURITY_TYPE, BUCKETED_PV01, forwardCurveProperties);
 
-    defaultCalConfig.addSpecificRequirement(new ValueRequirement(YIELD_CURVE, ComputationTargetSpecification.of(Currency.USD), ValueProperties.with(CURVE, "Discounting")
-        .with(CURVE_CALCULATION_METHOD, PAR_RATE_STRING).with(CURVE_CALCULATION_CONFIG, curveConfig).get()));
-    defaultCalConfig.addSpecificRequirement(new ValueRequirement(YIELD_CURVE, ComputationTargetSpecification.of(Currency.USD), ValueProperties.with(CURVE, "Forward3M")
-        .with(CURVE_CALCULATION_METHOD, PAR_RATE_STRING).with(CURVE_CALCULATION_CONFIG, curveConfig).get()));
+    final ComputationTargetSpecification currencyTarget = ComputationTargetSpecification.of(Currency.USD);
+    defaultCalConfig.addSpecificRequirement(new ValueRequirement(YIELD_CURVE, currencyTarget,
+        ValueProperties.with(CURVE, "Discounting").with(CURVE_CALCULATION_METHOD, PAR_RATE_STRING).with(CURVE_CALCULATION_CONFIG, curveConfig).get()));
+    defaultCalConfig.addSpecificRequirement(new ValueRequirement(YIELD_CURVE, currencyTarget,
+        ValueProperties.with(CURVE, "Forward3M").with(CURVE_CALCULATION_METHOD, PAR_RATE_STRING).with(CURVE_CALCULATION_CONFIG, curveConfig).get()));
     return viewDefinition;
   }
 
-  private ViewDefinition getEURFixedIncomeViewDefinition(final String portfolioName, final String viewName) {
+  /**
+   * Creates a view definition for a portfolio of EUR swaps and interest rate futures. The view definition has
+   * two column sets, one showing results when a discounting, 3m Euribor and 6m Euribor curve configuration is used
+   * that does not contain futures, and the other showing an equivalent configuration with 3m interest rate futures
+   * in the 3m Euribor curve.<p>
+   * This view produces:
+   * <ul>
+   * <li> ValueRequirementNames#PRESENT_VALUE
+   * <li> ValueRequirementNames#YIELD_CURVE_SENSITIVITIES
+   * </ul>
+   * @param portfolioName The portfolio name
+   * @param viewName The view name
+   * @return The view definition
+   */
+  private ViewDefinition getSyntheticEurFixedIncomeViewDefinition(final String portfolioName, final String viewName) {
     final UniqueId portfolioId = getPortfolioId(portfolioName).toLatest();
     final ViewDefinition viewDefinition = new ViewDefinition(viewName, portfolioId, UserPrincipal.getTestUser());
     viewDefinition.setDefaultCurrency(Currency.EUR);
-    viewDefinition.setMaxDeltaCalculationPeriod(500L);
-    viewDefinition.setMaxFullCalculationPeriod(500L);
-    viewDefinition.setMinDeltaCalculationPeriod(500L);
-    viewDefinition.setMinFullCalculationPeriod(500L);
+    viewDefinition.setMaxDeltaCalculationPeriod(MAX_DELTA_PERIOD);
+    viewDefinition.setMaxFullCalculationPeriod(MAX_FULL_PERIOD);
+    viewDefinition.setMinDeltaCalculationPeriod(MIN_DELTA_PERIOD);
+    viewDefinition.setMinFullCalculationPeriod(MIN_FULL_PERIOD);
     final String curveConfig1 = "EUR-OIS-3M-6M";
     final String curveConfig2 = "EUR-OIS-3MFut-6M";
     final ViewCalculationConfiguration firstConfig = new ViewCalculationConfiguration(viewDefinition, "EUR-OIS-3M-6M");
-    firstConfig.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, PRESENT_VALUE, ValueProperties.with(CURVE_CALCULATION_CONFIG, curveConfig1).get());
-    firstConfig.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, YIELD_CURVE_NODE_SENSITIVITIES, ValueProperties.with(CURVE, "Discounting").with(CURVE_CALCULATION_CONFIG, curveConfig1).get());
-    firstConfig.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, YIELD_CURVE_NODE_SENSITIVITIES, ValueProperties.with(CURVE, "Forward3M").with(CURVE_CALCULATION_CONFIG, curveConfig1).get());
-    firstConfig.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, YIELD_CURVE_NODE_SENSITIVITIES, ValueProperties.with(CURVE, "Forward6M").with(CURVE_CALCULATION_CONFIG, curveConfig1).get());
-    firstConfig.addSpecificRequirement(new ValueRequirement(YIELD_CURVE, ComputationTargetSpecification.of(Currency.EUR), ValueProperties.with(CURVE, "Discounting")
-        .with(CURVE_CALCULATION_METHOD, PAR_RATE_STRING).with(CURVE_CALCULATION_CONFIG, curveConfig1).get()));
-    firstConfig.addSpecificRequirement(new ValueRequirement(YIELD_CURVE, ComputationTargetSpecification.of(Currency.EUR), ValueProperties.with(CURVE, "Forward3M")
-        .with(CURVE_CALCULATION_METHOD, PAR_RATE_STRING).with(CURVE_CALCULATION_CONFIG, curveConfig1).get()));
-    firstConfig.addSpecificRequirement(new ValueRequirement(YIELD_CURVE, ComputationTargetSpecification.of(Currency.EUR), ValueProperties.with(CURVE, "Forward6M")
-        .with(CURVE_CALCULATION_METHOD, PAR_RATE_STRING).with(CURVE_CALCULATION_CONFIG, curveConfig1).get()));
+    final ComputationTargetSpecification currencyTarget = ComputationTargetSpecification.of(Currency.EUR);
+    firstConfig.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, PRESENT_VALUE,
+        ValueProperties.with(CURVE_CALCULATION_CONFIG, curveConfig1).get());
+    firstConfig.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, YIELD_CURVE_NODE_SENSITIVITIES,
+        ValueProperties.with(CURVE, "Discounting").with(CURVE_CALCULATION_CONFIG, curveConfig1).get());
+    firstConfig.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, YIELD_CURVE_NODE_SENSITIVITIES,
+        ValueProperties.with(CURVE, "Forward3M").with(CURVE_CALCULATION_CONFIG, curveConfig1).get());
+    firstConfig.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, YIELD_CURVE_NODE_SENSITIVITIES,
+        ValueProperties.with(CURVE, "Forward6M").with(CURVE_CALCULATION_CONFIG, curveConfig1).get());
+    firstConfig.addSpecificRequirement(new ValueRequirement(YIELD_CURVE, currencyTarget,
+        ValueProperties.with(CURVE, "Discounting").with(CURVE_CALCULATION_METHOD, PAR_RATE_STRING).with(CURVE_CALCULATION_CONFIG, curveConfig1).get()));
+    firstConfig.addSpecificRequirement(new ValueRequirement(YIELD_CURVE, currencyTarget,
+        ValueProperties.with(CURVE, "Forward3M").with(CURVE_CALCULATION_METHOD, PAR_RATE_STRING).with(CURVE_CALCULATION_CONFIG, curveConfig1).get()));
+    firstConfig.addSpecificRequirement(new ValueRequirement(YIELD_CURVE, currencyTarget,
+        ValueProperties.with(CURVE, "Forward6M").with(CURVE_CALCULATION_METHOD, PAR_RATE_STRING).with(CURVE_CALCULATION_CONFIG, curveConfig1).get()));
     viewDefinition.addViewCalculationConfiguration(firstConfig);
-    firstConfig.addPortfolioRequirement(FutureSecurity.SECURITY_TYPE, PRESENT_VALUE, ValueProperties.with(CURVE_CALCULATION_CONFIG, curveConfig1).get());
-    firstConfig.addPortfolioRequirement(FutureSecurity.SECURITY_TYPE, YIELD_CURVE_NODE_SENSITIVITIES, ValueProperties.with(CURVE, "Discounting").with(CURVE_CALCULATION_CONFIG, curveConfig1).get());
-    firstConfig.addPortfolioRequirement(FutureSecurity.SECURITY_TYPE, YIELD_CURVE_NODE_SENSITIVITIES, ValueProperties.with(CURVE, "Forward3M").with(CURVE_CALCULATION_CONFIG, curveConfig1).get());
-    firstConfig.addPortfolioRequirement(FutureSecurity.SECURITY_TYPE, YIELD_CURVE_NODE_SENSITIVITIES, ValueProperties.with(CURVE, "Forward6M").with(CURVE_CALCULATION_CONFIG, curveConfig1).get());
+    firstConfig.addPortfolioRequirement(FutureSecurity.SECURITY_TYPE, PRESENT_VALUE,
+        ValueProperties.with(CURVE_CALCULATION_CONFIG, curveConfig1).get());
+    firstConfig.addPortfolioRequirement(FutureSecurity.SECURITY_TYPE, YIELD_CURVE_NODE_SENSITIVITIES,
+        ValueProperties.with(CURVE, "Discounting").with(CURVE_CALCULATION_CONFIG, curveConfig1).get());
+    firstConfig.addPortfolioRequirement(FutureSecurity.SECURITY_TYPE, YIELD_CURVE_NODE_SENSITIVITIES,
+        ValueProperties.with(CURVE, "Forward3M").with(CURVE_CALCULATION_CONFIG, curveConfig1).get());
+    firstConfig.addPortfolioRequirement(FutureSecurity.SECURITY_TYPE, YIELD_CURVE_NODE_SENSITIVITIES,
+        ValueProperties.with(CURVE, "Forward6M").with(CURVE_CALCULATION_CONFIG, curveConfig1).get());
     viewDefinition.addViewCalculationConfiguration(firstConfig);
     final ViewCalculationConfiguration secondConfig = new ViewCalculationConfiguration(viewDefinition, "EUR-OIS-3MFut-6M");
-    secondConfig.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, PRESENT_VALUE, ValueProperties.with(CURVE_CALCULATION_CONFIG, curveConfig2).get());
-    secondConfig.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, YIELD_CURVE_NODE_SENSITIVITIES, ValueProperties.with(CURVE, "Discounting").with(CURVE_CALCULATION_CONFIG, curveConfig2).get());
-    secondConfig.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, YIELD_CURVE_NODE_SENSITIVITIES, ValueProperties.with(CURVE, "Forward3MFut").with(CURVE_CALCULATION_CONFIG, curveConfig2).get());
-    secondConfig.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, YIELD_CURVE_NODE_SENSITIVITIES, ValueProperties.with(CURVE, "Forward6M").with(CURVE_CALCULATION_CONFIG, curveConfig2).get());
-    secondConfig.addSpecificRequirement(new ValueRequirement(YIELD_CURVE, ComputationTargetSpecification.of(Currency.EUR), ValueProperties.with(CURVE, "Discounting")
-        .with(CURVE_CALCULATION_METHOD, PAR_RATE_STRING).with(CURVE_CALCULATION_CONFIG, curveConfig2).get()));
-    secondConfig.addSpecificRequirement(new ValueRequirement(YIELD_CURVE, ComputationTargetSpecification.of(Currency.EUR), ValueProperties.with(CURVE, "Forward3MFut")
-        .with(CURVE_CALCULATION_METHOD, PAR_RATE_STRING).with(CURVE_CALCULATION_CONFIG, curveConfig2).get()));
-    secondConfig.addSpecificRequirement(new ValueRequirement(YIELD_CURVE, ComputationTargetSpecification.of(Currency.EUR), ValueProperties.with(CURVE, "Forward6M")
-        .with(CURVE_CALCULATION_METHOD, PAR_RATE_STRING).with(CURVE_CALCULATION_CONFIG, curveConfig2).get()));
+    secondConfig.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, PRESENT_VALUE,
+        ValueProperties.with(CURVE_CALCULATION_CONFIG, curveConfig2).get());
+    secondConfig.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, YIELD_CURVE_NODE_SENSITIVITIES,
+        ValueProperties.with(CURVE, "Discounting").with(CURVE_CALCULATION_CONFIG, curveConfig2).get());
+    secondConfig.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, YIELD_CURVE_NODE_SENSITIVITIES,
+        ValueProperties.with(CURVE, "Forward3MFut").with(CURVE_CALCULATION_CONFIG, curveConfig2).get());
+    secondConfig.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, YIELD_CURVE_NODE_SENSITIVITIES,
+        ValueProperties.with(CURVE, "Forward6M").with(CURVE_CALCULATION_CONFIG, curveConfig2).get());
+    secondConfig.addSpecificRequirement(new ValueRequirement(YIELD_CURVE, currencyTarget,
+        ValueProperties.with(CURVE, "Discounting").with(CURVE_CALCULATION_METHOD, PAR_RATE_STRING).with(CURVE_CALCULATION_CONFIG, curveConfig2).get()));
+    secondConfig.addSpecificRequirement(new ValueRequirement(YIELD_CURVE, currencyTarget,
+        ValueProperties.with(CURVE, "Forward3MFut").with(CURVE_CALCULATION_METHOD, PAR_RATE_STRING).with(CURVE_CALCULATION_CONFIG, curveConfig2).get()));
+    secondConfig.addSpecificRequirement(new ValueRequirement(YIELD_CURVE, currencyTarget,
+        ValueProperties.with(CURVE, "Forward6M").with(CURVE_CALCULATION_METHOD, PAR_RATE_STRING).with(CURVE_CALCULATION_CONFIG, curveConfig2).get()));
     viewDefinition.addViewCalculationConfiguration(secondConfig);
-    secondConfig.addPortfolioRequirement(FutureSecurity.SECURITY_TYPE, PRESENT_VALUE, ValueProperties.with(CURVE_CALCULATION_CONFIG, curveConfig2).get());
-    secondConfig.addPortfolioRequirement(FutureSecurity.SECURITY_TYPE, YIELD_CURVE_NODE_SENSITIVITIES, ValueProperties.with(CURVE, "Discounting").with(CURVE_CALCULATION_CONFIG, curveConfig2).get());
-    secondConfig.addPortfolioRequirement(FutureSecurity.SECURITY_TYPE, YIELD_CURVE_NODE_SENSITIVITIES, ValueProperties.with(CURVE, "Forward3MFut").with(CURVE_CALCULATION_CONFIG, curveConfig2).get());
-    secondConfig.addPortfolioRequirement(FutureSecurity.SECURITY_TYPE, YIELD_CURVE_NODE_SENSITIVITIES, ValueProperties.with(CURVE, "Forward6M").with(CURVE_CALCULATION_CONFIG, curveConfig2).get());
+    secondConfig.addPortfolioRequirement(FutureSecurity.SECURITY_TYPE, PRESENT_VALUE,
+        ValueProperties.with(CURVE_CALCULATION_CONFIG, curveConfig2).get());
+    secondConfig.addPortfolioRequirement(FutureSecurity.SECURITY_TYPE, YIELD_CURVE_NODE_SENSITIVITIES,
+        ValueProperties.with(CURVE, "Discounting").with(CURVE_CALCULATION_CONFIG, curveConfig2).get());
+    secondConfig.addPortfolioRequirement(FutureSecurity.SECURITY_TYPE, YIELD_CURVE_NODE_SENSITIVITIES,
+        ValueProperties.with(CURVE, "Forward3MFut").with(CURVE_CALCULATION_CONFIG, curveConfig2).get());
+    secondConfig.addPortfolioRequirement(FutureSecurity.SECURITY_TYPE, YIELD_CURVE_NODE_SENSITIVITIES,
+        ValueProperties.with(CURVE, "Forward6M").with(CURVE_CALCULATION_CONFIG, curveConfig2).get());
     final ViewCalculationConfiguration thirdConfig = new ViewCalculationConfiguration(viewDefinition, "STIR futures MtM");
-    thirdConfig.addPortfolioRequirement(FutureSecurity.SECURITY_TYPE, PRESENT_VALUE, ValueProperties.with(CALCULATION_METHOD, "MarkToMarket").get());
+    thirdConfig.addPortfolioRequirement(FutureSecurity.SECURITY_TYPE, PRESENT_VALUE,
+        ValueProperties.with(CALCULATION_METHOD, "MarkToMarket").get());
     viewDefinition.addViewCalculationConfiguration(firstConfig);
     viewDefinition.addViewCalculationConfiguration(secondConfig);
     viewDefinition.addViewCalculationConfiguration(thirdConfig);
     return viewDefinition;
   }
 
-  private ViewDefinition getFXForwardViewDefinition(final String portfolioName, final String viewName) {
+  /**
+   * Creates a view definition for a portfolio of FX forwards with two column sets showing the results
+   * of calculations by discounting with yield curves implied from FX forwards and of using the
+   * FX forward quotes directly.<p>
+   * This view produces:
+   * <ul>
+   * <li> ValueRequirementNames#PRESENT_VALUE
+   * <li> ValueRequirementNames#FX_CURRENCY_EXPOSURE
+   * </ul>
+   * @param portfolioName The portfolio name
+   * @param viewName The view name
+   * @return The view definition
+   */
+  private ViewDefinition getSyntheticFxForwardViewDefinition(final String portfolioName, final String viewName) {
     final UniqueId portfolioId = getPortfolioId(portfolioName).toLatest();
     final ViewDefinition viewDefinition = new ViewDefinition(viewName, portfolioId, UserPrincipal.getTestUser());
     viewDefinition.setDefaultCurrency(Currency.USD);
-    viewDefinition.setMaxDeltaCalculationPeriod(500L);
-    viewDefinition.setMaxFullCalculationPeriod(500L);
-    viewDefinition.setMinDeltaCalculationPeriod(500L);
-    viewDefinition.setMinFullCalculationPeriod(500L);
+    viewDefinition.setMaxDeltaCalculationPeriod(MAX_DELTA_PERIOD);
+    viewDefinition.setMaxFullCalculationPeriod(MAX_FULL_PERIOD);
+    viewDefinition.setMinDeltaCalculationPeriod(MIN_DELTA_PERIOD);
+    viewDefinition.setMinFullCalculationPeriod(MIN_FULL_PERIOD);
     final ViewCalculationConfiguration calculationConfig1 = new ViewCalculationConfiguration(viewDefinition, "FX Implied Curves");
     final ViewCalculationConfiguration calculationConfig2 = new ViewCalculationConfiguration(viewDefinition, "FX Forward Points");
-    calculationConfig1.addPortfolioRequirement(FXForwardSecurity.SECURITY_TYPE, PRESENT_VALUE,
-        ValueProperties.with(CALCULATION_METHOD, CalculationPropertyNamesAndValues.DISCOUNTING).with(CURRENCY, Currency.USD.getCode()).get());
-    calculationConfig2.addPortfolioRequirement(FXForwardSecurity.SECURITY_TYPE, PRESENT_VALUE,
-        ValueProperties.with(CALCULATION_METHOD, CalculationPropertyNamesAndValues.FORWARD_POINTS).with(CURRENCY, Currency.USD.getCode()).get());
-    calculationConfig1.addPortfolioRequirement(FXForwardSecurity.SECURITY_TYPE, FX_CURRENCY_EXPOSURE, ValueProperties.with(CALCULATION_METHOD, CalculationPropertyNamesAndValues.DISCOUNTING).get());
-    calculationConfig2.addPortfolioRequirement(FXForwardSecurity.SECURITY_TYPE, FX_CURRENCY_EXPOSURE, ValueProperties.with(CALCULATION_METHOD, CalculationPropertyNamesAndValues.FORWARD_POINTS).get());
+    final ValueProperties discountingProperties = ValueProperties.builder()
+        .with(CALCULATION_METHOD, DISCOUNTING)
+        .get();
+    final ValueProperties forwardPointsProperties = ValueProperties.builder()
+        .with(CALCULATION_METHOD, FORWARD_POINTS)
+        .get();
+    calculationConfig1.addPortfolioRequirement(FXForwardSecurity.SECURITY_TYPE, PRESENT_VALUE, discountingProperties.copy().with(CURRENCY, "USD").get());
+    calculationConfig2.addPortfolioRequirement(FXForwardSecurity.SECURITY_TYPE, PRESENT_VALUE, forwardPointsProperties.copy().with(CURRENCY, "USD").get());
+    calculationConfig1.addPortfolioRequirement(FXForwardSecurity.SECURITY_TYPE, FX_CURRENCY_EXPOSURE, discountingProperties);
+    calculationConfig2.addPortfolioRequirement(FXForwardSecurity.SECURITY_TYPE, FX_CURRENCY_EXPOSURE, forwardPointsProperties);
     viewDefinition.addViewCalculationConfiguration(calculationConfig1);
     viewDefinition.addViewCalculationConfiguration(calculationConfig2);
     return viewDefinition;
   }
 
-  private ViewDefinition getEquityOptionViewDefinition(final String portfolioName, final String viewName) {
+  /**
+   * Creates a view definition for an index future portfolio producing:
+   * <ul>
+   * <li> ValueRequirementNames#PRESENT_VALUE
+   * <li> ValueRequirementNames#PV01
+   * <li> ValueRequirementNames#VALUE_DELTA
+   * <li> ValueRequirementNames#VALUE_RHO
+   * <li> ValueRequirementNames#FORWARD
+   * </ul>
+   * @param portfolioName The portfolio name
+   * @param viewName The view name
+   * @return The view definition
+   */
+  private ViewDefinition getSyntheticFutureViewDefinition(final String portfolioName, final String viewName) {
     final UniqueId portfolioId = getPortfolioId(portfolioName).toLatest();
     final ViewDefinition viewDefinition = new ViewDefinition(viewName, portfolioId, UserPrincipal.getTestUser());
     viewDefinition.setDefaultCurrency(Currency.USD);
-    viewDefinition.setMaxDeltaCalculationPeriod(500L);
-    viewDefinition.setMaxFullCalculationPeriod(500L);
-    viewDefinition.setMinDeltaCalculationPeriod(500L);
-    viewDefinition.setMinFullCalculationPeriod(500L);
-    final ViewCalculationConfiguration defaultCalcConfig = new ViewCalculationConfiguration(viewDefinition, DEFAULT_CALC_CONFIG);
-    final ValueProperties constraints = ValueProperties.with(ValuePropertyNames.CURVE_CALCULATION_METHOD, MarketInstrumentImpliedYieldCurveFunction.PAR_RATE_STRING).get();
-    defaultCalcConfig.addPortfolioRequirement(EquityOptionSecurity.SECURITY_TYPE, VALUE_DELTA, constraints);
-    defaultCalcConfig.addPortfolioRequirement(EquitySecurity.SECURITY_TYPE, VALUE_DELTA, constraints);
-    defaultCalcConfig.addPortfolioRequirement(EquityOptionSecurity.SECURITY_TYPE, DELTA, constraints);
-    defaultCalcConfig.addPortfolioRequirement(EquitySecurity.SECURITY_TYPE, DELTA, constraints);
-    defaultCalcConfig.addPortfolioRequirement(EquityOptionSecurity.SECURITY_TYPE, GAMMA, constraints);
-    defaultCalcConfig.addPortfolioRequirement(EquitySecurity.SECURITY_TYPE, GAMMA, constraints);
-    defaultCalcConfig.addPortfolioRequirement(EquityOptionSecurity.SECURITY_TYPE, THETA, constraints);
-    defaultCalcConfig.addPortfolioRequirement(EquitySecurity.SECURITY_TYPE, THETA, constraints);
-    defaultCalcConfig.addPortfolioRequirement(EquityOptionSecurity.SECURITY_TYPE, RHO, constraints);
-    defaultCalcConfig.addPortfolioRequirement(EquitySecurity.SECURITY_TYPE, RHO, constraints);
-    defaultCalcConfig.addPortfolioRequirement(EquityOptionSecurity.SECURITY_TYPE, VEGA, constraints);
-    defaultCalcConfig.addPortfolioRequirement(EquitySecurity.SECURITY_TYPE, VEGA, constraints);
-    viewDefinition.addViewCalculationConfiguration(defaultCalcConfig);
-    return viewDefinition;
-  }
-
-  private ViewDefinition getFutureViewDefinition(final String portfolioName, final String viewName) {
-    final UniqueId portfolioId = getPortfolioId(portfolioName).toLatest();
-    final ViewDefinition viewDefinition = new ViewDefinition(viewName, portfolioId, UserPrincipal.getTestUser());
-    viewDefinition.setDefaultCurrency(Currency.USD);
-    viewDefinition.setMaxDeltaCalculationPeriod(500L);
-    viewDefinition.setMaxFullCalculationPeriod(500L);
-    viewDefinition.setMinDeltaCalculationPeriod(500L);
-    viewDefinition.setMinFullCalculationPeriod(500L);
+    viewDefinition.setMaxDeltaCalculationPeriod(MAX_DELTA_PERIOD);
+    viewDefinition.setMaxFullCalculationPeriod(MAX_FULL_PERIOD);
+    viewDefinition.setMinDeltaCalculationPeriod(MIN_DELTA_PERIOD);
+    viewDefinition.setMinFullCalculationPeriod(MIN_FULL_PERIOD);
     final ViewCalculationConfiguration defaultCalConfig = new ViewCalculationConfiguration(viewDefinition, DEFAULT_CALC_CONFIG);
-    addValueRequirements(defaultCalConfig, IndexFutureSecurity.SECURITY_TYPE, new String[] {PRESENT_VALUE, PV01, VALUE_DELTA, VALUE_RHO, FORWARD });
+    addValueRequirements(defaultCalConfig, FutureSecurity.SECURITY_TYPE, new String[] {PRESENT_VALUE, PV01, VALUE_DELTA, VALUE_RHO, FORWARD });
     viewDefinition.addViewCalculationConfiguration(defaultCalConfig);
     return viewDefinition;
   }
 
-  private ViewDefinition getBondViewDefinition(final String portfolioName, final String viewName) {
+  /**
+   * Creates a view definition for a bond portfolio that showing the results of calculations that
+   * use yield curves and the bond yield directly that produces:
+   * <ul>
+   * <li> ValueRequirementNames#CLEAN_PRICE
+   * <li> ValueRequirementNames#MACAULAY_DURATION
+   * <li> ValueRequirementNames#MODIFIED_DURATION
+   * <li> ValueRequirementNames#PRESENT_VALUE
+   * <li> ValueRequirementNames#YTM
+   * </ul>
+   * @param portfolioName The portfolio name
+   * @param viewName The view name
+   * @return The view definition
+   */
+  private ViewDefinition getSyntheticBondViewDefinition(final String portfolioName, final String viewName) {
     final UniqueId portfolioId = getPortfolioId(portfolioName).toLatest();
     final ViewDefinition viewDefinition = new ViewDefinition(viewName, portfolioId, UserPrincipal.getTestUser());
     viewDefinition.setDefaultCurrency(Currency.USD);
-    viewDefinition.setMaxDeltaCalculationPeriod(500L);
-    viewDefinition.setMaxFullCalculationPeriod(500L);
-    viewDefinition.setMinDeltaCalculationPeriod(500L);
-    viewDefinition.setMinFullCalculationPeriod(500L);
+    viewDefinition.setMaxDeltaCalculationPeriod(MAX_DELTA_PERIOD);
+    viewDefinition.setMaxFullCalculationPeriod(MAX_FULL_PERIOD);
+    viewDefinition.setMinDeltaCalculationPeriod(MIN_DELTA_PERIOD);
+    viewDefinition.setMinFullCalculationPeriod(MIN_FULL_PERIOD);
     ViewCalculationConfiguration config = new ViewCalculationConfiguration(viewDefinition, "Curves");
-    config.addPortfolioRequirement(BondSecurity.SECURITY_TYPE, CLEAN_PRICE, ValueProperties.with(CALCULATION_METHOD, BondFunction.FROM_CURVES_METHOD).get());
-    config.addPortfolioRequirement(BondSecurity.SECURITY_TYPE, MACAULAY_DURATION, ValueProperties.with(CALCULATION_METHOD, BondFunction.FROM_CURVES_METHOD).get());
-    config.addPortfolioRequirement(BondSecurity.SECURITY_TYPE, MODIFIED_DURATION, ValueProperties.with(CALCULATION_METHOD, BondFunction.FROM_CURVES_METHOD).get());
-    config.addPortfolioRequirement(BondSecurity.SECURITY_TYPE, PRESENT_VALUE, ValueProperties.with(CALCULATION_METHOD, BondFunction.FROM_CURVES_METHOD).get());
-    config.addPortfolioRequirement(BondSecurity.SECURITY_TYPE, YTM, ValueProperties.with(CALCULATION_METHOD, BondFunction.FROM_CURVES_METHOD).get());
+    final ValueProperties curvesProperty = ValueProperties.with(CALCULATION_METHOD, BondFunction.FROM_CURVES_METHOD).get();
+    final ValueProperties yieldsProperty = ValueProperties.with(CALCULATION_METHOD, BondFunction.FROM_YIELD_METHOD).get();
+    config.addPortfolioRequirement(BondSecurity.SECURITY_TYPE, CLEAN_PRICE, curvesProperty);
+    config.addPortfolioRequirement(BondSecurity.SECURITY_TYPE, MACAULAY_DURATION, curvesProperty);
+    config.addPortfolioRequirement(BondSecurity.SECURITY_TYPE, MODIFIED_DURATION, curvesProperty);
+    config.addPortfolioRequirement(BondSecurity.SECURITY_TYPE, PRESENT_VALUE, curvesProperty);
+    config.addPortfolioRequirement(BondSecurity.SECURITY_TYPE, YTM, curvesProperty);
     viewDefinition.addViewCalculationConfiguration(config);
     config = new ViewCalculationConfiguration(viewDefinition, "Yields");
-    config.addPortfolioRequirement(BondSecurity.SECURITY_TYPE, CLEAN_PRICE, ValueProperties.with(CALCULATION_METHOD, BondFunction.FROM_YIELD_METHOD).get());
-    config.addPortfolioRequirement(BondSecurity.SECURITY_TYPE, MACAULAY_DURATION, ValueProperties.with(CALCULATION_METHOD, BondFunction.FROM_YIELD_METHOD).get());
-    config.addPortfolioRequirement(BondSecurity.SECURITY_TYPE, MODIFIED_DURATION, ValueProperties.with(CALCULATION_METHOD, BondFunction.FROM_YIELD_METHOD).get());
-    config.addPortfolioRequirement(BondSecurity.SECURITY_TYPE, PRESENT_VALUE, ValueProperties.with(CALCULATION_METHOD, BondFunction.FROM_YIELD_METHOD).get());
-    config.addPortfolioRequirement(BondSecurity.SECURITY_TYPE, YTM, ValueProperties.with(CALCULATION_METHOD, BondFunction.FROM_YIELD_METHOD).get());
+    config.addPortfolioRequirement(BondSecurity.SECURITY_TYPE, CLEAN_PRICE, yieldsProperty);
+    config.addPortfolioRequirement(BondSecurity.SECURITY_TYPE, MACAULAY_DURATION, yieldsProperty);
+    config.addPortfolioRequirement(BondSecurity.SECURITY_TYPE, MODIFIED_DURATION, yieldsProperty);
     viewDefinition.addViewCalculationConfiguration(config);
     return viewDefinition;
   }
 
   /**
-   * Creates a view definition for bond total return swaps that requests the present value,
-   * funding and asset leg present values, PV01 for all relevant curves, gamma PV01,
-   * the details of the funding leg, the details of the bond, the bond equivalent value 
-   * and the notional.
+   * Creates a view definition for the OIS portfolio that produces PV, par rate, PV01 and bucketed PV01.
    * @param portfolioName The portfolio name
    * @param viewName The view name
    * @return The view definition
    */
-  private ViewDefinition getBondTotalReturnSwapViewDefinition(final String portfolioName, final String viewName) {
+  private ViewDefinition getSyntheticOisViewDefinition(final String portfolioName, final String viewName) {
     final UniqueId portfolioId = getPortfolioId(portfolioName).toLatest();
     final ViewDefinition viewDefinition = new ViewDefinition(viewName, portfolioId, UserPrincipal.getTestUser());
     viewDefinition.setDefaultCurrency(Currency.USD);
-    viewDefinition.setMaxDeltaCalculationPeriod(500L);
-    viewDefinition.setMaxFullCalculationPeriod(500L);
-    viewDefinition.setMinDeltaCalculationPeriod(500L);
-    viewDefinition.setMinFullCalculationPeriod(500L);
-    final ViewCalculationConfiguration defaultCalculationConfig = new ViewCalculationConfiguration(viewDefinition, DEFAULT_CALC_CONFIG);
-    final ValueProperties properties = ValueProperties.builder()
-        .with(PROPERTY_CURVE_TYPE, "Discounting")
-        .with(CURVE_EXPOSURES, "Bond Exposures")
-        .get();
-    defaultCalculationConfig.addPortfolioRequirement(BondTotalReturnSwapSecurity.SECURITY_TYPE, PRESENT_VALUE, properties);
-    defaultCalculationConfig.addPortfolioRequirement(BondTotalReturnSwapSecurity.SECURITY_TYPE, FUNDING_LEG_PV, properties);
-    defaultCalculationConfig.addPortfolioRequirement(BondTotalReturnSwapSecurity.SECURITY_TYPE, FUNDING_LEG_DETAILS, properties);
-    defaultCalculationConfig.addPortfolioRequirement(BondTotalReturnSwapSecurity.SECURITY_TYPE, ASSET_LEG_PV, properties);
-    defaultCalculationConfig.addPortfolioRequirement(BondTotalReturnSwapSecurity.SECURITY_TYPE, GAMMA_PV01, properties);
-    defaultCalculationConfig.addPortfolioRequirement(BondTotalReturnSwapSecurity.SECURITY_TYPE, BOND_DETAILS, properties);
-    defaultCalculationConfig.addPortfolioRequirement(BondTotalReturnSwapSecurity.SECURITY_TYPE, NOTIONAL, ValueProperties.builder().get());
-    final ValueProperties thetaProperties = properties.copy()
-        .with(PROPERTY_DAYS_TO_MOVE_FORWARD, "1")
-        .with(PROPERTY_THETA_CALCULATION_METHOD, THETA_CONSTANT_SPREAD)
-        .get();
-    defaultCalculationConfig.addPortfolioRequirement(BondTotalReturnSwapSecurity.SECURITY_TYPE, VALUE_THETA, thetaProperties);
-    final String[] curveNames = new String[] {"USD Discounting", "USD 3M Forward Ibor", "UG Government Bond" };
-    final String[] sensitivityCurrencies = new String[] {"USD", "USD", "UGX" };
-    for (int i = 0; i < curveNames.length; i++) {
-      final ValueProperties curveProperties = properties.copy()
-          .with(CURVE, curveNames[i])
-          .with(CURVE_SENSITIVITY_CURRENCY, sensitivityCurrencies[i])
-          .with(CURRENCY, sensitivityCurrencies[i])
-          .get();
-      defaultCalculationConfig.addPortfolioRequirement(BondTotalReturnSwapSecurity.SECURITY_TYPE, PV01, curveProperties);
+    viewDefinition.setMaxDeltaCalculationPeriod(MAX_DELTA_PERIOD);
+    viewDefinition.setMaxFullCalculationPeriod(MAX_FULL_PERIOD);
+    viewDefinition.setMinDeltaCalculationPeriod(MIN_DELTA_PERIOD);
+    viewDefinition.setMinFullCalculationPeriod(MIN_FULL_PERIOD);
+    final ViewCalculationConfiguration defaultCalcConfig = new ViewCalculationConfiguration(viewDefinition, DEFAULT_CALC_CONFIG);
+    defaultCalcConfig.addPortfolioRequirementName(SwapSecurity.SECURITY_TYPE, PAR_RATE);
+    defaultCalcConfig.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, PRESENT_VALUE,
+        ValueProperties.with(CurrencyConversionFunction.ORIGINAL_CURRENCY, "Default").withOptional(CurrencyConversionFunction.ORIGINAL_CURRENCY).get());
+    defaultCalcConfig.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, PRESENT_VALUE, ValueProperties.with(CURRENCY, "USD").get());
+    final MergedOutput discountingPV01Output = new MergedOutput("PV01", MergedOutputAggregationType.LINEAR);
+    final MergedOutput discountingYCNSOutput = new MergedOutput("Bucketed PV01", MergedOutputAggregationType.LINEAR);
+    for (int i = 0; i < OIS_CURRENCIES.length; i++) {
+      final Currency ccy = OIS_CURRENCIES[i];
+      final String ccyCode = ccy.getCode();
+      discountingPV01Output.addMergedRequirement(PV01, ValueProperties.with(CURVE, "Discounting").with(CURVE_CURRENCY, ccyCode).get());
+      discountingYCNSOutput.addMergedRequirement(BUCKETED_PV01, ValueProperties.with(CURVE, "Discounting").with(CURVE_CURRENCY, ccyCode).get());
+      defaultCalcConfig.addSpecificRequirement(new ValueRequirement(YIELD_CURVE, ComputationTargetSpecification.of(ccy),
+          ValueProperties.builder().with(CURVE, "Discounting").with(CURVE_CALCULATION_CONFIG, CURVE_CONFIG_NAMES[i]).get()));
     }
-    viewDefinition.addViewCalculationConfiguration(defaultCalculationConfig);
+    defaultCalcConfig.addMergedOutput(discountingPV01Output);
+    defaultCalcConfig.addMergedOutput(discountingYCNSOutput);
+    viewDefinition.addViewCalculationConfiguration(defaultCalcConfig);
     return viewDefinition;
   }
 
   /**
-   * Creates a view definition for equity total return swaps that requests the present value,
-   * funding and asset leg present values, PV01 for all relevant curves, value delta, gamma PV01
-   * the details of the funding leg and the notional.
-   * @param portfolioName The portfolio name
-   * @param viewName The view name
+   * Creates a bond view that calculates clean price, modified and Macaulay durations using
+   * both the clean price and the market yield quote, and present value and yield to maturity from
+   * the clean price.
+   * @param portfolioName The name of the portfolio
+   * @param viewName The name of the view
    * @return The view definition
    */
-  private ViewDefinition getEquityTotalReturnSwapViewDefinition(final String portfolioName, final String viewName) {
+  private ViewDefinition getSyntheticMultiCountryBondViewDefinition(final String portfolioName, final String viewName) {
     final UniqueId portfolioId = getPortfolioId(portfolioName).toLatest();
     final ViewDefinition viewDefinition = new ViewDefinition(viewName, portfolioId, UserPrincipal.getTestUser());
     viewDefinition.setDefaultCurrency(Currency.USD);
-    viewDefinition.setMaxDeltaCalculationPeriod(500L);
-    viewDefinition.setMaxFullCalculationPeriod(500L);
-    viewDefinition.setMinDeltaCalculationPeriod(500L);
-    viewDefinition.setMinFullCalculationPeriod(500L);
-    final ViewCalculationConfiguration defaultCalculationConfig = new ViewCalculationConfiguration(viewDefinition, DEFAULT_CALC_CONFIG);
-    final ValueProperties properties = ValueProperties.builder()
+    viewDefinition.setMaxDeltaCalculationPeriod(MAX_DELTA_PERIOD);
+    viewDefinition.setMaxFullCalculationPeriod(MAX_FULL_PERIOD);
+    viewDefinition.setMinDeltaCalculationPeriod(MIN_DELTA_PERIOD);
+    viewDefinition.setMinFullCalculationPeriod(MIN_FULL_PERIOD);
+    ViewCalculationConfiguration config = new ViewCalculationConfiguration(viewDefinition, "Bond Curves");
+    ValueProperties properties = ValueProperties.builder()
         .with(PROPERTY_CURVE_TYPE, "Discounting")
-        .with(CURVE_EXPOSURES, "Exposures")
+        .with(CURVE_EXPOSURES, "Bond Exposures")
+        .with(CALCULATION_METHOD, "Curves")
         .get();
-    defaultCalculationConfig.addPortfolioRequirement(EquityTotalReturnSwapSecurity.SECURITY_TYPE, PRESENT_VALUE, properties);
-    defaultCalculationConfig.addPortfolioRequirement(EquityTotalReturnSwapSecurity.SECURITY_TYPE, FUNDING_LEG_PV, properties);
-    defaultCalculationConfig.addPortfolioRequirement(EquityTotalReturnSwapSecurity.SECURITY_TYPE, FUNDING_LEG_DETAILS, properties);
-    defaultCalculationConfig.addPortfolioRequirement(EquityTotalReturnSwapSecurity.SECURITY_TYPE, ASSET_LEG_PV, properties);
-    defaultCalculationConfig.addPortfolioRequirement(EquityTotalReturnSwapSecurity.SECURITY_TYPE, GAMMA_PV01, properties);
-    defaultCalculationConfig.addPortfolioRequirement(EquityTotalReturnSwapSecurity.SECURITY_TYPE, VALUE_DELTA, properties);
-    defaultCalculationConfig.addPortfolioRequirement(EquityTotalReturnSwapSecurity.SECURITY_TYPE, NOTIONAL, ValueProperties.builder().get());
-    final ValueProperties thetaProperties = properties.copy()
-        .with(PROPERTY_DAYS_TO_MOVE_FORWARD, "1")
-        .with(PROPERTY_THETA_CALCULATION_METHOD, THETA_CONSTANT_SPREAD)
-        .get();
-    defaultCalculationConfig.addPortfolioRequirement(EquityTotalReturnSwapSecurity.SECURITY_TYPE, VALUE_THETA, thetaProperties);
-    final String[] curveNames = new String[] {"USD Discounting", "USD 3M Forward Ibor" };
+    config.addPortfolioRequirement(BondSecurity.SECURITY_TYPE, PRESENT_VALUE, properties);
+    config.addPortfolioRequirement(BondSecurity.SECURITY_TYPE, CLEAN_PRICE, properties);
+    config.addPortfolioRequirement(BondSecurity.SECURITY_TYPE, CONVEXITY, properties);
+    config.addPortfolioRequirement(BondSecurity.SECURITY_TYPE, BOND_DETAILS, properties);
+    config.addPortfolioRequirement(BondSecurity.SECURITY_TYPE, MACAULAY_DURATION, properties);
+    config.addPortfolioRequirement(BondSecurity.SECURITY_TYPE, MODIFIED_DURATION, properties);
+    config.addPortfolioRequirement(BondSecurity.SECURITY_TYPE, YTM, properties);
+    config.addPortfolioRequirement(BondSecurity.SECURITY_TYPE, GAMMA_PV01, properties);
+    final String[] curveNames = new String[] {"USD Discounting", "US Government Bond" };
     for (final String curveName : curveNames) {
       final ValueProperties curveProperties = properties.copy()
           .with(CURVE, curveName)
           .get();
-      defaultCalculationConfig.addPortfolioRequirement(EquityTotalReturnSwapSecurity.SECURITY_TYPE, PV01, curveProperties);
+      config.addPortfolioRequirement(BondSecurity.SECURITY_TYPE, PV01, curveProperties);
+      config.addPortfolioRequirement(BondSecurity.SECURITY_TYPE, BUCKETED_PV01, curveProperties);
     }
-    viewDefinition.addViewCalculationConfiguration(defaultCalculationConfig);
+    final ValueProperties thetaProperties = properties.copy()
+        .with(PROPERTY_DAYS_TO_MOVE_FORWARD, "1")
+        .with(PROPERTY_THETA_CALCULATION_METHOD, THETA_CONSTANT_SPREAD)
+        .get();
+    config.addPortfolioRequirement(BondSecurity.SECURITY_TYPE, VALUE_THETA, thetaProperties);
+    final ValueProperties zSpreadProperties = ValueProperties.builder()
+        .with(PROPERTY_CURVE_TYPE, "Discounting")
+        .with(CURVE_EXPOSURES, "Bond Exposures")
+        .with(CALCULATION_METHOD, "Yield")
+        .with(CURVE, "US Government Bond")
+        .get();
+    config.addPortfolioRequirement(BondSecurity.SECURITY_TYPE, Z_SPREAD, zSpreadProperties);
+    ValueProperties curveProperties = ValueProperties.builder()
+        .with(PROPERTY_CURVE_TYPE, "Discounting")
+        .with(CURVE, "US Government Bond")
+        .with(CURVE_CONSTRUCTION_CONFIG, "US Government Bond Configuration")
+        .get();
+    config.addSpecificRequirement(new ValueRequirement(YIELD_CURVE, ComputationTargetSpecification.NULL, curveProperties));
+    viewDefinition.addViewCalculationConfiguration(config);
+    config = new ViewCalculationConfiguration(viewDefinition, "OIS Curves");
+    properties = ValueProperties.builder()
+        .with(PROPERTY_CURVE_TYPE, "Discounting")
+        .with(CURVE_EXPOSURES, "Bond OIS Exposures")
+        .with(CALCULATION_METHOD, "Curves")
+        .get();
+    curveProperties = ValueProperties.builder()
+        .with(PROPERTY_CURVE_TYPE, "Discounting")
+        .with(CURVE_CONSTRUCTION_CONFIG, "Default USD Curves")
+        .with(CURVE, "USD Discounting")
+        .get();
+    config.addPortfolioRequirement(BondSecurity.SECURITY_TYPE, PRESENT_VALUE, properties);
+    config.addSpecificRequirement(new ValueRequirement(YIELD_CURVE, ComputationTargetSpecification.NULL, curveProperties));
+    viewDefinition.addViewCalculationConfiguration(config);
     return viewDefinition;
   }
 
-  private void addValueRequirements(final ViewCalculationConfiguration calcConfiguration, final String securityType, final String[] valueRequirementNames) {
+  /**
+   * Creates a view definition for equity options and equities that asks for the PV, value delta,
+   * delta, gamma, theta, rho and vega using the Black method if appropriate.
+   * @param portfolioName The portfolio name
+   * @param viewName The view name
+   * @return The view definition
+   */
+  private ViewDefinition getSyntheticEquityOptionViewDefinition(final String portfolioName, final String viewName) {
+    final UniqueId portfolioId = getPortfolioId(portfolioName).toLatest();
+    final ViewDefinition viewDefinition = new ViewDefinition(viewName, portfolioId, UserPrincipal.getTestUser());
+    viewDefinition.setDefaultCurrency(Currency.USD);
+    viewDefinition.setMaxDeltaCalculationPeriod(MAX_DELTA_PERIOD);
+    viewDefinition.setMaxFullCalculationPeriod(MAX_FULL_PERIOD);
+    viewDefinition.setMinDeltaCalculationPeriod(MIN_DELTA_PERIOD);
+    viewDefinition.setMinFullCalculationPeriod(MAX_FULL_PERIOD);
+    final ViewCalculationConfiguration blackConfig = new ViewCalculationConfiguration(viewDefinition, "Black");
+    final ValueProperties blackConstraints = ValueProperties.with(CALCULATION_METHOD, BLACK_METHOD).get();
+    blackConfig.addPortfolioRequirement(EquityOptionSecurity.SECURITY_TYPE, VALUE_DELTA, blackConstraints);
+    blackConfig.addPortfolioRequirement(EquityOptionSecurity.SECURITY_TYPE, PRESENT_VALUE, blackConstraints);
+    blackConfig.addPortfolioRequirement(EquityOptionSecurity.SECURITY_TYPE, DELTA, blackConstraints);
+    blackConfig.addPortfolioRequirement(EquityOptionSecurity.SECURITY_TYPE, GAMMA, blackConstraints);
+    blackConfig.addPortfolioRequirement(EquityOptionSecurity.SECURITY_TYPE, THETA, blackConstraints);
+    blackConfig.addPortfolioRequirement(EquityOptionSecurity.SECURITY_TYPE, RHO, blackConstraints);
+    blackConfig.addPortfolioRequirement(EquityOptionSecurity.SECURITY_TYPE, VEGA, blackConstraints);
+    viewDefinition.addViewCalculationConfiguration(blackConfig);
+    final ViewCalculationConfiguration bawConfig = new ViewCalculationConfiguration(viewDefinition, "Barone-Adesi-Whaley");
+    final ValueProperties bawConstraints = ValueProperties.with(CALCULATION_METHOD, BAW_METHOD).get();
+    bawConfig.addPortfolioRequirement(EquityOptionSecurity.SECURITY_TYPE, VALUE_DELTA, bawConstraints);
+    bawConfig.addPortfolioRequirement(EquityOptionSecurity.SECURITY_TYPE, PRESENT_VALUE, bawConstraints);
+    bawConfig.addPortfolioRequirement(EquityOptionSecurity.SECURITY_TYPE, DELTA, bawConstraints);
+    bawConfig.addPortfolioRequirement(EquityOptionSecurity.SECURITY_TYPE, GAMMA, bawConstraints);
+    bawConfig.addPortfolioRequirement(EquityOptionSecurity.SECURITY_TYPE, THETA, bawConstraints);
+    bawConfig.addPortfolioRequirement(EquityOptionSecurity.SECURITY_TYPE, RHO, bawConstraints);
+    bawConfig.addPortfolioRequirement(EquityOptionSecurity.SECURITY_TYPE, VEGA, bawConstraints);
+    viewDefinition.addViewCalculationConfiguration(bawConfig);
+    return viewDefinition;
+  }
+
+  /**
+   * Adds a list of value requirement names to a calculation configuration for a particular security type.
+   * @param calcConfiguration The calculation configuration
+   * @param securityType The security type
+   * @param valueRequirementNames The value requirement names to add
+   */
+  private static void addValueRequirements(final ViewCalculationConfiguration calcConfiguration, final String securityType,
+      final String[] valueRequirementNames) {
     for (final String valueRequirementName : valueRequirementNames) {
       calcConfiguration.addPortfolioRequirementName(securityType, valueRequirementName);
     }
   }
 
+  /**
+   * Gets the id for a portfolio name.
+   * @param portfolioName The portfolio name
+   * @return The unique id of the portfolio
+   */
   private UniqueId getPortfolioId(final String portfolioName) {
     final PortfolioSearchRequest searchRequest = new PortfolioSearchRequest();
     searchRequest.setName(portfolioName);
     final PortfolioSearchResult searchResult = getToolContext().getPortfolioMaster().search(searchRequest);
     if (searchResult.getFirstPortfolio() == null) {
-      s_logger.error("Couldn't find portfolio {}", portfolioName);
+      LOGGER.error("Couldn't find portfolio {}", portfolioName);
       throw new OpenGammaRuntimeException("Couldn't find portfolio " + portfolioName);
     }
     return searchResult.getFirstPortfolio().getUniqueId();
   }
 
+  /**
+   * Stores a view definition in the config master.
+   * @param viewDefinition The view definition
+   */
   private void storeViewDefinition(final ViewDefinition viewDefinition) {
     final ConfigItem<ViewDefinition> config = ConfigItem.of(viewDefinition, viewDefinition.getName(), ViewDefinition.class);
     ConfigMasterUtils.storeByName(getToolContext().getConfigMaster(), config);

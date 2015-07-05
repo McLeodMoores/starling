@@ -2,6 +2,10 @@
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
  *
  * Please see distribution for license.
+ *
+ * Modified by McLeod Moores Software Limited.
+ *
+ * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.examples.simulated.loader;
 
@@ -15,7 +19,6 @@ import com.opengamma.engine.function.config.FunctionConfigurationSource;
 import com.opengamma.engine.function.config.ParameterizedFunctionConfiguration;
 import com.opengamma.engine.function.config.StaticFunctionConfiguration;
 import com.opengamma.examples.simulated.function.ExampleStandardFunctionConfiguration;
-import com.opengamma.examples.simulated.function.SyntheticVolatilityCubeFunctions;
 import com.opengamma.financial.aggregation.AggregationFunctions;
 import com.opengamma.financial.analytics.AnalyticsFunctions;
 import com.opengamma.financial.currency.CurrencyFunctions;
@@ -49,7 +52,7 @@ public class ExampleFunctionConfigurationPopulator extends AbstractTool<ToolCont
   //-------------------------------------------------------------------------
   /**
    * Main method to run the tool.
-   * 
+   *
    * @param args  the standard tool arguments, not null
    */
   public static void main(final String[] args) { // CSIGNORE
@@ -67,16 +70,15 @@ public class ExampleFunctionConfigurationPopulator extends AbstractTool<ToolCont
     storeFunctionDefinition(VIEW, ViewFunctions.instance());
     storeFunctionDefinition(TARGET, TargetFunctions.instance());
 
-    FunctionConfigurationDefinition financialFunc = new FunctionConfigurationDefinition(FINANCIAL,
+    final FunctionConfigurationDefinition financialFunc = new FunctionConfigurationDefinition(FINANCIAL,
         ImmutableList.of(AGGREGATION, ANALYTICS, CURRENCY, PROPERTY, TARGET, VALUE, VIEW),
         Collections.<StaticFunctionConfiguration>emptyList(),
         Collections.<ParameterizedFunctionConfiguration>emptyList());
     storeFunctionDefinition(financialFunc);
 
     storeFunctionDefinition(STANDARD, ExampleStandardFunctionConfiguration.instance());
-    storeFunctionDefinition(CUBE, SyntheticVolatilityCubeFunctions.instance());
 
-    FunctionConfigurationDefinition exampleFunc = new FunctionConfigurationDefinition(EXAMPLE,
+    final FunctionConfigurationDefinition exampleFunc = new FunctionConfigurationDefinition(EXAMPLE,
         ImmutableList.of(FINANCIAL, STANDARD, CUBE),
         Collections.<StaticFunctionConfiguration>emptyList(),
         Collections.<ParameterizedFunctionConfiguration>emptyList());
@@ -84,13 +86,22 @@ public class ExampleFunctionConfigurationPopulator extends AbstractTool<ToolCont
 
   }
 
+  /**
+   * Stores a function configuration definition.
+   * @param definition The definition
+   */
   private void storeFunctionDefinition(final FunctionConfigurationDefinition definition) {
     final ConfigItem<FunctionConfigurationDefinition> config = ConfigItem.of(definition, definition.getName(), FunctionConfigurationDefinition.class);
     ConfigMasterUtils.storeByName(getToolContext().getConfigMaster(), config);
   }
 
+  /**
+   * Stores a function definition by classifier name.
+   * @param name The classifier name
+   * @param funcConfigSource The function configuration source.
+   */
   private void storeFunctionDefinition(final String name, final FunctionConfigurationSource funcConfigSource) {
-    FunctionConfigurationDefinition definition = FunctionConfigurationDefinition.of(name, funcConfigSource);
+    final FunctionConfigurationDefinition definition = FunctionConfigurationDefinition.of(name, funcConfigSource);
     final ConfigItem<FunctionConfigurationDefinition> config = ConfigItem.of(definition, name, FunctionConfigurationDefinition.class);
     ConfigMasterUtils.storeByName(getToolContext().getConfigMaster(), config);
   }

@@ -18,7 +18,6 @@ import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 import com.opengamma.component.factory.source.FunctionConfigurationSourceComponentFactory;
 import com.opengamma.engine.function.config.FunctionConfigurationSource;
 import com.opengamma.examples.simulated.function.ExampleStandardFunctionConfiguration;
-import com.opengamma.examples.simulated.function.SyntheticVolatilityCubeFunctions;
 import com.opengamma.examples.simulated.tutorial.TutorialFunctions;
 
 /**
@@ -32,11 +31,6 @@ public class ExampleFunctionConfigurationSourceComponentFactory extends Function
     return ExampleStandardFunctionConfiguration.instance();
   }
 
-  //@Override
-  //protected FunctionConfigurationSource cubeConfigurations() {
-  //  return SyntheticVolatilityCubeFunctions.instance();
-  //}
-
   protected FunctionConfigurationSource tutorialConfiguration() {
     return TutorialFunctions.instance();
   }
@@ -44,7 +38,6 @@ public class ExampleFunctionConfigurationSourceComponentFactory extends Function
   @Override
   protected List<FunctionConfigurationSource> initSources() {
     final List<FunctionConfigurationSource> sources = super.initSources();
-    // sources.add(tutorialConfiguration());
     return sources;
   }
 
