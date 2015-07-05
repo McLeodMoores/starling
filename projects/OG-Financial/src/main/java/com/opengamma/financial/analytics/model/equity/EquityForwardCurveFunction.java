@@ -2,6 +2,10 @@
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
  *
  * Please see distribution for license.
+ *
+ * Modified by McLeod Moores Software Limited.
+ *
+ * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.financial.analytics.model.equity;
 
@@ -40,11 +44,14 @@ import com.opengamma.id.ExternalScheme;
 import com.opengamma.util.money.Currency;
 
 /**
- * Function produces a FORWARD_CURVE given YIELD_CURVE and Equity MARKET_VALUE Simple implementation does not include any Dividend treatment
+ * This function produces a {@link ValueRequirementNames#FORWARD_CURVE} given a {@link ValueRequirementNames#YIELD_CURVE} and
+ * equity {@link MarketDataRequirementNames#MARKET_VALUE}. This function can optionally adjust for dividends by using a
+ * continuous dividend yield or affine dividends.
  */
 public class EquityForwardCurveFunction extends AbstractFunction.NonCompiledInvoker {
-
-  private static final Set<ExternalScheme> s_validSchemes = ImmutableSet.of(ExternalSchemes.BLOOMBERG_TICKER, ExternalSchemes.BLOOMBERG_TICKER_WEAK, ExternalSchemes.ACTIVFEED_TICKER);
+  /** The valie ticker schemes */
+  private static final Set<ExternalScheme> VALID_SCHEMES = ImmutableSet.of(ExternalSchemes.BLOOMBERG_TICKER,
+      ExternalSchemes.BLOOMBERG_TICKER_WEAK, ExternalSchemes.ACTIVFEED_TICKER, ExternalSchemes.OG_SYNTHETIC_TICKER);
 
   @Override
   public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target) {
@@ -64,7 +71,7 @@ public class EquityForwardCurveFunction extends AbstractFunction.NonCompiledInvo
   public boolean canApplyTo(final FunctionCompilationContext context, final ComputationTarget target) {
     if (target.getValue() instanceof ExternalIdentifiable) {
       final ExternalId identifier = ((ExternalIdentifiable) target.getValue()).getExternalId();
-      return s_validSchemes.contains(identifier.getScheme());
+      return VALID_SCHEMES.contains(identifier.getScheme());
     }
     return false;
   }
@@ -75,14 +82,24 @@ public class EquityForwardCurveFunction extends AbstractFunction.NonCompiledInvo
     return true;
   }
 
-  /* Spot value of the equity index or name */
-  private ValueRequirement getSpotRequirement(final ComputationTarget target) {
-    return (new ValueRequirement(MarketDataRequirementNames.MARKET_VALUE, target.toSpecification()));
+  /**
+   * Gets the spot requirement of the equity index or name.
+   * @param target  the target
+   * @return  the spot value requirement
+   */
+  private static ValueRequirement getSpotRequirement(final ComputationTarget target) {
+    return new ValueRequirement(MarketDataRequirementNames.MARKET_VALUE, target.toSpecification());
   }
 
-  /* Funding curve of the equity's currency */
-  private ValueRequirement getFundingCurveRequirement(final Currency ccy, final String curveName, final String curveCalculationConfig) {
-    final ValueProperties fundingProperties = ValueProperties.builder() // Note that createValueProperties is _not_ used - otherwise engine can't find the requirement
+  /**
+   * Gets the funding curve requirement.
+   * @param ccy  the currency
+   * @param curveName  the curve name
+   * @param curveCalculationConfig  the curve calculation configuration name
+   * @return  the funding curve requirement
+   */
+  private static ValueRequirement getFundingCurveRequirement(final Currency ccy, final String curveName, final String curveCalculationConfig) {
+    final ValueProperties fundingProperties = ValueProperties.builder()
         .with(ValuePropertyNames.CURVE, curveName)
         .with(ValuePropertyNames.CURVE_CALCULATION_CONFIG, curveCalculationConfig)
         .get();
@@ -90,7 +107,6 @@ public class EquityForwardCurveFunction extends AbstractFunction.NonCompiledInvo
   }
 
   @Override
-  /* If a requirement is not found, return null, and go looking for a default */
   public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
     final Set<ValueRequirement> requirements = new HashSet<>();
     final ValueProperties constraints = desiredValue.getConstraints();
@@ -130,7 +146,8 @@ public class EquityForwardCurveFunction extends AbstractFunction.NonCompiledInvo
   }
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
 
     // desiredValues is defined by getResults. In our case, a singleton
     final ValueRequirement desiredValue = Iterables.getOnlyElement(desiredValues);
@@ -153,9 +170,9 @@ public class EquityForwardCurveFunction extends AbstractFunction.NonCompiledInvo
       throw new OpenGammaRuntimeException("Failed to get funding curve requirement");
     }
     final YieldCurve fundingCurve = (YieldCurve) fundingCurveObject;
-    // Dividend type: Discrete or Continuous 
+    // Dividend type: Discrete or Continuous
     final String dividendType = desiredValue.getConstraint(ValuePropertyNames.DIVIDEND_TYPE);
-    boolean isContinuousDividends = ValuePropertyNames.DIVIDEND_TYPE_CONTINUOUS.equalsIgnoreCase(dividendType);
+    final boolean isContinuousDividends = ValuePropertyNames.DIVIDEND_TYPE_CONTINUOUS.equalsIgnoreCase(dividendType);
     // Compute ForwardCurve
     final ForwardCurve forwardCurve;
     if (isContinuousDividends) {
@@ -165,8 +182,8 @@ public class EquityForwardCurveFunction extends AbstractFunction.NonCompiledInvo
       final YieldCurve costOfCarryCurve = YieldCurve.from(ConstantDoublesCurve.from(dividendYield, "CostOfCarry"));
       forwardCurve = new ForwardCurveYieldImplied(spot, fundingCurve, costOfCarryCurve);
     } else {
-      Object discreteDividendsInput = inputs.getValue(ValueRequirementNames.AFFINE_DIVIDENDS);
-      if ((discreteDividendsInput != null) && (discreteDividendsInput instanceof AffineDividends)) {
+      final Object discreteDividendsInput = inputs.getValue(ValueRequirementNames.AFFINE_DIVIDENDS);
+      if (discreteDividendsInput != null && discreteDividendsInput instanceof AffineDividends) {
         final AffineDividends discreteDividends = (AffineDividends) discreteDividendsInput;
         forwardCurve = new ForwardCurveAffineDividends(spot, fundingCurve, discreteDividends);
       } else {

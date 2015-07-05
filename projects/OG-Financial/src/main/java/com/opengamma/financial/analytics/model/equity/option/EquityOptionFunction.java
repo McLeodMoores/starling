@@ -2,6 +2,10 @@
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
  *
  * Please see distribution for license.
+ *
+ * Modified by McLeod Moores Software Limited.
+ *
+ * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.financial.analytics.model.equity.option;
 
@@ -47,7 +51,6 @@ import com.opengamma.financial.analytics.conversion.BondFutureSecurityConverter;
 import com.opengamma.financial.analytics.conversion.BondSecurityConverter;
 import com.opengamma.financial.analytics.conversion.EquityOptionsConverter;
 import com.opengamma.financial.analytics.conversion.FutureSecurityConverterDeprecated;
-import com.opengamma.financial.analytics.conversion.InterestRateFutureSecurityConverterDeprecated;
 import com.opengamma.financial.analytics.model.CalculationPropertyNamesAndValues;
 import com.opengamma.financial.analytics.model.InstrumentTypeProperties;
 import com.opengamma.financial.analytics.model.curve.forward.ForwardCurveValuePropertyNames;
@@ -66,15 +69,19 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.async.AsynchronousExecution;
 
 /**
- * Abstract base class for Equity and Equity Index Options
+ * Abstract base class for equity and equity index option pricing and risk functions.
  */
 public abstract class EquityOptionFunction extends AbstractFunction.NonCompiledInvoker {
   /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(EquityOptionFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(EquityOptionFunction.class);
   //TODO the next three properties should be moved from this class after checking that there's no others that match
-  /** Property name for the discounting curve */
+  /**
+   * Property name for the discounting curve.
+   */
   public static final String PROPERTY_DISCOUNTING_CURVE_NAME = "DiscountingCurveName";
-  /** Property name for the discounting curve configuration */
+  /**
+   * Property name for the discounting curve configuration.
+   */
   public static final String PROPERTY_DISCOUNTING_CURVE_CONFIG = "DiscountingCurveConfig";
   /** The value requirement name */
   private final String[] _valueRequirementNames;
@@ -97,7 +104,6 @@ public abstract class EquityOptionFunction extends AbstractFunction.NonCompiledI
     final RegionSource regionSource = OpenGammaCompilationContext.getRegionSource(context);
     final ConventionBundleSource conventionSource = OpenGammaCompilationContext.getConventionBundleSource(context);
     final SecuritySource securitySource = OpenGammaCompilationContext.getSecuritySource(context);
-    final InterestRateFutureSecurityConverterDeprecated irFutureConverter = new InterestRateFutureSecurityConverterDeprecated(holidaySource, conventionSource, regionSource);
     final BondSecurityConverter bondConverter = new BondSecurityConverter(holidaySource, conventionSource, regionSource);
     final BondFutureSecurityConverter bondFutureConverter = new BondFutureSecurityConverter(securitySource, bondConverter);
     final FutureSecurityConverterDeprecated futureSecurityConverter = new FutureSecurityConverterDeprecated(bondFutureConverter);
@@ -130,7 +136,7 @@ public abstract class EquityOptionFunction extends AbstractFunction.NonCompiledI
   }
 
   /**
-   * Constructs a market data bundle
+   * Constructs a market data bundle.
    *
    * @param underlyingId The underlying id of the index option
    * @param executionContext The execution context
@@ -172,7 +178,7 @@ public abstract class EquityOptionFunction extends AbstractFunction.NonCompiledI
   }
 
   /**
-   * Calculates the result
+   * Calculates the result.
    *
    * @param derivative The derivative
    * @param market The market data bundle
@@ -182,8 +188,9 @@ public abstract class EquityOptionFunction extends AbstractFunction.NonCompiledI
    * @param resultProperties The result properties
    * @return The result of the calculation
    */
-  protected abstract Set<ComputedValue> computeValues(final InstrumentDerivative derivative, final StaticReplicationDataBundle market, final FunctionInputs inputs,
-      final Set<ValueRequirement> desiredValues, final ComputationTargetSpecification targetSpec, final ValueProperties resultProperties);
+  protected abstract Set<ComputedValue> computeValues(final InstrumentDerivative derivative, final StaticReplicationDataBundle market,
+      final FunctionInputs inputs, final Set<ValueRequirement> desiredValues, final ComputationTargetSpecification targetSpec,
+      final ValueProperties resultProperties);
 
   @Override
   public ComputationTargetType getTargetType() {
@@ -212,7 +219,7 @@ public abstract class EquityOptionFunction extends AbstractFunction.NonCompiledI
     String forwardCurveCalculationMethod = null;
     int check = 8; // the number of properties we're looking out for below
     ValueProperties.Builder additionalConstraintsBuilder = null;
-    if ((constraints.getProperties() == null) || (constraints.getProperties().size() < check)) {
+    if (constraints.getProperties() == null || constraints.getProperties().size() < check) {
       return null;
     }
     for (final String property : constraints.getProperties()) {
@@ -289,14 +296,15 @@ public abstract class EquityOptionFunction extends AbstractFunction.NonCompiledI
       // One or more of the properties we were looking for was unconstrained
       return null;
     }
-    final ValueProperties additionalConstraints = (additionalConstraintsBuilder != null) ? additionalConstraintsBuilder.get() : ValueProperties.none();
+    final ValueProperties additionalConstraints = additionalConstraintsBuilder != null ? additionalConstraintsBuilder.get() : ValueProperties.none();
 
     // Get security and its underlying's ExternalId.
     final FinancialSecurity security = (FinancialSecurity) target.getSecurity();
-    final HistoricalTimeSeriesSource tsSource = OpenGammaCompilationContext.getHistoricalTimeSeriesSource(context); // TODO: Do we still require tsSource? Was used to access id bundles
+    final HistoricalTimeSeriesSource tsSource =
+        OpenGammaCompilationContext.getHistoricalTimeSeriesSource(context); // TODO: Do we still require tsSource? Was used to access id bundles
     final SecuritySource securitySource = OpenGammaCompilationContext.getSecuritySource(context);
-    final ExternalId underlyingId = getWeakUnderlyingId(FinancialSecurityUtils.getUnderlyingId(security), tsSource, securitySource, context.getComputationTargetResolver().getVersionCorrection(),
-        surfaceName);
+    final ExternalId underlyingId = getWeakUnderlyingId(FinancialSecurityUtils.getUnderlyingId(security), tsSource, securitySource,
+        context.getComputationTargetResolver().getVersionCorrection(), surfaceName);
     if (underlyingId == null) {
       return null;
     }
@@ -321,12 +329,12 @@ public abstract class EquityOptionFunction extends AbstractFunction.NonCompiledI
    * Adjusts the properties of the function inputs: <p>
    * <ul>
    *   <li> {@link ValueRequirementNames#YIELD_CURVE} - removes the {@link ValuePropertyNames#FUNCTION} and {@link ValuePropertyNames#CURRENCY}
-   *   properties and remaps {@link ValuePropertyNames#CURVE} -> {@link EquityOptionFunction#PROPERTY_DISCOUNTING_CURVE_NAME} and
-   *   {@link ValuePropertyNames#CURVE_CALCULATION_CONFIG} -> {@link EquityOptionFunction#PROPERTY_DISCOUNTING_CURVE_CONFIG}.
+   *   properties and remaps {@link ValuePropertyNames#CURVE} -&gt; {@link EquityOptionFunction#PROPERTY_DISCOUNTING_CURVE_NAME} and
+   *   {@link ValuePropertyNames#CURVE_CALCULATION_CONFIG} -&gt; {@link EquityOptionFunction#PROPERTY_DISCOUNTING_CURVE_CONFIG}.
    *   <li> {@link ValueRequirementNames#BLACK_VOLATILITY_SURFACE} removes the {@link ValuePropertyNames#FUNCTION} and
    *   {@link InstrumentTypeProperties#PROPERTY_SURFACE_INSTRUMENT_TYPE} properties.
    *   <li> {@link ValueRequirementNames#FORWARD_CURVE} - removes the {@link ValuePropertyNames#FUNCTION} and {@link ValuePropertyNames#CURRENCY}
-   *   properties and remaps {@link ValuePropertyNames#CURVE} -> {@link ForwardCurveValuePropertyNames#PROPERTY_FORWARD_CURVE_NAME}.
+   *   properties and remaps {@link ValuePropertyNames#CURVE} -&gt; {@link ForwardCurveValuePropertyNames#PROPERTY_FORWARD_CURVE_NAME}.
    * </ul>
    * <p>
    * @param input The resolved input
@@ -341,8 +349,8 @@ public abstract class EquityOptionFunction extends AbstractFunction.NonCompiledI
           .withoutAny(ValuePropertyNames.CURRENCY)
           .get();
       properties
-          .with(PROPERTY_DISCOUNTING_CURVE_NAME, input.getProperty(ValuePropertyNames.CURVE))
-          .with(PROPERTY_DISCOUNTING_CURVE_CONFIG, input.getProperty(ValuePropertyNames.CURVE_CALCULATION_CONFIG));
+      .with(PROPERTY_DISCOUNTING_CURVE_NAME, input.getProperty(ValuePropertyNames.CURVE))
+      .with(PROPERTY_DISCOUNTING_CURVE_CONFIG, input.getProperty(ValuePropertyNames.CURVE_CALCULATION_CONFIG));
       for (final String property : curveProperties.getProperties()) {
         properties.with(property, curveProperties.getValues(property));
       }
@@ -373,7 +381,8 @@ public abstract class EquityOptionFunction extends AbstractFunction.NonCompiledI
   }
 
   @Override
-  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputs) {
     final ValueProperties.Builder properties = createValueProperties()
         .with(ValuePropertyNames.CALCULATION_METHOD, getCalculationMethod())
         .with(CalculationPropertyNamesAndValues.PROPERTY_MODEL_TYPE, getModelType())
@@ -433,8 +442,8 @@ public abstract class EquityOptionFunction extends AbstractFunction.NonCompiledI
    * @param additionalConstraints The additional constraints
    * @return The forward curve requirement
    */
-  private static ValueRequirement getForwardCurveRequirement(final String forwardCurveName, final String forwardCurveCalculationMethod, final ExternalId underlyingBuid,
-      final ValueProperties additionalConstraints) {
+  private static ValueRequirement getForwardCurveRequirement(final String forwardCurveName, final String forwardCurveCalculationMethod,
+      final ExternalId underlyingBuid, final ValueProperties additionalConstraints) {
     final ValueProperties properties = ValueProperties.builder() // TODO: Update to this => additionalConstraints.copy() [PLAT-5524]
         .with(ValuePropertyNames.CURVE, forwardCurveName)
         .with(ForwardCurveValuePropertyNames.PROPERTY_FORWARD_CURVE_CALCULATION_METHOD, forwardCurveCalculationMethod)
@@ -444,7 +453,7 @@ public abstract class EquityOptionFunction extends AbstractFunction.NonCompiledI
   }
 
   /**
-   * Gets the volatility surface requirement
+   * Gets the volatility surface requirement.
    * @param tsSource The time series source
    * @param securitySource The security source
    * @param desiredValue The desired value
@@ -459,7 +468,8 @@ public abstract class EquityOptionFunction extends AbstractFunction.NonCompiledI
   protected ValueRequirement getVolatilitySurfaceRequirement(final HistoricalTimeSeriesSource tsSource, final SecuritySource securitySource,
       final ValueRequirement desiredValue, final Security security, final String surfaceName, final String forwardCurveName,
       final String surfaceCalculationMethod, final ExternalId underlyingBuid, final ValueProperties additionalConstraints) {
-    // REVIEW Andrew 2012-01-17 -- Could we pass a CTRef to the getSurfaceRequirement and use the underlyingBuid external identifier directly with a target type of SECURITY
+    // REVIEW Andrew 2012-01-17 -- Could we pass a CTRef to the getSurfaceRequirement and use the underlyingBuid external identifier
+    // directly with a target type of SECURITY
     // TODO Casey - Replace desiredValue with smileInterpolatorName in BlackVolatilitySurfacePropertyUtils.getSurfaceRequirement
     return BlackVolatilitySurfacePropertyUtils.getSurfaceRequirement(desiredValue, ValueProperties.none(), surfaceName, forwardCurveName,
         InstrumentTypeProperties.EQUITY_OPTION, ComputationTargetType.PRIMITIVE, underlyingBuid);
@@ -497,9 +507,10 @@ public abstract class EquityOptionFunction extends AbstractFunction.NonCompiledI
     final Security underlyingSecurity = securitySource.getSingle(ExternalIdBundle.of(underlyingId), versionCorrection);
     if (underlyingSecurity == null || underlyingSecurity.getExternalIdBundle().getExternalId(desiredScheme) == null) {
       // no underlying in db (or lacks desired scheme) - get from timeseries
-      final HistoricalTimeSeries historicalTimeSeries = tsSource.getHistoricalTimeSeries(MarketDataRequirementNames.MARKET_VALUE, ExternalIdBundle.of(underlyingId), null, null, true, null, true, 1);
+      final HistoricalTimeSeries historicalTimeSeries = tsSource.getHistoricalTimeSeries(MarketDataRequirementNames.MARKET_VALUE,
+          ExternalIdBundle.of(underlyingId), null, null, true, null, true, 1);
       if (historicalTimeSeries == null) {
-        s_logger.error("Require a time series for " + underlyingId);
+        LOGGER.error("Require a time series for " + underlyingId);
         return null;
       }
       final ExternalIdBundle idBundle = tsSource.getExternalIdBundle(historicalTimeSeries.getUniqueId());
@@ -510,12 +521,12 @@ public abstract class EquityOptionFunction extends AbstractFunction.NonCompiledI
     if (underlyingSecurity != null && underlyingSecurity.getExternalIdBundle().getExternalId(sourceScheme) != null) {
       return ExternalId.of(desiredScheme, underlyingSecurity.getExternalIdBundle().getExternalId(sourceScheme).getValue());
     }
-    s_logger.error("Couldn't get ticker of type " + sourceScheme + " only have " + underlyingId);
+    LOGGER.error("Couldn't get ticker of type " + sourceScheme + " only have " + underlyingId);
     return null;
   }
 
   /**
-   * Gets the value requirement names
+   * Gets the value requirement names.
    *
    * @return The value requirement names
    */
