@@ -37,8 +37,6 @@ import com.opengamma.engine.value.ValueRequirement;
 import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.financial.OpenGammaExecutionContext;
-import com.opengamma.financial.analytics.curve.AbstractCurveSpecification;
-import com.opengamma.financial.analytics.curve.ConstantCurveSpecification;
 import com.opengamma.financial.analytics.curve.CurveSpecification;
 import com.opengamma.financial.analytics.ircurve.strips.CurveNodeWithIdentifier;
 import com.opengamma.financial.analytics.ircurve.strips.PointsCurveNodeWithIdentifier;
@@ -46,6 +44,7 @@ import com.opengamma.financial.analytics.ircurve.strips.RateFutureNode;
 import com.opengamma.financial.analytics.ircurve.strips.ZeroCouponInflationNode;
 import com.opengamma.financial.convention.FederalFundsFutureConvention;
 import com.opengamma.financial.convention.InflationLegConvention;
+import com.opengamma.financial.security.index.OvernightIndex;
 import com.opengamma.financial.security.index.PriceIndex;
 import com.opengamma.id.ExternalId;
 import com.opengamma.id.ExternalIdBundle;
@@ -57,8 +56,13 @@ import com.opengamma.util.async.AsynchronousExecution;
  */
 public class CurveHistoricalTimeSeriesFunction extends AbstractFunction.NonCompiledInvoker {
   /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(CurveHistoricalTimeSeriesFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(CurveHistoricalTimeSeriesFunction.class);
 
+  /**
+   * Parses the time series resolution key.
+   * @param str  the string
+   * @return  the string or null if the string is empty
+   */
   private static String parseString(final String str) {
     if (str.length() == 0) {
       return null;
@@ -73,116 +77,109 @@ public class CurveHistoricalTimeSeriesFunction extends AbstractFunction.NonCompi
     final ValueRequirement desiredValue = desiredValues.iterator().next();
     final String resolutionKey = parseString(desiredValue.getConstraint(HistoricalTimeSeriesFunctionUtils.RESOLUTION_KEY_PROPERTY));
     final LocalDate startDate = DateConstraint.evaluate(executionContext, desiredValue.getConstraint(HistoricalTimeSeriesFunctionUtils.START_DATE_PROPERTY));
-    final boolean includeStart = HistoricalTimeSeriesFunctionUtils.parseBoolean(desiredValue.getConstraint(HistoricalTimeSeriesFunctionUtils.INCLUDE_START_PROPERTY));
+    final boolean includeStart =
+        HistoricalTimeSeriesFunctionUtils.parseBoolean(desiredValue.getConstraint(HistoricalTimeSeriesFunctionUtils.INCLUDE_START_PROPERTY));
     final LocalDate endDate = DateConstraint.evaluate(executionContext, desiredValue.getConstraint(HistoricalTimeSeriesFunctionUtils.END_DATE_PROPERTY));
-    final boolean includeEnd = HistoricalTimeSeriesFunctionUtils.parseBoolean(desiredValue.getConstraint(HistoricalTimeSeriesFunctionUtils.INCLUDE_END_PROPERTY));
-    final AbstractCurveSpecification curve = (AbstractCurveSpecification) inputs.getAllValues().iterator().next().getValue();
+    final boolean includeEnd =
+        HistoricalTimeSeriesFunctionUtils.parseBoolean(desiredValue.getConstraint(HistoricalTimeSeriesFunctionUtils.INCLUDE_END_PROPERTY));
+    final CurveSpecification curve = (CurveSpecification) inputs.getAllValues().iterator().next().getValue();
     final HistoricalTimeSeriesBundle bundle = new HistoricalTimeSeriesBundle();
-    if (curve instanceof ConstantCurveSpecification) {
-      final ConstantCurveSpecification constantCurve = (ConstantCurveSpecification) curve;
-      final String dataField = constantCurve.getDataField();
-      final ExternalIdBundle id = constantCurve.getIdentifier().toBundle();
-      final HistoricalTimeSeries timeSeries = timeSeriesSource.getHistoricalTimeSeries(dataField, id, resolutionKey, startDate, includeStart,
-          endDate, includeEnd);
+    for (final CurveNodeWithIdentifier node : curve.getNodes()) {
+      ExternalIdBundle id = ExternalIdBundle.of(node.getIdentifier());
+      String dataField = node.getDataField();
+      HistoricalTimeSeries timeSeries = timeSeriesSource.getHistoricalTimeSeries(dataField, id, resolutionKey, startDate, includeStart, endDate, includeEnd);
       if (timeSeries != null) {
         if (timeSeries.getTimeSeries().isEmpty()) {
-          s_logger.info("Time series for {} is empty", id);
+          LOGGER.info("Time series for {} is empty", id);
         } else {
           bundle.add(dataField, id, timeSeries);
         }
       } else {
-        s_logger.info("Couldn't get time series for {}", id);
+        LOGGER.info("Couldn't get time series for {}", id);
       }
-      return Collections.singleton(new ComputedValue(new ValueSpecification(ValueRequirementNames.CURVE_HISTORICAL_TIME_SERIES, target.toSpecification(),
-          desiredValue.getConstraints()), bundle));
-    } else if (curve instanceof CurveSpecification) {
-      for (final CurveNodeWithIdentifier node : ((CurveSpecification) curve).getNodes()) {
-        ExternalIdBundle id = ExternalIdBundle.of(node.getIdentifier());
-        String dataField = node.getDataField();
-        HistoricalTimeSeries timeSeries = timeSeriesSource.getHistoricalTimeSeries(dataField, id, resolutionKey, startDate, includeStart, endDate, includeEnd);
+      if (node instanceof PointsCurveNodeWithIdentifier) {
+        final PointsCurveNodeWithIdentifier pointsNode = (PointsCurveNodeWithIdentifier) node;
+        id = ExternalIdBundle.of(pointsNode.getUnderlyingIdentifier());
+        dataField = pointsNode.getUnderlyingDataField();
+        timeSeries = timeSeriesSource.getHistoricalTimeSeries(dataField, id, resolutionKey, startDate, includeStart, endDate, includeEnd);
         if (timeSeries != null) {
           if (timeSeries.getTimeSeries().isEmpty()) {
-            s_logger.info("Time series for {} is empty", id);
+            LOGGER.info("Time series for {} is empty", id);
           } else {
             bundle.add(dataField, id, timeSeries);
           }
         } else {
-          s_logger.info("Couldn't get time series for {}", id);
+          LOGGER.info("Couldn't get time series for {}", id);
         }
-        if (node instanceof PointsCurveNodeWithIdentifier) {
-          final PointsCurveNodeWithIdentifier pointsNode = (PointsCurveNodeWithIdentifier) node;
-          id = ExternalIdBundle.of(pointsNode.getUnderlyingIdentifier());
-          dataField = pointsNode.getUnderlyingDataField();
-          timeSeries = timeSeriesSource.getHistoricalTimeSeries(dataField, id, resolutionKey, startDate, includeStart, endDate, includeEnd);
-          if (timeSeries != null) {
-            if (timeSeries.getTimeSeries().isEmpty()) {
-              s_logger.info("Time series for {} is empty", id);
-            } else {
-              bundle.add(dataField, id, timeSeries);
-            }
-          } else {
-            s_logger.info("Couldn't get time series for {}", id);
-          }
-        }
-        if (node.getCurveNode() instanceof ZeroCouponInflationNode) {
-          final ZeroCouponInflationNode inflationNode = (ZeroCouponInflationNode) node.getCurveNode();
-          final ConventionSource conventionSource = OpenGammaExecutionContext.getConventionSource(executionContext);
-          final SecuritySource securitySource = OpenGammaExecutionContext.getSecuritySource(executionContext);
-          final InflationLegConvention inflationLegConvention =
-              conventionSource.getSingle(inflationNode.getInflationLegConvention(), InflationLegConvention.class);
-          final Security sec = securitySource.getSingle(inflationLegConvention.getPriceIndexConvention().toBundle());
-          if (sec == null) {
-            throw new OpenGammaRuntimeException("Index with id " + inflationLegConvention.getPriceIndexConvention() + " was null");
-          }
-          if (!(sec instanceof PriceIndex)) {
-            throw new OpenGammaRuntimeException("Index with id " + inflationLegConvention.getPriceIndexConvention() + " not of type PriceIndex");
-          }
-          final PriceIndex indexSecurity = (PriceIndex) sec;
-          final String priceIndexField = MarketDataRequirementNames.MARKET_VALUE; //TODO
-          final HistoricalTimeSeries priceIndexSeries = timeSeriesSource.getHistoricalTimeSeries(priceIndexField, indexSecurity.getExternalIdBundle(),
-              resolutionKey, startDate, includeStart, endDate, true);
-          if (priceIndexSeries != null) {
-            if (priceIndexSeries.getTimeSeries().isEmpty()) {
-              s_logger.info("Time series for {} is empty", indexSecurity.getExternalIdBundle());
-            } else {
-              bundle.add(dataField, indexSecurity.getExternalIdBundle(), priceIndexSeries);
-            }
-          } else {
-            s_logger.info("Couldn't get time series for {}", indexSecurity.getExternalIdBundle());
-          }
-        }
-        // Implementation node: fixing series are required for Fed Fund futures: underlying overnight index fixing (when fixing month has started)
-        if (node.getCurveNode() instanceof RateFutureNode) { // Start Fed Fund futures
-          final RateFutureNode nodeRateFut = (RateFutureNode) node.getCurveNode();
-          final Convention conventionRateFut =  ConventionLink.resolvable(nodeRateFut.getFutureConvention(), Convention.class).resolve();
-          if (conventionRateFut instanceof FederalFundsFutureConvention) {
-            final FederalFundsFutureConvention conventionFedFundFut = (FederalFundsFutureConvention) conventionRateFut;
-            final ExternalId onIndexConventionId = conventionFedFundFut.getIndexConvention();
-            final String onIndexField = MarketDataRequirementNames.MARKET_VALUE; //TODO
-            final HistoricalTimeSeries onIndexSeries = timeSeriesSource.getHistoricalTimeSeries(onIndexField, onIndexConventionId.toBundle(),
-                resolutionKey, startDate, includeStart, endDate, true);
-            if (onIndexSeries != null) {
-              if (onIndexSeries.getTimeSeries().isEmpty()) {
-                s_logger.info("Time series for {} is empty", onIndexConventionId);
-              } else {
-                bundle.add(dataField, onIndexConventionId.toBundle(), onIndexSeries);
-              }
-            } else {
-              s_logger.info("Couldn't get time series for {}, trying identifier from security", onIndexConventionId);
-              final Security underlyingSecurity = SecurityLink.resolvable(onIndexConventionId, Security.class).resolve();
-              if (underlyingSecurity != null) {
-
-              } else {
-                s_logger.info("Couldn't get security with identifier {}");
-              }
-            }
-          }
-        } // End Fed Fund futures
       }
-      return Collections.singleton(new ComputedValue(new ValueSpecification(ValueRequirementNames.CURVE_HISTORICAL_TIME_SERIES, target.toSpecification(),
-          desiredValue.getConstraints()), bundle));
+      if (node.getCurveNode() instanceof ZeroCouponInflationNode) {
+        final ZeroCouponInflationNode inflationNode = (ZeroCouponInflationNode) node.getCurveNode();
+        final ConventionSource conventionSource = OpenGammaExecutionContext.getConventionSource(executionContext);
+        final SecuritySource securitySource = OpenGammaExecutionContext.getSecuritySource(executionContext);
+        final InflationLegConvention inflationLegConvention =
+            conventionSource.getSingle(inflationNode.getInflationLegConvention(), InflationLegConvention.class);
+        final Security sec = securitySource.getSingle(inflationLegConvention.getPriceIndexConvention().toBundle());
+        if (sec == null) {
+          throw new OpenGammaRuntimeException("Index with id " + inflationLegConvention.getPriceIndexConvention() + " was null");
+        }
+        if (!(sec instanceof PriceIndex)) {
+          throw new OpenGammaRuntimeException("Index with id " + inflationLegConvention.getPriceIndexConvention() + " not of type PriceIndex");
+        }
+        final PriceIndex indexSecurity = (PriceIndex) sec;
+        final String priceIndexField = MarketDataRequirementNames.MARKET_VALUE; //TODO
+        final HistoricalTimeSeries priceIndexSeries = timeSeriesSource.getHistoricalTimeSeries(priceIndexField, indexSecurity.getExternalIdBundle(),
+            resolutionKey, startDate, includeStart, endDate, true);
+        if (priceIndexSeries != null) {
+          if (priceIndexSeries.getTimeSeries().isEmpty()) {
+            LOGGER.info("Time series for {} is empty", indexSecurity.getExternalIdBundle());
+          } else {
+            bundle.add(dataField, indexSecurity.getExternalIdBundle(), priceIndexSeries);
+          }
+        } else {
+          LOGGER.info("Couldn't get time series for {}", indexSecurity.getExternalIdBundle());
+        }
+      }
+      // Implementation node: fixing series are required for Fed Fund futures: underlying overnight index fixing (when fixing month has started)
+      if (node.getCurveNode() instanceof RateFutureNode) { // Start Fed Fund futures
+        final RateFutureNode nodeRateFut = (RateFutureNode) node.getCurveNode();
+        final Convention conventionRateFut =  ConventionLink.resolvable(nodeRateFut.getFutureConvention(), Convention.class).resolve();
+        if (conventionRateFut instanceof FederalFundsFutureConvention) {
+          final FederalFundsFutureConvention conventionFedFundFut = (FederalFundsFutureConvention) conventionRateFut;
+          final ExternalId onIndexConventionId = conventionFedFundFut.getIndexConvention();
+          final String onIndexField = MarketDataRequirementNames.MARKET_VALUE; //TODO
+          final HistoricalTimeSeries onIndexSeries = timeSeriesSource.getHistoricalTimeSeries(onIndexField, onIndexConventionId.toBundle(),
+              resolutionKey, startDate, includeStart, endDate, true);
+          if (onIndexSeries != null) {
+            if (onIndexSeries.getTimeSeries().isEmpty()) {
+              LOGGER.info("Time series for {} is empty", onIndexConventionId);
+            } else {
+              bundle.add(dataField, onIndexConventionId.toBundle(), onIndexSeries);
+            }
+          } else {
+            LOGGER.info("Couldn't get time series for {}, trying identifier from security", onIndexConventionId);
+            final Security underlyingSecurity = SecurityLink.resolvable(onIndexConventionId, Security.class).resolve();
+            if (underlyingSecurity != null) {
+              if (underlyingSecurity instanceof OvernightIndex) {
+                final HistoricalTimeSeries onIndexTs = timeSeriesSource.getHistoricalTimeSeries(onIndexField, underlyingSecurity.getExternalIdBundle(),
+                    resolutionKey, startDate, includeStart, endDate, true);
+                if (onIndexTs != null) {
+                  if (onIndexTs.getTimeSeries().isEmpty()) {
+                    LOGGER.info("Time series for {} is empty", underlyingSecurity.getExternalIdBundle());
+                  } else {
+                    bundle.add(dataField, onIndexConventionId.toBundle(), onIndexTs);
+                  }
+                }
+              }
+            } else {
+              LOGGER.info("Couldn't get security with identifier {}");
+            }
+          }
+        }
+      } // End Fed Fund futures
+
     }
-    throw new OpenGammaRuntimeException("Cannot handle specifications of type " + curve.getClass() + ": " + curve);
+    return Collections.singleton(new ComputedValue(new ValueSpecification(ValueRequirementNames.CURVE_HISTORICAL_TIME_SERIES, target.toSpecification(),
+        desiredValue.getConstraints()), bundle));
   }
 
   @Override
