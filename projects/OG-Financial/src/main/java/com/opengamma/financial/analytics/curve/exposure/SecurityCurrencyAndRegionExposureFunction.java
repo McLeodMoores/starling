@@ -1,7 +1,7 @@
 /**
  * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
  */
-package com.opengamma.financial.analytics.curve.exposure.factory;
+package com.opengamma.financial.analytics.curve.exposure;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -13,6 +13,7 @@ import com.opengamma.core.security.Security;
 import com.opengamma.core.security.SecuritySource;
 import com.opengamma.engine.function.FunctionCompilationContext;
 import com.opengamma.engine.function.FunctionExecutionContext;
+import com.opengamma.financial.analytics.curve.exposure.factory.NamedExposureFunction;
 import com.opengamma.financial.security.FinancialSecurity;
 import com.opengamma.financial.security.FinancialSecurityUtils;
 import com.opengamma.financial.security.FinancialSecurityVisitorSameMethodAdapter;

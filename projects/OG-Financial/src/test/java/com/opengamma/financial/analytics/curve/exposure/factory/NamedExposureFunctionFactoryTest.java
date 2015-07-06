@@ -15,6 +15,7 @@ import com.opengamma.financial.analytics.curve.exposure.SecurityAndCurrencyExpos
 import com.opengamma.financial.analytics.curve.exposure.SecurityAndRegionExposureFunction;
 import com.opengamma.financial.analytics.curve.exposure.SecurityAndSettlementExchangeExposureFunction;
 import com.opengamma.financial.analytics.curve.exposure.SecurityAndTradingExchangeExposureFunction;
+import com.opengamma.financial.analytics.curve.exposure.SecurityCurrencyAndRegionExposureFunction;
 import com.opengamma.financial.analytics.curve.exposure.SecurityExposureFunction;
 import com.opengamma.financial.analytics.curve.exposure.SecurityTypeExposureFunction;
 import com.opengamma.financial.analytics.curve.exposure.TradeAttributeExposureFunction;

@@ -128,7 +128,7 @@ import com.opengamma.util.time.Tenor;
 /**
  * Tests related to the conversion of nodes used in curve construction to OG-Analytics objects.
  */
-@Test(groups = TestGroup.UNIT)
+@Test(groups = TestGroup.UNIT, singleThreaded = true)
 public class CurveNodeToDefinitionConverterTest {
   private static final SimpleHoliday WEEKEND_ONLY_HOLIDAYS = new SimpleHolidayWithWeekend(Collections.<LocalDate>emptySet(), WeekendType.SATURDAY_SUNDAY);
   private static final MondayToFridayCalendar CALENDAR = new MondayToFridayCalendar("Weekend");

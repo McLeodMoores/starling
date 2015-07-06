@@ -3,9 +3,7 @@
  */
 package com.opengamma.financial.analytics.curve;
 
-import static com.opengamma.financial.analytics.curve.CurveNodeCurrencyVisitorTest.EMPTY_SECURITY_SOURCE;
 import static com.opengamma.financial.analytics.curve.CurveNodeCurrencyVisitorTest.SCHEME;
-import static com.opengamma.financial.analytics.curve.CurveNodeCurrencyVisitorTest.US;
 import static org.testng.Assert.assertEquals;
 
 import org.testng.annotations.Test;
@@ -15,6 +13,8 @@ import com.google.common.collect.Sets;
 import com.opengamma.DataNotFoundException;
 import com.opengamma.OpenGammaRuntimeException;
 import com.opengamma.analytics.financial.interestrate.CompoundingType;
+import com.opengamma.core.id.ExternalSchemes;
+import com.opengamma.core.security.SecuritySource;
 import com.opengamma.engine.InMemoryConventionSource;
 import com.opengamma.engine.InMemorySecuritySource;
 import com.opengamma.financial.analytics.ircurve.strips.SwapNode;
@@ -41,6 +41,10 @@ import com.opengamma.util.time.Tenor;
  * Tests the retrieval of a currency from swap nodes.
  */
 public class SwapNodeCurrencyVisitorTest {
+  /** US region. */
+  private static final ExternalId US = ExternalSchemes.financialRegionId("US");
+  /** An empty security source. */
+  private static final SecuritySource EMPTY_SECURITY_SOURCE = new InMemorySecuritySource();
   /** The curve node id mapper name */
   private static final String CNIM_NAME = "CNIM";
   /** The id of an underlying swap index convention */

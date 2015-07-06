@@ -18,9 +18,7 @@ import java.util.Set;
 import org.testng.annotations.Test;
 
 import com.google.common.collect.Sets;
-import com.opengamma.core.config.ConfigSource;
 import com.opengamma.core.convention.ConventionSource;
-import com.opengamma.core.id.ExternalSchemes;
 import com.opengamma.core.security.SecuritySource;
 import com.opengamma.engine.InMemoryConventionSource;
 import com.opengamma.engine.InMemorySecuritySource;
@@ -34,8 +32,6 @@ import com.opengamma.financial.convention.EquityConvention;
 import com.opengamma.financial.convention.businessday.BusinessDayConventions;
 import com.opengamma.id.ExternalId;
 import com.opengamma.id.ExternalIdBundle;
-import com.opengamma.master.config.impl.InMemoryConfigMaster;
-import com.opengamma.master.config.impl.MasterConfigSource;
 import com.opengamma.util.money.Currency;
 import com.opengamma.util.test.TestGroup;
 import com.opengamma.util.time.Tenor;
@@ -47,18 +43,10 @@ import com.opengamma.util.time.Tenor;
 public class CurveNodeCurrencyVisitorTest {
   /** Test scheme. */
   protected static final String SCHEME = "Test";
-  /** US region. */
-  protected static final ExternalId US = ExternalSchemes.financialRegionId("US");
-  /** EU region. */
-  protected static final ExternalId EU = ExternalSchemes.financialRegionId("EU");
-  /** NY+LON holidays. */
-  protected static final ExternalId NYLON = ExternalSchemes.financialRegionId("US+GB");
   /** An empty security source. */
-  protected static final SecuritySource EMPTY_SECURITY_SOURCE = new InMemorySecuritySource();
+  private static final SecuritySource EMPTY_SECURITY_SOURCE = new InMemorySecuritySource();
   /** An empty convention source. */
-  protected static final ConventionSource EMPTY_CONVENTION_SOURCE = new InMemoryConventionSource();
-  /** An empty config source. */
-  protected static final ConfigSource EMPTY_CONFIG_SOURCE = new MasterConfigSource(new InMemoryConfigMaster());
+  private static final ConventionSource EMPTY_CONVENTION_SOURCE = new InMemoryConventionSource();
   /** The id for FX forward conventions */
   private static final ExternalId FX_FORWARD_ID = ExternalId.of(SCHEME, "FX Forward");
   /** Gets the currencies from a curve node */

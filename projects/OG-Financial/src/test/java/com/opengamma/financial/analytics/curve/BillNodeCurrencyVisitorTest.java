@@ -3,11 +3,7 @@
  */
 package com.opengamma.financial.analytics.curve;
 
-import static com.opengamma.financial.analytics.curve.CurveNodeCurrencyVisitorTest.EMPTY_CONFIG_SOURCE;
-import static com.opengamma.financial.analytics.curve.CurveNodeCurrencyVisitorTest.EMPTY_CONVENTION_SOURCE;
-import static com.opengamma.financial.analytics.curve.CurveNodeCurrencyVisitorTest.EMPTY_SECURITY_SOURCE;
 import static com.opengamma.financial.analytics.curve.CurveNodeCurrencyVisitorTest.SCHEME;
-import static com.opengamma.financial.analytics.curve.CurveNodeCurrencyVisitorTest.US;
 import static org.testng.Assert.assertEquals;
 
 import java.util.Collections;
@@ -17,6 +13,10 @@ import org.testng.annotations.Test;
 import com.opengamma.OpenGammaRuntimeException;
 import com.opengamma.core.config.ConfigSource;
 import com.opengamma.core.config.impl.ConfigItem;
+import com.opengamma.core.convention.ConventionSource;
+import com.opengamma.core.id.ExternalSchemes;
+import com.opengamma.core.security.SecuritySource;
+import com.opengamma.engine.InMemoryConventionSource;
 import com.opengamma.engine.InMemorySecuritySource;
 import com.opengamma.financial.analytics.ircurve.CurveInstrumentProvider;
 import com.opengamma.financial.analytics.ircurve.StaticCurveInstrumentProvider;
@@ -40,6 +40,14 @@ import com.opengamma.util.time.Tenor;
  * Tests the retrieval of a currency from bill nodes.
  */
 public class BillNodeCurrencyVisitorTest {
+  /** US region. */
+  private static final ExternalId US = ExternalSchemes.financialRegionId("US");
+  /** An empty security source. */
+  private static final SecuritySource EMPTY_SECURITY_SOURCE = new InMemorySecuritySource();
+  /** An empty convention source. */
+  private static final ConventionSource EMPTY_CONVENTION_SOURCE = new InMemoryConventionSource();
+  /** An empty config source. */
+  private static final ConfigSource EMPTY_CONFIG_SOURCE = new MasterConfigSource(new InMemoryConfigMaster());
   /** The curve instrument provider */
   private static final CurveInstrumentProvider CURVE_INSTRUMENT_PROVIDER = new StaticCurveInstrumentProvider(ExternalId.of(SCHEME, "ISIN"));
   /** The curve node id mapper name */

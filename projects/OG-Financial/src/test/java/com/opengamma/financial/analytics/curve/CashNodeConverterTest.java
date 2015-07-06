@@ -55,6 +55,7 @@ import com.opengamma.util.time.Tenor;
 /**
  * Unit tests for {@link CashNodeConverter}.
  */
+@Test(singleThreaded = true)
 public class CashNodeConverterTest {
   /** The curve node id mapper name */
   private static final String MAPPER = "Mapper";
@@ -102,7 +103,7 @@ public class CashNodeConverterTest {
   private static final OvernightIndex USD_FEDFUND_INDEX = new OvernightIndex(USD_FEDFUND_INDEX_NAME, USD_OVERNIGHT_CONVENTION_ID);
   /** Overnight index convention */
   private static final OvernightIndexConvention USD_OVERNIGHT_CONVENTION = new OvernightIndexConvention(USD_OVERNIGHT_CONVENTION_NAME,
-      ExternalId.of(SCHEME, USD_OVERNIGHT_CONVENTION_NAME).toBundle(), DayCounts.ACT_360, 1, Currency.USD, US);
+      USD_OVERNIGHT_CONVENTION_ID.toBundle(), DayCounts.ACT_360, 1, Currency.USD, US);
   /** One day deposit convention */
   private static final DepositConvention DEPOSIT_1D = new DepositConvention("USD 1d Deposit", ExternalIdBundle.of(DEPOSIT_1D_ID),
       DayCounts.ACT_360, BusinessDayConventions.MODIFIED_FOLLOWING, 0, false, Currency.USD, US);
@@ -240,12 +241,13 @@ public class CashNodeConverterTest {
   }
 
   /**
-   * Tests that an ibor deposit definition is created with the correct dates and conventions from a node
-   * referencing an ibor index convention. The tenor is calculated from the start and maturity tenors.
+   * Tests that a cash definition is created with the correct dates and conventions from a node
+   * referencing an overnight index convention.
    */
   @Test
   public void testOvernightIndexFromConvention() {
     final ZonedDateTime now = DateUtils.getUTCDate(2013, 5, 1);
+    final Object temp = USD_OVERNIGHT_CONVENTION;
     final CurveNode node = new CashNode(Tenor.of(Period.ZERO), Tenor.ON, USD_OVERNIGHT_CONVENTION_ID, MAPPER);
     final CurveNodeVisitor<InstrumentDefinition<?>> converter =
         new CashNodeConverter(SECURITY_SOURCE, HOLIDAY_SOURCE, REGION_SOURCE, MARKET_VALUES, MARKET_DATA_ID, now);

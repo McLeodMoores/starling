@@ -3,8 +3,6 @@
  */
 package com.opengamma.financial.analytics.curve;
 
-import static com.opengamma.financial.analytics.curve.CurveNodeCurrencyVisitorTest.EMPTY_SECURITY_SOURCE;
-import static com.opengamma.financial.analytics.curve.CurveNodeCurrencyVisitorTest.EU;
 import static com.opengamma.financial.analytics.curve.CurveNodeCurrencyVisitorTest.SCHEME;
 import static org.testng.Assert.assertEquals;
 
@@ -13,7 +11,10 @@ import org.threeten.bp.LocalTime;
 
 import com.google.common.collect.Sets;
 import com.opengamma.DataNotFoundException;
+import com.opengamma.core.id.ExternalSchemes;
+import com.opengamma.core.security.SecuritySource;
 import com.opengamma.engine.InMemoryConventionSource;
+import com.opengamma.engine.InMemorySecuritySource;
 import com.opengamma.financial.analytics.ircurve.strips.ThreeLegBasisSwapNode;
 import com.opengamma.financial.convention.IborIndexConvention;
 import com.opengamma.financial.convention.StubType;
@@ -31,6 +32,10 @@ import com.opengamma.util.time.Tenor;
  * Tests the retrieval of a currency from three leg basis swap nodes.
  */
 public class ThreeLegBasisSwapCurrencyVisitorTest {
+  /** EU region. */
+  private static final ExternalId EU = ExternalSchemes.financialRegionId("EU");
+  /** An empty security source. */
+  private static final SecuritySource EMPTY_SECURITY_SOURCE = new InMemorySecuritySource();
   /** The curve node id mapper name */
   private static final String CNIM_NAME = "CNIM";
   /** The id of the pay leg convention */
