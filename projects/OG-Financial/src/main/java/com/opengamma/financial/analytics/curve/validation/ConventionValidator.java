@@ -1,9 +1,8 @@
 /**
  * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
  */
-package com.mcleodmoores.curve.validation;
+package com.opengamma.financial.analytics.curve.validation;
 
-import com.mcleodmoores.validation.ConventionValidationInfo;
 import com.opengamma.core.convention.Convention;
 import com.opengamma.core.convention.ConventionSource;
 import com.opengamma.engine.function.FunctionCompilationContext;

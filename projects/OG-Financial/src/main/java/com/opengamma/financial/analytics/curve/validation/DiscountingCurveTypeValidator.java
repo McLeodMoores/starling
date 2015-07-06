@@ -1,14 +1,13 @@
 /**
  * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
  */
-package com.mcleodmoores.curve.validation;
+package com.opengamma.financial.analytics.curve.validation;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.mcleodmoores.validation.ConfigurationValidationInfo;
 import com.opengamma.core.config.ConfigSource;
 import com.opengamma.financial.analytics.curve.CurveGroupConfiguration;
 import com.opengamma.financial.analytics.curve.CurveTypeConfiguration;
