@@ -1,7 +1,7 @@
 /**
  * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
  */
-package com.opengamma.financial.analytics.curve.validation;
+package com.mcleodmoores.config;
 
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotEquals;
@@ -12,6 +12,7 @@ import java.util.HashSet;
 
 import org.testng.annotations.Test;
 
+import com.mcleodmoores.config.ConfigurationValidationInfo;
 import com.opengamma.core.id.ExternalSchemes;
 import com.opengamma.financial.analytics.curve.AbstractCurveDefinition;
 import com.opengamma.financial.analytics.curve.ConstantCurveDefinition;

@@ -1,27 +1,24 @@
 /**
  * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
  */
-package com.opengamma.financial.analytics.curve.validation;
+package com.mcleodmoores.config;
 
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Objects;
 
-import com.opengamma.core.security.Security;
-import com.opengamma.id.ExternalId;
 import com.opengamma.util.ArgumentChecker;
 
 //TODO would it be useful to have the ability to say that all collections are empty?
-public abstract class SecurityValidationInfo<T extends Security> {
+public class ConfigurationValidationInfo<T> {
   private final Class<T> _type;
-  private final Collection<T> _configurations;
+  private final Collection<? extends T> _configurations;
   /** The names of missing underlying configurations */
-  private final Collection<ExternalId> _missingConfigurationNames;
+  private final Collection<String> _missingConfigurationNames;
   /** The names of duplicated underlying configurations */
-  private final Collection<ExternalId> _duplicatedConfigurationNames;
+  private final Collection<String> _duplicatedConfigurationNames;
   private final Collection<?> _unsupportedConfigurationNames;
 
-  //TODO maybe ExternalIdBundle
   /**
    * Creates an instance.
    * @param type  the type of the configurations being tested, not null
@@ -29,8 +26,8 @@ public abstract class SecurityValidationInfo<T extends Security> {
    * @param missingConfigurationNames  the names of missing curve construction configurations, not null
    * @param duplicatedConfigurationNames  the names of duplicated curve construction configurations, not null
    */
-  public SecurityValidationInfo(final Class<T> type, final Collection<T> configurations, final Collection<ExternalId> missingConfigurationNames,
-      final Collection<ExternalId> duplicatedConfigurationNames) {
+  public ConfigurationValidationInfo(final Class<T> type, final Collection<? extends T> configurations, final Collection<String> missingConfigurationNames,
+      final Collection<String> duplicatedConfigurationNames) {
     this(type, configurations, missingConfigurationNames, duplicatedConfigurationNames, Collections.<String>emptySet());
   }
   /**
@@ -40,8 +37,8 @@ public abstract class SecurityValidationInfo<T extends Security> {
    * @param missingConfigurationNames  the names of missing curve construction configurations, not null
    * @param duplicatedConfigurationNames  the names of duplicated curve construction configurations, not null
    */
-  public SecurityValidationInfo(final Class<T> type, final Collection<T> configurations, final Collection<ExternalId> missingConfigurationNames,
-      final Collection<ExternalId> duplicatedConfigurationNames, final Collection<?> unsupportedConfigurationName) {
+  public ConfigurationValidationInfo(final Class<T> type, final Collection<? extends T> configurations, final Collection<String> missingConfigurationNames,
+      final Collection<String> duplicatedConfigurationNames, final Collection<?> unsupportedConfigurationName) {
     ArgumentChecker.notNull(type, "type");
     ArgumentChecker.notNull(configurations, "configurations");
     ArgumentChecker.notNull(missingConfigurationNames, "missingConfigurationNames");
@@ -58,7 +55,7 @@ public abstract class SecurityValidationInfo<T extends Security> {
     return _type;
   }
 
-  public Collection<T> getConfigurations() {
+  public Collection<T> getValidatedConfigurations() {
     return Collections.unmodifiableCollection(_configurations);
   }
 
@@ -66,7 +63,7 @@ public abstract class SecurityValidationInfo<T extends Security> {
    * Returns an unmodifiable collection of missing configuration names.
    * @return  the missing configuration names
    */
-  public Collection<ExternalId> getMissingCurveConstructionConfigurationNames() {
+  public Collection<String> getMissingConfigurationNames() {
     return Collections.unmodifiableCollection(_missingConfigurationNames);
   }
 
@@ -74,11 +71,11 @@ public abstract class SecurityValidationInfo<T extends Security> {
    * Returns an unmodifiable collection of duplicated configuration names.
    * @return  the duplicated configuration names
    */
-  public Collection<ExternalId> getDuplicatedCurveConstructionConfigurationNames() {
+  public Collection<String> getDuplicatedConfigurationNames() {
     return Collections.unmodifiableCollection(_duplicatedConfigurationNames);
   }
 
-  public Collection<?> getUnsupportedConfigurationNames() {
+  public Collection<?> getUnsupportedConfigurations() {
     return Collections.unmodifiableCollection(_unsupportedConfigurationNames);
   }
 
@@ -86,7 +83,6 @@ public abstract class SecurityValidationInfo<T extends Security> {
   public int hashCode() {
     final int prime = 31;
     int result = 1;
-    result = prime * result + Objects.hashCode(_type);
     result = prime * result + Objects.hashCode(_configurations);
     result = prime * result + Objects.hashCode(_duplicatedConfigurationNames);
     result = prime * result + Objects.hashCode(_missingConfigurationNames);
@@ -102,13 +98,10 @@ public abstract class SecurityValidationInfo<T extends Security> {
     if (obj == null) {
       return false;
     }
-    if (!(obj instanceof SecurityValidationInfo)) {
+    if (!(obj instanceof ConfigurationValidationInfo)) {
       return false;
     }
-    final SecurityValidationInfo<?> other = (SecurityValidationInfo<?>) obj;
-    if (!Objects.equals(_type, _type)) {
-      return false;
-    }
+    final ConfigurationValidationInfo<?> other = (ConfigurationValidationInfo<?>) obj;
     if (!Objects.equals(_missingConfigurationNames, other._missingConfigurationNames)) {
       return false;
     }

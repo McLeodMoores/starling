@@ -1,7 +1,7 @@
 /**
  * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
  */
-package com.opengamma.financial.analytics.curve.validation;
+package com.mcleodmoores.security;
 
 import com.opengamma.core.security.Security;
 import com.opengamma.core.security.SecuritySource;

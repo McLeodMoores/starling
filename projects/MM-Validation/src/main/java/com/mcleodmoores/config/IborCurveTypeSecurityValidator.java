@@ -1,7 +1,7 @@
 /**
  * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
  */
-package com.opengamma.financial.analytics.curve.validation;
+package com.mcleodmoores.config;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Map;
 
 import com.google.common.collect.Iterables;
+import com.mcleodmoores.security.SecurityValidationInfo;
+import com.mcleodmoores.security.SecurityValidator;
 import com.opengamma.DataNotFoundException;
 import com.opengamma.core.security.Security;
 import com.opengamma.core.security.SecuritySource;
