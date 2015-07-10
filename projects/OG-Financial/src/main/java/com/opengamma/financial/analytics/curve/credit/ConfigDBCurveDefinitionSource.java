@@ -73,7 +73,21 @@ public class ConfigDBCurveDefinitionSource implements CurveDefinitionSource {
 
   @Override
   public AbstractCurveDefinition getDefinition(final String name) {
-    return getDefinition(name, _queryCurveDefinition.getVersionCorrection());
+    ArgumentChecker.notNull(name, "name");
+    AbstractCurveDefinition result = _queryInterpolatedCurveDefinition.get(name, _queryInterpolatedCurveDefinition.getVersionCorrection());
+    if (result != null) {
+      return result;
+    }
+//    result = _queryConstantCurveDefinition.get(name, _queryConstantCurveDefinition.getVersionCorrection());
+    result = _queryConstantCurveDefinition.get(name, VersionCorrection.LATEST);
+    if (result != null) {
+      return result;
+    }
+    result = _querySpreadCurveDefinition.get(name, _querySpreadCurveDefinition.getVersionCorrection());
+    if (result != null) {
+      return result;
+    }
+    return _queryCurveDefinition.get(name, _queryCurveDefinition.getVersionCorrection());
   }
 
   @Override
