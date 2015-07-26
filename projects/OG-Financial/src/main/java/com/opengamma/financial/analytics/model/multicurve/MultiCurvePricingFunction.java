@@ -206,6 +206,11 @@ public abstract class MultiCurvePricingFunction extends AbstractFunction {
     }
 
     @Override
+    public ComputationTargetType getTargetType() {
+      return ComputationTargetType.TRADE;
+    }
+
+    @Override
     public boolean canHandleMissingInputs() {
       return true;
     }
@@ -213,11 +218,6 @@ public abstract class MultiCurvePricingFunction extends AbstractFunction {
     @Override
     public boolean canHandleMissingRequirements() {
       return true;
-    }
-
-    @Override
-    public ComputationTargetType getTargetType() {
-      return ComputationTargetType.TRADE;
     }
 
     @Override

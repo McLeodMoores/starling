@@ -21,6 +21,11 @@ public class CurveCalculationPropertyNamesAndValues {
   public static final String ROOT_FINDING = "RootFinding";
 
   /**
+   * Property value indicating that the curves were created using the market data quotes directly.
+   */
+  public static final String DIRECT = "Direct";
+
+  /**
    * Property value indicating that any yield curves are discounting curves and that forward rates
    * are computed as ratios of discount factors.
    */
@@ -30,6 +35,11 @@ public class CurveCalculationPropertyNamesAndValues {
    * Property value indicating that the forward rates are calculated directly.
    */
   public static final String FORWARD = "Forward";
+
+  /**
+   * Property value indicating that a constant curve is constructed using a single direct rate.
+   */
+  public static final String CONSTANT_FROM_RATE = "ConstantFromRate";
 
   /**
    * Property value indicating that any yield curves are discounting curves and that forward

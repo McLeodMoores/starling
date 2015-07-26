@@ -63,7 +63,7 @@ public class FXForwardAndSwapConvention extends FinancialConvention {
    * the settlement date. The appropriate information is found in the spot convention.
    */
   @Deprecated
-  @PropertyDefinition(validate = "notNull")
+  @PropertyDefinition
   private ExternalId _settlementRegion;
 
   /**
@@ -80,8 +80,30 @@ public class FXForwardAndSwapConvention extends FinancialConvention {
    * @param spotConvention  the underlying spot rate convention, not null
    * @param businessDayConvention  the business day convention, not null
    * @param isEOM  is this convention EOM
-   * @param settlementRegion  the settlement region id, not null
    */
+  public FXForwardAndSwapConvention(
+      final String name, final ExternalIdBundle externalIdBundle, final ExternalId spotConvention,
+      final BusinessDayConvention businessDayConvention, final boolean isEOM) {
+    super(name, externalIdBundle);
+    setSpotConvention(spotConvention);
+    setBusinessDayConvention(businessDayConvention);
+    setIsEOM(isEOM);
+    setSettlementRegion(null);
+  }
+
+  /**
+   * Creates an instance.
+   * 
+   * @param name  the convention name, not null
+   * @param externalIdBundle  the id bundle for this convention, not null
+   * @param spotConvention  the underlying spot rate convention, not null
+   * @param businessDayConvention  the business day convention, not null
+   * @param isEOM  is this convention EOM
+   * @param settlementRegion  the settlement region id, not null
+   * @deprecated  the settlement region should not be used, as FX settlement dates are calculated using
+   * both conventions
+   */
+  @Deprecated
   public FXForwardAndSwapConvention(
       final String name, final ExternalIdBundle externalIdBundle, final ExternalId spotConvention,
       final BusinessDayConvention businessDayConvention, final boolean isEOM, final ExternalId settlementRegion) {
@@ -217,7 +239,7 @@ public class FXForwardAndSwapConvention extends FinancialConvention {
    * Gets the settlement region.
    * @deprecated  both regions and US holidays should be considered when calculating
    * the settlement date. The appropriate information is found in the spot convention.
-   * @return the value of the property, not null
+   * @return the value of the property
    */
   @Deprecated
   public ExternalId getSettlementRegion() {
@@ -228,11 +250,10 @@ public class FXForwardAndSwapConvention extends FinancialConvention {
    * Sets the settlement region.
    * @deprecated  both regions and US holidays should be considered when calculating
    * the settlement date. The appropriate information is found in the spot convention.
-   * @param settlementRegion  the new value of the property, not null
+   * @param settlementRegion  the new value of the property
    */
   @Deprecated
   public void setSettlementRegion(ExternalId settlementRegion) {
-    JodaBeanUtils.notNull(settlementRegion, "settlementRegion");
     this._settlementRegion = settlementRegion;
   }
 
@@ -451,7 +472,6 @@ public class FXForwardAndSwapConvention extends FinancialConvention {
     protected void validate(Bean bean) {
       JodaBeanUtils.notNull(((FXForwardAndSwapConvention) bean)._spotConvention, "spotConvention");
       JodaBeanUtils.notNull(((FXForwardAndSwapConvention) bean)._businessDayConvention, "businessDayConvention");
-      JodaBeanUtils.notNull(((FXForwardAndSwapConvention) bean)._settlementRegion, "settlementRegion");
       super.validate(bean);
     }
 

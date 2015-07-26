@@ -211,8 +211,15 @@ public class CashNodeConverter extends CurveNodeVisitorAdapter<InstrumentDefinit
         final ZonedDateTime startDate = ZonedDateTime.of(LocalDateTime.of(startLocalDate, time), zone);
         final ZonedDateTime endDate = ZonedDateTime.of(LocalDateTime.of(endLocalDate, time), zone);
         final Period period = Period.between(startDate.toLocalDate(), endDate.toLocalDate());
-        final Tenor monthPeriod = Tenor.of(Period.ofMonths(Long.valueOf(period.toTotalMonths()).intValue()));
-        final IborIndex index = ConverterUtils.indexIbor(iborIndexConvention.getName(), iborIndexConvention, monthPeriod);
+        final IborIndex index;
+        if (period.getDays() != 0) {
+          //TODO won't work for business day tenors
+          final Tenor daysPeriod = Tenor.of(maturityTenor.getPeriod().minus(startTenor.getPeriod()));
+          index = ConverterUtils.indexIbor(iborIndexConvention.getName(), iborIndexConvention, daysPeriod);
+        } else {
+          final Tenor monthPeriod = Tenor.of(Period.ofMonths(Long.valueOf(period.toTotalMonths()).intValue()));
+          index = ConverterUtils.indexIbor(iborIndexConvention.getName(), iborIndexConvention, monthPeriod);
+        }
         final double accrualFactor = dayCount.getDayCountFraction(startDate, endDate);
         return new DepositIborDefinition(currency, startDate, endDate, 1, _rate, accrualFactor, index);
       }

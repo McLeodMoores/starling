@@ -2,19 +2,25 @@
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
  *
  * Please see distribution for license.
+ *
+ * Modified by McLeod Moores Software Limited.
+ *
+ * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.financial.analytics.model.curve;
 
 import static com.opengamma.engine.value.ValuePropertyNames.CURVE_CONSTRUCTION_CONFIG;
 import static com.opengamma.engine.value.ValueRequirementNames.CURRENCY_PAIRS;
+import static com.opengamma.engine.value.ValueRequirementNames.FX_MATRIX;
+import static com.opengamma.engine.value.ValueRequirementNames.SPOT_RATE;
 
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.threeten.bp.Instant;
 import org.threeten.bp.LocalTime;
 import org.threeten.bp.ZoneOffset;
@@ -36,13 +42,16 @@ import com.opengamma.engine.target.ComputationTargetType;
 import com.opengamma.engine.value.ComputedValue;
 import com.opengamma.engine.value.ValueProperties;
 import com.opengamma.engine.value.ValueRequirement;
-import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.financial.OpenGammaCompilationContext;
+import com.opengamma.financial.analytics.curve.AbstractCurveDefinition;
 import com.opengamma.financial.analytics.curve.ConfigDBCurveConstructionConfigurationSource;
+import com.opengamma.financial.analytics.curve.ConstantCurveDefinition;
 import com.opengamma.financial.analytics.curve.CurveConstructionConfiguration;
 import com.opengamma.financial.analytics.curve.CurveConstructionConfigurationSource;
+import com.opengamma.financial.analytics.curve.CurveGroupConfiguration;
 import com.opengamma.financial.analytics.curve.CurveNodeCurrencyVisitor;
+import com.opengamma.financial.analytics.curve.CurveTypeConfiguration;
 import com.opengamma.financial.analytics.curve.CurveUtils;
 import com.opengamma.financial.analytics.curve.credit.ConfigDBCurveDefinitionSource;
 import com.opengamma.financial.analytics.curve.credit.CurveDefinitionSource;
@@ -57,8 +66,6 @@ import com.opengamma.util.money.Currency;
  * Function that returns a {@link FXMatrix} for a curve construction configuration.
  */
 public class FXMatrixFunction extends AbstractFunction {
-  /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(FXMatrixFunction.class);
   /** The configuration name */
   private final String _configurationName;
   /** A curve construction configuration source */
@@ -93,28 +100,44 @@ public class FXMatrixFunction extends AbstractFunction {
   public CompiledFunctionDefinition compile(final FunctionCompilationContext context, final Instant atInstant) {
     final ZonedDateTime atZDT = ZonedDateTime.ofInstant(atInstant, ZoneOffset.UTC);
     //TODO work out a way to use dependency graph to get curve information for this config
-    final CurveConstructionConfiguration curveConstructionConfiguration = _curveConstructionConfigurationSource.getCurveConstructionConfiguration(_configurationName);
+    final CurveConstructionConfiguration curveConstructionConfiguration =
+        _curveConstructionConfigurationSource.getCurveConstructionConfiguration(_configurationName);
     if (curveConstructionConfiguration == null) {
       throw new OpenGammaRuntimeException("Could not get curve construction configuration called " + _configurationName);
     }
     final ConventionSource conventionSource = OpenGammaCompilationContext.getConventionSource(context);
     final SecuritySource securitySource = OpenGammaCompilationContext.getSecuritySource(context);
     final ConfigSource configSource = OpenGammaCompilationContext.getConfigSource(context);
-    try {
-      final CurveNodeVisitor<Set<Currency>> visitor = new CurveNodeCurrencyVisitor(conventionSource, securitySource, configSource);
-      final Set<Currency> currencies = CurveUtils.getCurrencies(curveConstructionConfiguration, _curveDefinitionSource, _curveConstructionConfigurationSource, visitor);
-      final ValueProperties properties = createValueProperties().with(CURVE_CONSTRUCTION_CONFIG, _configurationName).get();
-      final ValueSpecification spec = new ValueSpecification(ValueRequirementNames.FX_MATRIX, ComputationTargetSpecification.NULL, properties);
-      return new MyCompiledFunction(atZDT.with(LocalTime.MIDNIGHT), atZDT.plusDays(1).with(LocalTime.MIDNIGHT).minusNanos(1000000), spec, currencies);
-    } catch (final Throwable e) {
-      s_logger.error("{}: problem in CurveConstructionConfiguration called {}", e.getMessage(), _configurationName);
-      s_logger.error("Full stack trace", e);
-      throw new OpenGammaRuntimeException(e.getMessage() + ": problem in CurveConstructionConfiguration called " + _configurationName);
+    boolean allCurvesConstant = true;
+    for (final CurveGroupConfiguration group : curveConstructionConfiguration.getCurveGroups()) {
+      for (final Map.Entry<String, List<? extends CurveTypeConfiguration>> entry : group.getTypesForCurves().entrySet()) {
+        final AbstractCurveDefinition definition = _curveDefinitionSource.getDefinition(entry.getKey());
+        if (!(definition instanceof ConstantCurveDefinition)) {
+          allCurvesConstant = false;
+          break;
+        }
+      }
     }
+    final Set<Currency> currencies;
+    if (allCurvesConstant) {
+      currencies = Collections.<Currency>emptySet();
+    } else {
+      try {
+        final CurveNodeVisitor<Set<Currency>> visitor = new CurveNodeCurrencyVisitor(conventionSource, securitySource, configSource);
+        currencies = CurveUtils.getCurrencies(curveConstructionConfiguration, _curveDefinitionSource, _curveConstructionConfigurationSource, visitor);
+      } catch (final Exception e) {
+        throw new OpenGammaRuntimeException(e.getMessage() + ": problem in CurveConstructionConfiguration called " + _configurationName);
+      }
+    }
+    final ValueProperties properties = createValueProperties()
+        .with(CURVE_CONSTRUCTION_CONFIG, _configurationName)
+        .get();
+    final ValueSpecification spec = new ValueSpecification(FX_MATRIX, ComputationTargetSpecification.NULL, properties);
+    return new MyCompiledFunction(atZDT.with(LocalTime.MIDNIGHT), atZDT.plusDays(1).with(LocalTime.MIDNIGHT).minusNanos(1000000), spec, currencies);
   }
 
   /**
-   * Function that creates an {@link FXMatrix}
+   * Function that creates an {@link FXMatrix}.
    */
   protected class MyCompiledFunction extends AbstractInvokingCompiledFunction {
     /** The result specification */
@@ -128,7 +151,8 @@ public class FXMatrixFunction extends AbstractFunction {
      * @param spec The result specification for the FX matrix, not null
      * @param currencies The currencies contained in the matrix, not null
      */
-    public MyCompiledFunction(final ZonedDateTime earliestInvocation, final ZonedDateTime latestInvocation, final ValueSpecification spec, final Set<Currency> currencies) {
+    public MyCompiledFunction(final ZonedDateTime earliestInvocation, final ZonedDateTime latestInvocation, final ValueSpecification spec,
+        final Set<Currency> currencies) {
       super(earliestInvocation, latestInvocation);
       ArgumentChecker.notNull(spec, "specification");
       ArgumentChecker.notNull(currencies, "currencies");
@@ -152,7 +176,8 @@ public class FXMatrixFunction extends AbstractFunction {
         if (pair == null) {
           throw new OpenGammaRuntimeException("CurrencyPairs for currencies " + initialCurrency + " and " + otherCurrency + " not available");
         }
-        final double spotRate = (Double) inputs.getValue(new ValueRequirement(ValueRequirementNames.SPOT_RATE, CurrencyPair.TYPE.specification(CurrencyPair.of(otherCurrency, initialCurrency))));
+        final double spotRate = (Double) inputs.getValue(new ValueRequirement(SPOT_RATE,
+            CurrencyPair.TYPE.specification(CurrencyPair.of(otherCurrency, initialCurrency))));
         matrix.addCurrency(otherCurrency, initialCurrency, spotRate);
       }
       return Collections.singleton(new ComputedValue(_spec, matrix));
@@ -169,7 +194,8 @@ public class FXMatrixFunction extends AbstractFunction {
     }
 
     @Override
-    public Set<ValueRequirement> getRequirements(final FunctionCompilationContext compilationContext, final ComputationTarget target, final ValueRequirement desiredValue) {
+    public Set<ValueRequirement> getRequirements(final FunctionCompilationContext compilationContext, final ComputationTarget target,
+        final ValueRequirement desiredValue) {
       if (_currencies == null || _currencies.isEmpty() || _currencies.size() == 1) {
         return Collections.emptySet();
       }
@@ -177,7 +203,7 @@ public class FXMatrixFunction extends AbstractFunction {
       final Iterator<Currency> iter = _currencies.iterator();
       final Currency initialCurrency = iter.next();
       while (iter.hasNext()) {
-        requirements.add(new ValueRequirement(ValueRequirementNames.SPOT_RATE, CurrencyPair.TYPE.specification(CurrencyPair.of(iter.next(), initialCurrency))));
+        requirements.add(new ValueRequirement(SPOT_RATE, CurrencyPair.TYPE.specification(CurrencyPair.of(iter.next(), initialCurrency))));
       }
       requirements.add(new ValueRequirement(CURRENCY_PAIRS, ComputationTargetSpecification.NULL, ValueProperties.none()));
       return requirements;

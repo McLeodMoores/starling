@@ -2,6 +2,10 @@
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
  *
  * Please see distribution for license.
+ *
+ * Modified by McLeod Moores Software Limited.
+ *
+ * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.financial.analytics;
 
@@ -16,7 +20,7 @@ import org.testng.annotations.Test;
 import com.opengamma.util.test.TestGroup;
 
 /**
- * 
+ *
  */
 @Test(groups = TestGroup.UNIT)
 public class LabelledMatrix1DTest {
@@ -138,20 +142,20 @@ public class LabelledMatrix1DTest {
     other = new MyLabelledMatrix1D(KEYS, LABELS1, new double[] {9, 10, 11, 12 });
     assertFalse(m.equals(other));
   }
-  
+
   @Test
   public void testTitles() {
-    MyLabelledMatrix1D withTitles = new MyLabelledMatrix1D(KEYS, LABELS1, "labels", VALUES, "values");
+    final MyLabelledMatrix1D withTitles = new MyLabelledMatrix1D(KEYS, LABELS1, "labels", VALUES, "values");
     assertEquals("labels", withTitles.getLabelsTitle());
     assertEquals("values", withTitles.getValuesTitle());
-    MyLabelledMatrix1D withoutTitles = new MyLabelledMatrix1D(KEYS, LABELS1, VALUES);
+    final MyLabelledMatrix1D withoutTitles = new MyLabelledMatrix1D(KEYS, LABELS1, VALUES);
     assertFalse(withTitles.equals(withoutTitles));
   }
-  
+
   @Test
   public void testTitlesPreserved() {
-    MyLabelledMatrix1D m1 = new MyLabelledMatrix1D(KEYS, LABELS1, "labels", VALUES, "values");
-    LabelledMatrix1D<Integer, Integer> m2 = m1.add(KEYS[0], LABELS1[0], 0);
+    final MyLabelledMatrix1D m1 = new MyLabelledMatrix1D(KEYS, LABELS1, "labels", VALUES, "values");
+    final LabelledMatrix1D<Integer, Integer> m2 = m1.add(KEYS[0], LABELS1[0], 0);
     assertEquals(m1.getLabelsTitle(), m2.getLabelsTitle());
     assertEquals(m1.getValuesTitle(), m2.getValuesTitle());
     assertEquals(m1, m2);
@@ -190,14 +194,14 @@ public class LabelledMatrix1DTest {
     public MyLabelledMatrix1D(final Integer[] keys, final Object[] labels, final String labelsTitle, final double[] values, final String valuesTitle) {
       super(keys, labels, labelsTitle, values, valuesTitle, TOLERANCE);
     }
-    
+
     @Override
     public int compare(final Integer o1, final Integer o2, final Integer tolerance) {
       return o1.compareTo(o2);
     }
-    
+
     @Override
-    public LabelledMatrix1D<Integer, Integer> getMatrix(Integer[] keys, Object[] labels, String labelsTitle, double[] values, String valuesTitle) {
+    public LabelledMatrix1D<Integer, Integer> getMatrix(final Integer[] keys, final Object[] labels, final String labelsTitle, final double[] values, final String valuesTitle) {
       return new MyLabelledMatrix1D(keys, labels, labelsTitle, values, valuesTitle);
     }
 

@@ -78,8 +78,7 @@ public class ConfigDBCurveDefinitionSource implements CurveDefinitionSource {
     if (result != null) {
       return result;
     }
-//    result = _queryConstantCurveDefinition.get(name, _queryConstantCurveDefinition.getVersionCorrection());
-    result = _queryConstantCurveDefinition.get(name, VersionCorrection.LATEST);
+    result = _queryConstantCurveDefinition.get(name, _queryConstantCurveDefinition.getVersionCorrection());
     if (result != null) {
       return result;
     }

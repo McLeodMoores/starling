@@ -2,6 +2,10 @@
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
  *
  * Please see distribution for license.
+ *
+ * Modified by McLeod Moores Software Limited.
+ *
+ * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.financial.analytics.model.curve;
 
@@ -25,13 +29,12 @@ import static com.opengamma.financial.analytics.model.curve.interestrate.MultiYi
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.threeten.bp.Clock;
 import org.threeten.bp.Instant;
 import org.threeten.bp.LocalDate;
@@ -94,8 +97,6 @@ import com.opengamma.util.tuple.Pair;
  * @param <W> The type of the sensitivity results
  */
 public abstract class MultiCurveFunction<T extends ParameterProviderInterface, U, V, W> extends AbstractFunction {
-  /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(MultiCurveFunction.class);
   /** The maturity calculator */
   private static final LastTimeCalculator MATURITY_CALCULATOR = LastTimeCalculator.getInstance();
   /** The curve configuration name */
@@ -123,7 +124,8 @@ public abstract class MultiCurveFunction<T extends ParameterProviderInterface, U
   public CompiledFunctionDefinition compile(final FunctionCompilationContext context, final Instant atInstant) {
     final ZonedDateTime atZDT = ZonedDateTime.ofInstant(atInstant, ZoneOffset.UTC);
     //TODO work out a way to use dependency graph to get curve information for this config
-    final CurveConstructionConfiguration curveConstructionConfiguration = _curveConstructionConfigurationSource.getCurveConstructionConfiguration(_configurationName);
+    final CurveConstructionConfiguration curveConstructionConfiguration =
+        _curveConstructionConfigurationSource.getCurveConstructionConfiguration(_configurationName);
     if (curveConstructionConfiguration == null) {
       throw new OpenGammaRuntimeException("Could not get curve construction configuration called " + _configurationName);
     }
@@ -153,13 +155,20 @@ public abstract class MultiCurveFunction<T extends ParameterProviderInterface, U
       for (final Currency currency : currencies) {
         currencyStrings[i++] = currency.getCode();
       }
-      return getCompiledFunction(atZDT.with(LocalTime.MIDNIGHT), atZDT.plusDays(1).with(LocalTime.MIDNIGHT).minusNanos(1000000), curveNames, exogenousRequirements,
-          curveConstructionConfiguration, currencyStrings);
+      return getCompiledFunction(atZDT.with(LocalTime.MIDNIGHT), atZDT.plusDays(1).with(LocalTime.MIDNIGHT).minusNanos(1000000),
+          curveNames, exogenousRequirements, curveConstructionConfiguration, currencyStrings);
     } catch (final Throwable e) {
-      s_logger.error("{}: problem in CurveConstructionConfiguration called {}", e.getMessage(), _configurationName);
-      s_logger.error("Full stack trace", e);
       throw new OpenGammaRuntimeException(e.getMessage() + ": problem in CurveConstructionConfiguration called " + _configurationName);
     }
+  }
+
+  /**
+   * Gets the curve construction configuration name.
+   *
+   * @return The curve construction configuration name
+   */
+  protected String getCurveConstructionConfigurationName() {
+    return _configurationName;
   }
 
   /**
@@ -237,8 +246,8 @@ public abstract class MultiCurveFunction<T extends ParameterProviderInterface, U
      * @deprecated Use the constructor that sets all currencies used in curve construction
      */
     @Deprecated
-    protected CurveCompiledFunctionDefinition(final ZonedDateTime earliestInvocation, final ZonedDateTime latestInvocation, final String[] curveNames, final String curveRequirement,
-        final Set<ValueRequirement> exogenousRequirements) {
+    protected CurveCompiledFunctionDefinition(final ZonedDateTime earliestInvocation, final ZonedDateTime latestInvocation, final String[] curveNames,
+        final String curveRequirement, final Set<ValueRequirement> exogenousRequirements) {
       this(earliestInvocation, latestInvocation, curveNames, curveRequirement, exogenousRequirements, null);
     }
 
@@ -250,8 +259,8 @@ public abstract class MultiCurveFunction<T extends ParameterProviderInterface, U
      * @param exogenousRequirements The exogenous requirements, not null
      * @param currencies The set of currencies to which the curves produce sensitivities, can be null
      */
-    protected CurveCompiledFunctionDefinition(final ZonedDateTime earliestInvocation, final ZonedDateTime latestInvocation, final String[] curveNames, final String curveRequirement,
-        final Set<ValueRequirement> exogenousRequirements, final String[] currencies) {
+    protected CurveCompiledFunctionDefinition(final ZonedDateTime earliestInvocation, final ZonedDateTime latestInvocation, final String[] curveNames,
+        final String curveRequirement, final Set<ValueRequirement> exogenousRequirements, final String[] currencies) {
       super(earliestInvocation, latestInvocation);
       ArgumentChecker.notNull(curveNames, "curve names");
       ArgumentChecker.notNull(curveRequirement, "curve requirement");
@@ -280,8 +289,12 @@ public abstract class MultiCurveFunction<T extends ParameterProviderInterface, U
           .withoutAny(CURVE)
           .with(CURVE, Arrays.asList(_curveNames));
       //TODO remove and use input properties
-      final Set<String> currencies = new HashSet<>();
-      currencies.addAll(Sets.newHashSet(_currencies));
+      final Set<String> currencies;
+      if (_currencies == null) {
+        currencies = Collections.<String>emptySet();
+      } else {
+        currencies = Sets.newHashSet(_currencies);
+      }
       for (final Map.Entry<Currency, Integer> entry : fxMatrix.getCurrencies().entrySet()) {
         currencies.add(entry.getKey().getCode());
       }
@@ -310,7 +323,8 @@ public abstract class MultiCurveFunction<T extends ParameterProviderInterface, U
     }
 
     @Override
-    public Set<ValueRequirement> getRequirements(final FunctionCompilationContext compilationContext, final ComputationTarget target, final ValueRequirement desiredValue) {
+    public Set<ValueRequirement> getRequirements(final FunctionCompilationContext compilationContext, final ComputationTarget target,
+        final ValueRequirement desiredValue) {
       final ValueProperties constraints = desiredValue.getConstraints();
       final Set<String> rootFinderAbsoluteTolerance = constraints.getValues(PROPERTY_ROOT_FINDER_ABSOLUTE_TOLERANCE);
       if (rootFinderAbsoluteTolerance == null || rootFinderAbsoluteTolerance.size() != 1) {
@@ -389,15 +403,6 @@ public abstract class MultiCurveFunction<T extends ParameterProviderInterface, U
     }
 
     /**
-     * Gets the curve construction configuration name.
-     *
-     * @return The curve construction configuration name
-     */
-    protected String getCurveConstructionConfigurationName() {
-      return _configurationName;
-    }
-
-    /**
      * Gets the known data from the FX matrix.
      *
      * @param inputs The inputs
@@ -416,7 +421,7 @@ public abstract class MultiCurveFunction<T extends ParameterProviderInterface, U
     protected abstract U getBuilder(double absoluteTolerance, double relativeTolerance, int maxIterations);
 
     /**
-     * Gets the generator for a curve definition
+     * Gets the generator for a curve definition.
      *
      * @param definition The curve definition
      * @param valuationDate The valuation date
@@ -425,6 +430,7 @@ public abstract class MultiCurveFunction<T extends ParameterProviderInterface, U
     protected abstract V getGenerator(CurveDefinition definition, LocalDate valuationDate);
 
     /**
+     * Gets the converter for the curve nodes in interpolated curves definitions.
      * @param context The execution context
      * @param marketData The market data snapshot
      * @param dataId The market data id for a node
@@ -433,10 +439,11 @@ public abstract class MultiCurveFunction<T extends ParameterProviderInterface, U
      * @param fxMatrix The FX matrix
      * @return A visitor that converts curve nodes to instrument definitions
      */
-    protected abstract CurveNodeVisitor<InstrumentDefinition<?>> getCurveNodeConverter(FunctionExecutionContext context, SnapshotDataBundle marketData, ExternalId dataId,
-        HistoricalTimeSeriesBundle historicalData, ZonedDateTime valuationTime, FXMatrix fxMatrix);
+    protected abstract CurveNodeVisitor<InstrumentDefinition<?>> getCurveNodeConverter(FunctionExecutionContext context,
+        SnapshotDataBundle marketData, ExternalId dataId, HistoricalTimeSeriesBundle historicalData, ZonedDateTime valuationTime, FXMatrix fxMatrix);
 
     /**
+     * Creates the yield curves.
      * @param inputs The inputs
      * @param now The valuation time
      * @param builder The builder
@@ -445,16 +452,19 @@ public abstract class MultiCurveFunction<T extends ParameterProviderInterface, U
      * @param fx The FX matrix.
      * @return The curve provider and associated results
      */
-    protected abstract Pair<T, CurveBuildingBlockBundle> getCurves(FunctionInputs inputs, ZonedDateTime now, U builder, T knownData, FunctionExecutionContext context, FXMatrix fx);
+    protected abstract Pair<T, CurveBuildingBlockBundle> getCurves(FunctionInputs inputs, ZonedDateTime now, U builder, T knownData,
+        FunctionExecutionContext context, FXMatrix fx);
 
     /**
+     * Gets the results.
      * @param bundleSpec The value specification for the curve bundle
      * @param jacobianSpec The value specification for the block of Jacobian matrices
      * @param bundleProperties The properties for the curve bundle
      * @param pair The results
      * @return A set of results
      */
-    protected abstract Set<ComputedValue> getResults(ValueSpecification bundleSpec, ValueSpecification jacobianSpec, ValueProperties bundleProperties, Pair<T, CurveBuildingBlockBundle> pair);
+    protected abstract Set<ComputedValue> getResults(ValueSpecification bundleSpec, ValueSpecification jacobianSpec, ValueProperties bundleProperties,
+        Pair<T, CurveBuildingBlockBundle> pair);
 
     /**
      * Gets the curve node converter used to convert a node into an InstrumentDerivative.

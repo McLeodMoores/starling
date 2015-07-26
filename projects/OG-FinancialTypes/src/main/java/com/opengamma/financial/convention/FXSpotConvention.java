@@ -74,6 +74,8 @@ public class FXSpotConvention extends FinancialConvention {
    * @param externalIdBundle  the external identifiers for this convention, not null
    * @param settlementDays  the number of settlement days
    * @param settlementRegion  the settlement region, can be null
+   * @deprecated  the settlement region should not be used, as FX settlement dates are calculated using
+   * both conventions
    */
   @Deprecated
   public FXSpotConvention(final String name, final ExternalIdBundle externalIdBundle, final int settlementDays,
