@@ -13,7 +13,7 @@
   </parent>
   <artifactId>og-util-common</artifactId>
   <packaging>jar</packaging>
-  <name>OG-Util</name>
+  <name>OG-UtilCommon</name>
   <description>OpenGamma Platform common utilities</description>
 
   <scm>
