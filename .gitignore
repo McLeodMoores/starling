@@ -93,20 +93,20 @@ docs.sqlite3
 
 # IntelliJ config files
 *.iws
-*.iml
+#*.iml
 *.ids
-.idea/libraries
-.idea/workspace.xml
-.idea/compiler.xml
-.idea/modules.xml
-.idea/encodings.xml
-.idea/uiDesigner.xml
-.idea/dictionaries
-.idea/inspectionProfiles
-.idea/validation.xml
-.idea/dataSources.xml
-.idea/scopes/scope_settings.xml
-.idea/inspectionProfiles/profiles_settings.xml
-.idea/inspectionProfiles/Project_Default.xml
-.idea/copyright/profiles_settings.xml
+#.idea/libraries
+#.idea/workspace.xml
+#.idea/compiler.xml
+#.idea/modules.xml
+#.idea/encodings.xml
+#.idea/uiDesigner.xml
+#.idea/dictionaries
+#.idea/inspectionProfiles
+#.idea/validation.xml
+#.idea/dataSources.xml
+#.idea/scopes/scope_settings.xml
+#.idea/inspectionProfiles/profiles_settings.xml
+#.idea/inspectionProfiles/Project_Default.xml
+#.idea/copyright/profiles_settings.xml
 atlassian-ide-plugin.xml
