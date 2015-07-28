@@ -15,10 +15,10 @@ import com.opengamma.analytics.math.interpolation.GridInterpolator2D;
 import com.opengamma.analytics.math.interpolation.Interpolator2D;
 import com.opengamma.analytics.math.interpolation.data.Interpolator1DDataBundle;
 import com.opengamma.util.tuple.DoublesPair;
-import com.opengamma.util.tuple.Pair;
-import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.tuple.FirstThenSecondDoublesPairComparator;
+import com.opengamma.util.tuple.Pair;
 import com.opengamma.util.tuple.Triple;
+import com.opengamma.util.ArgumentChecker;
 
 /**
  * A surface that is defined by a set of nodal points (i.e. <i>x-y-z</i> data) and an interpolator to return values of <i>z</i> for values

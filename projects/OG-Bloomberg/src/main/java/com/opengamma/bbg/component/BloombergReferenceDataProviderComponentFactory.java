@@ -90,7 +90,9 @@ public class BloombergReferenceDataProviderComponentFactory extends AbstractComp
     final ReferenceDataProvider provider = initReferenceDataProvider(repo);
     final ComponentInfo info = new ComponentInfo(ReferenceDataProvider.class, getClassifier());
     info.addAttribute(ComponentInfoAttributes.LEVEL, 1);
-    info.addAttribute(ComponentInfoAttributes.REMOTE_CLIENT_JAVA, RemoteReferenceDataProvider.class);
+    if (isPublishRest()) {
+      info.addAttribute(ComponentInfoAttributes.REMOTE_CLIENT_JAVA, RemoteReferenceDataProvider.class);
+    }
     repo.registerComponent(info, provider);
     if (isPublishRest()) {
       repo.getRestComponents().publish(info, new DataReferenceDataProviderResource(provider));

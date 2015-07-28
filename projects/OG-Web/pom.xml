@@ -55,7 +55,7 @@
   <dependencies>
     <dependency>
       <groupId>com.mcleodmoores.opengamma.platform</groupId>
-      <artifactId>og-financial</artifactId>
+      <artifactId>og-financial-rest</artifactId>
       <version>${project.version}</version>
     </dependency>
 

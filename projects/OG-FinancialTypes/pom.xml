@@ -23,12 +23,12 @@
   <dependencies>
     <dependency>
       <groupId>com.mcleodmoores.opengamma.platform</groupId>
-      <artifactId>og-util</artifactId>
+      <artifactId>og-util-common</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
       <groupId>com.mcleodmoores.opengamma.platform</groupId>
-      <artifactId>og-master</artifactId>
+      <artifactId>og-master-common</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>

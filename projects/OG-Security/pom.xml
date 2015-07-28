@@ -23,7 +23,7 @@
   <dependencies>
     <dependency>
       <groupId>com.mcleodmoores.opengamma.platform</groupId>
-      <artifactId>og-core</artifactId>
+      <artifactId>og-core-common</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>

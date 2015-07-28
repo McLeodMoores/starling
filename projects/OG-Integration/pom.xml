@@ -39,8 +39,20 @@
   <dependencies>
     <dependency>
       <groupId>com.mcleodmoores.opengamma.platform</groupId>
-      <artifactId>og-component</artifactId>
+      <artifactId>og-component-common</artifactId>
       <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.mcleodmoores.opengamma.platform</groupId>
+      <artifactId>og-core-common</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    
+    <dependency>
+      <groupId>com.mcleodmoores.opengamma.platform</groupId>
+      <artifactId>og-provider-rest-client</artifactId>
+      <version>${project.version}</version>
+      <optional>true</optional>
     </dependency>
     <dependency>
       <groupId>org.apache.commons</groupId>

@@ -4,7 +4,7 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
-
+ 
   <parent>
     <groupId>com.mcleodmoores.opengamma.platform</groupId>
     <artifactId>og-platform-public</artifactId>
@@ -12,39 +12,16 @@
     <relativePath>..</relativePath>
   </parent>
   <artifactId>og-engine</artifactId>
-  <packaging>jar</packaging>
+  <packaging>pom</packaging>
   <name>OG-Engine</name>
-  <description>OpenGamma Platform calculation engine</description>
-
-  <scm>
-    <url>https://github.com/OpenGamma/OG-Platform/tree/master/projects/OG-Engine</url>
-  </scm>
+  <description>OpenGamma Platform engine dependencies</description>
 
   <dependencies>
     <dependency>
       <groupId>com.mcleodmoores.opengamma.platform</groupId>
-      <artifactId>og-core</artifactId>
+      <artifactId>og-engine-rest</artifactId>
       <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>com.mcleodmoores.opengamma.platform</groupId>
-      <artifactId>og-livedata</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>com.sleepycat</groupId>
-      <artifactId>je</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.testng</groupId>
-      <artifactId>testng</artifactId>
-      <scope>provided</scope>
     </dependency>
   </dependencies>
-
-  <properties>
-    <fudge.proto.equals>false</fudge.proto.equals>
-    <fudge.proto.hashCode>false</fudge.proto.hashCode>
-  </properties>
 
 </project>

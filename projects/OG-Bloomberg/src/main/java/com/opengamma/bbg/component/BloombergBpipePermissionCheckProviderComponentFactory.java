@@ -76,7 +76,9 @@ public class BloombergBpipePermissionCheckProviderComponentFactory extends Abstr
 
     final ComponentInfo info = new ComponentInfo(PermissionCheckProvider.class, getClassifier());
     info.addAttribute(ComponentInfoAttributes.LEVEL, 1);
-    info.addAttribute(ComponentInfoAttributes.REMOTE_CLIENT_JAVA, RemotePermissionCheckProvider.class);
+    if (isPublishRest()) {
+      info.addAttribute(ComponentInfoAttributes.REMOTE_CLIENT_JAVA, RemotePermissionCheckProvider.class);
+    }
     info.addAttribute(ComponentInfoAttributes.ACCEPTED_TYPES, BloombergPermissions.BLOOMBERG_PREFIX);
 
     BloombergBpipePermissionCheckProvider provider = new BloombergBpipePermissionCheckProvider(

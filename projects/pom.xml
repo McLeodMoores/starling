@@ -31,20 +31,43 @@
     <module>OG-Bloomberg</module>
     <module>OG-Client</module>
     <module>OG-Component</module>
+    <module>OG-ComponentCommon</module>
+    <module>OG-ComponentRest</module>
     <module>OG-Core</module>
+    <module>OG-CoreCommon</module>
+    <module>OG-CoreRest</module>
+    <module>OG-CoreRestClient</module>
     <module>OG-Engine</module>
+    <module>OG-EngineCommon</module>
+    <module>OG-EngineRest</module>
+    <module>OG-EngineRestClient</module>
     <module>OG-EngineDB</module>
     <module>OG-Financial</module>
+    <module>OG-FinancialCommon</module>
+    <module>OG-FinancialRest</module>
+    <module>OG-FinancialRestClient</module>
     <module>OG-FinancialTypes</module>
     <module>OG-Integration</module>
     <module>OG-LiveData</module>
     <module>OG-Master</module>
+    <module>OG-MasterCommon</module>
+    <module>OG-MasterRest</module>
+    <module>OG-MasterRestClient</module>
     <module>OG-MasterDB</module>
+    <module>OG-MasterDBCommon</module>
+    <module>OG-MasterDBRest</module>
+    <module>OG-MasterDBRestClient</module>
     <module>OG-Provider</module>
+    <module>OG-ProviderCommon</module>
+    <module>OG-ProviderRest</module>
+    <module>OG-ProviderRestClient</module>
     <module>OG-Security</module>
     <module>OG-Server</module>
     <module>OG-TimeSeries</module>
     <module>OG-Util</module>
+    <module>OG-UtilCommon</module>
+    <module>OG-UtilRest</module>
+    <module>OG-UtilRestClient</module>
     <module>OG-UtilDB</module>
     <module>OG-Web</module>
   </modules>

@@ -1,3 +1,0 @@
-BEGIN TRAN;
-
-COMMIT;

@@ -25,6 +25,7 @@ import com.opengamma.analytics.math.interpolation.Interpolator1D;
 import com.opengamma.analytics.math.interpolation.data.Interpolator1DDataBundle;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.tuple.DoublesPair;
+
 import org.joda.beans.impl.direct.DirectBeanBuilder;
 
 /**

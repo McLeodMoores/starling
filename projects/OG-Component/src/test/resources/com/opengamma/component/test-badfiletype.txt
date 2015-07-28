@@ -1,2 +1,0 @@
-MANAGER.NEXT.FILE = classpath:com/opengamma/component/test-success.ini
-property = one
