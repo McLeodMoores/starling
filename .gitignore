@@ -25,6 +25,7 @@ common/deploy.properties
 !/projects/OG-Examples
 !/projects/OG-Financial
 !/projects/MM-Finmath
+!/projects/MM-Validation
 !/projects/OG-FinancialTypes
 !/projects/OG-Install
 !/projects/OG-Integration

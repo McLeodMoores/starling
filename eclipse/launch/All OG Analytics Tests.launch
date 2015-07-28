@@ -15,6 +15,7 @@
 <stringAttribute key="org.testng.eclipse.LOG_LEVEL" value="2"/>
 <listAttribute key="org.testng.eclipse.METHOD_TEST_LIST"/>
 <listAttribute key="org.testng.eclipse.PACKAGE_TEST_LIST">
+<listEntry value="com.opengamma.analytics.date"/>
 <listEntry value="com.opengamma.analytics.financial.calculator"/>
 <listEntry value="com.opengamma.analytics.financial.commodity.definition"/>
 <listEntry value="com.opengamma.analytics.financial.commodity"/>
@@ -189,6 +190,7 @@
 <listEntry value="com.opengamma.analytics.math.function"/>
 <listEntry value="com.opengamma.analytics.math.function.special"/>
 <listEntry value="com.opengamma.analytics.math.integration"/>
+<listEntry value="com.opengamma.analytics.math.integration.factory"/>
 <listEntry value="com.opengamma.analytics.math.interpolation"/>
 <listEntry value="com.opengamma.analytics.math.interpolation.data"/>
 <listEntry value="com.opengamma.analytics.math.linearalgebra"/>

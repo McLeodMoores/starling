@@ -60,7 +60,7 @@ public final class NamedExtrapolator1dFactory extends AbstractNamedInstanceFacto
         try {
           @SuppressWarnings("unchecked")
           final Class<? extends Interpolator<?, ?>> clazz =
-          (Class<? extends Interpolator<?, ?>>) ClassUtils.loadClassRuntime(implementationType).asSubclass(Interpolator.class);
+            (Class<? extends Interpolator<?, ?>>) ClassUtils.loadClassRuntime(implementationType).asSubclass(Interpolator.class);
           if (NamedExtrapolator.class.isAssignableFrom(clazz)) {
             instance = (NamedExtrapolator<?, ?>) clazz.newInstance();
           } else {

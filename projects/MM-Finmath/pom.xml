@@ -46,6 +46,16 @@
       <artifactId>og-analytics</artifactId>
       <version>${project.version}</version>
     </dependency>
+    <dependency>
+      <groupId>com.mcleodmoores.opengamma.platform</groupId>
+      <artifactId>og-component</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.mcleodmoores.opengamma.platform</groupId>
+      <artifactId>examples-simulated</artifactId>
+      <version>${project.version}</version>
+    </dependency>
 
     <!--dependency>
       <groupId>org.apache.poi</groupId>
