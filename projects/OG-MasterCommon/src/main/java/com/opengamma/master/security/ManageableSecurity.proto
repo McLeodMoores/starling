@@ -1,0 +1,19 @@
+/**
+ * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
+ *
+ * Please see distribution for license.
+ */
+
+namespace com.opengamma.master.security {
+
+  /**
+   * An abstract base security.
+   */
+  message ManageableSecurity {
+    optional com.opengamma.id.UniqueId uniqueId;
+    required string name [default=""];
+    required string securityType;
+    required com.opengamma.id.ExternalIdBundle identifiers [default=()];
+  }
+
+}
