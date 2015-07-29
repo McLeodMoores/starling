@@ -13,11 +13,15 @@ import com.opengamma.analytics.math.interpolation.NonnegativityPreservingCubicSp
 public class NonNegativeNaturalCubicSplineInterpolator1dAdapter extends Interpolator1dAdapter {
   /** Serialization version */
   private static final long serialVersionUID = 1L;
+  /**
+   * The interpolator name.
+   */
+  public static final String NAME = "Non-Negative Natural Cubic Spline";
 
   /**
    * Creates an instance.
    */
   public NonNegativeNaturalCubicSplineInterpolator1dAdapter() {
-    super(new NonnegativityPreservingCubicSplineInterpolator1D(new NaturalSplineInterpolator()), "Non-Negative Natural Cubic Spline");
+    super(new NonnegativityPreservingCubicSplineInterpolator1D(new NaturalSplineInterpolator()), NAME);
   }
 }

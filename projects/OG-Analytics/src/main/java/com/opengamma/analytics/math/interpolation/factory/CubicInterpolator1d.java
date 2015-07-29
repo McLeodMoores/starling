@@ -11,11 +11,15 @@ import com.opengamma.analytics.math.interpolation.PolynomialInterpolator1D;
 public class CubicInterpolator1d extends Interpolator1dAdapter {
   /** Serialization version */
   private static final long serialVersionUID = 1L;
+  /**
+   * The interpolator name.
+   */
+  public static final String NAME = "Cubic";
 
   /**
    * Creates an instance.
    */
   public CubicInterpolator1d() {
-    super(new PolynomialInterpolator1D(3), "Cubic");
+    super(new PolynomialInterpolator1D(3), NAME);
   }
 }

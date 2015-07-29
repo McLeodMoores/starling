@@ -11,11 +11,15 @@ import com.opengamma.analytics.math.interpolation.StepInterpolator1D;
 public class StepInterpolator1dAdapter extends Interpolator1dAdapter {
   /** Serialization version */
   private static final long serialVersionUID = 1L;
+  /**
+   * The interpolator name.
+   */
+  public static final String NAME = "Step";
 
   /**
    * Creates an instance.
    */
   public StepInterpolator1dAdapter() {
-    super(new StepInterpolator1D(), "Step");
+    super(new StepInterpolator1D(), NAME);
   }
 }

@@ -11,11 +11,15 @@ import com.opengamma.analytics.math.interpolation.TimeSquareInterpolator1D;
 public class TimeSquareInterpolator1dAdapter extends Interpolator1dAdapter {
   /** Serialization version */
   private static final long serialVersionUID = 1L;
+  /**
+   * The interpolator name.
+   */
+  public static final String NAME = "Time Square";
 
   /**
    * Creates an instance.
    */
   public TimeSquareInterpolator1dAdapter() {
-    super(new TimeSquareInterpolator1D(), "Time Square");
+    super(new TimeSquareInterpolator1D(), NAME);
   }
 }

@@ -11,11 +11,15 @@ import com.opengamma.analytics.math.interpolation.PCHIPYieldCurveInterpolator1D;
 public class ModifiedPchipInterpolator1dAdapter extends Interpolator1dAdapter {
   /** Serialization version */
   private static final long serialVersionUID = 1L;
+  /**
+   * The interpolator name.
+   */
+  public static final String NAME = "Modified PCHIP";
 
   /**
    * Creates an instance.
    */
   public ModifiedPchipInterpolator1dAdapter() {
-    super(new PCHIPYieldCurveInterpolator1D(), "Modified PCHIP");
+    super(new PCHIPYieldCurveInterpolator1D(), NAME);
   }
 }

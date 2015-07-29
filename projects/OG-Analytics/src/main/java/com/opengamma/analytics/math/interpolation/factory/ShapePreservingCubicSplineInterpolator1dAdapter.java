@@ -11,11 +11,15 @@ import com.opengamma.analytics.math.interpolation.ShapePreservingCubicSplineInte
 public class ShapePreservingCubicSplineInterpolator1dAdapter extends Interpolator1dAdapter {
   /** Serialization version */
   private static final long serialVersionUID = 1L;
+  /**
+   * The interpolator name.
+   */
+  public static final String NAME = "C2 Shape-Preserving Cubic Spline";
 
   /**
    * Creates an instance.
    */
   public ShapePreservingCubicSplineInterpolator1dAdapter() {
-    super(new ShapePreservingCubicSplineInterpolator1D(), "C2 Shape-Preserving Cubic Spline");
+    super(new ShapePreservingCubicSplineInterpolator1D(), NAME);
   }
 }

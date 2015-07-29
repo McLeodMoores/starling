@@ -11,11 +11,15 @@ import com.opengamma.analytics.math.interpolation.NotAKnotCubicSplineInterpolato
 public class NotAKnotCubicSplineInterpolator1dAdapter extends Interpolator1dAdapter {
   /** Serialization version */
   private static final long serialVersionUID = 1L;
+  /**
+   * The interpolator name.
+   */
+  public static final String NAME = "Not-a-Knot Cubic Spline";
 
   /**
    * Creates an instance.
    */
   public NotAKnotCubicSplineInterpolator1dAdapter() {
-    super(new NotAKnotCubicSplineInterpolator1D(), "Not-a-Knot Cubic Spline");
+    super(new NotAKnotCubicSplineInterpolator1D(), NAME);
   }
 }

@@ -11,11 +11,15 @@ import com.opengamma.analytics.math.interpolation.QuadraticSplineInterpolator1D;
 public class QuadraticSplineInterpolator1dAdapter extends Interpolator1dAdapter {
   /** Serialization version */
   private static final long serialVersionUID = 1L;
+  /**
+   * The interpolator name.
+   */
+  public static final String NAME = "Quadratic Spline";
 
   /**
    * Creates an instance.
    */
   public QuadraticSplineInterpolator1dAdapter() {
-    super(new QuadraticSplineInterpolator1D(), "Quadratic Spline");
+    super(new QuadraticSplineInterpolator1D(), NAME);
   }
 }

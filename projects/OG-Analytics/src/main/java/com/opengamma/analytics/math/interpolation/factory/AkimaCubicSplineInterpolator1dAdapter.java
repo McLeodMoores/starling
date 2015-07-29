@@ -11,11 +11,15 @@ import com.opengamma.analytics.math.interpolation.SemiLocalCubicSplineInterpolat
 public class AkimaCubicSplineInterpolator1dAdapter extends Interpolator1dAdapter {
   /** Serialization version */
   private static final long serialVersionUID = 1L;
+  /**
+   * The interpolator name.
+   */
+  public static final String NAME = "Akima Cubic Spline";
 
   /**
    * Creates an instance.
    */
   public AkimaCubicSplineInterpolator1dAdapter() {
-    super(new SemiLocalCubicSplineInterpolator1D(), "Akima Cubic Spline");
+    super(new SemiLocalCubicSplineInterpolator1D(), NAME);
   }
 }

@@ -11,11 +11,15 @@ import com.opengamma.analytics.math.interpolation.NaturalSplineInterpolator1D;
 public class NaturalSplineInterpolator1dAdapter extends Interpolator1dAdapter {
   /** Serialization version */
   private static final long serialVersionUID = 1L;
+  /**
+   * The interpolator name.
+   */
+  public static final String NAME = "Natural Spline";
 
   /**
    * Creates an instance.
    */
   public NaturalSplineInterpolator1dAdapter() {
-    super(new NaturalSplineInterpolator1D(), "Natural Spline");
+    super(new NaturalSplineInterpolator1D(), NAME);
   }
 }

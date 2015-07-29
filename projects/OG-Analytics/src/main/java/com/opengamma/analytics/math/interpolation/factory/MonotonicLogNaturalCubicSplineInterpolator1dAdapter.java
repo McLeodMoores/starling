@@ -11,11 +11,15 @@ import com.opengamma.analytics.math.interpolation.LogNaturalCubicMonotonicityPre
 public class MonotonicLogNaturalCubicSplineInterpolator1dAdapter extends Interpolator1dAdapter {
   /** Serialization version */
   private static final long serialVersionUID = 1L;
+  /**
+   * The interpolator name.
+   */
+  public static final String NAME = "Monotonic Log Natural Cubic Spline";
 
   /**
    * Creates an instance.
    */
   public MonotonicLogNaturalCubicSplineInterpolator1dAdapter() {
-    super(new LogNaturalCubicMonotonicityPreservingInterpolator1D(), "Monotonic Log Natural Cubic Spline");
+    super(new LogNaturalCubicMonotonicityPreservingInterpolator1D(), NAME);
   }
 }

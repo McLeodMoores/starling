@@ -11,11 +11,14 @@ import com.opengamma.analytics.math.interpolation.ExponentialExtrapolator1D;
 public class ExponentialExtrapolator1dAdapter extends Extrapolator1dAdapter {
   /** Serialization version */
   private static final long serialVersionUID = 1L;
-
+  /**
+   * The interpolator name.
+   */
+  public static final String NAME = "Exponential";
   /**
    * Creates an instance.
    */
   public ExponentialExtrapolator1dAdapter() {
-    super(new ExponentialExtrapolator1D(), "Exponential");
+    super(new ExponentialExtrapolator1D(), NAME);
   }
 }

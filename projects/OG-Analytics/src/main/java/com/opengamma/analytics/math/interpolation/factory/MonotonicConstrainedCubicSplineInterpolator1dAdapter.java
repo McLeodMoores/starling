@@ -13,11 +13,15 @@ import com.opengamma.analytics.math.interpolation.MonotonicityPreservingCubicSpl
 public class MonotonicConstrainedCubicSplineInterpolator1dAdapter extends Interpolator1dAdapter {
   /** Serialization version */
   private static final long serialVersionUID = 1L;
+  /**
+   * The interpolator name.
+   */
+  public static final String NAME = "Monotonic Constrained Cubic Spline";
 
   /**
    * Creates an instance.
    */
   public MonotonicConstrainedCubicSplineInterpolator1dAdapter() {
-    super(new MonotonicityPreservingCubicSplineInterpolator1D(new ConstrainedCubicSplineInterpolator()), "Monotonic Constrained Cubic Spline");
+    super(new MonotonicityPreservingCubicSplineInterpolator1D(new ConstrainedCubicSplineInterpolator()), NAME);
   }
 }

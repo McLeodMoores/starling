@@ -11,11 +11,15 @@ import com.opengamma.analytics.math.interpolation.PolynomialInterpolator1D;
 public class QuarticInterpolator1d extends Interpolator1dAdapter {
   /** Serialization version */
   private static final long serialVersionUID = 1L;
+  /**
+   * The interpolator name.
+   */
+  public static final String NAME = "Quartic";
 
   /**
    * Creates an instance.
    */
   public QuarticInterpolator1d() {
-    super(new PolynomialInterpolator1D(4), "Quartic");
+    super(new PolynomialInterpolator1D(4), NAME);
   }
 }

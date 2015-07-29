@@ -11,11 +11,15 @@ import com.opengamma.analytics.math.interpolation.ConstrainedCubicSplineInterpol
 public class ConstrainedCubicSplineInterpolator1dAdapter extends Interpolator1dAdapter {
   /** Serialization version */
   private static final long serialVersionUID = 1L;
+  /**
+   * The interpolator name.
+   */
+  public static final String NAME = "Constrained Cubic Spline";
 
   /**
    * Creates an instance.
    */
   public ConstrainedCubicSplineInterpolator1dAdapter() {
-    super(new ConstrainedCubicSplineInterpolator1D(), "Constrained Cubic Spline");
+    super(new ConstrainedCubicSplineInterpolator1D(), NAME);
   }
 }

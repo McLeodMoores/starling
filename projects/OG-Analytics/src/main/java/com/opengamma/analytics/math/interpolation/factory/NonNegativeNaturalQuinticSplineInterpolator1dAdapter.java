@@ -13,11 +13,15 @@ import com.opengamma.analytics.math.interpolation.NonnegativityPreservingQuintic
 public class NonNegativeNaturalQuinticSplineInterpolator1dAdapter extends Interpolator1dAdapter {
   /** Serialization version */
   private static final long serialVersionUID = 1L;
+  /**
+   * The interpolator name.
+   */
+  public static final String NAME = "Non-Negative Natural Quintic Spline";
 
   /**
    * Creates an instance.
    */
   public NonNegativeNaturalQuinticSplineInterpolator1dAdapter() {
-    super(new NonnegativityPreservingQuinticSplineInterpolator1D(new NaturalSplineInterpolator()), "Non-Negative Natural Quintic Spline");
+    super(new NonnegativityPreservingQuinticSplineInterpolator1D(new NaturalSplineInterpolator()), NAME);
   }
 }

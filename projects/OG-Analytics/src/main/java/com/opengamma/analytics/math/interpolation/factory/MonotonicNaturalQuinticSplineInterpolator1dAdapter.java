@@ -13,11 +13,15 @@ import com.opengamma.analytics.math.interpolation.NaturalSplineInterpolator;
 public class MonotonicNaturalQuinticSplineInterpolator1dAdapter extends Interpolator1dAdapter {
   /** Serialization version */
   private static final long serialVersionUID = 1L;
+  /**
+   * The interpolator name.
+   */
+  public static final String NAME = "Monotonic Natural Quintic Spline";
 
   /**
    * Creates an instance.
    */
   public MonotonicNaturalQuinticSplineInterpolator1dAdapter() {
-    super(new MonotonicityPreservingQuinticSplineInterpolator1D(new NaturalSplineInterpolator()), "Monotonic Natural Quintic Spline");
+    super(new MonotonicityPreservingQuinticSplineInterpolator1D(new NaturalSplineInterpolator()), NAME);
   }
 }
