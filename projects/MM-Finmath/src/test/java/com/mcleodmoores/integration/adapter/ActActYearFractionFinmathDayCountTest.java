@@ -13,9 +13,6 @@ import net.finmath.time.daycount.DayCountConvention_ACT_ACT_YEARFRAC;
 
 import org.testng.annotations.Test;
 
-import com.mcleodmoores.integration.adapter.ActActYearFractionFinmathDayCount;
-import com.mcleodmoores.integration.adapter.FinmathDayCount;
-
 /**
  * Unit tests for {@link ActActYearFractionFinmathDayCount}.
  */

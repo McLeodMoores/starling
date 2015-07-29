@@ -7,23 +7,22 @@ import java.util.Objects;
 
 import net.finmath.time.businessdaycalendar.BusinessdayCalendar;
 
-import com.opengamma.financial.convention.calendar.Calendar;
+import com.opengamma.analytics.date.WorkingDayCalendar;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Wraps a {@link Calendar} for {@link BusinessdayCalendar}.
+ * Wraps a {@link WorkingDayCalendar} for {@link BusinessdayCalendar}.
  */
 public class BusinessDayCalendarAdapter extends BusinessdayCalendar {
   /** The calendar */
-  private final Calendar _calendar;
+  private final WorkingDayCalendar _calendar;
 
   /**
    * Creates an instance.
    * @param calendar The calendar, not null
    */
-  public BusinessDayCalendarAdapter(final Calendar calendar) {
-    ArgumentChecker.notNull(calendar, "calendar");
-    _calendar = calendar;
+  public BusinessDayCalendarAdapter(final WorkingDayCalendar calendar) {
+    _calendar = ArgumentChecker.notNull(calendar, "calendar");
   }
 
   @Override

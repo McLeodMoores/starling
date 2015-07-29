@@ -45,6 +45,7 @@ import com.opengamma.financial.OpenGammaExecutionContext;
 import com.opengamma.financial.marketdata.MarketDataELCompiler;
 import com.opengamma.financial.temptarget.TempTargetRepository;
 import com.opengamma.id.VersionCorrection;
+import com.opengamma.master.config.ConfigMaster;
 import com.opengamma.master.historicaltimeseries.HistoricalTimeSeriesResolver;
 import com.opengamma.service.ServiceContext;
 import com.opengamma.service.ThreadLocalServiceContext;
@@ -94,6 +95,12 @@ public class MinimalEngineContextsComponentFactory extends AbstractComponentFact
    */
   @PropertyDefinition
   private ConfigSource _configSource;
+
+  /**
+   * The config master.
+   */
+  @PropertyDefinition
+  private ConfigMaster _configMaster;
 
   /**
    * The convention source.
@@ -162,6 +169,12 @@ public class MinimalEngineContextsComponentFactory extends AbstractComponentFact
   @PropertyDefinition
   private ViewProcessor _viewProcessor;
 
+  /**
+   * The permissive behavior flag.
+   */
+  @PropertyDefinition
+  private Boolean _permissive = Boolean.FALSE;
+
   @Override
   public void init(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) {
     initThreadLocalServiceContext();
@@ -187,6 +200,9 @@ public class MinimalEngineContextsComponentFactory extends AbstractComponentFact
     final ImmutableMap.Builder<Class<?>, Object> services = ImmutableMap.<Class<?>, Object>builder()
         .put(PositionSource.class, getPositionSource())
         .put(SecuritySource.class, getSecuritySource());
+    if (getConfigMaster() != null) {
+      services.put(ConfigMaster.class, getConfigMaster());
+    }
     if (getConfigSource() != null) {
       services.put(ConfigSource.class, getConfigSource());
     }
@@ -495,6 +511,31 @@ public class MinimalEngineContextsComponentFactory extends AbstractComponentFact
 
   //-----------------------------------------------------------------------
   /**
+   * Gets the config master.
+   * @return the value of the property
+   */
+  public ConfigMaster getConfigMaster() {
+    return _configMaster;
+  }
+
+  /**
+   * Sets the config master.
+   * @param configMaster  the new value of the property
+   */
+  public void setConfigMaster(ConfigMaster configMaster) {
+    this._configMaster = configMaster;
+  }
+
+  /**
+   * Gets the the {@code configMaster} property.
+   * @return the property, not null
+   */
+  public final Property<ConfigMaster> configMaster() {
+    return metaBean().configMaster().createProperty(this);
+  }
+
+  //-----------------------------------------------------------------------
+  /**
    * Gets the convention source.
    * @return the value of the property
    */
@@ -772,6 +813,31 @@ public class MinimalEngineContextsComponentFactory extends AbstractComponentFact
   }
 
   //-----------------------------------------------------------------------
+  /**
+   * Gets the permissive behavior flag.
+   * @return the value of the property
+   */
+  public Boolean getPermissive() {
+    return _permissive;
+  }
+
+  /**
+   * Sets the permissive behavior flag.
+   * @param permissive  the new value of the property
+   */
+  public void setPermissive(Boolean permissive) {
+    this._permissive = permissive;
+  }
+
+  /**
+   * Gets the the {@code permissive} property.
+   * @return the property, not null
+   */
+  public final Property<Boolean> permissive() {
+    return metaBean().permissive().createProperty(this);
+  }
+
+  //-----------------------------------------------------------------------
   @Override
   public MinimalEngineContextsComponentFactory clone() {
     return JodaBeanUtils.cloneAlways(this);
@@ -789,6 +855,7 @@ public class MinimalEngineContextsComponentFactory extends AbstractComponentFact
           JodaBeanUtils.equal(getPositionSource(), other.getPositionSource()) &&
           JodaBeanUtils.equal(getTargetResolver(), other.getTargetResolver()) &&
           JodaBeanUtils.equal(getConfigSource(), other.getConfigSource()) &&
+          JodaBeanUtils.equal(getConfigMaster(), other.getConfigMaster()) &&
           JodaBeanUtils.equal(getConventionSource(), other.getConventionSource()) &&
           JodaBeanUtils.equal(getExchangeSource(), other.getExchangeSource()) &&
           JodaBeanUtils.equal(getHistoricalTimeSeriesSource(), other.getHistoricalTimeSeriesSource()) &&
@@ -800,6 +867,7 @@ public class MinimalEngineContextsComponentFactory extends AbstractComponentFact
           JodaBeanUtils.equal(getCompilationBlacklist(), other.getCompilationBlacklist()) &&
           JodaBeanUtils.equal(getTempTargetRepository(), other.getTempTargetRepository()) &&
           JodaBeanUtils.equal(getViewProcessor(), other.getViewProcessor()) &&
+          JodaBeanUtils.equal(getPermissive(), other.getPermissive()) &&
           super.equals(obj);
     }
     return false;
@@ -813,6 +881,7 @@ public class MinimalEngineContextsComponentFactory extends AbstractComponentFact
     hash = hash * 31 + JodaBeanUtils.hashCode(getPositionSource());
     hash = hash * 31 + JodaBeanUtils.hashCode(getTargetResolver());
     hash = hash * 31 + JodaBeanUtils.hashCode(getConfigSource());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getConfigMaster());
     hash = hash * 31 + JodaBeanUtils.hashCode(getConventionSource());
     hash = hash * 31 + JodaBeanUtils.hashCode(getExchangeSource());
     hash = hash * 31 + JodaBeanUtils.hashCode(getHistoricalTimeSeriesSource());
@@ -824,12 +893,13 @@ public class MinimalEngineContextsComponentFactory extends AbstractComponentFact
     hash = hash * 31 + JodaBeanUtils.hashCode(getCompilationBlacklist());
     hash = hash * 31 + JodaBeanUtils.hashCode(getTempTargetRepository());
     hash = hash * 31 + JodaBeanUtils.hashCode(getViewProcessor());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getPermissive());
     return hash ^ super.hashCode();
   }
 
   @Override
   public String toString() {
-    StringBuilder buf = new StringBuilder(544);
+    StringBuilder buf = new StringBuilder(608);
     buf.append("MinimalEngineContextsComponentFactory{");
     int len = buf.length();
     toString(buf);
@@ -848,6 +918,7 @@ public class MinimalEngineContextsComponentFactory extends AbstractComponentFact
     buf.append("positionSource").append('=').append(JodaBeanUtils.toString(getPositionSource())).append(',').append(' ');
     buf.append("targetResolver").append('=').append(JodaBeanUtils.toString(getTargetResolver())).append(',').append(' ');
     buf.append("configSource").append('=').append(JodaBeanUtils.toString(getConfigSource())).append(',').append(' ');
+    buf.append("configMaster").append('=').append(JodaBeanUtils.toString(getConfigMaster())).append(',').append(' ');
     buf.append("conventionSource").append('=').append(JodaBeanUtils.toString(getConventionSource())).append(',').append(' ');
     buf.append("exchangeSource").append('=').append(JodaBeanUtils.toString(getExchangeSource())).append(',').append(' ');
     buf.append("historicalTimeSeriesSource").append('=').append(JodaBeanUtils.toString(getHistoricalTimeSeriesSource())).append(',').append(' ');
@@ -859,6 +930,7 @@ public class MinimalEngineContextsComponentFactory extends AbstractComponentFact
     buf.append("compilationBlacklist").append('=').append(JodaBeanUtils.toString(getCompilationBlacklist())).append(',').append(' ');
     buf.append("tempTargetRepository").append('=').append(JodaBeanUtils.toString(getTempTargetRepository())).append(',').append(' ');
     buf.append("viewProcessor").append('=').append(JodaBeanUtils.toString(getViewProcessor())).append(',').append(' ');
+    buf.append("permissive").append('=').append(JodaBeanUtils.toString(getPermissive())).append(',').append(' ');
   }
 
   //-----------------------------------------------------------------------
@@ -896,6 +968,11 @@ public class MinimalEngineContextsComponentFactory extends AbstractComponentFact
      */
     private final MetaProperty<ConfigSource> _configSource = DirectMetaProperty.ofReadWrite(
         this, "configSource", MinimalEngineContextsComponentFactory.class, ConfigSource.class);
+    /**
+     * The meta-property for the {@code configMaster} property.
+     */
+    private final MetaProperty<ConfigMaster> _configMaster = DirectMetaProperty.ofReadWrite(
+        this, "configMaster", MinimalEngineContextsComponentFactory.class, ConfigMaster.class);
     /**
      * The meta-property for the {@code conventionSource} property.
      */
@@ -952,6 +1029,11 @@ public class MinimalEngineContextsComponentFactory extends AbstractComponentFact
     private final MetaProperty<ViewProcessor> _viewProcessor = DirectMetaProperty.ofReadWrite(
         this, "viewProcessor", MinimalEngineContextsComponentFactory.class, ViewProcessor.class);
     /**
+     * The meta-property for the {@code permissive} property.
+     */
+    private final MetaProperty<Boolean> _permissive = DirectMetaProperty.ofReadWrite(
+        this, "permissive", MinimalEngineContextsComponentFactory.class, Boolean.class);
+    /**
      * The meta-properties.
      */
     private final Map<String, MetaProperty<?>> _metaPropertyMap$ = new DirectMetaPropertyMap(
@@ -961,6 +1043,7 @@ public class MinimalEngineContextsComponentFactory extends AbstractComponentFact
         "positionSource",
         "targetResolver",
         "configSource",
+        "configMaster",
         "conventionSource",
         "exchangeSource",
         "historicalTimeSeriesSource",
@@ -971,7 +1054,8 @@ public class MinimalEngineContextsComponentFactory extends AbstractComponentFact
         "executionBlacklist",
         "compilationBlacklist",
         "tempTargetRepository",
-        "viewProcessor");
+        "viewProcessor",
+        "permissive");
 
     /**
      * Restricted constructor.
@@ -992,6 +1076,8 @@ public class MinimalEngineContextsComponentFactory extends AbstractComponentFact
           return _targetResolver;
         case 195157501:  // configSource
           return _configSource;
+        case 10395716:  // configMaster
+          return _configMaster;
         case 225875692:  // conventionSource
           return _conventionSource;
         case -467239906:  // exchangeSource
@@ -1014,6 +1100,8 @@ public class MinimalEngineContextsComponentFactory extends AbstractComponentFact
           return _tempTargetRepository;
         case -1697555603:  // viewProcessor
           return _viewProcessor;
+        case -517618017:  // permissive
+          return _permissive;
       }
       return super.metaPropertyGet(propertyName);
     }
@@ -1072,6 +1160,14 @@ public class MinimalEngineContextsComponentFactory extends AbstractComponentFact
      */
     public final MetaProperty<ConfigSource> configSource() {
       return _configSource;
+    }
+
+    /**
+     * The meta-property for the {@code configMaster} property.
+     * @return the meta-property, not null
+     */
+    public final MetaProperty<ConfigMaster> configMaster() {
+      return _configMaster;
     }
 
     /**
@@ -1162,6 +1258,14 @@ public class MinimalEngineContextsComponentFactory extends AbstractComponentFact
       return _viewProcessor;
     }
 
+    /**
+     * The meta-property for the {@code permissive} property.
+     * @return the meta-property, not null
+     */
+    public final MetaProperty<Boolean> permissive() {
+      return _permissive;
+    }
+
     //-----------------------------------------------------------------------
     @Override
     protected Object propertyGet(Bean bean, String propertyName, boolean quiet) {
@@ -1176,6 +1280,8 @@ public class MinimalEngineContextsComponentFactory extends AbstractComponentFact
           return ((MinimalEngineContextsComponentFactory) bean).getTargetResolver();
         case 195157501:  // configSource
           return ((MinimalEngineContextsComponentFactory) bean).getConfigSource();
+        case 10395716:  // configMaster
+          return ((MinimalEngineContextsComponentFactory) bean).getConfigMaster();
         case 225875692:  // conventionSource
           return ((MinimalEngineContextsComponentFactory) bean).getConventionSource();
         case -467239906:  // exchangeSource
@@ -1198,6 +1304,8 @@ public class MinimalEngineContextsComponentFactory extends AbstractComponentFact
           return ((MinimalEngineContextsComponentFactory) bean).getTempTargetRepository();
         case -1697555603:  // viewProcessor
           return ((MinimalEngineContextsComponentFactory) bean).getViewProcessor();
+        case -517618017:  // permissive
+          return ((MinimalEngineContextsComponentFactory) bean).getPermissive();
       }
       return super.propertyGet(bean, propertyName, quiet);
     }
@@ -1219,6 +1327,9 @@ public class MinimalEngineContextsComponentFactory extends AbstractComponentFact
           return;
         case 195157501:  // configSource
           ((MinimalEngineContextsComponentFactory) bean).setConfigSource((ConfigSource) newValue);
+          return;
+        case 10395716:  // configMaster
+          ((MinimalEngineContextsComponentFactory) bean).setConfigMaster((ConfigMaster) newValue);
           return;
         case 225875692:  // conventionSource
           ((MinimalEngineContextsComponentFactory) bean).setConventionSource((ConventionSource) newValue);
@@ -1252,6 +1363,9 @@ public class MinimalEngineContextsComponentFactory extends AbstractComponentFact
           return;
         case -1697555603:  // viewProcessor
           ((MinimalEngineContextsComponentFactory) bean).setViewProcessor((ViewProcessor) newValue);
+          return;
+        case -517618017:  // permissive
+          ((MinimalEngineContextsComponentFactory) bean).setPermissive((Boolean) newValue);
           return;
       }
       super.propertySet(bean, propertyName, newValue, quiet);

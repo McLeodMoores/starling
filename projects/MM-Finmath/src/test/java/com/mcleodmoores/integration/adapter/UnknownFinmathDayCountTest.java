@@ -13,8 +13,6 @@ import net.finmath.time.daycount.DayCountConventionInterface;
 
 import org.testng.annotations.Test;
 
-import com.mcleodmoores.integration.adapter.UnknownFinmathDayCount;
-
 /**
  * Unit tests for {@link UnknownFinmathDayCount}.
  */

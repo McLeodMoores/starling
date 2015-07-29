@@ -3,10 +3,10 @@
  */
 package com.mcleodmoores.integration.adapter;
 
-import com.opengamma.financial.convention.calendar.Calendar;
+import com.opengamma.analytics.date.WorkingDayCalendar;
 
 /**
- * An adapter for {@link Calendar} that allows use of the named instance factory by wrapping a
+ * An adapter for {@link WorkingDayCalendar} that allows use of the named instance factory by wrapping a
  * {@link BusinessDayCalendarAdapter}.
  */
 public class CustomBusinessDayCalendar extends FinmathBusinessDay {
@@ -15,7 +15,7 @@ public class CustomBusinessDayCalendar extends FinmathBusinessDay {
    * Creates an instance of this adapter with the same name as the calendar and implementation {@link BusinessDayCalendarAdapter}.
    * @param calendar The calendar, not null
    */
-  public CustomBusinessDayCalendar(final Calendar calendar) {
+  public CustomBusinessDayCalendar(final WorkingDayCalendar calendar) {
     super(calendar.getName(), new BusinessDayCalendarAdapter(calendar));
   }
 

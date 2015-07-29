@@ -12,10 +12,6 @@ import java.util.Set;
 import org.testng.annotations.Test;
 import org.threeten.bp.LocalDate;
 
-import com.mcleodmoores.integration.adapter.FinmathBusinessDay;
-import com.mcleodmoores.integration.adapter.FinmathDateUtils;
-import com.mcleodmoores.integration.adapter.TargetBusinessDayCalendar;
-
 /**
  * Units tests for {@link TargetBusinessDayCalendar}.
  */

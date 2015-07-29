@@ -6,8 +6,10 @@ package com.mcleodmoores.integration.function.curve;
 import java.util.List;
 import java.util.Map;
 
+import com.opengamma.core.change.ChangeEvent;
 import com.opengamma.core.config.impl.ConfigItem;
 import com.opengamma.engine.function.config.AbstractFunctionConfigurationBean;
+import com.opengamma.engine.function.config.BeanDynamicFunctionConfigurationSource;
 import com.opengamma.engine.function.config.FunctionConfiguration;
 import com.opengamma.engine.function.config.FunctionConfigurationSource;
 import com.opengamma.engine.function.config.VersionedFunctionConfigurationBean;
@@ -19,7 +21,9 @@ import com.opengamma.financial.analytics.curve.CurveGroupConfiguration;
 import com.opengamma.financial.analytics.curve.CurveMarketDataFunction;
 import com.opengamma.financial.analytics.curve.CurveSpecificationFunction;
 import com.opengamma.financial.analytics.curve.CurveTypeConfiguration;
+import com.opengamma.financial.analytics.model.curve.CurveFunctions.ParameterProviders;
 import com.opengamma.financial.analytics.timeseries.CurveHistoricalTimeSeriesFunction;
+import com.opengamma.financial.config.ConfigMasterChangeProvider;
 import com.opengamma.master.config.ConfigDocument;
 import com.opengamma.master.config.ConfigMaster;
 import com.opengamma.master.config.ConfigSearchRequest;
@@ -33,6 +37,57 @@ public class CurveFunctions extends AbstractFunctionConfigurationBean {
 
   public static FunctionConfigurationSource instance() {
     return new CurveFunctions().getObjectCreating();
+  }
+
+  /**
+   * Returns a configuration populated with curve building functions.
+   *
+   * @param configMaster The config master
+   * @return A populated configuration
+   */
+  public static FunctionConfigurationSource providers(final ConfigMaster configMaster) {
+    return new BeanDynamicFunctionConfigurationSource(ConfigMasterChangeProvider.of(configMaster)) {
+  
+      @Override
+      protected VersionedFunctionConfigurationBean createConfiguration() {
+        final Providers providers = new Providers();
+        providers.setConfigMaster(configMaster);
+        return providers;
+      }
+  
+      @Override
+      protected boolean isPropogateEvent(final ChangeEvent event) {
+        //TODO
+        return true;
+      }
+  
+    };
+  }
+  
+  /**
+   * Returns a configuration populated with functions that supply model parameters (e.g. G2++ parameters).
+   *
+   * @param configMaster The config master
+   * @return A populated configuration
+   */
+  public static FunctionConfigurationSource parameterProviders(final ConfigMaster configMaster) {
+    return new BeanDynamicFunctionConfigurationSource(ConfigMasterChangeProvider.of(configMaster)) {
+  
+      @Override
+      protected VersionedFunctionConfigurationBean createConfiguration() {
+        final ParameterProviders providers = new ParameterProviders();
+        providers.setConfigMaster(configMaster);
+        return providers;
+      }
+  
+      @Override
+      protected boolean isPropogateEvent(final ChangeEvent event) {
+        //TODO
+        return true;
+        //return ParameterProviders.isMonitoredType(event.getObjectId().getValue());
+      }
+  
+    };
   }
 
   @Override

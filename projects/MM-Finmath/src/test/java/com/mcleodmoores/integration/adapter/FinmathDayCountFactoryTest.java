@@ -7,8 +7,6 @@ import static org.testng.AssertJUnit.assertEquals;
 
 import org.testng.annotations.Test;
 
-import com.mcleodmoores.integration.adapter.FinmathDayCountFactory;
-
 /**
  * Tests {@link FinmathDayCountFactory}.
  */

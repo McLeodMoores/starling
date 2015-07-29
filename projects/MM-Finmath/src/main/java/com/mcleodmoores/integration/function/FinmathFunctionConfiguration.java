@@ -105,7 +105,9 @@ public class FinmathFunctionConfiguration extends AbstractFunctionConfigurationB
   }
 
   protected void setCurveDefaults(final CurveFunctions.Defaults defaults) {
-    //com.opengamma.financial.analytics.model.curve.CurveFunctions.Defaults.
+    defaults.setAbsoluteTolerance(1e-9);
+    defaults.setMaximumIterations(1000);
+    defaults.setRelativeTolerance(1e-9);
   }
 
   @Override

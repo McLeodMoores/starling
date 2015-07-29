@@ -16,8 +16,6 @@ import org.testng.annotations.Test;
 import org.threeten.bp.LocalDate;
 
 import com.mcleodmoores.integration.adapter.FinmathDateUtils;
-import com.mcleodmoores.integration.serialization.CurveValueType;
-import com.mcleodmoores.integration.serialization.DiscountCurveBean;
 
 /**
  * Unit tests for {@link DiscountCurveBean}.

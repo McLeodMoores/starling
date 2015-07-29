@@ -18,28 +18,17 @@ import org.apache.commons.lang.SystemUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.mcleodmoores.integration.simulatedexamples.populator.TestCurrencyConfigurationsLoader;
+import com.mcleodmoores.integration.simulatedexamples.populator.TestCurveConfigurationsLoader;
+import com.mcleodmoores.integration.simulatedexamples.populator.TestExposureFunctionsLoader;
+import com.mcleodmoores.integration.simulatedexamples.populator.TestHolidaysLoader;
 import com.opengamma.OpenGammaRuntimeException;
 import com.opengamma.component.tool.AbstractTool;
-import com.opengamma.examples.simulated.convention.SyntheticInMemoryConventionMasterInitializer;
-import com.opengamma.examples.simulated.generator.ExampleIndexSecuritiesGeneratorTool;
-import com.opengamma.examples.simulated.loader.ExampleCurrencyConfigurationLoader;
-import com.opengamma.examples.simulated.loader.ExampleCurveAndSurfaceDefinitionLoader;
-import com.opengamma.examples.simulated.loader.ExampleCurveConfigurationLoader;
-import com.opengamma.examples.simulated.loader.ExampleCurveConfigurationsLoader;
-import com.opengamma.examples.simulated.loader.ExampleExchangeLoader;
-import com.opengamma.examples.simulated.loader.ExampleExposureFunctionLoader;
-import com.opengamma.examples.simulated.loader.ExampleFXImpliedCurveConfigurationLoader;
-import com.opengamma.examples.simulated.loader.ExampleHistoricalDataGeneratorTool;
-import com.opengamma.examples.simulated.loader.ExampleHolidayLoader;
-import com.opengamma.examples.simulated.loader.ExampleLegalEntityLoader;
-import com.opengamma.examples.simulated.loader.ExampleTimeSeriesRatingLoader;
-import com.opengamma.examples.simulated.tool.SyntheticSecuritiesGeneratorTool;
 import com.opengamma.financial.tool.ToolContext;
-import com.opengamma.master.convention.ConventionMaster;
 import com.opengamma.scripts.Scriptable;
 
 @Scriptable
-public class FinmathDatabasePopulator extends AbstractTool<ToolContext> {
+public class TestFinmathDatabasePopulator extends AbstractTool<ToolContext> {
 
   /**
    * The properties file.
@@ -47,7 +36,7 @@ public class FinmathDatabasePopulator extends AbstractTool<ToolContext> {
   public static final String TOOLCONTEXT_EXAMPLE_PROPERTIES = "classpath:/toolcontext/toolcontext.properties";
 
   /** Logger. */
-  /* package */static final Logger LOGGER = LoggerFactory.getLogger(FinmathDatabasePopulator.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(TestFinmathDatabasePopulator.class);
 
   //-------------------------------------------------------------------------
   /**
@@ -55,246 +44,93 @@ public class FinmathDatabasePopulator extends AbstractTool<ToolContext> {
    *
    * @param args  the standard tool arguments, not null
    */
-  public static void main(final String[] args) { // CSIGNORE
+  public static void main(final String[] args) {
     LOGGER.info("Populating example database");
-    new FinmathDatabasePopulator().invokeAndTerminate(args, TOOLCONTEXT_EXAMPLE_PROPERTIES, null);
+    new TestFinmathDatabasePopulator().invokeAndTerminate(args, TOOLCONTEXT_EXAMPLE_PROPERTIES, null);
   }
 
   //-------------------------------------------------------------------------
   @Override
   protected void doRun() {
-    loadExchanges();
+    //loadExchanges();
     loadHolidays();
-    loadLegalEntities();
-    loadConventions();
+    //loadLegalEntities();
+    //loadConventions();
     loadCurrencyConfiguration();
-    loadTimeSeriesRating();
-    loadSimulatedHistoricalData();
+    //loadTimeSeriesRating();
+    //loadSimulatedHistoricalData();
     loadViews();
     loadFunctionConfigurations();
     loadExposureFunctions();
     loadCurveConfigurations();
-    loadIndexSecurities();
+    //loadIndexSecurities();
   }
 
   /**
    * Loads the function configurations.
    */
   private void loadFunctionConfigurations() {
-    final Log log = new Log("Creating function configuration definitions");
-    try {
-      final FinmathFunctionConfigurationPopulator populator = new FinmathFunctionConfigurationPopulator();
-      populator.run(getToolContext());
-      log.done();
-    } catch (final RuntimeException t) {
-      log.fail(t);
-    }
-  }
-
-  /**
-   * Logging helper. All stages must go through this. When run as part of the Windows install, the logger is customized to recognize messages
-   * formatted in this fashion and route them towards the
-   * progress indicators.
-   */
-  private static final class Log {
-    /** The string */
-    private final String _str;
-
-    /**
-     * Create an instance
-     * @param str The string
-     */
-    /* package */Log(final String str) {
-      LOGGER.info("{}", str);
-      _str = str;
-    }
-
-    /**
-     * Appends a finished message.
-     */
-    /* package */void done() {
-      LOGGER.debug("{} - finished", _str);
-    }
-
-    /**
-     * Appends an error message.
-     * @param e The error
-     */
-    /* package */void fail(final RuntimeException e) {
-      LOGGER.error("{} - failed - {}", _str, e.getMessage());
-      throw e;
-    }
-
-  }
-
-  private void loadConventions() {
-    final Log log = new Log("Creating convention data");
-    try {
-      final ConventionMaster master = getToolContext().getConventionMaster();
-      SyntheticInMemoryConventionMasterInitializer.INSTANCE.init(master);
-      log.done();
-    } catch (final RuntimeException t) {
-      log.fail(t);
-    }
+    LOGGER.warn("Creating function configuration definitions");
+    final TestFinmathFunctionConfigurationPopulator populator = new TestFinmathFunctionConfigurationPopulator();
+    populator.run(getToolContext());
   }
 
   private void loadCurrencyConfiguration() {
-    final Log log = new Log("Creating FX definitions");
-    try {
-      final ExampleCurrencyConfigurationLoader currencyLoader = new ExampleCurrencyConfigurationLoader();
-      currencyLoader.run(getToolContext());
-      log.done();
-    } catch (final RuntimeException t) {
-      log.fail(t);
-    }
+    LOGGER.warn("Creating currency configurations");
+    final TestCurrencyConfigurationsLoader currencyLoader = new TestCurrencyConfigurationsLoader();
+    currencyLoader.run(getToolContext());
   }
 
-  private void loadCurveAndSurfaceDefinitions() {
-    final Log log = new Log("Creating curve and surface definitions");
-    try {
-      final ExampleCurveAndSurfaceDefinitionLoader curveLoader = new ExampleCurveAndSurfaceDefinitionLoader();
-      curveLoader.run(getToolContext());
-      log.done();
-    } catch (final RuntimeException t) {
-      log.fail(t);
-    }
-  }
+//  private void loadTimeSeriesRating() {
+//    LOGGER.warn("Creating timeseries configuration");
+//    //TODO remove dependency on examples-simulated
+//    final ExampleTimeSeriesRatingLoader timeSeriesRatingLoader = new ExampleTimeSeriesRatingLoader();
+//    timeSeriesRatingLoader.run(getToolContext());
+//  }
 
-  private void loadCurveCalculationConfigurations() {
-    final Log log = new Log("Creating curve calculation configurations");
-    try {
-      final ExampleCurveConfigurationLoader curveConfigLoader = new ExampleCurveConfigurationLoader();
-      curveConfigLoader.run(getToolContext());
-      log.done();
-    } catch (final RuntimeException t) {
-      log.fail(t);
-    }
-  }
-
-  private void loadFxImpliedCurveCalculationConfigurations() {
-    final Log log = new Log("Creating FX-implied curve calculation configurations");
-    try {
-      final ExampleFXImpliedCurveConfigurationLoader curveConfigLoader = new ExampleFXImpliedCurveConfigurationLoader();
-      curveConfigLoader.run(getToolContext());
-      log.done();
-    } catch (final RuntimeException t) {
-      log.fail(t);
-    }
-  }
-
-  private void loadTimeSeriesRating() {
-    final Log log = new Log("Creating Timeseries configuration");
-    try {
-      final ExampleTimeSeriesRatingLoader timeSeriesRatingLoader = new ExampleTimeSeriesRatingLoader();
-      timeSeriesRatingLoader.run(getToolContext());
-      log.done();
-    } catch (final RuntimeException t) {
-      log.fail(t);
-    }
-  }
-
-  private void loadSimulatedHistoricalData() {
-    final Log log = new Log("Creating simulated historical timeseries");
-    try {
-      final ExampleHistoricalDataGeneratorTool historicalDataGenerator = new ExampleHistoricalDataGeneratorTool();
-      historicalDataGenerator.run(getToolContext());
-      log.done();
-    } catch (final RuntimeException t) {
-      log.fail(t);
-    }
-  }
+//  private void loadSimulatedHistoricalData() {
+//    LOGGER.warn("Creating simulated historical timeseries");
+//    //TODO remove dependency on examples-simulated
+//    final ExampleHistoricalDataGeneratorTool historicalDataGenerator = new ExampleHistoricalDataGeneratorTool();
+//    historicalDataGenerator.run(getToolContext());
+//  }
 
   /**
-   * Loads example exposure functions.
+   * Loads exposure functions.
    */
   private void loadExposureFunctions() {
-    final Log log = new Log("Creating exposure functions");
-    try {
-      final ExampleExposureFunctionLoader exposureFunctionLoader = new ExampleExposureFunctionLoader();
-      exposureFunctionLoader.run(getToolContext());
-      log.done();
-    } catch (final RuntimeException t) {
-      log.fail(t);
-    }
+    LOGGER.warn("Creating exposure functions");
+    final TestExposureFunctionsLoader exposureFunctionsLoader = new TestExposureFunctionsLoader();
+    exposureFunctionsLoader.run(getToolContext());
   }
 
   /**
-   * Loads example curve construction configurations.
+   * Loads curve construction configurations.
    */
   private void loadCurveConfigurations() {
-    final Log log = new Log("Creating curve construction configurations");
-    try {
-      final ExampleCurveConfigurationsLoader loader = new ExampleCurveConfigurationsLoader();
-      loader.run(getToolContext());
-      log.done();
-    } catch (final RuntimeException t) {
-      log.fail(t);
-    }
+    LOGGER.warn("Creating curve construction configurations");
+    final TestCurveConfigurationsLoader loader = new TestCurveConfigurationsLoader();
+    loader.run(getToolContext());
   }
 
   /**
-   * Loads the example view definitions
+   * Loads view definitions.
    */
   private void loadViews() {
-    final Log log = new Log("Creating example view definitions");
-    try {
-      final FinmathViewsPopulator populator = new FinmathViewsPopulator();
-      populator.run(getToolContext());
-      log.done();
-    } catch (final RuntimeException t) {
-      log.fail(t);
-    }
+    LOGGER.warn("Creating view definitions");
+    final TestFinmathViewsPopulator populator = new TestFinmathViewsPopulator();
+    populator.run(getToolContext());
   }
 
-  private void loadExchanges() {
-    final Log log = new Log("Creating exchange data");
-    try {
-      final ExampleExchangeLoader loader = new ExampleExchangeLoader();
-      loader.run(getToolContext());
-      log.done();
-    } catch (final RuntimeException t) {
-      log.fail(t);
-    }
-  }
-
+  /**
+   * Loads holidays.
+   */
   private void loadHolidays() {
-    final Log log = new Log("Creating holiday data");
-    try {
-      final ExampleHolidayLoader loader = new ExampleHolidayLoader();
-      loader.run(getToolContext());
-      log.done();
-    } catch (final RuntimeException t) {
-      log.fail(t);
-    }
+    LOGGER.warn("Creating holiday data");
+    final TestHolidaysLoader loader = new TestHolidaysLoader();
+    loader.run(getToolContext());
   }
 
-
-  /**
-   * Loads hard-coded legal entity data.
-   */
-  private void loadLegalEntities() {
-    final Log log = new Log("Creating legal entity data");
-    try {
-      final ExampleLegalEntityLoader loader = new ExampleLegalEntityLoader();
-      loader.run(getToolContext());
-      log.done();
-    } catch (final RuntimeException t) {
-      log.fail(t);
-    }
-  }
-
-  /**
-   * Loads a list of index securities.
-   */
-  private void loadIndexSecurities() {
-    final Log log = new Log("Creating example indices");
-    try {
-      securitiesGeneratorTool().run(getToolContext(), new ExampleIndexSecuritiesGeneratorTool(), true);
-      log.done();
-    } catch (final RuntimeException t) {
-      log.fail(t);
-    }
-  }
   //-------------------------------------------------------------------------
   // workaround for poor handling of resources, see PLAT-3919
   private static String unpackJar(final URL resource) {
@@ -333,11 +169,11 @@ public class FinmathDatabasePopulator extends AbstractTool<ToolContext> {
     return file;
   }
 
-  /**
-   * Creates a synthetic securities generator tool.
-   * @return The tool
-   */
-  private static SyntheticSecuritiesGeneratorTool securitiesGeneratorTool() {
-    return new SyntheticSecuritiesGeneratorTool();
-  }
+//  /**
+//   * Creates a synthetic securities generator tool.
+//   * @return The tool
+//   */
+//  private static SyntheticSecuritiesGeneratorTool securitiesGeneratorTool() {
+//    return new SyntheticSecuritiesGeneratorTool();
+//  }
 }

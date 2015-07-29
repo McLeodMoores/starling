@@ -13,9 +13,6 @@ import net.finmath.time.daycount.DayCountConvention_ACT_ACT_ISDA;
 
 import org.testng.annotations.Test;
 
-import com.mcleodmoores.integration.adapter.ActActIsdaFinmathDayCount;
-import com.mcleodmoores.integration.adapter.FinmathDayCount;
-
 /**
  * Unit tests for {@link ActActIsdaFinmathDayCount}.
  */

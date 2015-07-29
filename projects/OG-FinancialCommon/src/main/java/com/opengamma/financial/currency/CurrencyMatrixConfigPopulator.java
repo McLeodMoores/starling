@@ -37,6 +37,11 @@ public class CurrencyMatrixConfigPopulator {
    */
   public static final String SYNTHETIC_LIVE_DATA = "SyntheticLiveData";
 
+  public static void populateSyntheticCurrencyMatrix(final ConfigMaster configMaster) {
+    final CurrencyPairs currencies = new MasterConfigSource(configMaster).getSingle(CurrencyPairs.class, CurrencyPairs.DEFAULT_CURRENCY_PAIRS, VersionCorrection.LATEST);
+    storeCurrencyMatrix(configMaster, SYNTHETIC_LIVE_DATA, createSyntheticConversionMatrix(currencies));
+  }
+
   public static ConfigMaster populateCurrencyMatrixConfigMaster(final ConfigMaster cfgMaster) {
     final CurrencyPairs currencies = new MasterConfigSource(cfgMaster).getSingle(CurrencyPairs.class, CurrencyPairs.DEFAULT_CURRENCY_PAIRS, VersionCorrection.LATEST);
     storeCurrencyMatrix(cfgMaster, BLOOMBERG_LIVE_DATA, createBloombergConversionMatrix(currencies));
@@ -67,7 +72,7 @@ public class CurrencyMatrixConfigPopulator {
     for (final CurrencyPair pair : currencies.getPairs()) {
       if (commonCross.equals(pair.getBase()) || commonCross.equals(pair.getCounter())) {
         matrix.setLiveData(pair.getCounter(), pair.getBase(),
-            new ValueRequirement(MarketDataRequirementNames.MARKET_VALUE, ComputationTargetType.PRIMITIVE, ExternalId.of(ExternalSchemes.OG_SYNTHETIC_TICKER.getName(), pair.getBase().getCode() +
+            new ValueRequirement(MarketDataRequirementNames.MARKET_VALUE, ComputationTargetType.PRIMITIVE, ExternalSchemes.syntheticSecurityId(pair.getBase().getCode() +
                 pair.getCounter().getCode())));
       }
     }

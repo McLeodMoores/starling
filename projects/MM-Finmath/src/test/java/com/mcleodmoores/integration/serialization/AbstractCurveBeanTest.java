@@ -5,9 +5,6 @@ package com.mcleodmoores.integration.serialization;
 
 import static org.testng.AssertJUnit.assertEquals;
 import static org.testng.AssertJUnit.assertNotNull;
-
-import com.mcleodmoores.integration.serialization.AbstractCurveBean;
-
 import net.finmath.marketdata.model.curves.CurveInterface;
 
 /**

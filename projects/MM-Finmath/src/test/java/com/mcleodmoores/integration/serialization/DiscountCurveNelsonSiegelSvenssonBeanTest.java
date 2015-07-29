@@ -11,7 +11,6 @@ import org.testng.annotations.Test;
 import org.threeten.bp.LocalDate;
 
 import com.mcleodmoores.integration.adapter.FinmathDateUtils;
-import com.mcleodmoores.integration.serialization.DiscountCurveNelsonSiegelSvenssonBean;
 
 /**
  * Unit tests for {@link DiscountCurveNelsonSiegelSvenssonBean}.

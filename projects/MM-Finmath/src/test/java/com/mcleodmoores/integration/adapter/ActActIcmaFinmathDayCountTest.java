@@ -6,8 +6,6 @@ package com.mcleodmoores.integration.adapter;
 import org.apache.commons.lang.NotImplementedException;
 import org.testng.annotations.Test;
 
-import com.mcleodmoores.integration.adapter.ActActIcmaFinmathDayCount;
-
 /**
  * Unit tests for {@link ActActIcmaFinmathDayCount}.
  */

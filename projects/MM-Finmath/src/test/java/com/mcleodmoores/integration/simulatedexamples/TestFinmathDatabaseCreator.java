@@ -22,10 +22,10 @@ import com.opengamma.util.ResourceUtils;
 import com.opengamma.util.db.tool.DbTool;
 
 @Scriptable
-public class FinmathDatabaseCreator {
+public class TestFinmathDatabaseCreator {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(FinmathDatabaseCreator.class);
+  private static final Logger s_logger = LoggerFactory.getLogger(TestFinmathDatabaseCreator.class);
 
   /** Shared database URL. */
   private static final String KEY_SHARED_URL = "db.standard.url";
@@ -61,7 +61,7 @@ public class FinmathDatabaseCreator {
       databaseArgs = args;
     }
     try {
-      new FinmathDatabaseCreator().run(databaseArgs[0]);
+      new TestFinmathDatabaseCreator().run(databaseArgs[0]);
       System.exit(0);
     } catch (final Exception ex) {
       s_logger.error("Caught exception", ex);
@@ -121,9 +121,9 @@ public class FinmathDatabaseCreator {
 
     // populate the database
     s_logger.warn("Populating main database...");
-    new FinmathDatabasePopulator().run(ResourceUtils.toResourceLocator(res), ToolContext.class);
+    new TestFinmathDatabasePopulator().run(ResourceUtils.toResourceLocator(res), ToolContext.class);
 
-    s_logger.warn("Successfully created example databases");
+    s_logger.warn("Successfully created test databases");
   }
 
 }

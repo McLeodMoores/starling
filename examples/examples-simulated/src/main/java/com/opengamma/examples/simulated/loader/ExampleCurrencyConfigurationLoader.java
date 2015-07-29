@@ -20,11 +20,11 @@ public class ExampleCurrencyConfigurationLoader extends AbstractTool<ToolContext
 
   /**
    * Main method to run the tool.
-   * 
+   *
    * @param args  the standard tool arguments, not null
    */
   public static void main(final String[] args) { // CSIGNORE
-    new ExampleCurveAndSurfaceDefinitionLoader().invokeAndTerminate(args);
+    new ExampleCurrencyConfigurationLoader().invokeAndTerminate(args);
   }
 
   //-------------------------------------------------------------------------

@@ -7,8 +7,6 @@ import static org.testng.Assert.assertEquals;
 
 import org.testng.annotations.Test;
 
-import com.mcleodmoores.integration.adapter.FinmathBusinessDayFactory;
-
 /**
  * Tests {@link FinmathBusinessDayFactory}.
  */

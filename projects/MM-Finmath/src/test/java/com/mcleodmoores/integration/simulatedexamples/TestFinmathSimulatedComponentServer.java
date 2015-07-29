@@ -13,9 +13,9 @@ import com.opengamma.util.ShutdownUtils;
  * the server is started in development mode.
  * <p>
  * Before the server can be started, the example HSQL database must have been set up, either from the
- * command line or a launch configuration that uses {@link com.mcleodmoores.tool.FinmathDatabaseCreator}.
+ * command line or a launch configuration that uses {@link com.mcleodmoores.integration.simulatedexamples.TestFinmathDatabaseCreator}.
  */
-public class FinmathSimulatedComponentServer extends OpenGammaComponentServer {
+public class TestFinmathSimulatedComponentServer extends OpenGammaComponentServer {
 
   /**
    * Main method to start an OpenGamma server. If the command line is empty, the development
@@ -29,7 +29,7 @@ public class FinmathSimulatedComponentServer extends OpenGammaComponentServer {
     } else {
       args = clArgs;
     }
-    if (!new FinmathSimulatedComponentServer().run(args)) {
+    if (!new TestFinmathSimulatedComponentServer().run(args)) {
       ShutdownUtils.exit(-1);
     }
   }

@@ -13,9 +13,6 @@ import net.finmath.time.daycount.DayCountConvention_30E_360_ISDA;
 
 import org.testng.annotations.Test;
 
-import com.mcleodmoores.integration.adapter.FinmathDayCount;
-import com.mcleodmoores.integration.adapter.ThirtyEThreeSixtyIsdaFinmathDayCount;
-
 /**
  * Unit tests for {@link ThirtyEThreeSixtyIsdaFinmathDayCount}.
  */

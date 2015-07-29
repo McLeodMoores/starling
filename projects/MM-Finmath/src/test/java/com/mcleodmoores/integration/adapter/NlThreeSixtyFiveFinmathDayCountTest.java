@@ -13,9 +13,6 @@ import net.finmath.time.daycount.DayCountConvention_NL_365;
 
 import org.testng.annotations.Test;
 
-import com.mcleodmoores.integration.adapter.FinmathDayCount;
-import com.mcleodmoores.integration.adapter.NlThreeSixtyFiveFinmathDayCount;
-
 /**
  * Unit tests for {@link NlThreeSixtyFiveFinmathDayCount}.
  */

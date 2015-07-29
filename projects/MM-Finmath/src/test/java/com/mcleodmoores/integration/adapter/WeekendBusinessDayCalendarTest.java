@@ -9,10 +9,6 @@ import static org.testng.Assert.assertTrue;
 import org.testng.annotations.Test;
 import org.threeten.bp.LocalDate;
 
-import com.mcleodmoores.integration.adapter.FinmathBusinessDay;
-import com.mcleodmoores.integration.adapter.FinmathDateUtils;
-import com.mcleodmoores.integration.adapter.WeekendBusinessDayCalendar;
-
 /**
  * Units tests for {@link WeekendBusinessDayCalendar}.
  */

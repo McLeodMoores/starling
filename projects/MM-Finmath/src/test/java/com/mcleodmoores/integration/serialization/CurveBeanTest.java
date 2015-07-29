@@ -3,10 +3,6 @@
  */
 package com.mcleodmoores.integration.serialization;
 
-import com.mcleodmoores.integration.serialization.CurveBean;
-
-
-
 /**
  * Base class for unit tests of classes that extend {@link CurveBean}.
  */

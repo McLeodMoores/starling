@@ -8,10 +8,6 @@ import static org.testng.Assert.assertTrue;
 import org.testng.annotations.Test;
 import org.threeten.bp.LocalDate;
 
-import com.mcleodmoores.integration.adapter.AnyBusinessDayCalendar;
-import com.mcleodmoores.integration.adapter.FinmathBusinessDay;
-import com.mcleodmoores.integration.adapter.FinmathDateUtils;
-
 /**
  * Units tests for {@link AnyBusinessDayCalendar}.
  */

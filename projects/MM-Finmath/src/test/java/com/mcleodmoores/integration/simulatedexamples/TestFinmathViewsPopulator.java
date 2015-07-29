@@ -27,11 +27,9 @@ import com.opengamma.scripts.Scriptable;
 import com.opengamma.util.money.Currency;
 
 @Scriptable
-public class FinmathViewsPopulator extends AbstractTool<ToolContext> {
-  /** Name of the default calculation configurations. */
-  private static final String DEFAULT_CALC_CONFIG = "Default";
+public class TestFinmathViewsPopulator extends AbstractTool<ToolContext> {
   /** Logger. */
-  private static final Logger LOGGER = LoggerFactory.getLogger(FinmathViewsPopulator.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(TestFinmathViewsPopulator.class);
   /** The default maximum delta calculation period */
   private static final long MAX_DELTA_PERIOD = 30000L;
   /** The default maximum full calculation period */
@@ -48,7 +46,7 @@ public class FinmathViewsPopulator extends AbstractTool<ToolContext> {
    * @param args  the standard tool arguments, not null
    */
   public static void main(final String[] args) {
-    new FinmathViewsPopulator().invokeAndTerminate(args);
+    new TestFinmathViewsPopulator().invokeAndTerminate(args);
   }
 
   //-------------------------------------------------------------------------
@@ -65,8 +63,8 @@ public class FinmathViewsPopulator extends AbstractTool<ToolContext> {
     viewDefinition.setMinDeltaCalculationPeriod(MIN_DELTA_PERIOD);
     viewDefinition.setMaxDeltaCalculationPeriod(MAX_DELTA_PERIOD);
 
-    final ViewCalculationConfiguration defaultCalc = new ViewCalculationConfiguration(viewDefinition, DEFAULT_CALC_CONFIG);
-    defaultCalc.addSpecificRequirement(new ValueRequirement(DISCOUNT_CURVE, ComputationTargetSpecification.NULL, ValueProperties.builder().with(CURVE, "Test").get()));
+    final ViewCalculationConfiguration defaultCalc = new ViewCalculationConfiguration(viewDefinition, "USD Curves");
+    defaultCalc.addSpecificRequirement(new ValueRequirement(DISCOUNT_CURVE, ComputationTargetSpecification.NULL, ValueProperties.builder().with(CURVE, "USD 3M LIBOR").get()));
     viewDefinition.addViewCalculationConfiguration(defaultCalc);
     return viewDefinition;
   }

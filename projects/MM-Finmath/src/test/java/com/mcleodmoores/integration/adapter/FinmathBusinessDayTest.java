@@ -11,9 +11,6 @@ import net.finmath.time.businessdaycalendar.BusinessdayCalendarExcludingWeekends
 
 import org.testng.annotations.Test;
 
-import com.mcleodmoores.integration.adapter.AnyBusinessDayCalendar;
-import com.mcleodmoores.integration.adapter.FinmathBusinessDay;
-
 /**
  * Unit tests for {@link FinmathBusinessDay}.
  */

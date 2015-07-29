@@ -13,9 +13,6 @@ import net.finmath.time.daycount.DayCountConvention_ACT_360;
 
 import org.testng.annotations.Test;
 
-import com.mcleodmoores.integration.adapter.ActThreeSixtyFinmathDayCount;
-import com.mcleodmoores.integration.adapter.FinmathDayCount;
-
 /**
  * Unit tests for {@link ActThreeSixtyFinmathDayCount}.
  */

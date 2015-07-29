@@ -4,8 +4,6 @@
 package com.mcleodmoores.integration.serialization;
 
 import static org.testng.Assert.fail;
-
-import com.mcleodmoores.integration.serialization.ForwardCurveBean;
 /**
  * Unit tests for {@link ForwardCurveBean}.
  */

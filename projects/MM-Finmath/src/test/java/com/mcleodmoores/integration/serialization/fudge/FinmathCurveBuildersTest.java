@@ -35,7 +35,6 @@ import org.threeten.bp.LocalDate;
 import com.mcleodmoores.integration.adapter.ActActAfbFinmathDayCount;
 import com.mcleodmoores.integration.adapter.FinmathDateUtils;
 import com.mcleodmoores.integration.adapter.TargetBusinessDayCalendar;
-import com.mcleodmoores.integration.serialization.fudge.FinmathCurveBuilders;
 import com.mcleodmoores.integration.testutils.FinancialTestBase;
 
 /**

@@ -10,12 +10,11 @@ import java.util.Collection;
 import java.util.HashSet;
 
 import org.testng.annotations.Test;
+import org.threeten.bp.DayOfWeek;
 import org.threeten.bp.LocalDate;
 
-import com.mcleodmoores.integration.adapter.CustomBusinessDayCalendar;
-import com.mcleodmoores.integration.adapter.FinmathBusinessDay;
-import com.mcleodmoores.integration.adapter.FinmathDateUtils;
-import com.mcleodmoores.integration.testutils.TestCalendar;
+import com.opengamma.analytics.date.SimpleWorkingDayCalendar;
+import com.opengamma.analytics.date.WorkingDayCalendar;
 
 /**
  * Unit tests for {@link CustomBusinessDayCalendar}.
@@ -25,7 +24,7 @@ public class CustomBusinessDayCalendarTest {
   /** Holiday dates */
   private static final Collection<LocalDate> HOLIDAYS;
   /** A test calendar */
-  private static final TestCalendar CALENDAR;
+  private static final WorkingDayCalendar CALENDAR;
   /** The adapter */
   private static final FinmathBusinessDay BUSINESS_DAY;
 
@@ -34,7 +33,7 @@ public class CustomBusinessDayCalendarTest {
     for (int i = 1; i < 13; i++) {
       HOLIDAYS.add(LocalDate.of(2014, i, 1));
     }
-    CALENDAR = new TestCalendar("Test", HOLIDAYS);
+    CALENDAR = new SimpleWorkingDayCalendar("Test", HOLIDAYS, DayOfWeek.SATURDAY, DayOfWeek.SUNDAY);
     BUSINESS_DAY = new CustomBusinessDayCalendar(CALENDAR);
   }
 
@@ -47,7 +46,7 @@ public class CustomBusinessDayCalendarTest {
     final LocalDate end = LocalDate.of(2015, 1, 1);
     LocalDate date = LocalDate.of(2014, 1, 1);
     while (date.isBefore(end)) {
-      if (HOLIDAYS.contains(date)) {
+      if (HOLIDAYS.contains(date) || date.getDayOfWeek() == DayOfWeek.SATURDAY || date.getDayOfWeek() == DayOfWeek.SUNDAY) {
         assertFalse(BUSINESS_DAY.isBusinessday(FinmathDateUtils.convertLocalDate(date)));
       } else {
         assertTrue(BUSINESS_DAY.isBusinessday(FinmathDateUtils.convertLocalDate(date)));

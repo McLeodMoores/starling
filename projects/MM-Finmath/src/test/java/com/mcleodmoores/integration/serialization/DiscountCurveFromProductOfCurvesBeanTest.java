@@ -14,10 +14,9 @@ import org.threeten.bp.LocalDate;
 
 import com.google.common.collect.Sets;
 import com.mcleodmoores.integration.adapter.FinmathDateUtils;
-import com.mcleodmoores.integration.serialization.DiscountCurveFromProductOfCurvesBean;
 
 /**
- * Units tests for {@link DiscountCurveFromProductOfCurvesBean}.
+ * Unit tests for {@link DiscountCurveFromProductOfCurvesBean}.
  */
 @Test
 public class DiscountCurveFromProductOfCurvesBeanTest extends CurveBeanTest {

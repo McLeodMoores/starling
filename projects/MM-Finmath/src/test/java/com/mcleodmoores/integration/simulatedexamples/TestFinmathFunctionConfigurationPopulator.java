@@ -6,6 +6,7 @@ package com.mcleodmoores.integration.simulatedexamples;
 import java.util.Collections;
 
 import com.google.common.collect.ImmutableList;
+import com.mcleodmoores.integration.function.FinmathFunctionConfiguration;
 import com.mcleodmoores.integration.function.FinmathFunctions;
 import com.opengamma.component.tool.AbstractTool;
 import com.opengamma.core.config.impl.ConfigItem;
@@ -13,7 +14,6 @@ import com.opengamma.engine.function.config.FunctionConfigurationDefinition;
 import com.opengamma.engine.function.config.FunctionConfigurationSource;
 import com.opengamma.engine.function.config.ParameterizedFunctionConfiguration;
 import com.opengamma.engine.function.config.StaticFunctionConfiguration;
-import com.opengamma.examples.simulated.function.ExampleStandardFunctionConfiguration;
 import com.opengamma.financial.aggregation.AggregationFunctions;
 import com.opengamma.financial.currency.CurrencyFunctions;
 import com.opengamma.financial.property.PropertyFunctions;
@@ -25,7 +25,7 @@ import com.opengamma.master.config.ConfigMasterUtils;
 import com.opengamma.scripts.Scriptable;
 
 @Scriptable
-public class FinmathFunctionConfigurationPopulator extends AbstractTool<ToolContext> {
+public class TestFinmathFunctionConfigurationPopulator extends AbstractTool<ToolContext> {
   private static final String STANDARD = "STANDARD_FUNCTIONS";
   private static final String VIEW = "VIEW_FUNCTIONS";
   private static final String VALUE = "VALUE_FUNCTIONS";
@@ -34,8 +34,7 @@ public class FinmathFunctionConfigurationPopulator extends AbstractTool<ToolCont
   private static final String ANALYTICS = "ANALYTICS_FUNCTIONS";
   private static final String AGGREGATION = "AGGREGATION_FUNCTIONS";
   private static final String FINANCIAL = "FINANCIAL_FUNCTIONS";
-  private static final String EXAMPLE = "EXAMPLE_FUNCTIONS";
-  private static final String CUBE = "CUBE_FUNCTIONS";
+  private static final String TEST = "TEST_FUNCTIONS";
   private static final String TARGET = "TARGET_FUNCTIONS";
 
   //-------------------------------------------------------------------------
@@ -45,7 +44,7 @@ public class FinmathFunctionConfigurationPopulator extends AbstractTool<ToolCont
    * @param args  the standard tool arguments, not null
    */
   public static void main(final String[] args) { // CSIGNORE
-    new FinmathFunctionConfigurationPopulator().invokeAndTerminate(args);
+    new TestFinmathFunctionConfigurationPopulator().invokeAndTerminate(args);
   }
 
   //-------------------------------------------------------------------------
@@ -65,13 +64,13 @@ public class FinmathFunctionConfigurationPopulator extends AbstractTool<ToolCont
         Collections.<ParameterizedFunctionConfiguration>emptyList());
     storeFunctionDefinition(financialFunc);
 
-    storeFunctionDefinition(STANDARD, ExampleStandardFunctionConfiguration.instance());
+    storeFunctionDefinition(STANDARD, FinmathFunctionConfiguration.instance());
 
-    final FunctionConfigurationDefinition exampleFunc = new FunctionConfigurationDefinition(EXAMPLE,
-        ImmutableList.of(FINANCIAL, STANDARD, CUBE),
+    final FunctionConfigurationDefinition functions = new FunctionConfigurationDefinition(TEST,
+        ImmutableList.of(FINANCIAL, STANDARD),
         Collections.<StaticFunctionConfiguration>emptyList(),
         Collections.<ParameterizedFunctionConfiguration>emptyList());
-    storeFunctionDefinition(exampleFunc);
+    storeFunctionDefinition(functions);
 
   }
 
