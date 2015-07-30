@@ -1,6 +1,7 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- *
+ * Copyright (C) 2015 - present by McLeod Moores Software Limited.
+ * 
  * Please see distribution for license.
  */
 package com.opengamma.component.factory.engine;
@@ -24,6 +25,7 @@ import com.opengamma.component.ComponentRepository;
 import com.opengamma.component.factory.AbstractComponentFactory;
 import com.opengamma.core.historicaltimeseries.HistoricalTimeSeriesSource;
 import com.opengamma.core.marketdatasnapshot.MarketDataSnapshotSource;
+import com.opengamma.engine.marketdata.AlwaysAvailableMarketDataProviderFactory;
 import com.opengamma.engine.marketdata.CombinedMarketDataProviderFactory;
 import com.opengamma.engine.marketdata.MarketDataProviderFactory;
 import com.opengamma.engine.marketdata.historical.HistoricalMarketDataProviderFactory;
@@ -34,6 +36,7 @@ import com.opengamma.engine.marketdata.resolver.CachingMarketDataProviderResolve
 import com.opengamma.engine.marketdata.resolver.MarketDataProviderResolver;
 import com.opengamma.engine.marketdata.resolver.TypeBasedMarketDataProviderResolver;
 import com.opengamma.engine.marketdata.snapshot.UserMarketDataProviderFactory;
+import com.opengamma.engine.marketdata.spec.AlwaysAvailableMarketDataSpecification;
 import com.opengamma.engine.marketdata.spec.CombinedMarketDataSpecification;
 import com.opengamma.engine.marketdata.spec.FixedHistoricalMarketDataSpecification;
 import com.opengamma.engine.marketdata.spec.HistoricalShockMarketDataSpecification;
@@ -97,6 +100,8 @@ public class MarketDataProviderResolverComponentFactory extends AbstractComponen
     providerResolver.addProvider(HistoricalShockMarketDataSpecification.class, historicalShockMarketDataProviderFactory);
     final MarketDataProviderFactory randomizingMarketDataProviderFactory = initRandomizingMarketDataProviderFactory(providerResolver);
     providerResolver.addProvider(RandomizingMarketDataSpecification.class, randomizingMarketDataProviderFactory);
+    final MarketDataProviderFactory alwaysAvailableMarketDataProviderFactory = initAlwaysAvailableMarketDataProviderFactory();
+    providerResolver.addProvider(AlwaysAvailableMarketDataSpecification.class, alwaysAvailableMarketDataProviderFactory);
     return providerResolver;
   }
 
@@ -104,6 +109,10 @@ public class MarketDataProviderResolverComponentFactory extends AbstractComponen
     final MarketDataProviderResolver resolver = new CachingMarketDataProviderResolver(createMarketDataProviderResolver());
     final ComponentInfo info = new ComponentInfo(MarketDataProviderResolver.class, getClassifier());
     repo.registerComponent(info, resolver);
+  }
+  
+  private MarketDataProviderFactory initAlwaysAvailableMarketDataProviderFactory() {
+    return new AlwaysAvailableMarketDataProviderFactory();
   }
 
   private MarketDataProviderFactory initRandomizingMarketDataProviderFactory(MarketDataProviderResolver resolver) {
