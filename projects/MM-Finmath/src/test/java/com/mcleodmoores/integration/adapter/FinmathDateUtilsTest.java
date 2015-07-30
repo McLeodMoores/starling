@@ -52,6 +52,6 @@ public class FinmathDateUtilsTest {
     assertEquals(hour, calendar.get(Calendar.HOUR_OF_DAY));
     assertEquals(minute, calendar.get(Calendar.MINUTE));
     assertEquals(second, calendar.get(Calendar.SECOND));
-    assertEquals("Coordinated Universal Time", calendar.getTimeZone().getDisplayName());
+    assertEquals("Greenwich Mean Time", calendar.getTimeZone().getDisplayName());
   }
 }

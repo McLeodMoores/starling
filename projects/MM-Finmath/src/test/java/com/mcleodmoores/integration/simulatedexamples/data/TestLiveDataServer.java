@@ -76,7 +76,7 @@ public class TestLiveDataServer extends StandardLiveDataServer {
   private volatile double _scalingFactor;
   private volatile int _maxMillisBetweenTicks;
   private final TerminatableJob _marketDataSimulatorJob = new SimulatedMarketDataJob();
-  private final ExecutorService _executorService = NamedThreadPoolFactory.newCachedThreadPool("ExampleLiveDataServer");
+  private final ExecutorService _executorService = NamedThreadPoolFactory.newCachedThreadPool("TestLiveDataServer");
 
   public TestLiveDataServer(final CacheManager cacheManager, final Resource initialValuesFile) {
     this(cacheManager, initialValuesFile, SCALING_FACTOR, MAX_MILLIS_BETWEEN_TICKS);
