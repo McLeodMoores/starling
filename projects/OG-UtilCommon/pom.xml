@@ -201,10 +201,7 @@
 <!--       <groupId>com.sun.jersey.contribs</groupId> -->
 <!--       <artifactId>jersey-spring</artifactId> -->
 <!--     </dependency> -->
-<!--     <dependency> -->
-<!--       <groupId>org.freemarker</groupId> -->
-<!--       <artifactId>freemarker</artifactId> -->
-<!--     </dependency> -->
+
 
     <dependency>
       <groupId>org.springframework.amqp</groupId>

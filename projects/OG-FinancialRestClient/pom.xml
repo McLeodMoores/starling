@@ -14,7 +14,7 @@
   <artifactId>og-financial-rest-client</artifactId>
   <packaging>jar</packaging>
   <name>OG-FinancialRestClient</name>
-  <description>OpenGamma Platform financial calculations (REST client interfaces)</description>
+  <description>OpenGamma Platform financial calculations (REST Client interfaces)</description>
 
   <scm>
     <url>https://github.com/OpenGamma/OG-Platform/tree/master/projects/OG-FinancialRestClient</url>
@@ -33,16 +33,6 @@
     </dependency>
     <dependency>
       <groupId>com.mcleodmoores.opengamma.platform</groupId>
-      <artifactId>og-master-rest-client</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>com.mcleodmoores.opengamma.platform</groupId>
-      <artifactId>og-core-rest-client</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>com.mcleodmoores.opengamma.platform</groupId>
       <artifactId>og-provider-rest-client</artifactId>
       <version>${project.version}</version>
     </dependency>
@@ -53,24 +43,15 @@
     </dependency>
     <dependency>
       <groupId>com.mcleodmoores.opengamma.platform</groupId>
+      <artifactId>og-master-rest-client</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.mcleodmoores.opengamma.platform</groupId>
       <artifactId>og-analytics</artifactId>
       <version>${project.version}</version>
     </dependency>
-    <dependency>
-      <groupId>com.mcleodmoores.opengamma.platform</groupId>
-      <artifactId>og-util</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>com.mcleodmoores.opengamma.platform</groupId>
-      <artifactId>og-util-rest-client</artifactId>
-      <version>${project.version}</version>
-    </dependency>
 
-    <dependency>
-      <groupId>com.sun.jersey</groupId>
-      <artifactId>jersey-client</artifactId>
-    </dependency>
     <dependency>
       <groupId>org.apache.poi</groupId>
       <artifactId>poi</artifactId>
