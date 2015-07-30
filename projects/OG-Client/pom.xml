@@ -21,6 +21,7 @@
       <groupId>com.mcleodmoores.opengamma.platform</groupId>
       <artifactId>og-util</artifactId>
       <version>${project.version}</version>
+      <type>pom</type>
     </dependency>
     <dependency>
       <groupId>com.mcleodmoores.opengamma.platform</groupId>
@@ -31,21 +32,25 @@
       <groupId>com.mcleodmoores.opengamma.platform</groupId>
       <artifactId>og-core</artifactId>
       <version>${project.version}</version>
+      <type>pom</type>
     </dependency>
     <dependency>
       <groupId>com.mcleodmoores.opengamma.platform</groupId>
       <artifactId>og-component</artifactId>
       <version>${project.version}</version>
+      <type>pom</type>
     </dependency>
     <dependency>
       <groupId>com.mcleodmoores.opengamma.platform</groupId>
       <artifactId>og-engine</artifactId>
       <version>${project.version}</version>
+      <type>pom</type>
     </dependency>
     <dependency>
       <groupId>com.mcleodmoores.opengamma.platform</groupId>
       <artifactId>og-financial</artifactId>
       <version>${project.version}</version>
+      <type>pom</type>
     </dependency>
     <dependency>
       <groupId>com.mcleodmoores.opengamma.platform</groupId>
@@ -61,6 +66,7 @@
       <groupId>com.mcleodmoores.opengamma.platform</groupId>
       <artifactId>og-master</artifactId>
       <version>${project.version}</version>
+      <type>pom</type>
     </dependency>
     <dependency>
       <groupId>com.mcleodmoores.opengamma.platform</groupId>

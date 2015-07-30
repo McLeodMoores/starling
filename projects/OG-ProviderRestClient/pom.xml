@@ -31,11 +31,6 @@
       <artifactId>og-core-common</artifactId>
       <version>${project.version}</version>
     </dependency>
-        <dependency>
-      <groupId>com.mcleodmoores.opengamma.platform</groupId>
-      <artifactId>og-util</artifactId>
-      <version>${project.version}</version>
-    </dependency>
     <dependency>
       <groupId>com.mcleodmoores.opengamma.platform</groupId>
       <artifactId>og-util-rest-client</artifactId>
