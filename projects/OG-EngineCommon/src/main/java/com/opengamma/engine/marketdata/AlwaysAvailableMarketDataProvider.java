@@ -7,9 +7,11 @@ package com.opengamma.engine.marketdata;
 
 import java.util.Set;
 
+import com.opengamma.core.marketdatasnapshot.impl.ManageableMarketDataSnapshot;
 import com.opengamma.engine.marketdata.availability.DefaultMarketDataAvailabilityProvider;
 import com.opengamma.engine.marketdata.availability.MarketDataAvailabilityProvider;
 import com.opengamma.engine.marketdata.availability.OptimisticMarketDataAvailabilityFilter;
+import com.opengamma.engine.marketdata.snapshot.UserMarketDataSnapshot;
 import com.opengamma.engine.marketdata.spec.AlwaysAvailableMarketDataSpecification;
 import com.opengamma.engine.marketdata.spec.MarketDataSpecification;
 import com.opengamma.engine.value.ValueSpecification;
@@ -69,8 +71,9 @@ public class AlwaysAvailableMarketDataProvider extends AbstractMarketDataProvide
 
   @Override
   public MarketDataSnapshot snapshot(MarketDataSpecification marketDataSpec) {
+    return new UserMarketDataSnapshot(new ManageableMarketDataSnapshot());
     //return new MockMarketDataSnapshot(new MockMarketDataProvider("AlwaysAvailableMarketDataProvider", true, 0));
-    throw new UnsupportedOperationException("This data provider only exists to produce a valid dependency graph build, not to provide data.");
+//    throw new UnsupportedOperationException("This data provider only exists to produce a valid dependency graph build, not to provide data.");
   }
 
 }
