@@ -69,8 +69,8 @@ public class AlwaysAvailableMarketDataProvider extends AbstractMarketDataProvide
 
   @Override
   public MarketDataSnapshot snapshot(MarketDataSpecification marketDataSpec) {
-    return new MockMarketDataSnapshot(new MockMarketDataProvider("AlwaysAvailableMarketDataProvider", true, 0));
-//    throw new UnsupportedOperationException("This data provider only exists to produce a valid dependency graph build, not to provide data.");
+    //return new MockMarketDataSnapshot(new MockMarketDataProvider("AlwaysAvailableMarketDataProvider", true, 0));
+    throw new UnsupportedOperationException("This data provider only exists to produce a valid dependency graph build, not to provide data.");
   }
 
 }
