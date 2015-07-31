@@ -24,43 +24,18 @@
     <dependency>
       <groupId>com.mcleodmoores.opengamma.platform</groupId>
       <artifactId>og-server</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <!-- dependency>
-      <groupId>com.mcleodmoores.opengamma.platform</groupId>
-      <artifactId>og-financial</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>com.mcleodmoores.opengamma.platform</groupId>
-      <artifactId>og-masterdb</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>com.mcleodmoores.opengamma.platform</groupId>
-      <artifactId>og-financial-types</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>com.mcleodmoores.opengamma.platform</groupId>
-      <artifactId>og-provider</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>com.mcleodmoores.opengamma.platform</groupId>
-      <artifactId>og-engine</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>com.mcleodmoores.opengamma.platform</groupId>
-      <artifactId>og-analytics</artifactId>
+      <type>pom</type>
       <version>${project.version}</version>
     </dependency>
     <dependency>
       <groupId>com.mcleodmoores.opengamma.platform</groupId>
       <artifactId>og-component</artifactId>
       <version>${project.version}</version>
-    </dependency-->
+    </dependency>
+    <dependency>
+      <groupId>org.freemarker</groupId>
+      <artifactId>freemarker</artifactId>
+    </dependency>    
     <dependency>
       <groupId>org.apache.activemq</groupId>
       <artifactId>activemq-pool</artifactId>
@@ -80,8 +55,5 @@
       <version>1.2.35</version>
     </dependency>
   </dependencies>
-
-  <properties>
-  </properties>
-
+  
 </project>
