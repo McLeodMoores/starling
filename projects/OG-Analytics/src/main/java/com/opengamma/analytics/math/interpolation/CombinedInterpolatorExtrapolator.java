@@ -2,41 +2,64 @@
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
  *
  * Please see distribution for license.
+ *
+ * Modified by McLeod Moores Software Limited.
+ *
+ * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.analytics.math.interpolation;
 
-import org.apache.commons.lang.Validate;
-
 import com.opengamma.analytics.math.interpolation.data.Interpolator1DDataBundle;
+import com.opengamma.util.ArgumentChecker;
 
 /**
- * 
+ * An implementation of a one-dimensional interpolator that can extrapolate if extrapolation methods are supplied.
+ * The left and right extrapolation methods can be different.
  */
 public class CombinedInterpolatorExtrapolator extends Interpolator1D {
+  /** Serialization version */
   private static final long serialVersionUID = 1L;
+  /** The interpolator */
   private final Interpolator1D _interpolator;
+  /** The left extrapolator */
   private final Interpolator1D _leftExtrapolator;
+  /** The right extrapolator */
   private final Interpolator1D _rightExtrapolator;
 
+  /**
+   * Creates an instance that does not extrapolate.
+   * @param interpolator  the interpolator, not null
+   */
   public CombinedInterpolatorExtrapolator(final Interpolator1D interpolator) {
-    Validate.notNull(interpolator, "interpolator");
+    ArgumentChecker.notNull(interpolator, "interpolator");
     _interpolator = interpolator;
     _leftExtrapolator = null;
     _rightExtrapolator = null;
   }
 
+  /**
+   * Creates an instance that uses the extrapolator for the left and right side.
+   * @param interpolator  the interpolator, not null
+   * @param extrapolator  the extrapolator, not null
+   */
   public CombinedInterpolatorExtrapolator(final Interpolator1D interpolator, final Interpolator1D extrapolator) {
-    Validate.notNull(interpolator, "interpolator");
-    Validate.notNull(extrapolator, "extrapolator");
+    ArgumentChecker.notNull(interpolator, "interpolator");
+    ArgumentChecker.notNull(extrapolator, "extrapolator");
     _interpolator = interpolator;
     _leftExtrapolator = extrapolator;
     _rightExtrapolator = extrapolator;
   }
 
+  /**
+   * Creates an instance.
+   * @param interpolator  the interpolator, not null
+   * @param leftExtrapolator  the left extrapolator, not null
+   * @param rightExtrapolator  the right extrapolator, not null
+   */
   public CombinedInterpolatorExtrapolator(final Interpolator1D interpolator, final Interpolator1D leftExtrapolator, final Interpolator1D rightExtrapolator) {
-    Validate.notNull(interpolator, "interpolator");
-    Validate.notNull(leftExtrapolator, "left extrapolator");
-    Validate.notNull(rightExtrapolator, "right extrapolator");
+    ArgumentChecker.notNull(interpolator, "interpolator");
+    ArgumentChecker.notNull(leftExtrapolator, "left extrapolator");
+    ArgumentChecker.notNull(rightExtrapolator, "right extrapolator");
     _interpolator = interpolator;
     _leftExtrapolator = leftExtrapolator;
     _rightExtrapolator = rightExtrapolator;
@@ -52,23 +75,34 @@ public class CombinedInterpolatorExtrapolator extends Interpolator1D {
     return _interpolator.getDataBundleFromSortedArrays(x, y);
   }
 
+  /**
+   * Gets the interpolator.
+   * @return  the interpolator
+   */
   public Interpolator1D getInterpolator() {
     return _interpolator;
   }
 
+  /**
+   * Gets the left extrapolator.
+   * @return  the left extrapolator, not null
+   */
   public Interpolator1D getLeftExtrapolator() {
     return _leftExtrapolator;
   }
 
+  /**
+   * Gets the right extrapolator.
+   * @return  the right extrapolator, not null
+   */
   public Interpolator1D getRightExtrapolator() {
     return _rightExtrapolator;
   }
 
-  //TODO  fail earlier if there's no extrapolators?
   @Override
   public Double interpolate(final Interpolator1DDataBundle data, final Double value) {
-    Validate.notNull(data, "data");
-    Validate.notNull(value, "value");
+    ArgumentChecker.notNull(data, "data");
+    ArgumentChecker.notNull(value, "value");
     if (value < data.firstKey()) {
       if (_leftExtrapolator != null) {
         return _leftExtrapolator.interpolate(data, value);
@@ -83,8 +117,8 @@ public class CombinedInterpolatorExtrapolator extends Interpolator1D {
 
   @Override
   public double firstDerivative(final Interpolator1DDataBundle data, final Double value) {
-    Validate.notNull(data, "data");
-    Validate.notNull(value, "value");
+    ArgumentChecker.notNull(data, "data");
+    ArgumentChecker.notNull(value, "value");
     if (value < data.firstKey()) {
       if (_leftExtrapolator != null) {
         return _leftExtrapolator.firstDerivative(data, value);
@@ -99,8 +133,8 @@ public class CombinedInterpolatorExtrapolator extends Interpolator1D {
 
   @Override
   public double[] getNodeSensitivitiesForValue(final Interpolator1DDataBundle data, final Double value) {
-    Validate.notNull(data, "data");
-    Validate.notNull(value, "value");
+    ArgumentChecker.notNull(data, "data");
+    ArgumentChecker.notNull(value, "value");
     if (value < data.firstKey()) {
       if (_leftExtrapolator != null) {
         return _leftExtrapolator.getNodeSensitivitiesForValue(data, value);
@@ -118,9 +152,17 @@ public class CombinedInterpolatorExtrapolator extends Interpolator1D {
     final StringBuilder sb = new StringBuilder("Interpolator[interpolator=");
     sb.append(_interpolator.toString());
     sb.append(", left extrapolator=");
-    sb.append(_leftExtrapolator.toString());
+    if (_leftExtrapolator == null) {
+      sb.append("null");
+    } else {
+      sb.append(_leftExtrapolator.toString());
+    }
     sb.append(", right extrapolator=");
-    sb.append(_rightExtrapolator.toString());
+    if (_rightExtrapolator == null) {
+      sb.append("null");
+    } else {
+      sb.append(_rightExtrapolator.toString());
+    }
     sb.append("]");
     return sb.toString();
   }

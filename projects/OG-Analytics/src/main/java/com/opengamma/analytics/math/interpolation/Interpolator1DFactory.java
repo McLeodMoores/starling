@@ -1,7 +1,11 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
+ *
+ * Modified by McLeod Moores Software Limited.
+ *
+ * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.analytics.math.interpolation;
 
@@ -12,194 +16,213 @@ import com.opengamma.analytics.financial.credit.cds.ISDAExtrapolator1D;
 import com.opengamma.analytics.financial.credit.cds.ISDAInterpolator1D;
 
 /**
- * 
+ * A factory for one-dimensional interpolators.
+ * @deprecated  use {@link com.opengamma.analytics.math.interpolation.factory.NamedInterpolator1dFactory} and
+ * {@link com.opengamma.analytics.math.interpolation.factory.NamedExtrapolator1dFactory}.
  */
+@Deprecated
 public final class Interpolator1DFactory {
-  /** Linear */
+  /** Linear. */
   public static final String LINEAR = "Linear";
-  /** Exponential */
+  /** Exponential. */
   public static final String EXPONENTIAL = "Exponential";
-  /** Log-linear */
+  /** Log-linear. */
   public static final String LOG_LINEAR = "LogLinear";
-  /** Natural cubic spline */
+  /** Natural cubic spline. */
   public static final String NATURAL_CUBIC_SPLINE = "NaturalCubicSpline";
-  /** Barycentric rational function */
+  /** Barycentric rational function. */
   public static final String BARYCENTRIC_RATIONAL_FUNCTION = "BarycentricRationalFunction";
-  /** Polynomial */
+  /** Polynomial. */
   public static final String POLYNOMIAL = "Polynomial";
-  /** Rational function */
+  /** Rational function. */
   public static final String RATIONAL_FUNCTION = "RationalFunction";
-  /** Step */
+  /** Step. */
   public static final String STEP = "Step";
-  /** Step with the value in the interval equal to the value at the upper bound */
+  /** Step with the value in the interval equal to the value at the upper bound. */
   public static final String STEP_UPPER = "StepUpper";
-  /** Double quadratic */
+  /** Double quadratic. */
   public static final String DOUBLE_QUADRATIC = "DoubleQuadratic";
-  /**Monotonicity-Preserving-Cubic-Spline
-   * @deprecated Use the name PCHIP instead 
-   * */
+  /** Monotonicity-Preserving-Cubic-Spline.
+   * @deprecated Use the name PCHIP instead
+   */
   @Deprecated
   public static final String MONOTONIC_CUBIC = "MonotonicityPreservingCubicSpline";
-  /**Piecewise Cubic Hermite Interpolating Polynomial (PCHIP)*/
+  /**Piecewise Cubic Hermite Interpolating Polynomial (PCHIP). */
   public static final String PCHIP = "PCHIP";
-  /**Modified Piecewise Cubic Hermite Interpolating Polynomial (PCHIP) for yield curves*/
+  /**Modified Piecewise Cubic Hermite Interpolating Polynomial (PCHIP) for yield curves. */
   public static final String MOD_PCHIP = "ModifiedPCHIP";
-  /** Time square */
+  /** Time square. */
   public static final String TIME_SQUARE = "TimeSquare";
-  /** Flat extrapolator */
+  /** Flat extrapolator. */
   public static final String FLAT_EXTRAPOLATOR = "FlatExtrapolator";
-  /** Linear extrapolator */
+  /** Linear extrapolator. */
   public static final String LINEAR_EXTRAPOLATOR = "LinearExtrapolator";
-  /** Log-linear extrapolator */
+  /** Log-linear extrapolator. */
   public static final String LOG_LINEAR_EXTRAPOLATOR = "LogLinearExtrapolator";
-  /** Quadratic polynomial left extrapolator */
+  /** Quadratic polynomial left extrapolator. */
   public static final String QUADRATIC_LEFT_EXTRAPOLATOR = "QuadraticLeftExtrapolator";
-  /** Linear extrapolator */
+  /** Linear extrapolator. */
   public static final String EXPONENTIAL_EXTRAPOLATOR = "ExponentialExtrapolator";
-  /** ISDA interpolator */
+  /** ISDA interpolator. */
   public static final String ISDA_INTERPOLATOR = "ISDAInterpolator";
-  /** ISDA extrapolator */
+  /** ISDA extrapolator. */
   public static final String ISDA_EXTRAPOLATOR = "ISDAExtrapolator";
-  /** Linear instance */
+  /** Linear instance. */
   public static final LinearInterpolator1D LINEAR_INSTANCE = new LinearInterpolator1D();
-  /** Exponential instance */
+  /** Exponential instance. */
   public static final ExponentialInterpolator1D EXPONENTIAL_INSTANCE = new ExponentialInterpolator1D();
-  /** Log-linear instance */
+  /** Log-linear instance. */
   public static final LogLinearInterpolator1D LOG_LINEAR_INSTANCE = new LogLinearInterpolator1D();
-  /** Natural cubic spline instance */
+  /** Natural cubic spline instance. */
   public static final NaturalCubicSplineInterpolator1D NATURAL_CUBIC_SPLINE_INSTANCE = new NaturalCubicSplineInterpolator1D();
-  /** Step instance */
+  /** Step instance. */
   public static final StepInterpolator1D STEP_INSTANCE = new StepInterpolator1D();
-  /** Step-Upper instance */
+  /** Step-Upper instance. */
   public static final StepUpperInterpolator1D STEP_UPPER_INSTANCE = new StepUpperInterpolator1D();
-  /** Double quadratic instance */
+  /** Double quadratic instance. */
   public static final DoubleQuadraticInterpolator1D DOUBLE_QUADRATIC_INSTANCE = new DoubleQuadraticInterpolator1D();
-  /** MonotonicityPreservingCubicSpline
-   * @deprecated use PCHIP_INSTANCE instead 
-   * */
+  /** MonotonicityPreservingCubicSpline.
+   * @deprecated use PCHIP_INSTANCE instead
+   */
   @Deprecated
   public static final PCHIPInterpolator1D MONOTONIC_CUBIC_INSTANCE = new PCHIPInterpolator1D();
-  /**Piecewise Cubic Hermite Interpolating Polynomial (PCHIP)*/
+  /** Piecewise Cubic Hermite Interpolating Polynomial (PCHIP). */
   public static final PCHIPInterpolator1D PCHIP_INSTANCE = new PCHIPInterpolator1D();
-  /**Modified Piecewise Cubic Hermite Interpolating Polynomial (PCHIP) for yield curves*/
+  /** Modified Piecewise Cubic Hermite Interpolating Polynomial (PCHIP) for yield curves. */
   public static final PCHIPYieldCurveInterpolator1D MOD_PCHIP_INSTANCE = new PCHIPYieldCurveInterpolator1D();
-  /** Time square instance */
+  /** Time square instance. */
   public static final TimeSquareInterpolator1D TIME_SQUARE_INSTANCE = new TimeSquareInterpolator1D();
-  /** Flat extrapolator instance */
+  /** Flat extrapolator instance. */
   public static final FlatExtrapolator1D FLAT_EXTRAPOLATOR_INSTANCE = new FlatExtrapolator1D();
-  /** Exponential extrapolator instance */
+  /** Exponential extrapolator instance. */
   public static final ExponentialExtrapolator1D EXPONENTIAL_EXTRAPOLATOR_INSTANCE = new ExponentialExtrapolator1D();
-  /** ISDA interpolator instance */
+  /** ISDA interpolator instance. */
   public static final ISDAInterpolator1D ISDA_INTERPOLATOR_INSTANCE = new ISDAInterpolator1D();
-  /** ISDA extrapolator instance */
+  /** ISDA extrapolator instance. */
   public static final ISDAExtrapolator1D ISDA_EXTRAPOLATOR_INSTANCE = new ISDAExtrapolator1D();
-  /** 
+  /**
    */
 
-  /**Cubic spline with clamped endpoint conditions*/
+  /** Cubic spline with clamped endpoint conditions. */
   public static final String CLAMPED_CUBIC = "ClampedCubicSpline";
-  /**Instance of cubic spline with clamped endpoint conditions*/
+  /** Instance of cubic spline with clamped endpoint conditions. */
   public static final ClampedCubicSplineInterpolator1D CLAMPED_CUBIC_INSTANCE = new ClampedCubicSplineInterpolator1D();
-  /**Cubic spline with clamped endpoint conditions and monotonicity filter*/
+  /** Cubic spline with clamped endpoint conditions and monotonicity filter. */
   public static final String CLAMPED_CUBIC_MONOTONE = "ClampedCubicSplineWithMonotonicity";
-  /**Instance of cubic spline with clamped endpoint conditions and monotonicity filter*/
-  public static final MonotonicityPreservingCubicSplineInterpolator1D CLAMPED_CUBIC_MONOTONE_INSTANCE = new MonotonicityPreservingCubicSplineInterpolator1D(new CubicSplineInterpolator());
-  /**Cubic spline with clamped endpoint conditions and nonnegativity filter*/
+  /** Instance of cubic spline with clamped endpoint conditions and monotonicity filter. */
+  public static final MonotonicityPreservingCubicSplineInterpolator1D CLAMPED_CUBIC_MONOTONE_INSTANCE =
+      new MonotonicityPreservingCubicSplineInterpolator1D(new CubicSplineInterpolator());
+  /** Cubic spline with clamped endpoint conditions and non-negativity filter. */
   public static final String CLAMPED_CUBIC_NONNEGATIVE = "ClampedCubicSplineWithNonnegativity";
-  /**Instance of cubic spline with clamped endpoint conditions and nonnegativity filter*/
-  public static final NonnegativityPreservingCubicSplineInterpolator1D CLAMPED_CUBIC_NONNEGATIVE_INSTANCE = new NonnegativityPreservingCubicSplineInterpolator1D(new CubicSplineInterpolator());
-  /**Quintic spline with clamped endpoint conditions and monotonicity filter*/
+  /** Instance of cubic spline with clamped endpoint conditions and non-negativity filter. */
+  public static final NonnegativityPreservingCubicSplineInterpolator1D CLAMPED_CUBIC_NONNEGATIVE_INSTANCE =
+      new NonnegativityPreservingCubicSplineInterpolator1D(new CubicSplineInterpolator());
+  /** Quintic spline with clamped endpoint conditions and monotonicity filter. */
   public static final String CLAMPED_QUINTIC_MONOTONE = "ClampedQuinticSplineWithMonotonicity";
-  /**Instance of quintic spline with clamped endpoint conditions and monotonicity filter*/
-  public static final MonotonicityPreservingQuinticSplineInterpolator1D CLAMPED_QUINTIC_MONOTONE_INSTANCE = new MonotonicityPreservingQuinticSplineInterpolator1D(new CubicSplineInterpolator());
-  /**Quintic spline with clamped endpoint conditions and nonnegativity filter*/
+  /** Instance of quintic spline with clamped endpoint conditions and monotonicity filter. */
+  public static final MonotonicityPreservingQuinticSplineInterpolator1D CLAMPED_QUINTIC_MONOTONE_INSTANCE =
+      new MonotonicityPreservingQuinticSplineInterpolator1D(new CubicSplineInterpolator());
+  /** Quintic spline with clamped endpoint conditions and non-negativity filter. */
   public static final String CLAMPED_QUINTIC_NONNEGATIVE = "ClampedQuinticSplineWithNonnegativity";
-  /**Instance of quintic spline with clamped endpoint conditions nonnegativity filter*/
-  public static final NonnegativityPreservingQuinticSplineInterpolator1D CLAMPED_QUINTIC_NONNEGATIVE_INSTANCE = new NonnegativityPreservingQuinticSplineInterpolator1D(new CubicSplineInterpolator());
+  /** Instance of quintic spline with clamped endpoint conditions non-negativity filter. */
+  public static final NonnegativityPreservingQuinticSplineInterpolator1D CLAMPED_QUINTIC_NONNEGATIVE_INSTANCE =
+      new NonnegativityPreservingQuinticSplineInterpolator1D(new CubicSplineInterpolator());
 
-  /**Cubic spline with natural endpoint conditions and monotonicity filter*/
+  /** Cubic spline with natural endpoint conditions and monotonicity filter. */
   public static final String NATURAL_CUBIC_MONOTONE = "NaturalCubicSplineWithMonotonicity";
-  /**Instance of cubic spline with clamped endpoint conditions and monotonicity filter*/
-  public static final MonotonicityPreservingCubicSplineInterpolator1D NATURAL_CUBIC_MONOTONE_INSTANCE = new MonotonicityPreservingCubicSplineInterpolator1D(new NaturalSplineInterpolator());
-  /**Cubic spline with natural endpoint conditions and nonnegativity filter*/
+  /** Instance of cubic spline with clamped endpoint conditions and monotonicity filter. */
+  public static final MonotonicityPreservingCubicSplineInterpolator1D NATURAL_CUBIC_MONOTONE_INSTANCE =
+      new MonotonicityPreservingCubicSplineInterpolator1D(new NaturalSplineInterpolator());
+  /** Cubic spline with natural endpoint conditions and non-negativity filter. */
   public static final String NATURAL_CUBIC_NONNEGATIVE = "NaturalCubicSplineWithNonnegativity";
-  /**Instance of cubic spline with clamped endpoint conditions and nonnegativity filter*/
-  public static final NonnegativityPreservingCubicSplineInterpolator1D NATURAL_CUBIC_NONNEGATIVE_INSTANCE = new NonnegativityPreservingCubicSplineInterpolator1D(new NaturalSplineInterpolator());
-  /**Quintic spline with natural endpoint conditions and monotonicity filter*/
+  /** Instance of cubic spline with clamped endpoint conditions and non-negativity filter. */
+  public static final NonnegativityPreservingCubicSplineInterpolator1D NATURAL_CUBIC_NONNEGATIVE_INSTANCE =
+      new NonnegativityPreservingCubicSplineInterpolator1D(new NaturalSplineInterpolator());
+  /** Quintic spline with natural endpoint conditions and monotonicity filter. */
   public static final String NATURAL_QUINTIC_MONOTONE = "NaturalQuinticSplineWithMonotonicity";
-  /**Instance of quintic spline with clamped endpoint conditions and monotonicity filter*/
-  public static final MonotonicityPreservingQuinticSplineInterpolator1D NATURAL_QUINTIC_MONOTONE_INSTANCE = new MonotonicityPreservingQuinticSplineInterpolator1D(new NaturalSplineInterpolator());
-  /**Quintic spline with natural endpoint conditions and nonnegativity filter*/
+  /** Instance of quintic spline with clamped endpoint conditions and monotonicity filter. */
+  public static final MonotonicityPreservingQuinticSplineInterpolator1D NATURAL_QUINTIC_MONOTONE_INSTANCE =
+      new MonotonicityPreservingQuinticSplineInterpolator1D(new NaturalSplineInterpolator());
+  /** Quintic spline with natural endpoint conditions and nonnegativity filter. */
   public static final String NATURAL_QUINTIC_NONNEGATIVE = "NaturalQuinticSplineWithNonnegativity";
-  /**Instance of quintic spline with clamped endpoint conditions and nonnegativity filter*/
-  public static final NonnegativityPreservingQuinticSplineInterpolator1D NATURAL_QUINTIC_NONNEGATIVE_INSTANCE = new NonnegativityPreservingQuinticSplineInterpolator1D(new NaturalSplineInterpolator());
+  /** Instance of quintic spline with clamped endpoint conditions and nonnegativity filter. */
+  public static final NonnegativityPreservingQuinticSplineInterpolator1D NATURAL_QUINTIC_NONNEGATIVE_INSTANCE =
+      new NonnegativityPreservingQuinticSplineInterpolator1D(new NaturalSplineInterpolator());
 
-  /**Cubic spline with not-a-knot endpoint conditions*/
+  /** Cubic spline with not-a-knot endpoint conditions. */
   public static final String NOTAKNOT_CUBIC = "NotAKnotCubicSpline";
-  /**Instance of cubic spline with not-a-knot endpoint conditions*/
+  /** Instance of cubic spline with not-a-knot endpoint conditions. */
   public static final NotAKnotCubicSplineInterpolator1D NOTAKNOT_CUBIC_INSTANCE = new NotAKnotCubicSplineInterpolator1D();
-  /**Cubic spline with not-a-knot endpoint conditions and monotonicity filter*/
+  /** Cubic spline with not-a-knot endpoint conditions and monotonicity filter. */
   public static final String NOTAKNOT_CUBIC_MONOTONE = "NotAKnotCubicSplineWithMonotonicity";
-  /**Instance of quintic spline with not-a-knot endpoint conditions and monotonicity filter*/
-  public static final MonotonicityPreservingCubicSplineInterpolator1D NOTAKNOT_CUBIC_MONOTONE_INSTANCE = new MonotonicityPreservingCubicSplineInterpolator1D(new CubicSplineInterpolator());
-  /**Cubic spline with not-a-knot endpoint conditions and nonnegativity filter*/
+  /** Instance of quintic spline with not-a-knot endpoint conditions and monotonicity filter. */
+  public static final MonotonicityPreservingCubicSplineInterpolator1D NOTAKNOT_CUBIC_MONOTONE_INSTANCE =
+      new MonotonicityPreservingCubicSplineInterpolator1D(new CubicSplineInterpolator());
+  /** Cubic spline with not-a-knot endpoint conditions and non-negativity filter. */
   public static final String NOTAKNOT_CUBIC_NONNEGATIVE = "NotAKnotCubicSplineWithNonnegativity";
-  /**Instance of quintic spline with not-a-knot endpoint conditions and nonnegativity filter*/
-  public static final NonnegativityPreservingCubicSplineInterpolator1D NOTAKNOT_CUBIC_NONNEGATIVE_INSTANCE = new NonnegativityPreservingCubicSplineInterpolator1D(new CubicSplineInterpolator());
-  /**Quintic spline with not-a-knot endpoint conditions and monotonicity filter*/
+  /** Instance of quintic spline with not-a-knot endpoint conditions and non-negativity filter. */
+  public static final NonnegativityPreservingCubicSplineInterpolator1D NOTAKNOT_CUBIC_NONNEGATIVE_INSTANCE =
+      new NonnegativityPreservingCubicSplineInterpolator1D(new CubicSplineInterpolator());
+  /** Quintic spline with not-a-knot endpoint conditions and monotonicity filter. */
   public static final String NOTAKNOT_QUINTIC_MONOTONE = "NotAKnotQuinticSplineWithMonotonicity";
-  /**Instance of quintic spline with not-a-knot endpoint conditions and monotonicity filter*/
-  public static final MonotonicityPreservingQuinticSplineInterpolator1D NOTAKNOT_QUINTIC_MONOTONE_INSTANCE = new MonotonicityPreservingQuinticSplineInterpolator1D(new CubicSplineInterpolator());
-  /**Quintic spline with not-a-knot endpoint conditions and nonnegativity filter*/
+  /** Instance of quintic spline with not-a-knot endpoint conditions and monotonicity filter. */
+  public static final MonotonicityPreservingQuinticSplineInterpolator1D NOTAKNOT_QUINTIC_MONOTONE_INSTANCE =
+      new MonotonicityPreservingQuinticSplineInterpolator1D(new CubicSplineInterpolator());
+  /** Quintic spline with not-a-knot endpoint conditions and non-negativity filter. */
   public static final String NOTAKNOT_QUINTIC_NONNEGATIVE = "NotAKnotQuinticSplineWithNonnegativity";
-  /**Instance of quintic spline with not-a-knot endpoint conditions and nonnegativity filter*/
-  public static final NonnegativityPreservingQuinticSplineInterpolator1D NOTAKNOT_QUINTIC_NONNEGATIVE_INSTANCE = new NonnegativityPreservingQuinticSplineInterpolator1D(new CubicSplineInterpolator());
+  /** Instance of quintic spline with not-a-knot endpoint conditions and nonnegativity filter. */
+  public static final NonnegativityPreservingQuinticSplineInterpolator1D NOTAKNOT_QUINTIC_NONNEGATIVE_INSTANCE =
+      new NonnegativityPreservingQuinticSplineInterpolator1D(new CubicSplineInterpolator());
 
-  /**Constrained cubic interpolation*/
+  /** Constrained cubic interpolation. */
   public static final String CONSTRAINED_CUBIC = "ConstrainedCubicSpline";
-  /**Instance of constrained cubic interpolation*/
+  /** Instance of constrained cubic interpolation. */
   public static final ConstrainedCubicSplineInterpolator1D CONSTRAINED_CUBIC_INSTANCE = new ConstrainedCubicSplineInterpolator1D();
-  /**Constrained cubic interpolation with monotonicity filter*/
+  /** Constrained cubic interpolation with monotonicity filter. */
   public static final String CONSTRAINED_CUBIC_MONOTONE = "ConstrainedCubicSplineWithMonotonicity";
-  /**Instance of constrained cubic interpolation with monotonicity filter*/
+  /** Instance of constrained cubic interpolation with monotonicity filter. */
   public static final MonotonicityPreservingCubicSplineInterpolator1D CONSTRAINED_CUBIC_MONOTONE_INSTANCE = new MonotonicityPreservingCubicSplineInterpolator1D(
       new ConstrainedCubicSplineInterpolator());
-  /**Constrained cubic interpolation with nonnegativity filter*/
+  /** Constrained cubic interpolation with non-negativity filter. */
   public static final String CONSTRAINED_CUBIC_NONNEGATIVE = "ConstrainedCubicSplineWithNonnegativity";
-  /**Instance of constrained cubic interpolation with nonnegativity filter*/
-  public static final NonnegativityPreservingCubicSplineInterpolator1D CONSTRAINED_CUBIC_NONNEGATIVE_INSTANCE = new NonnegativityPreservingCubicSplineInterpolator1D(
-      new ConstrainedCubicSplineInterpolator());
+  /** Instance of constrained cubic interpolation with non-negativity filter. */
+  public static final NonnegativityPreservingCubicSplineInterpolator1D CONSTRAINED_CUBIC_NONNEGATIVE_INSTANCE =
+      new NonnegativityPreservingCubicSplineInterpolator1D(new ConstrainedCubicSplineInterpolator());
 
-  /**Akima cubic interpolation*/
+  /** Akima cubic interpolation. */
   public static final String AKIMA_CUBIC = "AkimaCubicSpline";
-  /**Instance of Akima cubic interpolation*/
+  /** Instance of Akima cubic interpolation. */
   public static final SemiLocalCubicSplineInterpolator1D AKIMA_CUBIC_INSTANCE = new SemiLocalCubicSplineInterpolator1D();
-  /**Akima cubic interpolation with monotonicity filter*/
+  /** Akima cubic interpolation with monotonicity filter. */
   public static final String AKIMA_CUBIC_MONOTONE = "AkimaCubicSplineWithMonotonicity";
-  /**Instance of Akima cubic interpolation with monotonicity filter*/
-  public static final MonotonicityPreservingCubicSplineInterpolator1D AKIMA_CUBIC_MONOTONE_INSTANCE = new MonotonicityPreservingCubicSplineInterpolator1D(new SemiLocalCubicSplineInterpolator());
-  /**Akima cubic interpolation with nonnegativity filter*/
+  /** Instance of Akima cubic interpolation with monotonicity filter. */
+  public static final MonotonicityPreservingCubicSplineInterpolator1D AKIMA_CUBIC_MONOTONE_INSTANCE =
+      new MonotonicityPreservingCubicSplineInterpolator1D(new SemiLocalCubicSplineInterpolator());
+  /** Akima cubic interpolation with nonnegativity filter. */
   public static final String AKIMA_CUBIC_NONNEGATIVE = "AkimaCubicSplineWithNonnegativity";
-  /**Instance of Akima cubic interpolation with nonnegativity filter*/
-  public static final NonnegativityPreservingCubicSplineInterpolator1D AKIMA_CUBIC_NONNEGATIVE_INSTANCE = new NonnegativityPreservingCubicSplineInterpolator1D(new SemiLocalCubicSplineInterpolator());
+  /** Instance of Akima cubic interpolation with nonnegativity filter. */
+  public static final NonnegativityPreservingCubicSplineInterpolator1D AKIMA_CUBIC_NONNEGATIVE_INSTANCE =
+      new NonnegativityPreservingCubicSplineInterpolator1D(new SemiLocalCubicSplineInterpolator());
 
-  /**Monotone convex cubic interpolation*/
+  /** Monotone convex cubic interpolation. */
   public static final String MONOTONE_CONVEX_CUBIC = "MonotoneConvexCubicSpline";
-  /**Instance of monotone convex cubic interpolation*/
+  /** Instance of monotone convex cubic interpolation. */
   public static final MonotoneConvexSplineInterpolator1D MONOTONE_CONVEX_CUBIC_INSTANCE = new MonotoneConvexSplineInterpolator1D();
 
-  /**C2 shape preserving cubic interpolation*/
+  /** C2 shape preserving cubic interpolation. */
   public static final String C2_SHAPE_PRESERVING_CUBIC = "C2ShapePreservingCubicSpline";
-  /**Instance of C2 shape preserving cubic interpolation*/
+  /** Instance of C2 shape preserving cubic interpolation. */
   public static final ShapePreservingCubicSplineInterpolator1D C2_SHAPE_PRESERVING_CUBIC_INSTANCE = new ShapePreservingCubicSplineInterpolator1D();
 
-  /**Log natural cubic interpolation with monotonicity filter*/
+  /** Log natural cubic interpolation with monotonicity filter. */
   public static final String LOG_NATURAL_CUBIC_MONOTONE = "LogNaturalCubicWithMonotonicity";
-  /**Instance of log natural cubic interpolation with monotonicity filter*/
-  public static final LogNaturalCubicMonotonicityPreservingInterpolator1D LOG_NATURAL_CUBIC_MONOTONE_INSTANCE = new LogNaturalCubicMonotonicityPreservingInterpolator1D();
-
-  private static final Map<String, Interpolator1D> s_staticInstances;
-  private static final Map<Class<?>, String> s_instanceNames;
+  /** Instance of log natural cubic interpolation with monotonicity filter. */
+  public static final LogNaturalCubicMonotonicityPreservingInterpolator1D LOG_NATURAL_CUBIC_MONOTONE_INSTANCE =
+      new LogNaturalCubicMonotonicityPreservingInterpolator1D();
+  /** Map of name to instance */
+  private static final Map<String, Interpolator1D> STATIC_INSTANCES;
+  /** Map from class to name */
+  private static final Map<Class<?>, String> INSTANCE_NAMES;
 
   static {
     final Map<String, Interpolator1D> staticInstances = new HashMap<>();
@@ -289,30 +312,39 @@ public final class Interpolator1DFactory {
     staticInstances.put(LOG_NATURAL_CUBIC_MONOTONE, LOG_NATURAL_CUBIC_MONOTONE_INSTANCE);
     instanceNames.put(LogNaturalCubicMonotonicityPreservingInterpolator1D.class, LOG_NATURAL_CUBIC_MONOTONE);
 
-    s_staticInstances = new HashMap<>(staticInstances);
-    s_instanceNames = new HashMap<>(instanceNames);
+    STATIC_INSTANCES = new HashMap<>(staticInstances);
+    INSTANCE_NAMES = new HashMap<>(instanceNames);
   }
 
+  /**
+   * Restricted constructor.
+   */
   private Interpolator1DFactory() {
   }
 
+  /**
+   * Returns an instance of the interpolator or throws an exception if no interpolator of this name is found.
+   * @param interpolatorName  the interpolator name
+   * @return  the interpolator
+   */
   public static Interpolator1D getInterpolator(final String interpolatorName) {
-    final Interpolator1D interpolator = s_staticInstances.get(interpolatorName);
+    final Interpolator1D interpolator = STATIC_INSTANCES.get(interpolatorName);
     if (interpolator != null) {
       return interpolator;
     }
-    // TODO kirk 2009-12-30 -- Deal with degree for Barycentric, Polynomial, and
-    // RationalFunction
     throw new IllegalArgumentException("Interpolator not handled: " + interpolatorName);
   }
 
+  /**
+   * Returns the name of the interpolator.
+   * @param interpolator  the interpolator
+   * @return  the interpolator name or null if not found
+   */
   public static String getInterpolatorName(final Interpolator1D interpolator) {
     if (interpolator == null) {
       return null;
     }
-    final String interpolatorName = s_instanceNames.get(interpolator.getClass());
-    // TODO kirk 2010-03-31 -- Deal with the more complicated rules for
-    // Barycentric, Polynomial, and RationalFunction.
+    final String interpolatorName = INSTANCE_NAMES.get(interpolator.getClass());
     if (interpolator instanceof LinearExtrapolator1D) {
       return LINEAR_EXTRAPOLATOR;
     }
