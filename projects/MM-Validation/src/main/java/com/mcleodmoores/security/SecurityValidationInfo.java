@@ -11,75 +11,97 @@ import com.opengamma.core.security.Security;
 import com.opengamma.id.ExternalId;
 import com.opengamma.util.ArgumentChecker;
 
-//TODO would it be useful to have the ability to say that all collections are empty?
-public abstract class SecurityValidationInfo<T extends Security> {
+/**
+ * A container for information about objects that reference {@link Security}s that have been validated:
+ * <ul>
+ *  <li> The type of the security.</li>
+ *  <li> A collection of objects that have been validated given a particular criterion, e.g. if all underlying securities
+ *  were present in the security source.</li>
+ *  <li> The ids of any securities that were not found in the security source.</li>
+ *  <li> The ids of any securities that were duplicated in the security source.</li>
+ *  <li> The ids of securities that were found but that were not of the expected type.</li>
+ * </ul>
+ * @param <T> The type of the convention that has been validated.
+ */
+public class SecurityValidationInfo<T> {
+  /** The type of the security that has been validated */
   private final Class<T> _type;
-  private final Collection<T> _configurations;
-  /** The names of missing underlying configurations */
-  private final Collection<ExternalId> _missingConfigurationNames;
-  /** The names of duplicated underlying configurations */
-  private final Collection<ExternalId> _duplicatedConfigurationNames;
-  private final Collection<?> _unsupportedConfigurationNames;
+  /** The objects that were validated */
+  private final Collection<? extends T> _validated;
+  /** The ids of missing underlying securities */
+  private final Collection<ExternalId> _missingSecurityIds;
+  /** The ids of duplicated underlying securities */
+  private final Collection<ExternalId> _duplicatedSecurityIds;
+  /** Unsupported securities */
+  private final Collection<? extends Security> _unsupportedSecurities;
 
-  //TODO maybe ExternalIdBundle
   /**
-   * Creates an instance.
-   * @param type  the type of the configurations being tested, not null
-   * @param configurations  the configurations that were found, not null
-   * @param missingConfigurationNames  the names of missing curve construction configurations, not null
-   * @param duplicatedConfigurationNames  the names of duplicated curve construction configurations, not null
+   * Creates an instance without any entries for unsupported securities.
+   * @param type  the type of the securities being tested, not null
+   * @param validated  the objects that were found, not null
+   * @param missingSecurities  the ids of missing securities, not null
+   * @param duplicatedSecurities  the ids of duplicated securities, not null
    */
-  public SecurityValidationInfo(final Class<T> type, final Collection<T> configurations, final Collection<ExternalId> missingConfigurationNames,
-      final Collection<ExternalId> duplicatedConfigurationNames) {
-    this(type, configurations, missingConfigurationNames, duplicatedConfigurationNames, Collections.<String>emptySet());
-  }
-  /**
-   * Creates an instance.
-   * @param type  the type of the configurations being tested, not null
-   * @param configurations  the configurations that were found, not null
-   * @param missingConfigurationNames  the names of missing curve construction configurations, not null
-   * @param duplicatedConfigurationNames  the names of duplicated curve construction configurations, not null
-   */
-  public SecurityValidationInfo(final Class<T> type, final Collection<T> configurations, final Collection<ExternalId> missingConfigurationNames,
-      final Collection<ExternalId> duplicatedConfigurationNames, final Collection<?> unsupportedConfigurationName) {
-    ArgumentChecker.notNull(type, "type");
-    ArgumentChecker.notNull(configurations, "configurations");
-    ArgumentChecker.notNull(missingConfigurationNames, "missingConfigurationNames");
-    ArgumentChecker.notNull(duplicatedConfigurationNames, "duplicatedConfigurationNames");
-    ArgumentChecker.notNull(unsupportedConfigurationName, "unsupportedConfigurationName");
-    _type = type;
-    _configurations = configurations;
-    _missingConfigurationNames = missingConfigurationNames;
-    _duplicatedConfigurationNames = duplicatedConfigurationNames;
-    _unsupportedConfigurationNames = unsupportedConfigurationName;
+  public SecurityValidationInfo(final Class<T> type, final Collection<? extends T> validated, final Collection<ExternalId> missingSecurities,
+      final Collection<ExternalId> duplicatedSecurities) {
+    this(type, validated, missingSecurities, duplicatedSecurities, Collections.<Security>emptySet());
   }
 
+  /**
+   * Creates an instance.
+   * @param type  the type of the securities being tested, not null
+   * @param validated  the objects that were found, not null
+   * @param missingSecurities  the ids of missing securities, not null
+   * @param duplicatedSecurities  the ids of duplicated securities, not null
+   * @param unsupportedSecurities  any underlying securities that were found but were not of the expected type, not null
+   */
+  public SecurityValidationInfo(final Class<T> type, final Collection<? extends T> validated, final Collection<ExternalId> missingSecurities,
+      final Collection<ExternalId> duplicatedSecurities, final Collection<? extends Security> unsupportedSecurities) {
+    _type = ArgumentChecker.notNull(type, "type");
+    _validated = ArgumentChecker.notNull(validated, "validated");
+    _missingSecurityIds = ArgumentChecker.notNull(missingSecurities, "missingSecurities");
+    _duplicatedSecurityIds = ArgumentChecker.notNull(duplicatedSecurities, "duplicatedSecurities");
+    _unsupportedSecurities = ArgumentChecker.notNull(unsupportedSecurities, "unsupportedSecurities");
+  }
+
+  /**
+   * Gets the type of the security that is being validated.
+   * @return  the type of the security
+   */
   public Class<T> getType() {
     return _type;
   }
 
-  public Collection<T> getConfigurations() {
-    return Collections.unmodifiableCollection(_configurations);
+  /**
+   * Gets an unmodifiable collection of the objects that have been validated.
+   * @return  the validated objects
+   */
+  public Collection<T> getValidatedObjects() {
+    return Collections.unmodifiableCollection(_validated);
   }
 
   /**
-   * Returns an unmodifiable collection of missing configuration names.
-   * @return  the missing configuration names
+   * Gets an unmodifiable collection of ids of missing securities.
+   * @return  the missing security ids
    */
-  public Collection<ExternalId> getMissingCurveConstructionConfigurationNames() {
-    return Collections.unmodifiableCollection(_missingConfigurationNames);
+  public Collection<ExternalId> getMissingSecurityIds() {
+    return Collections.unmodifiableCollection(_missingSecurityIds);
   }
 
   /**
-   * Returns an unmodifiable collection of duplicated configuration names.
-   * @return  the duplicated configuration names
+   * Gets an unmodifiable collection of ids of duplicated securities.
+   * @return  the duplicated security ids
    */
-  public Collection<ExternalId> getDuplicatedCurveConstructionConfigurationNames() {
-    return Collections.unmodifiableCollection(_duplicatedConfigurationNames);
+  public Collection<ExternalId> getDuplicatedSecurityIds() {
+    return Collections.unmodifiableCollection(_duplicatedSecurityIds);
   }
 
-  public Collection<?> getUnsupportedConfigurationNames() {
-    return Collections.unmodifiableCollection(_unsupportedConfigurationNames);
+  /**
+   * Gets an unmodifiable collection of unsupported securities.
+   * @return  the unsupported securities
+   */
+  public Collection<Security> getUnsupportedSecurities() {
+    return Collections.unmodifiableCollection(_unsupportedSecurities);
   }
 
   @Override
@@ -87,10 +109,10 @@ public abstract class SecurityValidationInfo<T extends Security> {
     final int prime = 31;
     int result = 1;
     result = prime * result + Objects.hashCode(_type);
-    result = prime * result + Objects.hashCode(_configurations);
-    result = prime * result + Objects.hashCode(_duplicatedConfigurationNames);
-    result = prime * result + Objects.hashCode(_missingConfigurationNames);
-    result = prime * result * Objects.hashCode(_unsupportedConfigurationNames);
+    result = prime * result + Objects.hashCode(_validated);
+    result = prime * result + Objects.hashCode(_duplicatedSecurityIds);
+    result = prime * result + Objects.hashCode(_missingSecurityIds);
+    result = prime * result * Objects.hashCode(_unsupportedSecurities);
     return result;
   }
 
@@ -99,26 +121,23 @@ public abstract class SecurityValidationInfo<T extends Security> {
     if (this == obj) {
       return true;
     }
-    if (obj == null) {
-      return false;
-    }
     if (!(obj instanceof SecurityValidationInfo)) {
       return false;
     }
     final SecurityValidationInfo<?> other = (SecurityValidationInfo<?>) obj;
-    if (!Objects.equals(_type, _type)) {
+    if (!Objects.equals(_type, other._type)) {
       return false;
     }
-    if (!Objects.equals(_missingConfigurationNames, other._missingConfigurationNames)) {
+    if (!Objects.equals(_missingSecurityIds, other._missingSecurityIds)) {
       return false;
     }
-    if (!Objects.equals(_duplicatedConfigurationNames, other._duplicatedConfigurationNames)) {
+    if (!Objects.equals(_duplicatedSecurityIds, other._duplicatedSecurityIds)) {
       return false;
     }
-    if (!Objects.equals(_unsupportedConfigurationNames, other._unsupportedConfigurationNames)) {
+    if (!Objects.equals(_unsupportedSecurities, other._unsupportedSecurities)) {
       return false;
     }
-    if (!Objects.equals(_configurations, other._configurations)) {
+    if (!Objects.equals(_validated, other._validated)) {
       return false;
     }
     return true;

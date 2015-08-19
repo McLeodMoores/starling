@@ -4,48 +4,23 @@
 package com.mcleodmoores.config;
 
 import com.opengamma.core.config.ConfigSource;
-import com.opengamma.engine.function.FunctionCompilationContext;
-import com.opengamma.financial.OpenGammaCompilationContext;
-import com.opengamma.financial.tool.ToolContext;
 import com.opengamma.id.VersionCorrection;
-import com.opengamma.util.ArgumentChecker;
 
 /**
- *
+ * Base class for classes that validate that particular criteria were satisfied when the configuration was created
+ * e.g. that all curve definitions that are referenced are available from the config source.
+ * @param <U>  the type of the configuration to be validated
+ * @param <V>  the type of the configurations that have been validated
  */
 public abstract class ConfigurationValidator<U, V> {
 
-  public ConfigurationValidationInfo<V> validate(final U configuration, final FunctionCompilationContext compilationContext) {
-    return validate(configuration, VersionCorrection.LATEST, compilationContext);
-  }
-
-  public ConfigurationValidationInfo<V> validate(final U configuration, final ToolContext toolContext) {
-    return validate(configuration, VersionCorrection.LATEST, toolContext);
-  }
-
-  public ConfigurationValidationInfo<V> validate(final U curveConstructionConfiguration, final VersionCorrection versionCorrection,
-      final FunctionCompilationContext compilationContext) {
-    ArgumentChecker.notNull(curveConstructionConfiguration, "curveConstructionConfiguration");
-    ArgumentChecker.notNull(versionCorrection, "versionCorrection");
-    ArgumentChecker.notNull(compilationContext, "compilationContext");
-    final ConfigSource configSource = OpenGammaCompilationContext.getConfigSource(compilationContext);
-    if (configSource == null) {
-      throw new IllegalStateException("ConfigSource not set in function compilation context");
-    }
-    return validate(curveConstructionConfiguration, versionCorrection, configSource);
-  }
-
-  public ConfigurationValidationInfo<V> validate(final U curveConstructionConfiguration, final VersionCorrection versionCorrection,
-      final ToolContext toolContext) {
-    ArgumentChecker.notNull(curveConstructionConfiguration, "curveConstructionConfiguration");
-    ArgumentChecker.notNull(versionCorrection, "versionCorrection");
-    ArgumentChecker.notNull(toolContext, "toolContext");
-    final ConfigSource configSource = toolContext.getConfigSource();
-    if (configSource == null) {
-      throw new IllegalStateException("ConfigSource not set in tool context");
-    }
-    return validate(curveConstructionConfiguration, versionCorrection, configSource);
-  }
-
-  protected abstract ConfigurationValidationInfo<V> validate(U configuration, VersionCorrection versionCorrection, ConfigSource configSource);
+  /**
+   * Validates a configuration, returning information about successfully validated configurations and duplicate, missing
+   * and / or unsupported configurations that were referenced by the configuration being tested.
+   * @param configuration  the configuration, not null
+   * @param versionCorrection  the version correction, not null
+   * @param configSource  the config source, not null
+   * @return  the validation information
+   */
+  public abstract ConfigurationValidationInfo<V> validate(U configuration, VersionCorrection versionCorrection, ConfigSource configSource);
 }

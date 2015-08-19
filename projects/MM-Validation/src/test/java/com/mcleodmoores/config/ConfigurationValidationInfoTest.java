@@ -8,16 +8,16 @@ import static org.testng.Assert.assertNotEquals;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 
 import org.testng.annotations.Test;
 
-import com.mcleodmoores.config.ConfigurationValidationInfo;
 import com.opengamma.core.id.ExternalSchemes;
 import com.opengamma.financial.analytics.curve.AbstractCurveDefinition;
 import com.opengamma.financial.analytics.curve.ConstantCurveDefinition;
-import com.opengamma.financial.currency.CurrencyMatrix;
-import com.opengamma.financial.currency.SimpleCurrencyMatrix;
+import com.opengamma.util.money.Currency;
 
 /**
  * Unit tests for {@link ConfigurationValidationInfo}.
@@ -27,29 +27,24 @@ public class ConfigurationValidationInfoTest {
   private static final ConstantCurveDefinition CONSTANT_CURVE_1 = new ConstantCurveDefinition("Name 1", ExternalSchemes.syntheticSecurityId("ABC"));
   /** Constant curve configuration */
   private static final ConstantCurveDefinition CONSTANT_CURVE_2 = new ConstantCurveDefinition("Name 2", ExternalSchemes.syntheticSecurityId("DEF"));
-  /** A currency matrix configuration */
-  private static final CurrencyMatrix MATRIX = new SimpleCurrencyMatrix();
   /** The type of the validated configurations */
   private static final Class<AbstractCurveDefinition> TYPE = AbstractCurveDefinition.class;
   /** The validated underlying configurations */
   private static final Collection<AbstractCurveDefinition> VALIDATED = new HashSet<>();
   /** The missing underlying configurations */
-  private static final Collection<String> MISSING = new HashSet<>();
+  private static final Map<String, Class<?>> MISSING = new HashMap<>();
   /** The duplicated underlying configurations */
-  private static final Collection<String> DUPLICATED = new HashSet<>();
-  /** The unsupported underlying configurations */
-  private static final Collection<? super Object> UNSUPPORTED = new HashSet<>();
+  private static final Collection<Object> DUPLICATED = new HashSet<>();
   /** Configuration validation info */
   private static final ConfigurationValidationInfo<AbstractCurveDefinition> INFO;
 
   static {
     VALIDATED.add(CONSTANT_CURVE_1);
     VALIDATED.add(CONSTANT_CURVE_2);
-    MISSING.add("Name 3");
-    MISSING.add("Name 4");
+    MISSING.put("Name 3", Currency.class);
+    MISSING.put("Name 4", String.class);
     DUPLICATED.add("Name 5");
-    UNSUPPORTED.add(MATRIX);
-    INFO = new ConfigurationValidationInfo<>(TYPE, VALIDATED, MISSING, DUPLICATED, UNSUPPORTED);
+    INFO = new ConfigurationValidationInfo<>(TYPE, VALIDATED, MISSING, DUPLICATED);
   }
 
   /**
@@ -65,7 +60,7 @@ public class ConfigurationValidationInfoTest {
    */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullType2() {
-    new ConfigurationValidationInfo<>(null, VALIDATED, MISSING, DUPLICATED, UNSUPPORTED);
+    new ConfigurationValidationInfo<>(null, VALIDATED, MISSING, DUPLICATED);
   }
 
   /**
@@ -81,7 +76,7 @@ public class ConfigurationValidationInfoTest {
    */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullValidated2() {
-    new ConfigurationValidationInfo<>(TYPE, null, MISSING, DUPLICATED, UNSUPPORTED);
+    new ConfigurationValidationInfo<>(TYPE, null, MISSING, DUPLICATED);
   }
 
   /**
@@ -97,7 +92,7 @@ public class ConfigurationValidationInfoTest {
    */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullMissing2() {
-    new ConfigurationValidationInfo<>(TYPE, VALIDATED, null, DUPLICATED, UNSUPPORTED);
+    new ConfigurationValidationInfo<>(TYPE, VALIDATED, null, DUPLICATED);
   }
 
   /**
@@ -113,15 +108,7 @@ public class ConfigurationValidationInfoTest {
    */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullDuplicated2() {
-    new ConfigurationValidationInfo<>(TYPE, VALIDATED, MISSING, null, UNSUPPORTED);
-  }
-
-  /**
-   * Tests the behaviour when the unsupported configurations collection is null.
-   */
-  @Test(expectedExceptions = IllegalArgumentException.class)
-  public void testNullUnsupported() {
-    new ConfigurationValidationInfo<>(TYPE, VALIDATED, MISSING, DUPLICATED, null);
+    new ConfigurationValidationInfo<>(TYPE, VALIDATED, MISSING, null);
   }
 
   /**
@@ -138,8 +125,8 @@ public class ConfigurationValidationInfoTest {
    */
   @Test(expectedExceptions = UnsupportedOperationException.class)
   public void testUnmodifiableMissingConfigurations() {
-    final Collection<String> missing = INFO.getMissingConfigurationNames();
-    missing.add("Name 10");
+    final Map<String, Class<?>> missing = INFO.getMissingConfigurations();
+    missing.put("Name 10", AbstractCurveDefinition.class);
   }
 
   /**
@@ -147,17 +134,8 @@ public class ConfigurationValidationInfoTest {
    */
   @Test(expectedExceptions = UnsupportedOperationException.class)
   public void testUnmodifiableDuplicatedConfigurations() {
-    final Collection<String> duplicated = INFO.getDuplicatedConfigurationNames();
-    duplicated.add("Name 10");
-  }
-
-  /**
-   * Tests that the unsupported configurations collection returned is unmodifiable.
-   */
-  @Test(expectedExceptions = UnsupportedOperationException.class)
-  public void testUnmodifiableUnsupportedConfigurations() {
-    final Collection<Object> unsupported = (Collection<Object>) INFO.getUnsupportedConfigurations();
-    unsupported.add(MATRIX);
+    final Collection<Object> duplicated = INFO.getDuplicatedConfigurations();
+    duplicated.add(Currency.AUD);
   }
 
   /**
@@ -168,28 +146,24 @@ public class ConfigurationValidationInfoTest {
     final Collection<AbstractCurveDefinition> validated = new HashSet<>();
     validated.add(CONSTANT_CURVE_1);
     validated.add(CONSTANT_CURVE_2);
-    final Collection<String> missing = new HashSet<>();
-    missing.add("Name 3");
-    missing.add("Name 4");
+    final Map<String, Class<?>> missing = new HashMap<>();
+    missing.put("Name 3", Currency.class);
+    missing.put("Name 4", String.class);
     final Collection<String> duplicated = new HashSet<>();
     duplicated.add("Name 5");
-    final Collection<Object> unsupported = new HashSet<>();
-    unsupported.add(MATRIX);
     assertEquals(INFO.getType(), TYPE);
     assertEquals(INFO.getValidatedConfigurations(), validated);
-    assertEquals(INFO.getMissingConfigurationNames(), missing);
-    assertEquals(INFO.getDuplicatedConfigurationNames(), duplicated);
-    assertEquals(INFO.getUnsupportedConfigurations(), unsupported);
-    ConfigurationValidationInfo<AbstractCurveDefinition> other = new ConfigurationValidationInfo<>(TYPE, VALIDATED, MISSING, DUPLICATED, UNSUPPORTED);
+    assertEquals(INFO.getMissingConfigurations(), missing);
+    assertEquals(INFO.getDuplicatedConfigurations(), duplicated);
+    ConfigurationValidationInfo<AbstractCurveDefinition> other = new ConfigurationValidationInfo<>(TYPE, VALIDATED, MISSING, DUPLICATED);
     assertEquals(other, INFO);
     assertEquals(other.hashCode(), INFO.hashCode());
-    other = new ConfigurationValidationInfo<>(TYPE, Collections.singleton(CONSTANT_CURVE_1), MISSING, DUPLICATED, UNSUPPORTED);
+    other = new ConfigurationValidationInfo<>(TYPE, Collections.<AbstractCurveDefinition>singleton(CONSTANT_CURVE_1), MISSING, DUPLICATED);
     assertNotEquals(other, INFO);
-    other = new ConfigurationValidationInfo<>(TYPE, VALIDATED, DUPLICATED, DUPLICATED, UNSUPPORTED);
+    other = new ConfigurationValidationInfo<>(TYPE, VALIDATED, Collections.<String, Class<?>>singletonMap("Test", Currency.class), DUPLICATED);
     assertNotEquals(other, INFO);
-    other = new ConfigurationValidationInfo<>(TYPE, VALIDATED, MISSING, MISSING, UNSUPPORTED);
-    assertNotEquals(other, INFO);
-    other = new ConfigurationValidationInfo<>(TYPE, VALIDATED, MISSING, DUPLICATED, VALIDATED);
+    other = new ConfigurationValidationInfo<>(TYPE, VALIDATED, MISSING, Collections.<Object>emptySet());
     assertNotEquals(other, INFO);
   }
+
 }

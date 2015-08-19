@@ -12,23 +12,22 @@ import com.opengamma.id.ExternalId;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * A container for information about {@link Convention}s that have been validated:
+ * A container for information about objects that reference {@link Convention}s that have been validated:
  * <ul>
- *  <li> The type of the convention.
- *  <li> A collection of conventions that have been validated given a particular criterion, e.g. if all underlying conventions
- *  were present in the convention master.
- *  <li> A list of ids of any underlying conventions that were not found in the convention master.
- *  <li> A list of ids of any underlying conventions that were duplicated in the convention master.
- *  <li> A list of underlying conventions that were found but that were not of the expected type.
+ *  <li> The type of the convention.</li>
+ *  <li> A collection of objects that have been validated given a particular criterion, e.g. if all underlying conventions
+ *  were present in the convention source.</li>
+ *  <li> The ids of any conventions that were not found in the convention source.</li>
+ *  <li> The ids of any conventions that were duplicated in the convention source.</li>
+ *  <li> The ids of conventions that were found but that were not of the expected type.</li>
  * </ul>
  * @param <T> The type of the convention that has been validated.
  */
-//TODO would it be useful to have the ability to say that all collections are empty?
-public class ConventionValidationInfo<T extends Convention> {
-  /** The type of the conventions that have been validated */
+public class ConventionValidationInfo<T> {
+  /** The type of the convention that has been validated */
   private final Class<T> _type;
-  /** The conventions that were validated */
-  private final Collection<? extends T> _conventions;
+  /** The objects that were validated */
+  private final Collection<? extends T> _validated;
   /** The ids of missing underlying conventions */
   private final Collection<ExternalId> _missingConventions;
   /** The ids of duplicated underlying conventions */
@@ -39,34 +38,29 @@ public class ConventionValidationInfo<T extends Convention> {
   /**
    * Creates an instance without any entries for unsupported conventions.
    * @param type  the type of the conventions being tested, not null
-   * @param conventions  the conventions that were found, not null
+   * @param validated  the objects that were validated, not null
    * @param missingConventions  the ids of missing underlying conventions, not null
    * @param duplicatedConventions  the ids of duplicated underlying conventions, not null
    */
-  public ConventionValidationInfo(final Class<T> type, final Collection<? extends T> conventions, final Collection<ExternalId> missingConventions,
+  public ConventionValidationInfo(final Class<T> type, final Collection<? extends T> validated, final Collection<ExternalId> missingConventions,
       final Collection<ExternalId> duplicatedConventions) {
-    this(type, conventions, missingConventions, duplicatedConventions, Collections.<Convention>emptySet());
+    this(type, validated, missingConventions, duplicatedConventions, Collections.<Convention>emptySet());
   }
   /**
    * Creates an instance.
    * @param type  the type of the conventions being tested, not null
-   * @param configurations  the conventions that were found, not null
+   * @param validated  the objects that were validated, not null
    * @param missingConventions  the ids of missing underlying conventions, not null
    * @param duplicatedConventions  the ids of duplicated underlying conventions, not null
    * @param unsupportedConventions  any underlying conventions that were found but were not of the expected type, not null
    */
-  public ConventionValidationInfo(final Class<T> type, final Collection<? extends T> configurations, final Collection<ExternalId> missingConventions,
+  public ConventionValidationInfo(final Class<T> type, final Collection<? extends T> validated, final Collection<ExternalId> missingConventions,
       final Collection<ExternalId> duplicatedConventions, final Collection<? extends Convention> unsupportedConventions) {
-    ArgumentChecker.notNull(type, "type");
-    ArgumentChecker.notNull(configurations, "configurations");
-    ArgumentChecker.notNull(missingConventions, "missingConvention");
-    ArgumentChecker.notNull(duplicatedConventions, "duplicatedConventions");
-    ArgumentChecker.notNull(unsupportedConventions, "unsupportedConventions");
-    _type = type;
-    _conventions = configurations;
-    _missingConventions = missingConventions;
-    _duplicatedConventions = duplicatedConventions;
-    _unsupportedConventions = unsupportedConventions;
+    _type = ArgumentChecker.notNull(type, "type");
+    _validated = ArgumentChecker.notNull(validated, "validated");
+    _missingConventions = ArgumentChecker.notNull(missingConventions, "missingConventions");
+    _duplicatedConventions = ArgumentChecker.notNull(duplicatedConventions, "duplicatedConventions");
+    _unsupportedConventions = ArgumentChecker.notNull(unsupportedConventions, "unsupportedConventions");
   }
 
   /**
@@ -78,11 +72,11 @@ public class ConventionValidationInfo<T extends Convention> {
   }
 
   /**
-   * Gets an unmodifiable collection of the conventions that have been validated.
-   * @return  the validated conventions
+   * Gets an unmodifiable collection of the objects that have been validated.
+   * @return  the validated objects
    */
-  public Collection<T> getValidatedConventions() {
-    return Collections.unmodifiableCollection(_conventions);
+  public Collection<T> getValidatedObjects() {
+    return Collections.unmodifiableCollection(_validated);
   }
 
   /**
@@ -113,7 +107,8 @@ public class ConventionValidationInfo<T extends Convention> {
   public int hashCode() {
     final int prime = 31;
     int result = 1;
-    result = prime * result + Objects.hashCode(_conventions);
+    result = prime * result + Objects.hashCode(_type);
+    result = prime * result + Objects.hashCode(_validated);
     result = prime * result + Objects.hashCode(_duplicatedConventions);
     result = prime * result + Objects.hashCode(_missingConventions);
     result = prime * result * Objects.hashCode(_unsupportedConventions);
@@ -125,13 +120,13 @@ public class ConventionValidationInfo<T extends Convention> {
     if (this == obj) {
       return true;
     }
-    if (obj == null) {
-      return false;
-    }
     if (!(obj instanceof ConventionValidationInfo)) {
       return false;
     }
     final ConventionValidationInfo<?> other = (ConventionValidationInfo<?>) obj;
+    if (!Objects.equals(_type, other._type)) {
+      return false;
+    }
     if (!Objects.equals(_missingConventions, other._missingConventions)) {
       return false;
     }
@@ -141,7 +136,7 @@ public class ConventionValidationInfo<T extends Convention> {
     if (!Objects.equals(_unsupportedConventions, other._unsupportedConventions)) {
       return false;
     }
-    if (!Objects.equals(_conventions, other._conventions)) {
+    if (!Objects.equals(_validated, other._validated)) {
       return false;
     }
     return true;

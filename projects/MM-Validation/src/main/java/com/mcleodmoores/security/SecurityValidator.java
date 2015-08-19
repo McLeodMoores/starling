@@ -3,50 +3,24 @@
  */
 package com.mcleodmoores.security;
 
-import com.opengamma.core.security.Security;
 import com.opengamma.core.security.SecuritySource;
-import com.opengamma.engine.function.FunctionCompilationContext;
-import com.opengamma.financial.OpenGammaCompilationContext;
-import com.opengamma.financial.tool.ToolContext;
 import com.opengamma.id.VersionCorrection;
-import com.opengamma.util.ArgumentChecker;
 
 /**
- *
+ * Base class for classes that validate that particular criteria were satisfied when the configuration was created e.g.
+ * that any securities that are referenced are available from the source.
+ * @param <U>  the type of the object to be validated
+ * @param <V>  the type of the objects that have been validated
  */
-public abstract class SecurityValidator<U, V extends Security> {
+public abstract class SecurityValidator<U, V> {
 
-  public SecurityValidationInfo<V> validate(final U configuration, final FunctionCompilationContext compilationContext) {
-    return validate(configuration, VersionCorrection.LATEST, compilationContext);
-  }
-
-  public SecurityValidationInfo<V> validate(final U configuration, final ToolContext toolContext) {
-    return validate(configuration, VersionCorrection.LATEST, toolContext);
-  }
-
-  public SecurityValidationInfo<V> validate(final U curveConstructionConfiguration, final VersionCorrection versionCorrection,
-      final FunctionCompilationContext compilationContext) {
-    ArgumentChecker.notNull(curveConstructionConfiguration, "curveConstructionConfiguration");
-    ArgumentChecker.notNull(versionCorrection, "versionCorrection");
-    ArgumentChecker.notNull(compilationContext, "compilationContext");
-    final SecuritySource securitySource = OpenGammaCompilationContext.getSecuritySource(compilationContext);
-    if (securitySource == null) {
-      throw new IllegalStateException("SecuritySource not set in function compilation context");
-    }
-    return validate(curveConstructionConfiguration, versionCorrection, securitySource);
-  }
-
-  public SecurityValidationInfo<V> validate(final U curveConstructionConfiguration, final VersionCorrection versionCorrection,
-      final ToolContext toolContext) {
-    ArgumentChecker.notNull(curveConstructionConfiguration, "curveConstructionConfiguration");
-    ArgumentChecker.notNull(versionCorrection, "versionCorrection");
-    ArgumentChecker.notNull(toolContext, "toolContext");
-    final SecuritySource securitySource = toolContext.getSecuritySource();
-    if (securitySource == null) {
-      throw new IllegalStateException("SecuritySource not set in tool context");
-    }
-    return validate(curveConstructionConfiguration, versionCorrection, securitySource);
-  }
-
-  protected abstract SecurityValidationInfo<V> validate(final U configuration, VersionCorrection versionCorrection, SecuritySource securitySource);
+  /**
+   * Validates an object, returning information about successfully validated securities and duplicate, missing and / or
+   * unsupported securities that were referenced by the object being tested.
+   * @param object  the object, not null
+   * @param versionCorrection  the version correction, not null
+   * @param securitySource  the security source, not null
+   * @return  the validation information
+   */
+  public abstract SecurityValidationInfo<V> validate(final U object, VersionCorrection versionCorrection, SecuritySource securitySource);
 }
