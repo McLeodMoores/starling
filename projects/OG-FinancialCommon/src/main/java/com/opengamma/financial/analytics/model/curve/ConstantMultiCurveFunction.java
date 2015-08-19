@@ -143,13 +143,14 @@ public class ConstantMultiCurveFunction extends
     if (curveConstructionConfiguration == null) {
       throw new OpenGammaRuntimeException("Could not get curve construction configuration called " + curveConstructionConfigurationName);
     }
-    boolean allCurvesConstant = true;
+    boolean allCurvesConstant = false;;
     for (final CurveGroupConfiguration group : curveConstructionConfiguration.getCurveGroups()) {
       for (final Map.Entry<String, List<? extends CurveTypeConfiguration>> entry : group.getTypesForCurves().entrySet()) {
         final AbstractCurveDefinition definition = _curveDefinitionSource.getDefinition(entry.getKey());
-        if (!(definition instanceof ConstantCurveDefinition)) {
+        if (definition instanceof ConstantCurveDefinition) {
+          allCurvesConstant = true;
+        } else {
           allCurvesConstant = false;
-          break;
         }
       }
     }
