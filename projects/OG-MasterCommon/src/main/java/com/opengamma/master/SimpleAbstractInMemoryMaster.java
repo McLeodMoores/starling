@@ -24,6 +24,7 @@ import com.opengamma.core.change.BasicChangeManager;
 import com.opengamma.core.change.ChangeManager;
 import com.opengamma.core.change.ChangeProvider;
 import com.opengamma.core.change.ChangeType;
+import com.opengamma.id.MutableUniqueIdentifiable;
 import com.opengamma.id.ObjectId;
 import com.opengamma.id.ObjectIdSupplier;
 import com.opengamma.id.ObjectIdentifiable;
@@ -171,6 +172,14 @@ public abstract class SimpleAbstractInMemoryMaster<D extends AbstractDocument>
       
       List<D> orderedReplacementDocuments = MasterUtils.adjustVersionInstants(now, storedVersionFrom, storedVersionTo, replacementDocuments);
       D lastReplacementDocument = orderedReplacementDocuments.get(orderedReplacementDocuments.size() - 1);
+      // Start of fix for no id
+      UniqueId newUniqueId = objectId.getObjectId().atLatestVersion();
+      lastReplacementDocument.setUniqueId(newUniqueId);
+      if (lastReplacementDocument.getValue() instanceof MutableUniqueIdentifiable) {
+        MutableUniqueIdentifiable muidable = (MutableUniqueIdentifiable) lastReplacementDocument.getValue();
+        muidable.setUniqueId(newUniqueId);
+      }
+      // end fix for no id
       if (_store.replace(objectId.getObjectId(), storedDocument, lastReplacementDocument) == false) {
         throw new IllegalArgumentException("Concurrent modification");
       }

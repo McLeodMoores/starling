@@ -392,6 +392,8 @@ public class ComponentManager {
       throw new ComponentConfigException("Unable to create component factory: " + typeStr, ex);
     } catch (IllegalAccessException ex) {
       throw new ComponentConfigException("Unable to access component factory: " + typeStr, ex);
+    } catch (NoClassDefFoundError ex) {
+      throw new ComponentConfigException("Unable to access component factory: " + typeStr, ex);
     }
     return factory;
   }
