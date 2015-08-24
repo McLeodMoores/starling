@@ -193,6 +193,7 @@
 <listEntry value="com.opengamma.analytics.math.integration.factory"/>
 <listEntry value="com.opengamma.analytics.math.interpolation"/>
 <listEntry value="com.opengamma.analytics.math.interpolation.data"/>
+<listEntry value="com.opengamma.analytics.math.interpolation.data.factory"/>
 <listEntry value="com.opengamma.analytics.math.linearalgebra"/>
 <listEntry value="com.opengamma.analytics.math.matrix"/>
 <listEntry value="com.opengamma.analytics.math.minimization"/>

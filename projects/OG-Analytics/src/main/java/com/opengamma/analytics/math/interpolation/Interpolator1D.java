@@ -1,7 +1,11 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
+ *
+ * Modified by McLeod Moores Software Limited.
+ *
+ * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.analytics.math.interpolation;
 
@@ -10,28 +14,33 @@ import java.util.Map;
 import java.util.SortedMap;
 
 import org.apache.commons.lang.ArrayUtils;
-import org.apache.commons.lang.Validate;
 
 import com.opengamma.analytics.math.interpolation.data.Interpolator1DDataBundle;
+import com.opengamma.util.ArgumentChecker;
 
 /**
- * A base class for interpolation in one dimension.
+ * A base class for interpolation in one dimension. This class also calculates the first derivatives of the data and the
+ * sensitivity of the interpolated value to the y data by finite difference, although sub-classes can implement analytic
+ * versions of this calculation.
  */
 public abstract class Interpolator1D implements Interpolator<Interpolator1DDataBundle, Double>, Serializable {
-
+  /** Serialization version */
   private static final long serialVersionUID = 1L;
+  /** The default epsilon used for calculating the gradient via finite difference */
   private static final double EPS = 1e-6;
 
   @Override
   public abstract Double interpolate(Interpolator1DDataBundle data, Double value);
 
   /**
-   * Computes the gradient of the interpolant at the value
-   * @param data Interpolation Data
-   * @param value The value for which the gradient is computed
-   * @return The gradient
+   * Computes the gradient of the interpolant at the value.
+   * @param data  interpolation data, not null
+   * @param value  the value for which the gradient is computed, not null
+   * @return  the gradient
    */
   public double firstDerivative(final Interpolator1DDataBundle data, final Double value) {
+    ArgumentChecker.notNull(data, "data");
+    ArgumentChecker.notNull(value, "value");
     final double vm = value - EPS;
     final double vp = value + EPS;
 
@@ -51,31 +60,32 @@ public abstract class Interpolator1D implements Interpolator<Interpolator1DDataB
 
   /**
    * Computes the sensitivities of the interpolated value to the input data y.
-   * @param data The interpolation data.
-   * @param value The value for which the interpolation is computed.
-   * @param useFiniteDifferenceSensitivities Use finite difference approximation if true
-   * @return The sensitivity.
+   * @param data  the interpolation data, not null
+   * @param value  the value for which the interpolation is computed, not null
+   * @param useFiniteDifferenceSensitivities  use finite difference approximation if true
+   * @return  the sensitivities at each node
    */
   public double[] getNodeSensitivitiesForValue(final Interpolator1DDataBundle data, final Double value, final boolean useFiniteDifferenceSensitivities) {
     return useFiniteDifferenceSensitivities ? getFiniteDifferenceSensitivities(data, value) : getNodeSensitivitiesForValue(data, value);
   }
 
   /**
-   * Computes the sensitivities of the interpolated value to the input data y by using a methodology defined in a respective subclass
-   * @param data The interpolation data.
-   * @param value The value for which the interpolation is computed.
-   * @return The sensitivity.
+   * Computes the sensitivities of the interpolated value to the input data y by using a methodology defined in a respective subclass.
+   * @param data  the interpolation data, not null
+   * @param value  the value for which the interpolation is computed, not null
+   * @return  the sensitivities
    */
   public abstract double[] getNodeSensitivitiesForValue(Interpolator1DDataBundle data, Double value);
 
   /**
    * Computes the sensitivities of the interpolated value to the input data y by using central finite difference approximation.
-   * @param data The interpolation data.
-   * @param value The value for which the interpolation is computed.
-   * @return The sensitivity.
+   * @param data  the interpolation data, not null
+   * @param value  the value for which the interpolation is computed, not null
+   * @return  the sensitivities
    */
   protected double[] getFiniteDifferenceSensitivities(final Interpolator1DDataBundle data, final Double value) {
-    Validate.notNull(data, "data");
+    ArgumentChecker.notNull(data, "data");
+    ArgumentChecker.notNull(value, "value");
     final double[] x = data.getKeys();
     final double[] y = data.getValues();
     final int n = x.length;
@@ -97,32 +107,34 @@ public abstract class Interpolator1D implements Interpolator<Interpolator1DDataB
   }
 
   /**
-   * Construct Interpolator1DDataBundle from unsorted arrays
-   * @param x X values of data
-   * @param y Y values of data
-   * @return Interpolator1DDataBundle
+   * Construct an {@link Interpolator1DDataBundle} from unsorted arrays. The bundle may contain information such as the derivatives
+   * at each data point. The x data need not be sorted.
+   * @param x  x values of data, not null
+   * @param y  y values of data, not null
+   * @return  the data bundle
    */
   public abstract Interpolator1DDataBundle getDataBundle(double[] x, double[] y);
 
   /**
-   * Construct Interpolator1DDataBundle from sorted arrays, i.e, x[0] < x[1] < x[2], .....
-   * @param x X values of data
-   * @param y Y values of data
-   * @return Interpolator1DDataBundle
+   * Construct an {@link Interpolator1DDataBundle} from sorted arrays, i.e, x[0] < x[1] < x[2]. The bundle may contain information such as the derivatives
+   * at each data point.
+   * @param x  x values of data, not null
+   * @param y  y values of data, not null
+   * @return  the data bundle
    */
   public abstract Interpolator1DDataBundle getDataBundleFromSortedArrays(double[] x, double[] y);
 
   /**
-   * Construct Interpolator1DDataBundle from Map
-   * @param data Data containing x values and y values
+   * Constructs an {@link Interpolator1DDataBundle}. The bundle may contain information such as the derivatives
+   * at each data point. The x data need not be sorted.
+   * @param data  data containing x values and y values, not null
    * @return Interpolator1DDataBundle
    */
   public Interpolator1DDataBundle getDataBundle(final Map<Double, Double> data) {
-    Validate.notNull(data, "Backing data for interpolation must not be null.");
-    Validate.notEmpty(data, "Backing data for interpolation must not be empty.");
+    ArgumentChecker.notEmpty(data, "data");
     if (data instanceof SortedMap) {
-      final double[] keys = ArrayUtils.toPrimitive(data.keySet().toArray(ArrayUtils.EMPTY_DOUBLE_OBJECT_ARRAY));
-      final double[] values = ArrayUtils.toPrimitive(data.values().toArray(ArrayUtils.EMPTY_DOUBLE_OBJECT_ARRAY));
+      final double[] keys = ArrayUtils.toPrimitive(data.keySet().toArray(new Double[data.size()]));
+      final double[] values = ArrayUtils.toPrimitive(data.values().toArray(new Double[data.size()]));
       return getDataBundleFromSortedArrays(keys, values);
     }
     final double[] keys = new double[data.size()];
@@ -159,8 +171,8 @@ public abstract class Interpolator1D implements Interpolator<Interpolator1DDataB
   }
 
   /**
-   * @param o Reference class
-   * @return true if two objects are the same class
+   * @param o  the reference class
+   * @return  true if two objects are the same class
    */
   protected boolean classEquals(final Object o) {
     if (o == null) {

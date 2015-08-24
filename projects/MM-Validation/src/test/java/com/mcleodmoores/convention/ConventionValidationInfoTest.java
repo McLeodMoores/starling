@@ -31,12 +31,12 @@ public class ConventionValidationInfoTest {
   private static final OvernightIndexConvention OVERNIGHT_INDEX_CONVENTION = new OvernightIndexConvention("USD Overnight",
       ExternalSchemes.syntheticSecurityId("USD O/N").toBundle(), DayCounts.ACT_360, 0, Currency.USD, ExternalSchemes.countryRegionId(Country.US));
   /** An ibor convention */
-  private static final IborIndexConvention IBOR_INDEX_CONVENTION_2 = new IborIndexConvention("USD 3M Libor",
-      ExternalSchemes.syntheticSecurityId("USD 3M Libor").toBundle(), DayCounts.ACT_365, BusinessDayConventions.MODIFIED_FOLLOWING, 2, false,
-      Currency.USD, LocalTime.of(11, 0), "GB", ExternalSchemes.countryRegionId(Country.GB), ExternalSchemes.countryRegionId(Country.GB), "");
-  /** An ibor convention */
   private static final IborIndexConvention IBOR_INDEX_CONVENTION_1 = new IborIndexConvention("USD 1M Libor",
       ExternalSchemes.syntheticSecurityId("USD 1M Libor").toBundle(), DayCounts.ACT_365, BusinessDayConventions.MODIFIED_FOLLOWING, 2, false,
+      Currency.USD, LocalTime.of(11, 0), "GB", ExternalSchemes.countryRegionId(Country.GB), ExternalSchemes.countryRegionId(Country.GB), "");
+  /** An ibor convention */
+  private static final IborIndexConvention IBOR_INDEX_CONVENTION_2 = new IborIndexConvention("USD 3M Libor",
+      ExternalSchemes.syntheticSecurityId("USD 3M Libor").toBundle(), DayCounts.ACT_365, BusinessDayConventions.MODIFIED_FOLLOWING, 2, false,
       Currency.USD, LocalTime.of(11, 0), "GB", ExternalSchemes.countryRegionId(Country.GB), ExternalSchemes.countryRegionId(Country.GB), "");
   /** Type of the validated conventions */
   private static final Class<IborIndexConvention> TYPE = IborIndexConvention.class;
@@ -139,7 +139,7 @@ public class ConventionValidationInfoTest {
    */
   @Test(expectedExceptions = UnsupportedOperationException.class)
   public void testUnmodifiableValidatedConventions() {
-    final Collection<? super IborIndexConvention> validated = INFO.getValidatedConventions();
+    final Collection<? super IborIndexConvention> validated = INFO.getValidatedObjects();
     validated.add(VALIDATED.iterator().next());
   }
 
@@ -185,13 +185,15 @@ public class ConventionValidationInfoTest {
     final Collection<Convention> unsupported = new HashSet<>();
     unsupported.add(OVERNIGHT_INDEX_CONVENTION);
     assertEquals(INFO.getType(), TYPE);
-    assertEquals(INFO.getValidatedConventions(), validated);
+    assertEquals(INFO.getValidatedObjects(), validated);
     assertEquals(INFO.getMissingConventionIds(), missing);
     assertEquals(INFO.getDuplicatedConventionIds(), duplicated);
     assertEquals(INFO.getUnsupportedConventions(), unsupported);
     ConventionValidationInfo<? extends Convention> other = new ConventionValidationInfo<>(TYPE, VALIDATED, MISSING, DUPLICATED, UNSUPPORTED);
     assertEquals(other, INFO);
     assertEquals(other.hashCode(), INFO.hashCode());
+    other = new ConventionValidationInfo<>(Convention.class, Collections.singleton(IBOR_INDEX_CONVENTION_1), MISSING, DUPLICATED, UNSUPPORTED);
+    assertNotEquals(other, INFO);
     other = new ConventionValidationInfo<>(TYPE, Collections.singleton(IBOR_INDEX_CONVENTION_1), MISSING, DUPLICATED, UNSUPPORTED);
     assertNotEquals(other, INFO);
     other = new ConventionValidationInfo<>(TYPE, VALIDATED, DUPLICATED, DUPLICATED, UNSUPPORTED);
