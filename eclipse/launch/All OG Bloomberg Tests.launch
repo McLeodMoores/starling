@@ -1,5 +1,37 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <launchConfiguration type="org.testng.eclipse.launchconfig">
+<listAttribute key="com.mountainminds.eclemma.core.SCOPE_IDS">
+<listEntry value="=og-financial-types/src\/main\/java"/>
+<listEntry value="=og-provider-rest/src\/main\/java"/>
+<listEntry value="=og-security/src\/main\/java"/>
+<listEntry value="=og-component-rest/src\/main\/java"/>
+<listEntry value="=og-financial-rest/src\/main\/java"/>
+<listEntry value="=og-core-common/src\/main\/java"/>
+<listEntry value="=og-engine-common/src\/main\/java"/>
+<listEntry value="=og-livedata/src\/main\/java"/>
+<listEntry value="=og-master-common/src\/main\/java"/>
+<listEntry value="=og-financial-common/src\/main\/java"/>
+<listEntry value="=og-timeseries/src\/main\/java"/>
+<listEntry value="=og-enginedb/src\/main\/java"/>
+<listEntry value="=og-bloomberg/src\/main\/java"/>
+<listEntry value="=og-engine-rest-client/src\/main\/java"/>
+<listEntry value="=og-provider-rest-client/src\/main\/java"/>
+<listEntry value="=og-provider-common/src\/main\/java"/>
+<listEntry value="=og-util-rest/src\/main\/java"/>
+<listEntry value="=og-web/src\/main\/java"/>
+<listEntry value="=og-analytics/src\/main\/java"/>
+<listEntry value="=og-core-rest-client/src\/main\/java"/>
+<listEntry value="=og-util-common/src\/main\/java"/>
+<listEntry value="=og-financial-rest-client/src\/main\/java"/>
+<listEntry value="=og-core-rest/src\/main\/java"/>
+<listEntry value="=og-masterdb-common/src\/main\/java"/>
+<listEntry value="=og-master-rest/src\/main\/java"/>
+<listEntry value="=og-master-rest-client/src\/main\/java"/>
+<listEntry value="=og-utildb/src\/main\/java"/>
+<listEntry value="=og-engine-rest/src\/main\/java"/>
+<listEntry value="=og-util-rest-client/src\/main\/java"/>
+<listEntry value="=og-component-common/src\/main\/java"/>
+</listAttribute>
 <stringAttribute key="org.eclipse.jdt.launching.CLASSPATH_PROVIDER" value="org.eclipse.m2e.launchconfig.classpathProvider"/>
 <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="org.testng.remote.RemoteTestNG"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="og-bloomberg"/>
