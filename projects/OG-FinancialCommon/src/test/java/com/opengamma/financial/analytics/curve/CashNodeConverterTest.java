@@ -247,7 +247,6 @@ public class CashNodeConverterTest {
   @Test
   public void testOvernightIndexFromConvention() {
     final ZonedDateTime now = DateUtils.getUTCDate(2013, 5, 1);
-    final Object temp = USD_OVERNIGHT_CONVENTION;
     final CurveNode node = new CashNode(Tenor.of(Period.ZERO), Tenor.ON, USD_OVERNIGHT_CONVENTION_ID, MAPPER);
     final CurveNodeVisitor<InstrumentDefinition<?>> converter =
         new CashNodeConverter(SECURITY_SOURCE, HOLIDAY_SOURCE, REGION_SOURCE, MARKET_VALUES, MARKET_DATA_ID, now);
