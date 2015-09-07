@@ -58,7 +58,8 @@ public class SecurityMasterUtils {
         securityMaster.remove(foundSecurity.getUniqueId());
       }
     } else {
-      for (ManageableSecurity foundSecurity : searchResult.getSecurities()) {
+      for (SecurityDocument foundSecurityDoc : searchResult.getDocuments()) {
+        ManageableSecurity foundSecurity = foundSecurityDoc.getSecurity();
         List<BeanDifference<?>> differences = null;
         if (foundSecurity.getClass().equals(security.getClass())) {
           try {
@@ -78,6 +79,7 @@ public class SecurityMasterUtils {
             //updateDoc.setUniqueId(foundSecurity.getUniqueId());
             //return _securityMaster.update(updateDoc).getSecurity();
             UniqueId newId = securityMaster.addVersion(foundSecurity.getUniqueId().getObjectId(), updateDoc);
+            //UniqueId newId = securityMaster.addVersion(foundSecurityDoc, updateDoc);
             security.setUniqueId(newId);
             return security;
           } catch (Throwable t) {

@@ -15,6 +15,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 import org.joda.beans.JodaBeanUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.threeten.bp.Instant;
 
 import com.google.common.base.Supplier;
@@ -45,6 +47,7 @@ import com.opengamma.util.paging.Paging;
  */
 public class InMemoryPortfolioMaster extends SimpleAbstractInMemoryMaster<PortfolioDocument> implements PortfolioMaster {
 
+  private static final Logger LOGGER = LoggerFactory.getLogger(InMemoryPortfolioMaster.class);
   /**
    * The default scheme used for each {@link UniqueId}.
    */

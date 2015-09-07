@@ -95,7 +95,9 @@ public class InMemorySecurityMaster
   @Override
   protected void updateCaches(ObjectIdentifiable replacedObject, SecurityDocument updatedDocument) {
     if (replacedObject != null) {
-      _externalIdCache.remove(((SecurityDocument) replacedObject).getSecurity());
+      if (replacedObject instanceof SecurityDocument) {
+        _externalIdCache.remove(((SecurityDocument) replacedObject).getSecurity());
+      } // not sure what we can/should do otherwise. Jim 13-Aug-2015
     }
     if (updatedDocument != null) {
       SecurityDocument updatedSecurityDocument = (SecurityDocument) updatedDocument;
