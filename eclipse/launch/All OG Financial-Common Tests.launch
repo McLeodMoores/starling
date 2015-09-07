@@ -14,8 +14,6 @@
 <stringAttribute key="org.testng.eclipse.LOG_LEVEL" value="2"/>
 <listAttribute key="org.testng.eclipse.METHOD_TEST_LIST"/>
 <listAttribute key="org.testng.eclipse.PACKAGE_TEST_LIST">
-<listEntry value="com.opengamma.batch.rest"/>
-<listEntry value="com.opengamma.engine.depgraph"/>
 <listEntry value="com.opengamma.financial"/>
 <listEntry value="com.opengamma.financial.aggregation"/>
 <listEntry value="com.opengamma.financial.analytics"/>
@@ -23,28 +21,29 @@
 <listEntry value="com.opengamma.financial.analytics.curve"/>
 <listEntry value="com.opengamma.financial.analytics.curve.exposure"/>
 <listEntry value="com.opengamma.financial.analytics.curve.exposure.factory"/>
+<listEntry value="com.opengamma.financial.analytics.curve.upgrade"/>
 <listEntry value="com.opengamma.financial.analytics.fixedincome"/>
 <listEntry value="com.opengamma.financial.analytics.fudgemsg"/>
 <listEntry value="com.opengamma.financial.analytics.ircurve"/>
 <listEntry value="com.opengamma.financial.analytics.ircurve.calcconfig"/>
+<listEntry value="com.opengamma.financial.analytics.isda.credit"/>
 <listEntry value="com.opengamma.financial.analytics.model"/>
 <listEntry value="com.opengamma.financial.analytics.model.cds"/>
 <listEntry value="com.opengamma.financial.analytics.model.curve"/>
+<listEntry value="com.opengamma.financial.analytics.model.discounting"/>
 <listEntry value="com.opengamma.financial.analytics.model.sabrcube"/>
 <listEntry value="com.opengamma.financial.analytics.test"/>
 <listEntry value="com.opengamma.financial.analytics.test.unittest"/>
-<listEntry value="com.opengamma.financial.analytics.test.unittest.dealstest"/>
 <listEntry value="com.opengamma.financial.analytics.timeseries"/>
 <listEntry value="com.opengamma.financial.analytics.volatility.cube"/>
 <listEntry value="com.opengamma.financial.analytics.volatility.surface"/>
+<listEntry value="com.opengamma.financial.calendar"/>
 <listEntry value="com.opengamma.financial.comparison"/>
 <listEntry value="com.opengamma.financial.convention"/>
 <listEntry value="com.opengamma.financial.convention.expirycalc"/>
-<listEntry value="com.opengamma.financial.convention.rest"/>
 <listEntry value="com.opengamma.financial.conversion"/>
 <listEntry value="com.opengamma.financial.currency"/>
 <listEntry value="com.opengamma.financial.depgraph.provider"/>
-<listEntry value="com.opengamma.financial.depgraph.rest"/>
 <listEntry value="com.opengamma.financial.expression"/>
 <listEntry value="com.opengamma.financial.expression.deprecated"/>
 <listEntry value="com.opengamma.financial.filtering"/>
@@ -54,12 +53,10 @@
 <listEntry value="com.opengamma.financial.mock"/>
 <listEntry value="com.opengamma.financial.property"/>
 <listEntry value="com.opengamma.financial.security"/>
+<listEntry value="com.opengamma.financial.security.irs"/>
 <listEntry value="com.opengamma.financial.security.lookup"/>
-<listEntry value="com.opengamma.financial.security.lookup.swap"/>
 <listEntry value="com.opengamma.financial.temptarget"/>
-<listEntry value="com.opengamma.financial.temptarget.rest"/>
 <listEntry value="com.opengamma.financial.view"/>
-<listEntry value="com.opengamma.financial.view.rest"/>
 </listAttribute>
 <mapAttribute key="org.testng.eclipse.PARAMETERS"/>
 <intAttribute key="org.testng.eclipse.TYPE" value="5"/>
