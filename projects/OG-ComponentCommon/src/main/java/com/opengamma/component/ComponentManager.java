@@ -14,6 +14,8 @@ import java.util.LinkedHashMap;
 import java.util.Map.Entry;
 import java.util.Properties;
 
+import javax.servlet.ServletContext;
+
 import org.apache.commons.lang.StringUtils;
 import org.joda.beans.Bean;
 import org.joda.beans.JodaBeanUtils;
@@ -381,8 +383,13 @@ public class ComponentManager {
         Class<? extends ComponentFactory> cls = getClass().getClassLoader().loadClass(typeStr).asSubclass(ComponentFactory.class);
         factory = cls.newInstance();
       } catch (ClassNotFoundException ex) {
-        Class<? extends ComponentFactory> cls = ServletContextHolder.getContext().getClassLoader().loadClass(typeStr).asSubclass(ComponentFactory.class);
-        factory = cls.newInstance();
+        ServletContext servletContext = ServletContextHolder.getContext();
+        if (servletContext != null) {
+          Class<? extends ComponentFactory> cls = servletContext.getClassLoader().loadClass(typeStr).asSubclass(ComponentFactory.class);
+          factory = cls.newInstance();
+        } else {
+          throw new ComponentConfigException("Unknown component factory: " + typeStr, ex);         
+        }
       }
     } catch (ExceptionInInitializerError ex) {
       throw new ComponentConfigException("Error starting component factory: " + typeStr, ex);
