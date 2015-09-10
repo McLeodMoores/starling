@@ -45,7 +45,7 @@ public class BillTransactionDefinition implements InstrumentDefinition<BillTrans
   private final ZonedDateTime _settlementDate;
   /**
    * The amount paid or received at settlement date for the bill transaction.
-   * The amount is negative for a purchase (_quantity>0) and positive for a sell (_quantity<0).
+   * The amount is negative for a purchase and positive for a sale.
    */
   private final double _settlementAmount;
 
@@ -104,32 +104,32 @@ public class BillTransactionDefinition implements InstrumentDefinition<BillTrans
   }
 
   /**
-   * Gets the Bill security underlying the transaction.
-   * @return The bill.
+   * Gets the bill security underlying the transaction.
+   * @return  the bill
    */
   public BillSecurityDefinition getUnderlying() {
     return _underlying;
   }
 
   /**
-   * Gets the bill quantity.
-   * @return The quantity.
+   * Gets quantity of bills in the transaction.
+   * @return  the quantity
    */
   public double getQuantity() {
     return _quantity;
   }
 
   /**
-   * Gets the date at which the bill transaction is settled.
-   * @return The date.
+   * Gets the date on which the bill transaction is settled.
+   * @return  the date
    */
   public ZonedDateTime getSettlementDate() {
     return _settlementDate;
   }
 
   /**
-   * Gets the amount paid at settlement date for the bill transaction.
-   * @return The amount.
+   * Gets the amount paid on the settlement date for the bill transaction.
+   * @return  the amount
    */
   public double getSettlementAmount() {
     return _settlementAmount;
@@ -142,13 +142,13 @@ public class BillTransactionDefinition implements InstrumentDefinition<BillTrans
 
   /**
    * {@inheritDoc}
-   * @deprecated Use the method that does not take yield curve names
+   * @deprecated  Use the method that does not take yield curve names
    */
   @Deprecated
   @Override
   public BillTransaction toDerivative(final ZonedDateTime date, final String... yieldCurveNames) {
-    ArgumentChecker.notNull(date, "Reference date");
-    ArgumentChecker.notNull(yieldCurveNames, "Yield curve names");
+    ArgumentChecker.notNull(date, "date");
+    ArgumentChecker.notNull(yieldCurveNames, "yieldCurveNames");
     final BillSecurity purchased = _underlying.toDerivative(date, _settlementDate, yieldCurveNames);
     final BillSecurity standard = _underlying.toDerivative(date, yieldCurveNames);
     final double amount = _settlementDate.isBefore(date) ? 0.0 : _settlementAmount;
@@ -157,7 +157,7 @@ public class BillTransactionDefinition implements InstrumentDefinition<BillTrans
 
   @Override
   public BillTransaction toDerivative(final ZonedDateTime date) {
-    ArgumentChecker.notNull(date, "Reference date");
+    ArgumentChecker.notNull(date, "date");
     final BillSecurity purchased = _underlying.toDerivative(date, _settlementDate);
     final BillSecurity standard = _underlying.toDerivative(date);
     final double amount = _settlementDate.isBefore(date) ? 0.0 : _settlementAmount;

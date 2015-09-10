@@ -262,9 +262,9 @@ public class BillSecurityDefinition implements InstrumentDefinition<BillSecurity
    */
   @Deprecated
   public BillSecurity toDerivative(final ZonedDateTime date, final ZonedDateTime settlementDate, final String... yieldCurveNames) {
-    ArgumentChecker.notNull(date, "Reference date");
-    ArgumentChecker.notNull(settlementDate, "Settlement date");
-    ArgumentChecker.notNull(yieldCurveNames, "Yield curve names");
+    ArgumentChecker.notNull(date, "date");
+    ArgumentChecker.notNull(settlementDate, "settlementDate");
+    ArgumentChecker.notNull(yieldCurveNames, "yieldCurveNames");
     ArgumentChecker.isTrue(!date.isAfter(_endDate), "Reference date {} is after end date {}", date, _endDate);
     double settlementTime = TimeCalculator.getTimeBetween(date, settlementDate);
     settlementTime = Math.max(settlementTime, 0.0);
@@ -280,8 +280,8 @@ public class BillSecurityDefinition implements InstrumentDefinition<BillSecurity
    * @return The bill security.
    */
   public BillSecurity toDerivative(final ZonedDateTime date, final ZonedDateTime settlementDate) {
-    ArgumentChecker.notNull(date, "Reference date");
-    ArgumentChecker.notNull(settlementDate, "Settlement date");
+    ArgumentChecker.notNull(date, "date");
+    ArgumentChecker.notNull(settlementDate, "settlementDate");
     ArgumentChecker.isTrue(!date.isAfter(_endDate), "Reference date {} is after end date {}", date, _endDate);
     double settlementTime = TimeCalculator.getTimeBetween(date, settlementDate);
     settlementTime = Math.max(settlementTime, 0.0);
@@ -297,8 +297,8 @@ public class BillSecurityDefinition implements InstrumentDefinition<BillSecurity
   @Deprecated
   @Override
   public BillSecurity toDerivative(final ZonedDateTime date, final String... yieldCurveNames) {
-    ArgumentChecker.notNull(date, "Reference date");
-    ArgumentChecker.notNull(yieldCurveNames, "Yield curve names");
+    ArgumentChecker.notNull(date, "date");
+    ArgumentChecker.notNull(yieldCurveNames, "yieldCurveNames");
     ArgumentChecker.isTrue(!date.isAfter(_endDate), "Reference date {} is after end date {}", date, _endDate);
     ZonedDateTime settlementDate = ScheduleCalculator.getAdjustedDate(date, _settlementDays, new CalendarAdapter(_calendar));
     settlementDate = settlementDate.isAfter(_endDate) ? _endDate : settlementDate;
@@ -307,7 +307,7 @@ public class BillSecurityDefinition implements InstrumentDefinition<BillSecurity
 
   @Override
   public BillSecurity toDerivative(final ZonedDateTime date) {
-    ArgumentChecker.notNull(date, "Reference date");
+    ArgumentChecker.notNull(date, "date");
     ArgumentChecker.isTrue(!date.isAfter(_endDate), "Reference date {} is after end date {}", date, _endDate);
     ZonedDateTime settlementDate = ScheduleCalculator.getAdjustedDate(date, _settlementDays, new CalendarAdapter(_calendar));
     settlementDate = settlementDate.isAfter(_endDate) ? _endDate : settlementDate;
