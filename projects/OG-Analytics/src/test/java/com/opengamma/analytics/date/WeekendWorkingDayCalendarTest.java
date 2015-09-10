@@ -82,6 +82,7 @@ public class WeekendWorkingDayCalendarTest {
     WorkingDayCalendar other = new WeekendWorkingDayCalendar(name, weekendDay1, weekendDay2);
     assertEquals(calendar, other);
     assertEquals(calendar.hashCode(), other.hashCode());
+    assertFalse(calendar.equals(DayOfWeek.SATURDAY));
     other = new SimpleWorkingDayCalendar(name, Collections.<LocalDate>emptySet(), weekendDay1, weekendDay2);
     assertNotEquals(calendar, other);
     other = new WeekendWorkingDayCalendar(name + "1", weekendDay1, weekendDay2);

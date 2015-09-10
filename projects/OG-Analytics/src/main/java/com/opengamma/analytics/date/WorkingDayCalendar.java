@@ -22,7 +22,8 @@ public interface WorkingDayCalendar extends NamedInstance {
   boolean isWorkingDay(LocalDate date);
 
   /**
-   * Returns true if the date is a holiday, which may or may not return weekend days.
+   * Returns true if the date is a holiday, which may or may not return weekend days depending on the
+   * implementation. In general, implementations should not consider weekends as holidays.
    * @param date  the date, not null
    * @return  true if the date is a holiday
    */

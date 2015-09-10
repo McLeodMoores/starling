@@ -67,38 +67,38 @@ public class HolidaySourceWorkingDayCalendarAdapter implements WorkingDayCalenda
   public boolean isWorkingDay(final LocalDate date) {
     switch (_type) {
       case BANK: {
-          Collection<Holiday> holidays = _holidaySource.get(HolidayType.BANK, _region.getExternalIdBundle());
+        Collection<Holiday> holidays = _holidaySource.get(HolidayType.BANK, _region.getExternalIdBundle());
+        if (holidays.isEmpty()) {
+          // see if there is a holiday for the currency
+          final Currency currency = _region.getCurrency();
+          if (currency != null) {
+            holidays = _holidaySource.get(currency);
+          }
           if (holidays.isEmpty()) {
-            // see if there is a holiday for the currency
-            final Currency currency = _region.getCurrency();
-            if (currency != null) {
-              holidays = _holidaySource.get(currency);
-            }
-            if (holidays.isEmpty()) {
-              throw new DataNotFoundException("Could not get holiday for " + _region.getExternalIdBundle());
-            }
+            throw new DataNotFoundException("Could not get holiday for " + _region.getExternalIdBundle());
           }
-          for (final Holiday holiday : holidays) {
-            if (holiday instanceof WeekendTypeProvider) {
-              if (((WeekendTypeProvider) holiday).getWeekendType().isWeekend(date)) {
-                return false;
-              }
-              if (holiday.getHolidayDates().contains(date)) {
-                return false;
-              }
-            } else {
-              // backwards compatibility for source, where weekends were hard-coded and not stored in the Holiday
-              // object
-              if (WeekendType.SATURDAY_SUNDAY.isWeekend(date)) {
-                return false;
-              }
-              if (holiday.getHolidayDates().contains(date)) {
-                return false;
-              }
-            }
-          }
-          return true;
         }
+        for (final Holiday holiday : holidays) {
+          if (holiday instanceof WeekendTypeProvider) {
+            if (((WeekendTypeProvider) holiday).getWeekendType().isWeekend(date)) {
+              return false;
+            }
+            if (holiday.getHolidayDates().contains(date)) {
+              return false;
+            }
+          } else {
+            // backwards compatibility for source, where weekends were hard-coded and not stored in the Holiday
+            // object
+            if (WeekendType.SATURDAY_SUNDAY.isWeekend(date)) {
+              return false;
+            }
+            if (holiday.getHolidayDates().contains(date)) {
+              return false;
+            }
+          }
+        }
+        return true;
+      }
       case CURRENCY: {
         final Collection<Holiday> holidays = _holidaySource.get(_currency);
         if (holidays.isEmpty()) {
@@ -134,38 +134,38 @@ public class HolidaySourceWorkingDayCalendarAdapter implements WorkingDayCalenda
   public boolean isHoliday(final LocalDate date) {
     switch (_type) {
       case BANK: {
-          Collection<Holiday> holidays = _holidaySource.get(HolidayType.BANK, _region.getExternalIdBundle());
+        Collection<Holiday> holidays = _holidaySource.get(HolidayType.BANK, _region.getExternalIdBundle());
+        if (holidays.isEmpty()) {
+          // see if there is a holiday for the currency
+          final Currency currency = _region.getCurrency();
+          if (currency != null) {
+            holidays = _holidaySource.get(currency);
+          }
           if (holidays.isEmpty()) {
-            // see if there is a holiday for the currency
-            final Currency currency = _region.getCurrency();
-            if (currency != null) {
-              holidays = _holidaySource.get(currency);
-            }
-            if (holidays.isEmpty()) {
-              throw new DataNotFoundException("Could not get holiday for " + _region.getExternalIdBundle());
-            }
+            throw new DataNotFoundException("Could not get holiday for " + _region.getExternalIdBundle());
           }
-          for (final Holiday holiday : holidays) {
-            if (holiday instanceof WeekendTypeProvider) {
-              if (((WeekendTypeProvider) holiday).getWeekendType().isWeekend(date)) {
-                return false;
-              }
-              if (holiday.getHolidayDates().contains(date)) {
-                return true;
-              }
-            } else {
-              // backwards compatibility for source, where weekends were hard-coded and not stored in the Holiday
-              // object
-              if (WeekendType.SATURDAY_SUNDAY.isWeekend(date)) {
-                return false;
-              }
-              if (holiday.getHolidayDates().contains(date)) {
-                return true;
-              }
-            }
-          }
-          return false;
         }
+        for (final Holiday holiday : holidays) {
+          if (holiday instanceof WeekendTypeProvider) {
+            if (((WeekendTypeProvider) holiday).getWeekendType().isWeekend(date)) {
+              return false;
+            }
+            if (holiday.getHolidayDates().contains(date)) {
+              return true;
+            }
+          } else {
+            // backwards compatibility for source, where weekends were hard-coded and not stored in the Holiday
+            // object
+            if (WeekendType.SATURDAY_SUNDAY.isWeekend(date)) {
+              return false;
+            }
+            if (holiday.getHolidayDates().contains(date)) {
+              return true;
+            }
+          }
+        }
+        return false;
+      }
       case CURRENCY: {
         final Collection<Holiday> holidays = _holidaySource.get(_currency);
         if (holidays.isEmpty()) {

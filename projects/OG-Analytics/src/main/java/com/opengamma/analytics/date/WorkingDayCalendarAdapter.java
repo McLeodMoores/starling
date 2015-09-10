@@ -3,6 +3,8 @@
  */
 package com.opengamma.analytics.date;
 
+import java.util.Objects;
+
 import org.threeten.bp.DayOfWeek;
 import org.threeten.bp.LocalDate;
 
@@ -15,7 +17,7 @@ import com.opengamma.util.ArgumentChecker;
  * <p>
  * This class should be used when backwards compatibility is required.
  */
-public class WorkingDayCalendarAdapter implements WorkingDayCalendar, Calendar {
+public class WorkingDayCalendarAdapter implements WorkingDayCalendar {
   /** The underlying calendar */
   private final Calendar _calendar;
   /** The first weekend day */
@@ -41,18 +43,13 @@ public class WorkingDayCalendarAdapter implements WorkingDayCalendar, Calendar {
   }
 
   @Override
-  public String getConventionName() {
-    return _calendar.getName();
-  }
-
-  @Override
   public boolean isWorkingDay(final LocalDate date) {
     return _calendar.isWorkingDay(date);
   }
 
   @Override
   public boolean isHoliday(final LocalDate date) {
-    // holidays exclude weekend days so short circuit
+    // calendars may or may not exclude weekend days so short circuit
     if (date.getDayOfWeek() == _weekendDay1 || date.getDayOfWeek() == _weekendDay2) {
       return false;
     }
@@ -62,6 +59,34 @@ public class WorkingDayCalendarAdapter implements WorkingDayCalendar, Calendar {
   @Override
   public boolean isWeekend(final LocalDate date) {
     return date.getDayOfWeek() == _weekendDay1 || date.getDayOfWeek() == _weekendDay2;
+  }
+
+  @Override
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + _calendar.hashCode();
+    result = prime * result + _weekendDay1.hashCode();
+    result = prime * result + _weekendDay2.hashCode();
+    return result;
+  }
+
+  @Override
+  public boolean equals(final Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (!(obj instanceof WorkingDayCalendarAdapter)) {
+      return false;
+    }
+    final WorkingDayCalendarAdapter other = (WorkingDayCalendarAdapter) obj;
+    if (_weekendDay1 != other._weekendDay1) {
+      return false;
+    }
+    if (_weekendDay2 != other._weekendDay2) {
+      return false;
+    }
+    return Objects.equals(_calendar, other._calendar);
   }
 
 }
