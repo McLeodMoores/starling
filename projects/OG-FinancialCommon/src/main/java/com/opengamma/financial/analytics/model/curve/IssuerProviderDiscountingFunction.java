@@ -2,6 +2,10 @@
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
  *
  * Please see distribution for license.
+ *
+ * Modified by McLeod Moores Software Limited.
+ *
+ * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.financial.analytics.model.curve;
 
@@ -32,6 +36,7 @@ import org.threeten.bp.ZonedDateTime;
 
 import com.google.common.collect.LinkedListMultimap;
 import com.opengamma.OpenGammaRuntimeException;
+import com.opengamma.analytics.date.WorkingDayCalendar;
 import com.opengamma.analytics.financial.curve.interestrate.generator.GeneratorCurveYieldConstant;
 import com.opengamma.analytics.financial.curve.interestrate.generator.GeneratorCurveYieldInterpolated;
 import com.opengamma.analytics.financial.curve.interestrate.generator.GeneratorYDCurve;
@@ -121,12 +126,13 @@ import com.opengamma.util.tuple.Pairs;
 public class IssuerProviderDiscountingFunction extends
   MultiCurveFunction<ParameterIssuerProviderInterface, IssuerDiscountBuildingRepository, GeneratorYDCurve, MulticurveSensitivity> {
   /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(IssuerProviderDiscountingFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(IssuerProviderDiscountingFunction.class);
   /** The calculator */
   // TODO: [PLAT-5430] A mechanism to change the calculator should be implemented.
   private static final ParSpreadMarketQuoteIssuerDiscountingCalculator PSXIC = ParSpreadMarketQuoteIssuerDiscountingCalculator.getInstance();
   /** The sensitivity calculator */
-  private static final ParSpreadMarketQuoteCurveSensitivityIssuerDiscountingCalculator PSXCSIC = ParSpreadMarketQuoteCurveSensitivityIssuerDiscountingCalculator.getInstance();
+  private static final ParSpreadMarketQuoteCurveSensitivityIssuerDiscountingCalculator PSXCSIC =
+      ParSpreadMarketQuoteCurveSensitivityIssuerDiscountingCalculator.getInstance();
 
   /**
    * @param configurationName The configuration name, not null
@@ -200,8 +206,8 @@ public class IssuerProviderDiscountingFunction extends
 
     @SuppressWarnings("unchecked")
     @Override
-    protected Pair<ParameterIssuerProviderInterface, CurveBuildingBlockBundle> getCurves(final FunctionInputs inputs, final ZonedDateTime now, final IssuerDiscountBuildingRepository builder,
-        final ParameterIssuerProviderInterface knownData, final FunctionExecutionContext context, final FXMatrix fx) {
+    protected Pair<ParameterIssuerProviderInterface, CurveBuildingBlockBundle> getCurves(final FunctionInputs inputs, final ZonedDateTime now,
+        final IssuerDiscountBuildingRepository builder, final ParameterIssuerProviderInterface knownData, final FunctionExecutionContext context, final FXMatrix fx) {
       final SecuritySource securitySource = OpenGammaExecutionContext.getSecuritySource(context);
       final ConventionSource conventionSource = OpenGammaExecutionContext.getConventionSource(context);
       final ValueProperties curveConstructionProperties = ValueProperties.builder()
@@ -275,7 +281,8 @@ public class IssuerProviderDiscountingFunction extends
             if (instrumentDefinition instanceof BondFixedSecurityDefinition) {
               transaction = BondFixedTransactionDefinition.fromYield((BondFixedSecurityDefinition) instrumentDefinition, 1, now, marketData);
             } else if (instrumentDefinition instanceof BillSecurityDefinition) {
-              transaction = BillTransactionDefinition.fromYield((BillSecurityDefinition) instrumentDefinition, 1, now, marketData, null);
+              //TODO this will throw an exception
+              transaction = BillTransactionDefinition.fromYield((BillSecurityDefinition) instrumentDefinition, 1, now, marketData, (WorkingDayCalendar) null);
             } else {
               throw new OpenGammaRuntimeException("Cannot handle definitions of type " + instrumentDefinition.getClass());
             }
@@ -401,7 +408,7 @@ public class IssuerProviderDiscountingFunction extends
           curve = provider.getMulticurveProvider().getCurve(curveName);
         }
         if (curve == null) {
-          s_logger.error("Could not get curve called {} from configuration {}", curveName, getCurveConstructionConfigurationName());
+          LOGGER.error("Could not get curve called {} from configuration {}", curveName, getCurveConstructionConfigurationName());
         } else {
           final ValueSpecification curveSpec = new ValueSpecification(YIELD_CURVE, ComputationTargetSpecification.NULL, curveProperties);
           result.add(new ComputedValue(curveSpec, curve));
