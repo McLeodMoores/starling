@@ -2,6 +2,10 @@
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
  *
  * Please see distribution for license.
+ *
+ * Modified by McLeod Moores Software Limited.
+ *
+ * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.financial.analytics.curve;
 
@@ -9,9 +13,12 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.threeten.bp.DayOfWeek;
 import org.threeten.bp.ZonedDateTime;
 
 import com.opengamma.OpenGammaRuntimeException;
+import com.opengamma.analytics.date.WorkingDayCalendar;
+import com.opengamma.analytics.date.WorkingDayCalendarAdapter;
 import com.opengamma.analytics.financial.instrument.InstrumentDefinition;
 import com.opengamma.analytics.financial.instrument.bond.BillSecurityDefinition;
 import com.opengamma.analytics.financial.instrument.bond.BillTransactionDefinition;
@@ -28,7 +35,6 @@ import com.opengamma.core.security.Security;
 import com.opengamma.core.security.SecuritySource;
 import com.opengamma.financial.analytics.conversion.CalendarUtils;
 import com.opengamma.financial.analytics.ircurve.strips.BillNode;
-import com.opengamma.financial.convention.calendar.Calendar;
 import com.opengamma.financial.convention.daycount.DayCount;
 import com.opengamma.financial.convention.yield.YieldConvention;
 import com.opengamma.financial.security.bond.BillSecurity;
@@ -68,20 +74,13 @@ public class BillNodeConverter extends CurveNodeVisitorAdapter<InstrumentDefinit
    */
   public BillNodeConverter(final HolidaySource holidaySource, final RegionSource regionSource, final SecuritySource securitySource, final LegalEntitySource legalEntitySource,
       final SnapshotDataBundle marketData, final ExternalId dataId, final ZonedDateTime valuationTime) {
-    ArgumentChecker.notNull(regionSource, "region source");
-    ArgumentChecker.notNull(holidaySource, "holiday source");
-    ArgumentChecker.notNull(securitySource, "security source");
-    //ArgumentChecker.notNull(legalEntitySource, "legalEntitySource");
-    ArgumentChecker.notNull(marketData, "market data");
-    ArgumentChecker.notNull(dataId, "data id");
-    ArgumentChecker.notNull(valuationTime, "valuation time");
-    _regionSource = regionSource;
-    _holidaySource = holidaySource;
-    _securitySource = securitySource;
+    _regionSource = ArgumentChecker.notNull(regionSource, "regionSource");
+    _holidaySource = ArgumentChecker.notNull(holidaySource, "holidaySource");
+    _securitySource = ArgumentChecker.notNull(securitySource, "securitySource");
     _legalEntitySource = legalEntitySource;
-    _marketData = marketData;
-    _dataId = dataId;
-    _valuationTime = valuationTime;
+    _marketData = ArgumentChecker.notNull(marketData, "marketData");
+    _dataId = ArgumentChecker.notNull(dataId, "dataId");
+    _valuationTime = ArgumentChecker.notNull(valuationTime, "valuationTime");
   }
 
   @Override
@@ -96,7 +95,8 @@ public class BillNodeConverter extends CurveNodeVisitorAdapter<InstrumentDefinit
     }
     final BillSecurity billSecurity = (BillSecurity) security;
     final ExternalId regionId = billSecurity.getRegionId();
-    final Calendar calendar = CalendarUtils.getCalendar(_regionSource, _holidaySource, regionId);
+    final WorkingDayCalendar calendar =
+        new WorkingDayCalendarAdapter(CalendarUtils.getCalendar(_regionSource, _holidaySource, regionId), DayOfWeek.SATURDAY, DayOfWeek.SUNDAY);
     final Currency currency = billSecurity.getCurrency();
     final ZonedDateTime maturityDate = billSecurity.getMaturityDate().getExpiry();
     final DayCount dayCount = billSecurity.getDayCount();

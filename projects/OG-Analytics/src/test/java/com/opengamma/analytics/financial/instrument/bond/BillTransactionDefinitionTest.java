@@ -2,6 +2,10 @@
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
  *
  * Please see distribution for license.
+ *
+ * Modified by McLeod Moores Software Limited.
+ *
+ * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.analytics.financial.instrument.bond;
 
@@ -13,6 +17,8 @@ import java.util.Collections;
 import org.testng.annotations.Test;
 import org.threeten.bp.ZonedDateTime;
 
+import com.opengamma.analytics.date.WeekendWorkingDayCalendar;
+import com.opengamma.analytics.date.WorkingDayCalendar;
 import com.opengamma.analytics.financial.interestrate.bond.definition.BillSecurity;
 import com.opengamma.analytics.financial.interestrate.bond.definition.BillTransaction;
 import com.opengamma.analytics.financial.interestrate.bond.provider.BillSecurityDiscountingMethod;
@@ -38,9 +44,11 @@ import com.opengamma.util.time.DateUtils;
 @Test(groups = TestGroup.UNIT)
 public class BillTransactionDefinitionTest {
   /** The currency */
-  private final static Currency EUR = Currency.EUR;
+  private static final Currency EUR = Currency.EUR;
+  /** Saturday / Sunday calendar */
+  private static final WorkingDayCalendar CALENDAR = WeekendWorkingDayCalendar.SATURDAY_SUNDAY;
   /** The holiday calendar */
-  private static final Calendar CALENDAR = new MondayToFridayCalendar("TARGET");
+  private static final Calendar OLD_CALENDAR = new MondayToFridayCalendar("TARGET");
 
   /** The day count */
   private static final DayCount ACT360 = DayCounts.ACT_360;
@@ -50,34 +58,37 @@ public class BillTransactionDefinitionTest {
   private static final YieldConvention YIELD_CONVENTION = YieldConventionFactory.INSTANCE.getYieldConvention("INTEREST@MTY");
 
   /** Belgian government name */
-  private final static String ISSUER_BEL_NAME = "BELGIUM GOVT";
+  private static final String ISSUER_BEL_NAME = "BELGIUM GOVT";
   /** German government name */
-  private final static String ISSUER_GER_NAME = "GERMANY GOVT";
+  private static final String ISSUER_GER_NAME = "GERMANY GOVT";
   /** Belgian government entity */
-  private final static LegalEntity ISSUER_BEL = new LegalEntity(null, ISSUER_BEL_NAME, Collections.singleton(CreditRating.of("A", "Custom", true)), Sector.of("Government"), Region.of("Belgium", Country.BE, Currency.EUR));
+  private static final LegalEntity ISSUER_BEL = new LegalEntity(null, ISSUER_BEL_NAME, Collections.singleton(CreditRating.of("A", "Custom", true)),
+      Sector.of("Government"), Region.of("Belgium", Country.BE, Currency.EUR));
   /** German government entity */
-  private final static LegalEntity ISSUER_GER = new LegalEntity(null, ISSUER_GER_NAME, Collections.singleton(CreditRating.of("AA", "Custom", true)), Sector.of("Government"), Region.of("Germany", Country.DE, Currency.EUR));
+  private static final LegalEntity ISSUER_GER = new LegalEntity(null, ISSUER_GER_NAME, Collections.singleton(CreditRating.of("AA", "Custom", true)),
+      Sector.of("Government"), Region.of("Germany", Country.DE, Currency.EUR));
   /** The maturity */
-  private final static ZonedDateTime END_DATE = DateUtils.getUTCDate(2012, 2, 29);
+  private static final ZonedDateTime END_DATE = DateUtils.getUTCDate(2012, 2, 29);
   /** The notional */
-  private final static double NOTIONAL = 1000;
+  private static final double NOTIONAL = 1000;
   /** The underlying bill */
-  private final static BillSecurityDefinition BILL_SEC_DEFINITION = new BillSecurityDefinition(EUR, END_DATE, NOTIONAL, SETTLEMENT_DAYS, CALENDAR, YIELD_CONVENTION, ACT360, ISSUER_BEL);
+  private static final BillSecurityDefinition BILL_SEC_DEFINITION =
+      new BillSecurityDefinition(EUR, END_DATE, NOTIONAL, SETTLEMENT_DAYS, CALENDAR, YIELD_CONVENTION, ACT360, ISSUER_BEL);
 
   /** The quantity */
-  private final static double QUANTITY = 123456;
+  private static final double QUANTITY = 123456;
   /** The settlement date */
-  private final static ZonedDateTime SETTLE_DATE = DateUtils.getUTCDate(2012, 1, 18);
+  private static final ZonedDateTime SETTLE_DATE = DateUtils.getUTCDate(2012, 1, 18);
   /** The settlement amount */
-  private final static double SETTLE_AMOUNT = -NOTIONAL * QUANTITY * 99.95;
+  private static final double SETTLE_AMOUNT = -NOTIONAL * QUANTITY * 99.95;
 
   /** The discounting curve name */
-  private final static String DSC_NAME = "EUR Discounting";
+  private static final String DSC_NAME = "EUR Discounting";
   /** The credit curve name */
-  private final static String CREDIT_NAME = "EUR BELGIUM GOVT";
+  private static final String CREDIT_NAME = "EUR BELGIUM GOVT";
 
   /** The transaction */
-  private final static BillTransactionDefinition BILL_TRA_DEFINITION = new BillTransactionDefinition(BILL_SEC_DEFINITION, QUANTITY, SETTLE_DATE, SETTLE_AMOUNT);
+  private static final BillTransactionDefinition BILL_TRA_DEFINITION = new BillTransactionDefinition(BILL_SEC_DEFINITION, QUANTITY, SETTLE_DATE, SETTLE_AMOUNT);
   /** The pricing method */
   private static final BillSecurityDiscountingMethod METHOD_BILL_SECURITY = BillSecurityDiscountingMethod.getInstance();
 
@@ -139,8 +150,8 @@ public class BillTransactionDefinitionTest {
     final BillTransactionDefinition other = new BillTransactionDefinition(BILL_SEC_DEFINITION, QUANTITY, SETTLE_DATE, SETTLE_AMOUNT);
     assertEquals("Bill Transaction Definition: equal-hash code", BILL_TRA_DEFINITION, other);
     assertEquals("Bill Transaction Definition: equal-hash code", BILL_TRA_DEFINITION.hashCode(), other.hashCode());
-    BillTransactionDefinition modified;
-    modified = new BillTransactionDefinition(new BillSecurityDefinition(EUR, END_DATE, NOTIONAL, SETTLEMENT_DAYS, CALENDAR, YIELD_CONVENTION, ACT360, ISSUER_GER), QUANTITY, SETTLE_DATE, SETTLE_AMOUNT);
+    BillTransactionDefinition modified = new BillTransactionDefinition(new BillSecurityDefinition(EUR, END_DATE, NOTIONAL, SETTLEMENT_DAYS, CALENDAR,
+        YIELD_CONVENTION, ACT360, ISSUER_GER), QUANTITY, SETTLE_DATE, SETTLE_AMOUNT);
     assertFalse("Bill Security Definition: equal-hash code", BILL_SEC_DEFINITION.equals(modified));
     modified = new BillTransactionDefinition(BILL_SEC_DEFINITION, QUANTITY + 10.0, SETTLE_DATE, SETTLE_AMOUNT);
     assertFalse("Bill Security Definition: equal-hash code", BILL_SEC_DEFINITION.equals(modified));
@@ -156,7 +167,7 @@ public class BillTransactionDefinitionTest {
   @SuppressWarnings("deprecation")
   @Test
   public void toDerivativeStandardDeprecated() {
-    final ZonedDateTime referenceDateStandard = ScheduleCalculator.getAdjustedDate(SETTLE_DATE, -SETTLEMENT_DAYS, CALENDAR);
+    final ZonedDateTime referenceDateStandard = ScheduleCalculator.getAdjustedDate(SETTLE_DATE, -SETTLEMENT_DAYS, OLD_CALENDAR);
     final BillTransaction transactionConverted1 = BILL_TRA_DEFINITION.toDerivative(referenceDateStandard, DSC_NAME, CREDIT_NAME);
     final BillSecurity purchased1 = BILL_SEC_DEFINITION.toDerivative(referenceDateStandard, SETTLE_DATE, DSC_NAME, CREDIT_NAME);
     final BillSecurity standard1 = BILL_SEC_DEFINITION.toDerivative(referenceDateStandard, DSC_NAME, CREDIT_NAME);
@@ -170,7 +181,7 @@ public class BillTransactionDefinitionTest {
   @SuppressWarnings("deprecation")
   @Test
   public void toDerivativeEarlyDeprecated() {
-    final ZonedDateTime referenceDateEarly = ScheduleCalculator.getAdjustedDate(SETTLE_DATE, -(SETTLEMENT_DAYS + 1), CALENDAR);
+    final ZonedDateTime referenceDateEarly = ScheduleCalculator.getAdjustedDate(SETTLE_DATE, -(SETTLEMENT_DAYS + 1), OLD_CALENDAR);
     final BillTransaction transactionConverted2 = BILL_TRA_DEFINITION.toDerivative(referenceDateEarly, DSC_NAME, CREDIT_NAME);
     final BillSecurity purchased2 = BILL_SEC_DEFINITION.toDerivative(referenceDateEarly, SETTLE_DATE, DSC_NAME, CREDIT_NAME);
     final BillSecurity standard2 = BILL_SEC_DEFINITION.toDerivative(referenceDateEarly, DSC_NAME, CREDIT_NAME);
@@ -198,7 +209,7 @@ public class BillTransactionDefinitionTest {
   @SuppressWarnings("deprecation")
   @Test
   public void toDerivativeBetweenSettleAndMaturityDeprecated() {
-    final ZonedDateTime referenceDate = ScheduleCalculator.getAdjustedDate(SETTLE_DATE, SETTLEMENT_DAYS, CALENDAR);
+    final ZonedDateTime referenceDate = ScheduleCalculator.getAdjustedDate(SETTLE_DATE, SETTLEMENT_DAYS, OLD_CALENDAR);
     final BillTransaction transactionConverted = BILL_TRA_DEFINITION.toDerivative(referenceDate, DSC_NAME, CREDIT_NAME);
     final BillSecurity purchased = BILL_SEC_DEFINITION.toDerivative(referenceDate, SETTLE_DATE, DSC_NAME, CREDIT_NAME);
     final BillSecurity standard = BILL_SEC_DEFINITION.toDerivative(referenceDate, DSC_NAME, CREDIT_NAME);
@@ -212,7 +223,7 @@ public class BillTransactionDefinitionTest {
   @SuppressWarnings("deprecation")
   @Test
   public void toDerivativeBetweenJustBeforeMaturityDeprecated() {
-    final ZonedDateTime referenceDate = ScheduleCalculator.getAdjustedDate(END_DATE, -1, CALENDAR);
+    final ZonedDateTime referenceDate = ScheduleCalculator.getAdjustedDate(END_DATE, -1, OLD_CALENDAR);
     final BillTransaction transactionConverted = BILL_TRA_DEFINITION.toDerivative(referenceDate, DSC_NAME, CREDIT_NAME);
     final BillSecurity purchased = BILL_SEC_DEFINITION.toDerivative(referenceDate, SETTLE_DATE, DSC_NAME, CREDIT_NAME);
     final BillSecurity standard = BILL_SEC_DEFINITION.toDerivative(referenceDate, DSC_NAME, CREDIT_NAME);
@@ -239,7 +250,7 @@ public class BillTransactionDefinitionTest {
    */
   @Test
   public void toDerivativeStandard() {
-    final ZonedDateTime referenceDateStandard = ScheduleCalculator.getAdjustedDate(SETTLE_DATE, -SETTLEMENT_DAYS, CALENDAR);
+    final ZonedDateTime referenceDateStandard = ScheduleCalculator.getAdjustedDate(SETTLE_DATE, -SETTLEMENT_DAYS, OLD_CALENDAR);
     final BillTransaction transactionConverted1 = BILL_TRA_DEFINITION.toDerivative(referenceDateStandard);
     final BillSecurity purchased1 = BILL_SEC_DEFINITION.toDerivative(referenceDateStandard, SETTLE_DATE);
     final BillSecurity standard1 = BILL_SEC_DEFINITION.toDerivative(referenceDateStandard);
@@ -252,7 +263,7 @@ public class BillTransactionDefinitionTest {
    */
   @Test
   public void toDerivativeEarly() {
-    final ZonedDateTime referenceDateEarly = ScheduleCalculator.getAdjustedDate(SETTLE_DATE, -(SETTLEMENT_DAYS + 1), CALENDAR);
+    final ZonedDateTime referenceDateEarly = ScheduleCalculator.getAdjustedDate(SETTLE_DATE, -(SETTLEMENT_DAYS + 1), OLD_CALENDAR);
     final BillTransaction transactionConverted2 = BILL_TRA_DEFINITION.toDerivative(referenceDateEarly);
     final BillSecurity purchased2 = BILL_SEC_DEFINITION.toDerivative(referenceDateEarly, SETTLE_DATE);
     final BillSecurity standard2 = BILL_SEC_DEFINITION.toDerivative(referenceDateEarly);
@@ -278,7 +289,7 @@ public class BillTransactionDefinitionTest {
    */
   @Test
   public void toDerivativeBetweenSettleAndMaturity() {
-    final ZonedDateTime referenceDate = ScheduleCalculator.getAdjustedDate(SETTLE_DATE, SETTLEMENT_DAYS, CALENDAR);
+    final ZonedDateTime referenceDate = ScheduleCalculator.getAdjustedDate(SETTLE_DATE, SETTLEMENT_DAYS, OLD_CALENDAR);
     final BillTransaction transactionConverted = BILL_TRA_DEFINITION.toDerivative(referenceDate);
     final BillSecurity purchased = BILL_SEC_DEFINITION.toDerivative(referenceDate, SETTLE_DATE);
     final BillSecurity standard = BILL_SEC_DEFINITION.toDerivative(referenceDate);
@@ -291,7 +302,7 @@ public class BillTransactionDefinitionTest {
    */
   @Test
   public void toDerivativeBetweenJustBeforeMaturity() {
-    final ZonedDateTime referenceDate = ScheduleCalculator.getAdjustedDate(END_DATE, -1, CALENDAR);
+    final ZonedDateTime referenceDate = ScheduleCalculator.getAdjustedDate(END_DATE, -1, OLD_CALENDAR);
     final BillTransaction transactionConverted = BILL_TRA_DEFINITION.toDerivative(referenceDate);
     final BillSecurity purchased = BILL_SEC_DEFINITION.toDerivative(referenceDate, SETTLE_DATE);
     final BillSecurity standard = BILL_SEC_DEFINITION.toDerivative(referenceDate);

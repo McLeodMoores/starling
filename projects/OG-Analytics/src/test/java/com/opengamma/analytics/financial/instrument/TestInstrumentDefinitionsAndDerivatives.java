@@ -14,6 +14,8 @@ import org.threeten.bp.Period;
 import org.threeten.bp.ZoneOffset;
 import org.threeten.bp.ZonedDateTime;
 
+import com.opengamma.analytics.date.WeekendWorkingDayCalendar;
+import com.opengamma.analytics.date.WorkingDayCalendar;
 import com.opengamma.analytics.financial.ExerciseDecisionType;
 import com.opengamma.analytics.financial.commodity.definition.AgricultureForwardDefinition;
 import com.opengamma.analytics.financial.commodity.definition.AgricultureFutureDefinition;
@@ -133,7 +135,8 @@ import com.opengamma.util.time.DateUtils;
 public class TestInstrumentDefinitionsAndDerivatives {
   public static final Currency CUR = Currency.USD;
   public static final BusinessDayConvention BD = BusinessDayConventions.FOLLOWING;
-  public static final Calendar C = new MondayToFridayCalendar("F");
+  public static final WorkingDayCalendar C = WeekendWorkingDayCalendar.SATURDAY_SUNDAY;
+  public static final Calendar OLD_C = new MondayToFridayCalendar("F");
   public static final ZonedDateTime SETTLE_DATE = DateUtils.getUTCDate(2011, 1, 1);
   public static final Period TENOR = Period.ofYears(2);
   public static final Period FIXED_PERIOD = Period.ofMonths(6);
@@ -147,26 +150,26 @@ public class TestInstrumentDefinitionsAndDerivatives {
   public static final DayCount IBOR_DAY_COUNT = DayCounts.ACT_360;
   public static final IborIndex IBOR_INDEX_1 = new IborIndex(CUR, IBOR_PERIOD_1, SPOT_LAG, IBOR_DAY_COUNT, BD, IS_EOM, "Ibor1");
   public static final IndexON INDEX_ON = new IndexON("A", CUR, FIXED_DAY_COUNT, 0);
-  public static final IndexSwap CMS_INDEX = new IndexSwap(IBOR_PERIOD_1, IBOR_DAY_COUNT, IBOR_INDEX_1, IBOR_PERIOD_1, C);
+  public static final IndexSwap CMS_INDEX = new IndexSwap(IBOR_PERIOD_1, IBOR_DAY_COUNT, IBOR_INDEX_1, IBOR_PERIOD_1, OLD_C);
   public static final Period IBOR_PERIOD_2 = Period.ofMonths(6);
   public static final IborIndex IBOR_INDEX_2 = new IborIndex(CUR, IBOR_PERIOD_2, SPOT_LAG, IBOR_DAY_COUNT, BD, IS_EOM, "Ibor2");
   public static final double SPREAD = 0.001;
-  public static final GeneratorSwapXCcyIborIbor XCCY_GENERATOR = new GeneratorSwapXCcyIborIbor("XCCY", IBOR_INDEX_2, IBOR_INDEX_1, C, C);
+  public static final GeneratorSwapXCcyIborIbor XCCY_GENERATOR = new GeneratorSwapXCcyIborIbor("XCCY", IBOR_INDEX_2, IBOR_INDEX_1, OLD_C, OLD_C);
   public static final IndexPrice INDEX_PRICE = new IndexPrice("CPI", CUR);
-  public static final Convention CONVENTION = new Convention(2, FIXED_DAY_COUNT, BD, C, "");
+  public static final Convention CONVENTION = new Convention(2, FIXED_DAY_COUNT, BD, OLD_C, "");
   public static final ISDACDSPremiumDefinition ISDA_PREMIUM = ISDACDSPremiumDefinition.from(SETTLE_DATE, SETTLE_DATE.plusYears(5), PeriodFrequency.SEMI_ANNUAL, CONVENTION, StubType.LONG_END, false,
-      NOTIONAL, SPREAD, CUR, C);
+      NOTIONAL, SPREAD, CUR, OLD_C);
 
   public static final CouponFixedDefinition COUPON_FIXED = CouponFixedDefinition.from(CUR, SETTLE_DATE, SETTLE_DATE, SETTLE_DATE, SPOT_LAG, NOTIONAL, FIXED_RATE);
-  public static final CouponIborDefinition COUPON_IBOR = CouponIborDefinition.from(NOTIONAL, SETTLE_DATE, IBOR_INDEX_1, C);
+  public static final CouponIborDefinition COUPON_IBOR = CouponIborDefinition.from(NOTIONAL, SETTLE_DATE, IBOR_INDEX_1, OLD_C);
   public static final CouponIborGearingDefinition COUPON_IBOR_GEARING = CouponIborGearingDefinition.from(COUPON_IBOR, 0.3, 2);
   public static final CouponIborSpreadDefinition COUPON_IBOR_SPREAD = CouponIborSpreadDefinition.from(COUPON_IBOR, 0.3);
-  public static final CouponIborCompoundingDefinition COUPON_IBOR_COMPOUNDED = CouponIborCompoundingDefinition.from(NOTIONAL, SETTLE_DATE, TENOR, IBOR_INDEX_1, C);
+  public static final CouponIborCompoundingDefinition COUPON_IBOR_COMPOUNDED = CouponIborCompoundingDefinition.from(NOTIONAL, SETTLE_DATE, TENOR, IBOR_INDEX_1, OLD_C);
   public static final CouponIborRatchetDefinition COUPON_IBOR_RATCHET = new CouponIborRatchetDefinition(CUR, SETTLE_DATE.plusMonths(3), SETTLE_DATE, SETTLE_DATE.plusMonths(3), 0.01, NOTIONAL,
-      SETTLE_DATE.plusMonths(1), IBOR_INDEX_1, new double[] {1, 2, 3 }, new double[] {3, 4, 5 }, new double[] {5, 6, 7 }, C);
-  public static final CouponCMSDefinition COUPON_CMS = CouponCMSDefinition.from(CouponIborDefinition.from(1000, SETTLE_DATE, IBOR_INDEX_1, C), CMS_INDEX, C);
-  public static final CouponONSimplifiedDefinition COUPON_OIS_SIMPLIFIED = CouponONSimplifiedDefinition.from(INDEX_ON, SETTLE_DATE, SETTLE_DATE.plusDays(28), NOTIONAL, 2, C);
-  public static final CouponONDefinition COUPON_OIS = CouponONDefinition.from(INDEX_ON, SETTLE_DATE, SETTLE_DATE.plusYears(1), NOTIONAL, SPOT_LAG, C);
+      SETTLE_DATE.plusMonths(1), IBOR_INDEX_1, new double[] {1, 2, 3 }, new double[] {3, 4, 5 }, new double[] {5, 6, 7 }, OLD_C);
+  public static final CouponCMSDefinition COUPON_CMS = CouponCMSDefinition.from(CouponIborDefinition.from(1000, SETTLE_DATE, IBOR_INDEX_1, OLD_C), CMS_INDEX, OLD_C);
+  public static final CouponONSimplifiedDefinition COUPON_OIS_SIMPLIFIED = CouponONSimplifiedDefinition.from(INDEX_ON, SETTLE_DATE, SETTLE_DATE.plusDays(28), NOTIONAL, 2, OLD_C);
+  public static final CouponONDefinition COUPON_OIS = CouponONDefinition.from(INDEX_ON, SETTLE_DATE, SETTLE_DATE.plusYears(1), NOTIONAL, SPOT_LAG, OLD_C);
 
   public static final CouponInflationZeroCouponMonthlyDefinition INFLATION_ZERO_COUPON = CouponInflationZeroCouponMonthlyDefinition.from(SETTLE_DATE, SETTLE_DATE.plusMonths(3), NOTIONAL, INDEX_PRICE,
       1, 1, true);
@@ -178,34 +181,34 @@ public class TestInstrumentDefinitionsAndDerivatives {
       SETTLE_DATE.plusYears(1), NOTIONAL, INDEX_PRICE, 100.0, 2, 2, false, 1.4);
 
   public static final BondCapitalIndexedSecurityDefinition<CouponInflationZeroCouponMonthlyGearingDefinition> CAPITAL_INDEXED_BOND_SECURITY = BondCapitalIndexedSecurityDefinition.fromMonthly(
-      INDEX_PRICE, SPOT_LAG, SETTLE_DATE, 100, SETTLE_DATE.plusYears(5), FIXED_PERIOD, NOTIONAL, FIXED_RATE, BD, 2, C, FIXED_DAY_COUNT, SimpleYieldConvention.AUSTRIA_ISMA_METHOD, IS_EOM, "");
+      INDEX_PRICE, SPOT_LAG, SETTLE_DATE, 100, SETTLE_DATE.plusYears(5), FIXED_PERIOD, NOTIONAL, FIXED_RATE, BD, 2, OLD_C, FIXED_DAY_COUNT, SimpleYieldConvention.AUSTRIA_ISMA_METHOD, IS_EOM, "");
   public static final BondCapitalIndexedTransactionDefinition<CouponInflationZeroCouponMonthlyGearingDefinition> CAPITAL_INDEXED_BOND_TRANSACTION = new BondCapitalIndexedTransactionDefinition<>(
       CAPITAL_INDEXED_BOND_SECURITY, 1, SETTLE_DATE, 100);
   public static final PaymentFixedDefinition PAYMENT_FIXED = new PaymentFixedDefinition(CUR, SETTLE_DATE, NOTIONAL);
 
   public static final DepositCounterpartDefinition DEPOSIT_COUNTERPART = new DepositCounterpartDefinition(CUR, SETTLE_DATE, SETTLE_DATE.plusDays(3), NOTIONAL, FIXED_RATE, FIXED_RATE, "a");
-  public static final DepositIborDefinition DEPOSIT_IBOR = DepositIborDefinition.fromStart(SETTLE_DATE, NOTIONAL, FIXED_RATE, IBOR_INDEX_1, C);
-  public static final DepositZeroDefinition DEPOSIT_ZERO = DepositZeroDefinition.from(CUR, SETTLE_DATE, SETTLE_DATE.plusDays(3), FIXED_DAY_COUNT, new ContinuousInterestRate(0.03), C, FIXED_DAY_COUNT);
+  public static final DepositIborDefinition DEPOSIT_IBOR = DepositIborDefinition.fromStart(SETTLE_DATE, NOTIONAL, FIXED_RATE, IBOR_INDEX_1, OLD_C);
+  public static final DepositZeroDefinition DEPOSIT_ZERO = DepositZeroDefinition.from(CUR, SETTLE_DATE, SETTLE_DATE.plusDays(3), FIXED_DAY_COUNT, new ContinuousInterestRate(0.03), OLD_C, FIXED_DAY_COUNT);
 
-  public static final AnnuityCouponCMSDefinition ANNUITY_COUPON_CMS = new AnnuityCouponCMSDefinition(new CouponCMSDefinition[] {COUPON_CMS }, C);
-  public static final AnnuityCouponFixedDefinition ANNUITY_FIXED = AnnuityCouponFixedDefinition.from(CUR, SETTLE_DATE, TENOR, FIXED_PERIOD, C, FIXED_DAY_COUNT, BD, IS_EOM, NOTIONAL, FIXED_RATE,
+  public static final AnnuityCouponCMSDefinition ANNUITY_COUPON_CMS = new AnnuityCouponCMSDefinition(new CouponCMSDefinition[] {COUPON_CMS }, OLD_C);
+  public static final AnnuityCouponFixedDefinition ANNUITY_FIXED = AnnuityCouponFixedDefinition.from(CUR, SETTLE_DATE, TENOR, FIXED_PERIOD, OLD_C, FIXED_DAY_COUNT, BD, IS_EOM, NOTIONAL, FIXED_RATE,
       IS_PAYER);
-  public static final AnnuityCouponFixedDefinition ANNUITY_FIXED_UNIT_NOTIONAL = AnnuityCouponFixedDefinition.from(CUR, SETTLE_DATE, TENOR, FIXED_PERIOD, C, FIXED_DAY_COUNT, BD, IS_EOM, 1,
+  public static final AnnuityCouponFixedDefinition ANNUITY_FIXED_UNIT_NOTIONAL = AnnuityCouponFixedDefinition.from(CUR, SETTLE_DATE, TENOR, FIXED_PERIOD, OLD_C, FIXED_DAY_COUNT, BD, IS_EOM, 1,
       FIXED_RATE, !IS_PAYER);
-  public static final AnnuityCouponIborDefinition ANNUITY_IBOR = AnnuityCouponIborDefinition.from(SETTLE_DATE, TENOR, NOTIONAL, IBOR_INDEX_1, !IS_PAYER, C);
-  public static final AnnuityCouponIborDefinition ANNUITY_IBOR_UNIT_NOTIONAL = AnnuityCouponIborDefinition.from(SETTLE_DATE, TENOR, 1, IBOR_INDEX_1, IS_PAYER, C);
-  public static final AnnuityCouponIborSpreadDefinition ANNUITY_IBOR_SPREAD_RECEIVE = AnnuityCouponIborSpreadDefinition.from(SETTLE_DATE, TENOR, NOTIONAL, IBOR_INDEX_2, SPREAD, !IS_PAYER, C);
-  public static final AnnuityCouponIborSpreadDefinition ANNUITY_IBOR_SPREAD_PAY = AnnuityCouponIborSpreadDefinition.from(SETTLE_DATE, TENOR, NOTIONAL, IBOR_INDEX_1, 0.0, IS_PAYER, C);
+  public static final AnnuityCouponIborDefinition ANNUITY_IBOR = AnnuityCouponIborDefinition.from(SETTLE_DATE, TENOR, NOTIONAL, IBOR_INDEX_1, !IS_PAYER, OLD_C);
+  public static final AnnuityCouponIborDefinition ANNUITY_IBOR_UNIT_NOTIONAL = AnnuityCouponIborDefinition.from(SETTLE_DATE, TENOR, 1, IBOR_INDEX_1, IS_PAYER, OLD_C);
+  public static final AnnuityCouponIborSpreadDefinition ANNUITY_IBOR_SPREAD_RECEIVE = AnnuityCouponIborSpreadDefinition.from(SETTLE_DATE, TENOR, NOTIONAL, IBOR_INDEX_2, SPREAD, !IS_PAYER, OLD_C);
+  public static final AnnuityCouponIborSpreadDefinition ANNUITY_IBOR_SPREAD_PAY = AnnuityCouponIborSpreadDefinition.from(SETTLE_DATE, TENOR, NOTIONAL, IBOR_INDEX_1, 0.0, IS_PAYER, OLD_C);
   public static final AnnuityDefinition<PaymentFixedDefinition> GENERAL_ANNUITY = new AnnuityDefinition<>(new PaymentFixedDefinition[] {
-    new PaymentFixedDefinition(CUR, DateUtils.getUTCDate(2011, 1, 1), 1000), new PaymentFixedDefinition(CUR, DateUtils.getUTCDate(2012, 1, 1), 1000) }, C);
+    new PaymentFixedDefinition(CUR, DateUtils.getUTCDate(2011, 1, 1), 1000), new PaymentFixedDefinition(CUR, DateUtils.getUTCDate(2012, 1, 1), 1000) }, OLD_C);
 
   public static final BillSecurityDefinition BILL_SECURITY = new BillSecurityDefinition(CUR, SETTLE_DATE.plusYears(1), NOTIONAL, 0, C, SimpleYieldConvention.BANK_OF_CANADA, FIXED_DAY_COUNT, "");
   public static final BillTransactionDefinition BILL_TRANSACTION = new BillTransactionDefinition(BILL_SECURITY, 100, SETTLE_DATE, -100);
 
-  public static final BondFixedSecurityDefinition BOND_FIXED_SECURITY = BondFixedSecurityDefinition.from(CUR, SETTLE_DATE.plusYears(2), SETTLE_DATE, FIXED_PERIOD, FIXED_RATE, SPOT_LAG, C,
+  public static final BondFixedSecurityDefinition BOND_FIXED_SECURITY = BondFixedSecurityDefinition.from(CUR, SETTLE_DATE.plusYears(2), SETTLE_DATE, FIXED_PERIOD, FIXED_RATE, SPOT_LAG, OLD_C,
       FIXED_DAY_COUNT, BD, SimpleYieldConvention.DISCOUNT, IS_EOM, "");
   public static final BondFixedTransactionDefinition BOND_FIXED_TRANSACTION = new BondFixedTransactionDefinition(BOND_FIXED_SECURITY, 100, SETTLE_DATE, -100);
-  public static final BondIborSecurityDefinition BOND_IBOR_SECURITY = BondIborSecurityDefinition.from(SETTLE_DATE.plusYears(2), SETTLE_DATE, IBOR_INDEX_1, 2, FIXED_DAY_COUNT, BD, IS_EOM, "", C);
+  public static final BondIborSecurityDefinition BOND_IBOR_SECURITY = BondIborSecurityDefinition.from(SETTLE_DATE.plusYears(2), SETTLE_DATE, IBOR_INDEX_1, 2, FIXED_DAY_COUNT, BD, IS_EOM, "", OLD_C);
   public static final BondIborTransactionDefinition BOND_IBOR_TRANSACTION = new BondIborTransactionDefinition(BOND_IBOR_SECURITY, 100, SETTLE_DATE, -100);
   public static final BondFutureDefinition BNDFUT_SECURITY_DEFINITION = FutureInstrumentsDescriptionDataSet.createBondFutureSecurityDefinition();
   public static final BondFutureOptionPremiumSecurityDefinition BFO_SECURITY = FutureInstrumentsDescriptionDataSet.createBondFutureOptionPremiumSecurityDefinition();
@@ -213,8 +216,8 @@ public class TestInstrumentDefinitionsAndDerivatives {
       3), 100);
 
   public static final CashDefinition CASH = new CashDefinition(CUR, DateUtils.getUTCDate(2011, 1, 2), DateUtils.getUTCDate(2012, 1, 2), 1.0, 0.04, 1.0);
-  public static final ForwardRateAgreementDefinition FRA = ForwardRateAgreementDefinition.from(SETTLE_DATE, SETTLE_DATE.plusMonths(3), NOTIONAL, IBOR_INDEX_1, FIXED_RATE, C);
-  public static final FederalFundsFutureSecurityDefinition FF_SECURITY = FederalFundsFutureSecurityDefinition.from(SETTLE_DATE, INDEX_ON, NOTIONAL, 0.25, "a", C);
+  public static final ForwardRateAgreementDefinition FRA = ForwardRateAgreementDefinition.from(SETTLE_DATE, SETTLE_DATE.plusMonths(3), NOTIONAL, IBOR_INDEX_1, FIXED_RATE, OLD_C);
+  public static final FederalFundsFutureSecurityDefinition FF_SECURITY = FederalFundsFutureSecurityDefinition.from(SETTLE_DATE, INDEX_ON, NOTIONAL, 0.25, "a", OLD_C);
   public static final FederalFundsFutureTransactionDefinition FF_TRANSACTION = new FederalFundsFutureTransactionDefinition(FF_SECURITY, 100, SETTLE_DATE, 0.97);
 
   public static final AgricultureForwardDefinition AG_FWD = AgricultureForwardDefinition.withCashSettlement(SETTLE_DATE.plusYears(1), ExternalId.of("a", "b"), 100, NOTIONAL, "tonnes", 76, CUR,
@@ -261,9 +264,9 @@ public class TestInstrumentDefinitionsAndDerivatives {
   public static final CapFloorIborDefinition CAP_FLOOR_IBOR = CapFloorIborDefinition.from(COUPON_IBOR, FIXED_RATE, true);
   public static final CapFloorCMSDefinition CAP_FLOOR_CMS = CapFloorCMSDefinition.from(COUPON_CMS, FIXED_RATE, true);
   public static final CapFloorCMSSpreadDefinition CAP_FLOOR_CMS_SPREAD = CapFloorCMSSpreadDefinition.from(SETTLE_DATE.plusMonths(3), SETTLE_DATE, SETTLE_DATE.plusMonths(3), 0.1, NOTIONAL, CMS_INDEX,
-      CMS_INDEX, FIXED_RATE, false, C, C);
+      CMS_INDEX, FIXED_RATE, false, OLD_C, OLD_C);
 
-  public static final SwapXCcyIborIborDefinition XCCY_SWAP = SwapXCcyIborIborDefinition.from(SETTLE_DATE, TENOR, XCCY_GENERATOR, NOTIONAL, NOTIONAL, SPREAD, IS_PAYER, C, C);
+  public static final SwapXCcyIborIborDefinition XCCY_SWAP = SwapXCcyIborIborDefinition.from(SETTLE_DATE, TENOR, XCCY_GENERATOR, NOTIONAL, NOTIONAL, SPREAD, IS_PAYER, OLD_C, OLD_C);
 
   public static final ISDACDSDefinition ISDA_CDS = new ISDACDSDefinition(SETTLE_DATE, SETTLE_DATE.plusYears(2), ISDA_PREMIUM, NOTIONAL, SPREAD, FIXED_RATE, false, false, true,
       PeriodFrequency.SEMI_ANNUAL, CONVENTION, StubType.LONG_END);
@@ -278,9 +281,9 @@ public class TestInstrumentDefinitionsAndDerivatives {
   public static final ForexOptionDigitalDefinition FX_DIGITAL = new ForexOptionDigitalDefinition(FX, SETTLE_DATE, IS_PAYER, IS_EOM);
 
   public static final VarianceSwapDefinition VARIANCE_SWAP = VarianceSwapDefinition
-      .fromVarianceParams(SETTLE_DATE, SETTLE_DATE.plusYears(1), SETTLE_DATE, PeriodFrequency.DAILY, CUR, C, 1, 0.03, 1000);
+      .fromVarianceParams(SETTLE_DATE, SETTLE_DATE.plusYears(1), SETTLE_DATE, PeriodFrequency.DAILY, CUR, OLD_C, 1, 0.03, 1000);
   public static final EquityVarianceSwapDefinition EQUITY_VARIANCE_SWAP = EquityVarianceSwapDefinition.fromVarianceParams(SETTLE_DATE, SETTLE_DATE.plusYears(1), SETTLE_DATE, PeriodFrequency.DAILY,
-      CUR, C, 1, 0.03, 1000, true);
+      CUR, OLD_C, 1, 0.03, 1000, true);
   private static final Set<InstrumentDefinition<?>> ALL_INSTRUMENTS = Sets.newHashSet();
   private static final Set<InstrumentDerivative> ALL_DERIVATIVES = Sets.newHashSet();
 

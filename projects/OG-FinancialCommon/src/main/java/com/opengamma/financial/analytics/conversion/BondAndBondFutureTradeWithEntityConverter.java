@@ -2,6 +2,10 @@
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
  *
  * Please see distribution for license.
+ *
+ * Modified by McLeod Moores Software Limited.
+ *
+ * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.financial.analytics.conversion;
 
@@ -16,6 +20,7 @@ import java.util.Set;
 import org.joda.beans.impl.flexi.FlexiBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.threeten.bp.DayOfWeek;
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.LocalTime;
 import org.threeten.bp.OffsetTime;
@@ -26,6 +31,9 @@ import org.threeten.bp.ZonedDateTime;
 
 import com.google.common.collect.Sets;
 import com.opengamma.OpenGammaRuntimeException;
+import com.opengamma.analytics.date.WorkingDayCalendar;
+import com.opengamma.analytics.date.WorkingDayCalendar;
+import com.opengamma.analytics.date.WorkingDayCalendarAdapter;
 import com.opengamma.analytics.financial.instrument.InstrumentDefinition;
 import com.opengamma.analytics.financial.instrument.bond.BillSecurityDefinition;
 import com.opengamma.analytics.financial.instrument.bond.BillTransactionDefinition;
@@ -87,16 +95,20 @@ import com.opengamma.util.money.Currency;
  * library.
  */
 public class BondAndBondFutureTradeWithEntityConverter extends FinancialSecurityVisitorAdapter<InstrumentDefinition<?>> {
+  /**
+   * Sector name string.
+   */
+  public static final String SECTOR_STRING = "IndustrySector";
+  /**
+   * Market type string.
+   */
+  public static final String MARKET_STRING = "Market";
   /** The logger */
   private static final Logger LOGGER = LoggerFactory.getLogger(BondAndBondFutureTradeWithEntityConverter.class);
   /** Excluded coupon types */
   private static final Set<String> EXCLUDED_TYPES = Sets.newHashSet("TOGGLE PIK NOTES", "FLOAT_RATE_NOTE");
   /** Rating agency strings */
   private static final String[] RATING_STRINGS = new String[] {"RatingMoody", "RatingFitch" };
-  /** Sector name string */
-  public static final String SECTOR_STRING = "IndustrySector";
-  /** Market type string */
-  public static final String MARKET_STRING = "Market";
   /** The holiday source */
   private final HolidaySource _holidaySource;
   /** The convention bundle source */
@@ -523,7 +535,8 @@ public class BondAndBondFutureTradeWithEntityConverter extends FinancialSecurity
     final ZonedDateTime maturityDate = security.getMaturityDate().getExpiry();
     final double notional = 1;
     final int settlementDays = security.getDaysToSettle();
-    final Calendar calendar = new HolidaySourceCalendarAdapter(_holidaySource, security.getRegionId());
+    final WorkingDayCalendar calendar = new WorkingDayCalendarAdapter(new HolidaySourceCalendarAdapter(_holidaySource, security.getRegionId()),
+        DayOfWeek.SATURDAY, DayOfWeek.SUNDAY);
     final YieldConvention yieldConvention = security.getYieldConvention();
     final DayCount dayCount = security.getDayCount();
     return new BillSecurityDefinition(currency, maturityDate, notional, settlementDays, calendar, yieldConvention,

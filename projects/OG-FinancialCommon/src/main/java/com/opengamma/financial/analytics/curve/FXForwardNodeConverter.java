@@ -93,18 +93,16 @@ public class FXForwardNodeConverter extends CurveNodeVisitorAdapter<InstrumentDe
    */
   public FXForwardNodeConverter(final ConventionSource conventionSource, final HolidaySource holidaySource, final RegionSource regionSource,
       final SnapshotDataBundle marketData, final ExternalId dataId, final ZonedDateTime valuationTime) {
-    ArgumentChecker.notNull(conventionSource, "conventionSource");
     ArgumentChecker.notNull(holidaySource, "holidaySource");
     ArgumentChecker.notNull(regionSource, "regionSource");
     ArgumentChecker.notNull(marketData, "marketData");
     ArgumentChecker.notNull(dataId, "dataId");
     ArgumentChecker.notNull(valuationTime, "valuationTime");
-    _conventionSource = conventionSource;
-    _holidaySource = holidaySource;
-    _regionSource = regionSource;
-    _valuationTime = valuationTime;
-    _forward = marketData.getDataPoint(dataId);
-    ArgumentChecker.notNull(_forward, "forward");
+    _conventionSource = ArgumentChecker.notNull(conventionSource, "conventionSource");
+    _holidaySource = ArgumentChecker.notNull(holidaySource, "holidaySource");
+    _regionSource = ArgumentChecker.notNull(regionSource, "regionSource");
+    _valuationTime = ArgumentChecker.notNull(valuationTime, "valuationTime");
+    _forward = ArgumentChecker.notNull(marketData.getDataPoint(dataId), "forward");
   }
 
   @SuppressWarnings("deprecation")

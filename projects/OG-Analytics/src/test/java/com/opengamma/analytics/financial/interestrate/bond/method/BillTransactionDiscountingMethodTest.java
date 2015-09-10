@@ -2,6 +2,10 @@
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
  *
  * Please see distribution for license.
+ *
+ * Modified by McLeod Moores Software Limited.
+ *
+ * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.analytics.financial.interestrate.bond.method;
 
@@ -14,6 +18,8 @@ import org.testng.AssertJUnit;
 import org.testng.annotations.Test;
 import org.threeten.bp.ZonedDateTime;
 
+import com.opengamma.analytics.date.WeekendWorkingDayCalendar;
+import com.opengamma.analytics.date.WorkingDayCalendar;
 import com.opengamma.analytics.financial.instrument.bond.BillSecurityDefinition;
 import com.opengamma.analytics.financial.instrument.bond.BillTransactionDefinition;
 import com.opengamma.analytics.financial.interestrate.FDCurveSensitivityCalculator;
@@ -49,45 +55,48 @@ import com.opengamma.util.tuple.DoublesPair;
 @Test(groups = TestGroup.UNIT)
 public class BillTransactionDiscountingMethodTest {
 
-  private final static Currency EUR = Currency.EUR;
+  private static final Currency EUR = Currency.EUR;
+  private static final WorkingDayCalendar WEEKEND = WeekendWorkingDayCalendar.SATURDAY_SUNDAY;
   private static final Calendar CALENDAR = new MondayToFridayCalendar("TARGET");
-  private final static ZonedDateTime REFERENCE_DATE = DateUtils.getUTCDate(2012, 1, 17);
+  private static final ZonedDateTime REFERENCE_DATE = DateUtils.getUTCDate(2012, 1, 17);
 
   private static final DayCount ACT360 = DayCounts.ACT_360;
   private static final int SETTLEMENT_DAYS = 2;
   private static final YieldConvention YIELD_CONVENTION = YieldConventionFactory.INSTANCE.getYieldConvention("INTEREST@MTY");
 
   // ISIN: BE0312677462
-  private final static String ISSUER_BEL = "BELGIUM GOVT";
-  private final static ZonedDateTime END_DATE = DateUtils.getUTCDate(2012, 3, 15);
-  private final static double NOTIONAL = 1000;
+  private static final String ISSUER_BEL = "BELGIUM GOVT";
+  private static final ZonedDateTime END_DATE = DateUtils.getUTCDate(2012, 3, 15);
+  private static final double NOTIONAL = 1000;
   private static final double YIELD = 0.00185; // External source
   //  private static final double PRICE = 0.99971; // External source
 
-  private final static ZonedDateTime SETTLE_DATE = ScheduleCalculator.getAdjustedDate(REFERENCE_DATE, SETTLEMENT_DAYS, CALENDAR);
-  private final static String[] NAME_CURVES = TestsDataSetsSABR.nameCurvesBond3();
-  private final static BillSecurityDefinition BILL_SEC_DEFINITION = new BillSecurityDefinition(EUR, END_DATE, NOTIONAL, SETTLEMENT_DAYS, CALENDAR, YIELD_CONVENTION, ACT360, ISSUER_BEL);
-  private final static double QUANTITY = 123456.7;
-  private final static BillTransactionDefinition BILL_TRA_DEFINITION = BillTransactionDefinition.fromYield(BILL_SEC_DEFINITION, QUANTITY, SETTLE_DATE, YIELD, CALENDAR);
-  private final static BillTransaction BILL_TRA = BILL_TRA_DEFINITION.toDerivative(REFERENCE_DATE, NAME_CURVES);
+  private static final ZonedDateTime SETTLE_DATE = ScheduleCalculator.getAdjustedDate(REFERENCE_DATE, SETTLEMENT_DAYS, CALENDAR);
+  private static final String[] NAME_CURVES = TestsDataSetsSABR.nameCurvesBond3();
+  private static final BillSecurityDefinition BILL_SEC_DEFINITION =
+      new BillSecurityDefinition(EUR, END_DATE, NOTIONAL, SETTLEMENT_DAYS, WEEKEND, YIELD_CONVENTION, ACT360, ISSUER_BEL);
+  private static final double QUANTITY = 123456.7;
+  private static final BillTransactionDefinition BILL_TRA_DEFINITION =
+      BillTransactionDefinition.fromYield(BILL_SEC_DEFINITION, QUANTITY, SETTLE_DATE, YIELD, WEEKEND);
+  private static final BillTransaction BILL_TRA = BILL_TRA_DEFINITION.toDerivative(REFERENCE_DATE, NAME_CURVES);
 
-  private final static YieldCurveBundle CURVE_BUNDLE = TestsDataSetsSABR.createCurvesBond3();
+  private static final YieldCurveBundle CURVE_BUNDLE = TestsDataSetsSABR.createCurvesBond3();
 
-  private final static BillSecurityDiscountingMethod METHOD_SECURITY = BillSecurityDiscountingMethod.getInstance();
-  private final static BillTransactionDiscountingMethod METHOD_TRANSACTION = BillTransactionDiscountingMethod.getInstance();
-  private final static PresentValueCalculator PVC = PresentValueCalculator.getInstance();
-  private final static PresentValueCurveSensitivityCalculator PVCSC = PresentValueCurveSensitivityCalculator.getInstance();
-  private final static ParSpreadMarketQuoteCalculator PSMQC = ParSpreadMarketQuoteCalculator.getInstance();
-  private final static ParSpreadMarketQuoteCurveSensitivityCalculator PSMQCSC = ParSpreadMarketQuoteCurveSensitivityCalculator.getInstance();
+  private static final BillSecurityDiscountingMethod METHOD_SECURITY = BillSecurityDiscountingMethod.getInstance();
+  private static final BillTransactionDiscountingMethod METHOD_TRANSACTION = BillTransactionDiscountingMethod.getInstance();
+  private static final PresentValueCalculator PVC = PresentValueCalculator.getInstance();
+  private static final PresentValueCurveSensitivityCalculator PVCSC = PresentValueCurveSensitivityCalculator.getInstance();
+  private static final ParSpreadMarketQuoteCalculator PSMQC = ParSpreadMarketQuoteCalculator.getInstance();
+  private static final ParSpreadMarketQuoteCurveSensitivityCalculator PSMQCSC = ParSpreadMarketQuoteCurveSensitivityCalculator.getInstance();
 
   private static final double TOLERANCE_PV = 1.0E-2;
   private static final double TOLERANCE_SPREAD = 1.0E-8;
   private static final double TOLERANCE_SPREAD_DELTA = 1.0E-6;
 
-  @Test
   /**
    * Tests the present value against explicit computation.
    */
+  @Test
   public void presentValue() {
     final CurrencyAmount pvTransactionComputed = METHOD_TRANSACTION.presentValue(BILL_TRA, CURVE_BUNDLE);
     CurrencyAmount pvSecurity = METHOD_SECURITY.presentValue(BILL_TRA.getBillPurchased(), CURVE_BUNDLE);
@@ -96,10 +105,10 @@ public class BillTransactionDiscountingMethodTest {
     assertEquals("Bill Security: discounting method - present value", pvSecurity.plus(pvSettle).getAmount(), pvTransactionComputed.getAmount(), TOLERANCE_PV);
   }
 
-  @Test
   /**
-   * Tests the present value: Method vs Calculator
+   * Tests the present value: Method vs Calculator.
    */
+  @Test
   public void presentValueMethodVsCalculator() {
     final CurrencyAmount pvMethod = METHOD_TRANSACTION.presentValue(BILL_TRA, CURVE_BUNDLE);
     final double pvCalculator = BILL_TRA.accept(PVC, CURVE_BUNDLE);
@@ -145,32 +154,32 @@ public class BillTransactionDiscountingMethodTest {
     AssertSensitivityObjects.assertEquals("Bill Security: discounting method - curve sensitivity", pvcsMethod, pvcsCalculator, TOLERANCE_PV);
   }
 
-  @Test
   /**
    * Tests the par spread.
    */
+  @Test
   public void parSpread() {
     final double spread = METHOD_TRANSACTION.parSpread(BILL_TRA, CURVE_BUNDLE);
-    final BillTransactionDefinition bill0Definition = BillTransactionDefinition.fromYield(BILL_SEC_DEFINITION, QUANTITY, SETTLE_DATE, YIELD + spread, CALENDAR);
+    final BillTransactionDefinition bill0Definition = BillTransactionDefinition.fromYield(BILL_SEC_DEFINITION, QUANTITY, SETTLE_DATE, YIELD + spread, WEEKEND);
     final BillTransaction bill0 = bill0Definition.toDerivative(REFERENCE_DATE, NAME_CURVES);
     final CurrencyAmount pv0 = METHOD_TRANSACTION.presentValue(bill0, CURVE_BUNDLE);
     assertEquals("Bill Security: discounting method - par spread", 0, pv0.getAmount(), TOLERANCE_PV);
   }
 
-  @Test
   /**
    * Tests the par spread (Method vs Calculator).
    */
+  @Test
   public void parSpreadMethodVsCalculator() {
     final double spreadMethod = METHOD_TRANSACTION.parSpread(BILL_TRA, CURVE_BUNDLE);
     final double spreadCalculator = BILL_TRA.accept(PSMQC, CURVE_BUNDLE);
     assertEquals("Bill Security: discounting method - par spread", spreadMethod, spreadCalculator, TOLERANCE_SPREAD);
   }
 
-  @Test
   /**
    * Tests the par spread curve sensitivity vs a finite difference calculation.
    */
+  @Test
   public void parSpreadCurveSensitivity() {
     InterestRateCurveSensitivity pscsComputed = METHOD_TRANSACTION.parSpreadCurveSensitivity(BILL_TRA, CURVE_BUNDLE);
     pscsComputed = pscsComputed.cleaned();
@@ -192,10 +201,10 @@ public class BillTransactionDiscountingMethodTest {
     assertTrue("Bill Transaction: par spread curve sensitivity - fwd", InterestRateCurveSensitivityUtils.compare(sensiFwdFD, sensiFwdComputed, TOLERANCE_SPREAD_DELTA));
   }
 
-  @Test
   /**
    * Tests the par spread curve sensitivity  (Method vs Calculator).
    */
+  @Test
   public void parSpreadCurveSensitivityMethodVsCalculator() {
     final InterestRateCurveSensitivity pscsMethod = METHOD_TRANSACTION.parSpreadCurveSensitivity(BILL_TRA, CURVE_BUNDLE);
     final InterestRateCurveSensitivity pscsCalculator = BILL_TRA.accept(PSMQCSC, CURVE_BUNDLE);

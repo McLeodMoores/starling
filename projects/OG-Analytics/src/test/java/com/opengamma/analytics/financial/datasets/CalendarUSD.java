@@ -1,9 +1,23 @@
+/**
+ * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
+ *
+ * Please see distribution for license.
+ *
+ * Modified by McLeod Moores Software Limited.
+ *
+ * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
+ */
 package com.opengamma.analytics.financial.datasets;
 
 import org.threeten.bp.LocalDate;
 
 import com.opengamma.financial.convention.calendar.MondayToFridayCalendar;
 
+/**
+ * A calendar containing USD holidays and Saturday / Sunday weekends. This class is suitable only for tests.
+ * @deprecated  Use {@link TestWorkingDayCalendars}.
+ */
+@Deprecated
 public class CalendarUSD extends MondayToFridayCalendar {
 
   /**
@@ -12,10 +26,10 @@ public class CalendarUSD extends MondayToFridayCalendar {
   private static final long serialVersionUID = 1L;
 
   /**
-   * Constructor
+   * Constructor.
    * @param name The name
    */
-  public CalendarUSD(String name) {
+  public CalendarUSD(final String name) {
     super(name);
     final int startYear = 2013;
     final int endYear = 2063;

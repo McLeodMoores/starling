@@ -33,7 +33,7 @@ public class EndOfMonthDateAdjustmentCalculator implements TenorOffsetDateAdjust
     ArgumentChecker.notNull(tenor, "tenor");
     ArgumentChecker.notNull(convention, "convention");
     ArgumentChecker.notNull(workingDayCalendar, "workingDayCalendar");
-    final Calendar calendar = new WorkingDayCalendarAdapter(workingDayCalendar);
+    final Calendar calendar = new CalendarAdapter(workingDayCalendar);
     final LocalDate endDate = TenorUtils.adjustDateByTenor(date, tenor, calendar, 0);
     if (tenor.isBusinessDayTenor()) { // This handles tenor of the type ON, TN
       return endDate;

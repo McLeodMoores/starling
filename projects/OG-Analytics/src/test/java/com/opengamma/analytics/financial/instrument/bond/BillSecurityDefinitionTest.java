@@ -2,6 +2,10 @@
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
  *
  * Please see distribution for license.
+ *
+ * Modified by McLeod Moores Software Limited.
+ *
+ * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.analytics.financial.instrument.bond;
 
@@ -13,6 +17,8 @@ import java.util.Collections;
 import org.testng.annotations.Test;
 import org.threeten.bp.ZonedDateTime;
 
+import com.opengamma.analytics.date.WeekendWorkingDayCalendar;
+import com.opengamma.analytics.date.WorkingDayCalendar;
 import com.opengamma.analytics.financial.interestrate.bond.definition.BillSecurity;
 import com.opengamma.analytics.financial.legalentity.CreditRating;
 import com.opengamma.analytics.financial.legalentity.LegalEntity;
@@ -37,9 +43,11 @@ import com.opengamma.util.time.DateUtils;
 @Test(groups = TestGroup.UNIT)
 public class BillSecurityDefinitionTest {
   /** The currency */
-  private final static Currency EUR = Currency.EUR;
+  private static final Currency EUR = Currency.EUR;
+  /** Saturday / Sunday working days */
+  private static final WorkingDayCalendar CALENDAR = WeekendWorkingDayCalendar.SATURDAY_SUNDAY;
   /** A holiday calendar */
-  private static final Calendar CALENDAR = new MondayToFridayCalendar("TARGET");
+  private static final Calendar OLD_CALENDAR = new MondayToFridayCalendar("TARGET");
   /** The day count */
   private static final DayCount ACT360 = DayCounts.ACT_360;
   /** The number of settlement days */
@@ -48,24 +56,28 @@ public class BillSecurityDefinitionTest {
   private static final YieldConvention YIELD_CONVENTION = YieldConventionFactory.INSTANCE.getYieldConvention("INTEREST@MTY");
 
   /** Belgian government name */
-  private final static String ISSUER_BEL_NAME = "BELGIUM GOVT";
+  private static final String ISSUER_BEL_NAME = "BELGIUM GOVT";
   /** German government name */
-  private final static String ISSUER_GER_NAME = "GERMANY GOVT";
+  private static final String ISSUER_GER_NAME = "GERMANY GOVT";
   /** Belgian government entity */
-  private final static LegalEntity ISSUER_BEL = new LegalEntity(null, ISSUER_BEL_NAME, Collections.singleton(CreditRating.of("A", "Custom", true)), Sector.of("Government"), Region.of("Belgium", Country.BE, Currency.EUR));
+  private static final LegalEntity ISSUER_BEL = new LegalEntity(null, ISSUER_BEL_NAME, Collections.singleton(CreditRating.of("A", "Custom", true)),
+      Sector.of("Government"), Region.of("Belgium", Country.BE, Currency.EUR));
   /** German government entity */
-  private final static LegalEntity ISSUER_GER = new LegalEntity(null, ISSUER_GER_NAME, Collections.singleton(CreditRating.of("AA", "Custom", true)), Sector.of("Government"), Region.of("Germany", Country.DE, Currency.EUR));
+  private static final LegalEntity ISSUER_GER = new LegalEntity(null, ISSUER_GER_NAME, Collections.singleton(CreditRating.of("AA", "Custom", true)),
+      Sector.of("Government"), Region.of("Germany", Country.DE, Currency.EUR));
   /** The maturity */
-  private final static ZonedDateTime END_DATE = DateUtils.getUTCDate(2012, 2, 29);
+  private static final ZonedDateTime END_DATE = DateUtils.getUTCDate(2012, 2, 29);
   /** The notional */
-  private final static double NOTIONAL = 1000;
+  private static final double NOTIONAL = 1000;
 
   /** A security definition */
-  private final static BillSecurityDefinition BILL_SEC_DEFINITION1 = new BillSecurityDefinition(EUR, END_DATE, NOTIONAL, SETTLEMENT_DAYS, CALENDAR, YIELD_CONVENTION, ACT360, ISSUER_BEL_NAME);
+  private static final BillSecurityDefinition BILL_SEC_DEFINITION1 =
+      new BillSecurityDefinition(EUR, END_DATE, NOTIONAL, SETTLEMENT_DAYS, CALENDAR, YIELD_CONVENTION, ACT360, ISSUER_BEL_NAME);
   /** A security definition */
-  private final static BillSecurityDefinition BILL_SEC_DEFINITION2 = new BillSecurityDefinition(EUR, END_DATE, NOTIONAL, SETTLEMENT_DAYS, CALENDAR, YIELD_CONVENTION, ACT360, ISSUER_BEL);
+  private static final BillSecurityDefinition BILL_SEC_DEFINITION2 =
+      new BillSecurityDefinition(EUR, END_DATE, NOTIONAL, SETTLEMENT_DAYS, CALENDAR, YIELD_CONVENTION, ACT360, ISSUER_BEL);
   /** The pricing date */
-  private final static ZonedDateTime REFERENCE_DATE = DateUtils.getUTCDate(2012, 1, 17);
+  private static final ZonedDateTime REFERENCE_DATE = DateUtils.getUTCDate(2012, 1, 17);
 
   /**
    * Tests failure for a null currency.
@@ -88,7 +100,7 @@ public class BillSecurityDefinitionTest {
    */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void nullCalendar1() {
-    new BillSecurityDefinition(EUR, END_DATE, NOTIONAL, SETTLEMENT_DAYS, null, YIELD_CONVENTION, ACT360, ISSUER_BEL_NAME);
+    new BillSecurityDefinition(EUR, END_DATE, NOTIONAL, SETTLEMENT_DAYS, (WorkingDayCalendar) null, YIELD_CONVENTION, ACT360, ISSUER_BEL_NAME);
   }
 
   /**
@@ -152,7 +164,7 @@ public class BillSecurityDefinitionTest {
    */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void nullCalendar2() {
-    new BillSecurityDefinition(EUR, END_DATE, NOTIONAL, SETTLEMENT_DAYS, null, YIELD_CONVENTION, ACT360, ISSUER_BEL);
+    new BillSecurityDefinition(EUR, END_DATE, NOTIONAL, SETTLEMENT_DAYS, (WorkingDayCalendar) null, YIELD_CONVENTION, ACT360, ISSUER_BEL);
   }
 
   /**
@@ -180,7 +192,7 @@ public class BillSecurityDefinitionTest {
     assertEquals("Bill Security Definition: getter", END_DATE, BILL_SEC_DEFINITION1.getEndDate());
     assertEquals("Bill Security Definition: getter", NOTIONAL, BILL_SEC_DEFINITION1.getNotional());
     assertEquals("Bill Security Definition: getter", SETTLEMENT_DAYS, BILL_SEC_DEFINITION1.getSettlementDays());
-    assertEquals("Bill Security Definition: getter", CALENDAR, BILL_SEC_DEFINITION1.getCalendar());
+    assertEquals("Bill Security Definition: getter", CALENDAR, BILL_SEC_DEFINITION1.getWorkingDayCalendar());
     assertEquals("Bill Security Definition: getter", YIELD_CONVENTION, BILL_SEC_DEFINITION1.getYieldConvention());
     assertEquals("Bill Security Definition: getter", ACT360, BILL_SEC_DEFINITION1.getDayCount());
     assertEquals("Bill Security Definition: getter", new LegalEntity(null, ISSUER_BEL_NAME, null, null, null), BILL_SEC_DEFINITION1.getIssuerEntity());
@@ -205,15 +217,18 @@ public class BillSecurityDefinitionTest {
     assertFalse("Bill Security Definition: equal-hash code", BILL_SEC_DEFINITION1.equals(modified));
     modified = new BillSecurityDefinition(EUR, END_DATE, NOTIONAL, SETTLEMENT_DAYS + 1, CALENDAR, YIELD_CONVENTION, ACT360, ISSUER_BEL_NAME);
     assertFalse("Bill Security Definition: equal-hash code", BILL_SEC_DEFINITION1.equals(modified));
-    modified = new BillSecurityDefinition(EUR, END_DATE, NOTIONAL, SETTLEMENT_DAYS, new MondayToFridayCalendar("OTHER"), YIELD_CONVENTION, ACT360, ISSUER_BEL_NAME);
+    modified = new BillSecurityDefinition(EUR, END_DATE, NOTIONAL, SETTLEMENT_DAYS, WeekendWorkingDayCalendar.FRIDAY_SATURDAY, YIELD_CONVENTION,
+        ACT360, ISSUER_BEL_NAME);
     assertFalse("Bill Security Definition: equal-hash code", BILL_SEC_DEFINITION1.equals(modified));
-    modified = new BillSecurityDefinition(EUR, END_DATE, NOTIONAL, SETTLEMENT_DAYS, CALENDAR, YieldConventionFactory.INSTANCE.getYieldConvention("DISCOUNT"), ACT360, ISSUER_BEL_NAME);
+    modified = new BillSecurityDefinition(EUR, END_DATE, NOTIONAL, SETTLEMENT_DAYS, CALENDAR,
+        YieldConventionFactory.INSTANCE.getYieldConvention("DISCOUNT"), ACT360, ISSUER_BEL_NAME);
     assertFalse("Bill Security Definition: equal-hash code", BILL_SEC_DEFINITION1.equals(modified));
     modified = new BillSecurityDefinition(EUR, END_DATE, NOTIONAL, SETTLEMENT_DAYS, CALENDAR, YIELD_CONVENTION, DayCounts.ACT_365, ISSUER_BEL_NAME);
     assertFalse("Bill Security Definition: equal-hash code", BILL_SEC_DEFINITION1.equals(modified));
     modified = new BillSecurityDefinition(EUR, END_DATE, NOTIONAL, SETTLEMENT_DAYS, CALENDAR, YIELD_CONVENTION, ACT360, ISSUER_GER_NAME);
     assertFalse("Bill Security Definition: equal-hash code", BILL_SEC_DEFINITION1.equals(modified));
-    other = new BillSecurityDefinition(EUR, END_DATE, NOTIONAL, SETTLEMENT_DAYS, CALENDAR, YIELD_CONVENTION, ACT360, new LegalEntity(null, ISSUER_BEL_NAME, null, null, null));
+    other = new BillSecurityDefinition(EUR, END_DATE, NOTIONAL, SETTLEMENT_DAYS, CALENDAR, YIELD_CONVENTION, ACT360,
+        new LegalEntity(null, ISSUER_BEL_NAME, null, null, null));
     assertEquals("Bill Security Definition: equal-hash code", BILL_SEC_DEFINITION1, other);
     assertEquals("Bill Security Definition: equal-hash code", BILL_SEC_DEFINITION1.hashCode(), other.hashCode());
     other = new BillSecurityDefinition(EUR, END_DATE, NOTIONAL, SETTLEMENT_DAYS, CALENDAR, YIELD_CONVENTION, ACT360, ISSUER_BEL);
@@ -231,20 +246,22 @@ public class BillSecurityDefinitionTest {
   public void toDerivativeDeprecated() {
     final String dsc = "EUR Discounting";
     final String credit = "EUR BELGIUM GOVT";
-    final ZonedDateTime standardSettlementDate = ScheduleCalculator.getAdjustedDate(REFERENCE_DATE, SETTLEMENT_DAYS, CALENDAR);
+    final ZonedDateTime standardSettlementDate = ScheduleCalculator.getAdjustedDate(REFERENCE_DATE, SETTLEMENT_DAYS, OLD_CALENDAR);
     final BillSecurity securityConverted1 = BILL_SEC_DEFINITION1.toDerivative(REFERENCE_DATE, standardSettlementDate, dsc, credit);
     final double standardSettlementTime = TimeCalculator.getTimeBetween(REFERENCE_DATE, standardSettlementDate);
     final double endTime = TimeCalculator.getTimeBetween(REFERENCE_DATE, END_DATE);
     final double accrualFactorStandard = ACT360.getDayCountFraction(standardSettlementDate, END_DATE);
-    final BillSecurity securityExpected1 = new BillSecurity(EUR, standardSettlementTime, endTime, NOTIONAL, YIELD_CONVENTION, accrualFactorStandard, ISSUER_BEL_NAME, credit, dsc);
+    final BillSecurity securityExpected1 =
+        new BillSecurity(EUR, standardSettlementTime, endTime, NOTIONAL, YIELD_CONVENTION, accrualFactorStandard, ISSUER_BEL_NAME, credit, dsc);
     assertEquals("Bill Security Definition: toDerivative", securityExpected1, securityConverted1);
     final BillSecurity securityConverted2 = BILL_SEC_DEFINITION1.toDerivative(REFERENCE_DATE, dsc, credit);
     assertEquals("Bill Security Definition: toDerivative", securityExpected1, securityConverted2);
-    final ZonedDateTime otherSettlementDate = ScheduleCalculator.getAdjustedDate(REFERENCE_DATE, SETTLEMENT_DAYS + 1, CALENDAR);
+    final ZonedDateTime otherSettlementDate = ScheduleCalculator.getAdjustedDate(REFERENCE_DATE, SETTLEMENT_DAYS + 1, OLD_CALENDAR);
     final BillSecurity securityConverted3 = BILL_SEC_DEFINITION1.toDerivative(REFERENCE_DATE, otherSettlementDate, dsc, credit);
     final double otherSettlementTime = TimeCalculator.getTimeBetween(REFERENCE_DATE, otherSettlementDate);
     final double accrualFactorOther = ACT360.getDayCountFraction(otherSettlementDate, END_DATE);
-    final BillSecurity securityExpected3 = new BillSecurity(EUR, otherSettlementTime, endTime, NOTIONAL, YIELD_CONVENTION, accrualFactorOther, ISSUER_BEL_NAME, credit, dsc);
+    final BillSecurity securityExpected3 = new
+        BillSecurity(EUR, otherSettlementTime, endTime, NOTIONAL, YIELD_CONVENTION, accrualFactorOther, ISSUER_BEL_NAME, credit, dsc);
     assertEquals("Bill Security Definition: toDerivative", securityExpected3, securityConverted3);
   }
 
@@ -253,16 +270,17 @@ public class BillSecurityDefinitionTest {
    */
   @Test
   public void toDerivative() {
-    final ZonedDateTime standardSettlementDate = ScheduleCalculator.getAdjustedDate(REFERENCE_DATE, SETTLEMENT_DAYS, CALENDAR);
+    final ZonedDateTime standardSettlementDate = ScheduleCalculator.getAdjustedDate(REFERENCE_DATE, SETTLEMENT_DAYS, OLD_CALENDAR);
     final BillSecurity securityConverted1 = BILL_SEC_DEFINITION1.toDerivative(REFERENCE_DATE, standardSettlementDate);
     final double standardSettlementTime = TimeCalculator.getTimeBetween(REFERENCE_DATE, standardSettlementDate);
     final double endTime = TimeCalculator.getTimeBetween(REFERENCE_DATE, END_DATE);
     final double accrualFactorStandard = ACT360.getDayCountFraction(standardSettlementDate, END_DATE);
-    final BillSecurity securityExpected1 = new BillSecurity(EUR, standardSettlementTime, endTime, NOTIONAL, YIELD_CONVENTION, accrualFactorStandard, ISSUER_BEL_NAME);
+    final BillSecurity securityExpected1 =
+        new BillSecurity(EUR, standardSettlementTime, endTime, NOTIONAL, YIELD_CONVENTION, accrualFactorStandard, ISSUER_BEL_NAME);
     assertEquals("Bill Security Definition: toDerivative", securityExpected1, securityConverted1);
     final BillSecurity securityConverted2 = BILL_SEC_DEFINITION1.toDerivative(REFERENCE_DATE);
     assertEquals("Bill Security Definition: toDerivative", securityExpected1, securityConverted2);
-    final ZonedDateTime otherSettlementDate = ScheduleCalculator.getAdjustedDate(REFERENCE_DATE, SETTLEMENT_DAYS + 1, CALENDAR);
+    final ZonedDateTime otherSettlementDate = ScheduleCalculator.getAdjustedDate(REFERENCE_DATE, SETTLEMENT_DAYS + 1, OLD_CALENDAR);
     final BillSecurity securityConverted3 = BILL_SEC_DEFINITION1.toDerivative(REFERENCE_DATE, otherSettlementDate);
     final double otherSettlementTime = TimeCalculator.getTimeBetween(REFERENCE_DATE, otherSettlementDate);
     final double accrualFactorOther = ACT360.getDayCountFraction(otherSettlementDate, END_DATE);

@@ -2,12 +2,21 @@
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
  *
  * Please see distribution for license.
+ *
+ * Modified by McLeod Moores Software Limited.
+ *
+ * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.analytics.financial.instrument.bond;
 
-import org.apache.commons.lang.ObjectUtils;
+import java.util.Objects;
+
+import org.threeten.bp.DayOfWeek;
 import org.threeten.bp.ZonedDateTime;
 
+import com.opengamma.analytics.date.CalendarAdapter;
+import com.opengamma.analytics.date.WorkingDayCalendar;
+import com.opengamma.analytics.date.WorkingDayCalendarAdapter;
 import com.opengamma.analytics.financial.instrument.InstrumentDefinition;
 import com.opengamma.analytics.financial.instrument.InstrumentDefinitionVisitor;
 import com.opengamma.analytics.financial.interestrate.bond.calculator.PriceFromYieldCalculator;
@@ -17,12 +26,13 @@ import com.opengamma.financial.convention.calendar.Calendar;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Describes a (Treasury) Bill transaction.
+ * Describes a (Treasury) bill transaction, which includes information about the date on which the transaction settles
+ * and the amount paid or received when entered.
  */
 public class BillTransactionDefinition implements InstrumentDefinition<BillTransaction> {
 
   /**
-   * The Bill security underlying the transaction.
+   * The bill security underlying the transaction.
    */
   private final BillSecurityDefinition _underlying;
   /**
@@ -34,42 +44,62 @@ public class BillTransactionDefinition implements InstrumentDefinition<BillTrans
    */
   private final ZonedDateTime _settlementDate;
   /**
-   * The amount paid at settlement date for the bill transaction. The amount is negative for a purchase (_quantity>0) and positive for a sell (_quantity<0).
+   * The amount paid or received at settlement date for the bill transaction.
+   * The amount is negative for a purchase (_quantity>0) and positive for a sell (_quantity<0).
    */
   private final double _settlementAmount;
 
   /**
-   * Constructor.
-   * @param underlying The Bill security underlying the transaction.
-   * @param quantity The bill quantity.
-   * @param settlementDate The date at which the bill transaction is settled.
-   * @param settlementAmount The amount paid at settlement date for the bill transaction. The amount is negative for a purchase (_quantity>0) and positive for a sell (_quantity<0).
+   * Creates a transaction.
+   * @param underlying  the bill security underlying the transaction, not null
+   * @param quantity  the quantity of bills, not null
+   * @param settlementDate  the date on which the bill transaction is settled, not null
+   * @param settlementAmount  the amount paid at settlement date for the bill transaction, negative for a purchase and positive for a sale
    */
-  public BillTransactionDefinition(final BillSecurityDefinition underlying, final double quantity, final ZonedDateTime settlementDate, final double settlementAmount) {
-    ArgumentChecker.notNull(underlying, "Underlying");
-    ArgumentChecker.notNull(settlementDate, "Settlement date");
+  public BillTransactionDefinition(final BillSecurityDefinition underlying, final double quantity, final ZonedDateTime settlementDate,
+      final double settlementAmount) {
+    _underlying = ArgumentChecker.notNull(underlying, "underlying");
+    _settlementDate = ArgumentChecker.notNull(settlementDate, "settlementDate");
     ArgumentChecker.isTrue(quantity * settlementAmount <= 0, "Quantity and settlement amount should have opposite signs");
-    _underlying = underlying;
     _quantity = quantity;
-    _settlementDate = settlementDate;
     _settlementAmount = settlementAmount;
   }
 
   /**
-   * Builder from the yield.
-   * @param underlying The Bill security underlying the transaction.
-   * @param quantity The bill quantity.
-   * @param settlementDate The date at which the bill transaction is settled.
-   * @param yield The transaction yield. The yield should be in the bill convention.
-   * @param calendar The holiday calendar
-   * @return The bill transaction.
+   * Creates a transaction using the yield and yield convention of the underlying to calculate the settlement amount.
+   * @param underlying  the bill security underlying the transaction, not null
+   * @param quantity  the bill quantity, not null
+   * @param settlementDate  the date at which the bill transaction is settled, not null
+   * @param yield  the transaction yield, should be consistent with the yield convention of the underlying security
+   * @param calendar  the holiday calendar, not null
+   * @return  a bill transaction
+   * @deprecated  Use {@link #fromYield(BillSecurityDefinition, double, ZonedDateTime, double, WorkingDayCalendar)}, which
+   * takes the non-deprecated version of a calendar.
    */
-  public static BillTransactionDefinition fromYield(final BillSecurityDefinition underlying, final double quantity, final ZonedDateTime settlementDate, final double yield,
-      final Calendar calendar) {
-    ArgumentChecker.notNull(underlying, "Underlying");
-    ArgumentChecker.notNull(settlementDate, "Settlement date");
+  @Deprecated
+  public static BillTransactionDefinition fromYield(final BillSecurityDefinition underlying, final double quantity, final ZonedDateTime settlementDate,
+      final double yield, final Calendar calendar) {
+    return fromYield(underlying, quantity, settlementDate, yield,
+        (WorkingDayCalendar) new WorkingDayCalendarAdapter(calendar, DayOfWeek.SATURDAY, DayOfWeek.SUNDAY));
+  }
+
+  /**
+   * Creates a transaction using the yield and yield convention of the underlying to calculate the settlement amount.
+   * @param underlying  the bill security underlying the transaction, not null
+   * @param quantity  the bill quantity, not null
+   * @param settlementDate  the date at which the bill transaction is settled, not null
+   * @param yield  the transaction yield, should be consistent with the yield convention of the underlying security
+   * @param workingDayCalendar  the holiday calendar, not null
+   * @return  a bill transaction
+   */
+  public static BillTransactionDefinition fromYield(final BillSecurityDefinition underlying, final double quantity, final ZonedDateTime settlementDate,
+      final double yield, final WorkingDayCalendar workingDayCalendar) {
+    ArgumentChecker.notNull(underlying, "underlying");
+    ArgumentChecker.notNull(settlementDate, "settlementDate");
+    final Calendar calendar = new CalendarAdapter(workingDayCalendar);
     final double accrualFactor = underlying.getDayCount().getDayCountFraction(settlementDate, underlying.getEndDate(), calendar);
-    final double settlementAmount = -quantity * underlying.getNotional() * PriceFromYieldCalculator.priceFromYield(underlying.getYieldConvention(), yield, accrualFactor);
+    final double settlementAmount = -quantity * underlying.getNotional() * PriceFromYieldCalculator.priceFromYield(underlying.getYieldConvention(),
+        yield, accrualFactor);
     return new BillTransactionDefinition(underlying, quantity, settlementDate, settlementAmount);
   }
 
@@ -121,7 +151,7 @@ public class BillTransactionDefinition implements InstrumentDefinition<BillTrans
     ArgumentChecker.notNull(yieldCurveNames, "Yield curve names");
     final BillSecurity purchased = _underlying.toDerivative(date, _settlementDate, yieldCurveNames);
     final BillSecurity standard = _underlying.toDerivative(date, yieldCurveNames);
-    final double amount = (_settlementDate.isBefore(date)) ? 0.0 : _settlementAmount;
+    final double amount = _settlementDate.isBefore(date) ? 0.0 : _settlementAmount;
     return new BillTransaction(purchased, _quantity, amount, standard);
   }
 
@@ -130,7 +160,7 @@ public class BillTransactionDefinition implements InstrumentDefinition<BillTrans
     ArgumentChecker.notNull(date, "Reference date");
     final BillSecurity purchased = _underlying.toDerivative(date, _settlementDate);
     final BillSecurity standard = _underlying.toDerivative(date);
-    final double amount = (_settlementDate.isBefore(date)) ? 0.0 : _settlementAmount;
+    final double amount = _settlementDate.isBefore(date) ? 0.0 : _settlementAmount;
     return new BillTransaction(purchased, _quantity, amount, standard);
   }
 
@@ -152,9 +182,9 @@ public class BillTransactionDefinition implements InstrumentDefinition<BillTrans
     int result = 1;
     long temp;
     temp = Double.doubleToLongBits(_quantity);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_settlementAmount);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     result = prime * result + _settlementDate.hashCode();
     result = prime * result + _underlying.hashCode();
     return result;
@@ -165,10 +195,7 @@ public class BillTransactionDefinition implements InstrumentDefinition<BillTrans
     if (this == obj) {
       return true;
     }
-    if (obj == null) {
-      return false;
-    }
-    if (getClass() != obj.getClass()) {
+    if (!(obj instanceof BillTransactionDefinition)) {
       return false;
     }
     final BillTransactionDefinition other = (BillTransactionDefinition) obj;
@@ -178,10 +205,10 @@ public class BillTransactionDefinition implements InstrumentDefinition<BillTrans
     if (Double.doubleToLongBits(_settlementAmount) != Double.doubleToLongBits(other._settlementAmount)) {
       return false;
     }
-    if (!ObjectUtils.equals(_settlementDate, other._settlementDate)) {
+    if (!Objects.equals(_settlementDate, other._settlementDate)) {
       return false;
     }
-    if (!ObjectUtils.equals(_underlying, other._underlying)) {
+    if (!Objects.equals(_underlying, other._underlying)) {
       return false;
     }
     return true;

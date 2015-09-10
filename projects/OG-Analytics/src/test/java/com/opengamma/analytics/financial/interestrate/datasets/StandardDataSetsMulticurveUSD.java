@@ -58,7 +58,7 @@ import com.opengamma.util.time.DateUtils;
 import com.opengamma.util.tuple.Pair;
 
 /**
- * Curves calibration in USD: 
+ * Curves calibration in USD:
  * 0) ONDSC-OIS/LIBOR3M-FRAIRS
  * 0) ONDSC-OIS/LIBOR3M-FRAIRS/LIBOR1M-BS/LIBOR6M-BS
  * Data stored in snapshots for comparison with platform.
@@ -363,15 +363,15 @@ public class StandardDataSetsMulticurveUSD {
   }
 
   /**
-   * Returns the array of Ibor index used in the curve data set. 
-   * @return The array: USDLIBOR3M 
+   * Returns the array of Ibor index used in the curve data set.
+   * @return The array: USDLIBOR3M
    */
   public static IborIndex[] indexIborArrayUSDOisL3() {
     return new IborIndex[] {USDLIBOR3M };
   }
 
   /**
-   * Returns the array of Ibor index used in the curve data set. 
+   * Returns the array of Ibor index used in the curve data set.
    * @return The array: USDLIBOR1M, USDLIBOR3M, USDLIBOR6M
    */
   public static IborIndex[] indexIborArrayUSDOisL1L3L6() {
@@ -379,16 +379,16 @@ public class StandardDataSetsMulticurveUSD {
   }
 
   /**
-   * Returns the array of overnight index used in the curve data set. 
-   * @return The array: USDFEDFUND 
+   * Returns the array of overnight index used in the curve data set.
+   * @return The array: USDFEDFUND
    */
   public static IndexON[] indexONArray() {
     return new IndexON[] {USDFEDFUND };
   }
 
   /**
-   * Returns the array of calendars used in the curve data set. 
-   * @return The array: NYC 
+   * Returns the array of calendars used in the curve data set.
+   * @return The array: NYC
    */
   public static Calendar[] calendarArray() {
     return new Calendar[] {NYC };

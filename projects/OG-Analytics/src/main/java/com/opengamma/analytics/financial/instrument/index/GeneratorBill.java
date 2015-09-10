@@ -2,6 +2,10 @@
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
  *
  * Please see distribution for license.
+ *
+ * Modified by McLeod Moores Software Limited.
+ *
+ * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.analytics.financial.instrument.index;
 
@@ -23,14 +27,13 @@ public class GeneratorBill extends GeneratorInstrument<GeneratorAttribute> {
   private final BillSecurityDefinition _security;
 
   /**
-   * Constructor.
-   * @param name Generator name.
-   * @param security The underlying bill security.
+   * Creates an instance.
+   * @param name  the generator name, not null
+   * @param security  the underlying bill security, not null
    */
   public GeneratorBill(final String name, final BillSecurityDefinition security) {
     super(name);
-    ArgumentChecker.notNull(security, "Bill security");
-    _security = security;
+    _security = ArgumentChecker.notNull(security, "security");
   }
 
   /**
@@ -38,11 +41,12 @@ public class GeneratorBill extends GeneratorInstrument<GeneratorAttribute> {
    * Generate a bill transaction from the bill (market quote) yield.
    */
   @Override
-  public BillTransactionDefinition generateInstrument(final ZonedDateTime date, final double marketQuote, final double notional, final GeneratorAttribute attribute) {
-    ArgumentChecker.notNull(date, "Reference date");
+  public BillTransactionDefinition generateInstrument(final ZonedDateTime date, final double marketQuote, final double notional,
+      final GeneratorAttribute attribute) {
+    ArgumentChecker.notNull(date, "date");
     final int quantity = (int) Math.round(notional / _security.getNotional());
     final ZonedDateTime settleDate = ScheduleCalculator.getAdjustedDate(date, _security.getSettlementDays(), _security.getCalendar());
-    return BillTransactionDefinition.fromYield(_security, quantity, settleDate, marketQuote, _security.getCalendar());
+    return BillTransactionDefinition.fromYield(_security, quantity, settleDate, marketQuote, _security.getWorkingDayCalendar());
   }
 
 }

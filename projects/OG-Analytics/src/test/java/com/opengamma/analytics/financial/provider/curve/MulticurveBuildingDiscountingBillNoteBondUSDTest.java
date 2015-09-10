@@ -2,6 +2,10 @@
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
  *
  * Please see distribution for license.
+ *
+ * Modified by McLeod Moores Software Limited.
+ *
+ * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.analytics.financial.provider.curve;
 
@@ -18,6 +22,9 @@ import org.threeten.bp.Period;
 import org.threeten.bp.ZonedDateTime;
 
 import com.google.common.collect.LinkedListMultimap;
+import com.opengamma.analytics.date.WeekendWorkingDayCalendar;
+import com.opengamma.analytics.date.WorkingDayCalendar;
+import com.opengamma.analytics.date.CalendarAdapter;
 import com.opengamma.analytics.financial.curve.interestrate.generator.GeneratorCurveYieldInterpolated;
 import com.opengamma.analytics.financial.curve.interestrate.generator.GeneratorYDCurve;
 import com.opengamma.analytics.financial.forex.method.FXMatrix;
@@ -60,7 +67,6 @@ import com.opengamma.analytics.math.interpolation.Interpolator1DFactory;
 import com.opengamma.financial.convention.businessday.BusinessDayConvention;
 import com.opengamma.financial.convention.businessday.BusinessDayConventions;
 import com.opengamma.financial.convention.calendar.Calendar;
-import com.opengamma.financial.convention.calendar.MondayToFridayCalendar;
 import com.opengamma.financial.convention.daycount.DayCount;
 import com.opengamma.financial.convention.daycount.DayCounts;
 import com.opengamma.financial.convention.yield.YieldConvention;
@@ -88,19 +94,19 @@ public class MulticurveBuildingDiscountingBillNoteBondUSDTest {
   private static final LastTimeCalculator MATURITY_CALCULATOR = LastTimeCalculator.getInstance();
   private static final double TOLERANCE_ROOT = 1.0E-10;
   private static final int STEP_MAX = 100;
-
-  private static final Calendar NYC = new MondayToFridayCalendar("NYC");
+  private static final WorkingDayCalendar NYC = WeekendWorkingDayCalendar.SATURDAY_SUNDAY;
+  private static final Calendar NYC_OLD = new CalendarAdapter(NYC);
   private static final Currency USD = Currency.USD;
   private static final FXMatrix FX_MATRIX = new FXMatrix(USD);
 
   private static final double NOTIONAL = 1.0;
 
-  private static final GeneratorSwapFixedON GENERATOR_OIS_USD = GeneratorSwapFixedONMaster.getInstance().getGenerator("USD1YFEDFUND", NYC);
+  private static final GeneratorSwapFixedON GENERATOR_OIS_USD = GeneratorSwapFixedONMaster.getInstance().getGenerator("USD1YFEDFUND", NYC_OLD);
   private static final IndexON INDEX_ON_USD = GENERATOR_OIS_USD.getIndex();
-  private static final GeneratorDepositON GENERATOR_DEPOSIT_ON_USD = new GeneratorDepositON("USD Deposit ON", USD, NYC, INDEX_ON_USD.getDayCount());
+  private static final GeneratorDepositON GENERATOR_DEPOSIT_ON_USD = new GeneratorDepositON("USD Deposit ON", USD, NYC_OLD, INDEX_ON_USD.getDayCount());
   private static final String NAME_COUNTERPART = "US GOVT";
   private static final DayCount DAY_COUNT_ON = DayCounts.ACT_360;
-  private static final GeneratorDepositONCounterpart GENERATOR_DEPOSIT_ON_USGOVT = new GeneratorDepositONCounterpart("US GOVT Deposit ON", USD, NYC, DAY_COUNT_ON, NAME_COUNTERPART);
+  private static final GeneratorDepositONCounterpart GENERATOR_DEPOSIT_ON_USGOVT = new GeneratorDepositONCounterpart("US GOVT Deposit ON", USD, NYC_OLD, DAY_COUNT_ON, NAME_COUNTERPART);
 
   private static final YieldConvention YIELD_BILL_USGOVT = YieldConventionFactory.INSTANCE.getYieldConvention("INTEREST@MTY");
   private static final DayCount DAY_COUNT_BILL_USGOVT = DayCounts.ACT_360;
@@ -143,7 +149,7 @@ public class MulticurveBuildingDiscountingBillNoteBondUSDTest {
   static {
     for (int loopbill = 0; loopbill < BOND_MATURITY.length; loopbill++) {
       BOND_SECURITY[loopbill] = BondFixedSecurityDefinition.from(USD, BOND_MATURITY[loopbill], BOND_START_ACCRUAL_DATE[loopbill], BOND_PAYMENT_TENOR, RATE_FIXED[loopbill], SETTLEMENT_DAYS_US,
-          NOTIONAL, NYC,
+          NOTIONAL, NYC_OLD,
           DAY_COUNT_BOND_USGOVT, BOND_BUSINESS_DAY, YIELD_BOND_USGOVT, IS_EOM_FIXED, NAME_COUNTERPART, REPO_TYPE);
       GENERATOR_BOND[loopbill] = new GeneratorBondFixed("GeneratorBond" + loopbill, BOND_SECURITY[loopbill]);
     }

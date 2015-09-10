@@ -2,6 +2,10 @@
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
  *
  * Please see distribution for license.
+ *
+ * Modified by McLeod Moores Software Limited.
+ *
+ * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.analytics.financial.interestrate.bond.definition;
 
@@ -11,6 +15,8 @@ import static org.testng.AssertJUnit.assertFalse;
 import org.testng.annotations.Test;
 import org.threeten.bp.ZonedDateTime;
 
+import com.opengamma.analytics.date.WeekendWorkingDayCalendar;
+import com.opengamma.analytics.date.WorkingDayCalendar;
 import com.opengamma.analytics.financial.instrument.bond.BillSecurityDefinition;
 import com.opengamma.analytics.financial.schedule.ScheduleCalculator;
 import com.opengamma.financial.convention.calendar.Calendar;
@@ -29,26 +35,28 @@ import com.opengamma.util.time.DateUtils;
 @Test(groups = TestGroup.UNIT)
 public class BillTransactionTest {
 
-  private final static Currency EUR = Currency.EUR;
+  private static final Currency EUR = Currency.EUR;
+  private static final WorkingDayCalendar WEEKEND = WeekendWorkingDayCalendar.SATURDAY_SUNDAY;
   private static final Calendar CALENDAR = new MondayToFridayCalendar("TARGET");
-  private final static ZonedDateTime REFERENCE_DATE = DateUtils.getUTCDate(2012, 1, 16);
+  private static final ZonedDateTime REFERENCE_DATE = DateUtils.getUTCDate(2012, 1, 16);
 
   private static final DayCount ACT360 = DayCounts.ACT_360;
   private static final int SETTLEMENT_DAYS = 2;
   private static final YieldConvention YIELD_CONVENTION = YieldConventionFactory.INSTANCE.getYieldConvention("INTEREST@MTY");
 
-  private final static String ISSUER_BEL = "BELGIUM GOVT";
-  private final static ZonedDateTime END_DATE = DateUtils.getUTCDate(2012, 2, 29);
-  private final static double NOTIONAL = 1000;
-  private final static BillSecurityDefinition BILL_SEC_DEFINITION = new BillSecurityDefinition(EUR, END_DATE, NOTIONAL, SETTLEMENT_DAYS, CALENDAR, YIELD_CONVENTION, ACT360, ISSUER_BEL);
+  private static final String ISSUER_BEL = "BELGIUM GOVT";
+  private static final ZonedDateTime END_DATE = DateUtils.getUTCDate(2012, 2, 29);
+  private static final double NOTIONAL = 1000;
+  private static final BillSecurityDefinition BILL_SEC_DEFINITION =
+      new BillSecurityDefinition(EUR, END_DATE, NOTIONAL, SETTLEMENT_DAYS, WEEKEND, YIELD_CONVENTION, ACT360, ISSUER_BEL);
 
-  private final static double QUANTITY = 123456;
-  private final static ZonedDateTime SETTLE_DATE = ScheduleCalculator.getAdjustedDate(REFERENCE_DATE, 3, CALENDAR);
-  private final static double SETTLE_AMOUT = -NOTIONAL * QUANTITY * 99.95;
+  private static final double QUANTITY = 123456;
+  private static final ZonedDateTime SETTLE_DATE = ScheduleCalculator.getAdjustedDate(REFERENCE_DATE, 3, CALENDAR);
+  private static final double SETTLE_AMOUT = -NOTIONAL * QUANTITY * 99.95;
 
-  private final static BillSecurity BILL_PURCHASE = BILL_SEC_DEFINITION.toDerivative(REFERENCE_DATE, SETTLE_DATE);
-  private final static BillSecurity BILL_STANDARD = BILL_SEC_DEFINITION.toDerivative(REFERENCE_DATE);
-  private final static BillTransaction BILL_TRA = new BillTransaction(BILL_PURCHASE, QUANTITY, SETTLE_AMOUT, BILL_STANDARD);
+  private static final BillSecurity BILL_PURCHASE = BILL_SEC_DEFINITION.toDerivative(REFERENCE_DATE, SETTLE_DATE);
+  private static final BillSecurity BILL_STANDARD = BILL_SEC_DEFINITION.toDerivative(REFERENCE_DATE);
+  private static final BillTransaction BILL_TRA = new BillTransaction(BILL_PURCHASE, QUANTITY, SETTLE_AMOUT, BILL_STANDARD);
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void nullPurchase() {

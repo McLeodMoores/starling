@@ -100,18 +100,12 @@ public class CashNodeConverter extends CurveNodeVisitorAdapter<InstrumentDefinit
    */
   public CashNodeConverter(final SecuritySource securitySource, final HolidaySource holidaySource, final RegionSource regionSource,
       final SnapshotDataBundle marketData, final ExternalId dataId, final ZonedDateTime valuationTime) {
-    ArgumentChecker.notNull(securitySource, "securitySource");
-    ArgumentChecker.notNull(holidaySource, "holidaySource");
-    ArgumentChecker.notNull(regionSource, "regionSource");
-    ArgumentChecker.notNull(marketData, "marketData");
-    ArgumentChecker.notNull(dataId, "dataId");
-    ArgumentChecker.notNull(valuationTime, "valuationTime");
-    _securitySource = securitySource;
-    _holidaySource = holidaySource;
-    _regionSource = regionSource;
-    _marketData = marketData;
-    _dataId = dataId;
-    _valuationTime = valuationTime;
+    _securitySource = ArgumentChecker.notNull(securitySource, "securitySource");
+    _holidaySource = ArgumentChecker.notNull(holidaySource, "holidaySource");
+    _regionSource = ArgumentChecker.notNull(regionSource, "regionSource");
+    _marketData = ArgumentChecker.notNull(marketData, "marketData");
+    _dataId = ArgumentChecker.notNull(dataId, "dataId");
+    _valuationTime = ArgumentChecker.notNull(valuationTime, "valuationTime");
     _rate = _marketData.getDataPoint(_dataId);
     if (_rate == null) {
       throw new OpenGammaRuntimeException("Could not get market data for " + _dataId);

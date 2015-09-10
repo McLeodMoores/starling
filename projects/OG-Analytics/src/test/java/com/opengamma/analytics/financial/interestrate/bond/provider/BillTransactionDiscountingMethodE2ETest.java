@@ -17,6 +17,8 @@ import java.util.Map;
 import org.testng.annotations.Test;
 import org.threeten.bp.ZonedDateTime;
 
+import com.opengamma.analytics.date.WorkingDayCalendar;
+import com.opengamma.analytics.financial.datasets.TestWorkingDayCalendars;
 import com.opengamma.analytics.financial.instrument.bond.BillSecurityDefinition;
 import com.opengamma.analytics.financial.instrument.bond.BillTransactionDefinition;
 import com.opengamma.analytics.financial.interestrate.bond.definition.BillTransaction;
@@ -60,37 +62,38 @@ public class BillTransactionDiscountingMethodE2ETest {
   private static final Pair<MulticurveProviderDiscount, CurveBuildingBlockBundle> MULTICURVE_PAIR = StandardDataSetsMulticurveUSD.getCurvesUSDOisL3();
   private static final MulticurveProviderDiscount MULTICURVE = MULTICURVE_PAIR.getFirst();
   private static final CurveBuildingBlockBundle BLOCK = MULTICURVE_PAIR.getSecond();
-  private static final Calendar NYC = StandardDataSetsMulticurveUSD.calendarArray()[0];
+  private static final WorkingDayCalendar NYC = TestWorkingDayCalendars.USD_CALENDAR;
+  private static final Calendar NYC_OLD = StandardDataSetsMulticurveUSD.calendarArray()[0];
   private static final Currency USD = Currency.USD;
 
   // Issuer provider with Issuer "" priced from the OIS curve.
   private static final LegalEntityFilter<LegalEntity> SHORT_NAME_FILTER = new LegalEntityShortName();
-  private final static String USGOVT_NAME = "Utd Sts Amer";
+  private static final String USGOVT_NAME = "Utd Sts Amer";
   private static final Map<Pair<Object, LegalEntityFilter<LegalEntity>>, YieldAndDiscountCurve> ISSUER_SPECIFIC = new LinkedHashMap<>();
   static {
     ISSUER_SPECIFIC.put(Pairs.of((Object) USGOVT_NAME, SHORT_NAME_FILTER), MULTICURVE.getCurve(USD));
   }
-  private final static IssuerProviderDiscount ISSUER_MULTICURVE = new IssuerProviderDiscount(MULTICURVE, ISSUER_SPECIFIC);
+  private static final IssuerProviderDiscount ISSUER_MULTICURVE = new IssuerProviderDiscount(MULTICURVE, ISSUER_SPECIFIC);
 
   // ISIN: US912796DQ92 -
   private static final DayCount ACT360 = DayCounts.ACT_360;
   private static final int SETTLEMENT_DAYS = 1;
   private static final YieldConvention YIELD_CONVENTION_DISCOUNT = YieldConventionFactory.INSTANCE.getYieldConvention("DISCOUNT");
-  private final static ZonedDateTime MATURITY_DATE = DateUtils.getUTCDate(2014, 4, 24);
-  private final static double NOTIONAL = 1;
-  private final static BillSecurityDefinition B140814_DEFINITION = new BillSecurityDefinition(USD, MATURITY_DATE, NOTIONAL, SETTLEMENT_DAYS, NYC,
+  private static final ZonedDateTime MATURITY_DATE = DateUtils.getUTCDate(2014, 4, 24);
+  private static final double NOTIONAL = 1;
+  private static final BillSecurityDefinition B140814_DEFINITION = new BillSecurityDefinition(USD, MATURITY_DATE, NOTIONAL, SETTLEMENT_DAYS, NYC,
       YIELD_CONVENTION_DISCOUNT, ACT360, USGOVT_NAME);
 
   // Trade 1
-  private final static ZonedDateTime SETTLE_DATE_1 = DateUtils.getUTCDate(2014, 1, 23);
-  private final static double QUANTITY_1 = 10000000;
-  private final static double PREMIUM_1 = -9999000;
-  private final static BillTransactionDefinition B140814_TRA_1_DEFINITION = new BillTransactionDefinition(B140814_DEFINITION, QUANTITY_1, SETTLE_DATE_1, PREMIUM_1);
-  private final static BillTransaction B140814_TRA_1 = B140814_TRA_1_DEFINITION.toDerivative(REFERENCE_DATE);
+  private static final ZonedDateTime SETTLE_DATE_1 = DateUtils.getUTCDate(2014, 1, 23);
+  private static final double QUANTITY_1 = 10000000;
+  private static final double PREMIUM_1 = -9999000;
+  private static final BillTransactionDefinition B140814_TRA_1_DEFINITION = new BillTransactionDefinition(B140814_DEFINITION, QUANTITY_1, SETTLE_DATE_1, PREMIUM_1);
+  private static final BillTransaction B140814_TRA_1 = B140814_TRA_1_DEFINITION.toDerivative(REFERENCE_DATE);
 
   // Method and calculator
-  private final static BillSecurityDiscountingMethod METHOD_SECURITY = BillSecurityDiscountingMethod.getInstance();
-  private final static PresentValueIssuerCalculator PVIC = PresentValueIssuerCalculator.getInstance();
+  private static final BillSecurityDiscountingMethod METHOD_SECURITY = BillSecurityDiscountingMethod.getInstance();
+  private static final PresentValueIssuerCalculator PVIC = PresentValueIssuerCalculator.getInstance();
 
   private static final PresentValueCurveSensitivityIssuerCalculator PVCSIC = PresentValueCurveSensitivityIssuerCalculator.getInstance();
   private static final ParameterSensitivityParameterCalculator<ParameterIssuerProviderInterface> PSC = new ParameterSensitivityParameterCalculator<>(PVCSIC);

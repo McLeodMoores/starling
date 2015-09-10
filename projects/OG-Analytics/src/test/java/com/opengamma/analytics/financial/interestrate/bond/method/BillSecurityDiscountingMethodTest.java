@@ -2,6 +2,10 @@
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
  *
  * Please see distribution for license.
+ *
+ * Modified by McLeod Moores Software Limited.
+ *
+ * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.analytics.financial.interestrate.bond.method;
 
@@ -13,6 +17,8 @@ import org.testng.AssertJUnit;
 import org.testng.annotations.Test;
 import org.threeten.bp.ZonedDateTime;
 
+import com.opengamma.analytics.date.WeekendWorkingDayCalendar;
+import com.opengamma.analytics.date.WorkingDayCalendar;
 import com.opengamma.analytics.financial.instrument.bond.BillSecurityDefinition;
 import com.opengamma.analytics.financial.interestrate.InterestRateCurveSensitivity;
 import com.opengamma.analytics.financial.interestrate.PresentValueCalculator;
@@ -45,9 +51,10 @@ import com.opengamma.util.tuple.DoublesPair;
 @Test(groups = TestGroup.UNIT)
 public class BillSecurityDiscountingMethodTest {
 
-  private final static Currency EUR = Currency.EUR;
+  private static final Currency EUR = Currency.EUR;
+  private static final WorkingDayCalendar WEEKEND = WeekendWorkingDayCalendar.SATURDAY_SUNDAY;
   private static final Calendar CALENDAR = new MondayToFridayCalendar("TARGET");
-  private final static ZonedDateTime REFERENCE_DATE = DateUtils.getUTCDate(2012, 1, 17);
+  private static final ZonedDateTime REFERENCE_DATE = DateUtils.getUTCDate(2012, 1, 17);
 
   private static final DayCount ACT360 = DayCounts.ACT_360;
   private static final int SETTLEMENT_DAYS = 2;
@@ -55,26 +62,26 @@ public class BillSecurityDiscountingMethodTest {
   private static final YieldConvention YIELD_DSC = YieldConventionFactory.INSTANCE.getYieldConvention("DISCOUNT");
 
   // ISIN: BE0312677462
-  private final static String ISSUER_BEL = "BELGIUM GOVT";
-  private final static String ISSUER_US = "US GOVT";
-  private final static ZonedDateTime END_DATE = DateUtils.getUTCDate(2012, 3, 15);
-  private final static double NOTIONAL = 1000;
+  private static final String ISSUER_BEL = "BELGIUM GOVT";
+  private static final String ISSUER_US = "US GOVT";
+  private static final ZonedDateTime END_DATE = DateUtils.getUTCDate(2012, 3, 15);
+  private static final double NOTIONAL = 1000;
   private static final double YIELD = 0.00185; // External source
   private static final double PRICE = 0.99971; // External source
 
-  private final static ZonedDateTime SETTLE_DATE = ScheduleCalculator.getAdjustedDate(REFERENCE_DATE, SETTLEMENT_DAYS, CALENDAR);
-  private final static String[] NAME_CURVES = TestsDataSetsSABR.nameCurvesBond3();
-  private final static BillSecurityDefinition BILL_IAM_SEC_DEFINITION = new BillSecurityDefinition(EUR, END_DATE, NOTIONAL, SETTLEMENT_DAYS, CALENDAR, YIELD_IAM, ACT360, ISSUER_BEL);
-  private final static BillSecurityDefinition BILL_DSC_SEC_DEFINITION = new BillSecurityDefinition(EUR, END_DATE, NOTIONAL, SETTLEMENT_DAYS, CALENDAR, YIELD_DSC, ACT360, ISSUER_US);
+  private static final ZonedDateTime SETTLE_DATE = ScheduleCalculator.getAdjustedDate(REFERENCE_DATE, SETTLEMENT_DAYS, CALENDAR);
+  private static final String[] NAME_CURVES = TestsDataSetsSABR.nameCurvesBond3();
+  private static final BillSecurityDefinition BILL_IAM_SEC_DEFINITION = new BillSecurityDefinition(EUR, END_DATE, NOTIONAL, SETTLEMENT_DAYS, WEEKEND, YIELD_IAM, ACT360, ISSUER_BEL);
+  private static final BillSecurityDefinition BILL_DSC_SEC_DEFINITION = new BillSecurityDefinition(EUR, END_DATE, NOTIONAL, SETTLEMENT_DAYS, WEEKEND, YIELD_DSC, ACT360, ISSUER_US);
   //Should not be in EUR, but this is only a test
-  private final static BillSecurity BILL_IAM_SEC = BILL_IAM_SEC_DEFINITION.toDerivative(REFERENCE_DATE, SETTLE_DATE, NAME_CURVES);
-  private final static BillSecurity BILL_DSC_SEC = BILL_DSC_SEC_DEFINITION.toDerivative(REFERENCE_DATE, SETTLE_DATE, NAME_CURVES);
-  private final static YieldCurveBundle CURVE_BUNDLE = TestsDataSetsSABR.createCurvesBond3();
+  private static final BillSecurity BILL_IAM_SEC = BILL_IAM_SEC_DEFINITION.toDerivative(REFERENCE_DATE, SETTLE_DATE, NAME_CURVES);
+  private static final BillSecurity BILL_DSC_SEC = BILL_DSC_SEC_DEFINITION.toDerivative(REFERENCE_DATE, SETTLE_DATE, NAME_CURVES);
+  private static final YieldCurveBundle CURVE_BUNDLE = TestsDataSetsSABR.createCurvesBond3();
 
-  private final static BillSecurityDiscountingMethod METHOD_SECURITY = BillSecurityDiscountingMethod.getInstance();
-  private final static PresentValueCalculator PVC = PresentValueCalculator.getInstance();
-  private final static PresentValueCurveSensitivityCalculator PVCSC = PresentValueCurveSensitivityCalculator.getInstance();
-  private final static YieldFromCurvesCalculator YFCC = YieldFromCurvesCalculator.getInstance();
+  private static final BillSecurityDiscountingMethod METHOD_SECURITY = BillSecurityDiscountingMethod.getInstance();
+  private static final PresentValueCalculator PVC = PresentValueCalculator.getInstance();
+  private static final PresentValueCurveSensitivityCalculator PVCSC = PresentValueCurveSensitivityCalculator.getInstance();
+  private static final YieldFromCurvesCalculator YFCC = YieldFromCurvesCalculator.getInstance();
   private static final YieldFromCleanPriceCalculator YFPC = YieldFromCleanPriceCalculator.getInstance();
 
   private static final double TOLERANCE_PV = 1.0E-2;
