@@ -14,12 +14,14 @@ import com.opengamma.util.AbstractNamedInstanceFactory;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Factory for Currency named instances.
+ * Factory for {@link Currency} named instances.
  */
+//TODO this isn't an exhausive list - https://en.wikipedia.org/wiki/ISO_4217
+// plus it should be possible to easily add a currency and have it stored somewhere
 public final class CurrencyFactory extends AbstractNamedInstanceFactory<Currency> {
 
   /**
-   * Singleton instance of {@code CubeQuoteTypeFactory}.
+   * Singleton instance of {@code CurrencyFactory}.
    */
   public static final CurrencyFactory INSTANCE = new CurrencyFactory();
 
@@ -54,26 +56,26 @@ public final class CurrencyFactory extends AbstractNamedInstanceFactory<Currency
     addInstance(Currency.DEM, "DEM");
     addInstance(Currency.parse("GRD"), "GRD");
     addInstance(Currency.parse("GRN"), "GRN");
-    String[] ccys = new String[] {"AED", "AFN", "ALL", "AMD", "ANG", "AOA", "ARS", "AUD", "AWG", "AZN", "BAM", "BBD", "BDT", "BGN", "BHD", "BIF", "BMD", "BND", "BOB", "BOV", "BRL",
+    final String[] ccys = new String[] {"AED", "AFN", "ALL", "AMD", "ANG", "AOA", "ARS", "AUD", "AWG", "AZN", "BAM", "BBD", "BDT", "BGN", "BHD", "BIF", "BMD", "BND", "BOB", "BOV", "BRL",
         "BSD", "BTN", "BWP", "BYR", "BZD", "CAD", "CDF", "CHE", "CHF", "CHW", "CLF", "CLP", "CNY", "COP", "COU", "CRC", "CUC", "CUP", "CVE", "CZK", "DJF", "DKK", "DOP", "DZD", "EGP", "ERN", "ETB", "EUR",
         "FJD", "FKP", "GBP", "GEL", "GHS", "GIP", "GMD", "GNF", "GTQ", "GYD", "HKD", "HNL", "HRK", "HTG", "HUF", "IDR", "ILS", "INR", "IQD", "IRR", "ISK", "JMD", "JOD", "JPY", "KES", "KGS", "KHR", "KMF",
         "KPW", "KRW", "KWD", "KYD", "KZT", "LAK", "LBP", "LKR", "LRD", "LSL", "LYD", "MAD", "MDL", "MGA", "MKD", "MMK", "MNT", "MOP", "MRO", "MUR", "MVR", "MWK", "MXN", "MXV", "MYR", "MZN", "NAD", "NGN",
         "NIO", "NOK", "NPR", "NZD", "OMR", "PAB", "PEN", "PGK", "PHP", "PKR", "PLN", "PYG", "QAR", "RON", "RSD", "RUB", "RWF", "SAR", "SBD", "SCR", "SDG", "SEK", "SGD", "SHP", "SLL", "SOS", "SRD", "SSP",
         "STD", "SVC", "SYP", "SZL", "THB", "TJS", "TMT", "TND", "TOP", "TRY", "TTD", "TWD", "TZS", "UAH", "UGX", "USD", "USN", "UYI", "UYU", "UZS", "VEF", "VND", "VUV", "WST", "XAF", "XAG", "XAU", "XBA",
         "XBB", "XBC", "XBD", "XCD", "XDR", "XOF", "XPD", "XPF", "XPT", "XSU", "XTS", "XUA", "XXX", "YER", "ZAR", "ZMW", "ZWL" };
-    for (String ccy : ccys) {
+    for (final String ccy : ccys) {
       addInstance(Currency.parse(ccy), ccy);
     }
-    addInstance(Currency.parse("BTC"), "BTC"); 
-    addInstance(Currency.parse("XBT"), "XBT"); 
+    addInstance(Currency.parse("BTC"), "BTC");
+    addInstance(Currency.parse("XBT"), "XBT");
   }
 
   /**
-   * Finds a cube quote type by name, ignoring case.
+   * Finds a currency by name, ignoring case.
    * <p>
-   * This method dynamically creates the quote type if it is missing.
-   * @param name The name of the instance to find, not null
-   * @return The cube quote type, null if not found
+   * This method dynamically creates the currency if it is missing.
+   * @param name  the name of the instance to find, not null
+   * @return  the currency type, null if not found
    */
   @FromString
   public Currency of(final String name) {

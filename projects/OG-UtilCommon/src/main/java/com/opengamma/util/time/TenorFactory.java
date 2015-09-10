@@ -14,12 +14,13 @@ import com.opengamma.util.AbstractNamedInstanceFactory;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Factory for cube quote type named instances.
+ * Factory for {@link Tenor} named instances.
  */
+//TODO it should be possible to easily add a currency and have it stored somewhere
 public final class TenorFactory extends AbstractNamedInstanceFactory<Tenor> {
 
   /**
-   * Singleton instance of {@code CubeQuoteTypeFactory}.
+   * Singleton instance of {@code TenorFactory}.
    */
   public static final TenorFactory INSTANCE = new TenorFactory();
 
@@ -31,6 +32,7 @@ public final class TenorFactory extends AbstractNamedInstanceFactory<Tenor> {
     addInstance(Tenor.TN, "TN", "T/N");
     addInstance(Tenor.ON, "ON", "O/N");
     addInstance(Tenor.SN, "SN", "S/N");
+    //TODO add these in a loop with unit increment - 1D - 30D, 1W - 4W, 1M - 24M, 1Y - 60Y
     addInstance(Tenor.ofDays(1), "P1D", "1D");
     addInstance(Tenor.ofDays(2), "P2D", "2D");
     addInstance(Tenor.ofDays(3), "P3D", "3D");
@@ -68,26 +70,26 @@ public final class TenorFactory extends AbstractNamedInstanceFactory<Tenor> {
     addInstance(Tenor.ofYears(7), "P7Y", "7Y");
     addInstance(Tenor.ofYears(8), "P8Y", "8Y");
     addInstance(Tenor.ofYears(9), "P9Y", "9Y");
-    addInstance(Tenor.ofYears(10), "P10Y", "10Y");    
-    addInstance(Tenor.ofYears(11), "P11Y", "11Y");    
-    addInstance(Tenor.ofYears(12), "P12Y", "12Y");    
-    addInstance(Tenor.ofYears(15), "P15Y", "15Y");    
-    addInstance(Tenor.ofYears(20), "P20Y", "20Y");    
-    addInstance(Tenor.ofYears(25), "P25Y", "25Y");    
-    addInstance(Tenor.ofYears(30), "P30Y", "30Y");    
-    addInstance(Tenor.ofYears(35), "P35Y", "35Y");    
-    addInstance(Tenor.ofYears(40), "P40Y", "40Y");    
-    addInstance(Tenor.ofYears(45), "P45Y", "45Y");    
-    addInstance(Tenor.ofYears(50), "P50Y", "50Y");    
-    addInstance(Tenor.ofYears(60), "P60Y", "60Y");    
+    addInstance(Tenor.ofYears(10), "P10Y", "10Y");
+    addInstance(Tenor.ofYears(11), "P11Y", "11Y");
+    addInstance(Tenor.ofYears(12), "P12Y", "12Y");
+    addInstance(Tenor.ofYears(15), "P15Y", "15Y");
+    addInstance(Tenor.ofYears(20), "P20Y", "20Y");
+    addInstance(Tenor.ofYears(25), "P25Y", "25Y");
+    addInstance(Tenor.ofYears(30), "P30Y", "30Y");
+    addInstance(Tenor.ofYears(35), "P35Y", "35Y");
+    addInstance(Tenor.ofYears(40), "P40Y", "40Y");
+    addInstance(Tenor.ofYears(45), "P45Y", "45Y");
+    addInstance(Tenor.ofYears(50), "P50Y", "50Y");
+    addInstance(Tenor.ofYears(60), "P60Y", "60Y");
   }
 
   /**
-   * Finds a cube quote type by name, ignoring case.
+   * Finds a tenor by name, ignoring case.
    * <p>
-   * This method dynamically creates the quote type if it is missing.
-   * @param name The name of the instance to find, not null
-   * @return The cube quote type, null if not found
+   * This method dynamically creates the tenor if it is missing.
+   * @param name  the name of the instance to find, not null
+   * @return  the tenor, null if not found
    */
   @FromString
   public Tenor of(final String name) {
