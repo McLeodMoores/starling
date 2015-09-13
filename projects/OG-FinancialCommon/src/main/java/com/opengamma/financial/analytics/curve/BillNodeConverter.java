@@ -45,7 +45,10 @@ import com.opengamma.util.i18n.Country;
 import com.opengamma.util.money.Currency;
 
 /**
- *
+ * Converts a {@link BillNode} into a {@link BillTransactionDefinition} using yield information from the market data snapshot. The
+ * bill security must be available from the security source, as the maturity date and (optionally) the legal entity information
+ * used in the definition is obtained from the security. If there is no legal entity information available from the source,
+ * then an entity consisting of only the region is used to identify the issuer.
  */
 public class BillNodeConverter extends CurveNodeVisitorAdapter<InstrumentDefinition<?>> {
   /** The region source */
@@ -64,20 +67,41 @@ public class BillNodeConverter extends CurveNodeVisitorAdapter<InstrumentDefinit
   private final ZonedDateTime _valuationTime;
 
   /**
-   * @param regionSource The region source, not null
-   * @param holidaySource The holiday source, not null
-   * @param securitySource The security source, not null
-   * @param legalEntitySource The legal entity source, not null
-   * @param marketData The market data, not null
-   * @param dataId The market data id, not null
-   * @param valuationTime The valuation time, not null
+   * @param regionSource  the region source, not null
+   * @param holidaySource  the holiday source, not null
+   * @param securitySource  the security source, not null
+   * @param marketData  the market data, not null
+   * @param dataId  the market data id, not null
+   * @param valuationTime  the valuation time, not null
+   * @deprecated  A legal entity source should be supplied
    */
-  public BillNodeConverter(final HolidaySource holidaySource, final RegionSource regionSource, final SecuritySource securitySource, final LegalEntitySource legalEntitySource,
+  @Deprecated
+  public BillNodeConverter(final HolidaySource holidaySource, final RegionSource regionSource, final SecuritySource securitySource,
       final SnapshotDataBundle marketData, final ExternalId dataId, final ZonedDateTime valuationTime) {
     _regionSource = ArgumentChecker.notNull(regionSource, "regionSource");
     _holidaySource = ArgumentChecker.notNull(holidaySource, "holidaySource");
     _securitySource = ArgumentChecker.notNull(securitySource, "securitySource");
-    _legalEntitySource = legalEntitySource;
+    _legalEntitySource = null;
+    _marketData = ArgumentChecker.notNull(marketData, "marketData");
+    _dataId = ArgumentChecker.notNull(dataId, "dataId");
+    _valuationTime = ArgumentChecker.notNull(valuationTime, "valuationTime");
+  }
+
+  /**
+   * @param regionSource  the region source, not null
+   * @param holidaySource  the holiday source, not null
+   * @param securitySource  the security source, not null
+   * @param legalEntitySource  the legal entity source, not null
+   * @param marketData  the market data, not null
+   * @param dataId  the market data id, not null
+   * @param valuationTime  the valuation time, not null
+   */
+  public BillNodeConverter(final HolidaySource holidaySource, final RegionSource regionSource, final SecuritySource securitySource,
+      final LegalEntitySource legalEntitySource, final SnapshotDataBundle marketData, final ExternalId dataId, final ZonedDateTime valuationTime) {
+    _regionSource = ArgumentChecker.notNull(regionSource, "regionSource");
+    _holidaySource = ArgumentChecker.notNull(holidaySource, "holidaySource");
+    _securitySource = ArgumentChecker.notNull(securitySource, "securitySource");
+    _legalEntitySource = ArgumentChecker.notNull(legalEntitySource, "legalEntitySource");
     _marketData = ArgumentChecker.notNull(marketData, "marketData");
     _dataId = ArgumentChecker.notNull(dataId, "dataId");
     _valuationTime = ArgumentChecker.notNull(valuationTime, "valuationTime");

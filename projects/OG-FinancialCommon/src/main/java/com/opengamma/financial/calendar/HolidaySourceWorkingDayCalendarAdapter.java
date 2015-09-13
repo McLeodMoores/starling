@@ -28,6 +28,8 @@ import com.opengamma.util.money.Currency;
  *  <li> {@link HolidayType#CURRENCY} for a {@link Currency}
  * </ul>
  * If a holiday is requested that is not available from the source, then an exception is thrown.
+ * <p>
+ * The functionality in this class replicates that in {@link com.opengamma.financial.convention.HolidaySourceCalendarAdapter}.
  */
 public class HolidaySourceWorkingDayCalendarAdapter implements WorkingDayCalendar {
   /** The holiday source */

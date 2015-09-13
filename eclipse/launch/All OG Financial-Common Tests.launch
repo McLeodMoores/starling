@@ -20,6 +20,7 @@
 <listEntry value="com.opengamma.financial"/>
 <listEntry value="com.opengamma.financial.aggregation"/>
 <listEntry value="com.opengamma.financial.analytics"/>
+<listEntry value="com.opengamma.financial.analytics.conversion"/>
 <listEntry value="com.opengamma.financial.analytics.covariance"/>
 <listEntry value="com.opengamma.financial.analytics.curve"/>
 <listEntry value="com.opengamma.financial.analytics.curve.exposure"/>

@@ -9,7 +9,6 @@
  */
 package com.opengamma.financial.analytics.curve;
 
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,6 +17,7 @@ import org.threeten.bp.LocalDateTime;
 import org.threeten.bp.ZonedDateTime;
 
 import com.opengamma.OpenGammaRuntimeException;
+import com.opengamma.analytics.date.CalendarAdapter;
 import com.opengamma.analytics.date.FxSettlementDayCalculator;
 import com.opengamma.analytics.date.FxWorkingDayCalendar;
 import com.opengamma.analytics.date.LatAmFxSettlementDayCalculator;
@@ -27,14 +27,11 @@ import com.opengamma.analytics.financial.instrument.InstrumentDefinition;
 import com.opengamma.analytics.financial.schedule.ScheduleCalculator;
 import com.opengamma.analytics.util.time.TenorUtils;
 import com.opengamma.core.convention.ConventionSource;
-import com.opengamma.core.holiday.Holiday;
 import com.opengamma.core.holiday.HolidaySource;
-import com.opengamma.core.holiday.HolidayType;
 import com.opengamma.core.id.ExternalSchemes;
 import com.opengamma.core.marketdatasnapshot.SnapshotDataBundle;
-import com.opengamma.core.region.Region;
 import com.opengamma.core.region.RegionSource;
-import com.opengamma.financial.analytics.conversion.CalendarUtils;
+import com.opengamma.financial.analytics.conversion.WorkingDayCalendarUtils;
 import com.opengamma.financial.analytics.ircurve.strips.FXForwardNode;
 import com.opengamma.financial.calendar.HolidaySourceWorkingDayCalendarAdapter;
 import com.opengamma.financial.convention.FXForwardAndSwapConvention;
@@ -120,9 +117,9 @@ public class FXForwardNodeConverter extends CurveNodeVisitorAdapter<InstrumentDe
     final ZonedDateTime exchangeDate;
     // TODO start tenor isn't needed in the node
     if (spotConvention.getUseIntermediateUsHolidays() != null) {
-      final WorkingDayCalendar usCalendar = getCalendarForRegionOrCurrency();
+      final WorkingDayCalendar usCalendar = WorkingDayCalendarUtils.getCalendarForRegionOrCurrency(_regionSource, _holidaySource,
+          ExternalSchemes.countryRegionId(Country.US), Currency.USD);
       final Map<Currency, WorkingDayCalendar> calendars = new HashMap<>();
-      // TODO see comment on getCalendarForRegionOrCurrency
       calendars.put(payCurrency, new HolidaySourceWorkingDayCalendarAdapter(_holidaySource, payCurrency));
       calendars.put(receiveCurrency, new HolidaySourceWorkingDayCalendarAdapter(_holidaySource, receiveCurrency));
       calendars.put(Currency.USD, usCalendar);
@@ -141,45 +138,13 @@ public class FXForwardNodeConverter extends CurveNodeVisitorAdapter<InstrumentDe
       if (spotConvention.getSettlementRegion() == null) {
         throw new OpenGammaRuntimeException("Could not get settlement region from " + spotConvention.getSettlementRegion());
       }
-      final Calendar settlementCalendar = CalendarUtils.getCalendar(_regionSource, _holidaySource, forwardConvention.getSettlementRegion());
+      final Calendar settlementCalendar =
+          new CalendarAdapter(WorkingDayCalendarUtils.getCalendarForRegion(_regionSource, _holidaySource, forwardConvention.getSettlementRegion()));
       final ZonedDateTime spotDate = ScheduleCalculator.getAdjustedDate(_valuationTime, settlementDays, settlementCalendar);
       exchangeDate = ScheduleCalculator.getAdjustedDate(spotDate, fxForward.getMaturityTenor(), forwardConvention.getBusinessDayConvention(),
           settlementCalendar, forwardConvention.isIsEOM());
     }
     return ForexDefinition.fromAmounts(payCurrency, receiveCurrency, exchangeDate, payAmount, -_forward);
-  }
-
-  /**
-   * Gets the calendar by checking the source first for a holiday for the appropriate region, then the currency.
-   * @return  the calendar
-   */
-  //TODO this method should be used for both FX currencies as well as US, but need to find how to get a region for a currency
-  private WorkingDayCalendar getCalendarForRegionOrCurrency() {
-    WorkingDayCalendar calendar = null;
-    try {
-      final Region region = _regionSource.getHighestLevelRegion(ExternalSchemes.countryRegionId(Country.US));
-      if (region != null) {
-        final Collection<Holiday> usHolidays = _holidaySource.get(HolidayType.BANK, ExternalSchemes.countryRegionId(Country.US).toBundle());
-        if (usHolidays != null && !usHolidays.isEmpty()) {
-          calendar = new HolidaySourceWorkingDayCalendarAdapter(_holidaySource, region);
-        }
-      }
-    } catch (final Exception e) {
-      // source might throw exception rather than returning null or empty collection of region or holiday
-      final Collection<Holiday> usHolidays = _holidaySource.get(Currency.USD);
-      if (usHolidays == null || usHolidays.isEmpty()) {
-        throw new OpenGammaRuntimeException("Could not get US holidays from source");
-      }
-      calendar = new HolidaySourceWorkingDayCalendarAdapter(_holidaySource, Currency.USD);
-    }
-    if (calendar == null) {
-      final Collection<Holiday> usHolidays = _holidaySource.get(Currency.USD);
-      if (usHolidays == null || usHolidays.isEmpty()) {
-        throw new OpenGammaRuntimeException("Could not get US holidays from source");
-      }
-      calendar = new HolidaySourceWorkingDayCalendarAdapter(_holidaySource, Currency.USD);
-    }
-    return calendar;
   }
 
 }
