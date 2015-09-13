@@ -12,15 +12,25 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.time.Tenor;
 
 /**
- *
+ * Adjusts a date by adding the number of spot days and then adding a tenor to the date. If this date is a holiday,
+ * the business day convention is used to adjust to the appropriate business day (e.g. the preceding business day
+ * if the convention is {@link com.opengamma.financial.convention.businessday.PrecedingBusinessDayConvention}.
  */
 public final class DefaultDateAdjustmentCalculator implements TenorOffsetDateAdjustmentCalculator {
+  /** A static instance */
   private static final TenorOffsetDateAdjustmentCalculator INSTANCE = new DefaultDateAdjustmentCalculator();
 
+  /**
+   * Returns a static instance.
+   * @return  the instance.
+   */
   public static TenorOffsetDateAdjustmentCalculator getInstance() {
     return INSTANCE;
   }
 
+  /**
+   * Restricted constructor.
+   */
   private DefaultDateAdjustmentCalculator() {
   }
 

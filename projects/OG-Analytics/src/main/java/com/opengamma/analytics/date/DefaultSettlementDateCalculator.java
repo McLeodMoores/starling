@@ -58,4 +58,5 @@ public final class DefaultSettlementDateCalculator implements SettlementDateCalc
     }
     return settlementDate;
   }
+
 }
