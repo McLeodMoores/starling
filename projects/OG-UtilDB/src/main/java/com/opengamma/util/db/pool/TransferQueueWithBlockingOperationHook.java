@@ -8,8 +8,7 @@ package com.opengamma.util.db.pool;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.concurrent.TimeUnit;
-
-import jsr166y.TransferQueue;
+import java.util.concurrent.TransferQueue;
 
 import com.opengamma.util.async.BlockingOperation;
 
