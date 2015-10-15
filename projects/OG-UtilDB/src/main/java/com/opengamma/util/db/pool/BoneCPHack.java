@@ -9,8 +9,7 @@ import java.lang.reflect.Method;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Map;
-
-import jsr166y.TransferQueue;
+import java.util.concurrent.TransferQueue;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
