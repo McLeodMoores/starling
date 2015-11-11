@@ -37,6 +37,7 @@ common/deploy.properties
 !/projects/OG-FinancialRest
 !/projects/MM-Finmath
 !/projects/MM-Validation
+!/projects/MM-StarlingClient
 !/projects/OG-FinancialTypes
 !/projects/OG-Install
 !/projects/OG-Integration
