@@ -316,7 +316,7 @@ public class InMemoryHistoricalTimeSeriesMaster
 
     final LocalDateDoubleTimeSeries existingSeries = _storePoints.get(objectId);
     if (existingSeries != null) {
-      if (existingSeries.size() > 0 && series.getEarliestTime().isBefore(existingSeries.getLatestTime())) {
+      if (existingSeries.size() > 0 && !(series.getLatestTime().isBefore(existingSeries.getEarliestTime()) || series.getEarliestTime().isAfter(existingSeries.getLatestTime()))) {
         throw new IllegalArgumentException("Unable to add time-series as dates overlap");
       }
       LocalDateDoubleTimeSeries newSeries = existingSeries.noIntersectionOperation(series);

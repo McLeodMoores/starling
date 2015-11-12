@@ -102,8 +102,8 @@ public class HistoricalTimeSeriesWriterTest {
     // Current implementation drops new, earlier points
     ManageableHistoricalTimeSeries manageableTs = _htsMaster.getTimeSeries(id);
     LocalDateDoubleTimeSeries readTs = manageableTs.getTimeSeries();
-    List<LocalDate> expectedDates = ImmutableList.of(_today.minusDays(2), _today.minusDays(1), _today, _today.plusDays(1));
-    List<Double> expectedValues = ImmutableList.of(1d, 2d, 3d, 4d);
+    List<LocalDate> expectedDates = ImmutableList.of(_today.minusDays(3), _today.minusDays(2), _today.minusDays(1), _today, _today.plusDays(1));
+    List<Double> expectedValues = ImmutableList.of(0d, 1d, 2d, 3d, 4d);
     ImmutableLocalDateDoubleTimeSeries expectedTs = ImmutableLocalDateDoubleTimeSeries.of(expectedDates, expectedValues);
     assertEquals(expectedTs, readTs);    
   }
