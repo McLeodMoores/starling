@@ -82,6 +82,14 @@ public class HistoricalTimeSeriesMasterUtils {
           uId = _htsMaster.updateTimeSeriesDataPoints(oId, newSeries);
         }
       }
+      // 3: 'update' the time-series to add any new, earlier points
+      if (timeSeries.getEarliestTime().isBefore(existingTs.getEarliestTime())) {
+    	LocalDateDoubleTimeSeries newSeries = timeSeries.subSeries(timeSeries.getEarliestTime(), true, existingTs.getEarliestTime(), false);
+        if (newSeries.size() > 0) {
+          s_logger.debug("Updating time series " + oId + "[" + dataField + "] from " + newSeries.getEarliestTime() + " to " + newSeries.getLatestTime());
+          uId = _htsMaster.updateTimeSeriesDataPoints(oId, newSeries);
+        }  
+      }
     }
     return uId;
   }
