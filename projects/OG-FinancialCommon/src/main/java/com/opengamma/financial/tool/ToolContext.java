@@ -66,167 +66,167 @@ public class ToolContext extends DirectBean implements Closeable {
    * The manager that created this context. This is used by the {@link #close()} method.
    */
   @PropertyDefinition(set = "manual")
-  private Object _contextManager;
+  private volatile Object _contextManager;
 
   /**
    * The batch master.
    */
   @PropertyDefinition
-  private BatchMaster _batchMaster;
+  private volatile BatchMaster _batchMaster;
   /**
    * The config master.
    */
   @PropertyDefinition
-  private ConfigMaster _configMaster;
+  private volatile ConfigMaster _configMaster;
   /**
    * The exchange master.
    */
   @PropertyDefinition
-  private ExchangeMaster _exchangeMaster;
+  private volatile ExchangeMaster _exchangeMaster;
   /**
    * The holiday master.
    */
   @PropertyDefinition
-  private HolidayMaster _holidayMaster;
+  private volatile HolidayMaster _holidayMaster;
   /**
    * The region master.
    */
   @PropertyDefinition
-  private RegionMaster _regionMaster;
+  private volatile RegionMaster _regionMaster;
   /**
    * The security master.
    */
   @PropertyDefinition
-  private SecurityMaster _securityMaster;
+  private volatile SecurityMaster _securityMaster;
   /**
    * The position master.
    */
   @PropertyDefinition
-  private PositionMaster _positionMaster;
+  private volatile PositionMaster _positionMaster;
   /**
    * The portfolio master.
    */
   @PropertyDefinition
-  private PortfolioMaster _portfolioMaster;
+  private volatile PortfolioMaster _portfolioMaster;
   /**
    * The legal entity master.
    */
   @PropertyDefinition
-  private LegalEntityMaster _legalEntityMaster;
+  private volatile LegalEntityMaster _legalEntityMaster;
   /**
    * The historical time-series master.
    */
   @PropertyDefinition
-  private HistoricalTimeSeriesMaster _historicalTimeSeriesMaster;
+  private volatile HistoricalTimeSeriesMaster _historicalTimeSeriesMaster;
   /**
    * The snapshot master.
    */
   @PropertyDefinition
-  private MarketDataSnapshotMaster _marketDataSnapshotMaster;
+  private volatile MarketDataSnapshotMaster _marketDataSnapshotMaster;
 
   /**
    * The convention master.
    */
   @PropertyDefinition
-  private ConventionMaster _conventionMaster;
+  private volatile ConventionMaster _conventionMaster;
 
   /**
    * The config source.
    */
   @PropertyDefinition
-  private ConfigSource _configSource;
+  private volatile ConfigSource _configSource;
   /**
    * The exchange source.
    */
   @PropertyDefinition
-  private ExchangeSource _exchangeSource;
+  private volatile ExchangeSource _exchangeSource;
   /**
    * The holiday source.
    */
   @PropertyDefinition
-  private HolidaySource _holidaySource;
+  private volatile HolidaySource _holidaySource;
   /**
    * The region source.
    */
   @PropertyDefinition
-  private RegionSource _regionSource;
+  private volatile RegionSource _regionSource;
   /**
    * The security source.
    */
   @PropertyDefinition
-  private SecuritySource _securitySource;
+  private volatile SecuritySource _securitySource;
   /**
    * The position source.
    */
   @PropertyDefinition
-  private PositionSource _positionSource;
+  private volatile PositionSource _positionSource;
   /**
    * The organization source.
    */
   @PropertyDefinition
-  private LegalEntitySource _legalEntitySource;
+  private volatile LegalEntitySource _legalEntitySource;
   /**
    * The historical time-series source.
    */
   @PropertyDefinition
-  private HistoricalTimeSeriesSource _historicalTimeSeriesSource;
+  private volatile HistoricalTimeSeriesSource _historicalTimeSeriesSource;
   /**
    * The snapshot source.
    */
   @PropertyDefinition
-  private MarketDataSnapshotSource _marketDataSnapshotSource;
+  private volatile MarketDataSnapshotSource _marketDataSnapshotSource;
   /**
    * The convention bundle source.
    */
   @PropertyDefinition
-  private ConventionBundleSource _conventionBundleSource;
+  private volatile ConventionBundleSource _conventionBundleSource;
   /**
    * The convention source.
    */
   @PropertyDefinition
-  private ConventionSource _conventionSource;
+  private volatile ConventionSource _conventionSource;
   /**
    * The security provider.
    */
   @PropertyDefinition
-  private SecurityProvider _securityProvider;
+  private volatile SecurityProvider _securityProvider;
   /**
    * The security loader.
    */
   @PropertyDefinition
-  private SecurityLoader _securityLoader;
+  private volatile SecurityLoader _securityLoader;
   /**
    * The time-series provider.
    */
   @PropertyDefinition
-  private HistoricalTimeSeriesProvider _historicalTimeSeriesProvider;
+  private volatile HistoricalTimeSeriesProvider _historicalTimeSeriesProvider;
   /**
    * The time-series loader.
    */
   @PropertyDefinition
-  private HistoricalTimeSeriesLoader _historicalTimeSeriesLoader;
+  private volatile HistoricalTimeSeriesLoader _historicalTimeSeriesLoader;
   /**
    * The time-series resolver.
    */
   @PropertyDefinition
-  private HistoricalTimeSeriesResolver _historicalTimeSeriesResolver;
+  private volatile HistoricalTimeSeriesResolver _historicalTimeSeriesResolver;
   /**
    * The view processor.
    */
   @PropertyDefinition
-  private ViewProcessor _viewProcessor;
+  private volatile ViewProcessor _viewProcessor;
 
   /**
    * The available outputs provider.
    */
   @PropertyDefinition
-  private AvailableOutputsProvider _avaliableOutputsProvider;
+  private volatile AvailableOutputsProvider _avaliableOutputsProvider;
   
   /**
    * The function configuration source
    */
   @PropertyDefinition
-  private FunctionConfigurationSource _functionConfigSource;
+  private volatile FunctionConfigurationSource _functionConfigSource;
 
   /**
    * Creates an instance.

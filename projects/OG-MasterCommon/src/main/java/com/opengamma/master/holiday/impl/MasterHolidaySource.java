@@ -32,9 +32,6 @@ import com.opengamma.master.holiday.HolidayDocument;
 import com.opengamma.master.holiday.HolidayMaster;
 import com.opengamma.master.holiday.HolidaySearchRequest;
 import com.opengamma.master.holiday.HolidaySearchResult;
-import com.opengamma.service.ServiceContext;
-import com.opengamma.service.ThreadLocalServiceContext;
-import com.opengamma.service.VersionCorrectionProvider;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.PublicSPI;
 import com.opengamma.util.money.Currency;
@@ -105,9 +102,13 @@ public class MasterHolidaySource extends AbstractMasterSource<Holiday, HolidayDo
     return isHoliday(request, dateToCheck);
   }
 
+  /**
+   * This method used to check the ThreadLocalServiceContext.getConfigVersionCorrection(), but as it wasn't being initialized correctly
+   * by the engine, and always returned LATEST, it's been removed.
+   * @return the version/correction (always LATEST currently)
+   */
   private VersionCorrection getVersionCorrection() {
-    final ServiceContext serviceContext = ThreadLocalServiceContext.getInstance();
-    return serviceContext.get(VersionCorrectionProvider.class).getConfigVersionCorrection();
+    return VersionCorrection.LATEST;
   }
 
   private HolidaySearchRequest createCurrencySearchRequest(final Currency currency) {

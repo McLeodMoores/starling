@@ -115,7 +115,7 @@ public class BillNodeConverter extends CurveNodeVisitorAdapter<InstrumentDefinit
     }
     final Security security = _securitySource.getSingle(_dataId.toBundle()); //TODO this is in here because we can't ask for data by ISIN directly.
     if (!(security instanceof BillSecurity)) {
-      throw new OpenGammaRuntimeException("Could not get security for " + security);
+      throw new OpenGammaRuntimeException("Could not get security for " + _dataId.toBundle());
     }
     final BillSecurity billSecurity = (BillSecurity) security;
     final ExternalId regionId = billSecurity.getRegionId();
@@ -133,13 +133,8 @@ public class BillNodeConverter extends CurveNodeVisitorAdapter<InstrumentDefinit
     if (_legalEntitySource != null) {
       final com.opengamma.core.legalentity.LegalEntity legalEntityFromSource = _legalEntitySource.getSingle(billSecurity.getLegalEntityId());
       final Collection<Rating> ratings = legalEntityFromSource.getRatings();
-      final String ticker;
-      if (identifiers != null) {
-        final String isin = identifiers.getValue(ExternalSchemes.ISIN);
-        ticker = isin == null ? null : isin;
-      } else {
-        ticker = null;
-      }
+      final String isin = identifiers.getValue(ExternalSchemes.ISIN);
+      final String ticker = isin == null ? null : isin;
       final String shortName = legalEntityFromSource.getName();
       Set<CreditRating> creditRatings = null;
       for (final Rating rating : ratings) {

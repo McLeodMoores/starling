@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.mcleodmoores.starling</groupId>
+    <artifactId>starling-client</artifactId>
+    <packaging>pom</packaging>
+    <version>1.0-SNAPSHOT</version>
+    <properties>
+        <!-- maven-compiler-plugin -->
+        <maven.compiler.target>1.7</maven.compiler.target>
+        <maven.compiler.source>1.7</maven.compiler.source>
+    </properties>
+
+    <!--  Define some external repositories -->
+    <repositories>
+        <repository>
+            <id>private</id>
+            <name>McLeod Moores private maven repository</name>
+            <url>http://maven.mcleodmoores.com:8081/content/repositories/private</url>
+        </repository>
+        <repository>
+            <id>private-snapshot</id>
+            <name>McLeod Moores private maven snapshot repository</name>
+            <url>http://maven.mcleodmoores.com:8081/content/repositories/private-snapshot</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>og-public</id>
+            <name>OG Public</name>
+            <url>http://maven.opengamma.com/nexus/content/groups/public</url>
+        </repository>
+        <repository>
+            <id>jboss-maven2-release-repository</id>
+            <name>Jboss</name>
+            <url>http://repository.jboss.com/nexus/content/repositories/root_repository</url>
+        </repository>
+    </repositories>
+    <pluginRepositories>
+        <pluginRepository>
+            <id>og-public</id>
+            <name>OG Public</name>
+            <url>http://maven.opengamma.com/nexus/content/groups/public</url>
+        </pluginRepository>
+    </pluginRepositories>
+    <dependencies>
+        <dependency>
+            <groupId>com.mcleodmoores.opengamma.platform</groupId>
+            <artifactId>og-client</artifactId>
+            <version>1.1.0-SNAPSHOT</version>
+            <type>pom</type>
+        </dependency>
+    </dependencies>
+</project>

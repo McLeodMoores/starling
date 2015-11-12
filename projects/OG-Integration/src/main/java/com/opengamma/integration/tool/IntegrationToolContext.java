@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import com.opengamma.OpenGammaRuntimeException;
 import org.joda.beans.Bean;
 import org.joda.beans.BeanBuilder;
 import org.joda.beans.BeanDefinition;
@@ -25,6 +24,7 @@ import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.opengamma.OpenGammaRuntimeException;
 import com.opengamma.bbg.referencedata.ReferenceDataProvider;
 import com.opengamma.bbg.tool.BloombergToolContext;
 import com.opengamma.component.ComponentInfo;
@@ -48,16 +48,16 @@ public class IntegrationToolContext extends ToolContext implements BloombergTool
    * Link back to the component server providing the implementations.  Useful if you need a specific classifier/instance.
    */
   @PropertyDefinition
-  private ComponentServer _componentServer;
+  private volatile ComponentServer _componentServer;
   
   /**
    * The Bloomberg reference data provider.
    */
   @PropertyDefinition
-  private ReferenceDataProvider _bloombergReferenceDataProvider;
+  private volatile ReferenceDataProvider _bloombergReferenceDataProvider;
 
   @PropertyDefinition
-  private DependencyGraphTraceProvider _dependencyGraphTraceProvider;
+  private volatile DependencyGraphTraceProvider _dependencyGraphTraceProvider;
   
   public List<LiveDataMetaDataProvider> getLiveDataMetaDataProviders() {
     if (_componentServer == null) {

@@ -21,6 +21,7 @@ import com.opengamma.analytics.date.CalendarAdapter;
 import com.opengamma.analytics.date.FxSettlementDayCalculator;
 import com.opengamma.analytics.date.FxWorkingDayCalendar;
 import com.opengamma.analytics.date.LatAmFxSettlementDayCalculator;
+import com.opengamma.analytics.date.WeekendWorkingDayCalendar;
 import com.opengamma.analytics.date.WorkingDayCalendar;
 import com.opengamma.analytics.financial.forex.definition.ForexDefinition;
 import com.opengamma.analytics.financial.instrument.InstrumentDefinition;
@@ -117,12 +118,20 @@ public class FXForwardNodeConverter extends CurveNodeVisitorAdapter<InstrumentDe
     final ZonedDateTime exchangeDate;
     // TODO start tenor isn't needed in the node
     if (spotConvention.getUseIntermediateUsHolidays() != null) {
-      final WorkingDayCalendar usCalendar = WorkingDayCalendarUtils.getCalendarForRegionOrCurrency(_regionSource, _holidaySource,
-          ExternalSchemes.countryRegionId(Country.US), Currency.USD);
       final Map<Currency, WorkingDayCalendar> calendars = new HashMap<>();
-      calendars.put(payCurrency, new HolidaySourceWorkingDayCalendarAdapter(_holidaySource, payCurrency));
-      calendars.put(receiveCurrency, new HolidaySourceWorkingDayCalendarAdapter(_holidaySource, receiveCurrency));
-      calendars.put(Currency.USD, usCalendar);
+      try {
+        final WorkingDayCalendar usCalendar = WorkingDayCalendarUtils.getCalendarForRegionOrCurrency(_regionSource, _holidaySource,
+          ExternalSchemes.countryRegionId(Country.US), Currency.USD);
+        calendars.put(payCurrency, new HolidaySourceWorkingDayCalendarAdapter(_holidaySource, payCurrency));
+        calendars.put(receiveCurrency, new HolidaySourceWorkingDayCalendarAdapter(_holidaySource, receiveCurrency));
+        calendars.put(Currency.USD, usCalendar);
+      } catch (final NullPointerException e) {
+        // if one fails, all will
+        final WorkingDayCalendar weekendCalendar = WeekendWorkingDayCalendar.SATURDAY_SUNDAY;
+        calendars.put(payCurrency, weekendCalendar);
+        calendars.put(receiveCurrency, weekendCalendar);
+        calendars.put(Currency.USD, weekendCalendar);
+      }
       final FxWorkingDayCalendar perCurrencyCalendars = new FxWorkingDayCalendar(payCurrency.toString() + "/" + receiveCurrency.toString(), calendars);
       // find forward date
       final ZonedDateTime forwardDate = TenorUtils.adjustDateByTenor(_valuationTime, fxForward.getMaturityTenor());
