@@ -6,39 +6,39 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>com.mcleodmoores.opengamma.platform</groupId>
-    <artifactId>og-platform-public</artifactId>
+    <groupId>com.mcleodmoores.starling.platform</groupId>
+    <artifactId>platform-public</artifactId>
     <version>1.1.0-SNAPSHOT</version>
     <relativePath>..</relativePath>
   </parent>
-  <artifactId>og-masterdb-rest</artifactId>
+  <artifactId>master-db-rest</artifactId>
   <packaging>jar</packaging>
-  <name>OG-MasterDBRest</name>
-  <description>OpenGamma Platform master database implementation (REST Server)</description>
+  <name>master-db-rest</name>
+  <description>Starling Platform master database implementation (REST Server)</description>
 
   <scm>
-    <url>https://github.com/OpenGamma/OG-Platform/tree/master/projects/OG-MasterDBRest</url>
+    <url>https://github.com/McLeodMoores/starling/tree/master/projects/master-db-rest</url>
   </scm>
 
   <dependencies>
       <dependency>
-      <groupId>com.mcleodmoores.opengamma.platform</groupId>
-      <artifactId>og-masterdb-common</artifactId>
+      <groupId>com.mcleodmoores.starling.platform</groupId>
+      <artifactId>master-db</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>com.mcleodmoores.opengamma.platform</groupId>
-      <artifactId>og-financial-common</artifactId>
+      <groupId>com.mcleodmoores.starling.platform</groupId>
+      <artifactId>financial</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>com.mcleodmoores.opengamma.platform</groupId>
-      <artifactId>og-financial-rest</artifactId>
+      <groupId>com.mcleodmoores.starling.platform</groupId>
+      <artifactId>financial-rest</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>com.mcleodmoores.opengamma.platform</groupId>
-      <artifactId>og-utildb</artifactId>
+      <groupId>com.mcleodmoores.starling.platform</groupId>
+      <artifactId>util-db</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>

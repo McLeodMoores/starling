@@ -46,7 +46,6 @@
     <module>integration</module>
     <module>live-data</module>
     <module>master</module>
-    <module>master-common</module>
     <module>master-rest</module>
     <module>master-rest-client</module>
     <module>master-db</module>

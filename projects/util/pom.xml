@@ -31,7 +31,7 @@
       <artifactId>scripts</artifactId>
     </dependency>
     <dependency>
-      <groupId>com.starling</groupId>
+      <groupId>com.opengamma</groupId>
       <artifactId>lambdava</artifactId>
     </dependency>
 

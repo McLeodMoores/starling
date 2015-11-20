@@ -6,15 +6,15 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>com.mcleodmoores.opengamma.platform</groupId>
-    <artifactId>og-platform</artifactId>
+    <groupId>com.mcleodmoores.starling.platform</groupId>
+    <artifactId>platform</artifactId>
     <version>1.1.0-SNAPSHOT</version>
     <relativePath>..</relativePath>
   </parent>  
   <artifactId>examples</artifactId>
   <packaging>pom</packaging>
-  <name>Examples</name>
-  <description>OpenGamma Platform Examples</description>
+  <name>examples</name>
+  <description>Starling Platform Examples</description>
 
   <!-- ==================================================================== -->
   <licenses>
@@ -25,7 +25,7 @@
     </license>
   </licenses>
   <scm>
-    <url>https://github.com/OpenGamma/OG-Platform/tree/master/examples</url>
+    <url>https://github.com/McLeodMoores/starling/tree/master/examples</url>
   </scm>
 
   <!-- ==================================================================== -->
@@ -37,9 +37,9 @@
   <!-- ==================================================================== -->
   <distributionManagement>
     <site>
-      <id>og-public-site</id>
-      <name>OpenGamma public site</name>
-      <url>http://developers.opengamma.com/og-platform/examples</url>
+      <id>public-site</id>
+      <name>Starling public site</name>
+      <url>http://www.mcleodmoores.com</url>
     </site>
   </distributionManagement>
 

@@ -62,11 +62,11 @@
             <name>OG Public</name>
             <url>http://maven.opengamma.com/nexus/content/groups/public</url>
         </repository>
-        <repository>
+        <!--repository>
             <id>jboss-maven2-release-repository</id>
             <name>Jboss</name>
             <url>http://repository.jboss.com/nexus/content/repositories/root_repository</url>
-        </repository>
+        </repository-->
     </repositories>
     <pluginRepositories>
         <pluginRepository>
@@ -126,85 +126,85 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>com.mcleodmoores.opengamma.platform</groupId>
-            <artifactId>og-component-common</artifactId>
+            <groupId>com.mcleodmoores.starling.platform</groupId>
+            <artifactId>component</artifactId>
             <version>1.1.0-SNAPSHOT</version>
             <type>jar</type>
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>com.mcleodmoores.opengamma.platform</groupId>
-            <artifactId>og-util-common</artifactId>
+            <groupId>com.mcleodmoores.starling.platform</groupId>
+            <artifactId>util</artifactId>
             <version>1.1.0-SNAPSHOT</version>
             <type>jar</type>
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>com.mcleodmoores.opengamma.platform</groupId>
-            <artifactId>og-timeseries</artifactId>
+            <groupId>com.mcleodmoores.starling.platform</groupId>
+            <artifactId>time-series</artifactId>
             <version>1.1.0-SNAPSHOT</version>
             <type>jar</type>
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>com.mcleodmoores.opengamma.platform</groupId>
-            <artifactId>og-engine-common</artifactId>
+            <groupId>com.mcleodmoores.starling.platform</groupId>
+            <artifactId>engine</artifactId>
             <version>1.1.0-SNAPSHOT</version>
             <type>jar</type>
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>com.mcleodmoores.opengamma.platform</groupId>
-            <artifactId>og-core-common</artifactId>
+            <groupId>com.mcleodmoores.starling.platform</groupId>
+            <artifactId>core</artifactId>
             <version>1.1.0-SNAPSHOT</version>
             <type>jar</type>
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>com.mcleodmoores.opengamma.platform</groupId>
-            <artifactId>og-financial-common</artifactId>
+            <groupId>com.mcleodmoores.starling.platform</groupId>
+            <artifactId>financial</artifactId>
             <version>1.1.0-SNAPSHOT</version>
             <type>jar</type>
             <scope>compile</scope>
         </dependency>
         <!-- <dependency>-->
-            <!--<groupId>com.mcleodmoores.opengamma.platform</groupId>-->
-            <!--<artifactId>og-integration</artifactId>-->
+            <!--<groupId>com.mcleodmoores.starling.platform</groupId>-->
+            <!--<artifactId>integration</artifactId>-->
             <!--<version>1.1.0-SNAPSHOT</version>-->
             <!--<type>jar</type>-->
             <!--<scope>compile</scope>-->
         <!--</dependency>-->
         <!--<dependency>-->
-            <!--<groupId>com.mcleodmoores.opengamma.platform</groupId>-->
-            <!--<artifactId>og-integration</artifactId>-->
+            <!--<groupId>com.mcleodmoores.starling.platform</groupId>-->
+            <!--<artifactId>integration</artifactId>-->
             <!--<version>1.1.0-SNAPSHOT</version>-->
             <!--<type>jar</type>-->
             <!--<scope>compile</scope>-->
         <!--</dependency>-->
         <dependency>
-            <groupId>com.mcleodmoores.opengamma.platform</groupId>
-            <artifactId>og-master-common</artifactId>
+            <groupId>com.mcleodmoores.starling.platform</groupId>
+            <artifactId>master</artifactId>
             <version>1.1.0-SNAPSHOT</version>
             <type>jar</type>
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>com.mcleodmoores.opengamma.platform</groupId>
-            <artifactId>og-masterdb-common</artifactId>
+            <groupId>com.mcleodmoores.starling.platform</groupId>
+            <artifactId>master-db</artifactId>
             <version>1.1.0-SNAPSHOT</version>
             <type>jar</type>
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>com.mcleodmoores.opengamma.platform</groupId>
-            <artifactId>og-livedata</artifactId>
+            <groupId>com.mcleodmoores.starling.platform</groupId>
+            <artifactId>live-data</artifactId>
             <version>1.1.0-SNAPSHOT</version>
             <type>jar</type>
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>com.mcleodmoores.opengamma.platform</groupId>
-            <artifactId>og-financial-types</artifactId>
+            <groupId>com.mcleodmoores.starling.platform</groupId>
+            <artifactId>financial-types</artifactId>
             <version>1.1.0-SNAPSHOT</version>
             <type>jar</type>
             <scope>compile</scope>

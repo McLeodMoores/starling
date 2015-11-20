@@ -28,7 +28,7 @@
     </dependency>
 
     <dependency>
-      <groupId>com.starling</groupId>
+      <groupId>com.opengamma</groupId>
       <artifactId>elsql</artifactId>
     </dependency>
     <dependency>
