@@ -6,15 +6,15 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>com.mcleodmoores.opengamma.platform</groupId>
-    <artifactId>og-platform</artifactId>
+    <groupId>com.mcleodmoores.starling.platform</groupId>
+    <artifactId>platform</artifactId>
     <version>1.1.0-SNAPSHOT</version>
     <relativePath>..</relativePath>
   </parent>  
-  <artifactId>og-platform-public</artifactId>
+  <artifactId>platform-public</artifactId>
   <packaging>pom</packaging>
-  <name>OG-Platform-Public</name>
-  <description>OpenGamma Platform public project</description>
+  <name>platform-public</name>
+  <description>Starling Platform public project</description>
 
   <!-- ==================================================================== -->
   <licenses>
@@ -27,49 +27,42 @@
 
   <!-- ==================================================================== -->
   <modules>
-    <module>OG-Analytics</module>
-    <module>OG-Bloomberg</module>
-    <module>OG-Client</module>
-    <module>OG-Component</module>
-    <module>OG-ComponentCommon</module>
-    <module>OG-ComponentRest</module>
-    <module>OG-Core</module>
-    <module>OG-CoreCommon</module>
-    <module>OG-CoreRest</module>
-    <module>OG-CoreRestClient</module>
-    <module>OG-Engine</module>
-    <module>OG-EngineCommon</module>
-    <module>OG-EngineRest</module>
-    <module>OG-EngineRestClient</module>
-    <module>OG-EngineDB</module>
-    <module>OG-Financial</module>
-    <module>OG-FinancialCommon</module>
-    <module>OG-FinancialRest</module>
-    <module>OG-FinancialRestClient</module>
-    <module>OG-FinancialTypes</module>
-    <module>OG-Integration</module>
-    <module>OG-LiveData</module>
-    <module>OG-Master</module>
-    <module>OG-MasterCommon</module>
-    <module>OG-MasterRest</module>
-    <module>OG-MasterRestClient</module>
-    <module>OG-MasterDB</module>
-    <module>OG-MasterDBCommon</module>
-    <module>OG-MasterDBRest</module>
-    <module>OG-MasterDBRestClient</module>
-    <module>OG-Provider</module>
-    <module>OG-ProviderCommon</module>
-    <module>OG-ProviderRest</module>
-    <module>OG-ProviderRestClient</module>
-    <module>OG-Security</module>
-    <module>OG-Server</module>
-    <module>OG-TimeSeries</module>
-    <module>OG-Util</module>
-    <module>OG-UtilCommon</module>
-    <module>OG-UtilRest</module>
-    <module>OG-UtilRestClient</module>
-    <module>OG-UtilDB</module>
-    <module>OG-Web</module>
+    <module>analytics</module>
+    <module>bloomberg</module>
+    <module>client</module>
+    <module>component</module>
+    <module>component-rest</module>
+    <module>core</module>
+    <module>core-rest</module>
+    <module>core-rest-client</module>
+    <module>engine</module>
+    <module>engine-rest</module>
+    <module>engine-rest-client</module>
+    <module>engine-db</module>
+    <module>financial</module>
+    <module>financial-rest</module>
+    <module>financial-rest-client</module>
+    <module>financial-types</module>
+    <module>integration</module>
+    <module>live-data</module>
+    <module>master</module>
+    <module>master-common</module>
+    <module>master-rest</module>
+    <module>master-rest-client</module>
+    <module>master-db</module>
+    <module>master-db-rest</module>
+    <module>master-db-rest-client</module>
+    <module>provider</module>
+    <module>provider-rest</module>
+    <module>provider-rest-client</module>
+    <module>security</module>
+    <module>server</module>
+    <module>time-series</module>
+    <module>util</module>
+    <module>util-rest</module>
+    <module>util-rest-client</module>
+    <module>util-db</module>
+    <module>web</module>
   </modules>
 
   <!-- ==================================================================== -->
@@ -232,7 +225,7 @@
     <clirr-maven-plugin.version>2.6.1</clirr-maven-plugin.version>
     <comparisonVersion>2.1.0</comparisonVersion>
     <!-- Other properties -->
-    <fudge.proto.searchDir>..{RELATIVE}../projects/OG-Util/src/main/java;..{RELATIVE}../projects/OG-Engine/src/main/java</fudge.proto.searchDir>
+    <fudge.proto.searchDir>..{RELATIVE}../projects/util/src/main/java;..{RELATIVE}../projects/engine/src/main/java</fudge.proto.searchDir>
   </properties>
 
 </project>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project
+    xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>com.mcleodmoores.starling.platform</groupId>
+    <artifactId>platform-public</artifactId>
+    <version>1.1.0-SNAPSHOT</version>
+    <relativePath>..</relativePath>
+  </parent>
+  <artifactId>financial-types</artifactId>
+  <packaging>jar</packaging>
+  <name>financial-types</name>
+  <description>Starling Platform financial types</description>
+
+  <scm>
+    <url>https://github.com/McLeodMoores/starling/tree/master/projects/financial-types</url>
+  </scm>
+
+  <dependencies>
+    <dependency>
+      <groupId>com.mcleodmoores.starling.platform</groupId>
+      <artifactId>util</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.mcleodmoores.starling.platform</groupId>
+      <artifactId>master</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.mcleodmoores.starling.platform</groupId>
+      <artifactId>analytics</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.poi</groupId>
+      <artifactId>poi</artifactId>
+    </dependency>
+  </dependencies>
+
+  <properties>
+  </properties>
+
+</project>

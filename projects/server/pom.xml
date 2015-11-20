@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project
+    xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+ 
+  <parent>
+    <groupId>com.mcleodmoores.starling.platform</groupId>
+    <artifactId>platform-public</artifactId>
+    <version>1.1.0-SNAPSHOT</version>
+    <relativePath>..</relativePath>
+  </parent>
+  <artifactId>server</artifactId>
+  <packaging>pom</packaging>
+  <name>server</name>
+  <description>Starling Platform server dependencies</description>
+
+  <!-- ==================================================================== -->
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>com.starling.tools</groupId>
+        <artifactId>starling-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <goals>
+              <goal>generate-scripts</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+
+  <!-- ==================================================================== -->
+  <dependencies>
+    <dependency>
+      <groupId>com.mcleodmoores.starling.platform</groupId>
+      <artifactId>util</artifactId>
+      <version>${project.version}</version>
+      <type>pom</type>
+    </dependency>
+    <dependency>
+      <groupId>com.mcleodmoores.starling.platform</groupId>
+      <artifactId>time-series</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.mcleodmoores.starling.platform</groupId>
+      <artifactId>core</artifactId>
+      <version>${project.version}</version>
+      <type>pom</type>
+    </dependency>
+    <dependency>
+      <groupId>com.mcleodmoores.starling.platform</groupId>
+      <artifactId>component</artifactId> 
+      <version>${project.version}</version>
+      <type>pom</type>
+    </dependency>
+    <dependency>
+      <groupId>com.mcleodmoores.starling.platform</groupId>
+      <artifactId>engine</artifactId>
+      <version>${project.version}</version>
+      <type>pom</type>
+    </dependency>
+    <dependency>
+      <groupId>com.mcleodmoores.starling.platform</groupId>
+      <artifactId>financial</artifactId>
+      <version>${project.version}</version>
+      <type>pom</type>
+    </dependency>
+    <dependency>
+      <groupId>com.mcleodmoores.starling.platform</groupId>
+      <artifactId>analytics</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.mcleodmoores.starling.platform</groupId>
+      <artifactId>livedata</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.mcleodmoores.starling.platform</groupId>
+      <artifactId>master</artifactId>
+      <version>${project.version}</version>
+      <type>pom</type>
+    </dependency>
+    <dependency>
+      <groupId>com.mcleodmoores.starling.platform</groupId>
+      <artifactId>master-db</artifactId>
+      <version>${project.version}</version>
+      <type>pom</type>
+    </dependency>
+    <dependency>
+      <groupId>com.mcleodmoores.starling.platform</groupId>
+      <artifactId>integration</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.mcleodmoores.starling.platform</groupId>
+      <artifactId>web</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.starling</groupId>
+      <artifactId>og-region-data</artifactId>
+      <version>1.0.0.v20110908a</version>
+    </dependency>
+  </dependencies>
+
+  <!-- ==================================================================== -->
+  <properties>
+    <starling.generate.scripts.type>tool</starling.generate.scripts.type>
+  </properties>
+
+</project>
