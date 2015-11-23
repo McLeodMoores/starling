@@ -23,7 +23,7 @@
   <dependencies>
     <dependency>
       <groupId>com.mcleodmoores.starling.platform</groupId>
-      <artifactId>core-common</artifactId>
+      <artifactId>core</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
