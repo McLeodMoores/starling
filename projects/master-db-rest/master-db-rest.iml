@@ -12,25 +12,25 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module" module-name="master-db" />
     <orderEntry type="module" module-name="financial" />
     <orderEntry type="module" module-name="financial-types" />
     <orderEntry type="module" module-name="master" />
-    <orderEntry type="library" name="Maven: com.opengamma:og-region-data:1.0.0.v20110908a" level="project" />
+    <orderEntry type="library" name="Maven: com.starling:og-region-data:1.0.0.v20110908a" level="project" />
     <orderEntry type="module" module-name="provider" />
     <orderEntry type="module" module-name="core" />
-    <orderEntry type="library" name="Maven: org.mindrot:jbcrypt:0.3m" level="project" />
     <orderEntry type="module" module-name="live-data" />
     <orderEntry type="module" module-name="security" />
     <orderEntry type="library" name="Maven: org.springframework.security:spring-security-core:3.2.3.RELEASE" level="project" />
     <orderEntry type="module" module-name="engine" />
     <orderEntry type="library" name="Maven: com.sleepycat:je:4.0.92" level="project" />
     <orderEntry type="module" module-name="analytics" />
-    <orderEntry type="module" module-name="time-series" />
+    <orderEntry type="module" module-name="timeseries" />
     <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:1.7.5" level="project" />
     <orderEntry type="library" name="Maven: commons-lang:commons-lang:2.6" level="project" />
     <orderEntry type="library" name="Maven: org.joda:joda-convert:1.7" level="project" />
     <orderEntry type="library" name="Maven: org.joda:joda-beans:1.6-SNAPSHOT" level="project" />
-    <orderEntry type="library" name="Maven: com.google.guava:guava:14.0.1" level="project" />
+    <orderEntry type="library" name="Maven: com.google.guava:guava:18.0" level="project" />
     <orderEntry type="library" name="Maven: it.unimi.dsi:fastutil:6.5.6" level="project" />
     <orderEntry type="library" name="Maven: org.threeten:threetenbp:1.1" level="project" />
     <orderEntry type="library" name="Maven: org.apache.commons:commons-math:2.1" level="project" />
@@ -54,12 +54,38 @@
     <orderEntry type="library" name="Maven: org.jasypt:jasypt:1.9.0" level="project" />
     <orderEntry type="library" name="Maven: org.apache.activemq:activemq-pool:5.7.0" level="project" />
     <orderEntry type="library" name="Maven: commons-pool:commons-pool:1.6" level="project" />
+    <orderEntry type="module" module-name="financial-rest" />
+    <orderEntry type="module" module-name="financial-rest-client" />
+    <orderEntry type="module" module-name="provider-rest-client" />
+    <orderEntry type="module" module-name="engine-rest-client" />
+    <orderEntry type="module" module-name="master-rest-client" />
+    <orderEntry type="module" module-name="master-rest" />
+    <orderEntry type="module" module-name="core-rest" />
+    <orderEntry type="module" module-name="core-rest-client" />
+    <orderEntry type="library" name="Maven: com.mcleodmoores.starling.platform:core-common:1.1.0-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Maven: org.mindrot:jbcrypt:0.3m" level="project" />
+    <orderEntry type="module" module-name="provider-rest" />
+    <orderEntry type="library" name="Maven: com.sun.jersey:jersey-servlet:1.17.1" level="project" />
+    <orderEntry type="library" name="Maven: com.sun.jersey:jersey-server:1.17.1" level="project" />
+    <orderEntry type="library" name="Maven: asm:asm:3.1" level="project" />
+    <orderEntry type="library" name="Maven: com.sun.jersey:jersey-client:1.17.1" level="project" />
+    <orderEntry type="library" name="Maven: com.sun.jersey:jersey-core:1.17.1" level="project" />
+    <orderEntry type="library" name="Maven: com.sun.jersey.contribs:jersey-multipart:1.17.1" level="project" />
+    <orderEntry type="library" name="Maven: org.jvnet:mimepull:1.6" level="project" />
+    <orderEntry type="module" module-name="util-rest" />
+    <orderEntry type="module" module-name="util-rest-client" />
+    <orderEntry type="library" name="Maven: org.apache.httpcomponents:httpclient:4.2.5" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.httpcomponents:httpcore:4.2.4" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.httpcomponents:httpcore-nio:4.2.4" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework:spring-web:3.2.3.RELEASE" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework:spring-aop:3.2.3.RELEASE" level="project" />
+    <orderEntry type="library" name="Maven: javax.servlet:javax.servlet-api:3.0.1" level="project" />
+    <orderEntry type="library" name="Maven: com.sun.jersey.contribs:jersey-spring:1.17.1" level="project" />
+    <orderEntry type="module" module-name="engine-rest" />
     <orderEntry type="module" module-name="util-db" />
     <orderEntry type="module" module-name="util" />
-    <orderEntry type="library" name="Maven: com.mcleodmoores.opengamma.tools:scripts:1.4.2-MM" level="project" />
-    <orderEntry type="library" name="Maven: org.reflections:reflections:0.10-MM" level="project" />
-    <orderEntry type="library" name="Maven: org.javassist:javassist:3.18.2-GA" level="project" />
-    <orderEntry type="library" name="Maven: com.google.code.findbugs:annotations:2.0.1" level="project" />
+    <orderEntry type="library" name="Maven: com.mcleodmoores.starling.platform:time-series:1.1.0-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Maven: com.mcleodmoores.starling.tools:scripts:1.1.0-SNAPSHOT" level="project" />
     <orderEntry type="library" name="Maven: com.opengamma:lambdava:0.3" level="project" />
     <orderEntry type="library" name="Maven: net.sf.saxon:Saxon-HE:9.4" level="project" />
     <orderEntry type="library" name="Maven: org.jdom:jdom:1.1" level="project" />
@@ -75,10 +101,10 @@
     <orderEntry type="library" name="Maven: org.fudgemsg:fudge-java:0.3.9.20-MM" level="project" />
     <orderEntry type="library" name="Maven: commons-beanutils:commons-beanutils:1.8.3" level="project" />
     <orderEntry type="library" name="Maven: com.opengamma.external.json:json:1.0.0.v20101106" level="project" />
+    <orderEntry type="library" name="Maven: org.reflections:reflections:0.10-MM" level="project" />
+    <orderEntry type="library" name="Maven: org.javassist:javassist:3.18.2-GA" level="project" />
+    <orderEntry type="library" name="Maven: com.google.code.findbugs:annotations:2.0.1" level="project" />
     <orderEntry type="library" name="Maven: org.fudgemsg:fudge-proto:0.3.9.7" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.httpcomponents:httpclient:4.2.5" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.httpcomponents:httpcore:4.2.4" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.httpcomponents:httpcore-nio:4.2.4" level="project" />
     <orderEntry type="library" name="Maven: net.sf.opencsv:opencsv:2.3" level="project" />
     <orderEntry type="library" name="Maven: org.codehaus.woodstox:woodstox-core-asl:4.2.0" level="project" />
     <orderEntry type="library" name="Maven: javax.xml.stream:stax-api:1.0-2" level="project" />
@@ -96,27 +122,15 @@
     <orderEntry type="library" name="Maven: org.springframework:spring-core:3.2.3.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-beans:3.2.3.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-context:3.2.3.RELEASE" level="project" />
-    <orderEntry type="library" name="Maven: org.springframework:spring-aop:3.2.3.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-expression:3.2.3.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-context-support:3.2.3.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-jms:3.2.3.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-test:3.2.3.RELEASE" level="project" />
-    <orderEntry type="library" name="Maven: org.springframework:spring-web:3.2.3.RELEASE" level="project" />
-    <orderEntry type="library" name="Maven: javax.servlet:javax.servlet-api:3.0.1" level="project" />
-    <orderEntry type="library" name="Maven: com.sun.jersey:jersey-servlet:1.17.1" level="project" />
-    <orderEntry type="library" name="Maven: com.sun.jersey:jersey-server:1.17.1" level="project" />
-    <orderEntry type="library" name="Maven: asm:asm:3.1" level="project" />
-    <orderEntry type="library" name="Maven: com.sun.jersey:jersey-client:1.17.1" level="project" />
-    <orderEntry type="library" name="Maven: com.sun.jersey:jersey-core:1.17.1" level="project" />
-    <orderEntry type="library" name="Maven: com.sun.jersey.contribs:jersey-multipart:1.17.1" level="project" />
-    <orderEntry type="library" name="Maven: org.jvnet:mimepull:1.6" level="project" />
-    <orderEntry type="library" name="Maven: com.sun.jersey.contribs:jersey-spring:1.17.1" level="project" />
-    <orderEntry type="library" name="Maven: org.freemarker:freemarker:2.3.19" level="project" />
     <orderEntry type="library" name="Maven: javax.jms:jms-api:1.1-rev-1" level="project" />
     <orderEntry type="library" name="Maven: net.sf.ehcache:ehcache-core:2.6.3" level="project" />
     <orderEntry type="library" name="Maven: redis.clients:jedis:2.1.0" level="project" />
     <orderEntry type="library" name="Maven: com.opengamma:elsql:0.9" level="project" />
-    <orderEntry type="library" name="Maven: com.jolbox:bonecp:0.7.1.RELEASE" level="project" />
+    <orderEntry type="library" name="Maven: com.jolbox:bonecp:0.8.0.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-orm:3.2.3.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: aopalliance:aopalliance:1.0" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-jdbc:3.2.3.RELEASE" level="project" />
