@@ -21,36 +21,31 @@
       <groupId>com.mcleodmoores.starling.platform</groupId>
       <artifactId>util</artifactId>
       <version>${project.version}</version>
-      <type>pom</type>
     </dependency>
     <dependency>
       <groupId>com.mcleodmoores.starling.platform</groupId>
-      <artifactId>timeseries</artifactId>
+      <artifactId>time-series</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
       <groupId>com.mcleodmoores.starling.platform</groupId>
       <artifactId>core</artifactId>
       <version>${project.version}</version>
-      <type>pom</type>
     </dependency>
     <dependency>
       <groupId>com.mcleodmoores.starling.platform</groupId>
       <artifactId>component</artifactId>
       <version>${project.version}</version>
-      <type>pom</type>
     </dependency>
     <dependency>
       <groupId>com.mcleodmoores.starling.platform</groupId>
       <artifactId>engine</artifactId>
       <version>${project.version}</version>
-      <type>pom</type>
     </dependency>
     <dependency>
       <groupId>com.mcleodmoores.starling.platform</groupId>
       <artifactId>financial</artifactId>
       <version>${project.version}</version>
-      <type>pom</type>
     </dependency>
     <dependency>
       <groupId>com.mcleodmoores.starling.platform</groupId>
@@ -59,14 +54,13 @@
     </dependency>
     <dependency>
       <groupId>com.mcleodmoores.starling.platform</groupId>
-      <artifactId>livedata</artifactId>
+      <artifactId>live-data</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
       <groupId>com.mcleodmoores.starling.platform</groupId>
       <artifactId>master</artifactId>
       <version>${project.version}</version>
-      <type>pom</type>
     </dependency>
     <dependency>
       <groupId>com.mcleodmoores.starling.platform</groupId>

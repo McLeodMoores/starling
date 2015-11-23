@@ -39,7 +39,6 @@
       <groupId>com.mcleodmoores.starling.platform</groupId>
       <artifactId>util</artifactId>
       <version>${project.version}</version>
-      <type>pom</type>
     </dependency>
     <dependency>
       <groupId>com.mcleodmoores.starling.platform</groupId>
@@ -50,19 +49,16 @@
       <groupId>com.mcleodmoores.starling.platform</groupId>
       <artifactId>core</artifactId>
       <version>${project.version}</version>
-      <type>pom</type>
     </dependency>
     <dependency>
       <groupId>com.mcleodmoores.starling.platform</groupId>
       <artifactId>component</artifactId> 
       <version>${project.version}</version>
-      <type>pom</type>
     </dependency>
     <dependency>
       <groupId>com.mcleodmoores.starling.platform</groupId>
       <artifactId>engine</artifactId>
       <version>${project.version}</version>
-      <type>pom</type>
     </dependency>
     <dependency>
       <groupId>com.mcleodmoores.starling.platform</groupId>
@@ -84,13 +80,11 @@
       <groupId>com.mcleodmoores.starling.platform</groupId>
       <artifactId>master</artifactId>
       <version>${project.version}</version>
-      <type>pom</type>
     </dependency>
     <dependency>
       <groupId>com.mcleodmoores.starling.platform</groupId>
       <artifactId>master-db</artifactId>
       <version>${project.version}</version>
-      <type>pom</type>
     </dependency>
     <dependency>
       <groupId>com.mcleodmoores.starling.platform</groupId>
