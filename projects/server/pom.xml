@@ -77,7 +77,7 @@
     </dependency>
     <dependency>
       <groupId>com.mcleodmoores.starling.platform</groupId>
-      <artifactId>livedata</artifactId>
+      <artifactId>live-data</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
@@ -103,7 +103,7 @@
       <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>com.starling</groupId>
+      <groupId>com.opengamma</groupId>
       <artifactId>og-region-data</artifactId>
       <version>1.0.0.v20110908a</version>
     </dependency>
