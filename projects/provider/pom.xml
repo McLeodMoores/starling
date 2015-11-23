@@ -17,7 +17,7 @@
   <description>Starling Platform data providers (common code)</description>
 
   <scm>
-    <url>https://github.com/McLeodMoores/starling/tree/master/projects/provider-common</url>
+    <url>https://github.com/McLeodMoores/starling/tree/master/projects/provider</url>
   </scm>
 
   <dependencies>

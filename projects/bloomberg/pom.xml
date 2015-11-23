@@ -34,7 +34,7 @@
     </dependency>
     <dependency>
       <groupId>com.mcleodmoores.starling.platform</groupId>
-      <artifactId>masterdb-common</artifactId>
+      <artifactId>master-db</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
