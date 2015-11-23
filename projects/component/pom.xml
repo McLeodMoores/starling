@@ -53,13 +53,13 @@
     </dependency>
     <dependency>
       <groupId>com.mcleodmoores.starling.platform</groupId>
-      <artifactId>masterdb-rest-client</artifactId>
+      <artifactId>master-db-rest-client</artifactId>
       <version>${project.version}</version>
       <optional>true</optional>
     </dependency>
     <dependency>
       <groupId>com.mcleodmoores.starling.platform</groupId>
-      <artifactId>masterdb-rest</artifactId>
+      <artifactId>master-db-rest</artifactId>
       <version>${project.version}</version>
       <optional>true</optional>
     </dependency>
