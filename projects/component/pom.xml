@@ -77,7 +77,7 @@
     </dependency>
     <dependency>
       <groupId>com.mcleodmoores.starling.platform</groupId>
-      <artifactId>enginedb</artifactId>
+      <artifactId>engine-db</artifactId>
       <version>${project.version}</version>
     </dependency>
 
