@@ -82,6 +82,7 @@ docs.sqlite3
 .settings/
 /target/
 /examples/target/
+.project
 
 # IntelliJ config files
 *.iws
