@@ -153,7 +153,7 @@ public class SnapshotDataBundleTest {
   public void testToString() {
     final SnapshotDataBundle data = new SnapshotDataBundle();
     data.setDataPoint(ExternalId.parse("Snap~Test1"), 1234.56);
-    final String expected = "SnapshotDataBundle[\nBundle[Snap~Test1]=1234.56]";
+    final String expected = "SnapshotDataBundle[Bundle[Snap~Test1]=1234.56]";
     assertEquals(data.toString(), expected);
   }
 }

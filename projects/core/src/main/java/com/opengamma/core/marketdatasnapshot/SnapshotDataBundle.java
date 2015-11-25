@@ -183,13 +183,13 @@ public final class SnapshotDataBundle {
 
   @Override
   public String toString() {
-    final StringBuilder sb = new StringBuilder("SnapshotDataBundle[\n");
+    final StringBuilder sb = new StringBuilder("SnapshotDataBundle[");
     for (final Map.Entry<ExternalIdBundle, Double> entry : _dataPoints.entrySet()) {
       sb.append(entry.getKey());
       sb.append("=");
       sb.append(entry.getValue());
-      sb.append("\n");
+      sb.append(", ");
     }
-    return sb.substring(0, sb.length() - 1) + "]";
+    return sb.substring(0, sb.length() - 2) + "]";
   }
 }
