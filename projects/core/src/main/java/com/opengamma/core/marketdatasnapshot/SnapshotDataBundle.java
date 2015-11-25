@@ -2,6 +2,10 @@
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
  *
  * Please see distribution for license.
+ * 
+ * Modified by McLeod Moores Software Limited.
+ *
+ * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.core.marketdatasnapshot;
 
@@ -39,7 +43,7 @@ public final class SnapshotDataBundle {
   /**
    * Queries the data using an identifier bundle. Any data point matching one of the identifiers in the supplied bundle will be returned. If the identifier bundle is such that multiple points match
    * then an arbitrary one will be returned.
-   * 
+   *
    * @param identifiers the identifier(s) to search for
    * @return the data point found, or null if none
    */
@@ -59,7 +63,7 @@ public final class SnapshotDataBundle {
 
   /**
    * Queries the data using a single identifier.
-   * 
+   *
    * @param identifier the identifier to search for
    * @return the data point found, or null if none
    */
@@ -73,7 +77,7 @@ public final class SnapshotDataBundle {
 
   /**
    * Sets a data point in the snapshot. Any previous points with matching identifiers will be replaced.
-   * 
+   *
    * @param identifiers the identifiers to set, not null
    * @param value the value to set, not null
    */
@@ -89,7 +93,7 @@ public final class SnapshotDataBundle {
 
   /**
    * Sets a data point in the snapshot. Any previous point with a matching identifier will be replaced.
-   * 
+   *
    * @param identifier the identifier to set, not null
    * @param value the value to set
    */
@@ -105,7 +109,7 @@ public final class SnapshotDataBundle {
 
   /**
    * Removes data points from the snapshot. All points with matching identifiers will be removed.
-   * 
+   *
    * @param identifiers the identifiers to remove, not null
    */
   public void removeDataPoints(final ExternalIdBundle identifiers) {
@@ -116,7 +120,7 @@ public final class SnapshotDataBundle {
 
   /**
    * Removes a data point from the snapshot.
-   * 
+   *
    * @param identifier the identifier to remove, not null
    */
   public void removeDataPoint(final ExternalId identifier) {
@@ -131,7 +135,7 @@ public final class SnapshotDataBundle {
 
   /**
    * Returns the number of data points defined.
-   * 
+   *
    * @return the number of data points
    */
   public int size() {
@@ -140,7 +144,7 @@ public final class SnapshotDataBundle {
 
   /**
    * Returns the data points as a set.
-   * 
+   *
    * @return the data points
    */
   public Set<Map.Entry<ExternalIdBundle, Double>> getDataPointSet() {
@@ -157,7 +161,7 @@ public final class SnapshotDataBundle {
   }
 
   @Override
-  public boolean equals(Object o) {
+  public boolean equals(final Object o) {
     // only check one id collection, assume both in sync
     if (this == o) {
       return true;
@@ -165,7 +169,7 @@ public final class SnapshotDataBundle {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    SnapshotDataBundle that = (SnapshotDataBundle) o;
+    final SnapshotDataBundle that = (SnapshotDataBundle) o;
     if (_dataPoints.size() != that._dataPoints.size()) {
       return false;
     }
@@ -177,4 +181,15 @@ public final class SnapshotDataBundle {
     return _dataPoints.hashCode();
   }
 
+  @Override
+  public String toString() {
+    final StringBuilder sb = new StringBuilder("SnapshotDataBundle[\n");
+    for (final Map.Entry<ExternalIdBundle, Double> entry : _dataPoints.entrySet()) {
+      sb.append(entry.getKey());
+      sb.append("=");
+      sb.append(entry.getValue());
+      sb.append("\n");
+    }
+    return sb.substring(0, sb.length() - 1) + "]";
+  }
 }

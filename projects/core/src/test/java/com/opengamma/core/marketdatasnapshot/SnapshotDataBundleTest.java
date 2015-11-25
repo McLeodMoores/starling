@@ -2,6 +2,10 @@
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
  *
  * Please see distribution for license.
+ * 
+ * Modified by McLeod Moores Software Limited.
+ *
+ * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.core.marketdatasnapshot;
 
@@ -134,11 +138,11 @@ public class SnapshotDataBundleTest {
   }
 
   public void testEquals() {
-    SnapshotDataBundle snap = new SnapshotDataBundle();
+    final SnapshotDataBundle snap = new SnapshotDataBundle();
     snap.setDataPoint(ExternalId.parse("Snap~Test"), 1234.56);
-    SnapshotDataBundle snap2 = new SnapshotDataBundle();
+    final SnapshotDataBundle snap2 = new SnapshotDataBundle();
     snap2.setDataPoint(ExternalId.parse("Snap~Test"), 1234.56);
-    SnapshotDataBundle snap3 = new SnapshotDataBundle();
+    final SnapshotDataBundle snap3 = new SnapshotDataBundle();
     snap3.setDataPoint(ExternalId.parse("Snap~Test"), 1234);
     assertEquals(snap, snap2);
     assertEquals(snap.hashCode(), snap2.hashCode());
@@ -146,4 +150,10 @@ public class SnapshotDataBundleTest {
     assertNotEquals(snap.hashCode(), snap3.hashCode());
   }
 
+  public void testToString() {
+    final SnapshotDataBundle data = new SnapshotDataBundle();
+    data.setDataPoint(ExternalId.parse("Snap~Test1"), 1234.56);
+    final String expected = "SnapshotDataBundle[\nBundle[Snap~Test1]=1234.56]";
+    assertEquals(data.toString(), expected);
+  }
 }
