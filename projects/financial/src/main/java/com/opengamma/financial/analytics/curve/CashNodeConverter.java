@@ -9,6 +9,8 @@
  */
 package com.opengamma.financial.analytics.curve;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.LocalDateTime;
 import org.threeten.bp.LocalTime;
@@ -75,6 +77,8 @@ import com.opengamma.util.time.Tenor;
  * The notional in all cases is one.
  */
 public class CashNodeConverter extends CurveNodeVisitorAdapter<InstrumentDefinition<?>> {
+  /** The logger */
+  private static final Logger LOGGER = LoggerFactory.getLogger(CashNodeConverter.class);
   /** The holiday source */
   private final HolidaySource _holidaySource;
   /** The region source */
@@ -132,95 +136,96 @@ public class CashNodeConverter extends CurveNodeVisitorAdapter<InstrumentDefinit
   public InstrumentDefinition<?> visitCashNode(final CashNode cashNode) {
     final Tenor startTenor = cashNode.getStartTenor();
     final Tenor maturityTenor = cashNode.getMaturityTenor();
+    final Convention convention;
     try {
-      final Convention convention =
-          ConventionLink.resolvable(cashNode.getConvention().toBundle(), Convention.class).resolve();
-      if (convention == null) {
-        return getFromSecurity(cashNode, startTenor, maturityTenor);
-      }
-      final LocalTime time = _valuationTime.toLocalTime();
-      final ZoneOffset zone = _valuationTime.getOffset();
-      if (convention instanceof DepositConvention) {
-        final DepositConvention depositConvention = (DepositConvention) convention;
-        final Currency currency = depositConvention.getCurrency();
-        final Region region = _regionSource.getHighestLevelRegion(depositConvention.getRegionCalendar());
-        final WorkingDayCalendar calendar = new HolidaySourceWorkingDayCalendarAdapter(_holidaySource, region);
-        final BusinessDayConvention businessDayConvention = depositConvention.getBusinessDayConvention();
-        final boolean isEOM = depositConvention.isIsEOM();
-        final DayCount dayCount = depositConvention.getDayCount();
-        final int settlementDays = depositConvention.getSettlementDays();
-        final LocalDate spotLocalDate = DefaultSettlementDateCalculator.getInstance().getSettlementDate(_valuationTime.toLocalDate(), settlementDays, calendar);
-        final LocalDate startLocalDate, endLocalDate;
-        if (isEOM) {
-          startLocalDate = EndOfMonthDateAdjustmentCalculator.getInstance().getSettlementDate(spotLocalDate, startTenor, businessDayConvention, calendar);
-          endLocalDate = EndOfMonthDateAdjustmentCalculator.getInstance().getSettlementDate(startLocalDate, maturityTenor, businessDayConvention, calendar);
-        } else {
-          startLocalDate = DefaultDateAdjustmentCalculator.getInstance().getSettlementDate(spotLocalDate, startTenor, businessDayConvention, calendar);
-          endLocalDate = DefaultDateAdjustmentCalculator.getInstance().getSettlementDate(startLocalDate, maturityTenor, businessDayConvention, calendar);
-        }
-        final ZonedDateTime startDate = ZonedDateTime.of(LocalDateTime.of(startLocalDate, time), zone);
-        final ZonedDateTime endDate = ZonedDateTime.of(LocalDateTime.of(endLocalDate, time), zone);
-        final double accrualFactor = dayCount.getDayCountFraction(startDate, endDate);
-        return new CashDefinition(currency, startDate, endDate, 1, _rate, accrualFactor);
-      } else if (convention instanceof OvernightIndexConvention) {
-        final OvernightIndexConvention overnightIndexConvention = (OvernightIndexConvention) convention;
-        final Currency currency = overnightIndexConvention.getCurrency();
-        final Region region = _regionSource.getHighestLevelRegion(overnightIndexConvention.getRegionCalendar());
-        final WorkingDayCalendar calendar = new HolidaySourceWorkingDayCalendarAdapter(_holidaySource, region);
-        final BusinessDayConvention businessDayConvention = BusinessDayConventions.FOLLOWING; // by definition for overnight
-        final boolean isEOM = false; // by definition for overnight
-        final DayCount dayCount = overnightIndexConvention.getDayCount();
-        final int settlementDays = 0; // by definition for overnight
-        final LocalDate spotLocalDate = DefaultSettlementDateCalculator.getInstance().getSettlementDate(_valuationTime.toLocalDate(), settlementDays, calendar);
-        final LocalDate startLocalDate, endLocalDate;
-        if (isEOM) {
-          startLocalDate = EndOfMonthDateAdjustmentCalculator.getInstance().getSettlementDate(spotLocalDate, startTenor, businessDayConvention, calendar);
-          endLocalDate = EndOfMonthDateAdjustmentCalculator.getInstance().getSettlementDate(startLocalDate, maturityTenor, businessDayConvention, calendar);
-        } else {
-          startLocalDate = DefaultDateAdjustmentCalculator.getInstance().getSettlementDate(spotLocalDate, startTenor, businessDayConvention, calendar);
-          endLocalDate = DefaultDateAdjustmentCalculator.getInstance().getSettlementDate(startLocalDate, maturityTenor, businessDayConvention, calendar);
-        }
-        final ZonedDateTime startDate = ZonedDateTime.of(LocalDateTime.of(startLocalDate, time), zone);
-        final ZonedDateTime endDate = ZonedDateTime.of(LocalDateTime.of(endLocalDate, time), zone);
-        final double accrualFactor = dayCount.getDayCountFraction(startDate, endDate);
-        return new CashDefinition(currency, startDate, endDate, 1, _rate, accrualFactor);
-      } else if (convention instanceof IborIndexConvention) {
-        final IborIndexConvention iborIndexConvention = (IborIndexConvention) convention;
-        final Currency currency = iborIndexConvention.getCurrency();
-        final Region region = _regionSource.getHighestLevelRegion(iborIndexConvention.getRegionCalendar());
-        final WorkingDayCalendar calendar = new HolidaySourceWorkingDayCalendarAdapter(_holidaySource, region);
-        final BusinessDayConvention businessDayConvention = iborIndexConvention.getBusinessDayConvention();
-        final boolean isEOM = iborIndexConvention.isIsEOM();
-        final DayCount dayCount = iborIndexConvention.getDayCount();
-        final int settlementDays = iborIndexConvention.getSettlementDays();
-        final LocalDate spotLocalDate = DefaultSettlementDateCalculator.getInstance().getSettlementDate(_valuationTime.toLocalDate(), settlementDays, calendar);
-        final LocalDate startLocalDate, endLocalDate;
-        if (isEOM) {
-          startLocalDate = EndOfMonthDateAdjustmentCalculator.getInstance().getSettlementDate(spotLocalDate, startTenor, businessDayConvention, calendar);
-          endLocalDate = EndOfMonthDateAdjustmentCalculator.getInstance().getSettlementDate(startLocalDate, maturityTenor, businessDayConvention, calendar);
-        } else {
-          startLocalDate = DefaultDateAdjustmentCalculator.getInstance().getSettlementDate(spotLocalDate, startTenor, businessDayConvention, calendar);
-          endLocalDate = DefaultDateAdjustmentCalculator.getInstance().getSettlementDate(startLocalDate, maturityTenor, businessDayConvention, calendar);
-        }
-        final ZonedDateTime startDate = ZonedDateTime.of(LocalDateTime.of(startLocalDate, time), zone);
-        final ZonedDateTime endDate = ZonedDateTime.of(LocalDateTime.of(endLocalDate, time), zone);
-        final Period period = Period.between(startDate.toLocalDate(), endDate.toLocalDate());
-        final IborIndex index;
-        if (period.getDays() != 0) {
-          //TODO won't work for business day tenors
-          final Tenor daysPeriod = Tenor.of(maturityTenor.getPeriod().minus(startTenor.getPeriod()));
-          index = ConverterUtils.indexIbor(iborIndexConvention.getName(), iborIndexConvention, daysPeriod);
-        } else {
-          final Tenor monthPeriod = Tenor.of(Period.ofMonths(Long.valueOf(period.toTotalMonths()).intValue()));
-          index = ConverterUtils.indexIbor(iborIndexConvention.getName(), iborIndexConvention, monthPeriod);
-        }
-        final double accrualFactor = dayCount.getDayCountFraction(startDate, endDate);
-        return new DepositIborDefinition(currency, startDate, endDate, 1, _rate, accrualFactor, index);
-      }
+      convention = ConventionLink.resolvable(cashNode.getConvention().toBundle(), Convention.class).resolve();
     } catch (final Exception e) {
+      LOGGER.error("Problem getting convention with id {}: {}", cashNode.getConvention(), e.getMessage());
       // An exception could be thrown from the convention link resolver
       // If the convention is not found, try with the security.
       return getFromSecurity(cashNode, startTenor, maturityTenor);
+    }
+    if (convention == null) {
+      return getFromSecurity(cashNode, startTenor, maturityTenor);
+    }
+    final LocalTime time = _valuationTime.toLocalTime();
+    final ZoneOffset zone = _valuationTime.getOffset();
+    if (convention instanceof DepositConvention) {
+      final DepositConvention depositConvention = (DepositConvention) convention;
+      final Currency currency = depositConvention.getCurrency();
+      final Region region = _regionSource.getHighestLevelRegion(depositConvention.getRegionCalendar());
+      final WorkingDayCalendar calendar = new HolidaySourceWorkingDayCalendarAdapter(_holidaySource, region);
+      final BusinessDayConvention businessDayConvention = depositConvention.getBusinessDayConvention();
+      final boolean isEOM = depositConvention.isIsEOM();
+      final DayCount dayCount = depositConvention.getDayCount();
+      final int settlementDays = depositConvention.getSettlementDays();
+      final LocalDate spotLocalDate = DefaultSettlementDateCalculator.getInstance().getSettlementDate(_valuationTime.toLocalDate(), settlementDays, calendar);
+      final LocalDate startLocalDate, endLocalDate;
+      if (isEOM) {
+        startLocalDate = EndOfMonthDateAdjustmentCalculator.getInstance().getSettlementDate(spotLocalDate, startTenor, businessDayConvention, calendar);
+        endLocalDate = EndOfMonthDateAdjustmentCalculator.getInstance().getSettlementDate(startLocalDate, maturityTenor, businessDayConvention, calendar);
+      } else {
+        startLocalDate = DefaultDateAdjustmentCalculator.getInstance().getSettlementDate(spotLocalDate, startTenor, businessDayConvention, calendar);
+        endLocalDate = DefaultDateAdjustmentCalculator.getInstance().getSettlementDate(startLocalDate, maturityTenor, businessDayConvention, calendar);
+      }
+      final ZonedDateTime startDate = ZonedDateTime.of(LocalDateTime.of(startLocalDate, time), zone);
+      final ZonedDateTime endDate = ZonedDateTime.of(LocalDateTime.of(endLocalDate, time), zone);
+      final double accrualFactor = dayCount.getDayCountFraction(startDate, endDate);
+      return new CashDefinition(currency, startDate, endDate, 1, _rate, accrualFactor);
+    } else if (convention instanceof OvernightIndexConvention) {
+      final OvernightIndexConvention overnightIndexConvention = (OvernightIndexConvention) convention;
+      final Currency currency = overnightIndexConvention.getCurrency();
+      final Region region = _regionSource.getHighestLevelRegion(overnightIndexConvention.getRegionCalendar());
+      final WorkingDayCalendar calendar = new HolidaySourceWorkingDayCalendarAdapter(_holidaySource, region);
+      final BusinessDayConvention businessDayConvention = BusinessDayConventions.FOLLOWING; // by definition for overnight
+      final boolean isEOM = false; // by definition for overnight
+      final DayCount dayCount = overnightIndexConvention.getDayCount();
+      final int settlementDays = 0; // by definition for overnight
+      final LocalDate spotLocalDate = DefaultSettlementDateCalculator.getInstance().getSettlementDate(_valuationTime.toLocalDate(), settlementDays, calendar);
+      final LocalDate startLocalDate, endLocalDate;
+      if (isEOM) {
+        startLocalDate = EndOfMonthDateAdjustmentCalculator.getInstance().getSettlementDate(spotLocalDate, startTenor, businessDayConvention, calendar);
+        endLocalDate = EndOfMonthDateAdjustmentCalculator.getInstance().getSettlementDate(startLocalDate, maturityTenor, businessDayConvention, calendar);
+      } else {
+        startLocalDate = DefaultDateAdjustmentCalculator.getInstance().getSettlementDate(spotLocalDate, startTenor, businessDayConvention, calendar);
+        endLocalDate = DefaultDateAdjustmentCalculator.getInstance().getSettlementDate(startLocalDate, maturityTenor, businessDayConvention, calendar);
+      }
+      final ZonedDateTime startDate = ZonedDateTime.of(LocalDateTime.of(startLocalDate, time), zone);
+      final ZonedDateTime endDate = ZonedDateTime.of(LocalDateTime.of(endLocalDate, time), zone);
+      final double accrualFactor = dayCount.getDayCountFraction(startDate, endDate);
+      return new CashDefinition(currency, startDate, endDate, 1, _rate, accrualFactor);
+    } else if (convention instanceof IborIndexConvention) {
+      final IborIndexConvention iborIndexConvention = (IborIndexConvention) convention;
+      final Currency currency = iborIndexConvention.getCurrency();
+      final Region region = _regionSource.getHighestLevelRegion(iborIndexConvention.getRegionCalendar());
+      final WorkingDayCalendar calendar = new HolidaySourceWorkingDayCalendarAdapter(_holidaySource, region);
+      final BusinessDayConvention businessDayConvention = iborIndexConvention.getBusinessDayConvention();
+      final boolean isEOM = iborIndexConvention.isIsEOM();
+      final DayCount dayCount = iborIndexConvention.getDayCount();
+      final int settlementDays = iborIndexConvention.getSettlementDays();
+      final LocalDate spotLocalDate = DefaultSettlementDateCalculator.getInstance().getSettlementDate(_valuationTime.toLocalDate(), settlementDays, calendar);
+      final LocalDate startLocalDate, endLocalDate;
+      if (isEOM) {
+        startLocalDate = EndOfMonthDateAdjustmentCalculator.getInstance().getSettlementDate(spotLocalDate, startTenor, businessDayConvention, calendar);
+        endLocalDate = EndOfMonthDateAdjustmentCalculator.getInstance().getSettlementDate(startLocalDate, maturityTenor, businessDayConvention, calendar);
+      } else {
+        startLocalDate = DefaultDateAdjustmentCalculator.getInstance().getSettlementDate(spotLocalDate, startTenor, businessDayConvention, calendar);
+        endLocalDate = DefaultDateAdjustmentCalculator.getInstance().getSettlementDate(startLocalDate, maturityTenor, businessDayConvention, calendar);
+      }
+      final ZonedDateTime startDate = ZonedDateTime.of(LocalDateTime.of(startLocalDate, time), zone);
+      final ZonedDateTime endDate = ZonedDateTime.of(LocalDateTime.of(endLocalDate, time), zone);
+      final Period period = Period.between(startDate.toLocalDate(), endDate.toLocalDate());
+      final IborIndex index;
+      if (period.getDays() != 0) {
+        //TODO won't work for business day tenors
+        final Tenor daysPeriod = Tenor.of(maturityTenor.getPeriod().minus(startTenor.getPeriod()));
+        index = ConverterUtils.indexIbor(iborIndexConvention.getName(), iborIndexConvention, daysPeriod);
+      } else {
+        final Tenor monthPeriod = Tenor.of(Period.ofMonths(Long.valueOf(period.toTotalMonths()).intValue()));
+        index = ConverterUtils.indexIbor(iborIndexConvention.getName(), iborIndexConvention, monthPeriod);
+      }
+      final double accrualFactor = dayCount.getDayCountFraction(startDate, endDate);
+      return new DepositIborDefinition(currency, startDate, endDate, 1, _rate, accrualFactor, index);
     }
     throw new OpenGammaRuntimeException("Could not handle cash node with convention " + cashNode.getConvention());
   }
