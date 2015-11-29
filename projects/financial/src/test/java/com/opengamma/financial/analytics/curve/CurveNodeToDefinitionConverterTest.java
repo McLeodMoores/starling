@@ -74,7 +74,6 @@ import com.opengamma.financial.analytics.TargetWorkingDayCalendar;
 import com.opengamma.financial.analytics.ircurve.strips.CalendarSwapNode;
 import com.opengamma.financial.analytics.ircurve.strips.CurveNodeVisitor;
 import com.opengamma.financial.analytics.ircurve.strips.DeliverableSwapFutureNode;
-import com.opengamma.financial.analytics.ircurve.strips.FRANode;
 import com.opengamma.financial.analytics.ircurve.strips.RateFutureNode;
 import com.opengamma.financial.analytics.ircurve.strips.RollDateFRANode;
 import com.opengamma.financial.analytics.ircurve.strips.RollDateSwapNode;
@@ -465,29 +464,6 @@ public class CurveNodeToDefinitionConverterTest {
     ThreadLocalServiceContext.init(serviceContext);
   }
 
-  @Test(expectedExceptions = OpenGammaRuntimeException.class)
-  public void testNoConventionForFRA() {
-    final ExternalId marketDataId = ExternalId.of(SCHEME, "Data");
-    final SnapshotDataBundle marketValues = new SnapshotDataBundle();
-    final double rate = 0.0012345;
-    marketValues.setDataPoint(marketDataId, rate);
-    final FRANode fraNode = new FRANode(Tenor.SIX_MONTHS, Tenor.NINE_MONTHS, ExternalId.of(SCHEME, "Test"), "Mapper");
-    final CurveNodeVisitor<InstrumentDefinition<?>> converter = new FRANodeConverter(SECURITY_SOURCE, CONVENTION_SOURCE, HOLIDAY_SOURCE, REGION_SOURCE,
-        marketValues, marketDataId, NOW);
-    fraNode.accept(converter);
-  }
-
-  @Test(expectedExceptions = OpenGammaRuntimeException.class)
-  public void testWrongConventionForFRA() {
-    final ExternalId marketDataId = ExternalId.of(SCHEME, "Data");
-    final SnapshotDataBundle marketValues = new SnapshotDataBundle();
-    final double rate = 0.0012345;
-    marketValues.setDataPoint(marketDataId, rate);
-    final FRANode fraNode = new FRANode(Tenor.SIX_MONTHS, Tenor.NINE_MONTHS, FIXED_LEG_ID, "Mapper");
-    final CurveNodeVisitor<InstrumentDefinition<?>> converter = new FRANodeConverter(SECURITY_SOURCE, CONVENTION_SOURCE, HOLIDAY_SOURCE, REGION_SOURCE,
-        marketValues, marketDataId, NOW);
-    fraNode.accept(converter);
-  }
 
   @Test(expectedExceptions = OpenGammaRuntimeException.class)
   public void testNoFutureConvention() {
@@ -604,23 +580,6 @@ public class CurveNodeToDefinitionConverterTest {
     final CurveNodeVisitor<InstrumentDefinition<?>> converter = new SwapNodeConverter(SECURITY_SOURCE, conventionSource, HOLIDAY_SOURCE, REGION_SOURCE,
         marketValues, marketDataId, NOW, FX_MATRIX);
     swapNode.accept(converter);
-  }
-
-  @Test
-  public void testFRA() {
-    final ExternalId marketDataId = ExternalId.of(SCHEME, "US3mLibor");
-    final double rate = 0.0012345;
-    final SnapshotDataBundle marketValues = new SnapshotDataBundle();
-    marketValues.setDataPoint(marketDataId, rate);
-    final FRANode fraNode = new FRANode(Tenor.SIX_MONTHS, Tenor.NINE_MONTHS, USDLIBOR3M_ID, "Mapper");
-    final IborIndex index = ConverterUtils.indexIbor(USDLIBOR3M_NAME, USDLIBOR_ACT_360, Tenor.THREE_MONTHS);
-    final ZonedDateTime now = DateUtils.getUTCDate(2013, 3, 1);
-    final CurveNodeVisitor<InstrumentDefinition<?>> converter = new FRANodeConverter(SECURITY_SOURCE, CONVENTION_SOURCE, HOLIDAY_SOURCE, REGION_SOURCE, marketValues, marketDataId, now);
-    final InstrumentDefinition<?> definition = fraNode.accept(converter);
-    assertTrue(definition instanceof ForwardRateAgreementDefinition);
-    final ForwardRateAgreementDefinition fra = (ForwardRateAgreementDefinition) definition;
-    final ForwardRateAgreementDefinition expectedFRA = ForwardRateAgreementDefinition.from(DateUtils.getUTCDate(2013, 9, 5), DateUtils.getUTCDate(2013, 12, 5), 1, index, rate, CALENDAR);
-    assertEquals(expectedFRA, fra);
   }
 
   /**

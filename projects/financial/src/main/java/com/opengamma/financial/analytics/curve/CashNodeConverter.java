@@ -137,16 +137,16 @@ public class CashNodeConverter extends CurveNodeVisitorAdapter<InstrumentDefinit
     final Tenor startTenor = cashNode.getStartTenor();
     final Tenor maturityTenor = cashNode.getMaturityTenor();
     final Convention convention;
+    // try the security source first, then look for the convention directly
+    // if the convention is used, the tenor is implied from the start and maturity tenors from the node
     try {
-      convention = ConventionLink.resolvable(cashNode.getConvention().toBundle(), Convention.class).resolve();
-    } catch (final Exception e) {
-      LOGGER.error("Problem getting convention with id {}: {}", cashNode.getConvention(), e.getMessage());
-      // An exception could be thrown from the convention link resolver
-      // If the convention is not found, try with the security.
       return getFromSecurity(cashNode, startTenor, maturityTenor);
+    } catch (final Exception e) {
+      LOGGER.info("Problem getting security with id {}: {}, trying convention", cashNode.getConvention(), e.getMessage());
+      convention = ConventionLink.resolvable(cashNode.getConvention().toBundle(), Convention.class).resolve();
     }
     if (convention == null) {
-      return getFromSecurity(cashNode, startTenor, maturityTenor);
+      throw new OpenGammaRuntimeException("Could not get security or convention with id " + cashNode.getConvention());
     }
     final LocalTime time = _valuationTime.toLocalTime();
     final ZoneOffset zone = _valuationTime.getOffset();
@@ -195,6 +195,7 @@ public class CashNodeConverter extends CurveNodeVisitorAdapter<InstrumentDefinit
       final double accrualFactor = dayCount.getDayCountFraction(startDate, endDate);
       return new CashDefinition(currency, startDate, endDate, 1, _rate, accrualFactor);
     } else if (convention instanceof IborIndexConvention) {
+      //TODO should try to find index security and use that for the tenor
       final IborIndexConvention iborIndexConvention = (IborIndexConvention) convention;
       final Currency currency = iborIndexConvention.getCurrency();
       final Region region = _regionSource.getHighestLevelRegion(iborIndexConvention.getRegionCalendar());
@@ -217,7 +218,6 @@ public class CashNodeConverter extends CurveNodeVisitorAdapter<InstrumentDefinit
       final Period period = Period.between(startDate.toLocalDate(), endDate.toLocalDate());
       final IborIndex index;
       if (period.getDays() != 0) {
-        //TODO won't work for business day tenors
         final Tenor daysPeriod = Tenor.of(maturityTenor.getPeriod().minus(startTenor.getPeriod()));
         index = ConverterUtils.indexIbor(iborIndexConvention.getName(), iborIndexConvention, daysPeriod);
       } else {
