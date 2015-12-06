@@ -68,9 +68,9 @@ public class CMSIndexTest {
     assertEquals(CMS_INDEX.getIborIndex(), IBOR_INDEX);
     assertEquals(CMS_INDEX.getTenor(), CMS_TENOR);
     final GeneratorSwapFixedIbor generator = new GeneratorSwapFixedIbor("Swap Generator", FIXED_LEG_PERIOD, DAY_COUNT_FIXED, IBOR_INDEX, CALENDAR);
-    final String name = CMS_TENOR.toString() + generator.getName();
+    final String name = "P6M EUR Swap Index";
     assertEquals(name, CMS_INDEX.getName());
-    assertEquals(CMS_INDEX.toString(), CMS_INDEX.getName());
+    assertEquals(CMS_INDEX.toString(), "SwapIndex[P6M EUR Swap Index, currency=EUR, swap tenor=P2Y, ibor index=IborIndex[Ibor, currency=EUR, tenor=P3M, day count=Actual/360, business day convention=Modified Following, spot lag=2, end-of-month]]");
   }
 
   @Test

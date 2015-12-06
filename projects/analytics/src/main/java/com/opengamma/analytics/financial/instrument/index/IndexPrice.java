@@ -6,23 +6,17 @@
 package com.opengamma.analytics.financial.instrument.index;
 
 import org.apache.commons.lang.ObjectUtils;
-import org.apache.commons.lang.Validate;
 
 import com.opengamma.util.money.Currency;
 
 /**
  * Class describing a price index, like the one used in inflation instruments.
+ * @deprecated  use {@link PriceIndex}
  */
+@Deprecated
 public class IndexPrice {
-
-  /**
-   * Name of the index.
-   */
-  private final String _name;
-  /**
-   * The currency in which the index is computed.
-   */
-  private final Currency _currency;
+  /** The delegated index */
+  private final PriceIndex _index;
 
   /**
    * Constructor of the price index.
@@ -30,10 +24,15 @@ public class IndexPrice {
    * @param ccy The currency in which the index is computed. Not null.
    */
   public IndexPrice(final String name, final Currency ccy) {
-    Validate.notNull(name, "Name");
-    Validate.notNull(ccy, "Currency");
-    _name = name;
-    _currency = ccy;
+    _index = new PriceIndex(name, ccy);
+  }
+
+  /**
+   * Gets this index as a {@link PriceIndex}.
+   * @return  a price index
+   */
+  public PriceIndex toPriceIndex() {
+    return _index;
   }
 
   /**
@@ -41,7 +40,7 @@ public class IndexPrice {
    * @return The name.
    */
   public String getName() {
-    return _name;
+    return _index.getName();
   }
 
   /**
@@ -49,22 +48,17 @@ public class IndexPrice {
    * @return The currency.
    */
   public Currency getCurrency() {
-    return _currency;
+    return _index.getCurrency();
   }
 
   @Override
   public String toString() {
-    return _name;
+    return _index.toString();
   }
 
   @Override
   public int hashCode() {
-    final int prime = 31;
-    int result = 1;
-    result = prime * result + _currency.hashCode();
-    result = prime * result + _name.hashCode();
-
-    return result;
+    return _index.hashCode();
   }
 
   @Override
@@ -72,17 +66,14 @@ public class IndexPrice {
     if (this == obj) {
       return true;
     }
-    if (obj == null) {
-      return false;
-    }
-    if (getClass() != obj.getClass()) {
+    if (!(obj instanceof IndexPrice)) {
       return false;
     }
     final IndexPrice other = (IndexPrice) obj;
-    if (!ObjectUtils.equals(_currency, other._currency)) {
+    if (!ObjectUtils.equals(getCurrency(), other.getCurrency())) {
       return false;
     }
-    if (!ObjectUtils.equals(_name, other._name)) {
+    if (!ObjectUtils.equals(getName(), other.getName())) {
       return false;
     }
     return true;

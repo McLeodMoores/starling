@@ -2,56 +2,39 @@
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
  *
  * Please see distribution for license.
+ *
+ * Modified by McLeod Moores Software Limited.
+ *
+ * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.analytics.financial.instrument.index;
 
-import org.apache.commons.lang.ObjectUtils;
+import java.util.Objects;
+
 import org.threeten.bp.Period;
 
 import com.opengamma.financial.convention.businessday.BusinessDayConvention;
 import com.opengamma.financial.convention.daycount.DayCount;
-import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
+import com.opengamma.util.time.Tenor;
 
 /**
- * Class describing an Ibor-like index.
+ * Class describing an ibor-like index.
+ * @deprecated  use {@link IborTypeIndex}
  */
+@Deprecated
 public class IborIndex extends IndexDeposit {
-
-  /**
-   * The index spot lag in days between trade and settlement date (usually 2 or 0).
-   */
-  private final int _spotLag;
-  /**
-   * The day count convention associated to the index.
-   */
-  private final DayCount _dayCount;
-  /**
-   * The business day convention associated to the index.
-   */
-  private final BusinessDayConvention _businessDayConvention;
-  /**
-   * The flag indicating if the end-of-month rule is used.
-   */
-  private final boolean _endOfMonth;
-  /**
-   * Tenor of the index.
-   */
-  private final Period _tenor;
-
-  /**
-   * {@link IborIndex} is used as a key within the curve system, thus {@link #hashCode()} needs to be fast.
-   */
-  private final int _hashCode;
+  /** The delegated index */
+  private final IborTypeIndex _index;
 
   /**
    * Constructor from the index details. The name is set to "Ibor".
-   * @param currency The index currency.
-   * @param tenor The index tenor.
-   * @param spotLag The index spot lag (usually 2 or 0).
-   * @param dayCount The day count convention associated to the index.
-   * @param businessDayConvention The business day convention associated to the index.
-   * @param endOfMonth The end-of-month flag.
+   * @param currency  the index currency, not null
+   * @param tenor  the index tenor, not null
+   * @param spotLag  the index spot lag (usually 2 or 0)
+   * @param dayCount  the day count convention associated with the index, not null
+   * @param businessDayConvention  the business day convention associated with the index, not null
+   * @param endOfMonth  the end-of-month flag
    * @deprecated Use the constructor that takes an index name.
    */
   @Deprecated
@@ -61,87 +44,76 @@ public class IborIndex extends IndexDeposit {
 
   /**
    * Constructor from the index details.
-   * @param currency The index currency.
-   * @param tenor The index tenor.
-   * @param spotLag The index spot lag (usually 2 or 0).
-   * @param dayCount The day count convention associated to the index.
-   * @param businessDayConvention The business day convention associated to the index.
-   * @param endOfMonth The end-of-month flag.
-   * @param name The index name.
+   * @param currency  the index currency, not null
+   * @param tenor  the index tenor, not null
+   * @param spotLag  the index spot lag (usually 2 or 0)
+   * @param dayCount  the day count convention associated with the index, not null
+   * @param businessDayConvention  the business day convention associated with the index, not null
+   * @param endOfMonth  the end-of-month flag
+   * @param name  the index name, not null
    */
   public IborIndex(final Currency currency, final Period tenor, final int spotLag, final DayCount dayCount, final BusinessDayConvention businessDayConvention,
       final boolean endOfMonth, final String name) {
     super(name, currency);
-    ArgumentChecker.notNull(tenor, "tenor");
-    _tenor = tenor;
-    ArgumentChecker.notNull(dayCount, "day count");
-    ArgumentChecker.notNull(businessDayConvention, "business day convention");
-    _spotLag = spotLag;
-    _dayCount = dayCount;
-    _businessDayConvention = businessDayConvention;
-    _endOfMonth = endOfMonth;
-    _hashCode = generateHashCode();
+    _index = new IborTypeIndex(name, currency, Tenor.of(tenor), spotLag, dayCount, businessDayConvention, endOfMonth);
   }
 
   /**
-   * Gets the tenor field.
-   * @return the tenor
+   * Gets this index as an {@link IborTypeIndex}.
+   * @return  an ibor index
+   */
+  public IborTypeIndex toIborTypeIndex() {
+    return _index;
+  }
+
+  /**
+   * Gets the index tenor.
+   * @return  the index tenor
    */
   public Period getTenor() {
-    return _tenor;
+    return _index.getTenor().getPeriod();
   }
 
   /**
    * Gets the spot lag (in days).
-   * @return The spot lag.
+   * @return  the spot lag
    */
   public int getSpotLag() {
-    return _spotLag;
+    return _index.getSpotLag();
   }
 
   /**
    * Gets the day count.
-   * @return The day count.
+   * @return  the day count
    */
   public DayCount getDayCount() {
-    return _dayCount;
+    return _index.getDayCount();
   }
 
   /**
    * Gets the business day convention.
-   * @return The business day convention.
+   * @return  the business day convention
    */
   public BusinessDayConvention getBusinessDayConvention() {
-    return _businessDayConvention;
+    return _index.getBusinessDayConvention();
   }
 
   /**
-   * Gets the end-of-month rule flag.
-   * @return The flag.
+   * Returns true if the end-of-month rule is used.
+   * @return  true if the end-of-month rule is used
    */
   public boolean isEndOfMonth() {
-    return _endOfMonth;
+    return _index.isEndOfMonth();
   }
 
   @Override
   public String toString() {
-    return getName();
+    return _index.toString();
   }
 
   @Override
   public int hashCode() {
-    return _hashCode;
-  }
-
-  private int generateHashCode() {
-    final int prime = 31;
-    int result = super.hashCode();
-    result = prime * result + _businessDayConvention.hashCode();
-    result = prime * result + _dayCount.hashCode();
-    result = prime * result + (_endOfMonth ? 1231 : 1237);
-    result = prime * result + _spotLag;
-    result = prime * result + _tenor.hashCode();
-    return result;
+    return _index.hashCode();
   }
 
   @Override
@@ -149,26 +121,26 @@ public class IborIndex extends IndexDeposit {
     if (this == obj) {
       return true;
     }
+    if (!(obj instanceof IborIndex)) {
+      return false;
+    }
     if (!super.equals(obj)) {
       return false;
     }
-    if (getClass() != obj.getClass()) {
-      return false;
-    }
     final IborIndex other = (IborIndex) obj;
-    if (!ObjectUtils.equals(_businessDayConvention, other._businessDayConvention)) {
+    if (!Objects.equals(_index.getTenor().getPeriod(), other.getTenor())) {
       return false;
     }
-    if (!ObjectUtils.equals(_dayCount, other._dayCount)) {
+    if (_index.isEndOfMonth() != other.isEndOfMonth()) {
       return false;
     }
-    if (_endOfMonth != other._endOfMonth) {
+    if (_index.getSpotLag() != other.getSpotLag()) {
       return false;
     }
-    if (_spotLag != other._spotLag) {
+    if (!Objects.equals(_index.getBusinessDayConvention(), other.getBusinessDayConvention())) {
       return false;
     }
-    if (!ObjectUtils.equals(_tenor, other._tenor)) {
+    if (!Objects.equals(_index.getDayCount(), other.getDayCount())) {
       return false;
     }
     return true;

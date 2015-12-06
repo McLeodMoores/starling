@@ -2,33 +2,26 @@
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
  *
  * Please see distribution for license.
+ *
+ * Modified by McLeod Moores Software Limited.
+ *
+ * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.analytics.financial.instrument.index;
 
 import org.apache.commons.lang.ObjectUtils;
 
 import com.opengamma.financial.convention.daycount.DayCount;
-import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
 
 /**
  * Class describing an OIS-like index. The fixing period is always one business day.
+ * @deprecated  use {@link OvernightIndex}
  */
+@Deprecated
 public class IndexON extends IndexDeposit {
-
-  /**
-   * The day count convention associated to the overnight rate. Not null.
-   */
-  private final DayCount _dayCount;
-  /**
-   * The number of days between start of the fixing period and the publication of the index value. It is usually 0 day (EUR) or 1 day (USD).
-   * It does not represent the standard number of days between the trade date and the settlement date.
-   */
-  private final int _publicationLag;
-  /**
-   * {@link IndexON} is used as a key within the curve system, thus {@link #hashCode()} needs to be fast.
-   */
-  private final int _hashCode;
+  /** The delegated index */
+  private final OvernightIndex _index;
 
   /**
    * Index constructor from all the details.
@@ -39,11 +32,15 @@ public class IndexON extends IndexDeposit {
    */
   public IndexON(final String name, final Currency currency, final DayCount dayCount, final int publicationLag) {
     super(name, currency);
-    ArgumentChecker.notNull(dayCount, "OIS index: day count");
-    ArgumentChecker.isTrue(publicationLag == 0 || publicationLag == 1, "Attempted to construct an IndexON with publicationLag other than 0 or 1");
-    _publicationLag = publicationLag;
-    _dayCount = dayCount;
-    _hashCode = generateHashCode();
+    _index = new OvernightIndex(name, currency, dayCount, publicationLag);
+  }
+
+  /**
+   * Gets this index as an {@link OvernightIndex}.
+   * @return  an overnight index
+   */
+  public OvernightIndex toOvernightIndex() {
+    return new OvernightIndex(getName(), getCurrency(), getDayCount(), getPublicationLag());
   }
 
   /**
@@ -51,7 +48,7 @@ public class IndexON extends IndexDeposit {
    * @return The day count convention.
    */
   public DayCount getDayCount() {
-    return _dayCount;
+    return _index.getDayCount();
   }
 
   /**
@@ -59,25 +56,17 @@ public class IndexON extends IndexDeposit {
    * @return The number of lag days.
    */
   public int getPublicationLag() {
-    return _publicationLag;
+    return _index.getPublicationLag();
   }
 
   @Override
   public String toString() {
-    return super.toString() + "-" + _dayCount.getName();
+    return _index.toString();
   }
 
   @Override
   public int hashCode() {
-    return _hashCode;
-  }
-
-  private int generateHashCode() {
-    final int prime = 31;
-    int result = super.hashCode();
-    result = prime * result + _dayCount.hashCode();
-    result = prime * result + _publicationLag;
-    return result;
+    return _index.hashCode();
   }
 
   @Override
@@ -85,17 +74,17 @@ public class IndexON extends IndexDeposit {
     if (this == obj) {
       return true;
     }
+    if (!(obj instanceof IndexON)) {
+      return false;
+    }
     if (!super.equals(obj)) {
       return false;
     }
-    if (getClass() != obj.getClass()) {
-      return false;
-    }
     final IndexON other = (IndexON) obj;
-    if (!ObjectUtils.equals(_dayCount, other._dayCount)) {
+    if (!ObjectUtils.equals(_index.getDayCount(), other.getDayCount())) {
       return false;
     }
-    if (_publicationLag != other._publicationLag) {
+    if (_index.getPublicationLag() != other.getPublicationLag()) {
       return false;
     }
     return true;

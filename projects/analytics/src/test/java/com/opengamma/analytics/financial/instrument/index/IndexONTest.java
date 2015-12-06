@@ -66,10 +66,10 @@ public class IndexONTest {
     assertEquals(EUR_OIS.getPublicationLag(), EUR_PUBLICATION_LAG);
   }
 
-  @Test
   /**
    * Tests the equal and hashCode methods.
    */
+  @Test
   public void equalHash() {
     assertEquals("OIS Index: equal/hash code", US_OIS, US_OIS);
     assertFalse("OIS Index: equal/hash code", US_OIS.equals(EUR_OIS));

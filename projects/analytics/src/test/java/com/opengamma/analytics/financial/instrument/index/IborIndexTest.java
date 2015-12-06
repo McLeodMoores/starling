@@ -69,7 +69,7 @@ public class IborIndexTest {
     assertEquals(INDEX.isEndOfMonth(), IS_EOM);
     final String name = "Ibor";
     assertEquals(name, INDEX.getName());
-    assertEquals(name, INDEX.toString());
+    assertEquals(INDEX.toString(), "IborIndex[Ibor, currency=EUR, tenor=P3M, day count=Actual/360, business day convention=Modified Following, spot lag=2, end-of-month]");
     assertEquals(NAME, INDEX2.getName());
   }
 
