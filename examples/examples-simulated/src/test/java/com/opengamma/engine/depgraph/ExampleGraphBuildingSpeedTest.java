@@ -20,8 +20,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import net.sf.ehcache.CacheManager;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.annotations.AfterClass;
@@ -52,12 +50,14 @@ import com.opengamma.id.VersionCorrection;
 import com.opengamma.util.ehcache.EHCacheUtils;
 import com.opengamma.util.test.TestGroup;
 
+import net.sf.ehcache.CacheManager;
+
 /**
  * Times the building of dependency graphs for all views in the system; that is if they can be built.
  * <p>
  * Although timings can be reported, the repeated attempts to build the graph are more useful to detect faults with the graph building algorithm - for example inconsistent behaviors.
  */
-@Test(groups = TestGroup.INTEGRATION)
+@Test
 public class ExampleGraphBuildingSpeedTest {
 
   private static final Logger s_logger = LoggerFactory.getLogger(ExampleGraphBuildingSpeedTest.class);
@@ -158,7 +158,7 @@ public class ExampleGraphBuildingSpeedTest {
                 if (missing.size() < 8) {
                   s_logger.info("Missing = {}", missing);
                 } else {
-                  for (ValueSpecification vs : missing) {
+                  for (final ValueSpecification vs : missing) {
                     s_logger.info("Missing = {}", vs);
                   }
                 }
@@ -167,7 +167,7 @@ public class ExampleGraphBuildingSpeedTest {
                 if (extra.size() < 8) {
                   s_logger.info("Extra = {}", extra);
                 } else {
-                  for (ValueSpecification vs : extra) {
+                  for (final ValueSpecification vs : extra) {
                     s_logger.info("Extra = {}", vs);
                   }
                 }
@@ -175,7 +175,7 @@ public class ExampleGraphBuildingSpeedTest {
               assertEquals(graph.getTerminalOutputs().size(), terminalOutputs.get(graph.getCalculationConfigurationName()).size());
               assertEquals(missing.size(), extra.size());
               final Collection<ValueSpecification> extraCopy = new LinkedList<ValueSpecification>(extra);
-              for (ValueSpecification vs1 : missing) {
+              for (final ValueSpecification vs1 : missing) {
                 final Iterator<ValueSpecification> itr = extraCopy.iterator();
                 while (itr.hasNext()) {
                   final ValueSpecification vs2 = itr.next();
@@ -188,7 +188,7 @@ public class ExampleGraphBuildingSpeedTest {
                   }
                 }
               }
-              for (ValueSpecification vs : extraCopy) {
+              for (final ValueSpecification vs : extraCopy) {
                 s_logger.warn("Unpaired extra = {}", vs);
               }
               assertTrue(extraCopy.isEmpty());
@@ -199,7 +199,7 @@ public class ExampleGraphBuildingSpeedTest {
         Collections.sort(configs);
         final StringBuilder sb = new StringBuilder();
         sb.append("Compilation ").append(j).append("/").append(i).append(" of ").append(view.getName()).append(" in ").append((tStop - tStart) / 1e6).append("ms");
-        for (String config : configs) {
+        for (final String config : configs) {
           sb.append(' ').append(config).append('=').append(nodeCounts.get(config));
         }
         _report.add(sb.toString());
@@ -217,7 +217,7 @@ public class ExampleGraphBuildingSpeedTest {
     }
     Arrays.sort(viewDefinitions, new Comparator<Object[]>() {
       @Override
-      public int compare(Object[] o1, Object[] o2) {
+      public int compare(final Object[] o1, final Object[] o2) {
         return ((ViewDefinition) o1[0]).getName().compareTo(((ViewDefinition) o2[0]).getName());
       }
     });
