@@ -10,7 +10,6 @@ import org.testng.annotations.Test;
 import org.threeten.bp.LocalDate;
 
 import com.mcleodmoores.quandl.QuandlConstants;
-import com.mcleodmoores.quandl.util.Quandl4OpenGammaRuntimeException;
 import com.opengamma.core.value.MarketDataRequirementNames;
 import com.opengamma.financial.analytics.ircurve.BloombergFutureCurveInstrumentProvider;
 import com.opengamma.financial.analytics.ircurve.strips.DataFieldType;
@@ -40,7 +39,7 @@ public class QuandlFedFundsFutureCurveInstrumentProviderTest {
   /**
    * Tests the behavior when the underlying id is null.
    */
-  @Test(expectedExceptions = Quandl4OpenGammaRuntimeException.class)
+  @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullPrefix() {
     new QuandlFedFundsFutureCurveInstrumentProvider(PREFIX, DATA_FIELD, FIELD_TYPE, null, UNDERLYING_DATA_FIELD);
   }
@@ -48,7 +47,7 @@ public class QuandlFedFundsFutureCurveInstrumentProviderTest {
   /**
    * Tests the behaviour when the underlying data field is null.
    */
-  @Test(expectedExceptions = Quandl4OpenGammaRuntimeException.class)
+  @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullUnderlyingDataField() {
     new QuandlFedFundsFutureCurveInstrumentProvider(PREFIX, DATA_FIELD, FIELD_TYPE, UNDERLYING_ID, null);
   }

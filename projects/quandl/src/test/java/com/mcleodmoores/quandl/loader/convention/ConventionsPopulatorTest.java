@@ -19,7 +19,6 @@ import org.threeten.bp.LocalTime;
 import com.google.common.collect.Sets;
 import com.mcleodmoores.quandl.QuandlConstants;
 import com.mcleodmoores.quandl.convention.QuandlStirFutureConvention;
-import com.mcleodmoores.quandl.util.Quandl4OpenGammaRuntimeException;
 import com.opengamma.core.id.ExternalSchemes;
 import com.opengamma.financial.convention.IborIndexConvention;
 import com.opengamma.financial.convention.OvernightIndexConvention;
@@ -107,7 +106,7 @@ public class ConventionsPopulatorTest {
   /**
    * Tests the behaviour when the conventions are null.
    */
-  @Test(expectedExceptions = Quandl4OpenGammaRuntimeException.class)
+  @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullConventions() {
     new ConventionsPopulator(null);
   }
@@ -115,7 +114,7 @@ public class ConventionsPopulatorTest {
   /**
    * Tests the behaviour when the convention master is null.
    */
-  @Test(expectedExceptions = Quandl4OpenGammaRuntimeException.class)
+  @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullConventionMaster() {
     new ConventionsPopulator(Collections.<ManageableConvention>emptySet()).init(null, new InMemorySecurityMaster());
   }

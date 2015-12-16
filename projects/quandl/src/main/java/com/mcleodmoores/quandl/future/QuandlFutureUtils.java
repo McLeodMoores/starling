@@ -8,9 +8,9 @@ import org.threeten.bp.Month;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
-import com.mcleodmoores.quandl.util.ArgumentChecker;
 import com.mcleodmoores.quandl.util.Quandl4OpenGammaRuntimeException;
 import com.opengamma.financial.analytics.model.irfutureoption.FutureOptionUtils;
+import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.time.Tenor;
 
 /**

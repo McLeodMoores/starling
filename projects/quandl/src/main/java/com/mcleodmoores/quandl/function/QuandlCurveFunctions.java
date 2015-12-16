@@ -8,7 +8,6 @@ import java.util.List;
 import com.mcleodmoores.quandl.financial.curve.QuandlCurveHistoricalTimeSeriesFunction;
 import com.mcleodmoores.quandl.financial.curve.QuandlFxMatrixFunction;
 import com.mcleodmoores.quandl.financial.curve.QuandlMultiCurveDiscountingFunction;
-import com.mcleodmoores.quandl.util.ArgumentChecker;
 import com.opengamma.core.change.ChangeEvent;
 import com.opengamma.engine.function.config.AbstractFunctionConfigurationBean;
 import com.opengamma.engine.function.config.BeanDynamicFunctionConfigurationSource;
@@ -29,6 +28,7 @@ import com.opengamma.master.config.ConfigDocument;
 import com.opengamma.master.config.ConfigMaster;
 import com.opengamma.master.config.ConfigSearchRequest;
 import com.opengamma.master.config.impl.ConfigSearchIterator;
+import com.opengamma.util.ArgumentChecker;
 
 /**
  * Adds functions that produce curves that use Quandl data.

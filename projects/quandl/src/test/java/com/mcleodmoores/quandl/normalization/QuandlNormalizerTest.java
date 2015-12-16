@@ -10,7 +10,6 @@ import org.threeten.bp.LocalDate;
 
 import com.mcleodmoores.quandl.QuandlConstants;
 import com.mcleodmoores.quandl.classification.QuandlCodeClassifier;
-import com.mcleodmoores.quandl.util.Quandl4OpenGammaRuntimeException;
 import com.opengamma.core.historicaltimeseries.HistoricalTimeSeries;
 import com.opengamma.core.historicaltimeseries.HistoricalTimeSeriesAdjuster;
 import com.opengamma.core.historicaltimeseries.impl.SimpleHistoricalTimeSeries;
@@ -39,7 +38,7 @@ public class QuandlNormalizerTest {
   /**
    * Tests the behaviour when a null code classifier is supplied.
    */
-  @Test(expectedExceptions = Quandl4OpenGammaRuntimeException.class)
+  @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullClassifier() {
     new QuandlNormalizer(null);
   }
@@ -47,7 +46,7 @@ public class QuandlNormalizerTest {
   /**
    * Tests the behaviour when a null id bundle is supplied.
    */
-  @Test(expectedExceptions = Quandl4OpenGammaRuntimeException.class)
+  @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullIdBundle1() {
     NORMALIZER.adjust(null, TS);
   }
@@ -55,7 +54,7 @@ public class QuandlNormalizerTest {
   /**
    * Tests the behaviour when a null id bundle is supplied.
    */
-  @Test(expectedExceptions = Quandl4OpenGammaRuntimeException.class)
+  @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullIdBundle2() {
     NORMALIZER.getAdjustment(null);
   }
@@ -63,7 +62,7 @@ public class QuandlNormalizerTest {
   /**
    * Tests the behaviour when a null time series is supplied.
    */
-  @Test(expectedExceptions = Quandl4OpenGammaRuntimeException.class)
+  @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullTimeSeries() {
     NORMALIZER.adjust(ID_BUNDLE, null);
   }

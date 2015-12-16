@@ -11,7 +11,6 @@ import org.testng.annotations.Test;
 import org.threeten.bp.LocalDate;
 
 import com.mcleodmoores.quandl.QuandlConstants;
-import com.mcleodmoores.quandl.util.Quandl4OpenGammaRuntimeException;
 import com.opengamma.core.value.MarketDataRequirementNames;
 import com.opengamma.financial.analytics.ircurve.BloombergFutureCurveInstrumentProvider;
 import com.opengamma.financial.analytics.ircurve.IndexType;
@@ -36,7 +35,7 @@ public class QuandlFutureCurveInstrumentProviderTest {
   /**
    * Tests the behavior when the prefix is null.
    */
-  @Test(expectedExceptions = Quandl4OpenGammaRuntimeException.class)
+  @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullPrefix() {
     new QuandlFutureCurveInstrumentProvider(null, DATA_FIELD, FIELD_TYPE);
   }
@@ -44,7 +43,7 @@ public class QuandlFutureCurveInstrumentProviderTest {
   /**
    * Tests the behaviour when the data field is null.
    */
-  @Test(expectedExceptions = Quandl4OpenGammaRuntimeException.class)
+  @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullDataField() {
     new QuandlFutureCurveInstrumentProvider(PREFIX, null, FIELD_TYPE);
   }
@@ -52,7 +51,7 @@ public class QuandlFutureCurveInstrumentProviderTest {
   /**
    * Tests the behaviour when the field type is null.
    */
-  @Test(expectedExceptions = Quandl4OpenGammaRuntimeException.class)
+  @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullFieldType() {
     new QuandlFutureCurveInstrumentProvider(PREFIX, DATA_FIELD, null);
   }

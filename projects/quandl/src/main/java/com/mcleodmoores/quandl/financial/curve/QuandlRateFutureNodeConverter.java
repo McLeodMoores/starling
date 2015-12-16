@@ -14,7 +14,6 @@ import com.mcleodmoores.quandl.convention.QuandlFinancialConventionVisitor;
 import com.mcleodmoores.quandl.convention.QuandlStirFutureConvention;
 import com.mcleodmoores.quandl.future.FutureExpiryCalculator;
 import com.mcleodmoores.quandl.future.QuandlFutureUtils;
-import com.mcleodmoores.quandl.util.ArgumentChecker;
 import com.mcleodmoores.quandl.util.Quandl4OpenGammaRuntimeException;
 import com.opengamma.analytics.financial.instrument.InstrumentDefinition;
 import com.opengamma.analytics.financial.instrument.future.FederalFundsFutureSecurityDefinition;
@@ -37,6 +36,7 @@ import com.opengamma.financial.convention.IborIndexConvention;
 import com.opengamma.financial.convention.OvernightIndexConvention;
 import com.opengamma.financial.convention.calendar.Calendar;
 import com.opengamma.id.ExternalId;
+import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.result.Function2;
 import com.opengamma.util.time.Expiry;
 

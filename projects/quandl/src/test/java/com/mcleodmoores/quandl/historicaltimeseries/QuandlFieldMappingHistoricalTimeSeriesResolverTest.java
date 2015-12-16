@@ -25,7 +25,6 @@ import com.mcleodmoores.quandl.classification.QuandlCodeClassifier;
 import com.mcleodmoores.quandl.classification.QuandlDataUtils;
 import com.mcleodmoores.quandl.classification.QuandlHistoricalTimeSeriesFieldAdjustmentMap;
 import com.mcleodmoores.quandl.normalization.QuandlNormalizer;
-import com.mcleodmoores.quandl.util.Quandl4OpenGammaRuntimeException;
 import com.opengamma.core.config.impl.ConfigItem;
 import com.opengamma.core.value.MarketDataRequirementNames;
 import com.opengamma.id.ExternalIdBundle;
@@ -172,7 +171,7 @@ public class QuandlFieldMappingHistoricalTimeSeriesResolverTest {
   /**
    * Tests the behaviour when the field maps are null.
    */
-  @Test(expectedExceptions = Quandl4OpenGammaRuntimeException.class)
+  @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullFieldMaps() {
     new QuandlFieldMappingHistoricalTimeSeriesResolver(null, HTS_SELECTOR, HTS_MASTER);
   }
@@ -180,7 +179,7 @@ public class QuandlFieldMappingHistoricalTimeSeriesResolverTest {
   /**
    * Tests the behaviour when the selector is null.
    */
-  @Test(expectedExceptions = Quandl4OpenGammaRuntimeException.class)
+  @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullSelector() {
     new QuandlFieldMappingHistoricalTimeSeriesResolver(FIELD_MAPS, null, HTS_MASTER);
   }
@@ -220,7 +219,7 @@ public class QuandlFieldMappingHistoricalTimeSeriesResolverTest {
   /**
    * Tests the behaviour when the data field is null.
    */
-  @Test(expectedExceptions = Quandl4OpenGammaRuntimeException.class)
+  @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullDataField() {
     RESOLVER.resolve(ID_1, null, QUANDL_DATA_SOURCE_NAME, null, null, null);
   }

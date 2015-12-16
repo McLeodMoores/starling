@@ -21,7 +21,6 @@ import org.threeten.bp.ZonedDateTime;
 import com.mcleodmoores.quandl.QuandlConstants;
 import com.mcleodmoores.quandl.convention.QuandlFedFundsFutureConvention;
 import com.mcleodmoores.quandl.convention.QuandlStirFutureConvention;
-import com.mcleodmoores.quandl.util.Quandl4OpenGammaRuntimeException;
 import com.opengamma.core.convention.Convention;
 import com.opengamma.core.id.ExternalSchemes;
 import com.opengamma.core.security.Security;
@@ -171,7 +170,7 @@ public class QuandlRateFutureGeneratorTest {
   /**
    * Tests the exception thrown when the convention source is null.
    */
-  @Test(expectedExceptions = Quandl4OpenGammaRuntimeException.class)
+  @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullConventionSource() {
     LOADER.createSecurity(null, "CME/EDZ2014");
   }

@@ -8,7 +8,6 @@ import static org.testng.Assert.assertNull;
 
 import org.testng.annotations.Test;
 
-import com.mcleodmoores.quandl.util.Quandl4OpenGammaRuntimeException;
 import com.opengamma.util.test.TestGroup;
 
 import net.sf.ehcache.CacheManager;
@@ -24,7 +23,7 @@ public class QuandlCodeClassifierTest {
   /**
    * Tests the behaviour when a null cache manager is supplied.
    */
-  @Test(expectedExceptions = Quandl4OpenGammaRuntimeException.class)
+  @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullCacheManager() {
     new QuandlCodeClassifier(null);
   }

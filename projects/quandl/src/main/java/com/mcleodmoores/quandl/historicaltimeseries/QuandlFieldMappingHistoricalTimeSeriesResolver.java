@@ -15,7 +15,6 @@ import org.threeten.bp.LocalDate;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Iterables;
-import com.mcleodmoores.quandl.util.ArgumentChecker;
 import com.opengamma.core.historicaltimeseries.HistoricalTimeSeriesAdjuster;
 import com.opengamma.id.ExternalIdBundle;
 import com.opengamma.master.historicaltimeseries.HistoricalTimeSeriesMaster;
@@ -26,6 +25,7 @@ import com.opengamma.master.historicaltimeseries.impl.DefaultHistoricalTimeSerie
 import com.opengamma.master.historicaltimeseries.impl.FieldMappingHistoricalTimeSeriesResolver;
 import com.opengamma.master.historicaltimeseries.impl.HistoricalTimeSeriesFieldAdjustment;
 import com.opengamma.master.historicaltimeseries.impl.HistoricalTimeSeriesFieldAdjustmentMap;
+import com.opengamma.util.ArgumentChecker;
 
 /**
  * A historical time series resolver for Quandl data that allows multiple mappings from Quandl data fields to
@@ -91,8 +91,8 @@ public class QuandlFieldMappingHistoricalTimeSeriesResolver extends DefaultHisto
             final ManageableHistoricalTimeSeriesInfo candidate = it.next();
             final HistoricalTimeSeriesFieldAdjustment fieldAdjustment = fieldMappings.get(candidate.getDataSource());
             if (fieldAdjustment == null
-                || ((fieldAdjustment.getUnderlyingDataProvider() != null && !fieldAdjustment.getUnderlyingDataProvider().equals(candidate.getDataProvider()))
-                    || (field != null && !field.equals(candidate.getDataField())))) {
+                || fieldAdjustment.getUnderlyingDataProvider() != null && !fieldAdjustment.getUnderlyingDataProvider().equals(candidate.getDataProvider())
+                    || field != null && !field.equals(candidate.getDataField())) {
               // Incompatible
               it.remove();
             }

@@ -24,14 +24,13 @@ import com.google.common.collect.Multimap;
 import com.jimmoores.quandl.HeaderDefinition;
 import com.jimmoores.quandl.MultiDataSetRequest;
 import com.jimmoores.quandl.MultiDataSetRequest.Builder;
-import com.mcleodmoores.quandl.QuandlConstants;
-import com.mcleodmoores.quandl.robustwrapper.RobustQuandlSession;
-import com.mcleodmoores.quandl.util.ArgumentChecker;
 import com.jimmoores.quandl.MultiMetaDataRequest;
 import com.jimmoores.quandl.QuandlCodeRequest;
 import com.jimmoores.quandl.QuandlSession;
 import com.jimmoores.quandl.Row;
 import com.jimmoores.quandl.TabularResult;
+import com.mcleodmoores.quandl.QuandlConstants;
+import com.mcleodmoores.quandl.robustwrapper.RobustQuandlSession;
 import com.opengamma.id.ExternalId;
 import com.opengamma.id.ExternalIdBundle;
 import com.opengamma.provider.historicaltimeseries.HistoricalTimeSeriesProviderGetRequest;
@@ -40,6 +39,7 @@ import com.opengamma.provider.historicaltimeseries.impl.AbstractHistoricalTimeSe
 import com.opengamma.timeseries.date.localdate.ImmutableLocalDateDoubleTimeSeries;
 import com.opengamma.timeseries.date.localdate.LocalDateDoubleTimeSeries;
 import com.opengamma.timeseries.date.localdate.LocalDateDoubleTimeSeriesBuilder;
+import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.time.LocalDateRange;
 
 /**

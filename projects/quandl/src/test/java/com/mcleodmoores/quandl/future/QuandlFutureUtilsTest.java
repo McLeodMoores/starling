@@ -27,19 +27,19 @@ public class QuandlFutureUtilsTest {
     try {
       QuandlFutureUtils.getCodeForFuture(null, 3, LocalDate.of(2015, 1, 1));
       fail();
-    } catch (final Quandl4OpenGammaRuntimeException e) {
+    } catch (final IllegalArgumentException e) {
       // expected
     }
     try {
       QuandlFutureUtils.getExpiryYear(null, 3, LocalDate.of(2015, 1, 1));
       fail();
-    } catch (final Quandl4OpenGammaRuntimeException e) {
+    } catch (final IllegalArgumentException e) {
       // expected
     }
     try {
       QuandlFutureUtils.getMonthCode(null, 3, LocalDate.of(2015, 1, 1));
       fail();
-    } catch (final Quandl4OpenGammaRuntimeException e) {
+    } catch (final IllegalArgumentException e) {
       // expected
     }
   }
@@ -52,37 +52,37 @@ public class QuandlFutureUtilsTest {
     try {
       QuandlFutureUtils.getCodeForFuture(Tenor.THREE_MONTHS, 0, LocalDate.of(2015, 1, 1));
       fail();
-    } catch (final Quandl4OpenGammaRuntimeException e) {
+    } catch (final IllegalArgumentException e) {
       // expected
     }
     try {
       QuandlFutureUtils.getCodeForFuture(Tenor.THREE_MONTHS, -1, LocalDate.of(2015, 1, 1));
       fail();
-    } catch (final Quandl4OpenGammaRuntimeException e) {
+    } catch (final IllegalArgumentException e) {
       // expected
     }
     try {
       QuandlFutureUtils.getExpiryYear(Tenor.THREE_MONTHS, 0, LocalDate.of(2015, 1, 1));
       fail();
-    } catch (final Quandl4OpenGammaRuntimeException e) {
+    } catch (final IllegalArgumentException e) {
       // expected
     }
     try {
       QuandlFutureUtils.getExpiryYear(Tenor.THREE_MONTHS, -1, LocalDate.of(2015, 1, 1));
       fail();
-    } catch (final Quandl4OpenGammaRuntimeException e) {
+    } catch (final IllegalArgumentException e) {
       // expected
     }
     try {
       QuandlFutureUtils.getMonthCode(Tenor.THREE_MONTHS, 0, LocalDate.of(2015, 1, 1));
       fail();
-    } catch (final Quandl4OpenGammaRuntimeException e) {
+    } catch (final IllegalArgumentException e) {
       // expected
     }
     try {
       QuandlFutureUtils.getMonthCode(Tenor.THREE_MONTHS, -1, LocalDate.of(2015, 1, 1));
       fail();
-    } catch (final Quandl4OpenGammaRuntimeException e) {
+    } catch (final IllegalArgumentException e) {
       // expected
     }
   }
@@ -95,19 +95,19 @@ public class QuandlFutureUtilsTest {
     try {
       QuandlFutureUtils.getCodeForFuture(Tenor.THREE_MONTHS, 1, null);
       fail();
-    } catch (final Quandl4OpenGammaRuntimeException e) {
+    } catch (final IllegalArgumentException e) {
       // expected
     }
     try {
       QuandlFutureUtils.getExpiryYear(Tenor.THREE_MONTHS, 1, null);
       fail();
-    } catch (final Quandl4OpenGammaRuntimeException e) {
+    } catch (final IllegalArgumentException e) {
       // expected
     }
     try {
       QuandlFutureUtils.getMonthCode(Tenor.THREE_MONTHS, 1, null);
       fail();
-    } catch (final Quandl4OpenGammaRuntimeException e) {
+    } catch (final IllegalArgumentException e) {
       // expected
     }
   }

@@ -15,12 +15,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import net.sf.ehcache.CacheManager;
-
 import com.mcleodmoores.quandl.normalization.QuandlNormalizer;
-import com.mcleodmoores.quandl.util.ArgumentChecker;
 import com.opengamma.core.value.MarketDataRequirementNames;
 import com.opengamma.master.historicaltimeseries.impl.HistoricalTimeSeriesFieldAdjustmentMap;
+import com.opengamma.util.ArgumentChecker;
+
+import net.sf.ehcache.CacheManager;
 
 /**
  * Utilities class for Quandl data.

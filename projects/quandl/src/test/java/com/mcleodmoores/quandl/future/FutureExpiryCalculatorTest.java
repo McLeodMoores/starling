@@ -14,7 +14,6 @@ import org.threeten.bp.ZonedDateTime;
 import com.mcleodmoores.quandl.convention.QuandlFedFundsFutureConvention;
 import com.mcleodmoores.quandl.convention.QuandlFinancialConvention;
 import com.mcleodmoores.quandl.convention.QuandlStirFutureConvention;
-import com.mcleodmoores.quandl.util.Quandl4OpenGammaRuntimeException;
 import com.opengamma.core.id.ExternalSchemes;
 import com.opengamma.engine.InMemoryHolidaySource;
 import com.opengamma.engine.InMemoryRegionSource;
@@ -45,7 +44,7 @@ public class FutureExpiryCalculatorTest {
   /**
    * Tests the behaviour when a null holiday source is supplied.
    */
-  @Test(expectedExceptions = Quandl4OpenGammaRuntimeException.class)
+  @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullHolidaySource() {
     new FutureExpiryCalculator(null, new InMemoryRegionSource());
   }
@@ -53,7 +52,7 @@ public class FutureExpiryCalculatorTest {
   /**
    * Tests the behaviour when a null region source is supplied.
    */
-  @Test(expectedExceptions = Quandl4OpenGammaRuntimeException.class)
+  @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullRegionSource() {
     new FutureExpiryCalculator(new InMemoryHolidaySource(), null);
   }
@@ -61,7 +60,7 @@ public class FutureExpiryCalculatorTest {
   /**
    * Tests the behaviour when a null expiry year is supplied.
    */
-  @Test(expectedExceptions = Quandl4OpenGammaRuntimeException.class)
+  @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullYear1() {
     final Function2<Character, Integer, Expiry> calculator = STIR.accept(new FutureExpiryCalculator());
     calculator.apply('H', null);
@@ -70,7 +69,7 @@ public class FutureExpiryCalculatorTest {
   /**
    * Tests the behaviour when a bad month code is supplied.
    */
-  @Test(expectedExceptions = Quandl4OpenGammaRuntimeException.class)
+  @Test(expectedExceptions = IllegalArgumentException.class)
   public void testBadMonthCode1() {
     final Function2<Character, Integer, Expiry> calculator = STIR.accept(new FutureExpiryCalculator());
     calculator.apply('A', 2014);
@@ -79,7 +78,7 @@ public class FutureExpiryCalculatorTest {
   /**
    * Tests the behaviour when a null expiry year is supplied.
    */
-  @Test(expectedExceptions = Quandl4OpenGammaRuntimeException.class)
+  @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullYear2() {
     final Function2<Character, Integer, Expiry> calculator = FF.accept(new FutureExpiryCalculator());
     calculator.apply('H', null);
@@ -88,7 +87,7 @@ public class FutureExpiryCalculatorTest {
   /**
    * Tests the behaviour when a bad month code is supplied.
    */
-  @Test(expectedExceptions = Quandl4OpenGammaRuntimeException.class)
+  @Test(expectedExceptions = IllegalArgumentException.class)
   public void testBadMonthCode2() {
     final Function2<Character, Integer, Expiry> calculator = FF.accept(new FutureExpiryCalculator());
     calculator.apply('A', 2014);

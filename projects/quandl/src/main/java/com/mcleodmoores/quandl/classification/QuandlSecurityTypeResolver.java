@@ -16,8 +16,8 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.Maps;
 import com.mcleodmoores.quandl.QuandlConstants;
-import com.mcleodmoores.quandl.util.ArgumentChecker;
 import com.opengamma.id.ExternalIdBundle;
+import com.opengamma.util.ArgumentChecker;
 
 /**
  * Determines the security type of a set of ids.

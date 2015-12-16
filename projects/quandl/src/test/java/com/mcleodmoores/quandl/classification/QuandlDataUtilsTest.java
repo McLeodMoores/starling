@@ -15,7 +15,6 @@ import org.testng.annotations.Test;
 import org.threeten.bp.LocalDate;
 
 import com.mcleodmoores.quandl.QuandlConstants;
-import com.mcleodmoores.quandl.util.Quandl4OpenGammaRuntimeException;
 import com.opengamma.core.historicaltimeseries.HistoricalTimeSeries;
 import com.opengamma.core.historicaltimeseries.impl.SimpleHistoricalTimeSeries;
 import com.opengamma.core.id.ExternalSchemes;
@@ -37,7 +36,7 @@ public class QuandlDataUtilsTest {
   /**
    * Tests the behaviour when a null cache manager is supplied.
    */
-  @Test(expectedExceptions = Quandl4OpenGammaRuntimeException.class)
+  @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullCacheManager() {
     QuandlDataUtils.createFieldAdjustmentMap(null);
   }

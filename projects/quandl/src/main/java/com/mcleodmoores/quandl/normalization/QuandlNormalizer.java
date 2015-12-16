@@ -10,13 +10,13 @@ import org.slf4j.LoggerFactory;
 
 import com.mcleodmoores.quandl.QuandlConstants;
 import com.mcleodmoores.quandl.classification.QuandlCodeClassifier;
-import com.mcleodmoores.quandl.util.ArgumentChecker;
 import com.opengamma.core.historicaltimeseries.HistoricalTimeSeries;
 import com.opengamma.core.historicaltimeseries.HistoricalTimeSeriesAdjuster;
 import com.opengamma.core.historicaltimeseries.HistoricalTimeSeriesAdjustment;
 import com.opengamma.core.historicaltimeseries.impl.SimpleHistoricalTimeSeries;
 import com.opengamma.id.ExternalIdBundle;
 import com.opengamma.timeseries.date.localdate.LocalDateDoubleTimeSeries;
+import com.opengamma.util.ArgumentChecker;
 
 /**
  * Implementation of an {@link HistoricalTimeSeriesAdjuster} for Quandl data.

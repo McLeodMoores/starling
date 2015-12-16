@@ -11,10 +11,10 @@ import org.joda.beans.JodaBeanUtils;
 import org.joda.beans.MetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 
-import com.mcleodmoores.quandl.util.ArgumentChecker;
 import com.opengamma.financial.convention.FinancialConvention;
 import com.opengamma.financial.convention.FinancialConventionVisitor;
 import com.opengamma.id.ExternalIdBundle;
+import com.opengamma.util.ArgumentChecker;
 
 /**
  * Base class for conventions specific to this project.

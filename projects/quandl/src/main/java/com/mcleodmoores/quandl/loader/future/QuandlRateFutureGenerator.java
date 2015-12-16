@@ -21,7 +21,6 @@ import com.mcleodmoores.quandl.convention.QuandlFinancialConventionVisitorSameVa
 import com.mcleodmoores.quandl.convention.QuandlStirFutureConvention;
 import com.mcleodmoores.quandl.future.FutureExpiryCalculator;
 import com.mcleodmoores.quandl.loader.QuandlSecurityLoader;
-import com.mcleodmoores.quandl.util.ArgumentChecker;
 import com.opengamma.DataNotFoundException;
 import com.opengamma.core.convention.ConventionSource;
 import com.opengamma.core.holiday.HolidaySource;
@@ -32,6 +31,7 @@ import com.opengamma.financial.security.future.InterestRateFutureSecurity;
 import com.opengamma.id.ExternalId;
 import com.opengamma.master.security.ManageableSecurity;
 import com.opengamma.scripts.Scriptable;
+import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
 import com.opengamma.util.time.Expiry;
 import com.opengamma.util.time.ExpiryAccuracy;

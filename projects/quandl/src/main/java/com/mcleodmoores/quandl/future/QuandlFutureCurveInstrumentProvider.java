@@ -9,11 +9,11 @@ import org.threeten.bp.LocalDate;
 import org.threeten.bp.Period;
 
 import com.mcleodmoores.quandl.QuandlConstants;
-import com.mcleodmoores.quandl.util.ArgumentChecker;
 import com.opengamma.financial.analytics.ircurve.CurveInstrumentProvider;
 import com.opengamma.financial.analytics.ircurve.IndexType;
 import com.opengamma.financial.analytics.ircurve.strips.DataFieldType;
 import com.opengamma.id.ExternalId;
+import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.time.Tenor;
 
 /**

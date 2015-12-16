@@ -14,7 +14,6 @@ import org.threeten.bp.LocalTime;
 import org.threeten.bp.ZoneOffset;
 import org.threeten.bp.ZonedDateTime;
 
-import com.mcleodmoores.quandl.util.ArgumentChecker;
 import com.opengamma.OpenGammaRuntimeException;
 import com.opengamma.core.config.ConfigSource;
 import com.opengamma.core.convention.ConventionSource;
@@ -34,6 +33,7 @@ import com.opengamma.financial.analytics.curve.credit.ConfigDBCurveDefinitionSou
 import com.opengamma.financial.analytics.curve.credit.CurveDefinitionSource;
 import com.opengamma.financial.analytics.ircurve.strips.CurveNodeVisitor;
 import com.opengamma.financial.analytics.model.curve.FXMatrixFunction;
+import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
 
 /**

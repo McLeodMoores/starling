@@ -20,6 +20,7 @@
 <listEntry value="com.mcleodmoores.quandl.financial.curve"/>
 <listEntry value="com.mcleodmoores.quandl.function"/>
 <listEntry value="com.mcleodmoores.quandl.future"/>
+<listEntry value="com.mcleodmoores.quandl.historicaltimeseries"/>
 <listEntry value="com.mcleodmoores.quandl.loader.config"/>
 <listEntry value="com.mcleodmoores.quandl.loader.convention"/>
 <listEntry value="com.mcleodmoores.quandl.loader.future"/>

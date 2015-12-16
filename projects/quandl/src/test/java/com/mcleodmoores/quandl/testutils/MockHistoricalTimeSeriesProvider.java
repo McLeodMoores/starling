@@ -12,12 +12,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.threeten.bp.LocalDate;
 
-import com.mcleodmoores.quandl.util.ArgumentChecker;
 import com.opengamma.id.ExternalIdBundle;
 import com.opengamma.provider.historicaltimeseries.HistoricalTimeSeriesProviderGetRequest;
 import com.opengamma.provider.historicaltimeseries.HistoricalTimeSeriesProviderGetResult;
 import com.opengamma.provider.historicaltimeseries.impl.AbstractHistoricalTimeSeriesProvider;
 import com.opengamma.timeseries.date.localdate.LocalDateDoubleTimeSeries;
+import com.opengamma.util.ArgumentChecker;
 
 /**
  * A mock {@link com.opengamma.provider.historicaltimeseries.HistoricalTimeSeriesProvider} for testing.

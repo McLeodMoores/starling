@@ -3,10 +3,10 @@
  */
 package com.mcleodmoores.quandl.convention;
 
-import com.mcleodmoores.quandl.util.ArgumentChecker;
 import com.mcleodmoores.quandl.util.Quandl4OpenGammaRuntimeException;
 import com.opengamma.financial.convention.FinancialConvention;
 import com.opengamma.financial.convention.FinancialConventionVisitorAdapter;
+import com.opengamma.util.ArgumentChecker;
 
 /**
  * An adapter for {@link QuandlFinancialConventionVisitor} that extends {@link FinancialConventionVisitorAdapter}

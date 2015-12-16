@@ -8,10 +8,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.mcleodmoores.quandl.util.ArgumentChecker;
 import com.opengamma.core.historicaltimeseries.HistoricalTimeSeriesAdjuster;
 import com.opengamma.master.historicaltimeseries.impl.HistoricalTimeSeriesFieldAdjustment;
 import com.opengamma.master.historicaltimeseries.impl.HistoricalTimeSeriesFieldAdjustmentMap;
+import com.opengamma.util.ArgumentChecker;
 
 /**
  * Extension of the historical time series field adjustment map that allows multiple Quandl fields to

@@ -10,8 +10,8 @@ import java.util.Set;
 
 import org.threeten.bp.LocalDate;
 
-import com.mcleodmoores.quandl.util.ArgumentChecker;
 import com.opengamma.financial.convention.calendar.Calendar;
+import com.opengamma.util.ArgumentChecker;
 
 /**
  * Simple implementation of a calendar for testing purposes that is backed by a Set and can combine

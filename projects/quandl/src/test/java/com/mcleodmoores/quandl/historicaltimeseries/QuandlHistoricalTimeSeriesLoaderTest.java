@@ -40,12 +40,11 @@ import com.opengamma.provider.historicaltimeseries.HistoricalTimeSeriesProvider;
 import com.opengamma.provider.historicaltimeseries.HistoricalTimeSeriesProviderGetResult;
 import com.opengamma.timeseries.date.localdate.ImmutableLocalDateDoubleTimeSeries;
 import com.opengamma.timeseries.date.localdate.LocalDateDoubleTimeSeries;
-import com.opengamma.util.test.TestGroup;
 
 /**
  * Unit tests for {@link QuandlHistoricalTimeSeriesLoader}.
  */
-@Test(groups = TestGroup.UNIT)
+@Test//(groups = TestGroup.UNIT)
 public class QuandlHistoricalTimeSeriesLoaderTest {
   /** A mock historical time series provider */
   private static final HistoricalTimeSeriesProvider HTS_PROVIDER;

@@ -22,7 +22,6 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Sets;
 import com.mcleodmoores.quandl.QuandlConstants;
-import com.mcleodmoores.quandl.util.ArgumentChecker;
 import com.mcleodmoores.quandl.util.Quandl4OpenGammaRuntimeException;
 import com.opengamma.OpenGammaRuntimeException;
 import com.opengamma.core.historicaltimeseries.HistoricalTimeSeries;
@@ -47,6 +46,7 @@ import com.opengamma.provider.historicaltimeseries.HistoricalTimeSeriesProvider;
 import com.opengamma.provider.historicaltimeseries.HistoricalTimeSeriesProviderGetRequest;
 import com.opengamma.provider.historicaltimeseries.HistoricalTimeSeriesProviderGetResult;
 import com.opengamma.timeseries.date.localdate.LocalDateDoubleTimeSeries;
+import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.OpenGammaClock;
 import com.opengamma.util.monitor.OperationTimer;
 import com.opengamma.util.time.LocalDateRange;
@@ -106,8 +106,8 @@ public class QuandlHistoricalTimeSeriesLoader extends AbstractHistoricalTimeSeri
    * @return the resolver data provider, not null
    */
   private static String resolveDataProvider(final String dataProvider) {
-    return (dataProvider == null || dataProvider.equalsIgnoreCase(UNKNOWN_DATA_PROVIDER)
-        || dataProvider.equalsIgnoreCase(DEFAULT_DATA_PROVIDER) ? DEFAULT_DATA_PROVIDER : dataProvider);
+    return dataProvider == null || dataProvider.equalsIgnoreCase(UNKNOWN_DATA_PROVIDER)
+        || dataProvider.equalsIgnoreCase(DEFAULT_DATA_PROVIDER) ? DEFAULT_DATA_PROVIDER : dataProvider;
   }
 
   /**

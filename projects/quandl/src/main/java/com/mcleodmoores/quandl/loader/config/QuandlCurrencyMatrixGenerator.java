@@ -4,7 +4,6 @@
 package com.mcleodmoores.quandl.loader.config;
 
 import com.mcleodmoores.quandl.QuandlConstants;
-import com.mcleodmoores.quandl.util.ArgumentChecker;
 import com.opengamma.core.value.MarketDataRequirementNames;
 import com.opengamma.engine.target.ComputationTargetType;
 import com.opengamma.engine.value.ValueRequirement;
@@ -13,6 +12,7 @@ import com.opengamma.financial.currency.CurrencyPair;
 import com.opengamma.financial.currency.CurrencyPairs;
 import com.opengamma.financial.currency.SimpleCurrencyMatrix;
 import com.opengamma.id.ExternalId;
+import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
 
 /**

@@ -28,7 +28,6 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.mcleodmoores.quandl.QuandlConstants;
-import com.mcleodmoores.quandl.util.ArgumentChecker;
 import com.mcleodmoores.quandl.util.Quandl4OpenGammaRuntimeException;
 import com.opengamma.core.historicaltimeseries.HistoricalTimeSeriesConstants;
 import com.opengamma.id.ExternalIdBundle;
@@ -43,6 +42,7 @@ import com.opengamma.master.historicaltimeseries.ManageableHistoricalTimeSeriesI
 import com.opengamma.master.historicaltimeseries.impl.HistoricalTimeSeriesInfoSearchIterator;
 import com.opengamma.provider.historicaltimeseries.HistoricalTimeSeriesProvider;
 import com.opengamma.timeseries.date.localdate.LocalDateDoubleTimeSeries;
+import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.MapUtils;
 import com.opengamma.util.PoolExecutor;
 import com.opengamma.util.PoolExecutor.CompletionListener;
@@ -388,9 +388,9 @@ public class QuandlHistoricalTimeSeriesUpdater {
    * @return the resolver data provider, not null
    */
   public static String resolveDataProvider(final String dataProvider) {
-    return (dataProvider == null || dataProvider.equalsIgnoreCase(QuandlHistoricalTimeSeriesLoader.UNKNOWN_DATA_PROVIDER)
+    return dataProvider == null || dataProvider.equalsIgnoreCase(QuandlHistoricalTimeSeriesLoader.UNKNOWN_DATA_PROVIDER)
         || dataProvider.equalsIgnoreCase(QuandlHistoricalTimeSeriesLoader.DEFAULT_DATA_PROVIDER)
-        ? QuandlHistoricalTimeSeriesLoader.DEFAULT_DATA_PROVIDER : dataProvider);
+        ? QuandlHistoricalTimeSeriesLoader.DEFAULT_DATA_PROVIDER : dataProvider;
   }
 
   private void updateTimeSeriesMaster(final Map<ExternalIdBundle, LocalDateDoubleTimeSeries> loadedTs, final Map<MetaDataKey, Set<ObjectId>> metaDataKeyMap,
@@ -405,7 +405,7 @@ public class QuandlHistoricalTimeSeriesUpdater {
       LOGGER.info("Got {} new points for series {} {}", new Object[] {timeSeries.size(), dataField, identifierTs.getKey() });
 
       final LocalDate latestTime = timeSeries.getLatestTime();
-      final LocalDate startDate = (_startDate != null ? _startDate : LocalDate.MIN);
+      final LocalDate startDate = _startDate != null ? _startDate : LocalDate.MIN;
       timeSeries = timeSeries.subSeries(startDate, true, latestTime, true);
       if (!timeSeries.isEmpty()) {
         // metaDataKeyMap holds the object id of the series to be updated

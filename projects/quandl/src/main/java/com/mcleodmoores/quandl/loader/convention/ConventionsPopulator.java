@@ -12,7 +12,6 @@ import org.slf4j.LoggerFactory;
 import com.google.common.collect.Iterables;
 import com.mcleodmoores.quandl.QuandlConstants;
 import com.mcleodmoores.quandl.convention.QuandlStirFutureConvention;
-import com.mcleodmoores.quandl.util.ArgumentChecker;
 import com.opengamma.financial.convention.IborIndexConvention;
 import com.opengamma.financial.convention.OvernightIndexConvention;
 import com.opengamma.financial.convention.VanillaIborLegConvention;
@@ -24,6 +23,7 @@ import com.opengamma.id.ExternalIdBundle;
 import com.opengamma.master.convention.ConventionMaster;
 import com.opengamma.master.convention.ManageableConvention;
 import com.opengamma.master.security.SecurityMaster;
+import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.time.Tenor;
 
 /**

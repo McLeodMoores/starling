@@ -5,9 +5,9 @@ package com.mcleodmoores.quandl.future;
 
 import java.util.Objects;
 
-import com.mcleodmoores.quandl.util.ArgumentChecker;
 import com.opengamma.financial.analytics.ircurve.strips.DataFieldType;
 import com.opengamma.id.ExternalId;
+import com.opengamma.util.ArgumentChecker;
 
 /**
  * An instrument provider for curves that generates Quandl codes for Federal funds futures. This provider contains
