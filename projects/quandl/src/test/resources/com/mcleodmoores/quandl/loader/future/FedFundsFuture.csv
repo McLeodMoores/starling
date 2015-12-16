@@ -1,0 +1,2 @@
+Code,Category,Expiry,Unit Amount,Time Zone,Trading Hours,Trading Exchange,Settlement Exchange,Currency,Underlying Index
+CME/FFZ2014,FED FUNDS FUTURE,2014-12-31,500000,America/Chicago,09:30-16:00,CME,CME,USD,FRED/DFF

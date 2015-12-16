@@ -48,6 +48,7 @@ common/deploy.properties
 !/projects/provider
 !/projects/provider-rest-client
 !/projects/provider-rest
+!/projects/quandl
 !/projects/security
 !/projects/server
 !/projects/time-series

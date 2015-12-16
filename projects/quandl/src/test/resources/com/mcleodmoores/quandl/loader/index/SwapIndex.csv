@@ -1,0 +1,5 @@
+Code,Category,Name,Tenor,Convention Identifier,Additional Identifiers,
+FRED/DSWP1,SWAP INDEX,USD 1y Swap,P1Y,CONVENTION~USD Swap Index,QUANDL_RATE~USD Swap Index
+FRED/DSWP2,SWAP INDEX,USD 2y Swap,P2Y,USD Swap Index,QUANDL_RATE~USD Swap Index
+FRED/DSWP3,SWAP INDEX,USD 3y Swap,P3Y,,QUANDL_RATE~USD Swap Index
+FRED/DSWP4,SWAP INDEX,USD 4y Swap,P4Y,CONVENTION~USD Swap Index,

@@ -1,0 +1,2 @@
+Code,Category,Expiry,Unit Amount,Time Zone,Trading Hours,Trading Exchange,Settlement Exchange,Currency,Underlying Index
+CME/EDZ2014,STIR FUTURE,2014-12-17,2500,America/Chicago,09:30-16:00,CME,CME,USD,FRED/USD3MTD156N

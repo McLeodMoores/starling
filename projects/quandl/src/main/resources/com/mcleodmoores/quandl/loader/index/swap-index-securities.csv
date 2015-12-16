@@ -1,0 +1,6 @@
+Code,Category,Name,Tenor,Convention Identifier,Additional Identifiers
+FRED/DSWAP1,SWAP INDEX,FRED/DSWAP1,P1Y,Reference Rate Simple Name~USD ISDA Fixing,Reference Rate Simple Name~USD ISDA 1Y Fixing
+FRED/DSWAP2,SWAP INDEX,FRED/DSWAP2,P2Y,Reference Rate Simple Name~USD ISDA Fixing,Reference Rate Simple Name~USD ISDA 2Y Fixing
+FRED/DSWAP3,SWAP INDEX,FRED/DSWAP3,P3Y,Reference Rate Simple Name~USD ISDA Fixing,Reference Rate Simple Name~USD ISDA 3Y Fixing
+FRED/DSWAP5,SWAP INDEX,FRED/DSWAP5,P5Y,Reference Rate Simple Name~USD ISDA Fixing,Reference Rate Simple Name~USD ISDA 5Y Fixing
+FRED/DSWAP10,SWAP INDEX,FRED/DSWAP10,P10Y,Reference Rate Simple Name~USD ISDA Fixing,Reference Rate Simple Name~USD ISDA 10Y Fixing
