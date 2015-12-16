@@ -66,6 +66,12 @@ public abstract class QuandlFutureConvention extends QuandlFinancialConvention {
   private ExternalId _underlyingConventionId;
 
   /**
+   * The id of the trading exchange calendar.
+   */
+  @PropertyDefinition(validate = "notNull")
+  private ExternalId _tradingExchangeCalendarId;
+
+  /**
    * For the builder.
    */
   protected QuandlFutureConvention() {
@@ -81,9 +87,10 @@ public abstract class QuandlFutureConvention extends QuandlFinancialConvention {
    * @param zoneOffsetId The time zone of the exchange
    * @param unitAmount The unit amount of the future
    * @param underlyingConventionId The id of the underlying index convention, not null
+   * @param tradingExchangeCalendarId  the trading exchange holiday calendar id, not null
    */
   public QuandlFutureConvention(final String name, final ExternalIdBundle externalIdBundle, final String lastTradeTime, final String zoneOffsetId,
-      final double unitAmount, final ExternalId underlyingConventionId) {
+      final double unitAmount, final ExternalId underlyingConventionId, final ExternalId tradingExchangeCalendarId) {
     super(name, externalIdBundle);
     setLastTradeTime(lastTradeTime);
     setZoneOffsetId(zoneOffsetId);
@@ -92,6 +99,7 @@ public abstract class QuandlFutureConvention extends QuandlFinancialConvention {
     final String exchangeFromCode = getExchangeFromCode(externalIdBundle);
     setTradingExchange(exchangeFromCode);
     setSettlementExchange(exchangeFromCode);
+    setTradingExchangeCalendarId(tradingExchangeCalendarId);
   }
 
   /**
@@ -104,9 +112,11 @@ public abstract class QuandlFutureConvention extends QuandlFinancialConvention {
    * @param underlyingConventionId The id of the underlying index convention, not null
    * @param tradingExchange The name of the trading exchange, can be null
    * @param settlementExchange The name of the settlement exchange, can be null
+   * @param tradingExchangeCalendarId  the trading exchange holiday calendar id, not null
    */
   public QuandlFutureConvention(final String name, final ExternalIdBundle externalIdBundle, final String lastTradeTime, final String zoneOffsetId,
-      final double unitAmount, final ExternalId underlyingConventionId, final String tradingExchange, final String settlementExchange) {
+      final double unitAmount, final ExternalId underlyingConventionId, final String tradingExchange, final String settlementExchange,
+      final ExternalId tradingExchangeCalendarId) {
     super(name, externalIdBundle);
     setLastTradeTime(lastTradeTime);
     setZoneOffsetId(zoneOffsetId);
@@ -114,6 +124,7 @@ public abstract class QuandlFutureConvention extends QuandlFinancialConvention {
     setUnderlyingConventionId(underlyingConventionId);
     setTradingExchange(tradingExchange);
     setSettlementExchange(settlementExchange);
+    setTradingExchangeCalendarId(tradingExchangeCalendarId);
   }
 
   /**
@@ -313,6 +324,32 @@ public abstract class QuandlFutureConvention extends QuandlFinancialConvention {
   }
 
   //-----------------------------------------------------------------------
+  /**
+   * Gets the id of the trading exchange calendar.
+   * @return the value of the property, not null
+   */
+  public ExternalId getTradingExchangeCalendarId() {
+    return _tradingExchangeCalendarId;
+  }
+
+  /**
+   * Sets the id of the trading exchange calendar.
+   * @param tradingExchangeCalendarId  the new value of the property, not null
+   */
+  public void setTradingExchangeCalendarId(ExternalId tradingExchangeCalendarId) {
+    JodaBeanUtils.notNull(tradingExchangeCalendarId, "tradingExchangeCalendarId");
+    this._tradingExchangeCalendarId = tradingExchangeCalendarId;
+  }
+
+  /**
+   * Gets the the {@code tradingExchangeCalendarId} property.
+   * @return the property, not null
+   */
+  public final Property<ExternalId> tradingExchangeCalendarId() {
+    return metaBean().tradingExchangeCalendarId().createProperty(this);
+  }
+
+  //-----------------------------------------------------------------------
   @Override
   public boolean equals(Object obj) {
     if (obj == this) {
@@ -326,6 +363,7 @@ public abstract class QuandlFutureConvention extends QuandlFinancialConvention {
           JodaBeanUtils.equal(getTradingExchange(), other.getTradingExchange()) &&
           JodaBeanUtils.equal(getSettlementExchange(), other.getSettlementExchange()) &&
           JodaBeanUtils.equal(getUnderlyingConventionId(), other.getUnderlyingConventionId()) &&
+          JodaBeanUtils.equal(getTradingExchangeCalendarId(), other.getTradingExchangeCalendarId()) &&
           super.equals(obj);
     }
     return false;
@@ -340,12 +378,13 @@ public abstract class QuandlFutureConvention extends QuandlFinancialConvention {
     hash = hash * 31 + JodaBeanUtils.hashCode(getTradingExchange());
     hash = hash * 31 + JodaBeanUtils.hashCode(getSettlementExchange());
     hash = hash * 31 + JodaBeanUtils.hashCode(getUnderlyingConventionId());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getTradingExchangeCalendarId());
     return hash ^ super.hashCode();
   }
 
   @Override
   public String toString() {
-    StringBuilder buf = new StringBuilder(224);
+    StringBuilder buf = new StringBuilder(256);
     buf.append("QuandlFutureConvention{");
     int len = buf.length();
     toString(buf);
@@ -365,6 +404,7 @@ public abstract class QuandlFutureConvention extends QuandlFinancialConvention {
     buf.append("tradingExchange").append('=').append(JodaBeanUtils.toString(getTradingExchange())).append(',').append(' ');
     buf.append("settlementExchange").append('=').append(JodaBeanUtils.toString(getSettlementExchange())).append(',').append(' ');
     buf.append("underlyingConventionId").append('=').append(JodaBeanUtils.toString(getUnderlyingConventionId())).append(',').append(' ');
+    buf.append("tradingExchangeCalendarId").append('=').append(JodaBeanUtils.toString(getTradingExchangeCalendarId())).append(',').append(' ');
   }
 
   //-----------------------------------------------------------------------
@@ -408,6 +448,11 @@ public abstract class QuandlFutureConvention extends QuandlFinancialConvention {
     private final MetaProperty<ExternalId> _underlyingConventionId = DirectMetaProperty.ofReadWrite(
         this, "underlyingConventionId", QuandlFutureConvention.class, ExternalId.class);
     /**
+     * The meta-property for the {@code tradingExchangeCalendarId} property.
+     */
+    private final MetaProperty<ExternalId> _tradingExchangeCalendarId = DirectMetaProperty.ofReadWrite(
+        this, "tradingExchangeCalendarId", QuandlFutureConvention.class, ExternalId.class);
+    /**
      * The meta-properties.
      */
     private final Map<String, MetaProperty<?>> _metaPropertyMap$ = new DirectMetaPropertyMap(
@@ -417,7 +462,8 @@ public abstract class QuandlFutureConvention extends QuandlFinancialConvention {
         "unitAmount",
         "tradingExchange",
         "settlementExchange",
-        "underlyingConventionId");
+        "underlyingConventionId",
+        "tradingExchangeCalendarId");
 
     /**
      * Restricted constructor.
@@ -440,6 +486,8 @@ public abstract class QuandlFutureConvention extends QuandlFinancialConvention {
           return _settlementExchange;
         case -162478999:  // underlyingConventionId
           return _underlyingConventionId;
+        case 962060925:  // tradingExchangeCalendarId
+          return _tradingExchangeCalendarId;
       }
       return super.metaPropertyGet(propertyName);
     }
@@ -508,6 +556,14 @@ public abstract class QuandlFutureConvention extends QuandlFinancialConvention {
       return _underlyingConventionId;
     }
 
+    /**
+     * The meta-property for the {@code tradingExchangeCalendarId} property.
+     * @return the meta-property, not null
+     */
+    public final MetaProperty<ExternalId> tradingExchangeCalendarId() {
+      return _tradingExchangeCalendarId;
+    }
+
     //-----------------------------------------------------------------------
     @Override
     protected Object propertyGet(Bean bean, String propertyName, boolean quiet) {
@@ -524,6 +580,8 @@ public abstract class QuandlFutureConvention extends QuandlFinancialConvention {
           return ((QuandlFutureConvention) bean).getSettlementExchange();
         case -162478999:  // underlyingConventionId
           return ((QuandlFutureConvention) bean).getUnderlyingConventionId();
+        case 962060925:  // tradingExchangeCalendarId
+          return ((QuandlFutureConvention) bean).getTradingExchangeCalendarId();
       }
       return super.propertyGet(bean, propertyName, quiet);
     }
@@ -549,6 +607,9 @@ public abstract class QuandlFutureConvention extends QuandlFinancialConvention {
         case -162478999:  // underlyingConventionId
           ((QuandlFutureConvention) bean).setUnderlyingConventionId((ExternalId) newValue);
           return;
+        case 962060925:  // tradingExchangeCalendarId
+          ((QuandlFutureConvention) bean).setTradingExchangeCalendarId((ExternalId) newValue);
+          return;
       }
       super.propertySet(bean, propertyName, newValue, quiet);
     }
@@ -557,6 +618,7 @@ public abstract class QuandlFutureConvention extends QuandlFinancialConvention {
     protected void validate(Bean bean) {
       JodaBeanUtils.notNull(((QuandlFutureConvention) bean)._lastTradeTime, "lastTradeTime");
       JodaBeanUtils.notNull(((QuandlFutureConvention) bean)._underlyingConventionId, "underlyingConventionId");
+      JodaBeanUtils.notNull(((QuandlFutureConvention) bean)._tradingExchangeCalendarId, "tradingExchangeCalendarId");
       super.validate(bean);
     }
 

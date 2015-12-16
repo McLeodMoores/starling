@@ -1,7 +1,7 @@
 /**
  * Copyright (C) 2014 - present McLeod Moores Software Limited.
  * Based on APLv2 code Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.mcleodmoores.quandl.component;
@@ -31,7 +31,7 @@ import com.opengamma.provider.historicaltimeseries.HistoricalTimeSeriesProvider;
 /**
  * Component factory providing the {@code HistoricalTimeSeriesLoader}.
  * <p>
- * This implementation uses a Quandl specific loader
+ * This implementation uses a Quandl-specific loader
  */
 @BeanDefinition
 public class QuandlHistoricalTimeSeriesLoaderComponentFactory extends AbstractHistoricalTimeSeriesLoaderComponentFactory {
@@ -49,7 +49,7 @@ public class QuandlHistoricalTimeSeriesLoaderComponentFactory extends AbstractHi
 
   //-------------------------------------------------------------------------
   @Override
-  protected HistoricalTimeSeriesLoader createHistoricalTimeSeriesLoader(ComponentRepository repo) {
+  protected HistoricalTimeSeriesLoader createHistoricalTimeSeriesLoader(final ComponentRepository repo) {
     return new QuandlHistoricalTimeSeriesLoader(getHistoricalTimeSeriesMaster(), getHistoricalTimeSeriesProvider());
   }
 

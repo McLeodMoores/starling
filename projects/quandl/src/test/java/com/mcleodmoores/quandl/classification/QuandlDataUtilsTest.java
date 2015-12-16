@@ -11,13 +11,10 @@ import static org.testng.Assert.fail;
 import java.util.Arrays;
 import java.util.List;
 
-import net.sf.ehcache.CacheManager;
-
 import org.testng.annotations.Test;
 import org.threeten.bp.LocalDate;
 
 import com.mcleodmoores.quandl.QuandlConstants;
-import com.mcleodmoores.quandl.classification.QuandlDataUtils;
 import com.mcleodmoores.quandl.util.Quandl4OpenGammaRuntimeException;
 import com.opengamma.core.historicaltimeseries.HistoricalTimeSeries;
 import com.opengamma.core.historicaltimeseries.impl.SimpleHistoricalTimeSeries;
@@ -27,10 +24,14 @@ import com.opengamma.id.UniqueId;
 import com.opengamma.master.historicaltimeseries.impl.HistoricalTimeSeriesFieldAdjustment;
 import com.opengamma.master.historicaltimeseries.impl.HistoricalTimeSeriesFieldAdjustmentMap;
 import com.opengamma.timeseries.date.localdate.ImmutableLocalDateDoubleTimeSeries;
+import com.opengamma.util.test.TestGroup;
+
+import net.sf.ehcache.CacheManager;
 
 /**
  * Unit tests for {@link QuandlDataUtils}.
  */
+@Test(groups = TestGroup.UNIT)
 public class QuandlDataUtilsTest {
 
   /**

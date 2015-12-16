@@ -14,13 +14,14 @@ import java.util.Set;
 import org.testng.annotations.Test;
 
 import com.mcleodmoores.quandl.convention.QuandlFedFundsFutureConvention;
-import com.mcleodmoores.quandl.loader.convention.QuandlFedFundsFutureConventionsLoader;
+import com.opengamma.util.test.TestGroup;
 
 import au.com.bytecode.opencsv.CSVReader;
 
 /**
  * Unit tests for {@link QuandlFedFundsFutureConventionsLoader}.
  */
+@Test(groups = TestGroup.UNIT)
 public class QuandlFedFundsFutureConventionsLoaderTest {
 
   /**

@@ -20,13 +20,8 @@ import org.threeten.bp.ZonedDateTime;
 
 import com.google.common.collect.Sets;
 import com.mcleodmoores.quandl.QuandlConstants;
-import com.mcleodmoores.quandl.financial.curve.QuandlRateFutureNodeConverter;
 import com.mcleodmoores.quandl.testutils.ListCalendar;
-import com.mcleodmoores.quandl.testutils.MockConventionSource;
-import com.mcleodmoores.quandl.testutils.MockHolidaySource;
-import com.mcleodmoores.quandl.testutils.MockRegionSource;
-import com.mcleodmoores.quandl.testutils.MockSecuritySource;
-import com.mcleodmoores.quandl.util.Quandl4OpenGammaRuntimeException;
+import com.opengamma.DataNotFoundException;
 import com.opengamma.analytics.financial.instrument.InstrumentDefinition;
 import com.opengamma.analytics.financial.instrument.future.FederalFundsFutureSecurityDefinition;
 import com.opengamma.analytics.financial.instrument.future.FederalFundsFutureTransactionDefinition;
@@ -34,7 +29,6 @@ import com.opengamma.analytics.financial.instrument.future.InterestRateFutureSec
 import com.opengamma.analytics.financial.instrument.future.InterestRateFutureTransactionDefinition;
 import com.opengamma.analytics.financial.instrument.index.IndexON;
 import com.opengamma.core.convention.ConventionSource;
-import com.opengamma.core.holiday.Holiday;
 import com.opengamma.core.holiday.HolidaySource;
 import com.opengamma.core.holiday.HolidayType;
 import com.opengamma.core.holiday.impl.SimpleHoliday;
@@ -43,6 +37,10 @@ import com.opengamma.core.marketdatasnapshot.SnapshotDataBundle;
 import com.opengamma.core.region.RegionSource;
 import com.opengamma.core.region.impl.SimpleRegion;
 import com.opengamma.core.security.SecuritySource;
+import com.opengamma.engine.InMemoryConventionSource;
+import com.opengamma.engine.InMemoryHolidaySource;
+import com.opengamma.engine.InMemoryRegionSource;
+import com.opengamma.engine.InMemorySecuritySource;
 import com.opengamma.financial.analytics.ircurve.strips.RateFutureNode;
 import com.opengamma.financial.convention.businessday.BusinessDayConventions;
 import com.opengamma.financial.convention.calendar.Calendar;
@@ -53,12 +51,14 @@ import com.opengamma.financial.security.index.OvernightIndex;
 import com.opengamma.id.ExternalId;
 import com.opengamma.util.i18n.Country;
 import com.opengamma.util.money.Currency;
+import com.opengamma.util.test.TestGroup;
 import com.opengamma.util.time.DateUtils;
 import com.opengamma.util.time.Tenor;
 
 /**
  * Unit tests for {@link QuandlRateFutureNodeConverter}.
  */
+@Test(groups = TestGroup.UNIT)
 public class QuandlRateFutureNodeConverterTest {
   /** Price of the first Eurodollar future */
   private static final Double EDH5_PRICE = 0.98;
@@ -101,8 +101,8 @@ public class QuandlRateFutureNodeConverterTest {
   private static final Set<LocalDate> HOLIDAYS = Sets.newHashSet(LocalDate.of(2015, 6, 17), LocalDate.of(2015, 6, 30));
   /** The calendar */
   private static final Calendar US_CALENDAR = new ListCalendar("US Holidays", HOLIDAYS, new MondayToFridayCalendar("Weekend"));
-  /** The holiday */
-  private static final Holiday US_HOLIDAY = new SimpleHoliday(HOLIDAYS);
+  /** A US region holiday */
+  private static final SimpleHoliday US_HOLIDAY = new SimpleHoliday(HOLIDAYS);
   /** The region */
   private static final SimpleRegion US_REGION = new SimpleRegion();
 
@@ -111,6 +111,9 @@ public class QuandlRateFutureNodeConverterTest {
     SNAPSHOT.setDataPoint(EDM5_ID, EDM5_PRICE);
     SNAPSHOT.setDataPoint(FFH5_ID, FFH5_PRICE);
     SNAPSHOT.setDataPoint(FFM5_ID, FFM5_PRICE);
+    US_HOLIDAY.setRegionExternalId(ExternalSchemes.countryRegionId(Country.US));
+    US_HOLIDAY.setCurrency(Currency.USD);
+    US_HOLIDAY.setType(HolidayType.BANK);
     IBOR_INDEX_SECURITY.setExternalIdBundle(IBOR_INDEX_SECURITY_ID.toBundle());
     OVERNIGHT_INDEX_SECURITY.setExternalIdBundle(OVERNIGHT_INDEX_SECURITY_ID.toBundle());
     US_REGION.addExternalId(ExternalSchemes.countryRegionId(Country.US));
@@ -119,13 +122,13 @@ public class QuandlRateFutureNodeConverterTest {
   /**
    * Tests the behaviour when there is no data for the rate in the snapshot.
    */
-  @Test(expectedExceptions = Quandl4OpenGammaRuntimeException.class)
+  @Test(expectedExceptions = DataNotFoundException.class)
   public void testMissingMarketData() {
     final RateFutureNode node = new RateFutureNode(3, Tenor.of(Period.ZERO), Tenor.THREE_MONTHS, Tenor.THREE_MONTHS, ED_CONVENTION_ID, "Mapper");
-    final SecuritySource securitySource = new MockSecuritySource();
-    final ConventionSource conventionSource = new MockConventionSource();
-    final HolidaySource holidaySource = new MockHolidaySource();
-    final RegionSource regionSource = new MockRegionSource();
+    final SecuritySource securitySource = new InMemorySecuritySource();
+    final ConventionSource conventionSource = new InMemoryConventionSource();
+    final HolidaySource holidaySource = new InMemoryHolidaySource();
+    final RegionSource regionSource = new InMemoryRegionSource();
     final QuandlRateFutureNodeConverter converter = new QuandlRateFutureNodeConverter(securitySource, conventionSource, holidaySource, regionSource,
         SNAPSHOT, QuandlConstants.ofCode("EDU5"), NOW);
     node.accept(converter);
@@ -134,13 +137,13 @@ public class QuandlRateFutureNodeConverterTest {
   /**
    * Tests the behaviour when there is no future convention in the convention source.
    */
-  @Test(expectedExceptions = Quandl4OpenGammaRuntimeException.class)
+  @Test(expectedExceptions = DataNotFoundException.class)
   public void testMissingFutureConvention() {
     final RateFutureNode node = new RateFutureNode(1, Tenor.of(Period.ZERO), Tenor.THREE_MONTHS, Tenor.THREE_MONTHS, ED_CONVENTION_ID, "Mapper");
-    final SecuritySource securitySource = new MockSecuritySource();
-    final ConventionSource conventionSource = new MockConventionSource();
-    final HolidaySource holidaySource = new MockHolidaySource();
-    final RegionSource regionSource = new MockRegionSource();
+    final SecuritySource securitySource = new InMemorySecuritySource();
+    final ConventionSource conventionSource = new InMemoryConventionSource();
+    final HolidaySource holidaySource = new InMemoryHolidaySource();
+    final RegionSource regionSource = new InMemoryRegionSource();
     final QuandlRateFutureNodeConverter converter = new QuandlRateFutureNodeConverter(securitySource, conventionSource, holidaySource, regionSource,
         SNAPSHOT, EDH5_ID, NOW);
     node.accept(converter);
@@ -149,14 +152,14 @@ public class QuandlRateFutureNodeConverterTest {
   /**
    * Tests the behaviour when there is no underlying ibor index convention in the source.
    */
-  @Test(expectedExceptions = Quandl4OpenGammaRuntimeException.class)
+  @Test(expectedExceptions = DataNotFoundException.class)
   public void testMissingIborConvention() {
     final RateFutureNode node = new RateFutureNode(1, Tenor.of(Period.ZERO), Tenor.THREE_MONTHS, Tenor.THREE_MONTHS, ED_CONVENTION_ID, "Mapper");
-    final SecuritySource securitySource = new MockSecuritySource();
-    final MockConventionSource conventionSource = new MockConventionSource();
-    final HolidaySource holidaySource = new MockHolidaySource();
-    final RegionSource regionSource = new MockRegionSource();
-    conventionSource.addConvention(ED_CONVENTION_ID, QUANDL_USD_3M_3M_STIR_FUTURE);
+    final SecuritySource securitySource = new InMemorySecuritySource();
+    final InMemoryConventionSource conventionSource = new InMemoryConventionSource();
+    final HolidaySource holidaySource = new InMemoryHolidaySource();
+    final RegionSource regionSource = new InMemoryRegionSource();
+    conventionSource.addConvention(QUANDL_USD_3M_3M_STIR_FUTURE);
     final QuandlRateFutureNodeConverter converter = new QuandlRateFutureNodeConverter(securitySource, conventionSource, holidaySource, regionSource,
         SNAPSHOT, EDH5_ID, NOW);
     node.accept(converter);
@@ -166,14 +169,14 @@ public class QuandlRateFutureNodeConverterTest {
   /**
    * Tests the behaviour when there is no underlying overnight index convention in the source.
    */
-  @Test(expectedExceptions = Quandl4OpenGammaRuntimeException.class)
+  @Test(expectedExceptions = DataNotFoundException.class)
   public void testMissingOvernightConvention() {
     final RateFutureNode node = new RateFutureNode(1, Tenor.of(Period.ZERO), Tenor.THREE_MONTHS, Tenor.THREE_MONTHS, FF_CONVENTION_ID, "Mapper");
-    final SecuritySource securitySource = new MockSecuritySource();
-    final MockConventionSource conventionSource = new MockConventionSource();
-    final HolidaySource holidaySource = new MockHolidaySource();
-    final RegionSource regionSource = new MockRegionSource();
-    conventionSource.addConvention(FF_CONVENTION_ID, QUANDL_FED_FUNDS_FUTURE);
+    final SecuritySource securitySource = new InMemorySecuritySource();
+    final InMemoryConventionSource conventionSource = new InMemoryConventionSource();
+    final HolidaySource holidaySource = new InMemoryHolidaySource();
+    final RegionSource regionSource = new InMemoryRegionSource();
+    conventionSource.addConvention(QUANDL_FED_FUNDS_FUTURE);
     final QuandlRateFutureNodeConverter converter = new QuandlRateFutureNodeConverter(securitySource, conventionSource, holidaySource, regionSource,
         SNAPSHOT, FFH5_ID, NOW);
     node.accept(converter);
@@ -182,16 +185,16 @@ public class QuandlRateFutureNodeConverterTest {
   /**
    * Tests the behaviour when there is no appropriate region in the source.
    */
-  @Test(expectedExceptions = IllegalArgumentException.class)
+  @Test(expectedExceptions = DataNotFoundException.class)
   public void testMissingRegionForStir() {
     final RateFutureNode node = new RateFutureNode(1, Tenor.of(Period.ZERO), Tenor.THREE_MONTHS, Tenor.THREE_MONTHS, ED_CONVENTION_ID, "Mapper");
-    final SecuritySource securitySource = new MockSecuritySource();
-    final MockConventionSource conventionSource = new MockConventionSource();
-    final MockHolidaySource holidaySource = new MockHolidaySource();
-    final RegionSource regionSource = new MockRegionSource();
-    conventionSource.addConvention(ED_CONVENTION_ID, QUANDL_USD_3M_3M_STIR_FUTURE);
-    conventionSource.addConvention(IBOR_INDEX_CONVENTION_ID, IBOR_INDEX);
-    holidaySource.addHoliday(ExternalId.of(Currency.OBJECT_SCHEME, "USD"), HolidayType.CURRENCY, US_HOLIDAY);
+    final SecuritySource securitySource = new InMemorySecuritySource();
+    final InMemoryConventionSource conventionSource = new InMemoryConventionSource();
+    final InMemoryHolidaySource holidaySource = new InMemoryHolidaySource();
+    final RegionSource regionSource = new InMemoryRegionSource();
+    conventionSource.addConvention(QUANDL_USD_3M_3M_STIR_FUTURE);
+    conventionSource.addConvention(IBOR_INDEX);
+    holidaySource.addHoliday(ExternalSchemes.countryRegionId(Country.US), US_HOLIDAY);
     final QuandlRateFutureNodeConverter converter = new QuandlRateFutureNodeConverter(securitySource, conventionSource, holidaySource, regionSource,
         SNAPSHOT, EDH5_ID, NOW);
     node.accept(converter);
@@ -200,16 +203,16 @@ public class QuandlRateFutureNodeConverterTest {
   /**
    * Tests the behaviour when there is no appropriate region in the source.
    */
-  @Test(expectedExceptions = IllegalArgumentException.class)
+  @Test(expectedExceptions = DataNotFoundException.class)
   public void testMissingRegionForFedFunds() {
     final RateFutureNode node = new RateFutureNode(1, Tenor.of(Period.ZERO), Tenor.THREE_MONTHS, Tenor.ON, FF_CONVENTION_ID, "Mapper");
-    final SecuritySource securitySource = new MockSecuritySource();
-    final MockConventionSource conventionSource = new MockConventionSource();
-    final MockHolidaySource holidaySource = new MockHolidaySource();
-    final RegionSource regionSource = new MockRegionSource();
-    conventionSource.addConvention(FF_CONVENTION_ID, QUANDL_FED_FUNDS_FUTURE);
-    conventionSource.addConvention(OVERNIGHT_INDEX_CONVENTION_ID, OVERNIGHT_INDEX);
-    holidaySource.addHoliday(ExternalId.of(Currency.OBJECT_SCHEME, "USD"), HolidayType.CURRENCY, US_HOLIDAY);
+    final SecuritySource securitySource = new InMemorySecuritySource();
+    final InMemoryConventionSource conventionSource = new InMemoryConventionSource();
+    final InMemoryHolidaySource holidaySource = new InMemoryHolidaySource();
+    final RegionSource regionSource = new InMemoryRegionSource();
+    conventionSource.addConvention(QUANDL_FED_FUNDS_FUTURE);
+    conventionSource.addConvention(OVERNIGHT_INDEX);
+    holidaySource.addHoliday(ExternalSchemes.countryRegionId(Country.US), US_HOLIDAY);
     final QuandlRateFutureNodeConverter converter = new QuandlRateFutureNodeConverter(securitySource, conventionSource, holidaySource, regionSource,
         SNAPSHOT, EDH5_ID, NOW);
     node.accept(converter);
@@ -222,14 +225,14 @@ public class QuandlRateFutureNodeConverterTest {
   @Test
   public void testMissingIborSecurity() {
     final RateFutureNode node = new RateFutureNode(1, Tenor.of(Period.ZERO), Tenor.THREE_MONTHS, Tenor.THREE_MONTHS, ED_CONVENTION_ID, "Mapper");
-    final SecuritySource securitySource = new MockSecuritySource();
-    final MockConventionSource conventionSource = new MockConventionSource();
-    final MockHolidaySource holidaySource = new MockHolidaySource();
-    final MockRegionSource regionSource = new MockRegionSource();
-    conventionSource.addConvention(ED_CONVENTION_ID, QUANDL_USD_3M_3M_STIR_FUTURE);
-    conventionSource.addConvention(IBOR_INDEX_CONVENTION_ID, IBOR_INDEX);
-    holidaySource.addHoliday(ExternalId.of(Currency.OBJECT_SCHEME, "USD"), HolidayType.CURRENCY, US_HOLIDAY);
-    regionSource.addRegion(ExternalSchemes.countryRegionId(Country.US), US_REGION);
+    final SecuritySource securitySource = new InMemorySecuritySource();
+    final InMemoryConventionSource conventionSource = new InMemoryConventionSource();
+    final InMemoryHolidaySource holidaySource = new InMemoryHolidaySource();
+    final InMemoryRegionSource regionSource = new InMemoryRegionSource();
+    conventionSource.addConvention(QUANDL_USD_3M_3M_STIR_FUTURE);
+    conventionSource.addConvention(IBOR_INDEX);
+    holidaySource.addHoliday(ExternalSchemes.countryRegionId(Country.US), US_HOLIDAY);
+    regionSource.addRegion(US_REGION);
     final QuandlRateFutureNodeConverter converter = new QuandlRateFutureNodeConverter(securitySource, conventionSource, holidaySource, regionSource,
         SNAPSHOT, EDH5_ID, NOW);
     final ZonedDateTime expiryDate = ZonedDateTime.of(LocalDateTime.of(2015, 3, 18, 16, 0), ZoneId.of("America/Chicago"));
@@ -250,14 +253,14 @@ public class QuandlRateFutureNodeConverterTest {
   @Test
   public void testMissingOvernightSecurity() {
     final RateFutureNode node = new RateFutureNode(1, Tenor.of(Period.ZERO), Tenor.THREE_MONTHS, Tenor.ON, FF_CONVENTION_ID, "Mapper");
-    final SecuritySource securitySource = new MockSecuritySource();
-    final MockConventionSource conventionSource = new MockConventionSource();
-    final MockHolidaySource holidaySource = new MockHolidaySource();
-    final MockRegionSource regionSource = new MockRegionSource();
-    conventionSource.addConvention(FF_CONVENTION_ID, QUANDL_FED_FUNDS_FUTURE);
-    conventionSource.addConvention(OVERNIGHT_INDEX_CONVENTION_ID, OVERNIGHT_INDEX);
-    holidaySource.addHoliday(ExternalId.of(Currency.OBJECT_SCHEME, "USD"), HolidayType.CURRENCY, US_HOLIDAY);
-    regionSource.addRegion(ExternalSchemes.countryRegionId(Country.US), US_REGION);
+    final SecuritySource securitySource = new InMemorySecuritySource();
+    final InMemoryConventionSource conventionSource = new InMemoryConventionSource();
+    final InMemoryHolidaySource holidaySource = new InMemoryHolidaySource();
+    final InMemoryRegionSource regionSource = new InMemoryRegionSource();
+    conventionSource.addConvention(QUANDL_FED_FUNDS_FUTURE);
+    conventionSource.addConvention(OVERNIGHT_INDEX);
+    holidaySource.addHoliday(ExternalSchemes.countryRegionId(Country.US), US_HOLIDAY);
+    regionSource.addRegion(US_REGION);
     final QuandlRateFutureNodeConverter converter = new QuandlRateFutureNodeConverter(securitySource, conventionSource, holidaySource, regionSource,
         SNAPSHOT, FFH5_ID, NOW);
     final ZonedDateTime expiryDate = ZonedDateTime.of(LocalDateTime.of(2015, 3, 31, 16, 0), ZoneId.of("America/Chicago"));
@@ -276,15 +279,15 @@ public class QuandlRateFutureNodeConverterTest {
   @Test
   public void testEdh5() {
     final RateFutureNode node = new RateFutureNode(1, Tenor.of(Period.ZERO), Tenor.THREE_MONTHS, Tenor.THREE_MONTHS, ED_CONVENTION_ID, "Mapper");
-    final MockSecuritySource securitySource = new MockSecuritySource();
-    final MockConventionSource conventionSource = new MockConventionSource();
-    final MockHolidaySource holidaySource = new MockHolidaySource();
-    final MockRegionSource regionSource = new MockRegionSource();
-    securitySource.addSecurity(IBOR_INDEX_SECURITY_ID, IBOR_INDEX_SECURITY);
-    conventionSource.addConvention(ED_CONVENTION_ID, QUANDL_USD_3M_3M_STIR_FUTURE);
-    conventionSource.addConvention(IBOR_INDEX_CONVENTION_ID, IBOR_INDEX);
-    holidaySource.addHoliday(ExternalId.of(Currency.OBJECT_SCHEME, "USD"), HolidayType.CURRENCY, US_HOLIDAY);
-    regionSource.addRegion(ExternalSchemes.countryRegionId(Country.US), US_REGION);
+    final InMemorySecuritySource securitySource = new InMemorySecuritySource();
+    final InMemoryConventionSource conventionSource = new InMemoryConventionSource();
+    final InMemoryHolidaySource holidaySource = new InMemoryHolidaySource();
+    final InMemoryRegionSource regionSource = new InMemoryRegionSource();
+    securitySource.addSecurity(IBOR_INDEX_SECURITY);
+    conventionSource.addConvention(QUANDL_USD_3M_3M_STIR_FUTURE);
+    conventionSource.addConvention(IBOR_INDEX);
+    holidaySource.addHoliday(ExternalSchemes.countryRegionId(Country.US), US_HOLIDAY);
+    regionSource.addRegion(US_REGION);
     final QuandlRateFutureNodeConverter converter = new QuandlRateFutureNodeConverter(securitySource, conventionSource, holidaySource, regionSource,
         SNAPSHOT, EDH5_ID, NOW);
     final ZonedDateTime expiryDate = ZonedDateTime.of(LocalDateTime.of(2015, 3, 18, 16, 0), ZoneId.of("America/Chicago"));
@@ -305,15 +308,15 @@ public class QuandlRateFutureNodeConverterTest {
   @Test
   public void testEdm5() {
     final RateFutureNode node = new RateFutureNode(2, Tenor.of(Period.ZERO), Tenor.THREE_MONTHS, Tenor.THREE_MONTHS, ED_CONVENTION_ID, "Mapper");
-    final MockSecuritySource securitySource = new MockSecuritySource();
-    final MockConventionSource conventionSource = new MockConventionSource();
-    final MockHolidaySource holidaySource = new MockHolidaySource();
-    final MockRegionSource regionSource = new MockRegionSource();
-    securitySource.addSecurity(IBOR_INDEX_SECURITY_ID, IBOR_INDEX_SECURITY);
-    conventionSource.addConvention(ED_CONVENTION_ID, QUANDL_USD_3M_3M_STIR_FUTURE);
-    conventionSource.addConvention(IBOR_INDEX_CONVENTION_ID, IBOR_INDEX);
-    holidaySource.addHoliday(ExternalId.of(Currency.OBJECT_SCHEME, "USD"), HolidayType.CURRENCY, US_HOLIDAY);
-    regionSource.addRegion(ExternalSchemes.countryRegionId(Country.US), US_REGION);
+    final InMemorySecuritySource securitySource = new InMemorySecuritySource();
+    final InMemoryConventionSource conventionSource = new InMemoryConventionSource();
+    final InMemoryHolidaySource holidaySource = new InMemoryHolidaySource();
+    final InMemoryRegionSource regionSource = new InMemoryRegionSource();
+    securitySource.addSecurity(IBOR_INDEX_SECURITY);
+    conventionSource.addConvention(QUANDL_USD_3M_3M_STIR_FUTURE);
+    conventionSource.addConvention(IBOR_INDEX);
+    holidaySource.addHoliday(ExternalSchemes.countryRegionId(Country.US), US_HOLIDAY);
+    regionSource.addRegion(US_REGION);
     final QuandlRateFutureNodeConverter converter = new QuandlRateFutureNodeConverter(securitySource, conventionSource, holidaySource, regionSource,
         SNAPSHOT, EDM5_ID, NOW);
     final ZonedDateTime expiryDate = ZonedDateTime.of(LocalDateTime.of(2015, 6, 18, 16, 0), ZoneId.of("America/Chicago"));
@@ -333,15 +336,15 @@ public class QuandlRateFutureNodeConverterTest {
   @Test
   public void testFfh5() {
     final RateFutureNode node = new RateFutureNode(1, Tenor.of(Period.ZERO), Tenor.THREE_MONTHS, Tenor.ON, FF_CONVENTION_ID, "Mapper");
-    final MockSecuritySource securitySource = new MockSecuritySource();
-    final MockConventionSource conventionSource = new MockConventionSource();
-    final MockHolidaySource holidaySource = new MockHolidaySource();
-    final MockRegionSource regionSource = new MockRegionSource();
-    securitySource.addSecurity(OVERNIGHT_INDEX_SECURITY_ID, OVERNIGHT_INDEX_SECURITY);
-    conventionSource.addConvention(FF_CONVENTION_ID, QUANDL_FED_FUNDS_FUTURE);
-    conventionSource.addConvention(OVERNIGHT_INDEX_CONVENTION_ID, OVERNIGHT_INDEX);
-    holidaySource.addHoliday(ExternalId.of(Currency.OBJECT_SCHEME, "USD"), HolidayType.CURRENCY, US_HOLIDAY);
-    regionSource.addRegion(ExternalSchemes.countryRegionId(Country.US), US_REGION);
+    final InMemorySecuritySource securitySource = new InMemorySecuritySource();
+    final InMemoryConventionSource conventionSource = new InMemoryConventionSource();
+    final InMemoryHolidaySource holidaySource = new InMemoryHolidaySource();
+    final InMemoryRegionSource regionSource = new InMemoryRegionSource();
+    securitySource.addSecurity(OVERNIGHT_INDEX_SECURITY);
+    conventionSource.addConvention(QUANDL_FED_FUNDS_FUTURE);
+    conventionSource.addConvention(OVERNIGHT_INDEX);
+    holidaySource.addHoliday(ExternalSchemes.countryRegionId(Country.US), US_HOLIDAY);
+    regionSource.addRegion(US_REGION);
     final QuandlRateFutureNodeConverter converter = new QuandlRateFutureNodeConverter(securitySource, conventionSource, holidaySource, regionSource,
         SNAPSHOT, FFH5_ID, NOW);
     final ZonedDateTime expiryDate = ZonedDateTime.of(LocalDateTime.of(2015, 3, 31, 16, 0), ZoneId.of("America/Chicago"));
@@ -361,17 +364,15 @@ public class QuandlRateFutureNodeConverterTest {
   @Test
   public void testFfm5() {
     final RateFutureNode node = new RateFutureNode(2, Tenor.of(Period.ZERO), Tenor.THREE_MONTHS, Tenor.ON, FF_CONVENTION_ID, "Mapper");
-    final MockSecuritySource securitySource = new MockSecuritySource();
-    final MockConventionSource conventionSource = new MockConventionSource();
-    final MockHolidaySource holidaySource = new MockHolidaySource();
-    final MockRegionSource regionSource = new MockRegionSource();
-    securitySource.addSecurity(OVERNIGHT_INDEX_SECURITY_ID, OVERNIGHT_INDEX_SECURITY);
-    conventionSource.addConvention(FF_CONVENTION_ID, QUANDL_FED_FUNDS_FUTURE);
-    conventionSource.addConvention(OVERNIGHT_INDEX_CONVENTION_ID, OVERNIGHT_INDEX);
-    // duplicated holidays because future expiry calculator isn't quite right
-    holidaySource.addHoliday(ExternalSchemes.countryRegionId(Country.US), HolidayType.BANK, US_HOLIDAY);
-    holidaySource.addHoliday(ExternalId.of(Currency.OBJECT_SCHEME, "USD"), HolidayType.CURRENCY, US_HOLIDAY);
-    regionSource.addRegion(ExternalSchemes.countryRegionId(Country.US), US_REGION);
+    final InMemorySecuritySource securitySource = new InMemorySecuritySource();
+    final InMemoryConventionSource conventionSource = new InMemoryConventionSource();
+    final InMemoryHolidaySource holidaySource = new InMemoryHolidaySource();
+    final InMemoryRegionSource regionSource = new InMemoryRegionSource();
+    securitySource.addSecurity(OVERNIGHT_INDEX_SECURITY);
+    conventionSource.addConvention(QUANDL_FED_FUNDS_FUTURE);
+    conventionSource.addConvention(OVERNIGHT_INDEX);
+    holidaySource.addHoliday(ExternalSchemes.countryRegionId(Country.US), US_HOLIDAY);
+    regionSource.addRegion(US_REGION);
     final QuandlRateFutureNodeConverter converter = new QuandlRateFutureNodeConverter(securitySource, conventionSource, holidaySource, regionSource,
         SNAPSHOT, FFM5_ID, NOW);
     final ZonedDateTime expiryDate = ZonedDateTime.of(LocalDateTime.of(2015, 6, 30, 16, 0), ZoneId.of("America/Chicago"));

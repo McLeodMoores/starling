@@ -13,7 +13,7 @@
   </parent>
   <artifactId>deployment-template</artifactId>
   <packaging>jar</packaging>
-  <name>deployment-demplate</name>
+  <name>deployment-template</name>
   <description>Starling Platform Deployment Template Server</description>
 
   <scm>

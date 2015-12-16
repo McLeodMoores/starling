@@ -6,13 +6,14 @@ package com.mcleodmoores.quandl.convention;
 import org.testng.annotations.Test;
 
 import com.mcleodmoores.quandl.QuandlConstants;
-import com.mcleodmoores.quandl.convention.QuandlFedFundsFutureConvention;
 import com.opengamma.id.ExternalId;
 import com.opengamma.id.ExternalIdBundle;
+import com.opengamma.util.test.TestGroup;
 
 /**
  * Unit tests for {@link QuandlFedFundsFutureConvention}.
  */
+@Test(groups = TestGroup.UNIT)
 public class QuandlFedFundsFutureConventionTest extends QuandlFutureConventionTestBase {
   /** The name of the convention */
   private static final String NAME = "Name";

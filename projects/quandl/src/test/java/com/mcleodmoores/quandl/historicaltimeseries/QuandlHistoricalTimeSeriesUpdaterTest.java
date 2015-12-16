@@ -24,8 +24,6 @@ import org.threeten.bp.LocalDate;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Sets;
 import com.mcleodmoores.quandl.QuandlConstants;
-import com.mcleodmoores.quandl.historicaltimeseries.QuandlHistoricalTimeSeriesLoader;
-import com.mcleodmoores.quandl.historicaltimeseries.QuandlHistoricalTimeSeriesUpdater;
 import com.mcleodmoores.quandl.historicaltimeseries.QuandlHistoricalTimeSeriesUpdater.MetaDataKey;
 import com.mcleodmoores.quandl.testutils.MockHistoricalTimeSeriesProvider;
 import com.mcleodmoores.quandl.util.Quandl4OpenGammaRuntimeException;
@@ -49,6 +47,7 @@ import com.opengamma.util.time.DateUtils;
 /**
  * Unit tests for {@link QuandlHistoricalTimeSeriesUpdater}.
  */
+@Test//(groups = TestGroup.UNIT)
 public class QuandlHistoricalTimeSeriesUpdaterTest {
   /** A mock historical time series provider */
   private static final MockHistoricalTimeSeriesProvider HTS_PROVIDER;

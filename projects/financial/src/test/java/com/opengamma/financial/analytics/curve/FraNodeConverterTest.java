@@ -43,12 +43,14 @@ import com.opengamma.id.ExternalId;
 import com.opengamma.id.ExternalIdBundle;
 import com.opengamma.util.i18n.Country;
 import com.opengamma.util.money.Currency;
+import com.opengamma.util.test.TestGroup;
 import com.opengamma.util.time.DateUtils;
 import com.opengamma.util.time.Tenor;
 
 /**
  *
  */
+@Test(groups = TestGroup.UNIT)
 public class FraNodeConverterTest {
   /** The id scheme */
   private static final String SCHEME = "Test";

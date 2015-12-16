@@ -93,11 +93,12 @@ public class QuandlStirFutureConvention extends QuandlFutureConvention {
    * @param underlyingConventionId The id of the underlying index convention, not null
    * @param nthDay The nth day of the month of the future maturity
    * @param dayOfWeek The day of the week of the future maturity
+   * @param tradingExchangeCalendarId  the trading exchange holiday calendar id, not null
    */
   public QuandlStirFutureConvention(final String name, final ExternalIdBundle externalIdBundle, final Currency currency,
       final Tenor futureTenor, final Tenor underlyingTenor, final String lastTradeTime, final String zoneOffsetId, final double unitAmount,
-      final ExternalId underlyingConventionId, final int nthDay, final String dayOfWeek) {
-    super(name, externalIdBundle, lastTradeTime, zoneOffsetId, unitAmount, underlyingConventionId);
+      final ExternalId underlyingConventionId, final int nthDay, final String dayOfWeek, final ExternalId tradingExchangeCalendarId) {
+    super(name, externalIdBundle, lastTradeTime, zoneOffsetId, unitAmount, underlyingConventionId, tradingExchangeCalendarId);
     setCurrency(currency);
     setFutureTenor(futureTenor);
     setUnderlyingTenor(underlyingTenor);
@@ -120,12 +121,13 @@ public class QuandlStirFutureConvention extends QuandlFutureConvention {
    * @param dayOfWeek The day of the week of the future maturity
    * @param tradingExchange The name of the trading exchange, can be null
    * @param settlementExchange The name of the settlement exchange, can be null
+   * @param tradingExchangeCalendarId  the trading exchange holiday calendar id, not null
    */
   public QuandlStirFutureConvention(final String name, final ExternalIdBundle externalIdBundle, final Currency currency,
       final Tenor futureTenor, final Tenor underlyingTenor, final String lastTradeTime, final String zoneOffsetId, final double unitAmount,
       final ExternalId underlyingConventionId, final int nthDay, final String dayOfWeek, final String tradingExchange,
-      final String settlementExchange) {
-    super(name, externalIdBundle, lastTradeTime, zoneOffsetId, unitAmount, underlyingConventionId, tradingExchange, settlementExchange);
+      final String settlementExchange, final ExternalId tradingExchangeCalendarId) {
+    super(name, externalIdBundle, lastTradeTime, zoneOffsetId, unitAmount, underlyingConventionId, tradingExchange, settlementExchange, tradingExchangeCalendarId);
     setCurrency(currency);
     setFutureTenor(futureTenor);
     setUnderlyingTenor(underlyingTenor);

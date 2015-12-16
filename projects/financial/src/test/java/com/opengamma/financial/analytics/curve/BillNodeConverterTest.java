@@ -61,6 +61,7 @@ import com.opengamma.master.security.impl.InMemorySecurityMaster;
 import com.opengamma.master.security.impl.MasterSecuritySource;
 import com.opengamma.util.i18n.Country;
 import com.opengamma.util.money.Currency;
+import com.opengamma.util.test.TestGroup;
 import com.opengamma.util.time.DateUtils;
 import com.opengamma.util.time.Expiry;
 import com.opengamma.util.time.Tenor;
@@ -68,6 +69,7 @@ import com.opengamma.util.time.Tenor;
 /**
  * Unit tests for {@link BillNodeConverter}.
  */
+@Test(groups = TestGroup.UNIT)
 public class BillNodeConverterTest {
   /** An empty holiday source */
   private static final HolidaySource EMPTY_HOLIDAY_SOURCE = new MasterHolidaySource(new InMemoryHolidayMaster());
@@ -121,6 +123,7 @@ public class BillNodeConverterTest {
   /**
    * Tests the behaviour when the security source is null.
    */
+  @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullSecuritySource1() {
     new BillNodeConverter(EMPTY_HOLIDAY_SOURCE, EMPTY_REGION_SOURCE, null, EMPTY_DATA_BUNDLE, DATA_ID, NOW);
   }
@@ -128,6 +131,7 @@ public class BillNodeConverterTest {
   /**
    * Tests the behaviour when the security source is null.
    */
+  @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullSecuritySource2() {
     new BillNodeConverter(EMPTY_HOLIDAY_SOURCE, EMPTY_REGION_SOURCE, null, EMPTY_LEGAL_ENTITY_SOURCE, EMPTY_DATA_BUNDLE, DATA_ID, NOW);
   }

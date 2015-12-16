@@ -7,13 +7,14 @@ import static org.testng.Assert.fail;
 
 import org.testng.annotations.Test;
 
-import com.mcleodmoores.quandl.convention.QuandlFinancialConventionVisitorAdapter;
 import com.mcleodmoores.quandl.util.Quandl4OpenGammaRuntimeException;
 import com.opengamma.financial.convention.FinancialConventionVisitor;
+import com.opengamma.util.test.TestGroup;
 
 /**
  * Unit tests for {@link QuandlFinancialConventionVisitorAdapter}.
  */
+@Test(groups = TestGroup.UNIT)
 public class QuandlFinancialConventionAdapterVisitorTest {
   /** The visitor */
   private static final FinancialConventionVisitor<?> ADAPTER = new QuandlFinancialConventionVisitorAdapter<>();

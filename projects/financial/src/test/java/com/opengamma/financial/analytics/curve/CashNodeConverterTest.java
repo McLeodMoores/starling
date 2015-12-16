@@ -49,13 +49,14 @@ import com.opengamma.service.ServiceContext;
 import com.opengamma.service.ThreadLocalServiceContext;
 import com.opengamma.service.VersionCorrectionProvider;
 import com.opengamma.util.money.Currency;
+import com.opengamma.util.test.TestGroup;
 import com.opengamma.util.time.DateUtils;
 import com.opengamma.util.time.Tenor;
 
 /**
  * Unit tests for {@link CashNodeConverter}.
  */
-@Test(singleThreaded = true)
+@Test(groups = TestGroup.UNIT, singleThreaded = true)
 public class CashNodeConverterTest {
   /** The curve node id mapper name */
   private static final String MAPPER = "Mapper";

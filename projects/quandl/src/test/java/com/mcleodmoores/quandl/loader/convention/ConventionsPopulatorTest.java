@@ -4,13 +4,14 @@
 package com.mcleodmoores.quandl.loader.convention;
 
 import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertNull;
 import static org.testng.Assert.assertTrue;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import org.joda.beans.JodaBeanUtils;
 import org.testng.annotations.Test;
 import org.threeten.bp.DayOfWeek;
 import org.threeten.bp.LocalTime;
@@ -18,7 +19,6 @@ import org.threeten.bp.LocalTime;
 import com.google.common.collect.Sets;
 import com.mcleodmoores.quandl.QuandlConstants;
 import com.mcleodmoores.quandl.convention.QuandlStirFutureConvention;
-import com.mcleodmoores.quandl.loader.convention.ConventionsPopulator;
 import com.mcleodmoores.quandl.util.Quandl4OpenGammaRuntimeException;
 import com.opengamma.core.id.ExternalSchemes;
 import com.opengamma.financial.convention.IborIndexConvention;
@@ -43,11 +43,13 @@ import com.opengamma.master.security.SecuritySearchResult;
 import com.opengamma.master.security.impl.InMemorySecurityMaster;
 import com.opengamma.util.i18n.Country;
 import com.opengamma.util.money.Currency;
+import com.opengamma.util.test.TestGroup;
 import com.opengamma.util.time.Tenor;
 
 /**
  * Unit tests for {@link ConventionsPopulator}.
  */
+@Test(groups = TestGroup.UNIT)
 public class ConventionsPopulatorTest {
   /** An overnight index convention with no Quandl id */
   private static final OvernightIndexConvention C1 = new OvernightIndexConvention("1", ExternalIdBundle.of("CONVENTION", "ABC1"),
@@ -85,13 +87,16 @@ public class ConventionsPopulatorTest {
       ExternalId.of("CONVENTION", "ABC6"), false, "NONE", Tenor.THREE_MONTHS, 2, false, StubType.NONE, false, 0);
   /** A STIR future convention with an underlying convention with no Quandl id */
   private static final QuandlStirFutureConvention C10 = new QuandlStirFutureConvention("10", ExternalIdBundle.of("CONVENTION", "ABC10"),
-      Currency.USD, Tenor.THREE_MONTHS, Tenor.THREE_MONTHS, "16:00", "US", 1000000, ExternalId.of("CONVENTION", "ABC4"), 3, DayOfWeek.WEDNESDAY.name());
+      Currency.USD, Tenor.THREE_MONTHS, Tenor.THREE_MONTHS, "16:00", "US", 1000000, ExternalId.of("CONVENTION", "ABC4"), 3, DayOfWeek.WEDNESDAY.name(),
+      ExternalSchemes.countryRegionId(Country.US));
   /** A STIR future convention with an underlying convention with a single Quandl id */
   private static final QuandlStirFutureConvention C11 = new QuandlStirFutureConvention("11", ExternalIdBundle.of("CONVENTION", "ABC10"),
-      Currency.USD, Tenor.THREE_MONTHS, Tenor.THREE_MONTHS, "16:00", "US", 1000000, ExternalId.of("CONVENTION", "ABC5"), 3, DayOfWeek.WEDNESDAY.name());
+      Currency.USD, Tenor.THREE_MONTHS, Tenor.THREE_MONTHS, "16:00", "US", 1000000, ExternalId.of("CONVENTION", "ABC5"), 3, DayOfWeek.WEDNESDAY.name(),
+      ExternalSchemes.countryRegionId(Country.US));
   /** A STIR future convention with an underlying convention with multiple Quandl ids */
   private static final QuandlStirFutureConvention C12 = new QuandlStirFutureConvention("12", ExternalIdBundle.of("CONVENTION", "ABC10"),
-      Currency.USD, Tenor.THREE_MONTHS, Tenor.THREE_MONTHS, "16:00", "US", 1000000, ExternalId.of("CONVENTION", "ABC6"), 3, DayOfWeek.WEDNESDAY.name());
+      Currency.USD, Tenor.THREE_MONTHS, Tenor.THREE_MONTHS, "16:00", "US", 1000000, ExternalId.of("CONVENTION", "ABC6"), 3, DayOfWeek.WEDNESDAY.name(),
+      ExternalSchemes.countryRegionId(Country.US));
   /** An overnight index security */
   private static final OvernightIndex OVERNIGHT_INDEX = new OvernightIndex(C2.getName(), C2.getName(), QuandlConstants.ofCode("ABC2"),
       QuandlConstants.ofCode("ABC2").toBundle());
@@ -200,7 +205,7 @@ public class ConventionsPopulatorTest {
     conventionRequest.setConventionType(VanillaIborLegConvention.TYPE);
     final ConventionSearchResult conventionResult = conventionMaster.search(conventionRequest);
     final List<ManageableConvention> conventions = conventionResult.getConventions();
-    assertConventionEquals(conventions, Collections.singletonList(C7));
+    assertConventionEquals(conventions, Arrays.asList(C4, C7));
     // test the security is not added
     final SecuritySearchRequest securityRequest = new SecuritySearchRequest();
     securityRequest.setSecurityType(IborIndex.INDEX_TYPE);
@@ -224,7 +229,7 @@ public class ConventionsPopulatorTest {
     conventionRequest.setConventionType(VanillaIborLegConvention.TYPE);
     final ConventionSearchResult conventionResult = conventionMaster.search(conventionRequest);
     final List<ManageableConvention> conventions = conventionResult.getConventions();
-    assertConventionEquals(conventions, Collections.singletonList(C8));
+    assertConventionEquals(conventions, Arrays.asList(C5, C8));
     // test the security is added
     final SecuritySearchRequest securityRequest = new SecuritySearchRequest();
     securityRequest.setSecurityType(IborIndex.INDEX_TYPE);
@@ -248,7 +253,7 @@ public class ConventionsPopulatorTest {
     conventionRequest.setConventionType(VanillaIborLegConvention.TYPE);
     final ConventionSearchResult conventionResult = conventionMaster.search(conventionRequest);
     final List<ManageableConvention> conventions = conventionResult.getConventions();
-    assertConventionEquals(conventions, Collections.singletonList(C9));
+    assertConventionEquals(conventions, Arrays.asList(C6, C9));
     // test the security is not added
     final SecuritySearchRequest securityRequest = new SecuritySearchRequest();
     securityRequest.setSecurityType(IborIndex.INDEX_TYPE);
@@ -272,7 +277,7 @@ public class ConventionsPopulatorTest {
     conventionRequest.setConventionType(QuandlStirFutureConvention.TYPE);
     final ConventionSearchResult conventionResult = conventionMaster.search(conventionRequest);
     final List<ManageableConvention> conventions = conventionResult.getConventions();
-    assertConventionEquals(conventions, Collections.singletonList(C10));
+    assertConventionEquals(conventions, Arrays.asList(C4, C10));
     // test the security is not added
     final SecuritySearchRequest securityRequest = new SecuritySearchRequest();
     securityRequest.setSecurityType(IborIndex.INDEX_TYPE);
@@ -296,7 +301,7 @@ public class ConventionsPopulatorTest {
     conventionRequest.setConventionType(QuandlStirFutureConvention.TYPE);
     final ConventionSearchResult conventionResult = conventionMaster.search(conventionRequest);
     final List<ManageableConvention> conventions = conventionResult.getConventions();
-    assertConventionEquals(conventions, Collections.singletonList(C11));
+    assertConventionEquals(conventions, Arrays.asList(C5, C11));
     // test the security is added
     final SecuritySearchRequest securityRequest = new SecuritySearchRequest();
     securityRequest.setSecurityType(IborIndex.INDEX_TYPE);
@@ -320,7 +325,7 @@ public class ConventionsPopulatorTest {
     conventionRequest.setConventionType(QuandlStirFutureConvention.TYPE);
     final ConventionSearchResult conventionResult = conventionMaster.search(conventionRequest);
     final List<ManageableConvention> conventions = conventionResult.getConventions();
-    assertConventionEquals(conventions, Collections.singletonList(C12));
+    assertConventionEquals(conventions, Arrays.asList(C6, C12));
     // test the security is not added
     final SecuritySearchRequest securityRequest = new SecuritySearchRequest();
     securityRequest.setSecurityType(IborIndex.INDEX_TYPE);
@@ -348,9 +353,7 @@ public class ConventionsPopulatorTest {
     for (int i = 0; i < expected.size(); i++) {
       final ManageableConvention actualConvention = actual.get(i);
       final ManageableConvention expectedConvention = expected.get(i);
-      assertNotNull(actualConvention.getUniqueId());
-      actualConvention.setUniqueId(null);
-      assertEquals(actualConvention, expectedConvention);
+      JodaBeanUtils.equalIgnoring(actualConvention, expectedConvention, ManageableConvention.meta().uniqueId());
     }
   }
 
@@ -373,9 +376,7 @@ public class ConventionsPopulatorTest {
     for (int i = 0; i < expected.size(); i++) {
       final ManageableSecurity actualSecurity = actual.get(i);
       final ManageableSecurity expectedSecurity = expected.get(i);
-      assertNotNull(actualSecurity.getUniqueId());
-      actualSecurity.setUniqueId(null);
-      assertEquals(actualSecurity, expectedSecurity);
+      JodaBeanUtils.equalIgnoring(actualSecurity, expectedSecurity, ManageableConvention.meta().uniqueId());
     }
   }
 }

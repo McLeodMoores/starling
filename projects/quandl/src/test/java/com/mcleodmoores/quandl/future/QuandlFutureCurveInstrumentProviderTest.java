@@ -11,18 +11,18 @@ import org.testng.annotations.Test;
 import org.threeten.bp.LocalDate;
 
 import com.mcleodmoores.quandl.QuandlConstants;
-import com.mcleodmoores.quandl.future.QuandlFutureCurveInstrumentProvider;
 import com.mcleodmoores.quandl.util.Quandl4OpenGammaRuntimeException;
 import com.opengamma.core.value.MarketDataRequirementNames;
 import com.opengamma.financial.analytics.ircurve.BloombergFutureCurveInstrumentProvider;
 import com.opengamma.financial.analytics.ircurve.IndexType;
 import com.opengamma.financial.analytics.ircurve.strips.DataFieldType;
+import com.opengamma.util.test.TestGroup;
 import com.opengamma.util.time.Tenor;
 
 /**
  * Unit tests for {@link QuandlFutureCurveInstrumentProvider}.
  */
-@Test
+@Test(groups = TestGroup.UNIT)
 public class QuandlFutureCurveInstrumentProviderTest {
   /** The future prefix */
   private static final String PREFIX = "ED";

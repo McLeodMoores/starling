@@ -13,15 +13,14 @@ import java.util.Set;
 import org.testng.annotations.Test;
 
 import com.mcleodmoores.quandl.QuandlConstants;
-import com.mcleodmoores.quandl.classification.QuandlSecurityType;
-import com.mcleodmoores.quandl.classification.QuandlSecurityTypeResolver;
 import com.opengamma.id.ExternalId;
 import com.opengamma.id.ExternalIdBundle;
+import com.opengamma.util.test.TestGroup;
 
 /**
  * Unit tests for {@link QuandlSecurityTypeResolver}.
  */
-@Test
+@Test(groups = TestGroup.UNIT)
 public class QuandlSecurityTypeResolverTest {
   /** The resolver */
   private static final QuandlSecurityTypeResolver RESOLVER = new QuandlSecurityTypeResolver();

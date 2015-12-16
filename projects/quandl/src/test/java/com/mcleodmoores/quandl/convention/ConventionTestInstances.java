@@ -11,8 +11,6 @@ import java.util.concurrent.atomic.AtomicLong;
 import org.threeten.bp.DayOfWeek;
 import org.threeten.bp.LocalTime;
 
-import com.mcleodmoores.quandl.convention.QuandlFedFundsFutureConvention;
-import com.mcleodmoores.quandl.convention.QuandlStirFutureConvention;
 import com.opengamma.analytics.financial.instrument.annuity.CompoundingMethod;
 import com.opengamma.analytics.financial.instrument.annuity.DateRelativeTo;
 import com.opengamma.analytics.financial.instrument.annuity.OffsetType;
@@ -221,7 +219,7 @@ public final class ConventionTestInstances {
   public static final QuandlStirFutureConvention QUANDL_USD_3M_3M_STIR_FUTURE = new QuandlStirFutureConvention("USD 3M/3M STIR",
       ExternalIdBundle.of(CONVENTION_SCHEME, "USD 3M/3M STIR"), Currency.USD, Tenor.THREE_MONTHS, Tenor.THREE_MONTHS,
       "16:00", "America/Chicago", 2500, ExternalId.of(CONVENTION_SCHEME, "USD IBOR INDEX"), 3, DayOfWeek.WEDNESDAY.name(),
-      "ABC", "ABC");
+      "ABC", "ABC", ExternalSchemes.countryRegionId(Country.US));
 
   /**
    * An IMM FRA convention instance.

@@ -26,11 +26,13 @@ import com.opengamma.financial.security.index.IborIndex;
 import com.opengamma.financial.security.swap.InterpolationMethod;
 import com.opengamma.id.ExternalId;
 import com.opengamma.util.money.Currency;
+import com.opengamma.util.test.TestGroup;
 import com.opengamma.util.time.Tenor;
 
 /**
  * Tests the retrieval of a currency from three leg basis swap nodes.
  */
+@Test(groups = TestGroup.UNIT)
 public class ThreeLegBasisSwapCurrencyVisitorTest {
   /** EU region. */
   private static final ExternalId EU = ExternalSchemes.financialRegionId("EU");

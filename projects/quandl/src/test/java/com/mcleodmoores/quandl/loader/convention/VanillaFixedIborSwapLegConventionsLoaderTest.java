@@ -13,14 +13,15 @@ import java.util.Set;
 
 import org.testng.annotations.Test;
 
-import au.com.bytecode.opencsv.CSVReader;
-
-import com.mcleodmoores.quandl.loader.convention.VanillaFixedOvernightIndexSwapLegConventionsLoader;
 import com.opengamma.financial.convention.SwapFixedLegConvention;
+import com.opengamma.util.test.TestGroup;
+
+import au.com.bytecode.opencsv.CSVReader;
 
 /**
  * Unit tests for {@link VanillaFixedOvernightIndexSwapLegConventionsLoader}.
  */
+@Test(groups = TestGroup.UNIT)
 public class VanillaFixedIborSwapLegConventionsLoaderTest {
 
   /**

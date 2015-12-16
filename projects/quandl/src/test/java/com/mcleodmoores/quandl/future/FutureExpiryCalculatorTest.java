@@ -14,12 +14,16 @@ import org.threeten.bp.ZonedDateTime;
 import com.mcleodmoores.quandl.convention.QuandlFedFundsFutureConvention;
 import com.mcleodmoores.quandl.convention.QuandlFinancialConvention;
 import com.mcleodmoores.quandl.convention.QuandlStirFutureConvention;
-import com.mcleodmoores.quandl.future.FutureExpiryCalculator;
 import com.mcleodmoores.quandl.util.Quandl4OpenGammaRuntimeException;
+import com.opengamma.core.id.ExternalSchemes;
+import com.opengamma.engine.InMemoryHolidaySource;
+import com.opengamma.engine.InMemoryRegionSource;
 import com.opengamma.id.ExternalId;
 import com.opengamma.id.ExternalIdBundle;
+import com.opengamma.util.i18n.Country;
 import com.opengamma.util.money.Currency;
 import com.opengamma.util.result.Function2;
+import com.opengamma.util.test.TestGroup;
 import com.opengamma.util.time.Expiry;
 import com.opengamma.util.time.ExpiryAccuracy;
 import com.opengamma.util.time.Tenor;
@@ -28,11 +32,12 @@ import com.opengamma.util.time.Tenor;
 /**
  * Unit tests for {@link FutureExpiryCalculator}.
  */
+@Test(groups = TestGroup.UNIT)
 public class FutureExpiryCalculatorTest {
-  //TODO once the test holiday source is in, check they are taken into account correctly.
   /** Short-term interest rate future convention */
   private static final QuandlFinancialConvention STIR = new QuandlStirFutureConvention("Test", ExternalIdBundle.of("Test", "Test"), Currency.USD,
-      Tenor.THREE_MONTHS, Tenor.THREE_MONTHS, "11:00", "America/Chicago", 2500, ExternalId.of("Test", "Test"), 3, DayOfWeek.MONDAY.name());
+      Tenor.THREE_MONTHS, Tenor.THREE_MONTHS, "11:00", "America/Chicago", 2500, ExternalId.of("Test", "Test"), 3, DayOfWeek.MONDAY.name(),
+      ExternalSchemes.countryRegionId(Country.US));
   /** Fed funds future convention */
   private static final QuandlFinancialConvention FF = new QuandlFedFundsFutureConvention("Test", ExternalIdBundle.of("Test", "Test"), "11:00",
       "America/Chicago", 50000, ExternalId.of("Test", "Test"));
@@ -42,7 +47,15 @@ public class FutureExpiryCalculatorTest {
    */
   @Test(expectedExceptions = Quandl4OpenGammaRuntimeException.class)
   public void testNullHolidaySource() {
-    new FutureExpiryCalculator(null);
+    new FutureExpiryCalculator(null, new InMemoryRegionSource());
+  }
+
+  /**
+   * Tests the behaviour when a null region source is supplied.
+   */
+  @Test(expectedExceptions = Quandl4OpenGammaRuntimeException.class)
+  public void testNullRegionSource() {
+    new FutureExpiryCalculator(new InMemoryHolidaySource(), null);
   }
 
   /**

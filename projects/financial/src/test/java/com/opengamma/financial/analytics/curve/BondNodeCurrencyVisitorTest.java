@@ -33,6 +33,7 @@ import com.opengamma.master.config.impl.InMemoryConfigMaster;
 import com.opengamma.master.config.impl.MasterConfigSource;
 import com.opengamma.master.security.ManageableSecurity;
 import com.opengamma.util.money.Currency;
+import com.opengamma.util.test.TestGroup;
 import com.opengamma.util.time.DateUtils;
 import com.opengamma.util.time.Expiry;
 import com.opengamma.util.time.Tenor;
@@ -40,6 +41,7 @@ import com.opengamma.util.time.Tenor;
 /**
  * Tests the retrieval of a currency from cash nodes.
  */
+@Test(groups = TestGroup.UNIT)
 public class BondNodeCurrencyVisitorTest {
   /** US region. */
   private static final ExternalId US = ExternalSchemes.financialRegionId("US");

@@ -9,13 +9,14 @@ import static org.testng.Assert.fail;
 import org.testng.annotations.Test;
 import org.threeten.bp.LocalDate;
 
-import com.mcleodmoores.quandl.future.QuandlFutureUtils;
 import com.mcleodmoores.quandl.util.Quandl4OpenGammaRuntimeException;
+import com.opengamma.util.test.TestGroup;
 import com.opengamma.util.time.Tenor;
 
 /**
  * Unit tests for {@link QuandlFutureUtils}.
  */
+@Test(groups = TestGroup.UNIT)
 public class QuandlFutureUtilsTest {
 
   /**

@@ -7,15 +7,15 @@ import static org.testng.Assert.assertEquals;
 
 import org.testng.annotations.Test;
 
-import com.mcleodmoores.quandl.future.QuandlFutureCurveInstrumentProvider;
-import com.mcleodmoores.quandl.future.QuandlFutureCurveInstrumentProviderBuilder;
 import com.mcleodmoores.quandl.testutils.FinancialTestBase;
 import com.opengamma.core.value.MarketDataRequirementNames;
 import com.opengamma.financial.analytics.ircurve.strips.DataFieldType;
+import com.opengamma.util.test.TestGroup;
 
 /**
  * Unit tests for {@link QuandlFutureCurveInstrumentProviderBuilder}.
  */
+@Test(groups = TestGroup.UNIT)
 public class QuandlFutureCurveInstrumentProviderBuilderTest extends FinancialTestBase {
 
   /**

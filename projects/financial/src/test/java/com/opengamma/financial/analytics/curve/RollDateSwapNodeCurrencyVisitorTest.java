@@ -29,11 +29,13 @@ import com.opengamma.financial.security.index.IborIndex;
 import com.opengamma.financial.security.index.OvernightIndex;
 import com.opengamma.id.ExternalId;
 import com.opengamma.util.money.Currency;
+import com.opengamma.util.test.TestGroup;
 import com.opengamma.util.time.Tenor;
 
 /**
  * Tests the retrieval of a currency from roll date swap nodes.
  */
+@Test(groups = TestGroup.UNIT)
 public class RollDateSwapNodeCurrencyVisitorTest {
   /** US region. */
   private static final ExternalId US = ExternalSchemes.financialRegionId("US");

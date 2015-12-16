@@ -13,14 +13,15 @@ import java.util.Set;
 
 import org.testng.annotations.Test;
 
-import au.com.bytecode.opencsv.CSVReader;
-
-import com.mcleodmoores.quandl.loader.convention.QuandlOvernightIndexConventionsLoader;
 import com.opengamma.financial.convention.OvernightIndexConvention;
+import com.opengamma.util.test.TestGroup;
+
+import au.com.bytecode.opencsv.CSVReader;
 
 /**
  * Unit tests for {@link QuandlOvernightIndexConventionsLoader}.
  */
+@Test(groups = TestGroup.UNIT)
 public class QuandlOvernightIndexConventionsLoaderTest {
 
   /**

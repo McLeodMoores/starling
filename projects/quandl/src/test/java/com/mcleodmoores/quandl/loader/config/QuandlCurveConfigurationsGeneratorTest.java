@@ -7,12 +7,13 @@ import static org.testng.Assert.assertEquals;
 
 import org.testng.annotations.Test;
 
-import com.mcleodmoores.quandl.loader.config.QuandlCurveConfigurationsGenerator;
 import com.mcleodmoores.quandl.loader.config.QuandlCurveConfigurationsGenerator.Configurations;
+import com.opengamma.util.test.TestGroup;
 
 /**
  * Unit tests for {@link QuandlCurveConfigurationsGenerator}.
  */
+@Test(groups = TestGroup.UNIT)
 public class QuandlCurveConfigurationsGeneratorTest {
 
   /**

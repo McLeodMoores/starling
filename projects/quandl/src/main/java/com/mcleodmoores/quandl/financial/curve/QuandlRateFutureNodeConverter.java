@@ -90,7 +90,7 @@ public class QuandlRateFutureNodeConverter extends RateFutureNodeConverter {
     _marketData = marketData;
     _dataId = dataId;
     _valuationTime = valuationTime;
-    _expiryCalculator = new FutureExpiryCalculator(holidaySource); //TODO replace with convention from source
+    _expiryCalculator = new FutureExpiryCalculator(holidaySource, regionSource); //TODO replace with convention from source
   }
 
   @Override

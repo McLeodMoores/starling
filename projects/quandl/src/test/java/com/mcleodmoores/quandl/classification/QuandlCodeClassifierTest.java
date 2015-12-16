@@ -5,17 +5,18 @@ package com.mcleodmoores.quandl.classification;
 
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNull;
-import net.sf.ehcache.CacheManager;
 
 import org.testng.annotations.Test;
 
-import com.mcleodmoores.quandl.classification.QuandlCodeClassifier;
 import com.mcleodmoores.quandl.util.Quandl4OpenGammaRuntimeException;
+import com.opengamma.util.test.TestGroup;
+
+import net.sf.ehcache.CacheManager;
 
 /**
  * Unit tests for {@link QuandlCodeClassifier}.
  */
-@Test
+@Test(groups = TestGroup.UNIT)
 public class QuandlCodeClassifierTest {
   /** The classifier */
   private static final QuandlCodeClassifier CLASSIFIER = new QuandlCodeClassifier(CacheManager.newInstance());

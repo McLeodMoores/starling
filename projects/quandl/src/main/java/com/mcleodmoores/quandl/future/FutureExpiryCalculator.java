@@ -21,6 +21,8 @@ import com.mcleodmoores.quandl.convention.QuandlFinancialConventionVisitorAdapte
 import com.mcleodmoores.quandl.convention.QuandlStirFutureConvention;
 import com.mcleodmoores.quandl.util.ArgumentChecker;
 import com.opengamma.core.holiday.HolidaySource;
+import com.opengamma.core.region.Region;
+import com.opengamma.core.region.RegionSource;
 import com.opengamma.financial.convention.HolidaySourceCalendarAdapter;
 import com.opengamma.financial.convention.calendar.Calendar;
 import com.opengamma.financial.convention.calendar.MondayToFridayCalendar;
@@ -52,6 +54,8 @@ public class FutureExpiryCalculator extends QuandlFinancialConventionVisitorAdap
       .build();
   /** A holiday source */
   private final HolidaySource _holidaySource;
+  /** A region source */
+  private final RegionSource _regionSource;
 
   /**
    * Creates an instance that does not use a holiday source. In this case, the only holidays that will be taken into
@@ -59,14 +63,16 @@ public class FutureExpiryCalculator extends QuandlFinancialConventionVisitorAdap
    */
   public FutureExpiryCalculator() {
     _holidaySource = null;
+    _regionSource = null;
   }
   /**
    * Creates an instance.
-   * @param holidaySource The holiday source, not null
+   * @param holidaySource  the holiday source, not null
+   * @param regionSource  the region source, not null
    */
-  public FutureExpiryCalculator(final HolidaySource holidaySource) {
-    ArgumentChecker.notNull(holidaySource, "holidaySource");
-    _holidaySource = holidaySource;
+  public FutureExpiryCalculator(final HolidaySource holidaySource, final RegionSource regionSource) {
+    _holidaySource = ArgumentChecker.notNull(holidaySource, "holidaySource");
+    _regionSource = ArgumentChecker.notNull(regionSource, "regionSource");
   }
 
   @Override
@@ -76,8 +82,13 @@ public class FutureExpiryCalculator extends QuandlFinancialConventionVisitorAdap
     final DayOfWeek dayOfWeek = DayOfWeek.valueOf(convention.getDayOfWeek());
     final TemporalAdjuster dateAdjuster = TemporalAdjusters.dayOfWeekInMonth(nthDay, dayOfWeek);
     final LocalTime expiryTime = LocalTime.parse(convention.getLastTradeTime());
-    //TODO should not use currency as holiday type
-    final Calendar calendar = _holidaySource == null ? WEEKENDS : new HolidaySourceCalendarAdapter(_holidaySource, convention.getCurrency());
+    final Calendar calendar;
+    if (_holidaySource == null) {
+      calendar = WEEKENDS;
+    } else {
+      final Region exchangeRegion = _regionSource.getHighestLevelRegion(convention.getTradingExchangeCalendarId());
+      calendar = _holidaySource == null ? WEEKENDS : new HolidaySourceCalendarAdapter(_holidaySource, exchangeRegion);
+    }
     final ZoneId timeZone = ZoneId.of(convention.getZoneOffsetId());
     return new Function2<Character, Integer, Expiry>() {
 
@@ -103,8 +114,13 @@ public class FutureExpiryCalculator extends QuandlFinancialConventionVisitorAdap
     final TemporalAdjuster dateAdjuster = TemporalAdjusters.lastDayOfMonth();
     final LocalTime expiryTime = LocalTime.parse(convention.getLastTradeTime());
     final ZoneId timeZone = ZoneId.of(convention.getZoneOffsetId());
-    //TODO should not use currency as holiday type
-    final Calendar calendar = _holidaySource == null ? WEEKENDS : new HolidaySourceCalendarAdapter(_holidaySource, convention.getCurrency());
+    final Calendar calendar;
+    if (_holidaySource == null) {
+      calendar = WEEKENDS;
+    } else {
+      final Region exchangeRegion = _regionSource.getHighestLevelRegion(convention.getTradingExchangeCalendarId());
+      calendar = _holidaySource == null ? WEEKENDS : new HolidaySourceCalendarAdapter(_holidaySource, exchangeRegion);
+    }
     return new Function2<Character, Integer, Expiry>() {
 
       @Override

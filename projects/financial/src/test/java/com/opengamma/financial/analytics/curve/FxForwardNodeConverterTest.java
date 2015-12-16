@@ -32,6 +32,7 @@ import com.opengamma.financial.convention.daycount.DayCounts;
 import com.opengamma.id.ExternalId;
 import com.opengamma.util.i18n.Country;
 import com.opengamma.util.money.Currency;
+import com.opengamma.util.test.TestGroup;
 import com.opengamma.util.time.DateUtils;
 import com.opengamma.util.time.Tenor;
 
@@ -64,6 +65,7 @@ import com.opengamma.util.time.Tenor;
  * </ul>
  */
 @SuppressWarnings("deprecation")
+@Test(groups = TestGroup.UNIT)
 public class FxForwardNodeConverterTest {
   /** The test scheme */
   private static final String SCHEME = "Test";

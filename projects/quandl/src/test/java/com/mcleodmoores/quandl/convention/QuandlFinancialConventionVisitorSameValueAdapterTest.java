@@ -14,14 +14,14 @@ import java.util.Set;
 
 import org.testng.annotations.Test;
 
-import com.mcleodmoores.quandl.convention.QuandlFinancialConventionVisitor;
-import com.mcleodmoores.quandl.convention.QuandlFinancialConventionVisitorSameValueAdapter;
 import com.opengamma.financial.convention.FinancialConvention;
 import com.opengamma.financial.convention.FinancialConventionVisitor;
+import com.opengamma.util.test.TestGroup;
 
 /**
  * Unit tests for {@link QuandlFinancialConventionVisitorSameValueAdapter}.
  */
+@Test(groups = TestGroup.UNIT)
 public class QuandlFinancialConventionVisitorSameValueAdapterTest {
   /** The result */
   private static final Integer RESULT = 2;

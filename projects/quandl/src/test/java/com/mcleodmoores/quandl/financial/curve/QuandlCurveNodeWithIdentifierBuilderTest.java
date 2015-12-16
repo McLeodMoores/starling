@@ -15,8 +15,6 @@ import org.threeten.bp.LocalDate;
 import org.threeten.bp.Period;
 
 import com.mcleodmoores.quandl.QuandlConstants;
-import com.mcleodmoores.quandl.financial.curve.QuandlCurveNodeWithIdentifierAndUnderlying;
-import com.mcleodmoores.quandl.financial.curve.QuandlCurveNodeWithIdentifierBuilder;
 import com.mcleodmoores.quandl.future.QuandlFedFundsFutureCurveInstrumentProvider;
 import com.mcleodmoores.quandl.future.QuandlFutureCurveInstrumentProvider;
 import com.opengamma.core.value.MarketDataRequirementNames;
@@ -27,11 +25,13 @@ import com.opengamma.financial.analytics.ircurve.strips.CurveNodeWithIdentifier;
 import com.opengamma.financial.analytics.ircurve.strips.DataFieldType;
 import com.opengamma.financial.analytics.ircurve.strips.RateFutureNode;
 import com.opengamma.id.ExternalId;
+import com.opengamma.util.test.TestGroup;
 import com.opengamma.util.time.Tenor;
 
 /**
  * Unit tests for {@link QuandlCurveNodeWithIdentifierBuilder}.
  */
+@Test(groups = TestGroup.UNIT)
 public class QuandlCurveNodeWithIdentifierBuilderTest {
   /** The curve date */
   private static final LocalDate CURVE_DATE = LocalDate.of(2015, 4, 15);

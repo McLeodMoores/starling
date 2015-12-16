@@ -11,19 +11,19 @@ import static org.testng.Assert.assertEquals;
 
 import java.util.Arrays;
 
-import net.sf.ehcache.CacheManager;
-
 import org.testng.annotations.Test;
 
-import com.mcleodmoores.quandl.classification.QuandlCodeClassifier;
-import com.mcleodmoores.quandl.classification.QuandlHistoricalTimeSeriesFieldAdjustmentMap;
 import com.mcleodmoores.quandl.normalization.QuandlNormalizer;
 import com.opengamma.core.value.MarketDataRequirementNames;
 import com.opengamma.master.historicaltimeseries.impl.HistoricalTimeSeriesFieldAdjustment;
+import com.opengamma.util.test.TestGroup;
+
+import net.sf.ehcache.CacheManager;
 
 /**
  * Unit tests for {@link QuandlHistoricalTimeSeriesFieldAdjustmentMap}.
  */
+@Test(groups = TestGroup.UNIT)
 public class QuandlHistoricalTimeSeriesFieldAdjustmentMapTest {
   /** Field adjustment map */
   private static final QuandlHistoricalTimeSeriesFieldAdjustmentMap FIELD_ADJUSTMENTS =

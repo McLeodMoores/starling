@@ -22,8 +22,10 @@ import com.mcleodmoores.quandl.convention.QuandlStirFutureConvention;
 import com.mcleodmoores.quandl.future.FutureExpiryCalculator;
 import com.mcleodmoores.quandl.loader.QuandlSecurityLoader;
 import com.mcleodmoores.quandl.util.ArgumentChecker;
+import com.opengamma.DataNotFoundException;
 import com.opengamma.core.convention.ConventionSource;
 import com.opengamma.core.holiday.HolidaySource;
+import com.opengamma.core.region.RegionSource;
 import com.opengamma.financial.convention.FinancialConvention;
 import com.opengamma.financial.security.future.FederalFundsFutureSecurity;
 import com.opengamma.financial.security.future.InterestRateFutureSecurity;
@@ -185,10 +187,15 @@ public class QuandlRateFutureGenerator extends QuandlSecurityLoader {
     final ExternalId codeId = QuandlConstants.ofCode(quandlCode);
     try {
       futureConvention = (FinancialConvention) conventionSource.getSingle(codeId);
-    } catch (final Exception e) {
+    } catch (final DataNotFoundException e1) {
       LOGGER.info("FinancialConvention with id {} not found, trying {} ", codeId, prefixId);
-      futureConvention = (FinancialConvention) conventionSource.getSingle(prefixId);
-      if (futureConvention == null) {
+      try {
+        futureConvention = (FinancialConvention) conventionSource.getSingle(prefixId);
+        if (futureConvention == null) {
+          LOGGER.error("FinancialConvention with id {} not found ", prefixId);
+          return null;
+        }
+      } catch (final DataNotFoundException e2) {
         LOGGER.error("FinancialConvention with id {} not found ", prefixId);
         return null;
       }
@@ -207,7 +214,8 @@ public class QuandlRateFutureGenerator extends QuandlSecurityLoader {
       FutureExpiryCalculator expiryCalculator;
       try {
         final HolidaySource holidaySource = getToolContext().getHolidaySource();
-        expiryCalculator = new FutureExpiryCalculator(holidaySource);
+        final RegionSource regionSource = getToolContext().getRegionSource();
+        expiryCalculator = new FutureExpiryCalculator(holidaySource, regionSource);
       } catch (final Exception e) {
         // yuck
         expiryCalculator = new FutureExpiryCalculator();

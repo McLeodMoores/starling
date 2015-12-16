@@ -18,53 +18,54 @@ import org.threeten.bp.LocalDateTime;
 import org.threeten.bp.ZoneOffset;
 import org.threeten.bp.ZonedDateTime;
 
-import au.com.bytecode.opencsv.CSVReader;
-
 import com.mcleodmoores.quandl.QuandlConstants;
 import com.mcleodmoores.quandl.convention.QuandlFedFundsFutureConvention;
 import com.mcleodmoores.quandl.convention.QuandlStirFutureConvention;
-import com.mcleodmoores.quandl.loader.future.QuandlRateFutureGenerator;
-import com.mcleodmoores.quandl.testutils.MockConventionSource;
 import com.mcleodmoores.quandl.util.Quandl4OpenGammaRuntimeException;
 import com.opengamma.core.convention.Convention;
 import com.opengamma.core.id.ExternalSchemes;
 import com.opengamma.core.security.Security;
+import com.opengamma.engine.InMemoryConventionSource;
 import com.opengamma.financial.convention.DepositConvention;
 import com.opengamma.financial.convention.businessday.BusinessDayConventions;
 import com.opengamma.financial.convention.daycount.DayCounts;
 import com.opengamma.financial.security.future.FederalFundsFutureSecurity;
 import com.opengamma.financial.security.future.InterestRateFutureSecurity;
 import com.opengamma.master.security.ManageableSecurity;
+import com.opengamma.util.i18n.Country;
 import com.opengamma.util.money.Currency;
+import com.opengamma.util.test.TestGroup;
 import com.opengamma.util.time.Expiry;
 import com.opengamma.util.time.ExpiryAccuracy;
 import com.opengamma.util.time.Tenor;
 
+import au.com.bytecode.opencsv.CSVReader;
+
 /**
  * Unit tests for {@link QuandlRateFutureGenerator}.
  */
-@Test
+@Test(groups = TestGroup.UNIT)
 public class QuandlRateFutureGeneratorTest {
   /** The loader */
   private static final QuandlRateFutureGenerator LOADER = new QuandlRateFutureGenerator();
   /** A convention source */
-  private static final MockConventionSource CONVENTION_SOURCE = new MockConventionSource();
+  private static final InMemoryConventionSource CONVENTION_SOURCE = new InMemoryConventionSource();
 
   static {
     final Convention stirConvention1 = new QuandlStirFutureConvention("CME/ER", QuandlConstants.ofCode("CME/ERZ2014").toBundle(), Currency.EUR,
         Tenor.THREE_MONTHS, Tenor.THREE_MONTHS, "16:00", "America/Chicago", 2500, QuandlConstants.ofCode("FRED/EUR3MTD156N"), 3, DayOfWeek.MONDAY.name(),
-        "CME", "CME");
+        "CME", "CME", ExternalSchemes.countryRegionId(Country.US));
     final Convention stirConvention2 = new QuandlStirFutureConvention("CME/ED", QuandlConstants.ofPrefix("CME/ED").toBundle(), Currency.USD,
         Tenor.THREE_MONTHS, Tenor.THREE_MONTHS, "16:00", "America/Chicago", 2500, QuandlConstants.ofCode("FRED/USD3MTD156N"), 3, DayOfWeek.MONDAY.name(),
-        "CME", "CME");
-    CONVENTION_SOURCE.addConvention(QuandlConstants.ofCode("CME/ERZ2014"), stirConvention1);
-    CONVENTION_SOURCE.addConvention(QuandlConstants.ofPrefix("CME/ED"), stirConvention2);
+        "CME", "CME", ExternalSchemes.countryRegionId(Country.US));
+    CONVENTION_SOURCE.addConvention(stirConvention1);
+    CONVENTION_SOURCE.addConvention(stirConvention2);
     final Convention ffConvention1 = new QuandlFedFundsFutureConvention("CME/FF", QuandlConstants.ofPrefix("CME/FF").toBundle(), "16:00",
         "America/Chicago", 500000, QuandlConstants.ofCode("FRED/FF"), "CME", "CME");
     final Convention ffConvention2 = new QuandlFedFundsFutureConvention("CBOT/FF", QuandlConstants.ofPrefix("CBOT/FF").toBundle(), "16:00",
         "America/Chicago", 500000, QuandlConstants.ofCode("FRED/FF"), "CBOT", "CBOT");
-    CONVENTION_SOURCE.addConvention(QuandlConstants.ofPrefix("CME/FF"), ffConvention1);
-    CONVENTION_SOURCE.addConvention(QuandlConstants.ofPrefix("CBOT/FF"), ffConvention2);
+    CONVENTION_SOURCE.addConvention(ffConvention1);
+    CONVENTION_SOURCE.addConvention(ffConvention2);
   }
 
   /**
@@ -205,10 +206,11 @@ public class QuandlRateFutureGeneratorTest {
    */
   @Test
   public void testBadMonthCode() {
-    final MockConventionSource conventionSource = new MockConventionSource();
+    final InMemoryConventionSource conventionSource = new InMemoryConventionSource();
     final Convention convention = new QuandlStirFutureConvention("CME/ED", QuandlConstants.ofCode("CME/EDC2014").toBundle(), Currency.USD,
-        Tenor.THREE_MONTHS, Tenor.THREE_MONTHS, "16:00", "America/Chicago", 2500, QuandlConstants.ofCode("FRED/USD3MTD156N"), 3, DayOfWeek.MONDAY.name());
-    conventionSource.addConvention(QuandlConstants.ofCode("CME/EDC2014"), convention);
+        Tenor.THREE_MONTHS, Tenor.THREE_MONTHS, "16:00", "America/Chicago", 2500, QuandlConstants.ofCode("FRED/USD3MTD156N"), 3, DayOfWeek.MONDAY.name(),
+        ExternalSchemes.countryRegionId(Country.US));
+    conventionSource.addConvention(convention);
     assertNull(LOADER.createSecurity(conventionSource, "CME/EDC2014"));
   }
 
@@ -218,7 +220,7 @@ public class QuandlRateFutureGeneratorTest {
    */
   @Test
   public void testNoConvention() {
-    assertNull(LOADER.createSecurity(new MockConventionSource(), "CME/EDZ2014"));
+    assertNull(LOADER.createSecurity(new InMemoryConventionSource(), "CME/EDZ2014"));
   }
 
   /**
@@ -228,8 +230,8 @@ public class QuandlRateFutureGeneratorTest {
   public void testUnhandledConventionType() {
     final Convention convention = new DepositConvention("Test", QuandlConstants.ofCode("CME/EDZ2014").toBundle(), DayCounts.ACT_360,
         BusinessDayConventions.FOLLOWING, 0, false, Currency.USD, ExternalSchemes.financialRegionId("US"));
-    final MockConventionSource conventionSource = new MockConventionSource();
-    conventionSource.addConvention(QuandlConstants.ofCode("CME/EDZ2014"), convention);
+    final InMemoryConventionSource conventionSource = new InMemoryConventionSource();
+    conventionSource.addConvention(convention);
     assertNull(LOADER.createSecurity(conventionSource, "CME/EDZ2014"));
   }
 

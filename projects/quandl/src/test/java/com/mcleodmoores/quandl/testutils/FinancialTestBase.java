@@ -1,6 +1,6 @@
 /**
- * Copyright (C) 2015 - present by McLeod Moores Software Limited
- * Modified from APLv2 code Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
+ * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
+ *
  * Please see distribution for license.
  */
 package com.mcleodmoores.quandl.testutils;
@@ -18,79 +18,64 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.annotations.BeforeMethod;
 
+import com.opengamma.core.region.RegionSource;
+import com.opengamma.master.region.RegionMaster;
+import com.opengamma.master.region.impl.InMemoryRegionMaster;
+import com.opengamma.master.region.impl.MasterRegionSource;
+import com.opengamma.master.region.impl.RegionFileReader;
 import com.opengamma.util.fudgemsg.OpenGammaFudgeContext;
 import com.opengamma.util.test.TestGroup;
 
 /**
- * Base class for testing the conversion of OG-Financial objects to and from Fudge messages.
+ * Base class for testing OG-Financial objects to and from Fudge messages.
  */
 public class FinancialTestBase {
-  /** The logger */
-  private static final Logger LOGGER = LoggerFactory.getLogger(FinancialTestBase.class);
-  /** The fudge context */
+
+  private static final Logger s_logger = LoggerFactory.getLogger(FinancialTestBase.class);
+
+  private RegionSource _regionSource;
   private FudgeContext _fudgeContext;
 
-  /**
-   * Creates a fudge context before the tests are run.
-   */
   @BeforeMethod(groups = TestGroup.UNIT)
   public void createFudgeContext() {
     _fudgeContext = OpenGammaFudgeContext.getInstance();
+    final RegionMaster regionMaster = new InMemoryRegionMaster();
+    RegionFileReader.createPopulated(regionMaster);
+    _regionSource = new MasterRegionSource(regionMaster);
   }
 
-  /**
-   * Gets the fudge context.
-   * @return  the fudge context
-   */
   protected FudgeContext getFudgeContext() {
     return _fudgeContext;
   }
 
-  /**
-   * Converts a fudge message to a byte array and then deseria1lizes.
-   * @param message  the message
-   * @return  the cycled message
-   */
+  protected RegionSource getRegionSource() {
+    return _regionSource;
+  }
+
   private FudgeMsg cycleMessage(final FudgeMsg message) {
     final byte[] data = getFudgeContext().toByteArray(message);
-    LOGGER.info("{} bytes", data.length);
+    s_logger.info("{} bytes", data.length);
     return getFudgeContext().deserialize(data).getMessage();
   }
 
-  /**
-   * Cycles an object using the fudge context and tests that the cycled class
-   * is the same type as that expected.
-   * @param <T>  the type of the object
-   * @param clazz  the class of the object
-   * @param object  the object
-   * @return  the cycled object
-   */
   protected <T> T cycleObject(final Class<T> clazz, final T object) {
     final T newObject = cycleGenericObject(clazz, object);
     assertEquals(object.getClass(), newObject.getClass());
     return newObject;
   }
 
-  /**
-   * Cycles a generic object using the fudge context and tests that the cycled class
-   * is not null and that the expected class is assignable from the cycled class.
-   * @param <T>  the type of the object
-   * @param clazz  the class of the object
-   * @param object  the object
-   * @return  the cycled object
-   */
   protected <T> T cycleGenericObject(final Class<T> clazz, final T object) {
-    LOGGER.info("object {}", object);
+    s_logger.info("object {}", object);
     final FudgeSerializer fudgeSerializationContext = new FudgeSerializer(getFudgeContext());
     final FudgeDeserializer fudgeDeserializationContext = new FudgeDeserializer(getFudgeContext());
     final MutableFudgeMsg messageIn = fudgeSerializationContext.newMessage();
     fudgeSerializationContext.addToMessageWithClassHeaders(messageIn, "test", null, object, clazz);
-    LOGGER.info("message {}", messageIn);
+    s_logger.info("message {}", messageIn);
     final FudgeMsg messageOut = cycleMessage(messageIn);
-    LOGGER.info("message {}", messageOut);
+    s_logger.info("message {}", messageOut);
     final T newObject = fudgeDeserializationContext.fieldValueToObject(clazz, messageOut.getByName("test"));
     assertNotNull(newObject);
-    LOGGER.info("object {}", newObject);
+    s_logger.info("object {}", newObject);
     assertTrue(clazz.isAssignableFrom(newObject.getClass()));
     return newObject;
   }

@@ -13,14 +13,16 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import au.com.bytecode.opencsv.CSVReader;
-
 import com.mcleodmoores.quandl.QuandlConstants;
 import com.mcleodmoores.quandl.convention.QuandlStirFutureConvention;
+import com.opengamma.core.id.ExternalSchemes;
 import com.opengamma.id.ExternalId;
 import com.opengamma.id.ExternalIdBundle;
+import com.opengamma.util.i18n.Country;
 import com.opengamma.util.money.Currency;
 import com.opengamma.util.time.Tenor;
+
+import au.com.bytecode.opencsv.CSVReader;
 
 /**
  * Creates {@link QuandlStirFutureConvention}s from a csv file called "stir-future-conventions.csv". These
@@ -70,8 +72,9 @@ public final class QuandlStirFutureConventionsLoader implements ConventionsLoade
             final String dayOfWeek = line[10].toUpperCase();
             final String tradingExchange = line[11];
             final String settlementExchange = line[12];
+            final ExternalId tradingExchangeCalendarId = ExternalSchemes.countryRegionId(Country.of(line[13]));
             conventions.add(new QuandlStirFutureConvention(name, idBundle, currency, futureTenor, underlyingTenor, lastTradingTime,
-                timeZone, unitAmount, underlyingConventionId, nthDay, dayOfWeek, tradingExchange, settlementExchange));
+                timeZone, unitAmount, underlyingConventionId, nthDay, dayOfWeek, tradingExchange, settlementExchange, tradingExchangeCalendarId));
           } catch (final Exception e) {
             LOGGER.error(e.getMessage());
           }

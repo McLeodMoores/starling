@@ -4,14 +4,12 @@
 package com.mcleodmoores.quandl.normalization;
 
 import static org.testng.Assert.assertEquals;
-import net.sf.ehcache.CacheManager;
 
 import org.testng.annotations.Test;
 import org.threeten.bp.LocalDate;
 
 import com.mcleodmoores.quandl.QuandlConstants;
 import com.mcleodmoores.quandl.classification.QuandlCodeClassifier;
-import com.mcleodmoores.quandl.normalization.QuandlNormalizer;
 import com.mcleodmoores.quandl.util.Quandl4OpenGammaRuntimeException;
 import com.opengamma.core.historicaltimeseries.HistoricalTimeSeries;
 import com.opengamma.core.historicaltimeseries.HistoricalTimeSeriesAdjuster;
@@ -20,10 +18,14 @@ import com.opengamma.core.id.ExternalSchemes;
 import com.opengamma.id.ExternalIdBundle;
 import com.opengamma.id.UniqueId;
 import com.opengamma.timeseries.date.localdate.ImmutableLocalDateDoubleTimeSeries;
+import com.opengamma.util.test.TestGroup;
+
+import net.sf.ehcache.CacheManager;
 
 /**
  * Unit tests for {@link QuandlNormalizer}.
  */
+@Test(groups = TestGroup.UNIT)
 public class QuandlNormalizerTest {
   /** The normalizer */
   private static final HistoricalTimeSeriesAdjuster NORMALIZER = new QuandlNormalizer(new QuandlCodeClassifier(CacheManager.newInstance()));

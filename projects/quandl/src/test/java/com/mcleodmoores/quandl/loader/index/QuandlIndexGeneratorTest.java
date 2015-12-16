@@ -15,21 +15,22 @@ import java.util.List;
 
 import org.testng.annotations.Test;
 
-import au.com.bytecode.opencsv.CSVReader;
-
 import com.mcleodmoores.quandl.QuandlConstants;
-import com.mcleodmoores.quandl.loader.index.QuandlIndexGenerator;
 import com.opengamma.financial.security.index.IborIndex;
 import com.opengamma.financial.security.index.OvernightIndex;
 import com.opengamma.financial.security.index.SwapIndex;
 import com.opengamma.id.ExternalId;
 import com.opengamma.id.ExternalIdBundle;
 import com.opengamma.master.security.ManageableSecurity;
+import com.opengamma.util.test.TestGroup;
 import com.opengamma.util.time.Tenor;
+
+import au.com.bytecode.opencsv.CSVReader;
 
 /**
  * Unit tests for {@link QuandlIndexGenerator}.
  */
+@Test(groups = TestGroup.UNIT)
 public class QuandlIndexGeneratorTest {
   /** The loader */
   private static final QuandlIndexGenerator LOADER = new QuandlIndexGenerator();

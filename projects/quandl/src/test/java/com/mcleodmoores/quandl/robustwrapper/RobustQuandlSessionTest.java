@@ -4,14 +4,14 @@ import org.testng.annotations.Test;
 import com.jimmoores.quandl.MultiDataSetRequest;
 import com.jimmoores.quandl.QuandlCodeRequest;
 import com.jimmoores.quandl.QuandlSession;
-import com.mcleodmoores.quandl.robustwrapper.RobustQuandlSession;
+import com.opengamma.util.test.TestGroup;
 
 
-@Test
+@Test(groups = TestGroup.UNIT)
 public class RobustQuandlSessionTest {
   @Test
   public void testMultiGet() {
-    RobustQuandlSession session = new RobustQuandlSession(QuandlSession.create());
+    final RobustQuandlSession session = new RobustQuandlSession(QuandlSession.create());
     session.getDataSets(MultiDataSetRequest.Builder.of(QuandlCodeRequest.allColumns("FRED/DSWP10")).build());
   }
 }

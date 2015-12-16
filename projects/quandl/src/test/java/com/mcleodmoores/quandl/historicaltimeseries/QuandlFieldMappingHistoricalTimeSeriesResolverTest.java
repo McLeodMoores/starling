@@ -17,8 +17,6 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 
-import net.sf.ehcache.CacheManager;
-
 import org.testng.annotations.Test;
 
 import com.google.common.collect.Iterables;
@@ -26,13 +24,15 @@ import com.mcleodmoores.quandl.QuandlConstants;
 import com.mcleodmoores.quandl.classification.QuandlCodeClassifier;
 import com.mcleodmoores.quandl.classification.QuandlDataUtils;
 import com.mcleodmoores.quandl.classification.QuandlHistoricalTimeSeriesFieldAdjustmentMap;
-import com.mcleodmoores.quandl.historicaltimeseries.QuandlFieldMappingHistoricalTimeSeriesResolver;
 import com.mcleodmoores.quandl.normalization.QuandlNormalizer;
-import com.mcleodmoores.quandl.testutils.MockConfigSource;
 import com.mcleodmoores.quandl.util.Quandl4OpenGammaRuntimeException;
+import com.opengamma.core.config.impl.ConfigItem;
 import com.opengamma.core.value.MarketDataRequirementNames;
 import com.opengamma.id.ExternalIdBundle;
 import com.opengamma.id.ExternalIdBundleWithDates;
+import com.opengamma.master.config.ConfigDocument;
+import com.opengamma.master.config.impl.InMemoryConfigMaster;
+import com.opengamma.master.config.impl.MasterConfigSource;
 import com.opengamma.master.historicaltimeseries.HistoricalTimeSeriesInfoDocument;
 import com.opengamma.master.historicaltimeseries.HistoricalTimeSeriesMaster;
 import com.opengamma.master.historicaltimeseries.HistoricalTimeSeriesResolutionResult;
@@ -44,10 +44,14 @@ import com.opengamma.master.historicaltimeseries.impl.HistoricalTimeSeriesRating
 import com.opengamma.master.historicaltimeseries.impl.HistoricalTimeSeriesRatingFieldNames;
 import com.opengamma.master.historicaltimeseries.impl.HistoricalTimeSeriesRatingRule;
 import com.opengamma.master.historicaltimeseries.impl.InMemoryHistoricalTimeSeriesMaster;
+import com.opengamma.util.test.TestGroup;
+
+import net.sf.ehcache.CacheManager;
 
 /**
  * Unit tests for {@link QuandlFieldMappingHistoricalTimeSeriesResolver}.
  */
+@Test(groups = TestGroup.UNIT)
 public class QuandlFieldMappingHistoricalTimeSeriesResolverTest {
   /** A dummy data source name */
   private static final String DUMMY_DATA_SOURCE_NAME = "Dummy";
@@ -74,8 +78,10 @@ public class QuandlFieldMappingHistoricalTimeSeriesResolverTest {
   private static final QuandlFieldMappingHistoricalTimeSeriesResolver RESOLVER;
   /** A historical time series master */
   private static final HistoricalTimeSeriesMaster HTS_MASTER = new InMemoryHistoricalTimeSeriesMaster();
+  /** A config master */
+  private static final InMemoryConfigMaster CONFIG_MASTER = new InMemoryConfigMaster();
   /** A config source */
-  private static final MockConfigSource CONFIG_SOURCE = new MockConfigSource();
+  private static final MasterConfigSource CONFIG_SOURCE = new MasterConfigSource(CONFIG_MASTER);
   /** A time series selector */
   private static final HistoricalTimeSeriesSelector HTS_SELECTOR = new DefaultHistoricalTimeSeriesSelector(CONFIG_SOURCE);
 
@@ -160,7 +166,7 @@ public class QuandlFieldMappingHistoricalTimeSeriesResolverTest {
     rules.add(HistoricalTimeSeriesRatingRule.of(HistoricalTimeSeriesRatingFieldNames.DATA_PROVIDER_NAME, DUMMY_DATA_SOURCE_NAME, 0));
     rules.add(HistoricalTimeSeriesRatingRule.of(HistoricalTimeSeriesRatingFieldNames.DATA_PROVIDER_NAME, QUANDL_DATA_SOURCE_NAME, 1));
     final HistoricalTimeSeriesRating rating = HistoricalTimeSeriesRating.of(rules);
-    CONFIG_SOURCE.put(rating, HistoricalTimeSeriesRatingFieldNames.DEFAULT_CONFIG_NAME, HistoricalTimeSeriesRating.class);
+    CONFIG_MASTER.add(new ConfigDocument(ConfigItem.of(rating, HistoricalTimeSeriesRatingFieldNames.DEFAULT_CONFIG_NAME, HistoricalTimeSeriesRating.class)));
   }
 
   /**

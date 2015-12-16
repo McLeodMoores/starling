@@ -7,16 +7,18 @@ import org.testng.annotations.Test;
 import org.threeten.bp.DayOfWeek;
 
 import com.mcleodmoores.quandl.QuandlConstants;
-import com.mcleodmoores.quandl.convention.QuandlStirFutureConvention;
+import com.opengamma.core.id.ExternalSchemes;
 import com.opengamma.id.ExternalId;
 import com.opengamma.id.ExternalIdBundle;
+import com.opengamma.util.i18n.Country;
 import com.opengamma.util.money.Currency;
+import com.opengamma.util.test.TestGroup;
 import com.opengamma.util.time.Tenor;
 
 /**
  * Unit tests for {@link QuandlStirFutureConvention}.
  */
-@Test
+@Test(groups = TestGroup.UNIT)
 public class QuandlStirFutureConventionTest extends QuandlFutureConventionTestBase {
   /** The name of the convention */
   private static final String NAME = "Name";
@@ -95,42 +97,42 @@ public class QuandlStirFutureConventionTest extends QuandlFutureConventionTestBa
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testConstructorNullName1() {
     new QuandlStirFutureConvention(null, IDS, CURRENCY, FUTURE_TENOR, UNDERLYING_TENOR, TRADE_TIME, TIME_ZONE, UNIT_AMOUNT, UNDERLYING_CONVENTION,
-        NTH_DAY, DAY_OF_WEEK);
+        NTH_DAY, DAY_OF_WEEK, ExternalSchemes.countryRegionId(Country.US));
   }
 
   @Override
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testConstructorNullName2() {
     new QuandlStirFutureConvention(null, IDS, CURRENCY, FUTURE_TENOR, UNDERLYING_TENOR, TRADE_TIME, TIME_ZONE, UNIT_AMOUNT, UNDERLYING_CONVENTION,
-        NTH_DAY, DAY_OF_WEEK, TRADING_EXCHANGE, SETTLEMENT_EXCHANGE);
+        NTH_DAY, DAY_OF_WEEK, TRADING_EXCHANGE, SETTLEMENT_EXCHANGE, ExternalSchemes.countryRegionId(Country.US));
   }
 
   @Override
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testConstructorNullExternalIdBundle1() {
     new QuandlStirFutureConvention(NAME, null, CURRENCY, FUTURE_TENOR, UNDERLYING_TENOR, TRADE_TIME, TIME_ZONE, UNIT_AMOUNT, UNDERLYING_CONVENTION,
-        NTH_DAY, DAY_OF_WEEK);
+        NTH_DAY, DAY_OF_WEEK, ExternalSchemes.countryRegionId(Country.US));
   }
 
   @Override
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testConstructorNullExternalIdBundle2() {
     new QuandlStirFutureConvention(NAME, null, CURRENCY, FUTURE_TENOR, UNDERLYING_TENOR, TRADE_TIME, TIME_ZONE, UNIT_AMOUNT, UNDERLYING_CONVENTION,
-        NTH_DAY, DAY_OF_WEEK, TRADING_EXCHANGE, SETTLEMENT_EXCHANGE);
+        NTH_DAY, DAY_OF_WEEK, TRADING_EXCHANGE, SETTLEMENT_EXCHANGE, ExternalSchemes.countryRegionId(Country.US));
   }
 
   @Override
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testConstructorNullTradeTime1() {
     new QuandlStirFutureConvention(NAME, IDS, CURRENCY, FUTURE_TENOR, UNDERLYING_TENOR, null, TIME_ZONE, UNIT_AMOUNT, UNDERLYING_CONVENTION,
-        NTH_DAY, DAY_OF_WEEK);
+        NTH_DAY, DAY_OF_WEEK, ExternalSchemes.countryRegionId(Country.US));
   }
 
   @Override
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testConstructorNullTradeTime2() {
     new QuandlStirFutureConvention(NAME, IDS, CURRENCY, FUTURE_TENOR, UNDERLYING_TENOR, null, TIME_ZONE, UNIT_AMOUNT, UNDERLYING_CONVENTION,
-        NTH_DAY, DAY_OF_WEEK, TRADING_EXCHANGE, SETTLEMENT_EXCHANGE);
+        NTH_DAY, DAY_OF_WEEK, TRADING_EXCHANGE, SETTLEMENT_EXCHANGE, ExternalSchemes.countryRegionId(Country.US));
   }
 
   /**
@@ -148,7 +150,7 @@ public class QuandlStirFutureConventionTest extends QuandlFutureConventionTestBa
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testConstructorNullCurrency1() {
     new QuandlStirFutureConvention(NAME, IDS, null, FUTURE_TENOR, UNDERLYING_TENOR, TRADE_TIME, TIME_ZONE, UNIT_AMOUNT, UNDERLYING_CONVENTION,
-        NTH_DAY, DAY_OF_WEEK);
+        NTH_DAY, DAY_OF_WEEK, ExternalSchemes.countryRegionId(Country.US));
   }
 
   /**
@@ -158,7 +160,7 @@ public class QuandlStirFutureConventionTest extends QuandlFutureConventionTestBa
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testConstructorNullCurrency2() {
     new QuandlStirFutureConvention(NAME, IDS, null, FUTURE_TENOR, UNDERLYING_TENOR, TRADE_TIME, TIME_ZONE, UNIT_AMOUNT, UNDERLYING_CONVENTION,
-        NTH_DAY, DAY_OF_WEEK, TRADING_EXCHANGE, SETTLEMENT_EXCHANGE);
+        NTH_DAY, DAY_OF_WEEK, TRADING_EXCHANGE, SETTLEMENT_EXCHANGE, ExternalSchemes.countryRegionId(Country.US));
   }
 
   /**
@@ -176,7 +178,7 @@ public class QuandlStirFutureConventionTest extends QuandlFutureConventionTestBa
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testConstructorNullFutureTenor1() {
     new QuandlStirFutureConvention(NAME, IDS, CURRENCY, null, UNDERLYING_TENOR, TRADE_TIME, TIME_ZONE, UNIT_AMOUNT, UNDERLYING_CONVENTION,
-        NTH_DAY, DAY_OF_WEEK);
+        NTH_DAY, DAY_OF_WEEK, ExternalSchemes.countryRegionId(Country.US));
   }
 
   /**
@@ -186,7 +188,7 @@ public class QuandlStirFutureConventionTest extends QuandlFutureConventionTestBa
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testConstructorNullFutureTenor2() {
     new QuandlStirFutureConvention(NAME, IDS, CURRENCY, null, UNDERLYING_TENOR, TRADE_TIME, TIME_ZONE, UNIT_AMOUNT, UNDERLYING_CONVENTION,
-        NTH_DAY, DAY_OF_WEEK, TRADING_EXCHANGE, SETTLEMENT_EXCHANGE);
+        NTH_DAY, DAY_OF_WEEK, TRADING_EXCHANGE, SETTLEMENT_EXCHANGE, ExternalSchemes.countryRegionId(Country.US));
   }
 
   /**
@@ -204,7 +206,7 @@ public class QuandlStirFutureConventionTest extends QuandlFutureConventionTestBa
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testConstructorNullUnderlyingTenor1() {
     new QuandlStirFutureConvention(NAME, IDS, CURRENCY, FUTURE_TENOR, null, TRADE_TIME, TIME_ZONE, UNIT_AMOUNT, UNDERLYING_CONVENTION,
-        NTH_DAY, DAY_OF_WEEK);
+        NTH_DAY, DAY_OF_WEEK, ExternalSchemes.countryRegionId(Country.US));
   }
 
   /**
@@ -214,7 +216,7 @@ public class QuandlStirFutureConventionTest extends QuandlFutureConventionTestBa
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testConstructorNullUnderlyingTenor2() {
     new QuandlStirFutureConvention(NAME, IDS, CURRENCY, FUTURE_TENOR, null, TRADE_TIME, TIME_ZONE, UNIT_AMOUNT, UNDERLYING_CONVENTION,
-        NTH_DAY, DAY_OF_WEEK, TRADING_EXCHANGE, SETTLEMENT_EXCHANGE);
+        NTH_DAY, DAY_OF_WEEK, TRADING_EXCHANGE, SETTLEMENT_EXCHANGE, ExternalSchemes.countryRegionId(Country.US));
   }
 
   /**
@@ -232,7 +234,7 @@ public class QuandlStirFutureConventionTest extends QuandlFutureConventionTestBa
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testConstructorNullDayOfWeek1() {
     new QuandlStirFutureConvention(NAME, IDS, CURRENCY, FUTURE_TENOR, UNDERLYING_TENOR, TRADE_TIME, TIME_ZONE, UNIT_AMOUNT, UNDERLYING_CONVENTION,
-        NTH_DAY, null);
+        NTH_DAY, null, ExternalSchemes.countryRegionId(Country.US));
   }
 
   /**
@@ -242,6 +244,34 @@ public class QuandlStirFutureConventionTest extends QuandlFutureConventionTestBa
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testConstructorNullDayOfWeek2() {
     new QuandlStirFutureConvention(NAME, IDS, CURRENCY, FUTURE_TENOR, UNDERLYING_TENOR, TRADE_TIME, TIME_ZONE, UNIT_AMOUNT, UNDERLYING_CONVENTION,
-        NTH_DAY, null, TRADING_EXCHANGE, SETTLEMENT_EXCHANGE);
+        NTH_DAY, null, TRADING_EXCHANGE, SETTLEMENT_EXCHANGE, ExternalSchemes.countryRegionId(Country.US));
+  }
+
+  /**
+   * Tests the behaviour when a null trading exchange calendar id is supplied to the setter.
+   */
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void testMethodNullTradingExchangeCalendarId() {
+    getEmptyInstance().setTradingExchangeCalendarId(null);
+  }
+
+  /**
+   * Tests the behaviour when a null trading exchange calendar id is supplied to the constructor that does not
+   * take trading and settlement exchange names.
+   */
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void testConstructorNullTradingExchangeCalendarId1() {
+    new QuandlStirFutureConvention(NAME, IDS, CURRENCY, FUTURE_TENOR, UNDERLYING_TENOR, TRADE_TIME, TIME_ZONE, UNIT_AMOUNT, UNDERLYING_CONVENTION,
+        NTH_DAY, DayOfWeek.WEDNESDAY.name(), null);
+  }
+
+  /**
+   * Tests the behaviour when a null day of week is supplied to the constructor that takes trading
+   * and settlement exchange names.
+   */
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void testConstructorNullTradingExchangeCalendarId2() {
+    new QuandlStirFutureConvention(NAME, IDS, CURRENCY, FUTURE_TENOR, UNDERLYING_TENOR, TRADE_TIME, TIME_ZONE, UNIT_AMOUNT, UNDERLYING_CONVENTION,
+        NTH_DAY, DayOfWeek.WEDNESDAY.name(), TRADING_EXCHANGE, SETTLEMENT_EXCHANGE, null);
   }
 }

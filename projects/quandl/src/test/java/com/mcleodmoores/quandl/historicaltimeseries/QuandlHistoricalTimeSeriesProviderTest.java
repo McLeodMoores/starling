@@ -9,7 +9,6 @@ import org.testng.annotations.Test;
 import org.threeten.bp.LocalDate;
 
 import com.mcleodmoores.quandl.QuandlConstants;
-import com.mcleodmoores.quandl.historicaltimeseries.QuandlHistoricalTimeSeriesProvider;
 import com.opengamma.id.ExternalIdBundle;
 import com.opengamma.provider.historicaltimeseries.HistoricalTimeSeriesProviderGetRequest;
 import com.opengamma.provider.historicaltimeseries.HistoricalTimeSeriesProviderGetResult;
@@ -19,6 +18,7 @@ import com.opengamma.util.time.LocalDateRange;
 /**
  * Unit tests for {@link QuandlHistoricalTimeSeriesProvider}.
  */
+@Test//(groups = TestGroup.UNIT)
 public class QuandlHistoricalTimeSeriesProviderTest {
   /** The data source */
   private static final String DATA_SOURCE = "DEFAULT";
