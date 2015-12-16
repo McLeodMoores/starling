@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<launchConfiguration type="org.testng.eclipse.launchconfig">
+<listAttribute key="com.mountainminds.eclemma.core.SCOPE_IDS">
+<listEntry value="=financial-types/src\/main\/java"/>
+<listEntry value="=provider-rest/src\/main\/java"/>
+<listEntry value="=security/src\/main\/java"/>
+<listEntry value="=component-rest/src\/main\/java"/>
+<listEntry value="=financial-rest/src\/main\/java"/>
+<listEntry value="=core/src\/main\/java"/>
+<listEntry value="=engine/src\/main\/java"/>
+<listEntry value="=live-data/src\/main\/java"/>
+<listEntry value="=master/src\/main\/java"/>
+<listEntry value="=financial/src\/main\/java"/>
+<listEntry value="=time-series/src\/main\/java"/>
+<listEntry value="=engine-db/src\/main\/java"/>
+<listEntry value="=bloomberg/src\/main\/java"/>
+<listEntry value="=engine-rest-client/src\/main\/java"/>
+<listEntry value="=provider-rest-client/src\/main\/java"/>
+<listEntry value="=provider/src\/main\/java"/>
+<listEntry value="=util-rest/src\/main\/java"/>
+<listEntry value="=web/src\/main\/java"/>
+<listEntry value="=analytics/src\/main\/java"/>
+<listEntry value="=core-rest-client/src\/main\/java"/>
+<listEntry value="=util/src\/main\/java"/>
+<listEntry value="=financial-rest-client/src\/main\/java"/>
+<listEntry value="=core-rest/src\/main\/java"/>
+<listEntry value="=master-db/src\/main\/java"/>
+<listEntry value="=master-rest/src\/main\/java"/>
+<listEntry value="=master-rest-client/src\/main\/java"/>
+<listEntry value="=util-db/src\/main\/java"/>
+<listEntry value="=engine-rest/src\/main\/java"/>
+<listEntry value="=util-rest-client/src\/main\/java"/>
+<listEntry value="=component/src\/main\/java"/>
+</listAttribute>
+<stringAttribute key="org.eclipse.jdt.launching.CLASSPATH_PROVIDER" value="org.eclipse.m2e.launchconfig.classpathProvider"/>
+<stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="org.testng.remote.RemoteTestNG"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="bloomberg"/>
+<mapAttribute key="org.testng.eclipse.ALL_CLASS_METHODS"/>
+<listAttribute key="org.testng.eclipse.CLASS_TEST_LIST"/>
+<listAttribute key="org.testng.eclipse.GROUP_LIST"/>
+<listAttribute key="org.testng.eclipse.GROUP_LIST_CLASS"/>
+<stringAttribute key="org.testng.eclipse.LOG_LEVEL" value="2"/>
+<listAttribute key="org.testng.eclipse.METHOD_TEST_LIST"/>
+<listAttribute key="org.testng.eclipse.PACKAGE_TEST_LIST">
+<listEntry value="com.opengamma.bbg"/>
+<listEntry value="com.opengamma.bbg.bsym"/>
+<listEntry value="com.opengamma.bbg.livedata"/>
+<listEntry value="com.opengamma.bbg.loader"/>
+<listEntry value="com.opengamma.bbg.replay"/>
+<listEntry value="com.opengamma.bbg.server"/>
+<listEntry value="com.opengamma.util"/>
+</listAttribute>
+<mapAttribute key="org.testng.eclipse.PARAMETERS"/>
+<intAttribute key="org.testng.eclipse.TYPE" value="5"/>
+</launchConfiguration>
