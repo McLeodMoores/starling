@@ -21,7 +21,7 @@ import com.opengamma.util.ResourceUtils;
 import com.opengamma.util.db.tool.DbTool;
 
 /**
- * Tool class that creates a database based on the given toolcontext property file and 
+ * Tool class that creates a database based on the given toolcontext property file and
  * initialize the database with data from a given server URL.
  */
 @Scriptable
@@ -44,17 +44,17 @@ public class ServerDatabaseCreator {
   private static final String KEY_USERFINANCIAL_PASSWORD = "db.userfinancial.password";
   /** Catalog. */
   private static final String CATALOG = "og-financial";
-    
+
   private final String _configFile;
-  
+
   private final String _serverUrl;
-  
+
   public ServerDatabaseCreator(String configFile, String serverUrl) {
     configFile = StringUtils.trimToNull(configFile);
     serverUrl = StringUtils.trimToNull(serverUrl);
     ArgumentChecker.notNull(configFile, "configFile");
     ArgumentChecker.notNull(serverUrl, "serverUrl");
-    
+
     _configFile = configFile;
     _serverUrl = serverUrl;
   }
@@ -65,18 +65,18 @@ public class ServerDatabaseCreator {
    * <p>
    * If the command line is empty, the "development" configuration file is started.
    * This file is intended for use with an IDE and a checked out source code tree.
-   * It relies on the OG-Web directory being relative to Examples-Simulated in the file
+   * It relies on the <code>web</code> directory being relative to <code>integration</code> in the file
    * system as per a standard checkout of OG-Platform.
    *
    * @param args the arguments, unused
    */
-  public static void main(String[] args) { // CSIGNORE
+  public static void main(final String[] args) { // CSIGNORE
     try {
-      CommandLineOption option = new CommandLineOption(args, ServerDatabaseCreator.class);
-      String configFile = option.getConfigFile();
-      String serverUrl = option.getServerUrl();
+      final CommandLineOption option = new CommandLineOption(args, ServerDatabaseCreator.class);
+      final String configFile = option.getConfigFile();
+      final String serverUrl = option.getServerUrl();
       if (configFile != null && serverUrl != null) {
-        ServerDatabaseCreator databaseCreator = new ServerDatabaseCreator(configFile, serverUrl);
+        final ServerDatabaseCreator databaseCreator = new ServerDatabaseCreator(configFile, serverUrl);
         databaseCreator.run();
       }
       System.exit(0);
@@ -89,18 +89,18 @@ public class ServerDatabaseCreator {
 
   //-------------------------------------------------------------------------
   public void run() throws Exception {
-    Resource res = ResourceUtils.createResource(_configFile);
-    Properties props = new Properties();
+    final Resource res = ResourceUtils.createResource(_configFile);
+    final Properties props = new Properties();
     try (InputStream in = res.getInputStream()) {
       if (in == null) {
         throw new FileNotFoundException(_configFile);
       }
       props.load(in);
     }
-    
+
     // create main database
     s_logger.info("Creating main database...");
-    DbTool dbTool = new DbTool();
+    final DbTool dbTool = new DbTool();
     dbTool.setJdbcUrl(Objects.requireNonNull(props.getProperty(KEY_SHARED_URL)));
     dbTool.setUser(props.getProperty(KEY_SHARED_USER_NAME, ""));
     dbTool.setPassword(props.getProperty(KEY_SHARED_PASSWORD, ""));
@@ -109,10 +109,10 @@ public class ServerDatabaseCreator {
     dbTool.setDrop(true);
     dbTool.setCreateTables(true);
     dbTool.execute();
-    
+
     // create user database
     s_logger.info("Creating user database...");
-    DbTool dbToolUser = new DbTool();
+    final DbTool dbToolUser = new DbTool();
     dbToolUser.setJdbcUrl(Objects.requireNonNull(props.getProperty(KEY_USERFINANCIAL_URL)));
     dbToolUser.setUser(props.getProperty(KEY_USERFINANCIAL_USER_NAME, ""));
     dbToolUser.setPassword(props.getProperty(KEY_USERFINANCIAL_PASSWORD, ""));
@@ -121,12 +121,12 @@ public class ServerDatabaseCreator {
     dbToolUser.setDrop(true);
     dbToolUser.setCreateTables(true);
     dbToolUser.execute();
-    
+
     // populate the database
     s_logger.info("Populating main database...");
-    ServerDatabasePopulator populator = new ServerDatabasePopulator(_configFile, new DatabasePopulatorTool(_serverUrl));
+    final ServerDatabasePopulator populator = new ServerDatabasePopulator(_configFile, new DatabasePopulatorTool(_serverUrl));
     populator.run();
     s_logger.info("Successfully created server databases");
   }
-  
+
 }

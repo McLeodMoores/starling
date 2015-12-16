@@ -31,8 +31,8 @@ import com.opengamma.provider.historicaltimeseries.HistoricalTimeSeriesProvider;
 import com.opengamma.provider.security.SecurityProvider;
 
 /**
- * Factory for registering REST components from the OG-Integration project that can't be configured with the other
- * REST resources because they're not available to the OG-Web project component factories.
+ * Factory for registering REST components from the integration project that can't be configured with the other
+ * REST resources because they're not available to the web project component factories.
  */
 @BeanDefinition
 public class IntegrationWebComponentFactory extends AbstractComponentFactory {
@@ -75,7 +75,7 @@ public class IntegrationWebComponentFactory extends AbstractComponentFactory {
 
   //-------------------------------------------------------------------------
   @Override
-  public void init(ComponentRepository repo, LinkedHashMap<String, String> configuration) throws Exception {
+  public void init(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) throws Exception {
     repo.getRestComponents().publishResource(new PortfolioLoaderResource(
         getPortfolioMaster(),
         getPositionMaster(),

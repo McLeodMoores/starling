@@ -125,11 +125,6 @@
       <artifactId>master-db-rest</artifactId>
       <version>${project.version}</version>
     </dependency>
-    <!-- dependency>
-      <groupId>com.mcleodmoores.starling.platform</groupId>
-      <artifactId>integration</artifactId>
-      <version>${project.version}</version>
-    </dependency-->
     <dependency>
       <groupId>com.mcleodmoores.starling.platform</groupId>
       <artifactId>bloomberg</artifactId>
@@ -151,11 +146,11 @@
       <groupId>org.freemarker</groupId>
       <artifactId>freemarker</artifactId>
     </dependency>
-<!--    <dependency>
+    <!-- dependency>
       <groupId>org.postgresql</groupId>
       <artifactId>postgresql</artifactId>
       <version>9.3-1100-jdbc41</version>
-    </dependency> -->
+    </dependency-->
   </dependencies>
 
   <!-- ==================================================================== -->

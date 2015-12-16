@@ -14,7 +14,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.Resource;
 
-import com.opengamma.integration.tool.IntegrationToolContext;
 import com.opengamma.scripts.Scriptable;
 import com.opengamma.util.ResourceUtils;
 import com.opengamma.util.db.tool.DbTool;
@@ -49,7 +48,7 @@ public class ExampleEmptyDatabaseCreator {
    * <p>
    * If the command line is empty, the "development" configuration file is started.
    * This file is intended for use with an IDE and a checked out source code tree.
-   * It relies on the OG-Web directory being relative to Examples-Simulated in the file
+   * It relies on the <code>web</code> directory being relative to <code>examples-bloomberg</code> in the file
    * system as per a standard checkout of OG-Platform.
    *
    * @param args the arguments, unused
@@ -75,19 +74,19 @@ public class ExampleEmptyDatabaseCreator {
   }
 
   //-------------------------------------------------------------------------
-  public void run(String configFile) throws Exception {
-    Resource res = ResourceUtils.createResource(configFile);
-    Properties props = new Properties();
+  public void run(final String configFile) throws Exception {
+    final Resource res = ResourceUtils.createResource(configFile);
+    final Properties props = new Properties();
     try (InputStream in = res.getInputStream()) {
       if (in == null) {
         throw new FileNotFoundException(configFile);
       }
       props.load(in);
     }
-    
+
     // create main database
     s_logger.info("Creating main database...");
-    DbTool dbTool = new DbTool();
+    final DbTool dbTool = new DbTool();
     dbTool.setJdbcUrl(Objects.requireNonNull(props.getProperty(KEY_SHARED_URL)));
     dbTool.setUser(props.getProperty(KEY_SHARED_USER_NAME, ""));
     dbTool.setPassword(props.getProperty(KEY_SHARED_PASSWORD, ""));
@@ -96,10 +95,10 @@ public class ExampleEmptyDatabaseCreator {
     dbTool.setDrop(true);
     dbTool.setCreateTables(true);
     dbTool.execute();
-    
+
     // create user database
     s_logger.info("Creating user database...");
-    DbTool dbToolUser = new DbTool();
+    final DbTool dbToolUser = new DbTool();
     dbToolUser.setJdbcUrl(Objects.requireNonNull(props.getProperty(KEY_USERFINANCIAL_URL)));
     dbToolUser.setUser(props.getProperty(KEY_USERFINANCIAL_USER_NAME, ""));
     dbToolUser.setPassword(props.getProperty(KEY_USERFINANCIAL_PASSWORD, ""));

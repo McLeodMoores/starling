@@ -46,12 +46,12 @@ public class ExampleDatabaseChecker {
   /**
    * Main method to run the tool. No arguments are needed.
    * <p/>
-   * If the command line is empty, the "development" configuration file is started. This file is intended for use with an IDE and a checked out source code tree. It relies on the OG-Web directory
-   * being relative to Examples-Simulated in the file system as per a standard checkout of OG-Platform.
-   * 
+   * If the command line is empty, the "development" configuration file is started. This file is intended for use with an IDE and a checked out source code tree.
+   * It relies on the <code>web</code> directory being relative to <code>examples-bloomberg</code> in the file system as per a standard checkout of Starling.
+   *
    * @param args the arguments, unused
    */
-  public static void main(String[] args) throws Exception {
+  public static void main(final String[] args) throws Exception {
     try {
       ExampleDatabaseChecker.run(args);
       System.exit(0);
@@ -72,9 +72,9 @@ public class ExampleDatabaseChecker {
     return ExampleDatabaseChecker.run(args[0]);
   }
 
-  public static List<String> run(String configFile) throws Exception {
-    Resource res = ResourceUtils.createResource(configFile);
-    Properties props = new Properties();
+  public static List<String> run(final String configFile) throws Exception {
+    final Resource res = ResourceUtils.createResource(configFile);
+    final Properties props = new Properties();
     try (InputStream in = res.getInputStream()) {
       if (in == null) {
         throw new FileNotFoundException(configFile);
@@ -83,12 +83,12 @@ public class ExampleDatabaseChecker {
     }
 
     s_logger.info("Checking main database...");
-    DbTool dbTool = new DbTool();
+    final DbTool dbTool = new DbTool();
     dbTool.setJdbcUrl(Objects.requireNonNull(props.getProperty(KEY_SHARED_URL)));
     dbTool.setUser(props.getProperty(KEY_SHARED_USER_NAME, ""));
     dbTool.setPassword(props.getProperty(KEY_SHARED_PASSWORD, ""));
     dbTool.setCatalog(CATALOG); // ignored, as it is parsed from the url
-    List<String> tables = dbTool.listTables();
+    final List<String> tables = dbTool.listTables();
     s_logger.debug("url: " + Objects.requireNonNull(props.getProperty(KEY_SHARED_URL)));
     s_logger.info(tables.isEmpty() ? "Main database not found" : "Found existing database");
     return tables;

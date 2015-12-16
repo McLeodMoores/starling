@@ -116,7 +116,7 @@ public class ExampleDatabasePopulator extends AbstractTool<ToolContext> {
   /**
    * The name of a US Government bond portfolio.
    */
-  public static final String US_GOVERNMENT_BOND_PORTFOLIO_NAME = "Government Bonds";
+  public static final String US_GOVERNMENT_BOND_PORTFOLIO_NAME = "US Government Bonds";
   /**
    * The name of an index portfolio.
    */
@@ -178,6 +178,7 @@ public class ExampleDatabasePopulator extends AbstractTool<ToolContext> {
     loadFXVolatilitySwapPortfolio();
     loadOisPortfolio();
     loadMultiCountryBondPortfolio();
+    loadUsBondPortfolio();
     loadFxImpliedCurveCalculationConfigurations();
     loadViews();
     loadFunctionConfigurations();
@@ -537,6 +538,19 @@ public class ExampleDatabasePopulator extends AbstractTool<ToolContext> {
     final Log log = new Log("Creating example bond portfolio");
     try {
       portfolioGeneratorTool().run(getToolContext(), BONDS_PORTFOLIO_NAME, new ExampleMultiCountryPortfolioGeneratorTool(), true, null);
+      log.done();
+    } catch (final RuntimeException t) {
+      log.fail(t);
+    }
+  }
+
+  /**
+   * Adds a portfolio containing US government bonds.
+   */
+  private void loadUsBondPortfolio() {
+    final Log log = new Log("Creating example US bond portfolio");
+    try {
+      portfolioGeneratorTool().run(getToolContext(), US_GOVERNMENT_BOND_PORTFOLIO_NAME, new ExampleMultiCountryPortfolioGeneratorTool(), true, null);
       log.done();
     } catch (final RuntimeException t) {
       log.fail(t);

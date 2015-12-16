@@ -13,7 +13,7 @@ import com.opengamma.util.ShutdownUtils;
  * starting the "development" configuration file.
  * <p>
  * This file is intended for use with an IDE and a checked out source code tree.
- * It relies on the OG-Web directory being relative to Examples-Bloomberg in the file
+ * It relies on the <code>web</code> directory being relative to <code>examples-bloomberg</code> in the file
  * system as per a standard checkout of OG-Platform.
  * The server will not start correctly if you have obtained a bundle in distribution format.
  * <p>
@@ -29,9 +29,9 @@ public class ExamplesBloombergComponentServerDev extends OpenGammaComponentServe
    * <p>
    * If the command line is empty, the "development" configuration file is started.
    * This file is intended for use with an IDE and a checked out source code tree.
-   * It relies on the OG-Web directory being relative to Examples-Bloomberg in the file
+   * It relies on the <code>web</code> directory being relative to <code>examples-bloomberg</code> in the file
    * system as per a standard checkout of OG-Platform.
-   * 
+   *
    * @param args  the arguments
    */
   public static void main(String[] args) { // CSIGNORE

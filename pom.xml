@@ -19,7 +19,7 @@
   <description>Starling Platform project</description>
 
   <!-- ==================================================================== -->
-  <issueManagement>
+  <!-- issueManagement>
     <system>Jira</system>
     <url>http://jira.opengamma.com/browse/PLAT</url>
   </issueManagement>
@@ -29,15 +29,14 @@
       <name>OpenGamma forum</name>
       <archive>http://forums.opengamma.com/forum/discussions</archive>
     </mailingList>
-  </mailingLists>
+  </mailingLists-->
   <scm>
-    <connection>scm:git:https://github.com/OpenGamma/OG-Platform.git</connection>
-    <developerConnection>scm:git:https://github.com/OpenGamma/OG-Platform.git</developerConnection>
-    <url>https://github.com/OpenGamma/OG-Platform</url>
+    <connection>scm:git:https://github.com/McLeodMoores/starling.git</connection>
+    <developerConnection>scm:git:https://github.com/McLeodMoores/starling.git</developerConnection>
+    <url>https://github.com/McLeodMoores/starling</url>
   </scm>
 
   <!-- ==================================================================== -->
-  <!-- OpenGamma public repositories -->
   <!-- duplicated from corporate-pom to ensure this pom builds from scratch -->
   <repositories>
     <repository>
@@ -1051,16 +1050,6 @@
       <name>McLeod Moores private maven snapshot repository</name>
       <url>http://maven.mcleodmoores.com:8081/content/repositories/private-snapshot</url>
     </snapshotRepository>
-    <!--repository>
-      <id>og-public-release</id>
-      <name>OpenGamma public maven repository</name>
-      <url>${og-public-release.url}</url>
-    </repository>
-    <snapshotRepository>
-      <id>og-public-snapshot</id>
-      <name>OpenGamma public snapshot maven repository</name>
-      <url>${og-public-snapshot.url}</url>
-    </snapshotRepository-->
     <site>
       <id>og-public-site</id>
       <name>OpenGamma public site</name>
