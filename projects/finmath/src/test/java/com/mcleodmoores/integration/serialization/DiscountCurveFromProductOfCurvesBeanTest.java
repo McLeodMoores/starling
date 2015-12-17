@@ -6,19 +6,21 @@ package com.mcleodmoores.integration.serialization;
 import static com.mcleodmoores.integration.testutils.FinmathSerializationTestUtils.assertCurveEquals;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNull;
-import net.finmath.marketdata.model.curves.DiscountCurve;
-import net.finmath.marketdata.model.curves.DiscountCurveInterface;
 
 import org.testng.annotations.Test;
 import org.threeten.bp.LocalDate;
 
 import com.google.common.collect.Sets;
 import com.mcleodmoores.integration.adapter.FinmathDateUtils;
+import com.opengamma.util.test.TestGroup;
+
+import net.finmath.marketdata.model.curves.DiscountCurve;
+import net.finmath.marketdata.model.curves.DiscountCurveInterface;
 
 /**
  * Unit tests for {@link DiscountCurveFromProductOfCurvesBean}.
  */
-@Test
+@Test(groups = TestGroup.UNIT)
 public class DiscountCurveFromProductOfCurvesBeanTest extends CurveBeanTest {
   /** Times */
   private static final double[] TIMES = new double[] {1, 2, 3, 4};

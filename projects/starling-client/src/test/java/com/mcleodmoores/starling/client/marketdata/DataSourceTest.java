@@ -3,10 +3,12 @@ package com.mcleodmoores.starling.client.marketdata;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+import com.opengamma.util.test.TestGroup;
+
 /**
  * Created by jim on 08/06/15.
  */
-@Test
+@Test(groups = TestGroup.UNIT)
 public class DataSourceTest {
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNull() {

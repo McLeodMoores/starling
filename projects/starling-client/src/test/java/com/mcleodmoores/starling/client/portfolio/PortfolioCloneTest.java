@@ -2,10 +2,12 @@ package com.mcleodmoores.starling.client.portfolio;
 
 import org.testng.annotations.Test;
 
+import com.opengamma.util.test.TestGroup;
+
 /**
  * Created by jim on 29/05/15.
  */
-@Test
+@Test(groups = TestGroup.UNIT)
 public class PortfolioCloneTest {
   public void cloneTest() {
 //    FXForwardTrade fxForwardTrade = FXForwardTrade.builder()

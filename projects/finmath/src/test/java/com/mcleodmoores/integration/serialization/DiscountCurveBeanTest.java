@@ -8,19 +8,21 @@ import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotEquals;
 import static org.testng.Assert.assertNull;
 import static org.testng.Assert.fail;
-import net.finmath.marketdata.model.curves.Curve.ExtrapolationMethod;
-import net.finmath.marketdata.model.curves.Curve.InterpolationEntity;
-import net.finmath.marketdata.model.curves.Curve.InterpolationMethod;
 
 import org.testng.annotations.Test;
 import org.threeten.bp.LocalDate;
 
 import com.mcleodmoores.integration.adapter.FinmathDateUtils;
+import com.opengamma.util.test.TestGroup;
+
+import net.finmath.marketdata.model.curves.Curve.ExtrapolationMethod;
+import net.finmath.marketdata.model.curves.Curve.InterpolationEntity;
+import net.finmath.marketdata.model.curves.Curve.InterpolationMethod;
 
 /**
  * Unit tests for {@link DiscountCurveBean}.
  */
-@Test
+@Test(groups = TestGroup.UNIT)
 public class DiscountCurveBeanTest extends CurveBeanTest {
   /** The default interpolation method used in the Finmath library */
   private static final String DEFAULT_INTERPOLATION_METHOD = "LINEAR";

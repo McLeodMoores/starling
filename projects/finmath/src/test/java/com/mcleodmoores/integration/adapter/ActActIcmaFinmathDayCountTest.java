@@ -6,10 +6,12 @@ package com.mcleodmoores.integration.adapter;
 import org.apache.commons.lang.NotImplementedException;
 import org.testng.annotations.Test;
 
+import com.opengamma.util.test.TestGroup;
+
 /**
  * Unit tests for {@link ActActIcmaFinmathDayCount}.
  */
-@Test
+@Test(groups = TestGroup.UNIT)
 public class ActActIcmaFinmathDayCountTest {
 
   /**

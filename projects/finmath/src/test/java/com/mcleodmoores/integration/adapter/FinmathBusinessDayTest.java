@@ -6,15 +6,18 @@ package com.mcleodmoores.integration.adapter;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotEquals;
 import static org.testng.Assert.assertNotSame;
+
+import org.testng.annotations.Test;
+
 import net.finmath.time.businessdaycalendar.BusinessdayCalendarAny;
 import net.finmath.time.businessdaycalendar.BusinessdayCalendarExcludingWeekends;
 
-import org.testng.annotations.Test;
+import com.opengamma.util.test.TestGroup;
 
 /**
  * Unit tests for {@link FinmathBusinessDay}.
  */
-@Test
+@Test(groups = TestGroup.UNIT)
 public class FinmathBusinessDayTest {
   /** The instance to test */
   private static final FinmathBusinessDay BUSINESS_DAY = new AnyBusinessDayCalendar();

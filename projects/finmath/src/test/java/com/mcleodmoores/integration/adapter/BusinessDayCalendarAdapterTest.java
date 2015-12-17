@@ -13,19 +13,20 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 
-import net.finmath.time.businessdaycalendar.BusinessdayCalendar;
-
 import org.testng.annotations.Test;
 import org.threeten.bp.DayOfWeek;
 import org.threeten.bp.LocalDate;
 
 import com.opengamma.analytics.date.SimpleWorkingDayCalendar;
 import com.opengamma.analytics.date.WorkingDayCalendar;
+import com.opengamma.util.test.TestGroup;
+
+import net.finmath.time.businessdaycalendar.BusinessdayCalendar;
 
 /**
  * Unit tests for {@link BusinessDayCalendarAdapter}.
  */
-@Test
+@Test(groups = TestGroup.UNIT)
 public class BusinessDayCalendarAdapterTest {
   /** Holiday dates */
   private static final Collection<LocalDate> HOLIDAYS;

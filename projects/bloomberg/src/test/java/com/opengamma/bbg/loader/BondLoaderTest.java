@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
@@ -19,19 +19,15 @@ import com.opengamma.bbg.referencedata.impl.RemoteReferenceDataProvider;
 import com.opengamma.master.security.ManageableSecurity;
 
 /**
- * 
- */
-/**
- * @author arroub
  *
  */
 @Test
 public class BondLoaderTest {
 
   public void test() {
-    ReferenceDataProvider referenceDataProvider = new RemoteReferenceDataProvider(URI.create("http://marketdataserver-lx-1:8090/jax/components/ReferenceDataProvider/bloomberg"));
-    BondLoader bondLoader = new BondLoader(referenceDataProvider);
-    Map<String, ManageableSecurity> loadSecurities = bondLoader.loadSecurities(Sets.newHashSet("/ticker/NGGLN 2.983 07/08/18 Corp"));
+    final ReferenceDataProvider referenceDataProvider = new RemoteReferenceDataProvider(URI.create("http://marketdataserver-lx-1:8090/jax/components/ReferenceDataProvider/bloomberg"));
+    final BondLoader bondLoader = new BondLoader(referenceDataProvider);
+    final Map<String, ManageableSecurity> loadSecurities = bondLoader.loadSecurities(Sets.newHashSet("/ticker/NGGLN 2.983 07/08/18 Corp"));
     System.err.println(loadSecurities.get("/ticker/NGGLN 2.983 07/08/18 Corp").getAttributes());
   }
 }

@@ -9,14 +9,16 @@ import static org.testng.AssertJUnit.fail;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
-import net.finmath.time.daycount.DayCountConventionInterface;
-
 import org.testng.annotations.Test;
+
+import com.opengamma.util.test.TestGroup;
+
+import net.finmath.time.daycount.DayCountConventionInterface;
 
 /**
  * Unit tests for {@link UnknownFinmathDayCount}.
  */
-@Test
+@Test(groups = TestGroup.UNIT)
 public class UnknownFinmathDayCountTest {
 
   /**

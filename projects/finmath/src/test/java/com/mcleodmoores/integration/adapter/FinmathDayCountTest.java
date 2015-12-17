@@ -6,15 +6,18 @@ package com.mcleodmoores.integration.adapter;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotEquals;
 import static org.testng.Assert.assertNotSame;
+
+import org.testng.annotations.Test;
+
 import net.finmath.time.daycount.DayCountConvention_ACT_360;
 import net.finmath.time.daycount.DayCountConvention_NL_365;
 
-import org.testng.annotations.Test;
+import com.opengamma.util.test.TestGroup;
 
 /**
  * Unit tests for {@link FinmathDayCount}.
  */
-@Test
+@Test(groups = TestGroup.UNIT)
 public class FinmathDayCountTest {
   /** The instance to test */
   private static final FinmathDayCount DAY_COUNT = new NlThreeSixtyFiveFinmathDayCount();

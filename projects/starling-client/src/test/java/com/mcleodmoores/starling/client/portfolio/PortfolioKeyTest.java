@@ -1,18 +1,20 @@
 package com.mcleodmoores.starling.client.portfolio;
 
-import com.opengamma.id.UniqueId;
 import org.testng.Assert;
 import org.testng.annotations.Test;
+
+import com.opengamma.id.UniqueId;
+import com.opengamma.util.test.TestGroup;
 
 /**
  * Created by jim on 10/06/15.
  */
-@Test
+@Test(groups = TestGroup.UNIT)
 public class PortfolioKeyTest {
 
   @Test
   public void testOf() throws Exception {
-    PortfolioKey key = PortfolioKey.of("TEST");
+    final PortfolioKey key = PortfolioKey.of("TEST");
     Assert.assertNotNull(key);
     Assert.assertEquals(key.getName(), "TEST");
     Assert.assertNull(key.getUniqueId());
@@ -25,7 +27,7 @@ public class PortfolioKeyTest {
 
   @Test
   public void testOf1() throws Exception {
-    PortfolioKey key = PortfolioKey.of("TEST", UniqueId.of("A", "B"));
+    final PortfolioKey key = PortfolioKey.of("TEST", UniqueId.of("A", "B"));
     Assert.assertNotNull(key);
     Assert.assertEquals(key.getName(), "TEST");
     Assert.assertEquals(key.getUniqueId(), UniqueId.of("A", "B"));

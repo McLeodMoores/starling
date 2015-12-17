@@ -8,15 +8,17 @@ import static org.testng.AssertJUnit.assertEquals;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
+import org.testng.annotations.Test;
+
 import net.finmath.time.daycount.DayCountConventionInterface;
 import net.finmath.time.daycount.DayCountConvention_ACT_365;
 
-import org.testng.annotations.Test;
+import com.opengamma.util.test.TestGroup;
 
 /**
  * Unit tests for {@link ActThreeSixtyFiveFinmathDayCount}.
  */
-@Test
+@Test(groups = TestGroup.UNIT)
 public class ActThreeSixtyFiveFinmathDayCountTest {
 
   /**

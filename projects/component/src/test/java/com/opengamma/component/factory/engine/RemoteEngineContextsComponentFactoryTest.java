@@ -13,8 +13,6 @@ import java.net.URISyntaxException;
 import java.util.LinkedHashMap;
 import java.util.Properties;
 
-import net.sf.ehcache.CacheManager;
-
 import org.fudgemsg.FudgeContext;
 import org.fudgemsg.FudgeMsg;
 import org.fudgemsg.MutableFudgeMsg;
@@ -34,10 +32,12 @@ import com.opengamma.util.test.TestProperties;
 import com.opengamma.util.tuple.Pair;
 import com.opengamma.util.tuple.Pairs;
 
+import net.sf.ehcache.CacheManager;
+
 /**
  * Tests the {@link RemoteEngineContextsComponentFactory} class.
  */
-@Test
+@Test(groups = TestGroup.UNIT)
 public class RemoteEngineContextsComponentFactoryTest {
 
   protected void testFactory(final RemoteEngineContextsComponentFactory factory) throws Exception {
@@ -75,7 +75,7 @@ public class RemoteEngineContextsComponentFactoryTest {
       protected URI fetchURI(final Pair<UriEndPointDescriptionProvider.Validater, FudgeMsg> remoteConfiguration, final String label) {
         try {
           return new URI("http://localhost/mock/" + label);
-        } catch (URISyntaxException e) {
+        } catch (final URISyntaxException e) {
           return null;
         }
       }

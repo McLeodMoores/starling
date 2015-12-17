@@ -15,11 +15,12 @@ import org.threeten.bp.LocalDate;
 
 import com.opengamma.analytics.date.SimpleWorkingDayCalendar;
 import com.opengamma.analytics.date.WorkingDayCalendar;
+import com.opengamma.util.test.TestGroup;
 
 /**
  * Unit tests for {@link CustomBusinessDayCalendar}.
  */
-@Test
+@Test(groups = TestGroup.UNIT)
 public class CustomBusinessDayCalendarTest {
   /** Holiday dates */
   private static final Collection<LocalDate> HOLIDAYS;
