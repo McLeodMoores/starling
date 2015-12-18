@@ -20,7 +20,6 @@ import com.opengamma.core.position.PortfolioNode;
 import com.opengamma.core.position.Position;
 import com.opengamma.core.position.PositionOrTrade;
 import com.opengamma.core.position.Trade;
-import com.opengamma.core.position.impl.SimplePosition;
 import com.opengamma.core.security.Security;
 import com.opengamma.id.ObjectId;
 import com.opengamma.id.UniqueId;
@@ -56,7 +55,7 @@ public class PortfolioWriter {
    */
   private final boolean _write;
   /**
-   * Flag to switch on 
+   * Flag to switch on
    */
   private final boolean _updateIfExists;
 
@@ -65,31 +64,33 @@ public class PortfolioWriter {
   private final SecurityMaster _securityMaster;
 
   /**
-   * Create a new persister, initialized so that it is ready to write portfolios as required. Do not use this constructor any 
+   * Create a new persister, initialized so that it is ready to write portfolios as required. Do not use this constructor any
    * more, use the other one.
-   * @deprecated Explcitly state whether addOrUpdate behaviour is desired.  Despite this being a bug, others may rely on this
+   *
+   * @param write  true if the data should actually be written to the masters
+   * @param portfolioMaster  the portfolio master, not null
+   * @param positionMaster  the position master, not null
+   * @param securityMaster  the security master, not null
+   * @deprecated  explicitly state whether addOrUpdate behaviour is desired.  Despite this being a bug, others may rely on this
    *             constructor for existing behaviour.
-   * @param write should the data actually be written to the masters
-   * @param portfolioMaster the portfolio master
-   * @param positionMaster the position master
-   * @param securityMaster the security master
    */
-  public PortfolioWriter(boolean write, PortfolioMaster portfolioMaster,
-                         PositionMaster positionMaster, SecurityMaster securityMaster) {
+  @Deprecated
+  public PortfolioWriter(final boolean write, final PortfolioMaster portfolioMaster,
+                         final PositionMaster positionMaster, final SecurityMaster securityMaster) {
     this(write, false, portfolioMaster, positionMaster, securityMaster);
   }
-  
+
   /**
    * Create a new persister, initialized so that it is ready to write (create or update) portfolios as required.
    *
    * @param write should the data actually be written to the masters
-   * @param updateIfExists whether to update rather than add a new portfolio if one with the same name exists
-   * @param portfolioMaster the portfolio master
-   * @param positionMaster the position master
-   * @param securityMaster the security master
+   * @param updateIfExists  whether to update rather than add a new portfolio if one with the same name exists
+   * @param portfolioMaster  the portfolio master, not null
+   * @param positionMaster  the position master, not null
+   * @param securityMaster  the security master, not null
    */
-  public PortfolioWriter(boolean write, boolean updateIfExists, PortfolioMaster portfolioMaster,
-                         PositionMaster positionMaster, SecurityMaster securityMaster) {
+  public PortfolioWriter(final boolean write, final boolean updateIfExists, final PortfolioMaster portfolioMaster,
+                         final PositionMaster positionMaster, final SecurityMaster securityMaster) {
     _write = write;
     _updateIfExists = updateIfExists;
     _portfolioMaster = ArgumentChecker.notNull(portfolioMaster, "portfolioMaster");
@@ -106,43 +107,43 @@ public class PortfolioWriter {
    * of which may already exist in the security master)
    */
   @Deprecated
-  public void write(Portfolio portfolio, Set<ManageableSecurity> securities) {
+  public void write(final Portfolio portfolio, final Set<ManageableSecurity> securities) {
     persistSecurities(securities);
     persistPortfolio(portfolio);
   }
-  
+
   /**
    * Write the portfolio and supporting securities to the masters.
    * Securities are assumed to be attached to the portfolio in memory.
    * @param portfolio the portfolio to be written, not null
    * @return unique id of the portfolio or null if write not enabled.
    */
-  public UniqueId write(Portfolio portfolio) {
+  public UniqueId write(final Portfolio portfolio) {
     persistSecurities(walkPortfolioForSecurities(portfolio));
     return persistPortfolio(portfolio);
   }
-  
-  private Set<ManageableSecurity> walkPortfolioForSecurities(Portfolio portfolio) {
+
+  private Set<ManageableSecurity> walkPortfolioForSecurities(final Portfolio portfolio) {
     return walkPortfolioForSecurities(portfolio.getRootNode(), new HashSet<ManageableSecurity>());
   }
 
-  private Set<ManageableSecurity> walkPortfolioForSecurities(PortfolioNode node, Set<ManageableSecurity> existingSecurities) {
-    for (Position position : node.getPositions()) {
+  private Set<ManageableSecurity> walkPortfolioForSecurities(final PortfolioNode node, Set<ManageableSecurity> existingSecurities) {
+    for (final Position position : node.getPositions()) {
       existingSecurities = walkPositionOrTrade(position, existingSecurities);
-      for (com.opengamma.core.position.Trade trade : position.getTrades()) {
+      for (final com.opengamma.core.position.Trade trade : position.getTrades()) {
         existingSecurities = walkPositionOrTrade(trade, existingSecurities);
       }
     }
-    for (PortfolioNode childNode : node.getChildNodes()) {
+    for (final PortfolioNode childNode : node.getChildNodes()) {
       existingSecurities = walkPortfolioForSecurities(childNode, existingSecurities);
     }
     return existingSecurities;
   }
 
   private Set<ManageableSecurity> walkPositionOrTrade(final PositionOrTrade position, final Set<ManageableSecurity> existingSecurities) {
-    Security security = position.getSecurity();
+    final Security security = position.getSecurity();
     if (security instanceof ManageableSecurity) {
-      ManageableSecurity manageableSecurity = (ManageableSecurity) security;
+      final ManageableSecurity manageableSecurity = (ManageableSecurity) security;
       existingSecurities.add(manageableSecurity);
     } else {
       throw new OpenGammaRuntimeException("securities on position/trade " + position + " should be descendents of ManageableSecurity");
@@ -154,9 +155,9 @@ public class PortfolioWriter {
   // external id, then there is no way for it to be updated in case it contained
   // incorrect data. If updates are required then when passed the security needs
   // to have an external id (which could well be the external trade id)
-  private void persistSecurities(Set<ManageableSecurity> securities) {
+  private void persistSecurities(final Set<ManageableSecurity> securities) {
 
-    for (ManageableSecurity security : securities) {
+    for (final ManageableSecurity security : securities) {
 
       if (security.getExternalIdBundle().isEmpty()) {
         throw new OpenGammaRuntimeException("Unable to persist security with no external id: " + security);
@@ -172,21 +173,21 @@ public class PortfolioWriter {
     }
   }
 
-  private UniqueId persistPortfolio(Portfolio portfolio) {
-    ManageablePortfolio currentPortfolio = findCurrentPortfolio(portfolio);
+  private UniqueId persistPortfolio(final Portfolio portfolio) {
+    final ManageablePortfolio currentPortfolio = findCurrentPortfolio(portfolio);
     return insertPortfolio(portfolio, currentPortfolio, currentPortfolio == null ? null : currentPortfolio.getUniqueId());
   }
 
-  private ManageablePortfolio findCurrentPortfolio(Portfolio portfolio) {
+  private ManageablePortfolio findCurrentPortfolio(final Portfolio portfolio) {
 
-    PortfolioSearchRequest searchRequest = new PortfolioSearchRequest();
-    String portfolioName = portfolio.getName();
+    final PortfolioSearchRequest searchRequest = new PortfolioSearchRequest();
+    final String portfolioName = portfolio.getName();
     searchRequest.setName(portfolioName);
-    PortfolioSearchResult result = _portfolioMaster.search(searchRequest);
+    final PortfolioSearchResult result = _portfolioMaster.search(searchRequest);
 
-    List<ManageablePortfolio> portfolios = result.getPortfolios();
+    final List<ManageablePortfolio> portfolios = result.getPortfolios();
 
-    int size = portfolios.size();
+    final int size = portfolios.size();
     if (size > 1) {
       s_logger.warn("More than one portfolio found with name: {} - using first found", portfolioName);
     }
@@ -194,14 +195,13 @@ public class PortfolioWriter {
     return size == 0 ? null : portfolios.get(0);
   }
 
-  private UniqueId insertPortfolio(Portfolio portfolio, ManageablePortfolio manageablePortfolio, UniqueId previousId) {
+  private UniqueId insertPortfolio(final Portfolio portfolio, final ManageablePortfolio manageablePortfolio, final UniqueId previousId) {
     UniqueId uid;
-    List<ManageablePosition> manageablePositions = new ArrayList<>();
-    ManageablePortfolio managebalePortfolio = persistPositions(portfolio, manageablePositions);
+    final List<ManageablePosition> manageablePositions = new ArrayList<>();
+    final ManageablePortfolio managebalePortfolio = persistPositions(portfolio, manageablePositions);
 
-    String portfolioName = portfolio.getName();
-
-    PortfolioDocument portfolioDocument = new PortfolioDocument();
+    final String portfolioName = portfolio.getName();
+    final PortfolioDocument portfolioDocument = new PortfolioDocument();
     if (!portfolioEqual(portfolio, manageablePortfolio)) {
       if (!_updateIfExists) {
         s_logger.warn("Persisting a flat portfolio structure, use alternate constructor with updateIfExists flag set to true");
@@ -214,7 +214,7 @@ public class PortfolioWriter {
       if (previousId != null) {
         portfolioDocument.setUniqueId(previousId);
       }
-  
+
       if (_write) {
         if (!_updateIfExists) {
           s_logger.warn("Persisting a new copy of existing portfolio, use alternate constructor with updateIfExists flag set to true");
@@ -232,13 +232,13 @@ public class PortfolioWriter {
       }
     } else {
       uid = previousId;
-      s_logger.info("Portfolio structure didn't change, so not updating portoflio structure");
+      s_logger.debug("Portfolio structure didn't change, so not updating portfolio structure");
     }
     s_logger.info("Created portfolio with name: {}", portfolioName);
     return uid;
   }
-  
-  private boolean portfolioEqual(Portfolio portfolio, ManageablePortfolio existingPortfolio) {
+
+  private boolean portfolioEqual(final Portfolio portfolio, final ManageablePortfolio existingPortfolio) {
     if (existingPortfolio == null) {
       return false;
     }
@@ -250,8 +250,8 @@ public class PortfolioWriter {
     }
     return portfolioNodeEqual(portfolio.getRootNode(), existingPortfolio.getRootNode());
   }
-  
-  private boolean portfolioNodeEqual(PortfolioNode portfolioNode, ManageablePortfolioNode existingPortfolioNode) {
+
+  private boolean portfolioNodeEqual(final PortfolioNode portfolioNode, final ManageablePortfolioNode existingPortfolioNode) {
     if (!portfolioNode.getName().equals(existingPortfolioNode.getName())) {
       return false;
     }
@@ -261,12 +261,12 @@ public class PortfolioWriter {
     if (portfolioNode.getChildNodes().size() != existingPortfolioNode.getChildNodes().size()) { // fail fast.
       return false;
     }
-    Iterator<Position> posIter = portfolioNode.getPositions().iterator();
-    Iterator<ObjectId> existingIter = existingPortfolioNode.getPositionIds().iterator();
+    final Iterator<Position> posIter = portfolioNode.getPositions().iterator();
+    final Iterator<ObjectId> existingIter = existingPortfolioNode.getPositionIds().iterator();
     // loop through positions and see if any don't match object ids.
     while (posIter.hasNext()) {
-      Position pos = posIter.next();
-      ObjectId existingPosId = existingIter.next();
+      final Position pos = posIter.next();
+      final ObjectId existingPosId = existingIter.next();
       if (pos.getUniqueId() == null) {
         return false;
       }
@@ -274,11 +274,11 @@ public class PortfolioWriter {
         return false;
       }
     }
-    Iterator<PortfolioNode> nodeIter = portfolioNode.getChildNodes().iterator();
-    Iterator<ManageablePortfolioNode> existingNodeIter = existingPortfolioNode.getChildNodes().iterator();
+    final Iterator<PortfolioNode> nodeIter = portfolioNode.getChildNodes().iterator();
+    final Iterator<ManageablePortfolioNode> existingNodeIter = existingPortfolioNode.getChildNodes().iterator();
     while (nodeIter.hasNext()) {
-      PortfolioNode node = nodeIter.next();
-      ManageablePortfolioNode existingNode = existingNodeIter.next();
+      final PortfolioNode node = nodeIter.next();
+      final ManageablePortfolioNode existingNode = existingNodeIter.next();
       if (!portfolioNodeEqual(node, existingNode)) {
         return false;
       }
@@ -288,28 +288,28 @@ public class PortfolioWriter {
 
   /**
    * Build a manageable portfolio structure (but don't persist yet), and persist positions as we go.  We also build up
-   * a list of managable positions persisted to allow the creation of flat portfolios when in legacy mode (_updateIfExists==false)
+   * a list of manageable positions persisted to allow the creation of flat portfolios when in legacy mode (_updateIfExists==false)
    * @param portfolio  the simple portfolio containing the structure we want
    * @param legacyList  an empty arraylist to be filled with manageable portfolios
    * @return the constructed manageable portfolio, not persisted yet.
    */
   private ManageablePortfolio persistPositions(final Portfolio portfolio, final List<ManageablePosition> legacyList) {
-    ManageablePortfolio manageablePortfolio = new ManageablePortfolio();
+    final ManageablePortfolio manageablePortfolio = new ManageablePortfolio();
     manageablePortfolio.setName(portfolio.getName());
     manageablePortfolio.setAttributes(portfolio.getAttributes());
     manageablePortfolio.setRootNode(persistPositions(portfolio.getRootNode(), legacyList));
     return manageablePortfolio;
   }
-    
+
   private ManageablePortfolioNode persistPositions(final PortfolioNode portfolioNode, final List<ManageablePosition> legacyList) {
-    ManageablePortfolioNode manageablePortfolioNode = new ManageablePortfolioNode();
+    final ManageablePortfolioNode manageablePortfolioNode = new ManageablePortfolioNode();
     manageablePortfolioNode.setName(portfolioNode.getName());
-    for (Position position : portfolioNode.getPositions()) {
+    for (final Position position : portfolioNode.getPositions()) {
       if (position.getSecurityLink() == null || position.getSecurityLink().getExternalId().isEmpty()) {
         throw new OpenGammaRuntimeException("Unable to persist position with no security external id: " + position);
       }
 
-      ManageablePosition manageablePosition = new ManageablePosition(position.getQuantity(),
+      final ManageablePosition manageablePosition = new ManageablePosition(position.getQuantity(),
                                                                      position.getSecurityLink().getExternalId());
       manageablePosition.setAttributes(position.getAttributes());
       manageablePosition.setTrades(convertTrades(position));
@@ -318,17 +318,17 @@ public class PortfolioWriter {
         if (!_updateIfExists) {
           s_logger.warn("Persisting a new copy of existing position, use alternate constructor with updateIfExists flag set to true");
           s_logger.warn("This mode is retained purely for backwards compatibility.");
-          PositionDocument addedDoc = _positionMaster.add(new PositionDocument(manageablePosition));
+          final PositionDocument addedDoc = _positionMaster.add(new PositionDocument(manageablePosition));
           manageablePortfolioNode.addPosition(addedDoc.getObjectId());
           legacyList.add(addedDoc.getPosition());
         } else {
           PositionDocument addedOrUpdatedDoc;
           if (position.getUniqueId() != null) {
-            
-            PositionDocument existingDocument = _positionMaster.get(position.getUniqueId());
+
+            final PositionDocument existingDocument = _positionMaster.get(position.getUniqueId());
             if (existingDocument != null) {
               manageablePosition.setUniqueId(position.getUniqueId());
-              Position simplePosition = existingDocument.getPosition().toPosition();
+              final Position simplePosition = existingDocument.getPosition().toPosition();
               if (!position.equals(simplePosition)) {
                 addedOrUpdatedDoc = _positionMaster.update(new PositionDocument(manageablePosition));
               } else {
@@ -349,7 +349,7 @@ public class PortfolioWriter {
       s_logger.info("Added/updated position {}", position);
     }
     if (_updateIfExists) {
-      for (PortfolioNode child : portfolioNode.getChildNodes()) {
+      for (final PortfolioNode child : portfolioNode.getChildNodes()) {
         manageablePortfolioNode.addChildNode(persistPositions(child, legacyList));
       }
     } else {
@@ -358,10 +358,10 @@ public class PortfolioWriter {
     return manageablePortfolioNode;
   }
 
-  private List<ManageableTrade> convertTrades(Position position) {
+  private List<ManageableTrade> convertTrades(final Position position) {
 
-    List<ManageableTrade> converted = new ArrayList<>();
-    for (Trade trade : position.getTrades()) {
+    final List<ManageableTrade> converted = new ArrayList<>();
+    for (final Trade trade : position.getTrades()) {
       if (trade.getSecurityLink().getExternalId().isEmpty()) {
         throw new OpenGammaRuntimeException("Unable to persist trade with no security external id: " + trade);
       }
@@ -370,15 +370,15 @@ public class PortfolioWriter {
     return converted;
   }
 
-  private ManageablePortfolio createPortfolio(String portfolioName, List<ManageablePosition> positions) {
+  private ManageablePortfolio createPortfolio(final String portfolioName, final List<ManageablePosition> positions) {
 
-    ManageablePortfolioNode rootNode = new ManageablePortfolioNode(portfolioName);
+    final ManageablePortfolioNode rootNode = new ManageablePortfolioNode(portfolioName);
 
-    for (ManageablePosition position : positions) {
+    for (final ManageablePosition position : positions) {
       rootNode.addPosition(position.getUniqueId());
     }
 
     return new ManageablePortfolio(portfolioName, rootNode);
   }
-  
+
 }

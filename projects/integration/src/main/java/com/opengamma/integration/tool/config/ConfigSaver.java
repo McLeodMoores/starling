@@ -3,6 +3,7 @@
  *
  * Please see distribution for license.
  */
+// Copied from integration
 package com.opengamma.integration.tool.config;
 
 import java.io.OutputStreamWriter;
@@ -33,36 +34,46 @@ import com.opengamma.master.portfolio.PortfolioMaster;
 import com.opengamma.util.fudgemsg.OpenGammaFudgeContext;
 
 /**
- * Class that saves a range of configuration objects into a file in XML format
+ * Class that saves a range of configuration objects into a file in XML format.
  */
 public class ConfigSaver {
-
-  private static final Logger s_logger = LoggerFactory.getLogger(ConfigSaver.class);
-  private ConfigMaster _configMaster;
-  private PortfolioMaster _portfolioMaster;
-  private List<String> _names;
-  private List<String> _types;
-  private boolean _portPortfolioRefs;
-  private boolean _verbose;
+  private static final Logger LOGGER = LoggerFactory.getLogger(ConfigSaver.class);
+  private final ConfigMaster _configMaster;
+  private final PortfolioMaster _portfolioMaster;
+  private final List<String> _names;
+  private final List<String> _types;
+  private final boolean _portPortfolioRefs;
+  private final boolean _verbose;
   private final ConfigSearchSortOrder _order;
 
   /**
    * Process items in name order.
    *
-   * @param configMaster the config master
-   * @param portfolioMaster the portfolio master
-   * @param names names to search for
-   * @param types types to search for
-   * @param portPortfolioRefs port portfolio references?
-   * @param verbose verbose?
+   * @param configMaster  the config master
+   * @param portfolioMaster  the portfolio master
+   * @param names  names to search for
+   * @param types  types to search for
+   * @param portPortfolioRefs  true if the portfolio references should be ported
+   * @param verbose  true if the verbose output is required
    */
-  public ConfigSaver(ConfigMaster configMaster, PortfolioMaster portfolioMaster, List<String> names, List<String> types,
-                     boolean portPortfolioRefs, boolean verbose) {
+  public ConfigSaver(final ConfigMaster configMaster, final PortfolioMaster portfolioMaster, final List<String> names, final List<String> types,
+      final boolean portPortfolioRefs, final boolean verbose) {
     this(configMaster, portfolioMaster, names, types, portPortfolioRefs, verbose, ConfigSearchSortOrder.NAME_ASC);
   }
 
-  public ConfigSaver(ConfigMaster configMaster, PortfolioMaster portfolioMaster, List<String> names, List<String> types, 
-                     boolean portPortfolioRefs, boolean verbose, ConfigSearchSortOrder order) {
+  /**
+   * Process items.
+   *
+   * @param configMaster  the config master
+   * @param portfolioMaster  the portfolio master
+   * @param names  names to search for
+   * @param types  types to search for
+   * @param portPortfolioRefs  true if the portfolio references should be ported
+   * @param verbose  true if the verbose output is required
+   * @param order  the config item search order.
+   */
+  public ConfigSaver(final ConfigMaster configMaster, final PortfolioMaster portfolioMaster, final List<String> names, final List<String> types,
+      final boolean portPortfolioRefs, final boolean verbose, final ConfigSearchSortOrder order) {
     _configMaster = configMaster;
     _portfolioMaster = portfolioMaster;
     _names = names;
@@ -71,81 +82,87 @@ public class ConfigSaver {
     _verbose = verbose;
     _order = order;
   }
-  
-  public void saveConfigs(PrintStream outputStream) {
-    List<ConfigEntry> allConfigs = getAllConfigs();
+
+  public void saveConfigs(final PrintStream outputStream) {
+    final List<ConfigEntry> allConfigs = getAllConfigs();
     if (_verbose) {
-      s_logger.info("Matched " + allConfigs.size() + " configurations");
+      LOGGER.info("Matched " + allConfigs.size() + " configurations");
     }
-    FudgeXMLStreamWriter xmlStreamWriter = new FudgeXMLStreamWriter(OpenGammaFudgeContext.getInstance(), new OutputStreamWriter(outputStream));
-    FudgeSerializer serializer = new FudgeSerializer(OpenGammaFudgeContext.getInstance());
-    FlexiBean wrapper = new FlexiBean();
-    wrapper.set("configs", allConfigs);
-    if (_portPortfolioRefs) {
-      Map<UniqueId, String> idToPortfolioMap = getPortfolioNameMap(allConfigs);
-      wrapper.set("idToPortfolioMap", idToPortfolioMap);
+    try (FudgeXMLStreamWriter xmlStreamWriter = new FudgeXMLStreamWriter(OpenGammaFudgeContext.getInstance(), new OutputStreamWriter(outputStream))) {
+      final FudgeSerializer serializer = new FudgeSerializer(OpenGammaFudgeContext.getInstance());
+      final FlexiBean wrapper = new FlexiBean();
+      wrapper.set("configs", allConfigs);
+      if (_portPortfolioRefs) {
+        final Map<UniqueId, String> idToPortfolioMap = getPortfolioNameMap(allConfigs);
+        wrapper.set("idToPortfolioMap", idToPortfolioMap);
+      }
+      final MutableFudgeMsg msg = serializer.objectToFudgeMsg(wrapper);
+      try (FudgeMsgWriter fudgeMsgWriter = new FudgeMsgWriter(xmlStreamWriter)) {
+        fudgeMsgWriter.writeMessage(msg);
+        fudgeMsgWriter.close();
+      } catch (final Exception e) {
+        LOGGER.error(e.getMessage());
+      }
+    } catch (final Exception e) {
+      LOGGER.error(e.getMessage());
     }
-    MutableFudgeMsg msg = serializer.objectToFudgeMsg(wrapper);
-    FudgeMsgWriter fudgeMsgWriter = new FudgeMsgWriter(xmlStreamWriter);
-    fudgeMsgWriter.writeMessage(msg);
-    fudgeMsgWriter.close();
   }
-  
-  private Map<UniqueId, String> getPortfolioNameMap(List<ConfigEntry> configEntries) {
-    Map<UniqueId, String> idToPortfolioNameMap = Maps.newHashMap();
-    for (ConfigEntry configEntry : configEntries) {
+
+  private Map<UniqueId, String> getPortfolioNameMap(final List<ConfigEntry> configEntries) {
+    final Map<UniqueId, String> idToPortfolioNameMap = Maps.newHashMap();
+    for (final ConfigEntry configEntry : configEntries) {
       if (configEntry.getObject() instanceof ViewDefinition) {
-        ViewDefinition viewDefinition = (ViewDefinition) configEntry.getObject();
-        String portfolioName = getPortfolioName(viewDefinition.getPortfolioId());
+        final ViewDefinition viewDefinition = (ViewDefinition) configEntry.getObject();
+        final String portfolioName = getPortfolioName(viewDefinition.getPortfolioId());
         if (portfolioName != null) {
           idToPortfolioNameMap.put(viewDefinition.getPortfolioId(), portfolioName);
         } else {
           if (_verbose) {
-            s_logger.warn("Couldn't find portfolio for id in view definition called " + viewDefinition.getName());
+            LOGGER.warn("Couldn't find portfolio for id in view definition called " + viewDefinition.getName());
           }
         }
       }
     }
     return idToPortfolioNameMap;
   }
-  
-  private String getPortfolioName(UniqueId uniqueId) {
+
+  private String getPortfolioName(final UniqueId uniqueId) {
     if (uniqueId != null) {
       try {
-        PortfolioDocument portfolioDocument = _portfolioMaster.get(uniqueId);
+        final PortfolioDocument portfolioDocument = _portfolioMaster.get(uniqueId);
         if (portfolioDocument != null) {
           return portfolioDocument.getPortfolio().getName();
         }
-      } catch (DataNotFoundException dnfe) {
+      } catch (final DataNotFoundException dnfe) {
         if (_verbose) {
-          s_logger.warn("Couldn't find portfolio for " + uniqueId);
+          LOGGER.warn("Couldn't find portfolio for " + uniqueId);
         }
       }
     }
     return null;
   }
-  
+
   private List<ConfigEntry> getAllConfigs() {
-    List<ConfigEntry> configsToSave = new ArrayList<ConfigEntry>();
+    final List<ConfigEntry> configsToSave = new ArrayList<ConfigEntry>();
     if (_types.size() > 0) {
-      for (String type : _types) {
+      for (final String type : _types) {
         try {
-          Class<?> clazz = Class.forName(type);
+          final Class<?> clazz = Class.forName(type);
           if (_names.size() > 0) {
-            for (String name : _names) {
-              configsToSave.addAll(getConfigs(clazz, name));        
+            for (final String name : _names) {
+              configsToSave.addAll(getConfigs(clazz, name));
             }
           } else {
             configsToSave.addAll(getConfigs(clazz));
           }
-        } catch (ClassNotFoundException cnfe) {
-          s_logger.error("Could not find class called " + type + " aborting");
+        } catch (final ClassNotFoundException cnfe) {
+          LOGGER.error("Could not find class called " + type + " aborting");
           System.exit(1);
         }
       }
     } else {
       if (_names.size() > 0) {
-        for (String name : _names) {
+        for (final String name : _names) {
           configsToSave.addAll(getConfigs(name));
         }
       } else {
@@ -155,50 +172,50 @@ public class ConfigSaver {
     return configsToSave;
   }
 
-  private List<ConfigEntry> getConfigs(Class<?> type, String name) {
-    ConfigSearchRequest<Object> searchReq = createSearchRequest();
+  private List<ConfigEntry> getConfigs(final Class<?> type, final String name) {
+    final ConfigSearchRequest<Object> searchReq = createSearchRequest();
     searchReq.setType(type);
     searchReq.setName(name);
-    ConfigSearchResult<Object> searchResult = _configMaster.search(searchReq);
+    final ConfigSearchResult<Object> searchResult = _configMaster.search(searchReq);
     return docsToConfigEntries(searchResult);
-  }
-  
-  private List<ConfigEntry> getConfigs(Class<?> type) {
-    ConfigSearchRequest<Object> searchReq = createSearchRequest();
-    searchReq.setType(type);
-    ConfigSearchResult<Object> searchResult = _configMaster.search(searchReq);
-    return docsToConfigEntries(searchResult);    
-  }
-  
-  private List<ConfigEntry> getConfigs(String name) {
-    ConfigSearchRequest<Object> searchReq = createSearchRequest();
-    searchReq.setName(name);
-    searchReq.setType(Object.class);
-    ConfigSearchResult<Object> searchResult = _configMaster.search(searchReq);
-    return docsToConfigEntries(searchResult);
-  }
-  
-  private List<ConfigEntry> getConfigs() {
-    ConfigSearchRequest<Object> searchReq = createSearchRequest();
-    searchReq.setType(Object.class);
-    ConfigSearchResult<Object> searchResult = _configMaster.search(searchReq);
-    return docsToConfigEntries(searchResult);    
   }
 
-  
+  private List<ConfigEntry> getConfigs(final Class<?> type) {
+    final ConfigSearchRequest<Object> searchReq = createSearchRequest();
+    searchReq.setType(type);
+    final ConfigSearchResult<Object> searchResult = _configMaster.search(searchReq);
+    return docsToConfigEntries(searchResult);
+  }
+
+  private List<ConfigEntry> getConfigs(final String name) {
+    final ConfigSearchRequest<Object> searchReq = createSearchRequest();
+    searchReq.setName(name);
+    searchReq.setType(Object.class);
+    final ConfigSearchResult<Object> searchResult = _configMaster.search(searchReq);
+    return docsToConfigEntries(searchResult);
+  }
+
+  private List<ConfigEntry> getConfigs() {
+    final ConfigSearchRequest<Object> searchReq = createSearchRequest();
+    searchReq.setType(Object.class);
+    final ConfigSearchResult<Object> searchResult = _configMaster.search(searchReq);
+    return docsToConfigEntries(searchResult);
+  }
+
+
   /**
    * @return a search request with defaults set
    */
   private ConfigSearchRequest<Object> createSearchRequest() {
-    ConfigSearchRequest<Object> searchRequest = new ConfigSearchRequest<Object>();
+    final ConfigSearchRequest<Object> searchRequest = new ConfigSearchRequest<Object>();
     searchRequest.setSortOrder(_order);
     return searchRequest;
   }
-  
-  private List<ConfigEntry> docsToConfigEntries(ConfigSearchResult<Object> searchResult) {
-    List<ConfigEntry> results = new ArrayList<ConfigEntry>();
-    for (ConfigItem<Object> doc : searchResult.getValues()) {
-      ConfigEntry configEntry = new ConfigEntry();
+
+  private List<ConfigEntry> docsToConfigEntries(final ConfigSearchResult<Object> searchResult) {
+    final List<ConfigEntry> results = new ArrayList<ConfigEntry>();
+    for (final ConfigItem<Object> doc : searchResult.getValues()) {
+      final ConfigEntry configEntry = new ConfigEntry();
       configEntry.setName(doc.getName());
       configEntry.setType(doc.getType().getCanonicalName());
       configEntry.setObject(doc.getValue());

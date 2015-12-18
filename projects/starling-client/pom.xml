@@ -62,11 +62,6 @@
             <name>OG Public</name>
             <url>http://maven.opengamma.com/nexus/content/groups/public</url>
         </repository>
-        <!--repository>
-            <id>jboss-maven2-release-repository</id>
-            <name>Jboss</name>
-            <url>http://repository.jboss.com/nexus/content/repositories/root_repository</url>
-        </repository-->
     </repositories>
     <pluginRepositories>
         <pluginRepository>
@@ -167,20 +162,20 @@
             <type>jar</type>
             <scope>compile</scope>
         </dependency>
-        <!-- <dependency>-->
-            <!--<groupId>com.mcleodmoores.starling.platform</groupId>-->
-            <!--<artifactId>integration</artifactId>-->
-            <!--<version>1.1.0-SNAPSHOT</version>-->
-            <!--<type>jar</type>-->
-            <!--<scope>compile</scope>-->
-        <!--</dependency>-->
-        <!--<dependency>-->
-            <!--<groupId>com.mcleodmoores.starling.platform</groupId>-->
-            <!--<artifactId>integration</artifactId>-->
-            <!--<version>1.1.0-SNAPSHOT</version>-->
-            <!--<type>jar</type>-->
-            <!--<scope>compile</scope>-->
-        <!--</dependency>-->
+        <dependency>
+            <groupId>com.mcleodmoores.starling.platform</groupId>
+            <artifactId>integration</artifactId>
+            <version>1.1.0-SNAPSHOT</version>
+            <type>jar</type>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.mcleodmoores.starling.platform</groupId>
+            <artifactId>web</artifactId>
+            <version>1.1.0-SNAPSHOT</version>
+            <type>jar</type>
+            <scope>compile</scope>
+        </dependency>
         <dependency>
             <groupId>com.mcleodmoores.starling.platform</groupId>
             <artifactId>master</artifactId>
@@ -289,42 +284,6 @@
                     </properties>
                 </configuration>
             </plugin>
-            <!--<plugin>-->
-                <!--<groupId>org.codehaus.gmavenplus</groupId>-->
-                <!--<artifactId>gmavenplus-plugin</artifactId>-->
-                <!--<version>1.5</version>-->
-                <!--<executions>-->
-                    <!--<execution>-->
-                        <!--<phase>generate-resources</phase>-->
-                        <!--<goals>-->
-                            <!--<goal>execute</goal>-->
-                        <!--</goals>-->
-                        <!--<configuration>-->
-                            <!--<scripts>-->
-                                <!--<script><![CDATA[-->
-                                <!--new com.mcleodmoores.starling.client.utils.ReflectionsSaver().init()-->
-                                     <!--.save("${project.build.outputDirectory}/META-INF/reflections/${project.artifactId}-reflections.xml")-->
-                    <!--]]></script>-->
-                            <!--</scripts>-->
-                        <!--</configuration>-->
-                    <!--</execution>-->
-                <!--</executions>-->
-                <!--<dependencies>-->
-                    <!--<dependency>-->
-                        <!--<groupId>org.reflections</groupId>-->
-                        <!--<artifactId>reflections</artifactId>-->
-                        <!--&lt;!&ndash; use latest version of Reflections &ndash;&gt;-->
-                        <!--<version>0.10-MM</version>-->
-                    <!--</dependency>-->
-                    <!--<dependency>-->
-                        <!--<groupId>org.codehaus.groovy</groupId>-->
-                        <!--<artifactId>groovy-all</artifactId>-->
-                        <!--&lt;!&ndash; any version of Groovy \>= 1.5.0 should work here &ndash;&gt;-->
-                        <!--<version>2.4.3</version>-->
-                        <!--<scope>runtime</scope>-->
-                    <!--</dependency>-->
-                <!--</dependencies>-->
-            <!--</plugin>-->
         </plugins>
     </build>
 </project>
