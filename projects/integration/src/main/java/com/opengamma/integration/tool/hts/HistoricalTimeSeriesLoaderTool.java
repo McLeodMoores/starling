@@ -18,8 +18,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.opengamma.component.tool.AbstractTool;
+import com.opengamma.financial.tool.ToolContext;
 import com.opengamma.id.ExternalId;
-import com.opengamma.integration.tool.IntegrationToolContext;
 import com.opengamma.master.historicaltimeseries.HistoricalTimeSeriesLoader;
 import com.opengamma.master.historicaltimeseries.HistoricalTimeSeriesLoaderRequest;
 import com.opengamma.scripts.Scriptable;
@@ -29,7 +29,7 @@ import com.opengamma.scripts.Scriptable;
  * For raw data loading, see TimeSeriesLoaderTool.
  */
 @Scriptable
-public class HistoricalTimeSeriesLoaderTool extends AbstractTool<IntegrationToolContext> {
+public class HistoricalTimeSeriesLoaderTool extends AbstractTool<ToolContext> {
   private static final Logger s_logger = LoggerFactory.getLogger(HistoricalTimeSeriesLoaderTool.class);
   /** File name option flag */
   public static final String FILE_NAME_OPT = "f";
@@ -49,10 +49,10 @@ public class HistoricalTimeSeriesLoaderTool extends AbstractTool<IntegrationTool
   //-------------------------------------------------------------------------
   /**
    * Main method to run the tool.
-   * 
+   *
    * @param args  the arguments, not null
    */
-  public static void main(String[] args) { //CSIGNORE
+  public static void main(final String[] args) { //CSIGNORE
     new HistoricalTimeSeriesLoaderTool().invokeAndTerminate(args);
   }
 
@@ -60,18 +60,18 @@ public class HistoricalTimeSeriesLoaderTool extends AbstractTool<IntegrationTool
   /**
    * Loads the test portfolio into the position master.
    */
-  @Override 
+  @Override
   protected void doRun() {
-    String fileName = getCommandLine().getOptionValue(FILE_NAME_OPT);
-    String dataProvider = getCommandLine().hasOption(TIME_SERIES_DATAPROVIDER_OPT) ? getCommandLine().getOptionValue(TIME_SERIES_DATAPROVIDER_OPT) : DEFAULT_DATA_PROVIDER;
-    String dataField = getCommandLine().getOptionValue(TIME_SERIES_DATAFIELD_OPT);
-    HistoricalTimeSeriesLoader loader = getToolContext().getHistoricalTimeSeriesLoader();
+    final String fileName = getCommandLine().getOptionValue(FILE_NAME_OPT);
+    final String dataProvider = getCommandLine().hasOption(TIME_SERIES_DATAPROVIDER_OPT) ? getCommandLine().getOptionValue(TIME_SERIES_DATAPROVIDER_OPT) : DEFAULT_DATA_PROVIDER;
+    final String dataField = getCommandLine().getOptionValue(TIME_SERIES_DATAFIELD_OPT);
+    final HistoricalTimeSeriesLoader loader = getToolContext().getHistoricalTimeSeriesLoader();
     try {
-      File file = new File(fileName);
+      final File file = new File(fileName);
       if (file.exists()) {
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
           String line;
-          Set<ExternalId> ids = new LinkedHashSet<>();
+          final Set<ExternalId> ids = new LinkedHashSet<>();
           while ((line = reader.readLine()) != null) {
             if (line.contains("~")) {
               ids.add(ExternalId.parse(line.trim()));
@@ -83,50 +83,51 @@ public class HistoricalTimeSeriesLoaderTool extends AbstractTool<IntegrationTool
               }
             }
           }
-          HistoricalTimeSeriesLoaderRequest req = HistoricalTimeSeriesLoaderRequest.create(ids, dataProvider, dataField, null, null);
+          final HistoricalTimeSeriesLoaderRequest req = HistoricalTimeSeriesLoaderRequest.create(ids, dataProvider, dataField, null, null);
           loader.loadTimeSeries(req);
         }
       } else {
         s_logger.error("File {} does not exist", fileName);
       }
-    } catch (Exception e) {
-      
+    } catch (final Exception e) {
+
     }
   }
 
   @Override
-  protected  Options createOptions(boolean contextProvided) {
-    
-    Options options = super.createOptions(contextProvided);
-    
-    Option filenameOption = new Option(
+  protected  Options createOptions(final boolean contextProvided) {
+
+    final Options options = super.createOptions(contextProvided);
+
+    final Option filenameOption = new Option(
         FILE_NAME_OPT, "filename", true, "The path to the file containing data to import (CSV or ZIP)");
     filenameOption.setRequired(true);
     options.addOption(filenameOption);
-    
-    Option timeSeriesDataProviderOption = new Option(
+
+    final Option timeSeriesDataProviderOption = new Option(
         TIME_SERIES_DATAPROVIDER_OPT, "provider", true, "The name of the time series data provider (defaults to DEFAULT)");
     timeSeriesDataProviderOption.setOptionalArg(true);
     options.addOption(timeSeriesDataProviderOption);
-    
-    Option timeSeriesDataFieldOption = new Option(
+
+    final Option timeSeriesDataFieldOption = new Option(
         TIME_SERIES_DATAFIELD_OPT, "field", true, "The name of the time series data field");
     options.addOption(timeSeriesDataFieldOption);
-    
-    Option timeSeriesIdSchemeOption = new Option(
+
+    final Option timeSeriesIdSchemeOption = new Option(
         TIME_SERIES_IDSCHEME_OPT, "scheme", true, "The time series ID scheme (e.g. RIC, if omitted, assumes included in file IDs)");
     timeSeriesIdSchemeOption.setOptionalArg(true);
     options.addOption(timeSeriesIdSchemeOption);
-        
+
     return options;
   }
-  
+
+  @Override
   protected void usage(final Options options) {
     final HelpFormatter formatter = new HelpFormatter();
     formatter.setWidth(120);
     formatter.printHelp("historical-time-series-loader-tool.sh", HELP_HEADER, options, HELP_FOOTER, true);
   }
-  
-  
+
+
 
 }

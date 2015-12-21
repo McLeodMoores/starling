@@ -47,13 +47,32 @@
       <artifactId>core</artifactId>
       <version>${project.version}</version>
     </dependency>
-    
     <dependency>
+      <groupId>com.mcleodmoores.starling.platform</groupId>
+      <artifactId>provider</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.mcleodmoores.starling.platform</groupId>
+      <artifactId>master</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.mcleodmoores.starling.platform</groupId>
+      <artifactId>master-db</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.mcleodmoores.starling.platform</groupId>
+      <artifactId>financial-rest-client</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <!-- dependency>
       <groupId>com.mcleodmoores.starling.platform</groupId>
       <artifactId>provider-rest-client</artifactId>
       <version>${project.version}</version>
       <optional>true</optional>
-    </dependency>
+    </dependency-->
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-compress</artifactId>
@@ -64,12 +83,12 @@
       <artifactId>ant-compress</artifactId>
       <version>1.2</version>
     </dependency>
-    <dependency>
+    <!-- dependency>
       <groupId>com.mcleodmoores.starling.platform</groupId>
       <artifactId>bloomberg</artifactId>
       <version>${project.version}</version>
       <optional>true</optional>
-    </dependency>
+    </dependency-->
     <dependency>
       <groupId>org.quartz-scheduler</groupId>
       <artifactId>quartz</artifactId>

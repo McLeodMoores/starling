@@ -12,8 +12,8 @@ import com.opengamma.component.tool.AbstractTool;
 import com.opengamma.core.id.ExternalSchemes;
 import com.opengamma.financial.generator.AbstractPortfolioGeneratorTool;
 import com.opengamma.financial.generator.SecurityGenerator;
+import com.opengamma.financial.tool.ToolContext;
 import com.opengamma.id.ExternalId;
-import com.opengamma.integration.tool.IntegrationToolContext;
 import com.opengamma.lambdava.functions.Function2;
 import com.opengamma.util.money.Currency;
 
@@ -22,6 +22,7 @@ import com.opengamma.util.money.Currency;
  */
 public class PortfolioGeneratorTool extends AbstractPortfolioGeneratorTool {
 
+  @Override
   protected void configureChain(final SecurityGenerator<?> securityGenerator) {
     super.configureChain(securityGenerator);
     securityGenerator.setCurrencyCurveName("DEFAULT");
@@ -35,10 +36,10 @@ public class PortfolioGeneratorTool extends AbstractPortfolioGeneratorTool {
   }
 
   public static void main(final String[] args) { // CSIGNORE
-    AbstractTool<IntegrationToolContext> tool = new AbstractTool<IntegrationToolContext>() {
+    final AbstractTool<ToolContext> tool = new AbstractTool<ToolContext>() {
       private final PortfolioGeneratorTool _instance = new PortfolioGeneratorTool();
       @Override
-      protected Options createOptions(boolean mandatoryConfigResource) {
+      protected Options createOptions(final boolean mandatoryConfigResource) {
         final Options options = super.createOptions(mandatoryConfigResource);
         _instance.createOptions(options);
         return options;

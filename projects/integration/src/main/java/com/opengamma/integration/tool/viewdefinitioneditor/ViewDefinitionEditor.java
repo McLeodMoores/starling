@@ -34,17 +34,17 @@ import com.opengamma.component.tool.AbstractTool;
 import com.opengamma.core.config.ConfigSource;
 import com.opengamma.core.config.impl.ConfigItem;
 import com.opengamma.engine.view.ViewDefinition;
+import com.opengamma.financial.tool.ToolContext;
 import com.opengamma.integration.swing.ViewEntry;
 import com.opengamma.integration.swing.ViewListCellRenderer;
 import com.opengamma.integration.swing.ViewListModel;
-import com.opengamma.integration.tool.IntegrationToolContext;
 import com.opengamma.scripts.Scriptable;
 
 /**
  * Debugging tool for engine functions.
  */
 @Scriptable
-public class ViewDefinitionEditor extends AbstractTool<IntegrationToolContext> {
+public class ViewDefinitionEditor extends AbstractTool<ToolContext> {
 
   /** Logger. */
   private static final Logger s_logger = LoggerFactory.getLogger(ViewDefinitionEditor.class);
@@ -58,10 +58,10 @@ public class ViewDefinitionEditor extends AbstractTool<IntegrationToolContext> {
   //-------------------------------------------------------------------------
   /**
    * Main method to run the tool.
-   * 
+   *
    * @param args  the standard tool arguments, not null
    */
-  public static void main(String[] args) {
+  public static void main(final String[] args) {
     new ViewDefinitionEditor().invokeAndTerminate(args);
   }
 
@@ -75,11 +75,11 @@ public class ViewDefinitionEditor extends AbstractTool<IntegrationToolContext> {
     _frame.setTitle("View Definition Editor");
     _frame.setPreferredSize(new Dimension(1000, 700));
     _frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    
-    JPanel mainPanel = new JPanel();
+
+    final JPanel mainPanel = new JPanel();
     _frame.getContentPane().add(mainPanel, BorderLayout.CENTER);
     mainPanel.setLayout(new BorderLayout());
-    
+
     _viewList = new JList<ViewEntry>();
     _viewListModel = getViewListModel();
     _viewList.setModel(_viewListModel);
@@ -87,33 +87,33 @@ public class ViewDefinitionEditor extends AbstractTool<IntegrationToolContext> {
     _viewList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
     final ConfigSource configSource = getToolContext().getConfigSource();
-    
-    JPanel panel = new JPanel();
+
+    final JPanel panel = new JPanel();
     mainPanel.add(panel, BorderLayout.CENTER);
     panel.setLayout(new BorderLayout(0, 0));
-    
+
     _splitPane = new JSplitPane();
     panel.add(_splitPane);
-    
+
     //JScrollPane failuresScrollPane = new JScrollPane(_failuresTreeTable);
     //_splitPane.setRightComponent(failuresScrollPane);
-   
+
     _viewNameTextField = new JTextField();
     _viewNameTextField.setHorizontalAlignment(JTextField.LEFT);
     _viewNameTextField.addKeyListener(new KeyListener() {
-      private void actionPerformed(KeyEvent e) {
-        JTextField field = _viewNameTextField;
+      private void actionPerformed(final KeyEvent e) {
+        final JTextField field = _viewNameTextField;
         _viewListModel.setFilter(field.getText());;
       }
 
       @Override
-      public void keyTyped(KeyEvent e) {
+      public void keyTyped(final KeyEvent e) {
         s_logger.warn("key code = {}", e.getKeyCode());
         actionPerformed(e);
       }
 
       @Override
-      public void keyPressed(KeyEvent e) {
+      public void keyPressed(final KeyEvent e) {
         s_logger.warn("key pressed = {}", e.getKeyCode());
         if (e.getKeyCode() == KeyEvent.VK_DOWN) {
           _viewList.requestFocusInWindow();
@@ -121,21 +121,23 @@ public class ViewDefinitionEditor extends AbstractTool<IntegrationToolContext> {
       }
 
       @Override
-      public void keyReleased(KeyEvent e) {
+      public void keyReleased(final KeyEvent e) {
       }
     });
-    
+
     _viewList.addListSelectionListener(new ListSelectionListener() {
       @Override
-      public void valueChanged(ListSelectionEvent e) {
+      public void valueChanged(final ListSelectionEvent e) {
         @SuppressWarnings("unchecked")
+        final
         JList<ViewEntry> cb = (JList<ViewEntry>) e.getSource();
-        final ViewEntry viewEntry = (ViewEntry) cb.getSelectedValue();
+        final ViewEntry viewEntry = cb.getSelectedValue();
         if (viewEntry != null) {
           SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
               @SuppressWarnings("unchecked")
+              final
               ConfigItem<ViewDefinition> configItem = (ConfigItem<ViewDefinition>) configSource.get(viewEntry.getUniqueId());
               if (configItem.getValue() != null) {
                 _viewNameTextField.setText(viewEntry.getName());
@@ -148,13 +150,13 @@ public class ViewDefinitionEditor extends AbstractTool<IntegrationToolContext> {
         }
       }
     });
-    JPanel viewSelectionPanel = new JPanel(new BorderLayout());
-    JScrollPane scrollPane = new JScrollPane(_viewList);
-    viewSelectionPanel.add(_viewNameTextField, BorderLayout.PAGE_START);    
+    final JPanel viewSelectionPanel = new JPanel(new BorderLayout());
+    final JScrollPane scrollPane = new JScrollPane(_viewList);
+    viewSelectionPanel.add(_viewNameTextField, BorderLayout.PAGE_START);
     viewSelectionPanel.add(scrollPane, BorderLayout.CENTER);
     _splitPane.setLeftComponent(viewSelectionPanel);
   }
-  
+
   private ListCellRenderer<? super ViewEntry> getViewListCellRenderer() {
     return new ViewListCellRenderer();
   }
@@ -162,7 +164,7 @@ public class ViewDefinitionEditor extends AbstractTool<IntegrationToolContext> {
   private ViewListModel getViewListModel() {
     return new ViewListModel(getToolContext().getConfigMaster());
   }
-  
+
   private final SynchronousQueue<Void> _endQueue = new SynchronousQueue<>();
 
   private JSplitPane _splitPane;
@@ -181,14 +183,14 @@ public class ViewDefinitionEditor extends AbstractTool<IntegrationToolContext> {
           _frame.addWindowStateListener(new WindowStateListener() {
 
             @Override
-            public void windowStateChanged(WindowEvent e) {
+            public void windowStateChanged(final WindowEvent e) {
               if (e.getNewState() == WindowEvent.WINDOW_CLOSED) {
                 _endQueue.add(null);
               }
             }
           });
           _splitPane.setDividerLocation(0.3d);
-        } catch (Exception e) {
+        } catch (final Exception e) {
           e.printStackTrace();
         }
       }

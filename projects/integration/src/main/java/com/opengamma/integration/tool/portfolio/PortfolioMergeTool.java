@@ -14,9 +14,9 @@ import org.apache.commons.cli.Options;
 
 import com.google.common.collect.Lists;
 import com.opengamma.component.tool.AbstractTool;
+import com.opengamma.financial.tool.ToolContext;
 import com.opengamma.id.ObjectId;
 import com.opengamma.id.VersionCorrection;
-import com.opengamma.integration.tool.IntegrationToolContext;
 import com.opengamma.master.portfolio.ManageablePortfolio;
 import com.opengamma.master.portfolio.ManageablePortfolioNode;
 import com.opengamma.master.portfolio.PortfolioDocument;
@@ -29,7 +29,7 @@ import com.opengamma.scripts.Scriptable;
  * Tool to aggregate portfolios
  */
 @Scriptable
-public class PortfolioMergeTool extends AbstractTool<IntegrationToolContext> {
+public class PortfolioMergeTool extends AbstractTool<ToolContext> {
 
   private static final String INPUT_PORTFOLIO_NAMES = "n";
   private static final String NEW_PORTFOLIO_NAME = "m";
@@ -38,19 +38,19 @@ public class PortfolioMergeTool extends AbstractTool<IntegrationToolContext> {
   //-------------------------------------------------------------------------
   /**
    * Main method to run the tool.
-   * 
+   *
    * @param args  the standard tool arguments, not null
    */
-  public static void main(String[] args) {  // CSIGNORE
+  public static void main(final String[] args) {  // CSIGNORE
     new PortfolioMergeTool().invokeAndTerminate(args);
   }
 
   //-------------------------------------------------------------------------
   @Override
   protected void doRun() {
-    String[] portfolioNames = getCommandLine().getOptionValues(INPUT_PORTFOLIO_NAMES);
-    List<ManageablePortfolio> sourcePortfolios = new ArrayList<>();
-    for (String sourcePortfolioName : portfolioNames) {
+    final String[] portfolioNames = getCommandLine().getOptionValues(INPUT_PORTFOLIO_NAMES);
+    final List<ManageablePortfolio> sourcePortfolios = new ArrayList<>();
+    for (final String sourcePortfolioName : portfolioNames) {
       System.out.println("Loading portfolio " + sourcePortfolioName);
       sourcePortfolios.add(loadPortfolio(sourcePortfolioName));
     }
@@ -63,54 +63,54 @@ public class PortfolioMergeTool extends AbstractTool<IntegrationToolContext> {
       System.out.println("No supplied destination portfolio name, generating name:" + newName);
     }
     System.out.println("Merging...");
-    ManageablePortfolio resultingPortfolio = mergePortfolios(sourcePortfolios, newName, getCommandLine().hasOption(FLATTEN_OPTION_NAME));
+    final ManageablePortfolio resultingPortfolio = mergePortfolios(sourcePortfolios, newName, getCommandLine().hasOption(FLATTEN_OPTION_NAME));
     System.out.println("Finished merge, storing...");
     storePortfolio(resultingPortfolio);
     System.out.println("Done");
   }
-  
-  private void storePortfolio(ManageablePortfolio resultingPortfolio) {
-    PortfolioMaster portfolioMaster = getToolContext().getPortfolioMaster();
-    String name = resultingPortfolio.getName();
-    PortfolioSearchRequest request = new PortfolioSearchRequest();
+
+  private void storePortfolio(final ManageablePortfolio resultingPortfolio) {
+    final PortfolioMaster portfolioMaster = getToolContext().getPortfolioMaster();
+    final String name = resultingPortfolio.getName();
+    final PortfolioSearchRequest request = new PortfolioSearchRequest();
     request.setName(name);
-    PortfolioSearchResult result = portfolioMaster.search(request);
-    int numResults = result.getDocuments().size();
+    final PortfolioSearchResult result = portfolioMaster.search(request);
+    final int numResults = result.getDocuments().size();
     if (numResults > 1) {
       System.err.println("There are multiple matching resulting portfolios, don't know which to update, so aborting.");
       System.exit(1);
     } else if (numResults == 0) {
-      PortfolioDocument document = new PortfolioDocument(resultingPortfolio);
+      final PortfolioDocument document = new PortfolioDocument(resultingPortfolio);
       System.out.println("No existing result portfolio, creating a fresh one");
       portfolioMaster.add(document);
     } else if (numResults == 1) {
-      PortfolioDocument firstDocument = result.getFirstDocument();
+      final PortfolioDocument firstDocument = result.getFirstDocument();
       firstDocument.setPortfolio(resultingPortfolio);
       System.out.println("Found existing result portfolio, updating it");
       portfolioMaster.update(firstDocument);
     }
   }
 
-  public static List<ObjectId> flatten(ManageablePortfolio inputPortfolio) {
-    List<ObjectId> positions = Lists.newArrayList();
+  public static List<ObjectId> flatten(final ManageablePortfolio inputPortfolio) {
+    final List<ObjectId> positions = Lists.newArrayList();
     flatten(inputPortfolio.getRootNode(), positions);
     return positions;
   }
-  
-  private static void flatten(ManageablePortfolioNode portfolioNode, List<ObjectId> flattenedPortfolio) {
-    flattenedPortfolio.addAll(portfolioNode.getPositionIds());    
-    for (ManageablePortfolioNode subNode : portfolioNode.getChildNodes()) {
+
+  private static void flatten(final ManageablePortfolioNode portfolioNode, final List<ObjectId> flattenedPortfolio) {
+    flattenedPortfolio.addAll(portfolioNode.getPositionIds());
+    for (final ManageablePortfolioNode subNode : portfolioNode.getChildNodes()) {
       flatten(subNode, flattenedPortfolio);
     }
   }
-  
-  private ManageablePortfolio mergePortfolios(List<ManageablePortfolio> sourcePortfolios, String newName, boolean flatten) {
-    ManageablePortfolio mergedPortfolio = new ManageablePortfolio(newName);
-    for (ManageablePortfolio portfolio : sourcePortfolios) {
-      ManageablePortfolioNode mergedRootNode = mergedPortfolio.getRootNode();
+
+  private ManageablePortfolio mergePortfolios(final List<ManageablePortfolio> sourcePortfolios, final String newName, final boolean flatten) {
+    final ManageablePortfolio mergedPortfolio = new ManageablePortfolio(newName);
+    for (final ManageablePortfolio portfolio : sourcePortfolios) {
+      final ManageablePortfolioNode mergedRootNode = mergedPortfolio.getRootNode();
       if (flatten) {
-        List<ObjectId> positions = flatten(portfolio);
-        for (ObjectId positionId : positions) {
+        final List<ObjectId> positions = flatten(portfolio);
+        for (final ObjectId positionId : positions) {
           mergedRootNode.addPosition(positionId);
         }
       } else {
@@ -119,13 +119,13 @@ public class PortfolioMergeTool extends AbstractTool<IntegrationToolContext> {
     }
     return mergedPortfolio;
   }
-  
-  private String mergePortfolioNames(List<ManageablePortfolio> sourcePortfolios) {
-    StringBuilder sb = new StringBuilder();
+
+  private String mergePortfolioNames(final List<ManageablePortfolio> sourcePortfolios) {
+    final StringBuilder sb = new StringBuilder();
     sb.append("Merger of (");
-    Iterator<ManageablePortfolio> iter = sourcePortfolios.iterator();
+    final Iterator<ManageablePortfolio> iter = sourcePortfolios.iterator();
     while (iter.hasNext()) {
-      ManageablePortfolio next = iter.next();
+      final ManageablePortfolio next = iter.next();
       sb.append(next.getName().trim());
       if (iter.hasNext()) {
         sb.append(",");
@@ -134,13 +134,13 @@ public class PortfolioMergeTool extends AbstractTool<IntegrationToolContext> {
     sb.append(")");
     return sb.toString();
   }
-  
-  private ManageablePortfolio loadPortfolio(String name) {
-    PortfolioMaster portfolioMaster = getToolContext().getPortfolioMaster();
-    PortfolioSearchRequest searchRequest = new PortfolioSearchRequest();
+
+  private ManageablePortfolio loadPortfolio(final String name) {
+    final PortfolioMaster portfolioMaster = getToolContext().getPortfolioMaster();
+    final PortfolioSearchRequest searchRequest = new PortfolioSearchRequest();
     searchRequest.setName(name);
     searchRequest.setVersionCorrection(VersionCorrection.LATEST);
-    PortfolioSearchResult result = portfolioMaster.search(searchRequest);
+    final PortfolioSearchResult result = portfolioMaster.search(searchRequest);
     if (result.getDocuments().size() > 1) {
       System.err.println("Found multiple copies of portfolio called " + name + ", quitting");
       System.exit(1);
@@ -152,21 +152,22 @@ public class PortfolioMergeTool extends AbstractTool<IntegrationToolContext> {
     return result.getFirstPortfolio();
   }
 
-  protected Options createOptions(boolean contextProvided) {
-    Options options = super.createOptions(contextProvided);
+  @Override
+  protected Options createOptions(final boolean contextProvided) {
+    final Options options = super.createOptions(contextProvided);
 
-    Option origNameOption = new Option(
+    final Option origNameOption = new Option(
         INPUT_PORTFOLIO_NAMES, "origname", true, "The name of the portfolios to merge (preserves originals)");
     origNameOption.setRequired(true);
     origNameOption.setArgs(Option.UNLIMITED_VALUES);
     options.addOption(origNameOption);
 
-    Option newNameOption = new Option(
+    final Option newNameOption = new Option(
         NEW_PORTFOLIO_NAME, "newname", true, "The new name of the portfolio (default to generated name)");
     newNameOption.setRequired(false);
     options.addOption(newNameOption);
 
-    Option flattenOption = new Option(
+    final Option flattenOption = new Option(
         FLATTEN_OPTION_NAME, "flatten", false, "If specified, flatten the source portfolios prior to merging");
     flattenOption.setRequired(false);
     options.addOption(flattenOption);

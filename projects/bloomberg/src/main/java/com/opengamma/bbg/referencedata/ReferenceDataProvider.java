@@ -30,7 +30,7 @@ public interface ReferenceDataProvider {
    * Gets the reference data for a single field of a single identifier.
    * <p>
    * This retrieves the field reference data for the identifier.
-   * 
+   *
    * @param identifier  the identifier, not null
    * @param dataField  the field to retrieve, not null
    * @return the result, null if not found
@@ -43,7 +43,7 @@ public interface ReferenceDataProvider {
    * <p>
    * This retrieves the field reference data for the identifier.
    * The map will have missing elements, not nulls, when a field is not found.
-   * 
+   *
    * @param identifier  the identifier, not null
    * @param dataFields  the fields to retrieve, not null
    * @return the field-value map, not null
@@ -56,7 +56,7 @@ public interface ReferenceDataProvider {
    * <p>
    * This retrieves the field reference data for the identifier.
    * The map will have missing elements, not nulls, when an identifier is not found.
-   * 
+   *
    * @param identifiers  the identifiers, not null
    * @param dataField  the field to retrieve, not null
    * @return the identifier-value map, not null
@@ -69,7 +69,7 @@ public interface ReferenceDataProvider {
    * <p>
    * This retrieves the field reference data for the identifiers.
    * The map will have missing elements, not nulls, when an identifier or field is not found.
-   * 
+   *
    * @param identifiers  the identifiers, not null
    * @param dataFields  the fields to retrieve, not null
    * @return the reference data, from security to field-value map, not null
@@ -83,7 +83,7 @@ public interface ReferenceDataProvider {
    * This retrieves the field reference data for the identifiers.
    * This will ignore any caching and directly call the underlying data source.
    * The map will have missing elements, not nulls, when an identifier or field is not found.
-   * 
+   *
    * @param identifiers  the identifiers, not null
    * @param dataFields  the fields to retrieve, not null
    * @return the reference data, from security to field-value map, not null
@@ -98,7 +98,7 @@ public interface ReferenceDataProvider {
    * <p>
    * This is the underlying operation.
    * All other methods delegate to this one.
-   * 
+   *
    * @param request  the request, not null
    * @return the reference data result, not null
    * @throws RuntimeException if an unexpected error occurs

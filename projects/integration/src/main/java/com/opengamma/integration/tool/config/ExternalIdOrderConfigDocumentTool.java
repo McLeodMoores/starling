@@ -6,7 +6,7 @@
 package com.opengamma.integration.tool.config;
 
 import com.opengamma.component.tool.AbstractTool;
-import com.opengamma.integration.tool.IntegrationToolContext;
+import com.opengamma.financial.tool.ToolContext;
 import com.opengamma.master.config.ConfigMaster;
 import com.opengamma.scripts.Scriptable;
 
@@ -15,25 +15,25 @@ import com.opengamma.scripts.Scriptable;
  * The pairs must be in the format AAA/BBB, one per line in the file.
  */
 @Scriptable
-public class ExternalIdOrderConfigDocumentTool extends AbstractTool<IntegrationToolContext> {
+public class ExternalIdOrderConfigDocumentTool extends AbstractTool<ToolContext> {
 
   private static final String DEFAULT_CONFIG_NAME = "DEFAULT";
 
   //-------------------------------------------------------------------------
   /**
    * Main method to run the tool.
-   * 
+   *
    * @param args  the standard tool arguments, not null
    */
-  public static void main(String[] args) {  // CSIGNORE
+  public static void main(final String[] args) {  // CSIGNORE
     new ExternalIdOrderConfigDocumentTool().invokeAndTerminate(args);
   }
 
   //-------------------------------------------------------------------------
   @Override
   protected void doRun() {
-    ConfigMaster master = getToolContext().getConfigMaster();
-    ExternalIdOrderConfigDocumentLoader loader = new ExternalIdOrderConfigDocumentLoader(master, DEFAULT_CONFIG_NAME);
+    final ConfigMaster master = getToolContext().getConfigMaster();
+    final ExternalIdOrderConfigDocumentLoader loader = new ExternalIdOrderConfigDocumentLoader(master, DEFAULT_CONFIG_NAME);
     loader.run();
   }
 

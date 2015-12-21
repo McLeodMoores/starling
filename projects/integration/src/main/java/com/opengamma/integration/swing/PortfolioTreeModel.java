@@ -27,56 +27,57 @@ import com.opengamma.core.position.Trade;
 import com.opengamma.core.security.Security;
 import com.opengamma.core.security.SecuritySource;
 import com.opengamma.engine.view.compilation.PortfolioCompiler;
+import com.opengamma.financial.tool.ToolContext;
 import com.opengamma.id.UniqueId;
 import com.opengamma.id.VersionCorrection;
-import com.opengamma.integration.tool.IntegrationToolContext;
 import com.opengamma.util.tuple.Pair;
 
 /**
  * Swing TreeModel for browsing a resolved portfolio
  */
 public class PortfolioTreeModel implements TreeModel {
-  
+
   private static final int THREAD_POOL_SIZE = 20;
   private final PositionSource _positionSource;
   private final SecuritySource _securitySource;
-  
+
   private UniqueId _portfolioId;
   private volatile Portfolio _portfolio;
-    
-  private List<TreeModelListener> _listeners = new ArrayList<TreeModelListener>();
-  
-  public PortfolioTreeModel(final UniqueId portfolioId, final IntegrationToolContext toolContext) {
+
+  private final List<TreeModelListener> _listeners = new ArrayList<TreeModelListener>();
+
+  public PortfolioTreeModel(final UniqueId portfolioId, final ToolContext toolContext) {
     _portfolioId = portfolioId;
     _positionSource = toolContext.getPositionSource();
     _securitySource = toolContext.getSecuritySource();
-    
-    SwingWorker<Portfolio, Pair<UniqueId, SecuritySource>> worker = new SwingWorker<Portfolio, Pair<UniqueId, SecuritySource>>() {
+
+    final SwingWorker<Portfolio, Pair<UniqueId, SecuritySource>> worker = new SwingWorker<Portfolio, Pair<UniqueId, SecuritySource>>() {
       @Override
       protected Portfolio doInBackground() throws Exception {
-        Portfolio portfolio = _positionSource.getPortfolio(portfolioId, VersionCorrection.LATEST);
-        Portfolio resolvedPortfolio = PortfolioCompiler.resolvePortfolio(portfolio, Executors.newFixedThreadPool(THREAD_POOL_SIZE), _securitySource);
+        final Portfolio portfolio = _positionSource.getPortfolio(portfolioId, VersionCorrection.LATEST);
+        final Portfolio resolvedPortfolio = PortfolioCompiler.resolvePortfolio(portfolio, Executors.newFixedThreadPool(THREAD_POOL_SIZE), _securitySource);
         return resolvedPortfolio;
       }
-      
+
+      @Override
       protected void done() {
         try {
           _portfolio = get();
           if (_portfolio != null) {
-            for (TreeModelListener listener : _listeners) {
+            for (final TreeModelListener listener : _listeners) {
               listener.treeStructureChanged(new TreeModelEvent(PortfolioTreeModel.this, new TreePath(_portfolio.getRootNode())));
             }
           }
-        } catch (InterruptedException ex) {
+        } catch (final InterruptedException ex) {
           JOptionPane.showMessageDialog(null, ex.getMessage(), "Error getting portfolio", JOptionPane.ERROR_MESSAGE);
-        } catch (ExecutionException ex) {
+        } catch (final ExecutionException ex) {
           JOptionPane.showMessageDialog(null, ex.getMessage(), "Error getting portfolio", JOptionPane.ERROR_MESSAGE);
         }
       }
     };
     worker.execute();
   }
-  
+
   @Override
   public Object getRoot() {
     if (_portfolio == null) {
@@ -87,16 +88,16 @@ public class PortfolioTreeModel implements TreeModel {
   }
 
   @Override
-  public Object getChild(Object parent, int index) {
+  public Object getChild(final Object parent, final int index) {
     if (parent instanceof PortfolioNode) {
-      PortfolioNode portfolioNode = (PortfolioNode) parent;
-      List<PortfolioNode> childNodes = portfolioNode.getChildNodes();
+      final PortfolioNode portfolioNode = (PortfolioNode) parent;
+      final List<PortfolioNode> childNodes = portfolioNode.getChildNodes();
       if (index < childNodes.size()) {
         return childNodes.get(index);
       } else {
         // we get a position
-        List<Position> positions = portfolioNode.getPositions();
-        int positionIndex = index - childNodes.size();
+        final List<Position> positions = portfolioNode.getPositions();
+        final int positionIndex = index - childNodes.size();
         if (positionIndex < positions.size()) {
           return positions.get(positionIndex);
         } else {
@@ -104,8 +105,8 @@ public class PortfolioTreeModel implements TreeModel {
         }
       }
     } else if (parent instanceof Position) {
-      Position position = (Position) parent;
-      Collection<Trade> trades = position.getTrades();
+      final Position position = (Position) parent;
+      final Collection<Trade> trades = position.getTrades();
       if (trades.size() > 0) { // position has trades, so return them as children
         if (index < trades.size()) {
           return Lists.newArrayList(trades).get(index);
@@ -118,8 +119,8 @@ public class PortfolioTreeModel implements TreeModel {
         }
       }
     } else if (parent instanceof Trade) {
-      Trade trade = (Trade) parent;
-      if ((trade.getSecurity() != null) && (index == 0)) {
+      final Trade trade = (Trade) parent;
+      if (trade.getSecurity() != null && index == 0) {
         return trade.getSecurity();
       }
     } // shouldn't encounter securities here as they are always leaf nodes.
@@ -127,17 +128,17 @@ public class PortfolioTreeModel implements TreeModel {
   }
 
   @Override
-  public int getChildCount(Object parent) {
+  public int getChildCount(final Object parent) {
     if (parent instanceof PortfolioNode) {
-      PortfolioNode portfolioNode = (PortfolioNode) parent;
-      List<PortfolioNode> childNodes = portfolioNode.getChildNodes();
+      final PortfolioNode portfolioNode = (PortfolioNode) parent;
+      final List<PortfolioNode> childNodes = portfolioNode.getChildNodes();
       return portfolioNode.getChildNodes().size() + portfolioNode.getPositions().size();
     } else if (parent instanceof Position) {
-      Position position = (Position) parent;
+      final Position position = (Position) parent;
       return position.getTrades().size() == 0 ? 1 : position.getTrades().size();
     } else if (parent instanceof Trade) {
-      Trade trade = (Trade) parent;
-      if ((trade.getSecurity() != null)) {
+      final Trade trade = (Trade) parent;
+      if (trade.getSecurity() != null) {
         return 1;
       } else {
         return 0;
@@ -149,15 +150,15 @@ public class PortfolioTreeModel implements TreeModel {
   }
 
   @Override
-  public boolean isLeaf(Object node) {
+  public boolean isLeaf(final Object node) {
     if (node instanceof PortfolioNode) {
-      PortfolioNode portfolioNode = (PortfolioNode) node;
+      final PortfolioNode portfolioNode = (PortfolioNode) node;
       return portfolioNode.getChildNodes().size() == 0 && portfolioNode.getPositions().size() == 0;
     } else if (node instanceof Position) {
-      Position position = (Position) node;
+      final Position position = (Position) node;
       return position.getTrades().size() == 0 && position.getSecurity() == null;
     } else if (node instanceof Trade) {
-      Trade trade = (Trade) node;
+      final Trade trade = (Trade) node;
       return trade.getSecurity() == null;
     } else if (node instanceof Security) {
       return true;
@@ -167,20 +168,20 @@ public class PortfolioTreeModel implements TreeModel {
   }
 
   @Override
-  public void valueForPathChanged(TreePath path, Object newValue) {
+  public void valueForPathChanged(final TreePath path, final Object newValue) {
     throw new UnsupportedOperationException("Tree editing is not supported by this model");
   }
 
   @Override
-  public int getIndexOfChild(Object parent, Object child) {
+  public int getIndexOfChild(final Object parent, final Object child) {
     if (parent instanceof PortfolioNode) {
-      PortfolioNode parentNode = (PortfolioNode) parent;
+      final PortfolioNode parentNode = (PortfolioNode) parent;
       if (child instanceof PortfolioNode) {
-        PortfolioNode childNode = (PortfolioNode) child;
+        final PortfolioNode childNode = (PortfolioNode) child;
         return parentNode.getChildNodes().indexOf(childNode);
       } else if (child instanceof Position) {
-        Position childPosition = (Position) child;
-        int positionIndex = parentNode.getPositions().indexOf(childPosition);
+        final Position childPosition = (Position) child;
+        final int positionIndex = parentNode.getPositions().indexOf(childPosition);
         if (positionIndex == -1) {
           return -1;
         } else {
@@ -190,15 +191,15 @@ public class PortfolioTreeModel implements TreeModel {
         return -1;
       }
     } else if (parent instanceof Position) {
-      Position parentPosition = (Position) parent;
+      final Position parentPosition = (Position) parent;
       if (child instanceof Trade) {
-        Trade childTrade = (Trade) child;
+        final Trade childTrade = (Trade) child;
         return Lists.newArrayList(parentPosition.getTrades()).indexOf(childTrade); // indexOf returns -1 as expected by this interface if not present
       } else if (child instanceof Security) {
         return 0;
       }
     } else if (parent instanceof Trade) {
-      Trade parentTrade = (Trade) parent;
+      final Trade parentTrade = (Trade) parent;
       if (child instanceof Security) {
         return 0;
       } else {
@@ -211,12 +212,12 @@ public class PortfolioTreeModel implements TreeModel {
   }
 
   @Override
-  public void addTreeModelListener(TreeModelListener l) {
+  public void addTreeModelListener(final TreeModelListener l) {
     _listeners.add(l);
   }
 
   @Override
-  public void removeTreeModelListener(TreeModelListener l) {
+  public void removeTreeModelListener(final TreeModelListener l) {
     _listeners.remove(l);
   }
 

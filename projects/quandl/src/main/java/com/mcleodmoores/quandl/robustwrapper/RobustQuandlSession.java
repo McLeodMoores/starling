@@ -117,17 +117,29 @@ public class RobustQuandlSession {
       }
       final DataSetRequest dataSetRequest = builder.build();
       TabularResult tabularResult = null;
+      final int maxRetries = 10;
+      int count = 0;
       final Integer retries = 0;
       do {
         try {
           tabularResult = _session.getDataSet(dataSetRequest);
         } catch (final QuandlTooManyRequestsException tooManyReqs) {
           backOff(retries);
+          count++;
         } catch (final QuandlRuntimeException qre) {
+          count++;
           s_logger.error("Can't process request for {}, giving up and skipping.  Full request is {}", quandlCodeRequest.getQuandlCode(), dataSetRequest);
+          if (count > maxRetries) {
+            s_logger.error("Problem getting data from Quandl for {}. Full request is {}", quandlCodeRequest.getQuandlCode(), dataSetRequest);
+            break;
+          }
           continue;
         }
       } while (tabularResult == null);
+      if (count > maxRetries) {
+        s_logger.error("Problem getting data from Quandl for {}. Full request is {}", quandlCodeRequest.getQuandlCode(), dataSetRequest);
+        break;
+      }
       results.put(quandlCodeRequest, tabularResult);
     }
     return mergeTables(results, request.getSortOrder());

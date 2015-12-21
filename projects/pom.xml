@@ -44,6 +44,7 @@
     <module>financial-rest-client</module>
     <module>financial-types</module>
     <module>integration</module>
+    <module>integration-bloomberg</module>
     <module>live-data</module>
     <module>master</module>
     <module>master-rest</module>
@@ -57,6 +58,7 @@
     <module>quandl</module>
     <module>security</module>
     <module>server</module>
+    <module>starling-client</module>
     <module>time-series</module>
     <module>util</module>
     <module>util-rest</module>

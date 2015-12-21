@@ -88,7 +88,7 @@
     </dependency>
     <dependency>
       <groupId>com.mcleodmoores.starling.platform</groupId>
-      <artifactId>integration</artifactId>
+      <artifactId>integration-bloomberg</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>

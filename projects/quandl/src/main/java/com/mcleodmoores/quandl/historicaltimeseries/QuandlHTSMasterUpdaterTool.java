@@ -24,7 +24,6 @@ import com.opengamma.financial.tool.ToolContext;
 import com.opengamma.id.ExternalIdBundle;
 import com.opengamma.id.ObjectId;
 import com.opengamma.integration.tool.GUIFeedback;
-import com.opengamma.integration.tool.IntegrationToolContext;
 import com.opengamma.master.historicaltimeseries.HistoricalTimeSeriesInfoDocument;
 import com.opengamma.master.historicaltimeseries.HistoricalTimeSeriesMaster;
 import com.opengamma.provider.historicaltimeseries.HistoricalTimeSeriesProvider;
@@ -73,13 +72,13 @@ public class QuandlHTSMasterUpdaterTool extends AbstractTool<ToolContext> {
     GUIFeedback feedback = null;
     try {
       feedback = new GUIFeedback("Updating time series database from Quandl");
-      if (!new QuandlHTSMasterUpdaterTool(feedback).initAndRun(args, IntegrationToolContext.class)) {
+      if (!new QuandlHTSMasterUpdaterTool(feedback).initAndRun(args, ToolContext.class)) {
         feedback.done("Could not update the time-series database - check that the server has been started");
       } else {
         ShutdownUtils.exit(0);
       }
     } catch (final java.awt.HeadlessException ex) {
-      final boolean success = new QuandlHTSMasterUpdaterTool().initAndRun(args, IntegrationToolContext.class);
+      final boolean success = new QuandlHTSMasterUpdaterTool().initAndRun(args, ToolContext.class);
       ShutdownUtils.exit(success ? 0 : -1);
 
     } catch (final Exception ex) {
@@ -142,7 +141,7 @@ public class QuandlHTSMasterUpdaterTool extends AbstractTool<ToolContext> {
               _feedback.workCompleted(1);
               _toUpdate++;
               final long now = System.nanoTime();
-              if ((now - _lastNotify < 0) || (now - _lastNotify > 5000000000L)) {
+              if (now - _lastNotify < 0 || now - _lastNotify > 5000000000L) {
                 GUIFeedback.say("Found " + _toUpdate + " time series to update");
                 _lastNotify = now;
               }
@@ -181,7 +180,7 @@ public class QuandlHTSMasterUpdaterTool extends AbstractTool<ToolContext> {
           final int count = identifierSet.size();
           _toUpdate -= count;
           final long now = System.nanoTime();
-          if ((now - _lastNotify < 0) || (now - _lastNotify > 5000000000L)) {
+          if (now - _lastNotify < 0 || now - _lastNotify > 5000000000L) {
             GUIFeedback.say(_toUpdate + " time series left to update");
             _lastNotify = now;
           }

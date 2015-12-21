@@ -20,50 +20,13 @@
   <dependencies>
     <dependency>
       <groupId>com.jimmoores</groupId>
-      <artifactId>quandl</artifactId>
-      <version>1.3.0</version>
+      <artifactId>quandl-jersey1</artifactId>
+      <version>0.9.0</version>
     </dependency>
     <dependency>
       <groupId>com.mcleodmoores.starling.platform</groupId>
-      <artifactId>component</artifactId>
+      <artifactId>integration-bloomberg</artifactId>
       <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>com.mcleodmoores.starling.platform</groupId>
-      <artifactId>financial</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>com.mcleodmoores.starling.platform</groupId>
-      <artifactId>integration</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>com.mcleodmoores.starling.platform</groupId>
-      <artifactId>master</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>com.mcleodmoores.starling.platform</groupId>
-      <artifactId>provider</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>com.mcleodmoores.starling.platform</groupId>
-      <artifactId>util</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>com.google.guava</groupId>
-      <artifactId>guava</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-api</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>net.sf.ehcache</groupId>
-      <artifactId>ehcache-core</artifactId>
     </dependency>
   </dependencies>
   

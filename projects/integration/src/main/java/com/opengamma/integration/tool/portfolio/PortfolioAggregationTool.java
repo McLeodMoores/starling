@@ -28,14 +28,14 @@ import com.opengamma.financial.aggregation.GICSAggregationFunction;
 import com.opengamma.financial.aggregation.PortfolioAggregator;
 import com.opengamma.financial.aggregation.PositionAttributeAggregationFunction;
 import com.opengamma.financial.aggregation.UnderlyingAggregationFunction;
-import com.opengamma.integration.tool.IntegrationToolContext;
+import com.opengamma.financial.tool.ToolContext;
 import com.opengamma.scripts.Scriptable;
 
 /**
  * Tool to aggregate portfolios
  */
 @Scriptable
-public class PortfolioAggregationTool extends AbstractTool<IntegrationToolContext> {
+public class PortfolioAggregationTool extends AbstractTool<ToolContext> {
 
   /** Logger. */
   private static final Logger s_logger = LoggerFactory.getLogger(PortfolioAggregationTool.class);
@@ -48,10 +48,10 @@ public class PortfolioAggregationTool extends AbstractTool<IntegrationToolContex
   //-------------------------------------------------------------------------
   /**
    * Main method to run the tool.
-   * 
+   *
    * @param args  the standard tool arguments, not null
    */
-  public static void main(String[] args) {  // CSIGNORE
+  public static void main(final String[] args) {  // CSIGNORE
     new PortfolioAggregationTool().invokeAndTerminate(args);
   }
 
@@ -70,7 +70,7 @@ public class PortfolioAggregationTool extends AbstractTool<IntegrationToolContex
   }
 
 
-  private void populateAggregationFunctionMap(SecuritySource secSource) {
+  private void populateAggregationFunctionMap(final SecuritySource secSource) {
     _aggregationFunctions.put("AssetClass", new AssetClassAggregationFunction());
     _aggregationFunctions.put("Currency", new CurrencyAggregationFunction());
     _aggregationFunctions.put("DetailedAssetClass", new DetailedAssetClassAggregationFunction());
@@ -83,16 +83,16 @@ public class PortfolioAggregationTool extends AbstractTool<IntegrationToolContex
     _aggregationFunctions.put("RedCode", new CdsRedCodeAggregationFunction(getToolContext().getSecuritySource()));
     _aggregationFunctions.put("Seniority", new CdsSeniorityAggregationFunction(getToolContext().getSecuritySource()));
   }
-  
-  private AggregationFunction<?>[] createAggregationFunctions(String[] aggregatorNames) {
+
+  private AggregationFunction<?>[] createAggregationFunctions(final String[] aggregatorNames) {
     if (aggregatorNames == null) {
       s_logger.error("No aggregators specified");
       System.exit(1);
       return null; // idiot compiler...
-    } else { 
-      AggregationFunction<?>[] results = new AggregationFunction<?>[aggregatorNames.length];
+    } else {
+      final AggregationFunction<?>[] results = new AggregationFunction<?>[aggregatorNames.length];
       for (int i = 0; i < aggregatorNames.length; i++) {
-        AggregationFunction<?> aggregationFunction = _aggregationFunctions.get(aggregatorNames[i].trim());
+        final AggregationFunction<?> aggregationFunction = _aggregationFunctions.get(aggregatorNames[i].trim());
         if (aggregationFunction != null) {
           results[i] = aggregationFunction;
         } else {
@@ -103,10 +103,12 @@ public class PortfolioAggregationTool extends AbstractTool<IntegrationToolContex
     }
   }
 
-  protected Options createOptions(boolean contextProvided) {
-    Options options = super.createOptions(contextProvided);
+  @Override
+  protected Options createOptions(final boolean contextProvided) {
+    final Options options = super.createOptions(contextProvided);
 
     @SuppressWarnings("static-access")
+    final
     Option baseViewOption = OptionBuilder.withLongOpt("portfolio")
                                          .hasArg()
                                          .isRequired()
@@ -114,6 +116,7 @@ public class PortfolioAggregationTool extends AbstractTool<IntegrationToolContex
                                          .create(PORTFOLIO_OPT);
     options.addOption(baseViewOption);
     @SuppressWarnings("static-access")
+    final
     Option aggregationTypesOption = OptionBuilder.withLongOpt("aggregation-types")
                                                  .hasArgs()
                                                  .isRequired()
@@ -123,6 +126,7 @@ public class PortfolioAggregationTool extends AbstractTool<IntegrationToolContex
                                                  .create(AGGREGATION_OPT);
     options.addOption(aggregationTypesOption);
     @SuppressWarnings("static-access")
+    final
     Option splitPortfoliosOption =  OptionBuilder.withLongOpt("split")
                                                  .withDescription(
                                                      "Split into separate portfolios grouped by the top-level aggregator" +
