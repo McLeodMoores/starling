@@ -86,10 +86,10 @@ public class FindViewAmbiguities extends AbstractTool<ToolContext> {
   //-------------------------------------------------------------------------
   /**
    * Main method to run the tool.
-   * 
+   *
    * @param args  the standard tool arguments, not null
    */
-  public static void main(String[] args) { // CSIGNORE
+  public static void main(final String[] args) { // CSIGNORE
     new FindViewAmbiguities().invokeAndTerminate(args);
   }
 
@@ -125,7 +125,7 @@ public class FindViewAmbiguities extends AbstractTool<ToolContext> {
           if (prioritiesObject instanceof FunctionPriority) {
             return (FunctionPriority) prioritiesObject;
           }
-        } catch (Exception e) {
+        } catch (final Exception e) {
           throw new OpenGammaRuntimeException("Error loading function priorities", e);
         }
       }
@@ -177,7 +177,7 @@ public class FindViewAmbiguities extends AbstractTool<ToolContext> {
             return (FunctionExclusionGroups) groupsObject;
           }
           throw new IllegalArgumentException("Couldn't set exclusion groups to " + exclusionGroups + " (got " + groupsObject + ")");
-        } catch (Exception e) {
+        } catch (final Exception e) {
           throw new OpenGammaRuntimeException("Error loading exclusion groups", e);
         }
       }
@@ -188,12 +188,12 @@ public class FindViewAmbiguities extends AbstractTool<ToolContext> {
     protected void resolved(final FullRequirementResolution resolution) {
       resolvedImpl(resolution);
       final int count = _resolutions.incrementAndGet();
-      if ((count % 100) == 0) {
+      if (count % 100 == 0) {
         s_logger.info("Checked {} resolutions", count);
       }
       if (resolution.isDeeplyAmbiguous() && getCommandLine().hasOption(VERBOSE_OPTION)) {
         synchronized (this) {
-          (new FullRequirementResolutionPrinter(_out)).print(resolution);
+          new FullRequirementResolutionPrinter(_out).print(resolution);
         }
       }
     }
@@ -205,15 +205,15 @@ public class FindViewAmbiguities extends AbstractTool<ToolContext> {
     @Override
     protected synchronized void directAmbiguity(final FullRequirementResolution resolution) {
       final int count = _ambiguities.incrementAndGet();
-      if ((count % 10) == 0) {
+      if (count % 10 == 0) {
         s_logger.info("Found {} ambiguities", count);
       }
       _out.println(resolution.getRequirement());
-      for (Collection<RequirementResolution> nestedResolutions : resolution.getResolutions()) {
+      for (final Collection<RequirementResolution> nestedResolutions : resolution.getResolutions()) {
         final List<String> functions = new ArrayList<String>();
         final List<ValueSpecification> specifications = new ArrayList<ValueSpecification>();
         boolean failure = false;
-        for (RequirementResolution nestedResolution : nestedResolutions) {
+        for (final RequirementResolution nestedResolution : nestedResolutions) {
           if (nestedResolution != null) {
             functions.add(nestedResolution.getFunction().getFunctionId());
             specifications.add(nestedResolution.getSpecification());
@@ -221,13 +221,13 @@ public class FindViewAmbiguities extends AbstractTool<ToolContext> {
             failure = true;
           }
         }
-        for (String function : functions) {
+        for (final String function : functions) {
           _out.println("\t" + function);
         }
         if (failure) {
           _out.println("\t+ failure(s)");
         }
-        for (ValueSpecification specification : specifications) {
+        for (final ValueSpecification specification : specifications) {
           _out.println("\t" + specification);
         }
         _out.println();
@@ -236,16 +236,16 @@ public class FindViewAmbiguities extends AbstractTool<ToolContext> {
 
     @Override
     protected synchronized void deepAmbiguity(final FullRequirementResolution resolution) {
-      for (Collection<RequirementResolution> nestedResolutions : resolution.getResolutions()) {
-        for (RequirementResolution nestedResolution : nestedResolutions) {
-          for (FullRequirementResolution inputResolution : nestedResolution.getInputs()) {
+      for (final Collection<RequirementResolution> nestedResolutions : resolution.getResolutions()) {
+        for (final RequirementResolution nestedResolution : nestedResolutions) {
+          for (final FullRequirementResolution inputResolution : nestedResolution.getInputs()) {
             resolvedImpl(inputResolution);
           }
         }
       }
       _out.println(resolution.getRequirement());
-      for (Collection<RequirementResolution> nestedResolutions : resolution.getResolutions()) {
-        for (RequirementResolution nestedResolution : nestedResolutions) {
+      for (final Collection<RequirementResolution> nestedResolutions : resolution.getResolutions()) {
+        for (final RequirementResolution nestedResolution : nestedResolutions) {
           _out.println("\t" + nestedResolution.getSpecification());
         }
       }
@@ -289,7 +289,7 @@ public class FindViewAmbiguities extends AbstractTool<ToolContext> {
   }
 
   private static PrintStream openStream(final String filename) throws IOException {
-    if ((filename == null) || "stdout".equals(filename)) {
+    if (filename == null || "stdout".equals(filename)) {
       return System.out;
     } else if ("stderr".equals(filename)) {
       return System.err;
@@ -318,7 +318,7 @@ public class FindViewAmbiguities extends AbstractTool<ToolContext> {
     } else {
       final Collection<ConfigItem<ViewDefinition>> viewDefinitions = getToolContext().getConfigSource().getAll(ViewDefinition.class, VersionCorrection.LATEST);
       s_logger.info("Testing {} view definition(s)", viewDefinitions.size());
-      for (ConfigItem<ViewDefinition> viewDefinitionConfig : viewDefinitions) {
+      for (final ConfigItem<ViewDefinition> viewDefinitionConfig : viewDefinitions) {
         final ViewDefinition viewDefinition = viewDefinitionConfig.getValue();
         s_logger.info("Testing {}", viewDefinition.getName());
         out.println("View = " + viewDefinition.getName());

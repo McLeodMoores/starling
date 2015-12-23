@@ -13,16 +13,16 @@ public class LocalEngineViewerLauncher extends AbstractEngineViewerLauncher {
   @Override
   @SuppressWarnings("deprecation")
   protected void startup() {
-    DemoViewProcessor setup = new DemoViewProcessor();
+    final DemoViewProcessor setup = new DemoViewProcessor();
     startViewer(setup.getViewProcessor());
   }
 
   /**
    * Starts the demo.
-   * 
+   *
    * @param args command line arguments
    */
-  public static void main(String[] args) { // CSIGNORE
+  public static void main(final String[] args) { // CSIGNORE
     launch(LocalEngineViewerLauncher.class, args);
   }
 

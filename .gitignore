@@ -36,6 +36,8 @@ common/deploy.properties
 !/projects/financial-types
 !/projects/install
 !/projects/integration
+!/projects/integration-bloomberg
+!/projects/integration-rest-client
 !/projects/language
 !/projects/live-data
 !/projects/master

@@ -49,31 +49,31 @@ public final class DemoViewProcessor {
 
   /**
    * Connects to a server.
-   * 
+   *
    * @param uri  the URI to connect to,not null
    */
-  public DemoViewProcessor(URI uri) {
-    RemoteComponentServer server = new RemoteComponentServer(uri);
+  public DemoViewProcessor(final URI uri) {
+    final RemoteComponentServer server = new RemoteComponentServer(uri);
     _componentServer = server.getComponentServer();
   }
 
   public ViewProcessor getViewProcessor() {
-    ComponentInfo info = _componentServer.getComponentInfo(ViewProcessor.class, "main");
-    URI jmsBrokerUri = URI.create(info.getAttribute(ComponentInfoAttributes.JMS_BROKER_URI));
-    ActiveMQConnectionFactory cf = new ActiveMQConnectionFactory(jmsBrokerUri);
-    JmsConnectorFactoryBean factory = new JmsConnectorFactoryBean();
+    final ComponentInfo info = _componentServer.getComponentInfo(ViewProcessor.class, "main");
+    final URI jmsBrokerUri = URI.create(info.getAttribute(ComponentInfoAttributes.JMS_BROKER_URI));
+    final ActiveMQConnectionFactory cf = new ActiveMQConnectionFactory(jmsBrokerUri);
+    final JmsConnectorFactoryBean factory = new JmsConnectorFactoryBean();
     factory.setName(getClass().getSimpleName());
     factory.setConnectionFactory(cf);
     factory.setClientBrokerUri(jmsBrokerUri);
-    JmsConnector jmsConnector = factory.getObjectCreating();
-    
-    URI uri = UriBuilder.fromUri(info.getUri()).build();
-    
+    final JmsConnector jmsConnector = factory.getObjectCreating();
+
+    final URI uri = UriBuilder.fromUri(info.getUri()).build();
+
     return new RemoteViewProcessor(uri, jmsConnector, _scheduler);
   }
 
   public ConfigMaster getConfigMaster() {
-    ComponentInfo info = _componentServer.getComponentInfo(ConfigMaster.class, "main");
+    final ComponentInfo info = _componentServer.getComponentInfo(ConfigMaster.class, "main");
     return new RemoteConfigMaster(info.getUri());
   }
 

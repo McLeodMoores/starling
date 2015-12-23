@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+    	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd
+    	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.5.xsd
+    	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd">
+  
+  <!--  import resources from OG-Util -->
+  <import resource="classpath:com/opengamma/transport/jaxrs/beans.xml" />
+  
+  <!-- Property file configuration -->
+  <bean id="beansProperties" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+    <property name="ignoreUnresolvablePlaceholders" value="true" />
+    <property name="locations">
+      <list>
+        <value>classpath:marketdata.properties</value>
+      </list>
+    </property>
+  </bean>
+  
+  <import resource="classpath:/com/opengamma/bbg/bbg-context-common.xml"/>  	
+  <import resource="classpath:/com/opengamma/bbg/livedata/bbg-livedata-context.xml"/>
+
+  <!--  DEPRECATED -->
+  <!-- Remote access to the historical time-series source is through a RESTful API -->
+  <bean id="bbgHistoricalTimeSeriesSource" class="com.opengamma.bbg.BloombergHistoricalTimeSeriesSource">
+    <constructor-arg ref="bloombergHistoricalTimeSeriesProvider" />
+  </bean>
+  <bean id="historicalTimeSeriesSourceRestBean" class="com.opengamma.core.historicaltimeseries.impl.DataHistoricalTimeSeriesSourceResource">
+    <constructor-arg ref="bbgHistoricalTimeSeriesSource" />
+  </bean>
+  
+  <!-- Expose the server's capabilities -->
+  <bean id="configurationResource" class="com.opengamma.util.rest.DataConfigurationResource">
+    <constructor-arg ref="standardFudgeContext" />
+    <constructor-arg>
+      <map>
+        <entry key="0">
+          <map>
+            <entry key="historicalTimeSeriesSource">
+              <bean class="com.opengamma.transport.jaxrs.UriEndPointDescriptionProviderFactoryBean">
+                <property name="local" value="/jax/htsSource/" />
+                <property name="port" value="${jetty.port}" />
+              </bean>
+            </entry>
+          </map>
+        </entry>
+      </map>
+    </constructor-arg>
+  </bean>
+	
+</beans>

@@ -9,8 +9,6 @@ import java.net.URI;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
-import net.sf.ehcache.util.NamedThreadFactory;
-
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.apache.commons.lang.StringUtils;
 import org.fudgemsg.FudgeContext;
@@ -69,6 +67,8 @@ import com.opengamma.util.jms.JmsConnector;
 import com.opengamma.util.jms.JmsConnectorFactoryBean;
 import com.opengamma.util.rest.FudgeRestClient;
 
+import net.sf.ehcache.util.NamedThreadFactory;
+
 /**
  * Configuration tools for remote engine components.
  */
@@ -80,18 +80,18 @@ public class RemoteEngine {
   private URI _configurationURI;
   private FudgeMsg _configuration;
   private final ScheduledExecutorService _scheduler = Executors.newSingleThreadScheduledExecutor(new NamedThreadFactory("rvp"));
- 
-  public RemoteEngine(String baseUrl) {
+
+  public RemoteEngine(final String baseUrl) {
     ArgumentChecker.notNull(StringUtils.trimToNull(baseUrl), "baseUrl");
     init(baseUrl);
   }
-  
+
   private void init(String baseUrl) {
     baseUrl = StringUtils.stripEnd(baseUrl, "/");
     if (baseUrl.endsWith("/jax") == false) {
       baseUrl += "/jax";
     }
-    
+
     _fudgeContext = OpenGammaFudgeContext.getInstance();
     final URI componentsUri = URI.create(baseUrl);
     final RemoteComponentServer remote = new RemoteComponentServer(componentsUri);
@@ -103,7 +103,7 @@ public class RemoteEngine {
     factory.setName(getClass().getSimpleName());
     factory.setClientBrokerUri(URI.create(activeMQBroker));
     factory.setConnectionFactory(new ActiveMQConnectionFactory(factory.getClientBrokerUri()));
-    _jmsConnector = factory.getObjectCreating();    
+    _jmsConnector = factory.getObjectCreating();
   }
 
   public FudgeContext getFudgeContext() {
@@ -121,7 +121,7 @@ public class RemoteEngine {
   public URI getConfigurationURI() {
     return _configurationURI;
   }
-  
+
   /**
    * Gets the components.
    * @return the components
@@ -194,7 +194,7 @@ public class RemoteEngine {
     final URI uri = _components.getComponentInfo(HolidaySource.class, name).getUri();
     return new RemoteHolidaySource(uri);
   }
-  
+
   public RemoteHolidayMaster getHolidayMaster(final String name) {
     final URI uri = _components.getComponentInfo(HolidayMaster.class, name).getUri();
     return new RemoteHolidayMaster(uri);
@@ -216,7 +216,7 @@ public class RemoteEngine {
   }
 
   //-------------------------------------------------------------------------
-  public RemoteAvailableOutputsProvider getAvailableOutputsProvider(String name) {
+  public RemoteAvailableOutputsProvider getAvailableOutputsProvider(final String name) {
     final URI uri = _components.getComponentInfo(AvailableOutputsProvider.class, name).getUri();
     return new RemoteAvailableOutputsProvider(uri);
   }
@@ -225,27 +225,27 @@ public class RemoteEngine {
     final URI uri = _components.getComponentInfo(FinancialUserManager.class, finUserManagerComponentName).getUri();
     return RemoteClient.forClient(_fudgeContext, uri, username, clientId);
   }
-  
+
   public RemoteHistoricalTimeSeriesMaster getHistoricalTimeSeriesMaster(final String name) {
     final URI uri = _components.getComponentInfo(HistoricalTimeSeriesMaster.class, name).getUri();
     return new RemoteHistoricalTimeSeriesMaster(uri);
   }
-  
+
   public RemoteHistoricalTimeSeriesProvider getHistoricalTimeSeriesProvider(final String name) {
     final URI uri = _components.getComponentInfo(HistoricalTimeSeriesProvider.class, name).getUri();
     return new RemoteHistoricalTimeSeriesProvider(uri);
   }
-  
+
   public RemoteHistoricalTimeSeriesLoader getHistoricalTimeSeriesLoader(final String name) {
     final URI uri = _components.getComponentInfo(HistoricalTimeSeriesLoader.class, name).getUri();
     return new RemoteHistoricalTimeSeriesLoader(uri);
   }
-  
+
   public RemoteFunctionConfigurationSource getFunctionConfigurationSource(final String name) {
     final URI uri = _components.getComponentInfo(FunctionConfigurationSource.class, name).getUri();
     return new RemoteFunctionConfigurationSource(uri);
   }
-  
+
   public void shutDown() {
     if (_scheduler != null) {
       _scheduler.shutdownNow();

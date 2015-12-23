@@ -62,11 +62,11 @@
       <artifactId>master-db</artifactId>
       <version>${project.version}</version>
     </dependency>
-    <dependency>
+    <!-- dependency>
       <groupId>com.mcleodmoores.starling.platform</groupId>
       <artifactId>financial-rest-client</artifactId>
       <version>${project.version}</version>
-    </dependency>
+    </dependency-->
     <!-- dependency>
       <groupId>com.mcleodmoores.starling.platform</groupId>
       <artifactId>provider-rest-client</artifactId>

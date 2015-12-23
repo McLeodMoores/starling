@@ -34,26 +34,26 @@ public class RemoteEngineViewerLauncher extends AbstractEngineViewerLauncher {
     URI vpBase;
     try {
       vpBase = new URI(uriString.toString());
-    } catch (URISyntaxException ex) {
+    } catch (final URISyntaxException ex) {
       throw new OpenGammaRuntimeException("Invalid URI", ex);
     }
-    
-    URI uri = URI.create(props.getProperty("activeMQ.brokerURL"));
-    ActiveMQConnectionFactory cf = new ActiveMQConnectionFactory(uri);
-    JmsConnectorFactoryBean factory = new JmsConnectorFactoryBean();
+
+    final URI uri = URI.create(props.getProperty("activeMQ.brokerURL"));
+    final ActiveMQConnectionFactory cf = new ActiveMQConnectionFactory(uri);
+    final JmsConnectorFactoryBean factory = new JmsConnectorFactoryBean();
     factory.setName(getClass().getSimpleName());
     factory.setConnectionFactory(cf);
     factory.setClientBrokerUri(uri);
-    ViewProcessor vp = new RemoteViewProcessor(vpBase, factory.getObjectCreating(), Executors.newSingleThreadScheduledExecutor());
+    final ViewProcessor vp = new RemoteViewProcessor(vpBase, factory.getObjectCreating(), Executors.newSingleThreadScheduledExecutor());
     startViewer(vp);
   }
 
   /**
    * Starts the demo client, connecting to a shared server.
-   * 
+   *
    * @param args command line arguments
    */
-  public static void main(String[] args) { // CSIGNORE
+  public static void main(final String[] args) { // CSIGNORE
     launch(RemoteEngineViewerLauncher.class, args);
   }
 

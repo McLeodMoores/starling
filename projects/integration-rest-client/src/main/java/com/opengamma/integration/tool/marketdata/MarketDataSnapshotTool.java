@@ -63,13 +63,13 @@ public class MarketDataSnapshotTool extends AbstractTool<ToolContext> {
   private static final DateTimeFormatter VALUATION_TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm:ss");
 
   private static ToolContext s_context;
-  
+
   private static MarketDataSourceCli s_mktDataSourceCli = new MarketDataSourceCli();
 
   //-------------------------------------------------------------------------
   /**
    * Main method to run the tool.
-   * 
+   *
    * @param args  the standard tool arguments, not null
    */
   public static void main(final String[] args) { // CSIGNORE
@@ -80,7 +80,7 @@ public class MarketDataSnapshotTool extends AbstractTool<ToolContext> {
   @Override
   protected void doRun() throws Exception {
     s_context = getToolContext();
-    
+
     final RemoteViewProcessor viewProcessor = (RemoteViewProcessor) s_context.getViewProcessor();
     if (viewProcessor == null) {
       s_logger.warn("No view processors found at {}", s_context);
@@ -97,8 +97,8 @@ public class MarketDataSnapshotTool extends AbstractTool<ToolContext> {
     } else {
       marketDataSnapshotter = viewProcessor.getMarketDataSnapshotter(Mode.STRUCTURED);
     }
-    Long marketDataTimeoutSeconds = getCommandLine().hasOption(TIMEOUT_OPTION) ? Long.parseLong(getCommandLine().getOptionValue(TIMEOUT_OPTION)) : null;
-    Long marketDataTimeoutMillis = marketDataTimeoutSeconds != null ? TimeUnit.SECONDS.toMillis(marketDataTimeoutSeconds) : null;
+    final Long marketDataTimeoutSeconds = getCommandLine().hasOption(TIMEOUT_OPTION) ? Long.parseLong(getCommandLine().getOptionValue(TIMEOUT_OPTION)) : null;
+    final Long marketDataTimeoutMillis = marketDataTimeoutSeconds != null ? TimeUnit.SECONDS.toMillis(marketDataTimeoutSeconds) : null;
     final MarketDataSnapshotSaver snapshotSaver = MarketDataSnapshotSaver.of(marketDataSnapshotter, viewProcessor, s_context.getConfigMaster(), marketDataSnapshotMaster, marketDataTimeoutMillis);
 
     if (getCommandLine().hasOption(VIEW_PROCESS_ID_OPTION)) {
@@ -106,7 +106,7 @@ public class MarketDataSnapshotTool extends AbstractTool<ToolContext> {
       s_logger.info("Creating snapshot from existing view process " + viewProcessId);
       try {
         snapshotSaver.createSnapshot(null, viewProcessId);
-      } catch (Exception e) {
+      } catch (final Exception e) {
         endWithError(e.getMessage());
       }
     } else {
@@ -123,14 +123,14 @@ public class MarketDataSnapshotTool extends AbstractTool<ToolContext> {
       } else {
         valuationInstant = Instant.now();
       }
-      
-      List<MarketDataSpecification> marketDataSpecs = new ArrayList<>();
+
+      final List<MarketDataSpecification> marketDataSpecs = new ArrayList<>();
       if (getCommandLine().hasOption(HISTORICAL_OPTION)) {
         marketDataSpecs.add(new LatestHistoricalMarketDataSpecification());
       } else {
         marketDataSpecs.addAll(getMarketDataSpecs());
       }
-      
+
       s_logger.info("Creating snapshot for view definition " + viewDefinitionName);
       try {
         String snapshotName = StringUtils.trimToNull(getCommandLine().getOptionValue(SNAPSHOT_NAME_OPTION));
@@ -139,7 +139,7 @@ public class MarketDataSnapshotTool extends AbstractTool<ToolContext> {
           snapshotName = viewDefinitionName + "/" + valuationInstant;
         }
         snapshotSaver.createSnapshot(snapshotName, viewDefinitionName, valuationInstant, marketDataSpecs);
-      } catch (Exception e) {
+      } catch (final Exception e) {
         endWithError(e.getMessage());
       }
     }
@@ -149,8 +149,8 @@ public class MarketDataSnapshotTool extends AbstractTool<ToolContext> {
     return s_mktDataSourceCli.getMarketDataSpecs(getCommandLine(), s_context.getMarketDataSnapshotMaster());
   }
 
-  private void endWithError(String message, Object... messageArgs) {
-    String formattedMessage = format(message, messageArgs);
+  private void endWithError(final String message, final Object... messageArgs) {
+    final String formattedMessage = format(message, messageArgs);
     System.err.println(formattedMessage);
     s_logger.error(formattedMessage);
     System.exit(1);
@@ -158,7 +158,7 @@ public class MarketDataSnapshotTool extends AbstractTool<ToolContext> {
 
   //-------------------------------------------------------------------------
   @Override
-  protected Options createOptions(boolean mandatoryConfig) {
+  protected Options createOptions(final boolean mandatoryConfig) {
     final Options options = super.createOptions(mandatoryConfig);
     options.addOptionGroup(createViewOptionGroup());
     options.addOption(createSnapshotNameOption());
@@ -168,7 +168,7 @@ public class MarketDataSnapshotTool extends AbstractTool<ToolContext> {
     options.addOption(createUnstructuredSnapshot());
     return options;
   }
-  
+
   private OptionGroup createMarketDataSourceOptionGroup() {
     final OptionGroup optionGroup = new OptionGroup();
     optionGroup.addOption(createHistoricalOption());
@@ -190,13 +190,13 @@ public class MarketDataSnapshotTool extends AbstractTool<ToolContext> {
     option.setArgName("view name");
     return option;
   }
-  
+
   private static Option createSnapshotNameOption() {
     final Option option = new Option(SNAPSHOT_NAME_OPTION, "snapshotName", true, "the name to use when persisting the snapshot. (defaults to '<view name>/<valuation time>' )");
     option.setArgName("snapshot name");
     return option;
   }
-  
+
   private static Option createViewProcessIdOption() {
     final Option option = new Option(VIEW_PROCESS_ID_OPTION, "viewProcessId", true, "the unique identifier of an existing view process e.g ViewProcess~1234");
     option.setArgName("unique identifier");
@@ -208,7 +208,7 @@ public class MarketDataSnapshotTool extends AbstractTool<ToolContext> {
     option.setArgName("valuation time");
     return option;
   }
-  
+
   private static Option createTimeoutOption() {
     final Option option = new Option(TIMEOUT_OPTION, "timeout", true, "the timeout, in seconds, for market data to populate the snapshot (defaults to the engine default)");
     option.setArgName("seconds");
@@ -218,7 +218,7 @@ public class MarketDataSnapshotTool extends AbstractTool<ToolContext> {
   private static Option createHistoricalOption() {
     return new Option("hts", HISTORICAL_OPTION, false, "if true use data from latest hts");
   }
-  
+
   private static Option createUnstructuredSnapshot() {
     return new Option(UNSTRUCTURED_OPTION, "unstructured", false, "if set, do not capture structures and include data for those in unstructured section");
   }
