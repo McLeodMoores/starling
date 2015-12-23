@@ -34,7 +34,7 @@ public abstract class AbstractRegressionTest {
 
   private static final double s_defaultAcceptableDelta = 0.0000001;
 
-  private final RegressionTestToolContextManager _contextManager;
+  private final AbstractRegressionTestToolContextManager _contextManager;
   private final GoldenCopyPersistenceHelper _goldenCopyPersistenceHelper;
 
   private static final String s_defaultRegressionToolContext = "classpath:regression/regression-toolcontext.properties";
@@ -52,7 +52,7 @@ public abstract class AbstractRegressionTest {
    * @param regressionPropertiesFile path to a valid regression properties file
    */
   public AbstractRegressionTest(final File regressionRoot, final String toolContextPropertiesFile, final String regressionPropertiesFile) {
-    _contextManager = new RegressionTestToolContextManager(new File(regressionRoot, GoldenCopyDumpCreator.DB_DUMP_ZIP), toolContextPropertiesFile, regressionPropertiesFile);
+    _contextManager = createToolContextManager(regressionRoot, toolContextPropertiesFile, regressionPropertiesFile);
     _goldenCopyPersistenceHelper = new GoldenCopyPersistenceHelper(regressionRoot);
   }
 
@@ -60,6 +60,7 @@ public abstract class AbstractRegressionTest {
     this(regressionRoot, s_defaultRegressionToolContext, regressionPropertiesFile);
   }
 
+  protected abstract AbstractRegressionTestToolContextManager createToolContextManager(File regressionRoot, String toolContextPropertiesFile, String regressionPropertiesFile);
 
   @BeforeTest(groups = TestGroup.UNIT)
   public void initContext() {
@@ -70,8 +71,6 @@ public abstract class AbstractRegressionTest {
   public void closeContext() {
     _contextManager.close();
   }
-
-
 
   /**
    * Executes viewName against snapshotName in the running engine context.

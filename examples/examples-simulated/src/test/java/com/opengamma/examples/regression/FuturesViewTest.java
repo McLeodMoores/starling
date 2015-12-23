@@ -2,6 +2,10 @@
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
  *
  * Please see distribution for license.
+ *
+ * Modified by McLeod Moores Software Limited.
+ *
+ * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.examples.regression;
 
@@ -9,7 +13,9 @@ import java.io.File;
 
 import org.testng.annotations.Test;
 
+import com.opengamma.integration.regression.AbstractGoldenCopyDumpCreator;
 import com.opengamma.integration.regression.AbstractRegressionTest;
+import com.opengamma.integration.regression.AbstractRegressionTestToolContextManager;
 import com.opengamma.util.test.TestGroup;
 
 /**
@@ -32,6 +38,12 @@ public class FuturesViewTest extends AbstractRegressionTest {
   @Override
   protected double getAcceptableDelta() {
     return 0.0001;
+  }
+
+  @Override
+  protected AbstractRegressionTestToolContextManager createToolContextManager(final File regressionRoot, final String toolContextPropertiesFile,
+      final String regressionPropertiesFile) {
+    return new FutureViewRegressionTestToolContextManager(new File(regressionRoot, AbstractGoldenCopyDumpCreator.DB_DUMP_ZIP), toolContextPropertiesFile, regressionPropertiesFile);
   }
 
 }
