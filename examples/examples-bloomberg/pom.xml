@@ -120,6 +120,11 @@
       <artifactId>integration-bloomberg</artifactId>
       <version>${project.version}</version>
     </dependency>
+    <dependency>
+      <groupId>com.mcleodmoores.starling.platform</groupId>
+      <artifactId>examples-simulated</artifactId>
+      <version>${project.version}</version>
+    </dependency>
 
     <dependency>
       <groupId>org.apache.activemq</groupId>

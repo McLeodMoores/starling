@@ -86,7 +86,7 @@ public class ExampleDatabaseCreator {
       }
       props.load(in);
     }
-    // Version Currection
+    // Version Correction
     ThreadLocalServiceContext.init(ServiceContext.of(VersionCorrectionProvider.class, new VersionCorrectionProvider() {
       @Override
       public VersionCorrection getPortfolioVersionCorrection() {
