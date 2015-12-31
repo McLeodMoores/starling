@@ -14,12 +14,12 @@ import org.joda.convert.StringConvert;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.collect.Iterables;
 import com.mcleodmoores.starling.client.marketdata.MarketDataKey;
 import com.mcleodmoores.starling.client.marketdata.MarketDataSet;
 import com.mcleodmoores.starling.client.results.MarketDataTargetKey;
 import com.mcleodmoores.starling.client.results.PortfolioNodeTargetKey;
 import com.mcleodmoores.starling.client.results.PositionTargetKey;
+import com.mcleodmoores.starling.client.results.PrimitiveTargetKey;
 import com.mcleodmoores.starling.client.results.ResultKey;
 import com.mcleodmoores.starling.client.results.ResultModel;
 import com.mcleodmoores.starling.client.results.ResultModelImpl;
@@ -29,7 +29,6 @@ import com.opengamma.core.position.Portfolio;
 import com.opengamma.core.position.PortfolioNode;
 import com.opengamma.core.position.Position;
 import com.opengamma.engine.value.ComputedValueResult;
-import com.opengamma.engine.value.ValueProperties;
 import com.opengamma.util.ArgumentChecker;
 
 /**
@@ -117,10 +116,6 @@ public class TablePrinter {
   }
 
   private static String[][] tabulatePortfolioResult(final ResultModel resultModel, final boolean includeProperties) {
-    return tabulatePortfolioResult(resultModel, includeProperties, false);
-  }
-
-  private static String[][] tabulatePortfolioResult(final ResultModel resultModel, final boolean includeProperties, final boolean includeTradeTypeProperties) {
     final StringConvert converter = JodaBeanUtils.stringConverter();
     final Set<ResultKey> portfolioResultKeys = resultModel.getRequestedPortfolioResultKeys();
     final List<TargetKey> portfolioTargetKeys = resultModel.getTargetKeys(EnumSet.of(ResultModelImpl.TargetType.PORTFOLIO_NODE, ResultModelImpl.TargetType.POSITION));
@@ -138,13 +133,6 @@ public class TablePrinter {
       }
       if (includeProperties) {
         columnLabel = columnLabel + "[" + key.getResultType().getProperties().toSimpleString() + "]";
-      }
-      if (includeTradeTypeProperties) {
-        final ValueProperties properties = key.getResultType().getProperties();
-        final Set<String> tradeType = properties.getValues("TradeType");
-        if (tradeType != null && tradeType.size() == 1) {
-          columnLabel = columnLabel + "[" + Iterables.getOnlyElement(tradeType) + "]";
-        }
       }
       table[0][column++] = columnLabel;
     }
@@ -187,11 +175,7 @@ public class TablePrinter {
     return table;
   }
 
-  private static List<String[][]> tabulateMarketDataResult(final ResultModel resultModel, final boolean includeProperties) {
-    return tabulateMarketDataResult(resultModel, includeProperties, false);
-  }
-
-  private static List<String[][]> tabulateMarketDataResult(final ResultModel resultModel, final boolean includeProperties, final boolean includeTradeTypeProperties) {
+  private static List<String[][]> tabulateMarketDataAndSpecificRequirementResult(final ResultModel resultModel, final boolean includeProperties) {
     final StringConvert converter = JodaBeanUtils.stringConverter();
     final List<String[][]> tables = new ArrayList<>();
     final List<TargetKey> marketDataTargetKeys = resultModel.getTargetKeys(EnumSet.of(ResultModelImpl.TargetType.MARKET_DATA));
@@ -233,6 +217,45 @@ public class TablePrinter {
         tables.add(marketDataTable);
       }
     }
+    final List<TargetKey> primitiveTargetKeys = resultModel.getTargetKeys(EnumSet.of(ResultModelImpl.TargetType.PRIMITIVE));
+    for (final TargetKey targetKey : primitiveTargetKeys) {
+      if (targetKey instanceof PrimitiveTargetKey) {
+        final PrimitiveTargetKey primitiveTargetKey = (PrimitiveTargetKey) targetKey;
+        final Set<ResultKey> resultKeys = resultModel.getRequestedMarketDataResultKeys();
+        final Map<ResultKey, ComputedValueResult> mktResults = resultModel.getResultsForTarget(primitiveTargetKey);
+        final String[][] marketDataTable = new String[resultKeys.size() + 1][2];
+        marketDataTable[0][0] = "Result Key";
+        marketDataTable[0][1] = "Value";
+        int mktRow = 1;
+        for (final ResultKey resultKey : resultKeys) {
+          String rowLabel;
+          if (!resultKey.isDefaultColumnSet()) {
+            rowLabel = resultKey.getColumnSet() + "/" + resultKey.getResultType().getValueRequirementName();
+          } else {
+            rowLabel = resultKey.getResultType().getValueRequirementName();
+          }
+          if (includeProperties) {
+            rowLabel = rowLabel + "[" + resultKey.getResultType().getProperties().toSimpleString() + "]";
+          }
+          marketDataTable[mktRow][0] = rowLabel;
+          final ComputedValueResult res = mktResults.get(resultKey);
+          if (res != null) {
+            try {
+              marketDataTable[mktRow][1] = converter.convertToString(res.getValue());
+            } catch (final IllegalStateException ise) {
+              // no converter, use toString()
+              marketDataTable[mktRow][1] = res.getValue().toString();
+            }
+          } else {
+            LOGGER.error("Result key {} returned null when the API should have returned a value.", resultKeys);
+            LOGGER.error("Result keys available were {}", mktResults.keySet());
+            marketDataTable[mktRow][1] = null;
+          }
+          mktRow++;
+        }
+        tables.add(marketDataTable);
+      }
+    }
     return tables;
   }
 
@@ -240,18 +263,7 @@ public class TablePrinter {
     final String[][] table = tabulatePortfolioResult(resultModel, false);
     final StringBuilder sb = new StringBuilder();
     sb.append(TablePrinter.toPrettyPrintedString(table) + "\n");
-    final List<String[][]> tables = tabulateMarketDataResult(resultModel, false);
-    for (final String[][] mdTable : tables) {
-      sb.append(TablePrinter.toPrettyPrintedString(mdTable) + "\n");
-    }
-    return sb.toString();
-  }
-
-  public static String toPrettyPrintedStringWithTradeTypeProperties(final ResultModel resultModel) {
-    final String[][] table = tabulatePortfolioResult(resultModel, false, true);
-    final StringBuilder sb = new StringBuilder();
-    sb.append(TablePrinter.toPrettyPrintedString(table) + "\n");
-    final List<String[][]> tables = tabulateMarketDataResult(resultModel, false);
+    final List<String[][]> tables = tabulateMarketDataAndSpecificRequirementResult(resultModel, false);
     for (final String[][] mdTable : tables) {
       sb.append(TablePrinter.toPrettyPrintedString(mdTable) + "\n");
     }

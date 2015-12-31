@@ -284,14 +284,14 @@ public class ExampleViewsPopulator extends AbstractTool<ToolContext> {
 
     final ViewCalculationConfiguration defaultCalc = new ViewCalculationConfiguration(viewDefinition, DEFAULT_CALC_CONFIG);
     final String[] valueRequirementNames = new String[] {
-        FAIR_VALUE,
-        CAPM_BETA,
-        HISTORICAL_VAR,
-        SHARPE_RATIO,
-        TREYNOR_RATIO,
-        JENSENS_ALPHA,
-        TOTAL_RISK_ALPHA,
-        PNL };
+      FAIR_VALUE,
+      CAPM_BETA,
+      HISTORICAL_VAR,
+      SHARPE_RATIO,
+      TREYNOR_RATIO,
+      JENSENS_ALPHA,
+      TOTAL_RISK_ALPHA,
+      PNL };
     addValueRequirements(defaultCalc, EquitySecurity.SECURITY_TYPE, valueRequirementNames);
     viewDefinition.addViewCalculationConfiguration(defaultCalc);
     return viewDefinition;

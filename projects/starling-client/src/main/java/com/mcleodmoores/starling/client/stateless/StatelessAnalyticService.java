@@ -112,7 +112,6 @@ public class StatelessAnalyticService {
    */
   public SynchronousJob createSynchronousJob(final ViewKey templateViewKey, final SimplePortfolio portfolio, final ExternalScheme correlationIdScheme,
       final Instant valuationTime, final LocalDate snapshotDate) {
-    //TODO remove hard-coded daycount
     return new StatelessSynchronousJob(templateViewKey, portfolio, correlationIdScheme, valuationTime, snapshotDate);
   }
 

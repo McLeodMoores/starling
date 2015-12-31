@@ -4,12 +4,10 @@
 package com.mcleodmoores.starling.client.results;
 
 import com.opengamma.engine.ComputationTargetSpecification;
-import com.opengamma.id.ExternalId;
-import com.opengamma.id.UniqueId;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * A taget key that allows access to legacy target types that are occasionally required.  Included more for completeness than anything else.
+ * A target key that allows access to legacy target types that are occasionally required.  Included more for completeness than anything else.
  */
 public final class LegacyTargetKey implements TargetKey {
   private final ComputationTargetSpecification _targetSpecification;
@@ -41,7 +39,7 @@ public final class LegacyTargetKey implements TargetKey {
     if (!(o instanceof LegacyTargetKey)) {
       return false;
     }
-    LegacyTargetKey other = (LegacyTargetKey) o;
+    final LegacyTargetKey other = (LegacyTargetKey) o;
     return other._targetSpecification.equals(_targetSpecification);
   }
 
