@@ -1,18 +1,17 @@
 package com.mcleodmoores.starling.client.utils;
 
+import java.util.HashMap;
+
+import com.mcleodmoores.starling.client.component.StarlingToolContext;
 import com.mcleodmoores.starling.client.marketdata.DataField;
 import com.mcleodmoores.starling.client.marketdata.MarketDataKey;
 import com.mcleodmoores.starling.client.marketdata.MarketDataSet;
-import com.opengamma.component.ComponentInfo;
 import com.opengamma.component.ComponentManager;
 import com.opengamma.component.ComponentRepository;
 import com.opengamma.component.OpenGammaComponentServer;
 import com.opengamma.financial.tool.ToolContext;
 import com.opengamma.id.ExternalId;
 import com.opengamma.id.ExternalScheme;
-import com.opengamma.util.fudgemsg.ServletContextHolder;
-
-import java.util.HashMap;
 
 /**
  * Created by jim on 09/06/15.
@@ -27,17 +26,17 @@ public class TestUtils {
     if (System.getProperty(LOGGING_CONFIG) == null) {
       System.setProperty(LOGGING_CONFIG, DEFAULT_LOGGING_FILE);
     }
-    OpenGammaComponentServer server = new OpenGammaComponentServer();
-    ComponentManager componentManager = server.createManager("classpath:com/mcleodmoores/starling/client/config/fullstack/fullstack.properties",
+    final OpenGammaComponentServer server = new OpenGammaComponentServer();
+    final ComponentManager componentManager = server.createManager("classpath:/inmemory/inmemory.properties",
         new HashMap<String, String>());
-    ComponentRepository repository = componentManager.getRepository();
+    final ComponentRepository repository = componentManager.getRepository();
     componentManager.init();
     componentManager.start();
-    return repository.getInstance(ToolContext.class, "tool");
+    return repository.getInstance(StarlingToolContext.class, "tool");
   }
-  
+
   public static MarketDataSet createTestDataSet() {
-    MarketDataSet dataSet = MarketDataSet.empty();
+    final MarketDataSet dataSet = MarketDataSet.empty();
     dataSet.put(MarketDataKey.of(ExternalId.of(TEST_SUITE, "USDZEROO/N").toBundle(), DataField.of("Market_Value")), 0.01);
     dataSet.put(MarketDataKey.of(ExternalId.of(TEST_SUITE, "USDZERO7D").toBundle(), DataField.of("Market_Value")), 0.011);
     dataSet.put(MarketDataKey.of(ExternalId.of(TEST_SUITE, "USDZERO1M").toBundle(), DataField.of("Market_Value")), 0.013);

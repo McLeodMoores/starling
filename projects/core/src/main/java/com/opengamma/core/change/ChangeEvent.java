@@ -72,16 +72,16 @@ public class ChangeEvent extends DirectBean implements Serializable {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param type  the type of change, not null
    * @param oid  the object id of the entity, not null
-   * @param versionFrom  the begining of a timespan of the change of the entity, not null
+   * @param versionFrom  the beginning of a timespan of the change of the entity, not null
    * @param versionTo  the end of a timespan of the change of the entity, may be null
    * @param versionInstant  the instant at which the change is recorded as happening, not null
    */
   public ChangeEvent(final ChangeType type, final ObjectId oid, final Instant versionFrom, final Instant versionTo, final Instant versionInstant) {
     ArgumentChecker.notNull(type, "type");
-    ArgumentChecker.notNull(oid, "oid");    
+    ArgumentChecker.notNull(oid, "oid");
     ArgumentChecker.notNull(versionInstant, "versionInstant");
     setType(type);
     setObjectId(oid);

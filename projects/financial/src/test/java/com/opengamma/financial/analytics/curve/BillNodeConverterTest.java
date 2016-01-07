@@ -84,7 +84,7 @@ public class BillNodeConverterTest {
   /** An id */
   private static final ExternalId DATA_ID = ExternalSchemes.syntheticSecurityId("Test");
   /** The valuation time */
-  private static final ZonedDateTime NOW = ZonedDateTime.now();
+  private static final ZonedDateTime VALUATION_DATE = DateUtils.getUTCDate(2015, 10, 1);
   /** The curve node id mapper name */
   private static final String MAPPER_NAME = "CNIM";
 
@@ -93,7 +93,7 @@ public class BillNodeConverterTest {
    */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullHolidaySource1() {
-    new BillNodeConverter(null, EMPTY_REGION_SOURCE, EMPTY_SECURITY_SOURCE, EMPTY_DATA_BUNDLE, DATA_ID, NOW);
+    new BillNodeConverter(null, EMPTY_REGION_SOURCE, EMPTY_SECURITY_SOURCE, EMPTY_DATA_BUNDLE, DATA_ID, VALUATION_DATE);
   }
 
   /**
@@ -101,7 +101,7 @@ public class BillNodeConverterTest {
    */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullHolidaySource2() {
-    new BillNodeConverter(null, EMPTY_REGION_SOURCE, EMPTY_SECURITY_SOURCE, EMPTY_LEGAL_ENTITY_SOURCE, EMPTY_DATA_BUNDLE, DATA_ID, NOW);
+    new BillNodeConverter(null, EMPTY_REGION_SOURCE, EMPTY_SECURITY_SOURCE, EMPTY_LEGAL_ENTITY_SOURCE, EMPTY_DATA_BUNDLE, DATA_ID, VALUATION_DATE);
   }
 
   /**
@@ -109,7 +109,7 @@ public class BillNodeConverterTest {
    */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullRegionSource1() {
-    new BillNodeConverter(EMPTY_HOLIDAY_SOURCE, null, EMPTY_SECURITY_SOURCE, EMPTY_DATA_BUNDLE, DATA_ID, NOW);
+    new BillNodeConverter(EMPTY_HOLIDAY_SOURCE, null, EMPTY_SECURITY_SOURCE, EMPTY_DATA_BUNDLE, DATA_ID, VALUATION_DATE);
   }
 
   /**
@@ -117,7 +117,7 @@ public class BillNodeConverterTest {
    */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullRegionSource2() {
-    new BillNodeConverter(EMPTY_HOLIDAY_SOURCE, null, EMPTY_SECURITY_SOURCE, EMPTY_LEGAL_ENTITY_SOURCE, EMPTY_DATA_BUNDLE, DATA_ID, NOW);
+    new BillNodeConverter(EMPTY_HOLIDAY_SOURCE, null, EMPTY_SECURITY_SOURCE, EMPTY_LEGAL_ENTITY_SOURCE, EMPTY_DATA_BUNDLE, DATA_ID, VALUATION_DATE);
   }
 
   /**
@@ -125,7 +125,7 @@ public class BillNodeConverterTest {
    */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullSecuritySource1() {
-    new BillNodeConverter(EMPTY_HOLIDAY_SOURCE, EMPTY_REGION_SOURCE, null, EMPTY_DATA_BUNDLE, DATA_ID, NOW);
+    new BillNodeConverter(EMPTY_HOLIDAY_SOURCE, EMPTY_REGION_SOURCE, null, EMPTY_DATA_BUNDLE, DATA_ID, VALUATION_DATE);
   }
 
   /**
@@ -133,7 +133,7 @@ public class BillNodeConverterTest {
    */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullSecuritySource2() {
-    new BillNodeConverter(EMPTY_HOLIDAY_SOURCE, EMPTY_REGION_SOURCE, null, EMPTY_LEGAL_ENTITY_SOURCE, EMPTY_DATA_BUNDLE, DATA_ID, NOW);
+    new BillNodeConverter(EMPTY_HOLIDAY_SOURCE, EMPTY_REGION_SOURCE, null, EMPTY_LEGAL_ENTITY_SOURCE, EMPTY_DATA_BUNDLE, DATA_ID, VALUATION_DATE);
   }
 
   /**
@@ -141,7 +141,7 @@ public class BillNodeConverterTest {
    */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullLegalEntitySource() {
-    new BillNodeConverter(EMPTY_HOLIDAY_SOURCE, EMPTY_REGION_SOURCE, null, EMPTY_LEGAL_ENTITY_SOURCE, EMPTY_DATA_BUNDLE, DATA_ID, NOW);
+    new BillNodeConverter(EMPTY_HOLIDAY_SOURCE, EMPTY_REGION_SOURCE, null, EMPTY_LEGAL_ENTITY_SOURCE, EMPTY_DATA_BUNDLE, DATA_ID, VALUATION_DATE);
   }
 
   /**
@@ -149,7 +149,7 @@ public class BillNodeConverterTest {
    */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullMarketDataBundle1() {
-    new BillNodeConverter(EMPTY_HOLIDAY_SOURCE, EMPTY_REGION_SOURCE, EMPTY_SECURITY_SOURCE, null, DATA_ID, NOW);
+    new BillNodeConverter(EMPTY_HOLIDAY_SOURCE, EMPTY_REGION_SOURCE, EMPTY_SECURITY_SOURCE, null, DATA_ID, VALUATION_DATE);
   }
 
   /**
@@ -157,7 +157,7 @@ public class BillNodeConverterTest {
    */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullMarketDataBundle2() {
-    new BillNodeConverter(EMPTY_HOLIDAY_SOURCE, EMPTY_REGION_SOURCE, EMPTY_SECURITY_SOURCE, EMPTY_LEGAL_ENTITY_SOURCE, null, DATA_ID, NOW);
+    new BillNodeConverter(EMPTY_HOLIDAY_SOURCE, EMPTY_REGION_SOURCE, EMPTY_SECURITY_SOURCE, EMPTY_LEGAL_ENTITY_SOURCE, null, DATA_ID, VALUATION_DATE);
   }
 
   /**
@@ -165,7 +165,7 @@ public class BillNodeConverterTest {
    */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullDataId1() {
-    new BillNodeConverter(EMPTY_HOLIDAY_SOURCE, EMPTY_REGION_SOURCE, EMPTY_SECURITY_SOURCE, EMPTY_DATA_BUNDLE, null, NOW);
+    new BillNodeConverter(EMPTY_HOLIDAY_SOURCE, EMPTY_REGION_SOURCE, EMPTY_SECURITY_SOURCE, EMPTY_DATA_BUNDLE, null, VALUATION_DATE);
   }
 
   /**
@@ -173,7 +173,7 @@ public class BillNodeConverterTest {
    */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullDataId2() {
-    new BillNodeConverter(EMPTY_HOLIDAY_SOURCE, EMPTY_REGION_SOURCE, EMPTY_SECURITY_SOURCE, EMPTY_LEGAL_ENTITY_SOURCE, EMPTY_DATA_BUNDLE, null, NOW);
+    new BillNodeConverter(EMPTY_HOLIDAY_SOURCE, EMPTY_REGION_SOURCE, EMPTY_SECURITY_SOURCE, EMPTY_LEGAL_ENTITY_SOURCE, EMPTY_DATA_BUNDLE, null, VALUATION_DATE);
   }
 
   /**
@@ -198,7 +198,7 @@ public class BillNodeConverterTest {
   @Test(expectedExceptions = OpenGammaRuntimeException.class)
   public void testMissingMarketData() {
     final BillNodeConverter converter = new BillNodeConverter(EMPTY_HOLIDAY_SOURCE, EMPTY_REGION_SOURCE, EMPTY_SECURITY_SOURCE, EMPTY_LEGAL_ENTITY_SOURCE,
-        EMPTY_DATA_BUNDLE, DATA_ID, NOW);
+        EMPTY_DATA_BUNDLE, DATA_ID, VALUATION_DATE);
     final BillNode node = new BillNode(Tenor.ONE_YEAR, MAPPER_NAME);
     node.accept(converter);
   }
@@ -211,7 +211,7 @@ public class BillNodeConverterTest {
     final SnapshotDataBundle data = new SnapshotDataBundle();
     data.setDataPoint(DATA_ID.toBundle(), 0.01);
     final BillNodeConverter converter = new BillNodeConverter(EMPTY_HOLIDAY_SOURCE, EMPTY_REGION_SOURCE, EMPTY_SECURITY_SOURCE, EMPTY_LEGAL_ENTITY_SOURCE,
-        data, DATA_ID, NOW);
+        data, DATA_ID, VALUATION_DATE);
     final BillNode node = new BillNode(Tenor.ONE_YEAR, MAPPER_NAME);
     node.accept(converter);
   }
@@ -228,7 +228,7 @@ public class BillNodeConverterTest {
     equity.addExternalId(DATA_ID);
     securityMaster.add(new SecurityDocument(equity));
     final BillNodeConverter converter = new BillNodeConverter(EMPTY_HOLIDAY_SOURCE, EMPTY_REGION_SOURCE, new MasterSecuritySource(securityMaster), EMPTY_LEGAL_ENTITY_SOURCE,
-        data, DATA_ID, NOW);
+        data, DATA_ID, VALUATION_DATE);
     final BillNode node = new BillNode(Tenor.ONE_YEAR, MAPPER_NAME);
     node.accept(converter);
   }
@@ -272,13 +272,13 @@ public class BillNodeConverterTest {
     LegalEntity expectedLegalEntity = new LegalEntity(null, "", null, null, Region.of(regionId.getValue(), Country.US, Currency.USD));
     BillSecurityDefinition expectedBillSecurity = new BillSecurityDefinition(Currency.USD, maturityDate, 1, daysToSettle, calendar, yieldConvention, dayCount,
         expectedLegalEntity);
-    BillTransactionDefinition expectedBillDefinition = BillTransactionDefinition.fromYield(expectedBillSecurity, 1, NOW, yield, calendar);
-    BillNodeConverter converter = new BillNodeConverter(holidaySource, regionSource, new MasterSecuritySource(securityMaster), data, DATA_ID, NOW);
+    BillTransactionDefinition expectedBillDefinition = BillTransactionDefinition.fromYield(expectedBillSecurity, 1, VALUATION_DATE, yield, calendar);
+    BillNodeConverter converter = new BillNodeConverter(holidaySource, regionSource, new MasterSecuritySource(securityMaster), data, DATA_ID, VALUATION_DATE);
     BillTransactionDefinition billDefinition = (BillTransactionDefinition) billNode.accept(converter);
     assertEquals(billDefinition, expectedBillDefinition);
     // no legal entity available from source
     try {
-      converter = new BillNodeConverter(holidaySource, regionSource, new MasterSecuritySource(securityMaster), EMPTY_LEGAL_ENTITY_SOURCE, data, DATA_ID, NOW);
+      converter = new BillNodeConverter(holidaySource, regionSource, new MasterSecuritySource(securityMaster), EMPTY_LEGAL_ENTITY_SOURCE, data, DATA_ID, VALUATION_DATE);
       billDefinition = (BillTransactionDefinition) billNode.accept(converter);
       fail();
     } catch (final DataNotFoundException e) {
@@ -295,8 +295,8 @@ public class BillNodeConverterTest {
     expectedLegalEntity = new LegalEntity(isin, legalEntity.getName(), creditRatings, null, Region.of(regionId.getValue(), Country.US, Currency.USD));
     expectedBillSecurity = new BillSecurityDefinition(Currency.USD, maturityDate, 1, daysToSettle, calendar, yieldConvention, dayCount,
         expectedLegalEntity);
-    expectedBillDefinition = BillTransactionDefinition.fromYield(expectedBillSecurity, 1, NOW, yield, calendar);
-    converter = new BillNodeConverter(holidaySource, regionSource, new MasterSecuritySource(securityMaster), new MasterLegalEntitySource(legalEntityMaster), data, DATA_ID, NOW);
+    expectedBillDefinition = BillTransactionDefinition.fromYield(expectedBillSecurity, 1, VALUATION_DATE, yield, calendar);
+    converter = new BillNodeConverter(holidaySource, regionSource, new MasterSecuritySource(securityMaster), new MasterLegalEntitySource(legalEntityMaster), data, DATA_ID, VALUATION_DATE);
     billDefinition = (BillTransactionDefinition) billNode.accept(converter);
     assertEquals(billDefinition, expectedBillDefinition);
   }
@@ -329,7 +329,7 @@ public class BillNodeConverterTest {
     data.setDataPoint(DATA_ID.toBundle(), 0.01);
     final BillNode billNode = new BillNode(Tenor.THREE_MONTHS, MAPPER_NAME);
     final InMemoryLegalEntityMaster legalEntityMaster = new InMemoryLegalEntityMaster();
-    final BillNodeConverter converter = new BillNodeConverter(holidaySource, regionSource, securitySource, new MasterLegalEntitySource(legalEntityMaster), data, DATA_ID, NOW);
+    final BillNodeConverter converter = new BillNodeConverter(holidaySource, regionSource, securitySource, new MasterLegalEntitySource(legalEntityMaster), data, DATA_ID, VALUATION_DATE);
     // no ISIN
     ManageableLegalEntity legalEntity = new ManageableLegalEntity("US Government", legalEntityId.toBundle());
     legalEntity.setRatings(Arrays.asList(new Rating("Moodys", CreditRating.A, SeniorityLevel.SNRFOR), new Rating("S&P", CreditRating.AA, SeniorityLevel.SNRFOR)));

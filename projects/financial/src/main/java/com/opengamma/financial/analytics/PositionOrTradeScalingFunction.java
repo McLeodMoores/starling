@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics;
@@ -187,7 +187,7 @@ public class PositionOrTradeScalingFunction extends AbstractFunction.NonCompiled
       }
       scaledValue = new ComputedValue(specification, new DoubleLabelledMatrix3D(xKeys, xLabels, yKeys, yLabels, zKeys, zLabels, scaledValues));
     } else {
-      //REVIEW emcleod 27-1-2011 aaaaaaaaaarrrrrrrrgggggghhhhhhhhh Why is nothing done here?
+      //TODO this should actually do something
       scaledValue = new ComputedValue(specification, value);
     }
     return Collections.singleton(scaledValue);

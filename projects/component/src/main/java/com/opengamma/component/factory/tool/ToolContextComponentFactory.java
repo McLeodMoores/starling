@@ -33,6 +33,7 @@ import com.opengamma.core.marketdatasnapshot.MarketDataSnapshotSource;
 import com.opengamma.core.position.PositionSource;
 import com.opengamma.core.region.RegionSource;
 import com.opengamma.core.security.SecuritySource;
+import com.opengamma.engine.function.config.FunctionConfigurationSource;
 import com.opengamma.engine.view.ViewProcessor;
 import com.opengamma.financial.convention.ConventionBundleSource;
 import com.opengamma.financial.tool.ToolContext;
@@ -124,7 +125,6 @@ public class ToolContextComponentFactory extends AbstractComponentFactory {
    */
   @PropertyDefinition
   private MarketDataSnapshotMaster _marketDataSnapshotMaster;
-
   /**
    * The config source.
    */
@@ -200,20 +200,24 @@ public class ToolContextComponentFactory extends AbstractComponentFactory {
    */
   @PropertyDefinition
   private HistoricalTimeSeriesLoader _historicalTimeSeriesLoader;
-
   /**
    * The view processor.
    */
   @PropertyDefinition
   private ViewProcessor _viewProcessor;
+  /**
+   * The function configuration source.
+   */
+  @PropertyDefinition
+  private FunctionConfigurationSource _functionConfigSource;
 
   //-------------------------------------------------------------------------
   @Override
-  public void init(ComponentRepository repo, LinkedHashMap<String, String> configuration) {
-    ToolContext context = createToolContext();
-    Map<String, MetaProperty<?>> mapTarget = new HashMap<String, MetaProperty<?>>(context.metaBean().metaPropertyMap());
+  public void init(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) {
+    final ToolContext context = createToolContext();
+    final Map<String, MetaProperty<?>> mapTarget = new HashMap<String, MetaProperty<?>>(context.metaBean().metaPropertyMap());
     mapTarget.keySet().retainAll(this.metaBean().metaPropertyMap().keySet());
-    for (MetaProperty<?> mp : mapTarget.values()) {
+    for (final MetaProperty<?> mp : mapTarget.values()) {
       mp.set(context, mp.get(this));
     }
     context.setContextManager(repo);
@@ -222,7 +226,7 @@ public class ToolContextComponentFactory extends AbstractComponentFactory {
 
   /**
    * Creates an empty instance of the tool context.
-   * 
+   *
    * @return the empty tool context, not null
    */
   protected ToolContext createToolContext() {
@@ -974,6 +978,31 @@ public class ToolContextComponentFactory extends AbstractComponentFactory {
   }
 
   //-----------------------------------------------------------------------
+  /**
+   * Gets the function configuration source.
+   * @return the value of the property
+   */
+  public FunctionConfigurationSource getFunctionConfigSource() {
+    return _functionConfigSource;
+  }
+
+  /**
+   * Sets the function configuration source.
+   * @param functionConfigSource  the new value of the property
+   */
+  public void setFunctionConfigSource(FunctionConfigurationSource functionConfigSource) {
+    this._functionConfigSource = functionConfigSource;
+  }
+
+  /**
+   * Gets the the {@code functionConfigSource} property.
+   * @return the property, not null
+   */
+  public final Property<FunctionConfigurationSource> functionConfigSource() {
+    return metaBean().functionConfigSource().createProperty(this);
+  }
+
+  //-----------------------------------------------------------------------
   @Override
   public ToolContextComponentFactory clone() {
     return JodaBeanUtils.cloneAlways(this);
@@ -1015,6 +1044,7 @@ public class ToolContextComponentFactory extends AbstractComponentFactory {
           JodaBeanUtils.equal(getHistoricalTimeSeriesProvider(), other.getHistoricalTimeSeriesProvider()) &&
           JodaBeanUtils.equal(getHistoricalTimeSeriesLoader(), other.getHistoricalTimeSeriesLoader()) &&
           JodaBeanUtils.equal(getViewProcessor(), other.getViewProcessor()) &&
+          JodaBeanUtils.equal(getFunctionConfigSource(), other.getFunctionConfigSource()) &&
           super.equals(obj);
     }
     return false;
@@ -1052,12 +1082,13 @@ public class ToolContextComponentFactory extends AbstractComponentFactory {
     hash = hash * 31 + JodaBeanUtils.hashCode(getHistoricalTimeSeriesProvider());
     hash = hash * 31 + JodaBeanUtils.hashCode(getHistoricalTimeSeriesLoader());
     hash = hash * 31 + JodaBeanUtils.hashCode(getViewProcessor());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getFunctionConfigSource());
     return hash ^ super.hashCode();
   }
 
   @Override
   public String toString() {
-    StringBuilder buf = new StringBuilder(960);
+    StringBuilder buf = new StringBuilder(992);
     buf.append("ToolContextComponentFactory{");
     int len = buf.length();
     toString(buf);
@@ -1100,6 +1131,7 @@ public class ToolContextComponentFactory extends AbstractComponentFactory {
     buf.append("historicalTimeSeriesProvider").append('=').append(JodaBeanUtils.toString(getHistoricalTimeSeriesProvider())).append(',').append(' ');
     buf.append("historicalTimeSeriesLoader").append('=').append(JodaBeanUtils.toString(getHistoricalTimeSeriesLoader())).append(',').append(' ');
     buf.append("viewProcessor").append('=').append(JodaBeanUtils.toString(getViewProcessor())).append(',').append(' ');
+    buf.append("functionConfigSource").append('=').append(JodaBeanUtils.toString(getFunctionConfigSource())).append(',').append(' ');
   }
 
   //-----------------------------------------------------------------------
@@ -1258,6 +1290,11 @@ public class ToolContextComponentFactory extends AbstractComponentFactory {
     private final MetaProperty<ViewProcessor> _viewProcessor = DirectMetaProperty.ofReadWrite(
         this, "viewProcessor", ToolContextComponentFactory.class, ViewProcessor.class);
     /**
+     * The meta-property for the {@code functionConfigSource} property.
+     */
+    private final MetaProperty<FunctionConfigurationSource> _functionConfigSource = DirectMetaProperty.ofReadWrite(
+        this, "functionConfigSource", ToolContextComponentFactory.class, FunctionConfigurationSource.class);
+    /**
      * The meta-properties.
      */
     private final Map<String, MetaProperty<?>> _metaPropertyMap$ = new DirectMetaPropertyMap(
@@ -1290,7 +1327,8 @@ public class ToolContextComponentFactory extends AbstractComponentFactory {
         "securityLoader",
         "historicalTimeSeriesProvider",
         "historicalTimeSeriesLoader",
-        "viewProcessor");
+        "viewProcessor",
+        "functionConfigSource");
 
     /**
      * Restricted constructor.
@@ -1359,6 +1397,8 @@ public class ToolContextComponentFactory extends AbstractComponentFactory {
           return _historicalTimeSeriesLoader;
         case -1697555603:  // viewProcessor
           return _viewProcessor;
+        case -2085248523:  // functionConfigSource
+          return _functionConfigSource;
       }
       return super.metaPropertyGet(propertyName);
     }
@@ -1611,6 +1651,14 @@ public class ToolContextComponentFactory extends AbstractComponentFactory {
       return _viewProcessor;
     }
 
+    /**
+     * The meta-property for the {@code functionConfigSource} property.
+     * @return the meta-property, not null
+     */
+    public final MetaProperty<FunctionConfigurationSource> functionConfigSource() {
+      return _functionConfigSource;
+    }
+
     //-----------------------------------------------------------------------
     @Override
     protected Object propertyGet(Bean bean, String propertyName, boolean quiet) {
@@ -1673,6 +1721,8 @@ public class ToolContextComponentFactory extends AbstractComponentFactory {
           return ((ToolContextComponentFactory) bean).getHistoricalTimeSeriesLoader();
         case -1697555603:  // viewProcessor
           return ((ToolContextComponentFactory) bean).getViewProcessor();
+        case -2085248523:  // functionConfigSource
+          return ((ToolContextComponentFactory) bean).getFunctionConfigSource();
       }
       return super.propertyGet(bean, propertyName, quiet);
     }
@@ -1766,6 +1816,9 @@ public class ToolContextComponentFactory extends AbstractComponentFactory {
           return;
         case -1697555603:  // viewProcessor
           ((ToolContextComponentFactory) bean).setViewProcessor((ViewProcessor) newValue);
+          return;
+        case -2085248523:  // functionConfigSource
+          ((ToolContextComponentFactory) bean).setFunctionConfigSource((FunctionConfigurationSource) newValue);
           return;
       }
       super.propertySet(bean, propertyName, newValue, quiet);

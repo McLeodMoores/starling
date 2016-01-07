@@ -88,7 +88,7 @@ public final class ViewDefinitionCompiler {
   private ViewDefinitionCompiler() {
   }
 
-  public static void registerMetricsStatic(MetricRegistry summaryRegistry, MetricRegistry detailRegistry, String namePrefix) {
+  public static void registerMetricsStatic(final MetricRegistry summaryRegistry, final MetricRegistry detailRegistry, final String namePrefix) {
     s_deltaTimer = summaryRegistry.timer(namePrefix + ".delta");
     s_fullTimer = summaryRegistry.timer(namePrefix + ".full");
   }
@@ -98,7 +98,7 @@ public final class ViewDefinitionCompiler {
   /**
    * Compiles the specified view definition wrt the supplied compilation context, valuation time and version correction and returns the compiled view. This method wraps the compileTask method, waiting
    * for completion of the async compilation task and returning the resulting CompiledViewDefinitionWithGraphsImpl, rather than a future reference to it.
-   * 
+   *
    * @param viewDefinition the view definition to compile
    * @param compilationServices the compilation context (market data availability provider, graph builder factory, etc.)
    * @param valuationTime the effective valuation time against which to compile
@@ -161,7 +161,7 @@ public final class ViewDefinitionCompiler {
 
     private final ViewCompilationContext _viewCompilationContext;
     private volatile CompiledViewDefinitionWithGraphsImpl _result;
-    private boolean _portfolioOutputs;
+    private final boolean _portfolioOutputs;
     private Portfolio _portfolio;
 
     protected CompilationTask(final ViewCompilationContext context) {
@@ -170,7 +170,7 @@ public final class ViewDefinitionCompiler {
         new CompilationCompletionEstimate(_viewCompilationContext);
       }
       final ResultModelDefinition resultModelDefinition = context.getViewDefinition().getResultModelDefinition();
-      _portfolioOutputs = (resultModelDefinition.getPositionOutputMode() != ResultOutputMode.NONE) || (resultModelDefinition.getAggregatePositionOutputMode() != ResultOutputMode.NONE);
+      _portfolioOutputs = resultModelDefinition.getPositionOutputMode() != ResultOutputMode.NONE || resultModelDefinition.getAggregatePositionOutputMode() != ResultOutputMode.NONE;
     }
 
     protected ViewCompilationContext getContext() {
@@ -199,7 +199,7 @@ public final class ViewDefinitionCompiler {
       if (_portfolio != null) {
         validIdentifiers.add(_portfolio.getUniqueId());
       }
-      for (DependencyGraph graph : graphs) {
+      for (final DependencyGraph graph : graphs) {
         final Iterator<DependencyNode> itr = graph.nodeIterator();
         while (itr.hasNext()) {
           validIdentifiers.add(itr.next().getTarget().getUniqueId());
@@ -224,8 +224,7 @@ public final class ViewDefinitionCompiler {
     /**
      * Fully resolves the portfolio structure for a view. A fully resolved structure has resolved {@link Security} objects for each {@link Position} within the portfolio. Note however that any
      * underlying or related data referenced by a security will not be resolved at this stage.
-     * 
-     * @param compilationContext the compilation context containing the view being compiled, not null
+     *
      * @return the resolved portfolio, not null
      */
     private Portfolio resolvePortfolio() {
@@ -267,7 +266,7 @@ public final class ViewDefinitionCompiler {
             result &= builder.cancel(mayInterruptIfRunning);
           }
           return result;
-        } catch (ConcurrentModificationException e) {
+        } catch (final ConcurrentModificationException e) {
           // Ignore
         }
       } while (true);
@@ -285,7 +284,7 @@ public final class ViewDefinitionCompiler {
             result |= builder.isCancelled();
           }
           return result;
-        } catch (ConcurrentModificationException e) {
+        } catch (final ConcurrentModificationException e) {
           // Ignore
         }
       } while (true);
@@ -416,7 +415,7 @@ public final class ViewDefinitionCompiler {
             final ComputationTargetSpecification terminalTarget = terminalSpec.getTargetSpecification();
             if (!identifiers.contains(terminalTarget.getUniqueId())) {
               // Can't be a portfolio requirement
-              for (ValueRequirement requirement : terminal.getValue()) {
+              for (final ValueRequirement requirement : terminal.getValue()) {
                 if (!specifics.contains(requirement)) {
                   // Not a specific requirement
                   if (toRemove == null) {
@@ -425,7 +424,7 @@ public final class ViewDefinitionCompiler {
                   toRemove.add(requirement);
                 }
               }
-              if ((toRemove != null) && !toRemove.isEmpty()) {
+              if (toRemove != null && !toRemove.isEmpty()) {
                 final int removes = toRemove.size();
                 final int existing = terminal.getValue().size();
                 if (removes == existing) {
@@ -434,7 +433,7 @@ public final class ViewDefinitionCompiler {
                   s_logger.trace("Removed terminal output {} ({})", terminalSpec, terminal.getValue());
                 } else {
                   final Set<ValueRequirement> newReqs = Sets.newHashSetWithExpectedSize(existing - removes);
-                  for (ValueRequirement oldTerminal : terminal.getValue()) {
+                  for (final ValueRequirement oldTerminal : terminal.getValue()) {
                     if (!toRemove.contains(oldTerminal)) {
                       newReqs.add(oldTerminal);
                     }
@@ -468,13 +467,13 @@ public final class ViewDefinitionCompiler {
             if (changedPositions == null) {
               changedPositions = new HashSet<UniqueId>();
             }
-            for (UniqueId oldPositionId : updatedPositions) {
+            for (final UniqueId oldPositionId : updatedPositions) {
               try {
                 final Position newPosition = ps.getPosition(oldPositionId.getObjectId(), vc);
                 final UniqueId newPositionId = newPosition.getUniqueId();
                 s_logger.trace("Old position {} might now be {}", oldPositionId, newPosition.getUniqueId());
                 changedPositions.add(newPositionId);
-              } catch (DataNotFoundException e) {
+              } catch (final DataNotFoundException e) {
                 s_logger.trace("Old position {} no longer exists", oldPositionId);
               }
             }
@@ -523,7 +522,7 @@ public final class ViewDefinitionCompiler {
             DependencyGraph filtered = filter.subGraph(graph, missing);
             if (filtered == null) {
               // Entire graph has been rejected
-              for (Set<ValueRequirement> requirements : graph.getTerminalOutputs().values()) {
+              for (final Set<ValueRequirement> requirements : graph.getTerminalOutputs().values()) {
                 missing.addAll(requirements);
               }
             }
@@ -592,7 +591,7 @@ public final class ViewDefinitionCompiler {
 
   private static Set<Pair<String, ValueProperties>> getStripes(final Map<String, Set<Pair<String, ValueProperties>>> portfolioRequirementsBySecurityType) {
     final Set<Pair<String, ValueProperties>> stripes = new HashSet<Pair<String, ValueProperties>>();
-    for (Set<Pair<String, ValueProperties>> stripe : portfolioRequirementsBySecurityType.values()) {
+    for (final Set<Pair<String, ValueProperties>> stripe : portfolioRequirementsBySecurityType.values()) {
       stripes.addAll(stripe);
     }
     return stripes;
@@ -602,7 +601,7 @@ public final class ViewDefinitionCompiler {
    * Indicates whether portfolio requirements should be added in batches or together. All together may use more memory but may be quicker. In batches may use less memory but may be slower.
    * <p>
    * Views with many column definitions on large portfolios can benefit significantly from this as the memory required to process them all concurrently may be prohibitive.
-   * 
+   *
    * @return true to stripe the portfolio requirements in batches to the graph builder, false to do them all at once
    * @deprecated this is a temporary measure; enabling/disabling the striping should be performed programaticaly based on view/portfolio heuristics
    */
@@ -613,7 +612,7 @@ public final class ViewDefinitionCompiler {
 
   /**
    * Sets whether to batch portfolio requirements during graph builds.
-   * 
+   *
    * @param useStripes true to stripe the portfolio requirements in batches to the graph builder, false to do them all at once
    * @deprecated this is a temporary measure; enabling/disabling the striping should be performed programaticaly based on view/portfolio heuristics
    * @see {@link #isStripedPortfolioRequirements}.
@@ -634,12 +633,12 @@ public final class ViewDefinitionCompiler {
     final PortfolioNodeTraverser traverser = PortfolioNodeTraverser.parallel(traversalCallback, context.getServices().getExecutorService());
     if (isStripedPortfolioRequirements()) {
       final Map<String, Set<Pair<String, ValueProperties>>> requirementsBySecurityType = traversalCallback.getPortfolioRequirementsBySecurityType();
-      Map<String, Set<Pair<String, ValueProperties>>> requirementSubSet = Maps.newHashMapWithExpectedSize(requirementsBySecurityType.size());
+      final Map<String, Set<Pair<String, ValueProperties>>> requirementSubSet = Maps.newHashMapWithExpectedSize(requirementsBySecurityType.size());
       traversalCallback.setPortfolioRequirementsBySecurityType(requirementSubSet);
-      for (Pair<String, ValueProperties> stripe : getStripes(requirementsBySecurityType)) {
+      for (final Pair<String, ValueProperties> stripe : getStripes(requirementsBySecurityType)) {
         s_logger.debug("Adding {} portfolio requirement stripe", stripe);
         final Set<Pair<String, ValueProperties>> stripeRequirements = Collections.singleton(stripe);
-        for (Map.Entry<String, Set<Pair<String, ValueProperties>>> securityTypeRequirement : requirementsBySecurityType.entrySet()) {
+        for (final Map.Entry<String, Set<Pair<String, ValueProperties>>> securityTypeRequirement : requirementsBySecurityType.entrySet()) {
           if (securityTypeRequirement.getValue().contains(stripe)) {
             requirementSubSet.put(securityTypeRequirement.getKey(), stripeRequirements);
           } else {
@@ -652,7 +651,7 @@ public final class ViewDefinitionCompiler {
           s_logger.debug("Waiting for stripe {} to complete", stripe);
           // TODO: Waiting for a completion state causes any progress tracker to abort (it sees 100% and stops). Need to rethink how to do the progress estimates.
           builder.waitForDependencyGraphBuild();
-        } catch (InterruptedException e) {
+        } catch (final InterruptedException e) {
           throw new OpenGammaRuntimeException("Interrupted during striped compilation", e);
         }
       }

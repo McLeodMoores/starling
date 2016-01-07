@@ -1,18 +1,5 @@
 package com.mcleodmoores.starling.client.marketdata;
 
-import au.com.bytecode.opencsv.CSVReader;
-import com.opengamma.OpenGammaRuntimeException;
-import com.opengamma.id.ExternalId;
-import com.opengamma.id.ExternalIdBundle;
-import com.opengamma.timeseries.date.localdate.ImmutableLocalDateDoubleTimeSeries;
-import com.opengamma.timeseries.date.localdate.LocalDateDoubleTimeSeriesBuilder;
-import com.opengamma.util.ArgumentChecker;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.threeten.bp.LocalDate;
-import org.threeten.bp.format.DateTimeFormatter;
-import org.threeten.bp.format.DateTimeParseException;
-
 import java.io.BufferedReader;
 import java.io.Reader;
 import java.util.Arrays;
@@ -23,6 +10,21 @@ import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.threeten.bp.LocalDate;
+import org.threeten.bp.format.DateTimeFormatter;
+import org.threeten.bp.format.DateTimeParseException;
+
+import com.opengamma.OpenGammaRuntimeException;
+import com.opengamma.id.ExternalId;
+import com.opengamma.id.ExternalIdBundle;
+import com.opengamma.timeseries.date.localdate.ImmutableLocalDateDoubleTimeSeries;
+import com.opengamma.timeseries.date.localdate.LocalDateDoubleTimeSeriesBuilder;
+import com.opengamma.util.ArgumentChecker;
+
+import au.com.bytecode.opencsv.CSVReader;
 
 /**
  * File parser for Market Data.
@@ -41,8 +43,8 @@ public class MarketDataFileParser {
   /** pattern for parsing multiple Ids from the header e.g. ExternalId[BLOOMBERG_TICKER] */
   private static final Pattern PATTERN = Pattern.compile("^ExternalId\\[(.*?)\\]$", Pattern.CASE_INSENSITIVE);
 
-  private DateTimeFormatter _dateFormatter;
-  private LocalDate _date;
+  private final DateTimeFormatter _dateFormatter;
+  private final LocalDate _date;
 
   public MarketDataFileParser(final DateTimeFormatter dateFormatter, final LocalDate date) {
     _dateFormatter = ArgumentChecker.notNull(dateFormatter, "dateFormatter");
@@ -54,19 +56,19 @@ public class MarketDataFileParser {
    * @return the market data set parsed
    */
   public MarketDataSet readFile(final Reader reader) {
-    MarketDataSet dataSet = MarketDataSet.empty();
+    final MarketDataSet dataSet = MarketDataSet.empty();
     int lineNum = 0;
     try (CSVReader csvLoader = new CSVReader(new BufferedReader(reader))) {
       final String[] headerLine = csvLoader.readNext();
-      Map<String, Integer> headerMap = extractHeader(headerLine);
+      final Map<String, Integer> headerMap = extractHeader(headerLine);
       lineNum++;
       String[] line;
       while ((line = csvLoader.readNext()) != null) {
-        MarketDataKey key = readMarketDataKey(line, headerMap, lineNum);
+        final MarketDataKey key = readMarketDataKey(line, headerMap, lineNum);
         addValue(dataSet, key, line, headerMap, lineNum);
         lineNum++;
       }
-    } catch (Exception e) {
+    } catch (final Exception e) {
       LOGGER.error("Error while loading CSV file", e);
     }
     buildTimeSeries(dataSet);
@@ -77,11 +79,11 @@ public class MarketDataFileParser {
     Double scalar = null;
     LocalDate date = null;
     if (headerMap.containsKey(VALUE_COLUMN_NAME)) {
-      String value = line[headerMap.get(VALUE_COLUMN_NAME)];
+      final String value = line[headerMap.get(VALUE_COLUMN_NAME)];
       if (value != null && !value.isEmpty()) {
         try {
           scalar = Double.parseDouble(value);
-        } catch (NumberFormatException nfe) {
+        } catch (final NumberFormatException nfe) {
           LOGGER.error("Couldn't parse value {} on line {}", value, lineNum);
           System.exit(1);
         }
@@ -91,18 +93,18 @@ public class MarketDataFileParser {
       }
     }
     if (headerMap.containsKey(DATE_COLUMN_NAME)) {
-      String dateStr = line[headerMap.get(DATE_COLUMN_NAME)];
+      final String dateStr = line[headerMap.get(DATE_COLUMN_NAME)];
       if (dateStr != null && !dateStr.isEmpty()) {
         try {
           date = LocalDate.parse(dateStr, _dateFormatter);
-        } catch (DateTimeParseException dtpe) {
+        } catch (final DateTimeParseException dtpe) {
           LOGGER.error("Could not parse date on line {}.  Currently using SHORT style for locale {}, "
               + "us --locale switch to change", lineNum, Locale.getDefault());
           System.exit(1);
         }
       }
     }
-    Object value = dataSet.get(key);
+    final Object value = dataSet.get(key);
     if (date != null) {
       if (value == null) {
         // no existing value, but given a date, so assume it's part of a time series.
@@ -120,7 +122,7 @@ public class MarketDataFileParser {
           final Double existingScalar = (Double) value;
           if (date.equals(_date)) {
             LOGGER.error("You put a value in key {} on date {} explicitly and implcitly (by leaving date blank) "
-                + "on line {}", new String[] { key.toString(), date.format(_dateFormatter), Integer.toString(lineNum) });
+                + "on line {}", new String[] {key.toString(), date.format(_dateFormatter), Integer.toString(lineNum) });
             System.exit(1);
           } else {
             // in this case we found a scalar already registered against this key, but we've been asked to add another scalar on a different date,
@@ -152,10 +154,10 @@ public class MarketDataFileParser {
   }
 
   private void buildTimeSeries(final MarketDataSet dataSet) {
-    for (MarketDataKey key : new HashSet<>(dataSet.keySet())) { // avoid concurrent exceptions...
-      Object data = dataSet.get(key);
+    for (final MarketDataKey key : new HashSet<>(dataSet.keySet())) { // avoid concurrent exceptions...
+      final Object data = dataSet.get(key);
       if (data instanceof LocalDateDoubleTimeSeriesBuilder) {
-        LocalDateDoubleTimeSeriesBuilder builder = (LocalDateDoubleTimeSeriesBuilder) data;
+        final LocalDateDoubleTimeSeriesBuilder builder = (LocalDateDoubleTimeSeriesBuilder) data;
         dataSet.put(key, builder.build());
       }
     }
@@ -164,39 +166,39 @@ public class MarketDataFileParser {
   private MarketDataKey readMarketDataKey(final String[] line, final Map<String, Integer> headerMap, final int lineNum) {
     final MarketDataKey.Builder builder = MarketDataKey.builder();
     if (headerMap.containsKey(FIELD_COLUMN_NAME)) {
-      String field = line[headerMap.get(FIELD_COLUMN_NAME)];
+      final String field = line[headerMap.get(FIELD_COLUMN_NAME)];
       if (field != null && !field.isEmpty()) {
         builder.field(DataField.of(field));
       }
     }
     if (headerMap.containsKey(SOURCE_COLUMN_NAME)) {
-      String source = line[headerMap.get(SOURCE_COLUMN_NAME)];
+      final String source = line[headerMap.get(SOURCE_COLUMN_NAME)];
       if (source != null && !source.isEmpty()) {
         builder.source(DataSource.of(source));
       }
     }
     if (headerMap.containsKey(PROVIDER_COLUMN_NAME)) {
-      String provider = line[headerMap.get(PROVIDER_COLUMN_NAME)];
+      final String provider = line[headerMap.get(PROVIDER_COLUMN_NAME)];
       if (provider != null && !provider.isEmpty()) {
         builder.provider(DataProvider.of(provider));
       }
     }
     if (headerMap.containsKey(NORMALIZER_COLUMN_NAME)) {
-      String normalizer = line[headerMap.get(NORMALIZER_COLUMN_NAME)];
+      final String normalizer = line[headerMap.get(NORMALIZER_COLUMN_NAME)];
       if (normalizer != null && !normalizer.isEmpty()) {
         builder.normalizer(NormalizerFactory.INSTANCE.of(normalizer));
       }
     }
-    Set<ExternalId> externalIds = new HashSet<>();
+    final Set<ExternalId> externalIds = new HashSet<>();
 
-    for (String fieldName : headerMap.keySet()) {
-      String value = line[headerMap.get(fieldName)];
+    for (final String fieldName : headerMap.keySet()) {
+      final String value = line[headerMap.get(fieldName)];
 
       if (value != null && !value.isEmpty()) {
         if (fieldName.toUpperCase().startsWith(EXTERNAL_ID_COLUMN_PREFIX)) {
           final Matcher matcher = PATTERN.matcher(fieldName);
           if (matcher.matches()) {
-            String scheme = matcher.group(1);
+            final String scheme = matcher.group(1);
             if (!scheme.isEmpty()) {
               externalIds.add(ExternalId.of(scheme, value));
             } else {
@@ -206,7 +208,7 @@ public class MarketDataFileParser {
           } else {
             try {
               externalIds.add(ExternalId.parse(value));
-            } catch (IllegalArgumentException iae) {
+            } catch (final IllegalArgumentException iae) {
               LOGGER.error(
                   "Couldn't parse External ID on line {}: If column header ExternalId doesn't contain a scheme "
                       + "(e.g. ExternalId[MY_SCHEME]) then each id must be of form MY_SCHEME~ID_VALUE",
@@ -224,7 +226,7 @@ public class MarketDataFileParser {
     builder.externalIdBundle(bundle);
     try {
       return builder.build();
-    } catch (Exception e) {
+    } catch (final Exception e) {
       LOGGER.error("Cound't create market data key for {} on line {}", Arrays.asList(line), lineNum);
       System.exit(1);
       throw new OpenGammaRuntimeException("Impossible");
@@ -232,9 +234,9 @@ public class MarketDataFileParser {
   }
 
   private Map<String, Integer> extractHeader(final String[] headerRow) {
-    Map<String, Integer> columnHeaders = new HashMap<>();
+    final Map<String, Integer> columnHeaders = new HashMap<>();
     for (int i = 0; i < headerRow.length; i++) {
-      String columnName = headerRow[i];
+      final String columnName = headerRow[i];
       if (!columnName.isEmpty()) {
         if (!columnHeaders.containsKey(columnName)) {
           columnHeaders.put(columnName.toUpperCase(), i);

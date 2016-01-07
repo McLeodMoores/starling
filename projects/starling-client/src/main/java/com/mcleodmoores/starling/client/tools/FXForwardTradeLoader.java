@@ -1,12 +1,10 @@
 package com.mcleodmoores.starling.client.tools;
 
-import com.mcleodmoores.starling.client.portfolio.FXForwardTradeFileParser;
-import com.mcleodmoores.starling.client.portfolio.PortfolioManager;
-import com.mcleodmoores.starling.client.utils.TablePrinter;
-import com.opengamma.component.tool.AbstractTool;
-import com.opengamma.core.position.impl.SimplePortfolio;
-import com.opengamma.financial.tool.ToolContext;
-import com.opengamma.scripts.Scriptable;
+import java.io.File;
+import java.io.FileReader;
+import java.util.Locale;
+import java.util.Map;
+
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.joda.beans.JodaBeanUtils;
@@ -16,9 +14,13 @@ import org.slf4j.LoggerFactory;
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.format.DateTimeFormatter;
 
-import java.io.File;
-import java.io.FileReader;
-import java.util.*;
+import com.mcleodmoores.starling.client.portfolio.FXForwardTradeFileParser;
+import com.mcleodmoores.starling.client.portfolio.PortfolioManager;
+import com.mcleodmoores.starling.client.utils.TablePrinter;
+import com.opengamma.component.tool.AbstractTool;
+import com.opengamma.core.position.impl.SimplePortfolio;
+import com.opengamma.financial.tool.ToolContext;
+import com.opengamma.scripts.Scriptable;
 
 /**
  * Created by jim on 14/05/15.
@@ -62,17 +64,17 @@ public class FXForwardTradeLoader extends AbstractTool<ToolContext> {
       if (getCommandLine().hasOption(PORTFOLIO_OPTION)) {
         defaultPortfolioName = getCommandLine().getOptionValue(PORTFOLIO_OPTION);
       }
-      FXForwardTradeFileParser parser = new FXForwardTradeFileParser(defaultPortfolioName);
-      Map<String, SimplePortfolio> portfolios = parser.parseCSV(new FileReader(file));
+      final FXForwardTradeFileParser parser = new FXForwardTradeFileParser(defaultPortfolioName);
+      final Map<String, SimplePortfolio> portfolios = parser.parseCSV(new FileReader(file));
       if (!getCommandLine().hasOption(TEST_OPTION)) {
-        PortfolioManager portfolioManager = new PortfolioManager(getToolContext());
-        for (SimplePortfolio portfolio : portfolios.values()) {
+        final PortfolioManager portfolioManager = new PortfolioManager(getToolContext());
+        for (final SimplePortfolio portfolio : portfolios.values()) {
           LOGGER.info("Saving portfolio {}", portfolio.getName());
           portfolioManager.savePortfolio(portfolio);
         }
         LOGGER.info("Data saved.");
       } else {
-        for (SimplePortfolio portfolio : portfolios.values()) {
+        for (final SimplePortfolio portfolio : portfolios.values()) {
           System.out.println(TablePrinter.toPrettyPrintedString(portfolio));
         }
         LOGGER.info("Test mode, data parsed but not saved");
@@ -85,7 +87,7 @@ public class FXForwardTradeLoader extends AbstractTool<ToolContext> {
   private DateTimeFormatter initDateFormatter() {
     DateTimeFormatter formatter;
     if (getCommandLine().hasOption(DATEPATTERN_OPTION)) {
-      String datePattern = getCommandLine().getOptionValue(DATEPATTERN_OPTION);
+      final String datePattern = getCommandLine().getOptionValue(DATEPATTERN_OPTION);
       formatter = DateTimeFormatter.ofPattern(datePattern);
     } else {
       if (Locale.getDefault().getCountry().equals("US")) {
@@ -119,33 +121,33 @@ public class FXForwardTradeLoader extends AbstractTool<ToolContext> {
 
   @Override
   protected Options createOptions(final boolean requiresConfigResource) {
-    Options options = super.createOptions(requiresConfigResource);
+    final Options options = super.createOptions(requiresConfigResource);
 
-    Option fileOption = new Option(INPUT_FILE_OPTION, INPUT_FILE_LONG, true, INPUT_FILE_DESCRIPTION);
+    final Option fileOption = new Option(INPUT_FILE_OPTION, INPUT_FILE_LONG, true, INPUT_FILE_DESCRIPTION);
     fileOption.setArgName(INPUT_FILE_ARG_NAME);
     fileOption.setArgs(1);
     fileOption.setRequired(true);
     options.addOption(fileOption);
 
-    Option localeOption = new Option(DATEPATTERN_OPTION, DATEPATTERN_LONG, true, DATEPATTERN_DESCRIPTION);
+    final Option localeOption = new Option(DATEPATTERN_OPTION, DATEPATTERN_LONG, true, DATEPATTERN_DESCRIPTION);
     localeOption.setArgName(DATEPATTERN_ARG_NAME);
     localeOption.setArgs(1);
     localeOption.setRequired(false);
     options.addOption(localeOption);
 
-    Option dateOption = new Option(DATE_OPTION, DATE_LONG, true, DATE_DESCRIPTION);
+    final Option dateOption = new Option(DATE_OPTION, DATE_LONG, true, DATE_DESCRIPTION);
     dateOption.setArgName(DATE_ARG_NAME);
     dateOption.setArgs(1);
     dateOption.setRequired(false);
     options.addOption(dateOption);
 
-    Option portfolioOption = new Option(PORTFOLIO_OPTION, PORTFOLIO_LONG, true, PORTFOLIO_DESCRIPTION);
+    final Option portfolioOption = new Option(PORTFOLIO_OPTION, PORTFOLIO_LONG, true, PORTFOLIO_DESCRIPTION);
     portfolioOption.setArgName(PORTFOLIO_ARG_NAME);
     portfolioOption.setArgs(1);
     portfolioOption.setRequired(false);
     options.addOption(portfolioOption);
 
-    Option testOption = new Option(TEST_OPTION, TEST_LONG, false, TEST_DESCRIPTION);
+    final Option testOption = new Option(TEST_OPTION, TEST_LONG, false, TEST_DESCRIPTION);
     testOption.setRequired(false);
     options.addOption(testOption);
 
@@ -153,7 +155,7 @@ public class FXForwardTradeLoader extends AbstractTool<ToolContext> {
   }
 
   public static void main(final String[] args) {
-    FXForwardTradeLoader loader = new FXForwardTradeLoader();
+    final FXForwardTradeLoader loader = new FXForwardTradeLoader();
     loader.invokeAndTerminate(args);
   }
 }

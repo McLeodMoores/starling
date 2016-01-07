@@ -3,9 +3,22 @@
  */
 package com.mcleodmoores.starling.client.portfolio;
 
+import java.util.EnumSet;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.Set;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+import org.apache.shiro.authz.AuthorizationException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.threeten.bp.Instant;
+
 import com.opengamma.DataNotFoundException;
 import com.opengamma.OpenGammaRuntimeException;
-import com.opengamma.core.position.*;
+import com.opengamma.core.position.Portfolio;
+import com.opengamma.core.position.PositionSource;
 import com.opengamma.core.security.Security;
 import com.opengamma.core.security.SecuritySource;
 import com.opengamma.engine.view.compilation.PortfolioCompiler;
@@ -15,24 +28,18 @@ import com.opengamma.id.UniqueId;
 import com.opengamma.id.VersionCorrection;
 import com.opengamma.integration.tool.portfolio.PortfolioWriter;
 import com.opengamma.master.DocumentVisibility;
-import com.opengamma.master.portfolio.*;
+import com.opengamma.master.portfolio.ManageablePortfolio;
+import com.opengamma.master.portfolio.ManageablePortfolioNode;
+import com.opengamma.master.portfolio.PortfolioDocument;
+import com.opengamma.master.portfolio.PortfolioMaster;
+import com.opengamma.master.portfolio.PortfolioSearchRequest;
+import com.opengamma.master.portfolio.PortfolioSearchResult;
 import com.opengamma.master.position.ManageablePosition;
 import com.opengamma.master.position.ManageableTrade;
 import com.opengamma.master.position.PositionDocument;
 import com.opengamma.master.position.PositionMaster;
 import com.opengamma.master.security.SecurityMaster;
 import com.opengamma.util.ArgumentChecker;
-import org.apache.shiro.authz.AuthorizationException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.threeten.bp.Instant;
-
-import java.util.EnumSet;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.Set;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 /**
  * Class to build load and save portfolios and provide lists, test for existence etc.
@@ -95,16 +102,16 @@ public final class PortfolioManager {
               portfolioKey.getName(), portfolioKey.getUniqueId());
           return false;
         }
-      } catch (DataNotFoundException dnfe) {
+      } catch (final DataNotFoundException dnfe) {
         return false;
-      } catch (AuthorizationException authorizationException) {
+      } catch (final AuthorizationException authorizationException) {
         return false;
       }
     } else {
-      PortfolioSearchRequest searchRequest = new PortfolioSearchRequest();
+      final PortfolioSearchRequest searchRequest = new PortfolioSearchRequest();
       searchRequest.setName(portfolioKey.getName());
       searchRequest.setIncludePositions(false);
-      PortfolioSearchResult searchResult = _portfolioMaster.search(searchRequest);
+      final PortfolioSearchResult searchResult = _portfolioMaster.search(searchRequest);
       return !searchResult.getDocuments().isEmpty();
     }
   }
@@ -127,17 +134,17 @@ public final class PortfolioManager {
   public Portfolio loadPortfolio(final PortfolioKey portfolioKey, final Instant versionAsOf) {
     ArgumentChecker.notNull(portfolioKey, "portfolioKey");
     ArgumentChecker.notNull(versionAsOf, "versionAsOf");
-    VersionCorrection vc = VersionCorrection.ofVersionAsOf(versionAsOf);
+    final VersionCorrection vc = VersionCorrection.ofVersionAsOf(versionAsOf);
     ManageablePortfolio manageablePortfolio;
     if (portfolioKey.hasUniqueId()) {
       final PortfolioDocument document = _portfolioMaster.get(portfolioKey.getUniqueId().getObjectId(), vc);
       manageablePortfolio = document.getValue();
     } else {
-      PortfolioSearchRequest searchRequest = new PortfolioSearchRequest();
+      final PortfolioSearchRequest searchRequest = new PortfolioSearchRequest();
       searchRequest.setName(portfolioKey.getName());
       searchRequest.setVersionCorrection(vc);
       searchRequest.setIncludePositions(false);
-      PortfolioSearchResult searchResult = _portfolioMaster.search(searchRequest);
+      final PortfolioSearchResult searchResult = _portfolioMaster.search(searchRequest);
       if (searchResult.getFirstPortfolio() != null) {
         manageablePortfolio = searchResult.getFirstPortfolio();
       } else {
@@ -157,11 +164,11 @@ public final class PortfolioManager {
    * Order is preserved
    */
   public Set<PortfolioKey> getPortfolioList() {
-    PortfolioSearchRequest searchRequest = new PortfolioSearchRequest();
+    final PortfolioSearchRequest searchRequest = new PortfolioSearchRequest();
     searchRequest.setIncludePositions(false);
-    PortfolioSearchResult result = _portfolioMaster.search(searchRequest);
-    Set<PortfolioKey> results = new LinkedHashSet<>();
-    for (PortfolioDocument portfolioDoc : result.getDocuments()) {
+    final PortfolioSearchResult result = _portfolioMaster.search(searchRequest);
+    final Set<PortfolioKey> results = new LinkedHashSet<>();
+    for (final PortfolioDocument portfolioDoc : result.getDocuments()) {
       if (portfolioDoc.getVisibility() == DocumentVisibility.VISIBLE) {
         results.add(PortfolioKey.of(portfolioDoc.getPortfolio().getName(), portfolioDoc.getUniqueId()));
       }
@@ -178,8 +185,8 @@ public final class PortfolioManager {
   public PortfolioKey savePortfolio(final Portfolio portfolio) {
     ArgumentChecker.notNull(portfolio, "portfolio");
     ArgumentChecker.notBlank(portfolio.getName(), "portfolio.name");
-    PortfolioWriter writer = new PortfolioWriter(true, true, _portfolioMaster, _positionMaster, _securityMaster);
-    UniqueId id = writer.write(portfolio);
+    final PortfolioWriter writer = new PortfolioWriter(true, true, _portfolioMaster, _positionMaster, _securityMaster);
+    final UniqueId id = writer.write(portfolio);
     return PortfolioKey.of(portfolio.getName(), id);
   }
 
@@ -196,10 +203,10 @@ public final class PortfolioManager {
     if (portfolioKey.hasUniqueId()) {
       _portfolioMaster.remove(portfolioKey.getUniqueId());
     } else {
-      PortfolioSearchRequest searchRequest = new PortfolioSearchRequest();
+      final PortfolioSearchRequest searchRequest = new PortfolioSearchRequest();
       searchRequest.setIncludePositions(false);
       searchRequest.setName(portfolioKey.getName());
-      PortfolioSearchResult result = _portfolioMaster.search(searchRequest);
+      final PortfolioSearchResult result = _portfolioMaster.search(searchRequest);
       if (result.getFirstPortfolio() != null) {
         _portfolioMaster.remove(result.getFirstPortfolio().getUniqueId());
       } else {
@@ -240,15 +247,15 @@ public final class PortfolioManager {
       throw new OpenGammaRuntimeException("Too dangerous to allow wildcard delete, iterate over list");
     }
     if (portfolioKey.hasUniqueId()) {
-      PortfolioDocument portfolioDoc = _portfolioMaster.get(portfolioKey.getUniqueId());
+      final PortfolioDocument portfolioDoc = _portfolioMaster.get(portfolioKey.getUniqueId());
       _portfolioMaster.remove(portfolioKey.getUniqueId());
     } else {
-      PortfolioSearchRequest searchRequest = new PortfolioSearchRequest();
+      final PortfolioSearchRequest searchRequest = new PortfolioSearchRequest();
       searchRequest.setIncludePositions(false);
       searchRequest.setName(portfolioKey.getName());
-      PortfolioSearchResult result = _portfolioMaster.search(searchRequest);
+      final PortfolioSearchResult result = _portfolioMaster.search(searchRequest);
       if (result.getFirstPortfolio() != null) {
-        ManageablePortfolio portfolio = result.getFirstPortfolio();
+        final ManageablePortfolio portfolio = result.getFirstPortfolio();
         delete(portfolio.getRootNode(), whatToDelete, VersionCorrection.LATEST);
         _portfolioMaster.remove(result.getFirstPortfolio().getUniqueId());
       } else {
@@ -258,20 +265,20 @@ public final class PortfolioManager {
   }
 
   private void delete(final ManageablePortfolioNode node, final EnumSet<DeleteScope> whatToDelete, final VersionCorrection vc) {
-    Set<UniqueId> deletedSecurities = new HashSet<>();
+    final Set<UniqueId> deletedSecurities = new HashSet<>();
     if (whatToDelete.contains(DeleteScope.POSITION) || whatToDelete.contains(DeleteScope.SECURITY)) {
-      for (ObjectId positionId : node.getPositionIds()) {
+      for (final ObjectId positionId : node.getPositionIds()) {
         if (whatToDelete.contains(DeleteScope.SECURITY)) {
           final PositionDocument positionDocument = _positionMaster.get(positionId, vc);
           if (positionDocument != null) {
-            ManageablePosition position = positionDocument.getValue();
-            for (ManageableTrade trade : position.getTrades()) {
-              Security sec = trade.getSecurityLink().resolve(_securitySource);
+            final ManageablePosition position = positionDocument.getValue();
+            for (final ManageableTrade trade : position.getTrades()) {
+              final Security sec = trade.getSecurityLink().resolve(_securitySource);
               if (sec != null) {
                 if (!deletedSecurities.contains(sec.getUniqueId())) {
                   try {
                     _securityMaster.remove(sec.getUniqueId());
-                  } catch (DataNotFoundException dnfe) {
+                  } catch (final DataNotFoundException dnfe) {
                     // not a problem
                   }
                   deletedSecurities.add(sec.getUniqueId());
@@ -280,12 +287,12 @@ public final class PortfolioManager {
                 LOGGER.warn("Trade {} contained invalid security link {} so can't delete security", trade);
               }
             }
-            Security security = position.getSecurityLink().resolve(_securitySource);
+            final Security security = position.getSecurityLink().resolve(_securitySource);
             if (security != null) {
               if (!deletedSecurities.contains(security.getUniqueId())) {
                 try {
                   _securityMaster.remove(security.getUniqueId());
-                } catch (DataNotFoundException dnfe) {
+                } catch (final DataNotFoundException dnfe) {
                   // not a problem
                 }
                 deletedSecurities.add(security.getUniqueId());
@@ -298,12 +305,12 @@ public final class PortfolioManager {
         if (whatToDelete.contains(DeleteScope.POSITION)) {
           try {
             _positionMaster.remove(positionId);
-          } catch (DataNotFoundException dnfe) {
+          } catch (final DataNotFoundException dnfe) {
             // not a problem.
           }
         }
       }
-      for (ManageablePortfolioNode child : node.getChildNodes()) {
+      for (final ManageablePortfolioNode child : node.getChildNodes()) {
         delete(child, whatToDelete, vc);
       }
     }
@@ -313,10 +320,10 @@ public final class PortfolioManager {
     if (portfolioKey.getUniqueId() != null) {
       return _portfolioMaster.get(portfolioKey.getUniqueId()).getValue();
     } else {
-      PortfolioSearchRequest searchRequest = new PortfolioSearchRequest();
+      final PortfolioSearchRequest searchRequest = new PortfolioSearchRequest();
       searchRequest.setIncludePositions(false);
       searchRequest.setName(portfolioKey.getName());
-      PortfolioSearchResult result = _portfolioMaster.search(searchRequest);
+      final PortfolioSearchResult result = _portfolioMaster.search(searchRequest);
       return result.getFirstPortfolio();
     }
   }

@@ -373,7 +373,7 @@ public class TablePrinter {
   private static int[] maximumWidths(final String[][] result) {
     final int[] maxWidths = new int[result[0].length];
     for (final String[] row : result) {
-      for (int i =0; i < row.length; i++) {
+      for (int i = 0; i < row.length; i++) {
         final String value = row[i];
         if (value != null) {
           maxWidths[i] = Math.max(maxWidths[i], value.length());

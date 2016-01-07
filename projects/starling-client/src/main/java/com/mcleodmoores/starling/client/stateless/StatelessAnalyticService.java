@@ -86,7 +86,7 @@ public class StatelessAnalyticService {
 
   /**
    * Create a job that calls back to a listener provided when start(ResultListener) is called.  The caller is responsible for
-   * either explcitly closing the job with close() on completion or running the whole thing inside a try-with-resources block
+   * either explicitly closing the job with close() on completion or running the whole thing inside a try-with-resources block
    * (assuming the listener completes before the block)
    * @param templateViewKey  the key for the view to use as a template, not null
    * @param portfolio  the portfolio to use in the temporary view

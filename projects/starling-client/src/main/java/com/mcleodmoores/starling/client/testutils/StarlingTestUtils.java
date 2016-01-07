@@ -21,8 +21,7 @@ public class StarlingTestUtils {
    */
   public static StarlingToolContext getToolContext() {
     final OpenGammaComponentServer server = new OpenGammaComponentServer();
-    final ComponentManager componentManager = server.createManager("classpath:/inmemory/inmemory.properties",
-        new HashMap<String, String>());
+    final ComponentManager componentManager = server.createManager("classpath:/inmemory/inmemory.properties", new HashMap<String, String>());
     final ComponentRepository repository = componentManager.getRepository();
     componentManager.init();
     componentManager.start();

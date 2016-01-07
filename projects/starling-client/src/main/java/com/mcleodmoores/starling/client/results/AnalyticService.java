@@ -3,6 +3,13 @@
  */
 package com.mcleodmoores.starling.client.results;
 
+import java.util.Collections;
+import java.util.List;
+import java.util.concurrent.SynchronousQueue;
+
+import org.threeten.bp.Instant;
+import org.threeten.bp.LocalDate;
+
 import com.opengamma.OpenGammaRuntimeException;
 import com.opengamma.core.config.ConfigSource;
 import com.opengamma.core.position.PositionSource;
@@ -21,12 +28,6 @@ import com.opengamma.id.UniqueId;
 import com.opengamma.id.VersionCorrection;
 import com.opengamma.livedata.UserPrincipal;
 import com.opengamma.util.ArgumentChecker;
-import org.threeten.bp.Instant;
-import org.threeten.bp.LocalDate;
-
-import java.util.Collections;
-import java.util.List;
-import java.util.concurrent.SynchronousQueue;
 
 /**
  * A simplified interface for accessing opengamma analytics.
@@ -80,7 +81,7 @@ public class AnalyticService  {
    * and call back the supplied ResultListener
    */
   public final class AsynchronousJobImpl implements AsynchronousJob, AutoCloseable {
-    private ViewClient _viewClient = null;
+    private ViewClient _viewClient;
     private final ViewKey _viewKey;
     private final Instant _valuationTime;
     private final LocalDate _snapshotDate;
@@ -101,6 +102,7 @@ public class AnalyticService  {
      * job by calling close() explcitly or using in a try-with-resources block.
      * @param resultListener  the result listener, to be called when the calculation is complete, not null
      */
+    @Override
     public void start(final ResultListener resultListener) {
       if (_viewClient != null && _viewClient.isAttached()) {
         // if the job is being reused, we need to clean up the previous cycle.
@@ -109,9 +111,9 @@ public class AnalyticService  {
       _viewClient = _viewProcessor.createViewClient(UserPrincipal.getLocalUser());
       _viewClient.setResultMode(ViewResultMode.FULL_ONLY);
       _viewClient.setResultListener(new AnalyticServiceResultListener(_positionSource, _viewClient, resultListener, this));
-      List<MarketDataSpecification> marketDataSpecificationList = Collections
+      final List<MarketDataSpecification> marketDataSpecificationList = Collections
           .<MarketDataSpecification>singletonList(new FixedHistoricalMarketDataSpecification(TIME_SERIES_KEY_RESOLVER, _snapshotDate));
-      UniqueId viewDefId = ensureConfig(_viewKey);
+      final UniqueId viewDefId = ensureConfig(_viewKey);
       final ExecutionFlags flags = ExecutionFlags.none().awaitMarketData();
       _viewClient.attachToViewProcess(viewDefId, ExecutionOptions.singleCycle(_valuationTime, marketDataSpecificationList, flags.get()));
     }
@@ -149,12 +151,13 @@ public class AnalyticService  {
      * Run the job synchronously and return the ResultModel.  The caller must close the job afterwards to release any resources.
      * @return the result model
      */
+    @Override
     public ResultModel run() {
-      SynchronousQueue<ResultModel> resultQueue = new SynchronousQueue<>();
+      final SynchronousQueue<ResultModel> resultQueue = new SynchronousQueue<>();
       _asyncJob.start(new ViewResultListener(resultQueue));
       try {
         return resultQueue.take();
-      } catch (InterruptedException ie) {
+      } catch (final InterruptedException ie) {
         throw new OpenGammaRuntimeException("Computation interrupted", ie);
       }
     }
@@ -175,7 +178,7 @@ public class AnalyticService  {
       public void calculationComplete(final ResultModel resultModel, final AsynchronousJob asynchronousJob) {
         try {
           _resultQueue.put(resultModel);
-        } catch (Exception e) {
+        } catch (final Exception e) {
           throw new OpenGammaRuntimeException("ViewResultListener exception", e);
         }
       }
@@ -204,6 +207,7 @@ public class AnalyticService  {
       return UserPrincipal.getLocalUser();
     }
 
+    @Override
     public void cycleCompleted(final ViewComputationResultModel fullResult, final ViewDeltaResultModel deltaResult) {
       final ViewDefinition viewDefinition = _viewClient.getLatestViewDefinition();
       final ResultModel resultModel = new ResultModelImpl(fullResult, viewDefinition, _positionSource);

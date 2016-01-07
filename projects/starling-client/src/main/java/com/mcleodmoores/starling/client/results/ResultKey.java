@@ -67,12 +67,13 @@ public final class ResultKey {
 
   @Override
   public boolean equals(final Object o) {
-    if (this == o)
+    if (this == o) {
       return true;
-    if (o == null || getClass() != o.getClass())
+    }
+    if (o == null || getClass() != o.getClass()) {
       return false;
-
-    ResultKey resultKey = (ResultKey) o;
+    }
+    final ResultKey resultKey = (ResultKey) o;
 
     if (!_resultType.getValueRequirementName().equals(resultKey._resultType.getValueRequirementName())) {
       return false;
