@@ -152,7 +152,6 @@
         <property name="masters">
             <list>
                 <ref bean="sharedConfigSource"/>
-                <ref bean="userInterpolatedYieldCurveDefinitionSource"/>
                 <bean class="com.opengamma.financial.config.ConfigSourceChangeProvider">
                     <constructor-arg ref="sharedConfigSource"/>
                 </bean>
