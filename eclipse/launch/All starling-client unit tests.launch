@@ -17,6 +17,7 @@
 <stringAttribute key="org.testng.eclipse.LOG_LEVEL" value="2"/>
 <listAttribute key="org.testng.eclipse.METHOD_TEST_LIST"/>
 <listAttribute key="org.testng.eclipse.PACKAGE_TEST_LIST">
+<listEntry value="com.mcleodmoores.starling.client.config"/>
 <listEntry value="com.mcleodmoores.starling.client.marketdata"/>
 <listEntry value="com.mcleodmoores.starling.client.portfolio"/>
 <listEntry value="com.mcleodmoores.starling.client.results"/>
