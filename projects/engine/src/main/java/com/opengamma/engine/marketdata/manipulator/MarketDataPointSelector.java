@@ -12,6 +12,7 @@ import org.fudgemsg.MutableFudgeMsg;
 import org.fudgemsg.mapping.FudgeDeserializer;
 import org.fudgemsg.mapping.FudgeSerializer;
 
+import com.opengamma.engine.target.resolver.PrimitiveResolver;
 import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.id.ExternalId;
 import com.opengamma.id.UniqueId;
@@ -27,21 +28,21 @@ public final class MarketDataPointSelector implements DistinctMarketDataSelector
 
   /**
    * Construct a selector for the supplied external id.
-   * 
+   *
    * @param dataPointId the external id of the market data point to be selected, not null
    * @return a new MarketDataSelector for the market data point, not null
    */
-  public static DistinctMarketDataSelector of(ExternalId dataPointId) {
+  public static DistinctMarketDataSelector of(final ExternalId dataPointId) {
     return new MarketDataPointSelector(dataPointId);
   }
 
   //-------------------------------------------------------------------------
   /**
    * Creates an instance.
-   * 
+   *
    * @param externalId the data point id, not null
    */
-  private MarketDataPointSelector(ExternalId externalId) {
+  private MarketDataPointSelector(final ExternalId externalId) {
     _externalId = ArgumentChecker.notNull(externalId, EXTERNAL_ID);
   }
 
@@ -51,7 +52,7 @@ public final class MarketDataPointSelector implements DistinctMarketDataSelector
   }
 
   @Override
-  public DistinctMarketDataSelector findMatchingSelector(ValueSpecification valueSpecification, String calculationConfigurationName, SelectorResolver resolver) {
+  public DistinctMarketDataSelector findMatchingSelector(final ValueSpecification valueSpecification, final String calculationConfigurationName, final SelectorResolver resolver) {
     if (_externalId.equals(createId(valueSpecification))) {
       return this;
     } else {
@@ -76,7 +77,7 @@ public final class MarketDataPointSelector implements DistinctMarketDataSelector
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
@@ -87,14 +88,14 @@ public final class MarketDataPointSelector implements DistinctMarketDataSelector
     return Objects.equals(this._externalId, other._externalId);
   }
 
-  private static ExternalId createId(ValueSpecification valueSpecification) {
+  private static ExternalId createId(final ValueSpecification valueSpecification) {
     if (valueSpecification.getProperty("Id") != null) {
       return ExternalId.parse(valueSpecification.getProperty("Id"));
     } else {
       // Id may not always be present - maybe with snapshots? (get External from UniqueId)
-      UniqueId uniqueId = valueSpecification.getTargetSpecification().getUniqueId();
+      final UniqueId uniqueId = valueSpecification.getTargetSpecification().getUniqueId();
       String scheme = uniqueId.getScheme();
-      if (scheme.startsWith("ExternalId-")) {
+      if (scheme.startsWith(PrimitiveResolver.SCHEME_PREFIX)) {
         scheme = scheme.substring(11);
       }
       // REVIEW 2013-10-11 Andrew -- The above logic is only correct if the requirement was for a single identifier and not a bundle,

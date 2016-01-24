@@ -29,17 +29,19 @@ import com.opengamma.id.VersionCorrection;
  * A {@link ObjectResolver} for {@link ComputationTargetType#PRIMITIVE}.
  */
 public class PrimitiveResolver extends AbstractIdentifierResolver implements Resolver<Primitive> {
-
-  private static final String SCHEME_PREFIX = "ExternalId-";
+  /**
+   * The scheme prefix for primitive outputs (e.g. a live market data value).
+   */
+  public static final String SCHEME_PREFIX = "ExternalId-";
 
   private static void escape(final String str, final StringBuilder into) {
-    if ((str.indexOf('-') < 0) && (str.indexOf('\\') < 0)) {
+    if (str.indexOf('-') < 0 && str.indexOf('\\') < 0) {
       into.append(str);
     } else {
       final int l = str.length();
       for (int i = 0; i < l; i++) {
         final char c = str.charAt(i);
-        if ((c == '-') || (c == '\\')) {
+        if (c == '-' || c == '\\') {
           into.append('\\').append(c);
         } else {
           into.append(c);
@@ -61,7 +63,7 @@ public class PrimitiveResolver extends AbstractIdentifierResolver implements Res
         backslash = true;
       }
     }
-    if ((count == 1) && !backslash) {
+    if (count == 1 && !backslash) {
       return new String[] {str.substring(i) };
     }
     final String[] result = new String[count];
@@ -131,7 +133,7 @@ public class PrimitiveResolver extends AbstractIdentifierResolver implements Res
    * @param schemePrefix the scheme prefix
    * @return external id bundle
    */
-  public static ExternalIdBundle resolveExternalIds(final UniqueId uniqueId, String schemePrefix) {
+  public static ExternalIdBundle resolveExternalIds(final UniqueId uniqueId, final String schemePrefix) {
     final String scheme = uniqueId.getScheme();
 
     final String[] schemes = unescape(scheme, schemePrefix.length());
@@ -158,7 +160,7 @@ public class PrimitiveResolver extends AbstractIdentifierResolver implements Res
   public Primitive resolveObject(final UniqueId uniqueId, final VersionCorrection versionCorrection) {
     final String scheme = uniqueId.getScheme();
     if (scheme.startsWith(SCHEME_PREFIX)) {
-      ExternalIdBundle externalIdBundle = resolveExternalIds(uniqueId, SCHEME_PREFIX);
+      final ExternalIdBundle externalIdBundle = resolveExternalIds(uniqueId, SCHEME_PREFIX);
       if (externalIdBundle.size() == 1) {
         return new ExternalIdentifiablePrimitive(uniqueId, functional(externalIdBundle.getExternalIds()).first());
       } else {

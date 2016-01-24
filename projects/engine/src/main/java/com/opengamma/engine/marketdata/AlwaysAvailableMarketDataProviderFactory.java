@@ -8,15 +8,16 @@ import com.opengamma.engine.marketdata.spec.MarketDataSpecification;
 import com.opengamma.livedata.UserPrincipal;
 
 /**
- * Factory for building AlwaysAvailableMarketDataProviders.
+ * Factory for building {@link AlwaysAvailableMarketDataProvider}s.
  */
 public class AlwaysAvailableMarketDataProviderFactory implements MarketDataProviderFactory {
+
   @Override
-  public MarketDataProvider create(UserPrincipal marketDataUser, MarketDataSpecification marketDataSpec) {
+  public MarketDataProvider create(final UserPrincipal marketDataUser, final MarketDataSpecification marketDataSpec) {
     if (marketDataSpec instanceof AlwaysAvailableMarketDataSpecification) {
       return new AlwaysAvailableMarketDataProvider();
     }
-    throw new IllegalStateException("Asking AlwaysAvailableMarketDataProviderFactory for instance using incompatible spec type");
+    throw new IllegalStateException("Asking AlwaysAvailableMarketDataProviderFactory for instance using incompatible spec type " + marketDataSpec);
   }
 
 }
