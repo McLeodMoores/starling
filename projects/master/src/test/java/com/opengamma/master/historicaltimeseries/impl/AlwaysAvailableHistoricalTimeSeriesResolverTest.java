@@ -12,6 +12,7 @@ import org.testng.annotations.Test;
 import com.opengamma.core.historicaltimeseries.HistoricalTimeSeriesInfo;
 import com.opengamma.id.ExternalIdBundle;
 import com.opengamma.id.ExternalIdBundleWithDates;
+import com.opengamma.id.ObjectId;
 import com.opengamma.id.UniqueId;
 import com.opengamma.master.historicaltimeseries.HistoricalTimeSeriesInfoDocument;
 import com.opengamma.master.historicaltimeseries.HistoricalTimeSeriesResolutionResult;
@@ -135,6 +136,9 @@ public class AlwaysAvailableHistoricalTimeSeriesResolverTest {
     final UniqueId uid = info.getUniqueId();
     assertNotNull(uid);
     assertEquals(uid.getScheme(), AlwaysAvailableHistoricalTimeSeriesResolver.SCHEME);
+    final ObjectId oid = info.getTimeSeriesObjectId();
+    assertNotNull(oid);
+    assertEquals(oid.getScheme(), AlwaysAvailableHistoricalTimeSeriesResolver.SCHEME);
   }
 
   /**

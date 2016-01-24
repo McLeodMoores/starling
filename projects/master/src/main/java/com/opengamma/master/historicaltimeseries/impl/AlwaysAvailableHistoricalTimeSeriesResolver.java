@@ -9,6 +9,7 @@ import org.threeten.bp.LocalDate;
 
 import com.opengamma.id.ExternalIdBundle;
 import com.opengamma.id.ExternalIdBundleWithDates;
+import com.opengamma.id.ObjectIdSupplier;
 import com.opengamma.id.UniqueId;
 import com.opengamma.id.UniqueIdSupplier;
 import com.opengamma.master.historicaltimeseries.HistoricalTimeSeriesMaster;
@@ -36,6 +37,8 @@ public class AlwaysAvailableHistoricalTimeSeriesResolver extends HistoricalTimeS
   private final HistoricalTimeSeriesResolver _underlyingResolver;
   /** A unique id supplier */
   private final UniqueIdSupplier _uidSupplier = new UniqueIdSupplier(SCHEME);
+  /** An object id supplier */
+  private final ObjectIdSupplier _oidSupplier = new ObjectIdSupplier(SCHEME);
   /** A map of id bundle to time series info */
   private final ConcurrentHashMap<UniqueId, ManageableHistoricalTimeSeriesInfo> _idBundleMap = new ConcurrentHashMap<>();
 
@@ -62,6 +65,7 @@ public class AlwaysAvailableHistoricalTimeSeriesResolver extends HistoricalTimeS
     info.setDataSource(dataSource);
     info.setExternalIdBundle(ExternalIdBundleWithDates.of(identifierBundle));
     info.setUniqueId(uniqueId);
+    info.setTimeSeriesObjectId(_oidSupplier.get());
     _idBundleMap.put(uniqueId, info);
     return new HistoricalTimeSeriesResolutionResult(info);
   }
