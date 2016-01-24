@@ -17,10 +17,7 @@ import org.threeten.bp.ZonedDateTime;
 import com.opengamma.OpenGammaRuntimeException;
 import com.opengamma.analytics.financial.interestrate.InstrumentDerivative;
 import com.opengamma.analytics.financial.simpleinstruments.pricing.SimpleFutureDataBundle;
-import com.opengamma.core.holiday.HolidaySource;
-import com.opengamma.core.region.RegionSource;
 import com.opengamma.core.security.Security;
-import com.opengamma.core.security.SecuritySource;
 import com.opengamma.core.value.MarketDataRequirementNames;
 import com.opengamma.engine.ComputationTarget;
 import com.opengamma.engine.function.AbstractFunction.NonCompiledInvoker;
@@ -35,14 +32,10 @@ import com.opengamma.engine.value.ValuePropertyNames;
 import com.opengamma.engine.value.ValueRequirement;
 import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.financial.OpenGammaCompilationContext;
-import com.opengamma.financial.analytics.conversion.BondFutureSecurityConverter;
-import com.opengamma.financial.analytics.conversion.BondSecurityConverter;
-import com.opengamma.financial.analytics.conversion.FutureSecurityConverterDeprecated;
-import com.opengamma.financial.analytics.conversion.InterestRateFutureSecurityConverterDeprecated;
+import com.opengamma.financial.analytics.conversion.FutureSecurityConverter;
 import com.opengamma.financial.analytics.timeseries.DateConstraint;
 import com.opengamma.financial.analytics.timeseries.HistoricalTimeSeriesBundle;
 import com.opengamma.financial.analytics.timeseries.HistoricalTimeSeriesFunctionUtils;
-import com.opengamma.financial.convention.ConventionBundleSource;
 import com.opengamma.financial.security.FinancialSecurityUtils;
 import com.opengamma.financial.security.future.AgricultureFutureSecurity;
 import com.opengamma.financial.security.future.EnergyFutureSecurity;
@@ -63,24 +56,11 @@ public abstract class SimpleFutureFunction extends NonCompiledInvoker {
   /** Calculation method name */
   public static final String MARKET_METHOD = "Market";
   private static final Logger s_logger = LoggerFactory.getLogger(SimpleFutureFunction.class);
-  private FutureSecurityConverterDeprecated _converter;
+  private static final FutureSecurityConverter CONVERTER = new FutureSecurityConverter();
   private final String _valueRequirementName;
 
   public SimpleFutureFunction(final String valueRequirementName) {
-    ArgumentChecker.notNull(valueRequirementName, "valueRequirement name was null.");
-    _valueRequirementName = valueRequirementName;
-  }
-
-  @Override
-  public void init(final FunctionCompilationContext context) {
-    final HolidaySource holidaySource = OpenGammaCompilationContext.getHolidaySource(context);
-    final RegionSource regionSource = OpenGammaCompilationContext.getRegionSource(context);
-    final ConventionBundleSource conventionSource = OpenGammaCompilationContext.getConventionBundleSource(context);
-    final SecuritySource securitySource = OpenGammaCompilationContext.getSecuritySource(context);
-    final InterestRateFutureSecurityConverterDeprecated irFutureConverter = new InterestRateFutureSecurityConverterDeprecated(holidaySource, conventionSource, regionSource);
-    final BondSecurityConverter bondConverter = new BondSecurityConverter(holidaySource, conventionSource, regionSource);
-    final BondFutureSecurityConverter bondFutureConverter = new BondFutureSecurityConverter(securitySource, bondConverter);
-    _converter = new FutureSecurityConverterDeprecated(bondFutureConverter);
+    _valueRequirementName = ArgumentChecker.notNull(valueRequirementName, "valueRequirementName");
   }
 
   @Override
@@ -102,7 +82,7 @@ public abstract class SimpleFutureFunction extends NonCompiledInvoker {
       throw new OpenGammaRuntimeException("Could not find latest value in time series.");
     }
 
-    final InstrumentDerivative derivative = security.accept(_converter).toDerivative(now, lastMarginPrice, new String[0]);
+    final InstrumentDerivative derivative = security.accept(CONVERTER).toDerivative(now, lastMarginPrice);
 
     // 2. Build up the (simple) market data bundle
     final SimpleFutureDataBundle market = new SimpleFutureDataBundle(null, getMarketPrice(security, inputs), null, null, null);

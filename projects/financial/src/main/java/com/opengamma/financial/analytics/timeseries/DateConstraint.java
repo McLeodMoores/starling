@@ -168,7 +168,7 @@ public abstract class DateConstraint {
 
     @Override
     public boolean equals(final Object o) {
-      return (o instanceof NullDateConstraint);
+      return o instanceof NullDateConstraint;
     }
 
   }
@@ -290,7 +290,7 @@ public abstract class DateConstraint {
           final Period b = other._plus ? other._period : other._period.negated();
           return b.minus(a);
         }
-      } else if (o.equals((_underlying == null) ? DateConstraint.VALUATION_TIME : _underlying)) {
+      } else if (o.equals(_underlying == null ? DateConstraint.VALUATION_TIME : _underlying)) {
         if (_plus) {
           return _period.negated();
         } else {
@@ -323,7 +323,7 @@ public abstract class DateConstraint {
       }
       final PlusMinusPeriodDateConstraint other = (PlusMinusPeriodDateConstraint) o;
       return ObjectUtils.equals(_underlying, other._underlying)
-          && (_plus == other._plus)
+          && _plus == other._plus
           && ObjectUtils.equals(_period, other._period);
     }
 
@@ -398,7 +398,7 @@ public abstract class DateConstraint {
       }
       final WeekDayDateConstraint other = (WeekDayDateConstraint) o;
       return ObjectUtils.equals(_underlying, other._underlying)
-          && (_adjust == other._adjust);
+          && _adjust == other._adjust;
     }
 
   }
@@ -437,7 +437,7 @@ public abstract class DateConstraint {
 
     @Override
     public boolean equals(final Object o) {
-      return (o instanceof ValuationTime);
+      return o instanceof ValuationTime;
     }
 
   }
@@ -559,28 +559,32 @@ public abstract class DateConstraint {
    * @return the evaluated local date, possibly null
    */
   public static LocalDate evaluate(final FunctionExecutionContext context, final String str) {
+    return evaluate(valuationTime(context), str);
+  }
+
+  public static LocalDate evaluate(final LocalDate valuationTime, final String str) {
     if (str.length() == 0) {
       return null;
     }
     if (str.startsWith(NOW_STRING)) {
       if (str.length() == NOW_STRING.length()) {
-        return valuationTime(context);
+        return valuationTime;
       } else {
-        return evaluateRight(valuationTime(context), str.substring(NOW_STRING.length()));
+        return evaluateRight(valuationTime, str.substring(NOW_STRING.length()));
       }
     } else if (str.startsWith(NULL_STRING)) {
       return null;
     } else if (str.charAt(0) == '-') {
-      return valuationTime(context).minus(Period.parse(str.substring(1)));
+      return valuationTime.minus(Period.parse(str.substring(1)));
     } else if (str.charAt(0) == '+') {
-      return valuationTime(context).plus(Period.parse(str.substring(1)));
+      return valuationTime.plus(Period.parse(str.substring(1)));
     } else if (str.startsWith(PREVIOUS_WEEK_DAY_STRING)) {
       final Pair<String, String> brackets = parseBrackets(str.substring(PREVIOUS_WEEK_DAY_STRING.length()));
       final LocalDate left;
       if (brackets.getFirst() != null) {
-        left = DateUtils.previousWeekDay(evaluate(context, brackets.getFirst()));
+        left = DateUtils.previousWeekDay(evaluate(valuationTime, brackets.getFirst()));
       } else {
-        left = DateUtils.previousWeekDay(valuationTime(context));
+        left = DateUtils.previousWeekDay(valuationTime);
       }
       if (brackets.getSecond() != null) {
         return evaluateRight(left, brackets.getSecond());
@@ -591,9 +595,9 @@ public abstract class DateConstraint {
       final Pair<String, String> brackets = parseBrackets(str.substring(NEXT_WEEK_DAY_STRING.length()));
       final LocalDate left;
       if (brackets.getFirst() != null) {
-        left = DateUtils.nextWeekDay(evaluate(context, brackets.getFirst()));
+        left = DateUtils.nextWeekDay(evaluate(valuationTime, brackets.getFirst()));
       } else {
-        left = DateUtils.nextWeekDay(valuationTime(context));
+        left = DateUtils.nextWeekDay(valuationTime);
       }
       if (brackets.getSecond() != null) {
         return evaluateRight(left, brackets.getSecond());

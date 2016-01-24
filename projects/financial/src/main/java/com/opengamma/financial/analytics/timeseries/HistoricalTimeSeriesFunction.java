@@ -6,6 +6,7 @@
 package com.opengamma.financial.analytics.timeseries;
 
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -36,7 +37,6 @@ import com.opengamma.engine.value.ValueRequirement;
 import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.financial.OpenGammaExecutionContext;
-import com.opengamma.id.UniqueId;
 import com.opengamma.timeseries.date.localdate.ImmutableLocalDateDoubleTimeSeries;
 
 /**
@@ -85,7 +85,8 @@ public class HistoricalTimeSeriesFunction extends AbstractFunction {
           .withAny(HistoricalTimeSeriesFunctionUtils.START_DATE_PROPERTY)
           .with(HistoricalTimeSeriesFunctionUtils.INCLUDE_START_PROPERTY, HistoricalTimeSeriesFunctionUtils.YES_VALUE, HistoricalTimeSeriesFunctionUtils.NO_VALUE)
           .withAny(HistoricalTimeSeriesFunctionUtils.END_DATE_PROPERTY)
-          .with(HistoricalTimeSeriesFunctionUtils.INCLUDE_END_PROPERTY, HistoricalTimeSeriesFunctionUtils.YES_VALUE, HistoricalTimeSeriesFunctionUtils.NO_VALUE).get()));
+          .with(HistoricalTimeSeriesFunctionUtils.INCLUDE_END_PROPERTY, HistoricalTimeSeriesFunctionUtils.YES_VALUE, HistoricalTimeSeriesFunctionUtils.NO_VALUE)
+          .get()));
     }
 
     @Override
@@ -129,10 +130,9 @@ public class HistoricalTimeSeriesFunction extends AbstractFunction {
       if (constraints == null) {
         // We can satisfy the desired value as-is
         return Collections.emptySet();
-      } else {
-        // We need to substitute ourselves with the adjusted constraints
-        return Collections.singleton(new ValueRequirement(ValueRequirementNames.HISTORICAL_TIME_SERIES, target.toSpecification(), constraints.get()));
-      }
+      } 
+      // We need to substitute ourselves with the adjusted constraints
+      return Collections.singleton(new ValueRequirement(ValueRequirementNames.HISTORICAL_TIME_SERIES, target.toSpecification(), constraints.get()));
     }
 
     @Override
@@ -140,10 +140,9 @@ public class HistoricalTimeSeriesFunction extends AbstractFunction {
       if (inputs.isEmpty()) {
         // Use full results - graph builder will compose correctly against the desired value
         return getResults(context, target);
-      } else {
-        // Use the substituted result
-        return inputs.keySet();
-      }
+      } 
+      // Use the substituted result
+      return inputs.keySet();
     }
 
     // FunctionInvoker
