@@ -109,7 +109,7 @@ public class MarketDataManagerTest {
   @Test
   public void testSaveOrUpdate() {
     // note these configurations should be used as time series are actually stored and retrieved from the source
-    final ToolContext toolContext = StarlingTestUtils.getToolContext("/inmemory/inmemory.properties");
+    final ToolContext toolContext = StarlingTestUtils.getToolContext("/inmemory/marketdata-test.properties");
     final LocalDate today = LocalDate.now();
     final MarketDataManager marketDataManager = new MarketDataManager(toolContext);
     // saves the data
@@ -164,7 +164,7 @@ public class MarketDataManagerTest {
   public void testSaveWrongDataType() {
     final MarketDataSet dataSet = MarketDataSet.empty();
     dataSet.put(MarketDataKey.of(ExternalId.of(TEST_SCHEME, "JPYUSD").toBundle(), DataField.of(MarketDataRequirementNames.MARKET_VALUE)), "NaN");
-    final ToolContext toolContext = StarlingTestUtils.getToolContext("/inmemory/inmemory.properties");
+    final ToolContext toolContext = StarlingTestUtils.getToolContext("/inmemory/marketdata-test.properties");
     final LocalDate today = LocalDate.now();
     final MarketDataManager marketDataManager = new MarketDataManager(toolContext);
     // saves the data
@@ -178,7 +178,7 @@ public class MarketDataManagerTest {
    */
   @Test(expectedExceptions = OpenGammaRuntimeException.class)
   public void testNoViewInMaster() {
-    final ToolContext toolContext = StarlingTestUtils.getToolContext("/inmemory/marketdatatest.properties");
+    final ToolContext toolContext = StarlingTestUtils.getToolContext("/inmemory/marketdata-test.properties");
     final ZonedDateTime today = ZonedDateTime.now();
     final Instant now = Instant.from(today);
     final MarketDataManager marketDataManager = new MarketDataManager(toolContext);
@@ -199,7 +199,7 @@ public class MarketDataManagerTest {
   @Test
   public void testGetRequiredDataNoTimeSeries() {
     // the always available live market data provider in this configuration means that the graph will build
-    final ToolContext toolContext = StarlingTestUtils.getToolContext("/inmemory/marketdatatest.properties");
+    final ToolContext toolContext = StarlingTestUtils.getToolContext("/inmemory/marketdata-test.properties");
     final Set<CurveNode> nodes = new HashSet<>();
     final Map<Tenor, CurveInstrumentProvider> ids = new HashMap<>();
     final Set<ExternalId> expectedIds = new HashSet<>();
@@ -250,7 +250,7 @@ public class MarketDataManagerTest {
   @Test
   public void testGetRequiredDataWithTimeSeries() {
     // the always available historical time series resolver in this configuration means that the graph will build
-    final ToolContext toolContext = StarlingTestUtils.getToolContext("/inmemory/marketdatatest.properties");
+    final ToolContext toolContext = StarlingTestUtils.getToolContext("/inmemory/marketdata-test.properties");
     final ExternalId futureTicker = ExternalSchemes.syntheticSecurityId("ABH6 Index");
     final ExternalId tradeId = ExternalId.of("TEST_ID", "FUTURE");
     final PortfolioKey portfolioKey = createSingleFuturePortfolio(toolContext, futureTicker, tradeId);
