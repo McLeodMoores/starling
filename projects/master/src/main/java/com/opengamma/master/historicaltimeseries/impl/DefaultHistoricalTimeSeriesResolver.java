@@ -1,7 +1,11 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
+ *
+ * Modified by McLeod Moores Software Limited.
+ *
+ * Copyright (C) 2016 - present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.master.historicaltimeseries.impl;
 
@@ -25,6 +29,7 @@ import com.opengamma.master.historicaltimeseries.HistoricalTimeSeriesResolver;
 import com.opengamma.master.historicaltimeseries.HistoricalTimeSeriesResolverWithBasicChangeManager;
 import com.opengamma.master.historicaltimeseries.HistoricalTimeSeriesSelector;
 import com.opengamma.master.historicaltimeseries.ManageableHistoricalTimeSeriesInfo;
+import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.paging.PagingRequest;
 
 /**
@@ -37,18 +42,18 @@ public class DefaultHistoricalTimeSeriesResolver extends HistoricalTimeSeriesRes
   private final HistoricalTimeSeriesSelector _selector;
   private final HistoricalTimeSeriesMaster _master;
 
-  public DefaultHistoricalTimeSeriesResolver(HistoricalTimeSeriesSelector selector, HistoricalTimeSeriesMaster master) {
-    _selector = selector;
-    _master = master;
+  public DefaultHistoricalTimeSeriesResolver(final HistoricalTimeSeriesSelector selector, final HistoricalTimeSeriesMaster master) {
+    _selector = ArgumentChecker.notNull(selector, "selector");
+    _master = ArgumentChecker.notNull(master, "master");
 
     _master.changeManager().addChangeListener(new ChangeListener() {
       @Override
-      public void entityChanged(ChangeEvent event) {
-        ObjectId oid = event.getObjectId();
-        ChangeType type = event.getType();
-        Instant vFrom = event.getVersionFrom();
-        Instant vInstant = event.getVersionInstant();
-        Instant vTo = event.getVersionTo();
+      public void entityChanged(final ChangeEvent event) {
+        final ObjectId oid = event.getObjectId();
+        final ChangeType type = event.getType();
+        final Instant vFrom = event.getVersionFrom();
+        final Instant vInstant = event.getVersionInstant();
+        final Instant vTo = event.getVersionTo();
         DefaultHistoricalTimeSeriesResolver.this.changeManager().entityChanged(type, oid, vFrom, vTo, vInstant);
       }
     });
@@ -59,23 +64,23 @@ public class DefaultHistoricalTimeSeriesResolver extends HistoricalTimeSeriesRes
   public HistoricalTimeSeriesResolutionResult resolve(final ExternalIdBundle identifierBundle, final LocalDate identifierValidityDate, final String dataSource, final String dataProvider,
       final String dataField, final String resolutionKey) {
     if (identifierBundle != null) {
-      Collection<ManageableHistoricalTimeSeriesInfo> timeSeriesCandidates = search(identifierBundle, identifierValidityDate, dataSource, dataProvider, dataField);
-      ManageableHistoricalTimeSeriesInfo selectedResult = select(timeSeriesCandidates, resolutionKey);
+      final Collection<ManageableHistoricalTimeSeriesInfo> timeSeriesCandidates = search(identifierBundle, identifierValidityDate, dataSource, dataProvider, dataField);
+      final ManageableHistoricalTimeSeriesInfo selectedResult = select(timeSeriesCandidates, resolutionKey);
       if (selectedResult == null) {
         s_logger.warn("Resolver failed to find any time-series for {} using {}/{}", new Object[] {identifierBundle, dataField, resolutionKey });
         return null;
       }
       return new HistoricalTimeSeriesResolutionResult(selectedResult);
-    } else {
-      return search(dataSource, dataProvider, dataField);
     }
+    return search(dataSource, dataProvider, dataField);
   }
 
-  protected ManageableHistoricalTimeSeriesInfo select(Collection<ManageableHistoricalTimeSeriesInfo> timeSeriesCandidates, String resolutionKey) {
+  protected ManageableHistoricalTimeSeriesInfo select(final Collection<ManageableHistoricalTimeSeriesInfo> timeSeriesCandidates, final String resolutionKey) {
     return getSelector().select(timeSeriesCandidates, resolutionKey);
   }
 
-  protected Collection<ManageableHistoricalTimeSeriesInfo> search(ExternalIdBundle identifierBundle, LocalDate identifierValidityDate, String dataSource, String dataProvider, String dataField) {
+  protected Collection<ManageableHistoricalTimeSeriesInfo> search(final ExternalIdBundle identifierBundle, final LocalDate identifierValidityDate, final String dataSource,
+      final String dataProvider, final String dataField) {
     final HistoricalTimeSeriesInfoSearchRequest searchRequest = new HistoricalTimeSeriesInfoSearchRequest(identifierBundle);
     searchRequest.setValidityDate(identifierValidityDate);
     searchRequest.setDataSource(dataSource);
@@ -93,11 +98,10 @@ public class DefaultHistoricalTimeSeriesResolver extends HistoricalTimeSeriesRes
     searchRequest.setPagingRequest(PagingRequest.NONE);
     if (_master.search(searchRequest).getPaging().getTotalItems() > 0) {
       return new HistoricalTimeSeriesResolutionResult(null, null);
-    } else {
-      return null;
     }
+    return null;
   }
-  
+
   private HistoricalTimeSeriesSelector getSelector() {
     return _selector;
   }
