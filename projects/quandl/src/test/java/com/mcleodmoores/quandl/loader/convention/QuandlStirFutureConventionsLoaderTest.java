@@ -25,7 +25,7 @@ import au.com.bytecode.opencsv.CSVReader;
 public class QuandlStirFutureConventionsLoaderTest {
 
   /**
-   * This tests that the expected csv file exists, that there is a header that is ignored and the expected number
+   * This tests that the expected csv file exists, that there is a header and that the expected number
    * of conventions are created. Individual conventions are not tested as this file could change.
    * @throws Exception  if there is a problem reading the file
    */
@@ -45,7 +45,7 @@ public class QuandlStirFutureConventionsLoaderTest {
           fail("stir-future-conventions.csv was empty");
         }
         final Set<QuandlStirFutureConvention> conventions = loader.loadConventionsFromFile();
-        // expect there to be a header that is ignored when creating conventions
+        // expect there to be a header for the convention fields
         assertEquals(conventions.size(), lineCount - 1);
       }
     }

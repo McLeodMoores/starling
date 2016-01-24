@@ -13,8 +13,6 @@ import java.util.concurrent.ConcurrentMap;
 
 import com.google.common.collect.Maps;
 import com.opengamma.OpenGammaRuntimeException;
-import com.opengamma.util.ArgumentChecker;
-import com.opengamma.util.ClassUtils;
 
 /**
  * An abstract factory for named instances.
@@ -24,7 +22,7 @@ import com.opengamma.util.ClassUtils;
  * <p>
  * Implementations should typically be singletons with a public static factory instance
  * named 'INSTANCE' accessible using {@link ClassUtils#singletonInstance(Class)}.
- * 
+ *
  * @param <T> type of objects returned
  */
 public abstract class AbstractNamedInstanceFactory<T extends NamedInstance>
@@ -49,28 +47,28 @@ public abstract class AbstractNamedInstanceFactory<T extends NamedInstance>
 
   /**
    * Creates the factory.
-   * 
+   *
    * @param type  the type of named instance, not null
    */
-  protected AbstractNamedInstanceFactory(Class<T> type) {
+  protected AbstractNamedInstanceFactory(final Class<T> type) {
     _type = ArgumentChecker.notNull(type, "type");
   }
 
   //-------------------------------------------------------------------------
   /**
    * Adds an instance, potentially using a different name.
-   * 
+   *
    * @param instance  the named instance, not null
    * @param alternativeNames  the alternative names to use in addition to the instance name, not null
    * @return the instance, not null
    */
-  protected T addInstance(T instance, String... alternativeNames) {
+  protected T addInstance(final T instance, final String... alternativeNames) {
     ArgumentChecker.notNull(instance, "instance");
     ArgumentChecker.notNull(alternativeNames, "alternativeNames");
     _instanceMap.put(instance.getName(), instance);
     _instanceMapAltNames.put(instance.getName(), instance);
     _lookupMap.put(instance.getName().toLowerCase(Locale.ENGLISH), instance);
-    for (String altName : alternativeNames) {
+    for (final String altName : alternativeNames) {
       _instanceMapAltNames.put(altName, instance);
       _lookupMap.put(altName.toLowerCase(Locale.ENGLISH), instance);
     }
@@ -90,21 +88,21 @@ public abstract class AbstractNamedInstanceFactory<T extends NamedInstance>
    * Loads instances from a properties file.
    * <p>
    * The properties file must be a name key to a class name.
-   * 
+   *
    * @param bundleName  the bundle name, not null
    */
-  protected void loadFromProperties(String bundleName) {
+  protected void loadFromProperties(final String bundleName) {
     ArgumentChecker.notNull(bundleName, "bundleName");
     final ResourceBundle bundle = ResourceBundle.getBundle(bundleName);
     final Map<String, T> instances = Maps.newHashMap();
-    for (String name : bundle.keySet()) {
-      String implementationType = bundle.getString(name);
+    for (final String name : bundle.keySet()) {
+      final String implementationType = bundle.getString(name);
       T instance = instances.get(implementationType);
       if (instance == null) {
         try {
           instance = ClassUtils.loadClassRuntime(implementationType).asSubclass(_type).newInstance();
           instances.put(implementationType, instance);
-        } catch (Exception ex) {
+        } catch (final Exception ex) {
           throw new OpenGammaRuntimeException("Error loading properties for " + _type.getSimpleName(), ex);
         }
       }

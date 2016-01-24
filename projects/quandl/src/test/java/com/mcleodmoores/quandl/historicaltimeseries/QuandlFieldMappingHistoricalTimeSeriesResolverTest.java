@@ -187,7 +187,7 @@ public class QuandlFieldMappingHistoricalTimeSeriesResolverTest {
   /**
    * Tests the behaviour when the master is null.
    */
-  @Test(expectedExceptions = NullPointerException.class)
+  @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullMaster() {
     new QuandlFieldMappingHistoricalTimeSeriesResolver(FIELD_MAPS, HTS_SELECTOR, null);
   }

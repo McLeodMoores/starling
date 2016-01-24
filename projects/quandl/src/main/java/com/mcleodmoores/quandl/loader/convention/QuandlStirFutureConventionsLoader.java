@@ -26,7 +26,7 @@ import au.com.bytecode.opencsv.CSVReader;
 
 /**
  * Creates {@link QuandlStirFutureConvention}s from a csv file called "stir-future-conventions.csv". These
- * conventions contain information that required to construct interest rate futures.
+ * conventions contain information that is required to construct interest rate futures.
  */
 public final class QuandlStirFutureConventionsLoader implements ConventionsLoader<QuandlStirFutureConvention> {
   /** An instance of this loader. */
