@@ -8,9 +8,6 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
 
-import com.google.common.collect.Iterables;
-import com.opengamma.core.security.Security;
-import com.opengamma.util.ArgumentChecker;
 import org.joda.beans.Bean;
 import org.joda.beans.BeanDefinition;
 import org.joda.beans.ImmutableBean;
@@ -38,6 +35,7 @@ import com.opengamma.core.security.impl.SimpleSecurityLink;
 import com.opengamma.financial.security.fx.FXForwardSecurity;
 import com.opengamma.id.ExternalId;
 import com.opengamma.master.position.ManageableTrade;
+import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
 
 /**
@@ -47,6 +45,7 @@ import com.opengamma.util.money.Currency;
 public class FXForwardTrade implements ImmutableBean, Trade {
   private static final ExternalId DEFAULT_REGION = ExternalId.of(ExternalSchemes.ISO_COUNTRY_ALPHA2, "GB");
   private static final LocalTime DEFAULT_FORWARD_TIME = LocalTime.MAX;
+  //TODO won't this fail when daylight savings starts or ends?
   private static final ZoneId DEFAULT_FORWARD_ZONE = ZoneId.systemDefault();
   private static final OffsetTime DEFAULT_TRADE_TIME = OffsetTime.MAX;
   private static final Counterparty DEFAULT_COUNTERPARTY = new SimpleCounterparty(ExternalId.of(Counterparty.DEFAULT_SCHEME, "DEFAULT"));
@@ -117,19 +116,19 @@ public class FXForwardTrade implements ImmutableBean, Trade {
 
   /**
    * Build a position, trade and linked security that correspond to this trade.
-   * @return
+   * @return  the position
    */
+  @Override
   public Position toPosition() {
     // get one of the correlation ids, doesn't matter which as the full bundle is in the security.
-    ExternalId externalId = _correlationId;
-    ZonedDateTime forwardDateTime = _forwardDate.atTime(DEFAULT_FORWARD_TIME).atZone(DEFAULT_FORWARD_ZONE);
-    FXForwardSecurity fxForwardSec = new FXForwardSecurity(_payCurrency, _payAmount, _receiveCurrency, _receiveAmount, forwardDateTime, DEFAULT_REGION);
+    final ZonedDateTime forwardDateTime = _forwardDate.atTime(DEFAULT_FORWARD_TIME).atZone(DEFAULT_FORWARD_ZONE);
+    final FXForwardSecurity fxForwardSec = new FXForwardSecurity(_payCurrency, _payAmount, _receiveCurrency, _receiveAmount, forwardDateTime, DEFAULT_REGION);
     fxForwardSec.setName(getDescription());
     fxForwardSec.setExternalIdBundle(_correlationId.toBundle());
-    Counterparty cp = _counterparty == null ? DEFAULT_COUNTERPARTY : new SimpleCounterparty(ExternalId.of("Cpty", _counterparty));
-    SimpleTrade trade = new SimpleTrade(fxForwardSec, BigDecimal.ONE, cp, _tradeDate, DEFAULT_TRADE_TIME);
+    final Counterparty cp = _counterparty == null ? DEFAULT_COUNTERPARTY : new SimpleCounterparty(ExternalId.of("Cpty", _counterparty));
+    final SimpleTrade trade = new SimpleTrade(fxForwardSec, BigDecimal.ONE, cp, _tradeDate, DEFAULT_TRADE_TIME);
     trade.addAttribute(ManageableTrade.meta().providerId().name(), _correlationId.toString());
-    SimplePosition position = new SimplePosition();
+    final SimplePosition position = new SimplePosition();
     position.addAttribute(ManageableTrade.meta().providerId().name(), _correlationId.toString());
     position.setSecurityLink(SimpleSecurityLink.of(fxForwardSec));
     position.setQuantity(BigDecimal.ONE);
@@ -160,7 +159,7 @@ public class FXForwardTrade implements ImmutableBean, Trade {
   }
 
   protected String getDescription() {
-    StringBuilder sb = new StringBuilder();
+    final StringBuilder sb = new StringBuilder();
     sb.append(_payCurrency);
     sb.append("/");
     sb.append(_receiveCurrency);

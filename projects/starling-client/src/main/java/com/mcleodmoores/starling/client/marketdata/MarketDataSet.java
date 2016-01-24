@@ -1,31 +1,40 @@
 /**
- * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2015 - present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.mcleodmoores.starling.client.marketdata;
-
-import com.opengamma.util.ArgumentChecker;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+
+import com.opengamma.util.ArgumentChecker;
 
 /**
  * A set of market data, typically all that is required by a given view execution.  Methods and structure are
  * very similar to a Map&lt;MarketDataKey, Object&gt; so is mutable.
  */
 public final class MarketDataSet {
+  /** The data */
   private final Map<MarketDataKey, Object> _dataSet;
 
+  /**
+   * Restricted constructor.
+   * @param dataSet  the data, not null
+   */
   private MarketDataSet(final Map<MarketDataKey, Object> dataSet) {
     _dataSet = new HashMap<>(ArgumentChecker.notNull(dataSet, "dataSet"));
   }
 
+  /**
+   * Restricted constructor that creates an empty data set.
+   */
   private MarketDataSet() {
     _dataSet = new HashMap<>();
   }
 
   /**
-   * @return an empty data set (mutable).
+   * Gets a mutable empty market data set.
+   * @return an empty data set (mutable)
    */
   public static MarketDataSet empty() {
     return new MarketDataSet();
@@ -42,6 +51,7 @@ public final class MarketDataSet {
   }
 
   /**
+   * Returns true if the market data set contains an entry for the key.
    * @param key  a market data key, not null
    * @return true, if the market data set contains an entry for the key
    */
@@ -90,6 +100,7 @@ public final class MarketDataSet {
   }
 
   /**
+   * Gets all of the market data keys in this set.
    * @return the set of all market data keys
    */
   public Set<MarketDataKey> keySet() {
@@ -97,6 +108,7 @@ public final class MarketDataSet {
   }
 
   /**
+   * Gets the entry set of this market data set.
    * @return the set of market data key/value entries in this market data set
    */
   public Set<Map.Entry<MarketDataKey, Object>> entrySet() {
@@ -104,6 +116,7 @@ public final class MarketDataSet {
   }
 
   /**
+   * Gets the number of entries in this set.
    * @return the number of entries in this market data set
    */
   public int size() {
@@ -121,7 +134,7 @@ public final class MarketDataSet {
     if (!(other instanceof MarketDataSet)) {
       return false;
     }
-    MarketDataSet o = (MarketDataSet) other;
+    final MarketDataSet o = (MarketDataSet) other;
     return o._dataSet.equals(_dataSet);
   }
 

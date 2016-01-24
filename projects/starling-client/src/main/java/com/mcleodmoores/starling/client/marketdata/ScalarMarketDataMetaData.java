@@ -1,13 +1,13 @@
 /**
- * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2015 - present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.mcleodmoores.starling.client.marketdata;
 
 /**
  * Class to show that the data in question is a piece of scalar meta-data.
- * Might want to refactor this to an enum.
  */
-public class ScalarMarketDataMetaData implements MarketDataMetaData {
+//TODO  Might want to refactor this to an enum.
+public final class ScalarMarketDataMetaData implements MarketDataMetaData {
   /**
    * Singleton instance.
    */
@@ -20,8 +20,10 @@ public class ScalarMarketDataMetaData implements MarketDataMetaData {
   }
 
   /**
+   * Gets the type of the data, always a Double.
    * @return the type of data, in this case Double
    */
+  @Override
   public Class<?> getType() {
     return Double.class;
   }
@@ -31,8 +33,4 @@ public class ScalarMarketDataMetaData implements MarketDataMetaData {
     return "ScalarMarketDataMetaData[Double]";
   }
 
-  @Override
-  public int hashCode() {
-    return 31;
-  }
 }

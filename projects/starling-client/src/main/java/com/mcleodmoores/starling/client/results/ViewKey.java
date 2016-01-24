@@ -1,3 +1,6 @@
+/**
+ * Copyright (C) 2015 - present McLeod Moores Software Limited.  All rights reserved.
+ */
 package com.mcleodmoores.starling.client.results;
 
 import com.opengamma.engine.view.ViewDefinition;
@@ -8,7 +11,7 @@ import com.opengamma.util.ArgumentChecker;
  * A key for identifying views.  When the system is queried, it may include ids to speed up resolution and handle
  * duplicate names.  When searching, only the name is required and so {@link ViewKey#of(String)} should be used.
  */
-public class ViewKey {
+public final class ViewKey {
   /** The unique id of the view */
   private final UniqueId _uniqueId;
   /** The name of the view */
@@ -25,7 +28,7 @@ public class ViewKey {
   }
 
   /**
-   * Static factory method used to create key instances when the uniqueId of the view is not known.
+   * Static factory method used to create key instances when the unique id of the view is not known.
    * @param name  the name of the view, not null
    * @return the view key, not null
    */
@@ -34,7 +37,7 @@ public class ViewKey {
   }
 
   /**
-   * Static factory method used to create key instances, typically when the uniqueId is known.
+   * Static factory method used to create key instances, typically when the unique id is known.
    * @param name  the name of the view, not null
    * @param uniqueId  the unique id of the view, if known, null otherwise
    * @return the view key, not null

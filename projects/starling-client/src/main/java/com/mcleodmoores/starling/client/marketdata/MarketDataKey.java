@@ -3,42 +3,59 @@
  */
 package com.mcleodmoores.starling.client.marketdata;
 
-import com.opengamma.id.ExternalIdBundle;
-import org.joda.beans.BeanDefinition;
-import org.joda.beans.ImmutableBean;
-import org.joda.beans.ImmutablePreBuild;
-import org.joda.beans.PropertyDefinition;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
+
 import org.joda.beans.Bean;
+import org.joda.beans.BeanDefinition;
+import org.joda.beans.ImmutableBean;
+import org.joda.beans.ImmutablePreBuild;
 import org.joda.beans.JodaBeanUtils;
 import org.joda.beans.MetaProperty;
 import org.joda.beans.Property;
+import org.joda.beans.PropertyDefinition;
 import org.joda.beans.impl.direct.DirectFieldsBeanBuilder;
 import org.joda.beans.impl.direct.DirectMetaBean;
 import org.joda.beans.impl.direct.DirectMetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
+
+import com.opengamma.id.ExternalIdBundle;
 
 /**
  * Key to represent a particular piece of market data.
  */
 @BeanDefinition
 public final class MarketDataKey implements ImmutableBean {
+  /**
+   * The external id bundle for the market data.
+   */
   @PropertyDefinition(validate = "notNull")
   private final ExternalIdBundle _externalIdBundle;
+  /**
+   * The data field.
+   */
   @PropertyDefinition(validate = "notNull")
   private final DataField _field;
+  /**
+   * The data source.
+   */
   @PropertyDefinition(validate = "notNull")
   private final DataSource _source;
+  /**
+   * The data provider.
+   */
   @PropertyDefinition(validate = "notNull")
   private final DataProvider _provider;
+  /**
+   * The market data normalizer.
+   */
   @PropertyDefinition(validate = "notNull")
-  private final Normalizer _normalizer;
+  private final String _normalizer;
 
   // CHECKSTYLE:OFF
   @ImmutablePreBuild
-  private static void preBuild(Builder builder) {
+  private static void preBuild(final Builder builder) {
     if (builder.get(Meta.INSTANCE.field()) == null) {
       builder.field(DataField.PRICE);
     }
@@ -49,9 +66,10 @@ public final class MarketDataKey implements ImmutableBean {
       builder.provider(DataProvider.DEFAULT);
     }
     if (builder.get(Meta.INSTANCE.normalizer()) == null) {
-      builder.normalizer(UnitNormalizer.INSTANCE);
+      builder.normalizer(UnitNormalizer.INSTANCE.getName());
     }
   }
+
   /**
    * Static factory method for creating instances where you only want to provide the id bundle.
    * In this case, all the other properties will assume their default values.
@@ -96,11 +114,11 @@ public final class MarketDataKey implements ImmutableBean {
   }
 
   private MarketDataKey(
-      ExternalIdBundle externalIdBundle,
-      DataField field,
-      DataSource source,
-      DataProvider provider,
-      Normalizer normalizer) {
+      final ExternalIdBundle externalIdBundle,
+      final DataField field,
+      final DataSource source,
+      final DataProvider provider,
+      final String normalizer) {
     JodaBeanUtils.notNull(externalIdBundle, "externalIdBundle");
     JodaBeanUtils.notNull(field, "field");
     JodaBeanUtils.notNull(source, "source");
@@ -119,7 +137,7 @@ public final class MarketDataKey implements ImmutableBean {
   }
 
   @Override
-  public <R> Property<R> property(String propertyName) {
+  public <R> Property<R> property(final String propertyName) {
     return metaBean().<R>metaProperty(propertyName).createProperty(this);
   }
 
@@ -130,7 +148,7 @@ public final class MarketDataKey implements ImmutableBean {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the externalIdBundle.
+   * Gets the external id bundle for the market data.
    * @return the value of the property, not null
    */
   public ExternalIdBundle getExternalIdBundle() {
@@ -139,7 +157,7 @@ public final class MarketDataKey implements ImmutableBean {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the field.
+   * Gets the data field.
    * @return the value of the property, not null
    */
   public DataField getField() {
@@ -148,7 +166,7 @@ public final class MarketDataKey implements ImmutableBean {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the source.
+   * Gets the data source.
    * @return the value of the property, not null
    */
   public DataSource getSource() {
@@ -157,7 +175,7 @@ public final class MarketDataKey implements ImmutableBean {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the provider.
+   * Gets the data provider.
    * @return the value of the property, not null
    */
   public DataProvider getProvider() {
@@ -166,10 +184,10 @@ public final class MarketDataKey implements ImmutableBean {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the normalizer.
+   * Gets the market data normalizer.
    * @return the value of the property, not null
    */
-  public Normalizer getNormalizer() {
+  public String getNormalizer() {
     return _normalizer;
   }
 
@@ -183,12 +201,12 @@ public final class MarketDataKey implements ImmutableBean {
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (obj == this) {
       return true;
     }
     if (obj != null && obj.getClass() == this.getClass()) {
-      MarketDataKey other = (MarketDataKey) obj;
+      final MarketDataKey other = (MarketDataKey) obj;
       return JodaBeanUtils.equal(getExternalIdBundle(), other.getExternalIdBundle()) &&
           JodaBeanUtils.equal(getField(), other.getField()) &&
           JodaBeanUtils.equal(getSource(), other.getSource()) &&
@@ -211,7 +229,7 @@ public final class MarketDataKey implements ImmutableBean {
 
   @Override
   public String toString() {
-    StringBuilder buf = new StringBuilder(192);
+    final StringBuilder buf = new StringBuilder(192);
     buf.append("MarketDataKey{");
     buf.append("externalIdBundle").append('=').append(getExternalIdBundle()).append(',').append(' ');
     buf.append("field").append('=').append(getField()).append(',').append(' ');
@@ -255,8 +273,8 @@ public final class MarketDataKey implements ImmutableBean {
     /**
      * The meta-property for the {@code normalizer} property.
      */
-    private final MetaProperty<Normalizer> _normalizer = DirectMetaProperty.ofImmutable(
-        this, "normalizer", MarketDataKey.class, Normalizer.class);
+    private final MetaProperty<String> _normalizer = DirectMetaProperty.ofImmutable(
+        this, "normalizer", MarketDataKey.class, String.class);
     /**
      * The meta-properties.
      */
@@ -275,7 +293,7 @@ public final class MarketDataKey implements ImmutableBean {
     }
 
     @Override
-    protected MetaProperty<?> metaPropertyGet(String propertyName) {
+    protected MetaProperty<?> metaPropertyGet(final String propertyName) {
       switch (propertyName.hashCode()) {
         case -736922008:  // externalIdBundle
           return _externalIdBundle;
@@ -343,13 +361,13 @@ public final class MarketDataKey implements ImmutableBean {
      * The meta-property for the {@code normalizer} property.
      * @return the meta-property, not null
      */
-    public MetaProperty<Normalizer> normalizer() {
+    public MetaProperty<String> normalizer() {
       return _normalizer;
     }
 
     //-----------------------------------------------------------------------
     @Override
-    protected Object propertyGet(Bean bean, String propertyName, boolean quiet) {
+    protected Object propertyGet(final Bean bean, final String propertyName, final boolean quiet) {
       switch (propertyName.hashCode()) {
         case -736922008:  // externalIdBundle
           return ((MarketDataKey) bean).getExternalIdBundle();
@@ -366,7 +384,7 @@ public final class MarketDataKey implements ImmutableBean {
     }
 
     @Override
-    protected void propertySet(Bean bean, String propertyName, Object newValue, boolean quiet) {
+    protected void propertySet(final Bean bean, final String propertyName, final Object newValue, final boolean quiet) {
       metaProperty(propertyName);
       if (quiet) {
         return;
@@ -386,7 +404,7 @@ public final class MarketDataKey implements ImmutableBean {
     private DataField _field;
     private DataSource _source;
     private DataProvider _provider;
-    private Normalizer _normalizer;
+    private String _normalizer;
 
     /**
      * Restricted constructor.
@@ -398,7 +416,7 @@ public final class MarketDataKey implements ImmutableBean {
      * Restricted copy constructor.
      * @param beanToCopy  the bean to copy from, not null
      */
-    private Builder(MarketDataKey beanToCopy) {
+    private Builder(final MarketDataKey beanToCopy) {
       this._externalIdBundle = beanToCopy.getExternalIdBundle();
       this._field = beanToCopy.getField();
       this._source = beanToCopy.getSource();
@@ -408,7 +426,7 @@ public final class MarketDataKey implements ImmutableBean {
 
     //-----------------------------------------------------------------------
     @Override
-    public Object get(String propertyName) {
+    public Object get(final String propertyName) {
       switch (propertyName.hashCode()) {
         case -736922008:  // externalIdBundle
           return _externalIdBundle;
@@ -426,7 +444,7 @@ public final class MarketDataKey implements ImmutableBean {
     }
 
     @Override
-    public Builder set(String propertyName, Object newValue) {
+    public Builder set(final String propertyName, final Object newValue) {
       switch (propertyName.hashCode()) {
         case -736922008:  // externalIdBundle
           this._externalIdBundle = (ExternalIdBundle) newValue;
@@ -441,7 +459,7 @@ public final class MarketDataKey implements ImmutableBean {
           this._provider = (DataProvider) newValue;
           break;
         case -1255046395:  // normalizer
-          this._normalizer = (Normalizer) newValue;
+          this._normalizer = (String) newValue;
           break;
         default:
           throw new NoSuchElementException("Unknown property: " + propertyName);
@@ -450,25 +468,25 @@ public final class MarketDataKey implements ImmutableBean {
     }
 
     @Override
-    public Builder set(MetaProperty<?> property, Object value) {
+    public Builder set(final MetaProperty<?> property, final Object value) {
       super.set(property, value);
       return this;
     }
 
     @Override
-    public Builder setString(String propertyName, String value) {
+    public Builder setString(final String propertyName, final String value) {
       setString(meta().metaProperty(propertyName), value);
       return this;
     }
 
     @Override
-    public Builder setString(MetaProperty<?> property, String value) {
+    public Builder setString(final MetaProperty<?> property, final String value) {
       super.setString(property, value);
       return this;
     }
 
     @Override
-    public Builder setAll(Map<String, ? extends Object> propertyValueMap) {
+    public Builder setAll(final Map<String, ? extends Object> propertyValueMap) {
       super.setAll(propertyValueMap);
       return this;
     }
@@ -486,55 +504,55 @@ public final class MarketDataKey implements ImmutableBean {
 
     //-----------------------------------------------------------------------
     /**
-     * Sets the externalIdBundle.
+     * Sets the external id bundle for the market data.
      * @param externalIdBundle  the new value, not null
      * @return this, for chaining, not null
      */
-    public Builder externalIdBundle(ExternalIdBundle externalIdBundle) {
+    public Builder externalIdBundle(final ExternalIdBundle externalIdBundle) {
       JodaBeanUtils.notNull(externalIdBundle, "externalIdBundle");
       this._externalIdBundle = externalIdBundle;
       return this;
     }
 
     /**
-     * Sets the field.
+     * Sets the data field.
      * @param field  the new value, not null
      * @return this, for chaining, not null
      */
-    public Builder field(DataField field) {
+    public Builder field(final DataField field) {
       JodaBeanUtils.notNull(field, "field");
       this._field = field;
       return this;
     }
 
     /**
-     * Sets the source.
+     * Sets the data source.
      * @param source  the new value, not null
      * @return this, for chaining, not null
      */
-    public Builder source(DataSource source) {
+    public Builder source(final DataSource source) {
       JodaBeanUtils.notNull(source, "source");
       this._source = source;
       return this;
     }
 
     /**
-     * Sets the provider.
+     * Sets the data provider.
      * @param provider  the new value, not null
      * @return this, for chaining, not null
      */
-    public Builder provider(DataProvider provider) {
+    public Builder provider(final DataProvider provider) {
       JodaBeanUtils.notNull(provider, "provider");
       this._provider = provider;
       return this;
     }
 
     /**
-     * Sets the normalizer.
+     * Sets the market data normalizer.
      * @param normalizer  the new value, not null
      * @return this, for chaining, not null
      */
-    public Builder normalizer(Normalizer normalizer) {
+    public Builder normalizer(final String normalizer) {
       JodaBeanUtils.notNull(normalizer, "normalizer");
       this._normalizer = normalizer;
       return this;
@@ -543,7 +561,7 @@ public final class MarketDataKey implements ImmutableBean {
     //-----------------------------------------------------------------------
     @Override
     public String toString() {
-      StringBuilder buf = new StringBuilder(192);
+      final StringBuilder buf = new StringBuilder(192);
       buf.append("MarketDataKey.Builder{");
       buf.append("externalIdBundle").append('=').append(JodaBeanUtils.toString(_externalIdBundle)).append(',').append(' ');
       buf.append("field").append('=').append(JodaBeanUtils.toString(_field)).append(',').append(' ');

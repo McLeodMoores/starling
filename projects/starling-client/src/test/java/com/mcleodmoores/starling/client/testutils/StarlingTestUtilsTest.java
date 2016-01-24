@@ -31,7 +31,6 @@ import com.mcleodmoores.starling.client.results.SynchronousJob;
 import com.mcleodmoores.starling.client.results.TargetKey;
 import com.mcleodmoores.starling.client.results.ViewKey;
 import com.mcleodmoores.starling.client.stateless.StatelessAnalyticService;
-import com.opengamma.OpenGammaRuntimeException;
 import com.opengamma.core.config.impl.ConfigItem;
 import com.opengamma.core.id.ExternalSchemes;
 import com.opengamma.core.position.impl.SimpleCounterparty;
@@ -68,18 +67,21 @@ import com.opengamma.master.config.ConfigMasterUtils;
 import com.opengamma.master.position.ManageableTrade;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
+import com.opengamma.util.test.TestGroup;
 
 /**
  *
  */
+@Test(groups = TestGroup.UNIT, singleThreaded = true)
 public class StarlingTestUtilsTest {
+
 
   /**
    * Tests the output when a primitive is requested. The data is requested through a {@link HistoricalMarketDataProvider} and
    * so an empty function configuration source can be used. The expected result is a single value for the market data identifier.
    */
   @Test
-  public void testPrimitiveOnlyView() {
+  public void testPrimitiveOnlyView() throws Exception {
     final ToolContext toolContext = StarlingTestUtils.getToolContext();
     final MarketDataSet dataSet = MarketDataSet.empty();
     final ExternalId marketDataId = ExternalSchemes.syntheticSecurityId("TEST");
@@ -108,7 +110,7 @@ public class StarlingTestUtilsTest {
       assertEquals(computedValueResult.getValue(), marketDataValue);
     } catch (final Exception e) {
       toolContext.close();
-      throw new OpenGammaRuntimeException("Unexpected exception", e);
+      throw e;
     }
     toolContext.close();
   }
@@ -119,7 +121,7 @@ public class StarlingTestUtilsTest {
    * portfolio node-level output only.
    */
   @Test
-  public void testNoGraphView() {
+  public void testNoGraphView() throws Exception {
     final ToolContext toolContext = StarlingTestUtils.getToolContext();
     final MarketDataSet dataSet = MarketDataSet.empty();
     final ExternalId marketDataId = ExternalSchemes.syntheticSecurityId("TEST");
@@ -153,13 +155,13 @@ public class StarlingTestUtilsTest {
       assertNull(resultModel.getResultsForTarget(tradeTargetKeys.get(0)));
     } catch (final Exception e) {
       toolContext.close();
-      throw new OpenGammaRuntimeException("Unexpected exception", e);
+      throw e;
     }
     toolContext.close();
   }
 
   @Test
-  public void testNoMarketDataView() {
+  public void testNoMarketDataView() throws Exception {
     final StarlingToolContext toolContext = StarlingTestUtils.getToolContext();
     final MarketDataSet dataSet = MarketDataSet.empty();
     final ExternalId marketDataId = ExternalSchemes.syntheticSecurityId("TEST");
@@ -199,13 +201,13 @@ public class StarlingTestUtilsTest {
       assertNull(resultModel.getResultsForTarget(tradeTargetKeys.get(0)));
     } catch (final Exception e) {
       toolContext.close();
-      throw new OpenGammaRuntimeException("Unexpected exception", e);
+      throw e;
     }
     toolContext.close();
   }
 
   @Test
-  public void testSuccessfulSingleEquityView() {
+  public void testSuccessfulSingleEquityView() throws Exception {
     final StarlingToolContext toolContext = StarlingTestUtils.getToolContext();
     final MarketDataSet dataSet = MarketDataSet.empty();
     final ExternalId marketDataId = ExternalSchemes.syntheticSecurityId("TEST");
@@ -260,13 +262,13 @@ public class StarlingTestUtilsTest {
       assertEquals(tradeEntry.getValue().getValue(), marketValue * tradeQuantity);
     } catch (final Exception e) {
       toolContext.close();
-      throw new OpenGammaRuntimeException("Unexpected exception", e);
+      throw e;
     }
     toolContext.close();
   }
 
   @Test
-  public void testSuccessfulMultiEquityView() {
+  public void testSuccessfulMultiEquityView() throws Exception {
     final StarlingToolContext toolContext = StarlingTestUtils.getToolContext();
     final MarketDataSet dataSet = MarketDataSet.empty();
     final List<ExternalId> marketDataIds = Arrays.asList(ExternalSchemes.syntheticSecurityId("TEST10"), ExternalSchemes.syntheticSecurityId("TEST20"));
@@ -334,7 +336,7 @@ public class StarlingTestUtilsTest {
       assertEquals(tradeEntry2.getValue().getValue(), expectedPositionValue2);
     } catch (final Exception e) {
       toolContext.close();
-      throw new OpenGammaRuntimeException("Unexpected exception", e);
+      throw e;
     }
     toolContext.close();
   }

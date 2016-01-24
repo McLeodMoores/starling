@@ -1,0 +1,3 @@
+Value,Field,ExternalId[TEST],Normalizer
+100,Market_Value,ID1,Div100Normalizer
+200,Market_Value,ID1,UnitNormalizer

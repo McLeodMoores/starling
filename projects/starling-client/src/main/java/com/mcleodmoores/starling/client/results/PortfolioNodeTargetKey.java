@@ -1,17 +1,22 @@
 /**
- * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2015 - present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.mcleodmoores.starling.client.results;
 
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * A target key for access to results associated with portfolio nodes (i.e. aggregates).  The node is addressed using a filesystem style
+ * A target key for access to results associated with portfolio nodes (i.e. aggregates).  The node is addressed using a file-system style
  * path composed of the name of each node (empty if necessary) separated with forward slashes.
  */
 public final class PortfolioNodeTargetKey implements TargetKey {
+  /** The node path */
   private final String _nodePath;
 
+  /**
+   * Restricted constructor.
+   * @param nodePath  the node path, not null
+   */
   private PortfolioNodeTargetKey(final String nodePath) {
     _nodePath = ArgumentChecker.notNull(nodePath, "nodePath");
   }
@@ -32,32 +37,27 @@ public final class PortfolioNodeTargetKey implements TargetKey {
     return _nodePath;
   }
 
-  /**
-   * @return a hashCode based on the object
-   */
+  @Override
   public int hashCode() {
     return _nodePath.hashCode();
   }
 
-  /**
-   * Test equality with another object
-   * @param o  the other object
-   * @return true, if the objects are equivalent
-   */
-  public boolean equals(Object o) {
+  @Override
+  public boolean equals(final Object o) {
+    if (this == o) {
+      return true;
+    }
     if (o == null) {
       return false;
     }
     if (!(o instanceof PortfolioNodeTargetKey)) {
       return false;
     }
-    PortfolioNodeTargetKey other = (PortfolioNodeTargetKey) o;
+    final PortfolioNodeTargetKey other = (PortfolioNodeTargetKey) o;
     return _nodePath.equals(other._nodePath);
   }
 
-  /**
-   * @return a string representation of the key
-   */
+  @Override
   public String toString() {
     return "PortfolioNodeTargetKey[" + _nodePath + "]";
   }

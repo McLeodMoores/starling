@@ -1,11 +1,12 @@
 /**
- * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2015 - present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.mcleodmoores.starling.client.marketdata;
 
+import org.joda.convert.FromString;
+
 import com.opengamma.util.AbstractNamedInstanceFactory;
 import com.opengamma.util.ArgumentChecker;
-import org.joda.convert.FromString;
 
 /**
  * Factory for creating and registering named instances of DataSource.

@@ -1,3 +1,6 @@
+/**
+ * Copyright (C) 2015 - present McLeod Moores Software Limited.  All rights reserved.
+ */
 package com.mcleodmoores.starling.client.results;
 
 import static org.testng.Assert.assertEquals;
@@ -17,19 +20,27 @@ import com.opengamma.id.ExternalId;
 import com.opengamma.id.UniqueId;
 import com.opengamma.util.credit.CreditCurveIdentifier;
 import com.opengamma.util.money.Currency;
+import com.opengamma.util.test.TestGroup;
 
 /**
- * Created by jim on 19/06/15.
+ * Unit tests for {@link LegacyTargetKey}.
  */
+@Test(groups = TestGroup.UNIT)
 public class LegacyTargetKeyTest {
 
+  /**
+   * Tests the behaviour with a null computation target specification.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void testOfNull() throws Exception {
+  public void testOfNull() {
     LegacyTargetKey.of(null);
   }
 
+  /**
+   * Tests key creation.
+   */
   @Test
-  public void testOf() throws Exception {
+  public void testOf() {
     assertNotNull(LegacyTargetKey.of(ComputationTargetSpecification.NULL));
     assertNotNull(LegacyTargetKey.of(ComputationTargetSpecification.of(Currency.AUD)));
     assertNotNull(LegacyTargetKey.of(ComputationTargetSpecification.of(CreditCurveIdentifier.of("ABCD"))));
@@ -45,8 +56,11 @@ public class LegacyTargetKeyTest {
     assertNotNull(LegacyTargetKey.of(ComputationTargetSpecification.of(UniqueId.of("A", "B"))));
   }
 
+  /**
+   * Tests the hashcode.
+   */
   @Test
-  public void testHashCode() throws Exception {
+  public void testHashCode() {
     assertEquals(LegacyTargetKey.of(ComputationTargetSpecification.NULL).hashCode(), LegacyTargetKey.of(ComputationTargetSpecification.NULL).hashCode());
     assertEquals(LegacyTargetKey.of(ComputationTargetSpecification.of(Currency.AUD)).hashCode(),
         LegacyTargetKey.of(ComputationTargetSpecification.of(Currency.AUD)).hashCode());
@@ -58,20 +72,23 @@ public class LegacyTargetKeyTest {
     final SimplePosition position = new SimplePosition();
     position.setUniqueId(UniqueId.of("A", "B"));
     assertEquals(LegacyTargetKey.of(ComputationTargetSpecification.of(position)).hashCode(), LegacyTargetKey.of(ComputationTargetSpecification.of(position)).hashCode());
-    final ZonedDateTime now = ZonedDateTime.now(); // in case test runs over day boundary.
     final CashFlowSecurity security = new CashFlowSecurity(Currency.AUD, ZonedDateTime.now(), 1234);
     security.setUniqueId(UniqueId.of("A", "B"));
     assertEquals(LegacyTargetKey.of(ComputationTargetSpecification.of(security)).hashCode(), LegacyTargetKey.of(ComputationTargetSpecification.of(security)).hashCode());
     assertEquals(LegacyTargetKey.of(ComputationTargetSpecification.of(UniqueId.of("A", "B"))).hashCode(), LegacyTargetKey.of(ComputationTargetSpecification.of(UniqueId.of("A", "B"))).hashCode());
   }
 
+  /**
+   * Tests the equals method.
+   */
   @Test
-  public void testEquals() throws Exception {
-    assertEquals(LegacyTargetKey.of(ComputationTargetSpecification.NULL), LegacyTargetKey.of(ComputationTargetSpecification.NULL));
-    assertNotEquals(LegacyTargetKey.of(ComputationTargetSpecification.NULL), null);
-    assertNotEquals(LegacyTargetKey.of(ComputationTargetSpecification.NULL), new Object());
-    assertNotEquals(LegacyTargetKey.of(ComputationTargetSpecification.NULL), new Object());
-    assertNotEquals(LegacyTargetKey.of(ComputationTargetSpecification.of(Currency.AUD)), LegacyTargetKey.of(ComputationTargetSpecification.NULL));
+  public void testEquals() {
+    final LegacyTargetKey nullSpecificationTargetKey = LegacyTargetKey.of(ComputationTargetSpecification.NULL);
+    assertEquals(nullSpecificationTargetKey, nullSpecificationTargetKey);
+    assertEquals(nullSpecificationTargetKey, LegacyTargetKey.of(ComputationTargetSpecification.NULL));
+    assertNotEquals(null, nullSpecificationTargetKey);
+    assertNotEquals(new Object(), nullSpecificationTargetKey);
+    assertNotEquals(LegacyTargetKey.of(ComputationTargetSpecification.of(Currency.AUD)), nullSpecificationTargetKey);
     assertEquals(LegacyTargetKey.of(ComputationTargetSpecification.of(Currency.AUD)), LegacyTargetKey.of(ComputationTargetSpecification.of(Currency.AUD)));
     assertNotEquals(LegacyTargetKey.of(ComputationTargetSpecification.of(Currency.AUD)), LegacyTargetKey.of(ComputationTargetSpecification.of(Currency.USD)));
     assertEquals(LegacyTargetKey.of(ComputationTargetSpecification.of(CreditCurveIdentifier.of("ABCD"))), LegacyTargetKey.of(ComputationTargetSpecification.of(CreditCurveIdentifier.of("ABCD"))));
@@ -97,5 +114,14 @@ public class LegacyTargetKeyTest {
     assertNotEquals(LegacyTargetKey.of(ComputationTargetSpecification.of(security1)), LegacyTargetKey.of(ComputationTargetSpecification.of(security2)));
     assertEquals(LegacyTargetKey.of(ComputationTargetSpecification.of(UniqueId.of("A", "B"))), LegacyTargetKey.of(ComputationTargetSpecification.of(UniqueId.of("A", "B"))));
     assertNotEquals(LegacyTargetKey.of(ComputationTargetSpecification.of(UniqueId.of("A", "B"))), LegacyTargetKey.of(ComputationTargetSpecification.of(UniqueId.of("A", "C"))));
+  }
+
+  /**
+   * Tests the toString method.
+   */
+  @Test
+  public void testToString() {
+    assertEquals(LegacyTargetKey.of(ComputationTargetSpecification.NULL).toString(), "LegacyTargetKey[targetSpecification=CTSpec[NULL, NULL]]");
+    assertEquals(LegacyTargetKey.of(ComputationTargetSpecification.of(Currency.USD)).toString(), "LegacyTargetKey[targetSpecification=CTSpec[CURRENCY, CurrencyISO~USD]]");
   }
 }

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2015 - present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.mcleodmoores.starling.client.marketdata;
 
@@ -8,12 +8,16 @@ import com.opengamma.id.ExternalIdBundle;
 /**
  * A normalizer that leaves data unchanged.
  */
+@MarketData(group = "Normalization", description = "Unit")
 public final class UnitNormalizer implements Normalizer {
   /**
    * Singleton instance.
    */
   public static final UnitNormalizer INSTANCE = new UnitNormalizer();
 
+  /**
+   * Restricted constructor.
+   */
   private UnitNormalizer() {
   }
 

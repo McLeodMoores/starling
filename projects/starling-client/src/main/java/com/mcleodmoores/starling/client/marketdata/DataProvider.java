@@ -1,12 +1,12 @@
 /**
- * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2015 - present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.mcleodmoores.starling.client.marketdata;
 
 import com.opengamma.util.NamedInstance;
 
 /**
- * Class to represent an entity that provides data to a data source.  Examples might be Barclarys as a provider to Bloomberg as
+ * Class to represent an entity that provides data to a data source.  Examples might be Barclays as a provider to Bloomberg as
  * a data source.
  */
 public final class DataProvider implements NamedInstance {
@@ -14,17 +14,21 @@ public final class DataProvider implements NamedInstance {
    * Default value.
    */
   public static final DataProvider DEFAULT = DataProvider.of("DEFAULT");
-
+  /** The data provider name */
   private final String _providerName;
 
-  private DataProvider(final String fieldName) {
-    _providerName = fieldName;
+  /**
+   * Restricted constructor.
+   * @param providerName  the provider name, not null
+   */
+  private DataProvider(final String providerName) {
+    _providerName = providerName;
   }
 
   /**
    * Public factory method for looking up instances of DataProvider by name, or creating new instances if they don't exist.
    * @param providerName  the name of the data provider, not null
-   * @return an existing instance if one already available or a new instance if one not avialable, not null
+   * @return an existing instance if one already available or a new instance if one not available, not null
    */
   public static DataProvider of(final String providerName) {
     return DataProviderFactory.INSTANCE.of(providerName);
@@ -49,11 +53,14 @@ public final class DataProvider implements NamedInstance {
   }
 
   @Override
-  public boolean equals(Object other) {
+  public boolean equals(final Object other) {
+    if (other == this) {
+      return true;
+    }
     if (!(other instanceof DataProvider)) { // remember instanceof handles null...
       return false;
     }
-    DataProvider dataField = (DataProvider) other;
+    final DataProvider dataField = (DataProvider) other;
     return _providerName.equals(dataField._providerName);
   }
 

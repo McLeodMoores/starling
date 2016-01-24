@@ -1,0 +1,6 @@
+Value,Field,Source,ExternalId[TEST]
+100,Market_Value,TEST_SOURCE,ID1
+200,Market_Value,TEST_SOURCE,ID2
+300,Market_Value,TEST_SOURCE,ID3
+400,Market_Value,TEST_SOURCE,ID4
+500,Market_Value,TEST_SOURCE,ID5

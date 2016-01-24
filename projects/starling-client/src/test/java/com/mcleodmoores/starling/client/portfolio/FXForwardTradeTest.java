@@ -1,5 +1,15 @@
 package com.mcleodmoores.starling.client.portfolio;
 
+import java.math.BigDecimal;
+
+import org.testng.Assert;
+import org.testng.annotations.Test;
+import org.threeten.bp.LocalDate;
+import org.threeten.bp.LocalTime;
+import org.threeten.bp.Month;
+import org.threeten.bp.OffsetTime;
+import org.threeten.bp.ZoneId;
+
 import com.opengamma.core.id.ExternalSchemes;
 import com.opengamma.core.position.Position;
 import com.opengamma.core.security.Security;
@@ -7,17 +17,12 @@ import com.opengamma.financial.security.fx.FXForwardSecurity;
 import com.opengamma.id.ExternalId;
 import com.opengamma.master.position.ManageableTrade;
 import com.opengamma.util.money.Currency;
-import org.testng.Assert;
-import org.testng.annotations.Test;
-import org.threeten.bp.*;
-
-import java.math.BigDecimal;
 
 /**
  * Created by jim on 10/06/15.
  */
 public class FXForwardTradeTest {
-  
+
   private static final LocalDate NOW = LocalDate.of(2015, Month.JUNE, 12);
   private static final LocalDate FORWARD = LocalDate.of(2015, Month.JULY, 12);
 
@@ -35,13 +40,13 @@ public class FXForwardTradeTest {
     builder.payAmount(1100000d);
     builder.receiveCurrency(Currency.NZD);
     final FXForwardTrade fxForwardTrade = builder.build();
-    Position position = fxForwardTrade.toPosition();
+    final Position position = fxForwardTrade.toPosition();
     Assert.assertEquals(position.getQuantity(), BigDecimal.ONE);
     Assert.assertNull(position.getUniqueId());
     Assert.assertEquals(position.getTrades().size(), 1);
     Assert.assertEquals(position.getAttributes().size(), 1);
     Assert.assertEquals(position.getAttributes().get(ManageableTrade.meta().providerId().name()), "A~B");
-    Security security = position.getSecurity();
+    final Security security = position.getSecurity();
     Assert.assertTrue(security instanceof FXForwardSecurity);
     FXForwardSecurity fxForwardSecurity = (FXForwardSecurity) security;
     Assert.assertEquals(fxForwardSecurity.getForwardDate(), forwardDate.atTime(LocalTime.MAX).atZone(ZoneId.systemDefault()));
@@ -52,7 +57,7 @@ public class FXForwardTradeTest {
     Assert.assertEquals(fxForwardSecurity.getReceiveCurrency(), Currency.NZD);
     Assert.assertEquals(fxForwardSecurity.getRegionId(), ExternalId.of(ExternalSchemes.ISO_COUNTRY_ALPHA2, "GB"));
     Assert.assertTrue(fxForwardSecurity.getAttributes().isEmpty());
-    com.opengamma.core.position.Trade trade = position.getTrades().iterator().next();
+    final com.opengamma.core.position.Trade trade = position.getTrades().iterator().next();
     Assert.assertEquals(trade.getQuantity(), BigDecimal.ONE);
     Assert.assertEquals(trade.getAttributes().size(), 1);
     Assert.assertEquals(trade.getAttributes().get(ManageableTrade.meta().providerId().name()), "A~B");

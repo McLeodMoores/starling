@@ -1,9 +1,10 @@
 package com.mcleodmoores.starling.client.marketdata;
 
-import com.opengamma.id.ExternalId;
-import com.opengamma.id.ExternalIdBundle;
 import org.testng.Assert;
 import org.testng.annotations.Test;
+
+import com.opengamma.id.ExternalId;
+import com.opengamma.id.ExternalIdBundle;
 
 /**
  * Created by jim on 08/06/15.
@@ -34,7 +35,7 @@ public class MarketDataKeyTest {
     Assert.assertNotNull(key.getField());
     Assert.assertEquals(DataField.PRICE, key.getField());
     Assert.assertNotNull(key.getNormalizer());
-    Assert.assertEquals(UnitNormalizer.INSTANCE, key.getNormalizer());
+    Assert.assertEquals(UnitNormalizer.INSTANCE.getName(), key.getNormalizer());
     Assert.assertNotNull(key.getProvider());
     Assert.assertEquals(DataProvider.DEFAULT, key.getProvider());
     Assert.assertNotNull(key.getSource());
@@ -50,7 +51,7 @@ public class MarketDataKeyTest {
     Assert.assertNotNull(key.getField());
     Assert.assertEquals(DataField.of("LAST_PRICE"), key.getField());
     Assert.assertNotNull(key.getNormalizer());
-    Assert.assertEquals(UnitNormalizer.INSTANCE, key.getNormalizer());
+    Assert.assertEquals(UnitNormalizer.INSTANCE.getName(), key.getNormalizer());
     Assert.assertNotNull(key.getProvider());
     Assert.assertEquals(DataProvider.DEFAULT, key.getProvider());
     Assert.assertNotNull(key.getSource());
@@ -106,7 +107,7 @@ public class MarketDataKeyTest {
   public void testBuilderDefaults() {
     final MarketDataKey.Builder builder = MarketDataKey.builder();
     builder.externalIdBundle(ExternalIdBundle.EMPTY);
-    MarketDataKey key = builder.build();
+    final MarketDataKey key = builder.build();
     Assert.assertEquals(key.getExternalIdBundle(), ExternalIdBundle.EMPTY);
     Assert.assertEquals(key.getField(), DataField.PRICE);
     Assert.assertEquals(key.getProvider(), DataProvider.DEFAULT);
@@ -128,26 +129,26 @@ public class MarketDataKeyTest {
     Assert.assertEquals(key.getField(), DataField.of("FIELD"));
     Assert.assertEquals(key.getProvider(), DataProvider.of("PROVIDER"));
     Assert.assertEquals(key.getSource(), DataSource.of("SOURCE"));
-    Assert.assertEquals(key.getNormalizer(), UnitNormalizer.INSTANCE);
+    Assert.assertEquals(key.getNormalizer(), UnitNormalizer.INSTANCE.getName());
   }
 
   @Test
   public void testEquals() throws Exception {
-    MarketDataKey key1 = MarketDataKey.builder().externalIdBundle(ExternalIdBundle.EMPTY).build();
+    final MarketDataKey key1 = MarketDataKey.builder().externalIdBundle(ExternalIdBundle.EMPTY).build();
     Assert.assertEquals(key1, key1);
 
-    MarketDataKey key1a = MarketDataKey.builder().externalIdBundle(ExternalIdBundle.EMPTY).build();
+    final MarketDataKey key1a = MarketDataKey.builder().externalIdBundle(ExternalIdBundle.EMPTY).build();
     Assert.assertEquals(key1a, key1);
     Assert.assertEquals(key1, key1a);
 
-    MarketDataKey key2 = MarketDataKey.builder()
+    final MarketDataKey key2 = MarketDataKey.builder()
         .provider(DataProvider.of("PROVIDER"))
         .source(DataSource.of("SOURCE"))
         .field(DataField.of("FIELD"))
         .externalIdBundle(ExternalIdBundle.of(ExternalId.of("EXTERNAL", "ID"))).build();
     Assert.assertEquals(key2, key2);
 
-    MarketDataKey key2a = MarketDataKey.builder()
+    final MarketDataKey key2a = MarketDataKey.builder()
         .provider(DataProvider.of("PROVIDER"))
         .source(DataSource.of("SOURCE"))
         .field(DataField.of("FIELD"))
@@ -160,27 +161,27 @@ public class MarketDataKeyTest {
     Assert.assertNotEquals(key2, key2.toBuilder().field(DataField.PRICE).build());
     Assert.assertNotEquals(key2, key2.toBuilder().source(DataSource.DEFAULT).build());
     Assert.assertNotEquals(key2, key2.toBuilder().provider(DataProvider.DEFAULT).build());
-    Assert.assertNotEquals(key2, key2.toBuilder().normalizer(Div100Normalizer.INSTANCE).build());
+    Assert.assertNotEquals(key2, key2.toBuilder().normalizer(Div100Normalizer.INSTANCE.getName()).build());
     Assert.assertNotEquals(key2, null);
     Assert.assertNotEquals(key2, new Object());
   }
 
   @Test
   public void testHashCode() throws Exception {
-    MarketDataKey key1 = MarketDataKey.builder().externalIdBundle(ExternalIdBundle.EMPTY).build();
+    final MarketDataKey key1 = MarketDataKey.builder().externalIdBundle(ExternalIdBundle.EMPTY).build();
     Assert.assertEquals(key1.hashCode(), key1.hashCode());
 
-    MarketDataKey key1a = MarketDataKey.builder().externalIdBundle(ExternalIdBundle.EMPTY).build();
+    final MarketDataKey key1a = MarketDataKey.builder().externalIdBundle(ExternalIdBundle.EMPTY).build();
     Assert.assertEquals(key1a.hashCode(), key1.hashCode());
 
-    MarketDataKey key2 = MarketDataKey.builder()
+    final MarketDataKey key2 = MarketDataKey.builder()
         .provider(DataProvider.of("PROVIDER"))
         .source(DataSource.of("SOURCE"))
         .field(DataField.of("FIELD"))
         .externalIdBundle(ExternalIdBundle.of(ExternalId.of("EXTERNAL", "ID"))).build();
     Assert.assertEquals(key2.hashCode(), key2.hashCode());
 
-    MarketDataKey key2a = MarketDataKey.builder()
+    final MarketDataKey key2a = MarketDataKey.builder()
         .provider(DataProvider.of("PROVIDER"))
         .source(DataSource.of("SOURCE"))
         .field(DataField.of("FIELD"))
@@ -190,13 +191,13 @@ public class MarketDataKeyTest {
 
   @Test
   public void testToString() throws Exception {
-    MarketDataKey key = MarketDataKey.builder()
+    final MarketDataKey key = MarketDataKey.builder()
         .provider(DataProvider.of("PROVIDER"))
         .source(DataSource.of("SOURCE"))
         .field(DataField.of("FIELD"))
         .externalIdBundle(ExternalIdBundle.of(ExternalId.of("EXTERNAL", "ID"))).build();
     Assert.assertEquals(key.toString(), "MarketDataKey{externalIdBundle=Bundle[EXTERNAL~ID], field=FIELD, source=SOURCE, provider=PROVIDER, normalizer=UnitNormalizer}");
-    MarketDataKey key1 = MarketDataKey.builder().externalIdBundle(ExternalIdBundle.EMPTY).build();
+    final MarketDataKey key1 = MarketDataKey.builder().externalIdBundle(ExternalIdBundle.EMPTY).build();
     Assert.assertEquals(key1.toString(), "MarketDataKey{externalIdBundle=Bundle[], field=Market_Value, source=DEFAULT, provider=DEFAULT, normalizer=UnitNormalizer}");
   }
 }

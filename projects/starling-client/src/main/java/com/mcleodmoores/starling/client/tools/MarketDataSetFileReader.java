@@ -1,7 +1,31 @@
+/**
+ * Copyright (C) 2015 - present McLeod Moores Software Limited.  All rights reserved.
+ */
 package com.mcleodmoores.starling.client.tools;
 
-import au.com.bytecode.opencsv.CSVWriter;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Locale;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import org.apache.commons.cli.Option;
+import org.apache.commons.cli.Options;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.threeten.bp.Instant;
+import org.threeten.bp.LocalDate;
+import org.threeten.bp.format.DateTimeFormatter;
+import org.threeten.bp.format.DateTimeParseException;
+
 import com.mcleodmoores.starling.client.marketdata.MarketDataFileParser;
+import com.mcleodmoores.starling.client.marketdata.MarketDataInfo;
 import com.mcleodmoores.starling.client.marketdata.MarketDataKey;
 import com.mcleodmoores.starling.client.marketdata.MarketDataManager;
 import com.mcleodmoores.starling.client.marketdata.MarketDataMetaData;
@@ -14,32 +38,15 @@ import com.opengamma.financial.tool.ToolContext;
 import com.opengamma.id.ExternalId;
 import com.opengamma.id.ExternalScheme;
 import com.opengamma.scripts.Scriptable;
-import org.apache.commons.cli.Option;
-import org.apache.commons.cli.Options;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.threeten.bp.Instant;
-import org.threeten.bp.LocalDate;
-import org.threeten.bp.format.DateTimeFormatter;
-import org.threeten.bp.format.DateTimeParseException;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.LinkedHashMap;
-import java.util.Locale;
-import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import au.com.bytecode.opencsv.CSVWriter;
 
 /**
  * Command line tool to load market data from a CSV file.
  */
 @Scriptable
-public class MarketDataLoader extends AbstractTool<ToolContext> {
-  private static final Logger LOGGER = LoggerFactory.getLogger(MarketDataLoader.class);
+public class MarketDataSetFileReader extends AbstractTool<ToolContext> {
+  private static final Logger LOGGER = LoggerFactory.getLogger(MarketDataSetFileReader.class);
 
   private static final String INPUT_FILE_OPTION = "f";
   private static final String INPUT_FILE_LONG = "file";
@@ -84,7 +91,7 @@ public class MarketDataLoader extends AbstractTool<ToolContext> {
     initDate();
     final String fileName = getCommandLine().getOptionValue(INPUT_FILE_OPTION);
     if (getCommandLine().hasOption(QUERY_OPTION)) {
-      File file = new File(fileName);
+      final File file = new File(fileName);
       if (file.exists()) {
         if (getCommandLine().hasOption(OVERWRITE_OPTION)) {
           writeFile(fileName, getCommandLine().getOptionValue(QUERY_OPTION));
@@ -95,7 +102,7 @@ public class MarketDataLoader extends AbstractTool<ToolContext> {
         writeFile(fileName, getCommandLine().getOptionValue(QUERY_OPTION));
       }
     } else {
-      File file = new File(fileName);
+      final File file = new File(fileName);
       if (!file.exists()) {
         LOGGER.error("File {} does not exist", fileName);
         System.exit(1);
@@ -108,8 +115,8 @@ public class MarketDataLoader extends AbstractTool<ToolContext> {
         LOGGER.error("File {} is a directory", fileName);
         System.exit(1);
       }
-      MarketDataFileParser parser = new MarketDataFileParser(_dateFormatter, _date);
-      MarketDataSet dataSet = parser.readFile(new FileReader(file));
+      final MarketDataFileParser parser = new MarketDataFileParser(_dateFormatter, _date);
+      final MarketDataSet dataSet = parser.readFile(new FileReader(file));
       save(dataSet);
     }
   }
@@ -120,22 +127,24 @@ public class MarketDataLoader extends AbstractTool<ToolContext> {
    * @param viewName  the name of the view
    */
   protected void writeFile(final String fileName, final String viewName) {
-    MarketDataManager manager = new MarketDataManager(getToolContext());
-    Map<MarketDataKey, MarketDataMetaData> requiredData = manager.getRequiredData(ViewKey.of(viewName), Instant.now());
+    final MarketDataManager manager = new MarketDataManager(getToolContext());
+    final MarketDataInfo marketDataInfo = manager.getRequiredDataForView(ViewKey.of(viewName), Instant.now());
+    final Map<MarketDataKey, MarketDataMetaData> requiredData = new HashMap<>(marketDataInfo.getScalars());
+    requiredData.putAll(marketDataInfo.getTimeSeries());
     try (CSVWriter writer = new CSVWriter(new BufferedWriter(new FileWriter(fileName)))) {
-      Map<Integer, String> header = createHeader(requiredData);
+      final Map<Integer, String> header = createHeader(requiredData);
       writeHeader(writer, header);
-      for (Map.Entry<MarketDataKey, MarketDataMetaData> entry : requiredData.entrySet()) {
-        String[] row = new String[header.size()];
-        MarketDataKey key = entry.getKey();
-        MarketDataMetaData metaData = entry.getValue();
+      for (final Map.Entry<MarketDataKey, MarketDataMetaData> entry : requiredData.entrySet()) {
+        final String[] row = new String[header.size()];
+        final MarketDataKey key = entry.getKey();
+        final MarketDataMetaData metaData = entry.getValue();
         int i = 0;
         while (i < header.size()) {
-          String columnName = header.get(i);
-          Matcher matcher = PATTERN.matcher(columnName);
+          final String columnName = header.get(i);
+          final Matcher matcher = PATTERN.matcher(columnName);
           if (matcher.matches()) {
-            String scheme = matcher.group(1);
-            for (ExternalId id : key.getExternalIdBundle().getExternalIds(ExternalScheme.of(scheme))) {
+            final String scheme = matcher.group(1);
+            for (final ExternalId id : key.getExternalIdBundle().getExternalIds(ExternalScheme.of(scheme))) {
               row[i++] = id.getValue();
             }
             while (header.get(i).equals(columnName)) {
@@ -153,7 +162,7 @@ public class MarketDataLoader extends AbstractTool<ToolContext> {
                 row[i++] = key.getProvider().getName();
                 break;
               case "Normalizer":
-                row[i++] = key.getNormalizer().getName();
+                row[i++] = key.getNormalizer();
                 break;
               case "Value":
                 row[i++] = "";
@@ -171,7 +180,7 @@ public class MarketDataLoader extends AbstractTool<ToolContext> {
         writer.writeNext(row);
       }
       writer.close();
-    } catch (IOException ioe) {
+    } catch (final IOException ioe) {
       LOGGER.error("Problem writing file {}", fileName);
     }
   }
@@ -182,9 +191,9 @@ public class MarketDataLoader extends AbstractTool<ToolContext> {
    * @param header  a map of index to column name
    */
   protected void writeHeader(final CSVWriter writer, final Map<Integer, String> header) {
-    String[] headerStr = new String[header.size()];
+    final String[] headerStr = new String[header.size()];
     int i = 0;
-    for (String columnName :header.values()) {
+    for (final String columnName :header.values()) {
       headerStr[i++] = columnName;
     }
     writer.writeNext(headerStr);
@@ -196,21 +205,21 @@ public class MarketDataLoader extends AbstractTool<ToolContext> {
    * @return a header map
    */
   protected Map<Integer, String> createHeader(final Map<MarketDataKey, MarketDataMetaData> requiredData) {
-    // Unforunately this is more complex because it's possible to have several ids with the same scheme in a bundle.
-    Map<ExternalScheme, Integer> schemes = new LinkedHashMap<>(); // count of number of each scheme.
-    for (MarketDataKey key : requiredData.keySet()) {
-      Map<ExternalScheme, Integer> localSchemes = new LinkedHashMap<>(); // just within this bundle
-      for (ExternalId id : key.getExternalIdBundle().getExternalIds()) {
-        ExternalScheme scheme = id.getScheme();
+    // Unfortunately this is more complex because it's possible to have several ids with the same scheme in a bundle.
+    final Map<ExternalScheme, Integer> schemes = new LinkedHashMap<>(); // count of number of each scheme.
+    for (final MarketDataKey key : requiredData.keySet()) {
+      final Map<ExternalScheme, Integer> localSchemes = new LinkedHashMap<>(); // just within this bundle
+      for (final ExternalId id : key.getExternalIdBundle().getExternalIds()) {
+        final ExternalScheme scheme = id.getScheme();
         if (localSchemes.containsKey(scheme)) {
           localSchemes.put(scheme, localSchemes.get(scheme) + 1);
         } else {
           localSchemes.put(scheme, 1);
         }
       }
-      for (Map.Entry<ExternalScheme, Integer> entry : localSchemes.entrySet()) { // merge it in.
-        ExternalScheme scheme = entry.getKey();
-        int count = entry.getValue();
+      for (final Map.Entry<ExternalScheme, Integer> entry : localSchemes.entrySet()) { // merge it in.
+        final ExternalScheme scheme = entry.getKey();
+        final int count = entry.getValue();
         if (schemes.containsKey(scheme)) {
           if (schemes.get(scheme) < count) {
             schemes.put(scheme, count);
@@ -221,10 +230,10 @@ public class MarketDataLoader extends AbstractTool<ToolContext> {
       }
     }
     int i = 0;
-    Map<Integer, String> columnMappings = new LinkedHashMap<>();
-    for (Map.Entry<ExternalScheme, Integer> entry : schemes.entrySet()) {
-      ExternalScheme key = entry.getKey();
-      Integer value = entry.getValue();
+    final Map<Integer, String> columnMappings = new LinkedHashMap<>();
+    for (final Map.Entry<ExternalScheme, Integer> entry : schemes.entrySet()) {
+      final ExternalScheme key = entry.getKey();
+      final Integer value = entry.getValue();
       for (int j = 0; j < value; j++) {
         columnMappings.put(i++, "ExternalId[" + key + "]");
       }
@@ -244,7 +253,7 @@ public class MarketDataLoader extends AbstractTool<ToolContext> {
    */
   protected void save(final MarketDataSet dataSet) {
     if (!getCommandLine().hasOption(TEST_OPTION)) {
-      MarketDataManager manager = new MarketDataManager(getToolContext());
+      final MarketDataManager manager = new MarketDataManager(getToolContext());
       manager.saveOrUpdate(dataSet, _date);
       LOGGER.info("Data saved.");
     } else {
@@ -257,7 +266,7 @@ public class MarketDataLoader extends AbstractTool<ToolContext> {
 
   private void initDateFormatter() {
     if (getCommandLine().hasOption(DATEPATTERN_OPTION)) {
-      String datePattern = getCommandLine().getOptionValue(DATEPATTERN_OPTION);
+      final String datePattern = getCommandLine().getOptionValue(DATEPATTERN_OPTION);
       _dateFormatter = DateTimeFormatter.ofPattern(datePattern);
     } else {
       if (Locale.getDefault().getCountry().equals("US")) {
@@ -270,7 +279,7 @@ public class MarketDataLoader extends AbstractTool<ToolContext> {
 
   private void initDate() {
     if (getCommandLine().hasOption(DATE_OPTION)) {
-      String dateStr = getCommandLine().getOptionValue(DATE_OPTION);
+      final String dateStr = getCommandLine().getOptionValue(DATE_OPTION);
       switch (dateStr.toUpperCase()) {
         case TODAY:
           _date = LocalDate.now();
@@ -283,8 +292,8 @@ public class MarketDataLoader extends AbstractTool<ToolContext> {
           break;
         default:
           try {
-            _date = (LocalDate) _dateFormatter.parse(dateStr, LocalDate.FROM);
-          } catch (DateTimeParseException dtpe) {
+            _date = _dateFormatter.parse(dateStr, LocalDate.FROM);
+          } catch (final DateTimeParseException dtpe) {
             LOGGER.error("Could not parse date {}, expected format is {}, try setting the locale via the --locale flag", dateStr, _dateFormatter.toString());
             System.exit(1);
           }
@@ -301,37 +310,37 @@ public class MarketDataLoader extends AbstractTool<ToolContext> {
 
   @Override
   protected Options createOptions(final boolean requiresConfigResource) {
-    Options options = super.createOptions(requiresConfigResource);
+    final Options options = super.createOptions(requiresConfigResource);
 
-    Option fileOption = new Option(INPUT_FILE_OPTION, INPUT_FILE_LONG, true, INPUT_FILE_DESCRIPTION);
+    final Option fileOption = new Option(INPUT_FILE_OPTION, INPUT_FILE_LONG, true, INPUT_FILE_DESCRIPTION);
     fileOption.setArgName(INPUT_FILE_ARG_NAME);
     fileOption.setArgs(1);
     fileOption.setRequired(true);
     options.addOption(fileOption);
 
-    Option localeOption = new Option(DATEPATTERN_OPTION, DATEPATTERN_LONG, true, DATEPATTERN_DESCRIPTION);
+    final Option localeOption = new Option(DATEPATTERN_OPTION, DATEPATTERN_LONG, true, DATEPATTERN_DESCRIPTION);
     localeOption.setArgName(DATEPATTERN_ARG_NAME);
     localeOption.setArgs(1);
     localeOption.setRequired(false);
     options.addOption(localeOption);
 
-    Option dateOption = new Option(DATE_OPTION, DATE_LONG, true, DATE_DESCRIPTION);
+    final Option dateOption = new Option(DATE_OPTION, DATE_LONG, true, DATE_DESCRIPTION);
     dateOption.setArgName(DATE_ARG_NAME);
     dateOption.setArgs(1);
     dateOption.setRequired(false);
     options.addOption(dateOption);
 
-    Option testOption = new Option(TEST_OPTION, TEST_LONG, false, TEST_DESCRIPTION);
+    final Option testOption = new Option(TEST_OPTION, TEST_LONG, false, TEST_DESCRIPTION);
     testOption.setRequired(false);
     options.addOption(testOption);
 
-    Option queryOption = new Option(QUERY_OPTION, QUERY_LONG, false, QUERY_DESCRIPTION);
+    final Option queryOption = new Option(QUERY_OPTION, QUERY_LONG, false, QUERY_DESCRIPTION);
     queryOption.setArgName(QUERY_ARG_NAME);
     queryOption.setArgs(1);
     queryOption.setRequired(false);
     options.addOption(queryOption);
 
-    Option overwriteOption = new Option(OVERWRITE_OPTION, OVERWRITE_LONG, false, OVERWRITE_DESCRIPTION);
+    final Option overwriteOption = new Option(OVERWRITE_OPTION, OVERWRITE_LONG, false, OVERWRITE_DESCRIPTION);
     overwriteOption.setRequired(false);
     options.addOption(overwriteOption);
     return options;
@@ -342,7 +351,7 @@ public class MarketDataLoader extends AbstractTool<ToolContext> {
    * @param args  command line arguments
    */
   public static void main(final String[] args) {
-    MarketDataLoader loader = new MarketDataLoader();
+    final MarketDataSetFileReader loader = new MarketDataSetFileReader();
     loader.invokeAndTerminate(args);
   }
 }

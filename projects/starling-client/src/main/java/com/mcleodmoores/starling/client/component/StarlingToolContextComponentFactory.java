@@ -98,7 +98,7 @@ public class StarlingToolContextComponentFactory extends ToolContextComponentFac
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the historicalTimeSeriesResolver.
+   * Gets the historical time series resolver.
    * @return the value of the property, not null
    */
   public HistoricalTimeSeriesResolver getHistoricalTimeSeriesResolver() {
@@ -106,10 +106,10 @@ public class StarlingToolContextComponentFactory extends ToolContextComponentFac
   }
 
   /**
-   * Sets the historicalTimeSeriesResolver.
+   * Sets the historical time series resolver.
    * @param historicalTimeSeriesResolver  the new value of the property, not null
    */
-  public void setHistoricalTimeSeriesResolver(final HistoricalTimeSeriesResolver historicalTimeSeriesResolver) {
+  public void setHistoricalTimeSeriesResolver(HistoricalTimeSeriesResolver historicalTimeSeriesResolver) {
     JodaBeanUtils.notNull(historicalTimeSeriesResolver, "historicalTimeSeriesResolver");
     this._historicalTimeSeriesResolver = historicalTimeSeriesResolver;
   }
@@ -135,7 +135,7 @@ public class StarlingToolContextComponentFactory extends ToolContextComponentFac
    * Sets analytic service working on persistent portfolios.
    * @param analyticService  the new value of the property, not null
    */
-  public void setAnalyticService(final AnalyticService analyticService) {
+  public void setAnalyticService(AnalyticService analyticService) {
     JodaBeanUtils.notNull(analyticService, "analyticService");
     this._analyticService = analyticService;
   }
@@ -161,7 +161,7 @@ public class StarlingToolContextComponentFactory extends ToolContextComponentFac
    * Sets analytic service that takes transient portfolios.
    * @param statelessAnalyticService  the new value of the property, not null
    */
-  public void setStatelessAnalyticService(final StatelessAnalyticService statelessAnalyticService) {
+  public void setStatelessAnalyticService(StatelessAnalyticService statelessAnalyticService) {
     JodaBeanUtils.notNull(statelessAnalyticService, "statelessAnalyticService");
     this._statelessAnalyticService = statelessAnalyticService;
   }
@@ -187,7 +187,7 @@ public class StarlingToolContextComponentFactory extends ToolContextComponentFac
    * Sets market data manager.
    * @param marketDataManager  the new value of the property, not null
    */
-  public void setMarketDataManager(final MarketDataManager marketDataManager) {
+  public void setMarketDataManager(MarketDataManager marketDataManager) {
     JodaBeanUtils.notNull(marketDataManager, "marketDataManager");
     this._marketDataManager = marketDataManager;
   }
@@ -213,7 +213,7 @@ public class StarlingToolContextComponentFactory extends ToolContextComponentFac
    * Sets portfolio manager.
    * @param portfolioManager  the new value of the property, not null
    */
-  public void setPortfolioManager(final PortfolioManager portfolioManager) {
+  public void setPortfolioManager(PortfolioManager portfolioManager) {
     JodaBeanUtils.notNull(portfolioManager, "portfolioManager");
     this._portfolioManager = portfolioManager;
   }
@@ -239,7 +239,7 @@ public class StarlingToolContextComponentFactory extends ToolContextComponentFac
    * Sets config manager.
    * @param configManager  the new value of the property, not null
    */
-  public void setConfigManager(final ConfigManager configManager) {
+  public void setConfigManager(ConfigManager configManager) {
     JodaBeanUtils.notNull(configManager, "configManager");
     this._configManager = configManager;
   }
@@ -259,12 +259,12 @@ public class StarlingToolContextComponentFactory extends ToolContextComponentFac
   }
 
   @Override
-  public boolean equals(final Object obj) {
+  public boolean equals(Object obj) {
     if (obj == this) {
       return true;
     }
     if (obj != null && obj.getClass() == this.getClass()) {
-      final StarlingToolContextComponentFactory other = (StarlingToolContextComponentFactory) obj;
+      StarlingToolContextComponentFactory other = (StarlingToolContextComponentFactory) obj;
       return JodaBeanUtils.equal(getHistoricalTimeSeriesResolver(), other.getHistoricalTimeSeriesResolver()) &&
           JodaBeanUtils.equal(getAnalyticService(), other.getAnalyticService()) &&
           JodaBeanUtils.equal(getStatelessAnalyticService(), other.getStatelessAnalyticService()) &&
@@ -290,9 +290,9 @@ public class StarlingToolContextComponentFactory extends ToolContextComponentFac
 
   @Override
   public String toString() {
-    final StringBuilder buf = new StringBuilder(224);
+    StringBuilder buf = new StringBuilder(224);
     buf.append("StarlingToolContextComponentFactory{");
-    final int len = buf.length();
+    int len = buf.length();
     toString(buf);
     if (buf.length() > len) {
       buf.setLength(buf.length() - 2);
@@ -302,7 +302,7 @@ public class StarlingToolContextComponentFactory extends ToolContextComponentFac
   }
 
   @Override
-  protected void toString(final StringBuilder buf) {
+  protected void toString(StringBuilder buf) {
     super.toString(buf);
     buf.append("historicalTimeSeriesResolver").append('=').append(JodaBeanUtils.toString(getHistoricalTimeSeriesResolver())).append(',').append(' ');
     buf.append("analyticService").append('=').append(JodaBeanUtils.toString(getAnalyticService())).append(',').append(' ');
@@ -371,7 +371,7 @@ public class StarlingToolContextComponentFactory extends ToolContextComponentFac
     }
 
     @Override
-    protected MetaProperty<?> metaPropertyGet(final String propertyName) {
+    protected MetaProperty<?> metaPropertyGet(String propertyName) {
       switch (propertyName.hashCode()) {
         case -946313676:  // historicalTimeSeriesResolver
           return _historicalTimeSeriesResolver;
@@ -455,7 +455,7 @@ public class StarlingToolContextComponentFactory extends ToolContextComponentFac
 
     //-----------------------------------------------------------------------
     @Override
-    protected Object propertyGet(final Bean bean, final String propertyName, final boolean quiet) {
+    protected Object propertyGet(Bean bean, String propertyName, boolean quiet) {
       switch (propertyName.hashCode()) {
         case -946313676:  // historicalTimeSeriesResolver
           return ((StarlingToolContextComponentFactory) bean).getHistoricalTimeSeriesResolver();
@@ -474,7 +474,7 @@ public class StarlingToolContextComponentFactory extends ToolContextComponentFac
     }
 
     @Override
-    protected void propertySet(final Bean bean, final String propertyName, final Object newValue, final boolean quiet) {
+    protected void propertySet(Bean bean, String propertyName, Object newValue, boolean quiet) {
       switch (propertyName.hashCode()) {
         case -946313676:  // historicalTimeSeriesResolver
           ((StarlingToolContextComponentFactory) bean).setHistoricalTimeSeriesResolver((HistoricalTimeSeriesResolver) newValue);
@@ -499,7 +499,7 @@ public class StarlingToolContextComponentFactory extends ToolContextComponentFac
     }
 
     @Override
-    protected void validate(final Bean bean) {
+    protected void validate(Bean bean) {
       JodaBeanUtils.notNull(((StarlingToolContextComponentFactory) bean)._historicalTimeSeriesResolver, "historicalTimeSeriesResolver");
       JodaBeanUtils.notNull(((StarlingToolContextComponentFactory) bean)._analyticService, "analyticService");
       JodaBeanUtils.notNull(((StarlingToolContextComponentFactory) bean)._statelessAnalyticService, "statelessAnalyticService");

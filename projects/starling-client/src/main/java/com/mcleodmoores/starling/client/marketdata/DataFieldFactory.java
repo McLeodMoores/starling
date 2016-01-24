@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2015 - present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.mcleodmoores.starling.client.marketdata;
 
@@ -28,7 +28,7 @@ public class DataFieldFactory extends AbstractNamedInstanceFactory<DataField> {
   /**
    * Return the named instance of a DataField given a name, and create one if one isn't available
    * @param name  the name of the DataField
-   * @return the instance of the datafield corresponding to the name
+   * @return the instance of the data field corresponding to the name
    */
   @FromString
   public DataField of(final String name) {

@@ -1,3 +1,6 @@
+/**
+ * Copyright (C) 2015 - present McLeod Moores Software Limited.  All rights reserved.
+ */
 package com.mcleodmoores.starling.client.stateless;
 
 import java.util.EnumSet;
@@ -40,9 +43,13 @@ import com.opengamma.util.ArgumentChecker;
  * Analytic service that creates a portfolio and views only for the duration of the calculation.
  */
 public class StatelessAnalyticService {
+  /** A configuration manager */
   private final ConfigManager _configManager;
+  /** A portfolio manager */
   private final PortfolioManager _portfolioManager;
+  /** The analytic service */
   private final AnalyticService _analyticService;
+  /** The session counter */
   private static AtomicLong s_sessionCount = new AtomicLong(System.currentTimeMillis());
 
   /**
@@ -130,7 +137,7 @@ public class StatelessAnalyticService {
     return new StatelessSynchronousJob(templateViewKey, portfolio, correlationIdScheme, valuationTime, snapshotDate, analyticsDayCount);
   }
 
-  public final class StatelessAsynchronousJob implements AsynchronousJob, AutoCloseable {
+  public final class StatelessAsynchronousJob implements AsynchronousJob {
     private final AsynchronousJob _job;
     private final String _sessionPrefix;
     private final PortfolioKey _portfolioKey;

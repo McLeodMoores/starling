@@ -1,3 +1,6 @@
+/**
+ * Copyright (C) 2015 - present McLeod Moores Software Limited.  All rights reserved.
+ */
 package com.mcleodmoores.starling.client.results;
 
 import java.util.EnumSet;
@@ -51,7 +54,7 @@ public interface ResultModel {
   List<TargetKey> getTargetKeys(EnumSet<TargetType> includeTargets);
 
   /**
-   * Corresponds to the types TargetKey.
+   * Corresponds to the type's TargetKey.
    */
   public enum TargetType {
     /**

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2015 - present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.mcleodmoores.starling.client.results;
 
@@ -9,16 +9,22 @@ import com.opengamma.util.ArgumentChecker;
 /**
  * A target key that allows access to legacy target types that are occasionally required.  Included more for completeness than anything else.
  */
+//TODO this should exclude non-legacy computation target types
 public final class LegacyTargetKey implements TargetKey {
+  /** The computation target specification of this key */
   private final ComputationTargetSpecification _targetSpecification;
 
+  /**
+   * Restricted constructor.
+   * @param targetSpecification  the computation target specification, not null
+   */
   private LegacyTargetKey(final ComputationTargetSpecification targetSpecification) {
     _targetSpecification = targetSpecification;
   }
 
   /**
    * Static factory method used to create instances.
-   * @param targetSpecification  the underlying target specifciation associated with this target, not null
+   * @param targetSpecification  the underlying target specification associated with this target, not null
    * @return the legacy target key, not null
    */
   public static LegacyTargetKey of(final ComputationTargetSpecification targetSpecification) {
@@ -33,6 +39,9 @@ public final class LegacyTargetKey implements TargetKey {
 
   @Override
   public boolean equals(final Object o) {
+    if (this == o) {
+      return true;
+    }
     if (o == null) {
       return false;
     }

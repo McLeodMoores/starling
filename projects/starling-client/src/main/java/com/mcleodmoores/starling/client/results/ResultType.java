@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2015 - present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.mcleodmoores.starling.client.results;
 
@@ -24,12 +24,12 @@ import com.opengamma.engine.value.ValueProperties;
 import com.opengamma.engine.value.ValueRequirementNames;
 
 /**
- * Wrapper for ValueRequirementName and any ValueProperties to make it type-safe and add meta-data.
- * The difference between this and ResultKey is that only exact matches are .equals(), whereas
- * ResultKey is looser, treating ValueProperties that satisfy each other (subsets) as equal for
- * the purposes of result lookup.  This means you don't need to know in advance all the properties
- * on a given result to be able to retrieve it, although you may need to specify some properties to
- * get a unique hit.
+ * Wrapper for value requirement names and any value properties to make them type-safe and add meta-data.
+ * The difference between this key and {@link ResultKey} is that only exact matches are .equals(), whereas
+ * ResultKey is looser, treating value properties that satisfy each other (subsets) as equal for
+ * the purposes of result lookup.  This means that all of the properties in a given result aren't required
+ * to be known in advance before the result can be retrieved, although some properties may need to be specified
+ * to get a unique hit.
  */
 @BeanDefinition
 public final class ResultType implements ImmutableBean {
@@ -52,10 +52,10 @@ public final class ResultType implements ImmutableBean {
    */
   @PropertyDefinition(validate = "notNull")
   private final ValueProperties _properties;
-  
+
   // CHECKSTYLE:OFF
   @ImmutablePreBuild
-  private static void preBuild(Builder builder) {
+  private static void preBuild(final Builder builder) {
     if (builder.get(Meta.INSTANCE.properties()) == null) {
       builder.properties(ValueProperties.none());
     }
@@ -84,8 +84,8 @@ public final class ResultType implements ImmutableBean {
   }
 
   private ResultType(
-      String valueRequirementName,
-      ValueProperties properties) {
+      final String valueRequirementName,
+      final ValueProperties properties) {
     JodaBeanUtils.notNull(valueRequirementName, "valueRequirementName");
     JodaBeanUtils.notNull(properties, "properties");
     this._valueRequirementName = valueRequirementName;
@@ -98,7 +98,7 @@ public final class ResultType implements ImmutableBean {
   }
 
   @Override
-  public <R> Property<R> property(String propertyName) {
+  public <R> Property<R> property(final String propertyName) {
     return metaBean().<R>metaProperty(propertyName).createProperty(this);
   }
 
@@ -135,12 +135,12 @@ public final class ResultType implements ImmutableBean {
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (obj == this) {
       return true;
     }
     if (obj != null && obj.getClass() == this.getClass()) {
-      ResultType other = (ResultType) obj;
+      final ResultType other = (ResultType) obj;
       return JodaBeanUtils.equal(getValueRequirementName(), other.getValueRequirementName()) &&
           JodaBeanUtils.equal(getProperties(), other.getProperties());
     }
@@ -157,7 +157,7 @@ public final class ResultType implements ImmutableBean {
 
   @Override
   public String toString() {
-    StringBuilder buf = new StringBuilder(96);
+    final StringBuilder buf = new StringBuilder(96);
     buf.append("ResultType{");
     buf.append("valueRequirementName").append('=').append(getValueRequirementName()).append(',').append(' ');
     buf.append("properties").append('=').append(JodaBeanUtils.toString(getProperties()));
@@ -200,7 +200,7 @@ public final class ResultType implements ImmutableBean {
     }
 
     @Override
-    protected MetaProperty<?> metaPropertyGet(String propertyName) {
+    protected MetaProperty<?> metaPropertyGet(final String propertyName) {
       switch (propertyName.hashCode()) {
         case 1646585789:  // valueRequirementName
           return _valueRequirementName;
@@ -244,7 +244,7 @@ public final class ResultType implements ImmutableBean {
 
     //-----------------------------------------------------------------------
     @Override
-    protected Object propertyGet(Bean bean, String propertyName, boolean quiet) {
+    protected Object propertyGet(final Bean bean, final String propertyName, final boolean quiet) {
       switch (propertyName.hashCode()) {
         case 1646585789:  // valueRequirementName
           return ((ResultType) bean).getValueRequirementName();
@@ -255,7 +255,7 @@ public final class ResultType implements ImmutableBean {
     }
 
     @Override
-    protected void propertySet(Bean bean, String propertyName, Object newValue, boolean quiet) {
+    protected void propertySet(final Bean bean, final String propertyName, final Object newValue, final boolean quiet) {
       metaProperty(propertyName);
       if (quiet) {
         return;
@@ -284,14 +284,14 @@ public final class ResultType implements ImmutableBean {
      * Restricted copy constructor.
      * @param beanToCopy  the bean to copy from, not null
      */
-    private Builder(ResultType beanToCopy) {
+    private Builder(final ResultType beanToCopy) {
       this._valueRequirementName = beanToCopy.getValueRequirementName();
       this._properties = beanToCopy.getProperties();
     }
 
     //-----------------------------------------------------------------------
     @Override
-    public Object get(String propertyName) {
+    public Object get(final String propertyName) {
       switch (propertyName.hashCode()) {
         case 1646585789:  // valueRequirementName
           return _valueRequirementName;
@@ -303,7 +303,7 @@ public final class ResultType implements ImmutableBean {
     }
 
     @Override
-    public Builder set(String propertyName, Object newValue) {
+    public Builder set(final String propertyName, final Object newValue) {
       switch (propertyName.hashCode()) {
         case 1646585789:  // valueRequirementName
           this._valueRequirementName = (String) newValue;
@@ -318,25 +318,25 @@ public final class ResultType implements ImmutableBean {
     }
 
     @Override
-    public Builder set(MetaProperty<?> property, Object value) {
+    public Builder set(final MetaProperty<?> property, final Object value) {
       super.set(property, value);
       return this;
     }
 
     @Override
-    public Builder setString(String propertyName, String value) {
+    public Builder setString(final String propertyName, final String value) {
       setString(meta().metaProperty(propertyName), value);
       return this;
     }
 
     @Override
-    public Builder setString(MetaProperty<?> property, String value) {
+    public Builder setString(final MetaProperty<?> property, final String value) {
       super.setString(property, value);
       return this;
     }
 
     @Override
-    public Builder setAll(Map<String, ? extends Object> propertyValueMap) {
+    public Builder setAll(final Map<String, ? extends Object> propertyValueMap) {
       super.setAll(propertyValueMap);
       return this;
     }
@@ -355,7 +355,7 @@ public final class ResultType implements ImmutableBean {
      * @param valueRequirementName  the new value, not null
      * @return this, for chaining, not null
      */
-    public Builder valueRequirementName(String valueRequirementName) {
+    public Builder valueRequirementName(final String valueRequirementName) {
       JodaBeanUtils.notNull(valueRequirementName, "valueRequirementName");
       this._valueRequirementName = valueRequirementName;
       return this;
@@ -366,7 +366,7 @@ public final class ResultType implements ImmutableBean {
      * @param properties  the new value, not null
      * @return this, for chaining, not null
      */
-    public Builder properties(ValueProperties properties) {
+    public Builder properties(final ValueProperties properties) {
       JodaBeanUtils.notNull(properties, "properties");
       this._properties = properties;
       return this;
@@ -375,7 +375,7 @@ public final class ResultType implements ImmutableBean {
     //-----------------------------------------------------------------------
     @Override
     public String toString() {
-      StringBuilder buf = new StringBuilder(96);
+      final StringBuilder buf = new StringBuilder(96);
       buf.append("ResultType.Builder{");
       buf.append("valueRequirementName").append('=').append(JodaBeanUtils.toString(_valueRequirementName)).append(',').append(' ');
       buf.append("properties").append('=').append(JodaBeanUtils.toString(_properties));

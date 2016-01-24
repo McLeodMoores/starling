@@ -1,44 +1,74 @@
+/**
+ * Copyright (C) 2015 - present McLeod Moores Software Limited.  All rights reserved.
+ */
 package com.mcleodmoores.starling.client.results;
 
-import com.opengamma.id.ExternalId;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import static org.testng.Assert.*;
+import com.opengamma.id.ExternalId;
+import com.opengamma.util.test.TestGroup;
 
 /**
- * Created by jim on 19/06/15.
+ * Unit tests for {@link TradeTargetKey}.
  */
+@Test(groups = TestGroup.UNIT)
 public class TradeTargetKeyTest {
 
+  /**
+   * Tests the behaviour when a null correlation id is supplied.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void testNullOf() throws Exception {
+  public void testNullOf()  {
     TradeTargetKey.of(null);
   }
+
+  /**
+   * Tests creation of the key.
+   */
   @Test
-  public void testOf() throws Exception {
+  public void testOf()  {
     Assert.assertNotNull(TradeTargetKey.of(ExternalId.of("A", "B")));
   }
 
+  /**
+   * Tests that the correct correlation id is returned.
+   */
   @Test
-  public void testGetCorrelationId() throws Exception {
+  public void testGetCorrelationId()  {
     Assert.assertEquals(TradeTargetKey.of(ExternalId.of("A", "B")).getCorrelationId(), ExternalId.of("A", "B"));
   }
 
+  /**
+   * Tests the hashcode.
+   */
   @Test
-  public void testHashCode() throws Exception {
+  public void testHashCode()  {
     Assert.assertEquals(TradeTargetKey.of(ExternalId.of("A", "B")).hashCode(), TradeTargetKey.of(ExternalId.of("A", "B")).hashCode());
     Assert.assertEquals(TradeTargetKey.of(ExternalId.of("C", "D")).hashCode(), TradeTargetKey.of(ExternalId.of("C", "D")).hashCode());
   }
 
+  /**
+   * Tests the equals method.
+   */
   @Test
-  public void testEquals() throws Exception {
-    Assert.assertEquals(TradeTargetKey.of(ExternalId.of("A", "B")), TradeTargetKey.of(ExternalId.of("A", "B")));
+  public void testEquals()  {
+    final TradeTargetKey ab = TradeTargetKey.of(ExternalId.of("A", "B"));
+    Assert.assertEquals(ab, ab);
+    Assert.assertEquals(ab, TradeTargetKey.of(ExternalId.of("A", "B")));
     Assert.assertEquals(TradeTargetKey.of(ExternalId.of("C", "D")), TradeTargetKey.of(ExternalId.of("C", "D")));
-    Assert.assertNotEquals(TradeTargetKey.of(ExternalId.of("A", "B")), TradeTargetKey.of(ExternalId.of("C", "D")));
-    Assert.assertNotEquals(TradeTargetKey.of(ExternalId.of("A", "B")), TradeTargetKey.of(ExternalId.of("A", "D")));
-    Assert.assertNotEquals(TradeTargetKey.of(ExternalId.of("A", "B")), TradeTargetKey.of(ExternalId.of("C", "B")));
-    Assert.assertNotEquals(TradeTargetKey.of(ExternalId.of("A", "B")), new Object());
-    Assert.assertNotEquals(TradeTargetKey.of(ExternalId.of("A", "B")), null);
+    Assert.assertNotEquals(ab, TradeTargetKey.of(ExternalId.of("C", "D")));
+    Assert.assertNotEquals(ab, TradeTargetKey.of(ExternalId.of("A", "D")));
+    Assert.assertNotEquals(ab, TradeTargetKey.of(ExternalId.of("C", "B")));
+    Assert.assertNotEquals(new Object(), ab);
+    Assert.assertNotEquals(null, ab);
+  }
+
+  /**
+   * Tests the toString method.
+   */
+  @Test
+  public void testToString() {
+    Assert.assertEquals(TradeTargetKey.of(ExternalId.of("A", "B")).toString(), "TradeTargetKey[correlationId=A~B]");
   }
 }

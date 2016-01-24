@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2015 - present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.mcleodmoores.starling.client.portfolio;
 
@@ -45,18 +45,24 @@ import com.opengamma.util.ArgumentChecker;
  * Class to build load and save portfolios and provide lists, test for existence etc.
  */
 public final class PortfolioManager {
+  /** The logger */
   private static final Logger LOGGER = LoggerFactory.getLogger(PortfolioManager.class);
+  /** A thread pool to use when resolving the portfolio */
   private static final ExecutorService EXECUTOR_SERVICE = Executors.newCachedThreadPool();
-
+  /** The portfolio master */
   private final PortfolioMaster _portfolioMaster;
+  /** The position master */
   private final PositionMaster _positionMaster;
+  /** The position source */
   private final PositionSource _positionSource;
+  /** The security master */
   private final SecurityMaster _securityMaster;
+  /** The security source */
   private final SecuritySource _securitySource;
 
   /**
    * Create a PortfolioManager object with the provided tool context.
-   * ToolContext must contain a portfolio master, position master, position source, security master and security source.
+   * This tool context must contain a portfolio master, position master, position source, security master and security source.
    * @param toolContext  the tool context
    */
   public PortfolioManager(final ToolContext toolContext) {
@@ -97,28 +103,28 @@ public final class PortfolioManager {
         final PortfolioDocument portfolioDocument = _portfolioMaster.get(portfolioKey.getUniqueId());
         if (portfolioKey.getName().equals(portfolioDocument.getPortfolio().getName())) {
           return true; // sanity check
-        } else {
-          LOGGER.error("Portfolio name {} in PortfolioKey is inconsistent with embedded uniqueId {} so indicating not present",
-              portfolioKey.getName(), portfolioKey.getUniqueId());
-          return false;
         }
-      } catch (final DataNotFoundException dnfe) {
+        LOGGER.error("Portfolio name {} in PortfolioKey is inconsistent with embedded uniqueId {} so indicating not present",
+            portfolioKey.getName(), portfolioKey.getUniqueId());
         return false;
-      } catch (final AuthorizationException authorizationException) {
+      } catch (final DataNotFoundException dnfe) {
+        LOGGER.error("Problem getting portfolio for key: {}", dnfe.getMessage());
+        return false;
+      } catch (final AuthorizationException ae) {
+        LOGGER.error("Not authorized to get portfolio with key {}", ae.getMessage());
         return false;
       }
-    } else {
-      final PortfolioSearchRequest searchRequest = new PortfolioSearchRequest();
-      searchRequest.setName(portfolioKey.getName());
-      searchRequest.setIncludePositions(false);
-      final PortfolioSearchResult searchResult = _portfolioMaster.search(searchRequest);
-      return !searchResult.getDocuments().isEmpty();
     }
+    final PortfolioSearchRequest searchRequest = new PortfolioSearchRequest();
+    searchRequest.setName(portfolioKey.getName());
+    searchRequest.setIncludePositions(false);
+    final PortfolioSearchResult searchResult = _portfolioMaster.search(searchRequest);
+    return !searchResult.getDocuments().isEmpty();
   }
 
   /**
    * Load the latest version of the named portfolio.
-   * @param portfolioKey  the key for the portfolio
+   * @param portfolioKey  the key for the portfolio, not null
    * @return the loaded portfolio with all links to positions, trade and securities resolved
    */
   public Portfolio loadPortfolio(final PortfolioKey portfolioKey) {
@@ -152,14 +158,14 @@ public final class PortfolioManager {
       }
     }
     // This bit is odd.  For historical reasons, ManageablePortfolio doesn't implement Portfolio.  The code to convert it to Portfolio is in the source.
-    Portfolio portfolio = _positionSource.getPortfolio(manageablePortfolio.getUniqueId(), vc); // why do we have to pass the vc here?!?
+    Portfolio portfolio = _positionSource.getPortfolio(manageablePortfolio.getUniqueId(), vc); // TODO why do we have to pass the vc here?!?
     // Resolve all the securities, positions and trades.
-    portfolio = PortfolioCompiler
-        .resolvePortfolio(portfolio, EXECUTOR_SERVICE, _securitySource, VersionCorrection.ofVersionAsOf(versionAsOf));
+    portfolio = PortfolioCompiler.resolvePortfolio(portfolio, EXECUTOR_SERVICE, _securitySource, VersionCorrection.ofVersionAsOf(versionAsOf));
     return portfolio;
   }
 
   /**
+   * Gets the portfolio keys for all visible portfolios in the master.
    * @return a list of PortfolioKeys representing each of the portfolios loaded, not null
    * Order is preserved
    */
@@ -178,7 +184,7 @@ public final class PortfolioManager {
 
   /**
    * Save or update a portfolio under the name set in the portfolio object.
-   * The portfolio's name must not be the empty string.
+   * The name of the portfolio must not be the empty string.
    * @param portfolio  the portfolio to save, not null
    * @return a key for the portfolio
    */
@@ -192,7 +198,7 @@ public final class PortfolioManager {
 
   /**
    * Delete a portfolio.  This may be undoable by examining history in the underlying master.
-   * PortfolioKey name cannot contain wildcard '*' characters to prevent accidental mass deletion.
+   * The PortfolioKey name cannot contain wildcard '*' characters to prevent accidental mass deletion.
    * @param portfolioKey  the key for the portfolio to delete, not null
    */
   public void deletePortfolio(final PortfolioKey portfolioKey) {
@@ -234,9 +240,10 @@ public final class PortfolioManager {
   };
 
   /**
-   * Delete a portfolio to a given 'depth'.  Normal portfolio deletion leaves positions, trade and securities untouched.
-   * This may be a good thing if they're shared with other portfolios, but not otherwise.
-   * PortfolioKey name cannot contain wildcard '*' characters to prevent accidental mass deletion.
+   * Delete a portfolio to a given 'depth'. Normal portfolio deletion leaves positions, trade and securities untouched.
+   * This may be a good thing if they are shared with other portfolios, but not otherwise.
+   * <p>
+   * The PortfolioKey name cannot contain wildcard '*' characters to prevent accidental mass deletion.
    * @param portfolioKey  the key for the portfolio to process, not null
    * @param whatToDelete  an enumset containing values to indicate what to delete, not null
    */
@@ -247,8 +254,15 @@ public final class PortfolioManager {
       throw new OpenGammaRuntimeException("Too dangerous to allow wildcard delete, iterate over list");
     }
     if (portfolioKey.hasUniqueId()) {
-      final PortfolioDocument portfolioDoc = _portfolioMaster.get(portfolioKey.getUniqueId());
-      _portfolioMaster.remove(portfolioKey.getUniqueId());
+      ManageablePortfolio portfolio;
+      try {
+        final PortfolioDocument document = _portfolioMaster.get(portfolioKey.getUniqueId());
+        portfolio = document.getPortfolio();
+      } catch (final DataNotFoundException e) {
+        throw new OpenGammaRuntimeException("No portfolio for key " + portfolioKey + " could be found");
+      }
+      delete(portfolio.getRootNode(), whatToDelete, VersionCorrection.LATEST);
+      _portfolioMaster.remove(portfolio.getUniqueId());
     } else {
       final PortfolioSearchRequest searchRequest = new PortfolioSearchRequest();
       searchRequest.setIncludePositions(false);
@@ -264,6 +278,13 @@ public final class PortfolioManager {
     }
   }
 
+  /**
+   * Deletes a portfolio to a given depth - portfolio only, portfolio, positions and trades or portfolio, positions and trades,
+   * and securities.
+   * @param node  the portfolio node
+   * @param whatToDelete  the scope of the deletions
+   * @param vc  the version correction of the objects to be deleted
+   */
   private void delete(final ManageablePortfolioNode node, final EnumSet<DeleteScope> whatToDelete, final VersionCorrection vc) {
     final Set<UniqueId> deletedSecurities = new HashSet<>();
     if (whatToDelete.contains(DeleteScope.POSITION) || whatToDelete.contains(DeleteScope.SECURITY)) {
@@ -273,31 +294,40 @@ public final class PortfolioManager {
           if (positionDocument != null) {
             final ManageablePosition position = positionDocument.getValue();
             for (final ManageableTrade trade : position.getTrades()) {
-              final Security sec = trade.getSecurityLink().resolve(_securitySource);
-              if (sec != null) {
-                if (!deletedSecurities.contains(sec.getUniqueId())) {
-                  try {
-                    _securityMaster.remove(sec.getUniqueId());
-                  } catch (final DataNotFoundException dnfe) {
-                    // not a problem
+              try {
+                final Security sec = trade.getSecurityLink().resolve(_securitySource);
+                if (sec != null) {
+                  if (!deletedSecurities.contains(sec.getUniqueId())) {
+                    try {
+                      _securityMaster.remove(sec.getUniqueId());
+                    } catch (final DataNotFoundException dnfe) {
+                      // not a problem
+                    }
+                    deletedSecurities.add(sec.getUniqueId());
                   }
-                  deletedSecurities.add(sec.getUniqueId());
+                } else {
+                  LOGGER.warn("Trade {} contained invalid security link {} so can't delete security", trade);
                 }
-              } else {
+              } catch (final DataNotFoundException e) {
                 LOGGER.warn("Trade {} contained invalid security link {} so can't delete security", trade);
               }
             }
-            final Security security = position.getSecurityLink().resolve(_securitySource);
-            if (security != null) {
-              if (!deletedSecurities.contains(security.getUniqueId())) {
-                try {
-                  _securityMaster.remove(security.getUniqueId());
-                } catch (final DataNotFoundException dnfe) {
-                  // not a problem
+            try {
+              //TODO this always fails - unnecessary code?
+              final Security security = position.getSecurityLink().resolve(_securitySource);
+              if (security != null) {
+                if (!deletedSecurities.contains(security.getUniqueId())) {
+                  try {
+                    _securityMaster.remove(security.getUniqueId());
+                  } catch (final DataNotFoundException dnfe) {
+                    // not a problem
+                  }
+                  deletedSecurities.add(security.getUniqueId());
                 }
-                deletedSecurities.add(security.getUniqueId());
+              } else {
+                LOGGER.warn("Position {} contained invalid security link {} so can't delete security", position);
               }
-            } else {
+            } catch (final DataNotFoundException e) {
               LOGGER.warn("Position {} contained invalid security link {} so can't delete security", position);
             }
           }
@@ -313,18 +343,6 @@ public final class PortfolioManager {
       for (final ManageablePortfolioNode child : node.getChildNodes()) {
         delete(child, whatToDelete, vc);
       }
-    }
-  }
-
-  private ManageablePortfolio resolvePortfolio(final PortfolioKey portfolioKey) {
-    if (portfolioKey.getUniqueId() != null) {
-      return _portfolioMaster.get(portfolioKey.getUniqueId()).getValue();
-    } else {
-      final PortfolioSearchRequest searchRequest = new PortfolioSearchRequest();
-      searchRequest.setIncludePositions(false);
-      searchRequest.setName(portfolioKey.getName());
-      final PortfolioSearchResult result = _portfolioMaster.search(searchRequest);
-      return result.getFirstPortfolio();
     }
   }
 }

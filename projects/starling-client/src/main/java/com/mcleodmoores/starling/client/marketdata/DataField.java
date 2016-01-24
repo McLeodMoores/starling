@@ -1,8 +1,9 @@
 /**
- * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2015 - present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.mcleodmoores.starling.client.marketdata;
 
+import com.opengamma.core.value.MarketDataRequirementNames;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.NamedInstance;
 
@@ -14,10 +15,14 @@ public final class DataField implements NamedInstance {
   /**
    * Default pre-normalized price field for Starling.
    */
-  public static final DataField PRICE = DataField.of("Market_Value");
-
+  public static final DataField PRICE = DataField.of(MarketDataRequirementNames.MARKET_VALUE);
+  /** The field name */
   private final String _fieldName;
 
+  /**
+   * Restricted constructor.
+   * @param fieldName  the field name, not null
+   */
   private DataField(final String fieldName) {
     _fieldName = fieldName;
   }
@@ -45,16 +50,20 @@ public final class DataField implements NamedInstance {
   /**
    * @return the name of the field
    */
+  @Override
   public String getName() {
     return _fieldName;
   }
 
   @Override
   public boolean equals(final Object other) {
+    if (other == this) {
+      return true;
+    }
     if (!(other instanceof DataField)) { // remember instanceof handles null...
       return false;
     }
-    DataField dataField = (DataField) other;
+    final DataField dataField = (DataField) other;
     return _fieldName.equals(dataField._fieldName);
   }
 
@@ -62,7 +71,7 @@ public final class DataField implements NamedInstance {
   public int hashCode() {
     return _fieldName.hashCode();
   }
-  
+
   @Override
   public String toString() {
     return getName();

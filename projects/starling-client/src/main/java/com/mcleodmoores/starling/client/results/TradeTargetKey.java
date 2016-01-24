@@ -1,33 +1,38 @@
 /**
- * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2015 -present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.mcleodmoores.starling.client.results;
 
 import com.opengamma.id.ExternalId;
-import com.opengamma.id.ExternalIdBundle;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * A target key for access to particular trades, referred to by the correlation ids you supplied during trade creation.
+ * A target key for access to particular trades, referred to by the correlation ids supplied during trade creation.
  */
-public class TradeTargetKey implements TargetKey {
+public final class TradeTargetKey implements TargetKey {
+  /** The correlation id of the trade */
   private final ExternalId _correlationId;
 
-  private TradeTargetKey(ExternalId correlationId) {
+  /**
+   * Restricted constructor.
+   * @param correlationId  the correlation id, not null
+   */
+  private TradeTargetKey(final ExternalId correlationId) {
     _correlationId = correlationId;
   }
 
   /**
    * Static factory method used to create instances.
-   * @param correlationId  the correlation id, which must be unique to this this target, that was included in the trade you want to reference, not null.
-   * @return the position target key, not null
+   * @param correlationId  the correlation id, which must be unique to this this target, that was included in the trade, not null.
+   * @return the trade target key, not null
    */
-  public static TradeTargetKey of(ExternalId correlationId) {
+  public static TradeTargetKey of(final ExternalId correlationId) {
     ArgumentChecker.notNull(correlationId, "correlationId");
     return new TradeTargetKey(correlationId);
   }
 
   /**
+   * Gets the correlation id.
    * @return the correlation id
    */
   public ExternalId getCorrelationId() {
@@ -40,14 +45,17 @@ public class TradeTargetKey implements TargetKey {
   }
 
   @Override
-  public boolean equals(Object o) {
+  public boolean equals(final Object o) {
+    if (this == o) {
+      return true;
+    }
     if (o == null) {
       return false;
     }
     if (!(o instanceof TradeTargetKey)) {
       return false;
     }
-    TradeTargetKey other = (TradeTargetKey) o;
+    final TradeTargetKey other = (TradeTargetKey) o;
     return other._correlationId.equals(_correlationId);
   }
 

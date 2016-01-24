@@ -1,22 +1,5 @@
 package com.mcleodmoores.starling.client.marketdata;
 
-import au.com.bytecode.opencsv.CSVWriter;
-import com.mcleodmoores.starling.client.marketdata.DataField;
-import com.mcleodmoores.starling.client.marketdata.DataProvider;
-import com.mcleodmoores.starling.client.marketdata.DataSource;
-import com.mcleodmoores.starling.client.marketdata.MarketDataKey;
-import com.mcleodmoores.starling.client.marketdata.MarketDataSet;
-import com.mcleodmoores.starling.client.marketdata.UnitNormalizer;
-import com.opengamma.financial.conversion.JodaBeanConverters;
-import com.opengamma.id.ExternalId;
-import com.opengamma.id.ExternalScheme;
-import com.opengamma.timeseries.date.localdate.LocalDateDoubleEntryIterator;
-import com.opengamma.timeseries.date.localdate.LocalDateDoubleTimeSeries;
-import com.opengamma.util.ArgumentChecker;
-import org.joda.beans.ser.JodaBeanSer;
-import org.threeten.bp.LocalDate;
-import org.threeten.bp.format.DateTimeFormatter;
-
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -24,11 +7,20 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import org.threeten.bp.LocalDate;
+import org.threeten.bp.format.DateTimeFormatter;
+
+import com.opengamma.id.ExternalId;
+import com.opengamma.id.ExternalScheme;
+import com.opengamma.timeseries.date.localdate.LocalDateDoubleTimeSeries;
+import com.opengamma.util.ArgumentChecker;
+
+import au.com.bytecode.opencsv.CSVWriter;
 
 /**
  * Class to write a MarketDataSet to a CSV file (or String).
@@ -57,7 +49,7 @@ public class MarketDataSetFileWriter {
    * @return a string containing a CSV representation
    */
   public String toCSV(final MarketDataSet dataSet) {
-    StringWriter writer = new StringWriter();
+    final StringWriter writer = new StringWriter();
     writeCSV(writer, dataSet);
     return writer.toString();
   }
@@ -74,7 +66,7 @@ public class MarketDataSetFileWriter {
     }
     try {
       writeCSV(new FileWriter(file), dataSet);
-    } catch (IOException ioe) {
+    } catch (final IOException ioe) {
       throw new RuntimeException(ioe);
     }
   }
@@ -88,10 +80,10 @@ public class MarketDataSetFileWriter {
     ArgumentChecker.notNull(writer, "writer");
     ArgumentChecker.notNull(dataSet, "dataSet");
     try (CSVWriter csvWriter = new CSVWriter(new BufferedWriter(writer))) {
-      DataSetAnalysis analysis = DataSetAnalysis.of(dataSet);
+      final DataSetAnalysis analysis = DataSetAnalysis.of(dataSet);
       writeHeader(csvWriter, analysis);
-      for (Map.Entry<MarketDataKey, Object> entry : dataSet.entrySet()) {
-        Object val = entry.getValue();
+      for (final Map.Entry<MarketDataKey, Object> entry : dataSet.entrySet()) {
+        final Object val = entry.getValue();
         if (val == null) {
           writeEntry(csvWriter, analysis, entry.getKey(), (Double) null);
         } else if (val instanceof Double) {
@@ -103,14 +95,14 @@ public class MarketDataSetFileWriter {
               + " for key " + entry.getKey() + " in MarketDataSet");
         }
       }
-    } catch (IOException ioe) {
+    } catch (final IOException ioe) {
       throw new RuntimeException(ioe);
     }
   }
 
   private void writeHeader(final CSVWriter csvWriter, final DataSetAnalysis analysis) {
-    List<String> fields = new ArrayList<>();
-    for (ExternalScheme scheme : analysis.getExternalSchemes()) {
+    final List<String> fields = new ArrayList<>();
+    for (final ExternalScheme scheme : analysis.getExternalSchemes()) {
       fields.add("ExternalId[" + scheme.getName() + "]");
     }
     if (analysis.isFieldRequired()) {
@@ -129,14 +121,14 @@ public class MarketDataSetFileWriter {
       fields.add(DATE);
     }
     fields.add(VALUE);
-    String[] header = fields.toArray(new String[fields.size()]);
+    final String[] header = fields.toArray(new String[fields.size()]);
     csvWriter.writeNext(header);
   }
 
   private List<String> keyFields(final DataSetAnalysis analysis, final MarketDataKey key) {
-    List<String> fields = new ArrayList<>();
-    for (ExternalScheme scheme : analysis.getExternalSchemes()) {
-      String idValue = key.getExternalIdBundle().getValue(scheme);
+    final List<String> fields = new ArrayList<>();
+    for (final ExternalScheme scheme : analysis.getExternalSchemes()) {
+      final String idValue = key.getExternalIdBundle().getValue(scheme);
       if (idValue != null) {
         fields.add(idValue);
       } else {
@@ -153,13 +145,13 @@ public class MarketDataSetFileWriter {
       fields.add(key.getProvider().getName());
     }
     if (analysis.isNormalizerRequired()) {
-      fields.add(key.getNormalizer().getName());
+      fields.add(key.getNormalizer());
     }
     return fields;
   }
 
   private void writeEntry(final CSVWriter csvWriter, final DataSetAnalysis analysis, final MarketDataKey key, final Double value) {
-    List<String> fields = keyFields(analysis, key);
+    final List<String> fields = keyFields(analysis, key);
     if (analysis.isDateRequred()) {
       fields.add(""); // blank for scalar
     }
@@ -176,7 +168,7 @@ public class MarketDataSetFileWriter {
     final String[] row = fields.toArray(new String[fields.size() + 2]);
     final int dateIndex = fields.size();
     final int valueIndex = fields.size() + 1;
-    for (Map.Entry<LocalDate, Double> entry : value) {
+    for (final Map.Entry<LocalDate, Double> entry : value) {
       row[dateIndex] = _formatter.format(entry.getKey());
       row[valueIndex] = Double.toString(entry.getValue());
       csvWriter.writeNext(row);
@@ -196,7 +188,7 @@ public class MarketDataSetFileWriter {
     private boolean _normalizerRequired; // = false
     private boolean _dateRequried; // = false;
 
-    private Set<ExternalScheme> _schemes = new LinkedHashSet<>();
+    private final Set<ExternalScheme> _schemes = new LinkedHashSet<>();
 
     private void analyze(final MarketDataKey key, final Object value) {
       if (!key.getField().equals(DataField.PRICE)) {
@@ -208,20 +200,20 @@ public class MarketDataSetFileWriter {
       if (!key.getProvider().equals(DataProvider.DEFAULT)) {
         _providerRequired = true;
       }
-      if (!key.getNormalizer().equals(UnitNormalizer.INSTANCE)) {
+      if (!key.getNormalizer().equals(UnitNormalizer.INSTANCE.getName())) {
         _normalizerRequired = true;
       }
       if (value instanceof LocalDateDoubleTimeSeries) {
         _dateRequried = true;
       }
-      for (ExternalId externalId : key.getExternalIdBundle().getExternalIds()) {
+      for (final ExternalId externalId : key.getExternalIdBundle().getExternalIds()) {
         _schemes.add(externalId.getScheme());
       }
     }
 
     public static DataSetAnalysis of(final MarketDataSet dataSet) {
-      DataSetAnalysis analysis = new DataSetAnalysis();
-      for (MarketDataKey key : dataSet.keySet()) {
+      final DataSetAnalysis analysis = new DataSetAnalysis();
+      for (final MarketDataKey key : dataSet.keySet()) {
         analysis.analyze(key, dataSet.get(key));
       }
       return analysis;

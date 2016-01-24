@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2015 - present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.mcleodmoores.starling.client.results;
 
@@ -8,22 +8,28 @@ import com.opengamma.util.ArgumentChecker;
 
 /**
  * A key for looking up a specific result for a given target.  This is equivalent to a 'column' name in a tabular result set.
- * Note that this differs from a ResultType in that it has a much weaker equality match - this allows you to specify a minimal key
+ * Note that this differs from a ResultType in that it has a much weaker equality match - this allows the specification of a minimal key
  * that will successfully match a result with a ResultType that contains a ResultType with lots of extra meta-data in the form of
  * properties.
  */
 public final class ResultKey {
-
+  /** The result type */
   private final ResultType _resultType;
+  /** The column set name */
   private final String _columnSet;
 
+  /**
+   * Restricted constructor.
+   * @param columnSet  the column set name, not null
+   * @param resultType  the result type, not null
+   */
   private ResultKey(final String columnSet, final ResultType resultType) {
     _columnSet = columnSet;
     _resultType = resultType;
   }
 
   /**
-   * Static factory method used to create instances of a ResultKey assuming the result is in the default columnset (a.k.a calculation configuration)
+   * Static factory method used to create instances of a ResultKey assuming the result is in the default column set (a.k.a calculation configuration).
    * @param resultType  the type of result, not null
    * @return the result key, not null
    */
@@ -33,7 +39,7 @@ public final class ResultKey {
   }
 
   /**
-   * Static factory method used to create instances of a ResultKey when the desired result is in a non-default column set (a.k.a calculation configuration)
+   * Static factory method used to create instances of a ResultKey when the desired result is in a non-default column set (a.k.a calculation configuration).
    * @param columnSet  the name of the column set (a.k.a calculation configuration)
    * @param resultType  the type of result, not null
    * @return the result key, not null
@@ -52,7 +58,7 @@ public final class ResultKey {
   }
 
   /**
-   * @return true, if the column set/calculation configuration is the default.  Useful for supressing display of column set name in simpler outputs.
+   * @return true, if the column set/calculation configuration is the default. This method is useful for suppressing display of column set name in simpler outputs.
    */
   public boolean isDefaultColumnSet() {
     return _columnSet.equals(ViewDefinition.DEFAULT_CALCULATION_CONFIGURATION_NAME);
@@ -74,7 +80,6 @@ public final class ResultKey {
       return false;
     }
     final ResultKey resultKey = (ResultKey) o;
-
     if (!_resultType.getValueRequirementName().equals(resultKey._resultType.getValueRequirementName())) {
       return false;
     }

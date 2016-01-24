@@ -1,3 +1,6 @@
+/**
+ * Copyright (C) 2015 - present McLeod Moores Software Limited.  All rights reserved.
+ */
 package com.mcleodmoores.starling.client.marketdata;
 
 import java.io.BufferedReader;
@@ -27,29 +30,54 @@ import com.opengamma.util.ArgumentChecker;
 import au.com.bytecode.opencsv.CSVReader;
 
 /**
- * File parser for Market Data.
+ * A file parser for csv files that adds market data to a {@link MarketDataSet}. The available headers are:
+ * <ul>
+ *   <li> Date - the date of the market data point
+ *   <li> Value - the value of the market data
+ *   <li> Field - the market data field (e.g. last price, last volatility)
+ *   <li> Source - the market data source (e.g. Bloomberg)
+ *   <li> Provider - the market data provider (e.g. ICAP)
+ *   <li> Normalizer - the normalizer to use on the market data
+ *   <li> ExternalId - the id of the market data. There can multiple ids associated with a data point, as long as the scheme is different
+ *   for each one (e.g. ExternalId[BLOOMBERG_TICKER], ExternalId[REUTERS]).
+ * </ul>
+ * If the csv file contains more than one (date, data point) pair for a particular id, then a time series is created in the
+ * market data set. If the date of the market data point is not supplied, the data loading date is assumed to be the date
+ * of the point.
  */
 public class MarketDataFileParser {
+  /** The logger */
   private static final Logger LOGGER = LoggerFactory.getLogger(MarketDataFileParser.class);
-
+  /** The date column name */
   private static final String DATE_COLUMN_NAME = "Date".toUpperCase();
+  /** The value column name */
   private static final String VALUE_COLUMN_NAME = "Value".toUpperCase();
+  /** The field column name */
   private static final String FIELD_COLUMN_NAME = "Field".toUpperCase();
+  /** The data source column name */
   private static final String SOURCE_COLUMN_NAME = "Source".toUpperCase();
+  /** The data provider column name */
   private static final String PROVIDER_COLUMN_NAME = "Provider".toUpperCase();
+  /** The normalizer column name */
   private static final String NORMALIZER_COLUMN_NAME = "Normalizer".toUpperCase();
+  /** The ids column name */
   private static final String EXTERNAL_ID_COLUMN_PREFIX = "ExternalId".toUpperCase();
-
-  /** pattern for parsing multiple Ids from the header e.g. ExternalId[BLOOMBERG_TICKER] */
+  /** Pattern for parsing multiple ids from the header e.g. ExternalId[BLOOMBERG_TICKER] */
   private static final Pattern PATTERN = Pattern.compile("^ExternalId\\[(.*?)\\]$", Pattern.CASE_INSENSITIVE);
-
+  /** The date formatter */
   private final DateTimeFormatter _dateFormatter;
+  /** The data loading date */
   private final LocalDate _date;
 
+  /**
+   * @param dateFormatter  the date formatter, not null
+   * @param date  the data loading date, not null
+   */
   public MarketDataFileParser(final DateTimeFormatter dateFormatter, final LocalDate date) {
     _dateFormatter = ArgumentChecker.notNull(dateFormatter, "dateFormatter");
     _date = ArgumentChecker.notNull(date, "date");
   }
+
   /**
    * Read from a CSV file into a market data set.
    * @param reader  a reader for the CSV file to read from
@@ -70,11 +98,23 @@ public class MarketDataFileParser {
       }
     } catch (final Exception e) {
       LOGGER.error("Error while loading CSV file", e);
+      System.exit(1);
     }
     buildTimeSeries(dataSet);
     return dataSet;
   }
 
+  /**
+   * Adds a value to the set. If there are multiple values for the same id, or if there is a date that is not equal
+   * to the loading date, then a time series is created. Otherwise, the data point is added to the set as a single
+   * value.
+   * If there is a problem when adding the point, the code will exit.
+   * @param dataSet  the data set
+   * @param key  the market data key
+   * @param line  a line from the market data file
+   * @param headerMap  the header map
+   * @param lineNum  the line number
+   */
   private void addValue(final MarketDataSet dataSet, final MarketDataKey key, final String[] line, final Map<String, Integer> headerMap, final int lineNum) {
     Double scalar = null;
     LocalDate date = null;
@@ -121,7 +161,7 @@ public class MarketDataFileParser {
           // it's a scalar, we might be able to upgrade it to a time series if the dates don't clash.
           final Double existingScalar = (Double) value;
           if (date.equals(_date)) {
-            LOGGER.error("You put a value in key {} on date {} explicitly and implcitly (by leaving date blank) "
+            LOGGER.error("You put a value in key {} on date {} explicitly and implicitly (by leaving date blank) "
                 + "on line {}", new String[] {key.toString(), date.format(_dateFormatter), Integer.toString(lineNum) });
             System.exit(1);
           } else {
@@ -153,7 +193,11 @@ public class MarketDataFileParser {
     }
   }
 
-  private void buildTimeSeries(final MarketDataSet dataSet) {
+  /**
+   * Builds a time series from the builder.
+   * @param dataSet  the market data set
+   */
+  private static void buildTimeSeries(final MarketDataSet dataSet) {
     for (final MarketDataKey key : new HashSet<>(dataSet.keySet())) { // avoid concurrent exceptions...
       final Object data = dataSet.get(key);
       if (data instanceof LocalDateDoubleTimeSeriesBuilder) {
@@ -163,7 +207,14 @@ public class MarketDataFileParser {
     }
   }
 
-  private MarketDataKey readMarketDataKey(final String[] line, final Map<String, Integer> headerMap, final int lineNum) {
+  /**
+   * Creates the market data key, filling in any values that were set in the file.
+   * @param line  a line from the file
+   * @param headerMap  the header map
+   * @param lineNum  the line number
+   * @return  the market data key
+   */
+  private static MarketDataKey readMarketDataKey(final String[] line, final Map<String, Integer> headerMap, final int lineNum) {
     final MarketDataKey.Builder builder = MarketDataKey.builder();
     if (headerMap.containsKey(FIELD_COLUMN_NAME)) {
       final String field = line[headerMap.get(FIELD_COLUMN_NAME)];
@@ -184,9 +235,9 @@ public class MarketDataFileParser {
       }
     }
     if (headerMap.containsKey(NORMALIZER_COLUMN_NAME)) {
-      final String normalizer = line[headerMap.get(NORMALIZER_COLUMN_NAME)];
-      if (normalizer != null && !normalizer.isEmpty()) {
-        builder.normalizer(NormalizerFactory.INSTANCE.of(normalizer));
+      final String normalizerName = line[headerMap.get(NORMALIZER_COLUMN_NAME)];
+      if (normalizerName != null && !normalizerName.isEmpty()) {
+        builder.normalizer(normalizerName);
       }
     }
     final Set<ExternalId> externalIds = new HashSet<>();
@@ -221,6 +272,7 @@ public class MarketDataFileParser {
     }
     if (externalIds.isEmpty()) {
       LOGGER.error("No ExternalIds on line {}, need at least one", lineNum);
+      System.exit(1);
     }
     final ExternalIdBundle bundle = ExternalIdBundle.of(externalIds);
     builder.externalIdBundle(bundle);
@@ -229,11 +281,16 @@ public class MarketDataFileParser {
     } catch (final Exception e) {
       LOGGER.error("Cound't create market data key for {} on line {}", Arrays.asList(line), lineNum);
       System.exit(1);
-      throw new OpenGammaRuntimeException("Impossible");
+      throw new OpenGammaRuntimeException("System.exit(1) should have been called");
     }
   }
 
-  private Map<String, Integer> extractHeader(final String[] headerRow) {
+  /**
+   * Extracts the header row from the file to a map.
+   * @param headerRow  the header row.
+   * @return  the headers
+   */
+  private static Map<String, Integer> extractHeader(final String[] headerRow) {
     final Map<String, Integer> columnHeaders = new HashMap<>();
     for (int i = 0; i < headerRow.length; i++) {
       final String columnName = headerRow[i];

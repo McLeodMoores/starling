@@ -1,22 +1,27 @@
 /**
- * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2015 - present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.mcleodmoores.starling.client.marketdata;
 
 import com.opengamma.util.NamedInstance;
 
 /**
- * Created by jim on 08/05/15.
+ * Class to represent a data source. An example could be Bloomberg.
  */
 public final class DataSource implements NamedInstance {
   /**
    * A default data source.
    */
   public static final DataSource DEFAULT = DataSource.of("DEFAULT");
-  private final String _fieldName;
+  /** The data source name */
+  private final String _sourceName;
 
-  private DataSource(final String fieldName) {
-    _fieldName = fieldName;
+  /**
+   * Restricted constructor.
+   * @param sourceName  the source name, not null
+   */
+  private DataSource(final String sourceName) {
+    _sourceName = sourceName;
   }
 
   /**
@@ -30,7 +35,7 @@ public final class DataSource implements NamedInstance {
 
   /**
    * For internal use only, hence package protected, use of() instead.  This call will not add
-   * a previously unknown instance to the underlying factory, which is why it should be used,
+   * a previously unknown instance to the underlying factory, which is why it should not be used,
    * except by the factory itself.
    * @param sourceName  the name of the field, not null
    * @return a DataSource instance, not null
@@ -44,21 +49,24 @@ public final class DataSource implements NamedInstance {
    */
   @Override
   public String getName() {
-    return _fieldName;
+    return _sourceName;
   }
 
   @Override
   public boolean equals(final Object other) {
+    if (other == this) {
+      return true;
+    }
     if (!(other instanceof DataSource)) { // remember instanceof handles null...
       return false;
     }
-    DataSource dataField = (DataSource) other;
-    return _fieldName.equals(dataField._fieldName);
+    final DataSource dataField = (DataSource) other;
+    return _sourceName.equals(dataField._sourceName);
   }
 
   @Override
   public int hashCode() {
-    return _fieldName.hashCode();
+    return _sourceName.hashCode();
   }
 
   @Override

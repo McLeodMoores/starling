@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2015 - present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.mcleodmoores.starling.client.results;
 
@@ -38,6 +38,9 @@ public final class PrimitiveTargetKey implements TargetKey {
 
   @Override
   public boolean equals(final Object o) {
+    if (this == o) {
+      return true;
+    }
     if (o == null) {
       return false;
     }

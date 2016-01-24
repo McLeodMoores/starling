@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2015 - present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.mcleodmoores.starling.client.results;
 
@@ -42,10 +42,12 @@ import com.opengamma.util.tuple.Pair;
 /**
  * A wrapper class around {@link ViewComputationResultModel} that makes results more accessible.
  */
-//TODO position result keys not used
 //TODO add security outputs?
-//TODO _resultKeys not filled in anywhere
 public class ResultModelImpl implements ResultModel {
+  /**
+   * The correlation id attribute for positions and trades.
+   */
+  public static final String CORRELATION_ID_ATTRIBUTE = ManageableTrade.meta().providerId().name();
   /** The logger */
   private static final Logger LOGGER = LoggerFactory.getLogger(ResultModelImpl.class);
   /** The view definition */
@@ -84,8 +86,6 @@ public class ResultModelImpl implements ResultModel {
   private final Set<LegacyTargetKey> _legacyTargetKeys;
   /** The result keys */
   private final Map<TargetKey, Map<ResultKey, ComputedValueResult>> _results;
-  /** The correlation id attribute */
-  private static final String CORRELATION_ID_ATTRIBUTE = ManageableTrade.meta().providerId().name();
 
   /**
    * Creates a result model.
@@ -138,11 +138,10 @@ public class ResultModelImpl implements ResultModel {
           }
         } else if (targetType.equals(ComputationTargetType.POSITION)) {
           final Position position = _positionSource.getPosition(target.getUniqueId());
-          //final Security security = trade.getSecurityLink().resolve(_securitySource);
           final PositionTargetKey targetKey = buildTargetKey(position);
           for (final ComputedValueResult result : allValues) {
             final ResultKey resultKey = ResultKey.of(calcConfigName, convertValueSpec(result.getSpecification()));
-            addTradeResult(targetKey, resultKey, result);
+            addPositionResult(targetKey, resultKey, result);
           }
         } else if (targetType.equals(ComputationTargetType.PORTFOLIO_NODE)) {
           final String portfolioPath = getPortfolioNodePath(target.getUniqueId(), _resultModel.getVersionCorrection());
@@ -152,6 +151,7 @@ public class ResultModelImpl implements ResultModel {
             addPortfolioNodeResult(targetKey, resultKey, result);
           }
         } else if (targetType.equals(ComputationTargetType.NULL)) {
+          // TODO not sure if the distinction between this and primitive types is correctly worked out
           final MarketDataTargetKey targetKey = MarketDataTargetKey.instance();
           for (final ComputedValueResult result : allValues) {
             final ResultKey resultKey = ResultKey.of(calcConfigName, convertValueSpec(result.getSpecification()));
@@ -164,6 +164,7 @@ public class ResultModelImpl implements ResultModel {
             addPrimitiveResult(targetKey, resultKey, result);
           }
         } else {
+          // TODO not sure that security level results should be considered legacy
           final LegacyTargetKey targetKey = LegacyTargetKey.of(target);
           for (final ComputedValueResult result : allValues) {
             final ResultKey resultKey = ResultKey.of(calcConfigName, convertValueSpec(result.getSpecification()));
@@ -174,51 +175,99 @@ public class ResultModelImpl implements ResultModel {
     }
   }
 
-  private ResultType convertValueSpec(final ValueSpecification valueSpec) {
+  /**
+   * Converts the value specification to a result type.
+   * @param valueSpec  the value specification
+   * @return  the result type
+   */
+  private static ResultType convertValueSpec(final ValueSpecification valueSpec) {
     final ResultType.Builder builder = ResultType.builder();
     builder.valueRequirementName(valueSpec.getValueName());
     builder.properties(valueSpec.getProperties());
     return builder.build();
   }
 
+  /**
+   * Adds a legacy result.
+   * @param legacyKey  the target key
+   * @param resultKey  the result key
+   * @param result  the computed value
+   */
   private void addLegacyResult(final LegacyTargetKey legacyKey, final ResultKey resultKey, final ComputedValueResult result) {
     _legacyTargetKeys.add(legacyKey);
     _legacyResultKeys.add(resultKey);
     addResultInternal(legacyKey, resultKey, result);
   }
 
+  /**
+   * Adds a primitive result.
+   * @param primitiveKey  the target key
+   * @param resultKey  the result key
+   * @param result  the computed value
+   */
   private void addPrimitiveResult(final PrimitiveTargetKey primitiveKey, final ResultKey resultKey, final ComputedValueResult result) {
     _primitiveTargetKeys.add(primitiveKey);
     _primitiveResultKeys.add(resultKey);
     addResultInternal(primitiveKey, resultKey, result);
   }
 
+  /**
+   * Adds a market data result.
+   * @param marketDataResultKey  the target key
+   * @param resultKey  the result key
+   * @param result  the computed value
+   */
   private void addMarketDataResult(final MarketDataTargetKey marketDataResultKey, final ResultKey resultKey, final ComputedValueResult result) {
     _marketDataTargetKeys.add(marketDataResultKey);
     _marketDataResultKeys.add(resultKey);
     addResultInternal(marketDataResultKey, resultKey, result);
   }
 
+  /**
+   * Adds a portfolio node result.
+   * @param portfolioNodeTargetKey  the target key
+   * @param resultKey  the result key
+   * @param result  the computed value
+   */
   private void addPortfolioNodeResult(final PortfolioNodeTargetKey portfolioNodeTargetKey, final ResultKey resultKey, final ComputedValueResult result) {
     _portfolioNodeTargetKeys.add(portfolioNodeTargetKey);
     _portfolioNodeResultKeys.add(resultKey);
     addResultInternal(portfolioNodeTargetKey, resultKey, result);
   }
 
-  private void addTradeResult(final PositionTargetKey positionTargetKey, final ResultKey resultKey, final ComputedValueResult result) {
-    _positionTargetKeys.add(positionTargetKey);
-    _tradeResultKeys.add(resultKey);
-    addResultInternal(positionTargetKey, resultKey, result);
-  }
-
+  /**
+   * Adds a trade result.
+   * @param tradeTargetKey  the target key
+   * @param resultKey  the result key
+   * @param result  the computed value
+   */
   private void addTradeResult(final TradeTargetKey tradeTargetKey, final ResultKey resultKey, final ComputedValueResult result) {
     _tradeTargetKeys.add(tradeTargetKey);
     _tradeResultKeys.add(resultKey);
     addResultInternal(tradeTargetKey, resultKey, result);
   }
 
+  /**
+   * Adds a position result.
+   * @param positionTargetKey  the target key
+   * @param resultKey  the result key
+   * @param result  the computed value
+   */
+  private void addPositionResult(final PositionTargetKey positionTargetKey, final ResultKey resultKey, final ComputedValueResult result) {
+    _positionTargetKeys.add(positionTargetKey);
+    _positionResultKeys.add(resultKey);
+    addResultInternal(positionTargetKey, resultKey, result);
+  }
+
+  /**
+   * Adds a result.
+   * @param targetKey  the target key
+   * @param resultKey  the result key
+   * @param result  the computed value
+   */
   private void addResultInternal(final TargetKey targetKey, final ResultKey resultKey, final ComputedValueResult result) {
     _allTargetKeys.add(targetKey);
+    _resultKeys.add(resultKey);
     if (_results.containsKey(targetKey)) {
       _results.get(targetKey).put(resultKey, result);
     } else {
@@ -228,12 +277,24 @@ public class ResultModelImpl implements ResultModel {
     }
   }
 
+  /**
+   * Gets the path for a portfolio node.
+   * @param nodeId  the portfolio node id
+   * @param versionCorrection  the version correction
+   * @return  the path as a string
+   */
   private String getPortfolioNodePath(final UniqueId nodeId, final VersionCorrection versionCorrection) {
     final StringBuilder sb = new StringBuilder();
     walkPortfolioNodePath(sb, nodeId, versionCorrection);
     return sb.toString();
   }
 
+  /**
+   * Walks up the tree to create the portfolio node path.
+   * @param sb  the path string
+   * @param nodeId  the portfolio node id
+   * @param versionCorrection  the version correction
+   */
   private void walkPortfolioNodePath(final StringBuilder sb, final UniqueId nodeId, final VersionCorrection versionCorrection) {
     final PortfolioNode portfolioNode = _positionSource.getPortfolioNode(nodeId, _resultModel.getVersionCorrection());
     sb.insert(0, escapeSeparator(portfolioNode.getName()));
@@ -243,26 +304,34 @@ public class ResultModelImpl implements ResultModel {
     }
   }
 
-  private PositionTargetKey buildTargetKey(final Position position) {
+  /**
+   * Builds a position target key.
+   * @param position  the position
+   * @return  the target key
+   */
+  private static PositionTargetKey buildTargetKey(final Position position) {
     final Map<String, String> attributes = position.getAttributes();
     if (attributes.containsKey(CORRELATION_ID_ATTRIBUTE)) {
       return PositionTargetKey.of(ExternalId.parse(attributes.get(CORRELATION_ID_ATTRIBUTE)));
-    } else {
-      LOGGER.warn("Could not find correlation id attribute (providerId) in position, returning first security link id instead.  "
-          + "This means correlation ids aren't being persisted correctly");
-      return PositionTargetKey.of(position.getSecurityLink().getExternalId().getExternalIds().first());
     }
+    LOGGER.warn("Could not find correlation id attribute (providerId) in position, returning first security link id instead.  "
+        + "This means correlation ids aren't being persisted correctly");
+    return PositionTargetKey.of(position.getSecurityLink().getExternalId().getExternalIds().first());
   }
 
-  private TradeTargetKey buildTargetKey(final Trade trade) {
+  /**
+   * Builds a trade target key.
+   * @param trade  the trade
+   * @return  the target key
+   */
+  private static TradeTargetKey buildTargetKey(final Trade trade) {
     final Map<String, String> attributes = trade.getAttributes();
     if (attributes.containsKey(CORRELATION_ID_ATTRIBUTE)) {
       return TradeTargetKey.of(ExternalId.parse(attributes.get(CORRELATION_ID_ATTRIBUTE)));
-    } else {
-      LOGGER.warn("Could not find correlation id attribute (providerId) in position, returning first security link id instead.  "
-          + "This means correlation ids aren't being persisted correctly");
-      return TradeTargetKey.of(trade.getSecurityLink().getExternalId().getExternalIds().first());
     }
+    LOGGER.warn("Could not find correlation id attribute (providerId) in trade, returning first security link id instead.  "
+        + "This means correlation ids aren't being persisted correctly");
+    return TradeTargetKey.of(trade.getSecurityLink().getExternalId().getExternalIds().first());
   }
 
   @Override
@@ -334,7 +403,14 @@ public class ResultModelImpl implements ResultModel {
     return targetKeys;
   }
 
-  private void walkPortfolio(final List<TargetKey> targetKeys, final String parentPath, final PortfolioNode node, final EnumSet<TargetType> includeTargets) {
+  /**
+   * Walks down a portfolio node to create target keys.
+   * @param targetKeys  the target keys
+   * @param parentPath  the path of the node parent
+   * @param node  the node
+   * @param includeTargets  which targets should be included
+   */
+  private static void walkPortfolio(final List<TargetKey> targetKeys, final String parentPath, final PortfolioNode node, final EnumSet<TargetType> includeTargets) {
     String nodePath;
     if (parentPath == null) {
       nodePath = escapeSeparator(node.getName());
@@ -359,10 +435,17 @@ public class ResultModelImpl implements ResultModel {
     }
   }
 
-  private String escapeSeparator(final String nodeName) {
+  /**
+   * Escape the separator with double backslash in the portfolio node path name.
+   * @param nodeName  the node name
+   * @return  the escaped string
+   */
+  private static String escapeSeparator(final String nodeName) {
     return nodeName.replace(PORTFOLIO_SEPARATOR, "\\" + PORTFOLIO_SEPARATOR);
   }
 
-  private final EnumSet<TargetType> PORTFOLIO_TARGETS = EnumSet.of(TargetType.PORTFOLIO_NODE, TargetType.POSITION, TargetType.TRADE);
+  /** Target types that are found in a portfolio */
+  private static final EnumSet<TargetType> PORTFOLIO_TARGETS = EnumSet.of(TargetType.PORTFOLIO_NODE, TargetType.POSITION, TargetType.TRADE);
+
 
 }
