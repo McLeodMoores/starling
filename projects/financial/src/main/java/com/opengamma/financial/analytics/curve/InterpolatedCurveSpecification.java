@@ -41,9 +41,7 @@ public class InterpolatedCurveSpecification extends CurveSpecification {
   public InterpolatedCurveSpecification(final LocalDate curveDate, final String name, final Collection<CurveNodeWithIdentifier> nodes,
       final String interpolatorName, final String rightExtrapolatorName, final String leftExtrapolatorName) {
     super(curveDate, name, nodes);
-    ArgumentChecker.notNull(interpolatorName, "interpolator name");
-    ArgumentChecker.notNull(rightExtrapolatorName, "right extrapolator name");
-    ArgumentChecker.notNull(leftExtrapolatorName, "left extrapolator name");
+    ArgumentChecker.notNull(interpolatorName, "interpolatorName");
     _interpolatorName = interpolatorName;
     _rightExtrapolatorName = rightExtrapolatorName;
     _leftExtrapolatorName = leftExtrapolatorName;
