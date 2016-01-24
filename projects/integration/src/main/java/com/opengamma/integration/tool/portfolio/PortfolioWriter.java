@@ -146,7 +146,7 @@ public class PortfolioWriter {
       final ManageableSecurity manageableSecurity = (ManageableSecurity) security;
       existingSecurities.add(manageableSecurity);
     } else {
-      throw new OpenGammaRuntimeException("securities on position/trade " + position + " should be descendents of ManageableSecurity");
+      throw new OpenGammaRuntimeException("securities on position/trade " + position + " should be descendents of ManageableSecurity: have " + security);
     }
     return existingSecurities;
   }
