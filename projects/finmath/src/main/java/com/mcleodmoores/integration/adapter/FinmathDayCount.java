@@ -1,16 +1,17 @@
 /**
- * Copyright (C) 2014-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2014 - present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.mcleodmoores.integration.adapter;
 
-import java.util.Calendar;
 import java.util.Objects;
 
-import net.finmath.time.daycount.DayCountConventionInterface;
-
 import org.joda.convert.FromStringFactory;
+import org.joda.time.LocalDate;
 
 import com.mcleodmoores.integration.convention.DayCount;
+import com.opengamma.util.ArgumentChecker;
+
+import net.finmath.time.daycount.DayCountConventionInterface;
 
 /**
  * Top-level wrapper for {@link DayCountConventionInterface} classes.
@@ -24,21 +25,21 @@ public abstract class FinmathDayCount implements DayCount, DayCountConventionInt
 
   /**
    * Creates an instance.
-   * @param name The name, can be null
-   * @param dayCount The day count, can be null
+   * @param name The name, not null
+   * @param dayCount The day count, not null
    */
   protected FinmathDayCount(final String name, final DayCountConventionInterface dayCount) {
-    _name = name;
-    _dayCount = dayCount;
+    _name = ArgumentChecker.notNull(name, "name");
+    _dayCount = ArgumentChecker.notNull(dayCount, "dayCount");
   }
 
   @Override
-  public double getDaycount(final Calendar startDate, final Calendar endDate) {
+  public double getDaycount(final LocalDate startDate, final LocalDate endDate) {
     return getConvention().getDaycount(startDate, endDate);
   }
 
   @Override
-  public double getDaycountFraction(final Calendar startDate, final Calendar endDate) {
+  public double getDaycountFraction(final LocalDate startDate, final LocalDate endDate) {
     return getConvention().getDaycountFraction(startDate, endDate);
   }
 

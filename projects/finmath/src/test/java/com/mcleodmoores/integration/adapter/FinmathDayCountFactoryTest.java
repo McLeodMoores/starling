@@ -1,9 +1,9 @@
 /**
- * Copyright (C) 2014-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2014 - present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.mcleodmoores.integration.adapter;
 
-import static org.testng.AssertJUnit.assertEquals;
+import static org.testng.Assert.assertEquals;
 
 import org.testng.annotations.Test;
 
@@ -18,38 +18,48 @@ public class FinmathDayCountFactoryTest {
   /**
    * Tests the exception thrown when an unhandled day count name is requested from the factory.
    */
-  //TODO find out how to check the message
   @Test(expectedExceptions = {IllegalArgumentException.class })
   public void testNotImplemented() {
     FinmathDayCountFactory.of("Act/Act ICMA");
   }
 
   /**
-   * Tests that the properties file maps the names to day counts correctly.
+   * Tests that factory is correctly populated and that aliases work.
    */
   @Test
   public void testFactory() {
-    assertEquals("30/360", FinmathDayCountFactory.of("30E/360 ISDA").getName());
-    assertEquals("30/360", FinmathDayCountFactory.of("30/360").getName());
-    assertEquals("30E/360", FinmathDayCountFactory.of("30E/360").getName());
-    assertEquals("30E+/360", FinmathDayCountFactory.of("30E+/360").getName());
-    assertEquals("30U/360", FinmathDayCountFactory.of("30U/360").getName());
-    assertEquals("Act/360", FinmathDayCountFactory.of("Act/360").getName());
-    assertEquals("Act/360", FinmathDayCountFactory.of("Actual/360").getName());
-    assertEquals("Act/365", FinmathDayCountFactory.of("Act/365").getName());
-    assertEquals("Act/365", FinmathDayCountFactory.of("Actual/365").getName());
-    assertEquals("Act/365A", FinmathDayCountFactory.of("Act/365A").getName());
-    assertEquals("Act/365A", FinmathDayCountFactory.of("Actual/365A").getName());
-    assertEquals("Act/365L", FinmathDayCountFactory.of("Act/365L").getName());
-    assertEquals("Act/365L", FinmathDayCountFactory.of("Actual/365L").getName());
-    assertEquals("Act/Act AFB", FinmathDayCountFactory.of("Act/Act AFB").getName());
-    assertEquals("Act/Act AFB", FinmathDayCountFactory.of("Actual/Actual AFB").getName());
-    assertEquals("Act/Act ISDA", FinmathDayCountFactory.of("Act/Act ISDA").getName());
-    assertEquals("Act/Act ISDA", FinmathDayCountFactory.of("Actual/Actual ISDA").getName());
-    assertEquals("Act/Act YearFrac", FinmathDayCountFactory.of("Act/Act YearFrac").getName());
-    assertEquals("Act/Act YearFrac", FinmathDayCountFactory.of("Actual/Actual YearFrac").getName());
-    assertEquals("NL/365", FinmathDayCountFactory.of("NL/365").getName());
-    assertEquals("None", FinmathDayCountFactory.of("None").getName());
-    assertEquals("Unknown", FinmathDayCountFactory.of("Unknown").getName());
+    assertEquals(FinmathDayCountFactory.of("Act/Act AFB").getName(), "Act/Act AFB");
+    assertEquals(FinmathDayCountFactory.of("Actual/Actual AFB").getName(), "Act/Act AFB");
+    assertEquals(FinmathDayCountFactory.of("Act/Act ISDA").getName(), "Act/Act ISDA");
+    assertEquals(FinmathDayCountFactory.of("Actual/Actual ISDA").getName(), "Act/Act ISDA");
+    assertEquals(FinmathDayCountFactory.of("Act/Act YearFrac").getName(), "Act/Act YearFrac");
+    assertEquals(FinmathDayCountFactory.of("Actual/Actual YearFrac").getName(), "Act/Act YearFrac");
+    assertEquals(FinmathDayCountFactory.of("Actual/Actual Year Fraction").getName(), "Act/Act YearFrac");
+    assertEquals(FinmathDayCountFactory.of("Act/360").getName(), "Act/360");
+    assertEquals(FinmathDayCountFactory.of("Actual/360").getName(), "Act/360");
+    assertEquals(FinmathDayCountFactory.of("Act/365A").getName(), "Act/365A");
+    assertEquals(FinmathDayCountFactory.of("Actual/365A").getName(), "Act/365A");
+    assertEquals(FinmathDayCountFactory.of("Act/365").getName(), "Act/365");
+    assertEquals(FinmathDayCountFactory.of("Actual/365").getName(), "Act/365");
+    assertEquals(FinmathDayCountFactory.of("Act/365L").getName(), "Act/365L");
+    assertEquals(FinmathDayCountFactory.of("Actual/365L").getName(), "Act/365L");
+    assertEquals(FinmathDayCountFactory.of("NL/365").getName(), "NL/365");
+    assertEquals(FinmathDayCountFactory.of("None").getName(), "None");
+    assertEquals(FinmathDayCountFactory.of("30E+/360").getName(), "30E+/360");
+    assertEquals(FinmathDayCountFactory.of("Eurobond basis").getName(), "30E+/360");
+    assertEquals(FinmathDayCountFactory.of("30/360 ISMA").getName(), "30E+/360");
+    assertEquals(FinmathDayCountFactory.of("30E/360").getName(), "30E/360");
+    assertEquals(FinmathDayCountFactory.of("30E/360 ISDA").getName(), "30E/360 ISDA");
+    assertEquals(FinmathDayCountFactory.of("30/360").getName(), "30E/360 ISDA");
+    assertEquals(FinmathDayCountFactory.of("30E/360 ISDA Termination").getName(), "30E/360 ISDA Termination");
+    assertEquals(FinmathDayCountFactory.of("30/360 Termination").getName(), "30E/360 ISDA Termination");
+    assertEquals(FinmathDayCountFactory.of("30U/360 not EOM").getName(), "30U/360 not EOM");
+    assertEquals(FinmathDayCountFactory.of("Bond Basis not EOM").getName(), "30U/360 not EOM");
+    assertEquals(FinmathDayCountFactory.of("30U/360").getName(), "30U/360");
+    assertEquals(FinmathDayCountFactory.of("Bond Basis").getName(), "30U/360");
+    assertEquals(FinmathDayCountFactory.of("30U/360 EOM").getName(), "30U/360");
+    assertEquals(FinmathDayCountFactory.of("Bond Basis EOM").getName(), "30U/360");
+    assertEquals(FinmathDayCountFactory.of("Unknown").getName(), "Unknown");
+    assertEquals(FinmathDayCountFactory.of("UNKNOWN").getName(), "Unknown"); //should be case insensitive
   }
 }

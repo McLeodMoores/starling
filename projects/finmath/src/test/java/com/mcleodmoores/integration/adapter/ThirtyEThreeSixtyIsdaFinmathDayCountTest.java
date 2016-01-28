@@ -1,13 +1,11 @@
 /**
- * Copyright (C) 2014-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2014 - present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.mcleodmoores.integration.adapter;
 
 import static org.testng.AssertJUnit.assertEquals;
 
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-
+import org.joda.time.LocalDate;
 import org.testng.annotations.Test;
 
 import com.opengamma.util.test.TestGroup;
@@ -27,18 +25,35 @@ public class ThirtyEThreeSixtyIsdaFinmathDayCountTest {
   @Test
   public void test() {
     final FinmathDayCount finmathDayCount = new ThirtyEThreeSixtyIsdaFinmathDayCount();
-    assertEquals("30/360", finmathDayCount.getName());
-    final Calendar firstDate = new GregorianCalendar();
-    firstDate.set(2012, 1, 1);
-    final Calendar secondDate = new GregorianCalendar();
-    secondDate.set(2012, 7, 31);
+    assertEquals("30E/360 ISDA", finmathDayCount.getName());
+    final LocalDate firstDate = new LocalDate(2012, 1, 1);
+    final LocalDate secondDate = new LocalDate(2012, 7, 31);
     final DayCountConventionInterface convention = finmathDayCount.getConvention();
     final double dayCount = convention.getDaycount(firstDate, secondDate);
     final double dayCountFraction = convention.getDaycountFraction(firstDate, secondDate);
     final DayCountConvention_30E_360_ISDA newInstance = new DayCountConvention_30E_360_ISDA();
     assertEquals(newInstance.getDaycount(firstDate, secondDate), dayCount);
-    assertEquals(210., dayCount);
+    assertEquals(209., dayCount);
     assertEquals(newInstance.getDaycountFraction(firstDate, secondDate), dayCountFraction);
-    assertEquals(7 / 12., dayCountFraction);
+    assertEquals(209 / 360., dayCountFraction);
+  }
+
+  /**
+   * Tests that the expected day count is constructed.
+   */
+  @Test
+  public void testTerminationDate() {
+    final FinmathDayCount finmathDayCount = new ThirtyEThreeSixtyIsdaFinmathDayCount();
+    assertEquals("30E/360 ISDA", finmathDayCount.getName());
+    final LocalDate firstDate = new LocalDate(2012, 1, 1);
+    final LocalDate secondDate = new LocalDate(2012, 2, 29);
+    final DayCountConventionInterface convention = finmathDayCount.getConvention();
+    final double dayCount = convention.getDaycount(firstDate, secondDate);
+    final double dayCountFraction = convention.getDaycountFraction(firstDate, secondDate);
+    final DayCountConvention_30E_360_ISDA newInstance = new DayCountConvention_30E_360_ISDA();
+    assertEquals(newInstance.getDaycount(firstDate, secondDate), dayCount);
+    assertEquals(59., dayCount);
+    assertEquals(newInstance.getDaycountFraction(firstDate, secondDate), dayCountFraction);
+    assertEquals(59 / 360., dayCountFraction);
   }
 }

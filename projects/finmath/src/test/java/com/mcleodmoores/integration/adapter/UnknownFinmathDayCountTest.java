@@ -1,14 +1,12 @@
 /**
- * Copyright (C) 2014-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2014 - present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.mcleodmoores.integration.adapter;
 
 import static org.testng.AssertJUnit.assertEquals;
 import static org.testng.AssertJUnit.fail;
 
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-
+import org.joda.time.LocalDate;
 import org.testng.annotations.Test;
 
 import com.opengamma.util.test.TestGroup;
@@ -28,10 +26,8 @@ public class UnknownFinmathDayCountTest {
   public void test() {
     final UnknownFinmathDayCount finmathDayCount = new UnknownFinmathDayCount();
     assertEquals("Unknown", finmathDayCount.getName());
-    final Calendar firstDate = new GregorianCalendar();
-    firstDate.set(2012, 1, 1, 0, 0);
-    final Calendar secondDate = new GregorianCalendar();
-    secondDate.set(2012, 7, 31, 0, 0);
+    final LocalDate firstDate = new LocalDate(2012, 1, 1);
+    final LocalDate secondDate = new LocalDate(2012, 7, 31);
     final DayCountConventionInterface convention = finmathDayCount.getConvention();
     try {
       convention.getDaycount(firstDate, secondDate);
