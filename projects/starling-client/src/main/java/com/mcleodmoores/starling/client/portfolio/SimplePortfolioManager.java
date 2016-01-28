@@ -18,7 +18,7 @@ import com.opengamma.util.ArgumentChecker;
  */
 public class SimplePortfolioManager {
   /**
-   * The name of the portfolio holding all positions
+   * The name of the portfolio holding all positions.
    */
   public static final String ALL_PORTFOLIOS_NAME = "ALL_PORTFOLIOS";
   /** Portfolio management utilities */

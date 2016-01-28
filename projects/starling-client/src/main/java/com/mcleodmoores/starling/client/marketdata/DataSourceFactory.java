@@ -26,7 +26,7 @@ public class DataSourceFactory extends AbstractNamedInstanceFactory<DataSource> 
   }
 
   /**
-   * Return the named instance of a DataSource given a name, and create one if one isn't available
+   * Return the named instance of a DataSource given a name, and create one if one isn't available.
    * @param name  the name of the DataSource
    * @return the instance of the dataSource corresponding to the name
    */

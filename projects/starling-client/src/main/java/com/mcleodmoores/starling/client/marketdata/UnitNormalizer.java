@@ -8,7 +8,7 @@ import com.opengamma.id.ExternalIdBundle;
 /**
  * A normalizer that leaves data unchanged.
  */
-@MarketData(group = "Normalization", description = "Unit")
+@MarketData(type = "Normalization", description = "Unit")
 public final class UnitNormalizer implements Normalizer {
   /**
    * Singleton instance.

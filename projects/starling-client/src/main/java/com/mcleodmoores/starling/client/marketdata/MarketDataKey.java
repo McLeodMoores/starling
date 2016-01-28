@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2015 - present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.mcleodmoores.starling.client.marketdata;
 
@@ -55,7 +55,7 @@ public final class MarketDataKey implements ImmutableBean {
 
   // CHECKSTYLE:OFF
   @ImmutablePreBuild
-  private static void preBuild(final Builder builder) {
+  private static void preBuild(Builder builder) {
     if (builder.get(Meta.INSTANCE.field()) == null) {
       builder.field(DataField.PRICE);
     }

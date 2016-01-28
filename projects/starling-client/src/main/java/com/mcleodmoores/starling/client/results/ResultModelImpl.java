@@ -353,7 +353,8 @@ public class ResultModelImpl implements ResultModel {
     for (final String calcConfigName : _viewDefinition.getAllCalculationConfigurationNames()) {
       final ViewCalculationConfiguration calculationConfiguration = _viewDefinition.getCalculationConfiguration(calcConfigName);
       for (final ValueRequirement valueRequirement : calculationConfiguration.getSpecificRequirements()) {
-        final ResultType resultType = ResultType.builder().valueRequirementName(valueRequirement.getValueName()).properties(valueRequirement.getConstraints()).build();
+        final ResultType resultType = 
+            ResultType.builder().valueRequirementName(valueRequirement.getValueName()).properties(valueRequirement.getConstraints()).build();
         resultKeys.add(ResultKey.of(calcConfigName, resultType));
       }
     }
@@ -410,7 +411,8 @@ public class ResultModelImpl implements ResultModel {
    * @param node  the node
    * @param includeTargets  which targets should be included
    */
-  private static void walkPortfolio(final List<TargetKey> targetKeys, final String parentPath, final PortfolioNode node, final EnumSet<TargetType> includeTargets) {
+  private static void walkPortfolio(final List<TargetKey> targetKeys, final String parentPath, final PortfolioNode node, 
+      final EnumSet<TargetType> includeTargets) {
     String nodePath;
     if (parentPath == null) {
       nodePath = escapeSeparator(node.getName());

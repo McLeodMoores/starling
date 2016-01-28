@@ -22,7 +22,7 @@ public final class PortfolioNodeTargetKey implements TargetKey {
   }
 
   /**
-   * Static factory method used to create instances
+   * Static factory method used to create instances.
    * @param nodePath  the name of each node in the path separated with forward slashes (e.g. Root/Sub-Node/Sub-Sub-Node)
    * @return the portfolio node target key, not null
    */

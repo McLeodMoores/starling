@@ -5,19 +5,9 @@
  */
 package com.mcleodmoores.starling.client.component;
 
-import com.mcleodmoores.starling.client.marketdata.MarketDataManager;
-import com.mcleodmoores.starling.client.results.AnalyticService;
-import com.opengamma.component.ComponentInfo;
-import com.opengamma.component.ComponentRepository;
-import com.opengamma.component.factory.AbstractComponentFactory;
-import com.opengamma.component.factory.ComponentInfoAttributes;
-import com.opengamma.core.config.ConfigSource;
-import com.opengamma.core.historicaltimeseries.HistoricalTimeSeriesSource;
-import com.opengamma.core.position.PositionSource;
-import com.opengamma.core.security.SecuritySource;
-import com.opengamma.engine.view.ViewProcessor;
-import com.opengamma.master.historicaltimeseries.HistoricalTimeSeriesMaster;
-import com.opengamma.master.historicaltimeseries.HistoricalTimeSeriesResolver;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 import org.joda.beans.Bean;
 import org.joda.beans.BeanBuilder;
 import org.joda.beans.BeanDefinition;
@@ -29,8 +19,14 @@ import org.joda.beans.impl.direct.DirectBeanBuilder;
 import org.joda.beans.impl.direct.DirectMetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
+import com.mcleodmoores.starling.client.results.AnalyticService;
+import com.opengamma.component.ComponentInfo;
+import com.opengamma.component.ComponentRepository;
+import com.opengamma.component.factory.AbstractComponentFactory;
+import com.opengamma.component.factory.ComponentInfoAttributes;
+import com.opengamma.core.config.ConfigSource;
+import com.opengamma.core.position.PositionSource;
+import com.opengamma.engine.view.ViewProcessor;
 
 /**
  * A component factory for a MarketDataManager.

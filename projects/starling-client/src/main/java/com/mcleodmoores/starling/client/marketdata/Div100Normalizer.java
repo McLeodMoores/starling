@@ -8,7 +8,7 @@ import com.opengamma.id.ExternalIdBundle;
 /**
  * A normalizer that divides any Numbers by 100.  Other objects are left unchanged.
  */
-@MarketData(group = "Normalization", description = "Div100Normalizer")
+@MarketData(type = "Normalization", description = "Div100Normalizer")
 public final class Div100Normalizer implements Normalizer {
   /**
    * Singleton instance.

@@ -55,7 +55,7 @@ public final class ResultType implements ImmutableBean {
 
   // CHECKSTYLE:OFF
   @ImmutablePreBuild
-  private static void preBuild(final Builder builder) {
+  private static void preBuild(Builder builder) {
     if (builder.get(Meta.INSTANCE.properties()) == null) {
       builder.properties(ValueProperties.none());
     }

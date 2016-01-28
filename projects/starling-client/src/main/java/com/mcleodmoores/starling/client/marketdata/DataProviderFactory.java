@@ -26,7 +26,7 @@ public class DataProviderFactory extends AbstractNamedInstanceFactory<DataProvid
   }
 
   /**
-   * Return the named instance of a DataProvider given a name, and create one if one isn't available
+   * Return the named instance of a DataProvider given a name, and create one if one isn't available.
    * @param name  the name of the DataProvider
    * @return the instance of the dataProvider corresponding to the name
    */

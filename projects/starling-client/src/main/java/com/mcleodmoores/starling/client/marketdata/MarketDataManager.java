@@ -63,7 +63,7 @@ import com.opengamma.util.ArgumentChecker;
  * Market data manager class to allow save or update and load operations on MarketDataSets.
  */
 public class MarketDataManager {
-  /** The logger */
+  /** The logger. */
   /* package */ static final Logger LOGGER = LoggerFactory.getLogger(MarketDataManager.class);
   /** The default observation time */
   private static final String DEFAULT_OBSERVATION_TIME = "DEFAULT";

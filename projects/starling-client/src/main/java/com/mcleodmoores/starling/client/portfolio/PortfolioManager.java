@@ -75,7 +75,7 @@ public final class PortfolioManager {
   }
 
   /**
-   * Create a PortfolioManager object with the required data masters
+   * Create a PortfolioManager object with the required data masters.
    * @param portfolioMaster  the portfolio master, not null
    * @param positionMaster  the position master, not null
    * @param positionSource  the position source, not null

@@ -33,7 +33,7 @@ public class NormalizerFactory extends AbstractNamedInstanceFactory<Normalizer> 
     final AnnotationReflector reflector = AnnotationReflector.getDefaultReflector();
     final Set<Class<?>> normalizerClasses = reflector.getReflector().getTypesAnnotatedWith(MarketData.class);
     for (final Class<?> normalizerClass : normalizerClasses) {
-      if (normalizerClass.getDeclaredAnnotation(MarketData.class).group().equalsIgnoreCase("Normalization")) {
+      if (normalizerClass.getDeclaredAnnotation(MarketData.class).type().equalsIgnoreCase("Normalization")) {
         try {
           final Constructor<?> constructor = normalizerClass.getDeclaredConstructor();
           constructor.setAccessible(true);

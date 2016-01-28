@@ -58,7 +58,8 @@ public final class ResultKey {
   }
 
   /**
-   * @return true, if the column set/calculation configuration is the default. This method is useful for suppressing display of column set name in simpler outputs.
+   * @return true, if the column set/calculation configuration is the default. This method is useful for suppressing display of column 
+   * set name in simpler outputs.
    */
   public boolean isDefaultColumnSet() {
     return _columnSet.equals(ViewDefinition.DEFAULT_CALCULATION_CONFIGURATION_NAME);

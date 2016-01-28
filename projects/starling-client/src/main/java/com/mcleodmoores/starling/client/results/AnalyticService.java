@@ -118,8 +118,8 @@ public class AnalyticService  {
       _viewClient = _viewProcessor.createViewClient(UserPrincipal.getLocalUser());
       _viewClient.setResultMode(ViewResultMode.FULL_ONLY);
       _viewClient.setResultListener(new AnalyticServiceResultListener(_viewClient, resultListener, this));
-      final List<MarketDataSpecification> marketDataSpecificationList = Collections
-          .<MarketDataSpecification>singletonList(new FixedHistoricalMarketDataSpecification(HistoricalTimeSeriesRatingFieldNames.DEFAULT_CONFIG_NAME, _snapshotDate));
+      final List<MarketDataSpecification> marketDataSpecificationList = Collections.<MarketDataSpecification>singletonList(
+          new FixedHistoricalMarketDataSpecification(HistoricalTimeSeriesRatingFieldNames.DEFAULT_CONFIG_NAME, _snapshotDate));
       final UniqueId viewDefId = ensureConfig(_viewKey);
       final ExecutionFlags flags = ExecutionFlags.none().awaitMarketData();
       _viewClient.attachToViewProcess(viewDefId, ExecutionOptions.singleCycle(_valuationTime, marketDataSpecificationList, flags.get()));

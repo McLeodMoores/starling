@@ -26,7 +26,7 @@ public class DataFieldFactory extends AbstractNamedInstanceFactory<DataField> {
   }
 
   /**
-   * Return the named instance of a DataField given a name, and create one if one isn't available
+   * Return the named instance of a DataField given a name, and create one if one isn't available.
    * @param name  the name of the DataField
    * @return the instance of the data field corresponding to the name
    */
