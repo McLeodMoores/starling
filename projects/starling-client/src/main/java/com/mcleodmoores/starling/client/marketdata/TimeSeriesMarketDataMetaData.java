@@ -86,13 +86,13 @@ public final class TimeSeriesMarketDataMetaData implements MarketDataMetaData, I
   }
 
   private TimeSeriesMarketDataMetaData(
-      final Class<?> type,
-      final String adjust,
-      final String ageLimit,
-      final LocalDate startDate,
-      final boolean includeStart,
-      final LocalDate endDate,
-      final boolean includeEnd) {
+      Class<?> type,
+      String adjust,
+      String ageLimit,
+      LocalDate startDate,
+      boolean includeStart,
+      LocalDate endDate,
+      boolean includeEnd) {
     JodaBeanUtils.notNull(type, "type");
     this._type = type;
     this._adjust = adjust;
@@ -109,7 +109,7 @@ public final class TimeSeriesMarketDataMetaData implements MarketDataMetaData, I
   }
 
   @Override
-  public <R> Property<R> property(final String propertyName) {
+  public <R> Property<R> property(String propertyName) {
     return metaBean().<R>metaProperty(propertyName).createProperty(this);
   }
 
@@ -120,10 +120,9 @@ public final class TimeSeriesMarketDataMetaData implements MarketDataMetaData, I
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the type.
+   * Gets the type of the time series.
    * @return the value of the property, not null
    */
-  @Override
   public Class<?> getType() {
     return _type;
   }
@@ -193,19 +192,19 @@ public final class TimeSeriesMarketDataMetaData implements MarketDataMetaData, I
   }
 
   @Override
-  public boolean equals(final Object obj) {
+  public boolean equals(Object obj) {
     if (obj == this) {
       return true;
     }
     if (obj != null && obj.getClass() == this.getClass()) {
-      final TimeSeriesMarketDataMetaData other = (TimeSeriesMarketDataMetaData) obj;
+      TimeSeriesMarketDataMetaData other = (TimeSeriesMarketDataMetaData) obj;
       return JodaBeanUtils.equal(getType(), other.getType()) &&
           JodaBeanUtils.equal(getAdjust(), other.getAdjust()) &&
           JodaBeanUtils.equal(getAgeLimit(), other.getAgeLimit()) &&
           JodaBeanUtils.equal(getStartDate(), other.getStartDate()) &&
-          isIncludeStart() == other.isIncludeStart() &&
+          (isIncludeStart() == other.isIncludeStart()) &&
           JodaBeanUtils.equal(getEndDate(), other.getEndDate()) &&
-          isIncludeEnd() == other.isIncludeEnd();
+          (isIncludeEnd() == other.isIncludeEnd());
     }
     return false;
   }
@@ -225,7 +224,7 @@ public final class TimeSeriesMarketDataMetaData implements MarketDataMetaData, I
 
   @Override
   public String toString() {
-    final StringBuilder buf = new StringBuilder(256);
+    StringBuilder buf = new StringBuilder(256);
     buf.append("TimeSeriesMarketDataMetaData{");
     buf.append("type").append('=').append(getType()).append(',').append(' ');
     buf.append("adjust").append('=').append(getAdjust()).append(',').append(' ');
@@ -304,7 +303,7 @@ public final class TimeSeriesMarketDataMetaData implements MarketDataMetaData, I
     }
 
     @Override
-    protected MetaProperty<?> metaPropertyGet(final String propertyName) {
+    protected MetaProperty<?> metaPropertyGet(String propertyName) {
       switch (propertyName.hashCode()) {
         case 3575610:  // type
           return _type;
@@ -398,7 +397,7 @@ public final class TimeSeriesMarketDataMetaData implements MarketDataMetaData, I
 
     //-----------------------------------------------------------------------
     @Override
-    protected Object propertyGet(final Bean bean, final String propertyName, final boolean quiet) {
+    protected Object propertyGet(Bean bean, String propertyName, boolean quiet) {
       switch (propertyName.hashCode()) {
         case 3575610:  // type
           return ((TimeSeriesMarketDataMetaData) bean).getType();
@@ -419,7 +418,7 @@ public final class TimeSeriesMarketDataMetaData implements MarketDataMetaData, I
     }
 
     @Override
-    protected void propertySet(final Bean bean, final String propertyName, final Object newValue, final boolean quiet) {
+    protected void propertySet(Bean bean, String propertyName, Object newValue, boolean quiet) {
       metaProperty(propertyName);
       if (quiet) {
         return;
@@ -453,7 +452,7 @@ public final class TimeSeriesMarketDataMetaData implements MarketDataMetaData, I
      * Restricted copy constructor.
      * @param beanToCopy  the bean to copy from, not null
      */
-    private Builder(final TimeSeriesMarketDataMetaData beanToCopy) {
+    private Builder(TimeSeriesMarketDataMetaData beanToCopy) {
       this._type = beanToCopy.getType();
       this._adjust = beanToCopy.getAdjust();
       this._ageLimit = beanToCopy.getAgeLimit();
@@ -465,7 +464,7 @@ public final class TimeSeriesMarketDataMetaData implements MarketDataMetaData, I
 
     //-----------------------------------------------------------------------
     @Override
-    public Object get(final String propertyName) {
+    public Object get(String propertyName) {
       switch (propertyName.hashCode()) {
         case 3575610:  // type
           return _type;
@@ -487,7 +486,7 @@ public final class TimeSeriesMarketDataMetaData implements MarketDataMetaData, I
     }
 
     @Override
-    public Builder set(final String propertyName, final Object newValue) {
+    public Builder set(String propertyName, Object newValue) {
       switch (propertyName.hashCode()) {
         case 3575610:  // type
           this._type = (Class<?>) newValue;
@@ -517,25 +516,25 @@ public final class TimeSeriesMarketDataMetaData implements MarketDataMetaData, I
     }
 
     @Override
-    public Builder set(final MetaProperty<?> property, final Object value) {
+    public Builder set(MetaProperty<?> property, Object value) {
       super.set(property, value);
       return this;
     }
 
     @Override
-    public Builder setString(final String propertyName, final String value) {
+    public Builder setString(String propertyName, String value) {
       setString(meta().metaProperty(propertyName), value);
       return this;
     }
 
     @Override
-    public Builder setString(final MetaProperty<?> property, final String value) {
+    public Builder setString(MetaProperty<?> property, String value) {
       super.setString(property, value);
       return this;
     }
 
     @Override
-    public Builder setAll(final Map<String, ? extends Object> propertyValueMap) {
+    public Builder setAll(Map<String, ? extends Object> propertyValueMap) {
       super.setAll(propertyValueMap);
       return this;
     }
@@ -554,11 +553,11 @@ public final class TimeSeriesMarketDataMetaData implements MarketDataMetaData, I
 
     //-----------------------------------------------------------------------
     /**
-     * Sets the type.
+     * Sets the type of the time series.
      * @param type  the new value, not null
      * @return this, for chaining, not null
      */
-    public Builder type(final Class<?> type) {
+    public Builder type(Class<?> type) {
       JodaBeanUtils.notNull(type, "type");
       this._type = type;
       return this;
@@ -569,7 +568,7 @@ public final class TimeSeriesMarketDataMetaData implements MarketDataMetaData, I
      * @param adjust  the new value
      * @return this, for chaining, not null
      */
-    public Builder adjust(final String adjust) {
+    public Builder adjust(String adjust) {
       this._adjust = adjust;
       return this;
     }
@@ -580,7 +579,7 @@ public final class TimeSeriesMarketDataMetaData implements MarketDataMetaData, I
      * @param ageLimit  the new value
      * @return this, for chaining, not null
      */
-    public Builder ageLimit(final String ageLimit) {
+    public Builder ageLimit(String ageLimit) {
       this._ageLimit = ageLimit;
       return this;
     }
@@ -590,7 +589,7 @@ public final class TimeSeriesMarketDataMetaData implements MarketDataMetaData, I
      * @param startDate  the new value
      * @return this, for chaining, not null
      */
-    public Builder startDate(final LocalDate startDate) {
+    public Builder startDate(LocalDate startDate) {
       this._startDate = startDate;
       return this;
     }
@@ -600,7 +599,7 @@ public final class TimeSeriesMarketDataMetaData implements MarketDataMetaData, I
      * @param includeStart  the new value
      * @return this, for chaining, not null
      */
-    public Builder includeStart(final boolean includeStart) {
+    public Builder includeStart(boolean includeStart) {
       this._includeStart = includeStart;
       return this;
     }
@@ -610,7 +609,7 @@ public final class TimeSeriesMarketDataMetaData implements MarketDataMetaData, I
      * @param endDate  the new value
      * @return this, for chaining, not null
      */
-    public Builder endDate(final LocalDate endDate) {
+    public Builder endDate(LocalDate endDate) {
       this._endDate = endDate;
       return this;
     }
@@ -620,7 +619,7 @@ public final class TimeSeriesMarketDataMetaData implements MarketDataMetaData, I
      * @param includeEnd  the new value
      * @return this, for chaining, not null
      */
-    public Builder includeEnd(final boolean includeEnd) {
+    public Builder includeEnd(boolean includeEnd) {
       this._includeEnd = includeEnd;
       return this;
     }
@@ -628,7 +627,7 @@ public final class TimeSeriesMarketDataMetaData implements MarketDataMetaData, I
     //-----------------------------------------------------------------------
     @Override
     public String toString() {
-      final StringBuilder buf = new StringBuilder(256);
+      StringBuilder buf = new StringBuilder(256);
       buf.append("TimeSeriesMarketDataMetaData.Builder{");
       buf.append("type").append('=').append(JodaBeanUtils.toString(_type)).append(',').append(' ');
       buf.append("adjust").append('=').append(JodaBeanUtils.toString(_adjust)).append(',').append(' ');

@@ -79,6 +79,7 @@ public class StarlingTestUtilsTest {
   /**
    * Tests the output when a primitive is requested. The data is requested through a {@link HistoricalMarketDataProvider} and
    * so an empty function configuration source can be used. The expected result is a single value for the market data identifier.
+   * @throws Exception  if there is a problem during the calculation
    */
   @Test
   public void testPrimitiveOnlyView() throws Exception {
@@ -96,7 +97,8 @@ public class StarlingTestUtilsTest {
       toolContext.getPositionSource(), toolContext.getSecurityMaster(), toolContext.getSecuritySource(), toolContext.getConfigMaster(),
       toolContext.getConfigSource(), toolContext.getViewProcessor());
     final ViewKey viewKey = ViewKey.of(viewDefinition.getName(), viewDefinition.getUniqueId());
-    try (final SynchronousJob job = analyticService.createSynchronousJob(viewKey, new SimplePortfolio("Test"), ExternalSchemes.OG_SYNTHETIC_TICKER, now, today.toLocalDate())) {
+    try (final SynchronousJob job = 
+        analyticService.createSynchronousJob(viewKey, new SimplePortfolio("Test"), ExternalSchemes.OG_SYNTHETIC_TICKER, now, today.toLocalDate())) {
       final ResultModel resultModel = job.run();
       final List<TargetKey> targetKeys = resultModel.getTargetKeys(EnumSet.of(TargetType.PRIMITIVE));
       assertEquals(targetKeys.size(), 1);
@@ -119,6 +121,7 @@ public class StarlingTestUtilsTest {
    * Tests the output when a security-level output is requested but there is not an appropriate function in the function list to provide
    * this output (as an empty function configuration source was used). In this case, the graph cannot be built and so there is an empty
    * portfolio node-level output only.
+   * @throws Exception  if there is a problem during the calculation
    */
   @Test
   public void testNoGraphView() throws Exception {

@@ -13,8 +13,14 @@ import com.opengamma.component.OpenGammaComponentServer;
 /**
  *
  */
-public class StarlingTestUtils {
+public final class StarlingTestUtils {
 
+  /**
+   * Restricted constructor.
+   */
+  private StarlingTestUtils() {
+  }
+  
   /**
    * Creates a tool context for use in tests.
    * @return  the tool context
@@ -30,6 +36,7 @@ public class StarlingTestUtils {
 
   /**
    * Creates a tool context for use in tests.
+   * @param propertiesFilePath  the path to the properties file to be used
    * @return  the tool context
    */
   public static StarlingToolContext getToolContext(final String propertiesFilePath) {
