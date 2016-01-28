@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2014-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2014 - present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.mcleodmoores.integration.adapter;
 
@@ -22,12 +22,18 @@ public class FinmathBusinessDayFactoryTest {
   }
 
   /**
-   * Tests that the properties file maps the names to business day calendar correctly.
+   * Tests that the factory is correctly initialized.
    */
   @Test
   public void testFactory() {
     assertEquals("None", FinmathBusinessDayFactory.of("None").getName());
     assertEquals("TARGET", FinmathBusinessDayFactory.of("TARGET").getName());
     assertEquals("Weekend", FinmathBusinessDayFactory.of("Weekend").getName());
+    // tests that the name stored in the factory is case-insensitive
+    assertEquals("None", FinmathBusinessDayFactory.of("NONE").getName());
+    assertEquals("TARGET", FinmathBusinessDayFactory.of("Target").getName());
+    assertEquals("Weekend", FinmathBusinessDayFactory.of("WEEKEND").getName());
+    // tests one of the aliases
+    assertEquals("Weekend", FinmathBusinessDayFactory.of("Saturday / Sunday").getName());
   }
 }

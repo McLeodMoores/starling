@@ -1,15 +1,17 @@
 /**
- * Copyright (C) 2014-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2014 - present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.mcleodmoores.integration.adapter;
 
 import java.util.Objects;
 
-import net.finmath.time.businessdaycalendar.BusinessdayCalendarInterface;
-
 import org.joda.convert.FromStringFactory;
+import org.joda.time.LocalDate;
 
 import com.mcleodmoores.integration.convention.BusinessDay;
+import com.opengamma.util.ArgumentChecker;
+
+import net.finmath.time.businessdaycalendar.BusinessdayCalendarInterface;
 
 /**
  * Top-level wrapper for {@link BusinessdayCalendarInterface} classes.
@@ -23,31 +25,31 @@ public abstract class FinmathBusinessDay implements BusinessDay, BusinessdayCale
 
   /**
    * Creates an instance.
-   * @param name The name, can be null
-   * @param businessDay The business day calendar, can be null
+   * @param name The name, not null
+   * @param businessDay The business day calendar, not null
    */
   protected FinmathBusinessDay(final String name, final BusinessdayCalendarInterface businessDay) {
-    _name = name;
-    _businessDay = businessDay;
+    _name = ArgumentChecker.notNull(name, "name");
+    _businessDay = ArgumentChecker.notNull(businessDay, "businessDay");
   }
 
   @Override
-  public boolean isBusinessday(final java.util.Calendar date) {
+  public boolean isBusinessday(final LocalDate date) {
     return _businessDay.isBusinessday(date);
   }
 
   @Override
-  public java.util.Calendar getAdjustedDate(final java.util.Calendar date, final DateRollConvention dateRollConvention) {
+  public LocalDate getAdjustedDate(final LocalDate date, final DateRollConvention dateRollConvention) {
     return _businessDay.getAdjustedDate(date, dateRollConvention);
   }
 
   @Override
-  public java.util.Calendar getAdjustedDate(final java.util.Calendar baseDate, final String dateOffsetCode, final DateRollConvention dateRollConvention) {
+  public LocalDate getAdjustedDate(final LocalDate baseDate, final String dateOffsetCode, final DateRollConvention dateRollConvention) {
     return _businessDay.getAdjustedDate(baseDate, dateOffsetCode, dateRollConvention);
   }
 
   @Override
-  public java.util.Calendar getRolledDate(final java.util.Calendar baseDate, final int businessDays) {
+  public LocalDate getRolledDate(final LocalDate baseDate, final int businessDays) {
     // equivalent to ScheduleCalculator.getAdjustedDate
     return _businessDay.getRolledDate(baseDate, businessDays);
   }
@@ -69,7 +71,7 @@ public abstract class FinmathBusinessDay implements BusinessDay, BusinessdayCale
   public int hashCode() {
     final int prime = 31;
     int result = 1;
-    result = prime * result + (_name == null ? 0 : _name.hashCode());
+    result = prime * result + _name.hashCode();
     // doesn't make sense to wrap a calendar
     return result;
   }

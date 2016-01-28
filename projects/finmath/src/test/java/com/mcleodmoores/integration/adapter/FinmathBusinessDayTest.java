@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2014-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2014 - present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.mcleodmoores.integration.adapter;
 
@@ -9,10 +9,10 @@ import static org.testng.Assert.assertNotSame;
 
 import org.testng.annotations.Test;
 
+import com.opengamma.util.test.TestGroup;
+
 import net.finmath.time.businessdaycalendar.BusinessdayCalendarAny;
 import net.finmath.time.businessdaycalendar.BusinessdayCalendarExcludingWeekends;
-
-import com.opengamma.util.test.TestGroup;
 
 /**
  * Unit tests for {@link FinmathBusinessDay}.
@@ -37,10 +37,10 @@ public class FinmathBusinessDayTest {
   public void testHashCodeEquals() {
     FinmathBusinessDay businessDay = new AnyBusinessDayCalendar();
     assertEquals(BUSINESS_DAY, BUSINESS_DAY);
-    assertNotEquals(null, BUSINESS_DAY); // catch any missed check for null
+    assertNotEquals(null, BUSINESS_DAY);
     assertNotSame(BUSINESS_DAY, businessDay);
-    assertEquals(BUSINESS_DAY.hashCode(), businessDay.hashCode());
     assertEquals(BUSINESS_DAY, businessDay);
+    assertEquals(BUSINESS_DAY.hashCode(), businessDay.hashCode());
     businessDay = new FinmathBusinessDay("None Test", new BusinessdayCalendarAny()) {
     };
     assertNotEquals(BUSINESS_DAY, businessDay);

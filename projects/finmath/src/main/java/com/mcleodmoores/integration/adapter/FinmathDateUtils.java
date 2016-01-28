@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2014-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2014 - present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.mcleodmoores.integration.adapter;
 
@@ -34,6 +34,11 @@ public final class FinmathDateUtils {
     return calendar;
   }
 
+  public static org.joda.time.LocalDate convertToJodaDate(final LocalDate localDate) {
+    ArgumentChecker.notNull(localDate, "localDate");
+    return new org.joda.time.LocalDate(localDate.getYear(), localDate.getMonthValue(), localDate.getDayOfMonth());
+  }
+
   /**
    * Converts a {@link Calendar} to {@link LocalDate}.
    * @param calendar The calendar, not null
@@ -56,5 +61,10 @@ public final class FinmathDateUtils {
     calendar.set(zonedDateTime.getYear(), zonedDateTime.getMonthValue() - 1, zonedDateTime.getDayOfMonth(), zonedDateTime.getHour(),
         zonedDateTime.getMinute(), zonedDateTime.getSecond());
     return calendar;
+  }
+
+  public static LocalDate convertFromJodaDate(final org.joda.time.LocalDate localDate) {
+    ArgumentChecker.notNull(localDate, "localDate");
+    return LocalDate.of(localDate.getYear(), localDate.getMonthOfYear(), localDate.getDayOfMonth());
   }
 }

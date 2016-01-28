@@ -1,14 +1,16 @@
 /**
- * Copyright (C) 2014-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2014 - present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.mcleodmoores.integration.adapter;
 
 import java.util.Objects;
 
-import net.finmath.time.businessdaycalendar.BusinessdayCalendar;
+import org.joda.time.LocalDate;
 
 import com.opengamma.analytics.date.WorkingDayCalendar;
 import com.opengamma.util.ArgumentChecker;
+
+import net.finmath.time.businessdaycalendar.BusinessdayCalendar;
 
 /**
  * Wraps a {@link WorkingDayCalendar} for {@link BusinessdayCalendar}.
@@ -26,8 +28,8 @@ public class BusinessDayCalendarAdapter extends BusinessdayCalendar {
   }
 
   @Override
-  public boolean isBusinessday(final java.util.Calendar date) {
-    return _calendar.isWorkingDay(FinmathDateUtils.convertToLocalDate(date));
+  public boolean isBusinessday(final LocalDate date) {
+    return _calendar.isWorkingDay(FinmathDateUtils.convertFromJodaDate(date));
   }
 
   @Override
