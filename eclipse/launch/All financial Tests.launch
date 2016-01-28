@@ -3,7 +3,7 @@
 <listAttribute key="com.mountainminds.eclemma.core.SCOPE_IDS">
 <listEntry value="=financial/src\/main\/java"/>
 <listEntry value="=analytics/src\/main\/java"/>
-<listEntry value="=cor/src\/main\/java"/>
+<listEntry value="=core/src\/main\/java"/>
 <listEntry value="=engine/src\/main\/java"/>
 </listAttribute>
 <stringAttribute key="org.eclipse.jdt.launching.CLASSPATH_PROVIDER" value="org.eclipse.m2e.launchconfig.classpathProvider"/>
