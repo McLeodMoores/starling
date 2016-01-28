@@ -9,8 +9,13 @@ import static org.testng.Assert.assertEquals;
 import static org.testng.internal.junit.ArrayAsserts.assertArrayEquals;
 
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.List;
+
+import org.joda.time.LocalDate;
+import org.testng.annotations.Test;
+
+import com.mcleodmoores.integration.adapter.ActActAfbFinmathDayCount;
+import com.mcleodmoores.integration.testutils.FinancialTestBase;
 
 import net.finmath.marketdata.model.AnalyticModel;
 import net.finmath.marketdata.model.AnalyticModelInterface;
@@ -25,13 +30,6 @@ import net.finmath.time.Tenor;
 import net.finmath.time.TimeDiscretization;
 import net.finmath.time.daycount.DayCountConventionInterface;
 
-import org.testng.annotations.Test;
-import org.threeten.bp.LocalDate;
-
-import com.mcleodmoores.integration.adapter.ActActAfbFinmathDayCount;
-import com.mcleodmoores.integration.adapter.FinmathDateUtils;
-import com.mcleodmoores.integration.testutils.FinancialTestBase;
-
 /**
  * Unit tests for {@link FinmathBuilders}.
  */
@@ -42,12 +40,11 @@ public class FinmathBuildersTest extends FinancialTestBase {
    */
   @Test
   public void testTenor() {
-    final LocalDate referenceLocalDate = LocalDate.of(2015, 1, 1);
-    final Calendar referenceDate = FinmathDateUtils.convertLocalDate(referenceLocalDate);
+    final LocalDate referenceDate = new LocalDate(2015, 1, 1);
     final int n = 10;
-    final Calendar[] dates = new Calendar[n];
+    final LocalDate[] dates = new LocalDate[n];
     for (int i = 0; i < n; i++) {
-      dates[i] = FinmathDateUtils.convertLocalDate(referenceLocalDate.plusMonths(i + 1));
+      dates[i] = referenceDate.plusMonths(i + 1);
     }
     final Tenor tenor = new Tenor(dates, referenceDate);
     final Tenor cycled = cycleObject(Tenor.class, tenor);
@@ -73,7 +70,7 @@ public class FinmathBuildersTest extends FinancialTestBase {
     final DiscountCurve curve1 = DiscountCurve.createDiscountCurveFromDiscountFactors("discount-curve", new double[] {1, 2, 3, 4, 5, 6},
         new double[] {0.9, 0.85, 0.8, 0.75, 0.7, 0.65});
     final DiscountCurveNelsonSiegelSvensson curve2 = new DiscountCurveNelsonSiegelSvensson("nss-curve", null,  new double[] {1, 2, 3, 4, 5, 6}, 0.1);
-    final Calendar date = FinmathDateUtils.convertLocalDate(LocalDate.of(2015, 1, 1));
+    final LocalDate date = new LocalDate(2015, 1, 1);
     final CapletVolatilitiesParametric surface1 = new CapletVolatilitiesParametric("surface1", date, 0.1, 0.2, 0.3, 0.4, 1.1);
     final CapletVolatilitiesParametric surface2 = new CapletVolatilitiesParametric("surface2", date, 1.1, 1.2, 1.3, 1.4, 2.1);
     AnalyticModelInterface model = new AnalyticModel();
@@ -109,25 +106,23 @@ public class FinmathBuildersTest extends FinancialTestBase {
    */
   @Test
   public void testSchedule() {
-    final Calendar referenceDate = FinmathDateUtils.convertLocalDate(LocalDate.of(2015, 1, 1));
-    final List<Period> periods = Arrays.asList(new Period(FinmathDateUtils.convertLocalDate(LocalDate.of(2015, 1, 2)),
-        FinmathDateUtils.convertLocalDate(LocalDate.of(2015, 1, 3)), FinmathDateUtils.convertLocalDate(LocalDate.of(2015, 1, 4)),
-        FinmathDateUtils.convertLocalDate(LocalDate.of(2015, 1, 5))), new Period(FinmathDateUtils.convertLocalDate(LocalDate.of(2015, 1, 6)),
-            FinmathDateUtils.convertLocalDate(LocalDate.of(2015, 1, 7)), FinmathDateUtils.convertLocalDate(LocalDate.of(2015, 1, 8)),
-            FinmathDateUtils.convertLocalDate(LocalDate.of(2015, 1, 9))));
+    final LocalDate referenceDate = new LocalDate(2015, 1, 1);
+    final List<Period> periods = Arrays.asList(
+        new Period(new LocalDate(2015, 1, 2), new LocalDate(2015, 1, 3), new LocalDate(2015, 1, 4), new LocalDate(2015, 1, 5)),
+        new Period(new LocalDate(2015, 1, 6), new LocalDate(2015, 1, 7), new LocalDate(2015, 1, 8), new LocalDate(2015, 1, 9)));
     final DayCountConventionInterface dayCount = new ActActAfbFinmathDayCount();
     final Schedule schedule = new Schedule(referenceDate, periods, dayCount);
     final Schedule cycled = cycleObject(Schedule.class, schedule);
-    assertEquals(FinmathDateUtils.convertToLocalDate(schedule.getReferenceDate()), FinmathDateUtils.convertToLocalDate(cycled.getReferenceDate()));
+    assertEquals(schedule.getReferenceDate(), cycled.getReferenceDate());
     final List<Period> cycledPeriods = cycled.getPeriods();
     assertEquals(periods.size(), cycledPeriods.size());
     for (int i = 0; i < periods.size(); i++) {
       final Period expectedPeriod = periods.get(i);
       final Period actualPeriod = cycledPeriods.get(i);
-      assertEquals(FinmathDateUtils.convertToLocalDate(expectedPeriod.getFixing()), FinmathDateUtils.convertToLocalDate(actualPeriod.getFixing()));
-      assertEquals(FinmathDateUtils.convertToLocalDate(expectedPeriod.getPayment()), FinmathDateUtils.convertToLocalDate(actualPeriod.getPayment()));
-      assertEquals(FinmathDateUtils.convertToLocalDate(expectedPeriod.getPeriodStart()), FinmathDateUtils.convertToLocalDate(actualPeriod.getPeriodStart()));
-      assertEquals(FinmathDateUtils.convertToLocalDate(expectedPeriod.getPeriodEnd()), FinmathDateUtils.convertToLocalDate(actualPeriod.getPeriodEnd()));
+      assertEquals(expectedPeriod.getFixing(), actualPeriod.getFixing());
+      assertEquals(expectedPeriod.getPayment(), actualPeriod.getPayment());
+      assertEquals(expectedPeriod.getPeriodStart(), actualPeriod.getPeriodStart());
+      assertEquals(expectedPeriod.getPeriodEnd(), actualPeriod.getPeriodEnd());
     }
   }
 
@@ -136,15 +131,15 @@ public class FinmathBuildersTest extends FinancialTestBase {
    */
   @Test
   public void testPeriod() {
-    final Calendar fixing = FinmathDateUtils.convertLocalDate(LocalDate.of(2015, 1, 1));
-    final Calendar payment = FinmathDateUtils.convertLocalDate(LocalDate.of(2015, 1, 2));
-    final Calendar periodStart = FinmathDateUtils.convertLocalDate(LocalDate.of(2015, 1, 3));
-    final Calendar periodEnd = FinmathDateUtils.convertLocalDate(LocalDate.of(2015, 1, 4));
+    final LocalDate fixing = new LocalDate(2015, 1, 1);
+    final LocalDate payment = new LocalDate(2015, 1, 2);
+    final LocalDate periodStart = new LocalDate(2015, 1, 3);
+    final LocalDate periodEnd = new LocalDate(2015, 1, 4);
     final Period period = new Period(fixing, payment, periodStart, periodEnd);
     final Period cycled = cycleObject(Period.class, period);
-    assertEquals(FinmathDateUtils.convertToLocalDate(period.getFixing()), FinmathDateUtils.convertToLocalDate(cycled.getFixing()));
-    assertEquals(FinmathDateUtils.convertToLocalDate(period.getPayment()), FinmathDateUtils.convertToLocalDate(cycled.getPayment()));
-    assertEquals(FinmathDateUtils.convertToLocalDate(period.getPeriodStart()), FinmathDateUtils.convertToLocalDate(cycled.getPeriodStart()));
-    assertEquals(FinmathDateUtils.convertToLocalDate(period.getPeriodEnd()), FinmathDateUtils.convertToLocalDate(cycled.getPeriodEnd()));
+    assertEquals(period.getFixing(), cycled.getFixing());
+    assertEquals(period.getPayment(), cycled.getPayment());
+    assertEquals(period.getPeriodStart(), cycled.getPeriodStart());
+    assertEquals(period.getPeriodEnd(), cycled.getPeriodEnd());
   }
 }

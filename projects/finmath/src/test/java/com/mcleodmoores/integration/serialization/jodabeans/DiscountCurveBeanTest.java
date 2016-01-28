@@ -1,7 +1,7 @@
 /**
  * Copyright (C) 2014-Present McLeod Moores Software Limited.  All rights reserved.
  */
-package com.mcleodmoores.integration.serialization;
+package com.mcleodmoores.integration.serialization.jodabeans;
 
 import static com.mcleodmoores.integration.testutils.FinmathSerializationTestUtils.assertCurveEquals;
 import static org.testng.Assert.assertEquals;
@@ -9,10 +9,11 @@ import static org.testng.Assert.assertNotEquals;
 import static org.testng.Assert.assertNull;
 import static org.testng.Assert.fail;
 
+import org.joda.time.LocalDate;
 import org.testng.annotations.Test;
-import org.threeten.bp.LocalDate;
 
-import com.mcleodmoores.integration.adapter.FinmathDateUtils;
+import com.mcleodmoores.integration.serialization.CurveValueType;
+import com.mcleodmoores.integration.serialization.jodabeans.DiscountCurveBean;
 import com.opengamma.util.test.TestGroup;
 
 import net.finmath.marketdata.model.curves.Curve.ExtrapolationMethod;
@@ -135,15 +136,15 @@ public class DiscountCurveBeanTest extends CurveBeanTest {
         CurveValueType.ZERO_RATES.name());
     assertNull(curve.getReferenceDate());
     curve = new DiscountCurveBean(NAME, REFERENCE_DATE_STRING, TIMES, VALUES, IS_PARAMETER, CurveValueType.ZERO_RATES.name());
-    assertEquals(FinmathDateUtils.convertToLocalDate(curve.getReferenceDate()), LocalDate.of(2015, 1, 15));
+    assertEquals(curve.getReferenceDate(), new LocalDate(2015, 1, 15));
   }
 
   /**
    * Tests the behaviour when the reference date string cannot be parsed.
    */
-  @Test(expectedExceptions = IllegalStateException.class)
+  @Test(expectedExceptions = IllegalArgumentException.class)
   public void testMalformedReferenceDate() {
-    final DiscountCurveBean curve = new DiscountCurveBean(NAME, "2015/01/15", TIMES, VALUES, IS_PARAMETER, CurveValueType.DISCOUNT_FACTORS.name());
+    final DiscountCurveBean curve = new DiscountCurveBean(NAME, "2015//01//15", TIMES, VALUES, IS_PARAMETER, CurveValueType.DISCOUNT_FACTORS.name());
     curve.getReferenceDate();
   }
 

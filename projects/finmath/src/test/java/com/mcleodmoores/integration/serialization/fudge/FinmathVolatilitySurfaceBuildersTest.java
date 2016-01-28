@@ -7,7 +7,10 @@ import static com.mcleodmoores.integration.testutils.FinmathSerializationTestUti
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.fail;
 
-import java.util.Calendar;
+import org.joda.time.LocalDate;
+import org.testng.annotations.Test;
+
+import com.mcleodmoores.integration.testutils.FinancialTestBase;
 
 import net.finmath.marketdata.model.AnalyticModel;
 import net.finmath.marketdata.model.AnalyticModelInterface;
@@ -27,12 +30,6 @@ import net.finmath.time.businessdaycalendar.BusinessdayCalendarExcludingTARGETHo
 import net.finmath.time.businessdaycalendar.BusinessdayCalendarInterface;
 import net.finmath.time.businessdaycalendar.BusinessdayCalendarInterface.DateRollConvention;
 
-import org.testng.annotations.Test;
-import org.threeten.bp.LocalDate;
-
-import com.mcleodmoores.integration.adapter.FinmathDateUtils;
-import com.mcleodmoores.integration.testutils.FinancialTestBase;
-
 /**
  * Unit tests for {@link FinmathVolatilitySurfaceBuilders}.
  */
@@ -46,14 +43,14 @@ public class FinmathVolatilitySurfaceBuildersTest extends FinancialTestBase {
   @Test
   public void testCapletVolatilitiesParametric() {
     final String name = "parametric-caplets";
-    final Calendar date = FinmathDateUtils.convertLocalDate(LocalDate.of(2015, 1, 1));
+    final LocalDate date = new LocalDate(2015, 1, 1);
     CapletVolatilitiesParametric surface = new CapletVolatilitiesParametric(name, date, 0.1, 0.2, 0.3, 0.4, 1.1);
     CapletVolatilitiesParametric cycled = cycleObject(CapletVolatilitiesParametric.class, surface);
     try {
       assertSurfaceEquals(surface, cycled);
       fail();
-    } catch (final NullPointerException e) {
-      // parametric surfaces throws NPE when converting between quoting conventions because the forward curve is not set
+    } catch (final IllegalArgumentException e) {
+      // converting between quoting conventions fails because the discounting curve is not set
     }
     assertSurfaceEquals(surface, cycled, QuotingConvention.VOLATILITYLOGNORMAL);
     surface = new CapletVolatilitiesParametric(name, null, 0.1, 0.2, 0.3, 0.4, 1.1);
@@ -61,8 +58,8 @@ public class FinmathVolatilitySurfaceBuildersTest extends FinancialTestBase {
     try {
       assertSurfaceEquals(surface, cycled);
       fail();
-    } catch (final NullPointerException e) {
-      // parametric surfaces throws NPE when converting between quoting conventions because the forward curve is not set
+    } catch (final IllegalArgumentException e) {
+      // converting between quoting conventions fails because the discounting curve is not set
     }
     assertSurfaceEquals(surface, cycled, QuotingConvention.VOLATILITYLOGNORMAL);
   }
@@ -73,7 +70,7 @@ public class FinmathVolatilitySurfaceBuildersTest extends FinancialTestBase {
   @Test
   public void testCapletVolatilities() {
     final String name = "caplet-volatilities";
-    final Calendar referenceDate = FinmathDateUtils.convertLocalDate(LocalDate.of(2015, 1, 1));
+    final LocalDate referenceDate = new LocalDate(2015, 1, 1);
     final String forwardCurveName = "forward-curve";
     final String paymentOffsetCode = "1W";
     final BusinessdayCalendarInterface paymentBusinessdayCalendar = new BusinessdayCalendarExcludingTARGETHolidays();
@@ -119,24 +116,23 @@ public class FinmathVolatilitySurfaceBuildersTest extends FinancialTestBase {
    */
   @Test
   public void testCapletVolatilitiesParametricFourParameterPicewiseConstant() {
-    final LocalDate referenceLocalDate = LocalDate.of(2015, 1, 1);
-    final Calendar referenceDate = FinmathDateUtils.convertLocalDate(referenceLocalDate);
+    final LocalDate referenceDate = new LocalDate(2015, 1, 1);
     final int n = 10;
-    final Calendar[] dates = new Calendar[n];
+    final LocalDate[] dates = new LocalDate[n];
     for (int i = 0; i < n; i++) {
-      dates[i] = FinmathDateUtils.convertLocalDate(referenceLocalDate.plusMonths(i + 1));
+      dates[i] = referenceDate.plusMonths(i + 1);
     }
     final Tenor tenor = new Tenor(dates, referenceDate);
     final String name = "parametric-caplets";
-    final Calendar date = FinmathDateUtils.convertLocalDate(LocalDate.of(2015, 1, 1));
+    final LocalDate date = new LocalDate(2015, 1, 1);
     CapletVolatilitiesParametricFourParameterPicewiseConstant surface = new CapletVolatilitiesParametricFourParameterPicewiseConstant(name, date,
         0.1, 0.2, 0.3, 0.4, tenor);
     CapletVolatilitiesParametricFourParameterPicewiseConstant cycled = cycleObject(CapletVolatilitiesParametricFourParameterPicewiseConstant.class, surface);
     try {
       assertSurfaceEquals(surface, cycled);
       fail();
-    } catch (final NullPointerException e) {
-      // parametric surfaces throws NPE when converting between quoting conventions because the forward curve is not set
+    } catch (final IllegalArgumentException e) {
+      // converting between quoting conventions fails because the discounting curve is not set
     }
     assertSurfaceEquals(surface, cycled, QuotingConvention.VOLATILITYLOGNORMAL);
     surface = new CapletVolatilitiesParametricFourParameterPicewiseConstant(name, null, 0.1, 0.2, 0.3, 0.4, tenor);
@@ -144,8 +140,8 @@ public class FinmathVolatilitySurfaceBuildersTest extends FinancialTestBase {
     try {
       assertSurfaceEquals(surface, cycled);
       fail();
-    } catch (final NullPointerException e) {
-      // parametric surfaces throws NPE when converting between quoting conventions because the forward curve is not set
+    } catch (final IllegalArgumentException e) {
+      // converting between quoting conventions fails because the forward curve is not set
     }
     assertSurfaceEquals(surface, cycled, QuotingConvention.VOLATILITYLOGNORMAL);
   }
@@ -155,7 +151,7 @@ public class FinmathVolatilitySurfaceBuildersTest extends FinancialTestBase {
    */
   @Test
   public void testSwaptionMarketData() {
-    final Calendar referenceDate = FinmathDateUtils.convertLocalDate(LocalDate.of(2015, 1, 1));
+    final LocalDate referenceDate = new LocalDate(2015, 1, 1);
     final String forwardCurveName = "forward-curve";
     final String paymentOffsetCode = "1W";
     final BusinessdayCalendarInterface paymentBusinessdayCalendar = new BusinessdayCalendarExcludingTARGETHolidays();

@@ -1,16 +1,16 @@
 /**
  * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
  */
-package com.mcleodmoores.integration.serialization;
+package com.mcleodmoores.integration.serialization.jodabeans;
 
 import static com.mcleodmoores.integration.testutils.FinmathSerializationTestUtils.assertCurveEquals;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNull;
 
+import org.joda.time.LocalDate;
 import org.testng.annotations.Test;
-import org.threeten.bp.LocalDate;
 
-import com.mcleodmoores.integration.adapter.FinmathDateUtils;
+import com.mcleodmoores.integration.serialization.jodabeans.DiscountCurveNelsonSiegelSvenssonBean;
 
 /**
  * Unit tests for {@link DiscountCurveNelsonSiegelSvenssonBean}.
@@ -50,7 +50,7 @@ public class DiscountCurveNelsonSiegelSvenssonBeanTest extends CurveBeanTest {
     DiscountCurveNelsonSiegelSvenssonBean curve = new DiscountCurveNelsonSiegelSvenssonBean(NAME, null, PARAMETERS, TIME_SCALING);
     assertNull(curve.getReferenceDate());
     curve = new DiscountCurveNelsonSiegelSvenssonBean(NAME, REFERENCE_DATE, PARAMETERS, TIME_SCALING);
-    assertEquals(FinmathDateUtils.convertToLocalDate(curve.getReferenceDate()), LocalDate.of(2015, 1, 1));
+    assertEquals(curve.getReferenceDate(), new LocalDate(2015, 1, 1));
   }
 
 }

@@ -6,7 +6,12 @@ package com.mcleodmoores.integration.serialization.fudge;
 import static com.mcleodmoores.integration.testutils.FinmathSerializationTestUtils.assertCurveEquals;
 import static org.testng.Assert.fail;
 
-import java.util.Calendar;
+import org.joda.time.LocalDate;
+import org.testng.annotations.Test;
+
+import com.mcleodmoores.integration.adapter.ActActAfbFinmathDayCount;
+import com.mcleodmoores.integration.adapter.TargetBusinessDayCalendar;
+import com.mcleodmoores.integration.testutils.FinancialTestBase;
 
 import net.finmath.marketdata.model.AnalyticModel;
 import net.finmath.marketdata.model.AnalyticModelInterface;
@@ -28,14 +33,6 @@ import net.finmath.time.businessdaycalendar.BusinessdayCalendarExcludingTARGETHo
 import net.finmath.time.businessdaycalendar.BusinessdayCalendarInterface;
 import net.finmath.time.businessdaycalendar.BusinessdayCalendarInterface.DateRollConvention;
 import net.finmath.time.daycount.DayCountConventionInterface;
-
-import org.testng.annotations.Test;
-import org.threeten.bp.LocalDate;
-
-import com.mcleodmoores.integration.adapter.ActActAfbFinmathDayCount;
-import com.mcleodmoores.integration.adapter.FinmathDateUtils;
-import com.mcleodmoores.integration.adapter.TargetBusinessDayCalendar;
-import com.mcleodmoores.integration.testutils.FinancialTestBase;
 
 /**
  * Unit tests for {@link FinmathCurveBuilders}.
@@ -63,7 +60,7 @@ public class FinmathCurveBuildersTest extends FinancialTestBase {
     assertCurveEquals(curve, cycled);
     cycled = cycleObject(DiscountCurve.class, curve);
     assertCurveEquals(curve, cycled);
-    final Calendar date = FinmathDateUtils.convertLocalDate(LocalDate.of(2015, 1, 1));
+    final LocalDate date = new LocalDate(2015, 1, 1);
     curve = DiscountCurve.createDiscountCurveFromZeroRates(name, date, times, df, InterpolationMethod.LINEAR, ExtrapolationMethod.CONSTANT,
         InterpolationEntity.LOG_OF_VALUE);
     cycled = cycleObject(DiscountCurve.class, curve);
@@ -76,7 +73,7 @@ public class FinmathCurveBuildersTest extends FinancialTestBase {
   @Test
   public void testDiscountCurveProductCurve() {
     final String name = "product-curve";
-    final Calendar date = FinmathDateUtils.convertLocalDate(LocalDate.of(2015, 1, 1));
+    final LocalDate date = new LocalDate(2015, 1, 1);
     final DiscountCurveInterface[] curves = new DiscountCurveInterface[] {
         DiscountCurve.createDiscountCurveFromDiscountFactors("one", new double[] {1, 2, 3}, new double[] {0.99, 0.98, 0.97}),
         DiscountCurve.createDiscountCurveFromDiscountFactors("one", new double[] {1, 2, 3}, new double[] {0.96, 0.95, 0.94})};
@@ -94,7 +91,7 @@ public class FinmathCurveBuildersTest extends FinancialTestBase {
   @Test
   public void testDiscountCurveNelsonSiegelSvennson() {
     final String name = "nss-curve";
-    final Calendar date = FinmathDateUtils.convertLocalDate(LocalDate.of(2015, 1, 1));
+    final LocalDate date = new LocalDate(2015, 1, 1);
     final double[] parameters = new double[] {1, 2, 3, 4, 5, 6};
     DiscountCurveNelsonSiegelSvensson curve = new DiscountCurveNelsonSiegelSvensson(name, null, parameters, 0.1);
     DiscountCurveNelsonSiegelSvensson cycled = cycleObject(DiscountCurveNelsonSiegelSvensson.class, curve);
@@ -110,7 +107,7 @@ public class FinmathCurveBuildersTest extends FinancialTestBase {
   @Test
   public void testForwardCurve() {
     final String name = "forward-curve";
-    final Calendar referenceDate = FinmathDateUtils.convertLocalDate(LocalDate.of(2015, 1, 1));
+    final LocalDate referenceDate = new LocalDate(2015, 1, 1);
     final String paymentOffsetCode = "1W";
     final BusinessdayCalendarInterface paymentBusinessdayCalendar = new BusinessdayCalendarExcludingTARGETHolidays();
     final DateRollConvention paymentDateRollConvention = DateRollConvention.MODIFIED_FOLLOWING;
@@ -137,7 +134,7 @@ public class FinmathCurveBuildersTest extends FinancialTestBase {
   @Test
   public void testDiscountCurveFromForwardCurve() {
     final String name = "forward-curve";
-    final Calendar referenceDate = FinmathDateUtils.convertLocalDate(LocalDate.of(2015, 1, 1));
+    final LocalDate referenceDate = new LocalDate(2015, 1, 1);
     final String paymentOffsetCode = "1W";
     final BusinessdayCalendarInterface paymentBusinessdayCalendar = new TargetBusinessDayCalendar(); // note this is the wrapped type
     final DateRollConvention paymentDateRollConvention = DateRollConvention.MODIFIED_FOLLOWING;
@@ -169,7 +166,7 @@ public class FinmathCurveBuildersTest extends FinancialTestBase {
    */
   @Test
   public void testForwardCurveFromDiscountCurve() {
-    final Calendar referenceDate = FinmathDateUtils.convertLocalDate(LocalDate.of(2015, 1, 1));
+    final LocalDate referenceDate = new LocalDate(2015, 1, 1);
     final String paymentOffsetCode = "1W";
     final String discountCurveName = "discount-curve";
     final double[] times = new double[] {1, 2, 3, 4, 5, 6};
@@ -187,7 +184,7 @@ public class FinmathCurveBuildersTest extends FinancialTestBase {
   @Test
   public void testForwardCurveWithFixings() {
     final String name = "base-curve";
-    final Calendar referenceDate = FinmathDateUtils.convertLocalDate(LocalDate.of(2015, 1, 1));
+    final LocalDate referenceDate = new LocalDate(2015, 1, 1);
     final String paymentOffsetCode = "1W";
     final BusinessdayCalendarInterface paymentBusinessdayCalendar = new TargetBusinessDayCalendar(); // note this is the wrapped type
     final DateRollConvention paymentDateRollConvention = DateRollConvention.MODIFIED_FOLLOWING;
@@ -218,7 +215,7 @@ public class FinmathCurveBuildersTest extends FinancialTestBase {
   @Test
   public void testForwardCurveNelsonSiegelSvennson() {
     final String name = "forward-nss-curve";
-    final Calendar date = FinmathDateUtils.convertLocalDate(LocalDate.of(2015, 1, 1));
+    final LocalDate date = new LocalDate(2015, 1, 1);
     final double[] parameters = new double[] {1, 2, 3, 4, 5, 6};
     final String paymentOffsetCode = "1W";
     final BusinessdayCalendarInterface paymentBusinessDayCalendar = new TargetBusinessDayCalendar(); // note this is the wrapped type

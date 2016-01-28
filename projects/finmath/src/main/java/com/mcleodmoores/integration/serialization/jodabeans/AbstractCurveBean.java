@@ -1,16 +1,11 @@
 /**
- * Copyright (C) 2014-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2014 - present McLeod Moores Software Limited.  All rights reserved.
  */
-package com.mcleodmoores.integration.serialization;
+package com.mcleodmoores.integration.serialization.jodabeans;
 
 import java.io.Serializable;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.Map;
-
-import net.finmath.marketdata.model.curves.CurveInterface;
 
 import org.joda.beans.Bean;
 import org.joda.beans.BeanBuilder;
@@ -23,6 +18,9 @@ import org.joda.beans.impl.direct.DirectBean;
 import org.joda.beans.impl.direct.DirectMetaBean;
 import org.joda.beans.impl.direct.DirectMetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
+import org.joda.time.LocalDate;
+
+import net.finmath.marketdata.model.curves.CurveInterface;
 
 /**
  * Bean for the base Finmath curves class {@link net.finmath.marketdata.model.curves.AbstractCurve}. The Finmath
@@ -65,22 +63,15 @@ public abstract class AbstractCurveBean extends DirectBean implements Serializab
   }
 
   /**
-   * Gets the reference date from the reference date string. Throws an {@link IllegalStateException}
+   * Gets the reference date from the reference date string. Throws an {@link IllegalArgumentException}
    * if the date cannot be parsed.
    * @return The reference date.
    */
-  public Calendar getReferenceDate() {
+  public LocalDate getReferenceDate() {
     if (getReferenceDateString() == null) {
       return null;
     }
-    try {
-      final Date referenceDate = new SimpleDateFormat("yyyy-MM-dd").parse(getReferenceDateString());
-      final Calendar calendar = Calendar.getInstance();
-      calendar.setTime(referenceDate);
-      return calendar;
-    } catch (final ParseException e) {
-      throw new IllegalStateException(e);
-    }
+    return LocalDate.parse(getReferenceDateString());
   }
 
   /**

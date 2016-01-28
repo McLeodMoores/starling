@@ -1,17 +1,17 @@
 /**
  * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
  */
-package com.mcleodmoores.integration.serialization;
+package com.mcleodmoores.integration.serialization.jodabeans;
 
 import static com.mcleodmoores.integration.testutils.FinmathSerializationTestUtils.assertCurveEquals;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNull;
 
+import org.joda.time.LocalDate;
 import org.testng.annotations.Test;
-import org.threeten.bp.LocalDate;
 
 import com.google.common.collect.Sets;
-import com.mcleodmoores.integration.adapter.FinmathDateUtils;
+import com.mcleodmoores.integration.serialization.jodabeans.DiscountCurveFromProductOfCurvesBean;
 import com.opengamma.util.test.TestGroup;
 
 import net.finmath.marketdata.model.curves.DiscountCurve;
@@ -52,15 +52,15 @@ public class DiscountCurveFromProductOfCurvesBeanTest extends CurveBeanTest {
         new DiscountCurveInterface[]{CURVE1, CURVE2, CURVE3});
     assertNull(bean.getReferenceDate());
     bean = new DiscountCurveFromProductOfCurvesBean("Curve4", REFERENCE_DATE, new DiscountCurveInterface[]{CURVE1, CURVE2, CURVE3});
-    assertEquals(FinmathDateUtils.convertToLocalDate(bean.getReferenceDate()), LocalDate.of(2015, 1, 1));
+    assertEquals(bean.getReferenceDate(), new LocalDate(2015, 1, 1));
   }
 
   /**
    * Tests the behaviour when the reference date string cannot be parsed.
    */
-  @Test(expectedExceptions = IllegalStateException.class)
+  @Test(expectedExceptions = IllegalArgumentException.class)
   public void testMalformedReferenceDate() {
-    final DiscountCurveFromProductOfCurvesBean curve = new DiscountCurveFromProductOfCurvesBean("Curve4", "2015/01/15",
+    final DiscountCurveFromProductOfCurvesBean curve = new DiscountCurveFromProductOfCurvesBean("Curve4", "2015//01//15",
         new DiscountCurveInterface[]{CURVE1, CURVE2, CURVE3});
     curve.getReferenceDate();
   }

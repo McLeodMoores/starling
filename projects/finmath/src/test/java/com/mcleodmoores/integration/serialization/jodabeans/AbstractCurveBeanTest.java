@@ -1,10 +1,13 @@
 /**
  * Copyright (C) 2014-Present McLeod Moores Software Limited.  All rights reserved.
  */
-package com.mcleodmoores.integration.serialization;
+package com.mcleodmoores.integration.serialization.jodabeans;
 
 import static org.testng.AssertJUnit.assertEquals;
 import static org.testng.AssertJUnit.assertNotNull;
+
+import com.mcleodmoores.integration.serialization.jodabeans.AbstractCurveBean;
+
 import net.finmath.marketdata.model.curves.CurveInterface;
 
 /**

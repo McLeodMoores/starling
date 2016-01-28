@@ -1,16 +1,9 @@
 /**
- * Copyright (C) 2014-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2014 - present McLeod Moores Software Limited.  All rights reserved.
  */
-package com.mcleodmoores.integration.serialization;
+package com.mcleodmoores.integration.serialization.jodabeans;
 
 import java.util.Map;
-
-import net.finmath.marketdata.model.curves.Curve;
-import net.finmath.marketdata.model.curves.Curve.CurveBuilder;
-import net.finmath.marketdata.model.curves.Curve.ExtrapolationMethod;
-import net.finmath.marketdata.model.curves.Curve.InterpolationEntity;
-import net.finmath.marketdata.model.curves.Curve.InterpolationMethod;
-import net.finmath.marketdata.model.curves.CurveInterface;
 
 import org.joda.beans.Bean;
 import org.joda.beans.BeanBuilder;
@@ -24,6 +17,13 @@ import org.joda.beans.impl.direct.DirectMetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 
 import com.opengamma.util.ArgumentChecker;
+
+import net.finmath.marketdata.model.curves.Curve;
+import net.finmath.marketdata.model.curves.Curve.CurveBuilder;
+import net.finmath.marketdata.model.curves.Curve.ExtrapolationMethod;
+import net.finmath.marketdata.model.curves.Curve.InterpolationEntity;
+import net.finmath.marketdata.model.curves.Curve.InterpolationMethod;
+import net.finmath.marketdata.model.curves.CurveInterface;
 
 /**
  * Bean for the Finmath curves class {@link net.finmath.marketdata.model.curves.Curve}. The Finmath

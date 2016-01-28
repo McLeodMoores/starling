@@ -1,13 +1,21 @@
 /**
- * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2015 - present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.mcleodmoores.integration.serialization.fudge;
 
 import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Map;
+
+import org.fudgemsg.FudgeMsg;
+import org.fudgemsg.FudgeRuntimeException;
+import org.fudgemsg.MutableFudgeMsg;
+import org.fudgemsg.mapping.FudgeBuilder;
+import org.fudgemsg.mapping.FudgeBuilderFor;
+import org.fudgemsg.mapping.FudgeDeserializer;
+import org.fudgemsg.mapping.FudgeSerializer;
+import org.joda.time.LocalDate;
 
 import net.finmath.marketdata.model.curves.Curve;
 import net.finmath.marketdata.model.curves.CurveInterface;
@@ -21,17 +29,6 @@ import net.finmath.marketdata.model.volatilities.SwaptionMarketData;
 import net.finmath.marketdata.model.volatilities.VolatilitySurfaceInterface.QuotingConvention;
 import net.finmath.time.Tenor;
 import net.finmath.time.TimeDiscretizationInterface;
-
-import org.fudgemsg.FudgeMsg;
-import org.fudgemsg.FudgeRuntimeException;
-import org.fudgemsg.MutableFudgeMsg;
-import org.fudgemsg.mapping.FudgeBuilder;
-import org.fudgemsg.mapping.FudgeBuilderFor;
-import org.fudgemsg.mapping.FudgeDeserializer;
-import org.fudgemsg.mapping.FudgeSerializer;
-import org.threeten.bp.LocalDate;
-
-import com.mcleodmoores.integration.adapter.FinmathDateUtils;
 
 /**
  * Fudge builders for classes that extend {@link net.finmath.marketdata.model.volatilities.AbstractVolatilitySurface}.
@@ -74,7 +71,7 @@ import com.mcleodmoores.integration.adapter.FinmathDateUtils;
       message.add(null, 0, object.getClass().getName());
       message.add(NAME_ORDINAL, object.getName());
       if (object.getReferenceDate() != null) {
-        serializer.addToMessage(message, null, REFERENCE_DATE_ORDINAL, FinmathDateUtils.convertToLocalDate(object.getReferenceDate()));
+        serializer.addToMessage(message, null, REFERENCE_DATE_ORDINAL, object.getReferenceDate());
       }
       try {
         final Field field = CapletVolatilitiesParametric.class.getDeclaredField(TIME_SCALING_FIELD);
@@ -91,9 +88,9 @@ import com.mcleodmoores.integration.adapter.FinmathDateUtils;
     @Override
     public CapletVolatilitiesParametric buildObject(final FudgeDeserializer deserializer, final FudgeMsg message) {
       final String name = message.getString(NAME_ORDINAL);
-      Calendar referenceDate;
+      LocalDate referenceDate;
       if (message.hasField(REFERENCE_DATE_ORDINAL)) {
-        referenceDate = FinmathDateUtils.convertLocalDate(deserializer.fieldValueToObject(LocalDate.class, message.getByOrdinal(REFERENCE_DATE_ORDINAL)));
+        referenceDate = deserializer.fieldValueToObject(LocalDate.class, message.getByOrdinal(REFERENCE_DATE_ORDINAL));
       } else {
         referenceDate = null;
       }
@@ -143,7 +140,7 @@ import com.mcleodmoores.integration.adapter.FinmathDateUtils;
       message.add(null, 0, object.getClass().getName());
       message.add(NAME_ORDINAL, object.getName());
       if (object.getReferenceDate() != null) {
-        serializer.addToMessage(message, null, REFERENCE_DATE_ORDINAL, FinmathDateUtils.convertToLocalDate(object.getReferenceDate()));
+        serializer.addToMessage(message, null, REFERENCE_DATE_ORDINAL, object.getReferenceDate());
       }
       try {
         final Class<?>[] innerClasses = Curve.class.getDeclaredClasses();
@@ -176,7 +173,7 @@ import com.mcleodmoores.integration.adapter.FinmathDateUtils;
           final Field strikesField = pointsClass.getDeclaredField(TIME_FIELD_NAME);
           final Field maturitiesField = pointsClass.getDeclaredField(VALUE_FIELD_NAME);
           AccessibleObject.setAccessible(new AccessibleObject[] {pointsField, strikesField, maturitiesField, capletVolatilitiesField,
-              forwardCurveField, discountCurveField, quotingConventionField}, true);
+            forwardCurveField, discountCurveField, quotingConventionField}, true);
           final ArrayList<?> pointsList = (ArrayList<?>) pointsField.get(curve);
           if (pointsList.size() != 1) {
             throw new IllegalStateException("Have more than one strike / volatility point for " + entry.getKey() + ": should not happen");
@@ -202,9 +199,9 @@ import com.mcleodmoores.integration.adapter.FinmathDateUtils;
     @Override
     public CapletVolatilities buildObject(final FudgeDeserializer deserializer, final FudgeMsg message) {
       final String name = message.getString(NAME_ORDINAL);
-      Calendar referenceDate;
+      LocalDate referenceDate;
       if (message.hasField(REFERENCE_DATE_ORDINAL)) {
-        referenceDate = FinmathDateUtils.convertLocalDate(deserializer.fieldValueToObject(LocalDate.class, message.getByOrdinal(REFERENCE_DATE_ORDINAL)));
+        referenceDate = deserializer.fieldValueToObject(LocalDate.class, message.getByOrdinal(REFERENCE_DATE_ORDINAL));
       } else {
         referenceDate = null;
       }
@@ -228,7 +225,7 @@ import com.mcleodmoores.integration.adapter.FinmathDateUtils;
    */
   @FudgeBuilderFor(CapletVolatilitiesParametricFourParameterPicewiseConstant.class)
   public static class CapletVolatilitiesParametricFourParameterPiecewiseConstantBuilder
-  implements FudgeBuilder<CapletVolatilitiesParametricFourParameterPicewiseConstant> {
+    implements FudgeBuilder<CapletVolatilitiesParametricFourParameterPicewiseConstant> {
     /** The name field ordinal */
     private static final int NAME_ORDINAL = 1;
     /** The first parameter ordinal */
@@ -260,7 +257,7 @@ import com.mcleodmoores.integration.adapter.FinmathDateUtils;
       message.add(null, 0, object.getClass().getName());
       message.add(NAME_ORDINAL, object.getName());
       if (object.getReferenceDate() != null) {
-        serializer.addToMessage(message, null, REFERENCE_DATE_ORDINAL, FinmathDateUtils.convertToLocalDate(object.getReferenceDate()));
+        serializer.addToMessage(message, null, REFERENCE_DATE_ORDINAL, object.getReferenceDate());
       }
       try {
         final Field aField = CapletVolatilitiesParametricFourParameterPicewiseConstant.class.getDeclaredField(A_FIELD_NAME);
@@ -283,9 +280,9 @@ import com.mcleodmoores.integration.adapter.FinmathDateUtils;
     @Override
     public CapletVolatilitiesParametricFourParameterPicewiseConstant buildObject(final FudgeDeserializer deserializer, final FudgeMsg message) {
       final String name = message.getString(NAME_ORDINAL);
-      Calendar referenceDate;
+      LocalDate referenceDate;
       if (message.hasField(REFERENCE_DATE_ORDINAL)) {
-        referenceDate = FinmathDateUtils.convertLocalDate(deserializer.fieldValueToObject(LocalDate.class, message.getByOrdinal(REFERENCE_DATE_ORDINAL)));
+        referenceDate = deserializer.fieldValueToObject(LocalDate.class, message.getByOrdinal(REFERENCE_DATE_ORDINAL));
       } else {
         referenceDate = null;
       }

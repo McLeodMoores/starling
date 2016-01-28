@@ -1,12 +1,28 @@
 /**
- * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2015 - present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.mcleodmoores.integration.serialization.fudge;
 
 import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.Calendar;
+
+import org.apache.commons.lang3.ArrayUtils;
+import org.fudgemsg.FudgeMsg;
+import org.fudgemsg.FudgeRuntimeException;
+import org.fudgemsg.MutableFudgeMsg;
+import org.fudgemsg.mapping.FudgeBuilder;
+import org.fudgemsg.mapping.FudgeBuilderFor;
+import org.fudgemsg.mapping.FudgeDeserializer;
+import org.fudgemsg.mapping.FudgeSerializer;
+import org.joda.time.LocalDate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.mcleodmoores.integration.adapter.FinmathBusinessDay;
+import com.mcleodmoores.integration.adapter.FinmathBusinessDayFactory;
+import com.mcleodmoores.integration.adapter.FinmathDayCount;
+import com.mcleodmoores.integration.adapter.FinmathDayCountFactory;
 
 import net.finmath.marketdata.model.AnalyticModel;
 import net.finmath.marketdata.model.AnalyticModelInterface;
@@ -30,24 +46,6 @@ import net.finmath.marketdata.model.curves.PiecewiseCurve;
 import net.finmath.time.businessdaycalendar.BusinessdayCalendarInterface;
 import net.finmath.time.businessdaycalendar.BusinessdayCalendarInterface.DateRollConvention;
 import net.finmath.time.daycount.DayCountConventionInterface;
-
-import org.apache.commons.lang3.ArrayUtils;
-import org.fudgemsg.FudgeMsg;
-import org.fudgemsg.FudgeRuntimeException;
-import org.fudgemsg.MutableFudgeMsg;
-import org.fudgemsg.mapping.FudgeBuilder;
-import org.fudgemsg.mapping.FudgeBuilderFor;
-import org.fudgemsg.mapping.FudgeDeserializer;
-import org.fudgemsg.mapping.FudgeSerializer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.threeten.bp.LocalDate;
-
-import com.mcleodmoores.integration.adapter.FinmathBusinessDay;
-import com.mcleodmoores.integration.adapter.FinmathBusinessDayFactory;
-import com.mcleodmoores.integration.adapter.FinmathDateUtils;
-import com.mcleodmoores.integration.adapter.FinmathDayCount;
-import com.mcleodmoores.integration.adapter.FinmathDayCountFactory;
 
 /**
  * Fudge builders for objects that extend {@link net.finmath.marketdata.model.curves.AbstractCurve}.
@@ -137,7 +135,7 @@ import com.mcleodmoores.integration.adapter.FinmathDayCountFactory;
         message.add(EXTRAPOLATION_METHOD_ORDINAL, object.getExtrapolationMethod().name());
         message.add(INTERPOLATION_ENTITY_ORDINAL, object.getInterpolationEntity().name());
         if (object.getReferenceDate() != null) {
-          serializer.addToMessage(message, null, REFERENCE_DATE_ORDINAL, FinmathDateUtils.convertToLocalDate(object.getReferenceDate()));
+          serializer.addToMessage(message, null, REFERENCE_DATE_ORDINAL, object.getReferenceDate());
         }
         return message;
       } catch (NoSuchFieldException | SecurityException | IllegalAccessException e) {
@@ -155,9 +153,9 @@ import com.mcleodmoores.integration.adapter.FinmathDayCountFactory;
         final InterpolationMethod interpolationMethod = InterpolationMethod.valueOf(message.getString(INTERPOLATION_METHOD_ORDINAL));
         final ExtrapolationMethod extrapolationMethod = ExtrapolationMethod.valueOf(message.getString(EXTRAPOLATION_METHOD_ORDINAL));
         final InterpolationEntity interpolationEntity = InterpolationEntity.valueOf(message.getString(INTERPOLATION_ENTITY_ORDINAL));
-        Calendar referenceDate;
+        LocalDate referenceDate;
         if (message.hasField(REFERENCE_DATE_ORDINAL)) {
-          referenceDate = FinmathDateUtils.convertLocalDate(deserializer.fieldValueToObject(LocalDate.class, message.getByOrdinal(REFERENCE_DATE_ORDINAL)));
+          referenceDate = deserializer.fieldValueToObject(LocalDate.class, message.getByOrdinal(REFERENCE_DATE_ORDINAL));
         } else {
           referenceDate = null;
         }
@@ -200,7 +198,7 @@ import com.mcleodmoores.integration.adapter.FinmathDayCountFactory;
         message.add(NAME_ORDINAL, object.getName());
         serializer.addToMessageWithClassHeaders(message, null, CURVES_ORDINAL, curves, DiscountCurveInterface[].class);
         if (object.getReferenceDate() != null) {
-          serializer.addToMessage(message, null, REFERENCE_DATE_ORDINAL, FinmathDateUtils.convertToLocalDate(object.getReferenceDate()));
+          serializer.addToMessage(message, null, REFERENCE_DATE_ORDINAL, object.getReferenceDate());
         }
         return message;
       } catch (NoSuchFieldException | SecurityException | IllegalAccessException e) {
@@ -212,9 +210,9 @@ import com.mcleodmoores.integration.adapter.FinmathDayCountFactory;
     public DiscountCurveFromProductOfCurves buildObject(final FudgeDeserializer deserializer, final FudgeMsg message) {
       final String name = message.getString(NAME_ORDINAL);
       final DiscountCurveInterface[] curves = deserializer.fieldValueToObject(DiscountCurveInterface[].class, message.getByOrdinal(CURVES_ORDINAL));
-      Calendar referenceDate;
+      LocalDate referenceDate;
       if (message.hasField(REFERENCE_DATE_ORDINAL)) {
-        referenceDate = FinmathDateUtils.convertLocalDate(deserializer.fieldValueToObject(LocalDate.class, message.getByOrdinal(REFERENCE_DATE_ORDINAL)));
+        referenceDate = deserializer.fieldValueToObject(LocalDate.class, message.getByOrdinal(REFERENCE_DATE_ORDINAL));
       } else {
         referenceDate = null;
       }
@@ -243,7 +241,7 @@ import com.mcleodmoores.integration.adapter.FinmathDayCountFactory;
       message.add(null, 0, object.getClass().getName());
       message.add(NAME_ORDINAL, object.getName());
       if (object.getReferenceDate() != null) {
-        serializer.addToMessage(message, null, REFERENCE_DATE_ORDINAL, FinmathDateUtils.convertToLocalDate(object.getReferenceDate()));
+        serializer.addToMessage(message, null, REFERENCE_DATE_ORDINAL, object.getReferenceDate());
       }
       message.add(TIME_SCALING_ORDINAL, object.getTimeScaling());
       serializer.addToMessage(message, null, PARAMETERS_ORDINAL, object.getParameter());
@@ -253,9 +251,9 @@ import com.mcleodmoores.integration.adapter.FinmathDayCountFactory;
     @Override
     public DiscountCurveNelsonSiegelSvensson buildObject(final FudgeDeserializer deserializer, final FudgeMsg message) {
       final String name = message.getString(NAME_ORDINAL);
-      Calendar referenceDate;
+      LocalDate referenceDate;
       if (message.hasField(REFERENCE_DATE_ORDINAL)) {
-        referenceDate = FinmathDateUtils.convertLocalDate(deserializer.fieldValueToObject(LocalDate.class, message.getByOrdinal(REFERENCE_DATE_ORDINAL)));
+        referenceDate = deserializer.fieldValueToObject(LocalDate.class, message.getByOrdinal(REFERENCE_DATE_ORDINAL));
       } else {
         referenceDate = null;
       }
@@ -331,7 +329,7 @@ import com.mcleodmoores.integration.adapter.FinmathDayCountFactory;
         final Field paymentRollDateConventionField = AbstractForwardCurve.class.getDeclaredField(PAYMENT_ROLL_DATE_CONVENTION_FIELD);
         final Field forwardInterpolationEntityField = ForwardCurve.class.getDeclaredField(FORWARD_INTERPOLATION_ENTITY_FIELD);
         AccessibleObject.setAccessible(new AccessibleObject[] {pointsField, timeField, valueField, offsetCodeField,
-            paymentBusinessDayCalendarField, paymentRollDateConventionField, forwardInterpolationEntityField}, true);
+          paymentBusinessDayCalendarField, paymentRollDateConventionField, forwardInterpolationEntityField}, true);
         final BusinessdayCalendarInterface paymentBusinessDayCalendar = (BusinessdayCalendarInterface) paymentBusinessDayCalendarField.get(object);
         if (paymentBusinessDayCalendar instanceof FinmathBusinessDay) {
           message.add(BUSINESS_DAY_CALENDAR_ORDINAL, ((FinmathBusinessDay) paymentBusinessDayCalendar).getName());
@@ -362,7 +360,7 @@ import com.mcleodmoores.integration.adapter.FinmathDayCountFactory;
         message.add(FORWARD_INTERPOLATION_ENTITY_ORDINAL,
             ((InterpolationEntityForward) forwardInterpolationEntityField.get(object)).name());
         if (object.getReferenceDate() != null) {
-          serializer.addToMessage(message, null, REFERENCE_DATE_ORDINAL, FinmathDateUtils.convertToLocalDate(object.getReferenceDate()));
+          serializer.addToMessage(message, null, REFERENCE_DATE_ORDINAL, object.getReferenceDate());
         }
         return message;
       } catch (NoSuchFieldException | SecurityException | IllegalAccessException e) {
@@ -387,9 +385,9 @@ import com.mcleodmoores.integration.adapter.FinmathDayCountFactory;
         final String discountCurveName = message.getString(DISCOUNT_CURVE_NAME_ORDINAL);
         final InterpolationEntityForward forwardInterpolationEntity =
             InterpolationEntityForward.valueOf(message.getString(FORWARD_INTERPOLATION_ENTITY_ORDINAL));
-        final Calendar referenceDate;
+        final LocalDate referenceDate;
         if (message.hasField(REFERENCE_DATE_ORDINAL)) {
-          referenceDate = FinmathDateUtils.convertLocalDate(deserializer.fieldValueToObject(LocalDate.class, message.getByOrdinal(REFERENCE_DATE_ORDINAL)));
+          referenceDate = deserializer.fieldValueToObject(LocalDate.class, message.getByOrdinal(REFERENCE_DATE_ORDINAL));
         } else {
           referenceDate = null;
         }
@@ -495,7 +493,7 @@ import com.mcleodmoores.integration.adapter.FinmathDayCountFactory;
         final String paymentOffsetCode = (String) offsetCodeField.get(object);
         message.add(PAYMENT_OFFSET_ORDINAL, paymentOffsetCode);
         if (object.getReferenceDate() != null) {
-          serializer.addToMessage(message, null, REFERENCE_DATE_ORDINAL, FinmathDateUtils.convertToLocalDate(object.getReferenceDate()));
+          serializer.addToMessage(message, null, REFERENCE_DATE_ORDINAL, object.getReferenceDate());
         }
         return message;
       } catch (NoSuchFieldException | SecurityException | IllegalAccessException e) {
@@ -507,9 +505,9 @@ import com.mcleodmoores.integration.adapter.FinmathDayCountFactory;
     public ForwardCurveFromDiscountCurve buildObject(final FudgeDeserializer deserializer, final FudgeMsg message) {
       final String name = message.getString(NAME_ORDINAL);
       final String paymentOffsetCode = message.getString(PAYMENT_OFFSET_ORDINAL);
-      final Calendar referenceDate;
+      final LocalDate referenceDate;
       if (message.hasField(REFERENCE_DATE_ORDINAL)) {
-        referenceDate = FinmathDateUtils.convertLocalDate(deserializer.fieldValueToObject(LocalDate.class, message.getByOrdinal(REFERENCE_DATE_ORDINAL)));
+        referenceDate = deserializer.fieldValueToObject(LocalDate.class, message.getByOrdinal(REFERENCE_DATE_ORDINAL));
       } else {
         referenceDate = null;
       }
@@ -614,7 +612,7 @@ import com.mcleodmoores.integration.adapter.FinmathDayCountFactory;
         final Field dayCountConventionField = ForwardCurveNelsonSiegelSvensson.class.getDeclaredField(DAY_COUNT_CONVENTION_FIELD);
         final Field discountCurveField = ForwardCurveNelsonSiegelSvensson.class.getDeclaredField(DISCOUNT_CURVE_FIELD);
         AccessibleObject.setAccessible(new AccessibleObject[] {offsetCodeField, paymentBusinessDayCalendarField, paymentRollDateConventionField,
-            dayCountConventionField, discountCurveField}, true);
+          dayCountConventionField, discountCurveField}, true);
         final BusinessdayCalendarInterface paymentBusinessDayCalendar = (BusinessdayCalendarInterface) paymentBusinessDayCalendarField.get(object);
         if (paymentBusinessDayCalendar instanceof FinmathBusinessDay) {
           message.add(BUSINESS_DAY_CALENDAR_ORDINAL, ((FinmathBusinessDay) paymentBusinessDayCalendar).getName());
@@ -635,7 +633,7 @@ import com.mcleodmoores.integration.adapter.FinmathDayCountFactory;
         final DiscountCurveNelsonSiegelSvensson discountCurve = (DiscountCurveNelsonSiegelSvensson) discountCurveField.get(object);
         message.add(DISCOUNT_CURVE_NAME_ORDINAL, discountCurve.getName());
         if (object.getReferenceDate() != null) {
-          serializer.addToMessage(message, null, REFERENCE_DATE_ORDINAL, FinmathDateUtils.convertToLocalDate(discountCurve.getReferenceDate()));
+          serializer.addToMessage(message, null, REFERENCE_DATE_ORDINAL, discountCurve.getReferenceDate());
         }
         message.add(DISCOUNT_CURVE_TIME_SCALING_ORDINAL, discountCurve.getTimeScaling());
         serializer.addToMessage(message, null, DISCOUNT_CURVE_PARAMETERS_ORDINAL, discountCurve.getParameter());
@@ -648,9 +646,9 @@ import com.mcleodmoores.integration.adapter.FinmathDayCountFactory;
     @Override
     public ForwardCurveNelsonSiegelSvensson buildObject(final FudgeDeserializer deserializer, final FudgeMsg message) {
       final String name = message.getString(DISCOUNT_CURVE_NAME_ORDINAL);
-      final Calendar referenceDate;
+      final LocalDate referenceDate;
       if (message.hasField(REFERENCE_DATE_ORDINAL)) {
-        referenceDate = FinmathDateUtils.convertLocalDate(deserializer.fieldValueToObject(LocalDate.class, message.getByOrdinal(REFERENCE_DATE_ORDINAL)));
+        referenceDate = deserializer.fieldValueToObject(LocalDate.class, message.getByOrdinal(REFERENCE_DATE_ORDINAL));
       } else {
         referenceDate = null;
       }

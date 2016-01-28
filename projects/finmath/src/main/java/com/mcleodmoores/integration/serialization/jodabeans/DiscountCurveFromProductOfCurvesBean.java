@@ -1,13 +1,9 @@
 /**
- * Copyright (C) 2014-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2014 - present McLeod Moores Software Limited.  All rights reserved.
  */
-package com.mcleodmoores.integration.serialization;
+package com.mcleodmoores.integration.serialization.jodabeans;
 import java.util.Collection;
 import java.util.Map;
-
-import net.finmath.marketdata.model.curves.CurveInterface;
-import net.finmath.marketdata.model.curves.DiscountCurveFromProductOfCurves;
-import net.finmath.marketdata.model.curves.DiscountCurveInterface;
 
 import org.joda.beans.Bean;
 import org.joda.beans.BeanBuilder;
@@ -21,6 +17,10 @@ import org.joda.beans.impl.direct.DirectMetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 
 import com.opengamma.util.ArgumentChecker;
+
+import net.finmath.marketdata.model.curves.CurveInterface;
+import net.finmath.marketdata.model.curves.DiscountCurveFromProductOfCurves;
+import net.finmath.marketdata.model.curves.DiscountCurveInterface;
 
 /**
  * Bean for a Finmath {@link DiscountCurveFromProductOfCurvesBean}.

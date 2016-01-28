@@ -1,13 +1,26 @@
 /**
- * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2015 - present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.mcleodmoores.integration.serialization.fudge;
 
 import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Field;
-import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
+
+import org.fudgemsg.FudgeMsg;
+import org.fudgemsg.FudgeRuntimeException;
+import org.fudgemsg.MutableFudgeMsg;
+import org.fudgemsg.mapping.FudgeBuilder;
+import org.fudgemsg.mapping.FudgeBuilderFor;
+import org.fudgemsg.mapping.FudgeDeserializer;
+import org.fudgemsg.mapping.FudgeSerializer;
+import org.joda.time.LocalDate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.mcleodmoores.integration.adapter.FinmathDayCount;
+import com.mcleodmoores.integration.adapter.FinmathDayCountFactory;
 
 import net.finmath.marketdata.model.AnalyticModel;
 import net.finmath.marketdata.model.AnalyticModelInterface;
@@ -21,21 +34,6 @@ import net.finmath.time.TimeDiscretization;
 import net.finmath.time.TimeDiscretizationInterface;
 import net.finmath.time.daycount.DayCountConventionInterface;
 
-import org.fudgemsg.FudgeMsg;
-import org.fudgemsg.FudgeRuntimeException;
-import org.fudgemsg.MutableFudgeMsg;
-import org.fudgemsg.mapping.FudgeBuilder;
-import org.fudgemsg.mapping.FudgeBuilderFor;
-import org.fudgemsg.mapping.FudgeDeserializer;
-import org.fudgemsg.mapping.FudgeSerializer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.threeten.bp.LocalDate;
-
-import com.mcleodmoores.integration.adapter.FinmathDateUtils;
-import com.mcleodmoores.integration.adapter.FinmathDayCount;
-import com.mcleodmoores.integration.adapter.FinmathDayCountFactory;
-
 /**
  * Fudge builders for Finmath objects.
  */
@@ -47,6 +45,38 @@ import com.mcleodmoores.integration.adapter.FinmathDayCountFactory;
    * Restricted constructor.
    */
   private FinmathBuilders() {
+  }
+
+  /**
+   * Fudge builder for {@link org.joda.time.LocalDate}.
+   */
+  @FudgeBuilderFor(org.joda.time.LocalDate.class)
+  public static class JodaLocalDateBuilder implements FudgeBuilder<org.joda.time.LocalDate> {
+    /** The year ordinal */
+    private static final int YEAR_ORDINAL = 1;
+    /** The month ordinal */
+    private static final int MONTH_ORDINAL = 2;
+    /** The day ordinal */
+    private static final int DAY_ORDINAL = 3;
+
+    @Override
+    public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final org.joda.time.LocalDate object) {
+      final MutableFudgeMsg message = serializer.newMessage();
+      message.add(null, 0, object.getClass().getName());
+      message.add(YEAR_ORDINAL, object.getYear());
+      message.add(MONTH_ORDINAL, object.getMonthOfYear());
+      message.add(DAY_ORDINAL, object.getDayOfMonth());
+      return message;
+    }
+
+    @Override
+    public org.joda.time.LocalDate buildObject(final FudgeDeserializer deserializer, final FudgeMsg message) {
+      final int year = message.getInt(YEAR_ORDINAL);
+      final int month = message.getInt(MONTH_ORDINAL);
+      final int day = message.getInt(DAY_ORDINAL);
+      return new LocalDate(year, month, day);
+    }
+
   }
 
   /**
@@ -65,16 +95,11 @@ import com.mcleodmoores.integration.adapter.FinmathDayCountFactory;
     public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final Tenor object) {
       final MutableFudgeMsg message = serializer.newMessage();
       message.add(null, 0, object.getClass().getName());
-      serializer.addToMessage(message, null, REFERENCE_DATE_ORDINAL, FinmathDateUtils.convertToLocalDate(object.getReferenceDate()));
+      serializer.addToMessage(message, null, REFERENCE_DATE_ORDINAL, object.getReferenceDate());
       try {
         final Field field = Tenor.class.getDeclaredField(DATES_FIELD);
         field.setAccessible(true);
-        final Calendar[] calendar = (Calendar[]) field.get(object);
-        final int length = calendar.length;
-        final LocalDate[] dates = new LocalDate[length];
-        for (int i = 0; i < length; i++) {
-          dates[i] = FinmathDateUtils.convertToLocalDate(calendar[i]);
-        }
+        final LocalDate[] dates = (LocalDate[]) field.get(object);
         serializer.addToMessageWithClassHeaders(message, null, DATES_ORDINAL, dates);
         return message;
       } catch (NoSuchFieldException | SecurityException | IllegalAccessException e) {
@@ -85,14 +110,8 @@ import com.mcleodmoores.integration.adapter.FinmathDayCountFactory;
     @Override
     public Tenor buildObject(final FudgeDeserializer deserializer, final FudgeMsg message) {
       final LocalDate[] dates = deserializer.fieldValueToObject(LocalDate[].class, message.getByOrdinal(DATES_ORDINAL));
-      final int length = dates.length;
-      final Calendar[] calendar = new Calendar[length];
-      for (int i = 0; i < length; i++) {
-        calendar[i] = FinmathDateUtils.convertLocalDate(dates[i]);
-      }
-      final Calendar referenceDate = FinmathDateUtils.convertLocalDate(deserializer.fieldValueToObject(LocalDate.class,
-          message.getByOrdinal(REFERENCE_DATE_ORDINAL)));
-      return new Tenor(calendar, referenceDate);
+      final LocalDate referenceDate = deserializer.fieldValueToObject(LocalDate.class, message.getByOrdinal(REFERENCE_DATE_ORDINAL));
+      return new Tenor(dates, referenceDate);
     }
 
   }
@@ -226,7 +245,7 @@ import com.mcleodmoores.integration.adapter.FinmathDayCountFactory;
     public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final Schedule object) {
       final MutableFudgeMsg message = serializer.newMessage();
       message.add(null, 0, object.getClass().getName());
-      serializer.addToMessage(message, null, REFERENCE_DATE_ORDINAL, FinmathDateUtils.convertToLocalDate(object.getReferenceDate()));
+      serializer.addToMessage(message, null, REFERENCE_DATE_ORDINAL, object.getReferenceDate());
       serializer.addToMessageWithClassHeaders(message, null, PERIODS_ORDINAL, object.getPeriods());
       final DayCountConventionInterface dayCountConvention = object.getDaycountconvention();
       if (dayCountConvention instanceof FinmathDayCount) {
@@ -240,8 +259,7 @@ import com.mcleodmoores.integration.adapter.FinmathDayCountFactory;
 
     @Override
     public Schedule buildObject(final FudgeDeserializer deserializer, final FudgeMsg message) {
-      final Calendar referenceDate = FinmathDateUtils.convertLocalDate(deserializer.fieldValueToObject(LocalDate.class,
-          message.getByOrdinal(REFERENCE_DATE_ORDINAL)));
+      final LocalDate referenceDate = deserializer.fieldValueToObject(LocalDate.class, message.getByOrdinal(REFERENCE_DATE_ORDINAL));
       final List<Period> periods = deserializer.fieldValueToObject(List.class, message.getByOrdinal(PERIODS_ORDINAL));
       final DayCountConventionInterface dayCount = FinmathDayCountFactory.of(message.getString(DAY_COUNT_CONVENTION_ORDINAL));
       return new Schedule(referenceDate, periods, dayCount);
@@ -267,20 +285,19 @@ import com.mcleodmoores.integration.adapter.FinmathDayCountFactory;
     public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final Period object) {
       final MutableFudgeMsg message = serializer.newMessage();
       message.add(null, 0, object.getClass().getName());
-      serializer.addToMessage(message, null, FIXING_ORDINAL, FinmathDateUtils.convertToLocalDate(object.getFixing()));
-      serializer.addToMessage(message, null, PAYMENT_ORDINAL, FinmathDateUtils.convertToLocalDate(object.getPayment()));
-      serializer.addToMessage(message, null, PERIOD_START_ORDINAL, FinmathDateUtils.convertToLocalDate(object.getPeriodStart()));
-      serializer.addToMessage(message, null, PERIOD_END_ORDINAL, FinmathDateUtils.convertToLocalDate(object.getPeriodEnd()));
+      serializer.addToMessage(message, null, FIXING_ORDINAL, object.getFixing());
+      serializer.addToMessage(message, null, PAYMENT_ORDINAL, object.getPayment());
+      serializer.addToMessage(message, null, PERIOD_START_ORDINAL, object.getPeriodStart());
+      serializer.addToMessage(message, null, PERIOD_END_ORDINAL, object.getPeriodEnd());
       return message;
     }
 
     @Override
     public Period buildObject(final FudgeDeserializer deserializer, final FudgeMsg message) {
-      final Calendar fixing = FinmathDateUtils.convertLocalDate(deserializer.fieldValueToObject(LocalDate.class, message.getByOrdinal(FIXING_ORDINAL)));
-      final Calendar payment = FinmathDateUtils.convertLocalDate(deserializer.fieldValueToObject(LocalDate.class, message.getByOrdinal(PAYMENT_ORDINAL)));
-      final Calendar periodStart = FinmathDateUtils.convertLocalDate(deserializer.fieldValueToObject(LocalDate.class,
-          message.getByOrdinal(PERIOD_START_ORDINAL)));
-      final Calendar periodEnd = FinmathDateUtils.convertLocalDate(deserializer.fieldValueToObject(LocalDate.class, message.getByOrdinal(PERIOD_END_ORDINAL)));
+      final LocalDate fixing = deserializer.fieldValueToObject(LocalDate.class, message.getByOrdinal(FIXING_ORDINAL));
+      final LocalDate payment = deserializer.fieldValueToObject(LocalDate.class, message.getByOrdinal(PAYMENT_ORDINAL));
+      final LocalDate periodStart = deserializer.fieldValueToObject(LocalDate.class, message.getByOrdinal(PERIOD_START_ORDINAL));
+      final LocalDate periodEnd = deserializer.fieldValueToObject(LocalDate.class, message.getByOrdinal(PERIOD_END_ORDINAL));
       return new Period(fixing, payment, periodStart, periodEnd);
     }
 
