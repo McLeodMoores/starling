@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2014-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2014 - present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.mcleodmoores.integration.function.curve;
 
@@ -47,23 +47,23 @@ public class CurveFunctions extends AbstractFunctionConfigurationBean {
    */
   public static FunctionConfigurationSource providers(final ConfigMaster configMaster) {
     return new BeanDynamicFunctionConfigurationSource(ConfigMasterChangeProvider.of(configMaster)) {
-  
+
       @Override
       protected VersionedFunctionConfigurationBean createConfiguration() {
         final Providers providers = new Providers();
         providers.setConfigMaster(configMaster);
         return providers;
       }
-  
+
       @Override
       protected boolean isPropogateEvent(final ChangeEvent event) {
         //TODO
         return true;
       }
-  
+
     };
   }
-  
+
   /**
    * Returns a configuration populated with functions that supply model parameters (e.g. G2++ parameters).
    *
@@ -72,21 +72,21 @@ public class CurveFunctions extends AbstractFunctionConfigurationBean {
    */
   public static FunctionConfigurationSource parameterProviders(final ConfigMaster configMaster) {
     return new BeanDynamicFunctionConfigurationSource(ConfigMasterChangeProvider.of(configMaster)) {
-  
+
       @Override
       protected VersionedFunctionConfigurationBean createConfiguration() {
         final ParameterProviders providers = new ParameterProviders();
         providers.setConfigMaster(configMaster);
         return providers;
       }
-  
+
       @Override
       protected boolean isPropogateEvent(final ChangeEvent event) {
         //TODO
         return true;
         //return ParameterProviders.isMonitoredType(event.getObjectId().getValue());
       }
-  
+
     };
   }
 

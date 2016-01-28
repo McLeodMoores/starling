@@ -1,16 +1,16 @@
 /**
- * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2015 - present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.mcleodmoores.integration.web.analytics.formatting;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import net.finmath.marketdata.model.curves.DiscountCurve;
-
 import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.web.analytics.formatting.AbstractFormatter;
 import com.opengamma.web.analytics.formatting.DataType;
+
+import net.finmath.marketdata.model.curves.DiscountCurve;
 
 /**
  *

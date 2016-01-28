@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2014-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2014 - present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.mcleodmoores.integration.function.curve;
 
@@ -15,11 +15,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
-
-import net.finmath.marketdata.model.curves.Curve.ExtrapolationMethod;
-import net.finmath.marketdata.model.curves.Curve.InterpolationEntity;
-import net.finmath.marketdata.model.curves.Curve.InterpolationMethod;
-import net.finmath.marketdata.model.curves.DiscountCurve;
 
 import org.apache.commons.lang.NotImplementedException;
 
@@ -40,6 +35,11 @@ import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.financial.analytics.curve.AbstractCurveDefinition;
 import com.opengamma.financial.analytics.curve.InterpolatedCurveDefinition;
 import com.opengamma.util.async.AsynchronousExecution;
+
+import net.finmath.marketdata.model.curves.Curve.ExtrapolationMethod;
+import net.finmath.marketdata.model.curves.Curve.InterpolationEntity;
+import net.finmath.marketdata.model.curves.Curve.InterpolationMethod;
+import net.finmath.marketdata.model.curves.DiscountCurve;
 
 /**
  *
