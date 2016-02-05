@@ -176,7 +176,7 @@ public class CurveMarketDataFunction extends AbstractFunction {
       for (final CurveNodeWithIdentifier id : nodes) {
         try {
           if (id.getDataField() != null) {
-            if ((id.getCurveNode() instanceof BondNode) || (id.getCurveNode() instanceof BillNode)) {
+            if (id.getCurveNode() instanceof BondNode || id.getCurveNode() instanceof BillNode) {
               requirements.add(new ValueRequirement(id.getDataField(), ComputationTargetType.SECURITY, id.getIdentifier()));
             } else {
               requirements.add(new ValueRequirement(id.getDataField(), ComputationTargetType.PRIMITIVE, id.getIdentifier()));
@@ -232,7 +232,7 @@ public class CurveMarketDataFunction extends AbstractFunction {
       for (final CurveNodeWithIdentifier id : specification.getNodes()) {
         if (id.getDataField() != null) {
           ComputedValue value;
-          if ((id.getCurveNode() instanceof BondNode) || (id.getCurveNode() instanceof BillNode)) {
+          if (id.getCurveNode() instanceof BondNode || id.getCurveNode() instanceof BillNode) {
             try {
               value = inputs.getComputedValue(new ValueRequirement(id.getDataField(), ComputationTargetType.SECURITY, id.getIdentifier()));
             } catch (final NullPointerException e) {

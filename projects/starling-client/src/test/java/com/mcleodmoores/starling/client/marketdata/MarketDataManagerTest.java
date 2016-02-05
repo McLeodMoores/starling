@@ -5,6 +5,7 @@
  */
 package com.mcleodmoores.starling.client.marketdata;
 
+import static com.opengamma.core.value.MarketDataRequirementNames.MARKET_VALUE;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNull;
 import static org.testng.Assert.assertTrue;
@@ -99,7 +100,8 @@ public class MarketDataManagerTest {
     dataSet.put(MarketDataKey.of(ExternalId.of(TEST_SCHEME, "NZDUSD").toBundle(), DataField.of(MarketDataRequirementNames.MARKET_VALUE)), 2.2);
     dataSet.put(MarketDataKey.of(ExternalId.of(TEST_SCHEME, "GBPUSD").toBundle(), DataField.of(MarketDataRequirementNames.MARKET_VALUE)), 1.5);
     dataSet.put(MarketDataKey.of(ExternalId.of(TEST_SCHEME, "GBP1Y").toBundle(), DataField.of(MarketDataRequirementNames.MARKET_VALUE)),
-        ImmutableLocalDateDoubleTimeSeries.builder().putAll(new LocalDate[] {LocalDate.of(2016, 1, 1), LocalDate.of(2016, 1, 2)}, new double[] {0.01, 0.02}).build());
+        ImmutableLocalDateDoubleTimeSeries.builder()
+        .putAll(new LocalDate[] {LocalDate.of(2016, 1, 1), LocalDate.of(2016, 1, 2)}, new double[] {0.01, 0.02}).build());
     return dataSet;
   }
 
@@ -115,19 +117,25 @@ public class MarketDataManagerTest {
     // saves the data
     marketDataManager.saveOrUpdate(createTestMarketData(), today);
     final HistoricalTimeSeriesSource source = toolContext.getHistoricalTimeSeriesSource();
-    HistoricalTimeSeries historicalTimeSeries1 = source.getHistoricalTimeSeries(ExternalId.of(TEST_SCHEME, "AUDUSD").toBundle(), DataSource.DEFAULT.getName(), DataProvider.DEFAULT.getName(), MarketDataRequirementNames.MARKET_VALUE);
+    HistoricalTimeSeries historicalTimeSeries1 = 
+        source.getHistoricalTimeSeries(ExternalId.of(TEST_SCHEME, "AUDUSD").toBundle(), DataSource.DEFAULT.getName(), 
+            DataProvider.DEFAULT.getName(), MARKET_VALUE);
     LocalDateDoubleTimeSeries timeSeries1 = historicalTimeSeries1.getTimeSeries();
     assertEquals(timeSeries1.size(), 1);
     assertEquals(timeSeries1.getValue(today), 1.8);
-    HistoricalTimeSeries historicalTimeSeries2 = source.getHistoricalTimeSeries(ExternalId.of(TEST_SCHEME, "NZDUSD").toBundle(), DataSource.DEFAULT.getName(), DataProvider.DEFAULT.getName(), MarketDataRequirementNames.MARKET_VALUE);
+    HistoricalTimeSeries historicalTimeSeries2 = 
+        source.getHistoricalTimeSeries(ExternalId.of(TEST_SCHEME, "NZDUSD").toBundle(), DataSource.DEFAULT.getName(), 
+            DataProvider.DEFAULT.getName(), MARKET_VALUE);
     LocalDateDoubleTimeSeries timeSeries2 = historicalTimeSeries2.getTimeSeries();
     assertEquals(timeSeries2.size(), 1);
     assertEquals(timeSeries2.getValue(today), 2.2);
-    HistoricalTimeSeries historicalTimeSeries3 = source.getHistoricalTimeSeries(ExternalId.of(TEST_SCHEME, "GBPUSD").toBundle(), DataSource.DEFAULT.getName(), DataProvider.DEFAULT.getName(), MarketDataRequirementNames.MARKET_VALUE);
+    HistoricalTimeSeries historicalTimeSeries3 = source.getHistoricalTimeSeries(ExternalId.of(TEST_SCHEME, "GBPUSD").toBundle(), 
+        DataSource.DEFAULT.getName(), DataProvider.DEFAULT.getName(), MARKET_VALUE);
     LocalDateDoubleTimeSeries timeSeries3 = historicalTimeSeries3.getTimeSeries();
     assertEquals(timeSeries3.size(), 1);
     assertEquals(timeSeries3.getValue(today), 1.5);
-    HistoricalTimeSeries historicalTimeSeries4 = source.getHistoricalTimeSeries(ExternalId.of(TEST_SCHEME, "GBP1Y").toBundle(), DataSource.DEFAULT.getName(), DataProvider.DEFAULT.getName(), MarketDataRequirementNames.MARKET_VALUE);
+    HistoricalTimeSeries historicalTimeSeries4 = source.getHistoricalTimeSeries(ExternalId.of(TEST_SCHEME, "GBP1Y").toBundle(), 
+        DataSource.DEFAULT.getName(), DataProvider.DEFAULT.getName(), MARKET_VALUE);
     LocalDateDoubleTimeSeries timeSeries4 = historicalTimeSeries4.getTimeSeries();
     assertEquals(timeSeries4.size(), 2);
     assertEquals(timeSeries4.getValue(LocalDate.of(2016, 1, 1)), 0.01);
@@ -136,21 +144,26 @@ public class MarketDataManagerTest {
     final MarketDataSet updatedData = MarketDataSet.empty();
     updatedData.put(MarketDataKey.of(ExternalId.of(TEST_SCHEME, "AUDUSD").toBundle(), DataField.of(MarketDataRequirementNames.MARKET_VALUE)), 1.9);
     updatedData.put(MarketDataKey.of(ExternalId.of(TEST_SCHEME, "GBP1Y").toBundle(), DataField.of(MarketDataRequirementNames.MARKET_VALUE)),
-        ImmutableLocalDateDoubleTimeSeries.builder().putAll(new LocalDate[] {LocalDate.of(2016, 1, 1), LocalDate.of(2016, 1, 2)}, new double[] {0.01, 0.03}).build());
+        ImmutableLocalDateDoubleTimeSeries.builder().putAll(new LocalDate[] {LocalDate.of(2016, 1, 1), LocalDate.of(2016, 1, 2)}, 
+            new double[] {0.01, 0.03}).build());
     marketDataManager.saveOrUpdate(updatedData, today);
-    historicalTimeSeries1 = source.getHistoricalTimeSeries(ExternalId.of(TEST_SCHEME, "AUDUSD").toBundle(), DataSource.DEFAULT.getName(), DataProvider.DEFAULT.getName(), MarketDataRequirementNames.MARKET_VALUE);
+    historicalTimeSeries1 = source.getHistoricalTimeSeries(ExternalId.of(TEST_SCHEME, "AUDUSD").toBundle(), DataSource.DEFAULT.getName(), 
+        DataProvider.DEFAULT.getName(), MARKET_VALUE);
     timeSeries1 = historicalTimeSeries1.getTimeSeries();
     assertEquals(timeSeries1.size(), 1);
     assertEquals(timeSeries1.getValue(today), 1.9);
-    historicalTimeSeries2 = source.getHistoricalTimeSeries(ExternalId.of(TEST_SCHEME, "NZDUSD").toBundle(), DataSource.DEFAULT.getName(), DataProvider.DEFAULT.getName(), MarketDataRequirementNames.MARKET_VALUE);
+    historicalTimeSeries2 = source.getHistoricalTimeSeries(ExternalId.of(TEST_SCHEME, "NZDUSD").toBundle(), DataSource.DEFAULT.getName(), 
+        DataProvider.DEFAULT.getName(), MARKET_VALUE);
     timeSeries2 = historicalTimeSeries2.getTimeSeries();
     assertEquals(timeSeries2.size(), 1);
     assertEquals(timeSeries2.getValue(today), 2.2);
-    historicalTimeSeries3 = source.getHistoricalTimeSeries(ExternalId.of(TEST_SCHEME, "GBPUSD").toBundle(), DataSource.DEFAULT.getName(), DataProvider.DEFAULT.getName(), MarketDataRequirementNames.MARKET_VALUE);
+    historicalTimeSeries3 = source.getHistoricalTimeSeries(ExternalId.of(TEST_SCHEME, "GBPUSD").toBundle(), DataSource.DEFAULT.getName(), 
+        DataProvider.DEFAULT.getName(), MARKET_VALUE);
     timeSeries3 = historicalTimeSeries3.getTimeSeries();
     assertEquals(timeSeries3.size(), 1);
     assertEquals(timeSeries3.getValue(today), 1.5);
-    historicalTimeSeries4 = source.getHistoricalTimeSeries(ExternalId.of(TEST_SCHEME, "GBP1Y").toBundle(), DataSource.DEFAULT.getName(), DataProvider.DEFAULT.getName(), MarketDataRequirementNames.MARKET_VALUE);
+    historicalTimeSeries4 = source.getHistoricalTimeSeries(ExternalId.of(TEST_SCHEME, "GBP1Y").toBundle(), DataSource.DEFAULT.getName(), 
+        DataProvider.DEFAULT.getName(), MARKET_VALUE);
     timeSeries4 = historicalTimeSeries4.getTimeSeries();
     assertEquals(timeSeries4.size(), 2);
     assertEquals(timeSeries4.getValue(LocalDate.of(2016, 1, 1)), 0.01);
@@ -170,7 +183,8 @@ public class MarketDataManagerTest {
     // saves the data
     marketDataManager.saveOrUpdate(dataSet, today);
     final HistoricalTimeSeriesSource source = toolContext.getHistoricalTimeSeriesSource();
-    assertNull(source.getHistoricalTimeSeries(ExternalId.of(TEST_SCHEME, "JPYUSD").toBundle(), DataSource.DEFAULT.getName(), DataProvider.DEFAULT.getName(), MarketDataRequirementNames.MARKET_VALUE));
+    assertNull(source.getHistoricalTimeSeries(ExternalId.of(TEST_SCHEME, "JPYUSD").toBundle(), 
+        DataSource.DEFAULT.getName(), DataProvider.DEFAULT.getName(), MARKET_VALUE));
   }
 
   /**
@@ -185,7 +199,8 @@ public class MarketDataManagerTest {
     final FunctionConfigurationDefinition functionDefinition = new FunctionConfigurationDefinition("TEST_FUNCTIONS", Arrays.asList("TEST_FUNCTIONS"),
         Collections.<StaticFunctionConfiguration>emptyList(),
         Collections.<ParameterizedFunctionConfiguration>emptyList());
-    ConfigMasterUtils.storeByName(toolContext.getConfigMaster(), ConfigItem.of(functionDefinition, functionDefinition.getName(), FunctionConfigurationDefinition.class));
+    ConfigMasterUtils.storeByName(toolContext.getConfigMaster(), 
+        ConfigItem.of(functionDefinition, functionDefinition.getName(), FunctionConfigurationDefinition.class));
     final ViewKey viewKey = ViewKey.of("TEST", UniqueId.of("TEST", "1"));
     marketDataManager.getRequiredDataForView(viewKey, now);
   }
@@ -224,7 +239,8 @@ public class MarketDataManagerTest {
     final FunctionConfigurationDefinition functionDefinition = new FunctionConfigurationDefinition("TEST_FUNCTIONS", Arrays.asList("TEST_FUNCTIONS"),
         Collections.<StaticFunctionConfiguration>emptyList(),
         Collections.singletonList(new ParameterizedFunctionConfiguration(CurveMarketDataFunction.class.getName(), Collections.singletonList(curveName))));
-    ConfigMasterUtils.storeByName(toolContext.getConfigMaster(), ConfigItem.of(functionDefinition, functionDefinition.getName(), FunctionConfigurationDefinition.class));
+    ConfigMasterUtils.storeByName(toolContext.getConfigMaster(), ConfigItem.of(functionDefinition, functionDefinition.getName(), 
+        FunctionConfigurationDefinition.class));
     ConfigMasterUtils.storeByName(toolContext.getConfigMaster(), ConfigItem.of(curveDefinition, curveDefinition.getName(), InterpolatedCurveDefinition.class));
     ConfigMasterUtils.storeByName(toolContext.getConfigMaster(), ConfigItem.of(cnim, cnim.getName(), CurveNodeIdMapper.class));
     final ViewDefinition viewDefinition = createCurveDataView(toolContext, curveDefinition.getName());
@@ -260,7 +276,8 @@ public class MarketDataManagerTest {
             new StaticFunctionConfiguration(SimpleFuturePresentValueFunction.class.getName()),
             new StaticFunctionConfiguration(HistoricalTimeSeriesFunction.class.getName())),
         Collections.<ParameterizedFunctionConfiguration>emptyList());
-    ConfigMasterUtils.storeByName(toolContext.getConfigMaster(), ConfigItem.of(functionDefinition, functionDefinition.getName(), FunctionConfigurationDefinition.class));
+    ConfigMasterUtils.storeByName(toolContext.getConfigMaster(), ConfigItem.of(functionDefinition, functionDefinition.getName(), 
+        FunctionConfigurationDefinition.class));
     final ViewKey viewKey = ViewKey.of(viewDefinition.getName(), viewDefinition.getUniqueId());
     final ZonedDateTime today = ZonedDateTime.now();
     final Instant now = Instant.from(today);

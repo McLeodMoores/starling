@@ -201,7 +201,7 @@ public class CurveNodeCurrencyVisitor implements CurveNodeVisitor<Set<Currency>>
       // If the convention is not found in the convention source then try the convention referenced in the underlying security
       final Security security = _securitySource.getSingle(node.getConvention().toBundle());
       if (security == null) {
-        throw new OpenGammaRuntimeException("Could not get security with id " + node.getConvention());
+        throw new OpenGammaRuntimeException("Could not get convention or security with id " + node.getConvention());
       }
       if (security instanceof IborIndex) {
         final IborIndex indexSecurity = (IborIndex) security;

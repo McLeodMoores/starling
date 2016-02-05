@@ -6,8 +6,8 @@
 package com.opengamma.financial.analytics.curve;
 
 import java.util.Collection;
+import java.util.Objects;
 
-import org.apache.commons.lang.ObjectUtils;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 import org.threeten.bp.LocalDate;
@@ -76,8 +76,8 @@ public class InterpolatedCurveSpecification extends CurveSpecification {
     final int prime = 31;
     int result = super.hashCode();
     result = prime * result + _interpolatorName.hashCode();
-    result = prime * result + _rightExtrapolatorName.hashCode();
-    result = prime * result + _leftExtrapolatorName.hashCode();
+    result = prime * result + (_rightExtrapolatorName == null ? 0 : _rightExtrapolatorName.hashCode());
+    result = prime * result + (_leftExtrapolatorName == null ? 0 : _leftExtrapolatorName.hashCode());
     return result;
   }
 
@@ -93,9 +93,9 @@ public class InterpolatedCurveSpecification extends CurveSpecification {
       return false;
     }
     final InterpolatedCurveSpecification other = (InterpolatedCurveSpecification) obj;
-    return ObjectUtils.equals(_interpolatorName, other._interpolatorName) &&
-        ObjectUtils.equals(_rightExtrapolatorName, other._rightExtrapolatorName) &&
-        ObjectUtils.equals(_leftExtrapolatorName, other._leftExtrapolatorName);
+    return Objects.equals(_interpolatorName, other._interpolatorName) &&
+        Objects.equals(_rightExtrapolatorName, other._rightExtrapolatorName) &&
+        Objects.equals(_leftExtrapolatorName, other._leftExtrapolatorName);
   }
 
   @Override

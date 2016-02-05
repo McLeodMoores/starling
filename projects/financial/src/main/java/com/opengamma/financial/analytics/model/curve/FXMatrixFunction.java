@@ -126,6 +126,7 @@ public class FXMatrixFunction extends AbstractFunction {
         final CurveNodeVisitor<Set<Currency>> visitor = new CurveNodeCurrencyVisitor(conventionSource, securitySource, configSource);
         currencies = CurveUtils.getCurrencies(curveConstructionConfiguration, _curveDefinitionSource, _curveConstructionConfigurationSource, visitor);
       } catch (final Exception e) {
+        e.printStackTrace();
         throw new OpenGammaRuntimeException(e.getMessage() + ": problem in CurveConstructionConfiguration called " + _configurationName);
       }
     }

@@ -66,7 +66,7 @@ public class CashDefinition implements InstrumentDefinition<Cash> {
     ArgumentChecker.notNull(startDate, "Start date");
     ArgumentChecker.notNull(endDate, "End date");
     ArgumentChecker.notNull(currency, "Currency");
-    ArgumentChecker.isTrue(endDate.isAfter(startDate), "End date should be strictly after start date");
+    ArgumentChecker.isTrue(endDate.isAfter(startDate), "End date should be strictly after start date: have {} and {}", startDate, endDate);
     _startDate = startDate;
     _endDate = endDate;
     _notional = notional;
@@ -240,13 +240,13 @@ public class CashDefinition implements InstrumentDefinition<Cash> {
     int result = 1;
     long temp;
     temp = Double.doubleToLongBits(_accrualFactor);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     result = prime * result + _currency.hashCode();
     result = prime * result + _endDate.hashCode();
     temp = Double.doubleToLongBits(_notional);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_rate);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     result = prime * result + _startDate.hashCode();
     return result;
   }
