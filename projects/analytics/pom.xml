@@ -56,10 +56,6 @@
         </exclusion>
         <exclusion>
           <groupId>org.fudgemsg</groupId>
-          <artifactId>fudge-java</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>org.fudgemsg</groupId>
           <artifactId>fudge-proto</artifactId>
         </exclusion>
         <exclusion>

@@ -17,8 +17,7 @@ import com.opengamma.analytics.financial.credit.cds.ISDAInterpolator1D;
 
 /**
  * A factory for one-dimensional interpolators.
- * @deprecated  use {@link com.opengamma.analytics.math.interpolation.factory.NamedInterpolator1dFactory} and
- * {@link com.opengamma.analytics.math.interpolation.factory.NamedExtrapolator1dFactory}.
+ * @deprecated  use {@link com.opengamma.analytics.math.interpolation.factory.NamedInterpolator1dFactory}
  */
 @Deprecated
 public final class Interpolator1DFactory {

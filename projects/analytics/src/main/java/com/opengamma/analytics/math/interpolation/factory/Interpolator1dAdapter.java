@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2015 - present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.analytics.math.interpolation.factory;
 
@@ -22,17 +22,34 @@ public class Interpolator1dAdapter extends Interpolator1D implements NamedInterp
   private final Interpolator1D _interpolator;
   /** The interpolator name */
   private final String _name;
+  /** True if the interpolator extrapolates */
+  private final boolean _isExtrapolator;
 
   /**
-   * Creates an instance.
-   * @param interpolator The interpolator, not null
-   * @param name The interpolator name, not null
+   * Creates an instance that is assumed to not extrapolate beyond the data points on the x-axis.
+   * @param interpolator  the interpolator, not null
+   * @param name  the interpolator name, not null
    */
   public Interpolator1dAdapter(final Interpolator1D interpolator, final String name) {
     ArgumentChecker.notNull(interpolator, "interpolator");
     ArgumentChecker.notNull(name, "name");
     _interpolator = interpolator;
     _name = name;
+    _isExtrapolator = false;
+  }
+
+  /**
+   * Creates an instance.
+   * @param interpolator  the interpolator, not null
+   * @param name  the interpolator name, not null
+   * @param isExtrapolator  true if extrapolation can be performed
+   */
+  public Interpolator1dAdapter(final Interpolator1D interpolator, final String name, final boolean isExtrapolator) {
+    ArgumentChecker.notNull(interpolator, "interpolator");
+    ArgumentChecker.notNull(name, "name");
+    _interpolator = interpolator;
+    _name = name;
+    _isExtrapolator = isExtrapolator;
   }
 
   @Override
@@ -71,8 +88,16 @@ public class Interpolator1dAdapter extends Interpolator1D implements NamedInterp
   }
 
   /**
+   * Returns true if extrapolation is performed.
+   * @return  true if extrapolation is performed
+   */
+  public boolean isExtrapolator() {
+    return _isExtrapolator;
+  }
+
+  /**
    * Gets the underlying interpolator.
-   * @return The underlying interpolator
+   * @return  the underlying interpolator
    */
   public Interpolator1D getUnderlyingInterpolator() {
     return _interpolator;

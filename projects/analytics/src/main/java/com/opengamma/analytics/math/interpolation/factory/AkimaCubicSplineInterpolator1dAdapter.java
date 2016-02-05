@@ -1,13 +1,14 @@
 /**
- * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2015 - present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.analytics.math.interpolation.factory;
 
 import com.opengamma.analytics.math.interpolation.SemiLocalCubicSplineInterpolator1D;
 
 /**
- * A named interpolator called "Akima Cubic Spline" that wraps {@link SemiLocalCubicSplineInterpolator1D}.
+ * A named interpolator that wraps {@link SemiLocalCubicSplineInterpolator1D}.
  */
+@InterpolationType(name = "Akima Cubic Spline", aliases = {"AkimaCubicSpline", "Akima Cubic Spline Interpolator", "AkimaCubicSplineInterpolator" })
 public class AkimaCubicSplineInterpolator1dAdapter extends Interpolator1dAdapter {
   /** Serialization version */
   private static final long serialVersionUID = 1L;
@@ -17,9 +18,17 @@ public class AkimaCubicSplineInterpolator1dAdapter extends Interpolator1dAdapter
   public static final String NAME = "Akima Cubic Spline";
 
   /**
-   * Creates an instance.
+   * Creates an instance called "Akima Cubic Spline".
    */
   public AkimaCubicSplineInterpolator1dAdapter() {
     super(new SemiLocalCubicSplineInterpolator1D(), NAME);
+  }
+
+  /**
+   * Creates an instance.
+   * @param name  the interpolator name, not null
+   */
+  public AkimaCubicSplineInterpolator1dAdapter(final String name) {
+    super(new SemiLocalCubicSplineInterpolator1D(), name);
   }
 }
