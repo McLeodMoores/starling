@@ -29,7 +29,7 @@ public class BusinessDayCalendarAdapter extends BusinessdayCalendar {
 
   @Override
   public boolean isBusinessday(final LocalDate date) {
-    return _calendar.isWorkingDay(FinmathDateUtils.convertFromJodaDate(date));
+    return _calendar.isWorkingDay(FinmathDateUtils.convertFromJodaLocalDateDate(date));
   }
 
   @Override

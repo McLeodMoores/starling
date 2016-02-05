@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2015 - present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.mcleodmoores.integration.serialization.fudge;
 
@@ -51,6 +51,14 @@ public class FinmathBuildersTest extends FinancialTestBase {
     assertArrayEquals(tenor.getAsDoubleArray(), cycled.getAsDoubleArray(), 1e-15);
   }
 
+  /**
+   * Tests a cycle of {@link org.joda.time.LocalDate}.
+   */
+  @Test
+  public void testLocalDate() {
+    final org.joda.time.LocalDate date = new LocalDate(2016, 1, 1);
+    assertEquals(cycleObject(org.joda.time.LocalDate.class, date), date);
+  }
   /**
    * Tests a cycle of {@link TimeDiscretization}.
    */

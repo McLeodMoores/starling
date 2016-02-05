@@ -75,15 +75,16 @@ public class DiscountCurveFunction extends AbstractFunction.NonCompiledInvoker {
     return Collections.singleton(new ComputedValue(spec, discountCurve));
   }
 
-  @Override
-  public boolean canHandleMissingInputs() {
-    return true;
-  }
+//  @Override
+//  public boolean canHandleMissingInputs() {
+//    return true;
+//  }
+//
+//  @Override
+//  public boolean canHandleMissingRequirements() {
+//    return true;
+//  }
 
-  @Override
-  public boolean canHandleMissingRequirements() {
-    return true;
-  }
   @Override
   public ComputationTargetType getTargetType() {
     return ComputationTargetType.NULL;

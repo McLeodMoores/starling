@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2015 - present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.mcleodmoores.integration.serialization.fudge;
 
@@ -34,8 +34,6 @@ import net.finmath.time.businessdaycalendar.BusinessdayCalendarInterface.DateRol
  * Unit tests for {@link FinmathVolatilitySurfaceBuilders}.
  */
 public class FinmathVolatilitySurfaceBuildersTest extends FinancialTestBase {
-  /** The accuracy */
-  private static final double EPS = 1e-15;
 
   /**
    * Tests a cycle of {@link CapletVolatilitiesParametric}.

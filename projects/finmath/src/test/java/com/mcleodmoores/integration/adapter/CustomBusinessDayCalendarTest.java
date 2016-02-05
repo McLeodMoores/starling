@@ -47,7 +47,7 @@ public class CustomBusinessDayCalendarTest {
     final LocalDate end = new LocalDate(2015, 1, 1);
     LocalDate date = new LocalDate(2014, 1, 1);
     while (date.isBefore(end)) {
-      if (HOLIDAYS.contains(FinmathDateUtils.convertFromJodaDate(date)) || date.getDayOfWeek() == 6 || date.getDayOfWeek() == 7) {
+      if (HOLIDAYS.contains(FinmathDateUtils.convertFromJodaLocalDateDate(date)) || date.getDayOfWeek() == 6 || date.getDayOfWeek() == 7) {
         assertFalse(BUSINESS_DAY.isBusinessday(date));
       } else {
         assertTrue(BUSINESS_DAY.isBusinessday(date));
