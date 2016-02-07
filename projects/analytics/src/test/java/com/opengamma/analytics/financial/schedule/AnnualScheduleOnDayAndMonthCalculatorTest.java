@@ -27,7 +27,7 @@ public class AnnualScheduleOnDayAndMonthCalculatorTest extends ScheduleCalculato
   private static final AnnualScheduleOnDayAndMonthCalculator CALCULATOR = new AnnualScheduleOnDayAndMonthCalculator(DAY_OF_MONTH, MONTH_OF_YEAR);
 
   @Override
-  public Schedule getScheduleCalculator() {
+  protected Schedule getScheduleCalculator() {
     return CALCULATOR;
   }
 

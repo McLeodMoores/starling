@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2014-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2014 - present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.analytics.date;
 
@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Objects;
+import java.util.TreeSet;
 
 import org.threeten.bp.DayOfWeek;
 import org.threeten.bp.LocalDate;
@@ -26,7 +27,8 @@ public class SimpleWorkingDayCalendar implements WorkingDayCalendar {
   private final DayOfWeek _weekendDay1;
   /** The second weekend day */
   private final DayOfWeek _weekendDay2;
-
+  /** For the toString() method */
+  private String _toString = null;
   /**
    * Creates an instance.
    * @param name  the name of the calendar, not null
@@ -102,13 +104,20 @@ public class SimpleWorkingDayCalendar implements WorkingDayCalendar {
 
   @Override
   public String toString() {
+    if (_toString == null) {
+      buildString();
+    }
+    return _toString;
+  }
+
+  private void buildString() {
     final StringBuilder sb = new StringBuilder(_name);
     sb.append(": [");
     sb.append(_weekendDay1);
     sb.append(", ");
     sb.append(_weekendDay2);
     sb.append("], ");
-    sb.append(_holidays);
-    return sb.toString();
+    sb.append(new TreeSet<>(_holidays));
+    _toString = sb.toString();
   }
 }

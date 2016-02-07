@@ -15,8 +15,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.annotations.Test;
 
-import cern.jet.random.engine.MersenneTwister;
-
 import com.opengamma.analytics.financial.model.option.pricing.analytic.formula.BlackFunctionData;
 import com.opengamma.analytics.financial.model.option.pricing.analytic.formula.EuropeanVanillaOption;
 import com.opengamma.analytics.financial.model.volatility.smile.function.SABRFormulaData;
@@ -28,6 +26,8 @@ import com.opengamma.analytics.math.statistics.distribution.ProbabilityDistribut
 import com.opengamma.analytics.math.statistics.leastsquare.LeastSquareResultsWithTransform;
 import com.opengamma.util.monitor.OperationTimer;
 import com.opengamma.util.test.TestGroup;
+
+import cern.jet.random.engine.MersenneTwister;
 
 /**
  * Test.
@@ -136,7 +136,7 @@ public class SABRModelFitterTest {
     assertTrue("chi^2 " + results.getChiSq(), results.getChiSq() < exChi2);
   }
 
-  @Test
+  @Test(enabled = false)
   public void testNoisyFit() {
 
     final double[] start = new double[] {0.1, 0.7, 0.0, 0.3};

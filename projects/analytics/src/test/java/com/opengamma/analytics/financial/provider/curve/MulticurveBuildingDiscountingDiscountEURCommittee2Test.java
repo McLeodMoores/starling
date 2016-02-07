@@ -241,7 +241,7 @@ public class MulticurveBuildingDiscountingDiscountEURCommittee2Test {
   }
 
   @SuppressWarnings({"rawtypes", "unchecked" })
-  public static InstrumentDefinition<?>[] getDefinitions(final double[] marketQuotes, final GeneratorInstrument[] generators, final GeneratorAttribute[] attribute) {
+  private static InstrumentDefinition<?>[] getDefinitions(final double[] marketQuotes, final GeneratorInstrument[] generators, final GeneratorAttribute[] attribute) {
     final InstrumentDefinition<?>[] definitions = new InstrumentDefinition<?>[marketQuotes.length];
     for (int loopmv = 0; loopmv < marketQuotes.length; loopmv++) {
       definitions[loopmv] = generators[loopmv].generateInstrument(NOW, marketQuotes[loopmv], NOTIONAL, attribute[loopmv]);
@@ -249,7 +249,7 @@ public class MulticurveBuildingDiscountingDiscountEURCommittee2Test {
     return definitions;
   }
 
-  private static List<Pair<MulticurveProviderDiscount, CurveBuildingBlockBundle>> CURVES_PAR_SPREAD_MQ_WITHOUT_TODAY_BLOCK = new ArrayList<>();
+  private static final List<Pair<MulticurveProviderDiscount, CurveBuildingBlockBundle>> CURVES_PAR_SPREAD_MQ_WITHOUT_TODAY_BLOCK = new ArrayList<>();
 
   // Calculator
   private static final PresentValueDiscountingCalculator PVDC = PresentValueDiscountingCalculator.getInstance();
@@ -348,10 +348,10 @@ public class MulticurveBuildingDiscountingDiscountEURCommittee2Test {
     }
   }
 
-  @Test(enabled = false)
   /**
    * Analyzes the shape of the pseudo-on forward rates for the EURIBOR6M forward curve.
    */
+  @Test(enabled = false)
   public void forwardAnalysisON() {
     final MulticurveProviderInterface multicurve = CURVES_PAR_SPREAD_MQ_WITHOUT_TODAY_BLOCK.get(1).getFirst();
     final int jump = 1;
@@ -379,10 +379,10 @@ public class MulticurveBuildingDiscountingDiscountEURCommittee2Test {
     }
   }
 
-  @Test(enabled = false)
   /**
    * Analyzes the shape of the forward rate curve for EURIBOR6M forward curve.
    */
+  @Test(enabled = false)
   public void forwardAnalysisTenor() {
     final MulticurveProviderInterface multicurve = CURVES_PAR_SPREAD_MQ_WITHOUT_TODAY_BLOCK.get(1).getFirst();
     final int jump = 1;

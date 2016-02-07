@@ -507,7 +507,7 @@ public class MulticurveBuildingDiscountingDiscountXCcyTest {
   }
 
   @SuppressWarnings("unchecked")
-  public static InstrumentDefinition<?>[] getDefinitions(final double[] marketQuotes, @SuppressWarnings("rawtypes") final GeneratorInstrument[] generators, final GeneratorAttribute[] attribute) {
+  private static InstrumentDefinition<?>[] getDefinitions(final double[] marketQuotes, @SuppressWarnings("rawtypes") final GeneratorInstrument[] generators, final GeneratorAttribute[] attribute) {
     final InstrumentDefinition<?>[] definitions = new InstrumentDefinition<?>[marketQuotes.length];
     for (int loopmv = 0; loopmv < marketQuotes.length; loopmv++) {
       definitions[loopmv] = generators[loopmv].generateInstrument(NOW, marketQuotes[loopmv], NOTIONAL, attribute[loopmv]);
@@ -515,7 +515,7 @@ public class MulticurveBuildingDiscountingDiscountXCcyTest {
     return definitions;
   }
 
-  private static List<Pair<MulticurveProviderDiscount, CurveBuildingBlockBundle>> CURVES_PAR_SPREAD_MQ_WITHOUT_TODAY_BLOCK = new ArrayList<>();
+  private static final List<Pair<MulticurveProviderDiscount, CurveBuildingBlockBundle>> CURVES_PAR_SPREAD_MQ_WITHOUT_TODAY_BLOCK = new ArrayList<>();
 
   // Calculators
   private static final PresentValueDiscountingCalculator PVDC = PresentValueDiscountingCalculator.getInstance();
@@ -623,10 +623,10 @@ public class MulticurveBuildingDiscountingDiscountXCcyTest {
     }
   }
 
-  @Test(enabled = true)
   /**
    * Analyzes the shape of the forward curve.
    */
+  @Test(enabled = true)
   public void marketQuoteSensitivityAnalysis() {
     // Create a 3 currencies provider
     final int indexEur = 4;
@@ -647,10 +647,10 @@ public class MulticurveBuildingDiscountingDiscountXCcyTest {
     final int t = 0;
   }
 
-  @Test(enabled = false)
   /**
    * Analyzes the shape of the forward curve.
    */
+  @Test(enabled = false)
   public void forwardAnalysis() {
     final MulticurveProviderInterface marketDsc = CURVES_PAR_SPREAD_MQ_WITHOUT_TODAY_BLOCK.get(0).getFirst();
     final int jump = 1;

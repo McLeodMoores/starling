@@ -23,7 +23,7 @@ public class SemiAnnualScheduleCalculatorTest extends ScheduleCalculatorTestCase
   private static final SemiAnnualScheduleCalculator CALCULATOR = new SemiAnnualScheduleCalculator();
 
   @Override
-  public Schedule getScheduleCalculator() {
+  protected Schedule getScheduleCalculator() {
     return CALCULATOR;
   }
 

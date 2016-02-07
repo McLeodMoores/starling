@@ -23,7 +23,7 @@ public class FirstOfMonthScheduleCalculatorTest extends ScheduleCalculatorTestCa
   private static final FirstOfMonthScheduleCalculator CALCULATOR = new FirstOfMonthScheduleCalculator();
 
   @Override
-  public Schedule getScheduleCalculator() {
+  protected Schedule getScheduleCalculator() {
     return CALCULATOR;
   }
 

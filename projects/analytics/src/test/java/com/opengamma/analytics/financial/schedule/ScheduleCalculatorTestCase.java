@@ -22,7 +22,7 @@ public abstract class ScheduleCalculatorTestCase {
   private static final LocalDate END1 = LocalDate.of(2000, 12, 1);
   private static final ZonedDateTime END2 = DateUtils.getUTCDate(2000, 12, 1);
 
-  public abstract Schedule getScheduleCalculator();
+  protected abstract Schedule getScheduleCalculator();
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullStartDate1() {

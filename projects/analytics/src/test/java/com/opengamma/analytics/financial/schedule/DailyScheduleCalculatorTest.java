@@ -24,7 +24,7 @@ public class DailyScheduleCalculatorTest extends ScheduleCalculatorTestCase {
   private static final DailyScheduleCalculator CALCULATOR = new DailyScheduleCalculator();
 
   @Override
-  public Schedule getScheduleCalculator() {
+  protected Schedule getScheduleCalculator() {
     return CALCULATOR;
   }
 

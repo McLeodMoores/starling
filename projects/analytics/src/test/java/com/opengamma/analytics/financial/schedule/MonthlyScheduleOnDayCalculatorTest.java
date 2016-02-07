@@ -23,7 +23,7 @@ public class MonthlyScheduleOnDayCalculatorTest extends ScheduleCalculatorTestCa
   private static final MonthlyScheduleOnDayCalculator CALCULATOR = new MonthlyScheduleOnDayCalculator(15);
 
   @Override
-  public MonthlyScheduleOnDayCalculator getScheduleCalculator() {
+  protected MonthlyScheduleOnDayCalculator getScheduleCalculator() {
     return CALCULATOR;
   }
 

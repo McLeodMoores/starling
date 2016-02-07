@@ -22,7 +22,7 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT)
 public abstract class CapletStrippingAbsoluteStrikeTest extends CapletStrippingSetup {
 
-  public abstract CapletStrippingAbsoluteStrike getStripper(final List<CapFloor> caps);
+  protected abstract CapletStrippingAbsoluteStrike getStripper(final List<CapFloor> caps);
 
   public void testVolStripping(final boolean print) {
     testVolStripping(1e-7, print); // Tolerance of 0.001bps - only really applicable of root finding methods

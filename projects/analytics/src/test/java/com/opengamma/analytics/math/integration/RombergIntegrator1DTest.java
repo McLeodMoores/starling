@@ -17,7 +17,7 @@ public class RombergIntegrator1DTest extends Integrator1DTestCase {
   private static final Integrator1D<Double, Double> INTEGRATOR = new RombergIntegrator1D();
 
   @Override
-  public Integrator1D<Double, Double> getIntegrator() {
+  protected Integrator1D<Double, Double> getIntegrator() {
     return INTEGRATOR;
   }
 }

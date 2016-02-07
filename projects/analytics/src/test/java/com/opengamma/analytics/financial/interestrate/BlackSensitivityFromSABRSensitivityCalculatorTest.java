@@ -126,7 +126,7 @@ public class BlackSensitivityFromSABRSensitivityCalculatorTest {
   private static final SwaptionPhysicalFixedIborSABRMethod METHOD_SWAPTION_SABR = SwaptionPhysicalFixedIborSABRMethod.getInstance();
   private static final PresentValueSABRSensitivitySABRCalculator PVSSC_SABR = PresentValueSABRSensitivitySABRCalculator.getInstance();
 
-  public ObjectsPair<SABRInterestRateParameters, HashMap<DoublesPair, DoubleMatrix2D>> calibration(final double[][][] volBlack) {
+  private ObjectsPair<SABRInterestRateParameters, HashMap<DoublesPair, DoubleMatrix2D>> calibration(final double[][][] volBlack) {
     final double[] expiryTimeVector = new double[NB_EXPIRY * NB_MATURITY];
     final double[] maturityTimeVector = new double[NB_EXPIRY * NB_MATURITY];
     final double[] alphaVector = new double[NB_EXPIRY * NB_MATURITY];

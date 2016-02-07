@@ -15,9 +15,6 @@ import org.apache.commons.lang.Validate;
 import org.slf4j.Logger;
 import org.testng.annotations.Test;
 
-import cern.jet.random.engine.MersenneTwister;
-import cern.jet.random.engine.RandomEngine;
-
 import com.opengamma.analytics.financial.model.volatility.smile.function.SmileModelData;
 import com.opengamma.analytics.financial.model.volatility.smile.function.VolatilityFunctionProvider;
 import com.opengamma.analytics.math.differentiation.VectorFieldFirstOrderDifferentiator;
@@ -28,6 +25,9 @@ import com.opengamma.analytics.math.statistics.leastsquare.LeastSquareResults;
 import com.opengamma.analytics.math.statistics.leastsquare.LeastSquareResultsWithTransform;
 import com.opengamma.util.monitor.OperationTimer;
 import com.opengamma.util.test.TestGroup;
+
+import cern.jet.random.engine.MersenneTwister;
+import cern.jet.random.engine.RandomEngine;
 
 /**
  * Test.
@@ -113,6 +113,7 @@ public abstract class SmileModelFitterTest<T extends SmileModelData> {
     return from;
   }
 
+  @Test(enabled = false)
   public void testNoisyFit() {
     final double[][] start = getStartValues();
     final BitSet[] fixed = getFixedValues();
@@ -132,6 +133,7 @@ public abstract class SmileModelFitterTest<T extends SmileModelData> {
     }
   }
 
+  @Test(enabled = false)
   public void timeTest() {
     final int hotspotWarmupCycles = 200;
     final int benchmarkCycles = 1000;
@@ -145,7 +147,7 @@ public abstract class SmileModelFitterTest<T extends SmileModelData> {
         testNoisyFit();
       }
       final long time = timer.finished();
-      getlogger().info("time per fit: " + ((double) time) / benchmarkCycles / nStarts + "ms");
+      getlogger().info("time per fit: " + (double) time / benchmarkCycles / nStarts + "ms");
 
     }
   }

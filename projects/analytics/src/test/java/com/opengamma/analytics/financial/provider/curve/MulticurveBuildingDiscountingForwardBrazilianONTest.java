@@ -60,7 +60,7 @@ import com.opengamma.util.time.DateUtils;
 import com.opengamma.util.tuple.Pair;
 
 /**
- * 
+ *
  */
 
 @Test(groups = TestGroup.UNIT)
@@ -145,7 +145,7 @@ public class MulticurveBuildingDiscountingForwardBrazilianONTest {
   }
 
   @SuppressWarnings({"rawtypes", "unchecked" })
-  public static InstrumentDefinition<?>[] getDefinitions(final double[] marketQuotes, final GeneratorInstrument[] generators, final GeneratorAttribute[] attribute) {
+  private static InstrumentDefinition<?>[] getDefinitions(final double[] marketQuotes, final GeneratorInstrument[] generators, final GeneratorAttribute[] attribute) {
     final InstrumentDefinition<?>[] definitions = new InstrumentDefinition<?>[marketQuotes.length];
     for (int loopmv = 0; loopmv < marketQuotes.length; loopmv++) {
       definitions[loopmv] = generators[loopmv].generateInstrument(NOW, marketQuotes[loopmv], NOTIONAL, attribute[loopmv]);
@@ -207,10 +207,10 @@ public class MulticurveBuildingDiscountingForwardBrazilianONTest {
     }
   }
 
-  @Test(enabled = false)
   /**
     * Analyzes the shape of the forward curve.
     */
+  @Test(enabled = false)
   public void forwardAnalysis() {
     final MulticurveProviderInterface marketDsc = CURVES_PAR_SPREAD_MQ_WITHOUT_TODAY_BLOCK.get(0).getFirst();
     final int jump = 1;

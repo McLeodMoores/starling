@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.schedule;
@@ -23,7 +23,7 @@ public class EndOfYearScheduleCalculatorTest extends ScheduleCalculatorTestCase 
   private static final EndOfYearScheduleCalculator CALCULATOR = new EndOfYearScheduleCalculator();
 
   @Override
-  public Schedule getScheduleCalculator() {
+  protected Schedule getScheduleCalculator() {
     return CALCULATOR;
   }
 

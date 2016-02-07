@@ -336,10 +336,10 @@ public class MulticurveBuildingDiscountingDiscountEURCommitteeTest {
     }
   }
 
-  @Test(enabled = false)
   /**
    * Analyzes the shape of the forward curve.
    */
+  @Test(enabled = false)
   public void forwardAnalysis() {
     final MulticurveProviderInterface multicurve = CURVES_PAR_SPREAD_MQ_WITHOUT_TODAY_BLOCK.get(0).getFirst();
     final int jump = 1;

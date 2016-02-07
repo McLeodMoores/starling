@@ -23,7 +23,7 @@ public class FirstOfYearScheduleCalculatorTest extends ScheduleCalculatorTestCas
   private static final FirstOfYearScheduleCalculator CALCULATOR = new FirstOfYearScheduleCalculator();
 
   @Override
-  public Schedule getScheduleCalculator() {
+  protected Schedule getScheduleCalculator() {
     return CALCULATOR;
   }
 

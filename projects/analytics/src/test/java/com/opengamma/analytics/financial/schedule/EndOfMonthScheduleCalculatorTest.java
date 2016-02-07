@@ -23,7 +23,7 @@ public class EndOfMonthScheduleCalculatorTest extends ScheduleCalculatorTestCase
   private static final EndOfMonthScheduleCalculator CALCULATOR = new EndOfMonthScheduleCalculator();
 
   @Override
-  public Schedule getScheduleCalculator() {
+  protected Schedule getScheduleCalculator() {
     return CALCULATOR;
   }
 

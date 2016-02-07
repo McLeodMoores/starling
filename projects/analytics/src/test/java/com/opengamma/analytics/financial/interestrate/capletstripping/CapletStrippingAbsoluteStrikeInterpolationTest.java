@@ -19,7 +19,7 @@ import com.opengamma.util.test.TestGroup;
 public class CapletStrippingAbsoluteStrikeInterpolationTest extends CapletStrippingAbsoluteStrikeTest {
 
   @Override
-  public CapletStrippingAbsoluteStrike getStripper(final List<CapFloor> caps) {
+  protected CapletStrippingAbsoluteStrike getStripper(final List<CapFloor> caps) {
     return new CapletStrippingAbsoluteStrikeInterpolation(caps, getYieldCurves());
   }
 

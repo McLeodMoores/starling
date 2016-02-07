@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2014 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math.integration;
@@ -14,19 +14,19 @@ import com.opengamma.analytics.math.function.Function1D;
 import com.opengamma.util.test.TestGroup;
 
 /**
- * 
+ *
  */
 @Test(groups = TestGroup.UNIT)
 public class AdaptiveCompositeIntegrator1DTest extends Integrator1DTestCase {
   private static final Integrator1D<Double, Double> INTEGRATOR = new AdaptiveCompositeIntegrator1D(new SimpsonIntegrator1D());
 
   @Override
-  public Integrator1D<Double, Double> getIntegrator() {
+  protected Integrator1D<Double, Double> getIntegrator() {
     return INTEGRATOR;
   }
 
   /**
-   * 
+   *
    */
   @Test
   public void sampleDataTest() {
@@ -44,7 +44,7 @@ public class AdaptiveCompositeIntegrator1DTest extends Integrator1DTestCase {
   }
 
   /**
-   * 
+   *
    */
   @Test
   public void equalsHashCodetest() {
@@ -62,13 +62,13 @@ public class AdaptiveCompositeIntegrator1DTest extends Integrator1DTestCase {
     assertTrue(integ1.equals(integ0));
     assertTrue(integ1.hashCode() == integ0.hashCode());
 
-    assertTrue(!(integ0.equals(integ2)));
-    assertTrue(!(integ0.equals(integ3)));
-    assertTrue(!(integ0.equals(integ4)));
-    assertTrue(!(integ0.equals(integ5)));
-    assertTrue(!(integ0.equals(integBase)));
-    assertTrue(!(integ0.equals(null)));
-    assertTrue(!(integ3.equals(integ5)));
+    assertTrue(!integ0.equals(integ2));
+    assertTrue(!integ0.equals(integ3));
+    assertTrue(!integ0.equals(integ4));
+    assertTrue(!integ0.equals(integ5));
+    assertTrue(!integ0.equals(integBase));
+    assertTrue(!integ0.equals(null));
+    assertTrue(!integ3.equals(integ5));
 
     assertTrue(!(integ1.hashCode() == INTEGRATOR.hashCode()));
   }

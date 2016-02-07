@@ -183,7 +183,7 @@ public class MulticurveBuildingDiscountingDiscountSimpleTest {
   }
 
   @SuppressWarnings({"rawtypes", "unchecked" })
-  public static InstrumentDefinition<?>[] getDefinitions(final double[] marketQuotes, final GeneratorInstrument[] generators, final GeneratorAttribute[] attribute) {
+  private static InstrumentDefinition<?>[] getDefinitions(final double[] marketQuotes, final GeneratorInstrument[] generators, final GeneratorAttribute[] attribute) {
     final InstrumentDefinition<?>[] definitions = new InstrumentDefinition<?>[marketQuotes.length];
     for (int loopmv = 0; loopmv < marketQuotes.length; loopmv++) {
       definitions[loopmv] = generators[loopmv].generateInstrument(NOW, marketQuotes[loopmv], NOTIONAL, attribute[loopmv]);
@@ -191,7 +191,7 @@ public class MulticurveBuildingDiscountingDiscountSimpleTest {
     return definitions;
   }
 
-  private static List<Pair<MulticurveProviderDiscount, CurveBuildingBlockBundle>> CURVES_PAR_SPREAD_MQ_WITHOUT_TODAY_BLOCK = new ArrayList<>();
+  private static final List<Pair<MulticurveProviderDiscount, CurveBuildingBlockBundle>> CURVES_PAR_SPREAD_MQ_WITHOUT_TODAY_BLOCK = new ArrayList<>();
 
   // Calculator
   private static final PresentValueDiscountingCalculator PVC = PresentValueDiscountingCalculator.getInstance();
@@ -209,21 +209,18 @@ public class MulticurveBuildingDiscountingDiscountSimpleTest {
     }
   }
 
-  public List<Pair<MulticurveProviderDiscount, CurveBuildingBlockBundle>> getCurvesWithBlock() {
-    initClass();
+  private static List<Pair<MulticurveProviderDiscount, CurveBuildingBlockBundle>> getCurvesWithBlock() {
     return CURVES_PAR_SPREAD_MQ_WITHOUT_TODAY_BLOCK;
   }
 
-  public MulticurveProviderDiscount getCurvesWithOnlyDiscount() {
-    initClass();
+  private static MulticurveProviderDiscount getCurvesWithOnlyDiscount() {
     final MulticurveProviderDiscount curves = CURVES_PAR_SPREAD_MQ_WITHOUT_TODAY_BLOCK.get(0).getFirst().copy();
     final Map<IborIndex, YieldAndDiscountCurve> iborCurves = new LinkedHashMap<>();
     final MulticurveProviderDiscount curve = new MulticurveProviderDiscount(curves.getDiscountingCurves(), iborCurves, curves.getForwardONCurves(), curves.getFxRates());
     return curve;
   }
 
-  public CurveBuildingBlockBundle getBundleWithOnlyDiscount() {
-    initClass();
+  private static CurveBuildingBlockBundle getBundleWithOnlyDiscount() {
     final Map<String, Pair<CurveBuildingBlock, DoubleMatrix2D>> bundle = CURVES_PAR_SPREAD_MQ_WITHOUT_TODAY_BLOCK.get(0).getSecond().getData();
     final Map<String, Pair<CurveBuildingBlock, DoubleMatrix2D>> bundleWithoutFwd3M = new LinkedHashMap<>();
     final Set<String> keySet = bundle.keySet();
@@ -359,10 +356,10 @@ public class MulticurveBuildingDiscountingDiscountSimpleTest {
     }
   }
 
-  @Test(enabled = false)
   /**
    * Analyzes the shape of the forward curve.
    */
+  @Test(enabled = false)
   public void forwardAnalysis() {
     final MulticurveProviderInterface marketDsc = CURVES_PAR_SPREAD_MQ_WITHOUT_TODAY_BLOCK.get(0).getFirst();
     final int jump = 1;

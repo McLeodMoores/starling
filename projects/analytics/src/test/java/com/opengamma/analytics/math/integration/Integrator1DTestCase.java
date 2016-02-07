@@ -58,5 +58,5 @@ public abstract class Integrator1DTestCase {
     assertEquals(getIntegrator().integrate(DF, UPPER, LOWER), -getIntegrator().integrate(DF, LOWER, UPPER), EPS);
   }
 
-  public abstract Integrator1D<Double, Double> getIntegrator();
+  protected abstract Integrator1D<Double, Double> getIntegrator();
 }

@@ -24,7 +24,7 @@ public class WeeklyScheduleOnDayCalculatorTest extends ScheduleCalculatorTestCas
   private static final WeeklyScheduleOnDayCalculator CALCULATOR = new WeeklyScheduleOnDayCalculator(DayOfWeek.SATURDAY);
 
   @Override
-  public Schedule getScheduleCalculator() {
+  protected Schedule getScheduleCalculator() {
     return CALCULATOR;
   }
 

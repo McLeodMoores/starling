@@ -24,9 +24,9 @@ import org.threeten.bp.Period;
 import org.threeten.bp.ZonedDateTime;
 
 import com.google.common.collect.LinkedListMultimap;
+import com.opengamma.analytics.date.CalendarAdapter;
 import com.opengamma.analytics.date.WeekendWorkingDayCalendar;
 import com.opengamma.analytics.date.WorkingDayCalendar;
-import com.opengamma.analytics.date.CalendarAdapter;
 import com.opengamma.analytics.financial.curve.interestrate.generator.GeneratorCurveYieldInterpolated;
 import com.opengamma.analytics.financial.curve.interestrate.generator.GeneratorYDCurve;
 import com.opengamma.analytics.financial.forex.method.FXMatrix;
@@ -208,7 +208,7 @@ public class MulticurveBuildingDiscountingBillUSDTest {
     return definitions;
   }
 
-  private static List<Pair<IssuerProviderDiscount, CurveBuildingBlockBundle>> CURVES_PAR_SPREAD_MQ_WITHOUT_TODAY_BLOCK = new ArrayList<>();
+  private static final List<Pair<IssuerProviderDiscount, CurveBuildingBlockBundle>> CURVES_PAR_SPREAD_MQ_WITHOUT_TODAY_BLOCK = new ArrayList<>();
 
   // Calculator
   private static final PresentValueIssuerCalculator PVIC = PresentValueIssuerCalculator.getInstance();
@@ -233,21 +233,18 @@ public class MulticurveBuildingDiscountingBillUSDTest {
     }
   }
 
-  public List<Pair<IssuerProviderDiscount, CurveBuildingBlockBundle>> getCurvesWithBlock() {
-    initClass();
+  private static List<Pair<IssuerProviderDiscount, CurveBuildingBlockBundle>> getCurvesWithBlock() {
     return CURVES_PAR_SPREAD_MQ_WITHOUT_TODAY_BLOCK;
   }
 
-  public IssuerProviderDiscount getCurvesWithOnlyDiscount() {
-    initClass();
+  private static IssuerProviderDiscount getCurvesWithOnlyDiscount() {
     final IssuerProviderDiscount curves = CURVES_PAR_SPREAD_MQ_WITHOUT_TODAY_BLOCK.get(0).getFirst().copy();
     final IssuerProviderDiscount curve = new IssuerProviderDiscount(curves.getMulticurveProvider().getDiscountingCurves(), curves.getMulticurveProvider().getForwardIborCurves(), curves
         .getMulticurveProvider().getForwardONCurves(), curves.getMulticurveProvider().getFxRates());
     return curve;
   }
 
-  public CurveBuildingBlockBundle getBundleWithOnlyDiscount() {
-    initClass();
+  private static CurveBuildingBlockBundle getBundleWithOnlyDiscount() {
     final Map<String, Pair<CurveBuildingBlock, DoubleMatrix2D>> bundle = CURVES_PAR_SPREAD_MQ_WITHOUT_TODAY_BLOCK.get(0).getSecond().getData();
     final Map<String, Pair<CurveBuildingBlock, DoubleMatrix2D>> bundleWithoutIssuer = new LinkedHashMap<>();
     final Set<String> keySet = bundle.keySet();

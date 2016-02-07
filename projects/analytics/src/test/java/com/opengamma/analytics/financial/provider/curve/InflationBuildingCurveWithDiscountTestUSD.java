@@ -192,7 +192,7 @@ public class InflationBuildingCurveWithDiscountTestUSD {
   }
 
   @SuppressWarnings({"unchecked", "rawtypes" })
-  public static InstrumentDefinition<?>[] getDefinitions(final double[] marketQuotes, final GeneratorInstrument[] generators, final GeneratorAttribute[] attribute) {
+  private static InstrumentDefinition<?>[] getDefinitions(final double[] marketQuotes, final GeneratorInstrument[] generators, final GeneratorAttribute[] attribute) {
     final InstrumentDefinition<?>[] definitions = new InstrumentDefinition<?>[marketQuotes.length];
     for (int loopmv = 0; loopmv < marketQuotes.length; loopmv++) {
       definitions[loopmv] = generators[loopmv].generateInstrument(NOW, marketQuotes[loopmv], NOTIONAL, attribute[loopmv]);
@@ -200,7 +200,7 @@ public class InflationBuildingCurveWithDiscountTestUSD {
     return definitions;
   }
 
-  private static List<Pair<InflationProviderDiscount, CurveBuildingBlockBundle>> CURVES_PAR_SPREAD_MQ_WITHOUT_TODAY_BLOCK = new ArrayList<>();
+  private static final List<Pair<InflationProviderDiscount, CurveBuildingBlockBundle>> CURVES_PAR_SPREAD_MQ_WITHOUT_TODAY_BLOCK = new ArrayList<>();
 
   // Calculator
   private static final PresentValueDiscountingInflationCalculator PVIC = PresentValueDiscountingInflationCalculator.getInstance();
@@ -219,8 +219,7 @@ public class InflationBuildingCurveWithDiscountTestUSD {
     }
   }
 
-  public List<Pair<InflationProviderDiscount, CurveBuildingBlockBundle>> getCurvesWithBlock() {
-    initClass();
+  private static List<Pair<InflationProviderDiscount, CurveBuildingBlockBundle>> getCurvesWithBlock() {
     return CURVES_PAR_SPREAD_MQ_WITHOUT_TODAY_BLOCK;
   }
 
@@ -281,10 +280,10 @@ public class InflationBuildingCurveWithDiscountTestUSD {
     }
   }
 
-  @Test(enabled = false)
   /**
    * Analyzes the shape of the forward curve.
    */
+  @Test(enabled = false)
   public void marketQuoteSensitivityAnalysis() {
 
     final InflationProviderDiscount multicurves7 = CURVES_PAR_SPREAD_MQ_WITHOUT_TODAY_BLOCK.get(1).getFirst();

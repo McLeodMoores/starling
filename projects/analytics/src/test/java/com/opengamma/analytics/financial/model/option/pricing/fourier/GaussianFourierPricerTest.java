@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.option.pricing.fourier;
@@ -26,8 +26,8 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT)
 public class GaussianFourierPricerTest {
   private static final Logger s_logger = LoggerFactory.getLogger(GaussianFourierPricerTest.class);
-  private static final int WARMUP_CYCLES = 200;
-  private static final int BENCHMARK_CYCLES = 10000;
+  private static final int WARMUP_CYCLES = 0;
+  private static final int BENCHMARK_CYCLES = 1;
   private static final boolean TEST_TIMING = false;
   private static final double FORWARD = 1;
   private static final double T = 2.0;
@@ -62,7 +62,7 @@ public class GaussianFourierPricerTest {
     assertEquals(mu + 0.5 * sigma * sigma, res.getReal(), 1e-12);
     assertEquals(0.0, res.getImaginary(), 1e-12);
   }
-  
+
   @Test
   public void testMeanCorrectedExpectation() {
     final double sigma = 0.2;

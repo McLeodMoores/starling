@@ -121,7 +121,7 @@ public class HestonFourierPricerTest {
 
     for (int i = 0; i < 201; i++) {
       final double x = -0. + i * 20. / 200.0;
-      final ComplexNumber res = func.evaluate((new ComplexNumber(x, alpha)));
+      final ComplexNumber res = func.evaluate(new ComplexNumber(x, alpha));
       System.out.println(x + "\t" + res.getReal() + "\t" + res.getImaginary());
     }
   }
@@ -256,7 +256,7 @@ public class HestonFourierPricerTest {
 
   }
 
-  public static double[] finiteDifferenceModelGreeks(final HestonCharacteristicExponent ce, final FourierPricer pricer, final BlackFunctionData data, final EuropeanVanillaOption option) {
+  protected static double[] finiteDifferenceModelGreeks(final HestonCharacteristicExponent ce, final FourierPricer pricer, final BlackFunctionData data, final EuropeanVanillaOption option) {
     final double eps = 1e-5;
     final double tol = 1e-13;
     final double alpha = -0.5;

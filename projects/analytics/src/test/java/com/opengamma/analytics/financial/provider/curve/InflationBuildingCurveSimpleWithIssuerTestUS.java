@@ -57,7 +57,7 @@ import com.opengamma.util.time.DateUtils;
 import com.opengamma.util.tuple.Pair;
 
 /**
- * 
+ *
  */
 public class InflationBuildingCurveSimpleWithIssuerTestUS {
 
@@ -142,7 +142,7 @@ public class InflationBuildingCurveSimpleWithIssuerTestUS {
     return definitions;
   }
 
-  private static List<Pair<InflationIssuerProviderDiscount, CurveBuildingBlockBundle>> CURVES_PAR_SPREAD_MQ_WITHOUT_TODAY_BLOCK = new ArrayList<>();
+  private static final List<Pair<InflationIssuerProviderDiscount, CurveBuildingBlockBundle>> CURVES_PAR_SPREAD_MQ_WITHOUT_TODAY_BLOCK = new ArrayList<>();
 
   // Calculator
   private static final PresentValueDiscountingInflationIssuerCalculator PVIC = PresentValueDiscountingInflationIssuerCalculator.getInstance();

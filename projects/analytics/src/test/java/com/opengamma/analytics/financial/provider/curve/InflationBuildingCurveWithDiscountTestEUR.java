@@ -191,7 +191,7 @@ public class InflationBuildingCurveWithDiscountTestEUR {
   }
 
   @SuppressWarnings({"unchecked", "rawtypes" })
-  public static InstrumentDefinition<?>[] getDefinitions(final double[] marketQuotes, final GeneratorInstrument[] generators, final GeneratorAttribute[] attribute) {
+  private static InstrumentDefinition<?>[] getDefinitions(final double[] marketQuotes, final GeneratorInstrument[] generators, final GeneratorAttribute[] attribute) {
     final InstrumentDefinition<?>[] definitions = new InstrumentDefinition<?>[marketQuotes.length];
     for (int loopmv = 0; loopmv < marketQuotes.length; loopmv++) {
       definitions[loopmv] = generators[loopmv].generateInstrument(NOW, marketQuotes[loopmv], NOTIONAL, attribute[loopmv]);
@@ -199,7 +199,7 @@ public class InflationBuildingCurveWithDiscountTestEUR {
     return definitions;
   }
 
-  private static List<Pair<InflationProviderDiscount, CurveBuildingBlockBundle>> CURVES_PAR_SPREAD_MQ_WITHOUT_TODAY_BLOCK = new ArrayList<>();
+  private static final List<Pair<InflationProviderDiscount, CurveBuildingBlockBundle>> CURVES_PAR_SPREAD_MQ_WITHOUT_TODAY_BLOCK = new ArrayList<>();
 
   // Calculator
   private static final PresentValueDiscountingInflationCalculator PVIC = PresentValueDiscountingInflationCalculator.getInstance();
@@ -218,8 +218,7 @@ public class InflationBuildingCurveWithDiscountTestEUR {
     }
   }
 
-  public List<Pair<InflationProviderDiscount, CurveBuildingBlockBundle>> getCurvesWithBlock() {
-    initClass();
+  private static List<Pair<InflationProviderDiscount, CurveBuildingBlockBundle>> getCurvesWithBlock() {
     return CURVES_PAR_SPREAD_MQ_WITHOUT_TODAY_BLOCK;
   }
 
@@ -348,7 +347,7 @@ public class InflationBuildingCurveWithDiscountTestEUR {
       for (int j = 0; j < blockBundles.getBlock(CURVE_NAME_CPI_EUR).getSecond().getData().length; j++) {
         parametersSensi[j] = (parametersPlus[j] - parametersMinus[j]) / (2 * bump);
         assertEquals("Curve construction: block " + CURVE_NAME_CPI_EUR + ", column " + j + " - line " + k, blockBundles.getBlock(CURVE_NAME_CPI_EUR).getSecond().getData()[j][k],
-            parametersSensi[j], 2e-6);
+            parametersSensi[j], 3e-6);
       }
     }
     for (int k = 0; k < CPI_EUR_MARKET_QUOTES_PLUS.length; k++) {
@@ -380,10 +379,10 @@ public class InflationBuildingCurveWithDiscountTestEUR {
     }
   }
 
-  @Test(enabled = true)
   /**
    * Analyzes the shape of the forward curve.
    */
+  @Test(enabled = true)
   public void marketQuoteSensitivityAnalysis() {
 
     final InflationProviderDiscount multicurves7 = CURVES_PAR_SPREAD_MQ_WITHOUT_TODAY_BLOCK.get(1).getFirst();

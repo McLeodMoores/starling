@@ -230,7 +230,7 @@ public class MulticurveBuildingHullWhiteDiscountFuturesUSDTest {
     return definitions;
   }
 
-  private static List<Pair<HullWhiteOneFactorProviderDiscount, CurveBuildingBlockBundle>> CURVES_PAR_SPREAD_MQ_WITHOUT_TODAY_BLOCK = new ArrayList<>();
+  private static final List<Pair<HullWhiteOneFactorProviderDiscount, CurveBuildingBlockBundle>> CURVES_PAR_SPREAD_MQ_WITHOUT_TODAY_BLOCK = new ArrayList<>();
 
   // Calculator
   private static final PresentValueHullWhiteCalculator PVHWC = PresentValueHullWhiteCalculator.getInstance();

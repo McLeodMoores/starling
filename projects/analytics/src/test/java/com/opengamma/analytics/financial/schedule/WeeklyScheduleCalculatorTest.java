@@ -23,7 +23,7 @@ public class WeeklyScheduleCalculatorTest extends ScheduleCalculatorTestCase {
   private static final WeeklyScheduleCalculator CALCULATOR = new WeeklyScheduleCalculator();
 
   @Override
-  public Schedule getScheduleCalculator() {
+  protected Schedule getScheduleCalculator() {
     return CALCULATOR;
   }
 

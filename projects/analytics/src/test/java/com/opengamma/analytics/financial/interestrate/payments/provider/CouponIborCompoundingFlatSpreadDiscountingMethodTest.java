@@ -83,7 +83,7 @@ public class CouponIborCompoundingFlatSpreadDiscountingMethodTest {
     final MultipleCurrencyAmount pvComputed = METHOD_COMPOUNDED.presentValue(CPN_BEFORE,
         MULTICURVES);
     final int nbSub = CPN_BEFORE.getFixingTimes().length;
-    double[] forward = new double[nbSub];
+    final double[] forward = new double[nbSub];
     for (int loopsub = 0; loopsub < nbSub; loopsub++) {
       forward[loopsub] = MULTICURVES.getSimplyCompoundForwardRate(CADCDOR3M, CPN_BEFORE.getFixingPeriodStartTimes()[loopsub],
           CPN_BEFORE.getFixingPeriodEndTimes()[loopsub], CPN_BEFORE.getFixingPeriodAccrualFactors()[loopsub]);
@@ -94,7 +94,7 @@ public class CouponIborCompoundingFlatSpreadDiscountingMethodTest {
     assertEquals("CouponIborCompoundingFlatSpreadDiscountingMethod: Present value", pvExpected, pvComputed.getAmount(CAD), TOLERANCE_PV);
   }
 
-  public double cpa(double startValue, double[] rates, double[] accrualFactors, double spread) {
+  private static double cpa(final double startValue, final double[] rates, final double[] accrualFactors, final double spread) {
     double cpa = startValue;
     for (int loopsub = 0; loopsub < rates.length; loopsub++) {
       cpa += cpa * rates[loopsub] * accrualFactors[loopsub]; // Additional Compounding Period Amount
@@ -115,7 +115,7 @@ public class CouponIborCompoundingFlatSpreadDiscountingMethodTest {
   public void presentValueAfter1Fixing() {
     final MultipleCurrencyAmount pvComputed = METHOD_COMPOUNDED.presentValue(CPN_1, MULTICURVES);
     final int nbSub = CPN_1.getFixingTimes().length;
-    double[] forward = new double[nbSub];
+    final double[] forward = new double[nbSub];
     for (int loopsub = 0; loopsub < nbSub; loopsub++) {
       forward[loopsub] = MULTICURVES.getSimplyCompoundForwardRate(CADCDOR3M, CPN_1.getFixingPeriodStartTimes()[loopsub],
           CPN_1.getFixingPeriodEndTimes()[loopsub], CPN_1.getFixingPeriodAccrualFactors()[loopsub]);
