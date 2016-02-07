@@ -14,6 +14,9 @@ import java.util.Map;
 
 import com.opengamma.analytics.financial.credit.cds.ISDAExtrapolator1D;
 import com.opengamma.analytics.financial.credit.cds.ISDAInterpolator1D;
+import com.opengamma.analytics.math.interpolation.factory.Interpolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.NamedInterpolator;
+import com.opengamma.analytics.math.interpolation.factory.NamedInterpolator1dFactory;
 
 /**
  * A factory for one-dimensional interpolators.
@@ -226,89 +229,53 @@ public final class Interpolator1DFactory {
   static {
     final Map<String, Interpolator1D> staticInstances = new HashMap<>();
     final Map<Class<?>, String> instanceNames = new HashMap<>();
-    staticInstances.put(LINEAR, LINEAR_INSTANCE);
     instanceNames.put(LinearInterpolator1D.class, LINEAR);
-    staticInstances.put(EXPONENTIAL, EXPONENTIAL_INSTANCE);
     instanceNames.put(ExponentialInterpolator1D.class, EXPONENTIAL);
-    staticInstances.put(LOG_LINEAR, LOG_LINEAR_INSTANCE);
     instanceNames.put(LogLinearInterpolator1D.class, LOG_LINEAR);
-    staticInstances.put(NATURAL_CUBIC_SPLINE, NATURAL_CUBIC_SPLINE_INSTANCE);
     instanceNames.put(NaturalCubicSplineInterpolator1D.class, NATURAL_CUBIC_SPLINE);
-    staticInstances.put(STEP, STEP_INSTANCE);
     instanceNames.put(StepInterpolator1D.class, STEP);
-    staticInstances.put(STEP_UPPER, STEP_UPPER_INSTANCE);
     instanceNames.put(StepUpperInterpolator1D.class, STEP_UPPER);
-    staticInstances.put(DOUBLE_QUADRATIC, DOUBLE_QUADRATIC_INSTANCE);
     instanceNames.put(DoubleQuadraticInterpolator1D.class, DOUBLE_QUADRATIC);
-    staticInstances.put(MONOTONIC_CUBIC, MONOTONIC_CUBIC_INSTANCE);
     instanceNames.put(PCHIPInterpolator1D.class, MONOTONIC_CUBIC);
-    staticInstances.put(PCHIP, PCHIP_INSTANCE);
     instanceNames.put(PCHIPInterpolator1D.class, PCHIP);
-    staticInstances.put(MOD_PCHIP, MOD_PCHIP_INSTANCE);
     instanceNames.put(PCHIPYieldCurveInterpolator1D.class, MOD_PCHIP);
-    staticInstances.put(TIME_SQUARE, TIME_SQUARE_INSTANCE);
     instanceNames.put(TimeSquareInterpolator1D.class, TIME_SQUARE);
-    staticInstances.put(FLAT_EXTRAPOLATOR, FLAT_EXTRAPOLATOR_INSTANCE);
     instanceNames.put(FlatExtrapolator1D.class, FLAT_EXTRAPOLATOR);
-    staticInstances.put(EXPONENTIAL_EXTRAPOLATOR, EXPONENTIAL_EXTRAPOLATOR_INSTANCE);
     instanceNames.put(ExponentialExtrapolator1D.class, EXPONENTIAL_EXTRAPOLATOR);
     staticInstances.put(ISDA_INTERPOLATOR, ISDA_INTERPOLATOR_INSTANCE);
     instanceNames.put(ISDAInterpolator1D.class, ISDA_INTERPOLATOR);
     staticInstances.put(ISDA_EXTRAPOLATOR, ISDA_EXTRAPOLATOR_INSTANCE);
     instanceNames.put(ISDAExtrapolator1D.class, ISDA_EXTRAPOLATOR);
 
-    staticInstances.put(CLAMPED_CUBIC, CLAMPED_CUBIC_INSTANCE);
     instanceNames.put(ClampedCubicSplineInterpolator1D.class, CLAMPED_CUBIC);
-    staticInstances.put(CLAMPED_CUBIC_MONOTONE, CLAMPED_CUBIC_MONOTONE_INSTANCE);
     instanceNames.put(MonotonicityPreservingCubicSplineInterpolator1D.class, CLAMPED_CUBIC_MONOTONE);
-    staticInstances.put(CLAMPED_CUBIC_NONNEGATIVE, CLAMPED_CUBIC_NONNEGATIVE_INSTANCE);
     instanceNames.put(NonnegativityPreservingCubicSplineInterpolator1D.class, CLAMPED_CUBIC_NONNEGATIVE);
-    staticInstances.put(CLAMPED_QUINTIC_MONOTONE, CLAMPED_QUINTIC_MONOTONE_INSTANCE);
     instanceNames.put(MonotonicityPreservingQuinticSplineInterpolator1D.class, CLAMPED_QUINTIC_MONOTONE);
-    staticInstances.put(CLAMPED_QUINTIC_NONNEGATIVE, CLAMPED_QUINTIC_NONNEGATIVE_INSTANCE);
     instanceNames.put(NonnegativityPreservingQuinticSplineInterpolator1D.class, CLAMPED_QUINTIC_NONNEGATIVE);
 
-    staticInstances.put(NATURAL_CUBIC_MONOTONE, NATURAL_CUBIC_MONOTONE_INSTANCE);
     instanceNames.put(MonotonicityPreservingCubicSplineInterpolator1D.class, NATURAL_CUBIC_MONOTONE);
-    staticInstances.put(NATURAL_CUBIC_NONNEGATIVE, NATURAL_CUBIC_NONNEGATIVE_INSTANCE);
     instanceNames.put(NonnegativityPreservingCubicSplineInterpolator1D.class, NATURAL_CUBIC_NONNEGATIVE);
-    staticInstances.put(NATURAL_QUINTIC_MONOTONE, NATURAL_QUINTIC_MONOTONE_INSTANCE);
     instanceNames.put(MonotonicityPreservingQuinticSplineInterpolator1D.class, NATURAL_QUINTIC_MONOTONE);
-    staticInstances.put(NATURAL_QUINTIC_NONNEGATIVE, NATURAL_QUINTIC_NONNEGATIVE_INSTANCE);
     instanceNames.put(NonnegativityPreservingQuinticSplineInterpolator1D.class, NATURAL_QUINTIC_NONNEGATIVE);
 
-    staticInstances.put(NOTAKNOT_CUBIC, NOTAKNOT_CUBIC_INSTANCE);
     instanceNames.put(NotAKnotCubicSplineInterpolator1D.class, NOTAKNOT_CUBIC);
-    staticInstances.put(NOTAKNOT_CUBIC_MONOTONE, NOTAKNOT_CUBIC_MONOTONE_INSTANCE);
     instanceNames.put(MonotonicityPreservingCubicSplineInterpolator1D.class, NOTAKNOT_CUBIC_MONOTONE);
-    staticInstances.put(NOTAKNOT_CUBIC_NONNEGATIVE, NOTAKNOT_CUBIC_NONNEGATIVE_INSTANCE);
     instanceNames.put(NonnegativityPreservingCubicSplineInterpolator1D.class, NOTAKNOT_CUBIC_NONNEGATIVE);
-    staticInstances.put(NOTAKNOT_QUINTIC_MONOTONE, NOTAKNOT_QUINTIC_MONOTONE_INSTANCE);
     instanceNames.put(MonotonicityPreservingQuinticSplineInterpolator1D.class, NOTAKNOT_QUINTIC_MONOTONE);
-    staticInstances.put(NOTAKNOT_QUINTIC_NONNEGATIVE, NOTAKNOT_QUINTIC_NONNEGATIVE_INSTANCE);
     instanceNames.put(NonnegativityPreservingQuinticSplineInterpolator1D.class, NOTAKNOT_QUINTIC_NONNEGATIVE);
 
-    staticInstances.put(CONSTRAINED_CUBIC, CONSTRAINED_CUBIC_INSTANCE);
     instanceNames.put(ConstrainedCubicSplineInterpolator1D.class, CONSTRAINED_CUBIC);
-    staticInstances.put(CONSTRAINED_CUBIC_MONOTONE, CONSTRAINED_CUBIC_MONOTONE_INSTANCE);
     instanceNames.put(MonotonicityPreservingCubicSplineInterpolator1D.class, CONSTRAINED_CUBIC_MONOTONE);
-    staticInstances.put(CONSTRAINED_CUBIC_NONNEGATIVE, CONSTRAINED_CUBIC_NONNEGATIVE_INSTANCE);
     instanceNames.put(NonnegativityPreservingCubicSplineInterpolator1D.class, CONSTRAINED_CUBIC_NONNEGATIVE);
 
-    staticInstances.put(AKIMA_CUBIC, AKIMA_CUBIC_INSTANCE);
     instanceNames.put(SemiLocalCubicSplineInterpolator1D.class, AKIMA_CUBIC);
-    staticInstances.put(AKIMA_CUBIC_MONOTONE, AKIMA_CUBIC_MONOTONE_INSTANCE);
     instanceNames.put(MonotonicityPreservingCubicSplineInterpolator1D.class, AKIMA_CUBIC_MONOTONE);
-    staticInstances.put(AKIMA_CUBIC_NONNEGATIVE, AKIMA_CUBIC_NONNEGATIVE_INSTANCE);
     instanceNames.put(NonnegativityPreservingCubicSplineInterpolator1D.class, AKIMA_CUBIC_NONNEGATIVE);
 
-    staticInstances.put(MONOTONE_CONVEX_CUBIC, MONOTONE_CONVEX_CUBIC_INSTANCE);
     instanceNames.put(MonotoneConvexSplineInterpolator1D.class, MONOTONE_CONVEX_CUBIC);
 
-    staticInstances.put(C2_SHAPE_PRESERVING_CUBIC, C2_SHAPE_PRESERVING_CUBIC_INSTANCE);
     instanceNames.put(ShapePreservingCubicSplineInterpolator1D.class, C2_SHAPE_PRESERVING_CUBIC);
 
-    staticInstances.put(LOG_NATURAL_CUBIC_MONOTONE, LOG_NATURAL_CUBIC_MONOTONE_INSTANCE);
     instanceNames.put(LogNaturalCubicMonotonicityPreservingInterpolator1D.class, LOG_NATURAL_CUBIC_MONOTONE);
 
     STATIC_INSTANCES = new HashMap<>(staticInstances);
@@ -327,9 +294,17 @@ public final class Interpolator1DFactory {
    * @return  the interpolator
    */
   public static Interpolator1D getInterpolator(final String interpolatorName) {
-    final Interpolator1D interpolator = STATIC_INSTANCES.get(interpolatorName);
-    if (interpolator != null) {
-      return interpolator;
+    try {
+      final NamedInterpolator<?, ?> interpolatorFromDelegate = NamedInterpolator1dFactory.of(interpolatorName);
+      if (interpolatorFromDelegate instanceof Interpolator1dAdapter) {
+        return ((Interpolator1dAdapter) interpolatorFromDelegate).getUnderlyingInterpolator();
+      }
+    } catch (final IllegalArgumentException e) {
+      // in case the interpolator was not found
+      final Interpolator1D interpolator = STATIC_INSTANCES.get(interpolatorName);
+      if (interpolator != null) {
+        return interpolator;
+      }
     }
     throw new IllegalArgumentException("Interpolator not handled: " + interpolatorName);
   }

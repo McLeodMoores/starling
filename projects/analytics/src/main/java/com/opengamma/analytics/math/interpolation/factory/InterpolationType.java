@@ -10,15 +10,22 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- *
+ * An annotation to indicate that a class is an implementation of an {@link com.opengamma.analytics.math.interpolation.Interpolator}
+ * that is used by factories.
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ ElementType.TYPE })
 @Inherited
 public @interface InterpolationType {
 
+  /**
+   * The name of the interpolator.
+   */
   String name();
 
-  String[] aliases() default {};
+  /**
+   * Any aliases of the interpolator.
+   */
+  String[] aliases() default { };
 
 }

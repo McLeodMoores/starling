@@ -8,6 +8,12 @@ import java.util.Set;
 
 import org.fudgemsg.AnnotationReflector;
 import org.joda.convert.FromString;
+import org.reflections.Configuration;
+import org.reflections.scanners.SubTypesScanner;
+import org.reflections.scanners.TypeAnnotationsScanner;
+import org.reflections.util.ClasspathHelper;
+import org.reflections.util.ConfigurationBuilder;
+import org.reflections.util.FilterBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -50,7 +56,12 @@ public final class FinmathDayCountFactory extends AbstractNamedInstanceFactory<F
    */
   protected FinmathDayCountFactory() {
     super(FinmathDayCount.class);
-    final AnnotationReflector reflector = AnnotationReflector.getDefaultReflector();
+    final Configuration config = new ConfigurationBuilder()
+        .setUrls(ClasspathHelper.forManifest(ClasspathHelper.forJavaClassPath()))
+        .setScanners(new TypeAnnotationsScanner(), new SubTypesScanner(false))
+        .filterInputsBy(FilterBuilder.parse(AnnotationReflector.DEFAULT_ANNOTATION_REFLECTOR_FILTER))
+        .useParallelExecutor();
+    final AnnotationReflector reflector = new AnnotationReflector(config);
     final Set<Class<?>> classes = reflector.getReflector().getTypesAnnotatedWith(FinmathDayCountType.class);
     for (final Class<?> clazz : classes) {
       try {
