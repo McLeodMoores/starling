@@ -4,6 +4,7 @@
 package com.opengamma.analytics.math.interpolation.factory;
 
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertTrue;
 
 import java.lang.reflect.Field;
 import java.util.Arrays;
@@ -54,11 +55,83 @@ import com.opengamma.analytics.math.interpolation.TimeSquareInterpolator1D;
 public class NamedInterpolator1dFactoryTest {
 
   /**
+   * Tests the behaviour when a null interpolator name is provided.
+   */
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void testNullInterpolatorName() {
+    NamedInterpolator1dFactory.of(null);
+  }
+
+  /**
+   * Tests the behaviour when a null extrapolator name is provided.
+   */
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void testNullExtrapolatorName() {
+    NamedInterpolator1dFactory.of(LinearInterpolator1dAdapter.NAME, null);
+  }
+
+  /**
+   * Tests the behaviour when a null left extrapolator name is provided.
+   */
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void testNullLeftExtrapolatorName() {
+    NamedInterpolator1dFactory.of(LinearInterpolator1dAdapter.NAME, null, FlatExtrapolator1dAdapter.NAME);
+  }
+
+  /**
+   * Tests the behaviour when a null right extrapolator name is provided.
+   */
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void testNullRightExtrapolatorName() {
+    NamedInterpolator1dFactory.of(LinearInterpolator1dAdapter.NAME, FlatExtrapolator1dAdapter.NAME, null);
+  }
+
+  /**
    * Tests the behaviour when an unknown interpolator is requested.
    */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void testUnknown() {
+  public void testUnknownInterpolatorName() {
     NamedInterpolator1dFactory.of("Unknown");
+  }
+
+  /**
+   * Tests the behaviour when an unknown extrapolator is requested.
+   */
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void testUnknownExtrapolatorName() {
+    NamedInterpolator1dFactory.of(LinearInterpolator1dAdapter.NAME, "Unknown");
+  }
+
+  /**
+   * Tests the behaviour when an unknown left extrapolator is requested.
+   */
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void testUnknownLeftExtrapolatorName() {
+    NamedInterpolator1dFactory.of(LinearInterpolator1dAdapter.NAME, "Unknown", FlatExtrapolator1dAdapter.NAME);
+  }
+
+  /**
+   * Tests the behaviour when an unknown right extrapolator is requested.
+   */
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void testUnknownRightExtrapolatorName() {
+    NamedInterpolator1dFactory.of(LinearInterpolator1dAdapter.NAME, FlatExtrapolator1dAdapter.NAME, "Unknown");
+  }
+
+  /**
+   * Tests the behaviour when the left extrapolator cannot extrapolate.
+   */
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void testLeftInterpolatorCannotExtrapolate() {
+    NamedInterpolator1dFactory.of(LinearInterpolator1dAdapter.NAME, LinearInterpolator1dAdapter.NAME, FlatExtrapolator1dAdapter.NAME);
+  }
+
+  /**
+   * Tests the behaviour when the right extrapolator cannot extrapolate.
+   */
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void testRightInterpolatorCannotExtrapolate() {
+    NamedInterpolator1dFactory.of(LinearInterpolator1dAdapter.NAME, FlatExtrapolator1dAdapter.NAME, LinearInterpolator1dAdapter.NAME);
   }
 
   /**
@@ -187,6 +260,39 @@ public class NamedInterpolator1dFactoryTest {
         }
       }
     }
+  }
+
+  /**
+   * Tests the methods that create combined interpolators and extrapolators.
+   */
+  @Test
+  public void testCreateCombinedInterpolator() {
+    // flat extrapolator does not depend on which interpolator is used
+    NamedInterpolator<?, ?> test = NamedInterpolator1dFactory.of(LinearInterpolator1dAdapter.NAME, FlatExtrapolator1dAdapter.NAME);
+    assertTrue(test instanceof CombinedInterpolatorExtrapolator1dAdapter);
+    assertEquals(test.getName(), "Combined[interpolator = Linear, left extrapolator = Flat Extrapolator, right extrapolator = Flat Extrapolator]");
+    final CombinedInterpolatorExtrapolator1dAdapter flatLinearFlat = (CombinedInterpolatorExtrapolator1dAdapter) test;
+    assertEquals(flatLinearFlat.getInterpolator().getClass(), LinearInterpolator1dAdapter.class);
+    assertEquals(flatLinearFlat.getLeftExtrapolator().getClass(), FlatExtrapolator1dAdapter.class);
+    assertEquals(flatLinearFlat.getRightExtrapolator().getClass(), FlatExtrapolator1dAdapter.class);
+    // linear extrapolator depends on the interpolator used
+    test = NamedInterpolator1dFactory.of(DoubleQuadraticInterpolator1dAdapter.NAME, FlatExtrapolator1dAdapter.NAME, LinearExtrapolator1dAdapter.NAME);
+    assertTrue(test instanceof CombinedInterpolatorExtrapolator1dAdapter);
+    assertEquals(test.getName(),
+        "Combined[interpolator = Double Quadratic, left extrapolator = Flat Extrapolator, right extrapolator = Linear Extrapolator[Double Quadratic]]");
+    final CombinedInterpolatorExtrapolator1dAdapter flatDoubleQuadraticLinear = (CombinedInterpolatorExtrapolator1dAdapter) test;
+    assertEquals(flatDoubleQuadraticLinear.getInterpolator().getClass(), DoubleQuadraticInterpolator1dAdapter.class);
+    assertEquals(flatDoubleQuadraticLinear.getLeftExtrapolator().getClass(), FlatExtrapolator1dAdapter.class);
+    assertEquals(flatDoubleQuadraticLinear.getRightExtrapolator().getClass(), LinearExtrapolator1dAdapter.class);
+    // linear and quadratic extrapolators depend on the interpolator used
+    test = NamedInterpolator1dFactory.of(PchipInterpolator1dAdapter.NAME, QuadraticLeftExtrapolator1dAdapter.NAME, LinearExtrapolator1dAdapter.NAME);
+    assertTrue(test instanceof CombinedInterpolatorExtrapolator1dAdapter);
+    assertEquals(test.getName(),
+        "Combined[interpolator = PCHIP, left extrapolator = Quadratic Left Extrapolator[PCHIP], right extrapolator = Linear Extrapolator[PCHIP]]");
+    final CombinedInterpolatorExtrapolator1dAdapter quadraticDoubleQuadraticLinear = (CombinedInterpolatorExtrapolator1dAdapter) test;
+    assertEquals(quadraticDoubleQuadraticLinear.getInterpolator().getClass(), PchipInterpolator1dAdapter.class);
+    assertEquals(quadraticDoubleQuadraticLinear.getLeftExtrapolator().getClass(), QuadraticLeftExtrapolator1dAdapter.class);
+    assertEquals(quadraticDoubleQuadraticLinear.getRightExtrapolator().getClass(), LinearExtrapolator1dAdapter.class);
   }
 
   /**

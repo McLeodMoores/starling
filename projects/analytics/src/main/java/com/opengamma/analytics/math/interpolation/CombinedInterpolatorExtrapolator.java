@@ -31,8 +31,7 @@ public class CombinedInterpolatorExtrapolator extends Interpolator1D {
    * @param interpolator  the interpolator, not null
    */
   public CombinedInterpolatorExtrapolator(final Interpolator1D interpolator) {
-    ArgumentChecker.notNull(interpolator, "interpolator");
-    _interpolator = interpolator;
+    _interpolator = ArgumentChecker.notNull(interpolator, "interpolator");
     _leftExtrapolator = null;
     _rightExtrapolator = null;
   }
@@ -43,10 +42,8 @@ public class CombinedInterpolatorExtrapolator extends Interpolator1D {
    * @param extrapolator  the extrapolator, not null
    */
   public CombinedInterpolatorExtrapolator(final Interpolator1D interpolator, final Interpolator1D extrapolator) {
-    ArgumentChecker.notNull(interpolator, "interpolator");
-    ArgumentChecker.notNull(extrapolator, "extrapolator");
-    _interpolator = interpolator;
-    _leftExtrapolator = extrapolator;
+    _interpolator = ArgumentChecker.notNull(interpolator, "interpolator");
+    _leftExtrapolator = ArgumentChecker.notNull(extrapolator, "extrapolator");
     _rightExtrapolator = extrapolator;
   }
 
@@ -57,12 +54,9 @@ public class CombinedInterpolatorExtrapolator extends Interpolator1D {
    * @param rightExtrapolator  the right extrapolator, not null
    */
   public CombinedInterpolatorExtrapolator(final Interpolator1D interpolator, final Interpolator1D leftExtrapolator, final Interpolator1D rightExtrapolator) {
-    ArgumentChecker.notNull(interpolator, "interpolator");
-    ArgumentChecker.notNull(leftExtrapolator, "left extrapolator");
-    ArgumentChecker.notNull(rightExtrapolator, "right extrapolator");
-    _interpolator = interpolator;
-    _leftExtrapolator = leftExtrapolator;
-    _rightExtrapolator = rightExtrapolator;
+    _interpolator = ArgumentChecker.notNull(interpolator, "interpolator");
+    _leftExtrapolator = ArgumentChecker.notNull(leftExtrapolator, "left extrapolator");
+    _rightExtrapolator = ArgumentChecker.notNull(rightExtrapolator, "right extrapolator");
   }
 
   @Override

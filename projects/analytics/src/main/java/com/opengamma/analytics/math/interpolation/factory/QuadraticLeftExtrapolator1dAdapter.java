@@ -22,7 +22,7 @@ public class QuadraticLeftExtrapolator1dAdapter extends Interpolator1dAdapter {
    * @param interpolator  the interpolator, not null
    */
   public QuadraticLeftExtrapolator1dAdapter(final Interpolator1dAdapter interpolator) {
-    super(new QuadraticPolynomialLeftExtrapolator(interpolator), LinearExtrapolator1dAdapter.transformName(NAME, interpolator.getName()), true);
+    super(new QuadraticPolynomialLeftExtrapolator(interpolator), NamedInterpolator1dFactory.transformName(NAME, interpolator.getName()), true);
   }
 
   /**

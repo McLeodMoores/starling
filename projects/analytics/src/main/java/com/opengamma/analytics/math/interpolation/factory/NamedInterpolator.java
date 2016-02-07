@@ -14,4 +14,10 @@ import com.opengamma.util.NamedInstance;
  */
 public interface NamedInterpolator<S, T> extends Interpolator<S, T>, NamedInstance {
 
+  /**
+   * Returns true if extrapolation is performed.
+   * @return  true if extrapolation is performed
+   */
+  boolean isExtrapolator();
+
 }

@@ -22,7 +22,7 @@ public class LogLinearExtrapolator1dAdapter extends Interpolator1dAdapter {
    * @param interpolator  the interpolator, not null
    */
   public LogLinearExtrapolator1dAdapter(final Interpolator1dAdapter interpolator) {
-    super(new LogLinearExtrapolator1D(interpolator), LinearExtrapolator1dAdapter.transformName(NAME, interpolator.getName()), true);
+    super(new LogLinearExtrapolator1D(interpolator), NamedInterpolator1dFactory.transformName(NAME, interpolator.getName()), true);
   }
 
   /**

@@ -20,6 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.opengamma.util.AbstractNamedInstanceFactory;
+import com.opengamma.util.ArgumentChecker;
 
 /**
  * A factory for named instances of {@link NamedInterpolator}. The classes must have a no-argument constructor
@@ -38,12 +39,60 @@ public final class NamedInterpolator1dFactory extends AbstractNamedInstanceFacto
 
   /**
    * Gets the interpolator with this name.
-   * @param name The name, not null
+   * @param interpolatorName  the name, not null
    * @return  The interpolator
    */
   @FromString
-  public static NamedInterpolator of(final String name) {
-    return INSTANCE.instance(name);
+  public static NamedInterpolator of(final String interpolatorName) {
+    return INSTANCE.instance(interpolatorName);
+  }
+
+  /**
+   * Gets a combined interpolator and extrapolator that uses the same extrapolation method on the left and right.
+   * @param interpolatorName  the interpolator name, not null
+   * @param extrapolatorName  the extrapolator name, not null
+   * @return  a combined interpolator and extrapolator
+   */
+  public static NamedInterpolator of(final String interpolatorName, final String extrapolatorName) {
+    return of(interpolatorName, extrapolatorName, extrapolatorName);
+  }
+
+  /**
+   * Gets a combined interpolator and extrapolator.
+   * @param interpolatorName  the interpolator name, not null
+   * @param leftExtrapolatorName  the left extrapolator name, not null
+   * @param rightExtrapolatorName  the right extrapolator name, not null
+   * @return  a combined interpolator and extrapolator
+   */
+  public static NamedInterpolator of(final String interpolatorName, final String leftExtrapolatorName, final String rightExtrapolatorName) {
+    final NamedInterpolator<?, ?> interpolator = INSTANCE.instance(interpolatorName);
+    NamedInterpolator<?, ?> leftExtrapolator = null;
+    try {
+      // for those extrapolators that do not need information about the adjacent interpolator
+      leftExtrapolator = INSTANCE.instance(leftExtrapolatorName);
+    } catch (final IllegalArgumentException e) {
+      // try with transformed name
+      leftExtrapolator = INSTANCE.instance(transformName(leftExtrapolatorName, interpolatorName));
+    }
+    if (leftExtrapolator != null && !leftExtrapolator.isExtrapolator()) {
+      throw new IllegalArgumentException("Interpolator called " + leftExtrapolatorName + " cannot extrapolate values");
+    }
+    NamedInterpolator<?, ?> rightExtrapolator = null;
+    try {
+      rightExtrapolator = INSTANCE.instance(rightExtrapolatorName);
+    } catch (final IllegalArgumentException e) {
+      rightExtrapolator = INSTANCE.instance(transformName(rightExtrapolatorName, interpolatorName));
+    }
+    if (rightExtrapolator != null && !rightExtrapolator.isExtrapolator()) {
+      throw new IllegalArgumentException("Interpolator called " + rightExtrapolatorName + " cannot extrapolate values");
+    }
+    if (interpolator instanceof Interpolator1dAdapter && leftExtrapolator instanceof Interpolator1dAdapter
+        && rightExtrapolator instanceof Interpolator1dAdapter) {
+      return new CombinedInterpolatorExtrapolator1dAdapter((Interpolator1dAdapter) interpolator,
+          (Interpolator1dAdapter) leftExtrapolator, (Interpolator1dAdapter) rightExtrapolator);
+    }
+    throw new IllegalArgumentException("Could not construct combined interpolator with interpolator = " + interpolatorName
+        + " left extrapolator = " + leftExtrapolatorName + " right extrapolator = " + rightExtrapolatorName);
   }
 
   /**
@@ -79,9 +128,9 @@ public final class NamedInterpolator1dFactory extends AbstractNamedInstanceFacto
             }
           }
           if (instance != null && instance instanceof Interpolator1dAdapter && !((Interpolator1dAdapter) instance).isExtrapolator()) {
-            final String newLinearName = LinearExtrapolator1dAdapter.transformName(LinearExtrapolator1dAdapter.NAME, name);
-            final String newLogLinearName = LinearExtrapolator1dAdapter.transformName(LogLinearExtrapolator1dAdapter.NAME, name);
-            final String newQuadraticLeftName = LinearExtrapolator1dAdapter.transformName(QuadraticLeftExtrapolator1dAdapter.NAME, name);
+            final String newLinearName = transformName(LinearExtrapolator1dAdapter.NAME, name);
+            final String newLogLinearName = transformName(LogLinearExtrapolator1dAdapter.NAME, name);
+            final String newQuadraticLeftName = transformName(QuadraticLeftExtrapolator1dAdapter.NAME, name);
             final String[] linearExtrapolatorAliases = LinearExtrapolator1dAdapter.class.getAnnotation(InterpolationType.class).aliases();
             final String[] logLinearExtrapolatorAliases = LogLinearExtrapolator1dAdapter.class.getAnnotation(InterpolationType.class).aliases();
             final String[] quadraticLeftExtrapolatorAliases = QuadraticLeftExtrapolator1dAdapter.class.getAnnotation(InterpolationType.class).aliases();
@@ -89,24 +138,24 @@ public final class NamedInterpolator1dFactory extends AbstractNamedInstanceFacto
             final List<String> newLogLinearAliases = new ArrayList<>();
             final List<String> newQuadraticLeftAliases = new ArrayList<>();
             for (final String extrapolatorAlias : linearExtrapolatorAliases) {
-              newLinearAliases.add(LinearExtrapolator1dAdapter.transformName(extrapolatorAlias, name));
+              newLinearAliases.add(transformName(extrapolatorAlias, name));
               for (final String alias : aliases) {
-                newLinearAliases.add(LinearExtrapolator1dAdapter.transformName(LinearExtrapolator1dAdapter.NAME, alias));
-                newLinearAliases.add(LinearExtrapolator1dAdapter.transformName(extrapolatorAlias, alias));
+                newLinearAliases.add(transformName(LinearExtrapolator1dAdapter.NAME, alias));
+                newLinearAliases.add(transformName(extrapolatorAlias, alias));
               }
             }
             for (final String extrapolatorAlias : logLinearExtrapolatorAliases) {
-              newLogLinearAliases.add(LinearExtrapolator1dAdapter.transformName(extrapolatorAlias, name));
+              newLogLinearAliases.add(transformName(extrapolatorAlias, name));
               for (final String alias : aliases) {
-                newLogLinearAliases.add(LinearExtrapolator1dAdapter.transformName(LogLinearExtrapolator1dAdapter.NAME, alias));
-                newLogLinearAliases.add(LinearExtrapolator1dAdapter.transformName(extrapolatorAlias, alias));
+                newLogLinearAliases.add(transformName(LogLinearExtrapolator1dAdapter.NAME, alias));
+                newLogLinearAliases.add(transformName(extrapolatorAlias, alias));
               }
             }
             for (final String extrapolatorAlias : quadraticLeftExtrapolatorAliases) {
-              newQuadraticLeftAliases.add(LinearExtrapolator1dAdapter.transformName(extrapolatorAlias, name));
+              newQuadraticLeftAliases.add(transformName(extrapolatorAlias, name));
               for (final String alias : aliases) {
-                newQuadraticLeftAliases.add(LinearExtrapolator1dAdapter.transformName(QuadraticLeftExtrapolator1dAdapter.NAME, alias));
-                newQuadraticLeftAliases.add(LinearExtrapolator1dAdapter.transformName(extrapolatorAlias, alias));
+                newQuadraticLeftAliases.add(transformName(QuadraticLeftExtrapolator1dAdapter.NAME, alias));
+                newQuadraticLeftAliases.add(transformName(extrapolatorAlias, alias));
               }
             }
             addInstance(new LinearExtrapolator1dAdapter((Interpolator1dAdapter) instance, newLinearName),
@@ -122,6 +171,16 @@ public final class NamedInterpolator1dFactory extends AbstractNamedInstanceFacto
       }
     }
 
+  }
+
+  /**
+   * Transforms the name of the interpolator into the extrapolator: (EXTRAPOLATOR_NAME, NAME) -> EXTRAPOLATOR_NAME[NAME].
+   * @param extrapolatorName  the version of the name of the linear extrapolator, not null
+   * @param interpolatorName  the interpolator name, not null
+   * @return  the transformed name
+   */
+  public static String transformName(final String extrapolatorName, final String interpolatorName) {
+    return ArgumentChecker.notNull(extrapolatorName, "extrapolatorName") + "[" + ArgumentChecker.notNull(interpolatorName, "name") + "]";
   }
 
 }

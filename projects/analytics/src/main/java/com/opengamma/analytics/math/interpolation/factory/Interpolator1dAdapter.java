@@ -87,10 +87,7 @@ public class Interpolator1dAdapter extends Interpolator1D implements NamedInterp
     return _name;
   }
 
-  /**
-   * Returns true if extrapolation is performed.
-   * @return  true if extrapolation is performed
-   */
+  @Override
   public boolean isExtrapolator() {
     return _isExtrapolator;
   }
@@ -130,5 +127,8 @@ public class Interpolator1dAdapter extends Interpolator1D implements NamedInterp
     return Objects.equals(_interpolator, other._interpolator);
   }
 
-
+  @Override
+  public String toString() {
+    return _name;
+  }
 }
