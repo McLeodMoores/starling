@@ -11,8 +11,10 @@ import static org.testng.internal.junit.ArrayAsserts.assertArrayEquals;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang.ArrayUtils;
 import org.testng.annotations.BeforeSuite;
@@ -35,9 +37,8 @@ import com.opengamma.analytics.financial.instrument.index.GeneratorSwapFixedIbor
 import com.opengamma.analytics.financial.instrument.index.GeneratorSwapFixedON;
 import com.opengamma.analytics.financial.instrument.index.GeneratorSwapFixedONMaster;
 import com.opengamma.analytics.financial.instrument.index.IborIndex;
+import com.opengamma.analytics.financial.instrument.index.Index;
 import com.opengamma.analytics.financial.instrument.index.IndexON;
-import com.opengamma.analytics.financial.instrument.swap.SwapFixedIborDefinition;
-import com.opengamma.analytics.financial.instrument.swap.SwapFixedONDefinition;
 import com.opengamma.analytics.financial.interestrate.InstrumentDerivative;
 import com.opengamma.analytics.financial.interestrate.InstrumentDerivativeVisitor;
 import com.opengamma.analytics.financial.model.interestrate.curve.YieldAndDiscountCurve;
@@ -84,31 +85,42 @@ public class MulticurveBuildingDiscountingDiscountUSD2Test {
   private static final double NOTIONAL = 1.0;
 
   private static final GeneratorSwapFixedON GENERATOR_OIS_USD = GeneratorSwapFixedONMaster.getInstance().getGenerator("USD1YFEDFUND", NYC);
-  private static final IndexON INDEX_ON_USD = GENERATOR_OIS_USD.getIndex();
-  private static final GeneratorDepositON GENERATOR_DEPOSIT_ON_USD = new GeneratorDepositON("USD Deposit ON", USD, NYC, INDEX_ON_USD.getDayCount());
+  /** An overnight USD index */
+  private static final IndexON USD_OVERNIGHT_INDEX = GENERATOR_OIS_USD.getIndex();
+  private static final GeneratorDepositON GENERATOR_DEPOSIT_ON_USD = new GeneratorDepositON("USD Deposit ON", USD, NYC, USD_OVERNIGHT_INDEX.getDayCount());
   private static final GeneratorSwapFixedIborMaster GENERATOR_SWAP_MASTER = GeneratorSwapFixedIborMaster.getInstance();
   private static final GeneratorSwapFixedIbor USD6MLIBOR3M = GENERATOR_SWAP_MASTER.getGenerator("USD6MLIBOR3M", NYC);
-  private static final IborIndex USDLIBOR3M = USD6MLIBOR3M.getIborIndex();
-  private static final GeneratorFRA GENERATOR_FRA = new GeneratorFRA("GENERATOR_FRA", USDLIBOR3M, NYC);
-  private static final GeneratorDepositIbor GENERATOR_USDLIBOR3M = new GeneratorDepositIbor("GENERATOR_USDLIBOR3M", USDLIBOR3M, NYC);
+  /** A 3M USD LIBOR index */
+  private static final IborIndex USD_3M_LIBOR_INDEX = USD6MLIBOR3M.getIborIndex();
+  private static final GeneratorFRA GENERATOR_FRA = new GeneratorFRA("GENERATOR_FRA", USD_3M_LIBOR_INDEX, NYC);
+  private static final GeneratorDepositIbor GENERATOR_USDLIBOR3M = new GeneratorDepositIbor("GENERATOR_USDLIBOR3M", USD_3M_LIBOR_INDEX, NYC);
 
   private static final ZonedDateTime NOW = DateUtils.getUTCDate(2011, 9, 28);
 
-  private static final ZonedDateTimeDoubleTimeSeries TS_EMPTY = ImmutableZonedDateTimeDoubleTimeSeries.ofEmptyUTC();
   private static final ZonedDateTimeDoubleTimeSeries TS_ON_USD_WITH_TODAY = ImmutableZonedDateTimeDoubleTimeSeries.ofUTC(new ZonedDateTime[] {DateUtils.getUTCDate(2011, 9, 27),
     DateUtils.getUTCDate(2011, 9, 28) }, new double[] {0.07, 0.08 });
   private static final ZonedDateTimeDoubleTimeSeries TS_ON_USD_WITHOUT_TODAY = ImmutableZonedDateTimeDoubleTimeSeries.ofUTC(new ZonedDateTime[] {DateUtils.getUTCDate(2011, 9, 27),
     DateUtils.getUTCDate(2011, 9, 28) }, new double[] {0.07, 0.08 });
-  private static final ZonedDateTimeDoubleTimeSeries[] TS_FIXED_OIS_USD_WITH_TODAY = new ZonedDateTimeDoubleTimeSeries[] {TS_EMPTY, TS_ON_USD_WITH_TODAY };
-  private static final ZonedDateTimeDoubleTimeSeries[] TS_FIXED_OIS_USD_WITHOUT_TODAY = new ZonedDateTimeDoubleTimeSeries[] {TS_EMPTY, TS_ON_USD_WITHOUT_TODAY };
+//  private static final ZonedDateTimeDoubleTimeSeries[] TS_FIXED_OIS_USD_WITH_TODAY = new ZonedDateTimeDoubleTimeSeries[] {TS_EMPTY, TS_ON_USD_WITH_TODAY };
+//  private static final ZonedDateTimeDoubleTimeSeries[] TS_FIXED_OIS_USD_WITHOUT_TODAY = new ZonedDateTimeDoubleTimeSeries[] {TS_EMPTY, TS_ON_USD_WITHOUT_TODAY };
 
   private static final ZonedDateTimeDoubleTimeSeries TS_IBOR_USD3M_WITH_TODAY = ImmutableZonedDateTimeDoubleTimeSeries.ofUTC(new ZonedDateTime[] {DateUtils.getUTCDate(2011, 9, 27),
     DateUtils.getUTCDate(2011, 9, 28) }, new double[] {0.0035, 0.0036 });
   private static final ZonedDateTimeDoubleTimeSeries TS_IBOR_USD3M_WITHOUT_TODAY = ImmutableZonedDateTimeDoubleTimeSeries.ofUTC(new ZonedDateTime[] {DateUtils.getUTCDate(2011, 9, 27) },
       new double[] {0.0035 });
 
-  private static final ZonedDateTimeDoubleTimeSeries[] TS_FIXED_IBOR_USD3M_WITH_TODAY = new ZonedDateTimeDoubleTimeSeries[] {TS_IBOR_USD3M_WITH_TODAY };
-  private static final ZonedDateTimeDoubleTimeSeries[] TS_FIXED_IBOR_USD3M_WITHOUT_TODAY = new ZonedDateTimeDoubleTimeSeries[] {TS_IBOR_USD3M_WITHOUT_TODAY };
+//  private static final ZonedDateTimeDoubleTimeSeries[] TS_FIXED_IBOR_USD3M_WITH_TODAY = new ZonedDateTimeDoubleTimeSeries[] {TS_IBOR_USD3M_WITH_TODAY };
+//  private static final ZonedDateTimeDoubleTimeSeries[] TS_FIXED_IBOR_USD3M_WITHOUT_TODAY = new ZonedDateTimeDoubleTimeSeries[] {TS_IBOR_USD3M_WITHOUT_TODAY };
+  /** Fixing time series created before the valuation date fixing is available */
+  private static final Map<Index, ZonedDateTimeDoubleTimeSeries> FIXING_TS_WITHOUT_TODAY = new HashMap<>();
+  /** Fixing time series created after the valuation date fixing is available */
+  private static final Map<Index, ZonedDateTimeDoubleTimeSeries> FIXING_TS_WITH_TODAY = new HashMap<>();
+  static {
+    FIXING_TS_WITHOUT_TODAY.put(USD_OVERNIGHT_INDEX, TS_ON_USD_WITHOUT_TODAY);
+    FIXING_TS_WITHOUT_TODAY.put(USD_3M_LIBOR_INDEX, TS_IBOR_USD3M_WITHOUT_TODAY);
+    FIXING_TS_WITH_TODAY.put(USD_OVERNIGHT_INDEX, TS_ON_USD_WITH_TODAY);
+    FIXING_TS_WITH_TODAY.put(USD_3M_LIBOR_INDEX, TS_IBOR_USD3M_WITH_TODAY);
+  }
 
   private static final String CURVE_NAME_DSC_USD = "USD Dsc";
   private static final String CURVE_NAME_FWD3_USD = "USD Fwd 3M";
@@ -181,8 +193,8 @@ public class MulticurveBuildingDiscountingDiscountUSD2Test {
     NAMES_UNITS[1][0] = new String[] {CURVE_NAME_DSC_USD, CURVE_NAME_FWD3_USD };
     NAMES_UNITS[2][0] = new String[] {CURVE_NAME_DSC_USD };
     DSC_MAP.put(CURVE_NAME_DSC_USD, USD);
-    FWD_ON_MAP.put(CURVE_NAME_DSC_USD, new IndexON[] {INDEX_ON_USD });
-    FWD_IBOR_MAP.put(CURVE_NAME_FWD3_USD, new IborIndex[] {USDLIBOR3M });
+    FWD_ON_MAP.put(CURVE_NAME_DSC_USD, new IndexON[] {USD_OVERNIGHT_INDEX });
+    FWD_IBOR_MAP.put(CURVE_NAME_FWD3_USD, new IborIndex[] {USD_3M_LIBOR_INDEX });
   }
 
   @SuppressWarnings({"unchecked", "rawtypes" })
@@ -229,7 +241,7 @@ public class MulticurveBuildingDiscountingDiscountUSD2Test {
       units[loopblock] = CURVES_PAR_SPREAD_MQ_WITHOUT_TODAY_BLOCK.get(loopblock).getFirst();
       bb[loopblock] = CURVES_PAR_SPREAD_MQ_WITHOUT_TODAY_BLOCK.get(loopblock).getSecond();
       curveDsc[loopblock] = units[loopblock].getCurve(USD);
-      curveFwd[loopblock] = units[loopblock].getCurve(USDLIBOR3M);
+      curveFwd[loopblock] = units[loopblock].getCurve(USD_3M_LIBOR_INDEX);
     }
     assertEquals("Curve construction: 1 unit / 2 units ", curveDsc[0].getNumberOfParameters(), curveDsc[1].getNumberOfParameters());
     assertEquals("Curve construction: 1 unit / 2 units ", curveFwd[0].getNumberOfParameters(), curveFwd[1].getNumberOfParameters());
@@ -321,7 +333,7 @@ public class MulticurveBuildingDiscountingDiscountUSD2Test {
   private void curveConstructionTest(final InstrumentDefinition<?>[][][] definitions, final MulticurveProviderDiscount curves, final boolean withToday, final int block) {
     final int nbBlocks = definitions.length;
     for (int loopblock = 0; loopblock < nbBlocks; loopblock++) {
-      final InstrumentDerivative[][] instruments = convert(definitions[loopblock], loopblock, withToday);
+      final InstrumentDerivative[][] instruments = CurveTestUtils.convert(definitions[loopblock], withToday ? FIXING_TS_WITH_TODAY : FIXING_TS_WITHOUT_TODAY, NOW);
       final double[][] pv = new double[instruments.length][];
       for (int loopcurve = 0; loopcurve < instruments.length; loopcurve++) {
         pv[loopcurve] = new double[instruments[loopcurve].length];
@@ -342,17 +354,16 @@ public class MulticurveBuildingDiscountingDiscountUSD2Test {
     final int jump = 1;
     final int startIndex = 0;
     final int nbDate = 2750;
-    ZonedDateTime startDate = ScheduleCalculator.getAdjustedDate(NOW, USDLIBOR3M.getSpotLag() + startIndex * jump, NYC);
+    ZonedDateTime startDate = ScheduleCalculator.getAdjustedDate(NOW, USD_3M_LIBOR_INDEX.getSpotLag() + startIndex * jump, NYC);
     final double[] rateDsc = new double[nbDate];
     final double[] startTime = new double[nbDate];
-    try {
-      final FileWriter writer = new FileWriter("fwd-dsc.csv");
+    try (final FileWriter writer = new FileWriter("fwd-dsc.csv")) {
       for (int loopdate = 0; loopdate < nbDate; loopdate++) {
         startTime[loopdate] = TimeCalculator.getTimeBetween(NOW, startDate);
-        final ZonedDateTime endDate = ScheduleCalculator.getAdjustedDate(startDate, USDLIBOR3M, NYC);
+        final ZonedDateTime endDate = ScheduleCalculator.getAdjustedDate(startDate, USD_3M_LIBOR_INDEX, NYC);
         final double endTime = TimeCalculator.getTimeBetween(NOW, endDate);
-        final double accrualFactor = USDLIBOR3M.getDayCount().getDayCountFraction(startDate, endDate);
-        rateDsc[loopdate] = marketDsc.getSimplyCompoundForwardRate(USDLIBOR3M, startTime[loopdate], endTime, accrualFactor);
+        final double accrualFactor = USD_3M_LIBOR_INDEX.getDayCount().getDayCountFraction(startDate, endDate);
+        rateDsc[loopdate] = marketDsc.getSimplyCompoundForwardRate(USD_3M_LIBOR_INDEX, startTime[loopdate], endTime, accrualFactor);
         startDate = ScheduleCalculator.getAdjustedDate(startDate, jump, NYC);
         writer.append(0.0 + "," + startTime[loopdate] + "," + rateDsc[loopdate] + "\n");
       }
@@ -377,7 +388,7 @@ public class MulticurveBuildingDiscountingDiscountUSD2Test {
         final InstrumentDerivative[] derivatives = new InstrumentDerivative[nInstruments];
         final double[] initialGuess = new double[nInstruments];
         for (int k = 0; k < nInstruments; k++) {
-          derivatives[k] = convert(definitions[i][j][k], i, withToday);
+          derivatives[k] = CurveTestUtils.convert(definitions[i][j][k], withToday ? FIXING_TS_WITH_TODAY : FIXING_TS_WITHOUT_TODAY, NOW);
           initialGuess[k] = definitions[i][j][k].accept(CurveTestUtils.RATES_INITIALIZATION);
         }
         final GeneratorYDCurve generator = curveGenerators[i][j].finalGenerator(derivatives);
@@ -387,63 +398,6 @@ public class MulticurveBuildingDiscountingDiscountUSD2Test {
     }
     return CURVE_BUILDING_REPOSITORY.makeCurvesFromDerivatives(curveBundles, knownData, DSC_MAP, FWD_IBOR_MAP, FWD_ON_MAP, calculator,
         sensitivityCalculator);
-  }
-
-  private static InstrumentDerivative[][] convert(final InstrumentDefinition<?>[][] definitions, final int unit, final boolean withToday) {
-    final InstrumentDerivative[][] instruments = new InstrumentDerivative[definitions.length][];
-    for (int loopcurve = 0; loopcurve < definitions.length; loopcurve++) {
-      instruments[loopcurve] = new InstrumentDerivative[definitions[loopcurve].length];
-      int loopins = 0;
-      for (final InstrumentDefinition<?> instrument : definitions[loopcurve]) {
-        InstrumentDerivative ird;
-        if (instrument instanceof SwapFixedONDefinition) {
-          ird = ((SwapFixedONDefinition) instrument).toDerivative(NOW, getTSSwapFixedON(withToday, unit));
-        } else {
-          if (instrument instanceof SwapFixedIborDefinition) {
-            ird = ((SwapFixedIborDefinition) instrument).toDerivative(NOW, getTSSwapFixedIbor(withToday, unit));
-          } else {
-            ird = instrument.toDerivative(NOW);
-          }
-        }
-        instruments[loopcurve][loopins++] = ird;
-      }
-    }
-    return instruments;
-  }
-
-  private static InstrumentDerivative convert(final InstrumentDefinition<?> definition, final int unit, final boolean withToday) {
-    InstrumentDerivative ird;
-    if (definition instanceof SwapFixedONDefinition) {
-      ird = ((SwapFixedONDefinition) definition).toDerivative(NOW, getTSSwapFixedON(withToday, unit));
-    } else {
-      if (definition instanceof SwapFixedIborDefinition) {
-        ird = ((SwapFixedIborDefinition) definition).toDerivative(NOW, getTSSwapFixedIbor(withToday, unit));
-      } else {
-        ird = definition.toDerivative(NOW);
-      }
-    }
-    return ird;
-  }
-
-  private static ZonedDateTimeDoubleTimeSeries[] getTSSwapFixedON(final Boolean withToday, final Integer unit) {
-    switch (unit) {
-      case 0:
-        return withToday ? TS_FIXED_OIS_USD_WITH_TODAY : TS_FIXED_OIS_USD_WITHOUT_TODAY;
-      default:
-        throw new IllegalArgumentException(unit.toString());
-    }
-  }
-
-  private static ZonedDateTimeDoubleTimeSeries[] getTSSwapFixedIbor(final Boolean withToday, final Integer unit) {
-    //REVIEW is it intended that the first two branches of the switch statement do the same thing
-    switch (unit) {
-      case 0:
-        return withToday ? TS_FIXED_IBOR_USD3M_WITH_TODAY : TS_FIXED_IBOR_USD3M_WITHOUT_TODAY;
-      case 1:
-        return withToday ? TS_FIXED_IBOR_USD3M_WITH_TODAY : TS_FIXED_IBOR_USD3M_WITHOUT_TODAY;
-      default:
-        throw new IllegalArgumentException(unit.toString());
-    }
   }
 
 }
