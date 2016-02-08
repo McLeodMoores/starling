@@ -25,8 +25,6 @@ import com.opengamma.analytics.financial.curve.interestrate.generator.GeneratorC
 import com.opengamma.analytics.financial.curve.interestrate.generator.GeneratorYDCurve;
 import com.opengamma.analytics.financial.forex.method.FXMatrix;
 import com.opengamma.analytics.financial.instrument.InstrumentDefinition;
-import com.opengamma.analytics.financial.instrument.cash.CashDefinition;
-import com.opengamma.analytics.financial.instrument.fra.ForwardRateAgreementDefinition;
 import com.opengamma.analytics.financial.instrument.index.GeneratorAttribute;
 import com.opengamma.analytics.financial.instrument.index.GeneratorAttributeIR;
 import com.opengamma.analytics.financial.instrument.index.GeneratorDepositON;
@@ -37,11 +35,7 @@ import com.opengamma.analytics.financial.instrument.index.GeneratorSwapFixedON;
 import com.opengamma.analytics.financial.instrument.index.GeneratorSwapFixedONMaster;
 import com.opengamma.analytics.financial.instrument.index.IndexON;
 import com.opengamma.analytics.financial.instrument.index.IndexPrice;
-import com.opengamma.analytics.financial.instrument.inflation.CouponInflationZeroCouponInterpolationDefinition;
-import com.opengamma.analytics.financial.instrument.inflation.CouponInflationZeroCouponMonthlyDefinition;
-import com.opengamma.analytics.financial.instrument.swap.SwapFixedIborDefinition;
 import com.opengamma.analytics.financial.instrument.swap.SwapFixedInflationZeroCouponDefinition;
-import com.opengamma.analytics.financial.instrument.swap.SwapFixedONDefinition;
 import com.opengamma.analytics.financial.interestrate.InstrumentDerivative;
 import com.opengamma.analytics.financial.interestrate.InstrumentDerivativeVisitor;
 import com.opengamma.analytics.financial.interestrate.annuity.derivative.Annuity;
@@ -332,7 +326,7 @@ public class InflationBuildingCurveWithDiscountTestUSD {
         final double[] initialGuess = new double[nInstruments];
         for (int k = 0; k < nInstruments; k++) {
           derivatives[k] = convert(definitions[i][j][k]);
-          initialGuess[k] = initialGuess(definitions[i][j][k]);
+          initialGuess[k] = definitions[i][j][k].accept(CurveTestUtils.INFLATION_INITIALIZATION);
         }
         final GeneratorCurve generator = curveGenerators[i][j].finalGenerator(derivatives);
         singleCurves[j] = new SingleCurveBundle<>(curveNames[i][j], derivatives, initialGuess, generator);
@@ -354,8 +348,7 @@ public class InflationBuildingCurveWithDiscountTestUSD {
           final Annuity<? extends Payment> ird1 = ((SwapFixedInflationZeroCouponDefinition) instrument).getFirstLeg().toDerivative(NOW);
           final Annuity<? extends Payment> ird2 = ((SwapFixedInflationZeroCouponDefinition) instrument).getSecondLeg().toDerivative(NOW, TS_PRICE_INDEX_USD_WITH_TODAY);
           ird = new Swap<>(ird1, ird2);
-        }
-        else {
+        } else {
           ird = instrument.toDerivative(NOW);
         }
         instruments[loopcurve][loopins++] = ird;
@@ -375,32 +368,6 @@ public class InflationBuildingCurveWithDiscountTestUSD {
       ird = instrument.toDerivative(NOW);
     }
     return ird;
-  }
-
-  private static double initialGuess(final InstrumentDefinition<?> instrument) {
-    if (instrument instanceof SwapFixedONDefinition) {
-      return ((SwapFixedONDefinition) instrument).getFixedLeg().getNthPayment(0).getRate();
-    }
-    if (instrument instanceof SwapFixedIborDefinition) {
-      return ((SwapFixedIborDefinition) instrument).getFixedLeg().getNthPayment(0).getRate();
-    }
-    if (instrument instanceof SwapFixedInflationZeroCouponDefinition) {
-
-      if (((SwapFixedInflationZeroCouponDefinition) instrument).getFirstLeg().getNthPayment(0) instanceof CouponInflationZeroCouponMonthlyDefinition) {
-        return 100.0;
-      }
-      if (((SwapFixedInflationZeroCouponDefinition) instrument).getFirstLeg().getNthPayment(0) instanceof CouponInflationZeroCouponInterpolationDefinition) {
-        return 100.0;
-      }
-      return 100;
-    }
-    if (instrument instanceof ForwardRateAgreementDefinition) {
-      return ((ForwardRateAgreementDefinition) instrument).getRate();
-    }
-    if (instrument instanceof CashDefinition) {
-      return ((CashDefinition) instrument).getRate();
-    }
-    return 100;
   }
 
 }

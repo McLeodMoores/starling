@@ -22,8 +22,6 @@ import com.opengamma.analytics.financial.curve.interestrate.generator.GeneratorC
 import com.opengamma.analytics.financial.curve.interestrate.generator.GeneratorYDCurve;
 import com.opengamma.analytics.financial.forex.method.FXMatrix;
 import com.opengamma.analytics.financial.instrument.InstrumentDefinition;
-import com.opengamma.analytics.financial.instrument.cash.CashDefinition;
-import com.opengamma.analytics.financial.instrument.fra.ForwardRateAgreementDefinition;
 import com.opengamma.analytics.financial.instrument.index.GeneratorAttribute;
 import com.opengamma.analytics.financial.instrument.index.GeneratorAttributeIR;
 import com.opengamma.analytics.financial.instrument.index.GeneratorDepositON;
@@ -331,25 +329,9 @@ public class MulticurveBuildingDiscountingForwardTest {
     final double[] result = new double[definitions.length];
     int loopr = 0;
     for (final InstrumentDefinition<?> definition : definitions) {
-      result[loopr++] = initialGuess(definition);
+      result[loopr++] = definition.accept(CurveTestUtils.RATES_INITIALIZATION);
     }
     return result;
-  }
-
-  private static double initialGuess(final InstrumentDefinition<?> instrument) {
-    if (instrument instanceof SwapFixedONDefinition) {
-      return ((SwapFixedONDefinition) instrument).getFixedLeg().getNthPayment(0).getRate();
-    }
-    if (instrument instanceof SwapFixedIborDefinition) {
-      return ((SwapFixedIborDefinition) instrument).getFixedLeg().getNthPayment(0).getRate();
-    }
-    if (instrument instanceof ForwardRateAgreementDefinition) {
-      return ((ForwardRateAgreementDefinition) instrument).getRate();
-    }
-    if (instrument instanceof CashDefinition) {
-      return ((CashDefinition) instrument).getRate();
-    }
-    return 0.01;
   }
 
 }

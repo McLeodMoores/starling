@@ -282,21 +282,4 @@ public class MulticurveBuildingDiscountingBillWithoutDiscountTestUS {
 //    }
 //  }
 //
-//  private static double initialGuess(final InstrumentDefinition<?> instrument) {
-//    if (instrument instanceof SwapFixedONDefinition) {
-//      return ((SwapFixedONDefinition) instrument).getFixedLeg().getNthPayment(0).getRate();
-//    }
-//    if (instrument instanceof SwapFixedIborDefinition) {
-//      return ((SwapFixedIborDefinition) instrument).getFixedLeg().getNthPayment(0).getRate();
-//    }
-//    if (instrument instanceof ForwardRateAgreementDefinition) {
-//      return ((ForwardRateAgreementDefinition) instrument).getRate();
-//    }
-//    if (instrument instanceof CashDefinition) {
-//      return ((CashDefinition) instrument).getRate();
-//    }
-//    return 0.01;
-//
-//  }
-
 }

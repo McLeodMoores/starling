@@ -20,8 +20,6 @@ import com.opengamma.analytics.financial.curve.interestrate.generator.GeneratorC
 import com.opengamma.analytics.financial.curve.interestrate.generator.GeneratorYDCurve;
 import com.opengamma.analytics.financial.forex.method.FXMatrix;
 import com.opengamma.analytics.financial.instrument.InstrumentDefinition;
-import com.opengamma.analytics.financial.instrument.cash.CashDefinition;
-import com.opengamma.analytics.financial.instrument.fra.ForwardRateAgreementDefinition;
 import com.opengamma.analytics.financial.instrument.future.InterestRateFutureSecurityDefinition;
 import com.opengamma.analytics.financial.instrument.future.InterestRateFutureTransactionDefinition;
 import com.opengamma.analytics.financial.instrument.future.SwapFuturesPriceDeliverableSecurityDefinition;
@@ -39,7 +37,6 @@ import com.opengamma.analytics.financial.instrument.index.GeneratorSwapFixedONMa
 import com.opengamma.analytics.financial.instrument.index.GeneratorSwapFuturesDeliverable;
 import com.opengamma.analytics.financial.instrument.index.IborIndex;
 import com.opengamma.analytics.financial.instrument.index.IndexON;
-import com.opengamma.analytics.financial.instrument.swap.SwapFixedIborDefinition;
 import com.opengamma.analytics.financial.instrument.swap.SwapFixedONDefinition;
 import com.opengamma.analytics.financial.interestrate.InstrumentDerivative;
 import com.opengamma.analytics.financial.interestrate.InstrumentDerivativeVisitor;
@@ -312,7 +309,7 @@ public class MulticurveBuildingHullWhiteDiscountFuturesUSDTest {
         final double[] rates = new double[nInstruments];
         for (int k = 0; k < nInstruments; k++) {
           derivatives[k] = convert(definitions[i][j][k], withToday);
-          rates[k] = initialGuess(definitions[i][j][k]);
+          rates[k] = definitions[i][j][k].accept(CurveTestUtils.RATES_INITIALIZATION);
         }
         final GeneratorYDCurve generator = curveGenerators[i][j].finalGenerator(derivatives);
         final double[] initialGuess = generator.initialGuess(rates);
@@ -369,25 +366,6 @@ public class MulticurveBuildingHullWhiteDiscountFuturesUSDTest {
 
   private static ZonedDateTimeDoubleTimeSeries[] getTSSwapFixedON(final Boolean withToday) {
     return withToday ? TS_FIXED_OIS_EUR_WITH_TODAY : TS_FIXED_OIS_EUR_WITHOUT_TODAY;
-  }
-
-  private static double initialGuess(final InstrumentDefinition<?> instrument) {
-    if (instrument instanceof SwapFixedONDefinition) {
-      return ((SwapFixedONDefinition) instrument).getFixedLeg().getNthPayment(0).getRate();
-    }
-    if (instrument instanceof SwapFixedIborDefinition) {
-      return ((SwapFixedIborDefinition) instrument).getFixedLeg().getNthPayment(0).getRate();
-    }
-    if (instrument instanceof ForwardRateAgreementDefinition) {
-      return ((ForwardRateAgreementDefinition) instrument).getRate();
-    }
-    if (instrument instanceof CashDefinition) {
-      return ((CashDefinition) instrument).getRate();
-    }
-    if (instrument instanceof InterestRateFutureTransactionDefinition) {
-      return 1 - ((InterestRateFutureTransactionDefinition) instrument).getTradePrice();
-    }
-    return 0.01;
   }
 
 }

@@ -233,31 +233,5 @@ public class InflationBuildingCurveSimpleTestEUR {
 //    }
 //    return ird;
 //  }
-//
-//  private static double initialGuess(final InstrumentDefinition<?> instrument) {
-//    if (instrument instanceof SwapFixedONDefinition) {
-//      return ((SwapFixedONDefinition) instrument).getFixedLeg().getNthPayment(0).getRate();
-//    }
-//    if (instrument instanceof SwapFixedIborDefinition) {
-//      return ((SwapFixedIborDefinition) instrument).getFixedLeg().getNthPayment(0).getRate();
-//    }
-//    if (instrument instanceof SwapFixedInflationZeroCouponDefinition) {
-//
-//      if (((SwapFixedInflationZeroCouponDefinition) instrument).getFirstLeg().getNthPayment(0) instanceof CouponInflationZeroCouponMonthlyDefinition) {
-//        return 100.0;
-//      }
-//      if (((SwapFixedInflationZeroCouponDefinition) instrument).getFirstLeg().getNthPayment(0) instanceof CouponInflationZeroCouponInterpolationDefinition) {
-//        return 100.0;
-//      }
-//      return 100;
-//    }
-//    if (instrument instanceof ForwardRateAgreementDefinition) {
-//      return ((ForwardRateAgreementDefinition) instrument).getRate();
-//    }
-//    if (instrument instanceof CashDefinition) {
-//      return ((CashDefinition) instrument).getRate();
-//    }
-//    return 1;
-//  }
 
 }

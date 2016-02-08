@@ -24,8 +24,6 @@ import com.opengamma.analytics.financial.curve.interestrate.generator.GeneratorC
 import com.opengamma.analytics.financial.curve.interestrate.generator.GeneratorYDCurve;
 import com.opengamma.analytics.financial.forex.method.FXMatrix;
 import com.opengamma.analytics.financial.instrument.InstrumentDefinition;
-import com.opengamma.analytics.financial.instrument.cash.CashDefinition;
-import com.opengamma.analytics.financial.instrument.fra.ForwardRateAgreementDefinition;
 import com.opengamma.analytics.financial.instrument.index.GeneratorAttribute;
 import com.opengamma.analytics.financial.instrument.index.GeneratorAttributeIR;
 import com.opengamma.analytics.financial.instrument.index.GeneratorDepositIbor;
@@ -391,7 +389,7 @@ public class MulticurveBuildingDiscountingDiscountAUDTest {
         final double[] initialGuess = new double[nInstruments];
         for (int k = 0; k < nInstruments; k++) {
           derivatives[k] = convert(definitions[i][j][k], withToday);
-          initialGuess[k] = initialGuess(definitions[i][j][k]);
+          initialGuess[k] = definitions[i][j][k].accept(CurveTestUtils.RATES_INITIALIZATION);
         }
         final GeneratorYDCurve generator = curveGenerators[i][j].finalGenerator(derivatives);
         singleCurves[j] = new SingleCurveBundle<>(curveNames[i][j], derivatives, initialGuess, generator);
@@ -456,22 +454,6 @@ public class MulticurveBuildingDiscountingDiscountAUDTest {
 
   private static ZonedDateTimeDoubleTimeSeries[] getTSSwapIborIbor(final Boolean withToday) {
     return withToday ? TS_FIXED_IBOR_AUD3M6M_WITH_TODAY : TS_FIXED_IBOR_AUD3M6M_WITHOUT_TODAY;
-  }
-
-  private static double initialGuess(final InstrumentDefinition<?> instrument) {
-    if (instrument instanceof SwapFixedONDefinition) {
-      return ((SwapFixedONDefinition) instrument).getFixedLeg().getNthPayment(0).getRate();
-    }
-    if (instrument instanceof SwapFixedIborDefinition) {
-      return ((SwapFixedIborDefinition) instrument).getFixedLeg().getNthPayment(0).getRate();
-    }
-    if (instrument instanceof ForwardRateAgreementDefinition) {
-      return ((ForwardRateAgreementDefinition) instrument).getRate();
-    }
-    if (instrument instanceof CashDefinition) {
-      return ((CashDefinition) instrument).getRate();
-    } // TODO: What about basis swaps?
-    return 0.01;
   }
 
 }

@@ -5,7 +5,6 @@ package com.opengamma.analytics.date;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.Objects;
 import java.util.TreeSet;
 
@@ -27,8 +26,7 @@ public class SimpleWorkingDayCalendar implements WorkingDayCalendar {
   private final DayOfWeek _weekendDay1;
   /** The second weekend day */
   private final DayOfWeek _weekendDay2;
-  /** For the toString() method */
-  private String _toString = null;
+
   /**
    * Creates an instance.
    * @param name  the name of the calendar, not null
@@ -39,7 +37,7 @@ public class SimpleWorkingDayCalendar implements WorkingDayCalendar {
   public SimpleWorkingDayCalendar(final String name, final Collection<LocalDate> holidays, final DayOfWeek weekendDay1,
       final DayOfWeek weekendDay2) {
     _name = ArgumentChecker.notNull(name, "name");
-    _holidays = Collections.unmodifiableSet(new HashSet<>(ArgumentChecker.notNull(holidays, "holidays")));
+    _holidays = Collections.unmodifiableSet(new TreeSet<>(ArgumentChecker.notNull(holidays, "holidays")));
     _weekendDay1 = ArgumentChecker.notNull(weekendDay1, "weekendDay1");
     _weekendDay2 = ArgumentChecker.notNull(weekendDay2, "weekendDay2");
   }
@@ -104,13 +102,6 @@ public class SimpleWorkingDayCalendar implements WorkingDayCalendar {
 
   @Override
   public String toString() {
-    if (_toString == null) {
-      buildString();
-    }
-    return _toString;
-  }
-
-  private void buildString() {
     final StringBuilder sb = new StringBuilder(_name);
     sb.append(": [");
     sb.append(_weekendDay1);
@@ -118,6 +109,7 @@ public class SimpleWorkingDayCalendar implements WorkingDayCalendar {
     sb.append(_weekendDay2);
     sb.append("], ");
     sb.append(new TreeSet<>(_holidays));
-    _toString = sb.toString();
+    return sb.toString();
   }
+
 }

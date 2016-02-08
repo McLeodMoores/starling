@@ -260,7 +260,7 @@ public class MulticurveBuildingDiscountingBrazilianONTest2 {
         final double[] initialGuess = new double[nInstruments];
         for (int k = 0; k < nInstruments; k++) {
           derivatives[k] = convert(definitions[i][j][k], i, withToday);
-          initialGuess[k] = initialGuess();
+          initialGuess[k] = 0.01;
         }
         final GeneratorYDCurve generator = curveGenerators[i][j].finalGenerator(derivatives);
         singleCurves[j] = new SingleCurveBundle<>(curveNames[i][j], derivatives, initialGuess, generator);
@@ -305,10 +305,6 @@ public class MulticurveBuildingDiscountingBrazilianONTest2 {
       default:
         throw new IllegalArgumentException(unit.toString());
     }
-  }
-
-  private static double initialGuess() {
-    return 0.01;
   }
 
 }

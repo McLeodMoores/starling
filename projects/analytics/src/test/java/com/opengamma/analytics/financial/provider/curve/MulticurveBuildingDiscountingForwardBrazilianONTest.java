@@ -22,8 +22,6 @@ import com.opengamma.analytics.financial.curve.interestrate.generator.GeneratorC
 import com.opengamma.analytics.financial.curve.interestrate.generator.GeneratorYDCurve;
 import com.opengamma.analytics.financial.forex.method.FXMatrix;
 import com.opengamma.analytics.financial.instrument.InstrumentDefinition;
-import com.opengamma.analytics.financial.instrument.cash.CashDefinition;
-import com.opengamma.analytics.financial.instrument.fra.ForwardRateAgreementDefinition;
 import com.opengamma.analytics.financial.instrument.index.GeneratorAttribute;
 import com.opengamma.analytics.financial.instrument.index.GeneratorAttributeIR;
 import com.opengamma.analytics.financial.instrument.index.GeneratorDepositON;
@@ -33,8 +31,6 @@ import com.opengamma.analytics.financial.instrument.index.GeneratorSwapFixedComp
 import com.opengamma.analytics.financial.instrument.index.IborIndex;
 import com.opengamma.analytics.financial.instrument.index.IndexON;
 import com.opengamma.analytics.financial.instrument.swap.SwapFixedCompoundedONCompoundedDefinition;
-import com.opengamma.analytics.financial.instrument.swap.SwapFixedIborDefinition;
-import com.opengamma.analytics.financial.instrument.swap.SwapFixedONDefinition;
 import com.opengamma.analytics.financial.interestrate.InstrumentDerivative;
 import com.opengamma.analytics.financial.interestrate.InstrumentDerivativeVisitor;
 import com.opengamma.analytics.financial.provider.calculator.discounting.ParSpreadMarketQuoteCurveSensitivityDiscountingCalculator;
@@ -110,8 +106,8 @@ public class MulticurveBuildingDiscountingForwardBrazilianONTest {
     Period.ofDays(996), Period.ofDays(1090), Period.ofDays(1181), Period.ofDays(1272), Period.ofDays(1363), Period.ofDays(1454) };
   private static final GeneratorAttributeIR[] DSC_BRL_ATTR = new GeneratorAttributeIR[DSC_BRL_TENOR.length];
   static {
-    for (int loopins = 0; loopins < DSC_BRL_TENOR.length; loopins++) {
-      DSC_BRL_ATTR[loopins] = new GeneratorAttributeIR(DSC_BRL_TENOR[loopins]);
+    for (int i = 0; i < DSC_BRL_TENOR.length; i++) {
+      DSC_BRL_ATTR[i] = new GeneratorAttributeIR(DSC_BRL_TENOR[i]);
     }
   }
 
@@ -131,10 +127,10 @@ public class MulticurveBuildingDiscountingForwardBrazilianONTest {
 
   static {
     DEFINITIONS_DSC_BRL = getDefinitions(DSC_BRL_MARKET_QUOTES, DSC_BRL_GENERATORS, DSC_BRL_ATTR);
-    for (int loopblock = 0; loopblock < NB_BLOCKS; loopblock++) {
-      DEFINITIONS_UNITS[loopblock] = new InstrumentDefinition<?>[NB_UNITS[loopblock]][][];
-      GENERATORS_UNITS[loopblock] = new GeneratorYDCurve[NB_UNITS[loopblock]][];
-      NAMES_UNITS[loopblock] = new String[NB_UNITS[loopblock]][];
+    for (int i = 0; i < NB_BLOCKS; i++) {
+      DEFINITIONS_UNITS[i] = new InstrumentDefinition<?>[NB_UNITS[i]][][];
+      GENERATORS_UNITS[i] = new GeneratorYDCurve[NB_UNITS[i]][];
+      NAMES_UNITS[i] = new String[NB_UNITS[i]][];
     }
     DEFINITIONS_UNITS[0][0] = new InstrumentDefinition<?>[][] {DEFINITIONS_DSC_BRL };
     final GeneratorYDCurve genIntLin = new GeneratorCurveYieldInterpolated(MATURITY_CALCULATOR, INTERPOLATOR);
@@ -147,13 +143,13 @@ public class MulticurveBuildingDiscountingForwardBrazilianONTest {
   @SuppressWarnings({"rawtypes", "unchecked" })
   private static InstrumentDefinition<?>[] getDefinitions(final double[] marketQuotes, final GeneratorInstrument[] generators, final GeneratorAttribute[] attribute) {
     final InstrumentDefinition<?>[] definitions = new InstrumentDefinition<?>[marketQuotes.length];
-    for (int loopmv = 0; loopmv < marketQuotes.length; loopmv++) {
-      definitions[loopmv] = generators[loopmv].generateInstrument(NOW, marketQuotes[loopmv], NOTIONAL, attribute[loopmv]);
+    for (int i = 0; i < marketQuotes.length; i++) {
+      definitions[i] = generators[i].generateInstrument(NOW, marketQuotes[i], NOTIONAL, attribute[i]);
     }
     return definitions;
   }
 
-  private static List<Pair<MulticurveProviderForward, CurveBuildingBlockBundle>> CURVES_PAR_SPREAD_MQ_WITHOUT_TODAY_BLOCK = new ArrayList<>();
+  private static final List<Pair<MulticurveProviderForward, CurveBuildingBlockBundle>> CURVES_PAR_SPREAD_MQ_WITHOUT_TODAY_BLOCK = new ArrayList<>();
 
   // Calculator
   private static final PresentValueDiscountingCalculator PVC = PresentValueDiscountingCalculator.getInstance();
@@ -166,8 +162,8 @@ public class MulticurveBuildingDiscountingForwardBrazilianONTest {
 
   @BeforeSuite
   static void initClass() {
-    for (int loopblock = 0; loopblock < NB_BLOCKS; loopblock++) {
-      CURVES_PAR_SPREAD_MQ_WITHOUT_TODAY_BLOCK.add(makeCurvesFromDefinitions(DEFINITIONS_UNITS[loopblock], GENERATORS_UNITS[loopblock], NAMES_UNITS[loopblock], KNOWN_DATA, PSMQC, PSMQCSC, false));
+    for (int i = 0; i < NB_BLOCKS; i++) {
+      CURVES_PAR_SPREAD_MQ_WITHOUT_TODAY_BLOCK.add(makeCurvesFromDefinitions(DEFINITIONS_UNITS[i], GENERATORS_UNITS[i], NAMES_UNITS[i], KNOWN_DATA, PSMQC, PSMQCSC, false));
     }
   }
 
@@ -177,7 +173,7 @@ public class MulticurveBuildingDiscountingForwardBrazilianONTest {
     final int nbTest = 100;
 
     startTime = System.currentTimeMillis();
-    for (int looptest = 0; looptest < nbTest; looptest++) {
+    for (int i = 0; i < nbTest; i++) {
       makeCurvesFromDefinitions(DEFINITIONS_UNITS[0], GENERATORS_UNITS[0], NAMES_UNITS[0], KNOWN_DATA, PSMQC, PSMQCSC, false);
     }
     endTime = System.currentTimeMillis();
@@ -197,11 +193,11 @@ public class MulticurveBuildingDiscountingForwardBrazilianONTest {
     for (int loopblock = 0; loopblock < nbBlocks; loopblock++) {
       final InstrumentDerivative[][] instruments = convert(definitions[loopblock], loopblock, withToday);
       final double[][] pv = new double[instruments.length][];
-      for (int loopcurve = 0; loopcurve < instruments.length; loopcurve++) {
-        pv[loopcurve] = new double[instruments[loopcurve].length];
-        for (int loopins = 0; loopins < instruments[loopcurve].length; loopins++) {
-          pv[loopcurve][loopins] = curves.getFxRates().convert(instruments[loopcurve][loopins].accept(PVC, curves), BRL).getAmount();
-          assertEquals("Curve construction: block " + block + ", unit " + loopblock + " - instrument " + loopins, 0, pv[loopcurve][loopins], TOLERANCE_CAL);
+      for (int i = 0; i < instruments.length; i++) {
+        pv[i] = new double[instruments[i].length];
+        for (int j = 0; j < instruments[i].length; j++) {
+          pv[i][j] = curves.getFxRates().convert(instruments[i][j].accept(PVC, curves), BRL).getAmount();
+          assertEquals("Curve construction: block " + block + ", unit " + loopblock + " - instrument " + j, 0, pv[i][j], TOLERANCE_CAL);
         }
       }
     }
@@ -228,21 +224,21 @@ public class MulticurveBuildingDiscountingForwardBrazilianONTest {
     final double[] accrualFactorActAct = new double[nbDate];
     try {
       final FileWriter writer = new FileWriter("fwd-dsc.csv");
-      for (int loopdate = 0; loopdate < nbDate; loopdate++) {
-        startTime[loopdate] = TimeCalculator.getTimeBetween(NOW, startDate);
-        startTime2[loopdate] = INDEX_ON_BRL.getDayCount().getDayCountFraction(NOW, startDate, NYC);
+      for (int i = 0; i < nbDate; i++) {
+        startTime[i] = TimeCalculator.getTimeBetween(NOW, startDate);
+        startTime2[i] = INDEX_ON_BRL.getDayCount().getDayCountFraction(NOW, startDate, NYC);
         final ZonedDateTime endDate = ScheduleCalculator.getAdjustedDate(startDate, INDEX_ON_BRL.getPublicationLag(), NYC);
         final double endTime = TimeCalculator.getTimeBetween(NOW, endDate);
         final double endTime2 = INDEX_ON_BRL.getDayCount().getDayCountFraction(NOW, endDate, NYC);
-        accrualFactor[loopdate] = INDEX_ON_BRL.getDayCount().getDayCountFraction(startDate, endDate, NYC);
-        accrualFactorActAct[loopdate] = TimeCalculator.getTimeBetween(startDate, endDate);
-        dscstart[loopdate] = marketDsc.getDiscountFactor(BRL, startTime2[loopdate]);
-        dscend[loopdate] = marketDsc.getDiscountFactor(BRL, endTime2);
-        rateDsc[loopdate] = marketDsc.getSimplyCompoundForwardRate(INDEX_ON_BRL, startTime2[loopdate], endTime2, accrualFactor[loopdate]);
-        rateDsc2[loopdate] = marketDsc.getSimplyCompoundForwardRate(INDEX_ON_BRL, startTime[loopdate], endTime, accrualFactor[loopdate]);
-        rateDscNormal[loopdate] = marketDsc.getSimplyCompoundForwardRate(INDEX_ON_BRL, startTime[loopdate], endTime, accrualFactorActAct[loopdate]);
+        accrualFactor[i] = INDEX_ON_BRL.getDayCount().getDayCountFraction(startDate, endDate, NYC);
+        accrualFactorActAct[i] = TimeCalculator.getTimeBetween(startDate, endDate);
+        dscstart[i] = marketDsc.getDiscountFactor(BRL, startTime2[i]);
+        dscend[i] = marketDsc.getDiscountFactor(BRL, endTime2);
+        rateDsc[i] = marketDsc.getSimplyCompoundForwardRate(INDEX_ON_BRL, startTime2[i], endTime2, accrualFactor[i]);
+        rateDsc2[i] = marketDsc.getSimplyCompoundForwardRate(INDEX_ON_BRL, startTime[i], endTime, accrualFactor[i]);
+        rateDscNormal[i] = marketDsc.getSimplyCompoundForwardRate(INDEX_ON_BRL, startTime[i], endTime, accrualFactorActAct[i]);
         startDate = ScheduleCalculator.getAdjustedDate(startDate, jump, NYC);
-        writer.append(0.0 + "," + startTime[loopdate] + "," + dscstart[loopdate] + "," + dscend[loopdate] + "," + rateDsc[loopdate] + "," + rateDsc2[loopdate] + "," + rateDscNormal[loopdate] + "\n");
+        writer.append(0.0 + "," + startTime[i] + "," + dscstart[i] + "," + dscend[i] + "," + rateDsc[i] + "," + rateDsc2[i] + "," + rateDscNormal[i] + "\n");
       }
       writer.flush();
       writer.close();
@@ -259,20 +255,25 @@ public class MulticurveBuildingDiscountingForwardBrazilianONTest {
     final double[][] parametersGuess = new double[nUnits][];
     final GeneratorYDCurve[][] generatorFinal = new GeneratorYDCurve[nUnits][];
     final InstrumentDerivative[][][] instruments = new InstrumentDerivative[nUnits][][];
-    for (int loopunit = 0; loopunit < nUnits; loopunit++) {
-      generatorFinal[loopunit] = new GeneratorYDCurve[curveGenerators[loopunit].length];
+    for (int i = 0; i < nUnits; i++) {
+      generatorFinal[i] = new GeneratorYDCurve[curveGenerators[i].length];
       int nbInsUnit = 0;
-      for (int loopcurve = 0; loopcurve < curveGenerators[loopunit].length; loopcurve++) {
-        nbInsUnit += definitions[loopunit][loopcurve].length;
+      for (int loopcurve = 0; loopcurve < curveGenerators[i].length; loopcurve++) {
+        nbInsUnit += definitions[i][loopcurve].length;
       }
-      parametersGuess[loopunit] = new double[nbInsUnit];
+      parametersGuess[i] = new double[nbInsUnit];
       int startCurve = 0; // First parameter index of the curve in the unit.
-      instruments[loopunit] = convert(definitions[loopunit], loopunit, withToday);
-      for (int loopcurve = 0; loopcurve < curveGenerators[loopunit].length; loopcurve++) {
-        generatorFinal[loopunit][loopcurve] = curveGenerators[loopunit][loopcurve].finalGenerator(instruments[loopunit][loopcurve]);
-        final double[] guessCurve = generatorFinal[loopunit][loopcurve].initialGuess(initialGuess(definitions[loopunit][loopcurve]));
-        System.arraycopy(guessCurve, 0, parametersGuess[loopunit], startCurve, instruments[loopunit][loopcurve].length);
-        startCurve += instruments[loopunit][loopcurve].length;
+      instruments[i] = convert(definitions[i], i, withToday);
+      for (int j = 0; j < curveGenerators[i].length; j++) {
+        generatorFinal[i][j] = curveGenerators[i][j].finalGenerator(instruments[i][j]);
+        final InstrumentDefinition<?>[] definitionsForCurve = definitions[i][j];
+        final double[] initialGuess = new double[definitionsForCurve.length];
+        for (int k = 0; k < initialGuess.length; k++) {
+          initialGuess[k] = definitionsForCurve[k].accept(CurveTestUtils.RATES_INITIALIZATION);
+        }
+        final double[] guessCurve = generatorFinal[i][j].initialGuess(initialGuess);
+        System.arraycopy(guessCurve, 0, parametersGuess[i], startCurve, instruments[i][j].length);
+        startCurve += instruments[i][j].length;
       }
     }
     return CURVE_BUILDING_REPOSITORY.makeCurvesFromDerivatives(instruments, generatorFinal, curveNames, parametersGuess, knownData, DSC_MAP, FWD_IBOR_MAP, FWD_ON_MAP, calculator,
@@ -281,30 +282,20 @@ public class MulticurveBuildingDiscountingForwardBrazilianONTest {
 
   private static InstrumentDerivative[][] convert(final InstrumentDefinition<?>[][] definitions, final int unit, final boolean withToday) {
     final InstrumentDerivative[][] instruments = new InstrumentDerivative[definitions.length][];
-    for (int loopcurve = 0; loopcurve < definitions.length; loopcurve++) {
-      instruments[loopcurve] = new InstrumentDerivative[definitions[loopcurve].length];
+    for (int i = 0; i < definitions.length; i++) {
+      instruments[i] = new InstrumentDerivative[definitions[i].length];
       int loopins = 0;
-      for (final InstrumentDefinition<?> instrument : definitions[loopcurve]) {
+      for (final InstrumentDefinition<?> instrument : definitions[i]) {
         InstrumentDerivative ird;
         if (instrument instanceof SwapFixedCompoundedONCompoundedDefinition) {
           ird = ((SwapFixedCompoundedONCompoundedDefinition) instrument).toDerivative(NOW, getTSSwapFixedON(withToday, unit));
         } else {
           ird = instrument.toDerivative(NOW);
         }
-        instruments[loopcurve][loopins++] = ird;
+        instruments[i][loopins++] = ird;
       }
     }
     return instruments;
-  }
-
-  private static InstrumentDerivative convert(final InstrumentDefinition<?> instrument, final int unit, final boolean withToday) {
-    InstrumentDerivative ird;
-    if (instrument instanceof SwapFixedCompoundedONCompoundedDefinition) {
-      ird = ((SwapFixedCompoundedONCompoundedDefinition) instrument).toDerivative(NOW, getTSSwapFixedON(withToday, unit));
-    } else {
-      ird = instrument.toDerivative(NOW);
-    }
-    return ird;
   }
 
   private static ZonedDateTimeDoubleTimeSeries[] getTSSwapFixedON(final Boolean withToday, final Integer unit) {
@@ -314,35 +305,6 @@ public class MulticurveBuildingDiscountingForwardBrazilianONTest {
       default:
         throw new IllegalArgumentException(unit.toString());
     }
-  }
-
-  private static double[] initialGuess(final InstrumentDefinition<?>[] definitions) {
-    final double[] result = new double[definitions.length];
-    int loopr = 0;
-    for (final InstrumentDefinition<?> definition : definitions) {
-      result[loopr++] = initialGuess(definition);
-    }
-    return result;
-  }
-
-  private static double initialGuess(final InstrumentDefinition<?> instrument) {
-    if (instrument instanceof SwapFixedONDefinition) {
-      return ((SwapFixedONDefinition) instrument).getFixedLeg().getNthPayment(0).getRate();
-    }
-    if (instrument instanceof SwapFixedIborDefinition) {
-      return ((SwapFixedIborDefinition) instrument).getFixedLeg().getNthPayment(0).getRate();
-    }
-    if (instrument instanceof ForwardRateAgreementDefinition) {
-      return ((ForwardRateAgreementDefinition) instrument).getRate();
-    }
-    if (instrument instanceof CashDefinition) {
-      return ((CashDefinition) instrument).getRate();
-    }
-    return 0.1;
-  }
-
-  private static double initialGuess() {
-    return 0.01;
   }
 
 }
