@@ -15,7 +15,7 @@ import com.opengamma.util.ArgumentChecker;
  * An adapter for {@link Interpolator1D} that implements {@link NamedInterpolator}.
  */
 @FromStringFactory(factory = NamedInterpolator1dFactory.class)
-public class Interpolator1dAdapter extends Interpolator1D implements NamedInterpolator<Interpolator1DDataBundle, Double> {
+public class Interpolator1dAdapter extends NamedInterpolator1d {
   /** Serialization version */
   private static final long serialVersionUID = 1L;
   /** The underlying interpolator */

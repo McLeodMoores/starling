@@ -16,9 +16,7 @@ import com.opengamma.util.money.Currency;
 
 /**
  * Class describing an OIS-like index. The fixing period is always one business day.
- * @deprecated  use {@link OvernightIndex}
  */
-@Deprecated
 public class IndexON extends IndexDeposit {
   /** The delegated index */
   private final OvernightIndex _index;

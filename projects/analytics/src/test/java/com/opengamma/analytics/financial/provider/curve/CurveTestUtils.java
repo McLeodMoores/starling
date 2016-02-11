@@ -17,17 +17,23 @@ import com.opengamma.analytics.financial.instrument.annuity.AnnuityDefinition;
 import com.opengamma.analytics.financial.instrument.cash.CashDefinition;
 import com.opengamma.analytics.financial.instrument.fra.ForwardRateAgreementDefinition;
 import com.opengamma.analytics.financial.instrument.future.InterestRateFutureTransactionDefinition;
+import com.opengamma.analytics.financial.instrument.future.SwapFuturesPriceDeliverableTransactionDefinition;
 import com.opengamma.analytics.financial.instrument.index.Index;
 import com.opengamma.analytics.financial.instrument.inflation.CouponInflationZeroCouponInterpolationDefinition;
 import com.opengamma.analytics.financial.instrument.inflation.CouponInflationZeroCouponMonthlyDefinition;
+import com.opengamma.analytics.financial.instrument.payment.CouponFixedDefinition;
 import com.opengamma.analytics.financial.instrument.payment.CouponIborDefinition;
+import com.opengamma.analytics.financial.instrument.payment.CouponIborSpreadDefinition;
 import com.opengamma.analytics.financial.instrument.payment.CouponONDefinition;
 import com.opengamma.analytics.financial.instrument.payment.PaymentDefinition;
+import com.opengamma.analytics.financial.instrument.payment.PaymentFixedDefinition;
 import com.opengamma.analytics.financial.instrument.swap.SwapDefinition;
 import com.opengamma.analytics.financial.instrument.swap.SwapFixedCompoundedONCompoundedDefinition;
 import com.opengamma.analytics.financial.instrument.swap.SwapFixedIborDefinition;
 import com.opengamma.analytics.financial.instrument.swap.SwapFixedInflationZeroCouponDefinition;
 import com.opengamma.analytics.financial.instrument.swap.SwapFixedONDefinition;
+import com.opengamma.analytics.financial.instrument.swap.SwapIborIborDefinition;
+import com.opengamma.analytics.financial.instrument.swap.SwapXCcyIborIborDefinition;
 import com.opengamma.analytics.financial.interestrate.InstrumentDerivative;
 import com.opengamma.timeseries.precise.zdt.ImmutableZonedDateTimeDoubleTimeSeries;
 import com.opengamma.timeseries.precise.zdt.ZonedDateTimeDoubleTimeSeries;
@@ -48,6 +54,27 @@ public class CurveTestUtils {
     }
 
     @Override
+    public ZonedDateTimeDoubleTimeSeries[] visitSwapFixedIborDefinition(final SwapFixedIborDefinition swap, final Map<Index, ZonedDateTimeDoubleTimeSeries> data) {
+      return swap.getIborLeg().accept(this, data);
+    }
+
+    @Override
+    public ZonedDateTimeDoubleTimeSeries[] visitSwapIborIborDefinition(final SwapIborIborDefinition swap, final Map<Index, ZonedDateTimeDoubleTimeSeries> data) {
+      return visitSwapDefinition(swap, data);
+    }
+
+    @Override
+    public ZonedDateTimeDoubleTimeSeries[] visitSwapXCcyIborIborDefinition(final SwapXCcyIborIborDefinition swap, final Map<Index, ZonedDateTimeDoubleTimeSeries> data) {
+      final ZonedDateTimeDoubleTimeSeries[] firstLegTs = swap.getFirstLeg().accept(this, data);
+      final ZonedDateTimeDoubleTimeSeries[] secondLegTs = swap.getSecondLeg().accept(this, data);
+      final ZonedDateTimeDoubleTimeSeries[] result = new ZonedDateTimeDoubleTimeSeries[firstLegTs.length + secondLegTs.length];
+      System.arraycopy(firstLegTs, 0, result, 0, firstLegTs.length);
+      System.arraycopy(secondLegTs, 0, result, firstLegTs.length, secondLegTs.length);
+      return result;
+//      return visitSwapDefinition(swap, data);
+    }
+
+    @Override
     public ZonedDateTimeDoubleTimeSeries[] visitSwapDefinition(final SwapDefinition swap, final Map<Index, ZonedDateTimeDoubleTimeSeries> data) {
       final ZonedDateTimeDoubleTimeSeries[] firstLegTs = swap.getFirstLeg().accept(this, data);
       final ZonedDateTimeDoubleTimeSeries[] secondLegTs = swap.getSecondLeg().accept(this, data);
@@ -64,6 +91,9 @@ public class CurveTestUtils {
       final Set<ZonedDateTimeDoubleTimeSeries> tss = new LinkedHashSet<>();
       for (final PaymentDefinition payment : annuity.getPayments()) {
         final ZonedDateTimeDoubleTimeSeries[] tsForPayment = payment.accept(this, data);
+        if (!(payment instanceof PaymentFixedDefinition || payment instanceof CouponFixedDefinition) && tsForPayment.length == 0) {
+          throw new IllegalStateException("No fixing series found for " + payment);
+        }
         for (final ZonedDateTimeDoubleTimeSeries ts : tsForPayment) {
           tss.add(ts);
         }
@@ -82,6 +112,15 @@ public class CurveTestUtils {
 
     @Override
     public ZonedDateTimeDoubleTimeSeries[] visitCouponOISDefinition(final CouponONDefinition coupon, final Map<Index, ZonedDateTimeDoubleTimeSeries> data) {
+      final ZonedDateTimeDoubleTimeSeries ts = data.get(coupon.getIndex());
+      if (ts == null) {
+        throw new IllegalStateException("Could not get fixing series for " + coupon.getIndex());
+      }
+      return new ZonedDateTimeDoubleTimeSeries[] {ts};
+    }
+
+    @Override
+    public ZonedDateTimeDoubleTimeSeries[] visitCouponIborSpreadDefinition(final CouponIborSpreadDefinition coupon, final Map<Index, ZonedDateTimeDoubleTimeSeries> data) {
       final ZonedDateTimeDoubleTimeSeries ts = data.get(coupon.getIndex());
       if (ts == null) {
         throw new IllegalStateException("Could not get fixing series for " + coupon.getIndex());
@@ -190,8 +229,12 @@ public class CurveTestUtils {
         ird = ((ForwardRateAgreementDefinition) instrument).toDerivative(valuationDate, ts[0]);
       } else if (instrument instanceof SwapDefinition) {
         ird = ((InstrumentDefinitionWithData<InstrumentDerivative, Object>) instrument).toDerivative(valuationDate, ts);
+      } else if (instrument instanceof InterestRateFutureTransactionDefinition) {
+        ird = ((InterestRateFutureTransactionDefinition) instrument).toDerivative(valuationDate, 0.0); // Trade date = today, reference price not used.
+      } else if (instrument instanceof SwapFuturesPriceDeliverableTransactionDefinition) {
+        ird = ((SwapFuturesPriceDeliverableTransactionDefinition) instrument).toDerivative(valuationDate, 0.0); // Trade date = today, reference price not used.
       } else {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("Unsupported instrument type " + instrument.getClass());
       }
     } else {
       ird = instrument.toDerivative(valuationDate);
@@ -211,4 +254,11 @@ public class CurveTestUtils {
     return instruments;
   }
 
+  public static InstrumentDerivative[] convert(final InstrumentDefinition<?>[] definitions, final Map<Index, ZonedDateTimeDoubleTimeSeries> fixingTs, final ZonedDateTime valuationDate) {
+    final InstrumentDerivative[] instruments = new InstrumentDerivative[definitions.length];
+    for (int i = 0; i < definitions.length; i++) {
+      instruments[i] = convert(definitions[i], fixingTs, valuationDate);
+    }
+    return instruments;
+  }
 }

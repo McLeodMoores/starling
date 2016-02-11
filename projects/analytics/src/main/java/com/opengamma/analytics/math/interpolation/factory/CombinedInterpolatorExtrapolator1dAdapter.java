@@ -13,7 +13,7 @@ import com.opengamma.analytics.math.interpolation.data.Interpolator1DDataBundle;
  * An interpolator that can perform left and right extrapolation. Note that instances of this class are not cached,
  * unlike {@link Interpolator1dAdapter} instances, which can be accessed from {@link NamedInterpolator1dFactory}.
  */
-public class CombinedInterpolatorExtrapolator1dAdapter extends Interpolator1D implements NamedInterpolator<Interpolator1DDataBundle, Double> {
+public class CombinedInterpolatorExtrapolator1dAdapter extends NamedInterpolator1d {
   /** Serialization version */
   private static final long serialVersionUID = 1L;
   /** The interpolator */

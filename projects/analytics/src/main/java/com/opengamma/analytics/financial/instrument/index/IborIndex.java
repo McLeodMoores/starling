@@ -20,9 +20,7 @@ import com.opengamma.util.time.Tenor;
 
 /**
  * Class describing an ibor-like index.
- * @deprecated  use {@link IborTypeIndex}
  */
-@Deprecated
 public class IborIndex extends IndexDeposit {
   /** The delegated index */
   private final IborTypeIndex _index;

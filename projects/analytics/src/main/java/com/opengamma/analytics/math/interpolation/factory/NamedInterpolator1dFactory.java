@@ -29,7 +29,7 @@ import com.opengamma.util.ArgumentChecker;
  * {@link com.opengamma.util.NamedInstance}.
  */
 @SuppressWarnings("rawtypes")
-public final class NamedInterpolator1dFactory extends AbstractNamedInstanceFactory<NamedInterpolator> {
+public final class NamedInterpolator1dFactory extends AbstractNamedInstanceFactory<NamedInterpolator1d> {
   /** The logger */
   private static final Logger LOGGER = LoggerFactory.getLogger(NamedInterpolator1dFactory.class);
   /**
@@ -43,7 +43,7 @@ public final class NamedInterpolator1dFactory extends AbstractNamedInstanceFacto
    * @return  The interpolator
    */
   @FromString
-  public static NamedInterpolator of(final String interpolatorName) {
+  public static NamedInterpolator1d of(final String interpolatorName) {
     return INSTANCE.instance(interpolatorName);
   }
 
@@ -53,7 +53,7 @@ public final class NamedInterpolator1dFactory extends AbstractNamedInstanceFacto
    * @param extrapolatorName  the extrapolator name, not null
    * @return  a combined interpolator and extrapolator
    */
-  public static NamedInterpolator of(final String interpolatorName, final String extrapolatorName) {
+  public static NamedInterpolator1d of(final String interpolatorName, final String extrapolatorName) {
     return of(interpolatorName, extrapolatorName, extrapolatorName);
   }
 
@@ -64,9 +64,9 @@ public final class NamedInterpolator1dFactory extends AbstractNamedInstanceFacto
    * @param rightExtrapolatorName  the right extrapolator name, not null
    * @return  a combined interpolator and extrapolator
    */
-  public static NamedInterpolator of(final String interpolatorName, final String leftExtrapolatorName, final String rightExtrapolatorName) {
-    final NamedInterpolator<?, ?> interpolator = INSTANCE.instance(interpolatorName);
-    NamedInterpolator<?, ?> leftExtrapolator = null;
+  public static NamedInterpolator1d of(final String interpolatorName, final String leftExtrapolatorName, final String rightExtrapolatorName) {
+    final NamedInterpolator1d interpolator = INSTANCE.instance(interpolatorName);
+    NamedInterpolator1d leftExtrapolator = null;
     try {
       // for those extrapolators that do not need information about the adjacent interpolator
       leftExtrapolator = INSTANCE.instance(leftExtrapolatorName);
@@ -77,7 +77,7 @@ public final class NamedInterpolator1dFactory extends AbstractNamedInstanceFacto
     if (leftExtrapolator != null && !leftExtrapolator.isExtrapolator()) {
       throw new IllegalArgumentException("Interpolator called " + leftExtrapolatorName + " cannot extrapolate values");
     }
-    NamedInterpolator<?, ?> rightExtrapolator = null;
+    NamedInterpolator1d rightExtrapolator = null;
     try {
       rightExtrapolator = INSTANCE.instance(rightExtrapolatorName);
     } catch (final IllegalArgumentException e) {
@@ -99,7 +99,7 @@ public final class NamedInterpolator1dFactory extends AbstractNamedInstanceFacto
    * Restricted constructor.
    */
   protected NamedInterpolator1dFactory() {
-    super(NamedInterpolator.class);
+    super(NamedInterpolator1d.class);
     final Configuration config = new ConfigurationBuilder()
         .setUrls(ClasspathHelper.forManifest(ClasspathHelper.forJavaClassPath()))
         .setScanners(new TypeAnnotationsScanner(), new SubTypesScanner(false))
@@ -112,17 +112,17 @@ public final class NamedInterpolator1dFactory extends AbstractNamedInstanceFacto
         final InterpolationType annotation = clazz.getDeclaredAnnotation(InterpolationType.class);
         final String name = annotation.name();
         final String[] aliases = annotation.aliases();
-        NamedInterpolator instance = null;
+        NamedInterpolator1d instance = null;
         final Constructor<?>[] constructors = clazz.getDeclaredConstructors();
         if (constructors.length == 1 && constructors[0].getParameterTypes().length == 0) {
           // single no-args constructor, name hard-coded in constructor
-          instance = (NamedInterpolator) constructors[0].newInstance(name);
+          instance = (NamedInterpolator1d) constructors[0].newInstance(name);
           addInstance(instance);
         } else if (constructors.length == 2) {
           for (final Constructor constructor : constructors) {
             final Class[] parameterTypes = constructor.getParameterTypes();
             if (parameterTypes.length == 1 && parameterTypes[0].equals(String.class)) {
-              instance = (NamedInterpolator) constructor.newInstance(name);
+              instance = (NamedInterpolator1d) constructor.newInstance(name);
               addInstance(instance, aliases);
               break;
             }

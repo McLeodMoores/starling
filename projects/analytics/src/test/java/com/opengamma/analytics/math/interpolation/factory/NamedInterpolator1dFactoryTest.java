@@ -268,7 +268,7 @@ public class NamedInterpolator1dFactoryTest {
   @Test
   public void testCreateCombinedInterpolator() {
     // flat extrapolator does not depend on which interpolator is used
-    NamedInterpolator<?, ?> test = NamedInterpolator1dFactory.of(LinearInterpolator1dAdapter.NAME, FlatExtrapolator1dAdapter.NAME);
+    NamedInterpolator1d test = NamedInterpolator1dFactory.of(LinearInterpolator1dAdapter.NAME, FlatExtrapolator1dAdapter.NAME);
     assertTrue(test instanceof CombinedInterpolatorExtrapolator1dAdapter);
     assertEquals(test.getName(), "Combined[interpolator = Linear, left extrapolator = Flat Extrapolator, right extrapolator = Flat Extrapolator]");
     final CombinedInterpolatorExtrapolator1dAdapter flatLinearFlat = (CombinedInterpolatorExtrapolator1dAdapter) test;

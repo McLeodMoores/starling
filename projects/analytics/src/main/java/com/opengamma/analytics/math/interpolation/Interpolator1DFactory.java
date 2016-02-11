@@ -15,7 +15,7 @@ import java.util.Map;
 import com.opengamma.analytics.financial.credit.cds.ISDAExtrapolator1D;
 import com.opengamma.analytics.financial.credit.cds.ISDAInterpolator1D;
 import com.opengamma.analytics.math.interpolation.factory.Interpolator1dAdapter;
-import com.opengamma.analytics.math.interpolation.factory.NamedInterpolator;
+import com.opengamma.analytics.math.interpolation.factory.NamedInterpolator1d;
 import com.opengamma.analytics.math.interpolation.factory.NamedInterpolator1dFactory;
 
 /**
@@ -295,7 +295,7 @@ public final class Interpolator1DFactory {
    */
   public static Interpolator1D getInterpolator(final String interpolatorName) {
     try {
-      final NamedInterpolator<?, ?> interpolatorFromDelegate = NamedInterpolator1dFactory.of(interpolatorName);
+      final NamedInterpolator1d interpolatorFromDelegate = NamedInterpolator1dFactory.of(interpolatorName);
       if (interpolatorFromDelegate instanceof Interpolator1dAdapter) {
         return ((Interpolator1dAdapter) interpolatorFromDelegate).getUnderlyingInterpolator();
       }

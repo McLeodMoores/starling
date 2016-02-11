@@ -11,9 +11,7 @@ import com.opengamma.util.money.Currency;
 
 /**
  * Class describing an deposit-like index (in particular Ibor and OIS).
- * @deprecated  use {@link Index}, to which this class delegates
  */
-@Deprecated
 public abstract class IndexDeposit extends Index {
 
   /**
