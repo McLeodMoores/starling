@@ -5,6 +5,8 @@
  */
 package com.opengamma.analytics.financial.provider.curve.discounting;
 
+import static com.opengamma.analytics.financial.provider.curve.discounting.DiscountingMethodCurveUtils.curveConstructionTest;
+import static com.opengamma.analytics.financial.provider.curve.discounting.DiscountingMethodCurveUtils.makeCurvesFromDefinitions;
 import static org.testng.AssertJUnit.assertEquals;
 
 import java.io.FileWriter;
@@ -22,6 +24,7 @@ import org.threeten.bp.ZonedDateTime;
 
 import com.opengamma.analytics.date.CalendarAdapter;
 import com.opengamma.analytics.date.SimpleWorkingDayCalendar;
+import com.opengamma.analytics.financial.curve.interestrate.generator.GeneratorCurve;
 import com.opengamma.analytics.financial.curve.interestrate.generator.GeneratorCurveYieldInterpolated;
 import com.opengamma.analytics.financial.curve.interestrate.generator.GeneratorYDCurve;
 import com.opengamma.analytics.financial.forex.method.FXMatrix;
@@ -39,21 +42,15 @@ import com.opengamma.analytics.financial.instrument.index.IborIndex;
 import com.opengamma.analytics.financial.instrument.index.Index;
 import com.opengamma.analytics.financial.instrument.index.IndexON;
 import com.opengamma.analytics.financial.interestrate.InstrumentDerivative;
-import com.opengamma.analytics.financial.interestrate.InstrumentDerivativeVisitor;
 import com.opengamma.analytics.financial.model.interestrate.curve.YieldCurve;
-import com.opengamma.analytics.financial.provider.calculator.discounting.ParSpreadMarketQuoteCurveSensitivityDiscountingCalculator;
-import com.opengamma.analytics.financial.provider.calculator.discounting.ParSpreadMarketQuoteDiscountingCalculator;
-import com.opengamma.analytics.financial.provider.calculator.discounting.PresentValueDiscountingCalculator;
 import com.opengamma.analytics.financial.provider.calculator.generic.LastTimeCalculator;
 import com.opengamma.analytics.financial.provider.curve.CurveBuildingBlock;
 import com.opengamma.analytics.financial.provider.curve.CurveBuildingBlockBundle;
 import com.opengamma.analytics.financial.provider.curve.CurveTestUtils;
 import com.opengamma.analytics.financial.provider.curve.MultiCurveBundle;
 import com.opengamma.analytics.financial.provider.curve.SingleCurveBundle;
-import com.opengamma.analytics.financial.provider.curve.multicurve.MulticurveDiscountBuildingRepository;
 import com.opengamma.analytics.financial.provider.description.interestrate.MulticurveProviderDiscount;
 import com.opengamma.analytics.financial.provider.description.interestrate.MulticurveProviderInterface;
-import com.opengamma.analytics.financial.provider.sensitivity.multicurve.MulticurveSensitivity;
 import com.opengamma.analytics.financial.schedule.ScheduleCalculator;
 import com.opengamma.analytics.math.interpolation.Interpolator1D;
 import com.opengamma.analytics.math.interpolation.factory.FlatExtrapolator1dAdapter;
@@ -64,7 +61,6 @@ import com.opengamma.analytics.util.time.TimeCalculator;
 import com.opengamma.timeseries.precise.zdt.ImmutableZonedDateTimeDoubleTimeSeries;
 import com.opengamma.timeseries.precise.zdt.ZonedDateTimeDoubleTimeSeries;
 import com.opengamma.util.money.Currency;
-import com.opengamma.util.money.MultipleCurrencyAmount;
 import com.opengamma.util.test.TestGroup;
 import com.opengamma.util.time.DateUtils;
 import com.opengamma.util.tuple.Pair;
@@ -77,8 +73,6 @@ public class UsdDiscounting3mLibor1Test {
   private static final Interpolator1D INTERPOLATOR_LINEAR =
       NamedInterpolator1dFactory.of(LinearInterpolator1dAdapter.NAME, FlatExtrapolator1dAdapter.NAME, FlatExtrapolator1dAdapter.NAME);
   private static final LastTimeCalculator MATURITY_CALCULATOR = LastTimeCalculator.getInstance();
-  private static final double TOLERANCE_ROOT = 1.0E-10;
-  private static final int STEP_MAX = 100;
   private static final CalendarAdapter NYC =
       new CalendarAdapter(new SimpleWorkingDayCalendar("NYC", Collections.<LocalDate>emptySet(), DayOfWeek.SATURDAY, DayOfWeek.SUNDAY));
   private static final Currency USD = Currency.USD;
@@ -149,9 +143,6 @@ public class UsdDiscounting3mLibor1Test {
   private static final InstrumentDefinition<?>[] DEFINITIONS_DSC_USD;
   /** Standard USD Forward 3M curve instrument definitions */
   private static final InstrumentDefinition<?>[] DEFINITIONS_FWD3_USD;
-  private static final InstrumentDefinition<?>[][][] DEFINITIONS_UNITS = new InstrumentDefinition<?>[2][][];
-  private static final GeneratorYDCurve[][] GENERATORS_UNITS = new GeneratorYDCurve[2][];
-  private static final String[][] NAMES_UNITS = new String[2][];
   private static final MulticurveProviderDiscount KNOWN_DATA = new MulticurveProviderDiscount(FX_MATRIX);
   private static final LinkedHashMap<String, Currency> DSC_MAP = new LinkedHashMap<>();
   private static final LinkedHashMap<String, IndexON[]> FWD_ON_MAP = new LinkedHashMap<>();
@@ -160,13 +151,6 @@ public class UsdDiscounting3mLibor1Test {
   static {
     DEFINITIONS_DSC_USD = getDefinitions(DSC_USD_MARKET_QUOTES, DSC_USD_GENERATORS, DSC_USD_ATTR);
     DEFINITIONS_FWD3_USD = getDefinitions(FWD3_USD_MARKET_QUOTES, FWD3_USD_GENERATORS, FWD3_USD_ATTR);
-    DEFINITIONS_UNITS[0] = new InstrumentDefinition<?>[][] { DEFINITIONS_DSC_USD };
-    DEFINITIONS_UNITS[1] = new InstrumentDefinition<?>[][] { DEFINITIONS_FWD3_USD };
-    final GeneratorYDCurve genIntLin = new GeneratorCurveYieldInterpolated(MATURITY_CALCULATOR, INTERPOLATOR_LINEAR);
-    GENERATORS_UNITS[0] = new GeneratorYDCurve[] { genIntLin };
-    GENERATORS_UNITS[1] = new GeneratorYDCurve[] { genIntLin };
-    NAMES_UNITS[0] = new String[] { CURVE_NAME_DSC_USD };
-    NAMES_UNITS[1] = new String[] { CURVE_NAME_FWD3_USD };
     DSC_MAP.put(CURVE_NAME_DSC_USD, USD);
     FWD_ON_MAP.put(CURVE_NAME_DSC_USD, new IndexON[] { USD_OVERNIGHT_INDEX });
     FWD_IBOR_MAP.put(CURVE_NAME_FWD3_USD, new IborIndex[] { USD_3M_LIBOR_INDEX });
@@ -183,22 +167,34 @@ public class UsdDiscounting3mLibor1Test {
   }
   private static final Pair<MulticurveProviderDiscount, CurveBuildingBlockBundle> BEFORE_TODAYS_FIXING;
   private static final Pair<MulticurveProviderDiscount, CurveBuildingBlockBundle> AFTER_TODAYS_FIXING;
-  // Calculator
-  private static final PresentValueDiscountingCalculator PVC = PresentValueDiscountingCalculator.getInstance();
-  private static final ParSpreadMarketQuoteDiscountingCalculator PSMQC = ParSpreadMarketQuoteDiscountingCalculator.getInstance();
-  private static final ParSpreadMarketQuoteCurveSensitivityDiscountingCalculator PSMQCSC =
-      ParSpreadMarketQuoteCurveSensitivityDiscountingCalculator.getInstance();
-
-  private static final MulticurveDiscountBuildingRepository CURVE_BUILDING_REPOSITORY =
-      new MulticurveDiscountBuildingRepository(TOLERANCE_ROOT, TOLERANCE_ROOT, STEP_MAX);
 
   private static final double TOLERANCE_CAL = 1.0E-9;
 
   static {
-    BEFORE_TODAYS_FIXING = makeCurvesFromDefinitions(DEFINITIONS_UNITS, GENERATORS_UNITS, NAMES_UNITS,
-        KNOWN_DATA, PSMQC, PSMQCSC, FIXING_TS_WITHOUT_TODAY, NOW, DSC_MAP, FWD_IBOR_MAP, FWD_ON_MAP);
-    AFTER_TODAYS_FIXING = makeCurvesFromDefinitions(DEFINITIONS_UNITS, GENERATORS_UNITS, NAMES_UNITS,
-        KNOWN_DATA, PSMQC, PSMQCSC, FIXING_TS_WITH_TODAY, NOW, DSC_MAP, FWD_IBOR_MAP, FWD_ON_MAP);
+    final MultiCurveBundle<? extends GeneratorCurve>[] beforeFixing = new MultiCurveBundle[] {
+        new MultiCurveBundle<>(
+            new SingleCurveBundle[] {getCurveBundle(CURVE_NAME_DSC_USD, DSC_USD_MARKET_QUOTES, DEFINITIONS_DSC_USD, FIXING_TS_WITHOUT_TODAY, NOW)}),
+        new MultiCurveBundle<>(
+            new SingleCurveBundle[] {getCurveBundle(CURVE_NAME_FWD3_USD, FWD3_USD_MARKET_QUOTES, DEFINITIONS_FWD3_USD, FIXING_TS_WITHOUT_TODAY, NOW)})};
+    final MultiCurveBundle<? extends GeneratorCurve>[] afterFixing = new MultiCurveBundle[] {
+        new MultiCurveBundle<>(
+            new SingleCurveBundle[] {getCurveBundle(CURVE_NAME_DSC_USD, DSC_USD_MARKET_QUOTES, DEFINITIONS_DSC_USD, FIXING_TS_WITH_TODAY, NOW)}),
+        new MultiCurveBundle<>(
+            new SingleCurveBundle[] {getCurveBundle(CURVE_NAME_FWD3_USD, FWD3_USD_MARKET_QUOTES, DEFINITIONS_FWD3_USD, FIXING_TS_WITH_TODAY, NOW)})};
+    BEFORE_TODAYS_FIXING = makeCurvesFromDefinitions(beforeFixing, KNOWN_DATA, FIXING_TS_WITHOUT_TODAY, NOW, DSC_MAP, FWD_IBOR_MAP, FWD_ON_MAP);
+    AFTER_TODAYS_FIXING = makeCurvesFromDefinitions(afterFixing, KNOWN_DATA, FIXING_TS_WITH_TODAY, NOW, DSC_MAP, FWD_IBOR_MAP, FWD_ON_MAP);
+  }
+
+  private static SingleCurveBundle<? extends GeneratorCurve> getCurveBundle(final String curveName, final double[] marketQuotes,
+      final InstrumentDefinition<?>[] definitions, final Map<Index, ZonedDateTimeDoubleTimeSeries> fixingTs, final ZonedDateTime valuationDate) {
+    final InstrumentDerivative[] curveInstruments = new InstrumentDerivative[marketQuotes.length];
+    final double[] curveInitialGuess = new double[marketQuotes.length];
+    for (int i = 0; i < marketQuotes.length; i++) {
+      curveInstruments[i] = CurveTestUtils.convert(definitions[i], fixingTs, valuationDate);
+      curveInitialGuess[i] = definitions[i].accept(CurveTestUtils.RATES_INITIALIZATION);
+    }
+    final GeneratorYDCurve instrumentGenerator = new GeneratorCurveYieldInterpolated(MATURITY_CALCULATOR, INTERPOLATOR_LINEAR);
+    return new SingleCurveBundle<>(curveName, curveInstruments, curveInitialGuess, instrumentGenerator);
   }
 
   @Test
@@ -216,23 +212,10 @@ public class UsdDiscounting3mLibor1Test {
 
   @Test
   public void testInstrumentsInCurvePriceToZero() {
-    curveConstructionTest(DEFINITIONS_UNITS, BEFORE_TODAYS_FIXING.getFirst(), FIXING_TS_WITHOUT_TODAY);
-    curveConstructionTest(DEFINITIONS_UNITS, AFTER_TODAYS_FIXING.getFirst(), FIXING_TS_WITH_TODAY);
-  }
-
-  private static void curveConstructionTest(final InstrumentDefinition<?>[][][] definitions, final MulticurveProviderDiscount curves,
-      final Map<Index, ZonedDateTimeDoubleTimeSeries> fixingTs) {
-    final int nbBlocks = definitions.length;
-    for (int i = 0; i < nbBlocks; i++) {
-      final InstrumentDerivative[][] instruments = CurveTestUtils.convert(definitions[i], fixingTs, NOW);
-      for (final InstrumentDerivative[] instrumentsForCurve : instruments) {
-        for (final InstrumentDerivative instrument : instrumentsForCurve) {
-          final MultipleCurrencyAmount pv = instrument.accept(PVC, curves);
-          final double usdPv = FX_MATRIX.convert(pv, USD).getAmount();
-          assertEquals(0, usdPv, TOLERANCE_CAL);
-        }
-      }
-    }
+    curveConstructionTest(DEFINITIONS_DSC_USD, BEFORE_TODAYS_FIXING.getFirst(), FIXING_TS_WITHOUT_TODAY, FX_MATRIX, NOW);
+    curveConstructionTest(DEFINITIONS_DSC_USD, AFTER_TODAYS_FIXING.getFirst(), FIXING_TS_WITH_TODAY, FX_MATRIX, NOW);
+    curveConstructionTest(DEFINITIONS_FWD3_USD, BEFORE_TODAYS_FIXING.getFirst(), FIXING_TS_WITHOUT_TODAY, FX_MATRIX, NOW);
+    curveConstructionTest(DEFINITIONS_FWD3_USD, AFTER_TODAYS_FIXING.getFirst(), FIXING_TS_WITH_TODAY, FX_MATRIX, NOW);
   }
 
   @Test
@@ -247,18 +230,20 @@ public class UsdDiscounting3mLibor1Test {
       downDiscountingCurveQuotes[i] -= bump;
       final InstrumentDefinition<?>[] upDefinitions = getDefinitions(upDiscountingCurveQuotes, DSC_USD_GENERATORS, DSC_USD_ATTR);
       final InstrumentDefinition<?>[] downDefinitions = getDefinitions(downDiscountingCurveQuotes, DSC_USD_GENERATORS, DSC_USD_ATTR);
-      final InstrumentDefinition<?>[][][] upUnits = new InstrumentDefinition<?>[2][][];
-      final InstrumentDefinition<?>[][][] downUnits = new InstrumentDefinition<?>[2][][];
-      upUnits[0] = new InstrumentDefinition<?>[][] { upDefinitions };
-      downUnits[0] = new InstrumentDefinition<?>[][] { downDefinitions };
-      upUnits[1] = new InstrumentDefinition<?>[][] {DEFINITIONS_FWD3_USD };
-      downUnits[1] = new InstrumentDefinition<?>[][] {DEFINITIONS_FWD3_USD };
+      final MultiCurveBundle<? extends GeneratorCurve>[] upBundle = new MultiCurveBundle[] {
+          new MultiCurveBundle<>(
+              new SingleCurveBundle[] {getCurveBundle(CURVE_NAME_DSC_USD, upDiscountingCurveQuotes, upDefinitions, FIXING_TS_WITHOUT_TODAY, NOW)}),
+          new MultiCurveBundle<>(
+              new SingleCurveBundle[] {getCurveBundle(CURVE_NAME_FWD3_USD, FWD3_USD_MARKET_QUOTES, DEFINITIONS_FWD3_USD, FIXING_TS_WITHOUT_TODAY, NOW)})};
+      final MultiCurveBundle<? extends GeneratorCurve>[] downBundle = new MultiCurveBundle[] {
+          new MultiCurveBundle<>(
+              new SingleCurveBundle[] {getCurveBundle(CURVE_NAME_DSC_USD, downDiscountingCurveQuotes, downDefinitions, FIXING_TS_WITHOUT_TODAY, NOW)}),
+          new MultiCurveBundle<>(
+              new SingleCurveBundle[] {getCurveBundle(CURVE_NAME_FWD3_USD, FWD3_USD_MARKET_QUOTES, DEFINITIONS_FWD3_USD, FIXING_TS_WITHOUT_TODAY, NOW)})};
       final Pair<MulticurveProviderDiscount, CurveBuildingBlockBundle> upResults =
-          makeCurvesFromDefinitions(upUnits, GENERATORS_UNITS, NAMES_UNITS, KNOWN_DATA, PSMQC, PSMQCSC, FIXING_TS_WITHOUT_TODAY,
-              NOW, DSC_MAP, FWD_IBOR_MAP, FWD_ON_MAP);
+          makeCurvesFromDefinitions(upBundle, KNOWN_DATA, FIXING_TS_WITHOUT_TODAY, NOW, DSC_MAP, FWD_IBOR_MAP, FWD_ON_MAP);
       final Pair<MulticurveProviderDiscount, CurveBuildingBlockBundle> downResults =
-          makeCurvesFromDefinitions(downUnits, GENERATORS_UNITS, NAMES_UNITS, KNOWN_DATA, PSMQC, PSMQCSC, FIXING_TS_WITHOUT_TODAY,
-              NOW, DSC_MAP, FWD_IBOR_MAP, FWD_ON_MAP);
+          makeCurvesFromDefinitions(downBundle, KNOWN_DATA, FIXING_TS_WITHOUT_TODAY, NOW, DSC_MAP, FWD_IBOR_MAP, FWD_ON_MAP);
       final Double[] upYields = ((YieldCurve) upResults.getFirst().getCurve(CURVE_NAME_DSC_USD)).getCurve().getYData();
       final Double[] downYields = ((YieldCurve) downResults.getFirst().getCurve(CURVE_NAME_DSC_USD)).getCurve().getYData();
       for (int j = 0; j < discountingCurveSize; j++) {
@@ -287,20 +272,22 @@ public class UsdDiscounting3mLibor1Test {
     for (int i = 0; i < discountingCurveSize; i++) {
       upDiscountingCurveQuotes[i] += bump;
       downDiscountingCurveQuotes[i] -= bump;
-      final InstrumentDefinition<?>[] upDiscountingCurveDefinitions = getDefinitions(upDiscountingCurveQuotes, DSC_USD_GENERATORS, DSC_USD_ATTR);
-      final InstrumentDefinition<?>[] downDiscountingCurveDefinitions = getDefinitions(downDiscountingCurveQuotes, DSC_USD_GENERATORS, DSC_USD_ATTR);
-      final InstrumentDefinition<?>[][][] upUnits = new InstrumentDefinition<?>[2][][];
-      final InstrumentDefinition<?>[][][] downUnits = new InstrumentDefinition<?>[2][][];
-      upUnits[0] = new InstrumentDefinition<?>[][] {upDiscountingCurveDefinitions };
-      downUnits[0] = new InstrumentDefinition<?>[][] {downDiscountingCurveDefinitions };
-      upUnits[1] = new InstrumentDefinition<?>[][] { DEFINITIONS_FWD3_USD };
-      downUnits[1] = new InstrumentDefinition<?>[][] { DEFINITIONS_FWD3_USD };
+      final InstrumentDefinition<?>[] upDefinitions = getDefinitions(upDiscountingCurveQuotes, DSC_USD_GENERATORS, DSC_USD_ATTR);
+      final InstrumentDefinition<?>[] downDefinitions = getDefinitions(downDiscountingCurveQuotes, DSC_USD_GENERATORS, DSC_USD_ATTR);
+      final MultiCurveBundle<? extends GeneratorCurve>[] upBundle = new MultiCurveBundle[] {
+          new MultiCurveBundle<>(
+              new SingleCurveBundle[] {getCurveBundle(CURVE_NAME_DSC_USD, upDiscountingCurveQuotes, upDefinitions, FIXING_TS_WITHOUT_TODAY, NOW)}),
+          new MultiCurveBundle<>(
+              new SingleCurveBundle[] {getCurveBundle(CURVE_NAME_FWD3_USD, FWD3_USD_MARKET_QUOTES, DEFINITIONS_FWD3_USD, FIXING_TS_WITHOUT_TODAY, NOW)})};
+      final MultiCurveBundle<? extends GeneratorCurve>[] downBundle = new MultiCurveBundle[] {
+          new MultiCurveBundle<>(
+              new SingleCurveBundle[] {getCurveBundle(CURVE_NAME_DSC_USD, downDiscountingCurveQuotes, downDefinitions, FIXING_TS_WITHOUT_TODAY, NOW)}),
+          new MultiCurveBundle<>(
+              new SingleCurveBundle[] {getCurveBundle(CURVE_NAME_FWD3_USD, FWD3_USD_MARKET_QUOTES, DEFINITIONS_FWD3_USD, FIXING_TS_WITHOUT_TODAY, NOW)})};
       final Pair<MulticurveProviderDiscount, CurveBuildingBlockBundle> upResults =
-          makeCurvesFromDefinitions(upUnits, GENERATORS_UNITS, NAMES_UNITS, KNOWN_DATA, PSMQC, PSMQCSC, FIXING_TS_WITHOUT_TODAY,
-              NOW, DSC_MAP, FWD_IBOR_MAP, FWD_ON_MAP);
+          makeCurvesFromDefinitions(upBundle, KNOWN_DATA, FIXING_TS_WITHOUT_TODAY, NOW, DSC_MAP, FWD_IBOR_MAP, FWD_ON_MAP);
       final Pair<MulticurveProviderDiscount, CurveBuildingBlockBundle> downResults =
-          makeCurvesFromDefinitions(downUnits, GENERATORS_UNITS, NAMES_UNITS, KNOWN_DATA, PSMQC, PSMQCSC, FIXING_TS_WITHOUT_TODAY,
-              NOW, DSC_MAP, FWD_IBOR_MAP, FWD_ON_MAP);
+          makeCurvesFromDefinitions(downBundle, KNOWN_DATA, FIXING_TS_WITHOUT_TODAY, NOW, DSC_MAP, FWD_IBOR_MAP, FWD_ON_MAP);
       final Double[] upYields = ((YieldCurve) upResults.getFirst().getCurve(CURVE_NAME_FWD3_USD)).getCurve().getYData();
       final Double[] downYields = ((YieldCurve) downResults.getFirst().getCurve(CURVE_NAME_FWD3_USD)).getCurve().getYData();
       for (int j = 0; j < liborCurveSize; j++) {
@@ -315,20 +302,22 @@ public class UsdDiscounting3mLibor1Test {
     for (int i = 0; i < liborCurveSize; i++) {
       upLiborCurveQuotes[i] += bump;
       downLiborCurveQuotes[i] -= bump;
-      final InstrumentDefinition<?>[] upLiborCurveDefinitions = getDefinitions(upLiborCurveQuotes, FWD3_USD_GENERATORS, FWD3_USD_ATTR);
-      final InstrumentDefinition<?>[] downLiborCurveDefinitions = getDefinitions(downLiborCurveQuotes, FWD3_USD_GENERATORS, FWD3_USD_ATTR);
-      final InstrumentDefinition<?>[][][] upUnits = new InstrumentDefinition<?>[2][][];
-      final InstrumentDefinition<?>[][][] downUnits = new InstrumentDefinition<?>[2][][];
-      upUnits[0] = new InstrumentDefinition<?>[][] { DEFINITIONS_DSC_USD };
-      downUnits[0] = new InstrumentDefinition<?>[][] { DEFINITIONS_DSC_USD };
-      upUnits[1] = new InstrumentDefinition<?>[][] { upLiborCurveDefinitions };
-      downUnits[1] = new InstrumentDefinition<?>[][] {downLiborCurveDefinitions };
+      final InstrumentDefinition<?>[] upDefinitions = getDefinitions(upLiborCurveQuotes, FWD3_USD_GENERATORS, FWD3_USD_ATTR);
+      final InstrumentDefinition<?>[] downDefinitions = getDefinitions(downLiborCurveQuotes, FWD3_USD_GENERATORS, FWD3_USD_ATTR);
+      final MultiCurveBundle<? extends GeneratorCurve>[] upBundle = new MultiCurveBundle[] {
+          new MultiCurveBundle<>(
+              new SingleCurveBundle[] {getCurveBundle(CURVE_NAME_DSC_USD, DSC_USD_MARKET_QUOTES, DEFINITIONS_DSC_USD, FIXING_TS_WITHOUT_TODAY, NOW)}),
+          new MultiCurveBundle<>(
+              new SingleCurveBundle[] {getCurveBundle(CURVE_NAME_FWD3_USD, upLiborCurveQuotes, upDefinitions, FIXING_TS_WITHOUT_TODAY, NOW)})};
+      final MultiCurveBundle<? extends GeneratorCurve>[] downBundle = new MultiCurveBundle[] {
+          new MultiCurveBundle<>(
+              new SingleCurveBundle[] {getCurveBundle(CURVE_NAME_DSC_USD, DSC_USD_MARKET_QUOTES, DEFINITIONS_DSC_USD, FIXING_TS_WITHOUT_TODAY, NOW)}),
+          new MultiCurveBundle<>(
+              new SingleCurveBundle[] {getCurveBundle(CURVE_NAME_FWD3_USD, downLiborCurveQuotes, downDefinitions, FIXING_TS_WITHOUT_TODAY, NOW)})};
       final Pair<MulticurveProviderDiscount, CurveBuildingBlockBundle> upResults =
-          makeCurvesFromDefinitions(upUnits, GENERATORS_UNITS, NAMES_UNITS, KNOWN_DATA, PSMQC, PSMQCSC, FIXING_TS_WITHOUT_TODAY,
-              NOW, DSC_MAP, FWD_IBOR_MAP, FWD_ON_MAP);
+          makeCurvesFromDefinitions(upBundle, KNOWN_DATA, FIXING_TS_WITHOUT_TODAY, NOW, DSC_MAP, FWD_IBOR_MAP, FWD_ON_MAP);
       final Pair<MulticurveProviderDiscount, CurveBuildingBlockBundle> downResults =
-          makeCurvesFromDefinitions(downUnits, GENERATORS_UNITS, NAMES_UNITS, KNOWN_DATA, PSMQC, PSMQCSC, FIXING_TS_WITHOUT_TODAY,
-              NOW, DSC_MAP, FWD_IBOR_MAP, FWD_ON_MAP);
+          makeCurvesFromDefinitions(downBundle, KNOWN_DATA, FIXING_TS_WITHOUT_TODAY, NOW, DSC_MAP, FWD_IBOR_MAP, FWD_ON_MAP);
       final Double[] upYields = ((YieldCurve) upResults.getFirst().getCurve(CURVE_NAME_FWD3_USD)).getCurve().getYData();
       final Double[] downYields = ((YieldCurve) downResults.getFirst().getCurve(CURVE_NAME_FWD3_USD)).getCurve().getYData();
       final int offset = i + discountingCurveSize;
@@ -370,39 +359,6 @@ public class UsdDiscounting3mLibor1Test {
     } catch (final IOException e) {
       e.printStackTrace();
     }
-  }
-
-  @SuppressWarnings("unchecked")
-  private static Pair<MulticurveProviderDiscount, CurveBuildingBlockBundle> makeCurvesFromDefinitions(
-      final InstrumentDefinition<?>[][][] definitions, final GeneratorYDCurve[][] curveGenerators, final String[][] curveNames,
-      final MulticurveProviderDiscount knownData, final InstrumentDerivativeVisitor<MulticurveProviderInterface, Double> calculator,
-      final InstrumentDerivativeVisitor<MulticurveProviderInterface, MulticurveSensitivity> sensitivityCalculator,
-      final Map<Index, ZonedDateTimeDoubleTimeSeries> fixingTs, final ZonedDateTime valuationDate, final LinkedHashMap<String, Currency> discountingCurves,
-      final LinkedHashMap<String, IborIndex[]> iborCurves, final LinkedHashMap<String, IndexON[]> overnightCurves) {
-    final int nUnits = definitions.length;
-    final MultiCurveBundle<GeneratorYDCurve>[] curveBundles = new MultiCurveBundle[nUnits];
-    // for each block of curves to be constructed
-    for (int i = 0; i < nUnits; i++) {
-      final int nCurves = definitions[i].length;
-      final SingleCurveBundle<GeneratorYDCurve>[] singleCurves = new SingleCurveBundle[nCurves];
-      // for each curve
-      for (int j = 0; j < nCurves; j++) {
-        final int nInstruments = definitions[i][j].length;
-        final InstrumentDerivative[] derivatives = new InstrumentDerivative[nInstruments];
-        final double[] initialGuess = new double[nInstruments];
-        // for each instrument
-        for (int k = 0; k < nInstruments; k++) {
-          derivatives[k] = CurveTestUtils.convert(definitions[i][j][k], fixingTs, valuationDate);
-          initialGuess[k] = definitions[i][j][k].accept(CurveTestUtils.RATES_INITIALIZATION);
-        }
-        final GeneratorYDCurve generator = curveGenerators[i][j].finalGenerator(derivatives);
-        final double[] initialCurveGuess = generator.initialGuess(initialGuess);
-        singleCurves[j] = new SingleCurveBundle<>(curveNames[i][j], derivatives, initialCurveGuess, generator);
-      }
-      curveBundles[i] = new MultiCurveBundle<>(singleCurves);
-    }
-    return CURVE_BUILDING_REPOSITORY.makeCurvesFromDerivatives(curveBundles, knownData, discountingCurves, iborCurves, overnightCurves, calculator,
-        sensitivityCalculator);
   }
 
 }
