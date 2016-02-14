@@ -51,6 +51,7 @@ import com.opengamma.analytics.financial.provider.curve.CurveBuildingBlockBundle
 import com.opengamma.analytics.financial.provider.curve.CurveTestUtils;
 import com.opengamma.analytics.financial.provider.curve.MultiCurveBundle;
 import com.opengamma.analytics.financial.provider.curve.SingleCurveBundle;
+import com.opengamma.analytics.financial.provider.curve.discounting.DiscountingMethodCurveUtils.DiscountingMethodCurveBuilder;
 import com.opengamma.analytics.financial.provider.curve.multicurve.MulticurveDiscountBuildingRepository;
 import com.opengamma.analytics.financial.provider.description.interestrate.MulticurveProviderDiscount;
 import com.opengamma.analytics.financial.provider.description.interestrate.MulticurveProviderInterface;
@@ -214,6 +215,36 @@ public class EurDiscounting3mLibor6mLiborTest {
   private static final LinkedHashMap<String, IndexON[]> FWD_ON_MAP = new LinkedHashMap<>();
   private static final LinkedHashMap<String, IborIndex[]> FWD_IBOR_MAP = new LinkedHashMap<>();
 
+  private static final DiscountingMethodCurveBuilder.ConfigBuilder DISCOUNTING_THEN_LIBORS_BUILDER = DiscountingMethodCurveBuilder.setUp()
+      .buildingFirst(CURVE_NAME_DSC_EUR)
+      .using(CURVE_NAME_DSC_EUR).forDiscounting(Currency.EUR).forOvernightIndex(EUR_OVERNIGHT_INDEX)
+      .thenBuilding(CURVE_NAME_FWD3_EUR)
+      .using(CURVE_NAME_FWD3_EUR).forIborIndex(EUR_3M_LIBOR_INDEX, EUR_3M_EURIBOR_INDEX)
+      .thenBuilding(CURVE_NAME_FWD6_EUR)
+      .using(CURVE_NAME_FWD6_EUR).forIborIndex(EUR_6M_LIBOR_INDEX, EUR_6M_EURIBOR_INDEX)
+      .withKnownData(MULTICURVE_KNOWN_DATA);
+  private static final DiscountingMethodCurveBuilder.ConfigBuilder DISCOUNTING_AND_LIBORS_BUILDER = DiscountingMethodCurveBuilder.setUp()
+      .building(CURVE_NAME_DSC_EUR, CURVE_NAME_FWD3_EUR, CURVE_NAME_FWD6_EUR)
+      .using(CURVE_NAME_DSC_EUR).forDiscounting(Currency.EUR).forOvernightIndex(EUR_OVERNIGHT_INDEX)
+      .using(CURVE_NAME_FWD3_EUR).forIborIndex(EUR_3M_LIBOR_INDEX, EUR_3M_EURIBOR_INDEX)
+      .using(CURVE_NAME_FWD6_EUR).forIborIndex(EUR_6M_LIBOR_INDEX, EUR_6M_EURIBOR_INDEX)
+      .withKnownData(MULTICURVE_KNOWN_DATA);
+  static {
+    for (int i = 0; i < DSC_EUR_MARKET_QUOTES.length; i++) {
+      DISCOUNTING_THEN_LIBORS_BUILDER.withNode(CURVE_NAME_DSC_EUR, DSC_EUR_GENERATORS[i], DSC_EUR_ATTR[i], DSC_EUR_MARKET_QUOTES[i]);
+      DISCOUNTING_AND_LIBORS_BUILDER.withNode(CURVE_NAME_DSC_EUR, DSC_EUR_GENERATORS[i], DSC_EUR_ATTR[i], DSC_EUR_MARKET_QUOTES[i]);
+    }
+    for (int i = 0; i < FWD3_EUR_MARKET_QUOTES.length; i++) {
+      DISCOUNTING_THEN_LIBORS_BUILDER.withNode(CURVE_NAME_FWD3_EUR, FWD3_EUR_GENERATORS[i], FWD3_EUR_ATTR[i], FWD3_EUR_MARKET_QUOTES[i]);
+      DISCOUNTING_AND_LIBORS_BUILDER.withNode(CURVE_NAME_FWD3_EUR, FWD3_EUR_GENERATORS[i], FWD3_EUR_ATTR[i], FWD3_EUR_MARKET_QUOTES[i]);
+    }
+    for (int i = 0; i < FWD6_EUR_MARKET_QUOTES.length; i++) {
+      DISCOUNTING_THEN_LIBORS_BUILDER.withNode(CURVE_NAME_FWD6_EUR, FWD6_EUR_GENERATORS[i], FWD6_EUR_ATTR[i], FWD6_EUR_MARKET_QUOTES[i]);
+      DISCOUNTING_AND_LIBORS_BUILDER.withNode(CURVE_NAME_FWD6_EUR, FWD6_EUR_GENERATORS[i], FWD6_EUR_ATTR[i], FWD6_EUR_MARKET_QUOTES[i]);
+    }
+    DISCOUNTING_THEN_LIBORS_BUILDER.withFixingTs(FIXING_TS_WITH_TODAY).getBuilder().buildCurves(NOW);
+    DISCOUNTING_AND_LIBORS_BUILDER.withFixingTs(FIXING_TS_WITH_TODAY).getBuilder().buildCurves(NOW);
+  }
   static {
     DEFINITIONS_DSC_EUR = getDefinitions(DSC_EUR_MARKET_QUOTES, DSC_EUR_GENERATORS, DSC_EUR_ATTR);
     DEFINITIONS_FWD3_EUR = getDefinitions(FWD3_EUR_MARKET_QUOTES, FWD3_EUR_GENERATORS, FWD3_EUR_ATTR);
