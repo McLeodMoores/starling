@@ -149,6 +149,7 @@ public class DiscountingMethodCurveUtils {
       return definitionsForCurves;
     }
 
+    //TODO cache definitions on LocalDate
     public Pair<MulticurveProviderDiscount, CurveBuildingBlockBundle> buildCurves(final ZonedDateTime valuationDate) {
       MultiCurveBundle<GeneratorYDCurve>[] curveBundles = _cached.get(valuationDate);
       if (curveBundles == null) {
@@ -363,12 +364,13 @@ public class DiscountingMethodCurveUtils {
   }
 
   public static void curveConstructionTest(final InstrumentDefinition<?>[] definitions, final MulticurveProviderDiscount curves,
-      final Map<Index, ZonedDateTimeDoubleTimeSeries> fixingTs, final FXMatrix fxMatrix, final ZonedDateTime valuationDate) {
+      final Map<Index, ZonedDateTimeDoubleTimeSeries> fixingTs, final FXMatrix fxMatrix, final ZonedDateTime valuationDate,
+      final Currency valuationCurrency) {
     for (final InstrumentDefinition<?> definition : definitions) {
       final InstrumentDerivative instrument = CurveTestUtils.convert(definition, fixingTs, valuationDate);
       final MultipleCurrencyAmount pv = instrument.accept(PVC, curves);
-      final double usdPv = fxMatrix.convert(pv, Currency.USD).getAmount();
-      assertEquals(usdPv, 0, 1e-9);
+      final double valuationCcyPv = fxMatrix.convert(pv, valuationCurrency).getAmount();
+      assertEquals(valuationCcyPv, 0, 1e-9);
     }
   }
 }

@@ -10,18 +10,15 @@ import static org.testng.AssertJUnit.assertEquals;
 
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.testng.annotations.Test;
-import org.threeten.bp.DayOfWeek;
-import org.threeten.bp.LocalDate;
 import org.threeten.bp.Period;
 import org.threeten.bp.ZonedDateTime;
 
 import com.opengamma.analytics.date.CalendarAdapter;
-import com.opengamma.analytics.date.SimpleWorkingDayCalendar;
+import com.opengamma.analytics.date.WeekendWorkingDayCalendar;
 import com.opengamma.analytics.financial.forex.method.FXMatrix;
 import com.opengamma.analytics.financial.instrument.InstrumentDefinition;
 import com.opengamma.analytics.financial.instrument.index.GeneratorAttribute;
@@ -57,8 +54,7 @@ import com.opengamma.util.tuple.Pair;
  */
 @Test(groups = TestGroup.UNIT)
 public class UsdDiscounting3mLibor1Test {
-  private static final CalendarAdapter NYC =
-      new CalendarAdapter(new SimpleWorkingDayCalendar("NYC", Collections.<LocalDate>emptySet(), DayOfWeek.SATURDAY, DayOfWeek.SUNDAY));
+  private static final CalendarAdapter NYC = new CalendarAdapter(WeekendWorkingDayCalendar.SATURDAY_SUNDAY);
   private static final FXMatrix FX_MATRIX = new FXMatrix(Currency.USD);
   private static final double NOTIONAL = 1.0;
   private static final GeneratorSwapFixedON GENERATOR_OIS_USD = GeneratorSwapFixedONMaster.getInstance().getGenerator("USD1YFEDFUND", NYC);
@@ -172,10 +168,14 @@ public class UsdDiscounting3mLibor1Test {
         .withFixingTs(FIXING_TS_WITH_TODAY)
         .getBuilder()
         .getDefinitionsForCurves(NOW);
-    curveConstructionTest(definitionsForCurvesBeforeFixing.get(CURVE_NAME_DSC_USD), BEFORE_TODAYS_FIXING.getFirst(), FIXING_TS_WITHOUT_TODAY, FX_MATRIX, NOW);
-    curveConstructionTest(definitionsForCurvesAfterFixing.get(CURVE_NAME_DSC_USD), AFTER_TODAYS_FIXING.getFirst(), FIXING_TS_WITH_TODAY, FX_MATRIX, NOW);
-    curveConstructionTest(definitionsForCurvesBeforeFixing.get(CURVE_NAME_FWD3_USD), BEFORE_TODAYS_FIXING.getFirst(), FIXING_TS_WITHOUT_TODAY, FX_MATRIX, NOW);
-    curveConstructionTest(definitionsForCurvesAfterFixing.get(CURVE_NAME_FWD3_USD), AFTER_TODAYS_FIXING.getFirst(), FIXING_TS_WITH_TODAY, FX_MATRIX, NOW);
+    curveConstructionTest(definitionsForCurvesBeforeFixing.get(CURVE_NAME_DSC_USD),
+        BEFORE_TODAYS_FIXING.getFirst(), FIXING_TS_WITHOUT_TODAY, FX_MATRIX, NOW, Currency.USD);
+    curveConstructionTest(definitionsForCurvesAfterFixing.get(CURVE_NAME_DSC_USD),
+        AFTER_TODAYS_FIXING.getFirst(), FIXING_TS_WITH_TODAY, FX_MATRIX, NOW, Currency.USD);
+    curveConstructionTest(definitionsForCurvesBeforeFixing.get(CURVE_NAME_FWD3_USD),
+        BEFORE_TODAYS_FIXING.getFirst(), FIXING_TS_WITHOUT_TODAY, FX_MATRIX, NOW, Currency.USD);
+    curveConstructionTest(definitionsForCurvesAfterFixing.get(CURVE_NAME_FWD3_USD),
+        AFTER_TODAYS_FIXING.getFirst(), FIXING_TS_WITH_TODAY, FX_MATRIX, NOW, Currency.USD);
   }
 
   @Test
@@ -212,7 +212,6 @@ public class UsdDiscounting3mLibor1Test {
     final int liborCurveSize = FWD3_USD_MARKET_QUOTES.length;
     final CurveBuildingBlockBundle fullInverseJacobian = BEFORE_TODAYS_FIXING.getSecond();
     final double bump = 1e-6;
-
     for (int i = 0; i < discountingCurveSize; i++) {
       final Pair<MulticurveProviderDiscount, CurveBuildingBlockBundle> upResults = BUILDER_FOR_TEST.copy()
           .withFixingTs(FIXING_TS_WITHOUT_TODAY)
