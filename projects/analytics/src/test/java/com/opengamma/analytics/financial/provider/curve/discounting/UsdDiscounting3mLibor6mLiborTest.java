@@ -162,11 +162,10 @@ public class UsdDiscounting3mLibor6mLiborTest {
     Period.ofYears(1), Period.ofYears(2), Period.ofYears(3), Period.ofYears(4), Period.ofYears(5), Period.ofYears(10) };
   private static final GeneratorAttributeIR[] DSC_USD_ATTR = new GeneratorAttributeIR[DSC_USD_TENOR.length];
   static {
-    for (int loopins = 0; loopins < 2; loopins++) {
-      DSC_USD_ATTR[loopins] = new GeneratorAttributeIR(DSC_USD_TENOR[loopins], Period.ZERO);
-    }
-    for (int loopins = 2; loopins < DSC_USD_TENOR.length; loopins++) {
-      DSC_USD_ATTR[loopins] = new GeneratorAttributeIR(DSC_USD_TENOR[loopins]);
+    DSC_USD_ATTR[0] = new GeneratorAttributeIR(DSC_USD_TENOR[0], Period.ZERO);
+    DSC_USD_ATTR[1] = new GeneratorAttributeIR(DSC_USD_TENOR[1], Period.ZERO);
+    for (int i = 2; i < DSC_USD_TENOR.length; i++) {
+      DSC_USD_ATTR[i] = new GeneratorAttributeIR(DSC_USD_TENOR[i]);
     }
   }
 

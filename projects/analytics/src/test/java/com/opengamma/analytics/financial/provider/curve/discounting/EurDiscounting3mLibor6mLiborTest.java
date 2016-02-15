@@ -44,6 +44,10 @@ import com.opengamma.analytics.financial.provider.curve.discounting.DiscountingM
 import com.opengamma.analytics.financial.provider.description.interestrate.MulticurveProviderDiscount;
 import com.opengamma.analytics.financial.provider.description.interestrate.MulticurveProviderInterface;
 import com.opengamma.analytics.financial.schedule.ScheduleCalculator;
+import com.opengamma.analytics.math.interpolation.Interpolator1D;
+import com.opengamma.analytics.math.interpolation.factory.FlatExtrapolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.LinearInterpolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.NamedInterpolator1dFactory;
 import com.opengamma.analytics.math.matrix.DoubleMatrix2D;
 import com.opengamma.analytics.util.time.TimeCalculator;
 import com.opengamma.timeseries.precise.zdt.ImmutableZonedDateTimeDoubleTimeSeries;
@@ -59,16 +63,13 @@ import com.opengamma.util.tuple.Pair;
  */
 @Test(groups = TestGroup.UNIT)
 public class EurDiscounting3mLibor6mLiborTest {
+  private static final Interpolator1D INTERPOLATOR = NamedInterpolator1dFactory.of(LinearInterpolator1dAdapter.NAME, FlatExtrapolator1dAdapter.NAME);
   private static final CalendarAdapter TARGET = new CalendarAdapter(WeekendWorkingDayCalendar.SATURDAY_SUNDAY);
-  private static final Currency EUR = Currency.EUR;
-  private static final FXMatrix FX_MATRIX = new FXMatrix(EUR);
-
-  private static final double NOTIONAL = 1.0;
-
+  private static final FXMatrix FX_MATRIX = new FXMatrix(Currency.EUR);
   private static final GeneratorSwapFixedON GENERATOR_OIS_EUR = GeneratorSwapFixedONMaster.getInstance().getGenerator("EUR1YEONIA", TARGET);
   /** An overnight EUR index */
   private static final IndexON EUR_OVERNIGHT_INDEX = GENERATOR_OIS_EUR.getIndex();
-  private static final GeneratorDepositON GENERATOR_DEPOSIT_ON_EUR = new GeneratorDepositON("EUR Deposit ON", EUR, TARGET, EUR_OVERNIGHT_INDEX.getDayCount());
+  private static final GeneratorDepositON GENERATOR_DEPOSIT_ON_EUR = new GeneratorDepositON("EUR Deposit ON", Currency.EUR, TARGET, EUR_OVERNIGHT_INDEX.getDayCount());
   private static final GeneratorSwapFixedIborMaster GENERATOR_SWAP_MASTER = GeneratorSwapFixedIborMaster.getInstance();
   private static final GeneratorSwapFixedIbor EUR1YEURIBOR3M = GENERATOR_SWAP_MASTER.getGenerator("EUR1YEURIBOR3M", TARGET);
   private static final GeneratorSwapFixedIbor EUR1YEURIBOR6M = GENERATOR_SWAP_MASTER.getGenerator("EUR1YEURIBOR6M", TARGET);
@@ -77,9 +78,9 @@ public class EurDiscounting3mLibor6mLiborTest {
   /** A 6M EURIBOR index */
   private static final IborIndex EUR_6M_EURIBOR_INDEX = EUR1YEURIBOR6M.getIborIndex();
   /** A 3M EUR LIBOR index */
-  private static final IborIndex EUR_3M_LIBOR_INDEX = new IborIndex(EUR, Period.ofMonths(3), 2, EUR_3M_EURIBOR_INDEX.getDayCount(), EUR_3M_EURIBOR_INDEX.getBusinessDayConvention(), true, "EUROLIBOR3M");
+  private static final IborIndex EUR_3M_LIBOR_INDEX = new IborIndex(Currency.EUR, Period.ofMonths(3), 2, EUR_3M_EURIBOR_INDEX.getDayCount(), EUR_3M_EURIBOR_INDEX.getBusinessDayConvention(), true, "EUROLIBOR3M");
   /** A 6M EUR LIBOR index */
-  private static final IborIndex EUR_6M_LIBOR_INDEX = new IborIndex(EUR, Period.ofMonths(6), 2, EUR_6M_EURIBOR_INDEX.getDayCount(), EUR_6M_EURIBOR_INDEX.getBusinessDayConvention(), true, "EUROLIBOR6M");
+  private static final IborIndex EUR_6M_LIBOR_INDEX = new IborIndex(Currency.EUR, Period.ofMonths(6), 2, EUR_6M_EURIBOR_INDEX.getDayCount(), EUR_6M_EURIBOR_INDEX.getBusinessDayConvention(), true, "EUROLIBOR6M");
   private static final GeneratorFRA GENERATOR_FRA_3M = new GeneratorFRA("GENERATOR_FRA_3M", EUR_3M_EURIBOR_INDEX, TARGET);
   private static final GeneratorFRA GENERATOR_FRA_6M = new GeneratorFRA("GENERATOR_FRA_6M", EUR_6M_EURIBOR_INDEX, TARGET);
   private static final GeneratorDepositIbor GENERATOR_EURIBOR3M = new GeneratorDepositIbor("GENERATOR_EURIBOR3M", EUR_3M_EURIBOR_INDEX, TARGET);
@@ -172,17 +173,17 @@ public class EurDiscounting3mLibor6mLiborTest {
   private static final MulticurveProviderDiscount MULTICURVE_KNOWN_DATA = new MulticurveProviderDiscount(FX_MATRIX);
   private static final DiscountingMethodCurveBuilder.ConfigBuilder DISCOUNTING_THEN_LIBORS_BUILDER = DiscountingMethodCurveBuilder.setUp()
       .buildingFirst(CURVE_NAME_DSC_EUR)
-      .using(CURVE_NAME_DSC_EUR).forDiscounting(Currency.EUR).forOvernightIndex(EUR_OVERNIGHT_INDEX)
+      .using(CURVE_NAME_DSC_EUR).forDiscounting(Currency.EUR).forOvernightIndex(EUR_OVERNIGHT_INDEX).withInterpolator(INTERPOLATOR)
       .thenBuilding(CURVE_NAME_FWD3_EUR)
-      .using(CURVE_NAME_FWD3_EUR).forIborIndex(EUR_3M_LIBOR_INDEX, EUR_3M_EURIBOR_INDEX)
+      .using(CURVE_NAME_FWD3_EUR).forIborIndex(EUR_3M_LIBOR_INDEX, EUR_3M_EURIBOR_INDEX).withInterpolator(INTERPOLATOR)
       .thenBuilding(CURVE_NAME_FWD6_EUR)
-      .using(CURVE_NAME_FWD6_EUR).forIborIndex(EUR_6M_LIBOR_INDEX, EUR_6M_EURIBOR_INDEX)
+      .using(CURVE_NAME_FWD6_EUR).forIborIndex(EUR_6M_LIBOR_INDEX, EUR_6M_EURIBOR_INDEX).withInterpolator(INTERPOLATOR)
       .withKnownData(MULTICURVE_KNOWN_DATA);
   private static final DiscountingMethodCurveBuilder.ConfigBuilder DISCOUNTING_AND_LIBORS_BUILDER = DiscountingMethodCurveBuilder.setUp()
       .building(CURVE_NAME_DSC_EUR, CURVE_NAME_FWD3_EUR, CURVE_NAME_FWD6_EUR)
-      .using(CURVE_NAME_DSC_EUR).forDiscounting(Currency.EUR).forOvernightIndex(EUR_OVERNIGHT_INDEX)
-      .using(CURVE_NAME_FWD3_EUR).forIborIndex(EUR_3M_LIBOR_INDEX, EUR_3M_EURIBOR_INDEX)
-      .using(CURVE_NAME_FWD6_EUR).forIborIndex(EUR_6M_LIBOR_INDEX, EUR_6M_EURIBOR_INDEX)
+      .using(CURVE_NAME_DSC_EUR).forDiscounting(Currency.EUR).forOvernightIndex(EUR_OVERNIGHT_INDEX).withInterpolator(INTERPOLATOR)
+      .using(CURVE_NAME_FWD3_EUR).forIborIndex(EUR_3M_LIBOR_INDEX, EUR_3M_EURIBOR_INDEX).withInterpolator(INTERPOLATOR)
+      .using(CURVE_NAME_FWD6_EUR).forIborIndex(EUR_6M_LIBOR_INDEX, EUR_6M_EURIBOR_INDEX).withInterpolator(INTERPOLATOR)
       .withKnownData(MULTICURVE_KNOWN_DATA);
   static {
     for (int i = 0; i < DSC_EUR_MARKET_QUOTES.length; i++) {
@@ -218,7 +219,7 @@ public class EurDiscounting3mLibor6mLiborTest {
   @Test
   public void testJacobianSizes() {
     final int allQuotes = DSC_EUR_MARKET_QUOTES.length + FWD3_EUR_MARKET_QUOTES.length + FWD6_EUR_MARKET_QUOTES.length;
-    // discounting curve first, then two coupled LIBOR curves
+    // discounting curve first, then 3m, then 6m
     CurveBuildingBlockBundle fullJacobian = DSC_THEN_LIBOR_BEFORE_FIXING.getSecond();
     Map<String, Pair<CurveBuildingBlock, DoubleMatrix2D>> fullJacobianData = fullJacobian.getData();
     assertEquals(fullJacobianData.size(), 3);
