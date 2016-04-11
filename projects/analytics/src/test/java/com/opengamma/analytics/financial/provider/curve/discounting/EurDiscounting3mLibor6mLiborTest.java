@@ -40,7 +40,8 @@ import com.opengamma.analytics.financial.model.interestrate.curve.YieldAndDiscou
 import com.opengamma.analytics.financial.model.interestrate.curve.YieldCurve;
 import com.opengamma.analytics.financial.provider.curve.CurveBuildingBlock;
 import com.opengamma.analytics.financial.provider.curve.CurveBuildingBlockBundle;
-import com.opengamma.analytics.financial.provider.curve.discounting.DiscountingMethodCurveUtils.DiscountingMethodCurveBuilder;
+import com.opengamma.analytics.financial.provider.curve.builder.CurveBuilderSetUp;
+import com.opengamma.analytics.financial.provider.curve.builder.DiscountingMethodCurveBuilder;
 import com.opengamma.analytics.financial.provider.description.interestrate.MulticurveProviderDiscount;
 import com.opengamma.analytics.financial.provider.description.interestrate.MulticurveProviderInterface;
 import com.opengamma.analytics.financial.schedule.ScheduleCalculator;
@@ -171,7 +172,7 @@ public class EurDiscounting3mLibor6mLiborTest {
     }
   }
   private static final MulticurveProviderDiscount MULTICURVE_KNOWN_DATA = new MulticurveProviderDiscount(FX_MATRIX);
-  private static final DiscountingMethodCurveBuilder.ConfigBuilder DISCOUNTING_THEN_LIBORS_BUILDER = DiscountingMethodCurveBuilder.setUp()
+  private static final CurveBuilderSetUp DISCOUNTING_THEN_LIBORS_BUILDER = DiscountingMethodCurveBuilder.setUp()
       .buildingFirst(CURVE_NAME_DSC_EUR)
       .using(CURVE_NAME_DSC_EUR).forDiscounting(Currency.EUR).forOvernightIndex(EUR_OVERNIGHT_INDEX).withInterpolator(INTERPOLATOR)
       .thenBuilding(CURVE_NAME_FWD3_EUR)
@@ -179,7 +180,7 @@ public class EurDiscounting3mLibor6mLiborTest {
       .thenBuilding(CURVE_NAME_FWD6_EUR)
       .using(CURVE_NAME_FWD6_EUR).forIborIndex(EUR_6M_LIBOR_INDEX, EUR_6M_EURIBOR_INDEX).withInterpolator(INTERPOLATOR)
       .withKnownData(MULTICURVE_KNOWN_DATA);
-  private static final DiscountingMethodCurveBuilder.ConfigBuilder DISCOUNTING_AND_LIBORS_BUILDER = DiscountingMethodCurveBuilder.setUp()
+  private static final CurveBuilderSetUp DISCOUNTING_AND_LIBORS_BUILDER = DiscountingMethodCurveBuilder.setUp()
       .building(CURVE_NAME_DSC_EUR, CURVE_NAME_FWD3_EUR, CURVE_NAME_FWD6_EUR)
       .using(CURVE_NAME_DSC_EUR).forDiscounting(Currency.EUR).forOvernightIndex(EUR_OVERNIGHT_INDEX).withInterpolator(INTERPOLATOR)
       .using(CURVE_NAME_FWD3_EUR).forIborIndex(EUR_3M_LIBOR_INDEX, EUR_3M_EURIBOR_INDEX).withInterpolator(INTERPOLATOR)

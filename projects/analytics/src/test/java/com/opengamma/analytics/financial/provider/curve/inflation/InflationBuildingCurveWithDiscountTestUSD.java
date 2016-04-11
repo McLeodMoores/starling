@@ -51,10 +51,9 @@ import com.opengamma.analytics.financial.provider.calculator.inflation.ParSpread
 import com.opengamma.analytics.financial.provider.calculator.inflation.PresentValueCurveSensitivityDiscountingInflationCalculator;
 import com.opengamma.analytics.financial.provider.calculator.inflation.PresentValueDiscountingInflationCalculator;
 import com.opengamma.analytics.financial.provider.curve.CurveBuildingBlockBundle;
-import com.opengamma.analytics.financial.provider.curve.CurveTestUtils;
+import com.opengamma.analytics.financial.provider.curve.CurveUtils;
 import com.opengamma.analytics.financial.provider.curve.MultiCurveBundle;
 import com.opengamma.analytics.financial.provider.curve.SingleCurveBundle;
-import com.opengamma.analytics.financial.provider.curve.inflation.InflationDiscountBuildingRepositoryWithDiscount;
 import com.opengamma.analytics.financial.provider.description.inflation.InflationProviderDiscount;
 import com.opengamma.analytics.financial.provider.description.inflation.InflationProviderInterface;
 import com.opengamma.analytics.financial.provider.sensitivity.inflation.InflationSensitivity;
@@ -330,7 +329,7 @@ public class InflationBuildingCurveWithDiscountTestUSD {
         final double[] initialGuess = new double[nInstruments];
         for (int k = 0; k < nInstruments; k++) {
           derivatives[k] = convert(definitions[i][j][k]);
-          initialGuess[k] = definitions[i][j][k].accept(CurveTestUtils.INFLATION_INITIALIZATION);
+          initialGuess[k] = definitions[i][j][k].accept(CurveUtils.INFLATION_INITIALIZATION);
         }
         final GeneratorCurve generator = curveGenerators[i][j].finalGenerator(derivatives);
         singleCurves[j] = new SingleCurveBundle<>(curveNames[i][j], derivatives, initialGuess, generator);

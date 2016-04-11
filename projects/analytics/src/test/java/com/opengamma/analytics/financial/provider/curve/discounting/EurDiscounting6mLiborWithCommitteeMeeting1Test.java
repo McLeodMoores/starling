@@ -36,6 +36,7 @@ import com.opengamma.analytics.financial.instrument.index.IndexON;
 import com.opengamma.analytics.financial.provider.curve.CurveBuildingBlock;
 import com.opengamma.analytics.financial.provider.curve.CurveBuildingBlockBundle;
 import com.opengamma.analytics.financial.provider.curve.discounting.DiscountingMethodCurveUtils.DiscountingMethodCurveBuilder2;
+import com.opengamma.analytics.financial.provider.curve.discounting.DiscountingMethodCurveUtils.DiscountingMethodCurveBuilder2.CurveBuilderSetUp2;
 import com.opengamma.analytics.financial.provider.description.interestrate.MulticurveProviderDiscount;
 import com.opengamma.analytics.financial.provider.description.interestrate.MulticurveProviderInterface;
 import com.opengamma.analytics.financial.schedule.ScheduleCalculator;
@@ -149,7 +150,7 @@ public class EurDiscounting6mLiborWithCommitteeMeeting1Test {
     }
   }
   private static final MulticurveProviderDiscount KNOWN_DATA = new MulticurveProviderDiscount(FX_MATRIX);
-  private static final DiscountingMethodCurveBuilder2.ConfigBuilder2 BUILDER_FOR_TEST = DiscountingMethodCurveBuilder2.setUp()
+  private static final CurveBuilderSetUp2 BUILDER_FOR_TEST = DiscountingMethodCurveBuilder2.setUp()
       .buildingFirst(CURVE_NAME_DSC_EUR)
       .using(CURVE_NAME_DSC_EUR).forDiscounting(Currency.EUR).forOvernightIndex(EONIA_INDEX).withInterpolator(LOG_LINEAR_INTERPOLATOR)
       .thenBuilding(CURVE_NAME_FWD6_EUR)

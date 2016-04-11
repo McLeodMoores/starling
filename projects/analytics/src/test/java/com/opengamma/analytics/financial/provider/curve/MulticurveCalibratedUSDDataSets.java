@@ -217,8 +217,8 @@ public class MulticurveCalibratedUSDDataSets {
         final InstrumentDerivative[] derivatives = new InstrumentDerivative[nInstruments];
         final double[] rates = new double[nInstruments];
         for (int k = 0; k < nInstruments; k++) {
-          derivatives[k] = CurveTestUtils.convert(definitions[i][j][k], withToday ? FIXING_TS_WITH_TODAY : FIXING_TS_WITHOUT_TODAY, NOW);
-          rates[k] = definitions[i][j][k].accept(CurveTestUtils.RATES_INITIALIZATION);
+          derivatives[k] = CurveUtils.convert(definitions[i][j][k], withToday ? FIXING_TS_WITH_TODAY : FIXING_TS_WITHOUT_TODAY, NOW);
+          rates[k] = definitions[i][j][k].accept(CurveUtils.RATES_INITIALIZATION);
         }
         final GeneratorYDCurve generator = curveGenerators[i][j].finalGenerator(derivatives);
         final double[] initialGuess = generator.initialGuess(rates);

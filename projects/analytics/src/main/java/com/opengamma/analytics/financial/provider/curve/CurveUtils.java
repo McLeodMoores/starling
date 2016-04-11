@@ -41,7 +41,7 @@ import com.opengamma.timeseries.precise.zdt.ZonedDateTimeDoubleTimeSeries;
 /**
  *
  */
-public class CurveTestUtils {
+public class CurveUtils {
 
   public static final InstrumentDefinitionVisitor<Void, Double> RATES_INITIALIZATION = new InitialGuessForRates();
   public static final InstrumentDefinitionVisitor<Void, Double> INFLATION_INITIALIZATION = new InitialGuessForInflation();

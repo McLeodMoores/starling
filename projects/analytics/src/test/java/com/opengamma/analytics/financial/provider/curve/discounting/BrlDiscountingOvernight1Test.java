@@ -31,7 +31,8 @@ import com.opengamma.analytics.financial.instrument.index.Index;
 import com.opengamma.analytics.financial.instrument.index.IndexON;
 import com.opengamma.analytics.financial.provider.curve.CurveBuildingBlock;
 import com.opengamma.analytics.financial.provider.curve.CurveBuildingBlockBundle;
-import com.opengamma.analytics.financial.provider.curve.discounting.DiscountingMethodCurveUtils.DiscountingMethodCurveBuilder;
+import com.opengamma.analytics.financial.provider.curve.builder.CurveBuilderSetUp;
+import com.opengamma.analytics.financial.provider.curve.builder.DiscountingMethodCurveBuilder;
 import com.opengamma.analytics.financial.provider.description.interestrate.MulticurveProviderDiscount;
 import com.opengamma.analytics.financial.provider.description.interestrate.MulticurveProviderInterface;
 import com.opengamma.analytics.financial.schedule.ScheduleCalculator;
@@ -99,7 +100,7 @@ public class BrlDiscountingOvernight1Test {
   }
 
   private static final MulticurveProviderDiscount KNOWN_DATA = new MulticurveProviderDiscount(FX_MATRIX);
-  private static final DiscountingMethodCurveBuilder.ConfigBuilder BUILDER_FOR_TEST = DiscountingMethodCurveBuilder.setUp()
+  private static final CurveBuilderSetUp BUILDER_FOR_TEST = DiscountingMethodCurveBuilder.setUp()
       .building(CURVE_NAME_DSC_BRL)
       .using(CURVE_NAME_DSC_BRL).forDiscounting(Currency.BRL).forOvernightIndex(CDI_INDEX).withInterpolator(INTERPOLATOR)
       .withKnownData(KNOWN_DATA);
@@ -112,6 +113,7 @@ public class BrlDiscountingOvernight1Test {
   private static final Pair<MulticurveProviderDiscount, CurveBuildingBlockBundle> AFTER_TODAYS_FIXING;
   private static final double TOLERANCE_CAL = 1.0E-9;
   static {
+    final Object temp = BUILDER_FOR_TEST.copy();
     BEFORE_TODAYS_FIXING = BUILDER_FOR_TEST.copy().withFixingTs(FIXING_TS_WITHOUT_TODAY).getBuilder().buildCurves(NOW);
     AFTER_TODAYS_FIXING = BUILDER_FOR_TEST.copy().withFixingTs(FIXING_TS_WITH_TODAY).getBuilder().buildCurves(NOW);
   }

@@ -56,7 +56,7 @@ import com.opengamma.analytics.financial.provider.calculator.discounting.ParSpre
 import com.opengamma.analytics.financial.provider.calculator.discounting.PresentValueDiscountingCalculator;
 import com.opengamma.analytics.financial.provider.calculator.generic.LastTimeCalculator;
 import com.opengamma.analytics.financial.provider.curve.CurveBuildingBlockBundle;
-import com.opengamma.analytics.financial.provider.curve.CurveTestUtils;
+import com.opengamma.analytics.financial.provider.curve.CurveUtils;
 import com.opengamma.analytics.financial.provider.curve.MultiCurveBundle;
 import com.opengamma.analytics.financial.provider.curve.SingleCurveBundle;
 import com.opengamma.analytics.financial.provider.curve.multicurve.MulticurveDiscountBuildingRepository;
@@ -348,7 +348,7 @@ public class EurDiscounting6mLiborWithCommitteeMeeting3Test {
   private void curveConstructionTest(final InstrumentDefinition<?>[][][] definitions, final MulticurveProviderDiscount curves, final boolean withToday, final int block) {
     final int nbBlocks = definitions.length;
     for (int i = 0; i < nbBlocks; i++) {
-      final InstrumentDerivative[][] instruments = CurveTestUtils.convert(definitions[i], withToday ? FIXING_TS_WITH_TODAY : FIXING_TS_WITHOUT_TODAY, NOW);
+      final InstrumentDerivative[][] instruments = CurveUtils.convert(definitions[i], withToday ? FIXING_TS_WITH_TODAY : FIXING_TS_WITHOUT_TODAY, NOW);
       final double[][] pv = new double[instruments.length][];
       for (int j = 0; j < instruments.length; j++) {
         pv[j] = new double[instruments[j].length];
@@ -430,8 +430,8 @@ public class EurDiscounting6mLiborWithCommitteeMeeting3Test {
         final InstrumentDerivative[] derivatives = new InstrumentDerivative[nInstruments];
         final double[] rates = new double[nInstruments];
         for (int k = 0; k < nInstruments; k++) {
-          derivatives[k] = CurveTestUtils.convert(definitions[i][j][k], withToday ? FIXING_TS_WITH_TODAY : FIXING_TS_WITHOUT_TODAY, NOW);
-          rates[k] = definitions[i][j][k].accept(CurveTestUtils.RATES_INITIALIZATION);
+          derivatives[k] = CurveUtils.convert(definitions[i][j][k], withToday ? FIXING_TS_WITH_TODAY : FIXING_TS_WITHOUT_TODAY, NOW);
+          rates[k] = definitions[i][j][k].accept(CurveUtils.RATES_INITIALIZATION);
         }
         final GeneratorYDCurve generator = curveGenerators[i][j].finalGenerator(derivatives);
         final double[] initialGuess = generator.initialGuess(rates);

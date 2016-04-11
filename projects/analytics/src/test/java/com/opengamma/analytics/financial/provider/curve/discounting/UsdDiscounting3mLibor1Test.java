@@ -36,7 +36,8 @@ import com.opengamma.analytics.financial.instrument.index.IndexON;
 import com.opengamma.analytics.financial.model.interestrate.curve.YieldCurve;
 import com.opengamma.analytics.financial.provider.curve.CurveBuildingBlock;
 import com.opengamma.analytics.financial.provider.curve.CurveBuildingBlockBundle;
-import com.opengamma.analytics.financial.provider.curve.discounting.DiscountingMethodCurveUtils.DiscountingMethodCurveBuilder;
+import com.opengamma.analytics.financial.provider.curve.builder.CurveBuilderSetUp;
+import com.opengamma.analytics.financial.provider.curve.builder.DiscountingMethodCurveBuilder;
 import com.opengamma.analytics.financial.provider.description.interestrate.MulticurveProviderDiscount;
 import com.opengamma.analytics.financial.provider.description.interestrate.MulticurveProviderInterface;
 import com.opengamma.analytics.financial.schedule.ScheduleCalculator;
@@ -125,7 +126,7 @@ public class UsdDiscounting3mLibor1Test {
   }
   private static final MulticurveProviderDiscount KNOWN_DATA = new MulticurveProviderDiscount(FX_MATRIX);
 
-  private static final DiscountingMethodCurveBuilder.ConfigBuilder BUILDER_FOR_TEST = DiscountingMethodCurveBuilder.setUp()
+  private static final CurveBuilderSetUp BUILDER_FOR_TEST = DiscountingMethodCurveBuilder.setUp()
       .buildingFirst(CURVE_NAME_DSC_USD)
       .using(CURVE_NAME_DSC_USD).forDiscounting(Currency.USD).forOvernightIndex(USD_OVERNIGHT_INDEX).withInterpolator(INTERPOLATOR)
       .thenBuilding(CURVE_NAME_FWD3_USD)

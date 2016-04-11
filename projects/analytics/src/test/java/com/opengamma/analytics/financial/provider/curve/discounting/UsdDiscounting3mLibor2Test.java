@@ -40,7 +40,8 @@ import com.opengamma.analytics.financial.model.interestrate.curve.YieldAndDiscou
 import com.opengamma.analytics.financial.model.interestrate.curve.YieldCurve;
 import com.opengamma.analytics.financial.provider.curve.CurveBuildingBlock;
 import com.opengamma.analytics.financial.provider.curve.CurveBuildingBlockBundle;
-import com.opengamma.analytics.financial.provider.curve.discounting.DiscountingMethodCurveUtils.DiscountingMethodCurveBuilder;
+import com.opengamma.analytics.financial.provider.curve.builder.CurveBuilderSetUp;
+import com.opengamma.analytics.financial.provider.curve.builder.DiscountingMethodCurveBuilder;
 import com.opengamma.analytics.financial.provider.description.interestrate.MulticurveProviderDiscount;
 import com.opengamma.analytics.financial.provider.description.interestrate.MulticurveProviderInterface;
 import com.opengamma.analytics.financial.schedule.ScheduleCalculator;
@@ -127,17 +128,17 @@ public class UsdDiscounting3mLibor2Test {
   }
 
   private static final MulticurveProviderDiscount KNOWN_DATA = new MulticurveProviderDiscount(FX_MATRIX);
-  private static final DiscountingMethodCurveBuilder.ConfigBuilder DISCOUNTING_ONLY_BUILDER = DiscountingMethodCurveBuilder.setUp()
+  private static final CurveBuilderSetUp DISCOUNTING_ONLY_BUILDER = DiscountingMethodCurveBuilder.setUp()
         .building(CURVE_NAME_DSC_USD)
         .using(CURVE_NAME_DSC_USD).forDiscounting(Currency.USD).forOvernightIndex(USD_OVERNIGHT_INDEX).withInterpolator(INTERPOLATOR)
         .withKnownData(KNOWN_DATA);
-  private static final DiscountingMethodCurveBuilder.ConfigBuilder DISCOUNTING_THEN_LIBOR_BUILDER = DiscountingMethodCurveBuilder.setUp()
+  private static final CurveBuilderSetUp DISCOUNTING_THEN_LIBOR_BUILDER = DiscountingMethodCurveBuilder.setUp()
       .buildingFirst(CURVE_NAME_DSC_USD)
       .using(CURVE_NAME_DSC_USD).forDiscounting(Currency.USD).forOvernightIndex(USD_OVERNIGHT_INDEX).withInterpolator(INTERPOLATOR)
       .thenBuilding(CURVE_NAME_FWD3_USD)
       .using(CURVE_NAME_FWD3_USD).forIborIndex(USD_3M_LIBOR_INDEX).withInterpolator(INTERPOLATOR)
       .withKnownData(KNOWN_DATA);
-  private static final DiscountingMethodCurveBuilder.ConfigBuilder DISCOUNTING_AND_LIBOR_BUILDER = DiscountingMethodCurveBuilder.setUp()
+  private static final CurveBuilderSetUp DISCOUNTING_AND_LIBOR_BUILDER = DiscountingMethodCurveBuilder.setUp()
       .building(CURVE_NAME_DSC_USD, CURVE_NAME_FWD3_USD)
       .using(CURVE_NAME_DSC_USD).forDiscounting(Currency.USD).forOvernightIndex(USD_OVERNIGHT_INDEX).withInterpolator(INTERPOLATOR)
       .using(CURVE_NAME_FWD3_USD).forIborIndex(USD_3M_LIBOR_INDEX).withInterpolator(INTERPOLATOR)

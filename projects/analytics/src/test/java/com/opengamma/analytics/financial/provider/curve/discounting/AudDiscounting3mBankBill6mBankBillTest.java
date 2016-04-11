@@ -42,7 +42,8 @@ import com.opengamma.analytics.financial.model.interestrate.curve.YieldAndDiscou
 import com.opengamma.analytics.financial.model.interestrate.curve.YieldCurve;
 import com.opengamma.analytics.financial.provider.curve.CurveBuildingBlock;
 import com.opengamma.analytics.financial.provider.curve.CurveBuildingBlockBundle;
-import com.opengamma.analytics.financial.provider.curve.discounting.DiscountingMethodCurveUtils.DiscountingMethodCurveBuilder;
+import com.opengamma.analytics.financial.provider.curve.builder.CurveBuilderSetUp;
+import com.opengamma.analytics.financial.provider.curve.builder.DiscountingMethodCurveBuilder;
 import com.opengamma.analytics.financial.provider.description.interestrate.MulticurveProviderDiscount;
 import com.opengamma.analytics.financial.provider.description.interestrate.MulticurveProviderInterface;
 import com.opengamma.analytics.financial.schedule.ScheduleCalculator;
@@ -161,14 +162,14 @@ public class AudDiscounting3mBankBill6mBankBillTest {
   }
 
   private static final MulticurveProviderDiscount MULTICURVE_KNOWN_DATA = new MulticurveProviderDiscount(FX_MATRIX);
-  private static final DiscountingMethodCurveBuilder.ConfigBuilder DISCOUNTING_THEN_BANK_BILLS_BUILDER = DiscountingMethodCurveBuilder.setUp()
+  private static final CurveBuilderSetUp DISCOUNTING_THEN_BANK_BILLS_BUILDER = DiscountingMethodCurveBuilder.setUp()
       .buildingFirst(CURVE_NAME_DSC_AUD)
       .using(CURVE_NAME_DSC_AUD).forDiscounting(Currency.AUD).forOvernightIndex(AUD_OVERNIGHT_INDEX).withInterpolator(INTERPOLATOR)
       .thenBuilding(CURVE_NAME_FWD3_AUD, CURVE_NAME_FWD6_AUD)
       .using(CURVE_NAME_FWD3_AUD).forIborIndex(AUD_3M_BANK_BILL_INDEX).withInterpolator(INTERPOLATOR)
       .using(CURVE_NAME_FWD6_AUD).forIborIndex(AUD_6M_BANK_BILL_INDEX).withInterpolator(INTERPOLATOR)
       .withKnownData(MULTICURVE_KNOWN_DATA);
-  private static final DiscountingMethodCurveBuilder.ConfigBuilder DISCOUNTING_AND_BANK_BILLS_BUILDER = DiscountingMethodCurveBuilder.setUp()
+  private static final CurveBuilderSetUp DISCOUNTING_AND_BANK_BILLS_BUILDER = DiscountingMethodCurveBuilder.setUp()
       .building(CURVE_NAME_DSC_AUD, CURVE_NAME_FWD3_AUD, CURVE_NAME_FWD6_AUD)
       .using(CURVE_NAME_DSC_AUD).forDiscounting(Currency.AUD).forOvernightIndex(AUD_OVERNIGHT_INDEX).withInterpolator(INTERPOLATOR)
       .using(CURVE_NAME_FWD3_AUD).forIborIndex(AUD_3M_BANK_BILL_INDEX).withInterpolator(INTERPOLATOR)
@@ -242,7 +243,8 @@ public class AudDiscounting3mBankBill6mBankBillTest {
     // discounting then 3m then 6m
     Map<String, InstrumentDefinition<?>[]> definitionsForDiscountingThenLibors;
     // before fixing
-    definitionsForDiscountingThenLibors = DISCOUNTING_THEN_BANK_BILLS_BUILDER.copy().withFixingTs(FIXING_TS_WITHOUT_TODAY).getBuilder().getDefinitionsForCurves(NOW);
+    definitionsForDiscountingThenLibors = DISCOUNTING_THEN_BANK_BILLS_BUILDER.copy()
+        .withFixingTs(FIXING_TS_WITHOUT_TODAY).getBuilder().getDefinitionsForCurves(NOW);
     definitions = definitionsForDiscountingThenLibors.get(CURVE_NAME_DSC_AUD);
     curveConstructionTest(definitions, DSC_THEN_BANK_BILLS_BEFORE_FIXING.getFirst(), FIXING_TS_WITHOUT_TODAY, FX_MATRIX, NOW, Currency.AUD);
     definitions = definitionsForDiscountingThenLibors.get(CURVE_NAME_FWD3_AUD);
@@ -250,7 +252,8 @@ public class AudDiscounting3mBankBill6mBankBillTest {
     definitions = definitionsForDiscountingThenLibors.get(CURVE_NAME_FWD6_AUD);
     curveConstructionTest(definitions, DSC_THEN_BANK_BILLS_BEFORE_FIXING.getFirst(), FIXING_TS_WITHOUT_TODAY, FX_MATRIX, NOW, Currency.AUD);
     // after fixing
-    definitionsForDiscountingThenLibors = DISCOUNTING_THEN_BANK_BILLS_BUILDER.copy().withFixingTs(FIXING_TS_WITH_TODAY).getBuilder().getDefinitionsForCurves(NOW);
+    definitionsForDiscountingThenLibors = DISCOUNTING_THEN_BANK_BILLS_BUILDER.copy()
+        .withFixingTs(FIXING_TS_WITH_TODAY).getBuilder().getDefinitionsForCurves(NOW);
     definitions = definitionsForDiscountingThenLibors.get(CURVE_NAME_DSC_AUD);
     curveConstructionTest(definitions, DSC_THEN_BANK_BILLS_AFTER_FIXING.getFirst(), FIXING_TS_WITH_TODAY, FX_MATRIX, NOW, Currency.AUD);
     definitions = definitionsForDiscountingThenLibors.get(CURVE_NAME_FWD3_AUD);
@@ -260,7 +263,8 @@ public class AudDiscounting3mBankBill6mBankBillTest {
     // discounting and libors
     Map<String, InstrumentDefinition<?>[]> definitionsForDiscountingAndLibors;
     // before fixing
-    definitionsForDiscountingAndLibors = DISCOUNTING_AND_BANK_BILLS_BUILDER.copy().withFixingTs(FIXING_TS_WITHOUT_TODAY).getBuilder().getDefinitionsForCurves(NOW);
+    definitionsForDiscountingAndLibors = DISCOUNTING_AND_BANK_BILLS_BUILDER.copy()
+        .withFixingTs(FIXING_TS_WITHOUT_TODAY).getBuilder().getDefinitionsForCurves(NOW);
     definitions = definitionsForDiscountingAndLibors.get(CURVE_NAME_DSC_AUD);
     curveConstructionTest(definitions, DSC_BANK_BILLS_SIMULTANEOUS_BEFORE_FIXING.getFirst(), FIXING_TS_WITHOUT_TODAY, FX_MATRIX, NOW, Currency.AUD);
     definitions = definitionsForDiscountingAndLibors.get(CURVE_NAME_FWD3_AUD);
