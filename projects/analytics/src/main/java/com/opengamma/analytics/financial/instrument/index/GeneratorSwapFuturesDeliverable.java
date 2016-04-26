@@ -29,7 +29,7 @@ public class GeneratorSwapFuturesDeliverable extends GeneratorInstrument<Generat
    */
   public GeneratorSwapFuturesDeliverable(final String name, final SwapFuturesPriceDeliverableSecurityDefinition security) {
     super(name);
-    ArgumentChecker.notNull(security, "STIR futures security");
+    ArgumentChecker.notNull(security, "security");
     _security = security;
   }
 
@@ -46,7 +46,8 @@ public class GeneratorSwapFuturesDeliverable extends GeneratorInstrument<Generat
    * The quantity is selected to be in line with the required nominal.
    */
   @Override
-  public SwapFuturesPriceDeliverableTransactionDefinition generateInstrument(final ZonedDateTime date, final double marketQuote, final double notional, final GeneratorAttribute attribute) {
+  public SwapFuturesPriceDeliverableTransactionDefinition generateInstrument(final ZonedDateTime date, final double marketQuote,
+      final double notional, final GeneratorAttribute attribute) {
     final int quantity = (int) Math.ceil(notional / _security.getNotional());
     return new SwapFuturesPriceDeliverableTransactionDefinition(_security, quantity, date, marketQuote);
   }

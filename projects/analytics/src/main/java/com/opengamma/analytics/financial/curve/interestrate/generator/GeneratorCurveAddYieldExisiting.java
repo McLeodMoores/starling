@@ -27,7 +27,7 @@ public class GeneratorCurveAddYieldExisiting extends GeneratorYDCurve {
   /**
    * If true the rate of the new curve will be subtracted from the first one. If false the rates are added.
    */
-  private final boolean _substract;
+  private final boolean _subtract;
   /**
    * The name of the existing curve.
    */
@@ -36,14 +36,14 @@ public class GeneratorCurveAddYieldExisiting extends GeneratorYDCurve {
   /**
    * The constructor.
    * @param generator The generator for the new curve.
-   * @param substract If true the rate of the new curve will be subtracted from the first one. If false the rates are added.
+   * @param subtract If true the rate of the new curve will be subtracted from the first one. If false the rates are added.
    * @param existingCurveName The name of the existing curve.
    */
-  public GeneratorCurveAddYieldExisiting(final GeneratorYDCurve generator, final boolean substract, final String existingCurveName) {
+  public GeneratorCurveAddYieldExisiting(final GeneratorYDCurve generator, final boolean subtract, final String existingCurveName) {
     ArgumentChecker.notNull(generator, "Generator");
     ArgumentChecker.notNull(existingCurveName, "Exisitng curve name");
     _generator = generator;
-    _substract = substract;
+    _subtract = subtract;
     _existingCurveName = existingCurveName;
   }
 
@@ -66,7 +66,7 @@ public class GeneratorCurveAddYieldExisiting extends GeneratorYDCurve {
   public YieldAndDiscountCurve generateCurve(final String name, final YieldCurveBundle bundle, final double[] parameters) {
     final YieldAndDiscountCurve existingCurve = bundle.getCurve(_existingCurveName);
     final YieldAndDiscountCurve newCurve = _generator.generateCurve(name + "-0", bundle, parameters);
-    return new YieldAndDiscountAddZeroSpreadCurve(name, _substract, existingCurve, newCurve);
+    return new YieldAndDiscountAddZeroSpreadCurve(name, _subtract, existingCurve, newCurve);
   }
 
   @Override
@@ -74,14 +74,14 @@ public class GeneratorCurveAddYieldExisiting extends GeneratorYDCurve {
     if (multicurve instanceof MulticurveProviderDiscount) { // TODO: improve the way the curves are generated
       final YieldAndDiscountCurve existingCurve = ((MulticurveProviderDiscount) multicurve).getCurve(_existingCurveName);
       final YieldAndDiscountCurve newCurve = _generator.generateCurve(name + "-0", multicurve, parameters);
-      return new YieldAndDiscountAddZeroSpreadCurve(name, _substract, existingCurve, newCurve);
+      return new YieldAndDiscountAddZeroSpreadCurve(name, _subtract, existingCurve, newCurve);
     }
-    throw new UnsupportedOperationException("Cannot generate curves for a GeneratorCurveAddYieldExisiting");
+    throw new UnsupportedOperationException("Cannot generate curves for a GeneratorCurveAddYieldExisting");
   }
 
   @Override
   public GeneratorYDCurve finalGenerator(final Object data) {
-    return new GeneratorCurveAddYieldExisiting(_generator.finalGenerator(data), _substract, _existingCurveName);
+    return new GeneratorCurveAddYieldExisiting(_generator.finalGenerator(data), _subtract, _existingCurveName);
   }
 
   @Override

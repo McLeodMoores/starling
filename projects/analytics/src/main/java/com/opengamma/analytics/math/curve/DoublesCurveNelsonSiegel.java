@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math.curve;
@@ -25,7 +25,7 @@ import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Curve described by the Nelson-Siegle function.
+ * Curve described by the Nelson-Siegel function.
  * The function is one of the most used functional form to describe a bond yield curve.
  */
 @BeanDefinition
@@ -53,7 +53,7 @@ public class DoublesCurveNelsonSiegel
 
   /**
    * Constructor from the four parameters and a name.
-   * 
+   *
    * @param name  the curve name, not null
    * @param beta0  the beta0 parameter
    * @param beta1  the beta1 parameter
@@ -67,7 +67,7 @@ public class DoublesCurveNelsonSiegel
 
   /**
    * Constructor from the four parameters as an array and a name.
-   * 
+   *
    * @param name  the curve name, not null
    * @param parameters  the array with the four parameters used to describe the function.
    *  The parameters are beta0, beta1, beta2 and lambda (in that order)
@@ -82,7 +82,7 @@ public class DoublesCurveNelsonSiegel
   //-------------------------------------------------------------------------
   /**
    * Throws an exception as there is no <i>x</i> data.
-   * 
+   *
    * @return throws UnsupportedOperationException
    * @throws UnsupportedOperationException always
    */
@@ -93,7 +93,7 @@ public class DoublesCurveNelsonSiegel
 
   /**
    * Throws an exception as there is no <i>y</i> data.
-   * 
+   *
    * @return throws UnsupportedOperationException
    * @throws UnsupportedOperationException always
    */

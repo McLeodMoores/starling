@@ -43,7 +43,6 @@ import com.opengamma.core.value.MarketDataRequirementNames;
 import com.opengamma.engine.function.config.FunctionConfigurationDefinition;
 import com.opengamma.engine.function.config.ParameterizedFunctionConfiguration;
 import com.opengamma.engine.function.config.StaticFunctionConfiguration;
-import com.opengamma.engine.marketdata.historical.HistoricalMarketDataProvider;
 import com.opengamma.engine.target.ComputationTargetType;
 import com.opengamma.engine.value.ComputedValueResult;
 import com.opengamma.engine.value.ValueProperties;
@@ -77,8 +76,10 @@ public class StarlingTestUtilsTest {
 
 
   /**
-   * Tests the output when a primitive is requested. The data is requested through a {@link HistoricalMarketDataProvider} and
-   * so an empty function configuration source can be used. The expected result is a single value for the market data identifier.
+   * Tests the output when a primitive is requested. The data is requested through a 
+   * {@link com.opengamma.engine.marketdata.historical.HistoricalMarketDataProvider} and
+   * so an empty function configuration source can be used. The expected result is a single 
+   * value for the market data identifier.
    * @throws Exception  if there is a problem during the calculation
    */
   @Test
@@ -181,11 +182,14 @@ public class StarlingTestUtilsTest {
     final FunctionConfigurationDefinition functionDefinition = new FunctionConfigurationDefinition("TEST_FUNCTIONS", Arrays.asList("TEST_FUNCTIONS"),
         Arrays.asList(new StaticFunctionConfiguration(StandardEquityModelFunction.class.getName())),
         Arrays.asList(
-            new ParameterizedFunctionConfiguration(PositionTradeScalingFunction.class.getName(), Collections.singletonList(ValueRequirementNames.PRESENT_VALUE)),
-            new ParameterizedFunctionConfiguration(PositionOrTradeScalingFunction.class.getName(), Collections.singletonList(ValueRequirementNames.PRESENT_VALUE)),
+            new ParameterizedFunctionConfiguration(PositionTradeScalingFunction.class.getName(), 
+                Collections.singletonList(ValueRequirementNames.PRESENT_VALUE)),
+            new ParameterizedFunctionConfiguration(PositionOrTradeScalingFunction.class.getName(), 
+                Collections.singletonList(ValueRequirementNames.PRESENT_VALUE)),
             new ParameterizedFunctionConfiguration(SummingFunction.class.getName(), Collections.singletonList(ValueRequirementNames.PRESENT_VALUE))
             ));
-    ConfigMasterUtils.storeByName(toolContext.getConfigMaster(), ConfigItem.of(functionDefinition, functionDefinition.getName(), FunctionConfigurationDefinition.class));
+    ConfigMasterUtils.storeByName(toolContext.getConfigMaster(), ConfigItem.of(functionDefinition, 
+        functionDefinition.getName(), FunctionConfigurationDefinition.class));
     final StatelessAnalyticService analyticService = new StatelessAnalyticService(toolContext.getPortfolioMaster(), toolContext.getPositionMaster(),
       toolContext.getPositionSource(), toolContext.getSecurityMaster(), toolContext.getSecuritySource(), toolContext.getConfigMaster(),
       toolContext.getConfigSource(), toolContext.getViewProcessor());
@@ -228,11 +232,14 @@ public class StarlingTestUtilsTest {
     final FunctionConfigurationDefinition functionDefinition = new FunctionConfigurationDefinition("TEST_FUNCTIONS", Arrays.asList("TEST_FUNCTIONS"),
         Arrays.asList(new StaticFunctionConfiguration(StandardEquityModelFunction.class.getName())),
         Arrays.asList(
-            new ParameterizedFunctionConfiguration(PositionTradeScalingFunction.class.getName(), Collections.singletonList(ValueRequirementNames.PRESENT_VALUE)),
-            new ParameterizedFunctionConfiguration(PositionOrTradeScalingFunction.class.getName(), Collections.singletonList(ValueRequirementNames.PRESENT_VALUE)),
+            new ParameterizedFunctionConfiguration(PositionTradeScalingFunction.class.getName(), 
+                Collections.singletonList(ValueRequirementNames.PRESENT_VALUE)),
+            new ParameterizedFunctionConfiguration(PositionOrTradeScalingFunction.class.getName(), 
+                Collections.singletonList(ValueRequirementNames.PRESENT_VALUE)),
             new ParameterizedFunctionConfiguration(SummingFunction.class.getName(), Collections.singletonList(ValueRequirementNames.PRESENT_VALUE))
             ));
-    ConfigMasterUtils.storeByName(toolContext.getConfigMaster(), ConfigItem.of(functionDefinition, functionDefinition.getName(), FunctionConfigurationDefinition.class));
+    ConfigMasterUtils.storeByName(toolContext.getConfigMaster(), ConfigItem.of(functionDefinition, functionDefinition.getName(), 
+        FunctionConfigurationDefinition.class));
     final StatelessAnalyticService analyticService = new StatelessAnalyticService(toolContext.getPortfolioMaster(), toolContext.getPositionMaster(),
       toolContext.getPositionSource(), toolContext.getSecurityMaster(), toolContext.getSecuritySource(), toolContext.getConfigMaster(),
       toolContext.getConfigSource(), toolContext.getViewProcessor());
@@ -294,11 +301,14 @@ public class StarlingTestUtilsTest {
     final FunctionConfigurationDefinition functionDefinition = new FunctionConfigurationDefinition("TEST_FUNCTIONS", Arrays.asList("TEST_FUNCTIONS"),
         Arrays.asList(new StaticFunctionConfiguration(StandardEquityModelFunction.class.getName())),
         Arrays.asList(
-            new ParameterizedFunctionConfiguration(PositionTradeScalingFunction.class.getName(), Collections.singletonList(ValueRequirementNames.PRESENT_VALUE)),
-            new ParameterizedFunctionConfiguration(PositionOrTradeScalingFunction.class.getName(), Collections.singletonList(ValueRequirementNames.PRESENT_VALUE)),
+            new ParameterizedFunctionConfiguration(PositionTradeScalingFunction.class.getName(), 
+                Collections.singletonList(ValueRequirementNames.PRESENT_VALUE)),
+            new ParameterizedFunctionConfiguration(PositionOrTradeScalingFunction.class.getName(), 
+                Collections.singletonList(ValueRequirementNames.PRESENT_VALUE)),
             new ParameterizedFunctionConfiguration(SummingFunction.class.getName(), Collections.singletonList(ValueRequirementNames.PRESENT_VALUE))
             ));
-    ConfigMasterUtils.storeByName(toolContext.getConfigMaster(), ConfigItem.of(functionDefinition, functionDefinition.getName(), FunctionConfigurationDefinition.class));
+    ConfigMasterUtils.storeByName(toolContext.getConfigMaster(), ConfigItem.of(functionDefinition, functionDefinition.getName(), 
+        FunctionConfigurationDefinition.class));
     final StatelessAnalyticService analyticService = new StatelessAnalyticService(toolContext.getPortfolioMaster(), toolContext.getPositionMaster(),
       toolContext.getPositionSource(), toolContext.getSecurityMaster(), toolContext.getSecuritySource(), toolContext.getConfigMaster(),
       toolContext.getConfigSource(), toolContext.getViewProcessor());
@@ -378,7 +388,8 @@ public class StarlingTestUtilsTest {
     viewDefinition.setMinFullCalculationPeriod(500L);
     final ViewCalculationConfiguration defaultCalculationConfig = new ViewCalculationConfiguration(viewDefinition, "Test");
     defaultCalculationConfig.addPortfolioRequirement(EquitySecurity.SECURITY_TYPE, ValueRequirementNames.PRESENT_VALUE,
-        ValueProperties.builder().with(ValuePropertyNames.AGGREGATION, MissingInputsFunction.AGGREGATION_STYLE_MISSING).withOptional(ValuePropertyNames.AGGREGATION).get());
+        ValueProperties.builder().with(ValuePropertyNames.AGGREGATION, 
+            MissingInputsFunction.AGGREGATION_STYLE_MISSING).withOptional(ValuePropertyNames.AGGREGATION).get());
     viewDefinition.addViewCalculationConfiguration(defaultCalculationConfig);
     ConfigMasterUtils.storeByName(configMaster, ConfigItem.of(viewDefinition, viewName));
     return viewDefinition;
@@ -386,12 +397,13 @@ public class StarlingTestUtilsTest {
 
   private static SimplePortfolio createSingleCurrencyEquityPortfolio(final ToolContext toolContext, final ExternalId tradeId, final ExternalId marketDataId,
       final long tradeQuantity, final long positionQuantity) {
-    return createSingleCurrencyEquityPortfolio(toolContext, Collections.singletonList(tradeId), Collections.singletonList(marketDataId), Collections.singletonList(tradeQuantity),
+    return createSingleCurrencyEquityPortfolio(toolContext, Collections.singletonList(tradeId), Collections.singletonList(marketDataId), 
+        Collections.singletonList(tradeQuantity),
         Collections.singletonList(positionQuantity));
   }
 
-  private static SimplePortfolio createSingleCurrencyEquityPortfolio(final ToolContext toolContext, final List<ExternalId> tradeIds, final List<ExternalId> marketDataIds,
-      final List<Long> tradeQuantities, final List<Long> positionQuantities) {
+  private static SimplePortfolio createSingleCurrencyEquityPortfolio(final ToolContext toolContext, final List<ExternalId> tradeIds, 
+      final List<ExternalId> marketDataIds, final List<Long> tradeQuantities, final List<Long> positionQuantities) {
     final int size = tradeIds.size();
     assertEquals(size, marketDataIds.size());
     assertEquals(size, tradeQuantities.size());
@@ -405,7 +417,8 @@ public class StarlingTestUtilsTest {
       final EquitySecurity security = new EquitySecurity("", "", marketDataId.getValue(), Currency.USD);
       security.addExternalId(marketDataId);
       security.addExternalId(tradeId);
-      final SimpleTrade trade = new SimpleTrade(security, BigDecimal.valueOf(tradeQuantity), new SimpleCounterparty(ExternalId.of("Test", "Ctpty")), LocalDate.now().minusDays(7), OffsetTime.now());
+      final SimpleTrade trade = new SimpleTrade(security, BigDecimal.valueOf(tradeQuantity), new SimpleCounterparty(ExternalId.of("Test", "Ctpty")), 
+          LocalDate.now().minusDays(7), OffsetTime.now());
       trade.addAttribute(ManageableTrade.meta().providerId().name(), tradeId.toString());
       final SimplePosition position = new SimplePosition();
       position.addAttribute(ManageableTrade.meta().providerId().name(), tradeId.toString());

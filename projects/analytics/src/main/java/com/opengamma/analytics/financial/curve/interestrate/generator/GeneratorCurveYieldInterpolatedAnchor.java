@@ -6,7 +6,7 @@
 package com.opengamma.analytics.financial.curve.interestrate.generator;
 
 import com.opengamma.analytics.financial.interestrate.InstrumentDerivative;
-import com.opengamma.analytics.financial.interestrate.InstrumentDerivativeVisitorAdapter;
+import com.opengamma.analytics.financial.interestrate.InstrumentDerivativeVisitor;
 import com.opengamma.analytics.financial.interestrate.YieldCurveBundle;
 import com.opengamma.analytics.financial.model.interestrate.curve.YieldAndDiscountCurve;
 import com.opengamma.analytics.financial.provider.description.interestrate.MulticurveProviderInterface;
@@ -15,8 +15,9 @@ import com.opengamma.util.ArgumentChecker;
 
 /**
  * Store the details and generate the required curve. The curve is interpolated on the rate (continuously compounded).
- * One extra node with value zero is added at the mid point between the first and second point. This extra anchor is required when two translation invariant curves descriptions
- * are added in a spread curve (two translations would create a singular system).
+ * One extra node with value zero is added at the mid point between the first and second point. This extra anchor is
+ * required when two translation invariant curves descriptions are added in a spread curve (two translations would
+ * create a singular system).
  * Only the lastTimeCalculator is stored. The node are computed from the instruments.
  */
 @SuppressWarnings("deprecation")
@@ -26,7 +27,7 @@ public class GeneratorCurveYieldInterpolatedAnchor extends GeneratorYDCurve {
   /**
    * Calculator of the node associated to instruments.
    */
-  private final InstrumentDerivativeVisitorAdapter<Object, Double> _nodeTimeCalculator;
+  private final InstrumentDerivativeVisitor<Object, Double> _nodeTimeCalculator;
   /**
    * The interpolator used for the curve.
    */
@@ -37,7 +38,7 @@ public class GeneratorCurveYieldInterpolatedAnchor extends GeneratorYDCurve {
    * @param nodeTimeCalculator Calculator of the node associated to instruments.
    * @param interpolator The interpolator used for the curve.
    */
-  public GeneratorCurveYieldInterpolatedAnchor(final InstrumentDerivativeVisitorAdapter<Object, Double> nodeTimeCalculator, final Interpolator1D interpolator) {
+  public GeneratorCurveYieldInterpolatedAnchor(final InstrumentDerivativeVisitor<Object, Double> nodeTimeCalculator, final Interpolator1D interpolator) {
     _nodeTimeCalculator = nodeTimeCalculator;
     _interpolator = interpolator;
   }

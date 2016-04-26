@@ -5,8 +5,8 @@
  */
 package com.opengamma.analytics.financial.provider.curve.discounting;
 
-import static com.opengamma.analytics.financial.provider.curve.discounting.DiscountingMethodCurveUtils.curveConstructionTest;
-import static org.testng.AssertJUnit.assertEquals;
+import static com.opengamma.analytics.financial.provider.curve.discounting.CurveBuildingTestUtils.curveConstructionTest;
+import static org.testng.Assert.assertEquals;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -23,16 +23,17 @@ import com.opengamma.analytics.financial.forex.method.FXMatrix;
 import com.opengamma.analytics.financial.instrument.InstrumentDefinition;
 import com.opengamma.analytics.financial.instrument.index.GeneratorAttribute;
 import com.opengamma.analytics.financial.instrument.index.GeneratorAttributeIR;
-import com.opengamma.analytics.financial.instrument.index.GeneratorDepositON;
 import com.opengamma.analytics.financial.instrument.index.GeneratorInstrument;
 import com.opengamma.analytics.financial.instrument.index.GeneratorSwapFixedCompoundedONCompounded;
 import com.opengamma.analytics.financial.instrument.index.GeneratorSwapFixedCompoundedONCompoundedMaster;
 import com.opengamma.analytics.financial.instrument.index.Index;
 import com.opengamma.analytics.financial.instrument.index.IndexON;
+import com.opengamma.analytics.financial.provider.calculator.discounting.PresentValueDiscountingCalculator;
 import com.opengamma.analytics.financial.provider.curve.CurveBuildingBlock;
 import com.opengamma.analytics.financial.provider.curve.CurveBuildingBlockBundle;
-import com.opengamma.analytics.financial.provider.curve.builder.CurveBuilderSetUp;
+import com.opengamma.analytics.financial.provider.curve.CurveBuildingTests;
 import com.opengamma.analytics.financial.provider.curve.builder.DiscountingMethodCurveBuilder;
+import com.opengamma.analytics.financial.provider.curve.builder.DiscountingMethodCurveSetUp;
 import com.opengamma.analytics.financial.provider.description.interestrate.MulticurveProviderDiscount;
 import com.opengamma.analytics.financial.provider.description.interestrate.MulticurveProviderInterface;
 import com.opengamma.analytics.financial.schedule.ScheduleCalculator;
@@ -50,25 +51,31 @@ import com.opengamma.util.time.DateUtils;
 import com.opengamma.util.tuple.Pair;
 
 /**
- * Test.
+ * Builds and tests a discounting BRL curve containing OIS.
  */
 @Test(groups = TestGroup.UNIT)
-public class BrlDiscountingOvernight2Test {
+public class BrlDiscountingOvernight2Test extends CurveBuildingTests {
+  /** The interpolator used for the curve */
   private static final Interpolator1D INTERPOLATOR = NamedInterpolator1dFactory.of(LinearInterpolator1dAdapter.NAME, FlatExtrapolator1dAdapter.NAME);
+  /** A calendar containing only Saturday and Sunday holidays */
   private static final CalendarAdapter RIO = new CalendarAdapter(WeekendWorkingDayCalendar.SATURDAY_SUNDAY);
+  /** The base FX matrix */
   private static final FXMatrix FX_MATRIX = new FXMatrix(Currency.BRL);
-  private static final GeneratorSwapFixedCompoundedONCompounded GENERATOR_OIS_BRL = GeneratorSwapFixedCompoundedONCompoundedMaster.getInstance().getGenerator("BRLCDI", RIO);
-  /** A CDI index */
+  /** Generates OIS swaps */
+  private static final GeneratorSwapFixedCompoundedONCompounded GENERATOR_OIS_BRL =
+      GeneratorSwapFixedCompoundedONCompoundedMaster.getInstance().getGenerator("BRLCDI", RIO);
+  /** The CDI index */
   private static final IndexON CDI_INDEX = GENERATOR_OIS_BRL.getIndex();
-  private static final GeneratorDepositON GENERATOR_DEPOSIT_ON_BRL = new GeneratorDepositON("BRL Deposit ON", Currency.BRL, RIO, CDI_INDEX.getDayCount());
-
+  /** The curve construction date */
   private static final ZonedDateTime NOW = DateUtils.getUTCDate(2013, 10, 7);
+  /** The previous day */
   private static final ZonedDateTime PREVIOUS_DATE = NOW.minusDays(1);
+  /** Fixing time series of overnight rates after today's fixing */
   private static final ZonedDateTimeDoubleTimeSeries TS_ON_BRL_WITH_TODAY =
       ImmutableZonedDateTimeDoubleTimeSeries.ofUTC(new ZonedDateTime[] { PREVIOUS_DATE, NOW }, new double[] { 0.0881, 0.0881 });
+  /** Fixing time series of overnight rates before today's fixing */
   private static final ZonedDateTimeDoubleTimeSeries TS_ON_BRL_WITHOUT_TODAY =
       ImmutableZonedDateTimeDoubleTimeSeries.ofUTC(new ZonedDateTime[] { PREVIOUS_DATE }, new double[] { 0.0881 });
-
   /** Fixing time series created before the valuation date fixing is available */
   private static final Map<Index, ZonedDateTimeDoubleTimeSeries> FIXING_TS_WITHOUT_TODAY = new HashMap<>();
   /** Fixing time series created after the valuation date fixing is available */
@@ -77,28 +84,33 @@ public class BrlDiscountingOvernight2Test {
     FIXING_TS_WITHOUT_TODAY.put(CDI_INDEX, TS_ON_BRL_WITHOUT_TODAY);
     FIXING_TS_WITH_TODAY.put(CDI_INDEX, TS_ON_BRL_WITH_TODAY);
   }
-
+  /** The curve name */
   private static final String CURVE_NAME_DSC_BRL = "BRL Dsc";
-
-  /** Market values for the dsc BRL curve */
-  private static final double[] DSC_BRL_MARKET_QUOTES = new double[] {0.092925, 0.09325, 0.09458, 0.09545, 0.09665, 0.09845, 0.1001, 0.10101, 0.10335, 0.10565, 0.10725, 0.10865, 0.1098, 0.11085,
-    0.1113, 0.11165, 0.11205, 0.1127 };
-  /** Generators for the dsc BRL curve */
-  private static final GeneratorInstrument<? extends GeneratorAttribute>[] DSC_BRL_GENERATORS = new GeneratorInstrument<?>[] {GENERATOR_OIS_BRL, GENERATOR_OIS_BRL,
-    GENERATOR_OIS_BRL, GENERATOR_OIS_BRL, GENERATOR_OIS_BRL, GENERATOR_OIS_BRL, GENERATOR_OIS_BRL, GENERATOR_OIS_BRL, GENERATOR_OIS_BRL, GENERATOR_OIS_BRL, GENERATOR_OIS_BRL, GENERATOR_OIS_BRL,
-    GENERATOR_OIS_BRL, GENERATOR_OIS_BRL, GENERATOR_OIS_BRL, GENERATOR_OIS_BRL, GENERATOR_OIS_BRL, GENERATOR_OIS_BRL };
-  /** Tenors for the dsc BRL curve */
-  private static final Period[] DSC_BRL_TENOR = new Period[] {Period.ofDays(23), Period.ofDays(54), Period.ofDays(85),
-    Period.ofDays(117), Period.ofDays(174), Period.ofDays(267), Period.ofDays(357), Period.ofDays(450), Period.ofDays(539), Period.ofDays(630), Period.ofDays(722), Period.ofDays(817),
-    Period.ofDays(996), Period.ofDays(1090), Period.ofDays(1181), Period.ofDays(1272), Period.ofDays(1363), Period.ofDays(1454) };
-  private static final GeneratorAttributeIR[] DSC_BRL_ATTR = new GeneratorAttributeIR[DSC_BRL_TENOR.length];
+  /** Market values for the curve */
+  private static final double[] DSC_BRL_MARKET_QUOTES =
+      new double[] {0.092925, 0.09325, 0.09458, 0.09545, 0.09665, 0.09845, 0.1001, 0.10101, 0.10335, 0.10565, 0.10725, 0.10865, 0.1098,
+          0.11085, 0.1113, 0.11165, 0.11205, 0.1127 };
+  /** Vanilla instrument generators */
+  private static final GeneratorInstrument<? extends GeneratorAttribute>[] DSC_BRL_GENERATORS = new GeneratorInstrument<?>[] {
+    GENERATOR_OIS_BRL, GENERATOR_OIS_BRL, GENERATOR_OIS_BRL, GENERATOR_OIS_BRL, GENERATOR_OIS_BRL, GENERATOR_OIS_BRL, GENERATOR_OIS_BRL,
+    GENERATOR_OIS_BRL, GENERATOR_OIS_BRL, GENERATOR_OIS_BRL, GENERATOR_OIS_BRL, GENERATOR_OIS_BRL, GENERATOR_OIS_BRL, GENERATOR_OIS_BRL,
+    GENERATOR_OIS_BRL, GENERATOR_OIS_BRL, GENERATOR_OIS_BRL, GENERATOR_OIS_BRL };
+  /** Attributes for the curve */
+  private static final GeneratorAttributeIR[] DSC_BRL_ATTR;
   static {
-    for (int i = 0; i < DSC_BRL_TENOR.length; i++) {
-      DSC_BRL_ATTR[i] = new GeneratorAttributeIR(DSC_BRL_TENOR[i]);
+    final Period[] tenors = new Period[] {
+        Period.ofDays(23), Period.ofDays(54), Period.ofDays(85), Period.ofDays(117), Period.ofDays(174), Period.ofDays(267), Period.ofDays(357),
+        Period.ofDays(450), Period.ofDays(539), Period.ofDays(630), Period.ofDays(722), Period.ofDays(817), Period.ofDays(996), Period.ofDays(1090),
+        Period.ofDays(1181), Period.ofDays(1272), Period.ofDays(1363), Period.ofDays(1454) };
+    DSC_BRL_ATTR = new GeneratorAttributeIR[tenors.length];
+    for (int i = 0; i < tenors.length; i++) {
+      DSC_BRL_ATTR[i] = new GeneratorAttributeIR(tenors[i]);
     }
   }
+  /** Already known market data - contains only an empty FX matrix */
   private static final MulticurveProviderDiscount KNOWN_DATA = new MulticurveProviderDiscount(FX_MATRIX);
-  private static final CurveBuilderSetUp BUILDER_FOR_TEST = DiscountingMethodCurveBuilder.setUp()
+  /** The curve builder */
+  private static final DiscountingMethodCurveSetUp BUILDER_FOR_TEST = DiscountingMethodCurveBuilder.setUp()
       .building(CURVE_NAME_DSC_BRL)
       .using(CURVE_NAME_DSC_BRL).forDiscounting(Currency.BRL).forOvernightIndex(CDI_INDEX).withInterpolator(INTERPOLATOR)
       .withKnownData(KNOWN_DATA);
@@ -107,16 +119,18 @@ public class BrlDiscountingOvernight2Test {
       BUILDER_FOR_TEST.withNode(CURVE_NAME_DSC_BRL, DSC_BRL_GENERATORS[i], DSC_BRL_ATTR[i], DSC_BRL_MARKET_QUOTES[i]);
     }
   }
+  /** Curves constructed before today's fixing */
   private static final Pair<MulticurveProviderDiscount, CurveBuildingBlockBundle> BEFORE_TODAYS_FIXING;
+  /** Curves constructed after today's fixing */
   private static final Pair<MulticurveProviderDiscount, CurveBuildingBlockBundle> AFTER_TODAYS_FIXING;
-  private static final double TOLERANCE_CAL = 1.0E-9;
   static {
     BEFORE_TODAYS_FIXING = BUILDER_FOR_TEST.copy().withFixingTs(FIXING_TS_WITHOUT_TODAY).getBuilder().buildCurves(NOW);
     AFTER_TODAYS_FIXING = BUILDER_FOR_TEST.copy().withFixingTs(FIXING_TS_WITH_TODAY).getBuilder().buildCurves(NOW);
   }
 
+  @Override
   @Test
-  public void testJacobianSizes() {
+  public void testJacobianSize() {
     final CurveBuildingBlockBundle fullJacobian = BEFORE_TODAYS_FIXING.getSecond();
     final Map<String, Pair<CurveBuildingBlock, DoubleMatrix2D>> fullJacobianData = fullJacobian.getData();
     assertEquals(fullJacobianData.size(), 1);
@@ -125,6 +139,7 @@ public class BrlDiscountingOvernight2Test {
     assertEquals(discountingJacobianMatrix.getNumberOfColumns(), DSC_BRL_MARKET_QUOTES.length);
   }
 
+  @Override
   @Test
   public void testInstrumentsInCurvePriceToZero() {
     final Map<String, InstrumentDefinition<?>[]> definitionsForCurvesBeforeFixing = BUILDER_FOR_TEST.copy()
@@ -136,39 +151,37 @@ public class BrlDiscountingOvernight2Test {
         .getBuilder()
         .getDefinitionsForCurves(NOW);
     curveConstructionTest(definitionsForCurvesBeforeFixing.get(CURVE_NAME_DSC_BRL),
-        BEFORE_TODAYS_FIXING.getFirst(), FIXING_TS_WITHOUT_TODAY, FX_MATRIX, NOW, Currency.BRL);
+        BEFORE_TODAYS_FIXING.getFirst(), PresentValueDiscountingCalculator.getInstance(), FIXING_TS_WITHOUT_TODAY, FX_MATRIX, NOW, Currency.BRL);
     curveConstructionTest(definitionsForCurvesAfterFixing.get(CURVE_NAME_DSC_BRL),
-        AFTER_TODAYS_FIXING.getFirst(), FIXING_TS_WITH_TODAY, FX_MATRIX, NOW, Currency.BRL);
+        AFTER_TODAYS_FIXING.getFirst(), PresentValueDiscountingCalculator.getInstance(), FIXING_TS_WITH_TODAY, FX_MATRIX, NOW, Currency.BRL);
   }
 
-//@Test
-//public void blockBundleDscFiniteDifferenceTest() {
-//  final int discountingCurveSize = DSC_BRL_MARKET_QUOTES.length;
-//  final CurveBuildingBlockBundle fullInverseJacobian = BEFORE_TODAYS_FIXING.getSecond();
-//  final double bump = 1e-6;
-//  for (int i = 0; i < discountingCurveSize; i++) {
-//    final Pair<MulticurveProviderDiscount, CurveBuildingBlockBundle> upResults = BUILDER_FOR_TEST.copy()
-//        .withFixingTs(FIXING_TS_WITHOUT_TODAY)
-//        .getBuilder()
-//        .replaceMarketQuote(CURVE_NAME_DSC_BRL, DSC_BRL_GENERATORS[i], DSC_BRL_ATTR[i], DSC_BRL_MARKET_QUOTES[i] + bump)
-//        .buildCurves(NOW);
-//    final Pair<MulticurveProviderDiscount, CurveBuildingBlockBundle> downResults = BUILDER_FOR_TEST.copy()
-//        .withFixingTs(FIXING_TS_WITHOUT_TODAY)
-//        .getBuilder()
-//        .replaceMarketQuote(CURVE_NAME_DSC_BRL, DSC_BRL_GENERATORS[i], DSC_BRL_ATTR[i], DSC_BRL_MARKET_QUOTES[i] - bump)
-//        .buildCurves(NOW);
-//    final Double[] upYields = ((YieldCurve) upResults.getFirst().getCurve(CURVE_NAME_DSC_BRL)).getCurve().getYData();
-//    final Double[] downYields = ((YieldCurve) downResults.getFirst().getCurve(CURVE_NAME_DSC_BRL)).getCurve().getYData();
-//    for (int j = 0; j < discountingCurveSize; j++) {
-//      final double dYielddQuote = (upYields[j] - downYields[j]) / (2 * bump);
-//      // note columns then rows tested
-//      final double expectedSensitivity = fullInverseJacobian.getBlock(CURVE_NAME_DSC_BRL).getSecond().getData()[j][i];
-//      assertEquals("Finite difference sensitivities for " + CURVE_NAME_DSC_BRL + ": column=" + i + " row=" + j,
-//          expectedSensitivity, dYielddQuote, bump);
-//    }
-//  }
-//}
+  /**
+   * Tests the sensitivities of the discounting curve to changes in the market data points used in the
+   * discounting curve.
+   */
+  @Override
+  @Test
+  public void testFiniteDifferenceSensitivities() {
+    //TODO
+//    assertFiniteDifferenceSensitivities(BEFORE_TODAYS_FIXING.getSecond(), FIXING_TS_WITHOUT_TODAY, BUILDER_FOR_TEST, CURVE_NAME_DSC_BRL,
+//        CURVE_NAME_DSC_BRL, NOW, DSC_BRL_GENERATORS, DSC_BRL_ATTR, DSC_BRL_MARKET_QUOTES, false);
+//    assertFiniteDifferenceSensitivities(AFTER_TODAYS_FIXING.getSecond(), FIXING_TS_WITH_TODAY, BUILDER_FOR_TEST, CURVE_NAME_DSC_BRL,
+//        CURVE_NAME_DSC_BRL, NOW, DSC_BRL_GENERATORS, DSC_BRL_ATTR, DSC_BRL_MARKET_QUOTES, false);
+  }
 
+  /**
+   * Only one set of curves is constructed, so no tests are possible.
+   */
+  @Override
+  @Test
+  public void testSameCurvesDifferentMethods() {
+    return;
+  }
+
+  /**
+   * Performance tests.
+   */
   @Test(enabled = false)
   public void performance() {
     long startTime, endTime;

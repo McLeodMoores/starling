@@ -182,7 +182,8 @@ public class ConfigManagerTest {
     final ConfigSource configSource = new MasterConfigSource(configMaster);
     final ConfigManager configManager = new ConfigManager(configMaster, configSource);
     // so that uid doesn't change on original
-    final ViewDefinition originalView = VIEW_DEFINITION.copyWith(VIEW_DEFINITION.getName(), VIEW_DEFINITION.getPortfolioId(), VIEW_DEFINITION.getMarketDataUser());
+    final ViewDefinition originalView = VIEW_DEFINITION.copyWith(VIEW_DEFINITION.getName(), VIEW_DEFINITION.getPortfolioId(), 
+        VIEW_DEFINITION.getMarketDataUser());
     final ViewDefinition originalStoredView = ConfigMasterUtils.storeByName(configMaster, ConfigItem.of(originalView)).getValue();
     // view key with uid set
     ViewKey originalStoredViewKey = ViewKey.of(originalStoredView);
@@ -193,7 +194,8 @@ public class ConfigManagerTest {
     ViewDefinition newStoredView = configSource.getConfig(ViewDefinition.class, newStoredViewKey.getUniqueId());
     assertEquals(newStoredView.getName(), VIEW_PREFIX + originalStoredView.getName());
     // reset name and uid and check everything else is the same
-    ViewDefinition newStoredViewWithOriginalName = newStoredView.copyWith(VIEW_DEFINITION.getName(), VIEW_DEFINITION.getPortfolioId(), VIEW_DEFINITION.getMarketDataUser());
+    ViewDefinition newStoredViewWithOriginalName = newStoredView.copyWith(VIEW_DEFINITION.getName(), VIEW_DEFINITION.getPortfolioId(), 
+        VIEW_DEFINITION.getMarketDataUser());
     newStoredViewWithOriginalName.setUniqueId(null);
     assertEquals(newStoredViewWithOriginalName, originalView);
     // view key without uid
@@ -223,7 +225,8 @@ public class ConfigManagerTest {
     // config master should not contain any view definitions
     ConfigSearchResult<ViewDefinition> result = configMaster.search(request);
     assertTrue(result.getDocuments().isEmpty());
-    final ViewDefinition originalView = VIEW_DEFINITION.copyWith(VIEW_DEFINITION.getName(), VIEW_DEFINITION.getPortfolioId(), VIEW_DEFINITION.getMarketDataUser());
+    final ViewDefinition originalView = VIEW_DEFINITION.copyWith(VIEW_DEFINITION.getName(), VIEW_DEFINITION.getPortfolioId(), 
+        VIEW_DEFINITION.getMarketDataUser());
     final ViewDefinition originalStoredView = ConfigMasterUtils.storeByName(configMaster, ConfigItem.of(originalView)).getValue();
     final ViewKey viewKey = ViewKey.of(originalStoredView);
     result = configMaster.search(request);
@@ -246,7 +249,8 @@ public class ConfigManagerTest {
     // config master should not contain any view definitions
     ConfigSearchResult<ViewDefinition> result = configMaster.search(request);
     assertTrue(result.getDocuments().isEmpty());
-    final ViewDefinition originalView = VIEW_DEFINITION.copyWith(VIEW_DEFINITION.getName(), VIEW_DEFINITION.getPortfolioId(), VIEW_DEFINITION.getMarketDataUser());
+    final ViewDefinition originalView = VIEW_DEFINITION.copyWith(VIEW_DEFINITION.getName(), VIEW_DEFINITION.getPortfolioId(), 
+        VIEW_DEFINITION.getMarketDataUser());
     final ViewDefinition originalStoredView = ConfigMasterUtils.storeByName(configMaster, ConfigItem.of(originalView)).getValue();
     final ViewKey viewKey = ViewKey.of(originalStoredView.getName());
     result = configMaster.search(request);

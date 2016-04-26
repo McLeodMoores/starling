@@ -29,7 +29,7 @@ public class GeneratorCurveAddYield extends GeneratorYDCurve {
   /**
    * If true, the rate of all curves, except the first one, will be subtracted from the first one. If false, all the rates are added.
    */
-  private final boolean _substract;
+  private final boolean _subtract;
   /**
    * The number of generators.
    */
@@ -44,7 +44,7 @@ public class GeneratorCurveAddYield extends GeneratorYDCurve {
     ArgumentChecker.notNull(generators, "Generators");
     _generators = generators;
     _nbGenerators = generators.length;
-    _substract = subtract;
+    _subtract = subtract;
   }
 
   @Override
@@ -67,7 +67,7 @@ public class GeneratorCurveAddYield extends GeneratorYDCurve {
       index += _generators[loopgen].getNumberOfParameter();
       underlyingCurves[loopgen] = _generators[loopgen].generateCurve(name + "-" + loopgen, paramCurve);
     }
-    return new YieldAndDiscountAddZeroSpreadCurve(name, _substract, underlyingCurves);
+    return new YieldAndDiscountAddZeroSpreadCurve(name, _subtract, underlyingCurves);
   }
 
   /**
@@ -112,7 +112,7 @@ public class GeneratorCurveAddYield extends GeneratorYDCurve {
     // Implementation note: The anchor is the previous instrument.
     System.arraycopy(instruments, nbDataUsed, instrumentsLast, 1, instruments.length - nbDataUsed);
     finalGenerator[_nbGenerators - 1] = _generators[_nbGenerators - 1].finalGenerator(instrumentsLast);
-    return new GeneratorCurveAddYield(finalGenerator, _substract);
+    return new GeneratorCurveAddYield(finalGenerator, _subtract);
   }
 
   @Override

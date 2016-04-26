@@ -1,14 +1,13 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.interestrate.curve;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import org.apache.commons.lang.ObjectUtils;
+import java.util.Objects;
 
 import com.opengamma.analytics.financial.interestrate.ContinuousInterestRate;
 import com.opengamma.analytics.financial.interestrate.InterestRate;
@@ -109,7 +108,6 @@ public class YieldPeriodicCurve extends YieldAndDiscountCurve {
   @Override
   public double[] getInterestRateParameterSensitivity(final double t) {
     final double rp = _curve.getYValue(t);
-    //    double rc = _compoundingPeriodsPerYear * Math.log(1 + rp / _compoundingPeriodsPerYear);
     final double rcBar = 1.0;
     final double rpBar = 1.0 / (1 + rp / _compoundingPeriodsPerYear) * rcBar;
     final Double[] drpdp = _curve.getYValueParameterSensitivity(t);
@@ -137,7 +135,7 @@ public class YieldPeriodicCurve extends YieldAndDiscountCurve {
   public Curve<Double, Double> getCurve() {
     return _curve;
   }
-  
+
   /**
    * Returns the number of compounding periods per year.
    * @return the number of compounding periods per year.
@@ -150,6 +148,7 @@ public class YieldPeriodicCurve extends YieldAndDiscountCurve {
   public int hashCode() {
     final int prime = 31;
     int result = 1;
+    result = prime * result + _compoundingPeriodsPerYear;
     result = prime * result + _curve.hashCode();
     return result;
   }
@@ -166,7 +165,15 @@ public class YieldPeriodicCurve extends YieldAndDiscountCurve {
       return false;
     }
     final YieldPeriodicCurve other = (YieldPeriodicCurve) obj;
-    return ObjectUtils.equals(_curve, other._curve);
+    if (_compoundingPeriodsPerYear != other._compoundingPeriodsPerYear) {
+      return false;
+    }
+    return Objects.equals(_curve, other._curve);
+  }
+
+  @Override
+  public String toString() {
+    return "PeriodicYieldCurve[compoundingPeriods=" + _compoundingPeriodsPerYear + ", " + _curve.toString() + "]";
   }
 
 }

@@ -5,8 +5,8 @@
  */
 package com.opengamma.analytics.financial.provider.curve.discounting;
 
-import static com.opengamma.analytics.financial.provider.curve.discounting.DiscountingMethodCurveUtils.curveConstructionTest;
-import static org.testng.AssertJUnit.assertEquals;
+import static com.opengamma.analytics.financial.provider.curve.discounting.CurveBuildingTestUtils.curveConstructionTest;
+import static org.testng.Assert.assertEquals;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -35,11 +35,13 @@ import com.opengamma.analytics.financial.instrument.index.IborIndex;
 import com.opengamma.analytics.financial.instrument.index.Index;
 import com.opengamma.analytics.financial.instrument.index.IndexON;
 import com.opengamma.analytics.financial.model.interestrate.curve.YieldCurve;
+import com.opengamma.analytics.financial.provider.calculator.discounting.PresentValueDiscountingCalculator;
 import com.opengamma.analytics.financial.provider.curve.CurveBuildingBlock;
 import com.opengamma.analytics.financial.provider.curve.CurveBuildingBlockBundle;
-import com.opengamma.analytics.financial.provider.curve.builder.CurveBuilderSetUp;
+import com.opengamma.analytics.financial.provider.curve.CurveBuildingTests;
 import com.opengamma.analytics.financial.provider.curve.builder.CurveSetUpInterface;
 import com.opengamma.analytics.financial.provider.curve.builder.DiscountingMethodCurveBuilder;
+import com.opengamma.analytics.financial.provider.curve.builder.DiscountingMethodCurveSetUp;
 import com.opengamma.analytics.financial.provider.description.interestrate.MulticurveProviderDiscount;
 import com.opengamma.analytics.financial.provider.description.interestrate.MulticurveProviderInterface;
 import com.opengamma.analytics.financial.schedule.ScheduleCalculator;
@@ -62,7 +64,7 @@ import com.opengamma.util.tuple.Pair;
  * Test.
  */
 @Test(groups = TestGroup.UNIT)
-public class Usd3mLiborKnownDiscountingTest {
+public class Usd3mLiborKnownDiscountingTest extends CurveBuildingTests {
   private static final Interpolator1D INTERPOLATOR = NamedInterpolator1dFactory.of(LinearInterpolator1dAdapter.NAME, FlatExtrapolator1dAdapter.NAME);
   private static final CalendarAdapter NYC = new CalendarAdapter(WeekendWorkingDayCalendar.SATURDAY_SUNDAY);
   private static final GeneratorSwapFixedON GENERATOR_OIS_USD = GeneratorSwapFixedONMaster.getInstance().getGenerator("USD1YFEDFUND", NYC);
@@ -132,7 +134,7 @@ public class Usd3mLiborKnownDiscountingTest {
     }
   }
   private static final FXMatrix FX_MATRIX = new FXMatrix(Currency.USD);
-  private static final CurveBuilderSetUp DSC_BUILDER = DiscountingMethodCurveBuilder.setUp()
+  private static final DiscountingMethodCurveSetUp DSC_BUILDER = DiscountingMethodCurveBuilder.setUp()
       .building(CURVE_NAME_DSC_USD)
       .using(CURVE_NAME_DSC_USD).forDiscounting(Currency.USD).withInterpolator(INTERPOLATOR)
       .withKnownData(new MulticurveProviderDiscount(FX_MATRIX));
@@ -161,8 +163,9 @@ public class Usd3mLiborKnownDiscountingTest {
   }
   private static final double TOLERANCE_CAL = 1.0E-9;
 
+  @Override
   @Test
-  public void testJacobianSizes() {
+  public void testJacobianSize() {
     // discounting curve fitted first
     CurveBuildingBlockBundle fullJacobian = DSC_BEFORE_FIXING.getSecond();
     Map<String, Pair<CurveBuildingBlock, DoubleMatrix2D>> fullJacobianData = fullJacobian.getData();
@@ -178,6 +181,7 @@ public class Usd3mLiborKnownDiscountingTest {
     assertEquals(liborJacobianMatrix.getNumberOfColumns(), DSC_USD_MARKET_QUOTES.length + FWD3_USD_MARKET_QUOTES.length);
   }
 
+  @Override
   @Test
   public void testInstrumentsInCurvePriceToZero() {
     Map<String, InstrumentDefinition<?>[]> definitionsForCurvesBeforeFixing = DSC_BUILDER.copy()
@@ -189,9 +193,9 @@ public class Usd3mLiborKnownDiscountingTest {
         .getBuilder()
         .getDefinitionsForCurves(NOW);
     curveConstructionTest(definitionsForCurvesBeforeFixing.get(CURVE_NAME_DSC_USD),
-        DSC_BEFORE_FIXING.getFirst(), FIXING_TS_WITHOUT_TODAY, FX_MATRIX, NOW, Currency.USD);
+        DSC_BEFORE_FIXING.getFirst(), PresentValueDiscountingCalculator.getInstance(), FIXING_TS_WITHOUT_TODAY, FX_MATRIX, NOW, Currency.USD);
     curveConstructionTest(definitionsForCurvesAfterFixing.get(CURVE_NAME_DSC_USD),
-        DSC_AFTER_FIXING.getFirst(), FIXING_TS_WITH_TODAY, FX_MATRIX, NOW, Currency.USD);
+        DSC_AFTER_FIXING.getFirst(), PresentValueDiscountingCalculator.getInstance(), FIXING_TS_WITH_TODAY, FX_MATRIX, NOW, Currency.USD);
     definitionsForCurvesBeforeFixing = LIBOR_BUILDER.copy()
         .withFixingTs(FIXING_TS_WITHOUT_TODAY)
         .getBuilder()
@@ -201,9 +205,9 @@ public class Usd3mLiborKnownDiscountingTest {
         .getBuilder()
         .getDefinitionsForCurves(NOW);
     curveConstructionTest(definitionsForCurvesBeforeFixing.get(CURVE_NAME_FWD3_USD),
-        LIBOR_BEFORE_FIXING.getFirst(), FIXING_TS_WITHOUT_TODAY, FX_MATRIX, NOW, Currency.USD);
+        LIBOR_BEFORE_FIXING.getFirst(), PresentValueDiscountingCalculator.getInstance(), FIXING_TS_WITHOUT_TODAY, FX_MATRIX, NOW, Currency.USD);
     curveConstructionTest(definitionsForCurvesAfterFixing.get(CURVE_NAME_FWD3_USD),
-        LIBOR_AFTER_FIXING.getFirst(), FIXING_TS_WITH_TODAY, FX_MATRIX, NOW, Currency.USD);
+        LIBOR_AFTER_FIXING.getFirst(), PresentValueDiscountingCalculator.getInstance(), FIXING_TS_WITH_TODAY, FX_MATRIX, NOW, Currency.USD);
   }
 
   @Test
@@ -228,8 +232,8 @@ public class Usd3mLiborKnownDiscountingTest {
         final double dYielddQuote = (upYields[j] - downYields[j]) / (2 * bump);
         // note columns then rows tested
         final double expectedSensitivity = fullInverseJacobian.getBlock(CURVE_NAME_DSC_USD).getSecond().getData()[j][i];
-        assertEquals("Finite difference sensitivities for " + CURVE_NAME_DSC_USD + ": column=" + i + " row=" + j,
-            expectedSensitivity, dYielddQuote, bump);
+        assertEquals(
+            expectedSensitivity, dYielddQuote, bump,"Finite difference sensitivities for " + CURVE_NAME_DSC_USD + ": column=" + i + " row=" + j);
       }
     }
   }
@@ -260,8 +264,8 @@ public class Usd3mLiborKnownDiscountingTest {
       for (int j = 0; j < liborCurveSize; j++) {
         final double dYielddQuote = (upYields[j] - downYields[j]) / (2 * bump);
         final double expectedSensitivity = fullInverseJacobian.getBlock(CURVE_NAME_FWD3_USD).getSecond().getData()[j][offset];
-        assertEquals("Finite difference sensitivities for " + CURVE_NAME_FWD3_USD + ": column=" + offset + " row=" + j,
-            expectedSensitivity, dYielddQuote, bump);
+        assertEquals(
+            expectedSensitivity, dYielddQuote, bump,"Finite difference sensitivities for " + CURVE_NAME_FWD3_USD + ": column=" + offset + " row=" + j);
       }
     }
   }
@@ -293,5 +297,17 @@ public class Usd3mLiborKnownDiscountingTest {
     } catch (final IOException e) {
       e.printStackTrace();
     }
+  }
+
+  @Override
+  public void testFiniteDifferenceSensitivities() {
+    //TODO
+//    fail();
+  }
+
+  @Override
+  public void testSameCurvesDifferentMethods() {
+    //TODO
+//    fail();
   }
 }

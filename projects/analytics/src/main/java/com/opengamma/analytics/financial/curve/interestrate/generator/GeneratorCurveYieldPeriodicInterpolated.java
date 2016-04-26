@@ -6,7 +6,7 @@
 package com.opengamma.analytics.financial.curve.interestrate.generator;
 
 import com.opengamma.analytics.financial.interestrate.InstrumentDerivative;
-import com.opengamma.analytics.financial.interestrate.InstrumentDerivativeVisitorAdapter;
+import com.opengamma.analytics.financial.interestrate.InstrumentDerivativeVisitor;
 import com.opengamma.analytics.financial.interestrate.YieldCurveBundle;
 import com.opengamma.analytics.financial.model.interestrate.curve.YieldAndDiscountCurve;
 import com.opengamma.analytics.financial.provider.description.interestrate.MulticurveProviderInterface;
@@ -14,7 +14,7 @@ import com.opengamma.analytics.math.interpolation.Interpolator1D;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Store the details and generate the required curve. The curve is interpolated on the rate (periodally compounded).
+ * Store the details and generate the required curve. The curve is interpolated on the rate (periodically compounded).
  * Only the lastTimeCalculator is stored. The node are computed from the instruments.
  */
 @SuppressWarnings("deprecation")
@@ -23,7 +23,7 @@ public class GeneratorCurveYieldPeriodicInterpolated extends GeneratorYDCurve {
   /**
    * Calculator of the node associated to instruments.
    */
-  private final InstrumentDerivativeVisitorAdapter<Object, Double> _nodeTimeCalculator;
+  private final InstrumentDerivativeVisitor<Object, Double> _nodeTimeCalculator;
   /**
    * The interpolator used for the curve.
    */
@@ -39,7 +39,7 @@ public class GeneratorCurveYieldPeriodicInterpolated extends GeneratorYDCurve {
    * @param compoundingPeriodsPerYear The number of composition periods per year for the storage curve (1 for annual, 2 for semi-annual, etc.).
    * @param interpolator The interpolator used for the curve.
    */
-  public GeneratorCurveYieldPeriodicInterpolated(final InstrumentDerivativeVisitorAdapter<Object, Double> nodeTimeCalculator, final int compoundingPeriodsPerYear, final Interpolator1D interpolator) {
+  public GeneratorCurveYieldPeriodicInterpolated(final InstrumentDerivativeVisitor<Object, Double> nodeTimeCalculator, final int compoundingPeriodsPerYear, final Interpolator1D interpolator) {
     _nodeTimeCalculator = nodeTimeCalculator;
     _interpolator = interpolator;
     _compoundingPeriodsPerYear = compoundingPeriodsPerYear;

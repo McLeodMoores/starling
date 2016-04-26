@@ -8,31 +8,36 @@ import java.util.Map;
 import com.opengamma.analytics.financial.instrument.index.GeneratorAttribute;
 import com.opengamma.analytics.financial.instrument.index.GeneratorInstrument;
 import com.opengamma.analytics.financial.instrument.index.Index;
-import com.opengamma.analytics.financial.provider.description.interestrate.MulticurveProviderDiscount;
+import com.opengamma.analytics.financial.provider.curve.CurveBuildingBlockBundle;
+import com.opengamma.analytics.financial.provider.description.interestrate.ParameterProviderInterface;
 import com.opengamma.timeseries.precise.zdt.ZonedDateTimeDoubleTimeSeries;
 
 /**
  *
  */
-public interface CurveSetUpInterface {
+public interface CurveSetUpInterface<T extends ParameterProviderInterface> {
 
-  public CurveBuilderSetUp building(final String... curveNames);
+  public CurveSetUpInterface<T> building(final String... curveNames);
 
-  public CurveBuilderSetUp buildingFirst(final String... curveNames);
+  public CurveSetUpInterface<T> buildingFirst(final String... curveNames);
 
-  public CurveBuilderSetUp thenBuilding(final String... curveNames);
+  public CurveSetUpInterface<T> thenBuilding(final String... curveNames);
 
-  public CurveTypeSetUpInterface using(final String curveName);
+  public CurveTypeSetUpInterface<T> using(final String curveName);
 
-  public CurveBuilderSetUp withNode(final String curveName, final GeneratorInstrument instrumentGenerator, final GeneratorAttribute attributeGenerator, final double marketData);
+  public CurveSetUpInterface<T> withNode(final String curveName, final GeneratorInstrument instrumentGenerator, final GeneratorAttribute attributeGenerator, final double marketData);
 
   //TODO add a withNode that takes definitions
 
-  public DiscountingMethodCurveBuilder getBuilder();
+  public CurveBuilder<T> getBuilder();
 
-  public CurveBuilderSetUp withKnownData(final MulticurveProviderDiscount knownData);
+  //TODO rename this
+  public CurveSetUpInterface<T> withKnownData(final T knownData);
 
-  public CurveBuilderSetUp withFixingTs(final Map<Index, ZonedDateTimeDoubleTimeSeries> fixingTs);
+  //TODO rename this
+  public CurveSetUpInterface<T> withKnownBundle(final CurveBuildingBlockBundle knownBundle);
 
-  public CurveBuilderSetUp copy();
+  public CurveSetUpInterface<T> withFixingTs(final Map<Index, ZonedDateTimeDoubleTimeSeries> fixingTs);
+
+  public CurveSetUpInterface<T> copy();
 }

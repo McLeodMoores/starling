@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.interestrate.curve;
@@ -121,7 +121,8 @@ public class YieldCurve extends YieldAndDiscountCurve {
     final YieldCurve other = (YieldCurve) obj;
     return ObjectUtils.equals(_curve, other._curve);
   }
-  
+
+  @Override
   public String toString() {
     return "YieldCurve[" + _curve.toString() + "]";
   }

@@ -1,11 +1,9 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.interestrate.curve;
-
-import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -13,6 +11,8 @@ import java.util.List;
 import java.util.Set;
 
 import com.opengamma.util.ArgumentChecker;
+
+import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
 
 /**
  * YieldAndDiscountCurve created by adding the zero-coupon continuously compounded rate of other curves.
@@ -26,7 +26,7 @@ public class YieldAndDiscountAddZeroSpreadCurve extends YieldAndDiscountCurve {
   /**
    * If -1 the rate of all curves, except the first one, will be subtracted from the first one. If +1, all the rates are added.
    */
-  private final double _sign;
+  private final int _sign;
 
   /**
    * Constructor from an array of curves.
@@ -38,7 +38,7 @@ public class YieldAndDiscountAddZeroSpreadCurve extends YieldAndDiscountCurve {
   public YieldAndDiscountAddZeroSpreadCurve(final String name, final boolean subtract, final YieldAndDiscountCurve... curves) {
     super(name);
     ArgumentChecker.notNull(curves, "Curves");
-    _sign = subtract ? -1.0 : 1.0;
+    _sign = subtract ? -1 : 1;
     _curves = curves;
   }
 
@@ -116,7 +116,7 @@ public class YieldAndDiscountAddZeroSpreadCurve extends YieldAndDiscountCurve {
 
   /**
    * Returns +1 if the curves are to be added to the base curve or -1 if the curves are to be subtracted
-   * from the base curve
+   * from the base curve.
    * @return +/-1 depending on the operation
    */
   public double getSign() {
@@ -130,7 +130,7 @@ public class YieldAndDiscountAddZeroSpreadCurve extends YieldAndDiscountCurve {
     result = prime * result + Arrays.hashCode(_curves);
     long temp;
     temp = Double.doubleToLongBits(_sign);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 
@@ -146,13 +146,24 @@ public class YieldAndDiscountAddZeroSpreadCurve extends YieldAndDiscountCurve {
       return false;
     }
     final YieldAndDiscountAddZeroSpreadCurve other = (YieldAndDiscountAddZeroSpreadCurve) obj;
-    if (!Arrays.equals(_curves, other._curves)) {
+    if (_sign != other._sign) {
       return false;
     }
-    if (Double.doubleToLongBits(_sign) != Double.doubleToLongBits(other._sign)) {
+    if (!Arrays.equals(_curves, other._curves)) {
       return false;
     }
     return true;
   }
 
+  @Override
+  public String toString() {
+    final StringBuilder sb = new StringBuilder("SpreadYieldCurve[");
+    sb.append(_sign == 1 ? "+, " : "-, ");
+    for (final YieldAndDiscountCurve curve : _curves) {
+      sb.append(curve.toString());
+      sb.append(", ");
+    }
+    sb.append("]");
+    return sb.toString();
+  }
 }

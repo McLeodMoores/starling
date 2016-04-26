@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.credit.isdastandardmodel.fastcalibration;
@@ -43,7 +43,7 @@ public class CreditCurveCalibrationTest extends com.opengamma.analytics.financia
   }
 
   @SuppressWarnings("unused")
-  @Test
+  @Test(enabled = false)
   public void speedTest() {
     final LocalDate tradeDate = LocalDate.of(2013, Month.SEPTEMBER, 5);
     final LocalDate spotDate = addWorkDays(tradeDate.minusDays(1), 1, DEFAULT_CALENDAR);
@@ -103,7 +103,7 @@ public class CreditCurveCalibrationTest extends com.opengamma.analytics.financia
   }
 
   @SuppressWarnings("unused")
-  @Test
+  @Test(enabled = false)
   public void test2() {
     final LocalDate tradeDate = LocalDate.of(2013, Month.SEPTEMBER, 5);
     final LocalDate spotDate = addWorkDays(tradeDate.minusDays(1), 1, DEFAULT_CALENDAR);
