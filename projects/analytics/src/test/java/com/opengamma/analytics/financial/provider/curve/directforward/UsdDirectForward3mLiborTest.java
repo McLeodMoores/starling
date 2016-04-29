@@ -124,6 +124,7 @@ public class UsdDirectForward3mLiborTest extends CurveBuildingTests {
       .thenBuilding(CURVE_NAME_FWD3_USD)
       .using(CURVE_NAME_FWD3_USD).forIborIndex(USD_3M_LIBOR_INDEX).withInterpolator(INTERPOLATOR)
       .withKnownData(KNOWN_DATA);
+  /** Market values for the discounting curve */
   private static final double[] DSC_USD_MARKET_QUOTES =
       new double[] {0.0400, 0.0400, 0.0400, 0.0400, 0.0400, 0.0400, 0.0400, 0.0400, 0.0400, 0.0400, 0.0400, 0.0400 };
   /** Vanilla instrument generators for the discounting curve */
