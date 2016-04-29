@@ -5,7 +5,7 @@
  */
 package com.opengamma.analytics.financial.provider.curve.discounting;
 
-import static com.opengamma.analytics.financial.provider.curve.discounting.CurveBuildingTestUtils.curveConstructionTest;
+import static com.opengamma.analytics.financial.provider.curve.CurveBuildingTestUtils.curveConstructionTest;
 import static org.testng.Assert.assertEquals;
 
 import java.io.FileWriter;

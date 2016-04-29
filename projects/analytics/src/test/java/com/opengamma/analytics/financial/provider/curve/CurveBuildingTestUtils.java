@@ -1,7 +1,7 @@
 /**
  * Copyright (C) 2016 - present McLeod Moores Software Limited.  All rights reserved.
  */
-package com.opengamma.analytics.financial.provider.curve.discounting;
+package com.opengamma.analytics.financial.provider.curve;
 
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertFalse;

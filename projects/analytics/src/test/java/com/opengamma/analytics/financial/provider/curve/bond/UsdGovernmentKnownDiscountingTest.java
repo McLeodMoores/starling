@@ -9,9 +9,9 @@
  */
 package com.opengamma.analytics.financial.provider.curve.bond;
 
-import static com.opengamma.analytics.financial.provider.curve.discounting.CurveBuildingTestUtils.assertFiniteDifferenceSensitivities;
-import static com.opengamma.analytics.financial.provider.curve.discounting.CurveBuildingTestUtils.assertNoSensitivities;
-import static com.opengamma.analytics.financial.provider.curve.discounting.CurveBuildingTestUtils.curveConstructionTest;
+import static com.opengamma.analytics.financial.provider.curve.CurveBuildingTestUtils.assertFiniteDifferenceSensitivities;
+import static com.opengamma.analytics.financial.provider.curve.CurveBuildingTestUtils.assertNoSensitivities;
+import static com.opengamma.analytics.financial.provider.curve.CurveBuildingTestUtils.curveConstructionTest;
 import static org.testng.Assert.assertEquals;
 
 import java.util.HashMap;
@@ -68,12 +68,9 @@ import com.opengamma.util.tuple.Pair;
 import com.opengamma.util.tuple.Pairs;
 
 /**
- * Builds and tests discounting and US government curves. The discounting curve is built first and then used when
- * constructing the government curve. This means that the government curve has sensitivities to both discounting and government
- * market data, but the discounting curve only has sensitivities to the discounting curve.
+ * Builds and tests a US government curve. The discounting curve is supplied to the fitting code.
  * <p>
- * The discounting curve contains the overnight deposit rate and OIS swaps. The government curve contains the overnight
- * deposit rate and bills.
+ * The government curve contains the overnight deposit rate and bills.
  */
 @Test(groups = TestGroup.UNIT)
 public class UsdGovernmentKnownDiscountingTest extends CurveBuildingTests {

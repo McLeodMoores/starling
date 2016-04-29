@@ -5,12 +5,12 @@
  */
 package com.opengamma.analytics.financial.provider.curve.hullwhite;
 
-import static com.opengamma.analytics.financial.provider.curve.discounting.CurveBuildingTestUtils.assertFiniteDifferenceSensitivities;
-import static com.opengamma.analytics.financial.provider.curve.discounting.CurveBuildingTestUtils.assertMatrixEquals;
-import static com.opengamma.analytics.financial.provider.curve.discounting.CurveBuildingTestUtils.assertNoSensitivities;
-import static com.opengamma.analytics.financial.provider.curve.discounting.CurveBuildingTestUtils.assertYieldCurvesEqual;
-import static com.opengamma.analytics.financial.provider.curve.discounting.CurveBuildingTestUtils.assertYieldCurvesNotEqual;
-import static com.opengamma.analytics.financial.provider.curve.discounting.CurveBuildingTestUtils.curveConstructionTest;
+import static com.opengamma.analytics.financial.provider.curve.CurveBuildingTestUtils.assertFiniteDifferenceSensitivities;
+import static com.opengamma.analytics.financial.provider.curve.CurveBuildingTestUtils.assertMatrixEquals;
+import static com.opengamma.analytics.financial.provider.curve.CurveBuildingTestUtils.assertNoSensitivities;
+import static com.opengamma.analytics.financial.provider.curve.CurveBuildingTestUtils.assertYieldCurvesEqual;
+import static com.opengamma.analytics.financial.provider.curve.CurveBuildingTestUtils.assertYieldCurvesNotEqual;
+import static com.opengamma.analytics.financial.provider.curve.CurveBuildingTestUtils.curveConstructionTest;
 import static org.testng.Assert.assertEquals;
 
 import java.io.FileWriter;
