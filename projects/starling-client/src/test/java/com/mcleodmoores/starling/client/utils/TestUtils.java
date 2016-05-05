@@ -1,3 +1,6 @@
+/**
+ * Copyright (C) 2016 - present McLeod Moores Software Limited.  All rights reserved.
+ */
 package com.mcleodmoores.starling.client.utils;
 
 import java.util.HashMap;
@@ -14,14 +17,28 @@ import com.opengamma.id.ExternalId;
 import com.opengamma.id.ExternalScheme;
 
 /**
- * Created by jim on 09/06/15.
+ * Utilities for unit tests.
  */
-public class TestUtils {
-  private static final String LOGGING_CONFIG="logback.configurationFile";
-  private static final String DEFAULT_LOGGING_FILE="com/opengamma/util/warn-logback.xml";
-
+public final class TestUtils {
+  /** 
+   * Id scheme name for unit tests.
+   */
   public static final ExternalScheme TEST_SUITE = ExternalScheme.of("TEST_SUITE");
+  /** The logging configuration file */
+  private static final String LOGGING_CONFIG = "logback.configurationFile";
+  /** The default logging set up */
+  private static final String DEFAULT_LOGGING_FILE = "com/opengamma/util/warn-logback.xml";
 
+  /**
+   * Restricted constructor for utilities class.
+   */
+  private TestUtils() {
+  }
+  
+  /**
+   * Gets a test tool context.
+   * @return  the test tool context
+   */
   public static ToolContext getToolContext() {
     if (System.getProperty(LOGGING_CONFIG) == null) {
       System.setProperty(LOGGING_CONFIG, DEFAULT_LOGGING_FILE);
@@ -35,6 +52,10 @@ public class TestUtils {
     return repository.getInstance(StarlingToolContext.class, "tool");
   }
 
+  /**
+   * Creates a test data set containing USD zero rates, IR futures, FX rates and AUD and NZD FX forward rates.
+   * @return  the test data set
+   */
   public static MarketDataSet createTestDataSet() {
     final MarketDataSet dataSet = MarketDataSet.empty();
     dataSet.put(MarketDataKey.of(ExternalId.of(TEST_SUITE, "USDZEROO/N").toBundle(), DataField.of("Market_Value")), 0.01);

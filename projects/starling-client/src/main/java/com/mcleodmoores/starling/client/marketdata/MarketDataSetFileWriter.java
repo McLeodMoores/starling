@@ -1,3 +1,6 @@
+/**
+ * Copyright (C) 2015 - present McLeod Moores Software Limited.  All rights reserved.
+ */
 package com.mcleodmoores.starling.client.marketdata;
 
 import java.io.BufferedWriter;

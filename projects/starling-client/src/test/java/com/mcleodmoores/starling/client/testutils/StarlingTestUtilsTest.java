@@ -69,7 +69,7 @@ import com.opengamma.util.money.Currency;
 import com.opengamma.util.test.TestGroup;
 
 /**
- *
+ * Tests the test utils.
  */
 @Test(groups = TestGroup.UNIT, singleThreaded = true)
 public class StarlingTestUtilsTest {
@@ -164,6 +164,11 @@ public class StarlingTestUtilsTest {
     toolContext.close();
   }
 
+  /**
+   * Tests the output when there is no market data available to calculate the equity present value. The result
+   * keys at all levels should contain nulls. 
+   * @throws Exception  if there is an unexpected problem
+   */
   @Test
   public void testNoMarketDataView() throws Exception {
     final StarlingToolContext toolContext = StarlingTestUtils.getToolContext();
@@ -213,6 +218,10 @@ public class StarlingTestUtilsTest {
     toolContext.close();
   }
 
+  /**
+   * Tests that the expected outputs are obtained when requesting the present value for a portfolio containing a single equity.
+   * @throws Exception  if there is an unexpected problem.
+   */
   @Test
   public void testSuccessfulSingleEquityView() throws Exception {
     final StarlingToolContext toolContext = StarlingTestUtils.getToolContext();
@@ -277,6 +286,11 @@ public class StarlingTestUtilsTest {
     toolContext.close();
   }
 
+  /**
+   * Tests that the expected outputs are obtained when requesting the present value for a portfolio of equities,
+   * and that positions are scaled correctly and that the portfolio present value is calculated.
+   * @throws Exception  if there is an unexpected problem.
+   */
   @Test
   public void testSuccessfulMultiEquityView() throws Exception {
     final StarlingToolContext toolContext = StarlingTestUtils.getToolContext();
@@ -377,6 +391,11 @@ public class StarlingTestUtilsTest {
     return viewDefinition;
   }
 
+  /**
+   * Creates and stores a view definition that requests the present value for equities.
+   * @param toolContext  the tool context
+   * @return  the view definition
+   */
   private static ViewDefinition createEquityPresentValueView(final ToolContext toolContext) {
     final ConfigMaster configMaster = ArgumentChecker.notNull(toolContext.getConfigMaster(), "configMaster");
     final String viewName = "Single Equity Test View";
@@ -395,6 +414,15 @@ public class StarlingTestUtilsTest {
     return viewDefinition;
   }
 
+  /**
+   * Creates and stores an equity portfolio containing only USD-denominated equities.
+   * @param toolContext  the tool context 
+   * @param tradeId  the trade id
+   * @param marketDataId  the equity price market data id
+   * @param tradeQuantity  the number of trades
+   * @param positionQuantity  the number of positions
+   * @return  a portfolio
+   */
   private static SimplePortfolio createSingleCurrencyEquityPortfolio(final ToolContext toolContext, final ExternalId tradeId, final ExternalId marketDataId,
       final long tradeQuantity, final long positionQuantity) {
     return createSingleCurrencyEquityPortfolio(toolContext, Collections.singletonList(tradeId), Collections.singletonList(marketDataId), 
@@ -402,6 +430,15 @@ public class StarlingTestUtilsTest {
         Collections.singletonList(positionQuantity));
   }
 
+  /**
+   * Creates and stores an equity portfolio containing only USD-denominated equities.
+   * @param toolContext  the tool context
+   * @param tradeIds  the trade ids
+   * @param marketDataIds  the equity price market data ids
+   * @param tradeQuantities  the number of trades 
+   * @param positionQuantities  the number of positions
+   * @return  a portfolio
+   */
   private static SimplePortfolio createSingleCurrencyEquityPortfolio(final ToolContext toolContext, final List<ExternalId> tradeIds, 
       final List<ExternalId> marketDataIds, final List<Long> tradeQuantities, final List<Long> positionQuantities) {
     final int size = tradeIds.size();

@@ -7,6 +7,7 @@ import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertNotEquals;
 import static org.testng.Assert.assertTrue;
+import static com.opengamma.core.value.MarketDataRequirementNames.MARKET_VALUE;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -16,10 +17,10 @@ import org.testng.annotations.Test;
 import org.threeten.bp.LocalDate;
 
 import com.opengamma.core.historicaltimeseries.HistoricalTimeSeriesAdjustment;
-import com.opengamma.core.value.MarketDataRequirementNames;
 import com.opengamma.id.ExternalId;
 import com.opengamma.timeseries.date.localdate.LocalDateDoubleTimeSeries;
 import com.opengamma.util.test.TestGroup;
+
 /**
  * Unit tests for {@link MarketDataInfo}.
  */
@@ -46,9 +47,9 @@ public class MarketDataInfoTest {
       .type(LocalDateDoubleTimeSeries.class)
       .build();
   /** A market data key */
-  private static final MarketDataKey KEY_1 = MarketDataKey.of(ExternalId.of("TEST", "AUDUSD").toBundle(), DataField.of(MarketDataRequirementNames.MARKET_VALUE));
+  private static final MarketDataKey KEY_1 = MarketDataKey.of(ExternalId.of("TEST", "AUDUSD").toBundle(), DataField.of(MARKET_VALUE));
   /** A market data key */
-  private static final MarketDataKey KEY_2 = MarketDataKey.of(ExternalId.of("TEST", "AUDEUR").toBundle(), DataField.of(MarketDataRequirementNames.MARKET_VALUE));
+  private static final MarketDataKey KEY_2 = MarketDataKey.of(ExternalId.of("TEST", "AUDEUR").toBundle(), DataField.of(MARKET_VALUE));
 
   /**
    * Tests the behaviour when the scalar data are null.
@@ -235,7 +236,8 @@ public class MarketDataInfoTest {
     final Map<MarketDataKey, MarketDataMetaData> mixedData = new HashMap<>();
     mixedData.put(KEY_1, ScalarMarketDataMetaData.INSTANCE);
     mixedData.put(KEY_2, TS_META_DATA_2);
-    assertEquals(MarketDataInfo.of(mixedData), MarketDataInfo.of(Collections.singletonMap(KEY_1, ScalarMarketDataMetaData.INSTANCE), Collections.singletonMap(KEY_2, TS_META_DATA_2)));
+    assertEquals(MarketDataInfo.of(mixedData), MarketDataInfo.of(Collections.singletonMap(KEY_1, ScalarMarketDataMetaData.INSTANCE), 
+        Collections.singletonMap(KEY_2, TS_META_DATA_2)));
     final MarketDataInfo infoFromMixedData = MarketDataInfo.empty();
     assertFalse(infoFromMixedData.addInfo(KEY_1, ScalarMarketDataMetaData.INSTANCE));
     assertFalse(infoFromMixedData.addInfo(KEY_2, TS_META_DATA_2));
@@ -287,11 +289,13 @@ public class MarketDataInfoTest {
    */
   @Test
   public void testHashCodeEquals() {
-    final MarketDataInfo info = MarketDataInfo.of(Collections.singletonMap(KEY_1, ScalarMarketDataMetaData.INSTANCE), Collections.singletonMap(KEY_2, TS_META_DATA_2));
+    final MarketDataInfo info = MarketDataInfo.of(Collections.singletonMap(KEY_1, ScalarMarketDataMetaData.INSTANCE), 
+        Collections.singletonMap(KEY_2, TS_META_DATA_2));
     assertEquals(info, info);
     assertNotEquals(null, info);
     assertNotEquals(MarketDataSet.empty(), info);
-    MarketDataInfo other = MarketDataInfo.of(Collections.singletonMap(KEY_1, ScalarMarketDataMetaData.INSTANCE), Collections.singletonMap(KEY_2, TS_META_DATA_2));
+    MarketDataInfo other = MarketDataInfo.of(Collections.singletonMap(KEY_1, ScalarMarketDataMetaData.INSTANCE), 
+        Collections.singletonMap(KEY_2, TS_META_DATA_2));
     assertEquals(other, info);
     assertEquals(other.hashCode(), info.hashCode());
     other = MarketDataInfo.of(Collections.singletonMap(KEY_1, ScalarMarketDataMetaData.INSTANCE), Collections.singletonMap(KEY_2, TS_META_DATA_1));

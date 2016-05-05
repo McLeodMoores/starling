@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2015 - present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.mcleodmoores.starling.client.portfolio;
 
@@ -57,13 +57,13 @@ public class FXForwardTrade implements ImmutableBean, Trade {
   private final LocalDate _tradeDate;
 
   /**
-   * The pay currency, a list of currencies can be established by using CurrencyFactory
+   * The pay currency, a list of currencies can be established by using CurrencyFactory.
    */
   @PropertyDefinition(validate = "notNull")
   private final Currency _payCurrency;
 
   /**
-   * The pay currency, a list of currencies can be established by using CurrencyFactory
+   * The pay currency, a list of currencies can be established by using CurrencyFactory.
    */
   @PropertyDefinition(validate = "notNull")
   private final Currency _receiveCurrency;

@@ -1,3 +1,6 @@
+/**
+ * Copyright (C) 2015 - present McLeod Moores Software Limited.  All rights reserved.
+ */
 package com.mcleodmoores.starling.client.utils;
 
 import java.util.HashMap;
@@ -63,6 +66,7 @@ public class PortfolioCopier {
       copy.setUniqueId(position.getUniqueId());
     }
     copy.setSecurityLink(copy(position.getSecurityLink()));
+    //TODO attributes not copied - why not?
     for (final com.opengamma.core.position.Trade trade : position.getTrades()) {
       copy.addTrade(copy((SimpleTrade) trade));
     }

@@ -104,7 +104,8 @@ public class ResultModelImplTest {
     final PortfolioManager manager = new PortfolioManager(PORTFOLIO_MASTER, POSITION_MASTER, POSITION_SOURCE, SECURITY_MASTER, SECURITY_SOURCE);
     final FinancialSecurity security = new EquitySecurity("EXCH", "EXCH", "A", Currency.USD);
     security.addExternalId(ExternalId.of("Test", "5"));
-    final Trade trade = new SimpleTrade(SimpleSecurityLink.of(security), BigDecimal.ONE, new SimpleCounterparty(ExternalId.of("Test", "Ctpty")), LocalDate.of(2016, 1, 1), OffsetTime.of(0, 0, 0, 0, ZoneOffset.UTC));
+    final Trade trade = new SimpleTrade(SimpleSecurityLink.of(security), BigDecimal.ONE, new SimpleCounterparty(ExternalId.of("Test", "Ctpty")), 
+        LocalDate.of(2016, 1, 1), OffsetTime.of(0, 0, 0, 0, ZoneOffset.UTC));
     trade.addAttribute(ResultModelImpl.CORRELATION_ID_ATTRIBUTE, CORRELATION_ID);
     final SimplePosition position = new SimplePosition();
     position.addTrade(trade);
@@ -128,21 +129,37 @@ public class ResultModelImplTest {
   /** The second result properties */
   private static final ValueProperties PROPERTIES_2 = ValueProperties.with(FUNCTION, "Function2").get();
   /** A portfolio node result */
-  private static final ComputedValueResult PORTFOLIO_NODE_RESULT_1 = new ComputedValueResult(new ComputedValue(ValueSpecification.of(PRESENT_VALUE, ComputationTargetSpecification.of(PORTFOLIO_NODE), PROPERTIES_1), 2000), EmptyAggregatedExecutionLog.INSTANCE);
+  private static final ComputedValueResult PORTFOLIO_NODE_RESULT_1 = new ComputedValueResult(
+      new ComputedValue(ValueSpecification.of(PRESENT_VALUE, ComputationTargetSpecification.of(PORTFOLIO_NODE), PROPERTIES_1), 2000), 
+        EmptyAggregatedExecutionLog.INSTANCE);
   /** A position result */
-  private static final ComputedValueResult POSITION_RESULT_1 = new ComputedValueResult(new ComputedValue(ValueSpecification.of(PRESENT_VALUE, ComputationTargetSpecification.of(POSITION), PROPERTIES_1), 200), EmptyAggregatedExecutionLog.INSTANCE);
+  private static final ComputedValueResult POSITION_RESULT_1 = new ComputedValueResult(
+      new ComputedValue(ValueSpecification.of(PRESENT_VALUE, ComputationTargetSpecification.of(POSITION), PROPERTIES_1), 200), 
+        EmptyAggregatedExecutionLog.INSTANCE);
   /** A trade result */
-  private static final ComputedValueResult TRADE_RESULT_1 = new ComputedValueResult(new ComputedValue(ValueSpecification.of(PRESENT_VALUE, ComputationTargetSpecification.of(TRADE), PROPERTIES_1), 20), EmptyAggregatedExecutionLog.INSTANCE);
+  private static final ComputedValueResult TRADE_RESULT_1 = new ComputedValueResult(
+      new ComputedValue(ValueSpecification.of(PRESENT_VALUE, ComputationTargetSpecification.of(TRADE), PROPERTIES_1), 20), 
+        EmptyAggregatedExecutionLog.INSTANCE);
   /** A trade result */
-  private static final ComputedValueResult TRADE_RESULT_2 = new ComputedValueResult(new ComputedValue(ValueSpecification.of(DELTA, ComputationTargetSpecification.of(TRADE), PROPERTIES_2), 3), EmptyAggregatedExecutionLog.INSTANCE);
+  private static final ComputedValueResult TRADE_RESULT_2 = new ComputedValueResult(
+      new ComputedValue(ValueSpecification.of(DELTA, ComputationTargetSpecification.of(TRADE), PROPERTIES_2), 3), 
+        EmptyAggregatedExecutionLog.INSTANCE);
   /** A security result */
-  private static final ComputedValueResult SECURITY_RESULT_1 = new ComputedValueResult(new ComputedValue(ValueSpecification.of(PRESENT_VALUE, ComputationTargetSpecification.of(SECURITY), PROPERTIES_1), 2), EmptyAggregatedExecutionLog.INSTANCE);
+  private static final ComputedValueResult SECURITY_RESULT_1 = new ComputedValueResult(
+      new ComputedValue(ValueSpecification.of(PRESENT_VALUE, ComputationTargetSpecification.of(SECURITY), PROPERTIES_1), 2), 
+        EmptyAggregatedExecutionLog.INSTANCE);
   /** A primitive result */
-  private static final ComputedValueResult PRIMITIVE_RESULT_1 = new ComputedValueResult(new ComputedValue(ValueSpecification.of(MARKET_VALUE, ComputationTargetType.PRIMITIVE, UniqueId.of("Test", "500"), PROPERTIES_1), 40), EmptyAggregatedExecutionLog.INSTANCE);
+  private static final ComputedValueResult PRIMITIVE_RESULT_1 = new ComputedValueResult(
+      new ComputedValue(ValueSpecification.of(MARKET_VALUE, ComputationTargetType.PRIMITIVE, UniqueId.of("Test", "500"), PROPERTIES_1), 40), 
+        EmptyAggregatedExecutionLog.INSTANCE);
   /** A null target result */
-  private static final ComputedValueResult NULL_TARGET_RESULT_1 = new ComputedValueResult(new ComputedValue(ValueSpecification.of(CURVE_MARKET_DATA, ComputationTargetSpecification.NULL, PROPERTIES_1), 4), EmptyAggregatedExecutionLog.INSTANCE);
+  private static final ComputedValueResult NULL_TARGET_RESULT_1 = new ComputedValueResult(
+      new ComputedValue(ValueSpecification.of(CURVE_MARKET_DATA, ComputationTargetSpecification.NULL, PROPERTIES_1), 4), 
+        EmptyAggregatedExecutionLog.INSTANCE);
   /** A legacy target result */
-  private static final ComputedValueResult LEGACY_TARGET_RESULT_2 = new ComputedValueResult(new ComputedValue(ValueSpecification.of(YIELD_CURVE, ComputationTargetType.CURRENCY, Currency.USD.getUniqueId(), PROPERTIES_2), 5), EmptyAggregatedExecutionLog.INSTANCE);
+  private static final ComputedValueResult LEGACY_TARGET_RESULT_2 = new ComputedValueResult(
+      new ComputedValue(ValueSpecification.of(YIELD_CURVE, ComputationTargetType.CURRENCY, Currency.USD.getUniqueId(), PROPERTIES_2), 5), 
+        EmptyAggregatedExecutionLog.INSTANCE);
   /** A view result model */
   private static final InMemoryViewComputationResultModel VIEW_RESULT_MODEL = new InMemoryViewComputationResultModel();
   /** The view name */
@@ -214,9 +231,11 @@ public class ResultModelImplTest {
     assertEquals(tradeTarget.size(), 1);
     assertEquals(tradeTarget.get(0), TradeTargetKey.of(ExternalId.parse(CORRELATION_ID)));
     // to check whether all target types are used
-    final List<TargetKey> specificRequirementTargets = model.getTargetKeys(EnumSet.of(ResultModel.TargetType.PRIMITIVE, ResultModel.TargetType.MARKET_DATA, ResultModel.TargetType.LEGACY));
+    final List<TargetKey> specificRequirementTargets = 
+        model.getTargetKeys(EnumSet.of(ResultModel.TargetType.PRIMITIVE, ResultModel.TargetType.MARKET_DATA, ResultModel.TargetType.LEGACY));
     assertEquals(specificRequirementTargets.size(), 4);
-    assertEqualsNoOrder(specificRequirementTargets, Arrays.asList(PrimitiveTargetKey.of(ComputationTargetSpecification.of(UniqueId.of("Test", "500"))), MarketDataTargetKey.instance(),
+    assertEqualsNoOrder(specificRequirementTargets, 
+        Arrays.asList(PrimitiveTargetKey.of(ComputationTargetSpecification.of(UniqueId.of("Test", "500"))), MarketDataTargetKey.instance(),
         LegacyTargetKey.of(ComputationTargetSpecification.of(SECURITY)), LegacyTargetKey.of(ComputationTargetSpecification.of(Currency.USD))));
   }
 
@@ -228,9 +247,21 @@ public class ResultModelImplTest {
     final ResultModelImpl model = new ResultModelImpl(VIEW_RESULT_MODEL, VIEW_DEFINITION, POSITION_SOURCE);
     final Set<ResultKey> marketDataResultKeys = model.getRequestedMarketDataResultKeys();
     assertEquals(marketDataResultKeys.size(), 3);
-    final ResultKey firstResult = ResultKey.of(CALCULATION_CONFIGURATION_NAME_1, ResultType.builder().valueRequirementName(PRIMITIVE_RESULT_1.getSpecification().getValueName()).properties(PRIMITIVE_RESULT_1.getSpecification().getProperties()).build());
-    final ResultKey secondResult = ResultKey.of(CALCULATION_CONFIGURATION_NAME_1, ResultType.builder().valueRequirementName(NULL_TARGET_RESULT_1.getSpecification().getValueName()).properties(NULL_TARGET_RESULT_1.getSpecification().getProperties()).build());
-    final ResultKey thirdResult = ResultKey.of(CALCULATION_CONFIGURATION_NAME_2, ResultType.builder().valueRequirementName(LEGACY_TARGET_RESULT_2.getSpecification().getValueName()).properties(LEGACY_TARGET_RESULT_2.getSpecification().getProperties()).build());
+    final ResultKey firstResult = ResultKey.of(CALCULATION_CONFIGURATION_NAME_1, 
+        ResultType.builder()
+        .valueRequirementName(PRIMITIVE_RESULT_1.getSpecification().getValueName())
+        .properties(PRIMITIVE_RESULT_1.getSpecification().getProperties())
+        .build());
+    final ResultKey secondResult = ResultKey.of(CALCULATION_CONFIGURATION_NAME_1, 
+        ResultType.builder()
+        .valueRequirementName(NULL_TARGET_RESULT_1.getSpecification().getValueName())
+        .properties(NULL_TARGET_RESULT_1.getSpecification().getProperties())
+        .build());
+    final ResultKey thirdResult = ResultKey.of(CALCULATION_CONFIGURATION_NAME_2, 
+        ResultType.builder()
+        .valueRequirementName(LEGACY_TARGET_RESULT_2.getSpecification().getValueName())
+        .properties(LEGACY_TARGET_RESULT_2.getSpecification().getProperties())
+        .build());
     assertEqualsNoOrder(marketDataResultKeys, Arrays.asList(firstResult, secondResult, thirdResult));
   }
 
@@ -242,8 +273,16 @@ public class ResultModelImplTest {
     final ResultModelImpl model = new ResultModelImpl(VIEW_RESULT_MODEL, VIEW_DEFINITION, POSITION_SOURCE);
     final Set<ResultKey> portfolioResultKeys = model.getRequestedPortfolioResultKeys();
     assertEquals(portfolioResultKeys.size(), 2);
-    final ResultKey firstResult = ResultKey.of(CALCULATION_CONFIGURATION_NAME_1, ResultType.builder().valueRequirementName(TRADE_RESULT_1.getSpecification().getValueName()).properties(TRADE_RESULT_1.getSpecification().getProperties()).build());
-    final ResultKey secondResult = ResultKey.of(CALCULATION_CONFIGURATION_NAME_2, ResultType.builder().valueRequirementName(TRADE_RESULT_2.getSpecification().getValueName()).properties(TRADE_RESULT_2.getSpecification().getProperties()).build());
+    final ResultKey firstResult = ResultKey.of(CALCULATION_CONFIGURATION_NAME_1, 
+        ResultType.builder()
+        .valueRequirementName(TRADE_RESULT_1.getSpecification().getValueName())
+        .properties(TRADE_RESULT_1.getSpecification().getProperties())
+        .build());
+    final ResultKey secondResult = ResultKey.of(CALCULATION_CONFIGURATION_NAME_2, 
+        ResultType.builder()
+        .valueRequirementName(TRADE_RESULT_2.getSpecification().getValueName())
+        .properties(TRADE_RESULT_2.getSpecification().getProperties())
+        .build());
     assertEqualsNoOrder(portfolioResultKeys, Arrays.asList(firstResult, secondResult));
   }
 
@@ -279,7 +318,8 @@ public class ResultModelImplTest {
     final PortfolioManager manager = new PortfolioManager(PORTFOLIO_MASTER, POSITION_MASTER, POSITION_SOURCE, SECURITY_MASTER, SECURITY_SOURCE);
     final FinancialSecurity security = new EquitySecurity("EXCH", "EXCH", "B", Currency.USD);
     security.addExternalId(ExternalId.of("Test", "50"));
-    final Trade trade = new SimpleTrade(SimpleSecurityLink.of(security), BigDecimal.ONE, new SimpleCounterparty(ExternalId.of("Test", "Ctpty")), LocalDate.of(2016, 1, 1), OffsetTime.of(0, 0, 0, 0, ZoneOffset.UTC));
+    final Trade trade = new SimpleTrade(SimpleSecurityLink.of(security), BigDecimal.ONE, new SimpleCounterparty(ExternalId.of("Test", "Ctpty")), 
+        LocalDate.of(2016, 1, 1), OffsetTime.of(0, 0, 0, 0, ZoneOffset.UTC));
     final SimplePosition position = new SimplePosition();
     position.addTrade(trade);
     position.setQuantity(BigDecimal.ONE);
@@ -297,8 +337,12 @@ public class ResultModelImplTest {
     final Trade tradeWithUid = positionWithUid.getTrades().iterator().next();
     final InMemoryViewComputationResultModel viewResultModel = new InMemoryViewComputationResultModel();
     final ViewDefinition viewDefinition = new ViewDefinition("View No Correlation Ids", portfolioWithUid.getUniqueId(), UserPrincipal.getLocalUser());
-    viewResultModel.addValue(CALCULATION_CONFIGURATION_NAME_1, new ComputedValueResult(new ComputedValue(ValueSpecification.of(PRESENT_VALUE, ComputationTargetSpecification.of(positionWithUid), PROPERTIES_1), 200), EmptyAggregatedExecutionLog.INSTANCE));
-    viewResultModel.addValue(CALCULATION_CONFIGURATION_NAME_1, new ComputedValueResult(new ComputedValue(ValueSpecification.of(PRESENT_VALUE, ComputationTargetSpecification.of(tradeWithUid), PROPERTIES_1), 20), EmptyAggregatedExecutionLog.INSTANCE));
+    viewResultModel.addValue(CALCULATION_CONFIGURATION_NAME_1, new ComputedValueResult(
+        new ComputedValue(ValueSpecification.of(PRESENT_VALUE, ComputationTargetSpecification.of(positionWithUid), PROPERTIES_1), 200), 
+          EmptyAggregatedExecutionLog.INSTANCE));
+    viewResultModel.addValue(CALCULATION_CONFIGURATION_NAME_1, new ComputedValueResult(
+        new ComputedValue(ValueSpecification.of(PRESENT_VALUE, ComputationTargetSpecification.of(tradeWithUid), PROPERTIES_1), 20), 
+          EmptyAggregatedExecutionLog.INSTANCE));
     final ViewCalculationConfiguration calculationConfig1 = new ViewCalculationConfiguration(VIEW_DEFINITION, CALCULATION_CONFIGURATION_NAME_1);
     calculationConfig1.addPortfolioRequirement(EquitySecurity.SECURITY_TYPE, PRESENT_VALUE, PROPERTIES_1);
     viewDefinition.addViewCalculationConfiguration(calculationConfig1);

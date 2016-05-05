@@ -1,3 +1,6 @@
+/**
+ * Copyright (C) 2016 - present McLeod Moores Software Limited.  All rights reserved.
+ */
 package com.mcleodmoores.starling.client.marketdata;
 
 import org.testng.Assert;
@@ -5,29 +8,43 @@ import org.testng.annotations.Test;
 
 import com.opengamma.id.ExternalId;
 import com.opengamma.id.ExternalIdBundle;
+import com.opengamma.util.test.TestGroup;
 
 /**
- * Created by jim on 08/06/15.
+ * Unit tests for {@link MarketDataKey}.
  */
+@Test(groups = TestGroup.UNIT)
 public class MarketDataKeyTest {
 
+  /**
+   * Tests that null ids are not allowed.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNull() {
     MarketDataKey.of(null);
   }
 
+  /**
+   * Tests that null ids are not allowed.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNulls() {
     MarketDataKey.of(null, null);
   }
 
+  /**
+   * Tests that null data fields are not allowed.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNull2() {
     MarketDataKey.of(ExternalIdBundle.EMPTY, null);
   }
 
+  /**
+   * Tests the static constructor.
+   */
   @Test
-  public void testOf() throws Exception {
+  public void testOf() {
     final MarketDataKey key = MarketDataKey.of(ExternalIdBundle.EMPTY);
     Assert.assertNotNull(key);
     Assert.assertNotNull(key.getExternalIdBundle());
@@ -42,8 +59,11 @@ public class MarketDataKeyTest {
     Assert.assertEquals(DataSource.DEFAULT, key.getSource());
   }
 
+  /**
+   * Tests the static constructor.
+   */
   @Test
-  public void testOf1() throws Exception {
+  public void testOf1() {
     final MarketDataKey key = MarketDataKey.of(ExternalIdBundle.EMPTY, DataField.of("LAST_PRICE"));
     Assert.assertNotNull(key);
     Assert.assertNotNull(key.getExternalIdBundle());
@@ -58,6 +78,9 @@ public class MarketDataKeyTest {
     Assert.assertEquals(DataSource.DEFAULT, key.getSource());
   }
 
+  /**
+   * Tests that the key cannot be built with no fields set.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testBuilderNull() {
     final MarketDataKey.Builder builder = MarketDataKey.builder();
@@ -65,6 +88,9 @@ public class MarketDataKeyTest {
   }
 
 
+  /**
+   * Tests that the key requires an id before it can be built.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testBuilderExternalIdNull() {
     final MarketDataKey.Builder builder = MarketDataKey.builder();
@@ -72,6 +98,9 @@ public class MarketDataKeyTest {
     builder.build();
   }
 
+  /**
+   * Tests that the key requires a non-null data field before it can be built.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testBuilderFieldNull() {
     final MarketDataKey.Builder builder = MarketDataKey.builder();
@@ -80,6 +109,9 @@ public class MarketDataKeyTest {
     builder.build();
   }
 
+  /**
+   * Tests that the key requires a non-null provider before it can be built.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testBuilderProviderNull() {
     final MarketDataKey.Builder builder = MarketDataKey.builder();
@@ -88,6 +120,9 @@ public class MarketDataKeyTest {
     builder.build();
   }
 
+  /**
+   * Tests that the key requires a non-null source before it can be built.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testBuilderSourceNull() {
     final MarketDataKey.Builder builder = MarketDataKey.builder();
@@ -96,6 +131,9 @@ public class MarketDataKeyTest {
     builder.build();
   }
 
+  /**
+   * Tests that the key requires a non-null normalizer before it can be built.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testBuilderNormalizerNull() {
     final MarketDataKey.Builder builder = MarketDataKey.builder();
@@ -104,6 +142,10 @@ public class MarketDataKeyTest {
     builder.build();
   }
 
+  /**
+   * Tests the default values used in the builder.
+   */
+  @Test
   public void testBuilderDefaults() {
     final MarketDataKey.Builder builder = MarketDataKey.builder();
     builder.externalIdBundle(ExternalIdBundle.EMPTY);
@@ -115,8 +157,11 @@ public class MarketDataKeyTest {
     Assert.assertEquals(key.getNormalizer(), UnitNormalizer.INSTANCE);
   }
 
+  /**
+   * Tests the toBuilder() method.
+   */
   @Test
-  public void testToBuilder() throws Exception {
+  public void testToBuilder() {
     final MarketDataKey.Builder builder = MarketDataKey.builder();
     builder.externalIdBundle(ExternalIdBundle.EMPTY);
     MarketDataKey key = builder.build();
@@ -132,8 +177,11 @@ public class MarketDataKeyTest {
     Assert.assertEquals(key.getNormalizer(), UnitNormalizer.INSTANCE.getName());
   }
 
+  /**
+   * Tests the equals method.
+   */
   @Test
-  public void testEquals() throws Exception {
+  public void testEquals() {
     final MarketDataKey key1 = MarketDataKey.builder().externalIdBundle(ExternalIdBundle.EMPTY).build();
     Assert.assertEquals(key1, key1);
 
@@ -166,8 +214,11 @@ public class MarketDataKeyTest {
     Assert.assertNotEquals(key2, new Object());
   }
 
+  /**
+   * Tests the hashcode.
+   */
   @Test
-  public void testHashCode() throws Exception {
+  public void testHashCode() {
     final MarketDataKey key1 = MarketDataKey.builder().externalIdBundle(ExternalIdBundle.EMPTY).build();
     Assert.assertEquals(key1.hashCode(), key1.hashCode());
 
@@ -189,15 +240,20 @@ public class MarketDataKeyTest {
     Assert.assertEquals(key2.hashCode(), key2a.hashCode());
   }
 
+  /**
+   * Tests the toString() method.
+   */
   @Test
-  public void testToString() throws Exception {
+  public void testToString() {
     final MarketDataKey key = MarketDataKey.builder()
         .provider(DataProvider.of("PROVIDER"))
         .source(DataSource.of("SOURCE"))
         .field(DataField.of("FIELD"))
         .externalIdBundle(ExternalIdBundle.of(ExternalId.of("EXTERNAL", "ID"))).build();
-    Assert.assertEquals(key.toString(), "MarketDataKey{externalIdBundle=Bundle[EXTERNAL~ID], field=FIELD, source=SOURCE, provider=PROVIDER, normalizer=UnitNormalizer}");
+    Assert.assertEquals(key.toString(), 
+        "MarketDataKey{externalIdBundle=Bundle[EXTERNAL~ID], field=FIELD, source=SOURCE, provider=PROVIDER, normalizer=UnitNormalizer}");
     final MarketDataKey key1 = MarketDataKey.builder().externalIdBundle(ExternalIdBundle.EMPTY).build();
-    Assert.assertEquals(key1.toString(), "MarketDataKey{externalIdBundle=Bundle[], field=Market_Value, source=DEFAULT, provider=DEFAULT, normalizer=UnitNormalizer}");
+    Assert.assertEquals(key1.toString(), 
+        "MarketDataKey{externalIdBundle=Bundle[], field=Market_Value, source=DEFAULT, provider=DEFAULT, normalizer=UnitNormalizer}");
   }
 }

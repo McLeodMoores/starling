@@ -45,11 +45,12 @@ import com.opengamma.master.security.SecurityMaster;
 import com.opengamma.master.security.impl.InMemorySecurityMaster;
 import com.opengamma.master.security.impl.MasterSecuritySource;
 import com.opengamma.util.money.Currency;
+import com.opengamma.util.test.TestGroup;
 
 /**
  * Unit tests for {@link PortfolioManager}.
  */
-@Test(singleThreaded = true)
+@Test(groups = TestGroup.UNIT, singleThreaded = true)
 public class PortfolioManagerTest {
   /** The tool context */
   private ToolContext _toolContext;
@@ -111,11 +112,15 @@ public class PortfolioManagerTest {
     Assert.assertEquals(testPortfolio1.getRootNode().getName(), resolvedPortfolio1.getRootNode().getName());
     Assert.assertEquals(testPortfolio1.getRootNode().getChildNodes().size(), resolvedPortfolio1.getRootNode().getChildNodes().size());
     Assert.assertEquals(testPortfolio1.getRootNode().getChildNodes().get(0).getName(), resolvedPortfolio1.getRootNode().getChildNodes().get(0).getName());
-    Assert.assertEquals(testPortfolio1.getRootNode().getChildNodes().get(0).getPositions().size(), resolvedPortfolio1.getRootNode().getChildNodes().get(0).getPositions().size());
-    Assert.assertEquals(testPortfolio1.getRootNode().getChildNodes().get(0).getPositions().get(0).getQuantity(), resolvedPortfolio1.getRootNode().getChildNodes().get(0).getPositions().get(0).getQuantity());
-    Assert.assertEquals(testPortfolio1.getRootNode().getChildNodes().get(0).getPositions().get(0).getAttributes(), resolvedPortfolio1.getRootNode().getChildNodes().get(0).getPositions().get(0).getAttributes());
+    Assert.assertEquals(testPortfolio1.getRootNode().getChildNodes().get(0).getPositions().size(), 
+        resolvedPortfolio1.getRootNode().getChildNodes().get(0).getPositions().size());
+    Assert.assertEquals(testPortfolio1.getRootNode().getChildNodes().get(0).getPositions().get(0).getQuantity(), 
+        resolvedPortfolio1.getRootNode().getChildNodes().get(0).getPositions().get(0).getQuantity());
+    Assert.assertEquals(testPortfolio1.getRootNode().getChildNodes().get(0).getPositions().get(0).getAttributes(), 
+        resolvedPortfolio1.getRootNode().getChildNodes().get(0).getPositions().get(0).getAttributes());
     Assert.assertTrue(JodaBeanUtils.equalIgnoring((ManageableSecurity) testPortfolio1.getRootNode().getChildNodes().get(0).getPositions().get(0).getSecurity(),
-        (ManageableSecurity) resolvedPortfolio1.getRootNode().getChildNodes().get(0).getPositions().get(0).getSecurity(), ManageableSecurity.meta().uniqueId()));
+        (ManageableSecurity) resolvedPortfolio1.getRootNode().getChildNodes().get(0).getPositions().get(0).getSecurity(), 
+          ManageableSecurity.meta().uniqueId()));
     portfolioManager.savePortfolio(makeTestPortfolio("Test2", "002"));
   }
 
@@ -223,7 +228,8 @@ public class PortfolioManagerTest {
   @Test
   public void testPortfolioAuthorization() {
     final Portfolio portfolio = makeTestPortfolio("TestAuthorization", "001");
-    final PortfolioWriter writer = new PortfolioWriter(true, true, _toolContext.getPortfolioMaster(), _toolContext.getPositionMaster(), _toolContext.getSecurityMaster());
+    final PortfolioWriter writer = new PortfolioWriter(true, true, _toolContext.getPortfolioMaster(), _toolContext.getPositionMaster(), 
+        _toolContext.getSecurityMaster());
     final UniqueId id = writer.write(portfolio);
     final PortfolioDocument document = _toolContext.getPortfolioMaster().get(id);
     document.setVisibility(DocumentVisibility.HIDDEN);
@@ -570,7 +576,8 @@ public class PortfolioManagerTest {
     final SimplePosition savedPosition = (SimplePosition) savedPortfolio.getRootNode().getChildNodes().get(0).getPositions().get(0);
     final SimpleTrade savedTrade = (SimpleTrade) savedPosition.getTrades().iterator().next();
     final FXForwardSecurity savedSecurity = (FXForwardSecurity) savedTrade.getSecurity();
-    portfolioManager.delete(portfolioKey, EnumSet.of(PortfolioManager.DeleteScope.PORTFOLIO, PortfolioManager.DeleteScope.POSITION, PortfolioManager.DeleteScope.SECURITY));
+    portfolioManager.delete(portfolioKey, EnumSet.of(PortfolioManager.DeleteScope.PORTFOLIO, PortfolioManager.DeleteScope.POSITION, 
+        PortfolioManager.DeleteScope.SECURITY));
     try {
       positionSource.getPosition(savedPosition.getUniqueId());
       Assert.fail();
@@ -609,7 +616,8 @@ public class PortfolioManagerTest {
     final SimplePosition savedPosition = (SimplePosition) savedPortfolio.getRootNode().getChildNodes().get(0).getPositions().get(0);
     final SimpleTrade savedTrade = (SimpleTrade) savedPosition.getTrades().iterator().next();
     final FXForwardSecurity savedSecurity = (FXForwardSecurity) savedTrade.getSecurity();
-    portfolioManager.delete(PortfolioKey.of(portfolioKey.getName()), EnumSet.of(PortfolioManager.DeleteScope.PORTFOLIO, PortfolioManager.DeleteScope.POSITION, PortfolioManager.DeleteScope.SECURITY));
+    portfolioManager.delete(PortfolioKey.of(portfolioKey.getName()), EnumSet.of(PortfolioManager.DeleteScope.PORTFOLIO, PortfolioManager.DeleteScope.POSITION, 
+        PortfolioManager.DeleteScope.SECURITY));
     try {
       positionSource.getPosition(savedPosition.getUniqueId());
       Assert.fail();

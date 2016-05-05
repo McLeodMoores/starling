@@ -62,11 +62,38 @@ public class MarketDataFileParserTest {
     final FileReader reader = new FileReader(inputFile);
     final MarketDataSet dataSet = PARSER.readFile(reader);
     assertEquals(dataSet.size(), 5);
-    assertEquals(dataSet.get(MarketDataKey.builder().externalIdBundle(ExternalIdBundle.of(ExternalScheme.of("TEST"), "ID1")).field(DataField.of("Market_Value")).source(DataSource.of("TEST_SOURCE")).provider(DataProvider.DEFAULT).normalizer(UnitNormalizer.INSTANCE.getName()).build()), 100.);
-    assertEquals(dataSet.get(MarketDataKey.builder().externalIdBundle(ExternalIdBundle.of(ExternalScheme.of("TEST"), "ID2")).field(DataField.of("Market_Value")).source(DataSource.of("TEST_SOURCE")).provider(DataProvider.DEFAULT).normalizer(UnitNormalizer.INSTANCE.getName()).build()), 200.);
-    assertEquals(dataSet.get(MarketDataKey.builder().externalIdBundle(ExternalIdBundle.of(ExternalScheme.of("TEST"), "ID3")).field(DataField.of("Market_Value")).source(DataSource.of("TEST_SOURCE")).provider(DataProvider.DEFAULT).normalizer(UnitNormalizer.INSTANCE.getName()).build()), 300.);
-    assertEquals(dataSet.get(MarketDataKey.builder().externalIdBundle(ExternalIdBundle.of(ExternalScheme.of("TEST"), "ID4")).field(DataField.of("Market_Value")).source(DataSource.of("TEST_SOURCE")).provider(DataProvider.DEFAULT).normalizer(UnitNormalizer.INSTANCE.getName()).build()), 400.);
-    assertEquals(dataSet.get(MarketDataKey.builder().externalIdBundle(ExternalIdBundle.of(ExternalScheme.of("TEST"), "ID5")).field(DataField.of("Market_Value")).source(DataSource.of("TEST_SOURCE")).provider(DataProvider.DEFAULT).normalizer(UnitNormalizer.INSTANCE.getName()).build()), 500.);
+    assertEquals(dataSet.get(MarketDataKey.builder()
+        .externalIdBundle(ExternalIdBundle.of(ExternalScheme.of("TEST"), "ID1"))
+        .field(DataField.of("Market_Value"))
+        .source(DataSource.of("TEST_SOURCE"))
+        .provider(DataProvider.DEFAULT)
+        .normalizer(UnitNormalizer.INSTANCE.getName())
+        .build()), 100.);
+    assertEquals(dataSet.get(MarketDataKey.builder()
+        .externalIdBundle(ExternalIdBundle.of(ExternalScheme.of("TEST"), "ID2"))
+        .field(DataField.of("Market_Value"))
+        .source(DataSource.of("TEST_SOURCE"))
+        .provider(DataProvider.DEFAULT)
+        .normalizer(UnitNormalizer.INSTANCE.getName())
+        .build()), 200.);
+    assertEquals(dataSet.get(MarketDataKey.builder()
+        .externalIdBundle(ExternalIdBundle.of(ExternalScheme.of("TEST"), "ID3"))
+        .field(DataField.of("Market_Value")).source(DataSource.of("TEST_SOURCE"))
+        .provider(DataProvider.DEFAULT)
+        .normalizer(UnitNormalizer.INSTANCE.getName())
+        .build()), 300.);
+    assertEquals(dataSet.get(MarketDataKey.builder()
+        .externalIdBundle(ExternalIdBundle.of(ExternalScheme.of("TEST"), "ID4"))
+        .field(DataField.of("Market_Value")).source(DataSource.of("TEST_SOURCE"))
+        .provider(DataProvider.DEFAULT)
+        .normalizer(UnitNormalizer.INSTANCE.getName())
+        .build()), 400.);
+    assertEquals(dataSet.get(MarketDataKey.builder()
+        .externalIdBundle(ExternalIdBundle.of(ExternalScheme.of("TEST"), "ID5"))
+        .field(DataField.of("Market_Value")).source(DataSource.of("TEST_SOURCE"))
+        .provider(DataProvider.DEFAULT)
+        .normalizer(UnitNormalizer.INSTANCE.getName())
+        .build()), 500.);
   }
 
   /**
@@ -81,11 +108,36 @@ public class MarketDataFileParserTest {
     final FileReader reader = new FileReader(inputFile);
     final MarketDataSet dataSet = PARSER.readFile(reader);
     assertEquals(dataSet.size(), 5);
-    assertEquals(dataSet.get(MarketDataKey.builder().externalIdBundle(ExternalIdBundle.of(ExternalScheme.of("TEST"), "ID1")).field(DataField.of("Market_Value")).source(DataSource.of("TEST_SOURCE")).provider(DataProvider.DEFAULT).normalizer(UnitNormalizer.INSTANCE.getName()).build()), ImmutableLocalDateDoubleTimeSeries.builder().put(LocalDate.of(2016, 1, 1), 100.).build());
-    assertEquals(dataSet.get(MarketDataKey.builder().externalIdBundle(ExternalIdBundle.of(ExternalScheme.of("TEST"), "ID2")).field(DataField.of("Market_Value")).source(DataSource.of("TEST_SOURCE")).provider(DataProvider.DEFAULT).normalizer(UnitNormalizer.INSTANCE.getName()).build()), ImmutableLocalDateDoubleTimeSeries.builder().put(LocalDate.of(2016, 1, 1), 200.).build());
-    assertEquals(dataSet.get(MarketDataKey.builder().externalIdBundle(ExternalIdBundle.of(ExternalScheme.of("TEST"), "ID3")).field(DataField.of("Market_Value")).source(DataSource.of("TEST_SOURCE")).provider(DataProvider.DEFAULT).normalizer(UnitNormalizer.INSTANCE.getName()).build()), ImmutableLocalDateDoubleTimeSeries.builder().put(LocalDate.of(2016, 1, 1), 300.).build());
-    assertEquals(dataSet.get(MarketDataKey.builder().externalIdBundle(ExternalIdBundle.of(ExternalScheme.of("TEST"), "ID4")).field(DataField.of("Market_Value")).source(DataSource.of("TEST_SOURCE")).provider(DataProvider.DEFAULT).normalizer(UnitNormalizer.INSTANCE.getName()).build()), ImmutableLocalDateDoubleTimeSeries.builder().put(LocalDate.of(2016, 1, 1), 400.).build());
-    assertEquals(dataSet.get(MarketDataKey.builder().externalIdBundle(ExternalIdBundle.of(ExternalScheme.of("TEST"), "ID5")).field(DataField.of("Market_Value")).source(DataSource.of("TEST_SOURCE")).provider(DataProvider.DEFAULT).normalizer(UnitNormalizer.INSTANCE.getName()).build()), ImmutableLocalDateDoubleTimeSeries.builder().put(LocalDate.of(2016, 1, 1), 500.).build());
+    assertEquals(dataSet.get(MarketDataKey.builder()
+        .externalIdBundle(ExternalIdBundle.of(ExternalScheme.of("TEST"), "ID1"))
+        .field(DataField.of("Market_Value")).source(DataSource.of("TEST_SOURCE"))
+        .provider(DataProvider.DEFAULT)
+        .normalizer(UnitNormalizer.INSTANCE.getName())
+        .build()), ImmutableLocalDateDoubleTimeSeries.builder().put(LocalDate.of(2016, 1, 1), 100.).build());
+    assertEquals(dataSet.get(MarketDataKey.builder()
+        .externalIdBundle(ExternalIdBundle.of(ExternalScheme.of("TEST"), "ID2"))
+        .field(DataField.of("Market_Value")).source(DataSource.of("TEST_SOURCE"))
+        .provider(DataProvider.DEFAULT)
+        .normalizer(UnitNormalizer.INSTANCE.getName())
+        .build()), ImmutableLocalDateDoubleTimeSeries.builder().put(LocalDate.of(2016, 1, 1), 200.).build());
+    assertEquals(dataSet.get(MarketDataKey.builder()
+        .externalIdBundle(ExternalIdBundle.of(ExternalScheme.of("TEST"), "ID3"))
+        .field(DataField.of("Market_Value")).source(DataSource.of("TEST_SOURCE"))
+        .provider(DataProvider.DEFAULT)
+        .normalizer(UnitNormalizer.INSTANCE.getName())
+        .build()), ImmutableLocalDateDoubleTimeSeries.builder().put(LocalDate.of(2016, 1, 1), 300.).build());
+    assertEquals(dataSet.get(MarketDataKey.builder()
+        .externalIdBundle(ExternalIdBundle.of(ExternalScheme.of("TEST"), "ID4"))
+        .field(DataField.of("Market_Value")).source(DataSource.of("TEST_SOURCE"))
+        .provider(DataProvider.DEFAULT)
+        .normalizer(UnitNormalizer.INSTANCE.getName())
+        .build()), ImmutableLocalDateDoubleTimeSeries.builder().put(LocalDate.of(2016, 1, 1), 400.).build());
+    assertEquals(dataSet.get(MarketDataKey.builder()
+        .externalIdBundle(ExternalIdBundle.of(ExternalScheme.of("TEST"), "ID5"))
+        .field(DataField.of("Market_Value")).source(DataSource.of("TEST_SOURCE"))
+        .provider(DataProvider.DEFAULT)
+        .normalizer(UnitNormalizer.INSTANCE.getName())
+        .build()), ImmutableLocalDateDoubleTimeSeries.builder().put(LocalDate.of(2016, 1, 1), 500.).build());
   }
 
   /**
@@ -100,8 +152,20 @@ public class MarketDataFileParserTest {
     final FileReader reader = new FileReader(inputFile);
     final MarketDataSet dataSet = PARSER.readFile(reader);
     assertEquals(dataSet.size(), 2);
-    assertEquals(dataSet.get(MarketDataKey.builder().externalIdBundle(ExternalIdBundle.of(ExternalScheme.of("TEST"), "ID1")).field(DataField.of("Market_Value1")).source(DataSource.of("TEST_SOURCE")).provider(DataProvider.DEFAULT).normalizer(UnitNormalizer.INSTANCE.getName()).build()), 100.);
-    assertEquals(dataSet.get(MarketDataKey.builder().externalIdBundle(ExternalIdBundle.of(ExternalScheme.of("TEST"), "ID1")).field(DataField.of("Market_Value2")).source(DataSource.of("TEST_SOURCE")).provider(DataProvider.DEFAULT).normalizer(UnitNormalizer.INSTANCE.getName()).build()), 200.);
+    assertEquals(dataSet.get(MarketDataKey.builder()
+        .externalIdBundle(ExternalIdBundle.of(ExternalScheme.of("TEST"), "ID1"))
+        .field(DataField.of("Market_Value1"))
+        .source(DataSource.of("TEST_SOURCE"))
+        .provider(DataProvider.DEFAULT)
+        .normalizer(UnitNormalizer.INSTANCE.getName())
+        .build()), 100.);
+    assertEquals(dataSet.get(MarketDataKey.builder()
+        .externalIdBundle(ExternalIdBundle.of(ExternalScheme.of("TEST"), "ID1"))
+        .field(DataField.of("Market_Value2"))
+        .source(DataSource.of("TEST_SOURCE"))
+        .provider(DataProvider.DEFAULT)
+        .normalizer(UnitNormalizer.INSTANCE.getName())
+        .build()), 200.);
   }
 
   /**
@@ -116,8 +180,20 @@ public class MarketDataFileParserTest {
     final FileReader reader = new FileReader(inputFile);
     final MarketDataSet dataSet = PARSER.readFile(reader);
     assertEquals(dataSet.size(), 2);
-    assertEquals(dataSet.get(MarketDataKey.builder().externalIdBundle(ExternalIdBundle.of(ExternalScheme.of("TEST"), "ID1")).field(DataField.of("Market_Value")).source(DataSource.of("TEST_SOURCE1")).provider(DataProvider.DEFAULT).normalizer(UnitNormalizer.INSTANCE.getName()).build()), 100.);
-    assertEquals(dataSet.get(MarketDataKey.builder().externalIdBundle(ExternalIdBundle.of(ExternalScheme.of("TEST"), "ID1")).field(DataField.of("Market_Value")).source(DataSource.of("TEST_SOURCE2")).provider(DataProvider.DEFAULT).normalizer(UnitNormalizer.INSTANCE.getName()).build()), 200.);
+    assertEquals(dataSet.get(MarketDataKey.builder()
+        .externalIdBundle(ExternalIdBundle.of(ExternalScheme.of("TEST"), "ID1"))
+        .field(DataField.of("Market_Value"))
+        .source(DataSource.of("TEST_SOURCE1"))
+        .provider(DataProvider.DEFAULT)
+        .normalizer(UnitNormalizer.INSTANCE.getName())
+        .build()), 100.);
+    assertEquals(dataSet.get(MarketDataKey.builder()
+        .externalIdBundle(ExternalIdBundle.of(ExternalScheme.of("TEST"), "ID1"))
+        .field(DataField.of("Market_Value"))
+        .source(DataSource.of("TEST_SOURCE2"))
+        .provider(DataProvider.DEFAULT)
+        .normalizer(UnitNormalizer.INSTANCE.getName())
+        .build()), 200.);
   }
 
   /**
@@ -132,8 +208,20 @@ public class MarketDataFileParserTest {
     final FileReader reader = new FileReader(inputFile);
     final MarketDataSet dataSet = PARSER.readFile(reader);
     assertEquals(dataSet.size(), 2);
-    assertEquals(dataSet.get(MarketDataKey.builder().externalIdBundle(ExternalIdBundle.of(ExternalScheme.of("TEST"), "ID1")).field(DataField.of("Market_Value")).source(DataSource.DEFAULT).provider(DataProvider.of("TEST_PROVIDER1")).normalizer(UnitNormalizer.INSTANCE.getName()).build()), 100.);
-    assertEquals(dataSet.get(MarketDataKey.builder().externalIdBundle(ExternalIdBundle.of(ExternalScheme.of("TEST"), "ID1")).field(DataField.of("Market_Value")).source(DataSource.DEFAULT).provider(DataProvider.of("TEST_PROVIDER2")).normalizer(UnitNormalizer.INSTANCE.getName()).build()), 200.);
+    assertEquals(dataSet.get(MarketDataKey.builder()
+        .externalIdBundle(ExternalIdBundle.of(ExternalScheme.of("TEST"), "ID1"))
+        .field(DataField.of("Market_Value"))
+        .source(DataSource.DEFAULT)
+        .provider(DataProvider.of("TEST_PROVIDER1"))
+        .normalizer(UnitNormalizer.INSTANCE.getName())
+        .build()), 100.);
+    assertEquals(dataSet.get(MarketDataKey.builder()
+        .externalIdBundle(ExternalIdBundle.of(ExternalScheme.of("TEST"), "ID1"))
+        .field(DataField.of("Market_Value"))
+        .source(DataSource.DEFAULT)
+        .provider(DataProvider.of("TEST_PROVIDER2"))
+        .normalizer(UnitNormalizer.INSTANCE.getName())
+        .build()), 200.);
   }
 
   /**
@@ -155,7 +243,13 @@ public class MarketDataFileParserTest {
         .put(LocalDate.of(2016, 1, 4), 103.)
         .put(LocalDate.of(2016, 1, 5), 104.)
         .build();
-    assertEquals(dataSet.get(MarketDataKey.builder().externalIdBundle(ExternalIdBundle.of(ExternalScheme.of("TEST"), "ID1")).field(DataField.of("Market_Value")).source(DataSource.of("TEST_SOURCE")).provider(DataProvider.DEFAULT).normalizer(UnitNormalizer.INSTANCE.getName()).build()), expectedTs);
+    assertEquals(dataSet.get(MarketDataKey.builder()
+        .externalIdBundle(ExternalIdBundle.of(ExternalScheme.of("TEST"), "ID1"))
+        .field(DataField.of("Market_Value"))
+        .source(DataSource.of("TEST_SOURCE"))
+        .provider(DataProvider.DEFAULT)
+        .normalizer(UnitNormalizer.INSTANCE.getName())
+        .build()), expectedTs);
   }
 
   /**
@@ -180,9 +274,27 @@ public class MarketDataFileParserTest {
     final LocalDateDoubleTimeSeries expectedTs3 = ImmutableLocalDateDoubleTimeSeries.builder()
         .put(LocalDate.of(2016, 1, 1), 300.)
         .build();
-    assertEquals(dataSet.get(MarketDataKey.builder().externalIdBundle(ExternalIdBundle.of(ExternalScheme.of("TEST"), "ID1")).field(DataField.of("Market_Value")).source(DataSource.of("TEST_SOURCE")).provider(DataProvider.DEFAULT).normalizer(UnitNormalizer.INSTANCE.getName()).build()), expectedTs1);
-    assertEquals(dataSet.get(MarketDataKey.builder().externalIdBundle(ExternalIdBundle.of(ExternalScheme.of("TEST"), "ID2")).field(DataField.of("Market_Value")).source(DataSource.of("TEST_SOURCE")).provider(DataProvider.DEFAULT).normalizer(UnitNormalizer.INSTANCE.getName()).build()), 200.);
-    assertEquals(dataSet.get(MarketDataKey.builder().externalIdBundle(ExternalIdBundle.of(ExternalScheme.of("TEST"), "ID3")).field(DataField.of("Market_Value")).source(DataSource.of("TEST_SOURCE")).provider(DataProvider.DEFAULT).normalizer(UnitNormalizer.INSTANCE.getName()).build()), expectedTs3);
+    assertEquals(dataSet.get(MarketDataKey.builder()
+        .externalIdBundle(ExternalIdBundle.of(ExternalScheme.of("TEST"), "ID1"))
+        .field(DataField.of("Market_Value"))
+        .source(DataSource.of("TEST_SOURCE"))
+        .provider(DataProvider.DEFAULT)
+        .normalizer(UnitNormalizer.INSTANCE.getName())
+        .build()), expectedTs1);
+    assertEquals(dataSet.get(MarketDataKey.builder()
+        .externalIdBundle(ExternalIdBundle.of(ExternalScheme.of("TEST"), "ID2"))
+        .field(DataField.of("Market_Value"))
+        .source(DataSource.of("TEST_SOURCE"))
+        .provider(DataProvider.DEFAULT)
+        .normalizer(UnitNormalizer.INSTANCE.getName())
+        .build()), 200.);
+    assertEquals(dataSet.get(MarketDataKey.builder()
+        .externalIdBundle(ExternalIdBundle.of(ExternalScheme.of("TEST"), "ID3"))
+        .field(DataField.of("Market_Value"))
+        .source(DataSource.of("TEST_SOURCE"))
+        .provider(DataProvider.DEFAULT)
+        .normalizer(UnitNormalizer.INSTANCE.getName())
+        .build()), expectedTs3);
   }
 
   /**
@@ -201,7 +313,13 @@ public class MarketDataFileParserTest {
         .put(LocalDate.of(2016, 1, 1), 100.)
         .put(LOADING_DATE, 101.)
         .build();
-    assertEquals(dataSet.get(MarketDataKey.builder().externalIdBundle(ExternalIdBundle.of(ExternalScheme.of("TEST"), "ID1")).field(DataField.of("Market_Value")).source(DataSource.of("TEST_SOURCE")).provider(DataProvider.DEFAULT).normalizer(UnitNormalizer.INSTANCE.getName()).build()), expectedTs);
+    assertEquals(dataSet.get(MarketDataKey.builder()
+        .externalIdBundle(ExternalIdBundle.of(ExternalScheme.of("TEST"), "ID1"))
+        .field(DataField.of("Market_Value"))
+        .source(DataSource.of("TEST_SOURCE"))
+        .provider(DataProvider.DEFAULT)
+        .normalizer(UnitNormalizer.INSTANCE.getName())
+        .build()), expectedTs);
     url = getClass().getResource("multiple-market-data-points-as-time-series-example-2.csv");
     inputFile = new File(url.toURI());
     reader = new FileReader(inputFile);
@@ -212,7 +330,13 @@ public class MarketDataFileParserTest {
         .put(LocalDate.of(2016, 2, 1), 101.)
         .put(LOADING_DATE, 102.)
         .build();
-    assertEquals(dataSet.get(MarketDataKey.builder().externalIdBundle(ExternalIdBundle.of(ExternalScheme.of("TEST"), "ID1")).field(DataField.of("Market_Value")).source(DataSource.of("TEST_SOURCE")).provider(DataProvider.DEFAULT).normalizer(UnitNormalizer.INSTANCE.getName()).build()), expectedTs);
+    assertEquals(dataSet.get(MarketDataKey.builder()
+        .externalIdBundle(ExternalIdBundle.of(ExternalScheme.of("TEST"), "ID1"))
+        .field(DataField.of("Market_Value"))
+        .source(DataSource.of("TEST_SOURCE"))
+        .provider(DataProvider.DEFAULT)
+        .normalizer(UnitNormalizer.INSTANCE.getName())
+        .build()), expectedTs);
   }
 
   /**
@@ -227,8 +351,20 @@ public class MarketDataFileParserTest {
     final FileReader reader = new FileReader(inputFile);
     final MarketDataSet dataSet = PARSER.readFile(reader);
     assertEquals(dataSet.size(), 2);
-    assertEquals(dataSet.get(MarketDataKey.builder().externalIdBundle(ExternalIdBundle.of(ExternalScheme.of("TEST"), "ID1")).field(DataField.of("Market_Value")).source(DataSource.DEFAULT).provider(DataProvider.DEFAULT).normalizer(Div100Normalizer.INSTANCE.getName()).build()), 100.);
-    assertEquals(dataSet.get(MarketDataKey.builder().externalIdBundle(ExternalIdBundle.of(ExternalScheme.of("TEST"), "ID1")).field(DataField.of("Market_Value")).source(DataSource.DEFAULT).provider(DataProvider.DEFAULT).normalizer(UnitNormalizer.INSTANCE.getName()).build()), 200.);
+    assertEquals(dataSet.get(MarketDataKey.builder()
+        .externalIdBundle(ExternalIdBundle.of(ExternalScheme.of("TEST"), "ID1"))
+        .field(DataField.of("Market_Value"))
+        .source(DataSource.DEFAULT)
+        .provider(DataProvider.DEFAULT)
+        .normalizer(Div100Normalizer.INSTANCE.getName())
+        .build()), 100.);
+    assertEquals(dataSet.get(MarketDataKey.builder()
+        .externalIdBundle(ExternalIdBundle.of(ExternalScheme.of("TEST"), "ID1"))
+        .field(DataField.of("Market_Value"))
+        .source(DataSource.DEFAULT)
+        .provider(DataProvider.DEFAULT)
+        .normalizer(UnitNormalizer.INSTANCE.getName())
+        .build()), 200.);
   }
 
   /**
@@ -244,6 +380,12 @@ public class MarketDataFileParserTest {
     final MarketDataSet dataSet = PARSER.readFile(reader);
     assertEquals(dataSet.size(), 1);
     final ExternalIdBundle expectedIdBundle = ExternalIdBundle.of(ExternalId.of("TEST1", "ID1"), ExternalId.of("TEST2", "ID2"));
-    assertEquals(dataSet.get(MarketDataKey.builder().externalIdBundle(expectedIdBundle).field(DataField.of("Market_Value")).source(DataSource.of("TEST_SOURCE")).provider(DataProvider.DEFAULT).normalizer(UnitNormalizer.INSTANCE.getName()).build()), 100.);
+    assertEquals(dataSet.get(MarketDataKey.builder()
+        .externalIdBundle(expectedIdBundle)
+        .field(DataField.of("Market_Value"))
+        .source(DataSource.of("TEST_SOURCE"))
+        .provider(DataProvider.DEFAULT)
+        .normalizer(UnitNormalizer.INSTANCE.getName())
+        .build()), 100.);
   }
 }

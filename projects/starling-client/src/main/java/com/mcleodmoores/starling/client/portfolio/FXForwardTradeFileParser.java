@@ -1,3 +1,6 @@
+/**
+ * Copyright (C) 2015 - present McLeod Moores Software Limited.  All rights reserved.
+ */
 package com.mcleodmoores.starling.client.portfolio;
 
 import au.com.bytecode.opencsv.CSVReader;
@@ -47,7 +50,7 @@ public class FXForwardTradeFileParser {
   }
 
   /**
-   * Parse a trade file from a string
+   * Parse a trade file from a string.
    * @param csv  a string containing the CSV file
    * @return a map of portfolio name to portfolio
    */
@@ -57,7 +60,7 @@ public class FXForwardTradeFileParser {
   }
 
   /**
-   * Parse the trade file from the given reader
+   * Parse the trade file from the given reader.
    * @param reader  the reader from which to read the file, unbuffered is fine, not null
    * @return a map of portfolio name to portfolio
    */
@@ -157,7 +160,8 @@ public class FXForwardTradeFileParser {
     return map;
   }
 
-  private Trade readFXForwardTrade(final String[] line, final Map<String, Integer> headerMap, final Map<String, String> upperCaseProperties, int lineNum) {
+  private Trade readFXForwardTrade(final String[] line, final Map<String, Integer> headerMap, final Map<String, String> upperCaseProperties, 
+      final int lineNum) {
     final FXForwardTrade.Builder builder = FXForwardTrade.builder();
     for (String upperCaseProperty : upperCaseProperties.keySet()) {
       if (headerMap.containsKey(upperCaseProperty)) {

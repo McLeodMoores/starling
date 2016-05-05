@@ -57,8 +57,24 @@ public class SimplePortfolioManagerTest {
   private static final List<FXForwardTrade> TRADES = new ArrayList<>();
 
   static {
-    TRADES.add(FXForwardTrade.builder().correlationId(ExternalId.of("Test", "1")).tradeDate(LocalDate.of(2016, 1, 1)).forwardDate(LocalDate.of(2016, 2, 1)).payCurrency(Currency.USD).payAmount(100000).receiveCurrency(Currency.JPY).receiveAmount(10000000).build());
-    TRADES.add(FXForwardTrade.builder().correlationId(ExternalId.of("Test", "2")).tradeDate(LocalDate.of(2016, 1, 1)).forwardDate(LocalDate.of(2016, 3, 1)).payCurrency(Currency.JPY).payAmount(10000000).receiveCurrency(Currency.USD).receiveAmount(100000).build());
+    TRADES.add(FXForwardTrade.builder()
+        .correlationId(ExternalId.of("Test", "1"))
+        .tradeDate(LocalDate.of(2016, 1, 1))
+        .forwardDate(LocalDate.of(2016, 2, 1))
+        .payCurrency(Currency.USD)
+        .payAmount(100000)
+        .receiveCurrency(Currency.JPY)
+        .receiveAmount(10000000)
+        .build());
+    TRADES.add(FXForwardTrade.builder()
+        .correlationId(ExternalId.of("Test", "2"))
+        .tradeDate(LocalDate.of(2016, 1, 1))
+        .forwardDate(LocalDate.of(2016, 3, 1))
+        .payCurrency(Currency.JPY)
+        .payAmount(10000000)
+        .receiveCurrency(Currency.USD)
+        .receiveAmount(100000)
+        .build());
   }
 
   /**
@@ -398,7 +414,8 @@ public class SimplePortfolioManagerTest {
     final EquitySecurity equitySecurity = new EquitySecurity("EXCH", "NAME", "CO", Currency.USD);
     equitySecurity.addExternalId(ExternalSchemes.syntheticSecurityId("Equity"));
     final SimplePosition equityPosition = new SimplePosition();
-    equityPosition.addTrade(new SimpleTrade(equitySecurity, BigDecimal.ONE, new SimpleCounterparty(ExternalId.of("Test", "Test")), LocalDate.of(2016, 1, 1), OffsetTime.now()));
+    equityPosition.addTrade(new SimpleTrade(equitySecurity, BigDecimal.ONE, new SimpleCounterparty(ExternalId.of("Test", "Test")), 
+        LocalDate.of(2016, 1, 1), OffsetTime.now()));
     equityPosition.setSecurityLink(SimpleSecurityLink.of(equitySecurity));
     equityPosition.setQuantity(BigDecimal.ONE);
     equityPortfolioNode.addPosition(equityPosition);

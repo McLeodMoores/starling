@@ -46,7 +46,8 @@ public class Div100NormalizerTest {
       }
 
       @Override
-      public Object normalize(final ExternalIdBundle idBundle, final DataField field, final DataSource source, final DataProvider provider, final Object value) {
+      public Object normalize(final ExternalIdBundle idBundle, final DataField field, final DataSource source, final DataProvider provider, 
+          final Object value) {
         return Div100Normalizer.INSTANCE.normalize(idBundle, field, source, provider, value);
       }
 

@@ -369,7 +369,8 @@ public class MarketDataManagerTest {
     final FutureSecurity security = new EnergyFutureSecurity(new Expiry(ZonedDateTime.now().plusMonths(3)), "EXCH", "EXCH", Currency.USD, 1000, "Energy");
     security.addExternalId(marketDataId);
     security.addExternalId(tradeId);
-    final SimpleTrade trade = new SimpleTrade(security, BigDecimal.valueOf(tradeQuantity), new SimpleCounterparty(ExternalId.of("Test", "Ctpty")), LocalDate.now().minusDays(7), OffsetTime.now());
+    final SimpleTrade trade = new SimpleTrade(security, BigDecimal.valueOf(tradeQuantity), new SimpleCounterparty(ExternalId.of("Test", "Ctpty")), 
+        LocalDate.now().minusDays(7), OffsetTime.now());
     trade.addAttribute(ManageableTrade.meta().providerId().name(), tradeId.toString());
     final SimplePosition position = new SimplePosition();
     position.addAttribute(ManageableTrade.meta().providerId().name(), tradeId.toString());

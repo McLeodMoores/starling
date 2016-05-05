@@ -1,3 +1,6 @@
+/**
+ * Copyright (C) 2015 - present McLeod Moores Software Limited.  All rights reserved.
+ */
 package com.mcleodmoores.starling.client.portfolio;
 
 import org.testng.annotations.Test;
@@ -5,11 +8,12 @@ import org.testng.annotations.Test;
 import com.opengamma.util.test.TestGroup;
 
 /**
- * Created by jim on 29/05/15.
+ * Tests the portfolio copier.
  */
 @Test(groups = TestGroup.UNIT)
 public class PortfolioCloneTest {
-  public void cloneTest() {
+  
+//  public void cloneTest() {
 //    FXForwardTrade fxForwardTrade = FXForwardTrade.builder()
 //        .correlationId(ExternalId.of("MY_SCHEME", "001"))
 //        .counterparty("MyCounterparty")
@@ -41,11 +45,11 @@ public class PortfolioCloneTest {
 //    Security security2 = position2.getSecurity();
 //    Assert.assertFalse(security1 == security2);
 //    Assert.assertEquals(security1, security2);
-//    Trade trade1 = Iterables.getFirst(position1.getTrades(), null);
+//    com.opengamma.core.position.Trade trade1 = Iterables.getFirst(position1.getTrades(), null);
 //    Assert.assertNotNull(trade1);
-//    Trade trade2 = Iterables.getFirst(position2.getTrades(), null);
+//    com.opengamma.core.position.Trade trade2 = Iterables.getFirst(position2.getTrades(), null);
 //    Assert.assertNotNull(trade2);
 //    Assert.assertFalse(trade1 == trade2);
 //    Assert.assertEquals(trade1, trade2);
-  }
+//  }
 }

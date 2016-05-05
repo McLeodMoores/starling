@@ -16,7 +16,7 @@ import com.opengamma.util.test.TestGroup;
 public class MarketDataTargetKeyTest {
 
   /**
-   * Tests that the instance created is not null
+   * Tests that the instance created is not null.
    */
   @Test
   public void testInstance() {

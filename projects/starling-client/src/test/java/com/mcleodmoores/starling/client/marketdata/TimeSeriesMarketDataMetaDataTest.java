@@ -12,10 +12,12 @@ import org.threeten.bp.LocalDate;
 import com.opengamma.core.historicaltimeseries.HistoricalTimeSeriesAdjustment;
 import com.opengamma.timeseries.date.localdate.LocalDateDoubleTimeSeries;
 import com.opengamma.timeseries.precise.zdt.ZonedDateTimeDoubleTimeSeries;
+import com.opengamma.util.test.TestGroup;
 
 /**
  * Unit tests for {@link TimeSeriesMarketDataMetaData}.
  */
+@Test(groups = TestGroup.UNIT)
 public class TimeSeriesMarketDataMetaDataTest {
 
   /**

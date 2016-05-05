@@ -87,8 +87,8 @@ public final class ResultKey {
     if (!_columnSet.equals(resultKey._columnSet)) {
       return false;
     }
-    return _resultType.getProperties().isSatisfiedBy(resultKey._resultType.getProperties()) ||
-        resultKey._resultType.getProperties().isSatisfiedBy(_resultType.getProperties());
+    return _resultType.getProperties().isSatisfiedBy(resultKey._resultType.getProperties()) 
+        || resultKey._resultType.getProperties().isSatisfiedBy(_resultType.getProperties());
   }
 
   @Override

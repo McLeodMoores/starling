@@ -174,7 +174,8 @@ public class MarketDataSetTest {
     Assert.assertNotEquals(new Object(), set);
     Assert.assertEquals(set, set);
     Assert.assertEquals(set.hashCode(), set.hashCode());
-    Assert.assertEquals(set.toString(), "MarketDataSet[{MarketDataKey{externalIdBundle=Bundle[A~B], field=Market_Value, source=DEFAULT, provider=DEFAULT, normalizer=UnitNormalizer}=0.0}]");
+    Assert.assertEquals(set.toString(), "MarketDataSet[{MarketDataKey{externalIdBundle=Bundle[A~B], field=Market_Value, "
+        + "source=DEFAULT, provider=DEFAULT, normalizer=UnitNormalizer}=0.0}]");
     final MarketDataSet other = MarketDataSet.empty();
     other.put(MarketDataKey.of(ExternalIdBundle.EMPTY), 1.2d);
     Assert.assertNotEquals(set, other);

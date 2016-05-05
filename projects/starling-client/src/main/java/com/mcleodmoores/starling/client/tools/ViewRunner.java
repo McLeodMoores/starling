@@ -1,3 +1,6 @@
+/**
+ * Copyright (C) 2015 - present McLeod Moores Software Limited.  All rights reserved.
+ */
 package com.mcleodmoores.starling.client.tools;
 
 import java.io.File;
@@ -35,7 +38,8 @@ public class ViewRunner extends AbstractTool<ToolContext> {
 
   private static final String DATE_OPTION = "d";
   private static final String DATE_LONG = "date";
-  private static final String DATE_DESCRIPTION = "The date (in current locale short form or Today/Yesterday/YesterdayBusiness) of the scalar values, default to today";
+  private static final String DATE_DESCRIPTION = "The date (in current locale short form or Today/Yesterday/YesterdayBusiness) "
+      + "of the scalar values, default to today";
   private static final String DATE_ARG_NAME = "date";
   private static final String TODAY = "TODAY";
   private static final String YESTERDAY = "YESTERDAY";

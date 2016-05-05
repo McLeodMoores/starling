@@ -38,14 +38,28 @@ public class ResultTypeTest {
     assertNotEquals(new Object(), referenceType);
     assertEquals(referenceType, ResultType.builder().valueRequirementName(ValueRequirementNames.PRESENT_VALUE).build());
     // empty properties supplied
-    assertEquals(ResultType.builder().valueRequirementName(ValueRequirementNames.PRESENT_VALUE).properties(ValueProperties.none()).build(), referenceType);
+    assertEquals(ResultType.builder()
+        .valueRequirementName(ValueRequirementNames.PRESENT_VALUE)
+        .properties(ValueProperties.none())
+        .build(), referenceType);
     // value requirement names don't match
-    assertNotEquals(ResultType.builder().valueRequirementName(ValueRequirementNames.FX_PRESENT_VALUE).build(), referenceType);
+    assertNotEquals(ResultType.builder()
+        .valueRequirementName(ValueRequirementNames.FX_PRESENT_VALUE)
+        .build(), referenceType);
     // withAny() properties don't match
-    assertNotEquals(ResultType.builder().valueRequirementName(ValueRequirementNames.PRESENT_VALUE).properties(ValueProperties.withAny(ValuePropertyNames.CURRENCY).get()).build(), referenceType);
+    assertNotEquals(ResultType.builder()
+        .valueRequirementName(ValueRequirementNames.PRESENT_VALUE)
+        .properties(ValueProperties.withAny(ValuePropertyNames.CURRENCY).get())
+        .build(), referenceType);
     // with() properties don't match
-    assertNotEquals(ResultType.builder().valueRequirementName(ValueRequirementNames.PRESENT_VALUE).properties(ValueProperties.with(ValuePropertyNames.CURRENCY, "USD").get()).build(), referenceType);
+    assertNotEquals(ResultType.builder()
+        .valueRequirementName(ValueRequirementNames.PRESENT_VALUE)
+        .properties(ValueProperties.with(ValuePropertyNames.CURRENCY, "USD").get())
+        .build(), referenceType);
     //TODO should this be equals? it is according to the way properties are used throughout the rest of the system
-    assertNotEquals(ResultType.builder().valueRequirementName(ValueRequirementNames.PRESENT_VALUE).properties(ValueProperties.with(ValuePropertyNames.CURRENCY, "USD").withOptional(ValuePropertyNames.CURRENCY).get()).build(), referenceType);
+    assertNotEquals(ResultType.builder()
+        .valueRequirementName(ValueRequirementNames.PRESENT_VALUE)
+        .properties(ValueProperties.with(ValuePropertyNames.CURRENCY, "USD").withOptional(ValuePropertyNames.CURRENCY).get())
+        .build(), referenceType);
   }
 }

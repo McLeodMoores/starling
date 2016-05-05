@@ -9,10 +9,12 @@ import static org.testng.Assert.assertNotEquals;
 import org.testng.annotations.Test;
 
 import com.opengamma.id.ExternalIdBundle;
+import com.opengamma.util.test.TestGroup;
 
 /**
  * Unit tests for {@link UnitNormalizer}.
  */
+@Test(groups = TestGroup.UNIT)
 public class UnitNormalizerTest {
 
   /**
@@ -60,7 +62,8 @@ public class UnitNormalizerTest {
       }
 
       @Override
-      public Object normalize(final ExternalIdBundle idBundle, final DataField field, final DataSource source, final DataProvider provider, final Object value) {
+      public Object normalize(final ExternalIdBundle idBundle, final DataField field, final DataSource source, final DataProvider provider, 
+          final Object value) {
         return UnitNormalizer.INSTANCE.normalize(idBundle, field, source, provider, value);
       }
 

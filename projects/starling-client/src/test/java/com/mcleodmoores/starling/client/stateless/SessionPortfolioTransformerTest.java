@@ -1,3 +1,6 @@
+/**
+ * Copyright (C) 2016 - present McLeod Moores Software Limited.  All rights reserved.
+ */
 package com.mcleodmoores.starling.client.stateless;
 
 import org.joda.beans.JodaBeanUtils;
@@ -19,10 +22,15 @@ import com.opengamma.util.money.Currency;
 import com.opengamma.util.test.TestGroup;
 
 /**
- * Created by jim on 29/05/15.
+ * Tests the portfolio transformer.
  */
 @Test(groups = TestGroup.UNIT)
 public class SessionPortfolioTransformerTest {
+  
+  /**
+   * Tests that the portfolio is cloned correctly.
+   */
+  @Test
   public void cloneTest() {
     final FXForwardTrade fxForwardTrade = FXForwardTrade.builder()
         .correlationId(ExternalId.of("MY_SCHEME", "001"))
@@ -38,9 +46,6 @@ public class SessionPortfolioTransformerTest {
     final Position position = fxForwardTrade.toPosition();
     portfolio.getRootNode().addPosition(position);
     final SimplePortfolio portfolio2 = SessionPortfolioTransformer.buildSessionCopy(portfolio, ExternalScheme.of("MY_SCHEME"), "027");
-    System.out.println(portfolio.toLongString());
-    System.out.println("----------------");
-    System.out.println(portfolio2.toLongString());
     Assert.assertNotEquals(portfolio, portfolio2);
     Assert.assertFalse(portfolio == portfolio2);
     Assert.assertFalse(portfolio.getRootNode() == portfolio2.getRootNode());
@@ -51,7 +56,8 @@ public class SessionPortfolioTransformerTest {
     Assert.assertNotNull(position2);
     Assert.assertFalse(position1 == position2);
     Assert.assertNotEquals(position1, position2);
-    Assert.assertTrue(JodaBeanUtils.equalIgnoring(position1, position2, SimplePosition.meta().securityLink(), SimplePosition.meta().trades(), SimplePosition.meta().attributes()));
+    Assert.assertTrue(JodaBeanUtils.equalIgnoring(position1, position2, SimplePosition.meta().securityLink(), SimplePosition.meta().trades(), 
+        SimplePosition.meta().attributes()));
     final ManageableSecurity security1 = (ManageableSecurity) position1.getSecurity();
     final ManageableSecurity security2 = (ManageableSecurity) position2.getSecurity();
     Assert.assertFalse(security1 == security2);

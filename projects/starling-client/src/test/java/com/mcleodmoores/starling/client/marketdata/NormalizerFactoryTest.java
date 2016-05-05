@@ -10,9 +10,12 @@ import java.util.Map;
 
 import org.testng.annotations.Test;
 
+import com.opengamma.util.test.TestGroup;
+
 /**
  * Unit tests for {@link NormalizerFactory}.
  */
+@Test(groups = TestGroup.UNIT)
 public class NormalizerFactoryTest {
 
   /**

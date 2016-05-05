@@ -33,12 +33,14 @@ public final class MarketDataInfo {
    * @param timeSeries  time series data, not null
    * @return  an instance
    */
-  public static MarketDataInfo of(final Map<MarketDataKey, ? extends ScalarMarketDataMetaData> scalars, final Map<MarketDataKey, ? extends TimeSeriesMarketDataMetaData> timeSeries) {
+  public static MarketDataInfo of(final Map<MarketDataKey, ? extends ScalarMarketDataMetaData> scalars, 
+      final Map<MarketDataKey, ? extends TimeSeriesMarketDataMetaData> timeSeries) {
     return new MarketDataInfo(scalars, timeSeries);
   }
 
   /**
-   * Populates an instance with scalar and / or time series data. The data in the map is split according to type. If there is an unhandled type of meta-data, an exception is thrown.
+   * Populates an instance with scalar and / or time series data. The data in the map is split according to type. 
+   * If there is an unhandled type of meta-data, an exception is thrown.
    * <p>
    * This method is useful when the type of the meta-data is not tracked but is slower than {@link #of(Map, Map)}.
    * @param data  scalar and time series data, not null
@@ -53,7 +55,8 @@ public final class MarketDataInfo {
    * @param scalars  scalar data, not null
    * @param timeSeries  time series data, not null
    */
-  private MarketDataInfo(final Map<MarketDataKey, ? extends ScalarMarketDataMetaData> scalars, final Map<MarketDataKey, ? extends TimeSeriesMarketDataMetaData> timeSeries) {
+  private MarketDataInfo(final Map<MarketDataKey, ? extends ScalarMarketDataMetaData> scalars, 
+      final Map<MarketDataKey, ? extends TimeSeriesMarketDataMetaData> timeSeries) {
     ArgumentChecker.notNull(scalars, "scalars");
     ArgumentChecker.notNull(timeSeries, "timeSeries");
     _scalars = new HashMap<>(scalars);

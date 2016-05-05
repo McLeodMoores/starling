@@ -1,3 +1,6 @@
+/**
+ * Copyright (C) 2016 - present McLeod Moores Software Limited.  All rights reserved.
+ */
 package com.mcleodmoores.starling.client.portfolio;
 
 import java.math.BigDecimal;
@@ -17,17 +20,23 @@ import com.opengamma.financial.security.fx.FXForwardSecurity;
 import com.opengamma.id.ExternalId;
 import com.opengamma.master.position.ManageableTrade;
 import com.opengamma.util.money.Currency;
+import com.opengamma.util.test.TestGroup;
 
 /**
- * Created by jim on 10/06/15.
+ * Tests the FX forward trade object.
  */
+@Test(groups = TestGroup.UNIT)
 public class FXForwardTradeTest {
-
+  /** The current date */
   private static final LocalDate NOW = LocalDate.of(2015, Month.JUNE, 12);
+  /** The forward date */
   private static final LocalDate FORWARD = LocalDate.of(2015, Month.JULY, 12);
 
+  /**
+   * Tests conversion of the trade to a position.
+   */
   @Test
-  public void testToPosition() throws Exception {
+  public void testToPosition() {
     final FXForwardTrade.Builder builder = FXForwardTrade.builder();
     final LocalDate tradeDate = NOW;
     final LocalDate forwardDate = FORWARD;
@@ -76,29 +85,41 @@ public class FXForwardTradeTest {
     Assert.assertEquals(fxForwardSecurity.getAttributes().size(), 0);
   }
 
+  /**
+   * Tests that fields must be set.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void testBuilderEmpty() throws Exception {
+  public void testBuilderEmpty() {
     final FXForwardTrade.Builder builder = FXForwardTrade.builder();
     builder.build();
   }
 
+  /**
+   * Tests that fields must be set.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void testBuilderTradeDate() throws Exception {
+  public void testBuilderTradeDate() {
     final FXForwardTrade.Builder builder = FXForwardTrade.builder();
     builder.tradeDate(NOW);
     builder.build();
   }
 
+  /**
+   * Tests that fields must be set.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void testBuilderTDPC() throws Exception {
+  public void testBuilderTDPC() {
     final FXForwardTrade.Builder builder = FXForwardTrade.builder();
     builder.tradeDate(NOW);
     builder.payCurrency(Currency.AUD);
     builder.build();
   }
 
+  /**
+   * Tests that fields must be set.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void testBuilderTDPCFD() throws Exception {
+  public void testBuilderTDPCFD() {
     final FXForwardTrade.Builder builder = FXForwardTrade.builder();
     builder.tradeDate(NOW);
     builder.payCurrency(Currency.AUD);
@@ -106,8 +127,11 @@ public class FXForwardTradeTest {
     builder.build();
   }
 
+  /**
+   * Tests that fields must be set.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void testBuilderTDPCFDRA() throws Exception {
+  public void testBuilderTDPCFDRA() {
     final FXForwardTrade.Builder builder = FXForwardTrade.builder();
     builder.tradeDate(NOW);
     builder.payCurrency(Currency.AUD);
@@ -116,8 +140,11 @@ public class FXForwardTradeTest {
     builder.build();
   }
 
+  /**
+   * Tests that fields must be set.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void testBuilderTDPCFDRACI() throws Exception {
+  public void testBuilderTDPCFDRACI() {
     final FXForwardTrade.Builder builder = FXForwardTrade.builder();
     builder.tradeDate(NOW);
     builder.payCurrency(Currency.AUD);
@@ -127,8 +154,11 @@ public class FXForwardTradeTest {
     builder.build();
   }
 
+  /**
+   * Tests that fields must be set.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void testBuilderTDPCFDRACICP() throws Exception {
+  public void testBuilderTDPCFDRACICP() {
     final FXForwardTrade.Builder builder = FXForwardTrade.builder();
     builder.tradeDate(NOW);
     builder.payCurrency(Currency.AUD);
@@ -139,8 +169,11 @@ public class FXForwardTradeTest {
     builder.build();
   }
 
+  /**
+   * Tests that fields must be set.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void testBuilderTDPCFDRACICPPA() throws Exception {
+  public void testBuilderTDPCFDRACICPPA() {
     final FXForwardTrade.Builder builder = FXForwardTrade.builder();
     builder.tradeDate(NOW);
     builder.payCurrency(Currency.AUD);
@@ -152,8 +185,12 @@ public class FXForwardTradeTest {
     builder.build();
   }
 
+  /**
+   * Tests that a trade can be built with a minimal set of fields - the trade date, pay  receive currencies,
+   * pay and / or receive amounts, forward date, counterparty and correlation id.
+   */
   @Test
-  public void testBuilderTDPCFDRACICPPARC() throws Exception {
+  public void testBuilderTDPCFDRACICPPARC() {
     final FXForwardTrade.Builder builder = FXForwardTrade.builder();
     builder.tradeDate(NOW);
     builder.payCurrency(Currency.AUD);
@@ -166,8 +203,11 @@ public class FXForwardTradeTest {
     builder.build();
   }
 
+  /**
+   * Test that the trade date cannot be null.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void testBuilderTDNull() throws Exception {
+  public void testBuilderTDNull() {
     final FXForwardTrade.Builder builder = FXForwardTrade.builder();
     builder.tradeDate(null);
     builder.payCurrency(Currency.AUD);
@@ -180,8 +220,11 @@ public class FXForwardTradeTest {
     builder.build();
   }
 
+  /**
+   * Tests that the pay currency cannot be null.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void testBuilderPCNull() throws Exception {
+  public void testBuilderPCNull() {
     final FXForwardTrade.Builder builder = FXForwardTrade.builder();
     builder.tradeDate(NOW);
     builder.payCurrency(null);
@@ -194,8 +237,11 @@ public class FXForwardTradeTest {
     builder.build();
   }
 
+  /**
+   * Tests that the forward date cannot be null.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void testBuilderFDNull() throws Exception {
+  public void testBuilderFDNull() {
     final FXForwardTrade.Builder builder = FXForwardTrade.builder();
     builder.tradeDate(NOW);
     builder.payCurrency(Currency.AUD);
@@ -208,8 +254,12 @@ public class FXForwardTradeTest {
     builder.build();
   }
 
-  //@Test(expectedExceptions = IllegalArgumentException.class)
-  public void testBuilderRAMissing() throws Exception {
+  /**
+   * Tests that the receive amount can be null.
+   */
+  //TODO why is this allowed?
+  @Test
+  public void testBuilderRAMissing() {
     final FXForwardTrade.Builder builder = FXForwardTrade.builder();
     builder.tradeDate(NOW);
     builder.payCurrency(Currency.AUD);
@@ -221,8 +271,11 @@ public class FXForwardTradeTest {
     builder.build();
   }
 
+  /**
+   * Tests that the correlation id cannot be null.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void testBuilderCINull() throws Exception {
+  public void testBuilderCINull() {
     final FXForwardTrade.Builder builder = FXForwardTrade.builder();
     builder.tradeDate(NOW);
     builder.payCurrency(Currency.AUD);
@@ -235,8 +288,11 @@ public class FXForwardTradeTest {
     builder.build();
   }
 
+  /**
+   * Tests that the counterparty cannot be null.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void testBuilderCPNull() throws Exception {
+  public void testBuilderCPNull() {
     final FXForwardTrade.Builder builder = FXForwardTrade.builder();
     builder.tradeDate(NOW);
     builder.payCurrency(Currency.AUD);
@@ -249,8 +305,12 @@ public class FXForwardTradeTest {
     builder.build();
   }
 
-  //@Test(expectedExceptions = IllegalArgumentException.class)
-  public void testBuilderPAMissing() throws Exception {
+  /**
+   * Tests that the pay amount can be null.
+   */
+  //TODO why is this allowed?
+  @Test
+  public void testBuilderPAMissing() {
     final FXForwardTrade.Builder builder = FXForwardTrade.builder();
     builder.tradeDate(NOW);
     builder.payCurrency(Currency.AUD);
@@ -262,8 +322,11 @@ public class FXForwardTradeTest {
     builder.build();
   }
 
+  /**
+   * Tests that the receive currency cannot be null.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void testBuilderRCNull() throws Exception {
+  public void testBuilderRCNull() {
     final FXForwardTrade.Builder builder = FXForwardTrade.builder();
     builder.tradeDate(NOW);
     builder.payCurrency(Currency.AUD);
@@ -276,8 +339,11 @@ public class FXForwardTradeTest {
     builder.build();
   }
 
+  /**
+   * Tests the conversion of the trade to its builder and vice versa.
+   */
   @Test
-  public void testToBuilder() throws Exception {
+  public void testToBuilder() {
     final FXForwardTrade.Builder builder = FXForwardTrade.builder();
     builder.tradeDate(NOW);
     builder.payCurrency(Currency.AUD);
@@ -296,8 +362,11 @@ public class FXForwardTradeTest {
     Assert.assertEquals(Currency.USD, usdFXForward.getReceiveCurrency());
   }
 
+  /**
+   * Tests the equals() method.
+   */
   @Test
-  public void testEquals() throws Exception {
+  public void testEquals() {
     final FXForwardTrade.Builder builder = FXForwardTrade.builder();
     builder.tradeDate(NOW);
     builder.payCurrency(Currency.AUD);
@@ -328,8 +397,11 @@ public class FXForwardTradeTest {
     Assert.assertNotEquals(fxForwardTrade, fxForwardTrade1.toBuilder().receiveCurrency(Currency.BRL).build());
   }
 
+  /**
+   * Tests the hashCode() method.
+   */
   @Test
-  public void testHashCode() throws Exception {
+  public void testHashCode() {
     final FXForwardTrade.Builder builder = FXForwardTrade.builder();
     builder.tradeDate(NOW);
     builder.payCurrency(Currency.AUD);
@@ -355,8 +427,11 @@ public class FXForwardTradeTest {
     Assert.assertEquals(fxForwardTrade1.hashCode(), fxForwardTrade1.toBuilder().build().hashCode());
   }
 
+  /**
+   * Tests the toString() method.
+   */
   @Test
-  public void testToString() throws Exception {
+  public void testToString() {
     final FXForwardTrade.Builder builder = FXForwardTrade.builder();
     builder.tradeDate(NOW);
     builder.payCurrency(Currency.AUD);
@@ -367,8 +442,8 @@ public class FXForwardTradeTest {
     builder.payAmount(1100000d);
     builder.receiveCurrency(Currency.NZD);
     final FXForwardTrade fxForwardTrade = builder.build();
-    Assert.assertEquals("FXForwardTrade{tradeDate=2015-06-12, payCurrency=AUD, " +
-        "receiveCurrency=NZD, payAmount=1100000.0, receiveAmount=1000000.0," +
-        " forwardDate=2015-07-12, correlationId=A~B, counterparty=MyBroker}", fxForwardTrade.toString());
+    Assert.assertEquals("FXForwardTrade{tradeDate=2015-06-12, payCurrency=AUD, " 
+        + "receiveCurrency=NZD, payAmount=1100000.0, receiveAmount=1000000.0," 
+        + " forwardDate=2015-07-12, correlationId=A~B, counterparty=MyBroker}", fxForwardTrade.toString());
   }
 }

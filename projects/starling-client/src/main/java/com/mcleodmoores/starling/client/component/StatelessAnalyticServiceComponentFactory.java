@@ -5,7 +5,6 @@
  */
 package com.mcleodmoores.starling.client.component;
 
-import com.mcleodmoores.starling.client.results.AnalyticService;
 import com.mcleodmoores.starling.client.stateless.StatelessAnalyticService;
 import com.opengamma.component.ComponentInfo;
 import com.opengamma.component.ComponentRepository;

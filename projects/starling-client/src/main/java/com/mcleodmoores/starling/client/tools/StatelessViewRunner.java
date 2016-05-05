@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2015 - present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.mcleodmoores.starling.client.tools;
 
@@ -49,7 +49,8 @@ public class StatelessViewRunner extends AbstractTool<ToolContext> {
 
   private static final String DATE_OPTION = "d";
   private static final String DATE_LONG = "date";
-  private static final String DATE_DESCRIPTION = "The date (in current locale short form or Today/Yesterday/YesterdayBusiness) of the scalar values, default to today";
+  private static final String DATE_DESCRIPTION = "The date (in current locale short form or Today/Yesterday/YesterdayBusiness) "
+      + "of the scalar values, default to today";
   private static final String DATE_ARG_NAME = "date";
   private static final String TODAY = "TODAY";
   private static final String YESTERDAY = "YESTERDAY";
@@ -57,7 +58,8 @@ public class StatelessViewRunner extends AbstractTool<ToolContext> {
 
   private static final String VALUATION_DATE_OPTION = "vd";
   private static final String VALUATION_DATE_LONG = "valution-date";
-  private static final String VALUATION_DATE_DESCRIPTION = "The valuation date (in current locale short form or Today/Yesterday/YesterdayBusiness) of the scalar values, default to today";
+  private static final String VALUATION_DATE_DESCRIPTION = "The valuation date (in current locale short form or Today/Yesterday/YesterdayBusiness) "
+      + "of the scalar values, default to today";
   private static final String VALUATION_DATE_ARG_NAME = "date";
 
   private static final String TEST_OPTION = "t";
@@ -150,7 +152,8 @@ public class StatelessViewRunner extends AbstractTool<ToolContext> {
     PortfolioMaster portfolioMaster = getToolContext().getPortfolioMaster();
     PositionMaster positionMaster = getToolContext().getPositionMaster();
 
-    final StatelessAnalyticService service = new StatelessAnalyticService(portfolioMaster, positionMaster, positionSource, securityMaster, securitySource, configMaster, configSource, viewProcessor);
+    final StatelessAnalyticService service = new StatelessAnalyticService(portfolioMaster, positionMaster, positionSource, securityMaster, 
+        securitySource, configMaster, configSource, viewProcessor);
     final SynchronousJob job = service.createSynchronousJob(ViewKey.of(viewName), portfolio, scheme, valuationTime, snapshotDate);
     ResultModel resultModel = job.run();
     timer.finished();

@@ -85,13 +85,24 @@ public class ResultKeyTest {
     assertNotEquals(key, ResultKey.of(ResultType.FX_PRESENT_VALUE));
     // value requirement names don't match
     assertNotEquals(key, ResultKey.of("Test", ResultType.BUCKETED_PV01));
-    final ValueProperties missingInputProperty = ValueProperties.builder().with(ValuePropertyNames.AGGREGATION, MissingInputsFunction.AGGREGATION_STYLE_MISSING).get();
+    final ValueProperties missingInputProperty = ValueProperties.builder()
+        .with(ValuePropertyNames.AGGREGATION, MissingInputsFunction.AGGREGATION_STYLE_MISSING).get();
     final ValueProperties anyCurrencyProperty = ValueProperties.builder().withAny(ValuePropertyNames.CURRENCY).get();
-    final ValueProperties optionalProperties = ValueProperties.builder().with(ValuePropertyNames.AGGREGATION, MissingInputsFunction.AGGREGATION_STYLE_MISSING).withOptional(ValuePropertyNames.AGGREGATION)
+    final ValueProperties optionalProperties = ValueProperties.builder()
+        .with(ValuePropertyNames.AGGREGATION, MissingInputsFunction.AGGREGATION_STYLE_MISSING).withOptional(ValuePropertyNames.AGGREGATION)
         .with(ValuePropertyNames.CURRENCY, Currency.USD.getCode()).get();
-    final ResultKey keyWithMissingInputProperty = ResultKey.of("Test", ResultType.builder().valueRequirementName(ValueRequirementNames.FX_PRESENT_VALUE).properties(missingInputProperty).build());
-    final ResultKey keyWithCurrencyProperty = ResultKey.of("Test", ResultType.builder().valueRequirementName(ValueRequirementNames.FX_PRESENT_VALUE).properties(anyCurrencyProperty).build());
-    final ResultKey keyWithOptionalProperties = ResultKey.of("Test", ResultType.builder().valueRequirementName(ValueRequirementNames.FX_PRESENT_VALUE).properties(optionalProperties).build());
+    final ResultKey keyWithMissingInputProperty = ResultKey.of("Test", ResultType.builder()
+        .valueRequirementName(ValueRequirementNames.FX_PRESENT_VALUE)
+        .properties(missingInputProperty)
+        .build());
+    final ResultKey keyWithCurrencyProperty = ResultKey.of("Test", ResultType.builder()
+        .valueRequirementName(ValueRequirementNames.FX_PRESENT_VALUE)
+        .properties(anyCurrencyProperty)
+        .build());
+    final ResultKey keyWithOptionalProperties = ResultKey.of("Test", ResultType.builder()
+        .valueRequirementName(ValueRequirementNames.FX_PRESENT_VALUE)
+        .properties(optionalProperties)
+        .build());
     // loose matching means key without properties will always satisfy properties of other key
     assertEquals(key, keyWithMissingInputProperty);
     assertEquals(keyWithMissingInputProperty, key);
@@ -113,6 +124,7 @@ public class ResultKeyTest {
    */
   @Test
   public void testToString() {
-    assertEquals(ResultKey.of("Test", ResultType.FX_PRESENT_VALUE).toString(), "ResultKey[columnSet=Test, resultType=ResultType{valueRequirementName=FX Present Value, properties=EMPTY}]");
+    assertEquals(ResultKey.of("Test", ResultType.FX_PRESENT_VALUE).toString(), 
+        "ResultKey[columnSet=Test, resultType=ResultType{valueRequirementName=FX Present Value, properties=EMPTY}]");
   }
 }
