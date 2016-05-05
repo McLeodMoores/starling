@@ -153,7 +153,7 @@ public class Usd3mLiborKnownDiscountingTest extends CurveBuildingTests {
   /** Builds the discounting curve */
   private static final DiscountingMethodCurveSetUp DSC_BUILDER = DiscountingMethodCurveBuilder.setUp()
       .building(CURVE_NAME_DSC_USD)
-      .using(CURVE_NAME_DSC_USD).forDiscounting(Currency.USD).withInterpolator(INTERPOLATOR)
+      .using(CURVE_NAME_DSC_USD).forDiscounting(Currency.USD).forOvernightIndex(FED_FUNDS_INDEX).withInterpolator(INTERPOLATOR)
       .withKnownData(new MulticurveProviderDiscount(FX_MATRIX));
   static {
     for (int i = 0; i < DSC_USD_MARKET_QUOTES.length; i++) {

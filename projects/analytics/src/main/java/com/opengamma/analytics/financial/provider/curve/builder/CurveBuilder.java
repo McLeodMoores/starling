@@ -74,7 +74,7 @@ public abstract class CurveBuilder<T extends ParameterProviderInterface> {
           final String curveName = curveNamesForUnit[j];
           final Map<Pair<GeneratorInstrument, GeneratorAttribute>, Double> nodesForCurve = _nodes.get(curveName);
           if (nodesForCurve == null) {
-            throw new IllegalStateException();
+            throw new IllegalStateException("No nodes found for curve called " + curveName);
           }
           final Iterator<Map.Entry<Pair<GeneratorInstrument, GeneratorAttribute>, Double>> nodesIterator = nodesForCurve.entrySet().iterator();
           final int nNodes = nodesForCurve.size();

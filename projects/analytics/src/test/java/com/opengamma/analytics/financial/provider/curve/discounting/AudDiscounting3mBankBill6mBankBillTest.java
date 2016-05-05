@@ -227,8 +227,6 @@ public class AudDiscounting3mBankBill6mBankBillTest extends CurveBuildingTests {
       DISCOUNTING_THEN_BANK_BILLS_BUILDER.withNode(CURVE_NAME_FWD6_AUD, FWD6_AUD_GENERATORS[i], FWD6_AUD_ATTR[i], FWD6_AUD_MARKET_QUOTES[i]);
       DISCOUNTING_AND_BANK_BILLS_BUILDER.withNode(CURVE_NAME_FWD6_AUD, FWD6_AUD_GENERATORS[i], FWD6_AUD_ATTR[i], FWD6_AUD_MARKET_QUOTES[i]);
     }
-    DISCOUNTING_THEN_BANK_BILLS_BUILDER.withFixingTs(FIXING_TS_WITH_TODAY).getBuilder().buildCurves(NOW);
-    DISCOUNTING_AND_BANK_BILLS_BUILDER.withFixingTs(FIXING_TS_WITH_TODAY).getBuilder().buildCurves(NOW);
   }
   /** Simultaneous discounting and bank bill curves before today's fixing */
   private static final Pair<MulticurveProviderDiscount, CurveBuildingBlockBundle> DSC_BANK_BILLS_SIMULTANEOUS_BEFORE_FIXING;

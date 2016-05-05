@@ -25,6 +25,7 @@ public interface CurveSetUpInterface<T extends ParameterProviderInterface> {
 
   public CurveTypeSetUpInterface<T> using(final String curveName);
 
+  //TODO this method should generate definitions immediately
   public CurveSetUpInterface<T> withNode(final String curveName, final GeneratorInstrument instrumentGenerator, final GeneratorAttribute attributeGenerator, final double marketData);
 
   //TODO add a withNode that takes definitions

@@ -30,11 +30,6 @@ import com.opengamma.analytics.financial.model.interestrate.curve.YieldCurve;
 import com.opengamma.analytics.financial.provider.calculator.discounting.ParSpreadMarketQuoteCurveSensitivityDiscountingCalculator;
 import com.opengamma.analytics.financial.provider.calculator.discounting.ParSpreadMarketQuoteDiscountingCalculator;
 import com.opengamma.analytics.financial.provider.calculator.discounting.PresentValueDiscountingCalculator;
-import com.opengamma.analytics.financial.provider.curve.CurveBuildingBlock;
-import com.opengamma.analytics.financial.provider.curve.CurveBuildingBlockBundle;
-import com.opengamma.analytics.financial.provider.curve.CurveUtils;
-import com.opengamma.analytics.financial.provider.curve.MultiCurveBundle;
-import com.opengamma.analytics.financial.provider.curve.SingleCurveBundle;
 import com.opengamma.analytics.financial.provider.curve.builder.CurveSetUpInterface;
 import com.opengamma.analytics.financial.provider.curve.multicurve.MulticurveDiscountBuildingRepository;
 import com.opengamma.analytics.financial.provider.description.interestrate.HullWhiteOneFactorProviderDiscount;
@@ -62,7 +57,7 @@ public class CurveBuildingTestUtils {
   private static final int STEP_MAX = 100;
   private static final MulticurveDiscountBuildingRepository CURVE_BUILDING_REPOSITORY =
       new MulticurveDiscountBuildingRepository(TOLERANCE_ROOT, TOLERANCE_ROOT, STEP_MAX);
-  private static final double EPS = 1e-9;
+  private static final double EPS = 1e-8;
 
   @SuppressWarnings("unchecked")
   public static Pair<MulticurveProviderDiscount, CurveBuildingBlockBundle> makeCurvesFromDefinitions(
