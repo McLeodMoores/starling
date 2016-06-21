@@ -1,46 +1,4 @@
-Welcome to the Starling Platform!
----------------------------------
-Starling is McLeod Moores' technology platform for market risk and analytics.
-It is a fork of the OpenGamma platform (2.2) that has been further developed 
-by us for use by our customers and we are releasing our changes back to the 
-community.
 
-OpenGamma has recently deprecated the 2.x codebase we are using, so why is 
-it of any interest?  Quite simply we believe the tens of millions of dollars 
-of investment put into OpenGamma were never adequately exposed to users in 
-an easy-to-use way.  OpenGamma has chosen to rewrite their offering almost 
-from scratch, whereas we have taken an evolutionary approach.
-
-In particular
- * We won't break APIs unless we're correcting behaviour and when we replace
-   APIs we will provide a clear migration path.  We value your participation.
- * We want to make the common use cases much easier to use, and the more 
-   complex configurations still possible.
- * We want to promote the use of the Analytics library as a stand-alone 
-   component for when existing infrastructure is already in place in your
-   application.
- * We want to improve the documentation and invite others to participate.
-   
-Comparison with OpenGamma Strata
-OpenGamma's new Strata library is interesting and a mostly complete rewrite 
-of the OpenGamma platform.  It has some nice features and a clean 
-architecture, but it lacks many things:
- * No support for streaming analytics - not an event driven architecture
- * No support for persistence
- * No distributed micro-services model
- * No cube-like risk output
- * No live data model or Bloomberg module
- * No R support
-Starling continues support for fully streaming, real-time analytics, while 
-simplifying the API particularly for the more common use-cases like on-demand 
-calculations using daily snapshots and historical data provided by the user.
-
-Additionally, while preserving the abililty to scale to a multi-node micro-
-services style configuration, we have focussed on making simpler, single-node
-setups easier to run by separating the micro-services dependencies into 
-separate packages.  This yields large savings in memory and extraneous 
-dependencies in simple use-cases that make it much easier to embed Starling 
-in existing applications.
 
 Built as a completely open architecture, the OpenGamma Platform is designed so
 that every component can be individually used, or individually replaced, based
