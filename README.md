@@ -1,3 +1,5 @@
+![Starling](https://github.com/McLeodMoores/starling/raw/mcleodmoores/starling-inline.png)
+
 Welcome to the Starling Platform!
 ---------------------------------
 Starling is McLeod Moores' technology platform for market risk and analytics.
