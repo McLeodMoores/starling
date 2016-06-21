@@ -60,9 +60,9 @@ These can be skipped to save time if desired:
 ```
 
 
-Running the OpenGamma engine
-----------------------------
-The primary program in the OpenGamma platform is known as the "engine".
+Running the Calculation engine
+------------------------------
+A core component in Starling is known as the "engine".
 For production, the engine is typically customized, however two example engine
 configurations are pre-supplied, one with Bloomberg support and one with
 simulated market data.
