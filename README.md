@@ -3,7 +3,7 @@ Welcome to the Starling Platform!
 Starling is McLeod Moores' technology platform for market risk and analytics.
 It is a fork of the OpenGamma platform (2.2) that has been independently 
 developed by us in private.  We are releasing our changes back to the 
-community.
+community and will now work in public.
 
 Our aims and principles:
  * We won't break APIs unless we're correcting behaviour and when we replace
