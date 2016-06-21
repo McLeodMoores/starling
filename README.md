@@ -1,45 +1,49 @@
-Welcome to the OpenGamma Platform!
-----------------------------------
-OpenGamma's flagship technology for financial institutions, the OpenGamma
-Platform, is a comprehensive solution for financial analytics capable of
-satisfying the full range of front-office and risk requirements.
-It supports pre-trade ad-hoc calculations, near-real-time streaming analytics,
-batch/overnight risk calculations, and complex historical scenarios and
-stress tests in the same system.
+Welcome to the Starling Platform!
+---------------------------------
+Starling is McLeod Moores' technology platform for market risk and analytics.
+It is a fork of the OpenGamma platform (2.2) that has been independently 
+developed by us in private.  We are releasing our changes back to the 
+community.
 
-Built as a completely open architecture, the OpenGamma Platform is designed so
-that every component can be individually used, or individually replaced, based
-on customer requirements. We don't believe in forklift upgrades, and we built
-the OpenGamma Platform so that they're never necessary: individual projects can
-use OpenGamma components when they provide a clear advantage, and later migrate
-additional portions of their infrastructure if and when time and resources
-permit.
+Our aims and principles:
+ * We won't break APIs unless we're correcting behaviour and when we replace
+   APIs we will provide a clear migration path.  We value your participation.
+ * We want to make the common use cases much easier to use, and the more 
+   complex configurations still possible.
+ * We want to promote the use of the Analytics library as a stand-alone 
+   component for when existing infrastructure is already in place in your
+   application.
+ * We want to improve the documentation and invite others to participate.
+   
+Starling continues support for fully streaming, real-time analytics, while 
+simplifying the API particularly for the more common use-cases like on-demand 
+calculations using daily snapshots and historical data provided by the user.
 
-Visit the developer website at http://developers.opengamma.com for more
-information, downloads, docs and more.
+Additionally, while preserving the abililty to scale to a multi-node micro-
+services style configuration, we have focussed on making simpler, single-node
+setups easier to run by separating the micro-services dependencies into 
+separate packages.  This yields large savings in memory and extraneous 
+dependencies in simple use-cases that make it much easier to embed Starling 
+in existing applications.
 
-[![OpenGamma](http://developers.opengamma.com/res/display/default/chrome/masthead_logo.png "OpenGamma")](http://developers.opengamma.com)
-
-
-Installing and building OpenGamma
+Installing and building Starling
 ---------------------------------
 Firstly you need to make sure Apache Maven and Git are installed and working.
 Version 3.0.4 or later of Maven is required.
 
 ### Obtaining the source code
 
-The OpenGamma Platform is open source software using the Apache License v2.
-The [company](http://www.opengamma.com/) behind OpenGamma also offers support
-and some additional commercial components (The commercial components typically
-have dependencies with restrictive licensing incompatible with open source.)
-This README only refers to the open source components.
+The Starling Platform is open source software using the Apache License v2.
+The [company](http://www.mcleodmoores.com/) behind Starling also offers support,
+consultancy and some additional commercial components.
 
 The source code can be cloned using git from GitHub:
 ```
-  git clone https://github.com/OpenGamma/OG-Platform.git
+  git clone https://github.com/McLeodMoores/starling.git
 ```
 
-A source tarball can also be downloaded from http://developers.opengamma.com.
+A source tarball can also be downloaded from 
+http://github.com/McleodMoores/starling
 
 ### Building
 
@@ -88,4 +92,4 @@ Full details are in the README of the eclipse subdirectory.
 
 More information
 ----------------
-For more information go to http://developers.opengamma.com
+For more information go to http://www.mcleodmoores.com
