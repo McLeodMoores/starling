@@ -126,7 +126,7 @@ public final class ForexOptionVanillaBlackSmileMethod {
     final double volatility = smileMulticurves.getVolatility(optionForex.getCurrency1(), optionForex.getCurrency2(), optionForex.getTimeToExpiry(), optionForex.getStrike(), forward);
     final BlackFunctionData dataBlack = new BlackFunctionData(forward, dfDomestic, volatility);
     final double[] priceAdjoint = BLACK_FUNCTION.getPriceAdjoint(optionForex, dataBlack);
-    final double sign = (optionForex.isLong() ? 1.0 : -1.0);
+    final double sign = optionForex.isLong() ? 1.0 : -1.0;
     final double price = priceAdjoint[0] * Math.abs(optionForex.getUnderlyingForex().getPaymentCurrency1().getAmount()) * sign;
     final double deltaSpot = priceAdjoint[1] * dfForeign / dfDomestic;
     MultipleCurrencyAmount currencyExposure = MultipleCurrencyAmount.of(optionForex.getUnderlyingForex().getCurrency1(),
@@ -153,7 +153,7 @@ public final class ForexOptionVanillaBlackSmileMethod {
     final double spot = multicurves.getFxRate(optionForex.getCurrency1(), optionForex.getCurrency2());
     final double forward = spot * dfForeign / dfDomestic;
     final double volatility = smileMulticurves.getVolatility(optionForex.getCurrency1(), optionForex.getCurrency2(), optionForex.getTimeToExpiry(), optionForex.getStrike(), forward);
-    final double sign = (optionForex.isLong() ? 1.0 : -1.0);
+    final double sign = optionForex.isLong() ? 1.0 : -1.0;
     final double deltaDirect = BlackFormulaRepository.delta(forward, optionForex.getStrike(), optionForex.getTimeToExpiry(), volatility, optionForex.isCall()) * dfForeign * sign;
     if (directQuote) {
       return deltaDirect;
@@ -181,7 +181,7 @@ public final class ForexOptionVanillaBlackSmileMethod {
     final double spot = multicurves.getFxRate(optionForex.getCurrency1(), optionForex.getCurrency2());
     final double forward = spot * dfForeign / dfDomestic;
     final double volatility = smileMulticurves.getVolatility(optionForex.getCurrency1(), optionForex.getCurrency2(), optionForex.getTimeToExpiry(), optionForex.getStrike(), forward);
-    final double sign = (optionForex.isLong() ? 1.0 : -1.0);
+    final double sign = optionForex.isLong() ? 1.0 : -1.0;
     final double deltaDirect = BlackFormulaRepository.delta(forward, optionForex.getStrike(), optionForex.getTimeToExpiry(), volatility, optionForex.isCall()) * dfForeign * sign;
     if (directQuote) {
       return deltaDirect * spot;
@@ -241,7 +241,7 @@ public final class ForexOptionVanillaBlackSmileMethod {
     final double spot = multicurves.getFxRate(optionForex.getCurrency1(), optionForex.getCurrency2());
     final double forward = spot * dfForeign / dfDomestic;
     final double volatility = smileMulticurves.getVolatility(optionForex.getCurrency1(), optionForex.getCurrency2(), optionForex.getTimeToExpiry(), optionForex.getStrike(), forward);
-    final double sign = (optionForex.isLong() ? 1.0 : -1.0);
+    final double sign = optionForex.isLong() ? 1.0 : -1.0;
     final double gammaDirect = BlackFormulaRepository.gamma(forward, optionForex.getStrike(), optionForex.getTimeToExpiry(), volatility) * (dfForeign * dfForeign) / dfDomestic * sign;
     if (directQuote) {
       return gammaDirect;
@@ -253,7 +253,7 @@ public final class ForexOptionVanillaBlackSmileMethod {
 
   /**
    * Computes the relative gamma of the Forex option multiplied by the spot rate.
-   * The relative gamma is the second oder derivative of the pv relative to the option notional.
+   * The relative gamma is the second order derivative of the pv relative to the option notional.
    * The reason to multiply by the spot rate is to be able to compute the change of delta for a relative increase of e of the spot rate (from X to X(1+e)).
    * @param optionForex The Forex option.
    * @param smileMulticurves The curve and smile data.
@@ -270,7 +270,7 @@ public final class ForexOptionVanillaBlackSmileMethod {
     final double spot = multicurves.getFxRate(optionForex.getCurrency1(), optionForex.getCurrency2());
     final double forward = spot * dfForeign / dfDomestic;
     final double volatility = smileMulticurves.getVolatility(optionForex.getCurrency1(), optionForex.getCurrency2(), optionForex.getTimeToExpiry(), optionForex.getStrike(), forward);
-    final double sign = (optionForex.isLong() ? 1.0 : -1.0);
+    final double sign = optionForex.isLong() ? 1.0 : -1.0;
     final double gammaDirect = BlackFormulaRepository.gamma(forward, optionForex.getStrike(), optionForex.getTimeToExpiry(), volatility) * (dfForeign * dfForeign) / dfDomestic * sign;
     if (directQuote) {
       return gammaDirect * spot;
@@ -361,7 +361,7 @@ public final class ForexOptionVanillaBlackSmileMethod {
     final double spot = multicurves.getFxRate(optionForex.getCurrency1(), optionForex.getCurrency2());
     final double forward = spot * dfForeign / dfDomestic;
     final double volatility = smileMulticurves.getVolatility(optionForex.getCurrency1(), optionForex.getCurrency2(), optionForex.getTimeToExpiry(), optionForex.getStrike(), forward);
-    final double sign = (optionForex.isLong() ? 1.0 : -1.0);
+    final double sign = optionForex.isLong() ? 1.0 : -1.0;
     final double theta = BlackFormulaRepository.driftlessTheta(forward, optionForex.getStrike(), optionForex.getTimeToExpiry(), volatility) * sign
         * Math.abs(optionForex.getUnderlyingForex().getPaymentCurrency1().getAmount());
     return CurrencyAmount.of(optionForex.getUnderlyingForex().getCurrency2(), theta);
@@ -424,7 +424,7 @@ public final class ForexOptionVanillaBlackSmileMethod {
     final double spot = multicurves.getFxRate(optionForex.getCurrency1(), optionForex.getCurrency2());
     final double forward = spot * dfForeign / dfDomestic;
     final double volatility = smileMulticurves.getVolatility(optionForex.getCurrency1(), optionForex.getCurrency2(), optionForex.getTimeToExpiry(), optionForex.getStrike(), forward);
-    final double sign = (optionForex.isLong() ? 1.0 : -1.0);
+    final double sign = optionForex.isLong() ? 1.0 : -1.0;
     final double vanna = dfForeign * BlackFormulaRepository.vanna(forward, optionForex.getStrike(), optionForex.getTimeToExpiry(), volatility) * sign
         * Math.abs(optionForex.getUnderlyingForex().getPaymentCurrency1().getAmount());
 
@@ -447,7 +447,7 @@ public final class ForexOptionVanillaBlackSmileMethod {
     final double spot = multicurves.getFxRate(optionForex.getCurrency1(), optionForex.getCurrency2());
     final double forward = spot * dfForeign / dfDomestic;
     final double volatility = smileMulticurves.getVolatility(optionForex.getCurrency1(), optionForex.getCurrency2(), optionForex.getTimeToExpiry(), optionForex.getStrike(), forward);
-    final double sign = (optionForex.isLong() ? 1.0 : -1.0);
+    final double sign = optionForex.isLong() ? 1.0 : -1.0;
     final double vomma = dfDomestic * BlackFormulaRepository.vomma(forward, optionForex.getStrike(), optionForex.getTimeToExpiry(), volatility) * sign
         * Math.abs(optionForex.getUnderlyingForex().getPaymentCurrency1().getAmount());
     return CurrencyAmount.of(optionForex.getUnderlyingForex().getCurrency2(), vomma);
@@ -527,7 +527,7 @@ public final class ForexOptionVanillaBlackSmileMethod {
     final double[] priceAdjoint = BLACK_FUNCTION.getPriceAdjoint(optionForex, dataBlack);
     final double volatilitySensitivityValue = priceAdjoint[2] * Math.abs(optionForex.getUnderlyingForex().getPaymentCurrency1().getAmount()) * (optionForex.isLong() ? 1.0 : -1.0);
     final DoublesPair point = DoublesPair.of(optionForex.getTimeToExpiry(),
-        (optionForex.getCurrency1() == smileMulticurves.getCurrencyPair().getFirst()) ? optionForex.getStrike() : 1.0 / optionForex.getStrike());
+        optionForex.getCurrency1() == smileMulticurves.getCurrencyPair().getFirst() ? optionForex.getStrike() : 1.0 / optionForex.getStrike());
     // Implementation note: The strike should be in the same currency order as the input data.
     final SurfaceValue result = SurfaceValue.from(point, volatilitySensitivityValue);
     final PresentValueForexBlackVolatilitySensitivity sensi = new PresentValueForexBlackVolatilitySensitivity(optionForex.getUnderlyingForex().getCurrency1(), optionForex.getUnderlyingForex()
@@ -557,7 +557,7 @@ public final class ForexOptionVanillaBlackSmileMethod {
         optionForex.getTimeToExpiry(), optionForex.getStrike(), forward);
     final double[][] nodeWeight = volAndSensitivities.getBucketedSensitivities();
     final DoublesPair point = DoublesPair.of(optionForex.getTimeToExpiry(),
-        (optionForex.getCurrency1() == smileMulticurves.getCurrencyPair().getFirst()) ? optionForex.getStrike() : 1.0 / optionForex.getStrike());
+        optionForex.getCurrency1() == smileMulticurves.getCurrencyPair().getFirst() ? optionForex.getStrike() : 1.0 / optionForex.getStrike());
     final double[][] vega = new double[volatilityModel.getNumberExpiration()][volatilityModel.getNumberStrike()];
     for (int loopexp = 0; loopexp < volatilityModel.getNumberExpiration(); loopexp++) {
       for (int loopstrike = 0; loopstrike < volatilityModel.getNumberStrike(); loopstrike++) {

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.option.definition;
@@ -105,7 +105,7 @@ public class SmileDeltaParameters {
   }
 
   /**
-   * Gets the volatilities associated to the strikes,
+   * Gets the volatilities associated to the strikes.
    * @return The volatilities,
    */
   public double[] getVolatility() {
@@ -119,7 +119,7 @@ public class SmileDeltaParameters {
     result = prime * result + Arrays.hashCode(_delta);
     long temp;
     temp = Double.doubleToLongBits(_timeToExpiry);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     result = prime * result + Arrays.hashCode(_volatility);
     return result;
   }

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.option.pricing.analytic;
@@ -86,7 +86,7 @@ import com.opengamma.util.ArgumentChecker;
  *
  * The price of puts is calculated using the Bjerksund-Stensland put-call transformation
  * $p(S, K, T, r, b, \sigma) = c(K, S, T, r - b, -b, \sigma)$.
- * 
+ *
  */
 public class BjerksundStenslandModel {
 
@@ -130,7 +130,7 @@ public class BjerksundStenslandModel {
   }
 
   /**
-   * Get the price of an American option by the Bjerksund and Stensland (2002) approximation. We ensure that the price is the maximum of the no early excise (Black-Scholes price), 
+   * Get the price of an American option by the Bjerksund and Stensland (2002) approximation. We ensure that the price is the maximum of the no early excise (Black-Scholes price),
    * the immediate exercise value and the Bjerksund-Stensland approximation value
    * @param s0 The spot
    * @param k The strike
@@ -151,16 +151,16 @@ public class BjerksundStenslandModel {
       final double minPrice = Math.max(s0 - k, bsPrice);
       return Math.max(minPrice, getCallPrice(s0, k, r, b, t, sigma, bsPrice));
     }
-    //min price is  maximum of immediate exercise and Black-Scholes price 
+    //min price is  maximum of immediate exercise and Black-Scholes price
     final double minPrice = Math.max(k - s0, bsPrice);
     final double temp = (2 * b + sigma * sigma) / 2 / sigma;
     final double minR = b - 0.5 * temp * temp;
-    //this does not give the best possible lower bound. Bjerksund-Stensland will give an answer for r < 0, but will fail for r < minR (complex beta) 
-    //TODO review the Bjerksund-Stensland formalisation to see if a general r < 0 (for puts) solution is possible 
+    //this does not give the best possible lower bound. Bjerksund-Stensland will give an answer for r < 0, but will fail for r < minR (complex beta)
+    //TODO review the Bjerksund-Stensland formalisation to see if a general r < 0 (for puts) solution is possible
     if (r < minR) {
       return minPrice;
     }
-    //put using put-call transformation 
+    //put using put-call transformation
     return Math.max(minPrice, getCallPrice(k, s0, r - b, -b, t, sigma, bsPrice));
   }
 
@@ -201,7 +201,7 @@ public class BjerksundStenslandModel {
         b0 = Math.max(k, r * k / denom);
       }
       final double arg = y * y + 2 * r / sigmaSq;
-      ArgumentChecker.isTrue(arg >= 0, "beta is complex. Please check valueso of r & b"); //fail rather than propagate NaN
+      ArgumentChecker.isTrue(arg >= 0, "beta is complex. Please check values of r & b"); //fail rather than propagate NaN
       beta = y + Math.sqrt(arg);
       final double bInfinity = beta * k / (beta - 1);
       final double h1 = getH(b, t1, sigma, k, b0, bInfinity);
@@ -689,7 +689,7 @@ public class BjerksundStenslandModel {
   }
 
   /**
-   * Get the put option price, plus its delta and gamma from dual-delta and dual-gamma of the call option by using the put-call transformation. 
+   * Get the put option price, plus its delta and gamma from dual-delta and dual-gamma of the call option by using the put-call transformation.
    * @param s0 The spot
    * @param k The strike
    * @param r The risk-free rate
@@ -733,10 +733,10 @@ public class BjerksundStenslandModel {
   /**
    * access given for tests - expert use only <p>
    * Get lambda and its sensitivity to gamma, r, b and sigma-squared
-   * @param gamma If this is set to 0 or 1, then the gamma sensitivity should be ignored  
-   * @param r risk-free rate 
+   * @param gamma If this is set to 0 or 1, then the gamma sensitivity should be ignored
+   * @param r risk-free rate
    * @param b cost-of-carry
-   * @param sigmaSq volatility squared 
+   * @param sigmaSq volatility squared
 
    * @return length 5 array of lambda and its sensitivity to gamma, r, b and sigma-squared
    */
@@ -753,10 +753,10 @@ public class BjerksundStenslandModel {
 
   /**
    * access given for tests - expert use only <p>
-   * Get kappa and its sensitivity to gamma, b and sigma-squared 
-   * @param gamma If this is set to 0 or 1, then the gamma sensitivity should be ignored  
+   * Get kappa and its sensitivity to gamma, b and sigma-squared
+   * @param gamma If this is set to 0 or 1, then the gamma sensitivity should be ignored
    * @param b cost-of-carry
-   * @param sigmaSq volatility squared 
+   * @param sigmaSq volatility squared
    * @return length 4 array of kappa and its sensitivity to gamma, b and sigma-squared
    */
   protected double[] getKappaAdjoint(final double gamma, final double b, final double sigmaSq) {
@@ -771,16 +771,16 @@ public class BjerksundStenslandModel {
 
   /**
    * access given for tests - expert use only <p>
-   * get phi and its sensitivity to s, t, gamma, h, x (I), r, b & sigma  
+   * get phi and its sensitivity to s, t, gamma, h, x (I), r, b & sigma
    * @param s spot
    * @param t expiry
-   * @param gamma If this is set to 0 or 1, then the gamma sensitivity should be ignored  
+   * @param gamma If this is set to 0 or 1, then the gamma sensitivity should be ignored
    * @param h H
    * @param x I
    * @param r risk-free rate
    * @param b cost-of-carry
-   * @param sigma volatility 
-   * @return length 9 array of  phi and its sensitivity to s, t, gamma, h, x (I), r, b & sigma 
+   * @param sigma volatility
+   * @return length 9 array of  phi and its sensitivity to s, t, gamma, h, x (I), r, b & sigma
    */
   protected double[] getPhiAdjoint(final double s, final double t, final double gamma, final double h, final double x, final double r, final double b, final double sigma) {
 
@@ -791,7 +791,7 @@ public class BjerksundStenslandModel {
     final double[] lambdaAdj = getLambdaAdjoint(gamma, r, b, sigmaSq);
     final double[] kappaAdj = getKappaAdjoint(gamma, b, sigmaSq);
 
-    final double w0 = (b + (gamma - 0.5) * sigmaSq);
+    final double w0 = b + (gamma - 0.5) * sigmaSq;
     final double w1 = w0 * t1;
     final double w2 = Math.log(s / h);
     final double w3 = Math.log(x * x / s / h);
@@ -859,7 +859,7 @@ public class BjerksundStenslandModel {
     final double lambda = -r + gamma * b + 0.5 * gamma * (gamma - 1) * sigmaSq; //lambda
     final double kappa = 2 * b / sigmaSq + 2 * gamma - 1;
 
-    final double w0 = (b + (gamma - 0.5) * sigmaSq);
+    final double w0 = b + (gamma - 0.5) * sigmaSq;
     final double w1 = w0 * t1;
     final double w2 = Math.log(s / h);
     final double w2Dot = 1 / s;
@@ -913,13 +913,13 @@ public class BjerksundStenslandModel {
    * get Psi and its sensitivity to s, t, gamma, h, x2, x1, r, b and sigma
    * @param s spot
    * @param t expiry
-   * @param gamma If this is set to 0 or 1, then the gamma sensitivity should be ignored  
+   * @param gamma If this is set to 0 or 1, then the gamma sensitivity should be ignored
    * @param h H
    * @param x2 I2
    * @param x1 I1
    * @param r risk-free rate
    * @param b cost-of-carry
-   * @param sigma volatility 
+   * @param sigma volatility
    * @return array of length 10 of Psi and its sensitivity to s, t, gamma, h, x2, x1, r, b and sigma
    */
   protected double[] getPsiAdjoint(final double s, final double t, final double gamma, final double h, final double x2, final double x1, final double r, final double b,
@@ -1126,10 +1126,10 @@ public class BjerksundStenslandModel {
   /**
    * access given for tests - expert use only <p>
    * Get the first and second derivatives of the bi-variate normal with repect to a and b (rho is fixed)
-   * @param a first cooridinate 
-   * @param b second cooridinate 
-   * @param posRho true if RHO used, false is -RHO used 
-   * @return array of length 5 in order, dB/da, dB/db, d^2B/da^2, d^2B/db^2, d^2B/dadb 
+   * @param a first cooridinate
+   * @param b second cooridinate
+   * @param posRho true if RHO used, false is -RHO used
+   * @return array of length 5 in order, dB/da, dB/db, d^2B/da^2, d^2B/db^2, d^2B/dadb
    */
   protected double[] bivariateNormDiv(final double a, final double b, final boolean posRho) {
 
@@ -1157,7 +1157,7 @@ public class BjerksundStenslandModel {
    * Get beta and its sensitivity to r, b and sigma-squared
    * @param r risk-free rate
    * @param b cost-of-carry
-   * @param sigmaSq volatility squared 
+   * @param sigmaSq volatility squared
    * @return length 4 array of beta and its sensitivity to r, b and sigma-squared
    */
   protected double[] getBetaAdjoint(final double r, final double b, final double sigmaSq) {
@@ -1191,7 +1191,7 @@ public class BjerksundStenslandModel {
    * @param k strike
    * @param r risk-free rate
    * @param b cost-of-carry
-   * @param sigma volatility 
+   * @param sigma volatility
    * @param t expiry
    * @return length 6 array of  I1 and its sensitivity to k, r, b, sigma & t
    */
@@ -1205,7 +1205,7 @@ public class BjerksundStenslandModel {
    * @param k strike
    * @param r risk-free rate
    * @param b cost-of-carry
-   * @param sigma volatility 
+   * @param sigma volatility
    * @param t expiry
 
    * @return length 6 array of  I2 and its sensitivity to k, r, b, sigma & t
@@ -1223,7 +1223,7 @@ public class BjerksundStenslandModel {
 
     double z;
     final double[] res = new double[6];
-    //should always have r >= b - this stops problems with tests using divided difference 
+    //should always have r >= b - this stops problems with tests using divided difference
     final double denom = Math.abs(r - b);
     final boolean close;
     if (denom < R_B_SMALL) {
@@ -1246,7 +1246,7 @@ public class BjerksundStenslandModel {
     }
 
     final double[] betaAdj = getBetaAdjoint(r, b, sigmaSq);
-    final double zeta = (betaAdj[0]) / (betaAdj[0] - 1);
+    final double zeta = betaAdj[0] / (betaAdj[0] - 1);
     final double bInf = zeta * k;
     final double b0 = z < 1 ? k : k * z;
     final double w1 = -(b * u + 2 * sigmaRootT);
@@ -1259,7 +1259,7 @@ public class BjerksundStenslandModel {
     final double w5Bar = -w2;
     final double w4Bar = w5 * w5Bar;
     final double w3Bar = w1 * w4Bar;
-    final double w2Bar = (1 - w5) - w3 / w2 * w3Bar;
+    final double w2Bar = 1 - w5 - w3 / w2 * w3Bar;
     final double w1Bar = w3 * w4Bar;
     final double b0Bar = 1.0 - w3 / b0 * w3Bar - w2Bar;
     final double bInfBar = w2Bar;
@@ -1267,7 +1267,7 @@ public class BjerksundStenslandModel {
     final double zetaBar = k * bInfBar;
     final double betaBar = (1 - zeta) / (betaAdj[0] - 1) * zetaBar;
 
-    final double temp = (close ? 0.0 : (1 - z) / (r - b) * zBar);
+    final double temp = close ? 0.0 : (1 - z) / (r - b) * zBar;
     res[0] = w6;
     res[1] = 2 * w3 / k * w3Bar + (z < 1 ? 1.0 : z) * b0Bar + zeta * bInfBar; //kBar
     res[2] = temp + betaAdj[1] * betaBar; //rBar
