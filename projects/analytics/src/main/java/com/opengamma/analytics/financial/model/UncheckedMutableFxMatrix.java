@@ -19,14 +19,15 @@ import com.opengamma.util.money.MultipleCurrencyAmount;
  * A mutable implementation of an FX matrix that does not perform any calculations of cross rates or enforce consistency between
  * rates, but contains only those rates that have been added.
  */
-public final class SimpleMutableFxMatrix extends FXMatrix {
+public final class UncheckedMutableFxMatrix extends FXMatrix {
+  //TODO addOrUpdate rather than two methods
 
   /**
    * Gets an empty mutable matrix.
    * @return  an empty matrix
    */
-  public static SimpleMutableFxMatrix of() {
-    return new SimpleMutableFxMatrix();
+  public static UncheckedMutableFxMatrix of() {
+    return new UncheckedMutableFxMatrix();
   }
 
   /** The order that the currencies are stored in the matrix */
@@ -37,7 +38,7 @@ public final class SimpleMutableFxMatrix extends FXMatrix {
   /**
    * Restricted constructor.
    */
-  private SimpleMutableFxMatrix() {
+  private UncheckedMutableFxMatrix() {
     _currencyList = new ArrayList<>();
     _rates = new double[0][0];
   }
@@ -235,8 +236,8 @@ public final class SimpleMutableFxMatrix extends FXMatrix {
    * Returns an immutable FX matrix containing the data in this object.
    * @return  an immutable FX matrix
    */
-  public SimpleImmutableFxMatrix asImmutable() {
-    return SimpleImmutableFxMatrix.of(this);
+  public UncheckedImmutableFxMatrix asImmutable() {
+    return UncheckedImmutableFxMatrix.of(this);
   }
 
   @Deprecated
@@ -266,10 +267,10 @@ public final class SimpleMutableFxMatrix extends FXMatrix {
       return true;
     }
     // note that the superclass is ignored
-    if (!(obj instanceof SimpleMutableFxMatrix)) {
+    if (!(obj instanceof UncheckedMutableFxMatrix)) {
       return false;
     }
-    final SimpleMutableFxMatrix other = (SimpleMutableFxMatrix) obj;
+    final UncheckedMutableFxMatrix other = (UncheckedMutableFxMatrix) obj;
     if (!Objects.equals(_currencyList, other._currencyList)) {
       return false;
     }

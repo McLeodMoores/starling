@@ -18,28 +18,28 @@ import com.opengamma.util.money.MultipleCurrencyAmount;
  * An immutable implementation of an FX matrix that does not perform any calculations of cross rates or enforce consistency between
  * rates, but contains only those rates that have been added. The only operations that are possible are retrieving data.
  */
-public final class SimpleImmutableFxMatrix extends FXMatrix {
+public final class UncheckedImmutableFxMatrix extends FXMatrix {
 
   /**
    * Creates an immutable FX matrix. The data are copied on construction of the object.
    * @param matrix  the FX matrix, not null
    * @return  an immutable FX matrix
    */
-  public static SimpleImmutableFxMatrix of(final SimpleMutableFxMatrix matrix) {
-    return new SimpleImmutableFxMatrix(matrix);
+  public static UncheckedImmutableFxMatrix of(final UncheckedMutableFxMatrix matrix) {
+    return new UncheckedImmutableFxMatrix(matrix);
   }
 
   /** The underlying FX matrix */
-  private final SimpleMutableFxMatrix _underlying;
+  private final UncheckedMutableFxMatrix _underlying;
 
   /**
    * Restricted constructor.
    * @param matrix  the FX matrix, not null
    */
-  private SimpleImmutableFxMatrix(final SimpleMutableFxMatrix matrix) {
+  private UncheckedImmutableFxMatrix(final UncheckedMutableFxMatrix matrix) {
     ArgumentChecker.notNull(matrix, "matrix");
     final List<Currency> currencies = matrix.getCurrencyList();
-    _underlying = SimpleMutableFxMatrix.of();
+    _underlying = UncheckedMutableFxMatrix.of();
     final Currency[] currencyArray = currencies.toArray(new Currency[currencies.size()]);
     for (int i = 0; i < currencyArray.length; i++) {
       for (int j = i + 1; j < currencyArray.length; j++) {
@@ -123,10 +123,10 @@ public final class SimpleImmutableFxMatrix extends FXMatrix {
       return true;
     }
     // note that the superclass is ignored
-    if (!(obj instanceof SimpleImmutableFxMatrix)) {
+    if (!(obj instanceof UncheckedImmutableFxMatrix)) {
       return false;
     }
-    final SimpleImmutableFxMatrix other = (SimpleImmutableFxMatrix) obj;
+    final UncheckedImmutableFxMatrix other = (UncheckedImmutableFxMatrix) obj;
     return Objects.equals(_underlying, other._underlying);
   }
 

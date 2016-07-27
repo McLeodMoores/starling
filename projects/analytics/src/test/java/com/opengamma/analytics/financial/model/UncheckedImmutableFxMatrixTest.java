@@ -17,13 +17,13 @@ import com.opengamma.util.money.Currency;
 import com.opengamma.util.money.MultipleCurrencyAmount;
 
 /**
- * Unit tests for {@link SimpleImmutableFxMatrix}.
+ * Unit tests for {@link UncheckedImmutableFxMatrix}.
  */
-public class SimpleImmutableFxMatrixTest {
+public class UncheckedImmutableFxMatrixTest {
   /** The tolerance */
   private static final double EPS = 2e-16;
   /** The FX data */
-  private static final SimpleMutableFxMatrix MATRIX = SimpleMutableFxMatrix.of();
+  private static final UncheckedMutableFxMatrix MATRIX = UncheckedMutableFxMatrix.of();
   static {
     MATRIX.addCurrency(Currency.EUR, Currency.USD, 1.2);
     MATRIX.addCurrency(Currency.CHF, Currency.USD, 0.5);
@@ -38,7 +38,7 @@ public class SimpleImmutableFxMatrixTest {
    */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullUnderlying() {
-    SimpleImmutableFxMatrix.of(null);
+    UncheckedImmutableFxMatrix.of(null);
   }
 
   /**
@@ -87,14 +87,14 @@ public class SimpleImmutableFxMatrixTest {
    */
   @Test
   public void testImmutability() {
-    final SimpleMutableFxMatrix matrix = SimpleMutableFxMatrix.of();
+    final UncheckedMutableFxMatrix matrix = UncheckedMutableFxMatrix.of();
     matrix.addCurrency(Currency.EUR, Currency.USD, 1.2);
     matrix.addCurrency(Currency.CHF, Currency.USD, 0.5);
     matrix.addCurrency(Currency.GBP, Currency.USD, 1.3);
     matrix.addCurrency(Currency.CHF, Currency.EUR, 2.3);
     matrix.addCurrency(Currency.GBP, Currency.EUR, 23);
     matrix.addCurrency(Currency.GBP, Currency.CHF, 1.4);
-    final SimpleImmutableFxMatrix immutable = matrix.asImmutable();
+    final UncheckedImmutableFxMatrix immutable = matrix.asImmutable();
     final List<Currency> originalCurrencies = matrix.getCurrencyList();
     final List<Currency> immutableCurrencies = immutable.getCurrencyList();
     final double[][] originalRates = matrix.getFxRates();
@@ -117,7 +117,7 @@ public class SimpleImmutableFxMatrixTest {
    */
   @Test
   public void testDelegation() {
-    final SimpleImmutableFxMatrix immutable = MATRIX.asImmutable();
+    final UncheckedImmutableFxMatrix immutable = MATRIX.asImmutable();
     final MultipleCurrencyAmount mca = MultipleCurrencyAmount.of(new Currency[] {Currency.EUR, Currency.USD}, new double[] {100, 200});
     assertEquals(immutable.containsPair(Currency.EUR, Currency.CHF), MATRIX.containsPair(Currency.EUR, Currency.CHF));
     assertEquals(immutable.convert(mca, Currency.CHF), MATRIX.convert(mca, Currency.CHF));
@@ -132,16 +132,16 @@ public class SimpleImmutableFxMatrixTest {
    */
   @Test
   public void testObject() {
-    assertNotEquals(new FXMatrix(), SimpleImmutableFxMatrix.of(SimpleMutableFxMatrix.of()));
-    final SimpleImmutableFxMatrix matrix = MATRIX.asImmutable();
+    assertNotEquals(new FXMatrix(), UncheckedImmutableFxMatrix.of(UncheckedMutableFxMatrix.of()));
+    final UncheckedImmutableFxMatrix matrix = MATRIX.asImmutable();
     assertEquals(matrix.getCurrencyList(), MATRIX.getCurrencyList());
     assertMatrixEquals(matrix.getFxRates(), MATRIX.getFxRates(), EPS);
-    final SimpleImmutableFxMatrix other = MATRIX.asImmutable();
+    final UncheckedImmutableFxMatrix other = MATRIX.asImmutable();
     assertEquals(matrix, matrix);
     assertNotEquals(null, matrix);
     assertEquals(matrix, other);
     assertEquals(matrix.hashCode(), other.hashCode());
-    assertNotEquals(matrix, SimpleImmutableFxMatrix.of(SimpleMutableFxMatrix.of()));
+    assertNotEquals(matrix, UncheckedImmutableFxMatrix.of(UncheckedMutableFxMatrix.of()));
     assertFalse(other == MATRIX.asImmutable());
   }
 

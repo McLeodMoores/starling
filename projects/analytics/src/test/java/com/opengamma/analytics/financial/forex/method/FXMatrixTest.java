@@ -147,10 +147,10 @@ public class FXMatrixTest {
     assertFalse("FXMatrix - constructor", fxMatrix1.equals(fxMatrix2));
   }
 
-  @Test
   /**
    * Check the conversion of a multiple currency amount.
    */
+  @Test
   public void convert() {
     final FXMatrix fxMatrix = new FXMatrix();
     fxMatrix.addCurrency(EUR, USD, EUR_USD);
@@ -167,10 +167,10 @@ public class FXMatrixTest {
     assertEquals("FXMatrix - convert", USD, totalUSDCalculated.getCurrency());
   }
 
-  @Test
   /**
    * Check the update of one exchange rate in matrix.
    */
+  @Test
   public void update() {
     final FXMatrix fxMatrix = new FXMatrix();
     fxMatrix.addCurrency(EUR, USD, EUR_USD);
@@ -211,10 +211,10 @@ public class FXMatrixTest {
     assertFalse(fxMatrix.equals(other));
   }
 
-  @Test
   /**
    * Tests that a matrix merged with itself is equal with itself.
    */
+  @Test
   public void mergeWithItself() {
     final FXMatrix fxMatrix = new FXMatrix();
     fxMatrix.addCurrency(EUR, USD, EUR_USD);
@@ -223,15 +223,13 @@ public class FXMatrixTest {
     assertEquals("FXMatrixUtils - merge", fxMatrix, merged);
   }
 
-  @Test
   /**
    * Tests that a matrix constructed by adding currencies one by one or by merging by blocks returns the same result.
    */
+  @Test
   public void merge1() {
     final FXMatrix fxMatrixEURUSD = new FXMatrix();
     fxMatrixEURUSD.addCurrency(EUR, USD, EUR_USD);
-    //    assertTrue("FXMatrixUtils - merge", FXMatrixUtils.compare(fxMatrixEURUSD, FXMatrixUtils.merge(fxMatrixEURUSD, new FXMatrix()), TOLERANCE_RATE));
-    //    assertTrue("FXMatrixUtils - merge", FXMatrixUtils.compare(fxMatrixEURUSD, FXMatrixUtils.merge(new FXMatrix(), fxMatrixEURUSD), TOLERANCE_RATE));
     assertTrue("FXMatrixUtils - merge", FXMatrixUtils.compare(fxMatrixEURUSD, FXMatrixUtils.merge(fxMatrixEURUSD, new FXMatrix(USD)), TOLERANCE_RATE));
     assertTrue("FXMatrixUtils - merge", FXMatrixUtils.compare(fxMatrixEURUSD, FXMatrixUtils.merge(fxMatrixEURUSD, new FXMatrix(EUR)), TOLERANCE_RATE));
     assertTrue("FXMatrixUtils - merge", FXMatrixUtils.compare(fxMatrixEURUSD, FXMatrixUtils.merge(new FXMatrix(USD), fxMatrixEURUSD), TOLERANCE_RATE));
@@ -245,10 +243,10 @@ public class FXMatrixTest {
     assertTrue("FXMatrixUtils - merge", FXMatrixUtils.compare(merged, fxMatrixEURUSDGBP, TOLERANCE_RATE));
   }
 
-  @Test
   /**
    * Tests that a matrix constructed by adding currencies one by one or by merging by blocks returns the same result.
    */
+  @Test
   public void merge2() {
     final FXMatrix fxMatrix1 = new FXMatrix();
     fxMatrix1.addCurrency(EUR, USD, EUR_USD);
@@ -266,10 +264,10 @@ public class FXMatrixTest {
     assertEquals("FXMatrixUtils - merge", merged.getFxRate(USD, KRW), fxMatrixMergeExpected.getFxRate(USD, KRW), TOLERANCE_RATE);
   }
 
-  @Test
   /**
    * Tests the merge with an empty matrix.
    */
+  @Test
   public void merge3() {
     final FXMatrix fxMatrix1 = new FXMatrix();
     fxMatrix1.addCurrency(EUR, USD, EUR_USD);
@@ -280,10 +278,10 @@ public class FXMatrixTest {
     assertTrue("FXMatrixUtils - merge", FXMatrixUtils.compare(new FXMatrix(), FXMatrixUtils.merge(new FXMatrix(), new FXMatrix()), TOLERANCE_RATE));
   }
 
-  @Test
   /**
    * Tests the comparison tool.
    */
+  @Test
   public void compare() {
     // Matrix with itself
     final FXMatrix fxMatrix1 = new FXMatrix();
