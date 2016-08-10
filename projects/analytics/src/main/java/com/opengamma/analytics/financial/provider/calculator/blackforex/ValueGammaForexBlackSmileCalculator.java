@@ -9,9 +9,12 @@ import com.opengamma.analytics.financial.forex.derivative.ForexOptionVanilla;
 import com.opengamma.analytics.financial.forex.provider.ForexOptionVanillaBlackSmileMethod;
 import com.opengamma.analytics.financial.interestrate.InstrumentDerivativeVisitorAdapter;
 import com.opengamma.analytics.financial.provider.description.forex.BlackForexSmileProviderInterface;
+import com.opengamma.util.ArgumentChecker;
 
 /**
- * Calculates the value gamma (second order derivative with respect to the spot rate) for Forex derivatives in the Black (Garman-Kohlhagen) world.
+ * Calculates the value gamma (second order derivative with respect to the spot rate multiplied by the foreign notional)
+ * for Forex derivatives in the Black (Garman-Kohlhagen) world. The delta is calculated with respect to the direct quote
+ * i.e. 1 foreign currency = x domestic currency.
  */
 public class ValueGammaForexBlackSmileCalculator extends InstrumentDerivativeVisitorAdapter<BlackForexSmileProviderInterface, Double> {
 
@@ -34,19 +37,11 @@ public class ValueGammaForexBlackSmileCalculator extends InstrumentDerivativeVis
   ValueGammaForexBlackSmileCalculator() {
   }
 
-  /**
-   * The methods used by the different instruments.
-   */
-  private static final ForexOptionVanillaBlackSmileMethod METHOD_FXOPTIONVANILLA = ForexOptionVanillaBlackSmileMethod.getInstance();
-
-  /**
-   * The value gamma is provided with "direct quote", i.e. (1 foreign = x domestic) and not the reverse quote (1 domestic = x foreign).
-   * @param optionForex The Forex option.
-   * @param smileMulticurves The curve and smile data.
-   * @return The value gamma.
-   */
   @Override
-  public Double visitForexOptionVanilla(final ForexOptionVanilla optionForex, final BlackForexSmileProviderInterface smileMulticurves) {
-    return METHOD_FXOPTIONVANILLA.gammaRelative(optionForex, smileMulticurves, true);
+  public Double visitForexOptionVanilla(final ForexOptionVanilla option, final BlackForexSmileProviderInterface marketData) {
+    ArgumentChecker.notNull(option, "option");
+    final double sign = option.isLong() ? 1.0 : -1.0;
+    return ForexOptionVanillaBlackSmileMethod.getInstance().gammaRelative(option, marketData, true) * sign
+        * Math.abs(option.getUnderlyingForex().getPaymentCurrency1().getAmount());
   }
 }

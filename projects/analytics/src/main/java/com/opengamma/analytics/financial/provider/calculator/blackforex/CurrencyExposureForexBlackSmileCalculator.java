@@ -1,7 +1,11 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
+ *
+ * Modified by McLeod Moores Software Limited.
+ *
+ * Copyright (C) 2016 - present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.analytics.financial.provider.calculator.blackforex;
 
@@ -13,15 +17,14 @@ import com.opengamma.analytics.financial.forex.provider.ForexNonDeliverableOptio
 import com.opengamma.analytics.financial.forex.provider.ForexOptionDigitalBlackSmileMethod;
 import com.opengamma.analytics.financial.forex.provider.ForexOptionSingleBarrierBlackMethod;
 import com.opengamma.analytics.financial.forex.provider.ForexOptionVanillaBlackSmileMethod;
-import com.opengamma.analytics.financial.interestrate.InstrumentDerivative;
-import com.opengamma.analytics.financial.interestrate.InstrumentDerivativeVisitorSameMethodAdapter;
+import com.opengamma.analytics.financial.interestrate.InstrumentDerivativeVisitorAdapter;
 import com.opengamma.analytics.financial.provider.description.forex.BlackForexSmileProviderInterface;
 import com.opengamma.util.money.MultipleCurrencyAmount;
 
 /**
- * Calculates the present value of an inflation instruments by discounting for a given MarketBundle
+ * Calculates the currency exposure of FX options using the Garman-Kohlhagan model with a volatility smile.
  */
-public final class CurrencyExposureForexBlackSmileCalculator extends InstrumentDerivativeVisitorSameMethodAdapter<BlackForexSmileProviderInterface, MultipleCurrencyAmount> {
+public final class CurrencyExposureForexBlackSmileCalculator extends InstrumentDerivativeVisitorAdapter<BlackForexSmileProviderInterface, MultipleCurrencyAmount> {
 
   /**
    * The unique instance of the calculator.
@@ -42,44 +45,24 @@ public final class CurrencyExposureForexBlackSmileCalculator extends InstrumentD
     return INSTANCE;
   }
 
-  /**
-   * Pricing methods.
-   */
-  private static final ForexOptionVanillaBlackSmileMethod METHOD_FX_VAN = ForexOptionVanillaBlackSmileMethod.getInstance();
-  private static final ForexNonDeliverableOptionBlackSmileMethod METHOD_NDO = ForexNonDeliverableOptionBlackSmileMethod.getInstance();
-  private static final ForexOptionDigitalBlackSmileMethod METHOD_DIG = ForexOptionDigitalBlackSmileMethod.getInstance();
-  private static final ForexOptionSingleBarrierBlackMethod METHOD_BARRIER = ForexOptionSingleBarrierBlackMethod.getInstance();
-
   @Override
-  public MultipleCurrencyAmount visit(final InstrumentDerivative derivative, final BlackForexSmileProviderInterface blackSmile) {
-    return derivative.accept(this, blackSmile);
-  }
-
-  // -----     Forex     ------
-
-  @Override
-  public MultipleCurrencyAmount visitForexOptionVanilla(final ForexOptionVanilla option, final BlackForexSmileProviderInterface blackSmile) {
-    return METHOD_FX_VAN.currencyExposure(option, blackSmile);
+  public MultipleCurrencyAmount visitForexOptionVanilla(final ForexOptionVanilla option, final BlackForexSmileProviderInterface marketData) {
+    return ForexOptionVanillaBlackSmileMethod.getInstance().currencyExposure(option, marketData);
   }
 
   @Override
-  public MultipleCurrencyAmount visitForexNonDeliverableOption(final ForexNonDeliverableOption option, final BlackForexSmileProviderInterface blackSmile) {
-    return METHOD_NDO.currencyExposure(option, blackSmile);
+  public MultipleCurrencyAmount visitForexNonDeliverableOption(final ForexNonDeliverableOption option, final BlackForexSmileProviderInterface marketData) {
+    return ForexNonDeliverableOptionBlackSmileMethod.getInstance().currencyExposure(option, marketData);
   }
 
   @Override
-  public MultipleCurrencyAmount visitForexOptionDigital(final ForexOptionDigital option, final BlackForexSmileProviderInterface blackSmile) {
-    return METHOD_DIG.currencyExposure(option, blackSmile);
+  public MultipleCurrencyAmount visitForexOptionDigital(final ForexOptionDigital option, final BlackForexSmileProviderInterface marketData) {
+    return ForexOptionDigitalBlackSmileMethod.getInstance().currencyExposure(option, marketData);
   }
 
   @Override
-  public MultipleCurrencyAmount visitForexOptionSingleBarrier(final ForexOptionSingleBarrier option, final BlackForexSmileProviderInterface blackSmile) {
-    return METHOD_BARRIER.currencyExposure(option, blackSmile);
-  }
-
-  @Override
-  public MultipleCurrencyAmount visit(final InstrumentDerivative derivative) {
-    throw new UnsupportedOperationException();
+  public MultipleCurrencyAmount visitForexOptionSingleBarrier(final ForexOptionSingleBarrier option, final BlackForexSmileProviderInterface marketData) {
+    return ForexOptionSingleBarrierBlackMethod.getInstance().currencyExposure(option, marketData);
   }
 
 }

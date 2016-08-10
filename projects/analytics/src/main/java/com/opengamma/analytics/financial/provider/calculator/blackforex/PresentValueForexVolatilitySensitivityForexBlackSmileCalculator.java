@@ -2,6 +2,10 @@
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
  *
  * Please see distribution for license.
+ *
+ * Modified by McLeod Moores Software Limited.
+ *
+ * Copyright (C) 2016 - present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.analytics.financial.provider.calculator.blackforex;
 
@@ -18,7 +22,8 @@ import com.opengamma.analytics.financial.interestrate.InstrumentDerivativeVisito
 import com.opengamma.analytics.financial.provider.description.forex.BlackForexSmileProviderInterface;
 
 /**
- * Calculates the present value of an inflation instruments by discounting for a given MarketBundle
+ * Calculates the sensitivity of the present value to the implied volatility used in pricing. The underlying pricing
+ * model is a Black model without smile.
  */
 public final class PresentValueForexVolatilitySensitivityForexBlackSmileCalculator extends
     InstrumentDerivativeVisitorAdapter<BlackForexSmileProviderInterface, PresentValueForexBlackVolatilitySensitivity> {
@@ -42,32 +47,24 @@ public final class PresentValueForexVolatilitySensitivityForexBlackSmileCalculat
     return INSTANCE;
   }
 
-  /**
-   * Pricing methods.
-   */
-  private static final ForexOptionVanillaBlackSmileMethod METHOD_FX_VAN = ForexOptionVanillaBlackSmileMethod.getInstance();
-  private static final ForexNonDeliverableOptionBlackSmileMethod METHOD_NDO = ForexNonDeliverableOptionBlackSmileMethod.getInstance();
-  private static final ForexOptionDigitalBlackSmileMethod METHOD_DIG = ForexOptionDigitalBlackSmileMethod.getInstance();
-  private static final ForexOptionSingleBarrierBlackMethod METHOD_BARRIER = ForexOptionSingleBarrierBlackMethod.getInstance();
-
   @Override
   public PresentValueForexBlackVolatilitySensitivity visitForexOptionVanilla(final ForexOptionVanilla option, final BlackForexSmileProviderInterface blackSmile) {
-    return METHOD_FX_VAN.presentValueBlackVolatilitySensitivity(option, blackSmile);
+    return ForexOptionVanillaBlackSmileMethod.getInstance().presentValueBlackVolatilitySensitivity(option, blackSmile);
   }
 
   @Override
   public PresentValueForexBlackVolatilitySensitivity visitForexNonDeliverableOption(final ForexNonDeliverableOption option, final BlackForexSmileProviderInterface blackSmile) {
-    return METHOD_NDO.presentValueBlackVolatilitySensitivity(option, blackSmile);
+    return ForexNonDeliverableOptionBlackSmileMethod.getInstance().presentValueBlackVolatilitySensitivity(option, blackSmile);
   }
 
   @Override
   public PresentValueForexBlackVolatilitySensitivity visitForexOptionDigital(final ForexOptionDigital option, final BlackForexSmileProviderInterface blackSmile) {
-    return METHOD_DIG.presentValueBlackVolatilitySensitivity(option, blackSmile);
+    return ForexOptionDigitalBlackSmileMethod.getInstance().presentValueBlackVolatilitySensitivity(option, blackSmile);
   }
 
   @Override
   public PresentValueForexBlackVolatilitySensitivity visitForexOptionSingleBarrier(final ForexOptionSingleBarrier option, final BlackForexSmileProviderInterface blackSmile) {
-    return METHOD_BARRIER.presentValueBlackVolatilitySensitivity(option, blackSmile);
+    return ForexOptionSingleBarrierBlackMethod.getInstance().presentValueBlackVolatilitySensitivity(option, blackSmile);
   }
 
 }

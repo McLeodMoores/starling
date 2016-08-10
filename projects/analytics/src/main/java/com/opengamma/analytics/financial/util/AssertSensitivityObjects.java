@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.util;
@@ -95,7 +95,7 @@ public class AssertSensitivityObjects {
       }
     }
     for (final Map.Entry<String, List<ForwardSensitivity>> entry : sensi2.entrySet()) {
-      if (!(sensi1.containsKey(entry.getKey()))) {
+      if (!sensi1.containsKey(entry.getKey())) {
         return false;
       }
     }
@@ -113,7 +113,7 @@ public class AssertSensitivityObjects {
     for (int looptime = 0; looptime < sensi1.size(); looptime++) {
       final double startTime1 = sensi1.get(looptime).getStartTime();
       final double startTime2 = sensi2.get(looptime).getStartTime();
-      if ((Math.abs(startTime1 - startTime2) > tolerance) || (Math.abs(sensi1.get(looptime).getValue() - sensi2.get(looptime).getValue()) > tolerance)) {
+      if (Math.abs(startTime1 - startTime2) > tolerance || Math.abs(sensi1.get(looptime).getValue() - sensi2.get(looptime).getValue()) > tolerance) {
         return false;
       }
     }
@@ -145,7 +145,7 @@ public class AssertSensitivityObjects {
   }
 
   /**
-   * Compare two sensitivities with a given tolerance. The tolerance is used for both the time and the value. 
+   * Compare two sensitivities with a given tolerance. The tolerance is used for both the time and the value.
    * For each currency, the two sensitivities are suppose to be in the same time order.
    * @param msg The message.
    * @param sensi1 The first sensitivity.
@@ -169,7 +169,7 @@ public class AssertSensitivityObjects {
   }
 
   /**
-   * Compare two sensitivities with a given tolerance. The tolerance is used for both the time and the value. 
+   * Compare two sensitivities with a given tolerance. The tolerance is used for both the time and the value.
    * For each currency, the two sensitivities are suppose to be in the same time order.
    * @param msg The message.
    * @param sensi1 The first sensitivity.
@@ -215,10 +215,12 @@ public class AssertSensitivityObjects {
       if (map2.get(nameCcy) == null) {
         if (algebra.getNormInfinity(entry.getValue()) > tolerance) {
           cmp = false;
+          break;
         }
       } else {
         if (algebra.getNormInfinity(algebra.add(entry.getValue(), algebra.scale(map2.get(nameCcy), -1.0))) > tolerance) {
           cmp = false;
+          break;
         }
       }
     }
@@ -227,10 +229,12 @@ public class AssertSensitivityObjects {
       if (map1.get(nameCcy) == null) {
         if (algebra.getNormInfinity(entry.getValue()) > tolerance) {
           cmp = false;
+          break;
         }
       } else {
         if (algebra.getNormInfinity(algebra.add(entry.getValue(), algebra.scale(map1.get(nameCcy), -1.0))) > tolerance) {
           cmp = false;
+          break;
         }
       }
     }
@@ -353,7 +357,7 @@ public class AssertSensitivityObjects {
   }
 
   /**
-   * Compare two sensitivities with a given tolerance. The tolerance is used for both the time and the value. 
+   * Compare two sensitivities with a given tolerance. The tolerance is used for both the time and the value.
    * @param msg The message.
    * For each currency, the two sensitivities are suppose to be in the same time order.
    * @param sensi1 The first sensitivity.

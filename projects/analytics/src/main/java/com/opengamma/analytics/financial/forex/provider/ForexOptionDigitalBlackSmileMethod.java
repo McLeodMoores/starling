@@ -1,7 +1,11 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
+ *
+ * Modified by McLeod Moores Software Limited.
+ *
+ * Copyright (C) 2016 - present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.analytics.financial.forex.provider;
 
@@ -262,7 +266,7 @@ public final class ForexOptionDigitalBlackSmileMethod {
     final double dMBar = amount * dfDomestic * NORMAL.getPDF(omega * dM) * (optionForex.isLong() ? 1.0 : -1.0) * omega * pvBar;
     final double sigmaRootTBar = (-Math.log(forward / strike) / (sigmaRootT * sigmaRootT) - 0.5) * dMBar;
     final double volatilityBar = Math.sqrt(expiry) * sigmaRootTBar;
-    final DoublesPair point = DoublesPair.of(optionForex.getExpirationTime(), (foreignCcy == smileMulticurves.getCurrencyPair().getFirst()) ? strike : 1.0 / strike);
+    final DoublesPair point = DoublesPair.of(optionForex.getExpirationTime(), foreignCcy.equals(smileMulticurves.getCurrencyPair().getFirst()) ? strike : 1.0 / strike);
     // Implementation note: The strike should be in the same currency order as the input data.
     final SurfaceValue result = SurfaceValue.from(point, volatilityBar);
     final PresentValueForexBlackVolatilitySensitivity sensi = new PresentValueForexBlackVolatilitySensitivity(foreignCcy, domesticCcy, result);
@@ -305,11 +309,11 @@ public final class ForexOptionDigitalBlackSmileMethod {
     final double forward = spot * dfForeign / dfDomestic;
     final VolatilityAndBucketedSensitivities volAndSensitivities = smileMulticurves.getVolatilityAndSensitivities(foreignCcy, domesticCcy, expiry, strike, forward);
     final double[][] nodeWeight = volAndSensitivities.getBucketedSensitivities();
-    final DoublesPair point = DoublesPair.of(optionForex.getExpirationTime(), (foreignCcy == smileMulticurves.getCurrencyPair().getFirst()) ? strike : 1.0 / strike);
+    final DoublesPair point = DoublesPair.of(optionForex.getExpirationTime(), foreignCcy.equals(smileMulticurves.getCurrencyPair().getFirst()) ? strike : 1.0 / strike);
     final double[][] vega = new double[volatilityModel.getNumberExpiration()][volatilityModel.getNumberStrike()];
-    for (int loopexp = 0; loopexp < volatilityModel.getNumberExpiration(); loopexp++) {
-      for (int loopstrike = 0; loopstrike < volatilityModel.getNumberStrike(); loopstrike++) {
-        vega[loopexp][loopstrike] = nodeWeight[loopexp][loopstrike] * pointSensitivity.getVega().getMap().get(point);
+    for (int i = 0; i < volatilityModel.getNumberExpiration(); i++) {
+      for (int j = 0; j < volatilityModel.getNumberStrike(); j++) {
+        vega[i][j] = nodeWeight[i][j] * pointSensitivity.getVega().getMap().get(point);
       }
     }
     return new PresentValueForexBlackVolatilityNodeSensitivityDataBundle(optionForex.getUnderlyingForex().getCurrency1(), optionForex.getUnderlyingForex().getCurrency2(), new DoubleMatrix1D(

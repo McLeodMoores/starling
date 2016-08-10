@@ -36,13 +36,8 @@ public class ValueThetaForexBlackSmileCalculator extends InstrumentDerivativeVis
   ValueThetaForexBlackSmileCalculator() {
   }
 
-  /**
-   * The methods used by the different instruments.
-   */
-  private static final ForexOptionVanillaBlackSmileMethod METHOD_FXOPTIONVANILLA = ForexOptionVanillaBlackSmileMethod.getInstance();
-
   @Override
-  public CurrencyAmount visitForexOptionVanilla(final ForexOptionVanilla optionForex, final BlackForexSmileProviderInterface smileMulticurves) {
-    return METHOD_FXOPTIONVANILLA.thetaTheoretical(optionForex, smileMulticurves);
+  public CurrencyAmount visitForexOptionVanilla(final ForexOptionVanilla option, final BlackForexSmileProviderInterface marketData) {
+    return ForexOptionVanillaBlackSmileMethod.getInstance().thetaTheoretical(option, marketData);
   }
 }

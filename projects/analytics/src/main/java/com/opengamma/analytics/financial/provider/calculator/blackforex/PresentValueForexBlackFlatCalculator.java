@@ -1,21 +1,24 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
+ *
+ * Modified by McLeod Moores Software Limited.
+ *
+ * Copyright (C) 2016 - present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.analytics.financial.provider.calculator.blackforex;
 
 import com.opengamma.analytics.financial.forex.derivative.ForexOptionVanilla;
 import com.opengamma.analytics.financial.forex.provider.ForexOptionVanillaBlackFlatMethod;
-import com.opengamma.analytics.financial.interestrate.InstrumentDerivative;
-import com.opengamma.analytics.financial.interestrate.InstrumentDerivativeVisitorSameMethodAdapter;
+import com.opengamma.analytics.financial.interestrate.InstrumentDerivativeVisitorAdapter;
 import com.opengamma.analytics.financial.provider.description.forex.BlackForexFlatProviderInterface;
 import com.opengamma.util.money.MultipleCurrencyAmount;
 
 /**
- * Calculates the present value of an inflation instruments by discounting for a given MarketBundle
+ * Calculates the currency exposure of FX options using a Black model without smile.
  */
-public final class PresentValueForexBlackFlatCalculator extends InstrumentDerivativeVisitorSameMethodAdapter<BlackForexFlatProviderInterface, MultipleCurrencyAmount> {
+public final class PresentValueForexBlackFlatCalculator extends InstrumentDerivativeVisitorAdapter<BlackForexFlatProviderInterface, MultipleCurrencyAmount> {
 
   /**
    * The unique instance of the calculator.
@@ -36,26 +39,9 @@ public final class PresentValueForexBlackFlatCalculator extends InstrumentDeriva
     return INSTANCE;
   }
 
-  /**
-   * Pricing methods.
-   */
-  private static final ForexOptionVanillaBlackFlatMethod METHOD_FX_VAN = ForexOptionVanillaBlackFlatMethod.getInstance();
-
-  @Override
-  public MultipleCurrencyAmount visit(final InstrumentDerivative derivative, final BlackForexFlatProviderInterface blackSmile) {
-    return derivative.accept(this, blackSmile);
-  }
-
-  // -----     Forex     ------
-
   @Override
   public MultipleCurrencyAmount visitForexOptionVanilla(final ForexOptionVanilla option, final BlackForexFlatProviderInterface blackSmile) {
-    return METHOD_FX_VAN.presentValue(option, blackSmile);
-  }
-
-  @Override
-  public MultipleCurrencyAmount visit(final InstrumentDerivative derivative) {
-    throw new UnsupportedOperationException();
+    return ForexOptionVanillaBlackFlatMethod.getInstance().presentValue(option, blackSmile);
   }
 
 }

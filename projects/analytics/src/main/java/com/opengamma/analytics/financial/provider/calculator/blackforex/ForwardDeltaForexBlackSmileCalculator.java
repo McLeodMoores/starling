@@ -2,6 +2,10 @@
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
  *
  * Please see distribution for license.
+ *
+ * Modified by McLeod Moores Software Limited.
+ *
+ * Copyright (C) 2016 - present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.analytics.financial.provider.calculator.blackforex;
 
@@ -34,13 +38,9 @@ public class ForwardDeltaForexBlackSmileCalculator extends InstrumentDerivativeV
   ForwardDeltaForexBlackSmileCalculator() {
   }
 
-  /**
-   * The methods used by the different instruments.
-   */
-  private static final ForexOptionVanillaBlackSmileMethod METHOD_FXOPTIONVANILLA = ForexOptionVanillaBlackSmileMethod.getInstance();
-
   @Override
-  public Double visitForexOptionVanilla(final ForexOptionVanilla optionForex, final BlackForexSmileProviderInterface smileMulticurves) {
-    return METHOD_FXOPTIONVANILLA.forwardDeltaTheoretical(optionForex, smileMulticurves);
+  public Double visitForexOptionVanilla(final ForexOptionVanilla option, final BlackForexSmileProviderInterface marketData) {
+    return ForexOptionVanillaBlackSmileMethod.getInstance().forwardDeltaTheoretical(option, marketData);
   }
+
 }
