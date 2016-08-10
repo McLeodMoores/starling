@@ -1,8 +1,9 @@
 /**
- *
+ * Copyright (C) 2016 - Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.analytics.financial.model;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -15,30 +16,81 @@ import com.opengamma.util.money.CurrencyAmount;
 import com.opengamma.util.money.MultipleCurrencyAmount;
 
 /**
- *
+ * An immutable wrapper for FX matrices. The data are copied from the input matrix on constructions of this object.
  */
-public final class CheckedImmutableFxMatrix extends FXMatrix {
-  // TODO probably unneccesary to have this plus the unchecked version - combine and work out what to do with FX matrix
+public final class ImmutableFxMatrix extends FXMatrix {
+
   /**
-   * Creates an immutable FX matrix. The data are copied on construction of the object.
+   * Creates an immutable FX matrix from a checked matrix. The data are copied on construction of the object.
    * @param matrix  the FX matrix, not null
    * @return  an immutable FX matrix
    */
-  public static CheckedImmutableFxMatrix of(final CheckedMutableFxMatrix matrix) {
-    return new CheckedImmutableFxMatrix(matrix);
+  public static ImmutableFxMatrix of(final CheckedMutableFxMatrix matrix) {
+    return new ImmutableFxMatrix(matrix);
   }
 
-  /** The underlying FX matrix */
-  private final CheckedMutableFxMatrix _underlying;
+  /**
+   * Creates an immutable FX matrix from an unchecked matrix. The data are copied on construction of the object.
+   * @param matrix  the FX matrix, not null
+   * @return  an immutable FX matrix
+   */
+  public static ImmutableFxMatrix of(final UncheckedMutableFxMatrix matrix) {
+    return new ImmutableFxMatrix(matrix);
+  }
+
+  /**
+   * Creates an immutable FX matrix from an FX matrix. The data are copied on construction of this object. Note
+   * that the underlying data storage of this matrix is transformed from that in {@link FXMatrix} to {@link UncheckedMutableFxMatrix}.
+   * @param matrix  the FX matrix, not null
+   * @return   an immutable matrix
+   */
+  public static ImmutableFxMatrix of(final FXMatrix matrix) {
+    return new ImmutableFxMatrix(matrix);
+  }
+
+  /** The underlying FX matrix. Can be unchecked because nothing inconsistent can be added. */
+  private final UncheckedMutableFxMatrix _underlying;
 
   /**
    * Restricted constructor.
    * @param matrix  the FX matrix, not null
    */
-  private CheckedImmutableFxMatrix(final CheckedMutableFxMatrix matrix) {
+  private ImmutableFxMatrix(final CheckedMutableFxMatrix matrix) {
     ArgumentChecker.notNull(matrix, "matrix");
     final List<Currency> currencies = matrix.getCurrencyList();
-    _underlying = CheckedMutableFxMatrix.of();
+    _underlying = UncheckedMutableFxMatrix.of();
+    final Currency[] currencyArray = currencies.toArray(new Currency[currencies.size()]);
+    for (int i = 0; i < currencyArray.length; i++) {
+      for (int j = i + 1; j < currencyArray.length; j++) {
+        _underlying.addCurrency(currencyArray[j], currencyArray[i], matrix.getFxRate(currencyArray[j], currencyArray[i]));
+      }
+    }
+  }
+
+  /**
+   * Restricted constructor.
+   * @param matrix  the FX matrix, not null
+   */
+  private ImmutableFxMatrix(final UncheckedMutableFxMatrix matrix) {
+    ArgumentChecker.notNull(matrix, "matrix");
+    final List<Currency> currencies = matrix.getCurrencyList();
+    _underlying = UncheckedMutableFxMatrix.of();
+    final Currency[] currencyArray = currencies.toArray(new Currency[currencies.size()]);
+    for (int i = 0; i < currencyArray.length; i++) {
+      for (int j = i + 1; j < currencyArray.length; j++) {
+        _underlying.addCurrency(currencyArray[j], currencyArray[i], matrix.getFxRate(currencyArray[j], currencyArray[i]));
+      }
+    }
+  }
+
+  /**
+   * Restricted constructor.
+   * @param matrix  the FX matrix, not null
+   */
+  private ImmutableFxMatrix(final FXMatrix matrix) {
+    ArgumentChecker.notNull(matrix, "matrix");
+    final Collection<Currency> currencies = matrix.getCurrencies().keySet();
+    _underlying = UncheckedMutableFxMatrix.of();
     final Currency[] currencyArray = currencies.toArray(new Currency[currencies.size()]);
     for (int i = 0; i < currencyArray.length; i++) {
       for (int j = i + 1; j < currencyArray.length; j++) {
@@ -122,10 +174,10 @@ public final class CheckedImmutableFxMatrix extends FXMatrix {
       return true;
     }
     // note that the superclass is ignored
-    if (!(obj instanceof CheckedImmutableFxMatrix)) {
+    if (!(obj instanceof ImmutableFxMatrix)) {
       return false;
     }
-    final CheckedImmutableFxMatrix other = (CheckedImmutableFxMatrix) obj;
+    final ImmutableFxMatrix other = (ImmutableFxMatrix) obj;
     return Objects.equals(_underlying, other._underlying);
   }
 

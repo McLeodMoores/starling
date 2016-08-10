@@ -1,5 +1,5 @@
 /**
- *
+ * Copyright (C) 2016 - Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.analytics.financial.model;
 
@@ -17,44 +17,70 @@ import com.opengamma.util.money.Currency;
 import com.opengamma.util.money.MultipleCurrencyAmount;
 
 /**
- * Unit tests for {@link UncheckedImmutableFxMatrix}.
+ * Unit tests for {@link ImmutableFxMatrix}.
  */
-public class UncheckedImmutableFxMatrixTest {
+public class ImmutableFxMatrixTest {
   /** The tolerance */
   private static final double EPS = 2e-16;
-  /** The FX data */
-  private static final UncheckedMutableFxMatrix MATRIX = UncheckedMutableFxMatrix.of();
+  /** Unchecked FX data */
+  private static final UncheckedMutableFxMatrix UNCHECKED_MATRIX = UncheckedMutableFxMatrix.of();
+  /** Checked FX data */
+  private static final CheckedMutableFxMatrix CHECKED_MATRIX = CheckedMutableFxMatrix.of();
   static {
-    MATRIX.addCurrency(Currency.EUR, Currency.USD, 1.2);
-    MATRIX.addCurrency(Currency.CHF, Currency.USD, 0.5);
-    MATRIX.addCurrency(Currency.GBP, Currency.USD, 1.3);
-    MATRIX.addCurrency(Currency.CHF, Currency.EUR, 2.3);
-    MATRIX.addCurrency(Currency.GBP, Currency.EUR, 23);
-    MATRIX.addCurrency(Currency.GBP, Currency.CHF, 1.4);
+    UNCHECKED_MATRIX.addCurrency(Currency.EUR, Currency.USD, 1.2);
+    UNCHECKED_MATRIX.addCurrency(Currency.CHF, Currency.USD, 0.5);
+    UNCHECKED_MATRIX.addCurrency(Currency.GBP, Currency.USD, 1.1);
+    UNCHECKED_MATRIX.addCurrency(Currency.CHF, Currency.EUR, 2.3);
+    UNCHECKED_MATRIX.addCurrency(Currency.GBP, Currency.EUR, 23);
+    UNCHECKED_MATRIX.addCurrency(Currency.GBP, Currency.CHF, 1.4);
+    CHECKED_MATRIX.addCurrency(Currency.EUR, Currency.USD, 1.2);
+    CHECKED_MATRIX.addCurrency(Currency.CHF, Currency.USD, 0.5);
+    CHECKED_MATRIX.addCurrency(Currency.GBP, Currency.USD, 1.1);
+    CHECKED_MATRIX.addCurrency(Currency.CHF, Currency.EUR, 0.5 / 1.2);
+    CHECKED_MATRIX.addCurrency(Currency.GBP, Currency.EUR, 1.1 / 1.2);
+    CHECKED_MATRIX.addCurrency(Currency.GBP, Currency.CHF, 1.1 / 0.5);
   }
 
   /**
    * Tests that the FX matrix cannot be null.
    */
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void testNullUnderlying() {
-    UncheckedImmutableFxMatrix.of(null);
+  public void testNullUnderlying1() {
+    ImmutableFxMatrix.of((UncheckedMutableFxMatrix) null);
+  }
+
+  /**
+   * Tests that the FX matrix cannot be null.
+   */
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void testNullUnderlying2() {
+    ImmutableFxMatrix.of((CheckedMutableFxMatrix) null);
+  }
+
+  /**
+   * Tests that the FX matrix cannot be null.
+   */
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void testNullUnderlying3() {
+    ImmutableFxMatrix.of((FXMatrix) null);
   }
 
   /**
    * Tests the deprecated getCurrencies() method.
    */
+  @SuppressWarnings("deprecation")
   @Test(expectedExceptions = UnsupportedOperationException.class)
   public void testDeprecatedGetCurrencies() {
-    MATRIX.asImmutable().getCurrencies();
+    UNCHECKED_MATRIX.asImmutable().getCurrencies();
   }
 
   /**
    * Tests the deprecated getRates() method.
    */
+  @SuppressWarnings("deprecation")
   @Test(expectedExceptions = UnsupportedOperationException.class)
   public void testDeprecatedGetRates() {
-    MATRIX.asImmutable().getRates();
+    UNCHECKED_MATRIX.asImmutable().getRates();
   }
 
   /**
@@ -62,7 +88,7 @@ public class UncheckedImmutableFxMatrixTest {
    */
   @Test(expectedExceptions = UnsupportedOperationException.class)
   public void testAddRateFails() {
-    MATRIX.asImmutable().addCurrency(Currency.BRL, Currency.CZK, 100);
+    UNCHECKED_MATRIX.asImmutable().addCurrency(Currency.BRL, Currency.CZK, 100);
   }
 
   /**
@@ -70,7 +96,7 @@ public class UncheckedImmutableFxMatrixTest {
    */
   @Test(expectedExceptions = UnsupportedOperationException.class)
   public void testUpdateRateFails() {
-    MATRIX.asImmutable().updateRates(Currency.EUR, Currency.USD, 1.4);
+    UNCHECKED_MATRIX.asImmutable().updateRates(Currency.EUR, Currency.USD, 1.4);
   }
 
   /**
@@ -78,7 +104,7 @@ public class UncheckedImmutableFxMatrixTest {
    */
   @Test(expectedExceptions = UnsupportedOperationException.class)
   public void testImmutableCurrencyList() {
-    final List<Currency> currencies = MATRIX.asImmutable().getCurrencyList();
+    final List<Currency> currencies = UNCHECKED_MATRIX.asImmutable().getCurrencyList();
     currencies.add(Currency.BRL);
   }
 
@@ -94,17 +120,17 @@ public class UncheckedImmutableFxMatrixTest {
     matrix.addCurrency(Currency.CHF, Currency.EUR, 2.3);
     matrix.addCurrency(Currency.GBP, Currency.EUR, 23);
     matrix.addCurrency(Currency.GBP, Currency.CHF, 1.4);
-    final UncheckedImmutableFxMatrix immutable = matrix.asImmutable();
+    final ImmutableFxMatrix immutable = matrix.asImmutable();
     final List<Currency> originalCurrencies = matrix.getCurrencyList();
     final List<Currency> immutableCurrencies = immutable.getCurrencyList();
     final double[][] originalRates = matrix.getFxRates();
     final double[][] immutableRates = immutable.getFxRates();
     assertEquals(immutableCurrencies, originalCurrencies);
-    assertMatrixEquals(immutableRates, originalRates, EPS);
+    assertDeepEquals(immutableRates, originalRates, EPS);
     // change the values
     matrix.updateRates(Currency.EUR, Currency.USD, 1.25);
     assertMatrixNotEquals(immutableRates, originalRates, EPS);
-    assertMatrixEquals(originalRates, matrix.getFxRates(), EPS);
+    assertDeepEquals(originalRates, matrix.getFxRates(), EPS);
     // change the currencies
     matrix.updateRates(Currency.EUR, Currency.USD, 1.2);
     matrix.addCurrency(Currency.BRL, Currency.USD, 7);
@@ -117,13 +143,13 @@ public class UncheckedImmutableFxMatrixTest {
    */
   @Test
   public void testDelegation() {
-    final UncheckedImmutableFxMatrix immutable = MATRIX.asImmutable();
+    final ImmutableFxMatrix immutable = UNCHECKED_MATRIX.asImmutable();
     final MultipleCurrencyAmount mca = MultipleCurrencyAmount.of(new Currency[] {Currency.EUR, Currency.USD}, new double[] {100, 200});
-    assertEquals(immutable.containsPair(Currency.EUR, Currency.CHF), MATRIX.containsPair(Currency.EUR, Currency.CHF));
-    assertEquals(immutable.convert(mca, Currency.CHF), MATRIX.convert(mca, Currency.CHF));
-    assertEquals(immutable.getNumberOfCurrencies(), MATRIX.getNumberOfCurrencies());
-    for (final Currency currency : MATRIX.getCurrencyList()) {
-      assertEquals(immutable.getFxRate(currency, Currency.USD), MATRIX.getFxRate(currency, Currency.USD), EPS);
+    assertEquals(immutable.containsPair(Currency.EUR, Currency.CHF), UNCHECKED_MATRIX.containsPair(Currency.EUR, Currency.CHF));
+    assertEquals(immutable.convert(mca, Currency.CHF), UNCHECKED_MATRIX.convert(mca, Currency.CHF));
+    assertEquals(immutable.getNumberOfCurrencies(), UNCHECKED_MATRIX.getNumberOfCurrencies());
+    for (final Currency currency : UNCHECKED_MATRIX.getCurrencyList()) {
+      assertEquals(immutable.getFxRate(currency, Currency.USD), UNCHECKED_MATRIX.getFxRate(currency, Currency.USD), EPS);
     }
   }
 
@@ -132,17 +158,27 @@ public class UncheckedImmutableFxMatrixTest {
    */
   @Test
   public void testObject() {
-    assertNotEquals(new FXMatrix(), UncheckedImmutableFxMatrix.of(UncheckedMutableFxMatrix.of()));
-    final UncheckedImmutableFxMatrix matrix = MATRIX.asImmutable();
-    assertEquals(matrix.getCurrencyList(), MATRIX.getCurrencyList());
-    assertMatrixEquals(matrix.getFxRates(), MATRIX.getFxRates(), EPS);
-    final UncheckedImmutableFxMatrix other = MATRIX.asImmutable();
+    assertNotEquals(new FXMatrix(), ImmutableFxMatrix.of(UncheckedMutableFxMatrix.of()));
+    assertNotEquals(new FXMatrix(), ImmutableFxMatrix.of(CheckedMutableFxMatrix.of()));
+    assertNotEquals(new FXMatrix(), ImmutableFxMatrix.of(new FXMatrix()));
+    final ImmutableFxMatrix matrix = UNCHECKED_MATRIX.asImmutable();
+    assertEquals(matrix.getCurrencyList(), UNCHECKED_MATRIX.getCurrencyList());
+    assertDeepEquals(matrix.getFxRates(), UNCHECKED_MATRIX.getFxRates(), EPS);
+    assertEquals(CHECKED_MATRIX.getCurrencyList(), CHECKED_MATRIX.asImmutable().getCurrencyList());
+    assertDeepEquals(CHECKED_MATRIX.getFxRates(), CHECKED_MATRIX.asImmutable().getFxRates(), EPS);
+    final ImmutableFxMatrix other = UNCHECKED_MATRIX.asImmutable();
     assertEquals(matrix, matrix);
     assertNotEquals(null, matrix);
     assertEquals(matrix, other);
     assertEquals(matrix.hashCode(), other.hashCode());
-    assertNotEquals(matrix, UncheckedImmutableFxMatrix.of(UncheckedMutableFxMatrix.of()));
-    assertFalse(other == MATRIX.asImmutable());
+    assertNotEquals(matrix, ImmutableFxMatrix.of(UncheckedMutableFxMatrix.of()));
+    assertFalse(other == UNCHECKED_MATRIX.asImmutable());
+    final FXMatrix oldMatrix = new FXMatrix(Currency.EUR, Currency.USD, 1.1);
+    oldMatrix.addCurrency(Currency.GBP, Currency.USD, 0.9);
+    final CheckedMutableFxMatrix checked = CheckedMutableFxMatrix.of();
+    checked.addCurrency(Currency.EUR, Currency.USD, 1.1);
+    checked.addCurrency(Currency.GBP, Currency.USD, 0.9);
+    assertEquals(ImmutableFxMatrix.of(oldMatrix), checked.asImmutable());
   }
 
   /**
@@ -151,7 +187,7 @@ public class UncheckedImmutableFxMatrixTest {
    * @param expected  the expected matrix
    * @param eps  the tolerance
    */
-  private static void assertMatrixEquals(final double[][] actual, final double[][] expected, final double eps) {
+  private static void assertDeepEquals(final double[][] actual, final double[][] expected, final double eps) {
     assertEquals(actual.length, expected.length);
     for (int i = 0; i < actual.length; i++) {
       assertEquals(actual[i].length, expected[i].length);

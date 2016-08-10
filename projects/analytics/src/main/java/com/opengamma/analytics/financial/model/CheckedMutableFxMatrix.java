@@ -1,5 +1,5 @@
 /**
- *
+ * Copyright (C) 2016 - Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.analytics.financial.model;
 
@@ -9,17 +9,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import org.apache.commons.lang.NotImplementedException;
-
 import com.opengamma.analytics.financial.forex.method.FXMatrix;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
 import com.opengamma.util.money.CurrencyAmount;
 import com.opengamma.util.money.MultipleCurrencyAmount;
 
-/**
- *
- */
 public class CheckedMutableFxMatrix extends FXMatrix {
 
   public static CheckedMutableFxMatrix of() {
@@ -113,30 +108,12 @@ public class CheckedMutableFxMatrix extends FXMatrix {
         if (numeratorIndex > denominatorIndex) {
           supplied = _supplied[denominatorIndex][numeratorIndex - denominatorIndex - 1];
         } else {
-          supplied = _supplied[denominatorIndex][numeratorIndex - denominatorIndex - 1];
+          supplied = _supplied[numeratorIndex][denominatorIndex - numeratorIndex - 1];
         }
         if (supplied) {
           throw new IllegalStateException("Already have a value for " + numerator + "/" + denominator);
         }
-        // otherwise, rate can be implied so need to check that the values are consistent
-        //TODO check quotation rules
-        if (numerator.equals(Currency.JPY) || denominator.equals(Currency.JPY)) {
-          // 2dp matching
-          final int existingRate100 = (int) (existingRate * 100);
-          final int fxRate100 = (int) (fxRate * 100);
-          if (existingRate100 != fxRate100) {
-            throw new IllegalStateException("Implied FX rate for " + numerator + "/" + denominator + " " + existingRate
-                + " was inconsistent with the provided rate " + fxRate);
-          }
-        } else {
-          // 4dp matching
-          final int existingRate100 = (int) (existingRate * 100);
-          final int fxRate100 = (int) (fxRate * 100);
-          if (existingRate100 != fxRate100) {
-            throw new IllegalStateException("Implied FX rate for " + numerator + "/" + denominator + " " + existingRate
-                + " was inconsistent with the provided rate " + fxRate);
-          }
-        }
+        checkRatesAreConsistent(numerator, denominator, fxRate, existingRate);
         // prefer supplied rate to one that is implied
         if (numeratorIndex > denominatorIndex) {
           _rates[denominatorIndex][numeratorIndex - denominatorIndex - 1] = fxRate;
@@ -189,6 +166,7 @@ public class CheckedMutableFxMatrix extends FXMatrix {
     ArgumentChecker.isTrue(denominatorIndex >= 0, "{} not found in FX matrix", denominator);
     final double suppliedRate;
     final boolean supplied;
+    // try to get the rate from values that have been populated
     if (numeratorIndex > denominatorIndex) {
       supplied = _supplied[denominatorIndex][numeratorIndex - denominatorIndex - 1];
       suppliedRate = _rates[denominatorIndex][numeratorIndex - denominatorIndex - 1];
@@ -199,6 +177,7 @@ public class CheckedMutableFxMatrix extends FXMatrix {
     if (supplied) {
       return suppliedRate;
     }
+    //TODO this logic is not right - see failing tests
     for (int i = 0; i < _rates.length; i++) {
       if (denominatorIndex == i) {
         // match on denominator, look for an appropriate cross for each rate in this row until one is found
@@ -231,17 +210,19 @@ public class CheckedMutableFxMatrix extends FXMatrix {
       } else {
         final int denominatorColumn = denominatorIndex - i - 1;
         final int numeratorColumn = numeratorIndex - i - 1;
-        if (_supplied[i][denominatorColumn] && _supplied[i][numeratorColumn]) {
-          // there are values set for both the numerator and denominator currency against this row's currency
-          final double r1 = _rates[i][denominatorColumn];
-          final double r2 = _rates[i][numeratorColumn];
-          return r2 / r1;
-        }
-        // try to find a match from a different row
-        if (_supplied[i][denominatorColumn] && _supplied[denominatorColumn][numeratorColumn]) {
-          final double r1 = _rates[i][denominatorColumn];
-          final double r2 = _rates[i][numeratorColumn];
-          return r2 / r1;
+        if (denominatorColumn >= 0 && numeratorColumn >= 0) {
+          if (_supplied[i][denominatorColumn] && _supplied[i][numeratorColumn]) {
+            // there are values set for both the numerator and denominator currency against this row's currency
+            final double r1 = _rates[i][denominatorColumn];
+            final double r2 = _rates[i][numeratorColumn];
+            return r2 / r1;
+          }
+          // try to find a match from a different row
+          if (_supplied[i][denominatorColumn] && _supplied[denominatorColumn][numeratorColumn]) {
+            final double r1 = _rates[i][denominatorColumn];
+            final double r2 = _rates[i][numeratorColumn];
+            return r2 / r1;
+          }
         }
       }
     }
@@ -250,7 +231,53 @@ public class CheckedMutableFxMatrix extends FXMatrix {
 
   @Override
   public void updateRates(final Currency numerator, final Currency denominator, final double fxRate) {
-    throw new NotImplementedException();
+    ArgumentChecker.notNull(numerator, "numerator");
+    ArgumentChecker.notNull(denominator, "denominator");
+    ArgumentChecker.isFalse(numerator.equals(denominator), "Cannot have equal numerator and denominator currency: {}", numerator);
+    ArgumentChecker.isTrue(fxRate > 0, "FX rate must be greater than zero: have {}", fxRate);
+    final int numeratorIndex = _currencyList.indexOf(numerator);
+    final int denominatorIndex = _currencyList.indexOf(denominator);
+    ArgumentChecker.isTrue(numeratorIndex >= 0, "{} not found in FX matrix", numerator);
+    ArgumentChecker.isTrue(denominatorIndex >= 0, "{} not found in FX matrix", denominator);
+    final double existingRate = getFxRate(numerator, denominator);
+    // check that the values are consistent
+    checkRatesAreConsistent(numerator, denominator, fxRate, existingRate);
+    if (numeratorIndex > denominatorIndex) {
+      _rates[denominatorIndex][numeratorIndex - denominatorIndex - 1] = fxRate;
+      _supplied[denominatorIndex][numeratorIndex - denominatorIndex - 1] = true;
+    } else {
+      _rates[numeratorIndex][denominatorIndex - numeratorIndex - 1] = 1 / fxRate;
+      _supplied[numeratorIndex][denominatorIndex - numeratorIndex - 1] = true;
+    }
+  }
+
+  /**
+   * Checks that a rate that is already in the matrix is consistent with the new rate. The rates are matched to 2 decimal places if the
+   * denominator is JPY, otherwise the match is done to 4 d.p.
+   * @param numerator  the numerator, not null
+   * @param denominator  the denominator, not null
+   * @param newRate  the new rate, not null
+   * @param existingRate  the existing rate, not null
+   */
+  private static void checkRatesAreConsistent(final Currency numerator, final Currency denominator, final double newRate,
+      final double existingRate) {
+    if (denominator.equals(Currency.JPY)) {
+      // 2dp matching
+      final int existingRate100 = (int) (existingRate * 100);
+      final int fxRate100 = (int) (newRate * 100);
+      if (existingRate100 != fxRate100) {
+        throw new IllegalStateException("Implied FX rate for " + numerator + "/" + denominator + " " + existingRate
+            + " was inconsistent with the provided rate " + newRate);
+      }
+    } else {
+      // 4dp matching
+      final int existingRate100 = (int) (existingRate * 100);
+      final int fxRate100 = (int) (newRate * 100);
+      if (existingRate100 != fxRate100) {
+        throw new IllegalStateException("Implied FX rate for " + numerator + "/" + denominator + " " + existingRate
+            + " was inconsistent with the provided rate " + newRate);
+      }
+    }
   }
 
   @Override
@@ -262,12 +289,13 @@ public class CheckedMutableFxMatrix extends FXMatrix {
   public boolean containsPair(final Currency ccy1, final Currency ccy2) {
     ArgumentChecker.notNull(ccy1, "ccy1");
     ArgumentChecker.notNull(ccy2, "ccy2");
-    final int numeratorIndex = _currencyList.indexOf(ccy1);
-    final int denominatorIndex = _currencyList.indexOf(ccy2);
-    if (numeratorIndex < 0 || denominatorIndex < 0) {
+    try {
+      // nasty, but ensures consistency with getFxRates()
+      getFxRate(ccy1, ccy2);
+      return true;
+    } catch (final IllegalStateException | IllegalArgumentException e) {
       return false;
     }
-    return true;
   }
 
   /**
@@ -306,8 +334,8 @@ public class CheckedMutableFxMatrix extends FXMatrix {
    * Returns an immutable FX matrix containing the data in this object.
    * @return  an immutable FX matrix
    */
-  public CheckedImmutableFxMatrix asImmutable() {
-    return CheckedImmutableFxMatrix.of(this);
+  public ImmutableFxMatrix asImmutable() {
+    return ImmutableFxMatrix.of(this);
   }
 
   @Deprecated

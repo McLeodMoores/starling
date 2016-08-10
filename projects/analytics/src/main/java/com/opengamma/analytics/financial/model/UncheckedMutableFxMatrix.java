@@ -1,5 +1,5 @@
 /**
- *
+ * Copyright (C) 2016 - Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.analytics.financial.model;
 
@@ -236,8 +236,8 @@ public final class UncheckedMutableFxMatrix extends FXMatrix {
    * Returns an immutable FX matrix containing the data in this object.
    * @return  an immutable FX matrix
    */
-  public UncheckedImmutableFxMatrix asImmutable() {
-    return UncheckedImmutableFxMatrix.of(this);
+  public ImmutableFxMatrix asImmutable() {
+    return ImmutableFxMatrix.of(this);
   }
 
   @Deprecated

@@ -1,5 +1,5 @@
 /**
- *
+ * Copyright (C) 2016 - Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.analytics.financial.model;
 
@@ -28,6 +28,7 @@ public class UncheckedMutableFxMatrixTest {
   /**
    * Tests that the getCurrencies() method of the superclass fails.
    */
+  @SuppressWarnings("deprecation")
   @Test(expectedExceptions = UnsupportedOperationException.class)
   public void testGetCurrencies() {
     UncheckedMutableFxMatrix.of().getCurrencies();
@@ -36,6 +37,7 @@ public class UncheckedMutableFxMatrixTest {
   /**
    * Tests that the getRates() method of the superclass fails.
    */
+  @SuppressWarnings("deprecation")
   @Test(expectedExceptions = UnsupportedOperationException.class)
   public void testGetRates() {
     UncheckedMutableFxMatrix.of().getRates();
@@ -178,6 +180,7 @@ public class UncheckedMutableFxMatrixTest {
   /**
    * Tests that only rates that have been set can be retrieved from a sparsely-populated matrix.
    */
+  @SuppressWarnings("unused")
   @Test
   public void testRequestNonExistentRate() {
     final UncheckedMutableFxMatrix matrix = UncheckedMutableFxMatrix.of();
@@ -261,7 +264,7 @@ public class UncheckedMutableFxMatrixTest {
     assertEquals(matrix.getFxRate(Currency.EUR, Currency.USD), 1.2, EPS);
     // inverse
     assertEquals(matrix.getFxRate(Currency.USD, Currency.EUR), 1 / 1.2, EPS);
-    assertMatrixEquals(rates, expected, EPS);
+    assertDeepEquals(rates, expected, EPS);
   }
 
   /**
@@ -286,7 +289,7 @@ public class UncheckedMutableFxMatrixTest {
         new double[0]                   // CHF
     };
     assertEquals(matrix.getCurrencyList(), Arrays.asList(Currency.USD, Currency.EUR, Currency.GBP, Currency.CHF));
-    assertMatrixEquals(rates, expected, EPS);
+    assertDeepEquals(rates, expected, EPS);
     assertEquals(matrix.getFxRate(Currency.EUR, Currency.USD), 1.2, EPS);
     assertEquals(matrix.getFxRate(Currency.CHF, Currency.GBP), 1.7, EPS);
     // inverse
@@ -314,7 +317,7 @@ public class UncheckedMutableFxMatrixTest {
         new double[0]                   // CHF
     };
     assertEquals(matrix.getCurrencyList(), Arrays.asList(Currency.USD, Currency.EUR, Currency.CHF));
-    assertMatrixEquals(rates, expected, EPS);
+    assertDeepEquals(rates, expected, EPS);
     assertEquals(matrix.getFxRate(Currency.EUR, Currency.USD), 1.2, EPS);
     assertEquals(matrix.getFxRate(Currency.CHF, Currency.USD), 0.5, EPS);
     // inverse
@@ -342,7 +345,7 @@ public class UncheckedMutableFxMatrixTest {
         new double[0]                   // CHF
     };
     assertEquals(matrix.getCurrencyList(), Arrays.asList(Currency.USD, Currency.EUR, Currency.CHF));
-    assertMatrixEquals(rates, expected, EPS);
+    assertDeepEquals(rates, expected, EPS);
     assertEquals(matrix.getFxRate(Currency.EUR, Currency.USD), 1.2, EPS);
     assertEquals(matrix.getFxRate(Currency.CHF, Currency.EUR), 1.5, EPS);
     // inverse
@@ -373,7 +376,7 @@ public class UncheckedMutableFxMatrixTest {
         new double[0]                     // GBP
     };
     assertEquals(matrix.getCurrencyList(), Arrays.asList(Currency.USD, Currency.EUR, Currency.CHF, Currency.GBP));
-    assertMatrixEquals(rates, expected, EPS);
+    assertDeepEquals(rates, expected, EPS);
     assertEquals(matrix.getFxRate(Currency.EUR, Currency.USD), 1.2, EPS);
     assertEquals(matrix.getFxRate(Currency.CHF, Currency.USD), 0.5, EPS);
     assertEquals(matrix.getFxRate(Currency.GBP, Currency.EUR), 0.7, EPS);
@@ -408,7 +411,7 @@ public class UncheckedMutableFxMatrixTest {
         new double[0]                       // GBP
     };
     assertEquals(matrix.getCurrencyList(), Arrays.asList(Currency.USD, Currency.EUR, Currency.CHF, Currency.GBP));
-    assertMatrixEquals(rates, expected, EPS);
+    assertDeepEquals(rates, expected, EPS);
     assertEquals(matrix.getFxRate(Currency.EUR, Currency.USD), 1.2, EPS);
     assertEquals(matrix.getFxRate(Currency.CHF, Currency.USD), 0.5, EPS);
     assertEquals(matrix.getFxRate(Currency.EUR, Currency.GBP), 1.3, EPS);
@@ -444,7 +447,7 @@ public class UncheckedMutableFxMatrixTest {
         new double[0]                         // AUD
     };
     assertEquals(matrix.getCurrencyList(), Arrays.asList(Currency.USD, Currency.EUR, Currency.CHF, Currency.GBP, Currency.AUD));
-    assertMatrixEquals(rates, expected, EPS);
+    assertDeepEquals(rates, expected, EPS);
     assertEquals(matrix.getFxRate(Currency.EUR, Currency.USD), 1.2, EPS);
     assertEquals(matrix.getFxRate(Currency.CHF, Currency.USD), 0.5, EPS);
     assertEquals(matrix.getFxRate(Currency.GBP, Currency.EUR), 1.3, EPS);
@@ -489,7 +492,7 @@ public class UncheckedMutableFxMatrixTest {
       new double[0]                                           // AUD
     };
     assertEquals(matrix.getCurrencyList(), Arrays.asList(Currency.USD, Currency.EUR, Currency.CHF, Currency.JPY, Currency.NZD, Currency.GBP, Currency.AUD));
-    assertMatrixEquals(rates, expected, EPS);
+    assertDeepEquals(rates, expected, EPS);
     assertEquals(matrix.getFxRate(Currency.EUR, Currency.USD), 1.2, EPS);
     assertEquals(matrix.getFxRate(Currency.CHF, Currency.USD), 0.5, EPS);
     assertEquals(matrix.getFxRate(Currency.NZD, Currency.JPY), 0.015, EPS);
@@ -528,7 +531,7 @@ public class UncheckedMutableFxMatrixTest {
       new double[0]
     };
     assertEquals(matrix.getCurrencyList(), Arrays.asList(Currency.USD, Currency.EUR, Currency.CHF, Currency.GBP));
-    assertMatrixEquals(rates, expected, EPS);
+    assertDeepEquals(rates, expected, EPS);
   }
 
   /**
@@ -552,7 +555,7 @@ public class UncheckedMutableFxMatrixTest {
       new double[0]
     };
     assertEquals(matrix.getCurrencyList(), Arrays.asList(Currency.USD, Currency.EUR, Currency.CHF, Currency.GBP));
-    assertMatrixEquals(rates, expected, EPS);
+    assertDeepEquals(rates, expected, EPS);
     // update an inverse rate
     matrix.updateRates(Currency.USD, Currency.GBP, 0.8);
     rates = matrix.getFxRates();
@@ -563,7 +566,7 @@ public class UncheckedMutableFxMatrixTest {
       new double[0]
     };
     assertEquals(matrix.getCurrencyList(), Arrays.asList(Currency.USD, Currency.EUR, Currency.CHF, Currency.GBP));
-    assertMatrixEquals(rates, expected, EPS);
+    assertDeepEquals(rates, expected, EPS);
   }
 
   /**
@@ -631,7 +634,7 @@ public class UncheckedMutableFxMatrixTest {
    * @param expected  the expected matrix
    * @param eps  the tolerance
    */
-  private static void assertMatrixEquals(final double[][] actual, final double[][] expected, final double eps) {
+  private static void assertDeepEquals(final double[][] actual, final double[][] expected, final double eps) {
     assertEquals(actual.length, expected.length);
     for (int i = 0; i < actual.length; i++) {
       assertEquals(actual[i].length, expected[i].length);
