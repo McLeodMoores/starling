@@ -105,7 +105,7 @@ public class ScheduleCalculatorTest {
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void adjustedDatesDaysNullCalendar() {
-    ScheduleCalculator.getAdjustedDate(NOW, 2, null);
+    ScheduleCalculator.getAdjustedDate(NOW, 2, (Calendar) null);
   }
 
   @Test
@@ -246,7 +246,7 @@ public class ScheduleCalculatorTest {
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void adjustedDatesPeriodEOMNullCalendar() {
-    ScheduleCalculator.getAdjustedDate(NOW, PAYMENT_TENOR, MOD_FOL, null, true);
+    ScheduleCalculator.getAdjustedDate(NOW, PAYMENT_TENOR, MOD_FOL, (Calendar) null, true);
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
@@ -648,7 +648,7 @@ public class ScheduleCalculatorTest {
 
       @Override
       public double getDayCountFraction(final ZonedDateTime firstDate, final ZonedDateTime secondDate) {
-        return ((double) (secondDate.getMonthValue() - firstDate.getMonthValue())) / 12;
+        return (double) (secondDate.getMonthValue() - firstDate.getMonthValue()) / 12;
       }
 
       @Override
@@ -658,7 +658,7 @@ public class ScheduleCalculatorTest {
 
       @Override
       public double getDayCountFraction(final LocalDate firstDate, final LocalDate secondDate) {
-        return ((double) (secondDate.getMonthValue() - firstDate.getMonthValue())) / 12;
+        return (double) (secondDate.getMonthValue() - firstDate.getMonthValue()) / 12;
       }
 
       @Override
@@ -667,12 +667,12 @@ public class ScheduleCalculatorTest {
       }
 
       @Override
-      public double getDayCountFraction(LocalDate firstDate, LocalDate secondDate, Calendar calendar) {
+      public double getDayCountFraction(final LocalDate firstDate, final LocalDate secondDate, final Calendar calendar) {
         return 0;
       }
 
       @Override
-      public double getDayCountFraction(ZonedDateTime firstDate, ZonedDateTime secondDate, Calendar calendar) {
+      public double getDayCountFraction(final ZonedDateTime firstDate, final ZonedDateTime secondDate, final Calendar calendar) {
         return 0;
       }
 
