@@ -52,13 +52,6 @@ public final class CouponONDiscountingMethod {
    * @return The present value.
    */
   public MultipleCurrencyAmount presentValue(final CouponON coupon, final MulticurveProviderInterface multicurve) {
-    //    ArgumentChecker.notNull(coupon, "Coupon");
-    //    ArgumentChecker.notNull(multicurve, "Market");
-    //    final double ratio = 1.0 + coupon.getFixingPeriodAccrualFactor()
-    //        * multicurve.getForwardRate(coupon.getIndex(), coupon.getFixingPeriodStartTime(), coupon.getFixingPeriodEndTime(), coupon.getFixingPeriodAccrualFactor());
-    //    final double df = multicurve.getDiscountFactor(coupon.getCurrency(), coupon.getPaymentTime());
-    //    final double pv = (coupon.getNotionalAccrued() * ratio - coupon.getNotional()) * df;
-    //    return MultipleCurrencyAmount.of(coupon.getCurrency(), pv);
     return presentValue(coupon, multicurve, OvernightForwardRateProvider.getInstance());
   }
 

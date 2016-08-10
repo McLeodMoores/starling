@@ -63,13 +63,13 @@ public final class CouponIborCompoundingDiscountingMethod {
     ArgumentChecker.notNull(multicurve, "Multi-curves provider");
     final int nbSubPeriod = coupon.getFixingTimes().length;
     double notionalAccrued = coupon.getNotionalAccrued();
-    for (int loopsub = 0; loopsub < nbSubPeriod; loopsub++) {
+    for (int i = 0; i < nbSubPeriod; i++) {
       final double forwardRate = forwardRateProvider.getRate(
           multicurve,
           coupon,
-          coupon.getFixingPeriodStartTimes()[loopsub],
-          coupon.getFixingPeriodEndTimes()[loopsub], coupon.getFixingPeriodAccrualFactors()[loopsub]);
-      final double ratioForward = (1.0 + coupon.getPaymentAccrualFactors()[loopsub]
+          coupon.getFixingPeriodStartTimes()[i],
+          coupon.getFixingPeriodEndTimes()[i], coupon.getFixingPeriodAccrualFactors()[i]);
+      final double ratioForward = (1.0 + coupon.getPaymentAccrualFactors()[i]
           * forwardRate);
       notionalAccrued *= ratioForward;
     }
@@ -91,11 +91,11 @@ public final class CouponIborCompoundingDiscountingMethod {
     double notionalAccrued = coupon.getNotionalAccrued();
     final double[] forward = new double[nbSubPeriod];
     final double[] ratioForward = new double[nbSubPeriod];
-    for (int loopsub = 0; loopsub < nbSubPeriod; loopsub++) {
-      forward[loopsub] = multicurve.getSimplyCompoundForwardRate(coupon.getIndex(), coupon.getFixingPeriodStartTimes()[loopsub], coupon.getFixingPeriodEndTimes()[loopsub],
-          coupon.getFixingPeriodAccrualFactors()[loopsub]);
-      ratioForward[loopsub] = 1.0 + coupon.getPaymentAccrualFactors()[loopsub] * forward[loopsub];
-      notionalAccrued *= ratioForward[loopsub];
+    for (int i = 0; i < nbSubPeriod; i++) {
+      forward[i] = multicurve.getSimplyCompoundForwardRate(coupon.getIndex(), coupon.getFixingPeriodStartTimes()[i], coupon.getFixingPeriodEndTimes()[i],
+          coupon.getFixingPeriodAccrualFactors()[i]);
+      ratioForward[i] = 1.0 + coupon.getPaymentAccrualFactors()[i] * forward[i];
+      notionalAccrued *= ratioForward[i];
     }
     final double dfPayment = multicurve.getDiscountFactor(coupon.getCurrency(), coupon.getPaymentTime());
     // Backward sweep
@@ -104,9 +104,9 @@ public final class CouponIborCompoundingDiscountingMethod {
     final double notionalAccruedBar = dfPayment * pvBar;
     final double[] ratioForwardBar = new double[nbSubPeriod];
     final double[] forwardBar = new double[nbSubPeriod];
-    for (int loopsub = 0; loopsub < nbSubPeriod; loopsub++) {
-      ratioForwardBar[loopsub] = notionalAccrued / ratioForward[loopsub] * notionalAccruedBar;
-      forwardBar[loopsub] = coupon.getPaymentAccrualFactors()[loopsub] * ratioForwardBar[loopsub];
+    for (int i = 0; i < nbSubPeriod; i++) {
+      ratioForwardBar[i] = notionalAccrued / ratioForward[i] * notionalAccruedBar;
+      forwardBar[i] = coupon.getPaymentAccrualFactors()[i] * ratioForwardBar[i];
     }
     final Map<String, List<DoublesPair>> mapDsc = new HashMap<>();
     final List<DoublesPair> listDiscounting = new ArrayList<>();
@@ -114,9 +114,9 @@ public final class CouponIborCompoundingDiscountingMethod {
     mapDsc.put(multicurve.getName(coupon.getCurrency()), listDiscounting);
     final Map<String, List<ForwardSensitivity>> mapFwd = new HashMap<>();
     final List<ForwardSensitivity> listForward = new ArrayList<>();
-    for (int loopsub = 0; loopsub < nbSubPeriod; loopsub++) {
-      listForward.add(new SimplyCompoundedForwardSensitivity(coupon.getFixingPeriodStartTimes()[loopsub], coupon.getFixingPeriodEndTimes()[loopsub], coupon.getFixingPeriodAccrualFactors()[loopsub],
-          forwardBar[loopsub]));
+    for (int i = 0; i < nbSubPeriod; i++) {
+      listForward.add(new SimplyCompoundedForwardSensitivity(coupon.getFixingPeriodStartTimes()[i], coupon.getFixingPeriodEndTimes()[i], coupon.getFixingPeriodAccrualFactors()[i],
+          forwardBar[i]));
     }
     mapFwd.put(multicurve.getName(coupon.getIndex()), listForward);
     return MultipleCurrencyMulticurveSensitivity.of(coupon.getCurrency(), MulticurveSensitivity.of(mapDsc, mapFwd));

@@ -74,15 +74,15 @@ public final class CouponIborCompoundingFlatSpreadDiscountingMethod {
     ArgumentChecker.notNull(forwardRateProvider, "forwardRateProvider");
     final int nbSubPeriod = coupon.getFixingTimes().length;
     double cpaAccumulated = coupon.getCompoundingPeriodAmountAccumulated();
-    for (int loopsub = 0; loopsub < nbSubPeriod; loopsub++) {
+    for (int i = 0; i < nbSubPeriod; i++) {
       final double forward = forwardRateProvider.getRate(
           multicurve,
           coupon,
-          coupon.getFixingPeriodStartTimes()[loopsub],
-          coupon.getFixingPeriodEndTimes()[loopsub],
-          coupon.getFixingPeriodAccrualFactors()[loopsub]);
-      cpaAccumulated += cpaAccumulated * forward * coupon.getSubperiodsAccrualFactors()[loopsub]; // Additional Compounding Period Amount
-      cpaAccumulated += coupon.getNotional() * (forward + coupon.getSpread()) * coupon.getSubperiodsAccrualFactors()[loopsub]; // Basic Compounding Period Amount
+          coupon.getFixingPeriodStartTimes()[i],
+          coupon.getFixingPeriodEndTimes()[i],
+          coupon.getFixingPeriodAccrualFactors()[i]);
+      cpaAccumulated += cpaAccumulated * forward * coupon.getSubperiodsAccrualFactors()[i]; // Additional Compounding Period Amount
+      cpaAccumulated += coupon.getNotional() * (forward + coupon.getSpread()) * coupon.getSubperiodsAccrualFactors()[i]; // Basic Compounding Period Amount
     }
     final double df = multicurve.getDiscountFactor(coupon.getCurrency(), coupon.getPaymentTime());
     final double pv = cpaAccumulated * df;
@@ -105,12 +105,12 @@ public final class CouponIborCompoundingFlatSpreadDiscountingMethod {
     final double[] forward = new double[nbSubPeriod];
     cpa[0] = coupon.getCompoundingPeriodAmountAccumulated();
     cpaAccumulated[0] = coupon.getCompoundingPeriodAmountAccumulated();
-    for (int loopsub = 0; loopsub < nbSubPeriod; loopsub++) {
-      forward[loopsub] = multicurve.getSimplyCompoundForwardRate(coupon.getIndex(), coupon.getFixingPeriodStartTimes()[loopsub], coupon.getFixingPeriodEndTimes()[loopsub],
-          coupon.getFixingPeriodAccrualFactors()[loopsub]);
-      cpa[loopsub + 1] += coupon.getNotional() * (forward[loopsub] + spread) * coupon.getSubperiodsAccrualFactors()[loopsub]; // Basic Compounding Period Amount
-      cpa[loopsub + 1] += cpaAccumulated[loopsub] * forward[loopsub] * coupon.getSubperiodsAccrualFactors()[loopsub]; // Additional Compounding Period Amount
-      cpaAccumulated[loopsub + 1] = cpaAccumulated[loopsub] + cpa[loopsub + 1];
+    for (int i = 0; i < nbSubPeriod; i++) {
+      forward[i] = multicurve.getSimplyCompoundForwardRate(coupon.getIndex(), coupon.getFixingPeriodStartTimes()[i], coupon.getFixingPeriodEndTimes()[i],
+          coupon.getFixingPeriodAccrualFactors()[i]);
+      cpa[i + 1] += coupon.getNotional() * (forward[i] + spread) * coupon.getSubperiodsAccrualFactors()[i]; // Basic Compounding Period Amount
+      cpa[i + 1] += cpaAccumulated[i] * forward[i] * coupon.getSubperiodsAccrualFactors()[i]; // Additional Compounding Period Amount
+      cpaAccumulated[i + 1] = cpaAccumulated[i] + cpa[i + 1];
     }
     final double df = multicurve.getDiscountFactor(coupon.getCurrency(), coupon.getPaymentTime());
     // Backward sweep
@@ -119,11 +119,11 @@ public final class CouponIborCompoundingFlatSpreadDiscountingMethod {
     cpaAccumulatedBar[nbSubPeriod] = df * pvBar;
     final double[] cpaBar = new double[nbSubPeriod + 1];
     double spreadBar = 0;
-    for (int loopsub = nbSubPeriod - 1; loopsub >= 0; loopsub--) {
-      cpaAccumulatedBar[loopsub] = cpaAccumulatedBar[loopsub + 1];
-      cpaBar[loopsub + 1] += cpaAccumulatedBar[loopsub + 1];
-      cpaAccumulatedBar[loopsub] += forward[loopsub] * coupon.getSubperiodsAccrualFactors()[loopsub] * cpaBar[loopsub + 1];
-      spreadBar += coupon.getNotional() * coupon.getSubperiodsAccrualFactors()[loopsub] * cpaBar[loopsub + 1];
+    for (int i = nbSubPeriod - 1; i >= 0; i--) {
+      cpaAccumulatedBar[i] = cpaAccumulatedBar[i + 1];
+      cpaBar[i + 1] += cpaAccumulatedBar[i + 1];
+      cpaAccumulatedBar[i] += forward[i] * coupon.getSubperiodsAccrualFactors()[i] * cpaBar[i + 1];
+      spreadBar += coupon.getNotional() * coupon.getSubperiodsAccrualFactors()[i] * cpaBar[i + 1];
     }
     return spreadBar;
   }
@@ -143,12 +143,12 @@ public final class CouponIborCompoundingFlatSpreadDiscountingMethod {
     final double[] forward = new double[nbSubPeriod];
     cpa[0] = coupon.getCompoundingPeriodAmountAccumulated();
     cpaAccumulated[0] = coupon.getCompoundingPeriodAmountAccumulated();
-    for (int loopsub = 0; loopsub < nbSubPeriod; loopsub++) {
-      forward[loopsub] = multicurve.getSimplyCompoundForwardRate(coupon.getIndex(), coupon.getFixingPeriodStartTimes()[loopsub], coupon.getFixingPeriodEndTimes()[loopsub],
-          coupon.getFixingPeriodAccrualFactors()[loopsub]);
-      cpa[loopsub + 1] += coupon.getNotional() * (forward[loopsub] + coupon.getSpread()) * coupon.getSubperiodsAccrualFactors()[loopsub]; // Basic Compounding Period Amount
-      cpa[loopsub + 1] += cpaAccumulated[loopsub] * forward[loopsub] * coupon.getSubperiodsAccrualFactors()[loopsub]; // Additional Compounding Period Amount
-      cpaAccumulated[loopsub + 1] = cpaAccumulated[loopsub] + cpa[loopsub + 1];
+    for (int i = 0; i < nbSubPeriod; i++) {
+      forward[i] = multicurve.getSimplyCompoundForwardRate(coupon.getIndex(), coupon.getFixingPeriodStartTimes()[i], coupon.getFixingPeriodEndTimes()[i],
+          coupon.getFixingPeriodAccrualFactors()[i]);
+      cpa[i + 1] += coupon.getNotional() * (forward[i] + coupon.getSpread()) * coupon.getSubperiodsAccrualFactors()[i]; // Basic Compounding Period Amount
+      cpa[i + 1] += cpaAccumulated[i] * forward[i] * coupon.getSubperiodsAccrualFactors()[i]; // Additional Compounding Period Amount
+      cpaAccumulated[i + 1] = cpaAccumulated[i] + cpa[i + 1];
     }
     final double df = multicurve.getDiscountFactor(coupon.getCurrency(), coupon.getPaymentTime());
     // Backward sweep
@@ -158,12 +158,12 @@ public final class CouponIborCompoundingFlatSpreadDiscountingMethod {
     cpaAccumulatedBar[nbSubPeriod] = df * pvBar;
     final double[] cpaBar = new double[nbSubPeriod + 1];
     final double[] forwardBar = new double[nbSubPeriod];
-    for (int loopsub = nbSubPeriod - 1; loopsub >= 0; loopsub--) {
-      cpaAccumulatedBar[loopsub] = cpaAccumulatedBar[loopsub + 1];
-      cpaBar[loopsub + 1] += cpaAccumulatedBar[loopsub + 1];
-      cpaAccumulatedBar[loopsub] += forward[loopsub] * coupon.getSubperiodsAccrualFactors()[loopsub] * cpaBar[loopsub + 1];
-      forwardBar[loopsub] += cpaAccumulated[loopsub] * coupon.getSubperiodsAccrualFactors()[loopsub] * cpaBar[loopsub + 1];
-      forwardBar[loopsub] += coupon.getNotional() * coupon.getSubperiodsAccrualFactors()[loopsub] * cpaBar[loopsub + 1];
+    for (int i = nbSubPeriod - 1; i >= 0; i--) {
+      cpaAccumulatedBar[i] = cpaAccumulatedBar[i + 1];
+      cpaBar[i + 1] += cpaAccumulatedBar[i + 1];
+      cpaAccumulatedBar[i] += forward[i] * coupon.getSubperiodsAccrualFactors()[i] * cpaBar[i + 1];
+      forwardBar[i] += cpaAccumulated[i] * coupon.getSubperiodsAccrualFactors()[i] * cpaBar[i + 1];
+      forwardBar[i] += coupon.getNotional() * coupon.getSubperiodsAccrualFactors()[i] * cpaBar[i + 1];
     }
     final Map<String, List<DoublesPair>> mapDsc = new HashMap<>();
     final List<DoublesPair> listDiscounting = new ArrayList<>();
@@ -171,10 +171,10 @@ public final class CouponIborCompoundingFlatSpreadDiscountingMethod {
     mapDsc.put(multicurve.getName(coupon.getCurrency()), listDiscounting);
     final Map<String, List<ForwardSensitivity>> mapFwd = new HashMap<>();
     final List<ForwardSensitivity> listForward = new ArrayList<>();
-    for (int loopsub = 0; loopsub < nbSubPeriod; loopsub++) {
-      listForward.add(new SimplyCompoundedForwardSensitivity(coupon.getFixingPeriodStartTimes()[loopsub], coupon.getFixingPeriodEndTimes()[loopsub],
-          coupon.getFixingPeriodAccrualFactors()[loopsub],
-          forwardBar[loopsub]));
+    for (int i = 0; i < nbSubPeriod; i++) {
+      listForward.add(new SimplyCompoundedForwardSensitivity(coupon.getFixingPeriodStartTimes()[i], coupon.getFixingPeriodEndTimes()[i],
+          coupon.getFixingPeriodAccrualFactors()[i],
+          forwardBar[i]));
     }
     mapFwd.put(multicurve.getName(coupon.getIndex()), listForward);
     return MultipleCurrencyMulticurveSensitivity.of(coupon.getCurrency(), MulticurveSensitivity.of(mapDsc, mapFwd));
