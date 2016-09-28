@@ -74,6 +74,7 @@ public class HullWhiteMethodCurveTypeSetUp extends HullWhiteMethodCurveSetUp imp
     switch (function) {
       case NELSON_SIEGEL:
         _functionalForm = function;
+        return this;
       default:
         throw new IllegalStateException();
     }

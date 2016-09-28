@@ -80,6 +80,7 @@ public class DirectForwardMethodCurveTypeSetUp extends DirectForwardMethodCurveS
     switch (function) {
       case NELSON_SIEGEL:
         _functionalForm = function;
+        return this;
       default:
         throw new IllegalStateException();
     }
