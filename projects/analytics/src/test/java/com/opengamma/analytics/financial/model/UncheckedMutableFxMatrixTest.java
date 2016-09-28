@@ -1,5 +1,5 @@
 /**
- *
+ * Copyright (C) 2016 - Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.analytics.financial.model;
 
@@ -19,26 +19,28 @@ import com.opengamma.util.money.CurrencyAmount;
 import com.opengamma.util.money.MultipleCurrencyAmount;
 
 /**
- * Unit tests for {@link SimpleMutableFxMatrix}.
+ * Unit tests for {@link UncheckedMutableFxMatrix}.
  */
-public class SimpleMutableFxMatrixTest {
+public class UncheckedMutableFxMatrixTest {
   /** The tolerance */
   private static final double EPS = 2e-16;
 
   /**
    * Tests that the getCurrencies() method of the superclass fails.
    */
+  @SuppressWarnings("deprecation")
   @Test(expectedExceptions = UnsupportedOperationException.class)
   public void testGetCurrencies() {
-    SimpleMutableFxMatrix.of().getCurrencies();
+    UncheckedMutableFxMatrix.of().getCurrencies();
   }
 
   /**
    * Tests that the getRates() method of the superclass fails.
    */
+  @SuppressWarnings("deprecation")
   @Test(expectedExceptions = UnsupportedOperationException.class)
   public void testGetRates() {
-    SimpleMutableFxMatrix.of().getRates();
+    UncheckedMutableFxMatrix.of().getRates();
   }
 
   /**
@@ -47,7 +49,7 @@ public class SimpleMutableFxMatrixTest {
    */
   @Test(expectedExceptions = IllegalStateException.class)
   public void testAddExistingPair1() {
-    final SimpleMutableFxMatrix matrix = SimpleMutableFxMatrix.of();
+    final UncheckedMutableFxMatrix matrix = UncheckedMutableFxMatrix.of();
     matrix.addCurrency(Currency.EUR, Currency.USD, 1.2);
     matrix.addCurrency(Currency.EUR, Currency.USD, 1.1);
   }
@@ -58,7 +60,7 @@ public class SimpleMutableFxMatrixTest {
    */
   @Test(expectedExceptions = IllegalStateException.class)
   public void testAddExistingPair2() {
-    final SimpleMutableFxMatrix matrix = SimpleMutableFxMatrix.of();
+    final UncheckedMutableFxMatrix matrix = UncheckedMutableFxMatrix.of();
     matrix.addCurrency(Currency.EUR, Currency.USD, 1.2);
     matrix.addCurrency(Currency.USD, Currency.EUR, 0.83);
   }
@@ -68,7 +70,7 @@ public class SimpleMutableFxMatrixTest {
    */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testAddNegativeRate() {
-    final SimpleMutableFxMatrix matrix = SimpleMutableFxMatrix.of();
+    final UncheckedMutableFxMatrix matrix = UncheckedMutableFxMatrix.of();
     matrix.addCurrency(Currency.EUR, Currency.USD, -1.2);
   }
 
@@ -77,7 +79,7 @@ public class SimpleMutableFxMatrixTest {
    */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testAddZeroRate() {
-    final SimpleMutableFxMatrix matrix = SimpleMutableFxMatrix.of();
+    final UncheckedMutableFxMatrix matrix = UncheckedMutableFxMatrix.of();
     matrix.addCurrency(Currency.EUR, Currency.USD, 0);
   }
 
@@ -86,7 +88,7 @@ public class SimpleMutableFxMatrixTest {
    */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testUpdateNegativeRate() {
-    final SimpleMutableFxMatrix matrix = SimpleMutableFxMatrix.of();
+    final UncheckedMutableFxMatrix matrix = UncheckedMutableFxMatrix.of();
     matrix.addCurrency(Currency.EUR, Currency.USD, 1.2);
     matrix.updateRates(Currency.EUR, Currency.USD, -1.2);
   }
@@ -96,7 +98,7 @@ public class SimpleMutableFxMatrixTest {
    */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testUpdateZeroRate() {
-    final SimpleMutableFxMatrix matrix = SimpleMutableFxMatrix.of();
+    final UncheckedMutableFxMatrix matrix = UncheckedMutableFxMatrix.of();
     matrix.addCurrency(Currency.EUR, Currency.USD, 1.2);
     matrix.addCurrency(Currency.EUR, Currency.USD, 0);
   }
@@ -106,7 +108,7 @@ public class SimpleMutableFxMatrixTest {
    */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testUpdateNonExistentPair1() {
-    final SimpleMutableFxMatrix matrix = SimpleMutableFxMatrix.of();
+    final UncheckedMutableFxMatrix matrix = UncheckedMutableFxMatrix.of();
     matrix.addCurrency(Currency.EUR, Currency.USD, 1.2);
     matrix.updateRates(Currency.JPY, Currency.USD, 100);
   }
@@ -116,7 +118,7 @@ public class SimpleMutableFxMatrixTest {
    */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testUpdateNonExistentPair2() {
-    final SimpleMutableFxMatrix matrix = SimpleMutableFxMatrix.of();
+    final UncheckedMutableFxMatrix matrix = UncheckedMutableFxMatrix.of();
     matrix.addCurrency(Currency.EUR, Currency.USD, 1.2);
     matrix.updateRates(Currency.USD, Currency.JPY, 0.01);
   }
@@ -126,7 +128,7 @@ public class SimpleMutableFxMatrixTest {
    */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNumeratorNotInMatrix() {
-    final SimpleMutableFxMatrix matrix = SimpleMutableFxMatrix.of();
+    final UncheckedMutableFxMatrix matrix = UncheckedMutableFxMatrix.of();
     matrix.addCurrency(Currency.EUR, Currency.USD, 1.2);
     matrix.getFxRate(Currency.JPY, Currency.USD);
   }
@@ -136,7 +138,7 @@ public class SimpleMutableFxMatrixTest {
    */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testDenominatorNotInMatrix() {
-    final SimpleMutableFxMatrix matrix = SimpleMutableFxMatrix.of();
+    final UncheckedMutableFxMatrix matrix = UncheckedMutableFxMatrix.of();
     matrix.addCurrency(Currency.EUR, Currency.USD, 1.2);
     matrix.getFxRate(Currency.USD, Currency.JPY);
   }
@@ -146,7 +148,7 @@ public class SimpleMutableFxMatrixTest {
    */
   @Test
   public void testContainsPairMethod() {
-    final SimpleMutableFxMatrix matrix = SimpleMutableFxMatrix.of();
+    final UncheckedMutableFxMatrix matrix = UncheckedMutableFxMatrix.of();
     matrix.addCurrency(Currency.EUR, Currency.USD, 1.2);
     matrix.addCurrency(Currency.CHF, Currency.USD, 0.5);
     matrix.addCurrency(Currency.GBP, Currency.EUR, 1.3);
@@ -165,7 +167,7 @@ public class SimpleMutableFxMatrixTest {
    */
   @Test
   public void testDiagonal() {
-    final SimpleMutableFxMatrix matrix = SimpleMutableFxMatrix.of();
+    final UncheckedMutableFxMatrix matrix = UncheckedMutableFxMatrix.of();
     matrix.addCurrency(Currency.EUR, Currency.USD, 1.2);
     matrix.addCurrency(Currency.CHF, Currency.USD, 0.5);
     matrix.addCurrency(Currency.GBP, Currency.EUR, 1.3);
@@ -178,9 +180,10 @@ public class SimpleMutableFxMatrixTest {
   /**
    * Tests that only rates that have been set can be retrieved from a sparsely-populated matrix.
    */
+  @SuppressWarnings("unused")
   @Test
   public void testRequestNonExistentRate() {
-    final SimpleMutableFxMatrix matrix = SimpleMutableFxMatrix.of();
+    final UncheckedMutableFxMatrix matrix = UncheckedMutableFxMatrix.of();
     matrix.addCurrency(Currency.EUR, Currency.USD, 1.2);
     matrix.addCurrency(Currency.CHF, Currency.USD, 0.5);
     matrix.addCurrency(Currency.GBP, Currency.EUR, 1.3);
@@ -250,7 +253,7 @@ public class SimpleMutableFxMatrixTest {
    */
   @Test
   public void testAdd1() {
-    final SimpleMutableFxMatrix matrix = SimpleMutableFxMatrix.of();
+    final UncheckedMutableFxMatrix matrix = UncheckedMutableFxMatrix.of();
     matrix.addCurrency(Currency.EUR, Currency.USD, 1.2);
     final double[][] rates = matrix.getFxRates();
     final double[][] expected = new double[][] {
@@ -261,7 +264,7 @@ public class SimpleMutableFxMatrixTest {
     assertEquals(matrix.getFxRate(Currency.EUR, Currency.USD), 1.2, EPS);
     // inverse
     assertEquals(matrix.getFxRate(Currency.USD, Currency.EUR), 1 / 1.2, EPS);
-    assertMatrixEquals(rates, expected, EPS);
+    assertDeepEquals(rates, expected, EPS);
   }
 
   /**
@@ -275,7 +278,7 @@ public class SimpleMutableFxMatrixTest {
    */
   @Test
   public void testAdd2() {
-    final SimpleMutableFxMatrix matrix = SimpleMutableFxMatrix.of();
+    final UncheckedMutableFxMatrix matrix = UncheckedMutableFxMatrix.of();
     matrix.addCurrency(Currency.EUR, Currency.USD, 1.2);
     matrix.addCurrency(Currency.CHF, Currency.GBP, 1.7);
     final double[][] rates = matrix.getFxRates();
@@ -286,7 +289,7 @@ public class SimpleMutableFxMatrixTest {
         new double[0]                   // CHF
     };
     assertEquals(matrix.getCurrencyList(), Arrays.asList(Currency.USD, Currency.EUR, Currency.GBP, Currency.CHF));
-    assertMatrixEquals(rates, expected, EPS);
+    assertDeepEquals(rates, expected, EPS);
     assertEquals(matrix.getFxRate(Currency.EUR, Currency.USD), 1.2, EPS);
     assertEquals(matrix.getFxRate(Currency.CHF, Currency.GBP), 1.7, EPS);
     // inverse
@@ -304,7 +307,7 @@ public class SimpleMutableFxMatrixTest {
    */
   @Test
   public void testAdd3() {
-    final SimpleMutableFxMatrix matrix = SimpleMutableFxMatrix.of();
+    final UncheckedMutableFxMatrix matrix = UncheckedMutableFxMatrix.of();
     matrix.addCurrency(Currency.EUR, Currency.USD, 1.2);
     matrix.addCurrency(Currency.CHF, Currency.USD, 0.5);
     final double[][] rates = matrix.getFxRates();
@@ -314,7 +317,7 @@ public class SimpleMutableFxMatrixTest {
         new double[0]                   // CHF
     };
     assertEquals(matrix.getCurrencyList(), Arrays.asList(Currency.USD, Currency.EUR, Currency.CHF));
-    assertMatrixEquals(rates, expected, EPS);
+    assertDeepEquals(rates, expected, EPS);
     assertEquals(matrix.getFxRate(Currency.EUR, Currency.USD), 1.2, EPS);
     assertEquals(matrix.getFxRate(Currency.CHF, Currency.USD), 0.5, EPS);
     // inverse
@@ -332,7 +335,7 @@ public class SimpleMutableFxMatrixTest {
    */
   @Test
   public void testAdd4() {
-    final SimpleMutableFxMatrix matrix = SimpleMutableFxMatrix.of();
+    final UncheckedMutableFxMatrix matrix = UncheckedMutableFxMatrix.of();
     matrix.addCurrency(Currency.EUR, Currency.USD, 1.2);
     matrix.addCurrency(Currency.CHF, Currency.EUR, 1.5);
     final double[][] rates = matrix.getFxRates();
@@ -342,7 +345,7 @@ public class SimpleMutableFxMatrixTest {
         new double[0]                   // CHF
     };
     assertEquals(matrix.getCurrencyList(), Arrays.asList(Currency.USD, Currency.EUR, Currency.CHF));
-    assertMatrixEquals(rates, expected, EPS);
+    assertDeepEquals(rates, expected, EPS);
     assertEquals(matrix.getFxRate(Currency.EUR, Currency.USD), 1.2, EPS);
     assertEquals(matrix.getFxRate(Currency.CHF, Currency.EUR), 1.5, EPS);
     // inverse
@@ -361,7 +364,7 @@ public class SimpleMutableFxMatrixTest {
    */
   @Test
   public void testAdd5() {
-    final SimpleMutableFxMatrix matrix = SimpleMutableFxMatrix.of();
+    final UncheckedMutableFxMatrix matrix = UncheckedMutableFxMatrix.of();
     matrix.addCurrency(Currency.EUR, Currency.USD, 1.2);
     matrix.addCurrency(Currency.CHF, Currency.USD, 0.5);
     matrix.addCurrency(Currency.GBP, Currency.EUR, 0.7);
@@ -373,7 +376,7 @@ public class SimpleMutableFxMatrixTest {
         new double[0]                     // GBP
     };
     assertEquals(matrix.getCurrencyList(), Arrays.asList(Currency.USD, Currency.EUR, Currency.CHF, Currency.GBP));
-    assertMatrixEquals(rates, expected, EPS);
+    assertDeepEquals(rates, expected, EPS);
     assertEquals(matrix.getFxRate(Currency.EUR, Currency.USD), 1.2, EPS);
     assertEquals(matrix.getFxRate(Currency.CHF, Currency.USD), 0.5, EPS);
     assertEquals(matrix.getFxRate(Currency.GBP, Currency.EUR), 0.7, EPS);
@@ -396,7 +399,7 @@ public class SimpleMutableFxMatrixTest {
    */
   @Test
   public void testAdd6() {
-    final SimpleMutableFxMatrix matrix = SimpleMutableFxMatrix.of();
+    final UncheckedMutableFxMatrix matrix = UncheckedMutableFxMatrix.of();
     matrix.addCurrency(Currency.EUR, Currency.USD, 1.2);
     matrix.addCurrency(Currency.CHF, Currency.USD, 0.5);
     matrix.addCurrency(Currency.EUR, Currency.GBP, 1.3);
@@ -408,7 +411,7 @@ public class SimpleMutableFxMatrixTest {
         new double[0]                       // GBP
     };
     assertEquals(matrix.getCurrencyList(), Arrays.asList(Currency.USD, Currency.EUR, Currency.CHF, Currency.GBP));
-    assertMatrixEquals(rates, expected, EPS);
+    assertDeepEquals(rates, expected, EPS);
     assertEquals(matrix.getFxRate(Currency.EUR, Currency.USD), 1.2, EPS);
     assertEquals(matrix.getFxRate(Currency.CHF, Currency.USD), 0.5, EPS);
     assertEquals(matrix.getFxRate(Currency.EUR, Currency.GBP), 1.3, EPS);
@@ -430,7 +433,7 @@ public class SimpleMutableFxMatrixTest {
    */
   @Test
   public void testAdd7() {
-    final SimpleMutableFxMatrix matrix = SimpleMutableFxMatrix.of();
+    final UncheckedMutableFxMatrix matrix = UncheckedMutableFxMatrix.of();
     matrix.addCurrency(Currency.EUR, Currency.USD, 1.2);
     matrix.addCurrency(Currency.CHF, Currency.USD, 0.5);
     matrix.addCurrency(Currency.GBP, Currency.EUR, 1.3);
@@ -444,7 +447,7 @@ public class SimpleMutableFxMatrixTest {
         new double[0]                         // AUD
     };
     assertEquals(matrix.getCurrencyList(), Arrays.asList(Currency.USD, Currency.EUR, Currency.CHF, Currency.GBP, Currency.AUD));
-    assertMatrixEquals(rates, expected, EPS);
+    assertDeepEquals(rates, expected, EPS);
     assertEquals(matrix.getFxRate(Currency.EUR, Currency.USD), 1.2, EPS);
     assertEquals(matrix.getFxRate(Currency.CHF, Currency.USD), 0.5, EPS);
     assertEquals(matrix.getFxRate(Currency.GBP, Currency.EUR), 1.3, EPS);
@@ -470,7 +473,7 @@ public class SimpleMutableFxMatrixTest {
    */
   @Test
   public void testAdd8() {
-    final SimpleMutableFxMatrix matrix = SimpleMutableFxMatrix.of();
+    final UncheckedMutableFxMatrix matrix = UncheckedMutableFxMatrix.of();
     matrix.addCurrency(Currency.EUR, Currency.USD, 1.2);
     matrix.addCurrency(Currency.CHF, Currency.USD, 0.5);
     matrix.addCurrency(Currency.NZD, Currency.JPY, 0.015);
@@ -489,7 +492,7 @@ public class SimpleMutableFxMatrixTest {
       new double[0]                                           // AUD
     };
     assertEquals(matrix.getCurrencyList(), Arrays.asList(Currency.USD, Currency.EUR, Currency.CHF, Currency.JPY, Currency.NZD, Currency.GBP, Currency.AUD));
-    assertMatrixEquals(rates, expected, EPS);
+    assertDeepEquals(rates, expected, EPS);
     assertEquals(matrix.getFxRate(Currency.EUR, Currency.USD), 1.2, EPS);
     assertEquals(matrix.getFxRate(Currency.CHF, Currency.USD), 0.5, EPS);
     assertEquals(matrix.getFxRate(Currency.NZD, Currency.JPY), 0.015, EPS);
@@ -513,7 +516,7 @@ public class SimpleMutableFxMatrixTest {
    */
   @Test
   public void testFullMatrix() {
-    final SimpleMutableFxMatrix matrix = SimpleMutableFxMatrix.of();
+    final UncheckedMutableFxMatrix matrix = UncheckedMutableFxMatrix.of();
     matrix.addCurrency(Currency.EUR, Currency.USD, 1.2);
     matrix.addCurrency(Currency.CHF, Currency.USD, 0.5);
     matrix.addCurrency(Currency.GBP, Currency.USD, 1.3);
@@ -528,7 +531,7 @@ public class SimpleMutableFxMatrixTest {
       new double[0]
     };
     assertEquals(matrix.getCurrencyList(), Arrays.asList(Currency.USD, Currency.EUR, Currency.CHF, Currency.GBP));
-    assertMatrixEquals(rates, expected, EPS);
+    assertDeepEquals(rates, expected, EPS);
   }
 
   /**
@@ -536,7 +539,7 @@ public class SimpleMutableFxMatrixTest {
    */
   @Test
   public void testUpdateRate() {
-    final SimpleMutableFxMatrix matrix = SimpleMutableFxMatrix.of();
+    final UncheckedMutableFxMatrix matrix = UncheckedMutableFxMatrix.of();
     matrix.addCurrency(Currency.EUR, Currency.USD, 1.2);
     matrix.addCurrency(Currency.CHF, Currency.USD, 0.5);
     matrix.addCurrency(Currency.GBP, Currency.USD, 1.3);
@@ -552,7 +555,7 @@ public class SimpleMutableFxMatrixTest {
       new double[0]
     };
     assertEquals(matrix.getCurrencyList(), Arrays.asList(Currency.USD, Currency.EUR, Currency.CHF, Currency.GBP));
-    assertMatrixEquals(rates, expected, EPS);
+    assertDeepEquals(rates, expected, EPS);
     // update an inverse rate
     matrix.updateRates(Currency.USD, Currency.GBP, 0.8);
     rates = matrix.getFxRates();
@@ -563,7 +566,7 @@ public class SimpleMutableFxMatrixTest {
       new double[0]
     };
     assertEquals(matrix.getCurrencyList(), Arrays.asList(Currency.USD, Currency.EUR, Currency.CHF, Currency.GBP));
-    assertMatrixEquals(rates, expected, EPS);
+    assertDeepEquals(rates, expected, EPS);
   }
 
   /**
@@ -571,7 +574,7 @@ public class SimpleMutableFxMatrixTest {
    */
   @Test
   public void testConvert() {
-    final SimpleMutableFxMatrix matrix = SimpleMutableFxMatrix.of();
+    final UncheckedMutableFxMatrix matrix = UncheckedMutableFxMatrix.of();
     matrix.addCurrency(Currency.EUR, Currency.USD, 1.2);
     matrix.addCurrency(Currency.CHF, Currency.USD, 0.5);
     matrix.addCurrency(Currency.GBP, Currency.USD, 1.3);
@@ -585,8 +588,8 @@ public class SimpleMutableFxMatrixTest {
    */
   @Test
   public void testObject() {
-    assertNotEquals(new FXMatrix(), SimpleMutableFxMatrix.of());
-    final SimpleMutableFxMatrix matrix = SimpleMutableFxMatrix.of();
+    assertNotEquals(new FXMatrix(), UncheckedMutableFxMatrix.of());
+    final UncheckedMutableFxMatrix matrix = UncheckedMutableFxMatrix.of();
     matrix.addCurrency(Currency.EUR, Currency.USD, 1.2);
     matrix.addCurrency(Currency.CHF, Currency.USD, 0.5);
     matrix.addCurrency(Currency.GBP, Currency.USD, 1.3);
@@ -594,7 +597,7 @@ public class SimpleMutableFxMatrixTest {
     matrix.addCurrency(Currency.GBP, Currency.EUR, 23);
     matrix.addCurrency(Currency.GBP, Currency.CHF, 1.4);
     assertEquals(matrix.getNumberOfCurrencies(), 4);
-    SimpleMutableFxMatrix other = SimpleMutableFxMatrix.of();
+    UncheckedMutableFxMatrix other = UncheckedMutableFxMatrix.of();
     other.addCurrency(Currency.EUR, Currency.USD, 1.2);
     other.addCurrency(Currency.CHF, Currency.USD, 0.5);
     other.addCurrency(Currency.GBP, Currency.USD, 1.3);
@@ -606,7 +609,7 @@ public class SimpleMutableFxMatrixTest {
     assertEquals(matrix, other);
     assertEquals(matrix.hashCode(), other.hashCode());
     // different currencies
-    other = SimpleMutableFxMatrix.of();
+    other = UncheckedMutableFxMatrix.of();
     other.addCurrency(Currency.EUR, Currency.USD, 1.2);
     other.addCurrency(Currency.CHF, Currency.USD, 0.5);
     other.addCurrency(Currency.GBP, Currency.USD, 1.3);
@@ -615,7 +618,7 @@ public class SimpleMutableFxMatrixTest {
     other.addCurrency(Currency.GBP, Currency.NZD, 1.4);
     assertNotEquals(matrix, other);
     // different values
-    other = SimpleMutableFxMatrix.of();
+    other = UncheckedMutableFxMatrix.of();
     other.addCurrency(Currency.EUR, Currency.USD, 1.2);
     other.addCurrency(Currency.CHF, Currency.USD, 0.5);
     other.addCurrency(Currency.GBP, Currency.USD, 1.3);
@@ -631,7 +634,7 @@ public class SimpleMutableFxMatrixTest {
    * @param expected  the expected matrix
    * @param eps  the tolerance
    */
-  private static void assertMatrixEquals(final double[][] actual, final double[][] expected, final double eps) {
+  private static void assertDeepEquals(final double[][] actual, final double[][] expected, final double eps) {
     assertEquals(actual.length, expected.length);
     for (int i = 0; i < actual.length; i++) {
       assertEquals(actual[i].length, expected[i].length);

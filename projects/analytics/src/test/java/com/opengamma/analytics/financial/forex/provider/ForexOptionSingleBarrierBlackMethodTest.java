@@ -118,8 +118,10 @@ public class ForexOptionSingleBarrierBlackMethodTest {
   private static final double TOLERANCE_PV = 1.0E-2;
   private static final double TOLERANCE_PV_DELTA = 1.0E+0;
 
+  /**
+   * Comparison with the underlying vanilla option (the vanilla option is more expensive).
+   */
   @Test
-  /** Comparison with the underlying vanilla option (the vanilla option is more expensive). */
   public void comparisonOfBarrierPricersWithVeryHighAndVeryLowBarrierLevels() {
     final MultipleCurrencyAmount priceBarrierUp = METHOD_BARRIER.presentValue(BARRIER_LIKE_VANILLA_UP, SMILE_MULTICURVES);
     final MultipleCurrencyAmount priceBarrierDown = METHOD_BARRIER.presentValue(BARRIER_LIKE_VANILLA_DOWN, SMILE_MULTICURVES);
@@ -127,12 +129,12 @@ public class ForexOptionSingleBarrierBlackMethodTest {
         Math.abs(priceBarrierDown.getAmount(USD) / priceBarrierUp.getAmount(USD) - 1) < 1e-4);
   }
 
-  @Test
   /**
    * In-Out Parity. To get this exact, we must set the payment date equal to expiry date.
    * The treatment of the vanilla is: Z(t,T_pay) * FwdPrice(t,T_exp) where as
    * the treatment of the barrier is: Price(t,T_exp) (roughly :))
    */
+  @Test
   public void testKnockInOutParity() {
     // Local version where expiry is OPTION_PAY_DATE
     final ForexOptionVanillaDefinition vanillaDefn = new ForexOptionVanillaDefinition(FOREX_DEFINITION, OPTION_PAY_DATE, IS_CALL, IS_LONG);
@@ -151,23 +153,23 @@ public class ForexOptionSingleBarrierBlackMethodTest {
     final double priceBarrierDown = METHOD_BARRIER.presentValue(impossibleKnockOut, SMILE_MULTICURVES).getAmount(USD);
     assertTrue("PV : Knock-Out + Knock-In Barriers do not sum to the underlying vanilla (as approximated by a barrierOption with an impossibly low barrier",
         Math.abs((priceBarrierKO + priceBarrierKI) / priceBarrierDown - 1.0) < 1e-4);
-    assertTrue("PV : Knock-Out + Knock-In Barriers do not sum to the underlying vanilla", ((priceBarrierKO + priceBarrierKI) / priceVanilla - 1.0) < 1e-4);
+    assertTrue("PV : Knock-Out + Knock-In Barriers do not sum to the underlying vanilla", (priceBarrierKO + priceBarrierKI) / priceVanilla - 1.0 < 1e-4);
   }
 
-  @Test
   /**
    * Comparison with the underlying vanilla option (the vanilla option is more expensive).
    */
+  @Test
   public void comparisonVanilla() {
     final MultipleCurrencyAmount priceVanilla = METHOD_VANILLA.presentValue(VANILLA_LONG, SMILE_MULTICURVES);
     final MultipleCurrencyAmount priceBarrier = METHOD_BARRIER.presentValue(OPTION_BARRIER, SMILE_MULTICURVES);
     assertTrue("Barriers are cheaper than vanilla", priceVanilla.getAmount(USD) > priceBarrier.getAmount(USD));
   }
 
-  @Test
   /**
    * Tests present value with a direct computation.
    */
+  @Test
   public void presentValue() {
     final MultipleCurrencyAmount priceMethod = METHOD_BARRIER.presentValue(OPTION_BARRIER, SMILE_MULTICURVES);
     final double payTime = VANILLA_LONG.getUnderlyingForex().getPaymentTime();
@@ -182,10 +184,10 @@ public class ForexOptionSingleBarrierBlackMethodTest {
     assertEquals("Barriers present value", priceComputed, priceMethod.getAmount(USD), TOLERANCE_PV);
   }
 
-  @Test
   /**
    * Test the price scaling and the long/short parity.
    */
+  @Test
   public void scaleLongShortParity() {
     final MultipleCurrencyAmount priceBarrier = METHOD_BARRIER.presentValue(OPTION_BARRIER, SMILE_MULTICURVES);
     final double scale = 10;
@@ -199,21 +201,21 @@ public class ForexOptionSingleBarrierBlackMethodTest {
     assertEquals("Barriers are cheaper than vanilla", -priceBarrier.getAmount(USD), priceBarrierShort.getAmount(USD), TOLERANCE_PV);
   }
 
-  @Test
   /**
    * Tests present value method vs calculator.
    */
+  @Test
   public void presentValueMethodVsCalculator() {
     final MultipleCurrencyAmount pvMethod = METHOD_BARRIER.presentValue(OPTION_BARRIER, SMILE_MULTICURVES);
     final MultipleCurrencyAmount pvCalculator = OPTION_BARRIER.accept(PVFBC, SMILE_MULTICURVES);
     assertEquals("Forex vanilla option: present value Method vs Calculator", pvMethod.getAmount(USD), pvCalculator.getAmount(USD), TOLERANCE_PV);
   }
 
-  @Test
   /**
    * Tests the currency exposure vs a finite difference computation. The computation is with fixed Black volatility (Black world).
    * The volatility used in the shifted price is flat with the volatility equal to the volatility used for the original price.
    */
+  @Test
   public void currencyExposure() {
     final MultipleCurrencyAmount ce = METHOD_BARRIER.currencyExposure(OPTION_BARRIER, SMILE_FLAT_MULTICURVES);
     final double shiftSpotEURUSD = 1E-6;
@@ -223,7 +225,7 @@ public class ForexOptionSingleBarrierBlackMethodTest {
     multicurvesShiftedFX.setForexMatrix(fxMatrixShift);
     final BlackForexSmileProviderDiscount smileBumpedSpot = new BlackForexSmileProviderDiscount(multicurvesShiftedFX, SMILE_TERM_FLAT, Pairs.of(EUR, USD));
     final MultipleCurrencyAmount pvBumpedSpot = METHOD_BARRIER.presentValue(OPTION_BARRIER, smileBumpedSpot);
-    final double ceDomesticFD = (pvBumpedSpot.getAmount(USD) - pv.getAmount(USD));
+    final double ceDomesticFD = pvBumpedSpot.getAmount(USD) - pv.getAmount(USD);
     assertEquals("Barrier currency exposure: domestic currency", ceDomesticFD, ce.getAmount(EUR) * shiftSpotEURUSD, 2.0E-4);
     final double spotGBPUSD = 1.60;
     final double spotGBPEUR = spotGBPUSD / SPOT;
@@ -237,10 +239,10 @@ public class ForexOptionSingleBarrierBlackMethodTest {
         ce.getAmount(EUR) * (1 / spotGBPEURshifted - 1 / spotGBPEUR) + ce.getAmount(USD) * (1 / spotGBPUSDshifted - 1 / spotGBPUSD), 1.0E-4);
   }
 
-  @Test
   /**
    * Tests currency exposure Method vs Calculator.
    */
+  @Test
   public void currencyExposureMethodVsCalculator() {
     final MultipleCurrencyAmount ceMethod = METHOD_BARRIER.currencyExposure(OPTION_BARRIER, SMILE_MULTICURVES);
     final MultipleCurrencyAmount ceCalculator = OPTION_BARRIER.accept(CEFBC, SMILE_MULTICURVES);
@@ -248,10 +250,10 @@ public class ForexOptionSingleBarrierBlackMethodTest {
     assertEquals("Forex vanilla option: currency exposure Method vs Calculator", ceMethod.getAmount(USD), ceCalculator.getAmount(USD), TOLERANCE_PV);
   }
 
-  @Test
   /**
    * Tests the present value curve sensitivity.
    */
+  @Test
   public void presentValueCurveSensitivity() {
     final MultipleCurrencyParameterSensitivity pvpsExact = PS_FBS_C.calculateSensitivity(OPTION_BARRIER, SMILE_FLAT_MULTICURVES, SMILE_FLAT_MULTICURVES
         .getMulticurveProvider().getAllNames());
@@ -259,20 +261,20 @@ public class ForexOptionSingleBarrierBlackMethodTest {
     AssertSensitivityObjects.assertEquals("SwaptionPhysicalFixedIborSABRMethod: presentValueCurveSensitivity ", pvpsExact, pvpsFD, TOLERANCE_PV_DELTA);
   }
 
-  @Test
   /**
    * Test the present value curve sensitivity through the method and through the calculator.
    */
+  @Test
   public void presentValueCurveSensitivityMethodVsCalculator() {
     final MultipleCurrencyMulticurveSensitivity pvcsMethod = METHOD_BARRIER.presentValueCurveSensitivity(OPTION_BARRIER, SMILE_MULTICURVES);
     final MultipleCurrencyMulticurveSensitivity pvcsCalculator = OPTION_BARRIER.accept(PVCSFBC, SMILE_MULTICURVES);
     assertEquals("Forex present value curve sensitivity: Method vs Calculator", pvcsMethod, pvcsCalculator);
   }
 
-  @Test
   /**
    * Tests the long/short parity.
    */
+  @Test
   public void longShort() {
     final MultipleCurrencyAmount pvShort = METHOD_BARRIER.presentValue(BARRIER_SHORT, SMILE_MULTICURVES);
     final MultipleCurrencyAmount pvLong = METHOD_BARRIER.presentValue(OPTION_BARRIER, SMILE_MULTICURVES);
@@ -289,10 +291,10 @@ public class ForexOptionSingleBarrierBlackMethodTest {
     assertEquals("Forex single barrier option: volatility sensitivity long/short parity", pvvsLong, pvvsShort.multipliedBy(-1.0));
   }
 
-  @Test
   /**
    * Tests present value volatility sensitivity.
    */
+  @Test
   public void volatilitySensitivity() {
     final PresentValueForexBlackVolatilitySensitivity sensi = METHOD_BARRIER.presentValueBlackVolatilitySensitivity(OPTION_BARRIER, SMILE_MULTICURVES);
     final Pair<Currency, Currency> currencyPair = Pairs.of(EUR, USD);
@@ -315,10 +317,10 @@ public class ForexOptionSingleBarrierBlackMethodTest {
     assertEquals("Forex vanilla option: vega short", -sensi.getVega().getMap().get(point), sensiShort.getVega().getMap().get(point));
   }
 
-  @Test
   /**
    * Test the present value curve sensitivity through the method and through the calculator.
    */
+  @Test
   public void volatilitySensitivityMethodVsCalculator() {
     final PresentValueForexBlackVolatilitySensitivity pvvsMethod = METHOD_BARRIER.presentValueBlackVolatilitySensitivity(OPTION_BARRIER, SMILE_MULTICURVES);
     final PresentValueForexBlackVolatilitySensitivity pvvsCalculator = OPTION_BARRIER.accept(PVFVFBC, SMILE_MULTICURVES);
@@ -464,7 +466,6 @@ public class ForexOptionSingleBarrierBlackMethodTest {
   //    assertTrue(true);
   //  }
 
-  @Test
   /**
    * For the three key 2nd order sensitivities: Gamma, Vomma and Vanna, Finite Difference is used.
    * The tests below check the methods. <p>
@@ -473,6 +474,7 @@ public class ForexOptionSingleBarrierBlackMethodTest {
    * This works well for the one-dimensional sensitivities above, but not well at all for the cross-derivative, Vanna. Comparison below, and in test above.
    *
    */
+  @Test
   public void testOfFiniteDifferenceMethods() {
     final ForexOptionSingleBarrier optionForex = OPTION_BARRIER;
     final double bp10 = 0.001;
@@ -488,7 +490,7 @@ public class ForexOptionSingleBarrierBlackMethodTest {
     final double forward = spot * Math.exp(-rateForeign * payTime) / Math.exp(-rateDomestic * payTime);
     final double foreignAmount = optionForex.getUnderlyingOption().getUnderlyingForex().getPaymentCurrency1().getAmount();
     final double rebateByForeignUnit = optionForex.getRebate() / Math.abs(foreignAmount);
-    final double sign = (optionForex.getUnderlyingOption().isLong() ? 1.0 : -1.0);
+    final double sign = optionForex.getUnderlyingOption().isLong() ? 1.0 : -1.0;
     final double vol = SMILE_MULTICURVES.getVolatility(optionForex.getCurrency1(), optionForex.getCurrency2(), optionForex.getUnderlyingOption().getTimeToExpiry(),
         optionForex.getUnderlyingOption().getStrike(), forward);
 

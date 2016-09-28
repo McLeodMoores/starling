@@ -1,7 +1,11 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
+ *
+ * Modified by McLeod Moores Software Limited.
+ *
+ * Copyright (C) 2016 - present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.analytics.financial.forex.provider;
 
@@ -82,7 +86,7 @@ public final class ForexOptionSingleBarrierBlackMethod {
     final double forward = spot * dfForeign / dfDomestic;
     final double foreignAmount = optionForex.getUnderlyingOption().getUnderlyingForex().getPaymentCurrency1().getAmount();
     final double rebateByForeignUnit = optionForex.getRebate() / Math.abs(foreignAmount);
-    final double sign = (optionForex.getUnderlyingOption().isLong() ? 1.0 : -1.0);
+    final double sign = optionForex.getUnderlyingOption().isLong() ? 1.0 : -1.0;
     final double volatility = smileMulticurves.getVolatility(optionForex.getCurrency1(), optionForex.getCurrency2(), optionForex.getUnderlyingOption().getTimeToExpiry(), optionForex
         .getUnderlyingOption().getStrike(), forward);
     double price = BARRIER_FUNCTION.getPrice(optionForex.getUnderlyingOption(), optionForex.getBarrier(), rebateByForeignUnit, spot, rateDomestic - rateForeign, rateDomestic, volatility);
@@ -112,7 +116,7 @@ public final class ForexOptionSingleBarrierBlackMethod {
     final double forward = spot * Math.exp(-rateForeign * payTime) / Math.exp(-rateDomestic * payTime);
     final double foreignAmount = optionForex.getUnderlyingOption().getUnderlyingForex().getPaymentCurrency1().getAmount();
     final double rebateByForeignUnit = optionForex.getRebate() / Math.abs(foreignAmount);
-    final double sign = (optionForex.getUnderlyingOption().isLong() ? 1.0 : -1.0);
+    final double sign = optionForex.getUnderlyingOption().isLong() ? 1.0 : -1.0;
     final double volatility = smileMulticurves.getVolatility(optionForex.getCurrency1(), optionForex.getCurrency2(), optionForex.getUnderlyingOption().getTimeToExpiry(), optionForex
         .getUnderlyingOption().getStrike(), forward);
     final double[] priceDerivatives = new double[5];
@@ -148,10 +152,10 @@ public final class ForexOptionSingleBarrierBlackMethod {
     final double rateForeign = -Math.log(dfForeign) / payTime;
     final double spot = multicurves.getFxRate(optionForex.getCurrency1(), optionForex.getCurrency2());
     // Forward sweep
-    final double forward = spot * Math.exp(-rateForeign * payTime) / Math.exp(-rateDomestic * payTime);
+    final double forward = spot * dfForeign / dfDomestic;
     final double foreignAmount = optionForex.getUnderlyingOption().getUnderlyingForex().getPaymentCurrency1().getAmount();
     final double rebateByForeignUnit = optionForex.getRebate() / Math.abs(foreignAmount);
-    final double sign = (optionForex.getUnderlyingOption().isLong() ? 1.0 : -1.0);
+    final double sign = optionForex.getUnderlyingOption().isLong() ? 1.0 : -1.0;
     final double volatility = smileMulticurves.getVolatility(optionForex.getCurrency1(), optionForex.getCurrency2(), optionForex.getUnderlyingOption().getTimeToExpiry(), optionForex
         .getUnderlyingOption().getStrike(), forward);
     // The Barrier pricing method parameterizes as a function of rate (r=rateDomestic), and costOfCarry (b=rateDomestic-rateForeign)
@@ -195,15 +199,13 @@ public final class ForexOptionSingleBarrierBlackMethod {
     final double forward = spot * Math.exp(-rateForeign * payTime) / Math.exp(-rateDomestic * payTime);
     final double foreignAmount = optionForex.getUnderlyingOption().getUnderlyingForex().getPaymentCurrency1().getAmount();
     final double rebateByForeignUnit = optionForex.getRebate() / Math.abs(foreignAmount);
-    final double sign = (optionForex.getUnderlyingOption().isLong() ? 1.0 : -1.0);
+    final double sign = optionForex.getUnderlyingOption().isLong() ? 1.0 : -1.0;
     final double volatility = smileMulticurves.getVolatility(optionForex.getCurrency1(), optionForex.getCurrency2(), optionForex.getUnderlyingOption().getTimeToExpiry(), optionForex
         .getUnderlyingOption().getStrike(), forward);
     final double[] priceDerivatives = new double[5];
     BARRIER_FUNCTION.getPriceAdjoint(optionForex.getUnderlyingOption(), optionForex.getBarrier(), rebateByForeignUnit, spot, rateDomestic - rateForeign, rateDomestic, volatility, priceDerivatives);
     final double volatilitySensitivityValue = priceDerivatives[4] * Math.abs(foreignAmount) * sign;
     final DoublesPair point = DoublesPair.of(optionForex.getUnderlyingOption().getTimeToExpiry(), optionForex.getUnderlyingOption().getStrike());
-    //    Map<DoublesPair, Double> result = new HashMap<DoublesPair, Double>();
-    //    result.put(point, volatilitySensitivityValue);
     final SurfaceValue result = SurfaceValue.from(point, volatilitySensitivityValue);
     final PresentValueForexBlackVolatilitySensitivity sensi = new PresentValueForexBlackVolatilitySensitivity(optionForex.getUnderlyingOption().getUnderlyingForex().getCurrency1(), optionForex
         .getUnderlyingOption().getUnderlyingForex().getCurrency2(), result);
@@ -234,9 +236,9 @@ public final class ForexOptionSingleBarrierBlackMethod {
     final double[][] nodeWeight = volAndSensitivities.getBucketedSensitivities();
     final DoublesPair point = DoublesPair.of(optionForex.getUnderlyingOption().getTimeToExpiry(), optionForex.getUnderlyingOption().getStrike());
     final double[][] vega = new double[volatilityModel.getNumberExpiration()][volatilityModel.getNumberStrike()];
-    for (int loopexp = 0; loopexp < volatilityModel.getNumberExpiration(); loopexp++) {
-      for (int loopstrike = 0; loopstrike < volatilityModel.getNumberStrike(); loopstrike++) {
-        vega[loopexp][loopstrike] = nodeWeight[loopexp][loopstrike] * pointSensitivity.getVega().getMap().get(point);
+    for (int i = 0; i < volatilityModel.getNumberExpiration(); i++) {
+      for (int j = 0; j < volatilityModel.getNumberStrike(); j++) {
+        vega[i][j] = nodeWeight[i][j] * pointSensitivity.getVega().getMap().get(point);
       }
     }
     return new PresentValueForexBlackVolatilityNodeSensitivityDataBundle(optionForex.getUnderlyingOption().getUnderlyingForex().getCurrency1(), optionForex.getUnderlyingOption().getUnderlyingForex()
@@ -266,7 +268,7 @@ public final class ForexOptionSingleBarrierBlackMethod {
     final double forward = spot * Math.exp(-rateForeign * payTime) / Math.exp(-rateDomestic * payTime);
     final double foreignAmount = optionForex.getUnderlyingOption().getUnderlyingForex().getPaymentCurrency1().getAmount();
     final double rebateByForeignUnit = optionForex.getRebate() / Math.abs(foreignAmount);
-    final double sign = (optionForex.getUnderlyingOption().isLong() ? 1.0 : -1.0);
+    final double sign = optionForex.getUnderlyingOption().isLong() ? 1.0 : -1.0;
     final double vol = smileMulticurves.getVolatility(optionForex.getCurrency1(), optionForex.getCurrency2(), optionForex.getUnderlyingOption().getTimeToExpiry(), optionForex.getUnderlyingOption()
         .getStrike(), forward);
     // Bump and compute vega
@@ -317,7 +319,7 @@ public final class ForexOptionSingleBarrierBlackMethod {
     final double forward = spot * Math.exp(-rateForeign * payTime) / Math.exp(-rateDomestic * payTime);
     final double foreignAmount = optionForex.getUnderlyingOption().getUnderlyingForex().getPaymentCurrency1().getAmount();
     final double rebateByForeignUnit = optionForex.getRebate() / Math.abs(foreignAmount);
-    final double sign = (optionForex.getUnderlyingOption().isLong() ? 1.0 : -1.0);
+    final double sign = optionForex.getUnderlyingOption().isLong() ? 1.0 : -1.0;
     final double vol = smileMulticurves.getVolatility(optionForex.getCurrency1(), optionForex.getCurrency2(), optionForex.getUnderlyingOption().getTimeToExpiry(), optionForex.getUnderlyingOption()
         .getStrike(), forward);
     // Bump and compute vega
@@ -388,7 +390,7 @@ public final class ForexOptionSingleBarrierBlackMethod {
     final double forward = spot * Math.exp(-rateForeign * payTime) / Math.exp(-rateDomestic * payTime);
     final double foreignAmount = optionForex.getUnderlyingOption().getUnderlyingForex().getPaymentCurrency1().getAmount();
     final double rebateByForeignUnit = optionForex.getRebate() / Math.abs(foreignAmount);
-    final double sign = (optionForex.getUnderlyingOption().isLong() ? 1.0 : -1.0);
+    final double sign = optionForex.getUnderlyingOption().isLong() ? 1.0 : -1.0;
     final double vol = smileMulticurves.getVolatility(optionForex.getCurrency1(), optionForex.getCurrency2(), optionForex.getUnderlyingOption().getTimeToExpiry(), optionForex.getUnderlyingOption()
         .getStrike(), forward);
     // Bump *spot* and compute vega
@@ -428,7 +430,7 @@ public final class ForexOptionSingleBarrierBlackMethod {
     final double forward = spot * Math.exp(-rateForeign * payTime) / Math.exp(-rateDomestic * payTime);
     final double foreignAmount = optionForex.getUnderlyingOption().getUnderlyingForex().getPaymentCurrency1().getAmount();
     final double rebateByForeignUnit = optionForex.getRebate() / Math.abs(foreignAmount);
-    final double sign = (optionForex.getUnderlyingOption().isLong() ? 1.0 : -1.0);
+    final double sign = optionForex.getUnderlyingOption().isLong() ? 1.0 : -1.0;
     final double vol = smileMulticurves.getVolatility(optionForex.getCurrency1(), optionForex.getCurrency2(), optionForex.getUnderlyingOption().getTimeToExpiry(), optionForex.getUnderlyingOption()
         .getStrike(), forward);
     // Bump *vol* and compute delta
@@ -469,7 +471,7 @@ public final class ForexOptionSingleBarrierBlackMethod {
     final double forward = spot * Math.exp(-rateForeign * payTime) / Math.exp(-rateDomestic * payTime);
     final double foreignAmount = optionForex.getUnderlyingOption().getUnderlyingForex().getPaymentCurrency1().getAmount();
     final double rebateByForeignUnit = optionForex.getRebate() / Math.abs(foreignAmount);
-    final double sign = (optionForex.getUnderlyingOption().isLong() ? 1.0 : -1.0);
+    final double sign = optionForex.getUnderlyingOption().isLong() ? 1.0 : -1.0;
     final double vol = smileMulticurves.getVolatility(optionForex.getCurrency1(), optionForex.getCurrency2(), optionForex.getUnderlyingOption().getTimeToExpiry(), optionForex.getUnderlyingOption()
         .getStrike(), forward);
     // Bump spot *and* vol and compute *price*
@@ -510,7 +512,7 @@ public final class ForexOptionSingleBarrierBlackMethod {
     final double forward = spot * Math.exp(-rateForeign * payTime) / Math.exp(-rateDomestic * payTime);
     final double foreignAmount = optionForex.getUnderlyingOption().getUnderlyingForex().getPaymentCurrency1().getAmount();
     final double rebateByForeignUnit = optionForex.getRebate() / Math.abs(foreignAmount);
-    final double sign = (optionForex.getUnderlyingOption().isLong() ? 1.0 : -1.0);
+    final double sign = optionForex.getUnderlyingOption().isLong() ? 1.0 : -1.0;
     final double vol = smileMulticurves.getVolatility(optionForex.getCurrency1(), optionForex.getCurrency2(), optionForex.getUnderlyingOption().getTimeToExpiry(), optionForex.getUnderlyingOption()
         .getStrike(), forward);
     // Bump spot *and* vol and compute *price*

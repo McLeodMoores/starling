@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.credit.isdastandardmodel.fastcalibration;
@@ -23,7 +23,7 @@ import com.opengamma.analytics.math.rootfinding.NewtonRaphsonSingleRootFinder;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * 
+ *
  */
 public class CreditCurveCalibrator {
 
@@ -47,7 +47,8 @@ public class CreditCurveCalibrator {
     this(multiCDS, yieldCurve, AccrualOnDefaultFormulae.OrignalISDA, ArbitrageHandling.Ignore);
   }
 
-  public CreditCurveCalibrator(final MultiCDSAnalytic multiCDS, final ISDACompliantYieldCurve yieldCurve, final AccrualOnDefaultFormulae formula, final ArbitrageHandling arbHandle) {
+  public CreditCurveCalibrator(final MultiCDSAnalytic multiCDS, final ISDACompliantYieldCurve yieldCurve,
+      final AccrualOnDefaultFormulae formula, final ArbitrageHandling arbHandle) {
     ArgumentChecker.notNull(multiCDS, "multiCDS");
     ArgumentChecker.notNull(yieldCurve, "yieldCurve");
     _arbHandle = arbHandle;
@@ -63,8 +64,8 @@ public class CreditCurveCalibrator {
     }
     _valuationDF = yieldCurve.getDiscountFactor(multiCDS.getCashSettleTime());
 
-    //This is the global set of knots - it will be truncated down for the various leg elements 
-    //TODO this will not match ISDA C for forward starting (i.e. accStart > tradeDate) CDS, and will give different answers 
+    //This is the global set of knots - it will be truncated down for the various leg elements
+    //TODO this will not match ISDA C for forward starting (i.e. accStart > tradeDate) CDS, and will give different answers
     //if the Markit 'fix' is used in that case
     final double[] knots = getIntegrationsPoints(multiCDS.getEffectiveProtectionStart(), _t[_nCDS - 1], yieldCurve.getKnotTimes(), _t);
 
@@ -96,7 +97,7 @@ public class CreditCurveCalibrator {
         _cds2CouponsMap[i][jj] = jj;
       }
       //because of business-day adjustment, a terminal coupon can be identical to a standard coupon,
-      //in which case it is not added again 
+      //in which case it is not added again
       int index = allCoupons.indexOf(c);
       if (index == -1) {
         index = allCoupons.size();
@@ -119,7 +120,7 @@ public class CreditCurveCalibrator {
       map[i] = index;
     }
 
-    //make the protection leg elements 
+    //make the protection leg elements
     _premElems = new CouponOnlyElement[_nCoupons];
     if (multiCDS.isPayAccOnDefault()) {
       for (int i = 0; i < _nCoupons; i++) {
@@ -131,7 +132,7 @@ public class CreditCurveCalibrator {
       }
     }
 
-    //sort a map from coupon to curve node, to a map from curve node to coupons 
+    //sort a map from coupon to curve node, to a map from curve node to coupons
     for (int i = 0; i < _nCDS; i++) {
       _knot2CouponsMap[i] = new int[sizes[i]];
     }
@@ -152,7 +153,8 @@ public class CreditCurveCalibrator {
     this(cds, yieldCurve, AccrualOnDefaultFormulae.OrignalISDA, ArbitrageHandling.Ignore);
   }
 
-  public CreditCurveCalibrator(final CDSAnalytic[] cds, final ISDACompliantYieldCurve yieldCurve, final AccrualOnDefaultFormulae formula, final ArbitrageHandling arbHandle) {
+  public CreditCurveCalibrator(final CDSAnalytic[] cds, final ISDACompliantYieldCurve yieldCurve,
+      final AccrualOnDefaultFormulae formula, final ArbitrageHandling arbHandle) {
     ArgumentChecker.noNulls(cds, "cds");
     ArgumentChecker.notNull(yieldCurve, "yieldCurve");
     _arbHandle = arbHandle;
@@ -182,8 +184,8 @@ public class CreditCurveCalibrator {
       _unitAccured[i] = cds[i].getAccruedYearFraction();
     }
 
-    //This is the global set of knots - it will be truncated down for the various leg elements 
-    //TODO this will not match ISDA C for forward starting (i.e. accStart > tradeDate) CDS, and will give different answers 
+    //This is the global set of knots - it will be truncated down for the various leg elements
+    //TODO this will not match ISDA C for forward starting (i.e. accStart > tradeDate) CDS, and will give different answers
     //if the Markit 'fix' is used in that case
     final double[] knots = getIntegrationsPoints(effectProtStart, _t[_nCDS - 1], yieldCurve.getKnotTimes(), _t);
 
@@ -235,7 +237,7 @@ public class CreditCurveCalibrator {
       map[i] = index;
     }
 
-    //make the protection leg elements 
+    //make the protection leg elements
     _premElems = new CouponOnlyElement[_nCoupons];
     if (payAccOnDefault) {
       for (int i = 0; i < _nCoupons; i++) {
@@ -247,7 +249,7 @@ public class CreditCurveCalibrator {
       }
     }
 
-    //sort a map from coupon to curve node, to a map from curve node to coupons 
+    //sort a map from coupon to curve node, to a map from curve node to coupons
     for (int i = 0; i < _nCDS; i++) {
       _knot2CouponsMap[i] = new int[sizes[i]];
     }
@@ -373,7 +375,7 @@ public class CreditCurveCalibrator {
       return new Function1D<Double, Double>() {
         @Override
         public Double evaluate(final Double x) {
-          //do not call update - all ready called for getting the value 
+          //do not call update - all ready called for getting the value
 
           final double protLegPVSense = _protLegElmtPV[index][1];
 
@@ -444,11 +446,7 @@ public class CreditCurveCalibrator {
   public int hashCode() {
     final int prime = 31;
     int result = 1;
-    result = prime * result + ((_arbHandle == null) ? 0 : _arbHandle.hashCode());
-    //    Correction made PLAT-6314
-    //    result = prime * result + Arrays.hashCode(_cds2CouponsMap);
-    //    result = prime * result + Arrays.hashCode(_cdsCouponsUpdateMap);
-    //    result = prime * result + Arrays.hashCode(_knot2CouponsMap);
+    result = prime * result + (_arbHandle == null ? 0 : _arbHandle.hashCode());
     result = prime * result + Arrays.deepHashCode(_cds2CouponsMap);
     result = prime * result + Arrays.deepHashCode(_cdsCouponsUpdateMap);
     result = prime * result + Arrays.deepHashCode(_knot2CouponsMap);
@@ -461,7 +459,7 @@ public class CreditCurveCalibrator {
     result = prime * result + Arrays.hashCode(_unitAccured);
     long temp;
     temp = Double.doubleToLongBits(_valuationDF);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 

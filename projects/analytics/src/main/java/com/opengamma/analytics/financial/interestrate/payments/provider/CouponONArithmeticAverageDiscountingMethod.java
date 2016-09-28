@@ -62,9 +62,9 @@ public final class CouponONArithmeticAverageDiscountingMethod {
     final int nbFwd = delta.length;
     final double[] forwardON = new double[nbFwd];
     double rateAccrued = coupon.getRateAccrued();
-    for (int loopfwd = 0; loopfwd < nbFwd; loopfwd++) {
-      forwardON[loopfwd] = multicurve.getSimplyCompoundForwardRate(coupon.getIndex(), startTimes[loopfwd], endTimes[loopfwd], delta[loopfwd]);
-      rateAccrued += forwardON[loopfwd] * delta[loopfwd];
+    for (int i = 0; i < nbFwd; i++) {
+      forwardON[i] = multicurve.getSimplyCompoundForwardRate(coupon.getIndex(), startTimes[i], endTimes[i], delta[i]);
+      rateAccrued += forwardON[i] * delta[i];
     }
     final double df = multicurve.getDiscountFactor(coupon.getCurrency(), coupon.getPaymentTime());
     final double pv = df * rateAccrued * coupon.getNotional(); // Does not use the payment accrual factor.

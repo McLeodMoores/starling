@@ -2,6 +2,10 @@
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
  *
  * Please see distribution for license.
+ *
+ * Modified by McLeod Moores Software Limited.
+ *
+ * Copyright (C) 2016 - present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.analytics.financial.provider.calculator.blackforex;
 
@@ -12,7 +16,9 @@ import com.opengamma.analytics.financial.provider.description.forex.BlackForexSm
 import com.opengamma.util.money.CurrencyAmount;
 
 /**
- * Calculator of the gamma (second order derivative with respect to the spot rate) for Forex derivatives in the Black (Garman-Kohlhagen) world.
+ * Calculates the percentage (or spot) gamma, the second order derivative with respect to the spot rate multiplied by the spot rate,
+ * for Forex derivatives in the Black (Garman-Kohlhagen) world. The gamma is returned as the sensitivity with respect to the direct
+ * quote, i.e. 1 foreign = x domestic.
  */
 public class PercentageGammaForexBlackSmileCalculator extends InstrumentDerivativeVisitorAdapter<BlackForexSmileProviderInterface, CurrencyAmount> {
 
@@ -35,20 +41,9 @@ public class PercentageGammaForexBlackSmileCalculator extends InstrumentDerivati
   PercentageGammaForexBlackSmileCalculator() {
   }
 
-  /**
-   * The methods used by the different instruments.
-   */
-  private static final ForexOptionVanillaBlackSmileMethod METHOD_FXOPTIONVANILLA = ForexOptionVanillaBlackSmileMethod.getInstance();
-
-  /**
-   * The gamma is provided with "direct quote", i.e. (1 foreign = x domestic) and not the reverse quote (1 domestic = x foreign).
-   * @param optionForex The Forex option.
-   * @param smileMulticurves The curve and smile data.
-   * @return The gamma.
-   */
   @Override
-  public CurrencyAmount visitForexOptionVanilla(final ForexOptionVanilla optionForex, final BlackForexSmileProviderInterface smileMulticurves) {
-    return METHOD_FXOPTIONVANILLA.gammaSpot(optionForex, smileMulticurves, true);
+  public CurrencyAmount visitForexOptionVanilla(final ForexOptionVanilla option, final BlackForexSmileProviderInterface marketData) {
+    return ForexOptionVanillaBlackSmileMethod.getInstance().gammaSpot(option, marketData, true);
   }
 
 }

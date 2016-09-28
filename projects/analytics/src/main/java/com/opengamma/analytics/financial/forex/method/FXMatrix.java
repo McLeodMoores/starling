@@ -137,14 +137,14 @@ public class FXMatrix {
       _nbCurrencies++;
       final double[][] fxRatesNew = new double[_nbCurrencies][_nbCurrencies];
       // Copy the previous matrix
-      for (int loopccy = 0; loopccy < _nbCurrencies - 1; loopccy++) {
-        System.arraycopy(_fxRates[loopccy], 0, fxRatesNew[loopccy], 0, _nbCurrencies - 1);
+      for (int i = 0; i < _nbCurrencies - 1; i++) {
+        System.arraycopy(_fxRates[i], 0, fxRatesNew[i], 0, _nbCurrencies - 1);
       }
       fxRatesNew[_nbCurrencies - 1][_nbCurrencies - 1] = 1.0;
       final int indexRef = _currencies.get(ccyReference);
-      for (int loopccy = 0; loopccy < _nbCurrencies - 1; loopccy++) {
-        fxRatesNew[_nbCurrencies - 1][loopccy] = fxRate * _fxRates[indexRef][loopccy];
-        fxRatesNew[loopccy][_nbCurrencies - 1] = 1.0 / fxRatesNew[_nbCurrencies - 1][loopccy];
+      for (int i = 0; i < _nbCurrencies - 1; i++) {
+        fxRatesNew[_nbCurrencies - 1][i] = fxRate * _fxRates[indexRef][i];
+        fxRatesNew[i][_nbCurrencies - 1] = 1.0 / fxRatesNew[_nbCurrencies - 1][i];
       }
       _fxRates = fxRatesNew;
     }

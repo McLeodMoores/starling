@@ -130,8 +130,8 @@ public class BjerksundStenslandModel {
   }
 
   /**
-   * Get the price of an American option by the Bjerksund and Stensland (2002) approximation. We ensure that the price is the maximum of the no early excise (Black-Scholes price),
-   * the immediate exercise value and the Bjerksund-Stensland approximation value
+   * Get the price of an American option by the Bjerksund and Stensland (2002) approximation. We ensure that the price is the maximum of the no early exercise (Black-Scholes price),
+   * the immediate exercise value and the Bjerksund-Stensland approximation value.
    * @param s0 The spot
    * @param k The strike
    * @param r The risk-free rate

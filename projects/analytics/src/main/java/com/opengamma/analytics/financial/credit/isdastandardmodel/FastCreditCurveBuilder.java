@@ -19,7 +19,7 @@ import com.opengamma.util.ArgumentChecker;
 
 /**
  * This is a fast bootstrapper for the credit curve that is consistent with ISDA in that it will produce the same curve from
- * the same inputs (up to numerical round-off)
+ * the same inputs (up to numerical round-off).
  */
 
 public class FastCreditCurveBuilder extends ISDACompliantCreditCurveBuilder {
@@ -30,7 +30,7 @@ public class FastCreditCurveBuilder extends ISDACompliantCreditCurveBuilder {
   private final double _omega;
 
   /**
-   *Construct a credit curve builder that uses the Original ISDA accrual-on-default formula (version 1.8.2 and lower)
+   *Construct a credit curve builder that uses the Original ISDA accrual-on-default formula (version 1.8.2 and lower).
    */
   public FastCreditCurveBuilder() {
     super();
@@ -38,7 +38,7 @@ public class FastCreditCurveBuilder extends ISDACompliantCreditCurveBuilder {
   }
 
   /**
-   *Construct a credit curve builder that uses the specified accrual-on-default formula
+   * Construct a credit curve builder that uses the specified accrual-on-default formula.
    * @param formula The accrual on default formulae. <b>Note</b> The MarkitFix is erroneous
    */
   public FastCreditCurveBuilder(final AccrualOnDefaultFormulae formula) {
@@ -51,8 +51,8 @@ public class FastCreditCurveBuilder extends ISDACompliantCreditCurveBuilder {
   }
 
   /**
-   * Construct a credit curve builder that uses the specified accrual-on-default formula and arbitrage handing 
-  * @param formula The accrual on default formulae. <b>Note</b> The MarkitFix is erroneous
+   * Construct a credit curve builder that uses the specified accrual-on-default formula and arbitrage handling.
+   * @param formula The accrual on default formulae. <b>Note</b> The MarkitFix is erroneous
    * @param arbHandling How should any arbitrage in the input date be handled
    */
   public FastCreditCurveBuilder(final AccrualOnDefaultFormulae formula, final ArbitrageHandling arbHandling) {
@@ -68,7 +68,8 @@ public class FastCreditCurveBuilder extends ISDACompliantCreditCurveBuilder {
    * {@inheritDoc}
    */
   @Override
-  public ISDACompliantCreditCurve calibrateCreditCurve(final CDSAnalytic[] cds, final double[] premiums, final ISDACompliantYieldCurve yieldCurve, final double[] pointsUpfront) {
+  public ISDACompliantCreditCurve calibrateCreditCurve(final CDSAnalytic[] cds, final double[] premiums, final ISDACompliantYieldCurve yieldCurve,
+      final double[] pointsUpfront) {
     ArgumentChecker.noNulls(cds, "null CDSs");
     ArgumentChecker.notEmpty(premiums, "empty fractionalSpreads");
     ArgumentChecker.notEmpty(pointsUpfront, "empty pointsUpfront");
@@ -98,8 +99,9 @@ public class FastCreditCurveBuilder extends ISDACompliantCreditCurveBuilder {
       switch (getArbHanding()) {
         case Ignore: {
           try {
-            double[] bracket = BRACKER.getBracketedPoints(func, 0.8 * guess[i], 1.25 * guess[i], Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY);
-            double zeroRate = bracket[0] > bracket[1] ? ROOTFINDER.getRoot(func, bracket[1], bracket[0]) : ROOTFINDER.getRoot(func, bracket[0], bracket[1]); //Negative guess handled
+            final double[] bracket = BRACKER.getBracketedPoints(func, 0.8 * guess[i], 1.25 * guess[i], Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY);
+            final double zeroRate = bracket[0] > bracket[1]
+                ? ROOTFINDER.getRoot(func, bracket[1], bracket[0]) : ROOTFINDER.getRoot(func, bracket[0], bracket[1]); //Negative guess handled
             creditCurve = creditCurve.withRate(zeroRate, i);
           } catch (final MathException e) { //handling bracketing failure due to small survival probability
             if (Math.abs(func.evaluate(creditCurve.getZeroRateAtIndex(i - 1))) < 1.e-12) {
@@ -149,7 +151,7 @@ public class FastCreditCurveBuilder extends ISDACompliantCreditCurveBuilder {
   }
 
   /**
-   * Prices the CDS
+   * Prices the CDS.
    */
   protected class Pricer {
 
@@ -176,7 +178,8 @@ public class FastCreditCurveBuilder extends ISDACompliantCreditCurveBuilder {
     private final double[] _accRate;
     private final double[] _offsetAccStart;
 
-    public Pricer(final CDSAnalytic cds, final ISDACompliantYieldCurve yieldCurve, final double[] creditCurveKnots, final double fractionalSpread, final double pointsUpfront) {
+    public Pricer(final CDSAnalytic cds, final ISDACompliantYieldCurve yieldCurve, final double[] creditCurveKnots, final double fractionalSpread,
+        final double pointsUpfront) {
 
       _cds = cds;
       _fracSpread = fractionalSpread;
@@ -249,11 +252,6 @@ public class FastCreditCurveBuilder extends ISDACompliantCreditCurveBuilder {
 
     }
 
-    //    public Function1D<Double, Double> getPointFunction(final int index, final double[] zeroHazardRates) {
-    //      final ISDACompliantCreditCurve creditCurve = new ISDACompliantCreditCurve(_ccKnotTimes, zeroHazardRates);
-    //      return getPointFunction(index, creditCurve);
-    //    }
-
     public Function1D<Double, Double> getPointFunction(final int index, final ISDACompliantCreditCurve creditCurve) {
       return new Function1D<Double, Double>() {
         @Override
@@ -267,14 +265,7 @@ public class FastCreditCurveBuilder extends ISDACompliantCreditCurveBuilder {
 
     }
 
-    //    public double rpv01(final double[] zeroHazardRates, final PriceType cleanOrDirty) {
-    //      final ISDACompliantCreditCurve creditCurve = new ISDACompliantCreditCurve(_ccKnotTimes, zeroHazardRates);
-    //      return rpv01(creditCurve, cleanOrDirty);
-    //    }
-
     public double rpv01(final ISDACompliantCreditCurve creditCurve, final PriceType cleanOrDirty) {
-
-      //   final double obsOffset = _cds.isProtectionFromStartOfDay() ? -_cds.getCurveOneDay() : 0.0;
       double pv = 0.0;
       for (int i = 0; i < _nPayments; i++) {
         final CDSCoupon c = _cds.getCoupon(i);
@@ -353,11 +344,6 @@ public class FastCreditCurveBuilder extends ISDACompliantCreditCurveBuilder {
       }
       return accRate * pv;
     }
-
-    //    public double protectionLeg(final double[] zeroHazardRates) {
-    //      final ISDACompliantCreditCurve creditCurve = new ISDACompliantCreditCurve(_ccKnotTimes, zeroHazardRates);
-    //      return protectionLeg(creditCurve);
-    //    }
 
     public double protectionLeg(final ISDACompliantCreditCurve creditCurve) {
 
