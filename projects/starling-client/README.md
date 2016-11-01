@@ -1,1 +1,1 @@
-This project does not belong in this repository as it is part of the core platform.
+High level wrapper over ViewProcessor to provide more friendly API
