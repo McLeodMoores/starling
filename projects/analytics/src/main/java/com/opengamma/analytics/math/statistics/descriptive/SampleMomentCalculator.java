@@ -1,13 +1,15 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
+ *
+ * Modified by McLeod Moores Software Limited.
+ *
+ * Copyright (C) 2017 - present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.analytics.math.statistics.descriptive;
 
-import org.apache.commons.lang.Validate;
-
-import com.opengamma.analytics.math.function.Function1D;
+import com.opengamma.util.ArgumentChecker;
 
 /**
  * Calculates the $n^th$ sample raw moment of a series of data.
@@ -19,25 +21,31 @@ import com.opengamma.analytics.math.function.Function1D;
  * \end{align*}
  * $$
  */
-public class SampleMomentCalculator extends Function1D<double[], Double> {
+@DescriptiveStatistic(name = SampleMomentCalculator.NAME, aliases = "Sample Moment")
+public class SampleMomentCalculator extends DescriptiveStatisticsCalculator {
+  /**
+   * The name of this calculator.
+   */
+  public static final String NAME = "SampleMoment";
+
+  /** The degree */
   private final int _n;
 
   /**
-   * @param n The degree of the moment to calculate, cannot be negative
+   * @param n  the degree of the moment to calculate, cannot be negative
    */
   public SampleMomentCalculator(final int n) {
-    Validate.isTrue(n >= 0, "n must be >= 0");
+    ArgumentChecker.isTrue(n >= 0, "n must be >= 0");
     _n = n;
   }
 
   /**
-   * @param x The array of data, not null or empty
-   * @return The sample raw moment
+   * @param x  the array of data, not null or empty
+   * @return  the sample raw moment
    */
   @Override
   public Double evaluate(final double[] x) {
-    Validate.notNull(x, "x was null");
-    Validate.isTrue(x.length > 0, "x was empty");
+    ArgumentChecker.notEmpty(x, "x");
     if (_n == 0) {
       return 1.;
     }
@@ -48,4 +56,8 @@ public class SampleMomentCalculator extends Function1D<double[], Double> {
     return sum / (x.length - 1);
   }
 
+  @Override
+  public String getName() {
+    return NAME;
+  }
 }

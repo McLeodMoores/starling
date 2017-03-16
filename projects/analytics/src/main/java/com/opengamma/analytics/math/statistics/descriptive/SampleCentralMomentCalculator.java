@@ -1,13 +1,15 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
+ *
+ * Modified by McLeod Moores Software Limited.
+ *
+ * Copyright (C) 2017 - present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.analytics.math.statistics.descriptive;
 
-import org.apache.commons.lang.Validate;
-
-import com.opengamma.analytics.math.function.Function1D;
+import com.opengamma.util.ArgumentChecker;
 
 /**
  * Calculates the $n^th$ sample central moment of a series of data.
@@ -20,15 +22,21 @@ import com.opengamma.analytics.math.function.Function1D;
  * $$
  * where $\overline{x}$ is the mean.
  */
-public class SampleCentralMomentCalculator extends Function1D<double[], Double> {
-  private static final Function1D<double[], Double> MEAN = new MeanCalculator();
+@DescriptiveStatistic(name = SampleCentralMomentCalculator.NAME, aliases = "Sample Central Moment")
+public class SampleCentralMomentCalculator extends DescriptiveStatisticsCalculator {
+  /**
+   * The name of the calculator.
+   */
+  public static final String NAME = "SampleCentralMoment";
+
+  /** The number of the moment */
   private final int _n;
 
   /**
-   * @param n The degree of the moment to calculate, cannot be negative
+   * @param n  the degree of the moment to calculate, cannot be negative
    */
   public SampleCentralMomentCalculator(final int n) {
-    Validate.isTrue(n >= 0, "n must be >= 0");
+    ArgumentChecker.isTrue(n >= 0, "n must be >= 0");
     _n = n;
   }
 
@@ -38,16 +46,21 @@ public class SampleCentralMomentCalculator extends Function1D<double[], Double> 
    */
   @Override
   public Double evaluate(final double[] x) {
-    Validate.notNull(x, "x");
-    Validate.isTrue(x.length >= 2, "Need at least 2 data points to calculate central moment");
+    ArgumentChecker.notNull(x, "x");
+    ArgumentChecker.isTrue(x.length >= 2, "Need at least 2 data points to calculate central moment");
     if (_n == 0) {
       return 1.;
     }
-    final double mu = MEAN.evaluate(x);
+    final double mu = DescriptiveStatisticsFactory.of(MeanCalculator.NAME).evaluate(x);
     double sum = 0;
     for (final Double d : x) {
       sum += Math.pow(d - mu, _n);
     }
     return sum / (x.length - 1);
+  }
+
+  @Override
+  public String getName() {
+    return NAME;
   }
 }

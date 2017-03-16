@@ -1,13 +1,15 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
+ *
+ * Modified by McLeod Moores Software Limited.
+ *
+ * Copyright (C) 2017 - present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.analytics.math.statistics.descriptive;
 
-import org.apache.commons.lang.Validate;
-
-import com.opengamma.analytics.math.function.Function1D;
+import com.opengamma.util.ArgumentChecker;
 
 /**
  * The sample Pearson kurtosis gives a measure of how heavy the tails of a
@@ -20,17 +22,26 @@ import com.opengamma.analytics.math.function.Function1D;
  * $$
  * where the Fisher kurtosis is calculated using {@link SampleFisherKurtosisCalculator}.
  */
-public class SamplePearsonKurtosisCalculator extends Function1D<double[], Double> {
-  private static final Function1D<double[], Double> KURTOSIS = new SampleFisherKurtosisCalculator();
+@DescriptiveStatistic(name = SamplePearsonKurtosisCalculator.NAME, aliases = "Sample Pearson Kurtosis")
+public class SamplePearsonKurtosisCalculator extends DescriptiveStatisticsCalculator {
+  /**
+   * The name of this calculator.
+   */
+  public static final String NAME = "SamplePearsonKurtosis";
 
   /**
-   * @param x The array of data, not null. Must contain at least four data points.
-   * @return The sample Pearson kurtosis
+   * @param x  the array of data, not null. Must contain at least four data points.
+   * @return  the sample Pearson kurtosis
    */
   @Override
   public Double evaluate(final double[] x) {
-    Validate.notNull(x, "x");
-    Validate.isTrue(x.length >= 4, "Need at least four points to calculate kurtosis");
-    return KURTOSIS.evaluate(x) + 3;
+    ArgumentChecker.notNull(x, "x");
+    ArgumentChecker.isTrue(x.length >= 4, "Need at least four points to calculate kurtosis");
+    return DescriptiveStatisticsFactory.of(SampleFisherKurtosisCalculator.NAME).evaluate(x) + 3;
+  }
+
+  @Override
+  public String getName() {
+    return NAME;
   }
 }

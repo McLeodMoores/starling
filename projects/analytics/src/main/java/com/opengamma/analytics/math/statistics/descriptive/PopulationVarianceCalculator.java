@@ -2,12 +2,12 @@
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
  *
  * Please see distribution for license.
+ *
+ * Modified by McLeod Moores Software Limited.
+ *
+ * Copyright (C) 2017 - present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.analytics.math.statistics.descriptive;
-
-import org.apache.commons.lang.Validate;
-
-import com.opengamma.analytics.math.function.Function1D;
 
 /**
  * Calculates the population variance of a series of data.
@@ -20,18 +20,26 @@ import com.opengamma.analytics.math.function.Function1D;
  * $$
  * where $\overline{x}$ is the sample mean. For the sample variance, see {@link SampleVarianceCalculator}.
  */
-public class PopulationVarianceCalculator extends Function1D<double[], Double> {
-  private final Function1D<double[], Double> _variance = new SampleVarianceCalculator();
+@DescriptiveStatistic(name = PopulationVarianceCalculator.NAME, aliases = "Population Variance")
+public class PopulationVarianceCalculator extends DescriptiveStatisticsCalculator {
+  /**
+   * The name of this calculator.
+   */
+  public static final String NAME = "PopulationVariance";
 
   /**
-   * @param x The array of data, not null, must contain at least two elements
-   * @return The population variance
+   * @param x  the array of data, not null, must contain at least two elements
+   * @return  the population variance
    */
   @Override
   public Double evaluate(final double[] x) {
-    Validate.notNull(x, "x");
+    final double variance = DescriptiveStatisticsFactory.of(SampleVarianceCalculator.NAME).evaluate(x);
     final int n = x.length;
-    Validate.isTrue(n >= 2, "Need at least two points to calculate the population variance");
-    return _variance.evaluate(x) * (n - 1) / n;
+    return variance * (n - 1) / n;
+  }
+
+  @Override
+  public String getName() {
+    return NAME;
   }
 }

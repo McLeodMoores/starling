@@ -2,45 +2,56 @@
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
  *
  * Please see distribution for license.
+ *
+ * Modified by McLeod Moores Software Limited.
+ *
+ * Copyright (C) 2017 - present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.analytics.math.statistics.descriptive;
 
-import org.apache.commons.lang.Validate;
-
-import com.opengamma.analytics.math.function.Function1D;
-
 /**
  * The semi-standard deviation of a series of data is the partial moment (see {@link PartialMomentCalculator}) calculated with the mean as the threshold.
+ * This gives a measure of the spread of the values of a series above or below a threshold, and be used to calculate downside or upside risk.
  */
-public class SemiStandardDeviationCalculator extends Function1D<double[], Double> {
-  private static final MeanCalculator MEAN = new MeanCalculator();
+@DescriptiveStatistic(name = SemiStandardDeviationCalculator.CALCULATOR_NAME, aliases = "Semi Standard Deviation")
+public class SemiStandardDeviationCalculator extends DescriptiveStatisticsCalculator {
+  /**
+   * The name of this calculator.
+   */
+  public static final String CALCULATOR_NAME = "SemiStandardDeviationCalculator";
+
+  /** True if the downside standard deviation is calculated */
   private final boolean _useDownSide;
 
   /**
-   * Creates calculator with the default value for useDownSide (= true)
+   * Creates a downside semi-standard sample deviation calculator.
    */
   public SemiStandardDeviationCalculator() {
     _useDownSide = true;
   }
 
   /**
-   * Creates calculator
-   * @param useDownSide If true, data below the mean is used in the calculation
+   * Creates a calculator.
+   * @param useDownSide  true if data below the mean is used in the calculation, false if data above the mean is used
+   * in the calculation
    */
   public SemiStandardDeviationCalculator(final boolean useDownSide) {
     _useDownSide = useDownSide;
   }
 
   /**
-   * @param x The array of data, not null
-   * @return The semi-standard deviation
+   * @param x  the array of data, not null
+   * @return  the semi-standard deviation
    */
   @Override
   public Double evaluate(final double[] x) {
-    Validate.notNull(x, "x");
-    final double mean = MEAN.evaluate(x);
+    final double mean = DescriptiveStatisticsFactory.of(MeanCalculator.NAME).evaluate(x);
     final int n = x.length;
     return new PartialMomentCalculator(mean, _useDownSide).evaluate(x) * n / (n - 1);
   }
 
+  @Override
+  public String getName() {
+    return CALCULATOR_NAME;
+  }
 }

@@ -1,7 +1,11 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
+ *
+ * Modified by McLeod Moores Software Limited.
+ *
+ * Copyright (C) 2017 - present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.analytics.math.statistics.descriptive;
 
@@ -9,24 +13,28 @@ import java.util.Arrays;
 import java.util.TreeMap;
 
 import com.opengamma.analytics.math.MathException;
-import com.opengamma.analytics.math.function.Function1D;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * The mode of a series of data is the value that occurs more frequently in the data set.
+ * The mode of a series of data is the value that occurs most frequently in the data set.
  */
-public class ModeCalculator extends Function1D<double[], Double> {
+@DescriptiveStatistic(name = ModeCalculator.NAME)
+public class ModeCalculator extends DescriptiveStatisticsCalculator {
+  /**
+   * The name of this calculator.
+   */
+  public static final String NAME = "Mode";
+  /** The value below which two numbers are equal */
   private static final double EPS = 1e-16;
 
   //TODO more than one value can be the mode
   /**
-   * @param x The array of data, not null or empty
-   * @return The arithmetic mean
+   * @param x  the array of data, not null or empty
+   * @return  the arithmetic mean
    */
   @Override
   public Double evaluate(final double[] x) {
-    ArgumentChecker.notNull(x, "x");
-    ArgumentChecker.isTrue(x.length > 0, "x cannot be empty");
+    ArgumentChecker.notEmpty(x, "x");
     if (x.length == 1) {
       return x[0];
     }
@@ -46,5 +54,10 @@ public class ModeCalculator extends Function1D<double[], Double> {
       throw new MathException("Could not find mode for array; no repeated values");
     }
     return counts.lastEntry().getValue();
+  }
+
+  @Override
+  public String getName() {
+    return NAME;
   }
 }

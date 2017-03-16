@@ -2,12 +2,14 @@
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
  *
  * Please see distribution for license.
+ *
+ * Modified by McLeod Moores Software Limited.
+ *
+ * Copyright (C) 2017 - present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.analytics.math.statistics.descriptive;
 
-import org.apache.commons.lang.Validate;
-
-import com.opengamma.analytics.math.function.Function1D;
+import com.opengamma.util.ArgumentChecker;
 
 /**
  * Calculates the arithmetic mean of a series of data.
@@ -19,16 +21,20 @@ import com.opengamma.analytics.math.function.Function1D;
  * \end{align*}
  * $$
  */
-public class MeanCalculator extends Function1D<double[], Double> {
+@DescriptiveStatistic(name = MeanCalculator.NAME)
+public class MeanCalculator extends DescriptiveStatisticsCalculator {
+  /**
+   * The name of this calculator.
+   */
+  public static final String NAME = "Mean";
 
   /**
-   * @param x The array of data, not null or empty
-   * @return The arithmetic mean
+   * @param x  the array of data, not null or empty
+   * @return  the arithmetic mean
    */
   @Override
   public Double evaluate(final double[] x) {
-    Validate.notNull(x);
-    Validate.isTrue(x.length > 0, "x cannot be empty");
+    ArgumentChecker.notEmpty(x, "x");
     if (x.length == 1) {
       return x[0];
     }
@@ -39,4 +45,8 @@ public class MeanCalculator extends Function1D<double[], Double> {
     return sum / x.length;
   }
 
+  @Override
+  public String getName() {
+    return NAME;
+  }
 }

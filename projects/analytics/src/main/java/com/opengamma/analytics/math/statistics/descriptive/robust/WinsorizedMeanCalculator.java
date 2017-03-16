@@ -1,34 +1,49 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
+ *
+ * Modified by McLeod Moores Software Limited.
+ *
+ * Copyright (C) 2017 - present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.analytics.math.statistics.descriptive.robust;
 
 import java.util.Arrays;
 
-import org.apache.commons.lang.Validate;
-
-import com.opengamma.analytics.math.function.Function1D;
+import com.opengamma.analytics.math.statistics.descriptive.DescriptiveStatistic;
+import com.opengamma.analytics.math.statistics.descriptive.DescriptiveStatisticsCalculator;
+import com.opengamma.analytics.math.statistics.descriptive.DescriptiveStatisticsFactory;
 import com.opengamma.analytics.math.statistics.descriptive.MeanCalculator;
+import com.opengamma.util.ArgumentChecker;
 
 /**
- * 
+ * The Winsorized mean is a robust estimator of the mean that replaces the outliers in a set of data
+ * by the values at the specified percentile $$\gamma$$.
  */
-public class WinsorizedMeanCalculator extends Function1D<double[], Double> {
-  private static final Function1D<double[], Double> MEAN_CALCULATOR = new MeanCalculator();
+@DescriptiveStatistic(name = WinsorizedMeanCalculator.NAME, aliases = "Winsorized Mean")
+public class WinsorizedMeanCalculator extends DescriptiveStatisticsCalculator {
+  /**
+   * The name of this calculator.
+   */
+  public static final String NAME = "WinsorizedMean";
+
+  /** The percentile */
   private final double _gamma;
 
+  /**
+   * Creates the calculator.
+   * @param gamma  the percentile, must be between 0 and 1
+   */
   public WinsorizedMeanCalculator(final double gamma) {
-    Validate.isTrue(gamma > 0 && gamma < 1, "Gamma must be between 0 and 1, have {}", gamma);
+    ArgumentChecker.isTrue(gamma > 0 && gamma < 1, "Gamma must be between 0 and 1, have {}", gamma);
     _gamma = gamma > 0.5 ? 1 - gamma : gamma;
   }
 
   @Override
   public Double evaluate(final double[] x) {
-    Validate.notNull(x, "x was null");
+    ArgumentChecker.notEmpty(x, "x was null");
     final int length = x.length;
-    Validate.isTrue(length > 0, "x was empty");
     final double[] winsorized = Arrays.copyOf(x, length);
     Arrays.sort(winsorized);
     final int value = (int) Math.round(length * _gamma);
@@ -38,6 +53,11 @@ public class WinsorizedMeanCalculator extends Function1D<double[], Double> {
       winsorized[i] = x1;
       winsorized[length - 1 - i] = x2;
     }
-    return MEAN_CALCULATOR.evaluate(winsorized);
+    return DescriptiveStatisticsFactory.of(MeanCalculator.NAME).evaluate(winsorized);
+  }
+
+  @Override
+  public String getName() {
+    return NAME;
   }
 }

@@ -5,18 +5,18 @@
  */
 package com.opengamma.analytics.math.statistics.descriptive;
 
-import static org.testng.AssertJUnit.assertEquals;
+import static org.testng.Assert.assertEquals;
 
 import org.testng.annotations.Test;
-
-import cern.jet.random.engine.MersenneTwister;
-import cern.jet.random.engine.MersenneTwister64;
 
 import com.opengamma.analytics.math.function.Function1D;
 import com.opengamma.util.test.TestGroup;
 
+import cern.jet.random.engine.MersenneTwister;
+import cern.jet.random.engine.MersenneTwister64;
+
 /**
- * Test.
+ * Unit tests for {@link SemiStandardDeviationCalculator}.
  */
 @Test(groups = TestGroup.UNIT)
 public class SemiStandardDeviationCalculatorTest {
@@ -32,11 +32,17 @@ public class SemiStandardDeviationCalculatorTest {
     }
   }
 
+  /**
+   * Tests that the data cannot be null.
+   */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullArray() {
     UPSIDE.evaluate((double[]) null);
   }
 
+  /**
+   * Tests the calculator.
+   */
   @Test
   public void test() {
     final double eps = 1e-3;

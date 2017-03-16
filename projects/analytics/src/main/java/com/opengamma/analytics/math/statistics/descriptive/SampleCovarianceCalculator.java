@@ -5,10 +5,8 @@
  */
 package com.opengamma.analytics.math.statistics.descriptive;
 
-import org.apache.commons.lang.Validate;
-
 import com.opengamma.analytics.math.function.Function;
-import com.opengamma.analytics.math.function.Function1D;
+import com.opengamma.util.ArgumentChecker;
 
 /**
  * Calculates the sample covariance of two series of data, $x_1, x_2, \dots, x_n$ and $y_1, y_2, \dots, y_n$.
@@ -23,23 +21,22 @@ import com.opengamma.analytics.math.function.Function1D;
  * where $\overline{x}$ and $\overline{y}$ are the means of the two series.
  */
 public class SampleCovarianceCalculator implements Function<double[], Double> {
-  private static final Function1D<double[], Double> MEAN_CALCULATOR = new MeanCalculator();
 
   /**
-   * @param x The array of data, not null. The first and second elements must be arrays of data, neither of which is null or has less than two elements.
-   * @return The sample covariance
+   * @param x  the array of data, not null. The first and second elements must be arrays of data, neither of which is null or has less than two elements.
+   * @return  the sample covariance
    */
   @Override
   public Double evaluate(final double[]... x) {
-    Validate.notNull(x, "x");
-    Validate.isTrue(x.length > 1);
+    ArgumentChecker.notNull(x, "x");
+    ArgumentChecker.isTrue(x.length > 1, "Need two data series to calculate the covariance");
     final double[] x1 = x[0];
     final double[] x2 = x[1];
-    Validate.isTrue(x1.length > 1);
     final int n = x1.length;
-    Validate.isTrue(x2.length == n);
-    final double mean1 = MEAN_CALCULATOR.evaluate(x1);
-    final double mean2 = MEAN_CALCULATOR.evaluate(x2);
+    ArgumentChecker.isTrue(x2.length == n, "The two series must be the same length");
+    final DescriptiveStatisticsCalculator meanCalculator = DescriptiveStatisticsFactory.of(MeanCalculator.NAME);
+    final double mean1 = meanCalculator.evaluate(x1);
+    final double mean2 = meanCalculator.evaluate(x2);
     double sum = 0;
     for (int i = 0; i < n; i++) {
       sum += (x1[i] - mean1) * (x2[i] - mean2);

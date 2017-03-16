@@ -40,7 +40,7 @@ public final class NamedInterpolator1dFactory extends AbstractNamedInstanceFacto
   /**
    * Gets the interpolator with this name.
    * @param interpolatorName  the name, not null
-   * @return  The interpolator
+   * @return  the interpolator
    */
   @FromString
   public static NamedInterpolator1d of(final String interpolatorName) {

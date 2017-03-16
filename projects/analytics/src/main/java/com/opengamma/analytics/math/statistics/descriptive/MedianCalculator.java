@@ -2,14 +2,16 @@
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
  *
  * Please see distribution for license.
+ *
+ * Modified by McLeod Moores Software Limited.
+ *
+ * Copyright (C) 2017 - present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.analytics.math.statistics.descriptive;
 
 import java.util.Arrays;
 
-import org.apache.commons.lang.Validate;
-
-import com.opengamma.analytics.math.function.Function1D;
+import com.opengamma.util.ArgumentChecker;
 
 /**
  * Calculates the median of a series of data.
@@ -21,20 +23,24 @@ import com.opengamma.analytics.math.function.Function1D;
  * \begin{cases}
  * x_{\frac{n+1}{2}}\quad & n \text{ odd}\\
  * \frac{1}{2}\left(x_{\frac{n}{2}} + x_{\frac{n}{2} + 1}\right)\quad & n \text{ even}
- * \end{cases} 
+ * \end{cases}
  * \end{align*}
  * $$
  */
-public class MedianCalculator extends Function1D<double[], Double> {
+@DescriptiveStatistic(name = MedianCalculator.NAME)
+public class MedianCalculator extends DescriptiveStatisticsCalculator {
+  /**
+   * The name of this calculator.
+   */
+  public static final String NAME = "Median";
 
   /**
-   * @param x The array of data, not null or empty
-   * @return The median
+   * @param x  the array of data, not null or empty
+   * @return  the median
    */
   @Override
   public Double evaluate(final double[] x) {
-    Validate.notNull(x);
-    Validate.isTrue(x.length > 0, "x cannot be empty");
+    ArgumentChecker.notEmpty(x, "x");
     if (x.length == 1) {
       return x[0];
     }
@@ -47,4 +53,8 @@ public class MedianCalculator extends Function1D<double[], Double> {
     return (x1[mid] + x1[mid - 1]) / 2.;
   }
 
+  @Override
+  public String getName() {
+    return NAME;
+  }
 }
