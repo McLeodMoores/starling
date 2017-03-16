@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.credit.isdastandardmodel;
@@ -12,13 +12,6 @@ import org.testng.annotations.Test;
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.Month;
 
-import com.opengamma.analytics.financial.credit.isdastandardmodel.CDSAnalytic;
-import com.opengamma.analytics.financial.credit.isdastandardmodel.CDSQuoteConvention;
-import com.opengamma.analytics.financial.credit.isdastandardmodel.ISDACompliantCreditCurve;
-import com.opengamma.analytics.financial.credit.isdastandardmodel.ISDACompliantYieldCurve;
-import com.opengamma.analytics.financial.credit.isdastandardmodel.MarketQuoteConverter;
-import com.opengamma.analytics.financial.credit.isdastandardmodel.ParSpread;
-import com.opengamma.analytics.financial.credit.isdastandardmodel.PointsUpFront;
 import com.opengamma.util.test.TestGroup;
 
 /**
@@ -29,7 +22,7 @@ public class PUFCreditCurveCalibrationTest extends ISDABaseTest {
   private static final MarketQuoteConverter PUF_CONVERTER = new MarketQuoteConverter();
 
   protected static final double NOTIONAL = 1e7;
-  private static final LocalDate TRADE_DATE = LocalDate.of(2013, Month.APRIL, 10); //Today 
+  private static final LocalDate TRADE_DATE = LocalDate.of(2013, Month.APRIL, 10); //Today
   private static final LocalDate EFFECTIVE_DATE = TRADE_DATE.plusDays(1); // AKA stepin date
   private static final LocalDate CASH_SETTLE_DATE = addWorkDays(TRADE_DATE, 3, DEFAULT_CALENDAR); // AKA valuation date
   private static final LocalDate STARTDATE = LocalDate.of(2013, Month.MARCH, 20);//last IMM date before TRADE_DATE;

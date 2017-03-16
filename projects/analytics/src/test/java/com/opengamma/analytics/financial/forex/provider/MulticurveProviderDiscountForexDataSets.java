@@ -14,8 +14,6 @@ import static com.opengamma.util.money.Currency.GBP;
 import static com.opengamma.util.money.Currency.USD;
 
 import com.opengamma.analytics.financial.forex.method.FXMatrix;
-import com.opengamma.analytics.financial.model.CheckedMutableFxMatrix;
-import com.opengamma.analytics.financial.model.ImmutableFxMatrix;
 import com.opengamma.analytics.financial.model.interestrate.curve.YieldAndDiscountCurve;
 import com.opengamma.analytics.financial.model.interestrate.curve.YieldCurve;
 import com.opengamma.analytics.financial.provider.description.interestrate.MulticurveProviderDiscount;
@@ -36,16 +34,24 @@ public class MulticurveProviderDiscountForexDataSets {
   private static final String DISCOUNTING_GBP = "Discounting GBP";
   private static final String DISCOUNTING_KRW = "Discounting KRW";
   private static final double EUR_USD = 1.40;
-  private static final double USD_KRW = 1.111;
+  private static final double USD_KRW = 1111.11;
   private static final double GBP_USD = 1.50;
-  private static final ImmutableFxMatrix FX_MATRIX;
+//  private static final ImmutableFxMatrix FX_MATRIX;
+
+//  static {
+//    final CheckedMutableFxMatrix matrix = CheckedMutableFxMatrix.of();
+//    matrix.addCurrency(EUR, USD, 1 / EUR_USD);
+//    matrix.addCurrency(KRW, USD, 1 / USD_KRW);
+//    matrix.addCurrency(GBP, USD, GBP_USD);
+//    FX_MATRIX = ImmutableFxMatrix.of(matrix);
+//  }
+
+  private static final FXMatrix FX_MATRIX;
 
   static {
-    final CheckedMutableFxMatrix matrix = CheckedMutableFxMatrix.of();
-    matrix.addCurrency(EUR, USD, EUR_USD);
-    matrix.addCurrency(USD, KRW, USD_KRW);
-    matrix.addCurrency(GBP, USD, GBP_USD);
-    FX_MATRIX = ImmutableFxMatrix.of(matrix);
+    FX_MATRIX = new FXMatrix(EUR, USD, EUR_USD);
+    FX_MATRIX.addCurrency(KRW, USD, 1.0 / USD_KRW);
+    FX_MATRIX.addCurrency(GBP, USD, GBP_USD);
   }
 
   private static final Interpolator1D LINEAR_FLAT = NamedInterpolator1dFactory.of(LinearInterpolator1dAdapter.NAME, FlatExtrapolator1dAdapter.NAME);

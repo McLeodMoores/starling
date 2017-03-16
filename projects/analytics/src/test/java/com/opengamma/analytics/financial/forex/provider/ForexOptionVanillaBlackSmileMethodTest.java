@@ -19,8 +19,6 @@ import com.opengamma.analytics.financial.forex.derivative.ForexOptionVanilla;
 import com.opengamma.analytics.financial.forex.method.FXMatrix;
 import com.opengamma.analytics.financial.forex.method.PresentValueForexBlackVolatilityNodeSensitivityDataBundle;
 import com.opengamma.analytics.financial.forex.method.PresentValueForexBlackVolatilitySensitivity;
-import com.opengamma.analytics.financial.model.ImmutableFxMatrix;
-import com.opengamma.analytics.financial.model.UncheckedMutableFxMatrix;
 import com.opengamma.analytics.financial.model.option.pricing.analytic.formula.BlackFunctionData;
 import com.opengamma.analytics.financial.model.option.pricing.analytic.formula.BlackPriceFunction;
 import com.opengamma.analytics.financial.model.volatility.BlackFormulaRepository;
@@ -64,18 +62,7 @@ import com.opengamma.util.tuple.Triple;
 public class ForexOptionVanillaBlackSmileMethodTest {
 
   private static final MulticurveProviderDiscount MULTICURVES = MulticurveProviderDiscountForexDataSets.createMulticurvesForex();
-  private static final ImmutableFxMatrix FX_MATRIX;
-  static {
-    final UncheckedMutableFxMatrix matrix = UncheckedMutableFxMatrix.of();
-    final FXMatrix fxMatrix = MULTICURVES.getFxRates();
-    final Currency[] currencies = fxMatrix.getCurrencies().keySet().toArray(new Currency[fxMatrix.getNumberOfCurrencies()]);
-    for (int i = 0; i < currencies.length; i++) {
-      for (int j = i + 1; j < currencies.length; j++) {
-        matrix.addCurrency(currencies[i], currencies[j], fxMatrix.getFxRate(currencies[i], currencies[j]));
-      }
-    }
-    FX_MATRIX = ImmutableFxMatrix.of(matrix);
-  }
+  private static final FXMatrix FX_MATRIX = MULTICURVES.getFxRates();
   private static final Currency EUR = Currency.EUR;
   private static final Currency USD = Currency.USD;
   private static final double SPOT = FX_MATRIX.getFxRate(EUR, USD);

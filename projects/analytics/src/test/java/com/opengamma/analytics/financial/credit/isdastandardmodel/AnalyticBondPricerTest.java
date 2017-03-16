@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2014 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.credit.isdastandardmodel;
@@ -19,11 +19,11 @@ import com.opengamma.financial.convention.calendar.Calendar;
 import com.opengamma.financial.convention.daycount.DayCounts;
 
 /**
- * 
+ *
  */
 public class AnalyticBondPricerTest extends ISDABaseTest {
 
-  private static boolean PRINT = false;
+  private static final boolean PRINT = false;
   static {
     if (PRINT) {
       System.out.println("BondEquivalentCDSSpreadTest - Set PRINT to false");
@@ -39,7 +39,7 @@ public class AnalyticBondPricerTest extends ISDABaseTest {
     final CDSAnalytic cds = factory.makeIMMCDS(tradeDate, Period.ofYears(5));
 
     final double bondCoupon = 0.05;
-    //for now use the CDS mechanics to generate bond payment schedule 
+    //for now use the CDS mechanics to generate bond payment schedule
     final CDSAnalytic dummyCDS = factory.with(Period.ofMonths(6)).withProtectionStart(false).makeIMMCDS(tradeDate, Period.ofYears(5));
     final CDSCoupon[] cdsCoupons = dummyCDS.getCoupons();
     final int n = dummyCDS.getNumPayments();
@@ -116,8 +116,6 @@ public class AnalyticBondPricerTest extends ISDABaseTest {
       final double q = cc.getSurvivalProbability(exp);
       final double p = yieldCurve.getDiscountFactor(exp);
       final double bondPriceAsCDS = cdsAnnuity * bondCoupon + q * p + recoveryRate * cdsProtLeg;
-      //    System.out.println(cdsProtLeg);
-      //    System.out.println(bondPrice + "\t" + bondPriceAsCDS);
       assertEquals(bondPriceAsCDS, bondPrice, 1e-15);
     }
   }
@@ -154,7 +152,7 @@ public class AnalyticBondPricerTest extends ISDABaseTest {
     final double resBond1 = bondPricer.bondPriceForHazardRate(bond, yc, hr, priceTp);
     final double resCDS1 = -cdsPricer.pv(cds, yc, cc, coupon, priceTp);
     final double mat = bond.getPaymentTime(bond.getnPayments() - 1);
-    assertEquals((resCDS1 + 1. * yc.getDiscountFactor(mat) * cc.getDiscountFactor(mat)), resBond1, tol);
+    assertEquals(resCDS1 + 1. * yc.getDiscountFactor(mat) * cc.getDiscountFactor(mat), resBond1, tol);
     final double eqSp1 = bondPricer.getEquivalentCDSSpread(bond, yc, resBond1, priceTp, cds);
     assertEquals(0., eqSp1, tol);
 
@@ -165,14 +163,14 @@ public class AnalyticBondPricerTest extends ISDABaseTest {
     final BondAnalytic bond2 = new BondAnalytic(tradeDate, 0., schedule, rr, ACT360);
     final double resBond2 = bondPricer.bondPriceForHazardRate(bond2, yc, hr, priceTp);
     final double resCDS2 = cdsPricer.pv(cds2, yc, cc, 0., priceTp);
-    assertEquals((resCDS2 + 1. * yc.getDiscountFactor(mat) * cc.getDiscountFactor(mat)), resBond2, tol);
+    assertEquals(resCDS2 + 1. * yc.getDiscountFactor(mat) * cc.getDiscountFactor(mat), resBond2, tol);
     final double eqSp2 = bondPricer.getEquivalentCDSSpread(bond2, yc, resBond2, priceTp, cds2);
     final double sp2 = cdsPricer.parSpread(cds2, yc, cc);
     assertEquals(sp2, eqSp2, tol);
   }
 
   /**
-   * 
+   *
    */
   public void hazardRateTest() {
     final double tol = 1.e-12;
@@ -184,7 +182,7 @@ public class AnalyticBondPricerTest extends ISDABaseTest {
     final ISDACompliantYieldCurve yc = YieldCurveProvider.ISDA_USD_20140213;
 
     final double coupon = 0.11;
-    double rr = 0.3;
+    final double rr = 0.3;
     final Period couponPrd = Period.ofMonths(6);
     final StubType stubTp = StubType.FRONTSHORT;
     final BusinessDayConvention bdConv = MOD_FOLLOWING;
@@ -229,7 +227,7 @@ public class AnalyticBondPricerTest extends ISDABaseTest {
   }
 
   /**
-   * 
+   *
    */
   public void exceptionalBranchTest() {
     final double tol = 1.e-12;
@@ -239,7 +237,7 @@ public class AnalyticBondPricerTest extends ISDABaseTest {
     final LocalDate startDate = LocalDate.of(2013, 12, 20);
     final LocalDate endDate = LocalDate.of(2014, 12, 20);
     final double coupon = 0.11;
-    double rr = 0.3;
+    final double rr = 0.3;
     final Period couponPrd = Period.ofMonths(6);
     final StubType stubTp = StubType.FRONTSHORT;
     final BusinessDayConvention bdConv = MOD_FOLLOWING;

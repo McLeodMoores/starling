@@ -77,7 +77,7 @@ public class CreditCurveCalibrationTest extends com.opengamma.analytics.financia
     }
 
     final int warmups = 200;
-    final int hotspots = 1000;
+    final int hotspots = 0;
 
     for (int i = 0; i < warmups; i++) {
       final ISDACompliantCreditCurve cc1a = calibrator1.calibrate(spreads);

@@ -16,7 +16,6 @@ import com.opengamma.analytics.math.statistics.distribution.NormalDistribution;
 import com.opengamma.analytics.math.statistics.distribution.ProbabilityDistribution;
 import com.opengamma.financial.convention.businessday.BusinessDayConvention;
 import com.opengamma.financial.convention.businessday.BusinessDayConventions;
-import com.opengamma.financial.convention.calendar.MondayToFridayCalendar;
 import com.opengamma.financial.convention.daycount.DayCount;
 import com.opengamma.financial.convention.daycount.DayCounts;
 import com.opengamma.util.ArgumentChecker;
@@ -36,7 +35,7 @@ public class ISDACompliantYieldCurveBuildTest {
   private static final DayCount D30360 = DayCounts.THIRTY_U_360;
   private static final DayCount ACT_ACT = DayCounts.ACT_ACT_ISDA;
 
-  private static final ProbabilityDistribution<Double> NORMAL = new NormalDistribution(0, 1, new MersenneTwister(MersenneTwister.DEFAULT_SEED));
+  private static ProbabilityDistribution<Double> NORMAL = new NormalDistribution(0, 1, new MersenneTwister(MersenneTwister.DEFAULT_SEED));
 
   private static final BusinessDayConvention FOLLOWING = BusinessDayConventions.FOLLOWING;
   private static final BusinessDayConvention MOD_FOLLOWING = BusinessDayConventions.MODIFIED_FOLLOWING;
@@ -116,21 +115,6 @@ public class ISDACompliantYieldCurveBuildTest {
       }
     }
 
-  }
-
-  @Test
-  public void temp() {
-    final LocalDate spotDate = LocalDate.of(2016, 3, 20);
-    final ISDAInstrumentTypes[] instrumentTypes = new ISDAInstrumentTypes[] {ISDAInstrumentTypes.MoneyMarket, ISDAInstrumentTypes.MoneyMarket, ISDAInstrumentTypes.MoneyMarket, ISDAInstrumentTypes.MoneyMarket,
-        ISDAInstrumentTypes.Swap, ISDAInstrumentTypes.Swap, ISDAInstrumentTypes.Swap, ISDAInstrumentTypes.Swap, ISDAInstrumentTypes.Swap, ISDAInstrumentTypes.Swap};
-    final Period[] tenors = new Period[] {Period.ofMonths(1), Period.ofMonths(3), Period.ofMonths(6), Period.ofMonths(9), Period.ofYears(1), Period.ofYears(2), Period.ofYears(3), Period.ofYears(5), Period.ofYears(7), Period.ofYears(10)};
-    final double[] rates = new double[] {0.005, 0.0075, 0.008, 0.01, 0.012, 0.018, 0.02, 0.026, 0.03, 0.05};
-    final ISDACompliantYieldCurveBuild builder = new ISDACompliantYieldCurveBuild(spotDate, spotDate, instrumentTypes, tenors, DayCounts.ACT_360, DayCounts.ACT_365, Period.ofMonths(6), DayCounts.ACT_365, BusinessDayConventions.FOLLOWING, new MondayToFridayCalendar("Weekend"));
-    final ISDACompliantYieldCurve curve = builder.build(rates);
-    final double[] test = new double[] {0.08, 0.1, 0.375, 0.625, 0.97, 2.5, 3.6, 6.7, 8.9, 11.1};
-    for (final double element : test) {
-      System.out.println(curve.getDiscountFactor(element));
-    }
   }
 
   @Test
@@ -849,44 +833,4 @@ public class ISDACompliantYieldCurveBuildTest {
     }
   }
 
-  @Test
-  public void tempTest() {
-    final LocalDate spotDate = LocalDate.of(2009, 11, 13);
-
-    final int nMoneyMarket = 6;
-    final int nSwaps = 15;
-    final int nInstruments = nMoneyMarket + nSwaps;
-
-    final ISDAInstrumentTypes[] types = new ISDAInstrumentTypes[nInstruments];
-    final Period[] tenors = new Period[nInstruments];
-    final int[] mmMonths = new int[] {1, 2, 3, 6, 9, 12 };
-    final int[] swapYears = new int[] {2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 15, 20, 25, 30 };
-    // check
-    ArgumentChecker.isTrue(mmMonths.length == nMoneyMarket, "mmMonths");
-    ArgumentChecker.isTrue(swapYears.length == nSwaps, "swapYears");
-
-    for (int i = 0; i < nMoneyMarket; i++) {
-      types[i] = ISDAInstrumentTypes.MoneyMarket;
-      tenors[i] = Period.ofMonths(mmMonths[i]);
-    }
-    for (int i = nMoneyMarket; i < nInstruments; i++) {
-      types[i] = ISDAInstrumentTypes.Swap;
-      tenors[i] = Period.ofYears(swapYears[i - nMoneyMarket]);
-    }
-
-    final double[] rates = new double[] {0.00445, 0.009488, 0.012337, 0.017762, 0.01935, 0.020838, 0.01652, 0.02018, 0.023033, 0.02525, 1.02696, 0.02825, 0.02931, 0.03017, 0.03092, 0.0316, 0.03231,
-      0.03367, 0.03419, 0.03411, 0.03412, };
-
-    final DayCount moneyMarketDCC = ACT360;
-    final DayCount swapDCC = ACT360;
-    final Period swapInterval = Period.ofMonths(6);
-
-    final ISDACompliantCurve hc = ISDACompliantYieldCurveBuild.build(spotDate, types, tenors, rates, moneyMarketDCC, swapDCC, swapInterval, BusinessDayConventions.FOLLOWING);
-
-    final int nCurvePoints = hc.getNumberOfKnots();
-    assertEquals(nInstruments, nCurvePoints);
-    for (int i = 0; i < nCurvePoints; i++) {
-      System.out.println(hc.getTimeAtIndex(i) + "\t" + hc.getZeroRateAtIndex(i));
-    }
-  }
 }
