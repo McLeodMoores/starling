@@ -1,13 +1,11 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.util;
 
 import java.util.Map;
-
-import com.opengamma.util.ClassUtils;
 
 /**
  * An interface for named instances.
@@ -17,14 +15,14 @@ import com.opengamma.util.ClassUtils;
  * <p>
  * Implementations should typically be singletons with a public static factory instance
  * named 'INSTANCE' accessible using {@link ClassUtils#singletonInstance(Class)}.
- * 
+ *
  * @param <T> type of objects returned
  */
 public interface NamedInstanceFactory<T extends NamedInstance> {
 
   /**
    * Finds a named instance by name, ignoring case.
-   * 
+   *
    * @param name  the name of the instance to find, not null
    * @return the named instance, not null
    * @throws IllegalArgumentException if the name is not found
@@ -36,7 +34,7 @@ public interface NamedInstanceFactory<T extends NamedInstance> {
    * <p>
    * A named instance may be registered under more than one name.
    * Those additional names are excluded.
-   * 
+   *
    * @return the unmodifiable map of named instances, not null
    */
   Map<String, T> instanceMap();
@@ -46,7 +44,7 @@ public interface NamedInstanceFactory<T extends NamedInstance> {
    * <p>
    * A named instance may be registered under more than one name.
    * Those additional names are included.
-   * 
+   *
    * @return the unmodifiable map of named instances, not null
    */
   Map<String, T> instanceMapWithAlternateNames();

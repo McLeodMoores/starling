@@ -1,13 +1,15 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
+ *
+ * Modified by McLeod Moores Software Limited.
+ *
+ * Copyright (C) 2017 - present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.analytics.math.statistics.descriptive;
 
-import org.apache.commons.lang.Validate;
-
-import com.opengamma.analytics.math.function.Function1D;
+import com.opengamma.util.ArgumentChecker;
 
 /**
  * The sample skewness gives a measure of the asymmetry of the probability
@@ -15,13 +17,18 @@ import com.opengamma.analytics.math.function.Function1D;
  * unbiased estimator of the sample skewness is
  * $$
  * \begin{align*}
- * \mu_3 = \frac{\sqrt{n(n-1)}}{n-2}\frac{\frac{1}{n}\sum_{i=1}^n (x_i - \overline{x})^3}{\left(\frac{1}{n}\sum_{i=1}^n (x_i - \overline{x})^2\right)^\frac{3}{2}}
+ * \mu_3 = \frac{\sqrt{n(n-1)}}{n-2}\frac{\frac{1}{n}\sum_{i=1}^n
+ *      (x_i - \overline{x})^3}{\left(\frac{1}{n}\sum_{i=1}^n (x_i - \overline{x})^2\right)^\frac{3}{2}}
  * \end{align*}
  * $$
  * where $\overline{x}$ is the sample mean.
  */
-public class SampleSkewnessCalculator extends Function1D<double[], Double> {
-  private static final Function1D<double[], Double> MEAN = new MeanCalculator();
+@DescriptiveStatistic(name = SampleSkewnessCalculator.NAME, aliases = "Sample Skewness")
+public class SampleSkewnessCalculator extends DescriptiveStatisticsCalculator {
+  /**
+   * The name of this calculator.
+   */
+  public static final String NAME = "SampleSkewness";
 
   /**
    * @param x The array of data, not null, must contain at least three data points
@@ -29,11 +36,11 @@ public class SampleSkewnessCalculator extends Function1D<double[], Double> {
    */
   @Override
   public Double evaluate(final double[] x) {
-    Validate.notNull(x, "x");
-    Validate.isTrue(x.length >= 3, "Need at least three points to calculate sample skewness");
+    ArgumentChecker.notNull(x, "x");
+    ArgumentChecker.isTrue(x.length >= 3, "Need at least three points to calculate sample skewness");
     double sum = 0;
     double variance = 0;
-    final double mean = MEAN.evaluate(x);
+    final double mean = DescriptiveStatisticsFactory.of(MeanCalculator.NAME).evaluate(x);
     for (final Double d : x) {
       final double diff = d - mean;
       variance += diff * diff;
@@ -44,4 +51,8 @@ public class SampleSkewnessCalculator extends Function1D<double[], Double> {
     return Math.sqrt(n - 1.) * sum / (Math.pow(variance, 1.5) * Math.sqrt(n) * (n - 2));
   }
 
+  @Override
+  public String getName() {
+    return NAME;
+  }
 }

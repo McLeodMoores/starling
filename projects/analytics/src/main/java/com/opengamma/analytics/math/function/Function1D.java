@@ -9,10 +9,10 @@ import com.opengamma.util.ArgumentChecker;
 
 /**
  * 1-D function implementation.
- * @param <S> Type of the arguments
- * @param <T> Return type of the function
+ * @param <ARG_TYPE> Type of the arguments
+ * @param <RESULT_TYPE> Return type of the function
  */
-public abstract class Function1D<S, T> implements Function<S, T> {
+public abstract class Function1D<ARG_TYPE, RESULT_TYPE> implements Function<ARG_TYPE, RESULT_TYPE> {
 
   /**
    * Implementation of the interface. This method only uses the first argument.
@@ -21,16 +21,17 @@ public abstract class Function1D<S, T> implements Function<S, T> {
    */
   @SuppressWarnings("unchecked")
   @Override
-  public T evaluate(final S... x) {
+  public RESULT_TYPE evaluate(final ARG_TYPE... x) {
     ArgumentChecker.noNulls(x, "parameter list");
     ArgumentChecker.isTrue(x.length == 1, "parameter list must have one element");
     return evaluate(x[0]);
   }
 
   /**
-   * 1-D function method
-   * @param x The argument of the function, not null
-   * @return The value of the function
+   * 1-D function method.
+   * @param x  the argument of the function, not null
+   * @return  the value of the function
    */
-  public abstract T evaluate(S x);
+  public abstract RESULT_TYPE evaluate(ARG_TYPE x);
+
 }

@@ -1,36 +1,41 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math.statistics.descriptive;
 
 import java.util.Arrays;
 
-import org.apache.commons.lang.Validate;
-
-import com.opengamma.analytics.math.function.Function1D;
+import com.opengamma.util.ArgumentChecker;
 
 /**
  * For a series of data $x_1, x_2, \dots, x_n$, the percentile is the value $x$
- * below which a certain percentage of the data fall. 
+ * below which a certain percentage of the data fall.
  */
-public class PercentileCalculator extends Function1D<double[], Double> {
+@DescriptiveStatistic(name = PercentileCalculator.NAME)
+public class PercentileCalculator extends DescriptiveStatisticsCalculator {
+  /**
+   * The name of this calculator.
+   */
+  public static final String NAME = "Percentile";
+
+  /** The percentile */
   private double _percentile;
 
   /**
-   * @param percentile The percentile, must be between 0 and 1
+   * @param percentile  the percentile, must be between 0 and 1
    */
   public PercentileCalculator(final double percentile) {
-    Validate.isTrue(percentile > 0 && percentile < 1, "Percentile must be between 0 and 1");
+    ArgumentChecker.isTrue(percentile > 0 && percentile < 1, "Percentile must be between 0 and 1");
     _percentile = percentile;
   }
 
   /**
-   * @param percentile The percentile, must be between 0 and 1
+   * @param percentile  the percentile, must be between 0 and 1
    */
   public void setPercentile(final double percentile) {
-    Validate.isTrue(percentile > 0 && percentile < 1, "Percentile must be between 0 and 1");
+    ArgumentChecker.isTrue(percentile > 0 && percentile < 1, "Percentile must be between 0 and 1");
     _percentile = percentile;
   }
 
@@ -40,8 +45,7 @@ public class PercentileCalculator extends Function1D<double[], Double> {
    */
   @Override
   public Double evaluate(final double[] x) {
-    Validate.notNull(x, "x");
-    Validate.isTrue(x.length > 0, "x cannot be empty");
+    ArgumentChecker.notEmpty(x, "x");
     final int length = x.length;
     final double[] copy = Arrays.copyOf(x, length);
     Arrays.sort(copy);
@@ -55,5 +59,10 @@ public class PercentileCalculator extends Function1D<double[], Double> {
     final double d = n % 1;
     final int k = (int) Math.round(n - d);
     return copy[k - 1] + d * (copy[k] - copy[k - 1]);
+  }
+
+  @Override
+  public String getName() {
+    return NAME;
   }
 }

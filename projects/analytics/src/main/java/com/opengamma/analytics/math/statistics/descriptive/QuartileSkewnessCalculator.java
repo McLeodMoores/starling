@@ -1,15 +1,17 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
+ *
+ * Modified by McLeod Moores Software Limited.
+ *
+ * Copyright (C) 2017 - present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.analytics.math.statistics.descriptive;
 
 import java.util.Arrays;
 
-import org.apache.commons.lang.Validate;
-
-import com.opengamma.analytics.math.function.Function1D;
+import com.opengamma.util.ArgumentChecker;
 
 /**
  * Calculates the quartile skewness coefficient, which is given by:
@@ -19,21 +21,25 @@ import com.opengamma.analytics.math.function.Function1D;
  * \end{align*}
  * $$
  * where $Q_1$, $Q_2$ and $Q_3$ are the first, second and third quartiles.
- * <p> 
+ * <p>
  * The quartile skewness coefficient is also known as the Bowley skewness.
  */
-public class QuartileSkewnessCalculator extends Function1D<double[], Double> {
-  private static final Function1D<double[], Double> MEDIAN = new MedianCalculator();
+@DescriptiveStatistic(name = QuartileSkewnessCalculator.NAME, aliases = "Quartile Skewness")
+public class QuartileSkewnessCalculator extends DescriptiveStatisticsCalculator {
+  /**
+   * The name of this calculator.
+   */
+  public static final String NAME = "QuartileSkewness";
 
   /**
-   * @param x The array of data, not null. Must contain at least three points.
-   * @return The quartile skewness.
+   * @param x  the array of data, not null. Must contain at least three points.
+   * @return  the quartile skewness.
    */
   @Override
   public Double evaluate(final double[] x) {
-    Validate.notNull(x, "x");
+    ArgumentChecker.notNull(x, "x");
     final int n = x.length;
-    Validate.isTrue(n >= 3, "Need at least three points to calculate interquartile range");
+    ArgumentChecker.isTrue(n >= 3, "Need at least three points to calculate interquartile range");
     if (n == 3) {
       return (x[2] - 2 * x[1] + x[0]) / 2.;
     }
@@ -47,10 +53,15 @@ public class QuartileSkewnessCalculator extends Function1D<double[], Double> {
       lower = Arrays.copyOfRange(copy, 0, n / 2 + 1);
       upper = Arrays.copyOfRange(copy, n / 2, n);
     }
-    final double q1 = MEDIAN.evaluate(lower);
-    final double q2 = MEDIAN.evaluate(x);
-    final double q3 = MEDIAN.evaluate(upper);
+    final DescriptiveStatisticsCalculator medianCalculator = DescriptiveStatisticsFactory.of(MedianCalculator.NAME);
+    final double q1 = medianCalculator.evaluate(lower);
+    final double q2 = medianCalculator.evaluate(x);
+    final double q3 = medianCalculator.evaluate(upper);
     return (q1 - 2 * q2 + q3) / (q3 - q1);
   }
 
+  @Override
+  public String getName() {
+    return NAME;
+  }
 }

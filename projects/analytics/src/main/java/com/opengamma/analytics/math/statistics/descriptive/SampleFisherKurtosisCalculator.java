@@ -1,13 +1,15 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
+ *
+ * Modified by McLeod Moores Software Limited.
+ *
+ * Copyright (C) 2017 - present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.analytics.math.statistics.descriptive;
 
-import org.apache.commons.lang.Validate;
-
-import com.opengamma.analytics.math.function.Function1D;
+import com.opengamma.util.ArgumentChecker;
 
 /**
  * The sample Fisher kurtosis gives a measure of how heavy the tails of a distribution are with respect to the normal distribution (which
@@ -21,19 +23,23 @@ import com.opengamma.analytics.math.function.Function1D;
  * <p>
  * Fisher kurtosis is also known as the _excess kurtosis_.
  */
-public class SampleFisherKurtosisCalculator extends Function1D<double[], Double> {
-  private static final Function1D<double[], Double> MEAN = new MeanCalculator();
+@DescriptiveStatistic(name = SampleFisherKurtosisCalculator.NAME, aliases = "Sample Fisher Kurtosis")
+public class SampleFisherKurtosisCalculator extends DescriptiveStatisticsCalculator {
+  /**
+   * The name of this calculator.
+   */
+  public static final String NAME = "SampleFisherKurtosis";
 
   /**
-   * @param x The array of data, not null. Must contain at least four data points.
-   * @return The sample Fisher kurtosis
+   * @param x  the array of data, not null. Must contain at least four data points.
+   * @return  the sample Fisher kurtosis
    */
   @Override
   public Double evaluate(final double[] x) {
-    Validate.notNull(x, "x");
-    Validate.isTrue(x.length >= 4, "Need at least four points to calculate kurtosis");
+    ArgumentChecker.notNull(x, "x");
+    ArgumentChecker.isTrue(x.length >= 4, "Need at least four points to calculate kurtosis");
     double sum = 0;
-    final double mean = MEAN.evaluate(x);
+    final double mean = DescriptiveStatisticsFactory.of(MeanCalculator.NAME).evaluate(x);
     double variance = 0;
     for (final Double d : x) {
       final double diff = d - mean;
@@ -46,5 +52,10 @@ public class SampleFisherKurtosisCalculator extends Function1D<double[], Double>
     final double n2 = n1 - 1;
     variance /= n1;
     return n * (n + 1.) * sum / (n1 * n2 * (n - 3.) * variance * variance) - 3 * n1 * n1 / (n2 * (n - 3.));
+  }
+
+  @Override
+  public String getName() {
+    return NAME;
   }
 }

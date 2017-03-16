@@ -83,6 +83,7 @@ public class DiscountingMethodBondCurveTypeSetUp extends DiscountingMethodBondCu
     switch (function) {
       case NELSON_SIEGEL:
         _functionalForm = function;
+        return this;
       default:
         throw new IllegalStateException();
     }
