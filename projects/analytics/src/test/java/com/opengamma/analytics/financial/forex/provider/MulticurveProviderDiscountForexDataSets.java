@@ -1,7 +1,11 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
+ *
+ * Modified by McLeod Moores Software Limited.
+ *
+ * Copyright (C) 2016 - present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.analytics.financial.forex.provider;
 
@@ -10,13 +14,16 @@ import static com.opengamma.util.money.Currency.GBP;
 import static com.opengamma.util.money.Currency.USD;
 
 import com.opengamma.analytics.financial.forex.method.FXMatrix;
+import com.opengamma.analytics.financial.model.CheckedMutableFxMatrix;
+import com.opengamma.analytics.financial.model.ImmutableFxMatrix;
 import com.opengamma.analytics.financial.model.interestrate.curve.YieldAndDiscountCurve;
 import com.opengamma.analytics.financial.model.interestrate.curve.YieldCurve;
 import com.opengamma.analytics.financial.provider.description.interestrate.MulticurveProviderDiscount;
 import com.opengamma.analytics.math.curve.InterpolatedDoublesCurve;
-import com.opengamma.analytics.math.interpolation.CombinedInterpolatorExtrapolatorFactory;
 import com.opengamma.analytics.math.interpolation.Interpolator1D;
-import com.opengamma.analytics.math.interpolation.Interpolator1DFactory;
+import com.opengamma.analytics.math.interpolation.factory.FlatExtrapolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.LinearInterpolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.NamedInterpolator1dFactory;
 import com.opengamma.util.money.Currency;
 
 /**
@@ -29,18 +36,19 @@ public class MulticurveProviderDiscountForexDataSets {
   private static final String DISCOUNTING_GBP = "Discounting GBP";
   private static final String DISCOUNTING_KRW = "Discounting KRW";
   private static final double EUR_USD = 1.40;
-  private static final double USD_KRW = 1111.11;
+  private static final double USD_KRW = 1.111;
   private static final double GBP_USD = 1.50;
-  private static final FXMatrix FX_MATRIX;
+  private static final ImmutableFxMatrix FX_MATRIX;
 
   static {
-    FX_MATRIX = new FXMatrix(EUR, USD, EUR_USD);
-    FX_MATRIX.addCurrency(KRW, USD, 1.0 / USD_KRW);
-    FX_MATRIX.addCurrency(GBP, USD, GBP_USD);
+    final CheckedMutableFxMatrix matrix = CheckedMutableFxMatrix.of();
+    matrix.addCurrency(EUR, USD, EUR_USD);
+    matrix.addCurrency(USD, KRW, USD_KRW);
+    matrix.addCurrency(GBP, USD, GBP_USD);
+    FX_MATRIX = ImmutableFxMatrix.of(matrix);
   }
 
-  private static final Interpolator1D LINEAR_FLAT = CombinedInterpolatorExtrapolatorFactory.getInterpolator(Interpolator1DFactory.LINEAR, Interpolator1DFactory.FLAT_EXTRAPOLATOR,
-      Interpolator1DFactory.FLAT_EXTRAPOLATOR);
+  private static final Interpolator1D LINEAR_FLAT = NamedInterpolator1dFactory.of(LinearInterpolator1dAdapter.NAME, FlatExtrapolator1dAdapter.NAME);
   private static final double[] USD_DSC_TIME = new double[] {0.0, 0.5, 1.0, 2.0, 5.0 };
   private static final double[] USD_DSC_RATE = new double[] {0.0100, 0.0120, 0.0120, 0.0140, 0.0140 };
   private static final String USD_DSC_NAME = "USD Dsc";
@@ -62,9 +70,8 @@ public class MulticurveProviderDiscountForexDataSets {
   private static final YieldAndDiscountCurve KRW_DSC = new YieldCurve(KRW_DSC_NAME, new InterpolatedDoublesCurve(KRW_DSC_TIME, KRW_DSC_RATE, LINEAR_FLAT, true, KRW_DSC_NAME));
 
   /**
-   * Create a yield curve bundle with three curves. One called "Discounting EUR" with a constant rate of 2.50%, one called "Discounting USD" with a constant rate of 1.00%
-   * and one called "Discounting GBP" with a constant rate of 2.00%; "Discounting KRW" with a constant rate of 3.21%;
-   * @return The yield curve bundle.
+   * Create a curve data bundle with discounting curves for USD, EUR, GBP and KRW.
+   * @return  the curve data bundle
    */
   public static MulticurveProviderDiscount createMulticurvesForex() {
     final MulticurveProviderDiscount multicurves = new MulticurveProviderDiscount(FX_MATRIX);
@@ -75,18 +82,29 @@ public class MulticurveProviderDiscountForexDataSets {
     return multicurves;
   }
 
+  /**
+   * Create a curve data bundle with EUR and USD discounting curves.
+   * @return  the curve data bundle
+   */
   public static MulticurveProviderDiscount createMulticurvesEURUSD() {
-    FXMatrix fxMatrix = new FXMatrix(USD, EUR, 1.0d / EUR_USD);
-    final MulticurveProviderDiscount multicurves = new MulticurveProviderDiscount(fxMatrix);
+    final MulticurveProviderDiscount multicurves = new MulticurveProviderDiscount(FX_MATRIX);
     multicurves.setCurve(EUR, EUR_DSC);
     multicurves.setCurve(USD, USD_DSC);
     return multicurves;
   }
 
+  /**
+   * Gets the discounting curve names for USD, EUR, GBP and KRW.
+   * @return  the curve names
+   */
   public static String[] curveNames() {
     return new String[] {DISCOUNTING_EUR, DISCOUNTING_USD, DISCOUNTING_GBP, DISCOUNTING_KRW };
   }
 
+  /**
+   * Gets an immutable FX matrix containing cross-rate values for USD, EUR, GBP and KRW.
+   * @return  the FX matrix
+   */
   public static FXMatrix fxMatrix() {
     return FX_MATRIX;
   }

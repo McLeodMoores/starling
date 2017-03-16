@@ -94,7 +94,7 @@ public class IndexCDSTest extends ISDABaseTest {
 
     assertEquals("price", mCleanPrice, price, 1e-1); //only 1dp of percentage given
     assertEquals("Cash Settlement", mCashSettle, cashSettle, 1e-15 * NOTIONAL);
-    assertEquals("Accured Days", mAccDays, pointCDS.getAccuredDays());
+    assertEquals("Accured Days", mAccDays, pointCDS.getAccruedDays());
     assertEquals("Accured Amt", mAccAmt, accAmt, 1e-18 * NOTIONAL);
     assertEquals("Credit DV01", mCreditDV01, cs01, 1e-15 * NOTIONAL);
 
@@ -128,7 +128,7 @@ public class IndexCDSTest extends ISDABaseTest {
 
     final int mAccDays = 27;
     final double mAccAmount = 7.5e-4;
-    assertEquals(mAccDays, cds.getAccuredDays());
+    assertEquals(mAccDays, cds.getAccruedDays());
     assertEquals(mAccAmount, cds.getAccruedPremium(coupon));
 
     final double df = yieldCurve.getDiscountFactor(cds.getCashSettleTime());
@@ -186,7 +186,7 @@ public class IndexCDSTest extends ISDABaseTest {
     final double puf = pufConverter.convert(pointCDS, qSpread, yieldCurve).getPointsUpFront();
     final double accAmt = notional * pointCDS.getAccruedPremium(COUPON);
     final double cashAmount = notional * puf - accAmt;
-    System.out.println(startDate + "\t" + maturity + "\t" + puf + "\t" + (1 - puf) * 100 + "%\t" + cashAmount + "\t" + pointCDS.getAccuredDays() + "\t" + accAmt);
+    System.out.println(startDate + "\t" + maturity + "\t" + puf + "\t" + (1 - puf) * 100 + "%\t" + cashAmount + "\t" + pointCDS.getAccruedDays() + "\t" + accAmt);
 
     final double impSpread = pufConverter.pufToQuotedSpread(pointCDS, COUPON, yieldCurve, puf);
     System.out.println("imp Spread: " + impSpread);

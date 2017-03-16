@@ -17,7 +17,7 @@ import com.opengamma.util.test.TestGroup;
 public class CreditBootstrapFailTest extends ISDABaseTest {
 
   protected static final double NOTIONAL = 1e6;
-  private static final LocalDate TRADE_DATE = LocalDate.of(2013, Month.MARCH, 13); //Today 
+  private static final LocalDate TRADE_DATE = LocalDate.of(2013, Month.MARCH, 13); //Today
   private static final LocalDate EFFECTIVE_DATE = TRADE_DATE.plusDays(1); // AKA stepin date
   private static final LocalDate CASH_SETTLE_DATE = addWorkDays(TRADE_DATE, 3, DEFAULT_CALENDAR); // AKA valuation date
   private static final LocalDate STARTDATE = LocalDate.of(2012, Month.DECEMBER, 20);//last IMM date before TRADE_DATE;
@@ -43,23 +43,18 @@ public class CreditBootstrapFailTest extends ISDABaseTest {
     for (int i = 0; i < m; i++) {
       curveCDSs[i] = new CDSAnalytic(TRADE_DATE, EFFECTIVE_DATE, CASH_SETTLE_DATE, STARTDATE, PILLAR_DATES[i], PAY_ACC_ON_DEFAULT, PAYMENT_INTERVAL, STUB, PROCTECTION_START, RECOVERY_RATE);
     }
-    @SuppressWarnings("unused")
-    final ISDACompliantCreditCurve creditCurve = creditCurveBuilder.calibrateCreditCurve(curveCDSs, PAR_SPREADS, YIELD_CURVE);
+    creditCurveBuilder.calibrateCreditCurve(curveCDSs, PAR_SPREADS, YIELD_CURVE);
   }
 
   @Test
-  //(enabled = false)
   public void test() {
     final ISDACompliantCreditCurveBuilder creditCurveBuilder = new FastCreditCurveBuilder(MARKIT_FIX, ArbitrageHandling.ZeroHazardRate);
-
     final int m = PILLAR_DATES.length;
-
     final CDSAnalytic[] curveCDSs = new CDSAnalytic[m];
     for (int i = 0; i < m; i++) {
       curveCDSs[i] = new CDSAnalytic(TRADE_DATE, EFFECTIVE_DATE, CASH_SETTLE_DATE, STARTDATE, PILLAR_DATES[i], PAY_ACC_ON_DEFAULT, PAYMENT_INTERVAL, STUB, PROCTECTION_START, RECOVERY_RATE);
     }
     final ISDACompliantCreditCurve creditCurve = creditCurveBuilder.calibrateCreditCurve(curveCDSs, PAR_SPREADS, YIELD_CURVE);
-
     for (int i = 0; i < 200; i++) {
       final double t = 12.0 * i / 200.;
       final double lambda = creditCurve.getForwardRate(t);

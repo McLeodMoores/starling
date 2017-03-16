@@ -54,7 +54,7 @@ public class CS01TestGrids extends ISDABaseTest {
       0.03383, 0.034 };
     final ISDACompliantYieldCurve yieldCurve = makeYieldCurve(tradeDate, spotDate, yieldCurvePoints, yieldCurveInstruments, rates, ACT_ACT_ISDA, ACT_ACT_ISDA, Period.ofMonths(6));
     final double tradelevel = 130.5 * ONE_BP;
-    System.out.println("Accrued days: " + cds.getAccuredDays());
+    System.out.println("Accrued days: " + cds.getAccruedDays());
 
     final double cs01 = NOTIONAL * ONE_BP * CS01_CAL.parallelCS01(cds, new QuotedSpread(COUPON, tradelevel), yieldCurve, ONE_BP);
     System.out.println("CS01: " + cs01);
@@ -279,13 +279,13 @@ public class CS01TestGrids extends ISDABaseTest {
       if (isIMMDate(maturities[i])) {
         final CDSAnalytic pricingCDS = immFactory.makeCDS(tradeDate, startDate, maturities[i]);
         System.out.println(QUOTE_CONVERTER.pufToQuotedSpread(pricingCDS, coupon, yieldCurve, puf[i]));
-        accDays[i] = pricingCDS.getAccuredDays();
+        accDays[i] = pricingCDS.getAccruedDays();
         parellelCS01_A[i] = CS01_CAL.parallelCS01FromPUF(pricingCDS, coupon, yieldCurve, puf[i], ONE_BP);
         bucketedCS01[i] = CS01_CAL.bucketedCS01FromPUF(pricingCDS, new PointsUpFront(coupon, puf[i]), yieldCurve, bucketCDSsIMM, ONE_BP);
       } else {
         final CDSAnalytic pricingCDS = immFactory.makeCDS(tradeDate, tradeDate.plusDays(1), maturities[i]); //nonImmFactory.makeCDS(tradeDate, tradeDate.plusDays(1), maturities[i]);
 
-        accDays[i] = pricingCDS.getAccuredDays();
+        accDays[i] = pricingCDS.getAccruedDays();
 
         parellelCS01_A[i] = CS01_CAL.parallelCS01FromPUF(pricingCDS, coupon, yieldCurve, puf[i], ONE_BP);
 
@@ -331,7 +331,7 @@ public class CS01TestGrids extends ISDABaseTest {
     for (int i = 0; i < nMat; i++) {
       if (isIMMDate(maturities[i])) {
         final CDSAnalytic pricingCDS = immFactory.makeCDS(tradeDate, startDate, maturities[i]);
-        accDays[i] = pricingCDS.getAccuredDays();
+        accDays[i] = pricingCDS.getAccruedDays();
         final QuotedSpread quote = new QuotedSpread(coupon, spreads[i]);
         puf[i] = QUOTE_CONVERTER.convert(pricingCDS, quote, yieldCurve).getPointsUpFront();
         upfrontAmount[i] = (puf[i] - pricingCDS.getAccruedPremium(coupon)) * NOTIONAL;
@@ -342,7 +342,7 @@ public class CS01TestGrids extends ISDABaseTest {
         bucketedCS01[i] = CS01_CAL.bucketedCS01FromCreditCurve(pricingCDS, coupon, bucketCDSsIMM, yieldCurve, creditCurve, ONE_BP);
       } else {
         final CDSAnalytic pricingCDS = nonImmFactory.makeCDS(tradeDate, tradeDate.plusDays(1), maturities[i]);
-        accDays[i] = pricingCDS.getAccuredDays();
+        accDays[i] = pricingCDS.getAccruedDays();
         final ISDACompliantCreditCurve creditCurve = CREDIT_CURVE_BUILDER.calibrateCreditCurve(pillarCDSsNonIMM, pillarSpreads, yieldCurve);
         puf[i] = PRICER.pv(pricingCDS, yieldCurve, creditCurve, spreads[i]);
         upfrontAmount[i] = (puf[i] - pricingCDS.getAccruedPremium(spreads[i])) * NOTIONAL;

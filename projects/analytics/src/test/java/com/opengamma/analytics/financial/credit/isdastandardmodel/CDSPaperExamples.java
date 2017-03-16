@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.credit.isdastandardmodel;
@@ -50,7 +50,6 @@ public class CDSPaperExamples extends ISDABaseTest {
   private static final LocalDate STARTDATE = LocalDate.of(2011, Month.MARCH, 20);
 
   private static final Period[] TENORS = new Period[] {Period.ofMonths(6), Period.ofYears(1), Period.ofYears(3), Period.ofYears(5), Period.ofYears(7), Period.ofYears(10) };
-  //  private static final LocalDate NEXT_IMM = getNextIMMDate(EFFECTIVE_DATE);
   private static final LocalDate[] PILLAR_DATES = getIMMDateSet(NEXT_IMM, TENORS);
   private static final LocalDate[] IMM_DATES = getIMMDateSet(NEXT_IMM, 41);
   private static final LocalDate[] MATURITIES_6M_STEP;
@@ -107,7 +106,7 @@ public class CDSPaperExamples extends ISDABaseTest {
 
   @Test(enabled = false)
   public void creditCurveDump() {
-    System.out.println(PILLAR_CDSS[0].getAccuredDays());
+    System.out.println(PILLAR_CDSS[0].getAccruedDays());
     final int n = PILLAR_DATES.length;
     for (int i = 0; i < n; i++) {
       final double t = CREDIT_CURVE.getTimeAtIndex(i);
@@ -147,7 +146,7 @@ public class CDSPaperExamples extends ISDABaseTest {
   }
 
   /**
-   * Plots price against hazard rate 
+   * Plots price against hazard rate
    */
   @Test(enabled = false)
   public void funcTest() {

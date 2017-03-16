@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.credit.isdastandardmodel;
@@ -127,8 +127,8 @@ public class ISDAPremiumLegSchedule {
   }
 
   /**
-   * Remove all payment intervals before the given date 
-   * @param stepin a date 
+   * Remove all payment intervals before the given date
+   * @param stepin a date
    * @return truncate schedule
    */
   public ISDAPremiumLegSchedule truncateSchedule(final LocalDate stepin) {
@@ -145,7 +145,7 @@ public class ISDAPremiumLegSchedule {
   }
 
   /**
-   * makes a new ISDAPremiumLegSchedule with payment before index removed 
+   * makes a new ISDAPremiumLegSchedule with payment before index removed
    * @param index the index of the old schedule that will be the zero index of the new
    * @return truncate schedule
    */
@@ -217,7 +217,7 @@ public class ISDAPremiumLegSchedule {
       dPrevAdj = dNextAdj;
     }
 
-    // the last accrual date is not adjusted for business-day 
+    // the last accrual date is not adjusted for business-day
     _accEndDates[_nPayments - 1] = getFinalAccEndDate(unadjustedDates[_nPayments], protectionStart);
   }
 

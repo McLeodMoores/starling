@@ -28,7 +28,7 @@ public class MultiCDSAnalyticTest extends ISDABaseTest {
     CDSAnalytic[] cds = factory.makeIMMCDS(tradeDate, new Period[] {Period.ZERO, Period.ofMonths(3), Period.ofMonths(6), Period.ofMonths(12) });
 
     for (int i = 0; i < 4; i++) {
-      assertEquals(cds[i].getAccuredDays(), multiCDS.getAccuredDays(i));
+      assertEquals(cds[i].getAccruedDays(), multiCDS.getAccuredDays(i));
       assertEquals(cds[i].getAccruedYearFraction(), multiCDS.getAccruedPremiumPerUnitSpread(i), 1e-16);
       assertEquals(cds[i].getEffectiveProtectionStart(), multiCDS.getEffectiveProtectionStart(), 1e-16);
       assertEquals(cds[i].getAccStart(), multiCDS.getAccStart(), 1e-16);
@@ -37,7 +37,7 @@ public class MultiCDSAnalyticTest extends ISDABaseTest {
     multiCDS = factory.makeMultiIMMCDS(tradeDate, new int[] {2, 4, 12, 20, 28, 40 });
     cds = factory.makeIMMCDS(tradeDate, new Period[] {Period.ofMonths(6), Period.ofYears(1), Period.ofYears(3), Period.ofYears(5), Period.ofYears(7), Period.ofYears(10) });
     for (int i = 0; i < 6; i++) {
-      assertEquals(cds[i].getAccuredDays(), multiCDS.getAccuredDays(i));
+      assertEquals(cds[i].getAccruedDays(), multiCDS.getAccuredDays(i));
       assertEquals(cds[i].getAccruedYearFraction(), multiCDS.getAccruedPremiumPerUnitSpread(i), 1e-16);
       assertEquals(cds[i].getEffectiveProtectionStart(), multiCDS.getEffectiveProtectionStart(), 1e-16);
       assertEquals(cds[i].getAccStart(), multiCDS.getAccStart(), 1e-16);
@@ -54,7 +54,7 @@ public class MultiCDSAnalyticTest extends ISDABaseTest {
     final CDSAnalytic[] cds = factory.makeIMMCDS(tradeDate, accStart, new Period[] {Period.ofMonths(12), Period.ofMonths(15), Period.ofMonths(18), Period.ofMonths(24) });
 
     for (int i = 0; i < 4; i++) {
-      assertEquals(cds[i].getAccuredDays(), multiCDS.getAccuredDays(i));
+      assertEquals(cds[i].getAccruedDays(), multiCDS.getAccuredDays(i));
       assertEquals(cds[i].getAccruedYearFraction(), multiCDS.getAccruedPremiumPerUnitSpread(i), 1e-16);
       assertEquals(cds[i].getEffectiveProtectionStart(), multiCDS.getEffectiveProtectionStart(), 1e-16);
       assertEquals(cds[i].getAccStart(), multiCDS.getAccStart(), 1e-16);

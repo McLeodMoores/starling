@@ -24,44 +24,45 @@ public interface ViewProcess extends UniqueIdentifiable {
 
   /**
    * Gets the unique identifier of the view process.
-   * 
+   *
    * @return the identifier, not null
    */
+  @Override
   UniqueId getUniqueId();
-  
+
   /**
    * Gets the id of the underlying view definition
-   * 
+   *
    * @return the id of the underlying view definition
    */
   UniqueId getDefinitionId();
-  
+
   /**
    * A convenience method for obtaining the latest view definition. This is not necessarily the version in use by any
    * current computation.
-   * 
+   *
    * @return the underlying view definition, not null
    */
-  
+
   ViewDefinition getLatestViewDefinition();
-  
+
   /**
    * Gets the state of the view process.
-   * 
+   *
    * @return the computation state of the view process, not null
    */
   ViewProcessState getState();
-  
+
   /**
    * Gets the live data injector for overriding arbitrary live data for the view process.
-   * 
+   *
    * @return the live data injector, not null
    */
   MarketDataInjector getLiveDataOverrideInjector();
-  
+
   /**
    * Terminates this view process, detaching any clients from it.
    */
   void shutdown();
- 
+
 }

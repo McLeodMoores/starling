@@ -38,10 +38,10 @@ public class CDSAnalytic {
   private final CDSCoupon[] _coupons;
 
   //important time measures for the curve zero time ('now') using the curve DCC
-  private final double _accStart; //the start of the first accrual period (usually < 0) 
+  private final double _accStart; //the start of the first accrual period (usually < 0)
   private final double _effectiveProtectionStart; //when protection starts (usually zero unless forward starting CDS)
   private final double _cashSettlementTime; //Time when CDS is cash settled (valuation time defaults to this)
-  private final double _protectionEnd; //when the CDS ends 
+  private final double _protectionEnd; //when the CDS ends
 
   private final double _accrued;
   private final int _accruedDays;
@@ -50,12 +50,12 @@ public class CDSAnalytic {
    * Generates an analytic description of a CDS trade on a particular date. This can then be passed to a analytic CDS pricer.<br>
    * This using a weekend only calendar with a following convention. ACT/360 is used for accrual and  ACT/365 to convert
    * payment dates to year-fractions (doubles)
-   * @param tradeDate The trade date 
+   * @param tradeDate The trade date
      * @param stepinDate (aka Protection Effective date or assignment date). Date when party assumes ownership. This is usually T+1. This is when protection
    * (and risk) starts in terms of the model. Note, this is sometimes just called the Effective Date, however this can cause
    * confusion with the legal effective date which is T-60 or T-90.
    * @param valueDate The valuation date. The date that values are PVed to. Is is normally today + 3 business days.  Aka cash-settle date.
-   * @param accStartDate This is when the CDS nominally starts in terms of premium payments.  i.e. the number of days in the first 
+   * @param accStartDate This is when the CDS nominally starts in terms of premium payments.  i.e. the number of days in the first
    * period (and thus the amount of the first premium payment) is counted from this date.
    * @param endDate (aka maturity date) This is when the contract expires and protection ends - any default after this date does not
    *  trigger a payment. (the protection ends at end of day)
@@ -83,7 +83,7 @@ public class CDSAnalytic {
    * (and risk) starts in terms of the model. Note, this is sometimes just called the Effective Date, however this can cause
    * confusion with the legal effective date which is T-60 or T-90.
    * @param valueDate The valuation date. The date that values are PVed to. Is is normally today + 3 business days.  Aka cash-settle date.
-   * @param accStartDate This is when the CDS nominally starts in terms of premium payments.  i.e. the number of days in the first 
+   * @param accStartDate This is when the CDS nominally starts in terms of premium payments.  i.e. the number of days in the first
    * period (and thus the amount of the first premium payment) is counted from this date.
    * @param endDate (aka maturity date) This is when the contract expires and protection ends - any default after this date does not
    *  trigger a payment. (the protection ends at end of day)
@@ -111,7 +111,7 @@ public class CDSAnalytic {
    * (and risk) starts in terms of the model. Note, this is sometimes just called the Effective Date, however this can cause
    * confusion with the legal effective date which is T-60 or T-90.
    * @param valueDate The valuation date. The date that values are PVed to. Is is normally today + 3 business days.  Aka cash-settle date.
-   * @param accStartDate This is when the CDS nominally starts in terms of premium payments.  i.e. the number of days in the first 
+   * @param accStartDate This is when the CDS nominally starts in terms of premium payments.  i.e. the number of days in the first
    * period (and thus the amount of the first premium payment) is counted from this date.
    * @param endDate (aka maturity date) This is when the contract expires and protection ends - any default after this date does not
    *  trigger a payment. (the protection ends at end of day)
@@ -143,7 +143,7 @@ public class CDSAnalytic {
     ArgumentChecker.isFalse(valueDate.isBefore(tradeDate), "Require valueDate >= today");
     ArgumentChecker.isFalse(stepinDate.isBefore(tradeDate), "Require stepin >= today");
     //TODO should not allow the accrual start to be after the stepin (protection start), since this is 'free' protection. Currently some tests have this
-    //and need to be changed 
+    //and need to be changed
     //ArgumentChecker.isFalse(stepinDate.isBefore(accStartDate), "Require stepin >= accStartDate");
     ArgumentChecker.isFalse(tradeDate.isAfter(endDate), "CDS has expired");
 
@@ -182,10 +182,10 @@ public class CDSAnalytic {
     return _payAccOnDefault;
   }
 
-  /**
-   * Gets the protectionFromStartOfDay.
-   * @return the protectionFromStartOfDay
-   */
+//  /**
+//   * Gets the protectionFromStartOfDay.
+//   * @return the protectionFromStartOfDay
+//   */
   //  public boolean isProtectionFromStartOfDay() {
   //    return _protectionFromStartOfDay;
   //  }
@@ -199,7 +199,7 @@ public class CDSAnalytic {
   }
 
   /**
-   * Gets year fraction (according to curve DCC) between the trade date and the cash-settle date 
+   * Gets year fraction (according to curve DCC) between the trade date and the cash-settle date
    * @return the CashSettleTime
    */
   public double getCashSettleTime() {
@@ -207,8 +207,8 @@ public class CDSAnalytic {
   }
 
   /**
-   * Year fraction (according to curve DCC) from trade date to accrual start date. This will be negative for spot starting CDS, but will be positive for forward starting CDS.   
-   * @return accrual start year-fraction. 
+   * Year fraction (according to curve DCC) from trade date to accrual start date. This will be negative for spot starting CDS, but will be positive for forward starting CDS.
+   * @return accrual start year-fraction.
    */
   public double getAccStart() {
     return _accStart;
@@ -224,7 +224,7 @@ public class CDSAnalytic {
   }
 
   /**
-   *  Year fraction (according to curve DCC) from trade date to the maturity of the CDS. 
+   *  Year fraction (according to curve DCC) from trade date to the maturity of the CDS.
    * @return the protectionEnd
    */
   public double getProtectionEnd() {
@@ -233,7 +233,7 @@ public class CDSAnalytic {
 
   /**
    * Get all the coupons on the premium leg.
-   * @return the coupons. 
+   * @return the coupons.
    */
   public CDSCoupon[] getCoupons() {
     return _coupons;
@@ -242,7 +242,7 @@ public class CDSAnalytic {
   /**
    * get a coupon at a particular index (zero based).
    * @param index the index
-   * @return a coupon 
+   * @return a coupon
    */
   public CDSCoupon getCoupon(final int index) {
     return _coupons[index];
@@ -270,6 +270,16 @@ public class CDSAnalytic {
    * Get the number of days of accrued premium.
    * @return Accrued days
    */
+  public int getAccruedDays() {
+    return _accruedDays;
+  }
+
+  /**
+   * Get the number of days of accrued premium.
+   * @return  the accrued days
+   * @deprecated  use {@link #getAccruedDays()}
+   */
+  @Deprecated
   public int getAccuredDays() {
     return _accruedDays;
   }
@@ -301,11 +311,11 @@ public class CDSAnalytic {
   }
 
   /**
-   * Generate a CDS with a time offset. The main use is to produce a forward starting CDS from a forward CDS. A forward CDS is a CDS with a future trade date viewed 
+   * Generate a CDS with a time offset. The main use is to produce a forward starting CDS from a forward CDS. A forward CDS is a CDS with a future trade date viewed
    * from that date (i.e. it is a spot CDS view from the future trade date). A forward starting CDS is a CDS (seen today) that starts on some future date. The effect
-   * of this operation is to shift all time-to based numbers by offset. 
-   * @param offset The offset (in years) - must be positive 
-   * @return an offset (i.e. forward starting) CDS 
+   * of this operation is to shift all time-to based numbers by offset.
+   * @param offset The offset (in years) - must be positive
+   * @return an offset (i.e. forward starting) CDS
    */
   public CDSAnalytic withOffset(final double offset) {
     ArgumentChecker.isTrue(offset >= 0, "offset must be positive");
@@ -326,20 +336,20 @@ public class CDSAnalytic {
     int result = 1;
     long temp;
     temp = Double.doubleToLongBits(_accStart);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_accrued);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     result = prime * result + _accruedDays;
     temp = Double.doubleToLongBits(_cashSettlementTime);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     result = prime * result + Arrays.hashCode(_coupons);
     temp = Double.doubleToLongBits(_effectiveProtectionStart);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_lgd);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     result = prime * result + (_payAccOnDefault ? 1231 : 1237);
     temp = Double.doubleToLongBits(_protectionEnd);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 

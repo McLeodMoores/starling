@@ -46,7 +46,7 @@ public class ISDABaseTest {
   protected static final BusinessDayConvention FOLLOWING = BusinessDayConventions.FOLLOWING;
   protected static final BusinessDayConvention MOD_FOLLOWING = BusinessDayConventions.MODIFIED_FOLLOWING;
 
-  //standard CDS settings 
+  //standard CDS settings
   protected static final boolean PAY_ACC_ON_DEFAULT = true;
   protected static final Period PAYMENT_INTERVAL = Period.ofMonths(3);
   protected static final StubType STUB = StubType.FRONTSHORT;
@@ -86,7 +86,6 @@ public class ISDABaseTest {
         throw new IllegalArgumentException("cannot parse " + temp);
       }
     }
-    // return ISDACompliantYieldCurveBuild.build(today, spotDate, types, tenors, rates, moneyMarketDCC, swapDCC, swapInterval, curveDCC, MOD_FOLLOWING);
     final ISDACompliantYieldCurveBuild builder = new ISDACompliantYieldCurveBuild(today, spotDate, types, tenors, moneyMarketDCC, swapDCC, swapInterval, curveDCC, MOD_FOLLOWING, calendar);
     return builder;
   }

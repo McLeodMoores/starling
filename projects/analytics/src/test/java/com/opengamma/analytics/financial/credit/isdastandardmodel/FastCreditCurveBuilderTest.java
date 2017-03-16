@@ -1,12 +1,13 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.credit.isdastandardmodel;
 
 import static com.opengamma.analytics.financial.credit.isdastandardmodel.IMMDateLogic.getPrevIMMDate;
 import static com.opengamma.financial.convention.businessday.BusinessDayDateUtils.addWorkDays;
+import static org.testng.Assert.fail;
 import static org.testng.AssertJUnit.assertEquals;
 import static org.testng.AssertJUnit.assertTrue;
 
@@ -37,7 +38,7 @@ public class FastCreditCurveBuilderTest extends CreditCurveCalibrationTest {
   }
 
   /**
-   * 
+   *
    */
   @SuppressWarnings("deprecation")
   @Test
@@ -145,7 +146,7 @@ public class FastCreditCurveBuilderTest extends CreditCurveCalibrationTest {
     }
 
     /*
-     * ArgumentChecker hit 
+     * ArgumentChecker hit
      */
     final double[] prems = new double[nSpreads];
     Arrays.fill(prems, coupon);
@@ -184,73 +185,71 @@ public class FastCreditCurveBuilderTest extends CreditCurveCalibrationTest {
     try {
       BUILDER_ISDA.calibrateCreditCurve(tradeDate, stepinDate, valueDate, startDate, new LocalDate[] {endDate }, spreads, false, Period.ofMonths(3), StubType.FRONTSHORT,
           true, yc, 0.4);
-      throw new RuntimeException();
-    } catch (final Exception e) {
-      assertTrue(e instanceof IllegalArgumentException);
+      fail();
+    } catch (final IllegalArgumentException e) {
     }
-
   }
 
   /**
-   * 
+   *
    */
   public void viaConverterTest() {
-    LocalDate tradeDate = LocalDate.of(2014, 5, 22);
-    double recovery = 0.25;
-    CDSAnalyticFactory immCDSFact = new CDSAnalyticFactory(recovery);
+    final LocalDate tradeDate = LocalDate.of(2014, 5, 22);
+    final double recovery = 0.25;
+    final CDSAnalyticFactory immCDSFact = new CDSAnalyticFactory(recovery);
 
-    LocalDate spotDate = LocalDate.of(2014, 5, 27);
-    String[] yieldCurvePoints = new String[] {"1M", "2M", "3M", "6M", "1Y", "2Y", "3Y", "4Y", "5Y", "6Y", "7Y", "8Y", "9Y", "10Y", "12Y", "15Y", "20Y", "25Y", "30Y" };
-    String[] yieldCurveInstruments = new String[] {"M", "M", "M", "M", "M", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S" };
-    double[] rates = new double[] {0.001, 0.002, 0.0025, 0.003, 0.0052, 0.0053, 0.00851, 0.0125, 0.016, 0.02, 0.02, 0.022, 0.024, 0.025, 0.02, 0.031,
+    final LocalDate spotDate = LocalDate.of(2014, 5, 27);
+    final String[] yieldCurvePoints = new String[] {"1M", "2M", "3M", "6M", "1Y", "2Y", "3Y", "4Y", "5Y", "6Y", "7Y", "8Y", "9Y", "10Y", "12Y", "15Y", "20Y", "25Y", "30Y" };
+    final String[] yieldCurveInstruments = new String[] {"M", "M", "M", "M", "M", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S" };
+    final double[] rates = new double[] {0.001, 0.002, 0.0025, 0.003, 0.0052, 0.0053, 0.00851, 0.0125, 0.016, 0.02, 0.02, 0.022, 0.024, 0.025, 0.02, 0.031,
         0.030, 0.031, 0.0323 };
-    ISDACompliantYieldCurve yieldCurve = makeYieldCurve(tradeDate, spotDate, yieldCurvePoints, yieldCurveInstruments, rates, ACT360, D30360, Period.ofMonths(6));
-    LocalDate end = LocalDate.of(2014, 6, 20);
-    double spF = 6.726 * 1.e-4;
-    double spS = 6.727 * 1.e-4;
+    final ISDACompliantYieldCurve yieldCurve = makeYieldCurve(tradeDate, spotDate, yieldCurvePoints, yieldCurveInstruments, rates, ACT360, D30360, Period.ofMonths(6));
+    final LocalDate end = LocalDate.of(2014, 6, 20);
+    final double spF = 6.726 * 1.e-4;
+    final double spS = 6.727 * 1.e-4;
 
-    CDSAnalytic cds = immCDSFact.makeCDS(tradeDate, getPrevIMMDate(tradeDate), end);
-    double coupon = 500. * 1.e-4;
-    MarketQuoteConverter conv = new MarketQuoteConverter();
-    double[] resS = conv.parSpreadsToQuotedSpreads(new CDSAnalytic[] {cds }, coupon, yieldCurve, new double[] {spS });
-    double[] resF = conv.parSpreadsToQuotedSpreads(new CDSAnalytic[] {cds }, coupon, yieldCurve, new double[] {spF });
+    final CDSAnalytic cds = immCDSFact.makeCDS(tradeDate, getPrevIMMDate(tradeDate), end);
+    final double coupon = 500. * 1.e-4;
+    final MarketQuoteConverter conv = new MarketQuoteConverter();
+    final double[] resS = conv.parSpreadsToQuotedSpreads(new CDSAnalytic[] {cds }, coupon, yieldCurve, new double[] {spS });
+    final double[] resF = conv.parSpreadsToQuotedSpreads(new CDSAnalytic[] {cds }, coupon, yieldCurve, new double[] {spF });
     assertEquals(resS[0], resF[0], 1.e-5);
   }
 
   /**
-   * 
+   *
    */
   public void viaImpliedSpreadTest() {
 
-    LocalDate tradeDate = LocalDate.of(2014, 5, 16);
-    double recoveryF = 0.248;
-    double recoveryS = 0.247;
-    CDSAnalyticFactory nonImmCDSFactS = new CDSAnalyticFactory(recoveryS, Period.ofMonths(6));
-    CDSAnalyticFactory nonImmCDSFactF = new CDSAnalyticFactory(recoveryF, Period.ofMonths(6));
+    final LocalDate tradeDate = LocalDate.of(2014, 5, 16);
+    final double recoveryF = 0.248;
+    final double recoveryS = 0.247;
+    final CDSAnalyticFactory nonImmCDSFactS = new CDSAnalyticFactory(recoveryS, Period.ofMonths(6));
+    final CDSAnalyticFactory nonImmCDSFactF = new CDSAnalyticFactory(recoveryF, Period.ofMonths(6));
 
-    LocalDate spotDate = LocalDate.of(2014, Month.MAY, 20);
-    String[] yieldCurvePoints = new String[] {"1M", "2M", "3M", "6M", "1Y", "2Y", "3Y", "4Y", "5Y", "6Y", "7Y", "8Y", "9Y", "10Y", "12Y", "15Y", "20Y", "25Y", "30Y" };
-    String[] yieldCurveInstruments = new String[] {"M", "M", "M", "M", "M", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S" };
-    double[] rates = new double[] {0.00151, 0.0018, 0.0026, 0.0031, 0.0052, 0.0053, 0.00851, 0.0125, 0.016, 0.02, 0.02, 0.022, 0.024, 0.025, 0.02, 0.031,
+    final LocalDate spotDate = LocalDate.of(2014, Month.MAY, 20);
+    final String[] yieldCurvePoints = new String[] {"1M", "2M", "3M", "6M", "1Y", "2Y", "3Y", "4Y", "5Y", "6Y", "7Y", "8Y", "9Y", "10Y", "12Y", "15Y", "20Y", "25Y", "30Y" };
+    final String[] yieldCurveInstruments = new String[] {"M", "M", "M", "M", "M", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S" };
+    final double[] rates = new double[] {0.00151, 0.0018, 0.0026, 0.0031, 0.0052, 0.0053, 0.00851, 0.0125, 0.016, 0.02, 0.02, 0.022, 0.024, 0.025, 0.02, 0.031,
         0.030, 0.031, 0.0323 };
-    ISDACompliantYieldCurve yieldCurve = makeYieldCurve(tradeDate, spotDate, yieldCurvePoints, yieldCurveInstruments, rates, ACT360, D30360, Period.ofMonths(6));
+    final ISDACompliantYieldCurve yieldCurve = makeYieldCurve(tradeDate, spotDate, yieldCurvePoints, yieldCurveInstruments, rates, ACT360, D30360, Period.ofMonths(6));
 
-    LocalDate end = LocalDate.of(2014, 5, 20);
-    double puf = 1.101e-2;
-    double coupon = 500.0 * 1.0e-4;
+    final LocalDate end = LocalDate.of(2014, 5, 20);
+    final double puf = 1.101e-2;
+    final double coupon = 500.0 * 1.0e-4;
 
-    Period[] buckets = new Period[] {Period.ofMonths(6), Period.ofYears(1), Period.ofYears(2), Period.ofYears(3), Period.ofYears(4), Period.ofYears(5), Period.ofYears(6),
+    final Period[] buckets = new Period[] {Period.ofMonths(6), Period.ofYears(1), Period.ofYears(2), Period.ofYears(3), Period.ofYears(4), Period.ofYears(5), Period.ofYears(6),
         Period.ofYears(7), Period.ofYears(8), Period.ofYears(9), Period.ofYears(10), Period.ofYears(12), Period.ofYears(15), Period.ofYears(20), Period.ofYears(25), Period.ofYears(30) };
-    CDSAnalytic cdsS = nonImmCDSFactS.makeCDS(tradeDate, getPrevIMMDate(tradeDate), end);
-    CDSAnalytic[] bucketCDSS = nonImmCDSFactS.makeIMMCDS(tradeDate, buckets);
-    CDSAnalytic cdsF = nonImmCDSFactF.makeCDS(tradeDate, getPrevIMMDate(tradeDate), end);
-    CDSAnalytic[] bucketCDSF = nonImmCDSFactF.makeIMMCDS(tradeDate, buckets);
-    double bump = 1.e-4;
-    FiniteDifferenceSpreadSensitivityCalculator cs01Cal = new FiniteDifferenceSpreadSensitivityCalculator();
+    final CDSAnalytic cdsS = nonImmCDSFactS.makeCDS(tradeDate, getPrevIMMDate(tradeDate), end);
+    final CDSAnalytic[] bucketCDSS = nonImmCDSFactS.makeIMMCDS(tradeDate, buckets);
+    final CDSAnalytic cdsF = nonImmCDSFactF.makeCDS(tradeDate, getPrevIMMDate(tradeDate), end);
+    final CDSAnalytic[] bucketCDSF = nonImmCDSFactF.makeIMMCDS(tradeDate, buckets);
+    final double bump = 1.e-4;
+    final FiniteDifferenceSpreadSensitivityCalculator cs01Cal = new FiniteDifferenceSpreadSensitivityCalculator();
 
-    PointsUpFront pufC = new PointsUpFront(coupon, puf);
-    double[] resS = cs01Cal.bucketedCS01FromPUF(cdsS, pufC, yieldCurve, bucketCDSS, bump);
-    double[] resF = cs01Cal.bucketedCS01FromPUF(cdsF, pufC, yieldCurve, bucketCDSF, bump);
+    final PointsUpFront pufC = new PointsUpFront(coupon, puf);
+    final double[] resS = cs01Cal.bucketedCS01FromPUF(cdsS, pufC, yieldCurve, bucketCDSS, bump);
+    final double[] resF = cs01Cal.bucketedCS01FromPUF(cdsF, pufC, yieldCurve, bucketCDSF, bump);
 
     for (int i = 0; i < resS.length; ++i) {
       assertEquals(resS[i], resF[i], 1.e-5);

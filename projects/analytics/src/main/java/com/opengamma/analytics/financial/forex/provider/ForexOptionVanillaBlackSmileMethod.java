@@ -94,7 +94,7 @@ public final class ForexOptionVanillaBlackSmileMethod {
   }
 
   /**
-   * Computes the implied Black volatility of the vanilla option.
+   * Returns the Black implied volatility that is used to price the option.
    * @param option  the Forex option, not null
    * @param marketData  the curve and smile data, not null
    * @return  the implied volatility used in pricing

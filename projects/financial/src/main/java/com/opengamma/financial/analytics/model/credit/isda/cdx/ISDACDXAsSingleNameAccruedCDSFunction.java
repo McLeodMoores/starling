@@ -85,7 +85,7 @@ public class ISDACDXAsSingleNameAccruedCDSFunction extends AbstractFunction.NonC
     for (ValueRequirement desired : desiredValues) {
       switch (desired.getValueName()) {
         case ValueRequirementNames.ACCRUED_DAYS:
-          final int accruedDays = pricingCDS.getAccuredDays();
+          final int accruedDays = pricingCDS.getAccruedDays();
           final ValueSpecification spec = new ValueSpecification(ValueRequirementNames.ACCRUED_DAYS, target.toSpecification(), desired.getConstraints().copy().get());
           results.add(new ComputedValue(spec, accruedDays));
           break;

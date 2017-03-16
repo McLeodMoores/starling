@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.credit.isdastandardmodel;
@@ -42,7 +42,7 @@ public class AnalyticSpreadSensitivityTest extends ISDABaseTest {
   private static final CDSAnalytic[] MARKET_CDS = new CDSAnalytic[NUM_MARKET_CDS];
 
   // yield curve
-  private static ISDACompliantYieldCurve YIELD_CURVE;
+  private static final ISDACompliantYieldCurve YIELD_CURVE;
 
   static {
     final double flatrate = 0.05;
@@ -81,7 +81,7 @@ public class AnalyticSpreadSensitivityTest extends ISDABaseTest {
   }
 
   /**
-   * 
+   *
    */
   @Test
   public void ParallelCS01FiniteDifferenceComparisonTest() {
@@ -113,7 +113,7 @@ public class AnalyticSpreadSensitivityTest extends ISDABaseTest {
   }
 
   /**
-   * 
+   *
    */
   @Test(enabled = false)
   public void BucketedCS01FiniteDifferenceComparisonTest() {

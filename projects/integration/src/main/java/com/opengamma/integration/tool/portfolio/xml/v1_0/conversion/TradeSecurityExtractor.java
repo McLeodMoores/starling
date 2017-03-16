@@ -37,14 +37,14 @@ public abstract class TradeSecurityExtractor<T extends Trade> {
    *
    * @param trade the trade to perform extraction on
    */
-  public TradeSecurityExtractor(T trade) {
+  public TradeSecurityExtractor(final T trade) {
     _trade = trade;
   }
 
   //-------------------------------------------------------------------------
   /**
    * Gets the trade.
-   * 
+   *
    * @return the trade, not null
    */
   public T getTrade() {
@@ -65,7 +65,7 @@ public abstract class TradeSecurityExtractor<T extends Trade> {
    * @param date date to convert
    * @return the converted ZonedDateTime
    */
-  protected ZonedDateTime convertLocalDate(LocalDate date) {
+  protected ZonedDateTime convertLocalDate(final LocalDate date) {
     return date.atStartOfDay(ZoneOffset.UTC);
   }
 
@@ -75,10 +75,10 @@ public abstract class TradeSecurityExtractor<T extends Trade> {
    * @param calendars the calendars to extract the regions from
    * @return the extracted regions
    */
-  protected Set<String> extractCalendarRegions(Set<Calendar> calendars) {
+  protected Set<String> extractCalendarRegions(final Set<Calendar> calendars) {
 
-    Set<String> regions = Sets.newHashSet();
-    for (Calendar calendar : calendars) {
+    final Set<String> regions = Sets.newHashSet();
+    for (final Calendar calendar : calendars) {
       regions.add(calendar.getId().getId());
     }
 
@@ -91,8 +91,8 @@ public abstract class TradeSecurityExtractor<T extends Trade> {
    * @param calendars the calendars to extract the region identifier from.
    * @return the external region id
    */
-  protected ExternalId extractRegion(Set<Calendar> calendars) {
-    Set<String> calendarRegions = extractCalendarRegions(calendars);
+  protected ExternalId extractRegion(final Set<Calendar> calendars) {
+    final Set<String> calendarRegions = extractCalendarRegions(calendars);
     return ExternalSchemes.financialRegionId(StringUtils.join(calendarRegions, "+"));
   }
 
@@ -102,17 +102,17 @@ public abstract class TradeSecurityExtractor<T extends Trade> {
    * @param securities the securities to be wrapped
    * @return an array of the securities
    */
-  protected ManageableSecurity[] securityArray(ManageableSecurity... securities) {
+  protected ManageableSecurity[] securityArray(final ManageableSecurity... securities) {
     return securities;
   }
 
   /**
-   * Add an external identififer to the supplied security, returning the modified security.
+   * Add an external identifier to the supplied security, returning the modified security.
    *
    * @param security the security to add an identifier to
    * @return the modified security
    */
-  protected ManageableSecurity addIdentifier(ManageableSecurity security) {
+  protected ManageableSecurity addIdentifier(final ManageableSecurity security) {
 
     security.addExternalId(ExternalId.of("XML_LOADER", Integer.toHexString(
         new HashCodeBuilder()

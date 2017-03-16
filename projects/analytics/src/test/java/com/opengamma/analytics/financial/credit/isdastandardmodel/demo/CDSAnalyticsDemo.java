@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2014 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.credit.isdastandardmodel.demo;
@@ -42,8 +42,8 @@ import com.opengamma.util.test.TestGroup;
 
 /**
  * The purpose of this class is the demonstrate the API for OpenGamma's implementation of the ISDA standard and extensions
- * we have built. Each method (test) demonstrates a new feature and outputs some results to the console - ideally they should 
- * be read and executed in order.  
+ * we have built. Each method (test) demonstrates a new feature and outputs some results to the console - ideally they should
+ * be read and executed in order.
  */
 @Test(groups = TestGroup.INTEGRATION)
 public class CDSAnalyticsDemo extends ISDABaseTest {
@@ -59,7 +59,7 @@ public class CDSAnalyticsDemo extends ISDABaseTest {
     LocalDate.of(2014, 11, 1), LocalDate.of(2014, 12, 1), LocalDate.of(2015, 1, 1), LocalDate.of(2016, 1, 1), LocalDate.of(2017, 1, 1), LocalDate.of(2018, 1, 1) };
 
   /**
-   * Show the construction of a ISDA model yield curve. {@link ISDACompliantYieldCurveBuild} is the class that does the actual work, but 
+   * Show the construction of a ISDA model yield curve. {@link ISDACompliantYieldCurveBuild} is the class that does the actual work, but
    * {@link YieldCurveProvider} provides tools to set up standard (i.e. USD, EUR, GBP & JPY) yield curves.<p>
    * The main  point of this example is to show what is meant by a <i>shifted</i> yield curve
    */
@@ -69,24 +69,24 @@ public class CDSAnalyticsDemo extends ISDABaseTest {
     //The yield curve is snapped on 29-Jun-2014 and the spot date is 2-Jul-2014 (three working days on)
     final LocalDate spotDate = addWorkDays(TRADE_DATE.minusDays(1), 3, DEFAULT_CALENDAR);
 
-    //USD conventions 
+    //USD conventions
     final String[] periods = new String[] {"1M", "2M", "3M", "6M", "1Y", "2Y", "3Y", "4Y", "5Y", "6Y", "7Y", "8Y", "9Y", "10Y", "12Y", "15Y", "20Y", "25Y", "30Y" };
     final String[] types = new String[] {"M", "M", "M", "M", "M", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S" };
     final DayCount mmDCC = ACT360;
     final DayCount swapDCC = D30360;
     final Period swapInterval = Period.ofMonths(6);
 
-    //build shifted yield curve, by specifying all parameters 
-    final ISDACompliantYieldCurve yc_shifted = YieldCurveProvider.makeYieldCurve(TRADE_DATE, spotDate, periods, types, RATES, mmDCC, swapDCC, swapInterval, DEFAULT_CALENDAR);
-    //cannot use equals directly as the curves have different names 
+    //build shifted yield curve, by specifying all parameters
+    final ISDACompliantYieldCurve yc_shifted = ISDABaseTest.makeYieldCurve(TRADE_DATE, spotDate, periods, types, RATES, mmDCC, swapDCC, swapInterval, DEFAULT_CALENDAR);
+    //cannot use equals directly as the curves have different names
     assertTrue(Arrays.equals(YIELD_CURVE.getKnotTimes(), yc_shifted.getKnotTimes()));
     assertTrue(Arrays.equals(YIELD_CURVE.getKnotZeroRates(), yc_shifted.getKnotZeroRates()));
 
-    //build unshifted yield curve 
-    final ISDACompliantYieldCurve yc_unshifted = YieldCurveProvider.makeYieldCurve(spotDate, spotDate, periods, types, RATES, mmDCC, swapDCC, swapInterval, DEFAULT_CALENDAR);
+    //build unshifted yield curve
+    final ISDACompliantYieldCurve yc_unshifted = ISDABaseTest.makeYieldCurve(spotDate, spotDate, periods, types, RATES, mmDCC, swapDCC, swapInterval, DEFAULT_CALENDAR);
 
     //check the shifted and unshifted curves are equivalent - po is the discount factor between the CDS trade date and
-    //the spot date of the yield curve instruments 
+    //the spot date of the yield curve instruments
     final double p0 = yc_shifted.getDiscountFactor(ACT365F.getDayCountFraction(TRADE_DATE, spotDate));
     final int n = TEST_DATES.length;
     for (int i = 0; i < n; i++) {
@@ -97,7 +97,7 @@ public class CDSAnalyticsDemo extends ISDABaseTest {
       assertEquals(df1, df2, 1e-15);
     }
 
-    //this should be cut and pasted into Excel to view the curve 
+    //this should be cut and pasted into Excel to view the curve
     final int nSamples = 100;
     System.out.println("Time\tDiscount Factor\tZero Rate\tForward Rate");
     for (int i = 0; i < nSamples; i++) {
@@ -122,16 +122,16 @@ public class CDSAnalyticsDemo extends ISDABaseTest {
     final Period cdsTerm = Period.ofYears(5);
     final CDSAnalytic cds = factory.makeIMMCDS(TRADE_DATE, cdsTerm);
     assertEquals(recoveryRate, 1 - cds.getLGD(), 1e-15);
-    assertEquals(11, cds.getAccuredDays());
+    assertEquals(11, cds.getAccruedDays());
 
-    //can change the recovery rate without recomputing all the date logic 
+    //can change the recovery rate without recomputing all the date logic
     final CDSAnalytic cds65 = cds.withRecoveryRate(0.65);
     assertEquals(0.65, 1 - cds65.getLGD(), 1e-15);
-    assertEquals(11, cds65.getAccuredDays());
+    assertEquals(11, cds65.getAccruedDays());
 
-    //the full API is consistent with the ISDA C code (and the xll plugin) 
+    //the full API is consistent with the ISDA C code (and the xll plugin)
 
-    //standard CDS settings 
+    //standard CDS settings
     final LocalDate stepinDate = TRADE_DATE.plusDays(1); // 1-Jul-2014
     final LocalDate cashSettleDate = addWorkDays(TRADE_DATE, 3, DEFAULT_CALENDAR); // 3-Jul-2014
     final LocalDate accStartDate = FOLLOWING.adjustDate(DEFAULT_CALENDAR, getPrevIMMDate(TRADE_DATE)); // 20-Jun-2014
@@ -139,7 +139,7 @@ public class CDSAnalyticsDemo extends ISDABaseTest {
 
     final boolean payAccOnDefault = true;
     final Period paymentInterval = Period.ofMonths(3);
-    final StubType stub = StubType.FRONTSHORT; //Irrelevant for SNAC where accrual start is previous IMM date 
+    final StubType stub = StubType.FRONTSHORT; //Irrelevant for SNAC where accrual start is previous IMM date
     final boolean protectionStart = true;
 
     final CDSAnalytic cds2 = new CDSAnalytic(TRADE_DATE, stepinDate, cashSettleDate, accStartDate, endDate, payAccOnDefault, paymentInterval, stub, protectionStart, recoveryRate, FOLLOWING,
@@ -148,11 +148,11 @@ public class CDSAnalyticsDemo extends ISDABaseTest {
 
     //Note: Can use exactly the same code to setup 'legacy' CDS, i.e. accStartDate T+1, or some bespoke CDS
     //Nowhere has the coupon appeared - the coupon is an input to the pricing, or in the case of par instruments, the par spread
-    //is a calculation output 
+    //is a calculation output
   }
 
   /**
-   * Standard ISDA up-front model for pricing CDS. Conversion between Points-Up-Front (PUF) and Spread quotes 
+   * Standard ISDA up-front model for pricing CDS. Conversion between Points-Up-Front (PUF) and Spread quotes
    */
   public void upfrontModelDemo() {
     System.out.println("\nupfrontModelDemo");
@@ -173,7 +173,7 @@ public class CDSAnalyticsDemo extends ISDABaseTest {
     //is a negative Points-Up-Front of -1.87%, and a corresponding quoted spread of 41.5bps
     System.out.format("PUF: %.4f%%, Quoted Spread: %.3fbps\n", puf * ONE_HUNDRED, spread * TEN_THOUSAND);
 
-    //Above we knew the constant hazard rate, so could compute PUF and quoted spread directly from this. In practise 
+    //Above we knew the constant hazard rate, so could compute PUF and quoted spread directly from this. In practise
     //a CDS has a market quoted given as PUF and an equivalent quoted spread is required - this requires solving for the
     //hazard rate
     final ISDACompliantCreditCurveBuilder creditCurveBuilder = new FastCreditCurveBuilder();
@@ -181,7 +181,7 @@ public class CDSAnalyticsDemo extends ISDABaseTest {
     final double quotedSpread = pricer.parSpread(cds, YIELD_CURVE, fittedConstCreditCurve);
     assertEquals(spread, quotedSpread, 1e-15);
 
-    //going the other way also involves solving for a constant hazard rate 
+    //going the other way also involves solving for a constant hazard rate
     final ISDACompliantCreditCurve fittedConstCreditCurve2 = creditCurveBuilder.calibrateCreditCurve(cds, spread, YIELD_CURVE);
     final double puf2 = pricer.pv(cds, YIELD_CURVE, fittedConstCreditCurve2, coupon);
     assertEquals(puf, puf2, 1e-15);
@@ -198,8 +198,8 @@ public class CDSAnalyticsDemo extends ISDABaseTest {
   }
 
   /**
-   * We start with a quoted spread (or trade level) and compute the various cash amounts that are shown on BBG CDSW and/or 
-   * Markit calculator 
+   * We start with a quoted spread (or trade level) and compute the various cash amounts that are shown on BBG CDSW and/or
+   * Markit calculator
    */
 
   public void cashSettlementDemo() {
@@ -211,8 +211,8 @@ public class CDSAnalyticsDemo extends ISDABaseTest {
     final double notional = 1e7; //10MM
     final double coupon = 100 * ONE_BP;
 
-    //accured for the buyer of protection is conventionally shown as negative amount (e.g. on BBG CDSW) 
-    //Here we show it as an absolute value which is consistent with is ISDA C code and the Markit calculator 
+    //accured for the buyer of protection is conventionally shown as negative amount (e.g. on BBG CDSW)
+    //Here we show it as an absolute value which is consistent with is ISDA C code and the Markit calculator
     final double accruedAmount = notional * cds.getAccruedPremium(coupon);
     System.out.format("Accrued Amt: %.2f\n", accruedAmount);
 
@@ -224,7 +224,7 @@ public class CDSAnalyticsDemo extends ISDABaseTest {
     System.out.format("Principle: %.2f\n", principle);
 
     //The cash settlement is the amount actually paid (to enter the CDS contract) on the cash settlement date (3-Jul_2014)
-    //here we subtract a positive accrued amount rather than add a negative accrued 
+    //here we subtract a positive accrued amount rather than add a negative accrued
     final double cashSettlement = principle - accruedAmount;
     System.out.format("cash Settlement: %.2f\n", cashSettlement);
 
@@ -234,7 +234,7 @@ public class CDSAnalyticsDemo extends ISDABaseTest {
     final double marketValue = df * cashSettlement;
     System.out.format("Market value: %.2f\n", marketValue);
 
-    //can do all this explicitly with a credit curve and pricer 
+    //can do all this explicitly with a credit curve and pricer
     final ISDACompliantCreditCurveBuilder creditCurveBuilder = new FastCreditCurveBuilder();
     final AnalyticCDSPricer pricer = new AnalyticCDSPricer();
     final ISDACompliantCreditCurve fittedConstCreditCurve = creditCurveBuilder.calibrateCreditCurve(cds, tradeLevel, YIELD_CURVE);
@@ -246,16 +246,16 @@ public class CDSAnalyticsDemo extends ISDABaseTest {
     assertEquals(cashSettlement, cashSettlement2, 1e-15 * notional);
     assertEquals(marketValue, marketValue2, 1e-15 * notional);
 
-    //finally we can look at the individual legs 
-    //premium leg per unit of coupon (and unit notional) - often quoted per basis point of coupon 
-    //AKA RPV01 or duration (its value should be slightly less than the CDS time to maturity)  
+    //finally we can look at the individual legs
+    //premium leg per unit of coupon (and unit notional) - often quoted per basis point of coupon
+    //AKA RPV01 or duration (its value should be slightly less than the CDS time to maturity)
     final double annuity = pricer.annuity(cds, YIELD_CURVE, fittedConstCreditCurve);
     System.out.format("annuity: %.3f, time to maturity: %.3f\n", annuity, cds.getProtectionEnd());
 
     final double protectionLeg = notional * pricer.protectionLeg(cds, YIELD_CURVE, fittedConstCreditCurve);
     System.out.format("Protection leg: %.2f\n", protectionLeg);
 
-    //this can be a useful way of expressing the principle 
+    //this can be a useful way of expressing the principle
     final double principle3 = notional * (tradeLevel - coupon) * annuity;
     assertEquals(principle, principle3, 1e-15 * notional);
   }
@@ -267,17 +267,18 @@ public class CDSAnalyticsDemo extends ISDABaseTest {
     System.out.println("\ncreditCurveBuildDemo");
 
     final Period[] tenors = new Period[] {Period.ofMonths(6), Period.ofYears(1), Period.ofYears(3), Period.ofYears(5), Period.ofYears(7), Period.ofYears(10) };
-    final double[] parSpreads = new double[] {0.008, 0.0088, 0.013, 0.017, 0.018, 0.019 };
+    final double[] parSpreads = new double[] {1.008, 1.0088, 1.013, 1.017, 1.018, 1.019 };
 
     final CDSAnalyticFactory factory = new CDSAnalyticFactory(); //Default is 40% recovery
 
+    factory.makeIMMCDS(TRADE_DATE, tenors[4]);
     //the calibration instruments have accrual starting on last IMM date rather than T+1 (we'll show an example of a 'legacy' CDS later)
     final CDSAnalytic[] calibrationCDS = factory.makeIMMCDS(TRADE_DATE, tenors);
 
-    final ISDACompliantCreditCurveBuilder creditCurveBuilder = new SuperFastCreditCurveBuilder(); //its faster than FastCreditCurveBuilder
+    final ISDACompliantCreditCurveBuilder creditCurveBuilder = new FastCreditCurveBuilder(); //its faster than FastCreditCurveBuilder
     final ISDACompliantCreditCurve creditCurve = creditCurveBuilder.calibrateCreditCurve(calibrationCDS, parSpreads, YIELD_CURVE);
 
-    //check all the calibration instruments do indeed price back to zero (i.e. internally consistent) 
+    //check all the calibration instruments do indeed price back to zero (i.e. internally consistent)
     final int n = tenors.length;
     final AnalyticCDSPricer pricer = new AnalyticCDSPricer();
     for (int i = 0; i < n; i++) {
@@ -289,7 +290,7 @@ public class CDSAnalyticsDemo extends ISDABaseTest {
 
     //price a 4Y CDS off the credit curve (assume RR is also 40%)
     final CDSAnalytic cds4Y = factory.makeIMMCDS(TRADE_DATE, Period.ofYears(4));
-    //A SNAC will have a coupon of 100bps 
+    //A SNAC will have a coupon of 100bps
     final double coupon = 100 * ONE_BP;
     final double annuity = pricer.annuity(cds4Y, YIELD_CURVE, creditCurve);
     final double protLeg = pricer.protectionLeg(cds4Y, YIELD_CURVE, creditCurve);
@@ -299,7 +300,7 @@ public class CDSAnalyticsDemo extends ISDABaseTest {
     assertEquals(puf1, puf2, 1e-15);
     System.out.format("4Y par spread: %.3f, PUF: %.3f%%\n", parSpread * TEN_THOUSAND, puf1 * ONE_HUNDRED);
 
-    //this should be cut and pasted into Excel to view the curve 
+    //this should be cut and pasted into Excel to view the curve
     final int nSamples = 100;
     System.out.println("\nTime\tDiscount Factor\tZero Rate\tForward Rate");
     for (int i = 0; i < nSamples; i++) {
@@ -329,14 +330,14 @@ public class CDSAnalyticsDemo extends ISDABaseTest {
     final ISDACompliantCreditCurveBuilder creditCurveBuilder = new SuperFastCreditCurveBuilder();
     final ISDACompliantCreditCurve creditCurve = creditCurveBuilder.calibrateCreditCurve(calibrationCDS, coupons, YIELD_CURVE, puf);
 
-    //check all the calibration instruments do indeed price back to the market PUF (i.e. internally consistent) 
+    //check all the calibration instruments do indeed price back to the market PUF (i.e. internally consistent)
     final AnalyticCDSPricer pricer = new AnalyticCDSPricer();
     for (int i = 0; i < n; i++) {
       final double p = pricer.pv(calibrationCDS[i], YIELD_CURVE, creditCurve, coupons[i]);
       assertEquals(puf[i], p, 1e-14);
     }
 
-    //this should be cut and pasted into Excel to view the curve 
+    //this should be cut and pasted into Excel to view the curve
     final int nSamples = 100;
     System.out.println("\nTime\tDiscount Factor\tZero Rate\tForward Rate");
     for (int i = 0; i < nSamples; i++) {
@@ -355,7 +356,7 @@ public class CDSAnalyticsDemo extends ISDABaseTest {
   public void parVsQuotedSpreadDemo() {
     System.out.println("\nparVsQuotedSpreadDemo");
 
-    //build a credit curve from par spreads 
+    //build a credit curve from par spreads
     final Period[] tenors = new Period[] {Period.ofMonths(6), Period.ofYears(1), Period.ofYears(3), Period.ofYears(5), Period.ofYears(7), Period.ofYears(10) };
     final double[] parSpreads = new double[] {0.008, 0.0088, 0.013, 0.017, 0.018, 0.019 };
 
@@ -365,7 +366,7 @@ public class CDSAnalyticsDemo extends ISDABaseTest {
     final ISDACompliantCreditCurveBuilder creditCurveBuilder = new SuperFastCreditCurveBuilder(); //its faster than FastCreditCurveBuilder
     final ISDACompliantCreditCurve creditCurve = creditCurveBuilder.calibrateCreditCurve(calibrationCDS, parSpreads, YIELD_CURVE);
 
-    final double coupon = 100 * ONE_BP; //again use standard coupon of 100bps 
+    final double coupon = 100 * ONE_BP; //again use standard coupon of 100bps
     final int n = tenors.length;
     final double[] puf = new double[n];
     //price standard CDS with a coupon of 100bps - these are different from the calibration instruments which have coupons equal to their par spreads
@@ -374,7 +375,7 @@ public class CDSAnalyticsDemo extends ISDABaseTest {
     }
 
     final MarketQuoteConverter converter = new MarketQuoteConverter();
-    //this does an instrument-by-instrument conversion using separate constant hazard rates  
+    //this does an instrument-by-instrument conversion using separate constant hazard rates
     final double[] quotedSpreads = converter.pufToQuotedSpreads(calibrationCDS, coupon, YIELD_CURVE, puf);
     System.out.println("Par Spread\tPUF\tQuoted Spread");
     for (int i = 0; i < n; i++) {
@@ -383,8 +384,8 @@ public class CDSAnalyticsDemo extends ISDABaseTest {
   }
 
   /**
-   * To build a credit curve from quoted spreads, one should first convert the quoted spread to PUF. Systems tend to not do 
-   * this, but just treat quoted spreads as par spreads. We can build curves from mixed quote types 
+   * To build a credit curve from quoted spreads, one should first convert the quoted spread to PUF. Systems tend to not do
+   * this, but just treat quoted spreads as par spreads. We can build curves from mixed quote types
    */
   public void mixedQuoteCurveBuildDemo() {
     System.out.println("\nmixedQuoteCurveBuildDemo");
@@ -406,9 +407,9 @@ public class CDSAnalyticsDemo extends ISDABaseTest {
     //make the par spread quotes T+1 accrual
     calibrationCDS[0] = factory.makeCDS(TRADE_DATE, TRADE_DATE.plusDays(1), LocalDate.of(2015, 1, 20));
     calibrationCDS[4] = factory.makeCDS(TRADE_DATE, TRADE_DATE.plusDays(1), LocalDate.of(2021, 9, 20));
-    assertEquals(0, calibrationCDS[0].getAccuredDays()); //check no accrual 
+    assertEquals(0, calibrationCDS[0].getAccruedDays()); //check no accrual
 
-    //can have a recovery rate term structure 
+    //can have a recovery rate term structure
     for (int i = 0; i < n; i++) {
       final double rr = 0.7 - 0.5 * i / (n - 1.0);
       calibrationCDS[i] = calibrationCDS[i].withRecoveryRate(rr);
@@ -417,7 +418,7 @@ public class CDSAnalyticsDemo extends ISDABaseTest {
     //get out a horrible looking curve (because I have just made up some data)
     final ISDACompliantCreditCurve creditCurve = CREDIT_CURVE_BUILDER.calibrateCreditCurve(calibrationCDS, quotes, YIELD_CURVE);
 
-    //this should be cut and pasted into Excel to view the curve 
+    //this should be cut and pasted into Excel to view the curve
     final int nSamples = 100;
     System.out.println("\nTime\tDiscount Factor\tZero Rate\tForward Rate");
     for (int i = 0; i < nSamples; i++) {
@@ -452,7 +453,7 @@ public class CDSAnalyticsDemo extends ISDABaseTest {
 
     //CS01 is defined as a change in the principle for a one basis point increase in the quoted spread.
     //We can also calculate analytic sensitivity of the principle to the quoted spread, however it is the first
-    //number (a forward finite difference) which is quoted on CDSW and Markit calculator 
+    //number (a forward finite difference) which is quoted on CDSW and Markit calculator
     final double cs01 = notional * ONE_BP * sensCal.parallelCS01(cds5Y, quotedSpread, YIELD_CURVE, ONE_BP);
     final double anCS01 = notional * ONE_BP * anSensCal.parallelCS01(cds5Y, quotedSpread, YIELD_CURVE);
     System.out.format("CS01: %.2f, analytic sense:  %.2f \n", cs01, anCS01);

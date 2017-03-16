@@ -94,10 +94,10 @@ public class ForexOptionVanillaBlackSmileMethodTest {
   private static final double[] TIME_TO_EXPIRY = new double[NB_EXP + 1];
   static {
     TIME_TO_EXPIRY[0] = 0.0;
-    for (int loopexp = 0; loopexp < NB_EXP; loopexp++) {
-      PAY_DATE[loopexp] = ScheduleCalculator.getAdjustedDate(REFERENCE_SPOT, EXPIRY_PERIOD[loopexp], BUSINESS_DAY, CALENDAR);
-      EXPIRY_DATE[loopexp] = ScheduleCalculator.getAdjustedDate(PAY_DATE[loopexp], -SETTLEMENT_DAYS, CALENDAR);
-      TIME_TO_EXPIRY[loopexp + 1] = TimeCalculator.getTimeBetween(REFERENCE_DATE, EXPIRY_DATE[loopexp]);
+    for (int i = 0; i < NB_EXP; i++) {
+      PAY_DATE[i] = ScheduleCalculator.getAdjustedDate(REFERENCE_SPOT, EXPIRY_PERIOD[i], BUSINESS_DAY, CALENDAR);
+      EXPIRY_DATE[i] = ScheduleCalculator.getAdjustedDate(PAY_DATE[i], -SETTLEMENT_DAYS, CALENDAR);
+      TIME_TO_EXPIRY[i + 1] = TimeCalculator.getTimeBetween(REFERENCE_DATE, EXPIRY_DATE[i]);
     }
   }
   private static final double[] ATM = {0.175, 0.185, 0.18, 0.17, 0.16, 0.16 };
@@ -754,10 +754,10 @@ public class ForexOptionVanillaBlackSmileMethodTest {
     final VolatilityAndBucketedSensitivities volAndSensitivities = SMILE_TERM.getVolatilityAndSensitivities(FOREX_CALL_OPTION.getTimeToExpiry(), STRIKE, forward);
     final double[][] nodeWeight = volAndSensitivities.getBucketedSensitivities();
     final DoublesPair point = DoublesPair.of(FOREX_CALL_OPTION.getTimeToExpiry(), STRIKE);
-    for (int loopexp = 0; loopexp < NB_EXP; loopexp++) {
-      for (int loopstrike = 0; loopstrike < NB_STRIKE; loopstrike++) {
-        assertEquals("Forex vanilla option: vega node", nodeWeight[loopexp][loopstrike] * pointSensitivity.getVega().getMap().get(point),
-            sensi.getVega().getData()[loopexp][loopstrike]);
+    for (int i = 0; i < NB_EXP; i++) {
+      for (int j = 0; j < NB_STRIKE; j++) {
+        assertEquals("Forex vanilla option: vega node", nodeWeight[i][j] * pointSensitivity.getVega().getMap().get(point),
+            sensi.getVega().getData()[i][j]);
       }
     }
   }
@@ -782,10 +782,10 @@ public class ForexOptionVanillaBlackSmileMethodTest {
     final PresentValueForexBlackVolatilityNodeSensitivityDataBundle nsCallEURUSD = METHOD_OPTION
         .presentValueBlackVolatilityNodeSensitivity(callEURUSD, SMILE_MULTICURVES);
     final PresentValueForexBlackVolatilityNodeSensitivityDataBundle nsPutUSDEUR = METHOD_OPTION.presentValueBlackVolatilityNodeSensitivity(putUSDEUR, SMILE_MULTICURVES);
-    for (int loopexp = 0; loopexp < nsCallEURUSD.getExpiries().getNumberOfElements(); loopexp++) {
-      for (int loopdelta = 0; loopdelta < nsCallEURUSD.getDelta().getNumberOfElements(); loopdelta++) {
-        assertEquals("Forex vanilla option: volatilityNode", nsCallEURUSD.getVega().getEntry(loopexp, loopdelta) / SPOT,
-            nsPutUSDEUR.getVega().getEntry(loopexp, loopdelta), 1.0E-2);
+    for (int i = 0; i < nsCallEURUSD.getExpiries().getNumberOfElements(); i++) {
+      for (int j = 0; j < nsCallEURUSD.getDelta().getNumberOfElements(); j++) {
+        assertEquals("Forex vanilla option: volatilityNode", nsCallEURUSD.getVega().getEntry(i, j) / SPOT,
+            nsPutUSDEUR.getVega().getEntry(i, j), 1.0E-2);
       }
     }
   }
@@ -800,16 +800,16 @@ public class ForexOptionVanillaBlackSmileMethodTest {
     final double[][] sensiQuote = METHOD_OPTION.presentValueBlackVolatilityNodeSensitivity(FOREX_CALL_OPTION, SMILE_MULTICURVES).quoteSensitivity().getVega();
     final double[][] sensiStrikeData = sensiStrike.getVega().getData();
     final double[] atm = new double[sensiQuote.length];
-    for (int loopexp = 0; loopexp < sensiQuote.length; loopexp++) {
-      for (int loopdelta = 0; loopdelta < DELTA.length; loopdelta++) {
-        assertEquals("Forex vanilla option: vega quote - RR", sensiQuote[loopexp][1 + loopdelta], -0.5 * sensiStrikeData[loopexp][loopdelta] + 0.5
-            * sensiStrikeData[loopexp][2 * DELTA.length - loopdelta], 1.0E-10);
-        assertEquals("Forex vanilla option: vega quote - Strangle", sensiQuote[loopexp][DELTA.length + 1 + loopdelta], sensiStrikeData[loopexp][loopdelta]
-            + sensiStrikeData[loopexp][2 * DELTA.length - loopdelta], 1.0E-10);
-        atm[loopexp] += sensiStrikeData[loopexp][loopdelta] + sensiStrikeData[loopexp][2 * DELTA.length - loopdelta];
+    for (int i = 0; i < sensiQuote.length; i++) {
+      for (int j = 0; j < DELTA.length; j++) {
+        assertEquals("Forex vanilla option: vega quote - RR", sensiQuote[i][1 + j], -0.5 * sensiStrikeData[i][j] + 0.5
+            * sensiStrikeData[i][2 * DELTA.length - j], 1.0E-10);
+        assertEquals("Forex vanilla option: vega quote - Strangle", sensiQuote[i][DELTA.length + 1 + j], sensiStrikeData[i][j]
+            + sensiStrikeData[i][2 * DELTA.length - j], 1.0E-10);
+        atm[i] += sensiStrikeData[i][j] + sensiStrikeData[i][2 * DELTA.length - j];
       }
-      atm[loopexp] += sensiStrikeData[loopexp][DELTA.length];
-      assertEquals("Forex vanilla option: vega quote", sensiQuote[loopexp][0], atm[loopexp], 1.0E-10); // ATM
+      atm[i] += sensiStrikeData[i][DELTA.length];
+      assertEquals("Forex vanilla option: vega quote", sensiQuote[i][0], atm[i], 1.0E-10); // ATM
     }
   }
 

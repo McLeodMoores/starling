@@ -20,7 +20,7 @@ import com.opengamma.analytics.math.function.Function1D;
  * f(x + \delta) \approx f(x) + f'(x)\delta + \frac{f''(x)}{2}\delta^2 + \cdots
  * \end{align*}
  * $$
- * As delta approaches zero (and if the function is well-behaved), this gives 
+ * As delta approaches zero (and if the function is well-behaved), this gives
  * $$
  * \begin{align*}
  * \delta = -\frac{f(x)}{f'(x)}
@@ -33,7 +33,7 @@ import com.opengamma.analytics.math.function.Function1D;
  * currently does not attempt to correct for this: if the value of $x$ goes beyond the initial range of values $x_{low}$
  * and $x_{high}$, an exception is thrown.
  * <p>
- * If the function that is provided does not override the {@link com.opengamma.analytics.math.function.DoubleFunction1D#derivative()} method, then 
+ * If the function that is provided does not override the {@link com.opengamma.analytics.math.function.DoubleFunction1D#derivative()} method, then
  * the derivative is approximated using finite difference. This is undesirable for several reasons: (i) the extra function evaluations will lead
  * to slower convergence; and (ii) the choice of shift size is very important (too small and the result will be dominated by rounding errors, too large
  * and convergence will be even slower). Use of another root-finder is recommended in this case.
@@ -50,7 +50,7 @@ public class NewtonRaphsonSingleRootFinder extends RealSingleRootFinder {
   }
 
   /**
-   * Takes the accuracy of the root as a parameter - this is the maximum difference between the true root and the returned value that is allowed. 
+   * Takes the accuracy of the root as a parameter - this is the maximum difference between the true root and the returned value that is allowed.
    * If this is negative, then the absolute value is used.
    * @param accuracy The accuracy
    */
@@ -89,7 +89,7 @@ public class NewtonRaphsonSingleRootFinder extends RealSingleRootFinder {
   }
 
   /**
-   * Uses the {@link com.opengamma.analytics.math.function.DoubleFunction1D#derivative()} method. This method uses an initial guess for the root, rather than bounds. 
+   * Uses the {@link com.opengamma.analytics.math.function.DoubleFunction1D#derivative()} method. This method uses an initial guess for the root, rather than bounds.
    * @param function The function, not null
    * @param x The initial guess for the root, not null
    * @return The root
@@ -101,7 +101,7 @@ public class NewtonRaphsonSingleRootFinder extends RealSingleRootFinder {
   }
 
   /**
-   * Uses the function and its derivative. 
+   * Uses the function and its derivative.
    * @param function The function, not null
    * @param derivative The derivative, not null
    * @param x1 The first bound of the root, not null

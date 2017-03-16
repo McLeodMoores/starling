@@ -39,13 +39,14 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
 
 /**
- * Simplified representation of an FXForwardTrade that hides some of the less intuitive aspects of the OpenGamma 2.x data model.
+ * Simplified representation of an FXForwardSecurity that hides some of the less intuitive aspects of the OpenGamma 2.x data model.
  */
 @BeanDefinition
 public class FXForwardTrade implements ImmutableBean, Trade {
   private static final ExternalId DEFAULT_REGION = ExternalId.of(ExternalSchemes.ISO_COUNTRY_ALPHA2, "GB");
   private static final LocalTime DEFAULT_FORWARD_TIME = LocalTime.MAX;
   //TODO won't this fail when daylight savings starts or ends?
+  //TODO system default can change when different configurations are run - what to do then
   private static final ZoneId DEFAULT_FORWARD_ZONE = ZoneId.systemDefault();
   private static final OffsetTime DEFAULT_TRADE_TIME = OffsetTime.MAX;
   private static final Counterparty DEFAULT_COUNTERPARTY = new SimpleCounterparty(ExternalId.of(Counterparty.DEFAULT_SCHEME, "DEFAULT"));
@@ -238,7 +239,7 @@ public class FXForwardTrade implements ImmutableBean, Trade {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the pay currency, a list of currencies can be established by using CurrencyFactory
+   * Gets the pay currency, a list of currencies can be established by using CurrencyFactory.
    * @return the value of the property, not null
    */
   public Currency getPayCurrency() {
@@ -247,7 +248,7 @@ public class FXForwardTrade implements ImmutableBean, Trade {
 
   //-----------------------------------------------------------------------
   /**
-   * Gets the pay currency, a list of currencies can be established by using CurrencyFactory
+   * Gets the pay currency, a list of currencies can be established by using CurrencyFactory.
    * @return the value of the property, not null
    */
   public Currency getReceiveCurrency() {
@@ -725,7 +726,7 @@ public class FXForwardTrade implements ImmutableBean, Trade {
     }
 
     /**
-     * Sets the pay currency, a list of currencies can be established by using CurrencyFactory
+     * Sets the pay currency, a list of currencies can be established by using CurrencyFactory.
      * @param payCurrency  the new value, not null
      * @return this, for chaining, not null
      */
@@ -736,7 +737,7 @@ public class FXForwardTrade implements ImmutableBean, Trade {
     }
 
     /**
-     * Sets the pay currency, a list of currencies can be established by using CurrencyFactory
+     * Sets the pay currency, a list of currencies can be established by using CurrencyFactory.
      * @param receiveCurrency  the new value, not null
      * @return this, for chaining, not null
      */

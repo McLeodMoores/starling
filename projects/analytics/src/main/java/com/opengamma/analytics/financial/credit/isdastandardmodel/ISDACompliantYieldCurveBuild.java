@@ -38,7 +38,7 @@ public class ISDACompliantYieldCurveBuild {
   private final ISDAInstrumentTypes[] _instrumentTypes;
 
   //************************************************************************************************************************
-  // static curve builders 
+  // static curve builders
   //************************************************************************************************************************
 
   /**
@@ -81,17 +81,17 @@ public class ISDACompliantYieldCurveBuild {
   }
 
   //************************************************************************************************************************
-  // constructors 
+  // constructors
   //************************************************************************************************************************
 
   /**
    * Set up a yield curve builder (run the method build, to build the curve). Note, the cds trade date is taken as the spot date;
    * a weekend only calendar is used.
-   * @param spotDate The spot date for the instruments used to build the yield curve 
-   * @param instrumentTypes  The instrument type for each curve node 
-   * @param tenors The tenors of the instruments 
+   * @param spotDate The spot date for the instruments used to build the yield curve
+   * @param instrumentTypes  The instrument type for each curve node
+   * @param tenors The tenors of the instruments
    * @param moneyMarketDCC The day-count-convention for money market (spot libor) instruments (accrual)
-   * @param swapDCC The day-count-convention for swaps (accrual)  
+   * @param swapDCC The day-count-convention for swaps (accrual)
    * @param swapInterval The payment interval for the swaps
    * @param convention Specification for the handling of  non-business days
    */
@@ -103,13 +103,13 @@ public class ISDACompliantYieldCurveBuild {
   /**
    * Set up a yield curve builder (run the method build, to build the curve). Note, a weekend only calendar is used.
    * @param cdsTradeDate The trade date (aka today)
-   * @param spotDate The spot date for the instruments used to build the yield curve 
-   * @param instrumentTypes  The instrument type for each curve node 
-   * @param tenors The tenors of the instruments 
+   * @param spotDate The spot date for the instruments used to build the yield curve
+   * @param instrumentTypes  The instrument type for each curve node
+   * @param tenors The tenors of the instruments
    * @param moneyMarketDCC The day-count-convention for money market (spot libor) instruments (accrual)
-   * @param swapDCC The day-count-convention for swaps (accrual)  
+   * @param swapDCC The day-count-convention for swaps (accrual)
    * @param swapInterval The payment interval for the swaps
-   * @param curveDCC The day-count-convention used for the curve 
+   * @param curveDCC The day-count-convention used for the curve
    * @param convention Specification for the handling of  non-business days
    */
   public ISDACompliantYieldCurveBuild(final LocalDate cdsTradeDate, final LocalDate spotDate, final ISDAInstrumentTypes[] instrumentTypes, final Period[] tenors, final DayCount moneyMarketDCC,
@@ -118,15 +118,15 @@ public class ISDACompliantYieldCurveBuild {
   }
 
   /**
-   * Set up a yield curve builder (run the method build, to build the curve). 
+   * Set up a yield curve builder (run the method build, to build the curve).
    * @param cdsTradeDate The trade date (aka today)
-   * @param spotDate The spot date for the instruments used to build the yield curve 
-   * @param instrumentTypes  The instrument type for each curve node 
-   * @param tenors The tenors of the instruments 
+   * @param spotDate The spot date for the instruments used to build the yield curve
+   * @param instrumentTypes  The instrument type for each curve node
+   * @param tenors The tenors of the instruments
    * @param moneyMarketDCC The day-count-convention for money market (spot libor) instruments (accrual)
-   * @param swapDCC The day-count-convention for swaps (accrual)  
+   * @param swapDCC The day-count-convention for swaps (accrual)
    * @param swapInterval The payment interval for the swaps
-   * @param curveDCC The day-count-convention used for the curve 
+   * @param curveDCC The day-count-convention used for the curve
    * @param convention Specification for the handling of  non-business days
    * @param calendar Calendar defining what is a non-business day
    */
@@ -150,7 +150,7 @@ public class ISDACompliantYieldCurveBuild {
       if (i == 0) {
         ArgumentChecker.isTrue(matDates[0].isAfter(spotDate), "first tenor zero");
       } else {
-        ArgumentChecker.isTrue(matDates[i].isAfter(matDates[i - 1]), "tenors are not assending");
+        ArgumentChecker.isTrue(matDates[i].isAfter(matDates[i - 1]), "tenors are not ascending");
       }
       adjMatDates[i] = convention.adjustDate(calendar, matDates[i]);
     }
@@ -181,9 +181,9 @@ public class ISDACompliantYieldCurveBuild {
   }
 
   /**
-   * build a yield curve 
-   * @param rates The par rates of the instruments (as fractions) 
-   * @return a yield curve 
+   * build a yield curve
+   * @param rates The par rates of the instruments (as fractions)
+   * @return a yield curve
    */
   public ISDACompliantYieldCurve build(final double[] rates) {
     ArgumentChecker.notEmpty(rates, "rates");
@@ -210,7 +210,6 @@ public class ISDACompliantYieldCurveBuild {
       return baseCurve;
     }
     return baseCurve.withOffset(_offset);
-    //  return new ISDACompliantYieldCurve(baseCurve.getKnotTimes(), baseCurve.getKnotZeroRates(), _offset);
   }
 
   private ISDACompliantCurve fitSwap(final int curveIndex, final BasicFixedLeg swap, final ISDACompliantCurve curve, final double swapRate) {
@@ -280,7 +279,6 @@ public class ISDACompliantYieldCurveBuild {
       return curve;
     }
     final double[] bracket = BRACKETER.getBracketedPoints(func, 0.8 * guess, 1.25 * guess, 0, Double.POSITIVE_INFINITY);
-    // final double r = ROOTFINDER.getRoot(func, bracket[0], bracket[1]);
     final double r = ROOTFINDER.getRoot(func, grad, bracket[0], bracket[1]);
     return curve.withRate(r, curveIndex);
   }
@@ -323,7 +321,6 @@ public class ISDACompliantYieldCurveBuild {
         _swapPaymentTimes[i] = curveDCC.getDayCountFraction(spotDate, adjCurr); // Payment times always good business days
         prev = adjCurr;
       }
-      //  _paymentAmounts[_nPayments - 1] += 1.0; // see Javadocs comment
     }
 
     public int getNumPayments() {

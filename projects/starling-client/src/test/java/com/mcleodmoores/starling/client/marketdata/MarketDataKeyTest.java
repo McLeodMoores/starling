@@ -154,7 +154,7 @@ public class MarketDataKeyTest {
     Assert.assertEquals(key.getField(), DataField.PRICE);
     Assert.assertEquals(key.getProvider(), DataProvider.DEFAULT);
     Assert.assertEquals(key.getSource(), DataSource.DEFAULT);
-    Assert.assertEquals(key.getNormalizer(), UnitNormalizer.INSTANCE);
+    Assert.assertEquals(key.getNormalizer(), UnitNormalizer.INSTANCE.getName());
   }
 
   /**

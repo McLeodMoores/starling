@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2014 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.credit.isdastandardmodel;
@@ -15,6 +15,7 @@ import org.joda.beans.BeanBuilder;
 import org.joda.beans.Property;
 import org.testng.annotations.Test;
 import org.threeten.bp.LocalDate;
+import org.threeten.bp.Period;
 
 import com.opengamma.analytics.financial.credit.isdastandardmodel.ISDACompliantDateCreditCurve.Meta;
 import com.opengamma.financial.convention.daycount.DayCount;
@@ -22,7 +23,7 @@ import com.opengamma.financial.convention.daycount.DayCounts;
 import com.opengamma.util.test.TestGroup;
 
 /**
- * 
+ *
  */
 @Test(groups = TestGroup.UNIT)
 public class ISDACompliantCreditCurveTest {
@@ -30,7 +31,7 @@ public class ISDACompliantCreditCurveTest {
   private static final double EPS = 1.e-13;
 
   /**
-   * 
+   *
    */
   @Test
   public void buildCreditCurveTest() {
@@ -59,7 +60,7 @@ public class ISDACompliantCreditCurveTest {
       timeMod[i] = time[i] + base;
       rMod[i] = (rt[i] + r[0] * base) / timeMod[i];
     }
-    final ISDACompliantCreditCurve cv4 = (new ISDACompliantCreditCurve(time, rMod)).withRates(r);
+    final ISDACompliantCreditCurve cv4 = new ISDACompliantCreditCurve(time, rMod).withRates(r);
     final ISDACompliantCreditCurve cv1Clone = cv1.clone();
     assertNotSame(cv1, cv1Clone);
     assertEquals(cv1, cv1Clone);
@@ -86,7 +87,7 @@ public class ISDACompliantCreditCurveTest {
     builder.set(meta.metaPropertyGet("name"), "");
     builder.set(meta.metaPropertyGet("t"), time);
     builder.set(meta.metaPropertyGet("rt"), rt);
-    ISDACompliantCreditCurve builtCurve = (ISDACompliantCreditCurve) builder.build();
+    final ISDACompliantCreditCurve builtCurve = (ISDACompliantCreditCurve) builder.build();
     assertEquals(cv1, builtCurve);
 
     final ISDACompliantCreditCurve.Meta meta1 = ISDACompliantCreditCurve.meta();
@@ -106,16 +107,16 @@ public class ISDACompliantCreditCurveTest {
      * hashCode and equals
      */
     assertTrue(cv1.equals(cv1));
-    assertTrue(!(cv1.equals(null)));
+    assertTrue(!cv1.equals(null));
 
     final ISDACompliantCurve superCv1 = ISDACompliantCurve.makeFromForwardRates(time, forward);
     assertTrue(cv1.hashCode() != superCv1.hashCode());
-    assertTrue(!(cv1.equals(superCv1)));
+    assertTrue(!cv1.equals(superCv1));
 
   }
 
   /**
-   * 
+   *
    */
   @Test
   public void buildDateCurveTest() {
@@ -176,30 +177,61 @@ public class ISDACompliantCreditCurveTest {
     builder.set(meta.metaPropertyGet("name"), "");
     builder.set(meta.metaPropertyGet("t"), t);
     builder.set(meta.metaPropertyGet("rt"), rt);
-    ISDACompliantDateCreditCurve builtCurve = (ISDACompliantDateCreditCurve) builder.build();
+    final ISDACompliantDateCreditCurve builtCurve = (ISDACompliantDateCreditCurve) builder.build();
     assertEquals(baseCurve, builtCurve);
 
     final Meta meta1 = ISDACompliantDateCreditCurve.meta();
     assertEquals(meta1, meta);
 
     /*
-     * hash and equals 
+     * hash and equals
      */
-    assertTrue(!(baseCurve.equals(null)));
-    assertTrue(!(baseCurve.equals(new ISDACompliantDateCurve(baseDate, dates, rates))));
-    assertTrue(!(baseCurve.equals(new ISDACompliantDateCreditCurve(baseDate.minusDays(1), dates, rates))));
-    assertTrue(!(baseCurve.equals(new ISDACompliantDateCreditCurve(baseDate, new LocalDate[] {LocalDate.of(2012, 12, 3), LocalDate.of(2013, 4, 29), LocalDate.of(2013, 11, 12),
-        LocalDate.of(2014, 5, 19) }, rates))));
-    assertTrue(!(baseCurve.equals(new ISDACompliantDateCreditCurve(baseDate, dates, rates, DayCounts.ACT_36525))));
+    assertTrue(!baseCurve.equals(null));
+    assertTrue(!baseCurve.equals(new ISDACompliantDateCurve(baseDate, dates, rates)));
+    assertTrue(!baseCurve.equals(new ISDACompliantDateCreditCurve(baseDate.minusDays(1), dates, rates)));
+    assertTrue(!baseCurve.equals(new ISDACompliantDateCreditCurve(baseDate, new LocalDate[] {LocalDate.of(2012, 12, 3), LocalDate.of(2013, 4, 29), LocalDate.of(2013, 11, 12),
+        LocalDate.of(2014, 5, 19) }, rates)));
+    assertTrue(!baseCurve.equals(new ISDACompliantDateCreditCurve(baseDate, dates, rates, DayCounts.ACT_36525)));
 
     assertTrue(baseCurve.equals(baseCurve));
 
     assertTrue(baseCurve.hashCode() != curveWithRate.hashCode());
-    assertTrue(!(baseCurve.equals(curveWithRate)));
+    assertTrue(!baseCurve.equals(curveWithRate));
 
     /*
      * String
      */
     assertEquals(baseCurve.toString(), clonedCurve.toString());
   }
+
+  @Test
+  public void temp() {
+    final double[] ty = new double[] {0.25, 0.5, 0.75, 1, 2, 3, 5};
+    final double[] y = new double[] {0.0075, 0.008, 0.01, 0.012, 0.018, 0.02, 0.026};
+    final ISDACompliantYieldCurve yieldCurve = new ISDACompliantYieldCurve(ty, y);
+    final Period[] tenor = new Period[] {Period.ofYears(7)};
+    final double[] parSpread = new double[] {0.018};
+    final CDSAnalyticFactory factory = new CDSAnalyticFactory();
+    final LocalDate tradeDate = LocalDate.of(2014,  6,  30);
+    final CDSAnalytic[] cds = factory.makeIMMCDS(tradeDate, tenor);
+    final FastCreditCurveBuilder builder = new FastCreditCurveBuilder();
+    final ISDACompliantCreditCurve creditCurve = builder.calibrateCreditCurve(cds, parSpread, yieldCurve);
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

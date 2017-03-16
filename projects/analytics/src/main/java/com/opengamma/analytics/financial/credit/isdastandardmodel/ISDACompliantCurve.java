@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.credit.isdastandardmodel;
@@ -65,7 +65,7 @@ public class ISDACompliantCurve extends DoublesCurve {
 
   /**
    * Creates a flat curve at level r.
-   * 
+   *
    * @param t  (arbitrary) single knot point (t > 0)
    * @param r  the level
    */
@@ -94,7 +94,7 @@ public class ISDACompliantCurve extends DoublesCurve {
     _rt = new double[n];
     System.arraycopy(t, 0, _t, 0, n);
     for (int i = 0; i < n; i++) {
-      _rt[i] = r[i] * t[i]; // We make no check that rt is ascending (i.e. we allow negative forward rates) 
+      _rt[i] = r[i] * t[i]; // We make no check that rt is ascending (i.e. we allow negative forward rates)
     }
   }
 
@@ -107,7 +107,7 @@ public class ISDACompliantCurve extends DoublesCurve {
 
   /**
    * Creates a shallow clone of the specified curve.
-   * 
+   *
    * @param from  the curve to clone from, not null
    */
   protected ISDACompliantCurve(final ISDACompliantCurve from) {
@@ -126,7 +126,7 @@ public class ISDACompliantCurve extends DoublesCurve {
    * the yield curve today.  <br>
    * In general, a discount curve observed at time $t_1$ can be written as $P(t_1,T)$. Observed from time $t_2$ this is
    * $P(t_2,T) = \frac{P(t_1,T)}{P(t_1,t_2)}$
-   * 
+   *
    * @param timesFromBaseDate  the times measured from the base date of the curve, not null
    * @param r  zero rates, not null
    * @param newBaseFromOriginalBase  if this curve is to be used from a new base-date, this is the offset from the original curve base
@@ -140,7 +140,7 @@ public class ISDACompliantCurve extends DoublesCurve {
       ArgumentChecker.isTrue(timesFromBaseDate[i] > timesFromBaseDate[i - 1], "Times must be ascending");
     }
 
-    if (newBaseFromOriginalBase == 0) { //no offset 
+    if (newBaseFromOriginalBase == 0) { //no offset
       _t = new double[n];
       _rt = new double[n];
       System.arraycopy(timesFromBaseDate, 0, _t, 0, n);
@@ -148,7 +148,7 @@ public class ISDACompliantCurve extends DoublesCurve {
         _rt[i] = r[i] * _t[i]; // We make no check that rt is ascending (i.e. we allow negative forward rates)
       }
     } else if (newBaseFromOriginalBase < timesFromBaseDate[0]) {
-      //offset less than t value of 1st knot, so no knots are not removed 
+      //offset less than t value of 1st knot, so no knots are not removed
       _t = new double[n];
       _rt = new double[n];
       final double eta = r[0] * newBaseFromOriginalBase;
@@ -163,7 +163,7 @@ public class ISDACompliantCurve extends DoublesCurve {
       _t[0] = 1.0;
       _rt[0] = (r[n - 1] * timesFromBaseDate[n - 1] - r[n - 2] * timesFromBaseDate[n - 2]) / (timesFromBaseDate[n - 1] - timesFromBaseDate[n - 2]);
     } else {
-      //offset greater than (or equal to) t value of 1st knot, so at least one knot must be removed  
+      //offset greater than (or equal to) t value of 1st knot, so at least one knot must be removed
       int index = Arrays.binarySearch(timesFromBaseDate, newBaseFromOriginalBase);
       if (index < 0) {
         index = -(index + 1);
@@ -186,7 +186,7 @@ public class ISDACompliantCurve extends DoublesCurve {
   //-------------------------------------------------------------------------
   /**
    * Gets the knot times.
-   * 
+   *
    * @return the knot times, not null
    */
   public double[] getKnotTimes() {
@@ -195,7 +195,7 @@ public class ISDACompliantCurve extends DoublesCurve {
 
   /**
    * Gets the knot zero rates.
-   * 
+   *
    * @return the knot zero rates, not null
    */
   public double[] getKnotZeroRates() {
@@ -209,7 +209,7 @@ public class ISDACompliantCurve extends DoublesCurve {
 
   /**
    * The discount factor or survival probability.
-   * 
+   *
    * @param t  the time
    * @return the discount factor value
    */
@@ -219,7 +219,7 @@ public class ISDACompliantCurve extends DoublesCurve {
 
   /**
    * Gets the time at the specified index.
-   * 
+   *
    * @param index  the zero-based index
    * @return the time
    */
@@ -229,7 +229,7 @@ public class ISDACompliantCurve extends DoublesCurve {
 
   /**
    * Gets the zero rate at the specified index.
-   * 
+   *
    * @param index  the zero-based index
    * @return the zero rate
    */
@@ -241,7 +241,7 @@ public class ISDACompliantCurve extends DoublesCurve {
    * Gets the RT value at the specified index.
    * <p>
    * RT is zero rate multiplied by time, which is the same as the negative log of the discount factor.
-   * 
+   *
    * @param index  the zero-based index
    * @return the RT value
    */
@@ -251,7 +251,7 @@ public class ISDACompliantCurve extends DoublesCurve {
 
   /**
    * Gets the zero rate or zero hazard rate at the specified time.
-   * 
+   *
    * @param t  time
    * @return zero rate value
    */
@@ -268,6 +268,7 @@ public class ISDACompliantCurve extends DoublesCurve {
     }
     final int index = Arrays.binarySearch(_t, t);
     if (index >= 0) {
+
       return _rt[index] / _t[index];
     }
     final int insertionPoint = -(1 + index);
@@ -279,7 +280,7 @@ public class ISDACompliantCurve extends DoublesCurve {
    * Gets the RT value at the specified time.
    * <p>
    * RT is zero rate multiplied by time, which is the same as the negative log of the discount factor.
-   * 
+   *
    * @param t  time
    * @return the RT value
    */
@@ -320,7 +321,7 @@ public class ISDACompliantCurve extends DoublesCurve {
     } else {
       index = Arrays.binarySearch(_t, t);
       if (index >= 0) {
-        return new double[] {_rt[index], 0.0 }; //if nodeIndex == index, would have matched earlier 
+        return new double[] {_rt[index], 0.0 }; //if nodeIndex == index, would have matched earlier
       }
       index = -(index + 1);
       if (index == n) {
@@ -356,7 +357,6 @@ public class ISDACompliantCurve extends DoublesCurve {
     final double t1 = _t[insertionPoint - 1];
     final double t2 = _t[insertionPoint];
     final double dt = t2 - t1;
-
     return ((t2 - t) * _rt[insertionPoint - 1] + (t - t1) * _rt[insertionPoint]) / dt;
   }
 
@@ -404,7 +404,7 @@ public class ISDACompliantCurve extends DoublesCurve {
    * Get the sensitivity of the interpolated rate at time t to the curve node.
    * Note, since the interpolator is highly local, most of the returned values will be zero,
    * so it maybe more efficient to call getSingleNodeSensitivity.
-   * 
+   *
    * @param t  the time
    * @return the sensitivity to the nodes, not null
    */
@@ -446,7 +446,7 @@ public class ISDACompliantCurve extends DoublesCurve {
   /**
    * Gets the sensitivity of the interpolated zero rate at time t to the value of the zero rate at a given node (knot).
    * For a given index, i, this is zero unless $$t_{i-1} < t < t_{i+1}$$ since the interpolation is highly local.
-   * 
+   *
    * @param t  the time
    * @param nodeIndex  the node index
    * @return the sensitivity to a single node
@@ -501,7 +501,7 @@ public class ISDACompliantCurve extends DoublesCurve {
   /**
    * The sensitivity of the discount factor at some time, t, to the value of the zero rate at a given node (knot).
    * For a given index, i, this is zero unless $$t_{i-1} < t < t_{i+1}$$ since the interpolation is highly local.
-   * 
+   *
    * @param t  the time value of the discount factor
    * @param nodeIndex  the node index
    * @return the  sensitivity of a discount factor to a single node
@@ -522,7 +522,7 @@ public class ISDACompliantCurve extends DoublesCurve {
    * the yield curve today.  <br>
    * In general, a discount curve observed at time $t_1$ can be written as $P(t_1,T)$. Observed from time $t_2$ this is
    * $P(t_2,T) = \frac{P(t_1,T)}{P(t_1,t_2)}$
-   * 
+   *
    * @param newBaseFromOriginalBase  if this curve is to be used from a new base-date, what is the offset from the original curve base
    * @return a new curve with the offset
    */
@@ -532,7 +532,7 @@ public class ISDACompliantCurve extends DoublesCurve {
 
   /**
    * Update are rates in curve.
-   * 
+   *
    * @param r  the set of rates, not null
    * @return a new curve, not null
    */
@@ -542,7 +542,7 @@ public class ISDACompliantCurve extends DoublesCurve {
 
   /**
    * Adjust a rate at a particular index.
-   * 
+   *
    * @param rate  the new rate
    * @param index  the index of the knot
    * @return a new curve, not null
@@ -565,7 +565,7 @@ public class ISDACompliantCurve extends DoublesCurve {
 
   /**
    * Adjust a discount factor at a particular index.
-   * 
+   *
    * @param discountFactor  the new discount factor
    * @param index  the index of the knot
    * @return a new curve, not null
@@ -581,7 +581,7 @@ public class ISDACompliantCurve extends DoublesCurve {
 
   /**
    * Gets the times, which must not be altered.
-   * 
+   *
    * @return the times, not null
    */
   public double[] getT() {

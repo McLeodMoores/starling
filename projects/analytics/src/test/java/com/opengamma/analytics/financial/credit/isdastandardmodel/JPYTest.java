@@ -49,7 +49,7 @@ public class JPYTest extends ISDABaseTest {
     final double cashSettle = notional * puf.getPointsUpFront() - accAmt;
     final double cs01 = notional * ONE_BP * CS01_CAL.parallelCS01(cds, qs, yieldCurve, ONE_BP);
 
-    assertEquals(27, cds.getAccuredDays());
+    assertEquals(27, cds.getAccruedDays());
     assertEquals(7.5e9, accAmt);
     assertEquals("cashSettle", 91814571779.0, cashSettle, 1);
     assertEquals("CS01", 4924458158.0, cs01, 1);

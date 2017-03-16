@@ -34,7 +34,7 @@ public class CreditCurveCalibrator {
   private final double[] _t;
   private final double _valuationDF;
   private final double[] _lgd;
-  private final double[] _unitAccured;
+  private final double[] _unitAccrued;
 
   private final int[][] _cds2CouponsMap;
   private final int[][] _cdsCouponsUpdateMap;
@@ -56,11 +56,11 @@ public class CreditCurveCalibrator {
     _nCDS = multiCDS.getNumMaturities();
     _t = new double[_nCDS];
     _lgd = new double[_nCDS];
-    _unitAccured = new double[_nCDS];
+    _unitAccrued = new double[_nCDS];
     for (int i = 0; i < _nCDS; i++) {
       _t[i] = multiCDS.getProtectionEnd(i);
       _lgd[i] = multiCDS.getLGD();
-      _unitAccured[i] = multiCDS.getAccruedPremiumPerUnitSpread(i);
+      _unitAccrued[i] = multiCDS.getAccruedPremiumPerUnitSpread(i);
     }
     _valuationDF = yieldCurve.getDiscountFactor(multiCDS.getCashSettleTime());
 
@@ -178,10 +178,10 @@ public class CreditCurveCalibrator {
 
     _valuationDF = yieldCurve.getDiscountFactor(cashSettleTime);
     _lgd = new double[_nCDS];
-    _unitAccured = new double[_nCDS];
+    _unitAccrued = new double[_nCDS];
     for (int i = 0; i < _nCDS; i++) {
       _lgd[i] = cds[i].getLGD();
-      _unitAccured[i] = cds[i].getAccruedYearFraction();
+      _unitAccrued[i] = cds[i].getAccruedYearFraction();
     }
 
     //This is the global set of knots - it will be truncated down for the various leg elements
@@ -347,7 +347,7 @@ public class CreditCurveCalibrator {
     private Function1D<Double, Double> getPointFunction(final int index, final double premium, final double puf) {
       final int[] iCoupons = _cds2CouponsMap[index];
       final int nCoupons = iCoupons.length;
-      final double dirtyPV = puf - premium * _unitAccured[index];
+      final double dirtyPV = puf - premium * _unitAccrued[index];
       final double lgd = _lgd[index];
       return new Function1D<Double, Double>() {
         @Override
@@ -456,7 +456,7 @@ public class CreditCurveCalibrator {
     result = prime * result + Arrays.hashCode(_premElems);
     result = prime * result + Arrays.hashCode(_protElems);
     result = prime * result + Arrays.hashCode(_t);
-    result = prime * result + Arrays.hashCode(_unitAccured);
+    result = prime * result + Arrays.hashCode(_unitAccrued);
     long temp;
     temp = Double.doubleToLongBits(_valuationDF);
     result = prime * result + (int) (temp ^ temp >>> 32);
@@ -505,7 +505,7 @@ public class CreditCurveCalibrator {
     if (!Arrays.equals(_t, other._t)) {
       return false;
     }
-    if (!Arrays.equals(_unitAccured, other._unitAccured)) {
+    if (!Arrays.equals(_unitAccrued, other._unitAccrued)) {
       return false;
     }
     if (Double.doubleToLongBits(_valuationDF) != Double.doubleToLongBits(other._valuationDF)) {

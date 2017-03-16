@@ -8,10 +8,10 @@ import java.math.BigDecimal;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import org.threeten.bp.LocalDate;
+import org.threeten.bp.LocalDateTime;
 import org.threeten.bp.LocalTime;
 import org.threeten.bp.Month;
 import org.threeten.bp.OffsetTime;
-import org.threeten.bp.ZoneId;
 
 import com.opengamma.core.id.ExternalSchemes;
 import com.opengamma.core.position.Position;
@@ -58,7 +58,9 @@ public class FXForwardTradeTest {
     final Security security = position.getSecurity();
     Assert.assertTrue(security instanceof FXForwardSecurity);
     FXForwardSecurity fxForwardSecurity = (FXForwardSecurity) security;
-    Assert.assertEquals(fxForwardSecurity.getForwardDate(), forwardDate.atTime(LocalTime.MAX).atZone(ZoneId.systemDefault()));
+    // note that the zone is ignored in this test, as running the entire suite can cause the zone to change
+    LocalDateTime expectedDate = forwardDate.atTime(LocalTime.MAX);
+    Assert.assertEquals(fxForwardSecurity.getForwardDate().toLocalDateTime(), expectedDate);
     Assert.assertNull(fxForwardSecurity.getUniqueId());
     Assert.assertEquals(fxForwardSecurity.getPayAmount(), 1100000d);
     Assert.assertEquals(fxForwardSecurity.getPayCurrency(), Currency.AUD);
@@ -75,7 +77,7 @@ public class FXForwardTradeTest {
     Assert.assertNull(trade.getUniqueId());
     Assert.assertTrue(trade.getSecurity() instanceof FXForwardSecurity);
     fxForwardSecurity = (FXForwardSecurity) trade.getSecurity();
-    Assert.assertEquals(fxForwardSecurity.getForwardDate(), forwardDate.atTime(LocalTime.MAX).atZone(ZoneId.systemDefault()));
+    Assert.assertEquals(fxForwardSecurity.getForwardDate().toLocalDateTime(), expectedDate);
     Assert.assertNull(fxForwardSecurity.getUniqueId());
     Assert.assertEquals(fxForwardSecurity.getPayAmount(), 1100000d);
     Assert.assertEquals(fxForwardSecurity.getPayCurrency(), Currency.AUD);

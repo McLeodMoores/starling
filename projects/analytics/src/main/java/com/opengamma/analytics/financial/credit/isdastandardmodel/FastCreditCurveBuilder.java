@@ -24,7 +24,7 @@ import com.opengamma.util.ArgumentChecker;
 
 public class FastCreditCurveBuilder extends ISDACompliantCreditCurveBuilder {
   private static final double HALFDAY = 1 / 730.;
-  private static final BracketRoot BRACKER = new BracketRoot();
+  private static final BracketRoot BRACKET = new BracketRoot();
   private static final RealSingleRootFinder ROOTFINDER = new BrentSingleRootFinder();
 
   private final double _omega;
@@ -99,11 +99,12 @@ public class FastCreditCurveBuilder extends ISDACompliantCreditCurveBuilder {
       switch (getArbHanding()) {
         case Ignore: {
           try {
-            final double[] bracket = BRACKER.getBracketedPoints(func, 0.8 * guess[i], 1.25 * guess[i], Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY);
+            final double[] bracket = BRACKET.getBracketedPoints(func, -100, 100, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY);
             final double zeroRate = bracket[0] > bracket[1]
                 ? ROOTFINDER.getRoot(func, bracket[1], bracket[0]) : ROOTFINDER.getRoot(func, bracket[0], bracket[1]); //Negative guess handled
             creditCurve = creditCurve.withRate(zeroRate, i);
           } catch (final MathException e) { //handling bracketing failure due to small survival probability
+            final double temp = func.evaluate(creditCurve.getZeroRateAtIndex(i - 1));
             if (Math.abs(func.evaluate(creditCurve.getZeroRateAtIndex(i - 1))) < 1.e-12) {
               creditCurve = creditCurve.withRate(creditCurve.getZeroRateAtIndex(i - 1), i);
             } else {
@@ -125,7 +126,7 @@ public class FastCreditCurveBuilder extends ISDACompliantCreditCurveBuilder {
             throw new IllegalArgumentException(msg.toString());
           }
           guess[i] = Math.max(minValue, guess[i]);
-          final double[] bracket = BRACKER.getBracketedPoints(func, guess[i], 1.2 * guess[i], minValue, Double.POSITIVE_INFINITY);
+          final double[] bracket = BRACKET.getBracketedPoints(func, guess[i], 1.2 * guess[i], minValue, Double.POSITIVE_INFINITY);
           final double zeroRate = ROOTFINDER.getRoot(func, bracket[0], bracket[1]);
           creditCurve = creditCurve.withRate(zeroRate, i);
           break;
@@ -136,14 +137,14 @@ public class FastCreditCurveBuilder extends ISDACompliantCreditCurveBuilder {
             creditCurve = creditCurve.withRate(minValue, i);
           } else {
             guess[i] = Math.max(minValue, guess[i]);
-            final double[] bracket = BRACKER.getBracketedPoints(func, guess[i], 1.2 * guess[i], minValue, Double.POSITIVE_INFINITY);
+            final double[] bracket = BRACKET.getBracketedPoints(func, guess[i], 1.2 * guess[i], minValue, Double.POSITIVE_INFINITY);
             final double zeroRate = ROOTFINDER.getRoot(func, bracket[0], bracket[1]);
             creditCurve = creditCurve.withRate(zeroRate, i);
           }
           break;
         }
         default:
-          throw new IllegalArgumentException("unknow case " + getArbHanding());
+          throw new IllegalArgumentException("unknown case " + getArbHanding());
       }
 
     }

@@ -198,6 +198,20 @@ public final class ScheduleCalculator {
 
   /**
    * Compute the end date of a period from the start date, the tenor and the conventions without end-of-month convention.
+   * @param startDate  the period start date, not null
+   * @param tenor  the period tenor, not null
+   * @param convention  the business day convention, not null
+   * @param calendar  the calendar, not null
+   * @return  the end date
+   */
+  public static ZonedDateTime getAdjustedDate(final ZonedDateTime startDate, final Period tenor, final BusinessDayConvention convention, final WorkingDayCalendar calendar) {
+    ArgumentChecker.notNull(calendar, "calendar");
+    final Calendar adapted = new CalendarAdapter(calendar);
+    return getAdjustedDate(startDate, tenor, convention, adapted);
+  }
+
+  /**
+   * Compute the end date of a period from the start date, the tenor and the conventions without end-of-month convention.
    * @param startDate The period start date.
    * @param tenor The period tenor.
    * @param convention The business day convention.

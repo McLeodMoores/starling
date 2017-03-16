@@ -31,15 +31,15 @@ public class CDSAnalyticTest extends ISDABaseTest {
 
     LocalDate tradeDate = LocalDate.of(2011, Month.JUNE, 18);
     CDSAnalytic cds = FACTORY.makeCDS(tradeDate, accStart, maturity);
-    assertEquals(90, cds.getAccuredDays());
+    assertEquals(90, cds.getAccruedDays());
 
     tradeDate = LocalDate.of(2011, Month.JUNE, 19);
     cds = FACTORY.makeCDS(tradeDate, accStart, maturity);
-    assertEquals(0, cds.getAccuredDays());
+    assertEquals(0, cds.getAccruedDays());
 
     tradeDate = LocalDate.of(2011, Month.JUNE, 20);
     cds = FACTORY.makeCDS(tradeDate, accStart, maturity);
-    assertEquals(1, cds.getAccuredDays());
+    assertEquals(1, cds.getAccruedDays());
   }
 
   @Test
@@ -50,11 +50,11 @@ public class CDSAnalyticTest extends ISDABaseTest {
 
     LocalDate tradeDate = LocalDate.of(2011, Month.JUNE, 18);
     CDSAnalytic cds = FACTORY.makeCDS(tradeDate, accStart, maturity);
-    assertEquals(90, cds.getAccuredDays());
+    assertEquals(90, cds.getAccruedDays());
 
     tradeDate = LocalDate.of(2011, Month.JUNE, 19);
     cds = FACTORY.makeCDS(tradeDate, accStart, maturity);
-    assertEquals(91, cds.getAccuredDays()); //NOTE: this is the result from calling the ISDA c code (via Excel). The Markit calculator
+    assertEquals(91, cds.getAccruedDays()); //NOTE: this is the result from calling the ISDA c code (via Excel). The Markit calculator
     //shows 0 accrued days for this - this is probably an override before the model is hit. 
   }
 

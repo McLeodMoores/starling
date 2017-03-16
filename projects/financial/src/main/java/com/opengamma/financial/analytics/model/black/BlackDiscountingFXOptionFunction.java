@@ -29,11 +29,7 @@ import com.opengamma.analytics.financial.instrument.InstrumentDefinition;
 import com.opengamma.analytics.financial.model.volatility.surface.SmileDeltaTermStructureParametersStrikeInterpolation;
 import com.opengamma.analytics.financial.provider.description.forex.BlackForexSmileProvider;
 import com.opengamma.analytics.financial.provider.description.interestrate.MulticurveProviderInterface;
-import com.opengamma.core.convention.ConventionSource;
-import com.opengamma.core.holiday.HolidaySource;
-import com.opengamma.core.region.RegionSource;
 import com.opengamma.core.security.Security;
-import com.opengamma.core.security.SecuritySource;
 import com.opengamma.engine.ComputationTarget;
 import com.opengamma.engine.function.FunctionCompilationContext;
 import com.opengamma.engine.function.FunctionExecutionContext;
@@ -43,13 +39,12 @@ import com.opengamma.engine.value.ValueProperties;
 import com.opengamma.engine.value.ValuePropertyNames;
 import com.opengamma.engine.value.ValueRequirement;
 import com.opengamma.financial.OpenGammaCompilationContext;
+import com.opengamma.financial.analytics.conversion.DefaultTradeConverter;
 import com.opengamma.financial.analytics.conversion.FXVanillaOptionConverter;
 import com.opengamma.financial.analytics.conversion.FixedIncomeConverterDataProvider;
 import com.opengamma.financial.analytics.conversion.FutureTradeConverter;
-import com.opengamma.financial.analytics.conversion.DefaultTradeConverter;
 import com.opengamma.financial.analytics.model.discounting.DiscountingFunction;
 import com.opengamma.financial.analytics.model.forex.ForexVisitors;
-import com.opengamma.financial.convention.ConventionBundleSource;
 import com.opengamma.financial.currency.CurrencyPair;
 import com.opengamma.financial.currency.CurrencyPairs;
 import com.opengamma.financial.currency.CurrencyPairsSource;
@@ -78,7 +73,7 @@ public abstract class BlackDiscountingFXOptionFunction extends DiscountingFuncti
 
   /**
    * Gets the currency pairs configuration called {@link CurrencyPairs#DEFAULT_CURRENCY_PAIRS} from a {@link CurrencyPairsSource}.
-   * 
+   *
    * @param context The compilation context
    * @return The currency pairs
    */
@@ -90,11 +85,6 @@ public abstract class BlackDiscountingFXOptionFunction extends DiscountingFuncti
 
   @Override
   protected DefaultTradeConverter getTargetToDefinitionConverter(final FunctionCompilationContext context) {
-    final SecuritySource securitySource = OpenGammaCompilationContext.getSecuritySource(context);
-    final HolidaySource holidaySource = OpenGammaCompilationContext.getHolidaySource(context);
-    final RegionSource regionSource = OpenGammaCompilationContext.getRegionSource(context);
-    final ConventionBundleSource conventionBundleSource = OpenGammaCompilationContext.getConventionBundleSource(context);
-    final ConventionSource conventionSource = OpenGammaCompilationContext.getConventionSource(context);
     final FXVanillaOptionConverter fxOptionConverter = new FXVanillaOptionConverter(getCurrencyPairs(context));
     final FinancialSecurityVisitor<InstrumentDefinition<?>> securityConverter = FinancialSecurityVisitorAdapter.<InstrumentDefinition<?>>builder().fxOptionVisitor(fxOptionConverter)
         .create();
@@ -190,7 +180,7 @@ public abstract class BlackDiscountingFXOptionFunction extends DiscountingFuncti
 
     /**
      * Gets the Black surface and curve data.
-     * 
+     *
      * @param executionContext The execution context, not null
      * @param inputs The function inputs, not null
      * @param target The computation target, not null
@@ -208,7 +198,7 @@ public abstract class BlackDiscountingFXOptionFunction extends DiscountingFuncti
 
     /**
      * Gets the currency code of the result.
-     * 
+     *
      * @param target The computation target
      * @param baseQuotePair The base/quote pair for the currencies in the security
      * @return The result currency code.

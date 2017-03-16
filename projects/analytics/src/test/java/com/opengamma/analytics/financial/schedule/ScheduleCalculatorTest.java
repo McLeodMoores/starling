@@ -14,6 +14,7 @@ import org.threeten.bp.LocalDate;
 import org.threeten.bp.Period;
 import org.threeten.bp.ZonedDateTime;
 
+import com.opengamma.analytics.date.WorkingDayCalendar;
 import com.opengamma.analytics.financial.instrument.index.GeneratorDeposit;
 import com.opengamma.analytics.financial.instrument.index.IborIndex;
 import com.opengamma.analytics.financial.instrument.index.IndexIborMaster;
@@ -220,8 +221,13 @@ public class ScheduleCalculatorTest {
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void adjustedDatesPeriodNullCalendar() {
-    ScheduleCalculator.getAdjustedDate(NOW, PAYMENT_TENOR, MOD_FOL, null);
+  public void adjustedDatesPeriodNullCalendar1() {
+    ScheduleCalculator.getAdjustedDate(NOW, PAYMENT_TENOR, MOD_FOL, (Calendar) null);
+  }
+
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void adjustedDatesPeriodNullCalendar2() {
+    ScheduleCalculator.getAdjustedDate(NOW, PAYMENT_TENOR, MOD_FOL, (WorkingDayCalendar) null);
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)

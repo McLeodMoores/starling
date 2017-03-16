@@ -333,7 +333,9 @@ public class CurveNodeIdMapper {
    * @return The builder
    */
   @SuppressWarnings("synthetic-access")
-  public static Builder builder() { return new Builder(); }
+  public static Builder builder() {
+    return new Builder();
+  }
 
   /**
    * @param name The name of this configuration
@@ -1454,23 +1456,23 @@ public class CurveNodeIdMapper {
   public int hashCode() {
     final int prime = 31;
     int result = 1;
-    result = prime * result + ((_name == null) ? 0 : _name.hashCode());
-    result = prime * result + ((_billNodeIds == null) ? 0 : _billNodeIds.hashCode());
-    result = prime * result + ((_bondNodeIds == null) ? 0 : _bondNodeIds.hashCode());
-    result = prime * result + ((_cashNodeIds == null) ? 0 : _cashNodeIds.hashCode());
-    result = prime * result + ((_continuouslyCompoundedRateNodeIds == null) ? 0 : _continuouslyCompoundedRateNodeIds.hashCode());
-    result = prime * result + ((_periodicallyCompoundedRateNodeIds == null) ? 0 : _periodicallyCompoundedRateNodeIds.hashCode());
-    result = prime * result + ((_creditSpreadNodeIds == null) ? 0 : _creditSpreadNodeIds.hashCode());
-    result = prime * result + ((_deliverableSwapFutureNodeIds == null) ? 0 : _deliverableSwapFutureNodeIds.hashCode());
-    result = prime * result + ((_discountFactorNodeIds == null) ? 0 : _discountFactorNodeIds.hashCode());
-    result = prime * result + ((_fraNodeIds == null) ? 0 : _fraNodeIds.hashCode());
-    result = prime * result + ((_fxForwardNodeIds == null) ? 0 : _fxForwardNodeIds.hashCode());
-    result = prime * result + ((_immFRANodeIds == null) ? 0 : _immFRANodeIds.hashCode());
-    result = prime * result + ((_immSwapNodeIds == null) ? 0 : _immSwapNodeIds.hashCode());
-    result = prime * result + ((_rateFutureNodeIds == null) ? 0 : _rateFutureNodeIds.hashCode());
-    result = prime * result + ((_swapNodeIds == null) ? 0 : _swapNodeIds.hashCode());
-    result = prime * result + ((_threeLegBasisSwapNodeIds == null) ? 0 : _threeLegBasisSwapNodeIds.hashCode());
-    result = prime * result + ((_zeroCouponInflationNodeIds == null) ? 0 : _zeroCouponInflationNodeIds.hashCode());
+    result = prime * result + (_name == null ? 0 : _name.hashCode());
+    result = prime * result + (_billNodeIds == null ? 0 : _billNodeIds.hashCode());
+    result = prime * result + (_bondNodeIds == null ? 0 : _bondNodeIds.hashCode());
+    result = prime * result + (_cashNodeIds == null ? 0 : _cashNodeIds.hashCode());
+    result = prime * result + (_continuouslyCompoundedRateNodeIds == null ? 0 : _continuouslyCompoundedRateNodeIds.hashCode());
+    result = prime * result + (_periodicallyCompoundedRateNodeIds == null ? 0 : _periodicallyCompoundedRateNodeIds.hashCode());
+    result = prime * result + (_creditSpreadNodeIds == null ? 0 : _creditSpreadNodeIds.hashCode());
+    result = prime * result + (_deliverableSwapFutureNodeIds == null ? 0 : _deliverableSwapFutureNodeIds.hashCode());
+    result = prime * result + (_discountFactorNodeIds == null ? 0 : _discountFactorNodeIds.hashCode());
+    result = prime * result + (_fraNodeIds == null ? 0 : _fraNodeIds.hashCode());
+    result = prime * result + (_fxForwardNodeIds == null ? 0 : _fxForwardNodeIds.hashCode());
+    result = prime * result + (_immFRANodeIds == null ? 0 : _immFRANodeIds.hashCode());
+    result = prime * result + (_immSwapNodeIds == null ? 0 : _immSwapNodeIds.hashCode());
+    result = prime * result + (_rateFutureNodeIds == null ? 0 : _rateFutureNodeIds.hashCode());
+    result = prime * result + (_swapNodeIds == null ? 0 : _swapNodeIds.hashCode());
+    result = prime * result + (_threeLegBasisSwapNodeIds == null ? 0 : _threeLegBasisSwapNodeIds.hashCode());
+    result = prime * result + (_zeroCouponInflationNodeIds == null ? 0 : _zeroCouponInflationNodeIds.hashCode());
     return result;
   }
 

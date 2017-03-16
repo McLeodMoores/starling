@@ -86,7 +86,7 @@ public class BlackDiscountingPV01FXOptionFunction extends BlackDiscountingFXOpti
       @Override
       protected Collection<ValueProperties.Builder> getResultProperties(final FunctionCompilationContext compilationContext, final ComputationTarget target) {
         final Collection<ValueProperties.Builder> properties = super.getResultProperties(compilationContext, target);
-        for (ValueProperties.Builder builder : properties) {
+        for (final ValueProperties.Builder builder : properties) {
           builder.withAny(CURVE);
         }
         return properties;
@@ -120,7 +120,7 @@ public class BlackDiscountingPV01FXOptionFunction extends BlackDiscountingFXOpti
         final Collection<ValueProperties.Builder> commonPropertiesSet = super.getResultProperties(compilationContext, target);
         final Set<ValueSpecification> results = Sets.newHashSetWithExpectedSize(commonPropertiesSet.size() * curveNames.size());
         for (final String curveName : curveNames) {
-          for (ValueProperties.Builder commonProperties : commonPropertiesSet) {
+          for (final ValueProperties.Builder commonProperties : commonPropertiesSet) {
             final ValueProperties properties = commonProperties.withoutAny(CURVE).with(CURVE, curveName).get();
             results.add(new ValueSpecification(PV01, target.toSpecification(), properties));
           }

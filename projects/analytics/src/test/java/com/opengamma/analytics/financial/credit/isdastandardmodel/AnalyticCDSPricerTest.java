@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.credit.isdastandardmodel;
@@ -20,7 +20,6 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT)
 public class AnalyticCDSPricerTest extends ISDABaseTest {
 
-  @SuppressWarnings("unused")
   @Test(enabled = false)
   public void timingTest() {
 

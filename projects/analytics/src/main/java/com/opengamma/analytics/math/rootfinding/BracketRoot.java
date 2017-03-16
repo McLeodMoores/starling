@@ -113,6 +113,8 @@ public class BracketRoot {
         }
       }
     }
+    f1 = f.evaluate(xLower);
+    f2 = f.evaluate(xUpper);
     throw new MathException("Failed to bracket root: max iterations");
   }
 
