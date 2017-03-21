@@ -38,8 +38,8 @@ public class IborTypeIndex extends Index {
    * @param endOfMonth  the end-of-month flag
    * @param name  the index name, not null
    */
-  public IborTypeIndex(final String name, final Currency currency, final Tenor tenor, final int spotLag, final DayCount dayCount, final BusinessDayConvention businessDayConvention,
-      final boolean endOfMonth) {
+  public IborTypeIndex(final String name, final Currency currency, final Tenor tenor, final int spotLag, final DayCount dayCount,
+      final BusinessDayConvention businessDayConvention, final boolean endOfMonth) {
     super(name, currency);
     _tenor = ArgumentChecker.notNull(tenor, "tenor");
     _dayCount = ArgumentChecker.notNull(dayCount, "dayCount");

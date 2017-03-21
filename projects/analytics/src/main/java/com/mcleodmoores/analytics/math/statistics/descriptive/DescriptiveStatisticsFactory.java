@@ -1,7 +1,7 @@
 /**
  * Copyright (C) 2017 - present McLeod Moores Software Limited.  All rights reserved.
  */
-package com.opengamma.analytics.math.statistics.descriptive;
+package com.mcleodmoores.analytics.math.statistics.descriptive;
 
 import java.lang.reflect.Constructor;
 import java.util.Locale;

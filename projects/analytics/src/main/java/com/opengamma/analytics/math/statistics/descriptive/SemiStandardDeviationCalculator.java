@@ -9,6 +9,10 @@
  */
 package com.opengamma.analytics.math.statistics.descriptive;
 
+import com.mcleodmoores.analytics.math.statistics.descriptive.DescriptiveStatistic;
+import com.mcleodmoores.analytics.math.statistics.descriptive.DescriptiveStatisticsCalculator;
+import com.mcleodmoores.analytics.math.statistics.descriptive.DescriptiveStatisticsFactory;
+
 /**
  * The semi-standard deviation of a series of data is the partial moment (see {@link PartialMomentCalculator}) calculated with the mean as the threshold.
  * This gives a measure of the spread of the values of a series above or below a threshold, and be used to calculate downside or upside risk.

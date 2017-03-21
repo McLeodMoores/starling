@@ -69,8 +69,9 @@ public class CapFloorIborDefinition extends CouponFloatingDefinition implements 
    * @param isCap The cap/floor flag.
    * @param calendar The holiday calendar for the ibor leg.
    */
-  public CapFloorIborDefinition(final Currency currency, final ZonedDateTime paymentDate, final ZonedDateTime accrualStartDate, final ZonedDateTime accrualEndDate, final double accrualFactor,
-      final double notional, final ZonedDateTime fixingDate, final IborIndex index, final double strike, final boolean isCap, final Calendar calendar) {
+  public CapFloorIborDefinition(final Currency currency, final ZonedDateTime paymentDate, final ZonedDateTime accrualStartDate, final ZonedDateTime accrualEndDate,
+      final double accrualFactor, final double notional, final ZonedDateTime fixingDate, final IborIndex index, final double strike, final boolean isCap,
+      final Calendar calendar) {
     super(currency, paymentDate, accrualStartDate, accrualEndDate, accrualFactor, notional, fixingDate);
     ArgumentChecker.notNull(index, "index");
     ArgumentChecker.isTrue(currency.equals(index.getCurrency()), "index currency different from payment currency");
@@ -183,7 +184,7 @@ public class CapFloorIborDefinition extends CouponFloatingDefinition implements 
    */
   @Override
   public double payOff(final double fixing) {
-    final double omega = (_isCap) ? 1.0 : -1.0;
+    final double omega = _isCap ? 1.0 : -1.0;
     return Math.max(omega * (fixing - _strike), 0);
   }
 
@@ -332,7 +333,7 @@ public class CapFloorIborDefinition extends CouponFloatingDefinition implements 
     result = prime * result + (_isCap ? 1231 : 1237);
     long temp;
     temp = Double.doubleToLongBits(_strike);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 

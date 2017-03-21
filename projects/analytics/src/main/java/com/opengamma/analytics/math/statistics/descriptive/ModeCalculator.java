@@ -12,6 +12,8 @@ package com.opengamma.analytics.math.statistics.descriptive;
 import java.util.Arrays;
 import java.util.TreeMap;
 
+import com.mcleodmoores.analytics.math.statistics.descriptive.DescriptiveStatistic;
+import com.mcleodmoores.analytics.math.statistics.descriptive.DescriptiveStatisticsCalculator;
 import com.opengamma.analytics.math.MathException;
 import com.opengamma.util.ArgumentChecker;
 

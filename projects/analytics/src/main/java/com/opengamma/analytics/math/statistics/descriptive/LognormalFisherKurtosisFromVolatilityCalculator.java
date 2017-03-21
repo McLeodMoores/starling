@@ -9,6 +9,8 @@
  */
 package com.opengamma.analytics.math.statistics.descriptive;
 
+import com.mcleodmoores.analytics.math.statistics.descriptive.LognormalStatistic;
+import com.mcleodmoores.analytics.math.statistics.descriptive.LognormalStatisticsCalculator;
 import com.opengamma.util.ArgumentChecker;
 
 /**

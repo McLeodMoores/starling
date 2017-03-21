@@ -5,6 +5,8 @@
  */
 package com.opengamma.analytics.math.statistics.descriptive;
 
+import com.mcleodmoores.analytics.math.statistics.descriptive.DescriptiveStatisticsCalculator;
+import com.mcleodmoores.analytics.math.statistics.descriptive.DescriptiveStatisticsFactory;
 import com.opengamma.analytics.math.function.Function;
 import com.opengamma.util.ArgumentChecker;
 

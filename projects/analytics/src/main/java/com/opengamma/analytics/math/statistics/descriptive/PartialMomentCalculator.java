@@ -5,6 +5,8 @@
  */
 package com.opengamma.analytics.math.statistics.descriptive;
 
+import com.mcleodmoores.analytics.math.statistics.descriptive.DescriptiveStatistic;
+import com.mcleodmoores.analytics.math.statistics.descriptive.DescriptiveStatisticsCalculator;
 import com.opengamma.util.ArgumentChecker;
 
 /**
@@ -75,8 +77,8 @@ public class PartialMomentCalculator extends DescriptiveStatisticsCalculator {
     }
     for (final double d : x) {
       if (d > _threshold) {
-      sum += (d - _threshold) * (d - _threshold);
-      count++;
+        sum += (d - _threshold) * (d - _threshold);
+        count++;
       }
     }
     if (count == 0) {

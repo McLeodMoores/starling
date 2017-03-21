@@ -9,6 +9,10 @@
  */
 package com.opengamma.analytics.math.statistics.descriptive;
 
+import com.mcleodmoores.analytics.math.statistics.descriptive.DescriptiveStatistic;
+import com.mcleodmoores.analytics.math.statistics.descriptive.DescriptiveStatisticsCalculator;
+import com.mcleodmoores.analytics.math.statistics.descriptive.DescriptiveStatisticsFactory;
+
 /**
  * Calculates the $n^th$ normalized central moment of a series of data. Given
  * the $n^th$ central moment $\mu_n$ of a series of data with standard

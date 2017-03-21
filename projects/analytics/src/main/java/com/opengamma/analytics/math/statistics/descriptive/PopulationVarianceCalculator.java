@@ -9,6 +9,10 @@
  */
 package com.opengamma.analytics.math.statistics.descriptive;
 
+import com.mcleodmoores.analytics.math.statistics.descriptive.DescriptiveStatistic;
+import com.mcleodmoores.analytics.math.statistics.descriptive.DescriptiveStatisticsCalculator;
+import com.mcleodmoores.analytics.math.statistics.descriptive.DescriptiveStatisticsFactory;
+
 /**
  * Calculates the population variance of a series of data.
  * <p>

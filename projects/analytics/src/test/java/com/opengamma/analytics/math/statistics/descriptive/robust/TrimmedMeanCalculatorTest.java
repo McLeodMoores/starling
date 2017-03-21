@@ -14,8 +14,8 @@ import static org.testng.Assert.assertTrue;
 
 import org.testng.annotations.Test;
 
+import com.mcleodmoores.analytics.math.statistics.descriptive.DescriptiveStatisticsFactory;
 import com.opengamma.analytics.math.function.Function1D;
-import com.opengamma.analytics.math.statistics.descriptive.DescriptiveStatisticsFactory;
 import com.opengamma.analytics.math.statistics.descriptive.MeanCalculator;
 import com.opengamma.util.test.TestGroup;
 

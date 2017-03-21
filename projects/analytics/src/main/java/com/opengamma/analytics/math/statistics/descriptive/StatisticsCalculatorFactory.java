@@ -12,6 +12,7 @@ package com.opengamma.analytics.math.statistics.descriptive;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.mcleodmoores.analytics.math.statistics.descriptive.DescriptiveStatisticsFactory;
 import com.opengamma.analytics.math.function.Function;
 
 /**

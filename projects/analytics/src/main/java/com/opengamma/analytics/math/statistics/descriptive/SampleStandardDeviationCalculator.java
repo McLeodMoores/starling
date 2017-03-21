@@ -9,6 +9,10 @@
  */
 package com.opengamma.analytics.math.statistics.descriptive;
 
+import com.mcleodmoores.analytics.math.statistics.descriptive.DescriptiveStatistic;
+import com.mcleodmoores.analytics.math.statistics.descriptive.DescriptiveStatisticsCalculator;
+import com.mcleodmoores.analytics.math.statistics.descriptive.DescriptiveStatisticsFactory;
+
 /**
  * Calculates the sample standard deviation of a series of data. The sample standard deviation of a series of data is defined as the square root of
  * the sample variance (see {@link SampleVarianceCalculator}).

@@ -36,7 +36,8 @@ public class IborIndex extends IndexDeposit {
    * @deprecated Use the constructor that takes an index name.
    */
   @Deprecated
-  public IborIndex(final Currency currency, final Period tenor, final int spotLag, final DayCount dayCount, final BusinessDayConvention businessDayConvention, final boolean endOfMonth) {
+  public IborIndex(final Currency currency, final Period tenor, final int spotLag, final DayCount dayCount, final BusinessDayConvention businessDayConvention,
+      final boolean endOfMonth) {
     this(currency, tenor, spotLag, dayCount, businessDayConvention, endOfMonth, "Ibor");
   }
 

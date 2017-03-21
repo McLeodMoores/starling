@@ -18,8 +18,8 @@ import com.opengamma.util.ArgumentChecker;
  * Simplest possible caplet stripping algorithm. Each cap must be at the same strike (cap are normally quoted at fixed absolute strikes, except for the ATM
  * which this cannot handle), and have the same start (this could be relaxed with better decomposition logic). The co-starting caps are decomposed into a set
  * of spanning caps (simply by taking price difference). Since these spanning caps do not (by construction) share any underlying caplets, implied volatilities
- * (i.e. the common volatility of the caplet set) can be found that price each spanning cap. The resultant expiry dependent caplet volatility curve with of course
- * by piecewise constant.
+ * (i.e. the common volatility of the caplet set) can be found that price each spanning cap. The resultant expiry-dependent caplet volatility curve will
+ * be piecewise constant.
  * @deprecated {@link YieldCurveBundle} is deprecated
  */
 @Deprecated
@@ -29,10 +29,8 @@ public class CapletStrippingBootstrap {
   private final double[] _intrinsicValues;
   private final double[] _endTimes;
 
-  // private final List<CapFloorPricer> _capPricers;
-
   /**
-   * Simple caplet bootstrapping
+   * Simple caplet bootstrapping.
    * @param caps All caps must have same start time and strike
    * @param yieldCurves yield curves (i.e. discount and Ibor-projection)
    */

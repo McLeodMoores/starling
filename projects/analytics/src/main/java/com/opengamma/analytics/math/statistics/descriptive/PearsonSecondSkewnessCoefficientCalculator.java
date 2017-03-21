@@ -9,6 +9,10 @@
  */
 package com.opengamma.analytics.math.statistics.descriptive;
 
+import com.mcleodmoores.analytics.math.statistics.descriptive.DescriptiveStatistic;
+import com.mcleodmoores.analytics.math.statistics.descriptive.DescriptiveStatisticsCalculator;
+import com.mcleodmoores.analytics.math.statistics.descriptive.DescriptiveStatisticsFactory;
+
 /**
  * Given a series of data $x_1, x_2, \dots, x_n$ with mean $\overline{x}$, median $m$
  * and standard deviation $\sigma$, the Pearson second skewness coefficient is given by

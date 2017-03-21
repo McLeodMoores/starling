@@ -11,9 +11,9 @@ package com.opengamma.analytics.math.statistics.descriptive.robust;
 
 import java.util.Arrays;
 
-import com.opengamma.analytics.math.statistics.descriptive.DescriptiveStatistic;
-import com.opengamma.analytics.math.statistics.descriptive.DescriptiveStatisticsCalculator;
-import com.opengamma.analytics.math.statistics.descriptive.DescriptiveStatisticsFactory;
+import com.mcleodmoores.analytics.math.statistics.descriptive.DescriptiveStatistic;
+import com.mcleodmoores.analytics.math.statistics.descriptive.DescriptiveStatisticsCalculator;
+import com.mcleodmoores.analytics.math.statistics.descriptive.DescriptiveStatisticsFactory;
 import com.opengamma.analytics.math.statistics.descriptive.MeanCalculator;
 import com.opengamma.util.ArgumentChecker;
 

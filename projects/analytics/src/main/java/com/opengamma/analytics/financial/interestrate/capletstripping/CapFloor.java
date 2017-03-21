@@ -10,7 +10,7 @@ import com.opengamma.analytics.financial.interestrate.payments.derivative.CapFlo
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Representation of an interest rate cap (floor) as a set of caplets (floorlets) - calls (puts) on an Ibor rate
+ * Representation of an interest rate cap (floor) as a set of caplets (floorlets) - calls (puts) on an Ibor rate.
  */
 public class CapFloor extends Annuity<CapFloorIbor> {
 
