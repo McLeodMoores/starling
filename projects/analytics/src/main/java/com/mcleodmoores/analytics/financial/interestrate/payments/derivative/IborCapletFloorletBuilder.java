@@ -9,16 +9,16 @@ import com.opengamma.analytics.financial.interestrate.payments.derivative.CapFlo
 import com.opengamma.util.money.Currency;
 
 /**
- *
+ * Builds a {@link CapFloorIbor}.
  */
-public final class CapFloorIborBuilder {
+public final class IborCapletFloorletBuilder {
 
   /**
    * Gets a cap/floor builder.
    * @return  the builder
    */
-  public static CapFloorIborBuilder builder() {
-    return new CapFloorIborBuilder();
+  public static IborCapletFloorletBuilder builder() {
+    return new IborCapletFloorletBuilder();
   }
 
   private Currency _currency;
@@ -35,7 +35,7 @@ public final class CapFloorIborBuilder {
   /**
    * Restricted constructor.
    */
-  private CapFloorIborBuilder() {
+  private IborCapletFloorletBuilder() {
   }
 
   /**
@@ -43,7 +43,7 @@ public final class CapFloorIborBuilder {
    * @param currency  the currency, not null
    * @return  the CapFloorIborBuilder
    */
-  public CapFloorIborBuilder withCurrency(final Currency currency) {
+  public IborCapletFloorletBuilder withCurrency(final Currency currency) {
     _currency = currency;
     return this;
   }
@@ -53,7 +53,7 @@ public final class CapFloorIborBuilder {
    * @param paymentTime  the payment time
    * @return  the CapFloorIborBuilder
    */
-  public CapFloorIborBuilder withPaymentTime(final double paymentTime) {
+  public IborCapletFloorletBuilder withPaymentTime(final double paymentTime) {
     _paymentTime = paymentTime;
     return this;
   }
@@ -63,7 +63,7 @@ public final class CapFloorIborBuilder {
    * @param paymentYearFraction  the payment year fraction
    * @return  the CapFloorIborBuilder
    */
-  public CapFloorIborBuilder withPaymentYearFraction(final double paymentYearFraction) {
+  public IborCapletFloorletBuilder withPaymentYearFraction(final double paymentYearFraction) {
     _paymentYearFraction = paymentYearFraction;
     return this;
   }
@@ -73,7 +73,7 @@ public final class CapFloorIborBuilder {
    * @param notional  the notional
    * @return  the CapFloorIborBuilder
    */
-  public CapFloorIborBuilder withNotional(final double notional) {
+  public IborCapletFloorletBuilder withNotional(final double notional) {
     _notional = notional;
     return this;
   }
@@ -83,7 +83,7 @@ public final class CapFloorIborBuilder {
    * @param fixingTime  the fixing time
    * @return  the CapFloorIborBuilder
    */
-  public CapFloorIborBuilder withFixingTime(final double fixingTime) {
+  public IborCapletFloorletBuilder withFixingTime(final double fixingTime) {
     _fixingTime = fixingTime;
     return this;
   }
@@ -93,7 +93,7 @@ public final class CapFloorIborBuilder {
    * @param fixingPeriodStartTime  the fixing period start time
    * @return  the CapFloorIborBuilder
    */
-  public CapFloorIborBuilder withFixingPeriodStartTime(final double fixingPeriodStartTime) {
+  public IborCapletFloorletBuilder withFixingPeriodStartTime(final double fixingPeriodStartTime) {
     _fixingPeriodStartTime = fixingPeriodStartTime;
     return this;
   }
@@ -103,7 +103,7 @@ public final class CapFloorIborBuilder {
    * @param fixingPeriodEndTime  the fixing period end time
    * @return  the CapFloorIborBuilder
    */
-  public CapFloorIborBuilder withFixingPeriodEndTime(final double fixingPeriodEndTime) {
+  public IborCapletFloorletBuilder withFixingPeriodEndTime(final double fixingPeriodEndTime) {
     _fixingPeriodEndTime = fixingPeriodEndTime;
     return this;
   }
@@ -113,7 +113,7 @@ public final class CapFloorIborBuilder {
    * @param fixingYearFraction  the fixing year fraction, cannot be negative
    * @return  the CapFloorIborBuilder
    */
-  public CapFloorIborBuilder withFixingYearFraction(final double fixingYearFraction) {
+  public IborCapletFloorletBuilder withFixingYearFraction(final double fixingYearFraction) {
     _fixingYearFraction = fixingYearFraction;
     return this;
   }
@@ -123,7 +123,7 @@ public final class CapFloorIborBuilder {
    * @param index  the index, not null
    * @return  the CapFloorIborBuilder
    */
-  public CapFloorIborBuilder withIndex(final IborIndex index) {
+  public IborCapletFloorletBuilder withIndex(final IborIndex index) {
     _index = index;
     return this;
   }
@@ -133,7 +133,7 @@ public final class CapFloorIborBuilder {
    * @param strike  the strike
    * @return  the CapFloorIborBuilder
    */
-  public CapFloorIborBuilder withStrike(final double strike) {
+  public IborCapletFloorletBuilder withStrike(final double strike) {
     _strike = strike;
     return this;
   }

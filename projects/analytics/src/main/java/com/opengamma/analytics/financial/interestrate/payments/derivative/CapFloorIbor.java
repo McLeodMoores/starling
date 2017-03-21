@@ -96,11 +96,10 @@ public class CapFloorIbor extends CouponFloating implements CapFloor {
     ArgumentChecker.isTrue(fixingPeriodStartTime >= fixingTime, "fixing period start < fixing time");
     ArgumentChecker.isTrue(fixingPeriodEndTime >= fixingPeriodStartTime, "fixing period end < fixing period start");
     ArgumentChecker.isTrue(fixingYearFraction >= 0, "forward year fraction < 0");
-    ArgumentChecker.notNull(forwardCurveName, "forward curve name");
     _fixingPeriodStartTime = fixingPeriodStartTime;
     _fixingPeriodEndTime = fixingPeriodEndTime;
     _fixingAccrualFactor = fixingYearFraction;
-    _forwardCurveName = forwardCurveName;
+    _forwardCurveName = ArgumentChecker.notNull(forwardCurveName, "forward curve name");
     _index = index;
     _strike = strike;
     _isCap = isCap;

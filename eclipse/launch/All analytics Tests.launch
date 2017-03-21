@@ -22,6 +22,15 @@
 <listEntry value="com.opengamma.analytics.financial.calculator"/>
 <listEntry value="com.opengamma.analytics.financial.commodity.definition"/>
 <listEntry value="com.opengamma.analytics.financial.commodity"/>
+<listEntry value="com.opengamma.analytics.financial.commodity.multicurvecommodity"/>
+<listEntry value="com.opengamma.analytics.financial.commodity.multicurvecommodity.annuity"/>
+<listEntry value="com.opengamma.analytics.financial.commodity.multicurvecommodity.calculator"/>
+<listEntry value="com.opengamma.analytics.financial.commodity.multicurvecommodity.curve"/>
+<listEntry value="com.opengamma.analytics.financial.commodity.multicurvecommodity.definition"/>
+<listEntry value="com.opengamma.analytics.financial.commodity.multicurvecommodity.derivative"/>
+<listEntry value="com.opengamma.analytics.financial.commodity.multicurvecommodity.generator"/>
+<listEntry value="com.opengamma.analytics.financial.commodity.multicurvecommodity.provider"/>
+<listEntry value="com.opengamma.analytics.financial.commodity.multicurvecommodity.underlying"/>
 <listEntry value="com.opengamma.analytics.financial.covariance"/>
 <listEntry value="com.opengamma.analytics.financial.credit.calibratehazardratecurve"/>
 <listEntry value="com.opengamma.analytics.financial.credit.calibratehazardratecurve.standard"/>
@@ -62,6 +71,10 @@
 <listEntry value="com.opengamma.analytics.financial.equity.future"/>
 <listEntry value="com.opengamma.analytics.financial.equity.future.pricing"/>
 <listEntry value="com.opengamma.analytics.financial.equity.option"/>
+<listEntry value="com.opengamma.analytics.financial.equity.capm"/>
+<listEntry value="com.opengamma.analytics.financial.equity.trs.calculator"/>
+<listEntry value="com.opengamma.analytics.financial.equity.trs.definition"/>
+<listEntry value="com.opengamma.analytics.financial.equity.trs.method"/>
 <listEntry value="com.opengamma.analytics.financial.equity.variance"/>
 <listEntry value="com.opengamma.analytics.financial.forex.calculator"/>
 <listEntry value="com.opengamma.analytics.financial.forex.convention"/>

@@ -59,12 +59,12 @@ public class DeprecatedCouponIborTest {
       FIXING_ACCRUAL_FACTOR, FORWARD_CURVE_NAME);
 
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void nullCurrency() {
+  public void testNullCurrency() {
     new CouponIbor(null, PAYMENT_TIME, DISCOUNTING_CURVE_NAME, ACCRUAL_FACTOR, NOTIONAL, FIXING_TIME, INDEX_EURIBOR3M, FIXING_START_TIME, FIXING_END_TIME, FIXING_ACCRUAL_FACTOR, FORWARD_CURVE_NAME);
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
-  public void nullIndex() {
+  public void testNullIndex() {
     new CouponIbor(EUR, PAYMENT_TIME, DISCOUNTING_CURVE_NAME, ACCRUAL_FACTOR, NOTIONAL, FIXING_TIME, null, FIXING_START_TIME, FIXING_END_TIME, FIXING_ACCRUAL_FACTOR, FORWARD_CURVE_NAME);
   }
 
@@ -74,10 +74,10 @@ public class DeprecatedCouponIborTest {
         FORWARD_CURVE_NAME);
   }
 
-  @Test
   /**
    * Tests the getters.
    */
+  @Test
   public void getter() {
     assertEquals("CouponIbor: getter", EUR, CPN_IBOR.getCurrency());
     assertEquals("CouponIbor: getter", INDEX_EURIBOR3M, CPN_IBOR.getIndex());

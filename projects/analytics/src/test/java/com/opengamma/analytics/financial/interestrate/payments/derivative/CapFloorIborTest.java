@@ -180,6 +180,7 @@ public class CapFloorIborTest {
   public void testHashCodeEquals() {
     final CapFloorIbor floor = new CapFloorIbor(CUR, PAYMENT_TIME, PAYMENT_YEAR_FRACTION, NOTIONAL, FIXING_TIME, INDEX, FIXING_START_TIME, FIXING_END_TIME,
         FIXING_YEAR_FRACTION, STRIKE, false);
+    assertEquals(floor, FLOOR);
     CapFloorIbor other = new CapFloorIbor(CUR, PAYMENT_TIME, PAYMENT_YEAR_FRACTION, NOTIONAL, FIXING_TIME, INDEX, FIXING_START_TIME, FIXING_END_TIME,
         FIXING_YEAR_FRACTION, STRIKE, false);
     assertEquals(floor, other);
@@ -224,6 +225,9 @@ public class CapFloorIborTest {
     other = new CapFloorIbor(CUR, PAYMENT_TIME, PAYMENT_YEAR_FRACTION, NOTIONAL, FIXING_TIME, INDEX, FIXING_START_TIME, FIXING_END_TIME,
         FIXING_YEAR_FRACTION, STRIKE, false);
     assertNotEquals(other, cap);
+    final CouponIbor coupon = new CouponIbor(CUR, PAYMENT_TIME, PAYMENT_YEAR_FRACTION, NOTIONAL, FIXING_TIME, INDEX, FIXING_START_TIME, FIXING_END_TIME,
+        FIXING_YEAR_FRACTION);
+    assertNotEquals(coupon, cap);
   }
 
   /**

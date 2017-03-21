@@ -1,7 +1,11 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
+ *
+ * Modified by McLeod Moores Software Limited.
+ *
+ * Copyright (C) 2017 - present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.analytics.financial.interestrate.payments.derivative;
 
@@ -20,16 +24,17 @@ public abstract class CouponFloating extends Coupon {
 
   /**
    * Constructor from all the details.
-   * @param currency The payment currency.
-   * @param paymentTime Time (in years) up to the payment.
-   * @param fundingCurveName Name of the funding curve.
-   * @param paymentYearFraction The year fraction (or accrual factor) for the coupon payment.
-   * @param notional Coupon notional.
-   * @param fixingTime Time (in years) up to fixing.
+   * @param currency  the payment currency, not null
+   * @param paymentTime  time in years up to the payment
+   * @param fundingCurveName  name of the funding curve, not null
+   * @param paymentYearFraction  the year fraction (or accrual factor) for the coupon payment
+   * @param notional  coupon notional
+   * @param fixingTime  time in years up to fixing
    * @deprecated Use the constructor that does not take a curve name
    */
   @Deprecated
-  public CouponFloating(final Currency currency, final double paymentTime, final String fundingCurveName, final double paymentYearFraction, final double notional, final double fixingTime) {
+  public CouponFloating(final Currency currency, final double paymentTime, final String fundingCurveName, final double paymentYearFraction,
+      final double notional, final double fixingTime) {
     super(currency, paymentTime, fundingCurveName, paymentYearFraction, notional);
     ArgumentChecker.isTrue(fixingTime >= 0.0, "fixing time < 0");
     _fixingTime = fixingTime;
@@ -37,11 +42,11 @@ public abstract class CouponFloating extends Coupon {
 
   /**
    * Constructor from all the details.
-   * @param currency The payment currency.
-   * @param paymentTime Time (in years) up to the payment.
-   * @param paymentYearFraction The year fraction (or accrual factor) for the coupon payment.
-   * @param notional Coupon notional.
-   * @param fixingTime Time (in years) up to fixing.
+   * @param currency  the payment currency, not null
+   * @param paymentTime  time in years up to the payment
+   * @param paymentYearFraction  the year fraction (or accrual factor) for the coupon payment
+   * @param notional  coupon notional
+   * @param fixingTime  time in years up to fixing
    */
   public CouponFloating(final Currency currency, final double paymentTime, final double paymentYearFraction, final double notional, final double fixingTime) {
     super(currency, paymentTime, paymentYearFraction, notional);
@@ -57,9 +62,33 @@ public abstract class CouponFloating extends Coupon {
     return _fixingTime;
   }
 
+  @SuppressWarnings("deprecation")
   @Override
   public String toString() {
-    return super.toString() + ", fixing time = " + _fixingTime;
+    final StringBuilder sb = new StringBuilder("CouponFloating[_currency=");
+    sb.append(getCurrency());
+    sb.append(", _notional=");
+    sb.append(getNotional());
+    sb.append(", _fixingTime=");
+    sb.append(getFixingTime());
+    sb.append(", _paymentTime=");
+    sb.append(getPaymentTime());
+    sb.append(", _paymentYearFraction=");
+    sb.append(getPaymentYearFraction());
+    sb.append(", _referenceAmount=");
+    sb.append(getReferenceAmount());
+    String fundingCurveName = null;
+    try {
+      fundingCurveName = getFundingCurveName();
+    } catch (final IllegalStateException e) {
+      // wasn't set
+    }
+    if (fundingCurveName != null) {
+      sb.append(", _fundingCurveName=");
+      sb.append(getFundingCurveName());
+    }
+    sb.append("]");
+    return sb.toString();
   }
 
   @Override
@@ -68,7 +97,7 @@ public abstract class CouponFloating extends Coupon {
     int result = super.hashCode();
     long temp;
     temp = Double.doubleToLongBits(_fixingTime);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 
@@ -80,7 +109,7 @@ public abstract class CouponFloating extends Coupon {
     if (!super.equals(obj)) {
       return false;
     }
-    if (getClass() != obj.getClass()) {
+    if (!(obj instanceof CouponFloating)) {
       return false;
     }
     final CouponFloating other = (CouponFloating) obj;

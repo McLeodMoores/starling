@@ -92,9 +92,9 @@ public abstract class Coupon extends Payment {
     int result = super.hashCode();
     long temp;
     temp = Double.doubleToLongBits(_notional);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_paymentYearFraction);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 
@@ -106,7 +106,7 @@ public abstract class Coupon extends Payment {
     if (!super.equals(obj)) {
       return false;
     }
-    if (getClass() != obj.getClass()) {
+    if (!(obj instanceof Coupon)) {
       return false;
     }
     final Coupon other = (Coupon) obj;

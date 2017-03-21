@@ -2,6 +2,10 @@
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
  *
  * Please see distribution for license.
+ *
+ * Modified by McLeod Moores Software Limited.
+ *
+ * Copyright (C) 2017 - present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.analytics.financial.schedule;
 
@@ -58,8 +62,9 @@ public final class ScheduleCalculator {
   /**
    * Return a good business date computed from a given date and shifted by a certain number of business days.
    * If the number of shift days is 0, the return date is the next business day.
-   * If the number of shift days is non-zero (positive or negative), a 0 shift is first applied and then a one business day shift is applied as many time as the absolute value of the shift.
-   * If the shift is positive, the one business day is to the future., if the shift is negative, the one business day is to the past.
+   * If the number of shift days is non-zero (positive or negative), a 0 shift is first applied and then a one business day shift is applied as
+   * many time as the absolute value of the shift.
+   * If the shift is positive, the one business day is to the future, if the shift is negative, the one business day is to the past.
    * @param date The initial date.
    * @param shiftDays The number of days of the adjustment. Can be negative or positive.
    * @param calendar The calendar representing the good business days.
@@ -239,12 +244,12 @@ public final class ScheduleCalculator {
    * @return The end date.
    */
   //TODO test
-  public static ZonedDateTime getAdjustedDate(final ZonedDateTime startDate, final Period tenor, final BusinessDayConvention convention, final WorkingDayCalendar calendar,
-      final boolean endOfMonthRule) {
-    ArgumentChecker.notNull(startDate, "Start date");
-    ArgumentChecker.notNull(convention, "Convention");
-    ArgumentChecker.notNull(calendar, "Calendar");
-    ArgumentChecker.notNull(tenor, "Tenor");
+  public static ZonedDateTime getAdjustedDate(final ZonedDateTime startDate, final Period tenor, final BusinessDayConvention convention,
+      final WorkingDayCalendar calendar, final boolean endOfMonthRule) {
+    ArgumentChecker.notNull(startDate, "startDate");
+    ArgumentChecker.notNull(convention, "convention");
+    ArgumentChecker.notNull(calendar, "calendar");
+    ArgumentChecker.notNull(tenor, "tenor");
     final ZonedDateTime endDate = startDate.plus(tenor); // Unadjusted date.
     // Adjusted to month-end: when start date is last business day of the month, the end date is the last business day of the month.
     final boolean isStartDateEOM = startDate.getMonth() != getAdjustedDate(startDate, 1, calendar).getMonth();
@@ -390,6 +395,18 @@ public final class ScheduleCalculator {
    */
   public static ZonedDateTime getAdjustedDate(final ZonedDateTime startDate, final IborIndex index, final Calendar calendar) {
     ArgumentChecker.notNull(index, "Index");
+    return getAdjustedDate(startDate, index.getTenor(), index.getBusinessDayConvention(), calendar, index.isEndOfMonth());
+  }
+
+  /**
+   * Compute the end date of a period from the start date and a Ibor index. The period between the start date and the end date is the index tenor.
+   * @param startDate  the period start date
+   * @param index  the Ibor index
+   * @param calendar  the holiday calendar
+   * @return  the end date
+   */
+  public static ZonedDateTime getAdjustedDate(final ZonedDateTime startDate, final IborIndex index, final WorkingDayCalendar calendar) {
+    ArgumentChecker.notNull(index, "index");
     return getAdjustedDate(startDate, index.getTenor(), index.getBusinessDayConvention(), calendar, index.isEndOfMonth());
   }
 

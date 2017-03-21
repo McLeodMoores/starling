@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.interestrate.payments.derivative;
@@ -100,12 +100,12 @@ public abstract class Payment implements InstrumentDerivative {
    * @return  True if IborCoupon or FixedCoupon
    */
   public boolean isIborOrFixed() { //TODO: is this method necessary?
-    return (this instanceof CouponFixed) || (this instanceof CouponIbor);
+    return this instanceof CouponFixed || this instanceof CouponIbor;
   }
 
   @Override
   public String toString() {
-    StringBuilder sb = new StringBuilder("Currency=");
+    final StringBuilder sb = new StringBuilder("Currency=");
     sb.append(_currency);
     sb.append(", payment time=");
     sb.append(_paymentTime);
@@ -124,7 +124,7 @@ public abstract class Payment implements InstrumentDerivative {
     result = prime * result + (_fundingCurveName == null ? 0 : _fundingCurveName.hashCode());
     long temp;
     temp = Double.doubleToLongBits(_paymentTime);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 
@@ -133,10 +133,7 @@ public abstract class Payment implements InstrumentDerivative {
     if (this == obj) {
       return true;
     }
-    if (obj == null) {
-      return false;
-    }
-    if (getClass() != obj.getClass()) {
+    if (!(obj instanceof Payment)) {
       return false;
     }
     final Payment other = (Payment) obj;

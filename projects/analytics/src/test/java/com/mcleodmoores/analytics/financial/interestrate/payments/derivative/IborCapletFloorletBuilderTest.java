@@ -15,9 +15,9 @@ import com.opengamma.financial.convention.daycount.DayCounts;
 import com.opengamma.util.money.Currency;
 
 /**
- * Unit tests for {@link CapFloorIborBuilder}.
+ * Unit tests for {@link IborCapletFloorletBuilder}.
  */
-public class CapFloorIborBuilderTest {
+public class IborCapletFloorletBuilderTest {
   private static final Currency CCY = Currency.AUD;
   private static final double PAYMENT_TIME = 1.26;
   private static final double PAYMENT_YEAR_FRACTION = 1;
@@ -38,7 +38,7 @@ public class CapFloorIborBuilderTest {
    */
   @Test(expectedExceptions = IllegalStateException.class)
   public void testCurrencyIsSet() {
-    CapFloorIborBuilder.builder()
+    IborCapletFloorletBuilder.builder()
     .withFixingPeriodEndTime(FIXING_END)
     .withFixingPeriodStartTime(FIXING_START)
     .withFixingYearFraction(FIXING_YEAR_FRACTION)
@@ -56,7 +56,7 @@ public class CapFloorIborBuilderTest {
    */
   @Test(expectedExceptions = IllegalStateException.class)
   public void testFixingEndTimeIsSet() {
-    CapFloorIborBuilder.builder()
+    IborCapletFloorletBuilder.builder()
     .withCurrency(CCY)
     .withFixingPeriodStartTime(FIXING_START)
     .withFixingYearFraction(FIXING_YEAR_FRACTION)
@@ -74,7 +74,7 @@ public class CapFloorIborBuilderTest {
    */
   @Test(expectedExceptions = IllegalStateException.class)
   public void testFixingStartTimeIsSet() {
-    CapFloorIborBuilder.builder()
+    IborCapletFloorletBuilder.builder()
     .withCurrency(CCY)
     .withFixingPeriodEndTime(FIXING_END)
     .withFixingYearFraction(FIXING_YEAR_FRACTION)
@@ -92,7 +92,7 @@ public class CapFloorIborBuilderTest {
    */
   @Test(expectedExceptions = IllegalStateException.class)
   public void testFixingYearFractionIsSet() {
-    CapFloorIborBuilder.builder()
+    IborCapletFloorletBuilder.builder()
     .withCurrency(CCY)
     .withFixingPeriodEndTime(FIXING_END)
     .withFixingPeriodStartTime(FIXING_START)
@@ -110,7 +110,7 @@ public class CapFloorIborBuilderTest {
    */
   @Test(expectedExceptions = IllegalStateException.class)
   public void testFixingTimeIsSet() {
-    CapFloorIborBuilder.builder()
+    IborCapletFloorletBuilder.builder()
     .withCurrency(CCY)
     .withFixingPeriodEndTime(FIXING_END)
     .withFixingPeriodStartTime(FIXING_START)
@@ -128,7 +128,7 @@ public class CapFloorIborBuilderTest {
    */
   @Test(expectedExceptions = IllegalStateException.class)
   public void testIndexIsSet() {
-    CapFloorIborBuilder.builder()
+    IborCapletFloorletBuilder.builder()
     .withCurrency(CCY)
     .withFixingPeriodEndTime(FIXING_END)
     .withFixingPeriodStartTime(FIXING_START)
@@ -146,7 +146,7 @@ public class CapFloorIborBuilderTest {
    */
   @Test(expectedExceptions = IllegalStateException.class)
   public void testNotionalIsSet() {
-    CapFloorIborBuilder.builder()
+    IborCapletFloorletBuilder.builder()
     .withCurrency(CCY)
     .withFixingPeriodEndTime(FIXING_END)
     .withFixingPeriodStartTime(FIXING_START)
@@ -164,7 +164,7 @@ public class CapFloorIborBuilderTest {
    */
   @Test(expectedExceptions = IllegalStateException.class)
   public void testPaymentTimeIsSet() {
-    CapFloorIborBuilder.builder()
+    IborCapletFloorletBuilder.builder()
     .withCurrency(CCY)
     .withFixingPeriodEndTime(FIXING_END)
     .withFixingPeriodStartTime(FIXING_START)
@@ -182,7 +182,7 @@ public class CapFloorIborBuilderTest {
    */
   @Test(expectedExceptions = IllegalStateException.class)
   public void testPaymentYearFractionIsSet() {
-    CapFloorIborBuilder.builder()
+    IborCapletFloorletBuilder.builder()
     .withCurrency(CCY)
     .withFixingPeriodEndTime(FIXING_END)
     .withFixingPeriodStartTime(FIXING_START)
@@ -200,7 +200,7 @@ public class CapFloorIborBuilderTest {
    */
   @Test(expectedExceptions = IllegalStateException.class)
   public void testStrikeIsSet() {
-    CapFloorIborBuilder.builder()
+    IborCapletFloorletBuilder.builder()
     .withCurrency(CCY)
     .withFixingPeriodEndTime(FIXING_END)
     .withFixingPeriodStartTime(FIXING_START)
@@ -218,7 +218,7 @@ public class CapFloorIborBuilderTest {
    */
   @Test
   public void testBuildCap() {
-    final CapFloorIborBuilder builder = CapFloorIborBuilder.builder()
+    final IborCapletFloorletBuilder builder = IborCapletFloorletBuilder.builder()
         .withCurrency(CCY)
         .withFixingPeriodEndTime(FIXING_END)
         .withFixingPeriodStartTime(FIXING_START)
@@ -238,7 +238,7 @@ public class CapFloorIborBuilderTest {
    */
   @Test
   public void testBuildFloor() {
-    final CapFloorIborBuilder builder = CapFloorIborBuilder.builder()
+    final IborCapletFloorletBuilder builder = IborCapletFloorletBuilder.builder()
         .withCurrency(CCY)
         .withFixingPeriodEndTime(FIXING_END)
         .withFixingPeriodStartTime(FIXING_START)
