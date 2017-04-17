@@ -79,13 +79,18 @@ public class WeightedPopulationVarianceCalculatorTest {
     final double[] values = new double[n];
     final double[] reverseValues = new double[n];
     final Random random = new Random(10003);
-    for (int i = 0; i < n; i++) {
+    final double lambda = 0.94;
+    // construct series with zero weighted mean
+    for (int i = 0; i < n; i += 2) {
       dates[i] = LocalDate.now().plusDays(i);
+      dates[i + 1] = LocalDate.now().plusDays(i + 1);
       values[i] = random.nextDouble();
-      reverseValues[n - i - 1] = values[i];
+      values[i + 1] = -values[i] / lambda;
+    }
+    for (int i = 0; i < n; i++) {
+      reverseValues[i] = values[n - i - 1];
     }
     final LocalDateDoubleTimeSeries ts = ImmutableLocalDateDoubleTimeSeries.of(dates, reverseValues);
-    final double lambda = 0.94;
     final TimeSeriesReturnCalculator noOp = new TimeSeriesReturnCalculator(CalculationMode.LENIENT) {
 
       @Override
@@ -95,10 +100,10 @@ public class WeightedPopulationVarianceCalculatorTest {
     };
     final double expectedStdDev = new ExponentialWeightedMovingAverageHistoricalVolatilityCalculator(lambda, noOp).evaluate(ts);
     final ExponentialWeightFunction f = ExponentialWeightFunction.of(1 - lambda);
+    assertEquals(new WeightedMeanCalculator().apply(f, values), 0, 1e-15);
     final Double variance = CALCULATOR.apply(f, values);
     final double stdDev = Math.sqrt(variance);
-    final double temp = stdDev / expectedStdDev;
-    //    assertEquals(stdDev, expectedStdDev, 1e-15);
+    assertEquals(stdDev, expectedStdDev, 1e-15);
   }
 
   /**
