@@ -23,7 +23,6 @@ public class WeightedMeanCalculator implements Function2<WeightFunction<Double>,
     double mean = 0;
     for (int i = 0; i < n; i++) {
       final double weight = weights.get();
-      System.out.println(weight);
       sumW += weight;
       mean = mean + weight * (values[i] - mean) / sumW;
     }
