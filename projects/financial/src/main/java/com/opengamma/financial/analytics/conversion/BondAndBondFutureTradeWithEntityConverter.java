@@ -32,7 +32,6 @@ import org.threeten.bp.ZonedDateTime;
 import com.google.common.collect.Sets;
 import com.opengamma.OpenGammaRuntimeException;
 import com.opengamma.analytics.date.WorkingDayCalendar;
-import com.opengamma.analytics.date.WorkingDayCalendar;
 import com.opengamma.analytics.date.WorkingDayCalendarAdapter;
 import com.opengamma.analytics.financial.instrument.InstrumentDefinition;
 import com.opengamma.analytics.financial.instrument.bond.BillSecurityDefinition;

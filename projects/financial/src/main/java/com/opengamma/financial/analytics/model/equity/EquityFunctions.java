@@ -19,7 +19,7 @@ import com.opengamma.engine.function.config.FunctionConfigurationBundle;
 import com.opengamma.engine.function.config.FunctionConfigurationSource;
 import com.opengamma.engine.function.config.SimpleFunctionConfigurationSource;
 import com.opengamma.financial.analytics.model.equity.option.EquityVanillaBarrierOptionDistanceFunction;
-import com.opengamma.financial.analytics.model.equity.option.OptionFunctions;
+import com.opengamma.financial.analytics.model.equity.option.EquityOptionFunctions;
 import com.opengamma.financial.analytics.model.equity.portfoliotheory.PortfolioTheoryFunctions;
 import com.opengamma.financial.analytics.model.equity.varianceswap.EquityForwardFromSpotAndYieldCurveFunction;
 import com.opengamma.financial.analytics.model.equity.varianceswap.VarianceSwapFunctions;
@@ -69,7 +69,7 @@ public class EquityFunctions extends AbstractFunctionConfigurationBean {
    * @return  a configuration source populated with option functions
    */
   protected FunctionConfigurationSource optionFunctionConfiguration() {
-    return OptionFunctions.instance();
+    return EquityOptionFunctions.instance();
   }
 
   /**

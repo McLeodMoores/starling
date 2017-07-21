@@ -342,7 +342,7 @@ public abstract class StandardFunctionConfiguration extends AbstractFunctionConf
   }
 
   protected <T> Map<String, T> getCurrencyInfo(final Function1<CurrencyInfo, T> filter) {
-    final Map<String, T> result = new HashMap<String, T>();
+    final Map<String, T> result = new HashMap<>();
     for (final Map.Entry<String, CurrencyInfo> e : getPerCurrencyInfo().entrySet()) {
       final T entry = filter.execute(e.getValue());
       if (entry instanceof InitializingBean) {
@@ -379,7 +379,7 @@ public abstract class StandardFunctionConfiguration extends AbstractFunctionConf
   }
 
   protected <T> Map<Pair<String, String>, T> getCurrencyPairInfo(final Function1<CurrencyPairInfo, T> filter) {
-    final Map<Pair<String, String>, T> result = new HashMap<Pair<String, String>, T>();
+    final Map<Pair<String, String>, T> result = new HashMap<>();
     for (final Map.Entry<Pair<String, String>, CurrencyPairInfo> e : getPerCurrencyPairInfo().entrySet()) {
       final T entry = filter.execute(e.getValue());
       if (entry instanceof InitializingBean) {

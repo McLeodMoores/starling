@@ -26,7 +26,9 @@ import com.opengamma.util.ArgumentChecker;
 /**
  * A configuration bean that adds equity option pricing functions to a repository and sets up default
  * properties for volatility surfaces, forward curves and discount curves.
+ * @deprecated Use the configurations in {@link EquityOptionFunctions}.
  */
+@Deprecated
 public class OptionFunctions extends AbstractFunctionConfigurationBean {
 
   /**

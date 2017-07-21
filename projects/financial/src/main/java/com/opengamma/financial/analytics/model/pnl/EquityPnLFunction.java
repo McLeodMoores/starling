@@ -30,7 +30,7 @@ import com.opengamma.financial.security.equity.EquitySecurity;
 import com.opengamma.timeseries.date.localdate.LocalDateDoubleTimeSeries;
 
 /**
- * 
+ *
  */
 public class EquityPnLFunction extends AbstractFunction.NonCompiledInvoker {
 
@@ -46,9 +46,7 @@ public class EquityPnLFunction extends AbstractFunction.NonCompiledInvoker {
 
   @Override
   public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target) {
-    //final String currency = FinancialSecurityUtils.getCurrency(target.getSecurity()).getCode();
     final String currency = FinancialSecurityUtils.getCurrency(target.getPosition().getSecurity()).getCode();
-    // Please see http://jira.opengamma.com/browse/PLAT-2330 for information about the PROPERTY_PNL_CONTRIBUTIONS constant
     final ValueProperties properties = createValueProperties()
         .with(ValuePropertyNames.CURRENCY, currency)
         .withAny(ValuePropertyNames.SAMPLING_PERIOD)
@@ -78,23 +76,23 @@ public class EquityPnLFunction extends AbstractFunction.NonCompiledInvoker {
     if (returnCalculatorName == null || returnCalculatorName.size() != 1) {
       return null;
     }
-    //final String currency = FinancialSecurityUtils.getCurrency(target.getSecurity()).getCode();
     final String currency = FinancialSecurityUtils.getCurrency(target.getPosition().getSecurity()).getCode();
-    final Set<ValueRequirement> requirements = new HashSet<ValueRequirement>();
+    final Set<ValueRequirement> requirements = new HashSet<>();
     final ValueProperties priceSeriesProperties = ValueProperties.builder()
         .with(ValuePropertyNames.CURRENCY, currency)
         .with(ValuePropertyNames.SAMPLING_PERIOD, samplingPeriodName)
         .with(ValuePropertyNames.SCHEDULE_CALCULATOR, scheduleCalculatorName)
         .with(ValuePropertyNames.SAMPLING_FUNCTION, samplingFunctionName).get();
-    // final ComputationTargetSpecification targetSpec = target.toSpecification();
-    final ComputationTargetSpecification targetSpec = new ComputationTargetSpecification(ComputationTargetType.SECURITY, target.getPosition().getSecurity().getUniqueId());
+    final ComputationTargetSpecification targetSpec =
+        new ComputationTargetSpecification(ComputationTargetType.SECURITY, target.getPosition().getSecurity().getUniqueId());
     requirements.add(new ValueRequirement(ValueRequirementNames.FAIR_VALUE, targetSpec, ValueProperties.with(ValuePropertyNames.CURRENCY, currency).get()));
     requirements.add(new ValueRequirement(ValueRequirementNames.PRICE_SERIES, targetSpec, priceSeriesProperties));
     return requirements;
   }
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
     final ValueRequirement desiredValue = desiredValues.iterator().next();
     final ComputedValue fairValueCV = inputs.getComputedValue(ValueRequirementNames.FAIR_VALUE);
     final Object fairValueObj = fairValueCV.getValue();
@@ -108,9 +106,8 @@ public class EquityPnLFunction extends AbstractFunction.NonCompiledInvoker {
     }
     final Set<String> returnCalculatorNames = desiredValue.getConstraints().getValues(ValuePropertyNames.RETURN_CALCULATOR);
     final TimeSeriesReturnCalculator returnCalculator = getTimeSeriesReturnCalculator(returnCalculatorNames);
-    final LocalDateDoubleTimeSeries returnSeries = (LocalDateDoubleTimeSeries) returnCalculator.evaluate((LocalDateDoubleTimeSeries) priceSeriesObj);
+    final LocalDateDoubleTimeSeries returnSeries = returnCalculator.evaluate((LocalDateDoubleTimeSeries) priceSeriesObj);
     final ValueSpecification resultSpec = new ValueSpecification(ValueRequirementNames.PNL_SERIES, target.toSpecification(), desiredValue.getConstraints());
-    //final Object result = returnSeries.multiply(fairValue);
     final Object result = returnSeries.multiply(fairValue).multiply(target.getPosition().getQuantity().doubleValue());
     return Collections.singleton(new ComputedValue(resultSpec, result));
   }
