@@ -18,8 +18,8 @@ import org.testng.AssertJUnit;
 import org.testng.annotations.Test;
 import org.threeten.bp.ZonedDateTime;
 
-import com.opengamma.analytics.date.WeekendWorkingDayCalendar;
-import com.opengamma.analytics.date.WorkingDayCalendar;
+import com.mcleodmoores.date.WeekendWorkingDayCalendar;
+import com.mcleodmoores.date.WorkingDayCalendar;
 import com.opengamma.analytics.financial.instrument.bond.BillSecurityDefinition;
 import com.opengamma.analytics.financial.instrument.bond.BillTransactionDefinition;
 import com.opengamma.analytics.financial.interestrate.FDCurveSensitivityCalculator;

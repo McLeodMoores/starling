@@ -3,7 +3,7 @@
  */
 package com.mcleodmoores.integration.adapter;
 
-import com.opengamma.analytics.date.WorkingDayCalendar;
+import com.mcleodmoores.date.WorkingDayCalendar;
 
 /**
  * An adapter for {@link WorkingDayCalendar} that allows use of the named instance factory by wrapping a

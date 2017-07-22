@@ -17,6 +17,10 @@ import org.testng.annotations.Test;
 import org.threeten.bp.DayOfWeek;
 import org.threeten.bp.LocalDate;
 
+import com.mcleodmoores.date.FxWorkingDayCalendar;
+import com.mcleodmoores.date.SimpleWorkingDayCalendar;
+import com.mcleodmoores.date.WeekendWorkingDayCalendar;
+import com.mcleodmoores.date.WorkingDayCalendar;
 import com.opengamma.util.money.Currency;
 
 /**

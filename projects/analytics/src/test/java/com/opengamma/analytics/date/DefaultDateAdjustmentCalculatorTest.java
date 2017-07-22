@@ -12,6 +12,10 @@ import org.testng.annotations.Test;
 import org.threeten.bp.DayOfWeek;
 import org.threeten.bp.LocalDate;
 
+import com.mcleodmoores.date.DefaultDateAdjustmentCalculator;
+import com.mcleodmoores.date.SimpleWorkingDayCalendar;
+import com.mcleodmoores.date.TenorOffsetDateAdjustmentCalculator;
+import com.mcleodmoores.date.WorkingDayCalendar;
 import com.opengamma.financial.convention.businessday.BusinessDayConventions;
 import com.opengamma.util.time.Tenor;
 

@@ -7,7 +7,7 @@ import java.util.Objects;
 
 import org.joda.time.LocalDate;
 
-import com.opengamma.analytics.date.WorkingDayCalendar;
+import com.mcleodmoores.date.WorkingDayCalendar;
 import com.opengamma.util.ArgumentChecker;
 
 import net.finmath.time.businessdaycalendar.BusinessdayCalendar;

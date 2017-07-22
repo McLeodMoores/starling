@@ -10,8 +10,8 @@ import java.util.Collection;
 import org.threeten.bp.DayOfWeek;
 import org.threeten.bp.LocalDate;
 
-import com.opengamma.analytics.date.SimpleWorkingDayCalendar;
-import com.opengamma.analytics.date.WorkingDayCalendar;
+import com.mcleodmoores.date.SimpleWorkingDayCalendar;
+import com.mcleodmoores.date.WorkingDayCalendar;
 
 /**
  * Simple calendars for use in tests. These calendars are not suitable for use elsewhere.

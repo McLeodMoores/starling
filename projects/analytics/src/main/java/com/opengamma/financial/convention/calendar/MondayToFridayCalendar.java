@@ -16,7 +16,7 @@ import org.threeten.bp.LocalDate;
  * A working day calendar based on a Monday to Friday working week.
  * <p>
  * Bank Holidays can be loaded into an instance using XMLCalendarLoader.
- * @deprecated  {@link Calendar} has been deprecated. Use a {@link com.opengamma.analytics.date.WeekendWorkingDayCalendar} instead.
+ * @deprecated  {@link Calendar} has been deprecated. Use a {@link com.mcleodmoores.date.WeekendWorkingDayCalendar} instead.
  */
 @Deprecated
 public class MondayToFridayCalendar extends ExceptionCalendar {

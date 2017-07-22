@@ -8,8 +8,8 @@ import static org.testng.Assert.assertNotEquals;
 
 import org.testng.annotations.Test;
 
-import com.opengamma.analytics.date.CalendarAdapter;
-import com.opengamma.analytics.date.WeekendWorkingDayCalendar;
+import com.mcleodmoores.date.CalendarAdapter;
+import com.mcleodmoores.date.WeekendWorkingDayCalendar;
 import com.opengamma.financial.convention.businessday.BusinessDayConventions;
 import com.opengamma.financial.convention.daycount.DayCount;
 import com.opengamma.financial.convention.daycount.DayCounts;
