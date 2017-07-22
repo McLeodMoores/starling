@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2014 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.examples.simulated.convention;
@@ -21,6 +21,7 @@ import org.threeten.bp.LocalTime;
 
 import com.opengamma.analytics.math.interpolation.Interpolator1DFactory;
 import com.opengamma.core.id.ExternalSchemes;
+import com.opengamma.financial.convention.BondConvention;
 import com.opengamma.financial.convention.DepositConvention;
 import com.opengamma.financial.convention.IborIndexConvention;
 import com.opengamma.financial.convention.OISLegConvention;
@@ -107,6 +108,10 @@ public class ExampleUSConventions extends ConventionMasterInitializer {
     final SwapIndexConvention swapIndexConvention = new SwapIndexConvention(swapIndexName,
         ExternalIdBundle.of(ExternalSchemes.syntheticSecurityId(swapIndexName)), LocalTime.of(11, 0), swapConventionId);
 
+    // Bond conventions
+    final BondConvention bondConvention = new BondConvention("USD Government Bond",
+        ExternalIdBundle.of(ExternalSchemes.currencyRegionId(Currency.USD), ExternalSchemes.financialRegionId("US")), 0, 2, BusinessDayConventions.FOLLOWING, true, true);
+
     addConvention(master, depositConvention);
     addConvention(master, depositONConvention);
     addConvention(master, liborIndexConvention);
@@ -118,6 +123,7 @@ public class ExampleUSConventions extends ConventionMasterInitializer {
     addConvention(master, oisONLegConvention);
     addConvention(master, swapConvention);
     addConvention(master, swapIndexConvention);
+    addConvention(master, bondConvention);
   }
 
 }

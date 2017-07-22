@@ -21,7 +21,7 @@ import com.opengamma.livedata.normalization.NormalizationRuleSet;
 import com.opengamma.livedata.normalization.StandardRules;
 
 /**
- * Produces the normalization ruleset for the Simulated supplied data.
+ * Produces the normalization ruleset for the simulated supplied data.
  */
 public final class NormalizationRules {
 

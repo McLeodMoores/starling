@@ -338,12 +338,18 @@ public final class NodeConverterUtils {
             throw new NotImplementedException("Cross-currency OIS leg not implemented.");
           }
           final Security sec = securitySource.getSingle(convention.getOvernightIndexConvention().toBundle());
+          final OvernightIndexConvention indexConvention;
+          final String indexName;
           if (sec == null) {
-            throw new OpenGammaRuntimeException("Overnight index with id " + convention.getOvernightIndexConvention() + " was null");
+            // try using only the convention
+            indexConvention = conventionSource.getSingle(convention.getOvernightIndexConvention().toBundle(), OvernightIndexConvention.class);
+            indexName = indexConvention.getName();
+          } else {
+            final OvernightIndex index = (OvernightIndex) sec;
+            indexConvention = conventionSource.getSingle(index.getConventionId(), OvernightIndexConvention.class);
+            indexName = index.getName();
           }
-          final OvernightIndex index = (OvernightIndex) sec;
-          final OvernightIndexConvention indexConvention = conventionSource.getSingle(index.getConventionId(), OvernightIndexConvention.class);
-          final IndexON indexON = ConverterUtils.indexON(index.getName(), indexConvention);
+          final IndexON indexON = ConverterUtils.indexON(indexName, indexConvention);
           final Calendar calendar = CalendarUtils.getCalendar(regionSource, holidaySource, indexConvention.getRegionCalendar());
           final int spotLagLeg = convention.getSettlementDays();
           final ZonedDateTime spotDateLeg = ScheduleCalculator.getAdjustedDate(valuationTime, spotLagLeg, calendar);

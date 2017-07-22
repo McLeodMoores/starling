@@ -47,8 +47,8 @@ import com.opengamma.analytics.financial.provider.curve.multicurve.MulticurveDis
 import com.opengamma.analytics.financial.provider.description.interestrate.MulticurveProviderDiscount;
 import com.opengamma.analytics.financial.provider.description.interestrate.MulticurveProviderInterface;
 import com.opengamma.analytics.financial.provider.sensitivity.multicurve.MulticurveSensitivity;
-import com.opengamma.analytics.math.interpolation.CombinedInterpolatorExtrapolatorFactory;
 import com.opengamma.analytics.math.interpolation.Interpolator1D;
+import com.opengamma.analytics.math.interpolation.factory.NamedInterpolator1dFactory;
 import com.opengamma.analytics.util.time.TimeCalculator;
 import com.opengamma.core.DateSet;
 import com.opengamma.core.config.ConfigSource;
@@ -290,7 +290,7 @@ public class MultiCurveDiscountingFunction extends
         final String interpolatorName = interpolatedDefinition.getInterpolatorName();
         final String leftExtrapolatorName = interpolatedDefinition.getLeftExtrapolatorName();
         final String rightExtrapolatorName = interpolatedDefinition.getRightExtrapolatorName();
-        final Interpolator1D interpolator = CombinedInterpolatorExtrapolatorFactory.getInterpolator(interpolatorName, leftExtrapolatorName, rightExtrapolatorName);
+        final Interpolator1D interpolator = NamedInterpolator1dFactory.of(interpolatorName, leftExtrapolatorName, rightExtrapolatorName);
         if (definition instanceof FixedDateInterpolatedCurveDefinition) {
           final FixedDateInterpolatedCurveDefinition fixedDateDefinition = (FixedDateInterpolatedCurveDefinition) definition;
           final List<LocalDate> fixedDates = fixedDateDefinition.getFixedDates();

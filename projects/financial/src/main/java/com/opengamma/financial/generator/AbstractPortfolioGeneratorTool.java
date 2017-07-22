@@ -396,5 +396,5 @@ public abstract class AbstractPortfolioGeneratorTool {
         commandLine.hasOption(WRITE_OPT), parseCurrencies(commandLine));
   }
 
-
 }
+

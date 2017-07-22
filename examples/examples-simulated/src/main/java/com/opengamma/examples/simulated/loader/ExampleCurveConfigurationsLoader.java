@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2014 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.examples.simulated.loader;
@@ -25,6 +25,6 @@ public class ExampleCurveConfigurationsLoader extends AbstractTool<ToolContext> 
   @Override
   protected void doRun() throws Exception {
     final ConfigMaster configMaster = getToolContext().getConfigMaster();
-    ExampleCurveConfigurationsPopulator.populateConfigAndConventionMaster(configMaster);
+    ExampleCurveConfigurationsPopulator.populateConfigMaster(configMaster);
   }
 }

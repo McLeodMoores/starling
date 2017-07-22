@@ -30,8 +30,8 @@ import com.opengamma.engine.value.ComputedValue;
 import com.opengamma.engine.value.ValueProperties;
 import com.opengamma.engine.value.ValueProperties.Builder;
 import com.opengamma.engine.value.ValuePropertyNames;
-import com.opengamma.financial.analytics.conversion.FixedIncomeConverterDataProvider;
 import com.opengamma.financial.analytics.conversion.DefaultTradeConverter;
+import com.opengamma.financial.analytics.conversion.FixedIncomeConverterDataProvider;
 import com.opengamma.financial.analytics.fixedincome.InterestRateInstrumentType;
 import com.opengamma.financial.analytics.model.forex.ForexVisitors;
 import com.opengamma.financial.analytics.model.multicurve.MultiCurvePricingFunction;
@@ -92,7 +92,7 @@ public abstract class DiscountingFunction extends MultiCurvePricingFunction {
       if (_withCurrency) {
         final Security security = target.getTrade().getSecurity();
         if (security instanceof SwapSecurity && InterestRateInstrumentType.isFixedIncomeInstrumentType((SwapSecurity) security) &&
-            (InterestRateInstrumentType.getInstrumentTypeFromSecurity((SwapSecurity) security) == InterestRateInstrumentType.SWAP_CROSS_CURRENCY)) {
+            InterestRateInstrumentType.getInstrumentTypeFromSecurity((SwapSecurity) security) == InterestRateInstrumentType.SWAP_CROSS_CURRENCY) {
           final SwapSecurity swapSecurity = (SwapSecurity) security;
           if (swapSecurity.getPayLeg().getNotional() instanceof InterestRateNotional) {
             final String currency = ((InterestRateNotional) swapSecurity.getPayLeg().getNotional()).getCurrency().getCode();

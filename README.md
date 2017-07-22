@@ -73,8 +73,8 @@ To run the example engine, change to the examples/examples-simulated directory
 and run the following commands:
 ```
   cd examples/examples-simulated
-  mvn opengamma:server-init -Dconfig=fullstack
-  mvn opengamma:server-run -Dconfig=fullstack
+  mvn starling:server-init -Dconfig=fullstack
+  mvn starling:server-run -Dconfig=fullstack
 ```
 
 Wait for the components to load and then point your browser at

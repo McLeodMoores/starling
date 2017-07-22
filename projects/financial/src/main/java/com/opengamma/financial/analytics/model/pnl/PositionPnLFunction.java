@@ -37,10 +37,11 @@ import com.opengamma.timeseries.DoubleTimeSeries;
  */
 public class PositionPnLFunction extends AbstractFunction.NonCompiledInvoker {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(PositionPnLFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(PositionPnLFunction.class);
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
     final ValueRequirement desiredValue = desiredValues.iterator().next();
     final String currency = desiredValue.getConstraint(ValuePropertyNames.CURRENCY);
     final String samplingPeriod = desiredValue.getConstraint(ValuePropertyNames.SAMPLING_PERIOD);
@@ -58,7 +59,7 @@ public class PositionPnLFunction extends AbstractFunction.NonCompiledInvoker {
       final Object value = input.getValue();
       if (value == null) {
         throw new OpenGammaRuntimeException("Could not get time series for " + input.getSpecification());
-      } else if (!(DoubleTimeSeries.class.isAssignableFrom(value.getClass()))) {
+      } else if (!DoubleTimeSeries.class.isAssignableFrom(value.getClass())) {
         throw new OpenGammaRuntimeException("Value for " + input.getSpecification() + " was not a time series: " + value.getClass());
       }
       if (ts == null) {
@@ -116,11 +117,12 @@ public class PositionPnLFunction extends AbstractFunction.NonCompiledInvoker {
     final FinancialSecurity security = (FinancialSecurity) target.getPosition().getSecurity();
     final String currency = currencies.iterator().next();
     try {
-      final Set<ValueRequirement> set = OpenGammaCompilationContext.getPnLRequirementsGatherer(context).getFirstOrderRequirements(security, samplingPeriod, scheduleCalculator, samplingFunction,
-          target.toSpecification(), currency);
+      final Set<ValueRequirement> set =
+          OpenGammaCompilationContext.getPnLRequirementsGatherer(context)
+            .getFirstOrderRequirements(security, samplingPeriod, scheduleCalculator, samplingFunction, target.toSpecification(), currency);
       return set;
     } catch (final OpenGammaRuntimeException e) {
-      s_logger.error("Could not get delta requirements for {} {}; reason was {}", new Object[] {getCcyString(security), security.getClass(), e.getMessage() });
+      LOGGER.error("Could not get delta requirements for {} {}; reason was {}", new Object[] {getCcyString(security), security.getClass(), e.getMessage() });
       return null;
     }
   }

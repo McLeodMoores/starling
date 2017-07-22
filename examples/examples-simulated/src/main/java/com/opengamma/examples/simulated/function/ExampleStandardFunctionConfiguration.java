@@ -22,7 +22,7 @@ import com.opengamma.analytics.math.interpolation.Interpolator1DFactory;
 import com.opengamma.engine.function.config.CombiningFunctionConfigurationSource;
 import com.opengamma.engine.function.config.FunctionConfigurationSource;
 import com.opengamma.financial.analytics.model.curve.forward.ForwardCurveValuePropertyNames;
-import com.opengamma.financial.analytics.model.equity.option.OptionFunctions;
+import com.opengamma.financial.analytics.model.equity.option.EquityOptionFunctions;
 import com.opengamma.financial.analytics.model.volatility.surface.black.BlackVolatilitySurfacePropertyNamesAndValues;
 import com.opengamma.lambdava.functions.Function1;
 import com.opengamma.web.spring.StandardFunctionConfiguration;
@@ -97,9 +97,9 @@ public class ExampleStandardFunctionConfiguration extends StandardFunctionConfig
 
   @Override
   protected FunctionConfigurationSource equityOptionFunctions() {
-    final OptionFunctions.EquityForwardDefaults forwardCurveDefaults = new OptionFunctions.EquityForwardDefaults();
+    final EquityOptionFunctions.EquityForwardDefaults forwardCurveDefaults = new EquityOptionFunctions.EquityForwardDefaults();
     setEquityOptionForwardCurveDefaults(forwardCurveDefaults);
-    final OptionFunctions.EquityOptionDefaults surfaceDefaults = new OptionFunctions.EquityOptionDefaults();
+    final EquityOptionFunctions.EquityOptionDefaults surfaceDefaults = new EquityOptionFunctions.EquityOptionDefaults();
     setEquityOptionSurfaceDefaults(surfaceDefaults);
     final FunctionConfigurationSource forwardCurveRepository = getRepository(forwardCurveDefaults);
     final FunctionConfigurationSource surfaceRepository = getRepository(surfaceDefaults);
@@ -110,11 +110,11 @@ public class ExampleStandardFunctionConfiguration extends StandardFunctionConfig
    * Sets the per-equity forward curve defaults for equity option functions.
    * @param defaults The object containing the default values
    */
-  protected void setEquityOptionForwardCurveDefaults(final OptionFunctions.EquityForwardDefaults defaults) {
-    defaults.setPerEquityInfo(getEquityInfo(new Function1<EquityInfo, OptionFunctions.EquityInfo>() {
+  protected void setEquityOptionForwardCurveDefaults(final EquityOptionFunctions.EquityForwardDefaults defaults) {
+    defaults.setPerEquityInfo(getEquityInfo(new Function1<EquityInfo, EquityOptionFunctions.EquityInfo>() {
       @Override
-      public OptionFunctions.EquityInfo execute(final EquityInfo i) {
-        final OptionFunctions.EquityInfo d = new OptionFunctions.EquityInfo();
+      public EquityOptionFunctions.EquityInfo execute(final EquityInfo i) {
+        final EquityOptionFunctions.EquityInfo d = new EquityOptionFunctions.EquityInfo();
         setEquityOptionForwardCurveDefaults(i, d);
         return d;
       }
@@ -138,7 +138,7 @@ public class ExampleStandardFunctionConfiguration extends StandardFunctionConfig
    * @param i The per-equity info
    * @param defaults The object containing the default values
    */
-  protected void setEquityOptionForwardCurveDefaults(final EquityInfo i, final OptionFunctions.EquityInfo defaults) {
+  protected void setEquityOptionForwardCurveDefaults(final EquityInfo i, final EquityOptionFunctions.EquityInfo defaults) {
     defaults.setForwardCurveInterpolator(i.getForwardCurveInterpolator("model/equityoption"));
     defaults.setForwardCurveLeftExtrapolator(i.getForwardCurveLeftExtrapolator("model/equityoption"));
     defaults.setForwardCurveRightExtrapolator(i.getForwardCurveRightExtrapolator("model/equityoption"));
@@ -154,11 +154,11 @@ public class ExampleStandardFunctionConfiguration extends StandardFunctionConfig
    * Sets the per-equity surface defaults for equity option functions.
    * @param defaults The object containing the default values
    */
-  protected void setEquityOptionSurfaceDefaults(final OptionFunctions.EquityOptionDefaults defaults) {
-    defaults.setPerEquityInfo(getEquityInfo(new Function1<EquityInfo, OptionFunctions.EquityInfo>() {
+  protected void setEquityOptionSurfaceDefaults(final EquityOptionFunctions.EquityOptionDefaults defaults) {
+    defaults.setPerEquityInfo(getEquityInfo(new Function1<EquityInfo, EquityOptionFunctions.EquityInfo>() {
       @Override
-      public OptionFunctions.EquityInfo execute(final EquityInfo i) {
-        final OptionFunctions.EquityInfo d = new OptionFunctions.EquityInfo();
+      public EquityOptionFunctions.EquityInfo execute(final EquityInfo i) {
+        final EquityOptionFunctions.EquityInfo d = new EquityOptionFunctions.EquityInfo();
         setEquityOptionSurfaceDefaults(i, d);
         return d;
       }
@@ -180,7 +180,7 @@ public class ExampleStandardFunctionConfiguration extends StandardFunctionConfig
    * @param i The per-equity info
    * @param defaults The object containing the default values
    */
-  protected void setEquityOptionSurfaceDefaults(final EquityInfo i, final OptionFunctions.EquityInfo defaults) {
+  protected void setEquityOptionSurfaceDefaults(final EquityInfo i, final EquityOptionFunctions.EquityInfo defaults) {
     defaults.setSurfaceCalculationMethod(i.getSurfaceCalculationMethod("model/equityoption"));
     defaults.setDiscountingCurve(i.getDiscountingCurve("model/equityoption"));
     defaults.setDiscountingCurveConfig(i.getDiscountingCurveConfig("model/equityoption"));

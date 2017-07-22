@@ -114,7 +114,7 @@ public final class StatisticsCalculatorFactory {
    * @return  the calculator, throws IllegalArgumentException if the calculator cannot be found
    */
   public static Function<double[], Double> getCalculator(final String name) {
-    if (SAMPLE_COVARIANCE == name) {
+    if (SAMPLE_COVARIANCE.equals(name)) {
       return SAMPLE_COVARIANCE_CALCULATOR;
     }
     return DescriptiveStatisticsFactory.of(name);

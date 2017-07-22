@@ -1,5 +1,5 @@
 #!/bin/sh
-SCRIPTDIR="$(dirname "$0")"
+SCRIPTDIR="$(dirname -- "$0")"
 
 echo "### Creating populated database"
 
