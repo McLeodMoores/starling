@@ -269,13 +269,13 @@ public abstract class MultiCurvePricingFunction extends AbstractFunction {
             }
           }
         }
-        requirements.addAll(getFXRequirements(security, securitySource));
+        //requirements.addAll(getFXRequirements(security, securitySource));
         final Set<ValueRequirement> timeSeriesRequirements = getTimeSeriesRequirements(context, target);
         if (timeSeriesRequirements == null) {
           s_logger.error("getRequirements returned null as timeSeriesRequirements is null for {}", security);
           return null;
         }
-        requirements.addAll(timeSeriesRequirements);
+        //requirements.addAll(timeSeriesRequirements);
         return requirements;
       } catch (final Exception e) {
         s_logger.error(e.getMessage(), e);

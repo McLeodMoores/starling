@@ -25,7 +25,7 @@ import com.opengamma.master.config.ConfigMasterUtils;
 import com.opengamma.scripts.Scriptable;
 
 @Scriptable
-public class ExamplesFunctionConfigurationPopulator extends AbstractTool<ToolContext> {
+public class ExamplesFunctionConfigsPopulator extends AbstractTool<ToolContext> {
   private static final String STANDARD = "STANDARD_FUNCTIONS";
   private static final String VIEW = "VIEW_FUNCTIONS";
   private static final String VALUE = "VALUE_FUNCTIONS";
@@ -45,7 +45,7 @@ public class ExamplesFunctionConfigurationPopulator extends AbstractTool<ToolCon
    * @param args  the standard tool arguments, not null
    */
   public static void main(final String[] args) { // CSIGNORE
-    new ExamplesFunctionConfigurationPopulator().invokeAndTerminate(args);
+    new ExamplesFunctionConfigsPopulator().invokeAndTerminate(args);
   }
 
   //-------------------------------------------------------------------------

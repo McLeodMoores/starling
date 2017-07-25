@@ -20,7 +20,7 @@ import com.opengamma.util.money.Currency;
 /**
  * Populates the config master with example exposure functions.
  */
-public class ExamplesExposureFunctionConfigPopulator {
+public class ExamplesExposureFunctionConfigsPopulator {
 
   /**
    * Populates a config master with exposure functions.
@@ -31,11 +31,13 @@ public class ExamplesExposureFunctionConfigPopulator {
     String name = "FX Exposures";
     List<String> exposureFunctionNames = Arrays.asList("Currency");
     Map<ExternalId, String> idsToNames = new HashMap<>();
-    idsToNames.put(ExternalId.of(Currency.OBJECT_SCHEME, "USD"), "Default USD Curves");
-    idsToNames.put(ExternalId.of(Currency.OBJECT_SCHEME, "CHF"), "CHF FX Implied Curve");
-    idsToNames.put(ExternalId.of(Currency.OBJECT_SCHEME, "EUR"), "EUR FX Implied Curve");
-    idsToNames.put(ExternalId.of(Currency.OBJECT_SCHEME, "JPY"), "JPY FX Implied Curve");
-    idsToNames.put(ExternalId.of(Currency.OBJECT_SCHEME, "GBP"), "GBP FX Implied Curve");
+    idsToNames.put(ExternalId.of(Currency.OBJECT_SCHEME, "USD"), ExampleConfigUtils.generateVanillaFixedIncomeConfigName("USD"));
+    idsToNames.put(ExternalId.of(Currency.OBJECT_SCHEME, "CHF"), ExampleConfigUtils.generateFxImpliedConfigName("CHF"));
+    idsToNames.put(ExternalId.of(Currency.OBJECT_SCHEME, "EUR"), ExampleConfigUtils.generateFxImpliedConfigName("EUR"));
+    idsToNames.put(ExternalId.of(Currency.OBJECT_SCHEME, "JPY"), ExampleConfigUtils.generateFxImpliedConfigName("JPY"));
+    idsToNames.put(ExternalId.of(Currency.OBJECT_SCHEME, "GBP"), ExampleConfigUtils.generateFxImpliedConfigName("GBP"));
+    idsToNames.put(ExternalId.of(Currency.OBJECT_SCHEME, "AUD"), ExampleConfigUtils.generateFxImpliedConfigName("AUD"));
+    idsToNames.put(ExternalId.of(Currency.OBJECT_SCHEME, "NZD"), ExampleConfigUtils.generateFxImpliedConfigName("NZD"));
     ExposureFunctions exposureFunctions = new ExposureFunctions(name, exposureFunctionNames, idsToNames);
     ConfigMasterUtils.storeByName(configMaster, makeConfig(exposureFunctions));
     name = "Bond Exposures";

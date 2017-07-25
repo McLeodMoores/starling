@@ -15,10 +15,8 @@ import static com.opengamma.engine.value.ValuePropertyNames.CURVE_CONSTRUCTION_C
 import static com.opengamma.engine.value.ValuePropertyNames.CURVE_SENSITIVITY_CURRENCY;
 import static com.opengamma.engine.value.ValueRequirementNames.CURVE_BUNDLE;
 import static com.opengamma.engine.value.ValueRequirementNames.CURVE_DEFINITION;
-import static com.opengamma.engine.value.ValueRequirementNames.CURVE_INSTRUMENT_CONVERSION_HISTORICAL_TIME_SERIES;
 import static com.opengamma.engine.value.ValueRequirementNames.CURVE_MARKET_DATA;
 import static com.opengamma.engine.value.ValueRequirementNames.CURVE_SPECIFICATION;
-import static com.opengamma.engine.value.ValueRequirementNames.FX_MATRIX;
 import static com.opengamma.engine.value.ValueRequirementNames.JACOBIAN_BUNDLE;
 import static com.opengamma.engine.value.ValueRequirementNames.YIELD_CURVE;
 import static com.opengamma.financial.analytics.model.curve.CurveCalculationPropertyNamesAndValues.PROPERTY_CURVE_TYPE;
@@ -346,8 +344,8 @@ public abstract class MultiCurveFunction<T extends ParameterProviderInterface, U
       }
       @SuppressWarnings("synthetic-access")
       final ValueProperties properties = ValueProperties.builder().with(CURVE_CONSTRUCTION_CONFIG, _configurationName).get();
-      requirements.add(new ValueRequirement(CURVE_INSTRUMENT_CONVERSION_HISTORICAL_TIME_SERIES, ComputationTargetSpecification.NULL, properties));
-      requirements.add(new ValueRequirement(FX_MATRIX, ComputationTargetSpecification.NULL, properties));
+      //requirements.add(new ValueRequirement(CURVE_INSTRUMENT_CONVERSION_HISTORICAL_TIME_SERIES, ComputationTargetSpecification.NULL, properties));
+      //requirements.add(new ValueRequirement(FX_MATRIX, ComputationTargetSpecification.NULL, properties));
       addExogenousRequirements(constraints, requirements);
       return requirements;
     }

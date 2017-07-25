@@ -2,26 +2,31 @@
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
  *
  * Please see distribution for license.
+ *
+ * Modified by McLeod Moores Software Limited.
+ *
+ * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.financial.analytics.model.volatility.surface;
 
-import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
-import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import static com.opengamma.engine.value.ValueRequirementNames.VOLATILITY_SURFACE_DATA;
 
-import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 import java.util.Set;
-import java.util.TreeSet;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.threeten.bp.Clock;
+import org.threeten.bp.ZonedDateTime;
 
 import com.opengamma.OpenGammaRuntimeException;
 import com.opengamma.analytics.financial.model.option.definition.SmileDeltaParameters;
 import com.opengamma.analytics.financial.model.volatility.surface.SmileDeltaTermStructureParametersStrikeInterpolation;
-import com.opengamma.analytics.math.interpolation.CombinedInterpolatorExtrapolatorFactory;
 import com.opengamma.analytics.math.interpolation.Interpolator1D;
+import com.opengamma.analytics.math.interpolation.factory.NamedInterpolator1dFactory;
 import com.opengamma.core.marketdatasnapshot.VolatilitySurfaceData;
 import com.opengamma.engine.ComputationTarget;
 import com.opengamma.engine.function.FunctionExecutionContext;
@@ -40,12 +45,15 @@ import com.opengamma.financial.analytics.volatility.surface.VolatilitySurfaceShi
 import com.opengamma.util.time.Tenor;
 import com.opengamma.util.tuple.ObjectsPair;
 import com.opengamma.util.tuple.Pair;
+import com.opengamma.util.tuple.Pairs;
+
+import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
 
 /**
  *
  */
 public class ForexStrangleRiskReversalVolatilitySurfaceFunction extends ForexVolatilitySurfaceFunction {
-  private static final Logger s_logger = LoggerFactory.getLogger(ForexStrangleRiskReversalVolatilitySurfaceFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ForexStrangleRiskReversalVolatilitySurfaceFunction.class);
 
   @Override
   public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
@@ -55,10 +63,9 @@ public class ForexStrangleRiskReversalVolatilitySurfaceFunction extends ForexVol
     final String interpolatorName = desiredValue.getConstraint(InterpolatedDataProperties.X_INTERPOLATOR_NAME);
     final String leftExtrapolatorName = desiredValue.getConstraint(InterpolatedDataProperties.LEFT_X_EXTRAPOLATOR_NAME);
     final String rightExtrapolatorName = desiredValue.getConstraint(InterpolatedDataProperties.RIGHT_X_EXTRAPOLATOR_NAME);
-    final ValueRequirement surfaceRequirement = getDataRequirement(surfaceName, target);
-    final Object volatilitySurfaceObject = inputs.getValue(getDataRequirement(surfaceName, target));
+    final Object volatilitySurfaceObject = inputs.getValue(VOLATILITY_SURFACE_DATA);
     if (volatilitySurfaceObject == null) {
-      throw new OpenGammaRuntimeException("Could not get " + surfaceRequirement);
+      throw new OpenGammaRuntimeException("Could not get " + VOLATILITY_SURFACE_DATA);
     }
     @SuppressWarnings("unchecked")
     final VolatilitySurfaceData<Object, Object> fxVolatilitySurface = (VolatilitySurfaceData<Object, Object>) volatilitySurfaceObject;
@@ -66,20 +73,22 @@ public class ForexStrangleRiskReversalVolatilitySurfaceFunction extends ForexVol
     Arrays.sort(tenors);
     final Pair<Number, FXVolQuoteType>[] quotes = getYs(fxVolatilitySurface.getYs());
     final Number[] deltaValues = getDeltaValues(quotes);
-    final ObjectArrayList<SmileDeltaParameters> smile = new ObjectArrayList<>();
+    final List<SmileDeltaParameters> smile = new ArrayList<>();
     final int nSmileValues = deltaValues.length - 1;
     final Set<String> shifts = desiredValue.getConstraints().getValues(VolatilitySurfaceShiftFunction.SHIFT);
     final double shiftMultiplier;
-    if ((shifts != null) && (shifts.size() == 1)) {
+    if (shifts != null && shifts.size() == 1) {
       final String shift = shifts.iterator().next();
       shiftMultiplier = 1 + Double.parseDouble(shift);
     } else {
       // No shift requested
       shiftMultiplier = 1;
     }
+    final Clock snapshotClock = executionContext.getValuationClock();
+    final ZonedDateTime now = ZonedDateTime.now(snapshotClock);
     for (final Tenor tenor : tenors) {
-      final double t = getTime(tenor);
-      Double atm = fxVolatilitySurface.getVolatility(tenor, ObjectsPair.of(deltaValues[0], FXVolQuoteType.ATM));
+      final double t = getTime(now, tenor);
+      Double atm = fxVolatilitySurface.getVolatility(tenor, Pairs.of(deltaValues[0], FXVolQuoteType.ATM));
       if (atm != null) {
         if (shiftMultiplier != 1) {
           atm = atm * shiftMultiplier;
@@ -100,19 +109,20 @@ public class ForexStrangleRiskReversalVolatilitySurfaceFunction extends ForexVol
               butterflies.add(butterfly);
             }
           } else {
-            s_logger.info("Had a null delta value for tenor {}", j);
+            LOGGER.info("Had a null delta value for tenor {}", j);
           }
         }
         smile.add(new SmileDeltaParameters(t, atm, deltas.toDoubleArray(), riskReversals.toDoubleArray(), butterflies.toDoubleArray()));
       } else {
-        s_logger.info("Could not get atm data for tenor {}", tenor);
+        LOGGER.info("Could not get atm data for tenor {}", tenor);
       }
     }
     if (smile.size() == 0) {
       throw new OpenGammaRuntimeException("Could not get any data for surface " + surfaceName + " with target " + target);
     }
-    final Interpolator1D interpolator = CombinedInterpolatorExtrapolatorFactory.getInterpolator(interpolatorName, leftExtrapolatorName, rightExtrapolatorName);
-    final SmileDeltaTermStructureParametersStrikeInterpolation smiles = new SmileDeltaTermStructureParametersStrikeInterpolation(smile.toArray(new SmileDeltaParameters[smile.size()]), interpolator);
+    final Interpolator1D interpolator = NamedInterpolator1dFactory.of(interpolatorName, leftExtrapolatorName, rightExtrapolatorName);
+    final SmileDeltaTermStructureParametersStrikeInterpolation smiles =
+        new SmileDeltaTermStructureParametersStrikeInterpolation(smile.toArray(new SmileDeltaParameters[smile.size()]), interpolator);
     final ValueProperties.Builder resultProperties = createValueProperties()
         .with(ValuePropertyNames.SURFACE, surfaceName)
         .with(InstrumentTypeProperties.PROPERTY_SURFACE_INSTRUMENT_TYPE, InstrumentTypeProperties.FOREX)
@@ -131,16 +141,24 @@ public class ForexStrangleRiskReversalVolatilitySurfaceFunction extends ForexVol
     return SurfaceAndCubeQuoteType.MARKET_STRANGLE_RISK_REVERSAL;
   }
 
-  private Number[] getDeltaValues(final Pair<Number, FXVolQuoteType>[] quotes) {
-    final TreeSet<Number> values = new TreeSet<>();
-    for (final Pair<Number, FXVolQuoteType> pair : quotes) {
-      values.add(pair.getFirst());
+  private static Number[] getDeltaValues(final Pair<Number, FXVolQuoteType>[] quotes) {
+    final Number[] deltas = new Number[quotes.length];
+    int i = 0;
+    for (final Pair<Number, FXVolQuoteType> q : quotes) {
+      deltas[i++] = q.getFirst();
     }
-    return values.toArray((Number[]) Array.newInstance(Number.class, values.size()));
+    Arrays.sort(deltas);
+    return deltas;
+//    final TreeSet<Number> values = new TreeSet<>();
+//
+//    for (final Pair<Number, FXVolQuoteType> pair : quotes) {
+//      values.add(pair.getFirst());
+//    }
+//    return values.toArray((Number[]) Array.newInstance(Number.class, values.size()));
   }
 
   //TODO why are these next two methods suddenly needed?
-  private Tenor[] getTenors(final Object[] tenors) {
+  private static Tenor[] getTenors(final Object[] tenors) {
     final Tenor[] converted = new Tenor[tenors.length];
     for (int i = 0; i < tenors.length; i++) {
       converted[i] = (Tenor) tenors[i];
@@ -149,7 +167,7 @@ public class ForexStrangleRiskReversalVolatilitySurfaceFunction extends ForexVol
   }
 
   @SuppressWarnings("unchecked")
-  private Pair<Number, FXVolQuoteType>[] getYs(final Object[] ys) {
+  private static Pair<Number, FXVolQuoteType>[] getYs(final Object[] ys) {
     final Pair<Number, FXVolQuoteType>[] converted = new Pair[ys.length];
     for (int i = 0; i < ys.length; i++) {
       converted[i] = (Pair<Number, FXVolQuoteType>) ys[i];

@@ -12,19 +12,19 @@ import com.opengamma.master.config.ConfigMaster;
 /**
  * Loads example curve configurations, definitions and curve node id mappers.
  */
-public class ExamplesCurveConfigurationsLoader extends AbstractTool<ToolContext> {
+public class ExamplesCurveConfigsLoader extends AbstractTool<ToolContext> {
 
   /**
    * Main method to run the tool.
    * @param args The standard tool arguments, not null
    */
   public static void main(final String[] args) {
-    new ExamplesCurveConfigurationsLoader().invokeAndTerminate(args);
+    new ExamplesCurveConfigsLoader().invokeAndTerminate(args);
   }
 
   @Override
   protected void doRun() throws Exception {
     final ConfigMaster configMaster = getToolContext().getConfigMaster();
-    ExamplesCurveConfigurationsPopulator.populateConfigMaster(configMaster);
+    ExamplesFixedIncomeCurveConfigsPopulator.populateConfigMaster(configMaster);
   }
 }

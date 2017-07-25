@@ -18,7 +18,6 @@ import org.threeten.bp.Period;
 
 import com.opengamma.analytics.math.interpolation.factory.DoubleQuadraticInterpolator1dAdapter;
 import com.opengamma.analytics.math.interpolation.factory.LinearExtrapolator1dAdapter;
-import com.opengamma.core.config.impl.ConfigItem;
 import com.opengamma.core.id.ExternalSchemes;
 import com.opengamma.core.value.MarketDataRequirementNames;
 import com.opengamma.financial.analytics.curve.CurveConstructionConfiguration;
@@ -59,11 +58,11 @@ import com.opengamma.util.tuple.Pairs;
  *
  * The interpolator used for all curves is a monotonic convex spline with linear extrapolation on both ends.
  */
-public final class ExamplesCurveConfigurationsPopulator {
+public final class ExamplesFixedIncomeCurveConfigsPopulator {
   /** Zero period */
   private static final Tenor ZERO = Tenor.of(Period.ZERO);
   /** The curve node id mapper suffix */
-  private static final String NODE_MAPPER_SUFFIX = " Node Ids";
+  private static final String NODE_MAPPER_SUFFIX = " Tickers";
   /** A map of (currency string, tenor) pairs to ibor security ids */
   private static final Map<Pair<String, Tenor>, ExternalId> IBOR_SECURITY_FOR_CURRENCY = new HashMap<>();
   /** A map of currency strings to deposit convention ids */
@@ -133,7 +132,7 @@ public final class ExamplesCurveConfigurationsPopulator {
     curveTypes.put(forwardIborCurveName, Arrays.asList(forwardIborCurveType));
     final CurveGroupConfiguration group = new CurveGroupConfiguration(0, curveTypes);
     final List<CurveGroupConfiguration> groups = Arrays.asList(group);
-    ConfigMasterUtils.storeByName(configMaster, makeConfig(new CurveConstructionConfiguration(name, groups, Collections.<String>emptyList())));
+    ConfigMasterUtils.storeByName(configMaster, ExampleConfigUtils.makeConfig(new CurveConstructionConfiguration(name, groups, Collections.<String>emptyList())));
   }
 
   private static void makeDiscountingConfigsForCurrency(final String currency, final ConfigMaster configMaster) {
@@ -166,8 +165,8 @@ public final class ExamplesCurveConfigurationsPopulator {
         .cashNodeIds(depositNodes)
         .swapNodeIds(oisNodes)
         .build();
-    ConfigMasterUtils.storeByName(configMaster, makeConfig(discountingCurveDefinition));
-    ConfigMasterUtils.storeByName(configMaster, makeConfig(discountingCurveNodeIds));
+    ConfigMasterUtils.storeByName(configMaster, ExampleConfigUtils.makeConfig(discountingCurveDefinition));
+    ConfigMasterUtils.storeByName(configMaster, ExampleConfigUtils.makeConfig(discountingCurveNodeIds));
   }
 
   private static void makeIborConfigsForCurrency(final String currency, final Tenor tenor, final ConfigMaster configMaster) {
@@ -194,8 +193,8 @@ public final class ExamplesCurveConfigurationsPopulator {
         .build();
     final CurveDefinition iborCurveDefinition = new InterpolatedCurveDefinition(iborCurveName, iborCurveNodes, DoubleQuadraticInterpolator1dAdapter.NAME,
         LinearExtrapolator1dAdapter.NAME, LinearExtrapolator1dAdapter.NAME);
-    ConfigMasterUtils.storeByName(configMaster, makeConfig(iborCurveDefinition));
-    ConfigMasterUtils.storeByName(configMaster, makeConfig(iborCurveNodeIds));
+    ConfigMasterUtils.storeByName(configMaster, ExampleConfigUtils.makeConfig(iborCurveDefinition));
+    ConfigMasterUtils.storeByName(configMaster, ExampleConfigUtils.makeConfig(iborCurveNodeIds));
   }
 
   private static void makeAudThreeCurveConfigurations(final ConfigMaster configMaster) {
@@ -217,7 +216,7 @@ public final class ExamplesCurveConfigurationsPopulator {
     curveTypes.put(forward6mIborCurveName, Arrays.asList(ibor6mCurveType));
     final CurveGroupConfiguration group = new CurveGroupConfiguration(0, curveTypes);
     final List<CurveGroupConfiguration> groups = Arrays.asList(group);
-    ConfigMasterUtils.storeByName(configMaster, makeConfig(new CurveConstructionConfiguration(name, groups, Collections.<String>emptyList())));
+    ConfigMasterUtils.storeByName(configMaster, ExampleConfigUtils.makeConfig(new CurveConstructionConfiguration(name, groups, Collections.<String>emptyList())));
     // discounting curve
     final String discountingCurveNodeIdMapperName = currency + NODE_MAPPER_SUFFIX;
     final Set<CurveNode> discountingCurveNodes = new LinkedHashSet<>();
@@ -246,8 +245,8 @@ public final class ExamplesCurveConfigurationsPopulator {
         .cashNodeIds(depositNodes)
         .swapNodeIds(oisNodes)
         .build();
-    ConfigMasterUtils.storeByName(configMaster, makeConfig(discountingCurveDefinition));
-    ConfigMasterUtils.storeByName(configMaster, makeConfig(discountingCurveNodeIdMapper));
+    ConfigMasterUtils.storeByName(configMaster, ExampleConfigUtils.makeConfig(discountingCurveDefinition));
+    ConfigMasterUtils.storeByName(configMaster, ExampleConfigUtils.makeConfig(discountingCurveNodeIdMapper));
     // 3M LIBOR curve
     final String basisSwapCurveNodeIdMapperName = "AUD 3mx6m Basis" + NODE_MAPPER_SUFFIX;
     final String iborCurveNodeIdMapperName = "AUD IBOR" + NODE_MAPPER_SUFFIX;
@@ -300,30 +299,12 @@ public final class ExamplesCurveConfigurationsPopulator {
         LinearExtrapolator1dAdapter.NAME, LinearExtrapolator1dAdapter.NAME);
     final CurveDefinition ibor6mCurveDefinition = new InterpolatedCurveDefinition(forward6mIborCurveName, ibor6mCurveNodes, DoubleQuadraticInterpolator1dAdapter.NAME,
         LinearExtrapolator1dAdapter.NAME, LinearExtrapolator1dAdapter.NAME);
-    ConfigMasterUtils.storeByName(configMaster, makeConfig(ibor3mCurveDefinition));
-    ConfigMasterUtils.storeByName(configMaster, makeConfig(ibor6mCurveDefinition));
-    ConfigMasterUtils.storeByName(configMaster, makeConfig(iborCurveNodeIds));
-    ConfigMasterUtils.storeByName(configMaster, makeConfig(basisCurveNodeIds));
+    ConfigMasterUtils.storeByName(configMaster, ExampleConfigUtils.makeConfig(ibor3mCurveDefinition));
+    ConfigMasterUtils.storeByName(configMaster, ExampleConfigUtils.makeConfig(ibor6mCurveDefinition));
+    ConfigMasterUtils.storeByName(configMaster, ExampleConfigUtils.makeConfig(iborCurveNodeIds));
+    ConfigMasterUtils.storeByName(configMaster, ExampleConfigUtils.makeConfig(basisCurveNodeIds));
   }
 
-  private static ConfigItem<CurveConstructionConfiguration> makeConfig(final CurveConstructionConfiguration curveConfig) {
-    final ConfigItem<CurveConstructionConfiguration> config = ConfigItem.of(curveConfig);
-    config.setName(curveConfig.getName());
-    return config;
-  }
-
-  private static ConfigItem<CurveNodeIdMapper> makeConfig(final CurveNodeIdMapper curveNodeIdMapper) {
-    final ConfigItem<CurveNodeIdMapper> config = ConfigItem.of(curveNodeIdMapper);
-    config.setName(curveNodeIdMapper.getName());
-    return config;
-  }
-
-  private static ConfigItem<CurveDefinition> makeConfig(final CurveDefinition curveDefinition) {
-    final ConfigItem<CurveDefinition> config = ConfigItem.of(curveDefinition);
-    config.setName(curveDefinition.getName());
-    return config;
-  }
-
-  private ExamplesCurveConfigurationsPopulator() {
+  private ExamplesFixedIncomeCurveConfigsPopulator() {
   }
 }

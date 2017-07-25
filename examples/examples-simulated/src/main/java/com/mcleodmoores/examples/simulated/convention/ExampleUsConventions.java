@@ -53,10 +53,10 @@ public class ExampleUsConventions extends ConventionMasterInitializer {
     // IBOR
     final ExternalIdBundle iborIds = ExternalIdBundle.of(ExternalId.of("CONVENTION", "USDLIBORP3M"), ExternalId.of("CONVENTION", "USDLIBORP6M"),
         ExternalSchemes.syntheticSecurityId("USDLIBORP3M"), ExternalSchemes.syntheticSecurityId("USDLIBORP6M"));
-    final IborIndexConvention ibor = new IborIndexConvention("USD LIBOR", iborIds, DayCounts.ACT_360, BusinessDayConventions.FOLLOWING, 2, false, Currency.USD,
+    final IborIndexConvention ibor = new IborIndexConvention("USD LIBOR", iborIds, DayCounts.ACT_360, BusinessDayConventions.FOLLOWING, 0, false, Currency.USD,
         LocalTime.of(11, 0), "US", NYLON, US, "");
     // Overnight
-    final OvernightIndexConvention overnight = new OvernightIndexConvention("USDFF", ExternalIdBundle.of("CONVENTION", "USDFF"),
+    final OvernightIndexConvention overnight = new OvernightIndexConvention("USDFF", ExternalIdBundle.of(ExternalId.of("CONVENTION", "USDFF"), ExternalSchemes.syntheticSecurityId("USDFF")),
         DayCounts.ACT_360, 0, Currency.USD, US);
     // OIS
     final SwapFixedLegConvention oisFixedLeg = new SwapFixedLegConvention("USD OIS", ExternalIdBundle.of("CONVENTION", "USD"),

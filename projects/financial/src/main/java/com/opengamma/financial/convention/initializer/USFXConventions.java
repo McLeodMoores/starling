@@ -43,20 +43,20 @@ public class USFXConventions extends ConventionMasterInitializer {
 
   protected void addUsdCadFxSpotConvention(final ConventionMaster master) {
     final FXSpotConvention usdCadSpot = new FXSpotConvention(
-        "USD/CAD FX Spot", ExternalIdBundle.of(ExternalId.of("CONVENTION", "USD/CAD FX Spot")), 1, US);
+        "USD/CAD FX Spot", ExternalIdBundle.of(ExternalId.of("CONVENTION", "USD/CAD FX Spot")), 1, false);
     addConvention(master, usdCadSpot);
   }
 
   protected void addUsdCadForwardConvention(final ConventionMaster master) {
     final FXForwardAndSwapConvention usdCadForward = new FXForwardAndSwapConvention(
         "USD/CAD FX Forward", ExternalIdBundle.of(ExternalId.of("CONVENTION", "USD/CAD FX Forward")),
-        ExternalId.of("CONVENTION", "USD/CAD FX Spot"), FOLLOWING, false, US);
+        ExternalId.of("CONVENTION", "USD/CAD FX Spot"), FOLLOWING, false);
     addConvention(master, usdCadForward);
   }
 
   protected void addFxSpotConvention(final ConventionMaster master) {
     final FXSpotConvention fxSpot = new FXSpotConvention(
-        "FX Spot", ExternalIdBundle.of(ExternalId.of("CONVENTION", "FX Spot")), 2, US);
+        "FX Spot", ExternalIdBundle.of(ExternalId.of("CONVENTION", "FX Spot")), 2, false);
     addConvention(master, fxSpot);
   }
 
@@ -64,7 +64,7 @@ public class USFXConventions extends ConventionMasterInitializer {
     // TODO: Holiday should not be US only.
     final FXForwardAndSwapConvention fxForward = new FXForwardAndSwapConvention(
         "FX Forward", ExternalIdBundle.of(ExternalId.of("CONVENTION", "FX Forward")),
-        ExternalId.of("CONVENTION", "FX Spot"), FOLLOWING, false, US);
+        ExternalId.of("CONVENTION", "FX Spot"), FOLLOWING, false);
     addConvention(master, fxForward);
   }
 

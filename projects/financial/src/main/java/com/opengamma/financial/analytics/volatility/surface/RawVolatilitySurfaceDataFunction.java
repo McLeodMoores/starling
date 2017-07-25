@@ -5,8 +5,6 @@
  */
 package com.opengamma.financial.analytics.volatility.surface;
 
-import it.unimi.dsi.fastutil.objects.ObjectArrayList;
-
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -45,6 +43,8 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.tuple.Pair;
 import com.opengamma.util.tuple.Pairs;
 
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+
 /**
  * Gets volatility surface data from definitions and specifications. No financial modelling is done and the data points can be any type of data (e.g. price, implied lognormal volatility).
  */
@@ -75,14 +75,14 @@ public abstract class RawVolatilitySurfaceDataFunction extends AbstractFunction 
 
   /**
    * Gets the target type for the surface
-   * 
+   *
    * @return The target type
    */
   protected abstract ComputationTargetType getTargetType();
 
   /**
    * Determines whether this function applies to the target
-   * 
+   *
    * @param context The compilation context
    * @param target The computation target
    * @return true if this function applies to the target
@@ -96,7 +96,7 @@ public abstract class RawVolatilitySurfaceDataFunction extends AbstractFunction 
    * <p>
    * [SURFACE NAME]_[TARGET NAME]_[INSTRUMENT TYPE]
    * <p>
-   * 
+   *
    * @param definitionSource The surface definition source
    * @param versionCorrection The version/correction timestamp
    * @param target The computation target
@@ -112,7 +112,7 @@ public abstract class RawVolatilitySurfaceDataFunction extends AbstractFunction 
    * <p>
    * [SURFACE NAME]_[TRIMMED TARGET]_[INSTRUMENT TYPE]
    * <p>
-   * 
+   *
    * @param specificationSource The surface specification source
    * @param versionCorrection The version/correction timestamp
    * @param target The computation target
@@ -132,7 +132,7 @@ public abstract class RawVolatilitySurfaceDataFunction extends AbstractFunction 
 
   /**
    * Uses the volatility surface definition and specification to work out which market data requirements are needed to construct the surface with the given name and type.
-   * 
+   *
    * @param <X> The type of the x-axis data
    * @param <Y> The type of the y-axis data
    * @param specification The volatility specification
@@ -199,9 +199,14 @@ public abstract class RawVolatilitySurfaceDataFunction extends AbstractFunction 
     @SuppressWarnings("synthetic-access")
     @Override
     public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target) {
-      return Collections.singleton(new ValueSpecification(ValueRequirementNames.VOLATILITY_SURFACE_DATA, target.toSpecification(), createValueProperties()
-          .withAny(ValuePropertyNames.SURFACE).with(InstrumentTypeProperties.PROPERTY_SURFACE_INSTRUMENT_TYPE, _instrumentType)
-          .withAny(SurfaceAndCubePropertyNames.PROPERTY_SURFACE_QUOTE_TYPE).withAny(SurfaceAndCubePropertyNames.PROPERTY_SURFACE_UNITS).get()));
+      return Collections.singleton(new ValueSpecification(ValueRequirementNames.VOLATILITY_SURFACE_DATA,
+          target.toSpecification(),
+          createValueProperties()
+            .withAny(ValuePropertyNames.SURFACE)
+            .with(InstrumentTypeProperties.PROPERTY_SURFACE_INSTRUMENT_TYPE, _instrumentType)
+            .withAny(SurfaceAndCubePropertyNames.PROPERTY_SURFACE_QUOTE_TYPE)
+            .withAny(SurfaceAndCubePropertyNames.PROPERTY_SURFACE_UNITS)
+            .get()));
     }
 
     @SuppressWarnings("synthetic-access")
@@ -339,7 +344,7 @@ public abstract class RawVolatilitySurfaceDataFunction extends AbstractFunction 
 
     /**
      * Gets the definition source.
-     * 
+     *
      * @return The definition source
      */
     protected ConfigDBVolatilitySurfaceDefinitionSource getDefinitionSource() {
@@ -348,7 +353,7 @@ public abstract class RawVolatilitySurfaceDataFunction extends AbstractFunction 
 
     /**
      * Gets the specification source.
-     * 
+     *
      * @return The specification source
      */
     protected ConfigDBVolatilitySurfaceSpecificationSource getSpecificationSource() {

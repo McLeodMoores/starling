@@ -18,10 +18,12 @@ import org.apache.commons.lang.SystemUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mcleodmoores.examples.simulated.loader.config.ExamplesCurveConfigurationsLoader;
+import com.mcleodmoores.examples.simulated.loader.config.ExamplesCurveConfigsLoader;
 import com.mcleodmoores.examples.simulated.loader.config.ExamplesExposureFunctionLoader;
-import com.mcleodmoores.examples.simulated.loader.config.ExamplesFunctionConfigurationPopulator;
-import com.mcleodmoores.examples.simulated.loader.config.ExamplesUsBondCurveConfigurationsLoader;
+import com.mcleodmoores.examples.simulated.loader.config.ExamplesFunctionConfigsPopulator;
+import com.mcleodmoores.examples.simulated.loader.config.ExamplesFxImpliedCurveConfigsLoader;
+import com.mcleodmoores.examples.simulated.loader.config.ExamplesFxVolatilitySurfaceConfigsLoader;
+import com.mcleodmoores.examples.simulated.loader.config.ExamplesUsBondCurveConfigsLoader;
 import com.mcleodmoores.examples.simulated.loader.config.ExamplesViewsPopulator;
 import com.mcleodmoores.examples.simulated.loader.convention.ExamplesConventionMasterInitializer;
 import com.mcleodmoores.examples.simulated.loader.holiday.ExamplesCurrencyHolidayLoader;
@@ -36,7 +38,6 @@ import com.opengamma.OpenGammaRuntimeException;
 import com.opengamma.component.tool.AbstractTool;
 import com.opengamma.examples.simulated.generator.SyntheticPortfolioGeneratorTool;
 import com.opengamma.examples.simulated.loader.ExampleCurrencyConfigurationLoader;
-import com.opengamma.examples.simulated.loader.ExampleCurveAndSurfaceDefinitionLoader;
 import com.opengamma.examples.simulated.loader.ExampleEquityPortfolioLoader;
 import com.opengamma.examples.simulated.loader.ExampleExchangeLoader;
 import com.opengamma.examples.simulated.loader.ExampleHistoricalDataGeneratorTool;
@@ -154,7 +155,7 @@ public class ExamplesDatabasePopulator extends AbstractTool<ToolContext> {
     loadHolidays();
     loadLegalEntities();
     loadConventions();
-//    loadCurveAndSurfaceDefinitions();
+    //loadCurveAndSurfaceDefinitions();
 //    loadCurveCalculationConfigurations();
     loadTimeSeriesRating();
     loadSimulatedHistoricalData();
@@ -173,7 +174,7 @@ public class ExamplesDatabasePopulator extends AbstractTool<ToolContext> {
     loadAudSwapPortfolio();
 //    loadSwaptionParityPortfolio();
 //    loadMixedCMPortfolio();
-//    loadVanillaFXOptionPortfolio();
+    loadVanillaFxOptionPortfolio();
     loadEquityPortfolio();
 //    loadEquityOptionPortfolio();
 //    loadFuturePortfolio();
@@ -185,11 +186,12 @@ public class ExamplesDatabasePopulator extends AbstractTool<ToolContext> {
 //    loadFXVolatilitySwapPortfolio();
     loadOisPortfolio();
     loadMultiCountryBondPortfolio();
-//    loadFxImpliedCurveCalculationConfigurations();
     loadViews();
     loadFunctionConfigurations();
     loadExposureFunctions();
     loadCurveConfigurations();
+    loadFxVolatilitySurfaceConfigurations();
+    loadFxImpliedCurveCalculationConfigurations();
     loadUsBondCurveConfigurations(); // bond curve configurations to use a bond curve
     loadBondCurveSecurities();
     loadIndexSecurities();
@@ -201,7 +203,7 @@ public class ExamplesDatabasePopulator extends AbstractTool<ToolContext> {
   private void loadFunctionConfigurations() {
     final Log log = new Log("Creating function configuration definitions");
     try {
-      final ExamplesFunctionConfigurationPopulator populator = new ExamplesFunctionConfigurationPopulator();
+      final ExamplesFunctionConfigsPopulator populator = new ExamplesFunctionConfigsPopulator();
       populator.run(getToolContext());
       log.done();
     } catch (final RuntimeException t) {
@@ -288,14 +290,14 @@ public class ExamplesDatabasePopulator extends AbstractTool<ToolContext> {
     }
   }
 
-  private void loadCurveAndSurfaceDefinitions() {
-    final Log log = new Log("Creating curve and surface definitions");
+  private void loadFxVolatilitySurfaceConfigurations() {
+    final Log log = new Log("Creating FX volatility surface definitions");
     try {
-      final ExampleCurveAndSurfaceDefinitionLoader curveLoader = new ExampleCurveAndSurfaceDefinitionLoader();
-      curveLoader.run(getToolContext());
+      final ExamplesFxVolatilitySurfaceConfigsLoader loader = new ExamplesFxVolatilitySurfaceConfigsLoader();
+      loader.run(getToolContext());
       log.done();
-    } catch (final RuntimeException t) {
-      log.fail(t);
+    } catch (final RuntimeException e) {
+      log.fail(e);
     }
   }
 
@@ -401,7 +403,7 @@ public class ExamplesDatabasePopulator extends AbstractTool<ToolContext> {
     }
   }
 
-  private void loadVanillaFXOptionPortfolio() {
+  private void loadVanillaFxOptionPortfolio() {
     final Log log = new Log("Creating example vanilla FX option portfolio");
     try {
       portfolioGeneratorTool().run(getToolContext(), VANILLA_FX_OPTION_PORTFOLIO_NAME, "VanillaFXOption", true, null);
@@ -575,7 +577,7 @@ public class ExamplesDatabasePopulator extends AbstractTool<ToolContext> {
   private void loadCurveConfigurations() {
     final Log log = new Log("Creating curve construction configurations");
     try {
-      final ExamplesCurveConfigurationsLoader loader = new ExamplesCurveConfigurationsLoader();
+      final ExamplesCurveConfigsLoader loader = new ExamplesCurveConfigsLoader();
       loader.run(getToolContext());
       log.done();
     } catch (final RuntimeException t) {
@@ -597,6 +599,16 @@ public class ExamplesDatabasePopulator extends AbstractTool<ToolContext> {
 //    }
 //  }
 
+  private void loadFxImpliedCurveCalculationConfigurations() {
+    final Log log = new Log("Creating FX implied curve construction configurations");
+    try {
+      final ExamplesFxImpliedCurveConfigsLoader loader = new ExamplesFxImpliedCurveConfigsLoader();
+      loader.run(getToolContext());
+      log.done();
+    } catch (final RuntimeException t) {
+      log.fail(t);
+    }
+  }
 
   /**
    * Loads simulated US bond curve construction configurations.
@@ -604,7 +616,7 @@ public class ExamplesDatabasePopulator extends AbstractTool<ToolContext> {
   private void loadUsBondCurveConfigurations() {
     final Log log = new Log("Creating US bond curve construction configurations");
     try {
-      final ExamplesUsBondCurveConfigurationsLoader loader = new ExamplesUsBondCurveConfigurationsLoader();
+      final ExamplesUsBondCurveConfigsLoader loader = new ExamplesUsBondCurveConfigsLoader();
       loader.run(getToolContext());
       log.done();
     } catch (final RuntimeException t) {

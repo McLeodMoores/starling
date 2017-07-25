@@ -48,7 +48,7 @@ import com.opengamma.util.time.Tenor;
  * The bond curve contains bill nodes from 6 months to 18 months in six month increments and bond nodes
  * from 7 bonds with tenors {2y, 3y, 5y, 7y, 10y, 20y, 30y}, and uses the yield quote to construct the curve.
  */
-public class ExamplesUsBondCurveConfigPopulator {
+public class ExamplesUsBondCurveConfigsPopulator {
   /** The bond curve construction configuration name */
   private static final String BOND_CURVE_CONSTRUCTION_CONFIG_NAME = "US Government Bond Configuration";
   /** The OIS curve construction configuration name */
@@ -63,7 +63,7 @@ public class ExamplesUsBondCurveConfigPopulator {
    * and curve node id mappers.
    * @param configMaster The config master, not null
    */
-  public static void populateConfigAndConventionMaster(final ConfigMaster configMaster) {
+  public static void populateConfigMaster(final ConfigMaster configMaster) {
     ArgumentChecker.notNull(configMaster, "configMaster");
     final Collection<CurveConstructionConfiguration> curveConstructionConfigs = makeCurveConstructionConfiguration();
     for (final CurveConstructionConfiguration config : curveConstructionConfigs) {
