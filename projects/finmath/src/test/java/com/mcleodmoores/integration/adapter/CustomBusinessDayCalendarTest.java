@@ -13,8 +13,8 @@ import org.joda.time.LocalDate;
 import org.testng.annotations.Test;
 import org.threeten.bp.DayOfWeek;
 
-import com.opengamma.analytics.date.SimpleWorkingDayCalendar;
-import com.opengamma.analytics.date.WorkingDayCalendar;
+import com.mcleodmoores.date.SimpleWorkingDayCalendar;
+import com.mcleodmoores.date.WorkingDayCalendar;
 import com.opengamma.util.test.TestGroup;
 
 /**

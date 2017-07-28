@@ -19,8 +19,10 @@ import org.testng.annotations.Test;
 import org.threeten.bp.Period;
 import org.threeten.bp.ZonedDateTime;
 
-import com.opengamma.analytics.date.CalendarAdapter;
-import com.opengamma.analytics.date.WeekendWorkingDayCalendar;
+import com.mcleodmoores.analytics.financial.curve.interestrate.HullWhiteMethodCurveBuilder;
+import com.mcleodmoores.analytics.financial.curve.interestrate.HullWhiteMethodCurveSetUp;
+import com.mcleodmoores.date.CalendarAdapter;
+import com.mcleodmoores.date.WeekendWorkingDayCalendar;
 import com.opengamma.analytics.financial.forex.method.FXMatrix;
 import com.opengamma.analytics.financial.instrument.InstrumentDefinition;
 import com.opengamma.analytics.financial.instrument.future.InterestRateFutureSecurityDefinition;
@@ -45,8 +47,6 @@ import com.opengamma.analytics.financial.provider.calculator.hullwhite.PresentVa
 import com.opengamma.analytics.financial.provider.curve.CurveBuildingBlock;
 import com.opengamma.analytics.financial.provider.curve.CurveBuildingBlockBundle;
 import com.opengamma.analytics.financial.provider.curve.CurveBuildingTests;
-import com.opengamma.analytics.financial.provider.curve.builder.HullWhiteMethodCurveBuilder;
-import com.opengamma.analytics.financial.provider.curve.builder.HullWhiteMethodCurveSetUp;
 import com.opengamma.analytics.financial.provider.description.interestrate.HullWhiteOneFactorProviderDiscount;
 import com.opengamma.analytics.financial.provider.description.interestrate.MulticurveProviderDiscount;
 import com.opengamma.analytics.math.interpolation.Interpolator1D;

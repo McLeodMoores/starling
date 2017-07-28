@@ -14,9 +14,9 @@ import java.util.Objects;
 import org.threeten.bp.DayOfWeek;
 import org.threeten.bp.ZonedDateTime;
 
-import com.opengamma.analytics.date.CalendarAdapter;
-import com.opengamma.analytics.date.WorkingDayCalendar;
-import com.opengamma.analytics.date.WorkingDayCalendarAdapter;
+import com.mcleodmoores.date.CalendarAdapter;
+import com.mcleodmoores.date.WorkingDayCalendar;
+import com.mcleodmoores.date.WorkingDayCalendarAdapter;
 import com.opengamma.analytics.financial.instrument.InstrumentDefinition;
 import com.opengamma.analytics.financial.instrument.InstrumentDefinitionVisitor;
 import com.opengamma.analytics.financial.interestrate.bond.calculator.PriceFromYieldCalculator;

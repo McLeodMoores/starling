@@ -18,11 +18,11 @@ import org.threeten.bp.Period;
 import org.threeten.bp.ZoneOffset;
 import org.threeten.bp.ZonedDateTime;
 
+import com.mcleodmoores.date.DefaultDateAdjustmentCalculator;
+import com.mcleodmoores.date.DefaultSettlementDateCalculator;
+import com.mcleodmoores.date.EndOfMonthDateAdjustmentCalculator;
+import com.mcleodmoores.date.WorkingDayCalendar;
 import com.opengamma.OpenGammaRuntimeException;
-import com.opengamma.analytics.date.DefaultDateAdjustmentCalculator;
-import com.opengamma.analytics.date.DefaultSettlementDateCalculator;
-import com.opengamma.analytics.date.EndOfMonthDateAdjustmentCalculator;
-import com.opengamma.analytics.date.WorkingDayCalendar;
 import com.opengamma.analytics.financial.instrument.InstrumentDefinition;
 import com.opengamma.analytics.financial.instrument.cash.CashDefinition;
 import com.opengamma.analytics.financial.instrument.cash.DepositIborDefinition;

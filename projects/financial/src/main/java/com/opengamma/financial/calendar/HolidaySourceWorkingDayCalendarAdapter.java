@@ -7,9 +7,9 @@ import java.util.Collection;
 
 import org.threeten.bp.LocalDate;
 
+import com.mcleodmoores.date.WorkingDayCalendar;
 import com.opengamma.DataNotFoundException;
 import com.opengamma.OpenGammaRuntimeException;
-import com.opengamma.analytics.date.WorkingDayCalendar;
 import com.opengamma.core.holiday.Holiday;
 import com.opengamma.core.holiday.HolidaySource;
 import com.opengamma.core.holiday.HolidayType;

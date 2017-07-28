@@ -45,8 +45,8 @@ public class EqualWeightFunctionTest {
    */
   @Test
   public void testObject() {
-    final EqualWeightFunction f1 = EqualWeightFunction.of(1000);
-    EqualWeightFunction f2 = EqualWeightFunction.of(1000);
+    final EqualWeightFunction f1 = EqualWeightFunction.ofInverse(1000);
+    EqualWeightFunction f2 = EqualWeightFunction.ofInverse(1000);
     assertEquals(f1, f2);
     assertEquals(f1.hashCode(), f2.hashCode());
     f2 = EqualWeightFunction.of(1500);

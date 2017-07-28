@@ -21,7 +21,7 @@ import com.opengamma.financial.convention.NamedInstance;
  * Abstraction of a calendar interface for tracking working/non-working days, such as Bank Holidays.
  * This is used in conjunction with DayCount and BusinessDayConvention to calculate settlement dates.
  * @deprecated This calendar does not distinguish between holidays and weekends.
- * {@link com.opengamma.analytics.date.WorkingDayCalendar} should be used instead.
+ * {@link com.mcleodmoores.date.WorkingDayCalendar} should be used instead.
  */
 @Deprecated
 @FromStringFactory(factory = CalendarFactory.class)

@@ -5,8 +5,8 @@ package com.opengamma.financial.analytics.conversion;
 
 import java.util.Collection;
 
+import com.mcleodmoores.date.WorkingDayCalendar;
 import com.opengamma.OpenGammaRuntimeException;
-import com.opengamma.analytics.date.WorkingDayCalendar;
 import com.opengamma.core.holiday.Holiday;
 import com.opengamma.core.holiday.HolidaySource;
 import com.opengamma.core.holiday.HolidayType;

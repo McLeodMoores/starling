@@ -9,8 +9,8 @@ import java.util.HashSet;
 import org.threeten.bp.DayOfWeek;
 import org.threeten.bp.LocalDate;
 
-import com.opengamma.analytics.date.SimpleWorkingDayCalendar;
-import com.opengamma.analytics.date.WorkingDayCalendar;
+import com.mcleodmoores.date.SimpleWorkingDayCalendar;
+import com.mcleodmoores.date.WorkingDayCalendar;
 import com.opengamma.core.holiday.WeekendType;
 import com.opengamma.core.holiday.impl.SimpleHoliday;
 import com.opengamma.core.holiday.impl.SimpleHolidayWithWeekend;
