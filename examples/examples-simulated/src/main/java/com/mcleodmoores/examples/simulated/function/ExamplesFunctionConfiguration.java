@@ -4,6 +4,7 @@
 package com.mcleodmoores.examples.simulated.function;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -11,10 +12,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 
 import com.opengamma.engine.function.config.CombiningFunctionConfigurationSource;
+import com.opengamma.engine.function.config.FunctionConfiguration;
 import com.opengamma.engine.function.config.FunctionConfigurationSource;
 import com.opengamma.financial.analytics.model.black.BlackDiscountingPricingFunctions;
 import com.opengamma.financial.analytics.model.black.BlackDiscountingPricingFunctions.FxOptionDefaults;
 import com.opengamma.financial.analytics.model.equity.option.EquityOptionFunctions;
+import com.opengamma.financial.currency.CurrencyMatrixConfigPopulator;
+import com.opengamma.financial.currency.CurrencyMatrixLookupFunction;
 import com.opengamma.lambdava.functions.Function1;
 import com.opengamma.util.money.Currency;
 import com.opengamma.util.money.UnorderedCurrencyPair;
@@ -31,6 +35,13 @@ public class ExamplesFunctionConfiguration extends StandardFunctionConfiguration
  public ExamplesFunctionConfiguration() {
    setEquityOptionInfo();
    setFxOptionInfo();
+ }
+
+ @Override
+ protected void addCurrencyConversionFunctions(final List<FunctionConfiguration> functionConfigs) {
+   super.addCurrencyConversionFunctions(functionConfigs);
+   functionConfigs.add(functionConfiguration(CurrencyMatrixLookupFunction.class, CurrencyMatrixConfigPopulator.BLOOMBERG_LIVE_DATA));
+   functionConfigs.add(functionConfiguration(CurrencyMatrixLookupFunction.class, CurrencyMatrixConfigPopulator.SYNTHETIC_LIVE_DATA));
  }
 
  protected void setEquityOptionInfo() {

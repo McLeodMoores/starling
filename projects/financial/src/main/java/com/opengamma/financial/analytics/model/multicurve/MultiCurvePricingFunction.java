@@ -10,7 +10,6 @@ import static com.opengamma.engine.value.ValuePropertyNames.CURVE_CONSTRUCTION_C
 import static com.opengamma.engine.value.ValuePropertyNames.CURVE_EXPOSURES;
 import static com.opengamma.engine.value.ValueRequirementNames.CURVE_BUNDLE;
 import static com.opengamma.engine.value.ValueRequirementNames.CURVE_DEFINITION;
-import static com.opengamma.engine.value.ValueRequirementNames.FX_MATRIX;
 import static com.opengamma.engine.value.ValueRequirementNames.JACOBIAN_BUNDLE;
 
 import java.util.Collection;
@@ -88,6 +87,7 @@ import com.opengamma.master.historicaltimeseries.HistoricalTimeSeriesResolver;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.async.AsynchronousExecution;
 import com.opengamma.util.money.Currency;
+import com.opengamma.util.money.UnorderedCurrencyPair;
 
 /**
  * Base function for all multi-curve pricing and risk functions. Produces results for trades with following underlying securities:
@@ -262,7 +262,7 @@ public abstract class MultiCurvePricingFunction extends AbstractFunction {
             final ValueProperties fxMatrixProperties = ValueProperties.builder()
                 .with(CURVE_CONSTRUCTION_CONFIG, curveConstructionConfigurationNames)
                 .get();
-            requirements.add(new ValueRequirement(FX_MATRIX, ComputationTargetSpecification.NULL, fxMatrixProperties));
+            //requirements.add(new ValueRequirement(FX_MATRIX, ComputationTargetSpecification.NULL, fxMatrixProperties));
             for (final String curveName : curveNames) {
               final ValueProperties curveProperties = ValueProperties.builder().with(CURVE, curveName).get();
               requirements.add(new ValueRequirement(CURVE_DEFINITION, ComputationTargetSpecification.NULL, curveProperties));
@@ -297,7 +297,8 @@ public abstract class MultiCurvePricingFunction extends AbstractFunction {
         final Iterator<Currency> iter = currencies.iterator();
         final Currency initialCurrency = iter.next();
         while (iter.hasNext()) {
-          requirements.add(new ValueRequirement(ValueRequirementNames.SPOT_RATE, CurrencyPair.TYPE.specification(CurrencyPair.of(iter.next(), initialCurrency))));
+//          requirements.add(new ValueRequirement(ValueRequirementNames.SPOT_RATE, CurrencyPair.TYPE.specification(CurrencyPair.of(iter.next(), initialCurrency))));
+          requirements.add(new ValueRequirement(ValueRequirementNames.SPOT_RATE, ComputationTargetType.UNORDERED_CURRENCY_PAIR.specification(UnorderedCurrencyPair.of(initialCurrency, iter.next()))));
         }
       }
       return requirements;

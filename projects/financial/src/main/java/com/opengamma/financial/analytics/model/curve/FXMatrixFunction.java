@@ -208,5 +208,6 @@ public class FXMatrixFunction extends AbstractFunction {
       requirements.add(new ValueRequirement(CURRENCY_PAIRS, ComputationTargetSpecification.NULL, ValueProperties.none()));
       return requirements;
     }
+
   };
 }
