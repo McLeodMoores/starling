@@ -487,7 +487,7 @@ public class AudDiscounting3mBankBill6mBankBillTest extends CurveBuildingTests {
     ZonedDateTime startDate = ScheduleCalculator.getAdjustedDate(NOW, AUD_3M_BANK_BILL_INDEX.getSpotLag() + startIndex * jump, SYD);
     final double[] rateDsc = new double[nbDate];
     final double[] startTime = new double[nbDate];
-    try (final FileWriter writer = new FileWriter("fwd-dsc.csv")) {
+    try (FileWriter writer = new FileWriter("fwd-dsc.csv")) {
       for (int i = 0; i < nbDate; i++) {
         startTime[i] = TimeCalculator.getTimeBetween(NOW, startDate);
         final ZonedDateTime endDate = ScheduleCalculator.getAdjustedDate(startDate, AUD_3M_BANK_BILL_INDEX, SYD);

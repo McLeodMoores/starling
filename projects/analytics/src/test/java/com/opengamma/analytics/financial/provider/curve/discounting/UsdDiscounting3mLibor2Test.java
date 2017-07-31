@@ -459,7 +459,7 @@ public class UsdDiscounting3mLibor2Test extends CurveBuildingTests {
     ZonedDateTime startDate = ScheduleCalculator.getAdjustedDate(NOW, USD_3M_LIBOR_INDEX.getSpotLag() + startIndex * jump, NYC);
     final double[] rateDsc = new double[nbDate];
     final double[] startTime = new double[nbDate];
-    try (final FileWriter writer = new FileWriter("fwd-dsc.csv")) {
+    try (FileWriter writer = new FileWriter("fwd-dsc.csv")) {
       for (int i = 0; i < nbDate; i++) {
         startTime[i] = TimeCalculator.getTimeBetween(NOW, startDate);
         final ZonedDateTime endDate = ScheduleCalculator.getAdjustedDate(startDate, USD_3M_LIBOR_INDEX, NYC);

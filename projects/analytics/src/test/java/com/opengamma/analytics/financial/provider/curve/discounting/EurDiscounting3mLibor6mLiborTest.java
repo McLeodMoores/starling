@@ -503,7 +503,7 @@ public class EurDiscounting3mLibor6mLiborTest extends CurveBuildingTests {
     ZonedDateTime startDate = ScheduleCalculator.getAdjustedDate(NOW, EUR_3M_EURIBOR_INDEX.getSpotLag() + startIndex * jump, TARGET);
     final double[] rateDsc = new double[nbDate];
     final double[] startTime = new double[nbDate];
-    try (final FileWriter writer = new FileWriter("fwd-dsc.csv")) {
+    try (FileWriter writer = new FileWriter("fwd-dsc.csv")) {
       for (int i = 0; i < nbDate; i++) {
         startTime[i] = TimeCalculator.getTimeBetween(NOW, startDate);
         final ZonedDateTime endDate = ScheduleCalculator.getAdjustedDate(startDate, EUR_3M_EURIBOR_INDEX, TARGET);

@@ -216,7 +216,7 @@ public class BrlDiscountingOvernight2Test extends CurveBuildingTests {
     final double[] startTime2 = new double[nbDate];
     final double[] accrualFactor = new double[nbDate];
     final double[] accrualFactorActAct = new double[nbDate];
-    try (final FileWriter writer = new FileWriter("fwd-dsc.csv")) {
+    try (FileWriter writer = new FileWriter("fwd-dsc.csv")) {
       for (int i = 0; i < nbDate; i++) {
         startTime[i] = TimeCalculator.getTimeBetween(NOW, startDate);
         startTime2[i] = CDI_INDEX.getDayCount().getDayCountFraction(NOW, startDate, RIO);
