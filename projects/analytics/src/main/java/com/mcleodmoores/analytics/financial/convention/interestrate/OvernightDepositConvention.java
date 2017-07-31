@@ -92,4 +92,18 @@ public class OvernightDepositConvention extends CashConvention {
     final double accrualFactor = getDayCount().getDayCountFraction(startDate, endDate, new CalendarAdapter(getCalendar()));
     return new CashDefinition(getCurrency(), startDate, endDate, notional, fixedRate, accrualFactor);
   }
+
+  @Override
+  public String toString() {
+    final StringBuilder builder = new StringBuilder();
+    builder.append("OvernightDepositConvention [currency=");
+    builder.append(getCurrency().getCode());
+    builder.append(", calendar=");
+    builder.append(getCalendar().getName());
+    builder.append(", dayCount=");
+    builder.append(getDayCount().getName());
+    builder.append("]");
+    return builder.toString();
+  }
+
 }

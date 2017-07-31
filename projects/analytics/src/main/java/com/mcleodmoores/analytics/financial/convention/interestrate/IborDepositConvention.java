@@ -61,12 +61,14 @@ public class IborDepositConvention implements CurveDataConvention<DepositIborDef
     }
   }
 
-  private final IborTypeIndex _index;
+  private final IborIndex _index;
+  private final Tenor _tenor;
   private final WorkingDayCalendar _calendar;
 
   /* package */ IborDepositConvention(final IborTypeIndex index, final WorkingDayCalendar calendar) {
-    _index = index;
+    _index = IndexConverter.toIborIndex(index);
     _calendar = calendar;
+    _tenor = index.getTenor();
   }
 
   @Override
@@ -76,14 +78,11 @@ public class IborDepositConvention implements CurveDataConvention<DepositIborDef
     ArgumentChecker.notNull(startTenor, "startTenor");
     ArgumentChecker.notNull(endTenor, "endTenor");
     final Currency currency = _index.getCurrency();
-    final Tenor tenor = _index.getTenor();
     final int spotLag = _index.getSpotLag();
     final DayCount dayCount = _index.getDayCount();
-    // TODO getPeriod()
-    final IborIndex index = IndexConverter.toIborIndex(_index); // move this - too much work done otherwise
     final ZonedDateTime startDate = ScheduleCalculator.getAdjustedDate(date, spotLag, _calendar);
-    final ZonedDateTime endDate = ScheduleCalculator.getAdjustedDate(startDate, tenor, _calendar);
+    final ZonedDateTime endDate = ScheduleCalculator.getAdjustedDate(startDate, _tenor, _calendar);
     final double accrualFactor = dayCount.getDayCountFraction(startDate, endDate, new CalendarAdapter(_calendar));
-    return new DepositIborDefinition(currency, startDate, endDate, notional, fixedRate, accrualFactor, index);
+    return new DepositIborDefinition(currency, startDate, endDate, notional, fixedRate, accrualFactor, _index);
   }
 }
