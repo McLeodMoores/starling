@@ -54,6 +54,7 @@ public class DiscountingMethodCurveTypeSetUp extends DiscountingMethodCurveSetUp
 
   //TODO versions that only take a single index
   //TODO should store currency, indices in this object rather than in super class
+  //TODO IborTypeIndex version, same for overnight index
   @Override
   public DiscountingMethodCurveTypeSetUp forIborIndex(final IborIndex... indices) {
     _iborCurves.put(_curveName, indices);
@@ -80,6 +81,8 @@ public class DiscountingMethodCurveTypeSetUp extends DiscountingMethodCurveSetUp
     }
   }
 
+
+  //TODO move interpolator to curve name setup (have a map from name to interpolator)
   @Override
   public DiscountingMethodCurveTypeSetUp withInterpolator(final Interpolator1D interpolator) {
     if (_functionalForm != null) {

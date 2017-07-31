@@ -36,6 +36,7 @@ public class VanillaOisConvention implements CurveDataConvention<SwapFixedONDefi
     boolean _isShortStub;
     boolean _isFromEnd;
     int _paymentLag;
+    int _spotLag;
     IndexON _underlyingIndex;
 
     /* package */ Builder() {
@@ -76,6 +77,11 @@ public class VanillaOisConvention implements CurveDataConvention<SwapFixedONDefi
       return this;
     }
 
+    public Builder withSpotLag(final int spotLag) {
+      _spotLag = spotLag;
+      return this;
+    }
+
     public Builder withUnderlyingIndex(final IndexON underlyingIndex) {
       _underlyingIndex = underlyingIndex;
       return this;
@@ -93,6 +99,7 @@ public class VanillaOisConvention implements CurveDataConvention<SwapFixedONDefi
   private final boolean _isShortStub;
   private final boolean _isFromEnd;
   private final int _paymentLag;
+  private final int _spotLag;
   private final IndexON _index;
 
   VanillaOisConvention(final VanillaOisConvention.Builder builder) {
@@ -102,6 +109,7 @@ public class VanillaOisConvention implements CurveDataConvention<SwapFixedONDefi
     _isShortStub = builder._isShortStub;
     _isFromEnd = builder._isFromEnd;
     _paymentLag = builder._paymentLag;
+    _spotLag = builder._spotLag;
     _index = builder._underlyingIndex;
     switch (builder._endOfMonth) {
       case ADJUST_FOR_END_OF_MONTH:
@@ -119,11 +127,11 @@ public class VanillaOisConvention implements CurveDataConvention<SwapFixedONDefi
   public SwapFixedONDefinition toCurveInstrument(final ZonedDateTime date, final Tenor startTenor, final Tenor endTenor, final double notional, final double fixedRate) {
     ArgumentChecker.notNull(date, "date");
     final Calendar holidays = new CalendarAdapter(_calendar);
-    final ZonedDateTime settlementDate = ScheduleCalculator.getAdjustedDate(date, startTenor, _businessDayConvention, _calendar, _endOfMonth);
+    final ZonedDateTime settlementDate = ScheduleCalculator.getAdjustedDate(date, _spotLag, _calendar);
     final ZonedDateTime[] endFixingPeriodDates = ScheduleCalculator.getAdjustedDateSchedule(settlementDate, endTenor, _paymentPeriod.getPeriod(), _isShortStub, _isFromEnd,
         _businessDayConvention, _calendar, _endOfMonth);
     final CouponONDefinition[] coupons = new CouponONDefinition[endFixingPeriodDates.length];
-    coupons[0] = CouponONDefinition.from(_index, settlementDate, endFixingPeriodDates[0], -notional, _paymentLag, holidays);
+    coupons[0] = CouponONDefinition.from(_index, settlementDate, endFixingPeriodDates[0], notional, _paymentLag, holidays);
     for (int i = 1; i < endFixingPeriodDates.length; i++) {
       coupons[i] = CouponONDefinition.from(_index, endFixingPeriodDates[i - 1], endFixingPeriodDates[i], notional, _paymentLag,
           holidays);

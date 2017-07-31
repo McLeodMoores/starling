@@ -1,7 +1,7 @@
 /**
  * Copyright (C) 2017 - present McLeod Moores Software Limited.  All rights reserved.
  */
-package com.mcleodmoores.analytics.financial.curve.construction;
+package com.mcleodmoores.analytics.financial.curve.construction.discounting;
 
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
