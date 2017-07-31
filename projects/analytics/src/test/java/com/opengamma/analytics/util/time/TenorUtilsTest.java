@@ -45,26 +45,25 @@ public class TenorUtilsTest {
 
   @Test
   public void testAdjustZonedDateTime2() {
-    final int spotDays = 2;
     final ZonedDateTime zonedDateTime = DateUtils.getUTCDate(2013, 12, 31);
-    assertEquals(DateUtils.getUTCDate(2014, 12, 31), TenorUtils.adjustDateByTenor(zonedDateTime, Tenor.ONE_YEAR, CALENDAR, spotDays));
-    assertEquals(DateUtils.getUTCDate(2014, 1, 31), TenorUtils.adjustDateByTenor(zonedDateTime, Tenor.ONE_MONTH, CALENDAR, spotDays));
-    assertEquals(DateUtils.getUTCDate(2014, 1, 1), TenorUtils.adjustDateByTenor(zonedDateTime, Tenor.ONE_DAY, CALENDAR, spotDays));
-    assertEquals(DateUtils.getUTCDate(2014, 1, 1), TenorUtils.adjustDateByTenor(DateUtils.getUTCDate(2013, 12, 31), Tenor.ON, NO_HOLIDAYS, spotDays));
-    assertEquals(DateUtils.getUTCDate(2014, 1, 2), TenorUtils.adjustDateByTenor(DateUtils.getUTCDate(2013, 12, 31), Tenor.TN, NO_HOLIDAYS, spotDays));
-    assertEquals(DateUtils.getUTCDate(2014, 1, 3), TenorUtils.adjustDateByTenor(DateUtils.getUTCDate(2013, 12, 31), Tenor.SN, NO_HOLIDAYS, spotDays));
-    assertEquals(DateUtils.getUTCDate(2014, 1, 1), TenorUtils.adjustDateByTenor(DateUtils.getUTCDate(2013, 12, 31), Tenor.ON, WEEKEND_CALENDAR, spotDays));
-    assertEquals(DateUtils.getUTCDate(2014, 1, 2), TenorUtils.adjustDateByTenor(DateUtils.getUTCDate(2013, 12, 31), Tenor.TN, WEEKEND_CALENDAR, spotDays));
-    assertEquals(DateUtils.getUTCDate(2014, 1, 3), TenorUtils.adjustDateByTenor(DateUtils.getUTCDate(2013, 12, 31), Tenor.SN, WEEKEND_CALENDAR, spotDays));
-    assertEquals(DateUtils.getUTCDate(2014, 1, 2), TenorUtils.adjustDateByTenor(DateUtils.getUTCDate(2014, 1, 1), Tenor.ON, NO_HOLIDAYS, spotDays));
-    assertEquals(DateUtils.getUTCDate(2014, 1, 3), TenorUtils.adjustDateByTenor(DateUtils.getUTCDate(2014, 1, 1), Tenor.TN, NO_HOLIDAYS, spotDays));
-    assertEquals(DateUtils.getUTCDate(2014, 1, 4), TenorUtils.adjustDateByTenor(DateUtils.getUTCDate(2014, 1, 1), Tenor.SN, NO_HOLIDAYS, spotDays));
-    assertEquals(DateUtils.getUTCDate(2014, 1, 2), TenorUtils.adjustDateByTenor(DateUtils.getUTCDate(2014, 1, 1), Tenor.ON, WEEKEND_CALENDAR, spotDays));
-    assertEquals(DateUtils.getUTCDate(2014, 1, 3), TenorUtils.adjustDateByTenor(DateUtils.getUTCDate(2014, 1, 1), Tenor.TN, WEEKEND_CALENDAR, spotDays));
-    assertEquals(DateUtils.getUTCDate(2014, 1, 6), TenorUtils.adjustDateByTenor(DateUtils.getUTCDate(2014, 1, 1), Tenor.SN, WEEKEND_CALENDAR, spotDays));
-    assertEquals(DateUtils.getUTCDate(2014, 1, 2), TenorUtils.adjustDateByTenor(DateUtils.getUTCDate(2013, 12, 31), Tenor.ON, CALENDAR, spotDays));
-    assertEquals(DateUtils.getUTCDate(2014, 1, 3), TenorUtils.adjustDateByTenor(DateUtils.getUTCDate(2013, 12, 31), Tenor.TN, CALENDAR, spotDays));
-    assertEquals(DateUtils.getUTCDate(2014, 1, 6), TenorUtils.adjustDateByTenor(DateUtils.getUTCDate(2013, 12, 31), Tenor.SN, CALENDAR, spotDays));
+    assertEquals(DateUtils.getUTCDate(2014, 12, 31), TenorUtils.adjustDateByTenor(zonedDateTime, Tenor.ONE_YEAR, CALENDAR, 0));
+    assertEquals(DateUtils.getUTCDate(2014, 1, 31), TenorUtils.adjustDateByTenor(zonedDateTime, Tenor.ONE_MONTH, CALENDAR, 0));
+    assertEquals(DateUtils.getUTCDate(2014, 1, 1), TenorUtils.adjustDateByTenor(zonedDateTime, Tenor.ONE_DAY, CALENDAR, 0));
+    assertEquals(DateUtils.getUTCDate(2014, 1, 1), TenorUtils.adjustDateByTenor(DateUtils.getUTCDate(2013, 12, 31), Tenor.ON, NO_HOLIDAYS, 2));
+    assertEquals(DateUtils.getUTCDate(2014, 1, 1), TenorUtils.adjustDateByTenor(DateUtils.getUTCDate(2013, 12, 31), Tenor.TN, NO_HOLIDAYS, 2));
+    assertEquals(DateUtils.getUTCDate(2014, 1, 2), TenorUtils.adjustDateByTenor(DateUtils.getUTCDate(2013, 12, 31), Tenor.SN, NO_HOLIDAYS, 2));
+    assertEquals(DateUtils.getUTCDate(2014, 1, 1), TenorUtils.adjustDateByTenor(DateUtils.getUTCDate(2013, 12, 31), Tenor.ON, WEEKEND_CALENDAR, 2));
+    assertEquals(DateUtils.getUTCDate(2014, 1, 1), TenorUtils.adjustDateByTenor(DateUtils.getUTCDate(2013, 12, 31), Tenor.TN, WEEKEND_CALENDAR, 2));
+    assertEquals(DateUtils.getUTCDate(2014, 1, 2), TenorUtils.adjustDateByTenor(DateUtils.getUTCDate(2013, 12, 31), Tenor.SN, WEEKEND_CALENDAR, 2));
+    assertEquals(DateUtils.getUTCDate(2014, 1, 2), TenorUtils.adjustDateByTenor(DateUtils.getUTCDate(2014, 1, 1), Tenor.ON, NO_HOLIDAYS, 2));
+    assertEquals(DateUtils.getUTCDate(2014, 1, 2), TenorUtils.adjustDateByTenor(DateUtils.getUTCDate(2014, 1, 1), Tenor.TN, NO_HOLIDAYS, 2));
+    assertEquals(DateUtils.getUTCDate(2014, 1, 3), TenorUtils.adjustDateByTenor(DateUtils.getUTCDate(2014, 1, 1), Tenor.SN, NO_HOLIDAYS, 2));
+    assertEquals(DateUtils.getUTCDate(2014, 1, 2), TenorUtils.adjustDateByTenor(DateUtils.getUTCDate(2014, 1, 1), Tenor.ON, WEEKEND_CALENDAR, 2));
+    assertEquals(DateUtils.getUTCDate(2014, 1, 2), TenorUtils.adjustDateByTenor(DateUtils.getUTCDate(2014, 1, 1), Tenor.TN, WEEKEND_CALENDAR, 2));
+    assertEquals(DateUtils.getUTCDate(2014, 1, 3), TenorUtils.adjustDateByTenor(DateUtils.getUTCDate(2014, 1, 1), Tenor.SN, WEEKEND_CALENDAR, 2));
+    assertEquals(DateUtils.getUTCDate(2014, 1, 2), TenorUtils.adjustDateByTenor(DateUtils.getUTCDate(2013, 12, 31), Tenor.ON, CALENDAR, 2));
+    assertEquals(DateUtils.getUTCDate(2014, 1, 2), TenorUtils.adjustDateByTenor(DateUtils.getUTCDate(2013, 12, 31), Tenor.TN, CALENDAR, 2));
+    assertEquals(DateUtils.getUTCDate(2014, 1, 2), TenorUtils.adjustDateByTenor(DateUtils.getUTCDate(2013, 12, 31), Tenor.SN, CALENDAR, 2));
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
@@ -161,7 +160,7 @@ public class TenorUtilsTest {
   private static class MyCalendar extends ExceptionCalendar {
 
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 1L;
 

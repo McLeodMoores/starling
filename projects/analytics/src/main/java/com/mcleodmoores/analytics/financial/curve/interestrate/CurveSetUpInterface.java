@@ -5,6 +5,7 @@ package com.mcleodmoores.analytics.financial.curve.interestrate;
 
 import java.util.Map;
 
+import com.opengamma.analytics.financial.instrument.InstrumentDefinition;
 import com.opengamma.analytics.financial.instrument.index.GeneratorAttribute;
 import com.opengamma.analytics.financial.instrument.index.GeneratorInstrument;
 import com.opengamma.analytics.financial.instrument.index.Index;
@@ -25,10 +26,10 @@ public interface CurveSetUpInterface<T extends ParameterProviderInterface> {
 
   public CurveTypeSetUpInterface<T> using(final String curveName);
 
-  //TODO this method should generate definitions immediately
   public CurveSetUpInterface<T> withNode(final String curveName, final GeneratorInstrument instrumentGenerator, final GeneratorAttribute attributeGenerator, final double marketData);
 
-  //TODO add a withNode that takes definitions
+  //TODO don't need market data here
+  public CurveSetUpInterface<T> withNode(final String curveName, InstrumentDefinition<?> definition);
 
   public CurveBuilder<T> getBuilder();
 
@@ -41,4 +42,5 @@ public interface CurveSetUpInterface<T extends ParameterProviderInterface> {
   public CurveSetUpInterface<T> withFixingTs(final Map<Index, ZonedDateTimeDoubleTimeSeries> fixingTs);
 
   public CurveSetUpInterface<T> copy();
+
 }

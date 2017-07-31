@@ -20,6 +20,7 @@ import com.opengamma.analytics.financial.interestrate.swap.derivative.SwapFixedC
 import com.opengamma.financial.convention.calendar.Calendar;
 import com.opengamma.timeseries.precise.zdt.ZonedDateTimeDoubleTimeSeries;
 import com.opengamma.util.ArgumentChecker;
+import com.opengamma.util.time.Tenor;
 
 /**
  * Class describing a fixed for ON rate swap. Both legs are in the same currency.
@@ -48,6 +49,24 @@ public class SwapFixedONDefinition extends SwapDefinition {
    * @return The swap.
    */
   public static SwapFixedONDefinition from(final ZonedDateTime settlementDate, final Period tenorAnnuity, final double notional, final GeneratorSwapFixedON generator, final double fixedRate,
+      final boolean isPayer) {
+    final AnnuityCouponONDefinition oisLeg = AnnuityCouponONDefinition.from(settlementDate, tenorAnnuity, notional, generator, !isPayer);
+    final double sign = isPayer ? -1.0 : 1.0;
+    final double notionalSigned = sign * notional;
+    return from(oisLeg, notionalSigned, fixedRate, generator.getOvernightCalendar());
+  }
+
+  /**
+   * Builder of OIS swap from financial description (start date and tenor).
+   * @param settlementDate The annuity settlement or first fixing date.
+   * @param tenorAnnuity The total tenor of the annuity.
+   * @param notional The annuity notional.
+   * @param generator The OIS generator.
+   * @param fixedRate The rate of the swap fixed leg.
+   * @param isPayer The flag indicating if the annuity is paying (true) or receiving (false).
+   * @return The swap.
+   */
+  public static SwapFixedONDefinition from(final ZonedDateTime settlementDate, final Tenor tenorAnnuity, final double notional, final GeneratorSwapFixedON generator, final double fixedRate,
       final boolean isPayer) {
     final AnnuityCouponONDefinition oisLeg = AnnuityCouponONDefinition.from(settlementDate, tenorAnnuity, notional, generator, !isPayer);
     final double sign = isPayer ? -1.0 : 1.0;
@@ -104,7 +123,7 @@ public class SwapFixedONDefinition extends SwapDefinition {
    * @return The swap.
    */
   public static SwapFixedONDefinition from(final ZonedDateTime settlementDate, final ZonedDateTime endFixingPeriodDate, final NotionalProvider notionalFixed, final NotionalProvider notionalOIS,
-                                           final GeneratorSwapFixedON generator, final double fixedRate, final boolean isPayer) {
+      final GeneratorSwapFixedON generator, final double fixedRate, final boolean isPayer) {
     final AnnuityCouponONDefinition oisLeg = AnnuityCouponONDefinition.from(settlementDate, endFixingPeriodDate, notionalOIS, generator, !isPayer);
     return from(oisLeg, notionalFixed, fixedRate, generator.getOvernightCalendar(), isPayer);
   }

@@ -10,6 +10,7 @@ import org.threeten.bp.LocalDateTime;
 import org.threeten.bp.Period;
 import org.threeten.bp.ZonedDateTime;
 
+import com.mcleodmoores.date.WorkingDayCalendar;
 import com.opengamma.financial.convention.calendar.Calendar;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.time.Tenor;
@@ -76,37 +77,55 @@ public class TenorUtils {
     ArgumentChecker.notNull(tenor, "tenor");
     ArgumentChecker.notNull(calendar, "calendar");
     ArgumentChecker.isTrue(spotDays >= 0, "number of spot days must be greater than zero; have {}", spotDays);
+    ZonedDateTime result;
     if (tenor.isBusinessDayTenor()) {
-      int offset;
       final BusinessDayTenor bdt = tenor.getBusinessDayTenor();
       switch (bdt) {
         case OVERNIGHT:
-          offset = 0;
-          break;
         case TOM_NEXT:
-          offset = 1;
+          result = date.plusDays(1);
           break;
         case SPOT_NEXT:
-          offset = spotDays;
+          result = date.plusDays(spotDays);
           break;
         default:
           throw new IllegalArgumentException("Did not recognise tenor " + tenor);
       }
-      ZonedDateTime result = date;
-      int count = 0;
-      while (count < offset) {
-        result = result.plusDays(1);
-        if (calendar.isWorkingDay(result.toLocalDate())) {
-          count++;
-        }
-      }
-      result = result.plusDays(1);
       while (!calendar.isWorkingDay(result.toLocalDate())) {
         result = result.plusDays(1);
       }
       return result;
     }
-    return date.plus(tenor.getPeriod());
+    result = date.plusDays(spotDays);
+    return result.plus(tenor.getPeriod());
+  }
+
+  public static ZonedDateTime adjustDateByTenor(final ZonedDateTime date, final Tenor tenor, final WorkingDayCalendar calendar, final int spotDays) {
+    ArgumentChecker.notNull(date, "date");
+    ArgumentChecker.notNull(tenor, "tenor");
+    ArgumentChecker.notNull(calendar, "calendar");
+    ArgumentChecker.isTrue(spotDays >= 0, "number of spot days must be greater than zero; have {}", spotDays);
+    ZonedDateTime result;
+    if (tenor.isBusinessDayTenor()) {
+      final BusinessDayTenor bdt = tenor.getBusinessDayTenor();
+      switch (bdt) {
+        case OVERNIGHT:
+        case TOM_NEXT:
+          result = date.plusDays(1);
+          break;
+        case SPOT_NEXT:
+          result = date.plusDays(spotDays);
+          break;
+        default:
+          throw new IllegalArgumentException("Did not recognise tenor " + tenor);
+      }
+      while (!calendar.isWorkingDay(result.toLocalDate())) {
+        result = result.plusDays(1);
+      }
+      return result;
+    }
+    result = date.plusDays(spotDays);
+    return result.plus(tenor.getPeriod());
   }
 
   /**
@@ -205,7 +224,7 @@ public class TenorUtils {
 
   /**
    * Add two tenors when it make sense.
-   * When the two tenors are backed by period, create a tenor backed by adding the periods. 
+   * When the two tenors are backed by period, create a tenor backed by adding the periods.
    * When one of the tenor is backed by a ZERO period, return the other tenor.
    * When both tenors are ON, returns TN.
    * In all other cases throw an exception.
@@ -215,7 +234,7 @@ public class TenorUtils {
    * @throws IllegalArgumentException as described above.
    */
   public static Tenor plus(final Tenor tenor1, final Tenor tenor2) {
-    if ((!tenor1.isBusinessDayTenor()) && (!tenor2.isBusinessDayTenor())) { // Standard periods
+    if (!tenor1.isBusinessDayTenor() && !tenor2.isBusinessDayTenor()) { // Standard periods
       return Tenor.of(tenor1.getPeriod().plus(tenor2.getPeriod()));
     }
     if (tenor1.equals(Tenor.of(Period.ZERO))) { // First tenor is ZERO
@@ -224,7 +243,7 @@ public class TenorUtils {
     if (tenor2.equals(Tenor.of(Period.ZERO))) { // Second tenor is ZERO
       return tenor1;
     }
-    if ((tenor1.equals(Tenor.ON)) && (tenor1.equals(Tenor.ON))) { // Both tenors are ON
+    if (tenor1.equals(Tenor.ON) && tenor1.equals(Tenor.ON)) { // Both tenors are ON
       return Tenor.TN;
     }
     throw new IllegalArgumentException("Can not add " + tenor1 + " and " + tenor2);

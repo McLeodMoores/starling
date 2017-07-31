@@ -26,6 +26,7 @@ import com.mcleodmoores.examples.simulated.loader.config.ExamplesFxVolatilitySur
 import com.mcleodmoores.examples.simulated.loader.config.ExamplesUsBondCurveConfigsLoader;
 import com.mcleodmoores.examples.simulated.loader.config.ExamplesViewsPopulator;
 import com.mcleodmoores.examples.simulated.loader.convention.ExamplesConventionMasterInitializer;
+import com.mcleodmoores.examples.simulated.loader.data.ExampleHistoricalDataGeneratorTool;
 import com.mcleodmoores.examples.simulated.loader.holiday.ExamplesCurrencyHolidayLoader;
 import com.mcleodmoores.examples.simulated.loader.legalentity.SimulatedLegalEntityLoader;
 import com.mcleodmoores.examples.simulated.loader.portfolio.SimulatedMultiCountryBondPortfolioGenerator;
@@ -40,7 +41,6 @@ import com.opengamma.examples.simulated.generator.SyntheticPortfolioGeneratorToo
 import com.opengamma.examples.simulated.loader.ExampleCurrencyConfigurationLoader;
 import com.opengamma.examples.simulated.loader.ExampleEquityPortfolioLoader;
 import com.opengamma.examples.simulated.loader.ExampleExchangeLoader;
-import com.opengamma.examples.simulated.loader.ExampleHistoricalDataGeneratorTool;
 import com.opengamma.examples.simulated.loader.ExampleTimeSeriesRatingLoader;
 import com.opengamma.financial.generator.AbstractPortfolioGeneratorTool;
 import com.opengamma.financial.generator.StaticNameGenerator;
@@ -156,7 +156,7 @@ public class ExamplesDatabasePopulator extends AbstractTool<ToolContext> {
     loadLegalEntities();
     loadConventions();
     //loadCurveAndSurfaceDefinitions();
-//    loadCurveCalculationConfigurations();
+    //    loadCurveCalculationConfigurations();
     loadTimeSeriesRating();
     loadSimulatedHistoricalData();
     loadMultiCurrencySwapPortfolio();
@@ -172,18 +172,18 @@ public class ExamplesDatabasePopulator extends AbstractTool<ToolContext> {
     // GBP corporate bonds
 
     loadAudSwapPortfolio();
-//    loadSwaptionParityPortfolio();
-//    loadMixedCMPortfolio();
+    //    loadSwaptionParityPortfolio();
+    //    loadMixedCMPortfolio();
     loadVanillaFxOptionPortfolio();
     loadEquityPortfolio();
-//    loadEquityOptionPortfolio();
-//    loadFuturePortfolio();
-//    loadBondPortfolio();
-//    loadSwaptionPortfolio();
-//    loadEURFixedIncomePortfolio();
-//    loadFXForwardPortfolio();
-//    loadERFuturePortfolio();
-//    loadFXVolatilitySwapPortfolio();
+    //    loadEquityOptionPortfolio();
+    //    loadFuturePortfolio();
+    //    loadBondPortfolio();
+    //    loadSwaptionPortfolio();
+    //    loadEURFixedIncomePortfolio();
+    //    loadFXForwardPortfolio();
+    //    loadERFuturePortfolio();
+    //    loadFXVolatilitySwapPortfolio();
     loadOisPortfolio();
     loadMultiCountryBondPortfolio();
     loadViews();
@@ -585,19 +585,19 @@ public class ExamplesDatabasePopulator extends AbstractTool<ToolContext> {
     }
   }
 
-//  /**
-//   * Loads example Ugandan bond curve construction configurations.
-//   */
-//  private void loadUgandanBondCurveConfigurations() {
-//    final Log log = new Log("Creating Ugandan bond curve construction configurations");
-//    try {
-//      final ExampleUgandanBondCurveConfigurationsLoader loader = new ExampleUgandanBondCurveConfigurationsLoader();
-//      loader.run(getToolContext());
-//      log.done();
-//    } catch (final RuntimeException t) {
-//      log.fail(t);
-//    }
-//  }
+  //  /**
+  //   * Loads example Ugandan bond curve construction configurations.
+  //   */
+  //  private void loadUgandanBondCurveConfigurations() {
+  //    final Log log = new Log("Creating Ugandan bond curve construction configurations");
+  //    try {
+  //      final ExampleUgandanBondCurveConfigurationsLoader loader = new ExampleUgandanBondCurveConfigurationsLoader();
+  //      loader.run(getToolContext());
+  //      log.done();
+  //    } catch (final RuntimeException t) {
+  //      log.fail(t);
+  //    }
+  //  }
 
   private void loadFxImpliedCurveCalculationConfigurations() {
     final Log log = new Log("Creating FX implied curve construction configurations");

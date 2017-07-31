@@ -59,12 +59,12 @@ public class SimulatedOisPortfolioGenerator extends AbstractPortfolioGeneratorTo
    */
   private static final class OisSecurityGenerator extends SecurityGenerator<SwapSecurity> {
     /** The logger */
-    private static final Logger s_logger = LoggerFactory.getLogger(SimulatedOisPortfolioGenerator.OisSecurityGenerator.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(SimulatedOisPortfolioGenerator.OisSecurityGenerator.class);
     /** The tickers of the OIS rates for each currency */
     private static final List<Pair<Currency, ExternalId>> FIXINGS = new ArrayList<>();
     /** The swap tenors */
     private static final Tenor[] TENORS = new Tenor[] {Tenor.TWO_YEARS, Tenor.THREE_YEARS, Tenor.FIVE_YEARS,
-      Tenor.ofYears(7), Tenor.TEN_YEARS, Tenor.ofYears(15), Tenor.ofYears(20) };
+        Tenor.ofYears(7), Tenor.TEN_YEARS, Tenor.ofYears(15), Tenor.ofYears(20) };
     /** The trade date */
     private static final LocalDate TODAY = LocalDate.now();
     /** The counterparty */
@@ -102,14 +102,19 @@ public class SimulatedOisPortfolioGenerator extends AbstractPortfolioGeneratorTo
       final ExternalId floatingRateId = pair.getSecond();
       final HistoricalTimeSeries initialRateSeries = getHistoricalSource().getHistoricalTimeSeries(MarketDataRequirementNames.MARKET_VALUE,
           floatingRateId.toBundle(), null, TODAY, true, TODAY, true);
+      if (initialRateSeries == null || initialRateSeries.getTimeSeries() == null) {
+        LOGGER.error("Could not get time series for {}", floatingRateId);
+        return null;
+      }
       final double initialRate = initialRateSeries.getTimeSeries().getEarliestValue();
       final double fixedRate = initialRate * (1 + (getRandom().nextBoolean() ? -1 : 1) * getRandom().nextDouble() / 100.);
       final Double notional = (getRandom().nextInt(9999) + 1) * 10000.;
       final ZonedDateTime tradeDateTime = TODAY.atStartOfDay(ZoneOffset.UTC);
       final ZonedDateTime maturityDateTime = maturity.atStartOfDay(ZoneOffset.UTC);
-      final ConventionBundle swapConvention = getConventionBundleSource().getConventionBundle(ExternalId.of(InMemoryConventionBundleMaster.SIMPLE_NAME_SCHEME, ccy.getCode() + "_OIS_SWAP"));
+      final ConventionBundle swapConvention =
+          getConventionBundleSource().getConventionBundle(ExternalId.of(InMemoryConventionBundleMaster.SIMPLE_NAME_SCHEME, ccy.getCode() + "_OIS_SWAP"));
       if (swapConvention == null) {
-        s_logger.error("Couldn't get swap convention for {}", ccy.getCode());
+        LOGGER.error("Couldn't get swap convention for {}", ccy.getCode());
         return null;
       }
       final InterestRateNotional interestRateNotional = new InterestRateNotional(ccy, notional);

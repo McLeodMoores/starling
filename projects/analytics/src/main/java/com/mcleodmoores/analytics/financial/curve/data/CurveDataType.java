@@ -5,7 +5,8 @@ package com.mcleodmoores.analytics.financial.curve.data;
 
 import org.threeten.bp.Period;
 
-import com.opengamma.analytics.financial.instrument.index.GeneratorInstrument;
+import com.mcleodmoores.analytics.financial.convention.interestrate.CurveDataConvention;
+import com.opengamma.analytics.financial.interestrate.InstrumentDerivative;
 import com.opengamma.util.money.Currency;
 
 /**
@@ -13,6 +14,6 @@ import com.opengamma.util.money.Currency;
  */
 public interface CurveDataType {
 
-  GeneratorInstrument<?> getInstrumentGenerator(String name, Currency currency, Period period);
+  <T extends CurveDataConvention, U extends InstrumentDerivative> U generateInstrument(T convention, String name, Currency currency, Period period);
 
 }

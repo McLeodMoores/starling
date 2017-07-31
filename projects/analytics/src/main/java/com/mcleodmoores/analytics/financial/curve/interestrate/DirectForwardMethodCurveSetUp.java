@@ -9,6 +9,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.opengamma.analytics.financial.instrument.InstrumentDefinition;
 import com.opengamma.analytics.financial.instrument.index.GeneratorAttribute;
 import com.opengamma.analytics.financial.instrument.index.GeneratorInstrument;
 import com.opengamma.analytics.financial.instrument.index.IborIndex;
@@ -33,6 +34,7 @@ public class DirectForwardMethodCurveSetUp implements CurveSetUpInterface<Multic
   protected final LinkedHashMap<String, IndexON[]> _overnightCurves;
   protected final Map<String, DirectForwardMethodCurveTypeSetUp> _curveTypes;
   protected final Map<String, Map<Pair<GeneratorInstrument, GeneratorAttribute>, Double>> _nodes;
+  protected final Map<String, List<InstrumentDefinition<?>>> _newNodes;
   protected final Map<Index, ZonedDateTimeDoubleTimeSeries> _fixingTs;
   protected MulticurveProviderForward _knownData;
   protected CurveBuildingBlockBundle _knownBundle;
@@ -45,6 +47,7 @@ public class DirectForwardMethodCurveSetUp implements CurveSetUpInterface<Multic
     _curveTypes = new HashMap<>();
     //TODO currently have to add things in the right order for each curve - need to have comparator for attribute generator tenors
     _nodes = new LinkedHashMap<>();
+    _newNodes = new LinkedHashMap<>();
     _fixingTs = new HashMap<>();
     _knownData = null;
     _knownBundle = null;
@@ -59,6 +62,7 @@ public class DirectForwardMethodCurveSetUp implements CurveSetUpInterface<Multic
     _curveTypes = setup._curveTypes;
     //TODO currently have to add things in the right order for each curve - need to have comparator for attribute generator tenors
     _nodes = setup._nodes;
+    _newNodes = setup._newNodes;
     _fixingTs = setup._fixingTs;
     _knownData = setup._knownData;
     _knownBundle = setup._knownBundle;
@@ -66,6 +70,7 @@ public class DirectForwardMethodCurveSetUp implements CurveSetUpInterface<Multic
 
   protected DirectForwardMethodCurveSetUp(final List<String[]> curveNames, final LinkedHashMap<String, Currency> discountingCurves, final LinkedHashMap<String, IborIndex[]> iborCurves,
       final LinkedHashMap<String, IndexON[]> overnightCurves, final Map<String, Map<Pair<GeneratorInstrument, GeneratorAttribute>, Double>> nodes,
+      final Map<String, List<InstrumentDefinition<?>>> newNodes,
       final Map<Index, ZonedDateTimeDoubleTimeSeries> fixingTs, final Map<String, DirectForwardMethodCurveTypeSetUp> curveTypes,  final MulticurveProviderForward knownData,
       final CurveBuildingBlockBundle knownBundle) {
     _curveNames = new ArrayList<>(curveNames);
@@ -73,6 +78,7 @@ public class DirectForwardMethodCurveSetUp implements CurveSetUpInterface<Multic
     _iborCurves = new LinkedHashMap<>(iborCurves);
     _overnightCurves = new LinkedHashMap<>(overnightCurves);
     _nodes = new HashMap<>(nodes);
+    _newNodes = new HashMap<>(newNodes);
     _curveTypes = new HashMap<>(curveTypes);
     _fixingTs = new HashMap<>(fixingTs);
     _knownData = knownData == null ? null : knownData.copy();
@@ -82,13 +88,13 @@ public class DirectForwardMethodCurveSetUp implements CurveSetUpInterface<Multic
 
   @Override
   public DirectForwardMethodCurveBuilder getBuilder() {
-    return new DirectForwardMethodCurveBuilder(_curveNames, _discountingCurves, _iborCurves, _overnightCurves, _nodes, _curveTypes,
+    return new DirectForwardMethodCurveBuilder(_curveNames, _discountingCurves, _iborCurves, _overnightCurves, _nodes, _newNodes, _curveTypes,
         _knownData, _knownBundle, _fixingTs);
   }
 
   @Override
   public DirectForwardMethodCurveSetUp copy() {
-    return new DirectForwardMethodCurveSetUp(_curveNames, _discountingCurves, _iborCurves, _overnightCurves, _nodes, _fixingTs, _curveTypes,
+    return new DirectForwardMethodCurveSetUp(_curveNames, _discountingCurves, _iborCurves, _overnightCurves, _nodes, _newNodes, _fixingTs, _curveTypes,
         _knownData, _knownBundle);
   }
 
@@ -138,6 +144,18 @@ public class DirectForwardMethodCurveSetUp implements CurveSetUpInterface<Multic
       _nodes.put(curveName, nodesForCurve);
     }
     nodesForCurve.put(Pairs.<GeneratorInstrument, GeneratorAttribute>of(instrumentGenerator, attributeGenerator), marketData);
+    //TODO if market data is already present, log then overwrite
+    return this;
+  }
+
+  @Override
+  public DirectForwardMethodCurveSetUp withNode(final String curveName, final InstrumentDefinition<?> definition) {
+    List<InstrumentDefinition<?>> nodesForCurve = _newNodes.get(curveName);
+    if (nodesForCurve == null) {
+      nodesForCurve = new ArrayList<>();
+      _newNodes.put(curveName, nodesForCurve);
+    }
+    nodesForCurve.add(definition);
     //TODO if market data is already present, log then overwrite
     return this;
   }

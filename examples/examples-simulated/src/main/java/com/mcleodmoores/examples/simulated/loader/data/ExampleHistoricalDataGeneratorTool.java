@@ -3,10 +3,10 @@
  *
  * Please see distribution for license.
  */
-package com.opengamma.examples.simulated.loader;
+package com.mcleodmoores.examples.simulated.loader.data;
 
+import com.mcleodmoores.examples.simulated.historical.SimulatedHistoricalDataGenerator;
 import com.opengamma.component.tool.AbstractTool;
-import com.opengamma.examples.simulated.historical.SimulatedHistoricalDataGenerator;
 import com.opengamma.financial.tool.ToolContext;
 import com.opengamma.scripts.Scriptable;
 

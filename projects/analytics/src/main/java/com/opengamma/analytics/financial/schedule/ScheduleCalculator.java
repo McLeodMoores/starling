@@ -21,12 +21,14 @@ import org.threeten.bp.ZonedDateTime;
 import org.threeten.bp.temporal.TemporalAdjusters;
 
 import com.mcleodmoores.date.CalendarAdapter;
+import com.mcleodmoores.date.EmptyWorkingDayCalendar;
 import com.mcleodmoores.date.WorkingDayCalendar;
 import com.opengamma.analytics.financial.instrument.index.GeneratorDeposit;
 import com.opengamma.analytics.financial.instrument.index.IborIndex;
 import com.opengamma.analytics.util.time.TenorUtils;
 import com.opengamma.financial.convention.StubType;
 import com.opengamma.financial.convention.businessday.BusinessDayConvention;
+import com.opengamma.financial.convention.businessday.BusinessDayConventions;
 import com.opengamma.financial.convention.businessday.FollowingBusinessDayConvention;
 import com.opengamma.financial.convention.businessday.PrecedingBusinessDayConvention;
 import com.opengamma.financial.convention.calendar.Calendar;
@@ -165,6 +167,10 @@ public final class ScheduleCalculator {
     return getAdjustedDate(date, shiftDays.getDays(), calendar);
   }
 
+  public static ZonedDateTime getAdjustedDate(final ZonedDateTime date, final Tenor tenor, final WorkingDayCalendar calendar) {
+    return TenorUtils.adjustDateByTenor(date, tenor, new CalendarAdapter(calendar), 0);
+  }
+
   /**
    * Return a good business date computed from a given date and shifted by a certain number of business days.
    * This version uses LocalDate.
@@ -261,6 +267,23 @@ public final class ScheduleCalculator {
     return convention.adjustDate(previousCalendarType, endDate); // Adjusted by Business day convention
   }
 
+  public static ZonedDateTime getAdjustedDate(final ZonedDateTime startDate, final Tenor tenor, final BusinessDayConvention convention,
+      final WorkingDayCalendar calendar, final boolean endOfMonthRule) {
+    ArgumentChecker.notNull(startDate, "startDate");
+    ArgumentChecker.notNull(convention, "convention");
+    ArgumentChecker.notNull(calendar, "calendar");
+    ArgumentChecker.notNull(tenor, "tenor");
+    final ZonedDateTime endDate = TenorUtils.adjustDateByTenor(startDate, tenor); // Unadjusted date. //TODO check for business days
+    // Adjusted to month-end: when start date is last business day of the month, the end date is the last business day of the month.
+    final boolean isStartDateEOM = startDate.getMonth() != getAdjustedDate(startDate, 1, calendar).getMonth();
+    final Calendar previousCalendarType = new CalendarAdapter(calendar);
+    if (tenor.getPeriod().getDays() == 0 && endOfMonthRule && isStartDateEOM) {
+      final BusinessDayConvention preceding = new PrecedingBusinessDayConvention();
+      return preceding.adjustDate(previousCalendarType, endDate.with(TemporalAdjusters.lastDayOfMonth()));
+    }
+    return convention.adjustDate(previousCalendarType, endDate); // Adjusted by Business day convention
+  }
+
   /**
    * Compute the end date of a period from the start date, the tenor and the conventions.
    * @param startDate The period start date.
@@ -281,11 +304,26 @@ public final class ScheduleCalculator {
     final ZonedDateTime endDate = startDate.plus(tenor); // Unadjusted date.
     // Adjusted to month-end: when start date is last business day of the month, the end date is the last business day of the month.
     final boolean isStartDateEOM = startDate.getMonth() != getAdjustedDate(startDate, 1, calendar).getMonth();
-    if (tenor.getDays() == 0 & endOfMonthRule & isStartDateEOM) {
-      final BusinessDayConvention preceding = new PrecedingBusinessDayConvention();
-      return preceding.adjustDate(calendar, endDate.with(TemporalAdjusters.lastDayOfMonth()));
+    if (tenor.getDays() == 0 && endOfMonthRule && isStartDateEOM) {
+      return BusinessDayConventions.PRECEDING.adjustDate(calendar, endDate.with(TemporalAdjusters.lastDayOfMonth()));
     }
     return convention.adjustDate(calendar, endDate); // Adjusted by Business day convention
+  }
+
+  public static ZonedDateTime getAdjustedDate(final ZonedDateTime startDate, final Tenor tenor, final BusinessDayConvention convention, final WorkingDayCalendar calendar,
+      final int spotDays, final boolean endOfMonthRule) {
+    ArgumentChecker.notNull(startDate, "Start date");
+    ArgumentChecker.notNull(convention, "Convention");
+    ArgumentChecker.notNull(calendar, "Calendar");
+    ArgumentChecker.notNull(tenor, "Tenor");
+    final Calendar holidays = new CalendarAdapter(calendar);
+    // Adjusted to month-end: when start date is last business day of the month, the end date is the last business day of the month.
+    final boolean isStartDateEom = startDate.getMonth() != getAdjustedDate(startDate, 1, calendar).getMonth();
+    final ZonedDateTime endDate = TenorUtils.adjustDateByTenor(startDate, tenor, new CalendarAdapter(EmptyWorkingDayCalendar.INSTANCE), 0); // Unadjusted date.
+    if (tenor.isBusinessDayTenor() && endOfMonthRule && isStartDateEom) {
+      return BusinessDayConventions.PRECEDING.adjustDate(holidays, endDate.with(TemporalAdjusters.lastDayOfMonth()));
+    }
+    return convention.adjustDate(holidays, endDate); // Adjusted by Business day convention
   }
 
   /**
@@ -677,6 +715,15 @@ public final class ScheduleCalculator {
     final boolean eomApply = eomRule && getAdjustedDate(startDate, 1, calendar).getMonth() != startDate.getMonth() && tenorTotal.getDays() == 0;
     // Implementation note: the "tenorTotal.getDays() == 0" condition is required as the rule does not apply for period of less than 1 month (like 1 week).
     return getAdjustedDateSchedule(unadjustedDateSchedule, convention, calendar, eomApply);
+  }
+
+  public static ZonedDateTime[] getAdjustedDateSchedule(final ZonedDateTime startDate, final Tenor tenorTotal, final Period tenorPeriod, final boolean stubShort,
+      final boolean fromEnd, final BusinessDayConvention convention, final WorkingDayCalendar calendar, final boolean eomRule) {
+    final ZonedDateTime endDate = TenorUtils.adjustDateByTenor(startDate, tenorTotal); //TODO check for business days
+    final ZonedDateTime[] unadjustedDateSchedule = getUnadjustedDateSchedule(startDate, endDate, tenorPeriod, stubShort, fromEnd);
+    final boolean eomApply = eomRule && getAdjustedDate(startDate, 1, calendar).getMonth() != startDate.getMonth() && tenorTotal.getPeriod().getDays() == 0;
+    // Implementation note: the "tenorTotal.getDays() == 0" condition is required as the rule does not apply for period of less than 1 month (like 1 week).
+    return getAdjustedDateSchedule(unadjustedDateSchedule, convention, new CalendarAdapter(calendar), eomApply);
   }
 
   /**

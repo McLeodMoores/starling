@@ -24,6 +24,7 @@ import com.opengamma.financial.convention.businessday.BusinessDayConvention;
 import com.opengamma.financial.convention.calendar.Calendar;
 import com.opengamma.timeseries.DoubleTimeSeries;
 import com.opengamma.util.ArgumentChecker;
+import com.opengamma.util.time.Tenor;
 
 /**
  * A wrapper class for a {@link AnnuityDefinition} containing {@link CouponONDefinition}.
@@ -61,6 +62,16 @@ public class AnnuityCouponONDefinition extends AnnuityCouponDefinition<CouponOND
     ArgumentChecker.notNull(tenorAnnuity, "tenor annuity");
     ArgumentChecker.notNull(generator, "generator");
     final ZonedDateTime[] endFixingPeriodDate = ScheduleCalculator.getAdjustedDateSchedule(settlementDate, tenorAnnuity, generator.getLegsPeriod(), generator.isStubShort(), generator.isFromEnd(),
+        generator.getBusinessDayConvention(), generator.getOvernightCalendar(), generator.isEndOfMonth());
+    return AnnuityCouponONDefinition.from(settlementDate, endFixingPeriodDate, notional, generator, isPayer);
+  }
+
+  public static AnnuityCouponONDefinition from(final ZonedDateTime settlementDate, final Tenor tenorAnnuity, final double notional, final GeneratorSwapFixedON generator, final boolean isPayer) {
+    ArgumentChecker.notNull(settlementDate, "settlement date");
+    ArgumentChecker.notNull(tenorAnnuity, "tenor annuity");
+    ArgumentChecker.notNull(generator, "generator");
+    //TODO check period is available from tenor
+    final ZonedDateTime[] endFixingPeriodDate = ScheduleCalculator.getAdjustedDateSchedule(settlementDate, tenorAnnuity.getPeriod(), generator.getLegsPeriod(), generator.isStubShort(), generator.isFromEnd(),
         generator.getBusinessDayConvention(), generator.getOvernightCalendar(), generator.isEndOfMonth());
     return AnnuityCouponONDefinition.from(settlementDate, endFixingPeriodDate, notional, generator, isPayer);
   }
@@ -112,12 +123,12 @@ public class AnnuityCouponONDefinition extends AnnuityCouponDefinition<CouponOND
    * @return The annuity.
    */
   public static AnnuityCouponONDefinition from(final ZonedDateTime settlementDate, final ZonedDateTime endFixingPeriodDate, final NotionalProvider notional, final GeneratorSwapFixedON generator,
-                                               final boolean isPayer) {
+      final boolean isPayer) {
     ArgumentChecker.notNull(settlementDate, "settlement date");
     ArgumentChecker.notNull(endFixingPeriodDate, "End fixing period date");
     ArgumentChecker.notNull(generator, "generator");
     final ZonedDateTime[] endFixingPeriodDates = ScheduleCalculator.getAdjustedDateSchedule(settlementDate, endFixingPeriodDate, generator.getLegsPeriod(), generator.isStubShort(),
-                                                                                            generator.isFromEnd(), generator.getBusinessDayConvention(), generator.getOvernightCalendar(), generator.isEndOfMonth());
+        generator.isFromEnd(), generator.getBusinessDayConvention(), generator.getOvernightCalendar(), generator.isEndOfMonth());
     return AnnuityCouponONDefinition.from(settlementDate, endFixingPeriodDates, notional, generator, isPayer);
   }
 
@@ -185,12 +196,12 @@ public class AnnuityCouponONDefinition extends AnnuityCouponDefinition<CouponOND
    * @return The annuity.
    */
   public static AnnuityCouponONDefinition from(final ZonedDateTime settlementDate, final ZonedDateTime endFixingPeriodDate, final NotionalProvider notional, final GeneratorSwapIborON generator,
-                                               final boolean isPayer) {
+      final boolean isPayer) {
     ArgumentChecker.notNull(settlementDate, "settlement date");
     ArgumentChecker.notNull(endFixingPeriodDate, "End fixing period date");
     ArgumentChecker.notNull(generator, "generator");
     final ZonedDateTime[] endFixingPeriodDates = ScheduleCalculator.getAdjustedDateSchedule(settlementDate, endFixingPeriodDate, generator.getIndexIbor().getTenor(), generator.isStubShort(),
-                                                                                            generator.isFromEnd(), generator.getBusinessDayConvention(), generator.getOvernightCalendar(), generator.isEndOfMonth());
+        generator.isFromEnd(), generator.getBusinessDayConvention(), generator.getOvernightCalendar(), generator.isEndOfMonth());
     return AnnuityCouponONDefinition.from(settlementDate, endFixingPeriodDates, notional, generator, isPayer);
   }
 
@@ -226,13 +237,13 @@ public class AnnuityCouponONDefinition extends AnnuityCouponDefinition<CouponOND
    * @return An overnight annuity
    */
   private static AnnuityCouponONDefinition from(final ZonedDateTime settlementDate, final ZonedDateTime[] endFixingPeriodDates, final NotionalProvider notional, final GeneratorSwapFixedON generator,
-                                                final boolean isPayer) {
+      final boolean isPayer) {
     final double sign = isPayer ? -1.0 : 1.0;
     final CouponONDefinition[] coupons = new CouponONDefinition[endFixingPeriodDates.length];
     coupons[0] = CouponONDefinition.from(generator.getIndex(), settlementDate, endFixingPeriodDates[0], sign * notional.getAmount(settlementDate.toLocalDate()), generator.getPaymentLag(), generator.getOvernightCalendar());
     for (int loopcpn = 1; loopcpn < endFixingPeriodDates.length; loopcpn++) {
       coupons[loopcpn] = CouponONDefinition.from(generator.getIndex(), endFixingPeriodDates[loopcpn - 1], endFixingPeriodDates[loopcpn], sign * notional.getAmount(endFixingPeriodDates[loopcpn - 1].toLocalDate()), generator.getPaymentLag(),
-                                                 generator.getOvernightCalendar());
+          generator.getOvernightCalendar());
     }
     return new AnnuityCouponONDefinition(coupons, generator.getIndex(), generator.getOvernightCalendar());
   }
@@ -269,13 +280,13 @@ public class AnnuityCouponONDefinition extends AnnuityCouponDefinition<CouponOND
    * @return An overnight annuity
    */
   private static AnnuityCouponONDefinition from(final ZonedDateTime settlementDate, final ZonedDateTime[] endFixingPeriodDates, final NotionalProvider notional, final GeneratorSwapIborON generator,
-                                                final boolean isPayer) {
+      final boolean isPayer) {
     final double sign = isPayer ? -1.0 : 1.0;
     final CouponONDefinition[] coupons = new CouponONDefinition[endFixingPeriodDates.length];
     coupons[0] = CouponONDefinition.from(generator.getIndexON(), settlementDate, endFixingPeriodDates[0], sign * notional.getAmount(settlementDate.toLocalDate()), generator.getPaymentLag(), generator.getOvernightCalendar());
     for (int loopcpn = 1; loopcpn < endFixingPeriodDates.length; loopcpn++) {
       coupons[loopcpn] = CouponONDefinition.from(generator.getIndexON(), endFixingPeriodDates[loopcpn - 1], endFixingPeriodDates[loopcpn], sign * notional.getAmount(endFixingPeriodDates[loopcpn - 1].toLocalDate()), generator.getPaymentLag(),
-                                                 generator.getOvernightCalendar());
+          generator.getOvernightCalendar());
     }
     return new AnnuityCouponONDefinition(coupons, generator.getIndexON(), generator.getOvernightCalendar());
   }

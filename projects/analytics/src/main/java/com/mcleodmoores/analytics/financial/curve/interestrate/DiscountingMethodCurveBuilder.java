@@ -3,10 +3,12 @@
  */
 package com.mcleodmoores.analytics.financial.curve.interestrate;
 
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.opengamma.analytics.financial.instrument.InstrumentDefinition;
 import com.opengamma.analytics.financial.instrument.index.GeneratorAttribute;
 import com.opengamma.analytics.financial.instrument.index.GeneratorInstrument;
 import com.opengamma.analytics.financial.instrument.index.IborIndex;
@@ -44,9 +46,10 @@ public class DiscountingMethodCurveBuilder extends CurveBuilder<MulticurveProvid
 
   DiscountingMethodCurveBuilder(final List<String[]> curveNames, final LinkedHashMap<String, Currency> discountingCurves,
       final LinkedHashMap<String, IborIndex[]> iborCurves, final LinkedHashMap<String, IndexON[]> overnightCurves,
-      final Map<String, Map<Pair<GeneratorInstrument, GeneratorAttribute>, Double>> nodes, final Map<String, ? extends CurveTypeSetUpInterface<MulticurveProviderDiscount>> curveGenerators,
-      final MulticurveProviderDiscount knownData, final CurveBuildingBlockBundle knownBundle, final Map<Index, ZonedDateTimeDoubleTimeSeries> fixingTs) {
-    super(curveNames, discountingCurves, iborCurves, overnightCurves, nodes, curveGenerators, knownData, knownBundle, fixingTs);
+      final Map<String, Map<Pair<GeneratorInstrument, GeneratorAttribute>, Double>> nodes, final Map<String, List<InstrumentDefinition<?>>> newNodes,
+      final Map<String, ? extends CurveTypeSetUpInterface<MulticurveProviderDiscount>> curveGenerators,
+          final MulticurveProviderDiscount knownData, final CurveBuildingBlockBundle knownBundle, final Map<Index, ZonedDateTimeDoubleTimeSeries> fixingTs) {
+    super(curveNames, discountingCurves, iborCurves, overnightCurves, nodes, newNodes, curveGenerators, knownData, knownBundle, fixingTs);
     _curveBuildingRepository = new MulticurveDiscountBuildingRepository(_absoluteTolerance, _relativeTolerance, _maxSteps);
   }
 
@@ -70,10 +73,10 @@ public class DiscountingMethodCurveBuilder extends CurveBuilder<MulticurveProvid
       final LinkedHashMap<String, IndexON[]> overnightCurves,
       final Map<String, Map<Pair<GeneratorInstrument, GeneratorAttribute>, Double>> newNodesForCurve,
       final Map<String, ? extends CurveTypeSetUpInterface<MulticurveProviderDiscount>> curveGenerators,
-      final MulticurveProviderDiscount knownData,
-      final CurveBuildingBlockBundle knownBundle,
-      final Map<Index, ZonedDateTimeDoubleTimeSeries> fixingTs) {
-    return new DiscountingMethodCurveBuilder(curveNames, discountingCurves, iborCurves, overnightCurves, newNodesForCurve,
+          final MulticurveProviderDiscount knownData,
+          final CurveBuildingBlockBundle knownBundle,
+          final Map<Index, ZonedDateTimeDoubleTimeSeries> fixingTs) {
+    return new DiscountingMethodCurveBuilder(curveNames, discountingCurves, iborCurves, overnightCurves, newNodesForCurve, new HashMap<String, List<InstrumentDefinition<?>>>(),
         curveGenerators, knownData, knownBundle, fixingTs);
   }
 

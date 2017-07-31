@@ -16,8 +16,8 @@ import java.util.Set;
 
 import org.threeten.bp.Period;
 
-import com.opengamma.analytics.math.interpolation.factory.DoubleQuadraticInterpolator1dAdapter;
 import com.opengamma.analytics.math.interpolation.factory.LinearExtrapolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.MonotonicConstrainedCubicSplineInterpolator1dAdapter;
 import com.opengamma.core.id.ExternalSchemes;
 import com.opengamma.core.value.MarketDataRequirementNames;
 import com.opengamma.financial.analytics.curve.CurveConstructionConfiguration;
@@ -159,7 +159,7 @@ public final class ExamplesFixedIncomeCurveConfigsPopulator {
       oisNodes.put(nodeTenor, new StaticCurveInstrumentProvider(ExternalSchemes.syntheticSecurityId(currency + "OIS_SWAP" + nodeTenor.toFormattedString())));
     }
     final CurveDefinition discountingCurveDefinition = new InterpolatedCurveDefinition(discountingCurveName, discountingCurveNodes,
-        DoubleQuadraticInterpolator1dAdapter.NAME, LinearExtrapolator1dAdapter.NAME, LinearExtrapolator1dAdapter.NAME);
+        MonotonicConstrainedCubicSplineInterpolator1dAdapter.NAME, LinearExtrapolator1dAdapter.NAME, LinearExtrapolator1dAdapter.NAME);
     final CurveNodeIdMapper discountingCurveNodeIds = CurveNodeIdMapper.builder()
         .name(discountingCurveNodeIdMapperName)
         .cashNodeIds(depositNodes)
@@ -191,7 +191,7 @@ public final class ExamplesFixedIncomeCurveConfigsPopulator {
         .cashNodeIds(iborNodes)
         .swapNodeIds(swapNodes)
         .build();
-    final CurveDefinition iborCurveDefinition = new InterpolatedCurveDefinition(iborCurveName, iborCurveNodes, DoubleQuadraticInterpolator1dAdapter.NAME,
+    final CurveDefinition iborCurveDefinition = new InterpolatedCurveDefinition(iborCurveName, iborCurveNodes, MonotonicConstrainedCubicSplineInterpolator1dAdapter.NAME,
         LinearExtrapolator1dAdapter.NAME, LinearExtrapolator1dAdapter.NAME);
     ConfigMasterUtils.storeByName(configMaster, ExampleConfigUtils.makeConfig(iborCurveDefinition));
     ConfigMasterUtils.storeByName(configMaster, ExampleConfigUtils.makeConfig(iborCurveNodeIds));
@@ -239,7 +239,7 @@ public final class ExamplesFixedIncomeCurveConfigsPopulator {
       oisNodes.put(nodeTenor, new StaticCurveInstrumentProvider(ExternalSchemes.syntheticSecurityId(currency + "OIS_SWAP" + nodeTenor.toFormattedString())));
     }
     final CurveDefinition discountingCurveDefinition = new InterpolatedCurveDefinition(discountingCurveName, discountingCurveNodes,
-        DoubleQuadraticInterpolator1dAdapter.NAME, LinearExtrapolator1dAdapter.NAME, LinearExtrapolator1dAdapter.NAME);
+        MonotonicConstrainedCubicSplineInterpolator1dAdapter.NAME, LinearExtrapolator1dAdapter.NAME, LinearExtrapolator1dAdapter.NAME);
     final CurveNodeIdMapper discountingCurveNodeIdMapper = CurveNodeIdMapper.builder()
         .name(discountingCurveNodeIdMapperName)
         .cashNodeIds(depositNodes)
@@ -295,9 +295,9 @@ public final class ExamplesFixedIncomeCurveConfigsPopulator {
         .name(basisSwapCurveNodeIdMapperName)
         .swapNodeIds(basisSwapNodes)
         .build();
-    final CurveDefinition ibor3mCurveDefinition = new InterpolatedCurveDefinition(forward3mIborCurveName, ibor3mCurveNodes, DoubleQuadraticInterpolator1dAdapter.NAME,
+    final CurveDefinition ibor3mCurveDefinition = new InterpolatedCurveDefinition(forward3mIborCurveName, ibor3mCurveNodes, MonotonicConstrainedCubicSplineInterpolator1dAdapter.NAME,
         LinearExtrapolator1dAdapter.NAME, LinearExtrapolator1dAdapter.NAME);
-    final CurveDefinition ibor6mCurveDefinition = new InterpolatedCurveDefinition(forward6mIborCurveName, ibor6mCurveNodes, DoubleQuadraticInterpolator1dAdapter.NAME,
+    final CurveDefinition ibor6mCurveDefinition = new InterpolatedCurveDefinition(forward6mIborCurveName, ibor6mCurveNodes, MonotonicConstrainedCubicSplineInterpolator1dAdapter.NAME,
         LinearExtrapolator1dAdapter.NAME, LinearExtrapolator1dAdapter.NAME);
     ConfigMasterUtils.storeByName(configMaster, ExampleConfigUtils.makeConfig(ibor3mCurveDefinition));
     ConfigMasterUtils.storeByName(configMaster, ExampleConfigUtils.makeConfig(ibor6mCurveDefinition));

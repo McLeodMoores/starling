@@ -60,9 +60,11 @@ public class DiscountingMethodBondCurveBuilder extends CurveBuilder<IssuerProvid
   DiscountingMethodBondCurveBuilder(final List<String[]> curveNames, final LinkedHashMap<String, Currency> discountingCurves,
       final LinkedHashMap<String, IborIndex[]> iborCurves, final LinkedHashMap<String, IndexON[]> overnightCurves,
       final LinkedListMultimap<String, Pair<Object, LegalEntityFilter<LegalEntity>>> issuerCurves,
-      final Map<String, Map<Pair<GeneratorInstrument, GeneratorAttribute>, Double>> nodes, final Map<String, ? extends CurveTypeSetUpInterface<IssuerProviderDiscount>> curveGenerators,
-      final IssuerProviderDiscount knownData, final CurveBuildingBlockBundle knownBundle, final Map<Index, ZonedDateTimeDoubleTimeSeries> fixingTs) {
-    super(curveNames, discountingCurves, iborCurves, overnightCurves, nodes, curveGenerators, knownData, knownBundle, fixingTs);
+      final Map<String, Map<Pair<GeneratorInstrument, GeneratorAttribute>, Double>> nodes,
+      final Map<String, List<InstrumentDefinition<?>>> newNodes,
+      final Map<String, ? extends CurveTypeSetUpInterface<IssuerProviderDiscount>> curveGenerators,
+          final IssuerProviderDiscount knownData, final CurveBuildingBlockBundle knownBundle, final Map<Index, ZonedDateTimeDoubleTimeSeries> fixingTs) {
+    super(curveNames, discountingCurves, iborCurves, overnightCurves, nodes, newNodes, curveGenerators, knownData, knownBundle, fixingTs);
     _issuerCurves = LinkedListMultimap.create(issuerCurves);
     _curveBuildingRepository = new IssuerDiscountBuildingRepository(_absoluteTolerance, _relativeTolerance, _maxSteps);
     _cached = new HashMap<>();
@@ -92,6 +94,41 @@ public class DiscountingMethodBondCurveBuilder extends CurveBuilder<IssuerProvid
           for (int k = 0; k < nNodes; k++) {
             final Map.Entry<Pair<GeneratorInstrument, GeneratorAttribute>, Double> info = nodesIterator.next();
             final InstrumentDefinition<?> definition = info.getKey().getFirst().generateInstrument(valuationDate, info.getValue(), 1, info.getKey().getSecond());
+            instruments[k] = CurveUtils.convert(definition, getFixingTs(), valuationDate);
+            curveInitialGuess[k] = definition.accept(CurveUtils.RATES_INITIALIZATION);
+          }
+          final GeneratorYDCurve instrumentGenerator = getCurveGenerators().get(curveName).buildCurveGenerator(valuationDate).finalGenerator(instruments);
+          generatorForCurve.put(curveName, instrumentGenerator);
+          unitBundle[j] = new SingleCurveBundle<>(curveName, instruments, instrumentGenerator.initialGuess(curveInitialGuess), instrumentGenerator);
+        }
+        curveBundles[i] = new MultiCurveBundle<>(unitBundle);
+      }
+      _cached.put(valuationDate, curveBundles);
+    }
+    return buildCurves(curveBundles, getKnownData(), getKnownBundle(), getDiscountingCurves(), getIborCurves(), getOvernightCurves(), _issuerCurves);
+  }
+
+  @Override
+  public Pair<IssuerProviderDiscount, CurveBuildingBlockBundle> buildCurves1(final ZonedDateTime valuationDate) {
+    MultiCurveBundle<GeneratorYDCurve>[] curveBundles = _cached.get(valuationDate);
+    if (curveBundles == null) {
+      final Map<String, GeneratorYDCurve> generatorForCurve = new HashMap<>();
+      curveBundles = new MultiCurveBundle[getCurveNames().size()];
+      for (int i = 0; i < getCurveNames().size(); i++) {
+        final String[] curveNamesForUnit = getCurveNames().get(i);
+        final SingleCurveBundle[] unitBundle = new SingleCurveBundle[curveNamesForUnit.length];
+        for (int j = 0; j < curveNamesForUnit.length; j++) {
+          final String curveName = curveNamesForUnit[j];
+          final List<InstrumentDefinition<?>> nodesForCurve = getNewNodes().get(curveName);
+          if (nodesForCurve == null) {
+            throw new IllegalStateException();
+          }
+          final int nNodes = nodesForCurve.size();
+          final InstrumentDerivative[] instruments = new InstrumentDerivative[nNodes];
+          //TODO could do sorting of derivatives here
+          final double[] curveInitialGuess = new double[nNodes];
+          for (int k = 0; k < nNodes; k++) {
+            final InstrumentDefinition<?> definition = nodesForCurve.get(i);
             instruments[k] = CurveUtils.convert(definition, getFixingTs(), valuationDate);
             curveInitialGuess[k] = definition.accept(CurveUtils.RATES_INITIALIZATION);
           }
@@ -139,7 +176,7 @@ public class DiscountingMethodBondCurveBuilder extends CurveBuilder<IssuerProvid
     final Map<String, Map<Pair<GeneratorInstrument, GeneratorAttribute>, Double>> newNodesForCurve = new HashMap<>(getNodes());
     newNodesForCurve.put(curveName, nodesWithReplacedPoint);
     return new DiscountingMethodBondCurveBuilder(getCurveNames(), getDiscountingCurves(), getIborCurves(), getOvernightCurves(), _issuerCurves,
-        newNodesForCurve, getCurveGenerators(), getKnownData(), getKnownBundle(), getFixingTs());
+        newNodesForCurve, new HashMap<String, List<InstrumentDefinition<?>>>(), getCurveGenerators(), getKnownData(), getKnownBundle(), getFixingTs());
   }
 
   @Override
@@ -150,12 +187,12 @@ public class DiscountingMethodBondCurveBuilder extends CurveBuilder<IssuerProvid
       final LinkedHashMap<String, IndexON[]> overnightCurves,
       final Map<String, Map<Pair<GeneratorInstrument, GeneratorAttribute>, Double>> newNodesForCurve,
       final Map<String, ? extends CurveTypeSetUpInterface<IssuerProviderDiscount>> curveGenerators,
-      final IssuerProviderDiscount knownData,
-      final CurveBuildingBlockBundle knownBundle,
-      final Map<Index, ZonedDateTimeDoubleTimeSeries> fixingTs) {
+          final IssuerProviderDiscount knownData,
+          final CurveBuildingBlockBundle knownBundle,
+          final Map<Index, ZonedDateTimeDoubleTimeSeries> fixingTs) {
     throw new IllegalStateException();
-//    return new DiscountingMethodBondCurveBuilder(curveNames, discountingCurves, iborCurves, overnightCurves, newNodesForCurve,
-//        curveGenerators, knownData, knownBundle, fixingTs);
+    //    return new DiscountingMethodBondCurveBuilder(curveNames, discountingCurves, iborCurves, overnightCurves, newNodesForCurve,
+    //        curveGenerators, knownData, knownBundle, fixingTs);
   }
 
 }

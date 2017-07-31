@@ -42,18 +42,20 @@ public abstract class CurveBuilder<T extends ParameterProviderInterface> {
   private final CurveBuildingBlockBundle _knownBundle;
   private final Map<Index, ZonedDateTimeDoubleTimeSeries> _fixingTs;
   private final T _knownData;
+  private final Map<String, List<InstrumentDefinition<?>>> _newNodes;
   private final Map<String, Map<Pair<GeneratorInstrument, GeneratorAttribute>, Double>> _nodes;
   private final Map<ZonedDateTime, MultiCurveBundle[]> _cached;
 
   CurveBuilder(final List<String[]> curveNames, final LinkedHashMap<String, Currency> discountingCurves, final LinkedHashMap<String, IborIndex[]> iborCurves,
       final LinkedHashMap<String, IndexON[]> overnightCurves, final Map<String, Map<Pair<GeneratorInstrument, GeneratorAttribute>, Double>> nodes,
-      final Map<String, ? extends CurveTypeSetUpInterface<T>> curveGenerators, final T knownData, final CurveBuildingBlockBundle knownBundle,
-      final Map<Index, ZonedDateTimeDoubleTimeSeries> fixingTs) {
+      final Map<String, List<InstrumentDefinition<?>>> newNodes, final Map<String, ? extends CurveTypeSetUpInterface<T>> curveGenerators, final T knownData, final CurveBuildingBlockBundle knownBundle,
+          final Map<Index, ZonedDateTimeDoubleTimeSeries> fixingTs) {
     _curveNames = new ArrayList<>(curveNames);
     _discountingCurves = new LinkedHashMap<>(discountingCurves);
     _iborCurves = new LinkedHashMap<>(iborCurves);
     _overnightCurves = new LinkedHashMap<>(overnightCurves);
     _nodes = new HashMap<>(nodes);
+    _newNodes = new HashMap<>(newNodes);
     _curveGenerators = new HashMap<>(curveGenerators);
     _knownData = knownData == null ? null : (T) knownData.copy();
     _knownBundle = knownBundle; // TODO copy this
@@ -84,6 +86,41 @@ public abstract class CurveBuilder<T extends ParameterProviderInterface> {
           for (int k = 0; k < nNodes; k++) {
             final Map.Entry<Pair<GeneratorInstrument, GeneratorAttribute>, Double> info = nodesIterator.next();
             final InstrumentDefinition<?> definition = info.getKey().getFirst().generateInstrument(valuationDate, info.getValue(), 1, info.getKey().getSecond());
+            instruments[k] = CurveUtils.convert(definition, _fixingTs, valuationDate);
+            curveInitialGuess[k] = definition.accept(CurveUtils.RATES_INITIALIZATION);
+          }
+          final GeneratorYDCurve instrumentGenerator = _curveGenerators.get(curveName).buildCurveGenerator(valuationDate).finalGenerator(instruments);
+          generatorForCurve.put(curveName, instrumentGenerator);
+          unitBundle[j] = new SingleCurveBundle<>(curveName, instruments, instrumentGenerator.initialGuess(curveInitialGuess), instrumentGenerator);
+        }
+        curveBundles[i] = new MultiCurveBundle<>(unitBundle);
+      }
+      _cached.put(valuationDate, curveBundles);
+    }
+    return buildCurves(curveBundles, _knownData, _knownBundle, _discountingCurves, _iborCurves, _overnightCurves);
+  }
+
+  //TODO cache definitions on LocalDate
+  public Pair<T, CurveBuildingBlockBundle> buildCurves1(final ZonedDateTime valuationDate) {
+    MultiCurveBundle<GeneratorYDCurve>[] curveBundles = _cached.get(valuationDate);
+    if (curveBundles == null) {
+      final Map<String, GeneratorYDCurve> generatorForCurve = new HashMap<>();
+      curveBundles = new MultiCurveBundle[_curveNames.size()];
+      for (int i = 0; i < _curveNames.size(); i++) {
+        final String[] curveNamesForUnit = _curveNames.get(i);
+        final SingleCurveBundle[] unitBundle = new SingleCurveBundle[curveNamesForUnit.length];
+        for (int j = 0; j < curveNamesForUnit.length; j++) {
+          final String curveName = curveNamesForUnit[j];
+          final List<InstrumentDefinition<?>> nodesForCurve = _newNodes.get(curveName);
+          if (nodesForCurve == null) {
+            throw new IllegalStateException("No nodes found for curve called " + curveName);
+          }
+          final int nNodes = nodesForCurve.size();
+          final InstrumentDerivative[] instruments = new InstrumentDerivative[nNodes];
+          //TODO could do sorting of derivatives here
+          final double[] curveInitialGuess = new double[nNodes];
+          for (int k = 0; k < nNodes; k++) {
+            final InstrumentDefinition<?> definition = nodesForCurve.get(k);
             instruments[k] = CurveUtils.convert(definition, _fixingTs, valuationDate);
             curveInitialGuess[k] = definition.accept(CurveUtils.RATES_INITIALIZATION);
           }
@@ -139,7 +176,7 @@ public abstract class CurveBuilder<T extends ParameterProviderInterface> {
   abstract CurveBuilder<T> replaceMarketQuote(List<String[]> curveNames, LinkedHashMap<String, Currency> discountingCurves,
       LinkedHashMap<String, IborIndex[]> iborCurves, LinkedHashMap<String, IndexON[]> overnightCurves,
       Map<String, Map<Pair<GeneratorInstrument, GeneratorAttribute>, Double>> nodes, Map<String, ? extends CurveTypeSetUpInterface<T>> curveGenerators,
-      T knownData, CurveBuildingBlockBundle knownBundle, Map<Index, ZonedDateTimeDoubleTimeSeries> fixingTs);
+          T knownData, CurveBuildingBlockBundle knownBundle, Map<Index, ZonedDateTimeDoubleTimeSeries> fixingTs);
 
   List<String[]> getCurveNames() {
     return _curveNames;
@@ -175,6 +212,10 @@ public abstract class CurveBuilder<T extends ParameterProviderInterface> {
 
   Map<String, Map<Pair<GeneratorInstrument, GeneratorAttribute>, Double>> getNodes() {
     return _nodes;
+  }
+
+  Map<String, List<InstrumentDefinition<?>>> getNewNodes() {
+    return _newNodes;
   }
 
   Map<ZonedDateTime, MultiCurveBundle[]> getCached() {

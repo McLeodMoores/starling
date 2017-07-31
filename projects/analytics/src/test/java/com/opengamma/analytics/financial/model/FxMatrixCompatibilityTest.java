@@ -50,25 +50,25 @@ public class FxMatrixCompatibilityTest {
     assertEquals(FX_MATRIX.getFxRate(Currency.NZD, Currency.JPY), NZD_PER_USD / JPY_PER_USD, EPS);
   }
 
-  @Test
-  public void testUncheckedAddedInSameOrder() {
-    final UncheckedMutableFxMatrix matrix = UncheckedMutableFxMatrix.of();
-    matrix.addCurrency(Currency.EUR, Currency.USD, EUR_PER_USD);
-    matrix.addCurrency(Currency.JPY, Currency.USD, JPY_PER_USD);
-    matrix.addCurrency(Currency.NZD, Currency.USD, NZD_PER_USD);
-    assertEquals(matrix.getFxRate(Currency.EUR, Currency.USD), FX_MATRIX.getFxRate(Currency.EUR, Currency.USD), EPS);
-    assertEquals(matrix.getFxRate(Currency.JPY, Currency.USD), FX_MATRIX.getFxRate(Currency.JPY, Currency.USD), EPS);
-    assertEquals(matrix.getFxRate(Currency.NZD, Currency.USD), FX_MATRIX.getFxRate(Currency.NZD, Currency.USD), EPS);
-    assertEquals(matrix.getFxRate(Currency.USD, Currency.EUR), FX_MATRIX.getFxRate(Currency.USD, Currency.EUR), EPS);
-    assertEquals(matrix.getFxRate(Currency.USD, Currency.JPY), FX_MATRIX.getFxRate(Currency.USD, Currency.JPY), EPS);
-    assertEquals(matrix.getFxRate(Currency.USD, Currency.NZD), FX_MATRIX.getFxRate(Currency.USD, Currency.NZD), EPS);
-    assertEquals(matrix.getFxRate(Currency.EUR, Currency.JPY), FX_MATRIX.getFxRate(Currency.EUR, Currency.JPY), EPS);
-    assertEquals(matrix.getFxRate(Currency.EUR, Currency.NZD), FX_MATRIX.getFxRate(Currency.EUR, Currency.NZD), EPS);
-    assertEquals(matrix.getFxRate(Currency.JPY, Currency.NZD), FX_MATRIX.getFxRate(Currency.JPY, Currency.NZD), EPS);
-    assertEquals(matrix.getFxRate(Currency.JPY, Currency.EUR), FX_MATRIX.getFxRate(Currency.JPY, Currency.EUR), EPS);
-    assertEquals(matrix.getFxRate(Currency.NZD, Currency.EUR), FX_MATRIX.getFxRate(Currency.NZD, Currency.EUR), EPS);
-    assertEquals(matrix.getFxRate(Currency.NZD, Currency.JPY), FX_MATRIX.getFxRate(Currency.NZD, Currency.JPY), EPS);
-  }
+  //  @Test
+  //  public void testUncheckedAddedInSameOrder() {
+  //    final UncheckedMutableFxMatrix matrix = UncheckedMutableFxMatrix.of();
+  //    matrix.addCurrency(Currency.EUR, Currency.USD, EUR_PER_USD);
+  //    matrix.addCurrency(Currency.JPY, Currency.USD, JPY_PER_USD);
+  //    matrix.addCurrency(Currency.NZD, Currency.USD, NZD_PER_USD);
+  //    assertEquals(matrix.getFxRate(Currency.EUR, Currency.USD), FX_MATRIX.getFxRate(Currency.EUR, Currency.USD), EPS);
+  //    assertEquals(matrix.getFxRate(Currency.JPY, Currency.USD), FX_MATRIX.getFxRate(Currency.JPY, Currency.USD), EPS);
+  //    assertEquals(matrix.getFxRate(Currency.NZD, Currency.USD), FX_MATRIX.getFxRate(Currency.NZD, Currency.USD), EPS);
+  //    assertEquals(matrix.getFxRate(Currency.USD, Currency.EUR), FX_MATRIX.getFxRate(Currency.USD, Currency.EUR), EPS);
+  //    assertEquals(matrix.getFxRate(Currency.USD, Currency.JPY), FX_MATRIX.getFxRate(Currency.USD, Currency.JPY), EPS);
+  //    assertEquals(matrix.getFxRate(Currency.USD, Currency.NZD), FX_MATRIX.getFxRate(Currency.USD, Currency.NZD), EPS);
+  //    assertEquals(matrix.getFxRate(Currency.EUR, Currency.JPY), FX_MATRIX.getFxRate(Currency.EUR, Currency.JPY), EPS);
+  //    assertEquals(matrix.getFxRate(Currency.EUR, Currency.NZD), FX_MATRIX.getFxRate(Currency.EUR, Currency.NZD), EPS);
+  //    assertEquals(matrix.getFxRate(Currency.JPY, Currency.NZD), FX_MATRIX.getFxRate(Currency.JPY, Currency.NZD), EPS);
+  //    assertEquals(matrix.getFxRate(Currency.JPY, Currency.EUR), FX_MATRIX.getFxRate(Currency.JPY, Currency.EUR), EPS);
+  //    assertEquals(matrix.getFxRate(Currency.NZD, Currency.EUR), FX_MATRIX.getFxRate(Currency.NZD, Currency.EUR), EPS);
+  //    assertEquals(matrix.getFxRate(Currency.NZD, Currency.JPY), FX_MATRIX.getFxRate(Currency.NZD, Currency.JPY), EPS);
+  //  }
 
   @Test
   public void testCheckedAddedInSameOrder() {
