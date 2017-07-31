@@ -181,7 +181,7 @@ public class ExamplesDatabasePopulator extends AbstractTool<ToolContext> {
     //    loadBondPortfolio();
     //    loadSwaptionPortfolio();
     //    loadEURFixedIncomePortfolio();
-    //    loadFXForwardPortfolio();
+    loadFXForwardPortfolio();
     //    loadERFuturePortfolio();
     //    loadFXVolatilitySwapPortfolio();
     loadOisPortfolio();

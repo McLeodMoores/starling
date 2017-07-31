@@ -31,7 +31,7 @@ public class ExamplesExposureFunctionConfigsPopulator {
     String name = "FX Exposures";
     List<String> exposureFunctionNames = Arrays.asList("Currency");
     Map<ExternalId, String> idsToNames = new HashMap<>();
-    idsToNames.put(ExternalId.of(Currency.OBJECT_SCHEME, "USD"), ExampleConfigUtils.generateVanillaFixedIncomeConfigName("USD"));
+    idsToNames.put(ExternalId.of(Currency.OBJECT_SCHEME, "USD"), "USD Deposit Config");
     idsToNames.put(ExternalId.of(Currency.OBJECT_SCHEME, "CHF"), ExampleConfigUtils.generateFxImpliedConfigName("CHF"));
     idsToNames.put(ExternalId.of(Currency.OBJECT_SCHEME, "EUR"), ExampleConfigUtils.generateFxImpliedConfigName("EUR"));
     idsToNames.put(ExternalId.of(Currency.OBJECT_SCHEME, "JPY"), ExampleConfigUtils.generateFxImpliedConfigName("JPY"));
