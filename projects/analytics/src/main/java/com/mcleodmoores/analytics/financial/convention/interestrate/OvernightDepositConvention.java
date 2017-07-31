@@ -3,6 +3,7 @@
  */
 package com.mcleodmoores.analytics.financial.convention.interestrate;
 
+import org.threeten.bp.Period;
 import org.threeten.bp.ZonedDateTime;
 
 import com.mcleodmoores.date.CalendarAdapter;
@@ -85,9 +86,7 @@ public class OvernightDepositConvention extends CashConvention {
   public CashDefinition toCurveInstrument(final ZonedDateTime date, final Tenor startTenor, final Tenor endTenor, final double notional,
       final double fixedRate) {
     ArgumentChecker.notNull(date, "valuationDate");
-    ArgumentChecker.notNull(startTenor, "startTenor");
-    ArgumentChecker.notNull(endTenor, "endTenor");
-    final ZonedDateTime startDate = TenorUtils.adjustDateByTenor(date, startTenor, getCalendar(), 0);
+    final ZonedDateTime startDate = TenorUtils.adjustDateByTenor(date, Tenor.of(Period.ZERO), getCalendar(), 0);
     final ZonedDateTime endDate = ScheduleCalculator.getAdjustedDate(startDate, 1, getCalendar());
     final double accrualFactor = getDayCount().getDayCountFraction(startDate, endDate, new CalendarAdapter(getCalendar()));
     return new CashDefinition(getCurrency(), startDate, endDate, notional, fixedRate, accrualFactor);

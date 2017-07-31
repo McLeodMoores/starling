@@ -89,22 +89,6 @@ public class OvernightDepositConventionTest {
   }
 
   /**
-   * Tests that the start tenor cannot be null.
-   */
-  @Test(expectedExceptions = IllegalArgumentException.class)
-  public void testNullStartTenor() {
-    CONVENTION.toCurveInstrument(ZonedDateTime.now(), null, Tenor.ONE_MONTH, 1, 0.02);
-  }
-
-  /**
-   * Tests that the end tenor cannot be null.
-   */
-  @Test(expectedExceptions = IllegalArgumentException.class)
-  public void testNullEndTenor() {
-    CONVENTION.toCurveInstrument(ZonedDateTime.now(), Tenor.ON, null, 1, 0.02);
-  }
-
-  /**
    * Tests the object.
    */
   @Test
@@ -150,13 +134,11 @@ public class OvernightDepositConventionTest {
   @Test
   public void testCashDefinition() {
     final ZonedDateTime date = DateUtils.getUTCDate(2017, 1, 27);
-    final Tenor startTenor = Tenor.ON;
-    final Tenor endTenor = Tenor.ONE_MONTH;
     final double rate = 0.01;
-    final CashDefinition cash = CONVENTION.toCurveInstrument(date, startTenor, endTenor, 1, rate);
-    assertEquals(cash.getStartDate(), DateUtils.getUTCDate(2017, 1, 30));
-    assertEquals(cash.getEndDate(), DateUtils.getUTCDate(2017, 1, 31));
-    assertEquals(cash.getAccrualFactor(), 1 / 360., 1e-15);
+    final CashDefinition cash = CONVENTION.toCurveInstrument(date, null, null, 1, rate);
+    assertEquals(cash.getStartDate(), DateUtils.getUTCDate(2017, 1, 27));
+    assertEquals(cash.getEndDate(), DateUtils.getUTCDate(2017, 1, 30));
+    assertEquals(cash.getAccrualFactor(), 3 / 360., 1e-15);
     assertEquals(cash.getRate(), rate, 1e-15);
     assertEquals(cash.getCurrency(), CCY);
     assertEquals(cash.getNotional(), 1, 1e-15);

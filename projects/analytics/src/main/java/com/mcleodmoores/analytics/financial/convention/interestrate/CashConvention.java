@@ -307,7 +307,10 @@ public class CashConvention implements CurveDataConvention<CashDefinition> {
     if (this == obj) {
       return true;
     }
-    if (!(obj instanceof CashConvention)) {
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
       return false;
     }
     final CashConvention other = (CashConvention) obj;
