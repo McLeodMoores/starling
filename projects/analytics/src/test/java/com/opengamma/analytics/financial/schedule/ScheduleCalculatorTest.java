@@ -48,8 +48,7 @@ public class ScheduleCalculatorTest {
   private static final GeneratorDeposit GENERATOR_DEPOSIT = new EURDeposit(CALENDAR);
   private static final IborIndex INDEX_EURIBOR6M = IndexIborMaster.getInstance().getIndex("EURIBOR6M");
 
-  private static final Calendar ALL = new AllCalendar();
-  private static final Calendar WEEKEND = new WeekendCalendar();
+  private static final Calendar ALL = new NoHolidayCalendar();
   private static final Calendar FIRST = new FirstOfMonthCalendar();
   private static final ZonedDateTime NOW = DateUtils.getUTCDate(2010, 1, 1);
 
@@ -63,10 +62,10 @@ public class ScheduleCalculatorTest {
   private static final BusinessDayConvention FOL = BusinessDayConventions.FOLLOWING;
   private static final BusinessDayConvention PRE = BusinessDayConventions.PRECEDING;
 
-  @Test
   /**
    * Tests the adjusted dates shifted by a number of days. Reviewed 13-Dec-2011.
    */
+  @Test
   public void adjustedDatesDays() {
     final ZonedDateTime aMonday = DateUtils.getUTCDate(2011, 12, 12);
     final ZonedDateTime aTuesday = DateUtils.getUTCDate(2011, 12, 13);
@@ -109,10 +108,10 @@ public class ScheduleCalculatorTest {
     ScheduleCalculator.getAdjustedDate(NOW, 2, (Calendar) null);
   }
 
-  @Test
   /**
    * Tests the adjusted dates shifted by periods. Reviewed 13-Dec-2011.
    */
+  @Test
   public void adjustedDatesPeriod() {
     final Period m1 = Period.ofMonths(1);
     final Period m2 = Period.ofMonths(2);
@@ -156,54 +155,54 @@ public class ScheduleCalculatorTest {
     //    ZonedDateTime eom30NGBD = DateUtils.getUTCDate(2011, 4, 29);
   }
 
-  //@Test
-  //  /**
-  //   * Tests the adjusted dates shifted by a tenor (including ON, TN).
-  //   */
-  //  public void adjustedDatesTenor() {
-  //    final Tenor m1 = Tenor.of(Period.ofMonths(1));
-  //    final Tenor m2 = Tenor.of(Period.ofMonths(2));
-  //    final Tenor m3 = Tenor.of(Period.ofMonths(3));
-  //    final ZonedDateTime stdStart = DateUtils.getUTCDate(2011, 11, 15); //1m
-  //    final ZonedDateTime stdEnd = DateUtils.getUTCDate(2011, 12, 15);
-  //    assertEquals("Adjusted date tenor", stdEnd, ScheduleCalculator.getAdjustedDate(stdStart, m1, MOD_FOL, CALENDAR, true));
-  //    assertEquals("Adjusted date tenor", stdEnd, ScheduleCalculator.getAdjustedDate(stdStart, m1, MOD_FOL, CALENDAR, false));
-  //    final ZonedDateTime ngbdStart = DateUtils.getUTCDate(2011, 11, 17); //1m
-  //    final ZonedDateTime ngbdEnd = DateUtils.getUTCDate(2011, 12, 19);
-  //    assertEquals("Adjusted date tenor", ngbdEnd, ScheduleCalculator.getAdjustedDate(ngbdStart, m1, MOD_FOL, CALENDAR, true));
-  //    assertEquals("Adjusted date tenor", ngbdEnd, ScheduleCalculator.getAdjustedDate(ngbdStart, m1, MOD_FOL, CALENDAR, false));
-  //    final ZonedDateTime eom31NGBD = DateUtils.getUTCDate(2011, 7, 29);
-  //    assertEquals("Adjusted date tenor", DateUtils.getUTCDate(2011, 10, 31), ScheduleCalculator.getAdjustedDate(eom31NGBD, m3, MOD_FOL, CALENDAR, true));
-  //    assertEquals("Adjusted date tenor", DateUtils.getUTCDate(2011, 10, 31), ScheduleCalculator.getAdjustedDate(eom31NGBD, m3, MOD_FOL, CALENDAR, false));
-  //    assertEquals("Adjusted date tenor", DateUtils.getUTCDate(2011, 9, 30), ScheduleCalculator.getAdjustedDate(eom31NGBD, m2, MOD_FOL, CALENDAR, true));
-  //    assertEquals("Adjusted date tenor", DateUtils.getUTCDate(2011, 9, 29), ScheduleCalculator.getAdjustedDate(eom31NGBD, m2, MOD_FOL, CALENDAR, false));
-  //    final Tenor on = Tenor.ON;
-  //    final ZonedDateTime stdStartON = DateUtils.getUTCDate(2013, 12, 19); //1m
-  //    final ZonedDateTime stdEndON = DateUtils.getUTCDate(2013, 12, 20);
-  //    assertEquals("Adjusted date tenor", stdEndON, ScheduleCalculator.getAdjustedDate(stdStartON, on, MOD_FOL, CALENDAR, true));
-  //    assertEquals("Adjusted date tenor", stdEndON, ScheduleCalculator.getAdjustedDate(stdStartON, on, MOD_FOL, CALENDAR, false));
-  //    final ZonedDateTime eomStartON = DateUtils.getUTCDate(2013, 10, 31); //1m
-  //    final ZonedDateTime eomEndON = DateUtils.getUTCDate(2013, 11, 1);
-  //    assertEquals("Adjusted date tenor", eomEndON, ScheduleCalculator.getAdjustedDate(eomStartON, on, MOD_FOL, CALENDAR, true));
-  //    assertEquals("Adjusted date tenor", eomEndON, ScheduleCalculator.getAdjustedDate(eomStartON, on, MOD_FOL, CALENDAR, false));
-  //    final ZonedDateTime weStartON = DateUtils.getUTCDate(2013, 12, 20); //1m
-  //    final ZonedDateTime weEndON = DateUtils.getUTCDate(2013, 12, 23);
-  //    assertEquals("Adjusted date tenor", weEndON, ScheduleCalculator.getAdjustedDate(weStartON, on, MOD_FOL, CALENDAR, true));
-  //    assertEquals("Adjusted date tenor", weEndON, ScheduleCalculator.getAdjustedDate(weStartON, on, MOD_FOL, CALENDAR, false));
-  //    final Tenor tn = Tenor.TN;
-  //    final ZonedDateTime stdStartTN = DateUtils.getUTCDate(2013, 12, 18); //1m
-  //    final ZonedDateTime stdEndTN = DateUtils.getUTCDate(2013, 12, 20);
-  //    assertEquals("Adjusted date tenor", stdEndTN, ScheduleCalculator.getAdjustedDate(stdStartTN, tn, MOD_FOL, CALENDAR, true));
-  //    assertEquals("Adjusted date tenor", stdEndTN, ScheduleCalculator.getAdjustedDate(stdStartTN, tn, MOD_FOL, CALENDAR, false));
-  //    final ZonedDateTime eomStartTN = DateUtils.getUTCDate(2013, 10, 30); //1m
-  //    final ZonedDateTime eomEndTN = DateUtils.getUTCDate(2013, 11, 1);
-  //    assertEquals("Adjusted date tenor", eomEndTN, ScheduleCalculator.getAdjustedDate(eomStartTN, tn, MOD_FOL, CALENDAR, true));
-  //    assertEquals("Adjusted date tenor", eomEndTN, ScheduleCalculator.getAdjustedDate(eomStartTN, tn, MOD_FOL, CALENDAR, false));
-  //    final ZonedDateTime weStartTN = DateUtils.getUTCDate(2013, 12, 20); //1m
-  //    final ZonedDateTime weEndTN = DateUtils.getUTCDate(2013, 12, 24);
-  //    assertEquals("Adjusted date tenor", weEndTN, ScheduleCalculator.getAdjustedDate(weStartTN, tn, MOD_FOL, CALENDAR, true));
-  //    assertEquals("Adjusted date tenor", weEndTN, ScheduleCalculator.getAdjustedDate(weStartTN, tn, MOD_FOL, CALENDAR, false));
-  //  }
+  /**
+   * Tests the adjusted dates shifted by a tenor (including ON, TN).
+   */
+  @Test
+  public void adjustedDatesTenor() {
+    final Tenor m1 = Tenor.of(Period.ofMonths(1));
+    final Tenor m2 = Tenor.of(Period.ofMonths(2));
+    final Tenor m3 = Tenor.of(Period.ofMonths(3));
+    final ZonedDateTime stdStart = DateUtils.getUTCDate(2011, 11, 15); //1m
+    final ZonedDateTime stdEnd = DateUtils.getUTCDate(2011, 12, 15);
+    assertEquals("Adjusted date tenor", stdEnd, ScheduleCalculator.getAdjustedDate(stdStart, m1, MOD_FOL, CALENDAR, true));
+    assertEquals("Adjusted date tenor", stdEnd, ScheduleCalculator.getAdjustedDate(stdStart, m1, MOD_FOL, CALENDAR, false));
+    final ZonedDateTime ngbdStart = DateUtils.getUTCDate(2011, 11, 17); //1m
+    final ZonedDateTime ngbdEnd = DateUtils.getUTCDate(2011, 12, 19);
+    assertEquals("Adjusted date tenor", ngbdEnd, ScheduleCalculator.getAdjustedDate(ngbdStart, m1, MOD_FOL, CALENDAR, true));
+    assertEquals("Adjusted date tenor", ngbdEnd, ScheduleCalculator.getAdjustedDate(ngbdStart, m1, MOD_FOL, CALENDAR, false));
+    final ZonedDateTime eom31NGBD = DateUtils.getUTCDate(2011, 7, 29);
+    assertEquals("Adjusted date tenor", DateUtils.getUTCDate(2011, 10, 31), ScheduleCalculator.getAdjustedDate(eom31NGBD, m3, MOD_FOL, CALENDAR, true));
+    assertEquals("Adjusted date tenor", DateUtils.getUTCDate(2011, 10, 31), ScheduleCalculator.getAdjustedDate(eom31NGBD, m3, MOD_FOL, CALENDAR, false));
+    assertEquals("Adjusted date tenor", DateUtils.getUTCDate(2011, 9, 30), ScheduleCalculator.getAdjustedDate(eom31NGBD, m2, MOD_FOL, CALENDAR, true));
+    assertEquals("Adjusted date tenor", DateUtils.getUTCDate(2011, 9, 29), ScheduleCalculator.getAdjustedDate(eom31NGBD, m2, MOD_FOL, CALENDAR, false));
+    final Tenor on = Tenor.ON;
+    final ZonedDateTime stdStartON = DateUtils.getUTCDate(2013, 12, 19); //1m
+    final ZonedDateTime stdEndON = DateUtils.getUTCDate(2013, 12, 20);
+    assertEquals("Adjusted date tenor", stdEndON, ScheduleCalculator.getAdjustedDate(stdStartON, on, MOD_FOL, CALENDAR, true));
+    assertEquals("Adjusted date tenor", stdEndON, ScheduleCalculator.getAdjustedDate(stdStartON, on, MOD_FOL, CALENDAR, false));
+    final ZonedDateTime eomStartON = DateUtils.getUTCDate(2013, 10, 31); //1m
+    final ZonedDateTime eomEndON = DateUtils.getUTCDate(2013, 11, 1);
+    assertEquals("Adjusted date tenor", eomEndON, ScheduleCalculator.getAdjustedDate(eomStartON, on, MOD_FOL, CALENDAR, true));
+    assertEquals("Adjusted date tenor", eomEndON, ScheduleCalculator.getAdjustedDate(eomStartON, on, MOD_FOL, CALENDAR, false));
+    final ZonedDateTime weStartON = DateUtils.getUTCDate(2013, 12, 20); //1m
+    final ZonedDateTime weEndON = DateUtils.getUTCDate(2013, 12, 23);
+    assertEquals("Adjusted date tenor", weEndON, ScheduleCalculator.getAdjustedDate(weStartON, on, MOD_FOL, CALENDAR, true));
+    assertEquals("Adjusted date tenor", weEndON, ScheduleCalculator.getAdjustedDate(weStartON, on, MOD_FOL, CALENDAR, false));
+    final Tenor tn = Tenor.TN;
+    final ZonedDateTime stdStartTN = DateUtils.getUTCDate(2013, 12, 18); //1m
+    final ZonedDateTime stdEndTN = DateUtils.getUTCDate(2013, 12, 19);
+    assertEquals("Adjusted date tenor", stdEndTN, ScheduleCalculator.getAdjustedDate(stdStartTN, tn, MOD_FOL, CALENDAR, true));
+    assertEquals("Adjusted date tenor", stdEndTN, ScheduleCalculator.getAdjustedDate(stdStartTN, tn, MOD_FOL, CALENDAR, false));
+    final ZonedDateTime eomStartTN = DateUtils.getUTCDate(2013, 10, 30); //1m
+    final ZonedDateTime eomEndTN = DateUtils.getUTCDate(2013, 10, 31);
+    assertEquals("Adjusted date tenor", eomEndTN, ScheduleCalculator.getAdjustedDate(eomStartTN, tn, MOD_FOL, CALENDAR, true));
+    assertEquals("Adjusted date tenor", eomEndTN, ScheduleCalculator.getAdjustedDate(eomStartTN, tn, MOD_FOL, CALENDAR, false));
+    final ZonedDateTime weStartTN = DateUtils.getUTCDate(2013, 12, 20); //1m
+    final ZonedDateTime weEndTN = DateUtils.getUTCDate(2013, 12, 23);
+    assertEquals("Adjusted date tenor", weEndTN, ScheduleCalculator.getAdjustedDate(weStartTN, tn, MOD_FOL, CALENDAR, true));
+    assertEquals("Adjusted date tenor", weEndTN, ScheduleCalculator.getAdjustedDate(weStartTN, tn, MOD_FOL, CALENDAR, false));
+  }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void adjustedDatesPeriodNullDate() {
@@ -280,10 +279,10 @@ public class ScheduleCalculatorTest {
     ScheduleCalculator.getAdjustedDate(NOW, (IborIndex) null, CALENDAR);
   }
 
-  @Test
   /**
    * Tests the unadjusted date schedule. Reviewed 19-Jan-2012.
    */
+  @Test
   public void unadjustedDateSchedule() {
     final Period m6 = Period.ofMonths(6);
     final Period m15 = Period.ofMonths(15);
@@ -382,10 +381,10 @@ public class ScheduleCalculatorTest {
     assertArrayEquals("Unadjusted schedule", scheduleMonthEndFeb15MTTExpected, scheduleMonthEndFeb15MTT);
   }
 
-  @Test
   /**
    * Tests the adjusted date schedule. Reviewed 23-Jan-2012.
    */
+  @Test
   public void adjustedDateSchedule1() {
     final Period m6 = Period.ofMonths(6);
     final Period y2 = Period.ofYears(2);
@@ -428,10 +427,10 @@ public class ScheduleCalculatorTest {
     assertArrayEquals("Adjusted schedule", endMarchModFolExpectedEOM, endMarchFolEOM);
   }
 
-  @Test
   /**
    * Tests the adjusted date schedule. Reviewed 22-Feb-2012.
    */
+  @Test
   public void adjustedDateSchedule2() {
     final Period m6 = Period.ofMonths(6);
     final Frequency semi = PeriodFrequency.SEMI_ANNUAL;
@@ -585,17 +584,17 @@ public class ScheduleCalculatorTest {
     assertDateArray(ScheduleCalculator.getAdjustedDateSchedule(unadjusted, new FollowingBusinessDayConvention(), ALL), unadjusted);
     assertDateArray(ScheduleCalculator.getAdjustedDateSchedule(unadjusted, new PrecedingBusinessDayConvention(), ALL), unadjusted);
     assertDateArray(
-        ScheduleCalculator.getAdjustedDateSchedule(unadjusted, new ModifiedFollowingBusinessDayConvention(), WEEKEND),
+        ScheduleCalculator.getAdjustedDateSchedule(unadjusted, new ModifiedFollowingBusinessDayConvention(), CALENDAR),
         new ZonedDateTime[] {DateUtils.getUTCDate(2010, 2, 1), DateUtils.getUTCDate(2010, 3, 1), DateUtils.getUTCDate(2010, 4, 1), DateUtils.getUTCDate(2010, 5, 3), DateUtils.getUTCDate(2010, 6, 1),
             DateUtils.getUTCDate(2010, 7, 1), DateUtils.getUTCDate(2010, 8, 2), DateUtils.getUTCDate(2010, 9, 1), DateUtils.getUTCDate(2010, 10, 1), DateUtils.getUTCDate(2010, 11, 1),
             DateUtils.getUTCDate(2010, 12, 1), DateUtils.getUTCDate(2011, 1, 3) });
     assertDateArray(
-        ScheduleCalculator.getAdjustedDateSchedule(unadjusted, new FollowingBusinessDayConvention(), WEEKEND),
+        ScheduleCalculator.getAdjustedDateSchedule(unadjusted, new FollowingBusinessDayConvention(), CALENDAR),
         new ZonedDateTime[] {DateUtils.getUTCDate(2010, 2, 1), DateUtils.getUTCDate(2010, 3, 1), DateUtils.getUTCDate(2010, 4, 1), DateUtils.getUTCDate(2010, 5, 3), DateUtils.getUTCDate(2010, 6, 1),
             DateUtils.getUTCDate(2010, 7, 1), DateUtils.getUTCDate(2010, 8, 2), DateUtils.getUTCDate(2010, 9, 1), DateUtils.getUTCDate(2010, 10, 1), DateUtils.getUTCDate(2010, 11, 1),
             DateUtils.getUTCDate(2010, 12, 1), DateUtils.getUTCDate(2011, 1, 3) });
     assertDateArray(
-        ScheduleCalculator.getAdjustedDateSchedule(unadjusted, new PrecedingBusinessDayConvention(), WEEKEND),
+        ScheduleCalculator.getAdjustedDateSchedule(unadjusted, new PrecedingBusinessDayConvention(), CALENDAR),
         new ZonedDateTime[] {DateUtils.getUTCDate(2010, 2, 1), DateUtils.getUTCDate(2010, 3, 1), DateUtils.getUTCDate(2010, 4, 1), DateUtils.getUTCDate(2010, 4, 30), DateUtils.getUTCDate(2010, 6, 1),
             DateUtils.getUTCDate(2010, 7, 1), DateUtils.getUTCDate(2010, 7, 30), DateUtils.getUTCDate(2010, 9, 1), DateUtils.getUTCDate(2010, 10, 1), DateUtils.getUTCDate(2010, 11, 1),
             DateUtils.getUTCDate(2010, 12, 1), DateUtils.getUTCDate(2010, 12, 31) });
@@ -737,43 +736,4 @@ public class ScheduleCalculatorTest {
     }
   }
 
-  private static class WeekendCalendar implements Calendar {
-
-    @Override
-    public String getConventionName() {
-      return "";
-    }
-
-    @Override
-    public boolean isWorkingDay(final LocalDate date) {
-      final DayOfWeek day = date.getDayOfWeek();
-      if (day.equals(DayOfWeek.SATURDAY) || day.equals(DayOfWeek.SUNDAY)) {
-        return false;
-      }
-      return true;
-    }
-
-    @Override
-    public String getName() {
-      return "";
-    }
-  }
-
-  private static class AllCalendar implements Calendar {
-
-    @Override
-    public String getConventionName() {
-      return "";
-    }
-
-    @Override
-    public boolean isWorkingDay(final LocalDate date) {
-      return true;
-    }
-
-    @Override
-    public String getName() {
-      return "";
-    }
-  }
 }
