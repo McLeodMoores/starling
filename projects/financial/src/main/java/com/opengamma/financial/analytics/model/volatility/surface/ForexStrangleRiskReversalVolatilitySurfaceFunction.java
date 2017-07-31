@@ -11,11 +11,13 @@ package com.opengamma.financial.analytics.model.volatility.surface;
 
 import static com.opengamma.engine.value.ValueRequirementNames.VOLATILITY_SURFACE_DATA;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -142,19 +144,13 @@ public class ForexStrangleRiskReversalVolatilitySurfaceFunction extends ForexVol
   }
 
   private static Number[] getDeltaValues(final Pair<Number, FXVolQuoteType>[] quotes) {
-    final Number[] deltas = new Number[quotes.length];
-    int i = 0;
-    for (final Pair<Number, FXVolQuoteType> q : quotes) {
-      deltas[i++] = q.getFirst();
+    // use a set to get unique deltas
+    final TreeSet<Number> values = new TreeSet<>();
+
+    for (final Pair<Number, FXVolQuoteType> pair : quotes) {
+      values.add(pair.getFirst());
     }
-    Arrays.sort(deltas);
-    return deltas;
-//    final TreeSet<Number> values = new TreeSet<>();
-//
-//    for (final Pair<Number, FXVolQuoteType> pair : quotes) {
-//      values.add(pair.getFirst());
-//    }
-//    return values.toArray((Number[]) Array.newInstance(Number.class, values.size()));
+    return values.toArray((Number[]) Array.newInstance(Number.class, values.size()));
   }
 
   //TODO why are these next two methods suddenly needed?
