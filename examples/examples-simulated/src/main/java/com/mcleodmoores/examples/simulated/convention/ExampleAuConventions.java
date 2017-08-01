@@ -1,5 +1,5 @@
 /**
- *
+ * Copyright (C) 2016 - present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.mcleodmoores.examples.simulated.convention;
 
@@ -50,9 +50,9 @@ public final class ExampleAuConventions extends ConventionMasterInitializer {
     final OvernightIndexConvention overnight = new OvernightIndexConvention("AUD O/N",
         ExternalIdBundle.of(ExternalId.of("CONVENTION", "AUDON"), ExternalSchemes.syntheticSecurityId("AUDON")), DayCounts.ACT_365, 0, Currency.AUD, AU);
     // OIS
-    final SwapFixedLegConvention oisFixedLeg = new SwapFixedLegConvention("AUD OIS", ExternalIdBundle.of("CONVENTION", "AUD"),
+    final SwapFixedLegConvention oisFixedLeg = new SwapFixedLegConvention("AUD OIS Fixed", ExternalIdBundle.of("CONVENTION", "AUD"),
         Tenor.ONE_YEAR, DayCounts.ACT_365, BusinessDayConventions.MODIFIED_FOLLOWING, Currency.AUD, AU, 1, true, StubType.SHORT_START, false, 0);
-    final OISLegConvention oisLeg = new OISLegConvention("AUD OIS", ExternalId.of("CONVENTION", "AUD OIS").toBundle(),
+    final OISLegConvention oisLeg = new OISLegConvention("AUD OIS Fixed", ExternalId.of("CONVENTION", "AUD OIS").toBundle(),
         ExternalId.of("CONVENTION", "AUDON"), Tenor.ONE_YEAR, BusinessDayConventions.MODIFIED_FOLLOWING,
         0, false, StubType.SHORT_START, false, 0);
     // IBOR Swaps

@@ -95,8 +95,8 @@ public final class ExamplesFixedIncomeCurveConfigsPopulator {
 
     IBOR_LEG_CONVENTION_FOR_CURRENCY.put(Pairs.of("USD", Tenor.THREE_MONTHS), ExternalId.of("CONVENTION", "USD 3M"));
 
-    FIXED_OIS_LEG_CONVENTION_FOR_CURRENCY.put("USD", ExternalId.of("CONVENTION", "USD OIS"));
-    FIXED_OIS_LEG_CONVENTION_FOR_CURRENCY.put("AUD", ExternalId.of("CONVENTION", "AUD OIS"));
+    FIXED_OIS_LEG_CONVENTION_FOR_CURRENCY.put("USD", ExternalId.of("CONVENTION", "USD OIS Fixed"));
+    FIXED_OIS_LEG_CONVENTION_FOR_CURRENCY.put("AUD", ExternalId.of("CONVENTION", "AUD OIS Fixed"));
 
     OIS_LEG_CONVENTION_FOR_CURRENCY.put("USD", ExternalId.of("CONVENTION", "USD OIS"));
     OIS_LEG_CONVENTION_FOR_CURRENCY.put("AUD", ExternalId.of("CONVENTION", "AUD OIS"));

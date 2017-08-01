@@ -30,7 +30,7 @@ import com.opengamma.util.money.UnorderedCurrencyPair;
 /**
  *
  */
-public class FxForwardAndNdfDefaults extends DefaultPropertyFunction {
+public class FxForwardAndNdfPerCurrencyPairDefaults extends DefaultPropertyFunction {
   private static final String[] VALUE_REQUIREMENTS = new String[] {
       FX_PRESENT_VALUE,
       PRESENT_VALUE,
@@ -41,7 +41,7 @@ public class FxForwardAndNdfDefaults extends DefaultPropertyFunction {
   private final UnorderedCurrencyPair _underlying;
   private final String _curveExposuresName;
 
-  public FxForwardAndNdfDefaults(final String ccy1, final String ccy2, final String curveExposuresName) {
+  public FxForwardAndNdfPerCurrencyPairDefaults(final String ccy1, final String ccy2, final String curveExposuresName) {
     super(ComputationTargetType.TRADE, true);
     _underlying = UnorderedCurrencyPair.of(Currency.of(ccy1), Currency.of(ccy2));
     _curveExposuresName = ArgumentChecker.notNull(curveExposuresName, "curveExposuresName");

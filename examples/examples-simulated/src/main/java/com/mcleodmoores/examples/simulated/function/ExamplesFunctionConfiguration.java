@@ -18,6 +18,7 @@ import com.opengamma.financial.analytics.model.black.BlackDiscountingPricingFunc
 import com.opengamma.financial.analytics.model.black.BlackDiscountingPricingFunctions.FxOptionDefaults;
 import com.opengamma.financial.analytics.model.discounting.DiscountingPricingFunctions;
 import com.opengamma.financial.analytics.model.discounting.DiscountingPricingFunctions.FxForwardDefaults;
+import com.opengamma.financial.analytics.model.discounting.DiscountingPricingFunctions.LinearRatesDefaults;
 import com.opengamma.financial.analytics.model.equity.option.EquityOptionFunctions;
 import com.opengamma.financial.currency.CurrencyMatrixConfigPopulator;
 import com.opengamma.financial.currency.CurrencyMatrixLookupFunction;
@@ -34,11 +35,13 @@ public class ExamplesFunctionConfiguration extends StandardFunctionConfiguration
   private final Map<String, EquityInfo> _perEquityInfo = new HashMap<>();
   private final Map<UnorderedCurrencyPair, FxOptionInfo> _vanillaFxOptionInfo = new HashMap<>();
   private final Map<UnorderedCurrencyPair, FxForwardInfo> _fxForwardInfo = new HashMap<>();
+  private final Map<Currency, LinearRatesInfo> _linearRatesInfo = new HashMap<>();
 
   public ExamplesFunctionConfiguration() {
     setEquityOptionInfo();
     setVanillaFxOptionInfo();
     setFxForwardInfo();
+    setLinearRatesInfo();
   }
 
   @Override
@@ -57,6 +60,8 @@ public class ExamplesFunctionConfiguration extends StandardFunctionConfiguration
   protected void setFxForwardInfo() {
   }
 
+  protected void setLinearRatesInfo() {
+  }
 
   @Override
   protected FunctionConfigurationSource createObject() {
@@ -148,6 +153,27 @@ public class ExamplesFunctionConfiguration extends StandardFunctionConfiguration
 
   protected FxForwardInfo defaultFxForwardInfo(final Currency ccy1, final Currency ccy2) {
     return new FxForwardInfo(ccy1, ccy2);
+  }
+
+  public void setLinearRatesInfo(final Map<Currency, LinearRatesInfo> info) {
+    _linearRatesInfo.clear();
+    _linearRatesInfo.putAll(info);
+  }
+
+  public Map<Currency, LinearRatesInfo> getLinearRatesInfo() {
+    return _linearRatesInfo;
+  }
+
+  protected void setLinearRatesInfo(final Currency ccy, final LinearRatesInfo info) {
+    _linearRatesInfo.put(ccy, info);
+  }
+
+  protected LinearRatesInfo getLinearRatesInfo(final Currency ccy) {
+    return _linearRatesInfo.get(ccy);
+  }
+
+  protected LinearRatesInfo defaultLinearRatesInfo(final Currency ccy) {
+    return new LinearRatesInfo(ccy);
   }
 
   /**
@@ -291,42 +317,34 @@ public class ExamplesFunctionConfiguration extends StandardFunctionConfiguration
     d.setCurveExposuresName(i.getCurveExposureName("model/fxforward"));
   }
 
+  protected void setLinearRatesDefaults(final DiscountingPricingFunctions.LinearRatesDefaults defaults) {
+    defaults.setCurrencyInfo(getLinearRatesInfo(new Function1<LinearRatesInfo, DiscountingPricingFunctions.LinearRatesDefaults.CurrencyInfo>() {
+
+      @Override
+      public DiscountingPricingFunctions.LinearRatesDefaults.CurrencyInfo execute(final LinearRatesInfo i) {
+        final DiscountingPricingFunctions.LinearRatesDefaults.CurrencyInfo d = new DiscountingPricingFunctions.LinearRatesDefaults.CurrencyInfo();
+        setLinearRatesDefaults(i, d);
+        return d;
+      }
+    }));
+  }
+
+  protected void setLinearRatesDefaults(final LinearRatesInfo i, final DiscountingPricingFunctions.LinearRatesDefaults.CurrencyInfo d) {
+    d.setCurveExposuresName(i.getCurveExposureName("model/linearrates"));
+  }
+
   protected FunctionConfigurationSource discountingFunctionConfiguration() {
     final FxForwardDefaults fxForwardDefaults = new DiscountingPricingFunctions.FxForwardDefaults();
     setFxForwardDefaults(fxForwardDefaults);
-    return CombiningFunctionConfigurationSource.of(getRepository(fxForwardDefaults));
+    final LinearRatesDefaults linearRatesDefaults = new DiscountingPricingFunctions.LinearRatesDefaults();
+    setLinearRatesDefaults(linearRatesDefaults);
+    return CombiningFunctionConfigurationSource.of(getRepository(fxForwardDefaults), getRepository(linearRatesDefaults));
   }
 
   protected FunctionConfigurationSource blackDiscountingFunctionConfiguration() {
     final FxOptionDefaults vanillaDefaults = new BlackDiscountingPricingFunctions.FxOptionDefaults();
     setVanillaFxOptionDefaults(vanillaDefaults);
     return CombiningFunctionConfigurationSource.of(getRepository(vanillaDefaults));
-  }
-
-  /**
-   * Gets the equity ticker information for a given filter.
-   * @param <T> The type of the object that contains default values for an equity ticker
-   * @param filter The filter
-   * @return T The object that contains default values for an equity ticker
-   */
-  protected <T> Map<String, T> getEquityInfo(final Function1<EquityInfo, T> filter) {
-    final Map<String, T> result = new HashMap<>();
-    for (final Map.Entry<String, EquityInfo> e : getPerEquityInfo().entrySet()) {
-      final T entry = filter.execute(e.getValue());
-      if (entry instanceof InitializingBean) {
-        try {
-          ((InitializingBean) entry).afterPropertiesSet();
-        } catch (final Exception ex) {
-          LOGGER.debug("Skipping {}", e.getKey());
-          LOGGER.trace("Caught exception", e);
-          continue;
-        }
-      }
-      if (entry != null) {
-        result.put(e.getKey(), entry);
-      }
-    }
-    return result;
   }
 
   protected <T> Map<UnorderedCurrencyPair, T> getVanillaFxOptionInfo(final Function1<FxOptionInfo, T> filter) {
@@ -440,6 +458,69 @@ public class ExamplesFunctionConfiguration extends StandardFunctionConfiguration
       return _curveExposuresName.get(key);
     }
 
+  }
+
+  protected <T> Map<Currency, T> getLinearRatesInfo(final Function1<LinearRatesInfo, T> filter) {
+    final Map<Currency, T> result = new HashMap<>();
+    for (final Map.Entry<Currency, LinearRatesInfo> e : getLinearRatesInfo().entrySet()) {
+      final T entry = filter.execute(e.getValue());
+      if (entry instanceof InitializingBean) {
+        try {
+          ((InitializingBean) entry).afterPropertiesSet();
+        } catch (final Exception ex) {
+          LOGGER.debug("Skipping {}", e.getKey());
+          LOGGER.trace("Caught exception", e);
+          continue;
+        }
+      }
+      if (entry != null) {
+        result.put(e.getKey(), entry);
+      }
+    }
+    return result;
+  }
+
+  public static class LinearRatesInfo {
+    private final Currency _ccy;
+    private final Value _curveExposuresName = new Value();
+
+    public LinearRatesInfo(final Currency ccy) {
+      _ccy = ccy;
+    }
+
+    public void setCurveExposureName(final String key, final String name) {
+      _curveExposuresName.set(key, name);
+    }
+
+    public String getCurveExposureName(final String key) {
+      return _curveExposuresName.get(key);
+    }
+  }
+
+  /**
+   * Gets the equity ticker information for a given filter.
+   * @param <T> The type of the object that contains default values for an equity ticker
+   * @param filter The filter
+   * @return T The object that contains default values for an equity ticker
+   */
+  protected <T> Map<String, T> getEquityInfo(final Function1<EquityInfo, T> filter) {
+    final Map<String, T> result = new HashMap<>();
+    for (final Map.Entry<String, EquityInfo> e : getPerEquityInfo().entrySet()) {
+      final T entry = filter.execute(e.getValue());
+      if (entry instanceof InitializingBean) {
+        try {
+          ((InitializingBean) entry).afterPropertiesSet();
+        } catch (final Exception ex) {
+          LOGGER.debug("Skipping {}", e.getKey());
+          LOGGER.trace("Caught exception", e);
+          continue;
+        }
+      }
+      if (entry != null) {
+        result.put(e.getKey(), entry);
+      }
+    }
+    return result;
   }
 
   /**

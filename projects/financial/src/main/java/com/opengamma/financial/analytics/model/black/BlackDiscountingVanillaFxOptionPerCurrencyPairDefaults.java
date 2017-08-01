@@ -48,7 +48,7 @@ import com.opengamma.util.money.UnorderedCurrencyPair;
 /**
  *
  */
-public class BlackDiscountingVanillaFxOptionDefaults extends DefaultPropertyFunction {
+public class BlackDiscountingVanillaFxOptionPerCurrencyPairDefaults extends DefaultPropertyFunction {
   private static final String[] VALUE_REQUIREMENTS = new String[] {
       FX_PRESENT_VALUE,
       PRESENT_VALUE,
@@ -80,7 +80,7 @@ public class BlackDiscountingVanillaFxOptionDefaults extends DefaultPropertyFunc
   private final String _leftXExtrapolatorName;
   private final String _rightXExtrapolatorName;
 
-  public BlackDiscountingVanillaFxOptionDefaults(final String ccy1, final String ccy2, final String surfaceName,
+  public BlackDiscountingVanillaFxOptionPerCurrencyPairDefaults(final String ccy1, final String ccy2, final String surfaceName,
       final String curveExposuresName, final String xInterpolatorName, final String leftXExtrapolatorName, final String rightXExtrapolatorName) {
     super(ComputationTargetType.TRADE, true);
     ArgumentChecker.notNull(ccy1, "ccy1");

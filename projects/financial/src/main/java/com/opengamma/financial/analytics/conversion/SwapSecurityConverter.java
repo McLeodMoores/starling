@@ -142,10 +142,10 @@ public class SwapSecurityConverter extends FinancialSecurityVisitorAdapter<Instr
     final FixedInterestRateLeg fixedLeg = (FixedInterestRateLeg) (payFixed ? payLeg : receiveLeg);
     final FloatingInterestRateLeg iborLeg = (FloatingInterestRateLeg) (payFixed ? receiveLeg : payLeg);
     // Swap data
-    final double signFixed = (payFixed ? -1.0 : 1.0);
+    final double signFixed = payFixed ? -1.0 : 1.0;
     int nbNotional = 0;
-    nbNotional = (swapSecurity.isExchangeInitialNotional() ? nbNotional + 1 : nbNotional);
-    nbNotional = (swapSecurity.isExchangeFinalNotional() ? nbNotional + 1 : nbNotional);
+    nbNotional = swapSecurity.isExchangeInitialNotional() ? nbNotional + 1 : nbNotional;
+    nbNotional = swapSecurity.isExchangeFinalNotional() ? nbNotional + 1 : nbNotional;
     final double spread;
     if (hasSpread) {
       spread = ((FloatingSpreadIRLeg) iborLeg).getSpread();
@@ -159,7 +159,7 @@ public class SwapSecurityConverter extends FinancialSecurityVisitorAdapter<Instr
     }
     final com.opengamma.financial.security.index.IborIndex indexSecurity = (com.opengamma.financial.security.index.IborIndex) sec;
     final IborIndexConvention indexConvention = _conventionSource.getSingle(indexSecurity.getConventionId(), IborIndexConvention.class);
-    final IborIndex indexIbor = ConverterUtils.indexIbor(indexSecurity.getName(), indexConvention, indexSecurity.getTenor());
+    final IborIndex indexIbor = ConverterUtils.indexIbor(indexConvention.getName(), indexConvention, indexSecurity.getTenor());
     final ExternalId regionIdIbor = fixedLeg.getRegionId();
     final Calendar calendarIbor = CalendarUtils.getCalendar(_regionSource, _holidaySource, regionIdIbor);
     final StubType stub = StubType.SHORT_START; // TODO: this should be pass trough the security [PLAT-5956]
@@ -201,14 +201,14 @@ public class SwapSecurityConverter extends FinancialSecurityVisitorAdapter<Instr
     final AnnuityCouponFixedDefinition fixedLegDefinition;
     if (Frequency.NEVER_NAME.equals(freqFixed.getName())) { // If NEVER, then treated as a zero-coupon and coupon not used.
       final int nbPayment = Math.max(nbNotional, 1); // Implementation note: If zero-coupon with no notional, create a fake coupon of 0.
-      final double accruedEnd = (nbNotional == 0 ? 0.0 : 1.0);
+      final double accruedEnd = nbNotional == 0 ? 0.0 : 1.0;
       final CouponFixedDefinition[] notional = new CouponFixedDefinition[nbPayment];
       int loopnot = 0;
       if (swapSecurity.isExchangeInitialNotional()) {
         notional[0] = new CouponFixedDefinition(currencyIbor, effectiveDate, effectiveDate, effectiveDate, 1.0, -signFixed * fixedLegNotional, 1.0);
         loopnot++;
       }
-      if (swapSecurity.isExchangeFinalNotional() || (nbNotional == 0)) {
+      if (swapSecurity.isExchangeFinalNotional() || nbNotional == 0) {
         notional[loopnot] = new CouponFixedDefinition(currencyIbor, maturityDate, maturityDate, maturityDate, accruedEnd, signFixed * fixedLegNotional, 1.0);
       }
       fixedLegDefinition = new AnnuityCouponFixedDefinition(notional, calendarFixed);

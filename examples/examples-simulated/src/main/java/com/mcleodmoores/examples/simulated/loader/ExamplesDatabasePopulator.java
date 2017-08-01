@@ -151,6 +151,8 @@ public class ExamplesDatabasePopulator extends AbstractTool<ToolContext> {
   //-------------------------------------------------------------------------
   @Override
   protected void doRun() {
+    loadBondCurveSecurities();
+    loadIndexSecurities();
     loadExchanges();
     loadHolidays();
     loadLegalEntities();
@@ -193,8 +195,6 @@ public class ExamplesDatabasePopulator extends AbstractTool<ToolContext> {
     loadFxVolatilitySurfaceConfigurations();
     loadFxImpliedCurveCalculationConfigurations();
     loadUsBondCurveConfigurations(); // bond curve configurations to use a bond curve
-    loadBondCurveSecurities();
-    loadIndexSecurities();
   }
 
   /**

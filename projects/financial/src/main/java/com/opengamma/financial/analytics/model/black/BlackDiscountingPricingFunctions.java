@@ -170,7 +170,7 @@ public class BlackDiscountingPricingFunctions extends AbstractFunctionConfigurat
             value.getLeftXExtrapolatorName(),
             value.getRightXExtrapolatorName()
         };
-        functions.add(functionConfiguration(BlackDiscountingVanillaFxOptionDefaults.class, args));
+        functions.add(functionConfiguration(BlackDiscountingVanillaFxOptionPerCurrencyPairDefaults.class, args));
       }
     }
 

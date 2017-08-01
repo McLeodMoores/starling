@@ -5,18 +5,33 @@
  */
 package com.opengamma.financial.generator;
 
+import java.util.Collection;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.ZoneOffset;
 import org.threeten.bp.ZonedDateTime;
 
+import com.opengamma.DataNotFoundException;
+import com.opengamma.core.convention.Convention;
+import com.opengamma.core.convention.ConventionSource;
 import com.opengamma.core.historicaltimeseries.HistoricalTimeSeries;
+import com.opengamma.core.holiday.Holiday;
+import com.opengamma.core.id.ExternalSchemes;
 import com.opengamma.core.position.Counterparty;
 import com.opengamma.core.value.MarketDataRequirementNames;
-import com.opengamma.financial.analytics.ircurve.CurveSpecificationBuilderConfiguration;
 import com.opengamma.financial.convention.ConventionBundle;
+import com.opengamma.financial.convention.IborIndexConvention;
 import com.opengamma.financial.convention.InMemoryConventionBundleMaster;
+import com.opengamma.financial.convention.SwapFixedLegConvention;
+import com.opengamma.financial.convention.VanillaIborLegConvention;
+import com.opengamma.financial.convention.businessday.BusinessDayConvention;
+import com.opengamma.financial.convention.daycount.DayCount;
+import com.opengamma.financial.convention.frequency.Frequency;
+import com.opengamma.financial.convention.frequency.PeriodFrequency;
+import com.opengamma.financial.security.index.IborIndex;
 import com.opengamma.financial.security.swap.FixedInterestRateLeg;
 import com.opengamma.financial.security.swap.FloatingInterestRateLeg;
 import com.opengamma.financial.security.swap.FloatingRateType;
@@ -24,7 +39,11 @@ import com.opengamma.financial.security.swap.InterestRateNotional;
 import com.opengamma.financial.security.swap.SwapLeg;
 import com.opengamma.financial.security.swap.SwapSecurity;
 import com.opengamma.id.ExternalId;
+import com.opengamma.id.VersionCorrection;
 import com.opengamma.master.position.ManageableTrade;
+import com.opengamma.master.security.ManageableSecurity;
+import com.opengamma.master.security.SecuritySearchRequest;
+import com.opengamma.master.security.SecuritySearchResult;
 import com.opengamma.util.money.Currency;
 import com.opengamma.util.time.Tenor;
 
@@ -33,9 +52,9 @@ import com.opengamma.util.time.Tenor;
  */
 public class SwapSecurityGenerator extends SecurityGenerator<SwapSecurity> {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(SwapSecurityGenerator.class);
-  private static final Tenor[] TENORS = new Tenor[] {Tenor.ONE_YEAR, Tenor.TWO_YEARS, Tenor.THREE_YEARS, Tenor.FIVE_YEARS, Tenor.ofYears(7), Tenor.ofYears(10), Tenor.ofYears(12), Tenor.ofYears(15),
-      Tenor.ofYears(20) };
+  private static final Logger LOGGER = LoggerFactory.getLogger(SwapSecurityGenerator.class);
+  private static final Tenor[] TENORS = new Tenor[] {Tenor.ONE_YEAR, Tenor.TWO_YEARS, Tenor.THREE_YEARS, Tenor.FIVE_YEARS,
+      Tenor.ofYears(7), Tenor.ofYears(10), Tenor.ofYears(12), Tenor.ofYears(15), Tenor.ofYears(20) };
 
   private int _daysTrading = 60;
   private LocalDate _swaptionExpiry;
@@ -47,18 +66,18 @@ public class SwapSecurityGenerator extends SecurityGenerator<SwapSecurity> {
   public int getDaysTrading() {
     return _daysTrading;
   }
-  
+
   public void setSwationExpiry(final LocalDate swaptionExpiry) {
     _swaptionExpiry = swaptionExpiry;
   }
-  
+
   public LocalDate getSwaptionExpiry() {
     return _swaptionExpiry;
   }
 
   /**
    * Return the time series identifier.
-   * 
+   *
    * @param liborConvention the convention bundle, not null
    * @return the time series identifier
    */
@@ -66,25 +85,15 @@ public class SwapSecurityGenerator extends SecurityGenerator<SwapSecurity> {
     return liborConvention.getIdentifiers().getExternalId(getPreferredScheme());
   }
 
-  private ExternalId getSwapRateFor(Currency ccy, LocalDate tradeDate, Tenor tenor) {
-    final CurveSpecificationBuilderConfiguration curveSpecConfig = getCurrencyCurveConfig(ccy);
-    if (curveSpecConfig == null) {
-      return null;
-    }
-    final ExternalId swapSecurity;
-    if (ccy.equals(Currency.USD)) {
-      // Standard (i.e. matches convention) floating leg tenor for USD is 3M
-      swapSecurity = curveSpecConfig.getSwap3MSecurity(tradeDate, tenor);
-    } else {
-      // Standard (i.e. matches convention) floating leg tenor for CHF, JPY, GBP, EUR is 6M
-      swapSecurity = curveSpecConfig.getSwap6MSecurity(tradeDate, tenor);
-    }
-    return swapSecurity;
-  }
-
   @Override
   public SwapSecurity createSecurity() {
     final Currency ccy = getRandomCurrency();
+    final Collection<Holiday> holidays = getHolidaySource().get(ccy);
+    if (holidays == null || holidays.size() != 1) {
+      LOGGER.error("Could not get currency holidays for {}", ccy);
+      return null;
+    }
+    final List<LocalDate> holidayDates = holidays.iterator().next().getHolidayDates();
     LocalDate tradeDate;
     int i = 0;
     do {
@@ -93,64 +102,168 @@ public class SwapSecurityGenerator extends SecurityGenerator<SwapSecurity> {
       } else {
         tradeDate = getSwaptionExpiry().plusDays(2 + i++); // effective date should be at least two days after expiry of swaption.
       }
-    } while (getHolidaySource().isHoliday(tradeDate, ccy));
-    ConventionBundle swapConvention = getConventionBundleSource().getConventionBundle(ExternalId.of(InMemoryConventionBundleMaster.SIMPLE_NAME_SCHEME, ccy.getCode() + "_SWAP"));
-    if (swapConvention == null) {
-      s_logger.error("Couldn't get swap convention for {}", ccy.getCode());
-      return null;
-    }
+    } while (holidayDates.contains(tradeDate));
+
     final Tenor maturity = getRandom(TENORS);
-    // get the convention of the identifier of the initial rate
-    ConventionBundle liborConvention = getConventionBundleSource().getConventionBundle(swapConvention.getSwapFloatingLegInitialRate());
-    if (liborConvention == null) {
-      s_logger.error("Couldn't get libor convention for {}", swapConvention.getSwapFloatingLegInitialRate());
-      return null;
+    ExternalId tsIdentifier = null;
+    DayCount fixedLegDayCount = null;
+    DayCount floatingLegDayCount = null;
+    Frequency fixedLegFrequency = null;
+    Frequency floatingLegFrequency = null;
+    BusinessDayConvention fixedLegBusinessDayConvention = null;
+    BusinessDayConvention floatingLegBusinessDayConvention = null;
+    ExternalId fixedLegRegion = null;
+    ExternalId floatingLegRegion = null;
+    ExternalId indexId = null;
+    // try the convention master - see if there's a convention of the appropriate type with the currency as the identifier
+    final ConventionSource conventionSource = getConventionSource();
+    if (conventionSource != null) {
+      SwapFixedLegConvention fixedLegConvention = null;
+      VanillaIborLegConvention iborLegConvention = null;
+      final Collection<Convention> conventionsForCurrency =
+          conventionSource.get(ExternalSchemes.currencyRegionId(ccy).toBundle(), VersionCorrection.LATEST);
+      for (final Convention convention : conventionsForCurrency) {
+        if (convention instanceof SwapFixedLegConvention) {
+          if (fixedLegConvention != null) {
+            LOGGER.error("Already have a SwapFixedLegConvention for {}, ignoring", ccy);
+          } else {
+            fixedLegConvention = (SwapFixedLegConvention) convention;
+          }
+        }
+        if (convention instanceof VanillaIborLegConvention) {
+          if (iborLegConvention != null) {
+            LOGGER.error("Already have a VanillaIborLegConvention for {}, ignoring", ccy);
+          } else {
+            iborLegConvention = (VanillaIborLegConvention) convention;
+          }
+        }
+      }
+      if (fixedLegConvention != null) {
+        fixedLegDayCount = fixedLegConvention.getDayCount();
+        fixedLegFrequency = PeriodFrequency.of(fixedLegConvention.getPaymentTenor().getPeriod());
+        fixedLegBusinessDayConvention = fixedLegConvention.getBusinessDayConvention();
+        fixedLegRegion = fixedLegConvention.getRegionCalendar();
+      } else {
+        LOGGER.error("Could not get SwapFixedLegConvention for {}", ccy);
+      }
+      if (iborLegConvention != null) {
+        IborIndexConvention indexConvention = null;
+        try {
+          indexConvention = conventionSource.getSingle(iborLegConvention.getIborIndexConvention().toBundle(), IborIndexConvention.class);
+        } catch (final DataNotFoundException e) {
+        }
+        if (indexConvention != null) {
+          floatingLegDayCount = indexConvention.getDayCount();
+          floatingLegBusinessDayConvention = indexConvention.getBusinessDayConvention();
+          floatingLegRegion = indexConvention.getRegionCalendar();
+          final SecuritySearchRequest indexRequest = new SecuritySearchRequest(indexConvention.getExternalIdBundle());
+          try {
+            final SecuritySearchResult securities = getSecurityMaster().search(indexRequest);
+            for (final ManageableSecurity security : securities.getSecurities()) {
+              if (security instanceof IborIndex) {
+                final IborIndex indexSecurity = (IborIndex) security;
+                floatingLegFrequency = PeriodFrequency.of(indexSecurity.getTenor().getPeriod());
+                indexId = indexSecurity.getExternalIdBundle().getExternalId(getPreferredScheme());
+                tsIdentifier = indexId;
+                break;
+              }
+            }
+          } catch (final Exception e) {
+            LOGGER.error("Could not get any securities with id {}", indexConvention.getExternalIdBundle());
+          }
+        } else {
+          LOGGER.error("Could not get IborIndexConvention with identifier {}", indexConvention);
+        }
+      } else {
+        LOGGER.error("Could not get VanillaIborLegConvention for {}", ccy);
+      }
     }
-    // look up the rate timeseries identifier out of the bundle
-    final ExternalId tsIdentifier = getTimeSeriesIdentifier(liborConvention);
+    // just need to test that either the fixed or floating leg was missing
+    if (fixedLegDayCount == null || floatingLegFrequency == null || tsIdentifier == null || indexId == null) {
+      // couldn't find information from convention, try the old way
+      // discouraged use of ConventionBundleSource
+      final ConventionBundle swapConvention =
+          getConventionBundleSource().getConventionBundle(ExternalId.of(InMemoryConventionBundleMaster.SIMPLE_NAME_SCHEME, ccy.getCode() + "_SWAP"));
+      if (swapConvention == null) {
+        LOGGER.error("Couldn't get swap convention for {}", ccy.getCode());
+        return null;
+      }
+      // get the convention of the identifier of the initial rate
+      final ConventionBundle liborConvention = getConventionBundleSource().getConventionBundle(swapConvention.getSwapFloatingLegInitialRate());
+      if (liborConvention == null) {
+        LOGGER.error("Couldn't get libor convention for {}", swapConvention.getSwapFloatingLegInitialRate());
+        return null;
+      }
+      if (tsIdentifier == null) {
+        // look up the rate timeseries identifier out of the bundle
+        tsIdentifier = getTimeSeriesIdentifier(liborConvention);
+      }
+      if (tsIdentifier == null) {
+        LOGGER.error("Could not get time series identifier for {}", liborConvention);
+        return null;
+      }
+      if (fixedLegDayCount == null) {
+        fixedLegDayCount = swapConvention.getSwapFixedLegDayCount();
+        fixedLegFrequency = swapConvention.getSwapFixedLegFrequency();
+        fixedLegBusinessDayConvention = swapConvention.getSwapFixedLegBusinessDayConvention();
+        fixedLegRegion = swapConvention.getSwapFixedLegRegion();
+      }
+      if (floatingLegDayCount == null) {
+        floatingLegDayCount = swapConvention.getSwapFloatingLegDayCount();
+        floatingLegFrequency = swapConvention.getSwapFloatingLegFrequency();
+        floatingLegBusinessDayConvention = swapConvention.getSwapFloatingLegBusinessDayConvention();
+        floatingLegRegion = swapConvention.getSwapFloatingLegRegion();
+      }
+      if (indexId == null) {
+        indexId = swapConvention.getSwapFloatingLegInitialRate();
+      }
+      if (indexId == null) {
+        LOGGER.error("Could not get index id for {}", swapConvention);
+        return null;
+      }
+    }
     // look up the value on our chosen trade date
-    final HistoricalTimeSeries initialRateSeries = getHistoricalSource().getHistoricalTimeSeries(MarketDataRequirementNames.MARKET_VALUE, tsIdentifier.toBundle(), null, tradeDate,
+    final HistoricalTimeSeries rateSeries =
+        getHistoricalSource().getHistoricalTimeSeries(MarketDataRequirementNames.MARKET_VALUE, tsIdentifier.toBundle(), null, tradeDate,
         true, tradeDate, true);
-    if (initialRateSeries == null || initialRateSeries.getTimeSeries().isEmpty()) {
-      s_logger.error("couldn't get series for {} on {}", tsIdentifier, tradeDate);
+    if (rateSeries == null || rateSeries.getTimeSeries().isEmpty()) {
+      LOGGER.error("couldn't get series for {} on {}", tsIdentifier, tradeDate);
       return null;
     }
-    Double initialRate = initialRateSeries.getTimeSeries().getEarliestValue();
+    final Double initialRate = rateSeries.getTimeSeries().getLatestValue();
     // get the identifier for the swap rate for the maturity we're interested in (assuming the fixed rate will be =~ swap rate)
-    final ExternalId swapRateForMaturityIdentifier = getSwapRateFor(ccy, tradeDate, maturity);
-    if (swapRateForMaturityIdentifier == null) {
-      s_logger.error("Couldn't get swap rate identifier for {} [{}] from {}", new Object[] {ccy, maturity, tradeDate });
-      return null;
-    }
-    final HistoricalTimeSeries fixedRateSeries = getHistoricalSource().getHistoricalTimeSeries(MarketDataRequirementNames.MARKET_VALUE, swapRateForMaturityIdentifier.toBundle(),
-        null, tradeDate, true,
-        tradeDate, true);
-    if (fixedRateSeries == null) {
-      s_logger.error("can't find time series for {} on {}", swapRateForMaturityIdentifier, tradeDate);
-      return null;
-    }
-    Double fixedRate = (fixedRateSeries.getTimeSeries().getEarliestValue() + getRandom().nextDouble()) / 100d;
-    Double notional = (double) (getRandom(99999) + 1) * 1000;
-    ZonedDateTime tradeDateTime = tradeDate.atStartOfDay(ZoneOffset.UTC);
-    ZonedDateTime maturityDateTime = tradeDate.plus(maturity.getPeriod()).atStartOfDay(ZoneOffset.UTC);
-    String counterparty = "CParty";
-    SwapLeg fixedLeg = new FixedInterestRateLeg(swapConvention.getSwapFixedLegDayCount(),
-        swapConvention.getSwapFixedLegFrequency(),
-        swapConvention.getSwapFixedLegRegion(),
-        swapConvention.getSwapFixedLegBusinessDayConvention(),
+    final Double fixedRate = initialRate + (getRandom().nextDouble() - 0.5) / 200.;
+    return createSwap(ccy, tradeDate, maturity, tsIdentifier, fixedLegDayCount,
+        floatingLegDayCount, fixedLegFrequency, floatingLegFrequency,
+        fixedLegBusinessDayConvention, floatingLegBusinessDayConvention,
+        fixedLegRegion, floatingLegRegion, indexId, initialRate, fixedRate);
+  }
+
+  private SwapSecurity createSwap(final Currency ccy, final LocalDate tradeDate, final Tenor maturity, final ExternalId tsIdentifier,
+      final DayCount fixedLegDayCount, final DayCount floatingLegDayCount, final Frequency fixedLegFrequency, final Frequency floatingLegFrequency,
+      final BusinessDayConvention fixedLegBusinessDayConvention, final BusinessDayConvention floatingLegBusinessDayConvention,
+      final ExternalId fixedLegRegion, final ExternalId floatingLegRegion, final ExternalId indexId, final Double initialRate, final Double fixedRate) {
+    final Double notional = (double) (getRandom(99999) + 1) * 1000;
+    final ZonedDateTime tradeDateTime = tradeDate.atStartOfDay(ZoneOffset.UTC);
+    final ZonedDateTime maturityDateTime = tradeDate.plus(maturity.getPeriod()).atStartOfDay(ZoneOffset.UTC);
+    final String counterparty = "CParty";
+    final SwapLeg fixedLeg = new FixedInterestRateLeg(fixedLegDayCount,
+        fixedLegFrequency,
+        fixedLegRegion,
+        fixedLegBusinessDayConvention,
         new InterestRateNotional(ccy, notional),
         false, fixedRate);
-    FloatingInterestRateLeg floatingLeg = new FloatingInterestRateLeg(swapConvention.getSwapFloatingLegDayCount(),
-        swapConvention.getSwapFloatingLegFrequency(),
-        swapConvention.getSwapFloatingLegRegion(),
-        swapConvention.getSwapFloatingLegBusinessDayConvention(),
+    final FloatingInterestRateLeg floatingLeg = new FloatingInterestRateLeg(floatingLegDayCount,
+        floatingLegFrequency,
+        floatingLegRegion,
+        floatingLegBusinessDayConvention,
         new InterestRateNotional(ccy, notional),
         false, tsIdentifier,
         FloatingRateType.IBOR);
     floatingLeg.setInitialFloatingRate(initialRate);
-    String fixedLegDescription = RATE_FORMATTER.format(fixedRate);
-    String floatingLegDescription = swapConvention.getSwapFloatingLegInitialRate().getValue();
-    boolean isPayFixed = getRandom().nextBoolean();
+    final String fixedLegDescription = RATE_FORMATTER.format(fixedRate);
+    final String floatingLegDescription = indexId.getValue();
+    final boolean isPayFixed = getRandom().nextBoolean();
     SwapLeg payLeg;
     String payLegDescription;
     SwapLeg receiveLeg;
@@ -167,7 +280,8 @@ public class SwapSecurityGenerator extends SecurityGenerator<SwapSecurity> {
       receiveLegDescription = fixedLegDescription;
     }
     final SwapSecurity swap = new SwapSecurity(tradeDateTime, tradeDateTime, maturityDateTime, counterparty, payLeg, receiveLeg);
-    swap.setName("IR Swap " + ccy + " " + NOTIONAL_FORMATTER.format(notional) + " " + maturityDateTime.format(DATE_FORMATTER) + " - " + payLegDescription + " / " + receiveLegDescription);
+    swap.setName("IR Swap " + ccy + " "
+        + NOTIONAL_FORMATTER.format(notional) + " " + maturityDateTime.format(DATE_FORMATTER) + " - " + payLegDescription + " / " + receiveLegDescription);
     return swap;
   }
 
@@ -176,8 +290,8 @@ public class SwapSecurityGenerator extends SecurityGenerator<SwapSecurity> {
     ManageableTrade trade = null;
     final SwapSecurity swap = createSecurity();
     if (swap != null) {
-      trade = new ManageableTrade(quantity.createQuantity(), persister.storeSecurity(swap), swap.getTradeDate().toLocalDate(), swap.getTradeDate().toOffsetDateTime().toOffsetTime(), 
-          ExternalId.of(Counterparty.DEFAULT_SCHEME, counterPartyGenerator.createName()));
+      trade = new ManageableTrade(quantity.createQuantity(), persister.storeSecurity(swap), swap.getTradeDate().toLocalDate(),
+          swap.getTradeDate().toOffsetDateTime().toOffsetTime(), ExternalId.of(Counterparty.DEFAULT_SCHEME, counterPartyGenerator.createName()));
     }
     return trade;
   }

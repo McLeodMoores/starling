@@ -58,6 +58,14 @@ public class ExamplesSimulatedFunctionConfiguration extends ExamplesFunctionConf
     }
   }
 
+  @Override
+  protected void setLinearRatesInfo() {
+    final Currency[] currencies = ExamplesViewsPopulator.SWAP_CURRENCIES;
+    for (final Currency c : currencies) {
+      setLinearRatesInfo(c);
+    }
+  }
+
   /**
    * Creates empty default per-equity information objects for equity options.
    * @param ticker The equity ticker
@@ -96,5 +104,11 @@ public class ExamplesSimulatedFunctionConfiguration extends ExamplesFunctionConf
     final FxForwardInfo i = defaultFxForwardInfo(ccy1, ccy2);
     i.setCurveExposureName("model/fxforward", "FX Exposures");
     setFxForwardInfo(ccy1, ccy2, i);
+  }
+
+  protected void setLinearRatesInfo(final Currency ccy) {
+    final LinearRatesInfo i = defaultLinearRatesInfo(ccy);
+    i.setCurveExposureName("model/linearrates", "Fixed Income Exposures");
+    setLinearRatesInfo(ccy, i);
   }
 }

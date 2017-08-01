@@ -23,7 +23,7 @@ public class SimulatedIndexSecuritiesGenerator extends AbstractSecuritiesGenerat
 
   static {
     final String[] currencies = new String[] {"USD", "EUR", "JPY", "CHF", "GBP", "AUD" };
-    final String[] overnightTickers = new String[] {"USDFF", "EONIA", "TONAR", "TOISTOIS", "SONIO", "AUDON" };
+    final String[] overnightTickers = new String[] {"USDFF", "EONIA", "TONAR", "TOISTOIS", "SONIA", "AUDON" };
     Tenor[] tenors = new Tenor[] {Tenor.ONE_MONTH, Tenor.TWO_MONTHS, Tenor.THREE_MONTHS, Tenor.FOUR_MONTHS, Tenor.FIVE_MONTHS, Tenor.SIX_MONTHS };
     for (final Tenor tenor : tenors) {
       final String iborTicker = "EUREURIBOR" + tenor.toFormattedString();
