@@ -38,12 +38,12 @@ import com.opengamma.util.money.CurrencyAmount;
  * of FX options using a Black surface and curves constructed using the discounting method.
  */
 public class BlackDiscountingValueVommaFXOptionFunction extends BlackDiscountingFXOptionFunction {
-  /** The value vomma calculator */
-  private static final InstrumentDerivativeVisitor<BlackForexSmileProviderInterface, CurrencyAmount> CALCULATOR =
+  /** The value vomma calculator. */
+  static final InstrumentDerivativeVisitor<BlackForexSmileProviderInterface, CurrencyAmount> CALCULATOR =
       ValueVommaForexBlackSmileCalculator.getInstance();
 
   /**
-   * Sets the value requirement to {@link ValueRequirementNames#VALUE_VOMMA}
+   * Sets the value requirement to {@link ValueRequirementNames#VALUE_VOMMA}.
    */
   public BlackDiscountingValueVommaFXOptionFunction() {
     super(VALUE_VOMMA);
@@ -63,8 +63,8 @@ public class BlackDiscountingValueVommaFXOptionFunction extends BlackDiscounting
         final ValueProperties properties = desiredValue.getConstraints().copy().get();
         final String currency = Iterables.getOnlyElement(properties.getValues(CURRENCY));
         if (!currency.equals(valueVomma.getCurrency().getCode())) {
-          throw new OpenGammaRuntimeException("Currency of result " + valueVomma.getCurrency() + " did not match" +
-              " the expected currency " + currency);
+          throw new OpenGammaRuntimeException("Currency of result " + valueVomma.getCurrency() + " did not match"
+              + " the expected currency " + currency);
         }
         final ValueSpecification spec = new ValueSpecification(VALUE_VOMMA, target.toSpecification(), properties);
         return Collections.singleton(new ComputedValue(spec, valueVomma.getAmount()));

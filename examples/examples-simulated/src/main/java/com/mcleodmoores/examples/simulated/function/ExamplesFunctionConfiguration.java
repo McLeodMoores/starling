@@ -16,6 +16,8 @@ import com.opengamma.engine.function.config.FunctionConfiguration;
 import com.opengamma.engine.function.config.FunctionConfigurationSource;
 import com.opengamma.financial.analytics.model.black.BlackDiscountingPricingFunctions;
 import com.opengamma.financial.analytics.model.black.BlackDiscountingPricingFunctions.FxOptionDefaults;
+import com.opengamma.financial.analytics.model.discounting.DiscountingPricingFunctions;
+import com.opengamma.financial.analytics.model.discounting.DiscountingPricingFunctions.FxForwardDefaults;
 import com.opengamma.financial.analytics.model.equity.option.EquityOptionFunctions;
 import com.opengamma.financial.currency.CurrencyMatrixConfigPopulator;
 import com.opengamma.financial.currency.CurrencyMatrixLookupFunction;
@@ -35,7 +37,7 @@ public class ExamplesFunctionConfiguration extends StandardFunctionConfiguration
 
   public ExamplesFunctionConfiguration() {
     setEquityOptionInfo();
-    setFxOptionInfo();
+    setVanillaFxOptionInfo();
     setFxForwardInfo();
   }
 
@@ -49,15 +51,17 @@ public class ExamplesFunctionConfiguration extends StandardFunctionConfiguration
   protected void setEquityOptionInfo() {
   }
 
-  protected void setFxOptionInfo() {
+  protected void setVanillaFxOptionInfo() {
   }
 
   protected void setFxForwardInfo() {
   }
 
+
   @Override
   protected FunctionConfigurationSource createObject() {
-    return CombiningFunctionConfigurationSource.of(super.createObject(), curveFunctions(), multicurvePricingFunctions(), blackDiscountingFunctionConfiguration());
+    return CombiningFunctionConfigurationSource.of(super.createObject(), curveFunctions(), multicurvePricingFunctions(),
+        blackDiscountingFunctionConfiguration(), discountingFunctionConfiguration());
   }
 
   /**
@@ -117,16 +121,29 @@ public class ExamplesFunctionConfiguration extends StandardFunctionConfiguration
     _vanillaFxOptionInfo.put(UnorderedCurrencyPair.of(ccy1, ccy2), info);
   }
 
-  public void setFxForwardInfo(final Currency ccy1, final Currency ccy2, final FxForwardInfo info) {
-    _fxForwardInfo.put(UnorderedCurrencyPair.of(ccy1, ccy2), info);
-  }
-
   public FxOptionInfo getVanillaFxOptionInfo(final Currency ccy1, final Currency ccy2) {
     return _vanillaFxOptionInfo.get(UnorderedCurrencyPair.of(ccy1, ccy2));
   }
 
   protected FxOptionInfo defaultVanillaFxOptionInfo(final Currency ccy1, final Currency ccy2) {
     return new FxOptionInfo(ccy1, ccy2);
+  }
+
+  public void setFxForwardInfo(final Map<UnorderedCurrencyPair, FxForwardInfo> info) {
+    _fxForwardInfo.clear();
+    _fxForwardInfo.putAll(info);
+  }
+
+  public Map<UnorderedCurrencyPair, FxForwardInfo> getFxForwardInfo() {
+    return _fxForwardInfo;
+  }
+
+  public void setFxForwardInfo(final Currency ccy1, final Currency ccy2, final FxForwardInfo info) {
+    _fxForwardInfo.put(UnorderedCurrencyPair.of(ccy1, ccy2), info);
+  }
+
+  public FxForwardInfo getFxForwardInfo(final Currency ccy1, final Currency ccy2) {
+    return _fxForwardInfo.get(UnorderedCurrencyPair.of(ccy1, ccy2));
   }
 
   protected FxForwardInfo defaultFxForwardInfo(final Currency ccy1, final Currency ccy2) {
@@ -167,6 +184,22 @@ public class ExamplesFunctionConfiguration extends StandardFunctionConfiguration
   }
 
   /**
+   * Sets the per-equity surface defaults for equity option functions.
+   * @param defaults The object containing the default values
+   */
+  protected void setEquityOptionSurfaceDefaults(final EquityOptionFunctions.EquityOptionDefaults defaults) {
+    defaults.setPerEquityInfo(getEquityInfo(new Function1<EquityInfo, EquityOptionFunctions.EquityInfo>() {
+      @Override
+      public EquityOptionFunctions.EquityInfo execute(final EquityInfo i) {
+        final EquityOptionFunctions.EquityInfo d = new EquityOptionFunctions.EquityInfo();
+        setEquityOptionSurfaceDefaults(i, d);
+        return d;
+      }
+    }));
+  }
+
+
+  /**
    * Sets the paths for the per-equity ticker default values for the forward curve used
    * in pricing with the keys:
    * <p>
@@ -194,21 +227,6 @@ public class ExamplesFunctionConfiguration extends StandardFunctionConfiguration
     defaults.setDiscountingCurveConfig(i.getDiscountingCurveConfig("model/equityoption"));
     defaults.setDiscountingCurveCurrency(i.getDiscountingCurveCurrency("model/equityoption"));
     defaults.setDividendType(i.getDiscountingCurve("model/equityoption"));
-  }
-
-  /**
-   * Sets the per-equity surface defaults for equity option functions.
-   * @param defaults The object containing the default values
-   */
-  protected void setEquityOptionSurfaceDefaults(final EquityOptionFunctions.EquityOptionDefaults defaults) {
-    defaults.setPerEquityInfo(getEquityInfo(new Function1<EquityInfo, EquityOptionFunctions.EquityInfo>() {
-      @Override
-      public EquityOptionFunctions.EquityInfo execute(final EquityInfo i) {
-        final EquityOptionFunctions.EquityInfo d = new EquityOptionFunctions.EquityInfo();
-        setEquityOptionSurfaceDefaults(i, d);
-        return d;
-      }
-    }));
   }
 
   /**
@@ -249,19 +267,40 @@ public class ExamplesFunctionConfiguration extends StandardFunctionConfiguration
     }));
   }
 
+  protected void setVanillaFxOptionDefaults(final FxOptionInfo i, final BlackDiscountingPricingFunctions.FxOptionDefaults.CurrencyPairInfo d) {
+    d.setCurveExposuresName(i.getCurveExposureName("model/vanillafxoption"));
+    d.setLeftXExtrapolatorName(i.getLeftXExtrapolatorName("model/vanillafxoption"));
+    d.setRightXExtrapolatorName(i.getRightXExtrapolatorName("model/vanillafxoption"));
+    d.setSurfaceName(i.getSurfaceName("model/vanillafxoption"));
+    d.setXInterpolatorName(i.getXInterpolatorName("model/vanillafxoption"));
+  }
+
+  protected void setFxForwardDefaults(final DiscountingPricingFunctions.FxForwardDefaults defaults) {
+    defaults.setCurrencyPairInfo(getFxForwardInfo(new Function1<FxForwardInfo, DiscountingPricingFunctions.FxForwardDefaults.CurrencyPairInfo>() {
+
+      @Override
+      public DiscountingPricingFunctions.FxForwardDefaults.CurrencyPairInfo execute(final FxForwardInfo i) {
+        final DiscountingPricingFunctions.FxForwardDefaults.CurrencyPairInfo d = new DiscountingPricingFunctions.FxForwardDefaults.CurrencyPairInfo();
+        setFxForwardDefaults(i, d);
+        return d;
+      }
+    }));
+  }
+
+  protected void setFxForwardDefaults(final FxForwardInfo i, final DiscountingPricingFunctions.FxForwardDefaults.CurrencyPairInfo d) {
+    d.setCurveExposuresName(i.getCurveExposureName("model/fxforward"));
+  }
+
+  protected FunctionConfigurationSource discountingFunctionConfiguration() {
+    final FxForwardDefaults fxForwardDefaults = new DiscountingPricingFunctions.FxForwardDefaults();
+    setFxForwardDefaults(fxForwardDefaults);
+    return CombiningFunctionConfigurationSource.of(getRepository(fxForwardDefaults));
+  }
+
   protected FunctionConfigurationSource blackDiscountingFunctionConfiguration() {
     final FxOptionDefaults vanillaDefaults = new BlackDiscountingPricingFunctions.FxOptionDefaults();
     setVanillaFxOptionDefaults(vanillaDefaults);
     return CombiningFunctionConfigurationSource.of(getRepository(vanillaDefaults));
-  }
-
-
-  protected void setVanillaFxOptionDefaults(final FxOptionInfo i, final BlackDiscountingPricingFunctions.FxOptionDefaults.CurrencyPairInfo d) {
-    d.setSurfaceName(i.getSurfaceName("model/vanillafxoption"));
-    d.setCurveExposuresName(i.getCurveExposureName("model/vanillafxoption"));
-    d.setXInterpolatorName(i.getXInterpolatorName("model/vanillafxoption"));
-    d.setLeftXExtrapolatorName(i.getLeftXExtrapolatorName("model/vanillafxoption"));
-    d.setRightXExtrapolatorName(i.getRightXExtrapolatorName("model/vanillafxoption"));
   }
 
   /**
@@ -363,6 +402,26 @@ public class ExamplesFunctionConfiguration extends StandardFunctionConfiguration
       return _rightXExtrapolatorName.get(key);
     }
 
+  }
+
+  protected <T> Map<UnorderedCurrencyPair, T> getFxForwardInfo(final Function1<FxForwardInfo, T> filter) {
+    final Map<UnorderedCurrencyPair, T> result = new HashMap<>();
+    for (final Map.Entry<UnorderedCurrencyPair, FxForwardInfo> e : getFxForwardInfo().entrySet()) {
+      final T entry = filter.execute(e.getValue());
+      if (entry instanceof InitializingBean) {
+        try {
+          ((InitializingBean) entry).afterPropertiesSet();
+        } catch (final Exception ex) {
+          LOGGER.debug("Skipping {}", e.getKey());
+          LOGGER.trace("Caught exception", e);
+          continue;
+        }
+      }
+      if (entry != null) {
+        result.put(e.getKey(), entry);
+      }
+    }
+    return result;
   }
 
   public static class FxForwardInfo {

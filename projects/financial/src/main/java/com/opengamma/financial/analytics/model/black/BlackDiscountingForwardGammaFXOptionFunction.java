@@ -35,12 +35,12 @@ import com.opengamma.engine.value.ValueSpecification;
  * curves constructed using the discounting method.
  */
 public class BlackDiscountingForwardGammaFXOptionFunction extends BlackDiscountingFXOptionFunction {
-  /** The forward gamma calculator */
-  private static final InstrumentDerivativeVisitor<BlackForexSmileProviderInterface, Double> CALCULATOR =
+  /** The forward gamma calculator. */
+  static final InstrumentDerivativeVisitor<BlackForexSmileProviderInterface, Double> CALCULATOR =
       ForwardGammaForexBlackSmileCalculator.getInstance();
 
   /**
-   * Sets the value requirement to {@link ValueRequirementNames#FORWARD_GAMMA}
+   * Sets the value requirement to {@link ValueRequirementNames#FORWARD_GAMMA}.
    */
   public BlackDiscountingForwardGammaFXOptionFunction() {
     super(FORWARD_GAMMA);
@@ -50,7 +50,6 @@ public class BlackDiscountingForwardGammaFXOptionFunction extends BlackDiscounti
   public CompiledFunctionDefinition compile(final FunctionCompilationContext context, final Instant atInstant) {
     return new BlackDiscountingCompiledFunction(getTargetToDefinitionConverter(context), getDefinitionToDerivativeConverter(context), false) {
 
-      @SuppressWarnings("synthetic-access")
       @Override
       protected Set<ComputedValue> getValues(final FunctionExecutionContext executionContext, final FunctionInputs inputs,
           final ComputationTarget target, final Set<ValueRequirement> desiredValues, final InstrumentDerivative derivative,

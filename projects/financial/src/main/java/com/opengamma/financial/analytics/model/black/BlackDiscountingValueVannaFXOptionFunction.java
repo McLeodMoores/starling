@@ -38,12 +38,12 @@ import com.opengamma.util.money.CurrencyAmount;
  * of FX options using a Black surface and curves constructed using the discounting method.
  */
 public class BlackDiscountingValueVannaFXOptionFunction extends BlackDiscountingFXOptionFunction {
-  /** The value vanna calculator */
-  private static final InstrumentDerivativeVisitor<BlackForexSmileProviderInterface, CurrencyAmount> CALCULATOR =
+  /** The value vanna calculator. */
+  static final InstrumentDerivativeVisitor<BlackForexSmileProviderInterface, CurrencyAmount> CALCULATOR =
       ValueVannaForexBlackSmileCalculator.getInstance();
 
   /**
-   * Sets the value requirement to {@link ValueRequirementNames#VALUE_VANNA}
+   * Sets the value requirement to {@link ValueRequirementNames#VALUE_VANNA}.
    */
   public BlackDiscountingValueVannaFXOptionFunction() {
     super(VALUE_VANNA);
@@ -63,8 +63,8 @@ public class BlackDiscountingValueVannaFXOptionFunction extends BlackDiscounting
         final ValueProperties properties = desiredValue.getConstraints().copy().get();
         final String currency = Iterables.getOnlyElement(properties.getValues(CURRENCY));
         if (!currency.equals(valueVanna.getCurrency().getCode())) {
-          throw new OpenGammaRuntimeException("Currency of result " + valueVanna.getCurrency() + " did not match" +
-              " the expected currency " + currency);
+          throw new OpenGammaRuntimeException("Currency of result " + valueVanna.getCurrency() + " did not match"
+              + " the expected currency " + currency);
         }
         final ValueSpecification spec = new ValueSpecification(VALUE_VANNA, target.toSpecification(), properties);
         return Collections.singleton(new ComputedValue(spec, valueVanna.getAmount()));

@@ -35,12 +35,12 @@ import com.opengamma.engine.value.ValueSpecification;
  * curves constructed using the discounting method.
  */
 public class BlackDiscountingForwardVegaFXOptionFunction extends BlackDiscountingFXOptionFunction {
-  /** The forward vega calculator */
-  private static final InstrumentDerivativeVisitor<BlackForexSmileProviderInterface, Double> CALCULATOR =
+  /** The forward vega calculator. */
+  static final InstrumentDerivativeVisitor<BlackForexSmileProviderInterface, Double> CALCULATOR =
       ForwardVegaForexBlackSmileCalculator.getInstance();
 
   /**
-   * Sets the value requirement to {@link ValueRequirementNames#FORWARD_VEGA}
+   * Sets the value requirement to {@link ValueRequirementNames#FORWARD_VEGA}.
    */
   public BlackDiscountingForwardVegaFXOptionFunction() {
     super(FORWARD_VEGA);

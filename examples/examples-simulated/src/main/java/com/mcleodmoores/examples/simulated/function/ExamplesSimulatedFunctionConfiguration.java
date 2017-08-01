@@ -43,7 +43,7 @@ public class ExamplesSimulatedFunctionConfiguration extends ExamplesFunctionConf
   }
 
   @Override
-  protected void setFxOptionInfo() {
+  protected void setVanillaFxOptionInfo() {
     final UnorderedCurrencyPair[] currencies = ExamplesViewsPopulator.CURRENCY_PAIRS;
     for (final UnorderedCurrencyPair c : currencies) {
       setVanillaFxOptionInfo(c.getFirstCurrency(), c.getSecondCurrency());

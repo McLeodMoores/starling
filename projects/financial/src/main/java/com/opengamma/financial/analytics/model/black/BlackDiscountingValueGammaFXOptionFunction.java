@@ -35,12 +35,12 @@ import com.opengamma.engine.value.ValueSpecification;
  * curves constructed using the discounting method.
  */
 public class BlackDiscountingValueGammaFXOptionFunction extends BlackDiscountingFXOptionFunction {
-  /** The value gamma calculator */
-  private static final InstrumentDerivativeVisitor<BlackForexSmileProviderInterface, Double> CALCULATOR =
+  /** The value gamma calculator. */
+  static final InstrumentDerivativeVisitor<BlackForexSmileProviderInterface, Double> CALCULATOR =
       ValueGammaForexBlackSmileCalculator.getInstance();
 
   /**
-   * Sets the value requirement to {@link ValueRequirementNames#VALUE_GAMMA}
+   * Sets the value requirement to {@link ValueRequirementNames#VALUE_GAMMA}.
    */
   public BlackDiscountingValueGammaFXOptionFunction() {
     super(VALUE_GAMMA);

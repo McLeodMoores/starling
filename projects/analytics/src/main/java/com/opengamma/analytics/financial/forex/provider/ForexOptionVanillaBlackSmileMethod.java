@@ -457,6 +457,28 @@ public final class ForexOptionVanillaBlackSmileMethod {
   }
 
   /**
+   * Computes the vega (1st order sensitivity of the option present value to the implied vol)
+   * @param option  the Forex option, not null
+   * @param marketData  the curve and smile data, not null
+   * @return  the vega in the domestic currency
+   */
+  public CurrencyAmount vega(final ForexOptionVanilla option, final BlackForexSmileProviderInterface marketData) {
+    ArgumentChecker.notNull(option, "option");
+    ArgumentChecker.notNull(marketData, "marketData");
+    ArgumentChecker.isTrue(marketData.checkCurrencies(option.getCurrency1(), option.getCurrency2()), "Option currencies not compatible with smile data");
+    final MulticurveProviderInterface multicurves = marketData.getMulticurveProvider();
+    final double dfDomestic = multicurves.getDiscountFactor(option.getCurrency2(), option.getUnderlyingForex().getPaymentTime());
+    final double dfForeign = multicurves.getDiscountFactor(option.getCurrency1(), option.getUnderlyingForex().getPaymentTime());
+    final double spot = multicurves.getFxRate(option.getCurrency1(), option.getCurrency2());
+    final double forward = spot * dfForeign / dfDomestic;
+    final double volatility = marketData.getVolatility(option.getCurrency1(), option.getCurrency2(), option.getTimeToExpiry(), option.getStrike(), forward);
+    final double sign = option.isLong() ? 1.0 : -1.0;
+    final double vomma = dfDomestic * BlackFormulaRepository.vega(forward, option.getStrike(), option.getTimeToExpiry(), volatility) * sign
+        * Math.abs(option.getUnderlyingForex().getPaymentCurrency1().getAmount());
+    return CurrencyAmount.of(option.getUnderlyingForex().getCurrency2(), vomma);
+  }
+
+  /**
    * Computes the forward exchange rate associated to the Forex option (1 Cyy1 = fwd Cyy2).
    * @param option  the Forex option, not null
    * @param marketData  the curve and smile data, not null

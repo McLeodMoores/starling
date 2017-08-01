@@ -11,7 +11,6 @@ import java.util.Set;
 import org.threeten.bp.Period;
 
 import com.opengamma.analytics.math.interpolation.factory.LinearExtrapolator1dAdapter;
-import com.opengamma.analytics.math.interpolation.factory.LinearInterpolator1dAdapter;
 import com.opengamma.analytics.math.interpolation.factory.MonotonicConstrainedCubicSplineInterpolator1dAdapter;
 import com.opengamma.core.id.ExternalSchemes;
 import com.opengamma.core.value.MarketDataRequirementNames;
@@ -37,6 +36,7 @@ import com.opengamma.util.money.Currency;
 import com.opengamma.util.time.Tenor;
 
 public class ExamplesFxImpliedCurveConfigsPopulator {
+  public static final String USD_DEPOSIT_CURVE_NAME = "USD Deposit";
   private static final List<Tenor> USD_DEPOSIT_TENORS = Arrays.asList(Tenor.ONE_WEEK, Tenor.TWO_WEEKS, Tenor.THREE_WEEKS,
       Tenor.ONE_MONTH, Tenor.TWO_MONTHS, Tenor.THREE_MONTHS, Tenor.FOUR_MONTHS, Tenor.FIVE_MONTHS, Tenor.SIX_MONTHS, Tenor.NINE_MONTHS,
       Tenor.TWELVE_MONTHS, Tenor.TWO_YEARS, Tenor.THREE_YEARS, Tenor.FOUR_YEARS, Tenor.FIVE_YEARS);
@@ -47,7 +47,6 @@ public class ExamplesFxImpliedCurveConfigsPopulator {
       Tenor.SIX_MONTHS, Tenor.NINE_MONTHS, Tenor.ONE_YEAR, Tenor.TWO_YEARS, Tenor.THREE_YEARS, Tenor.FOUR_YEARS, Tenor.FIVE_YEARS,
       Tenor.SIX_YEARS, Tenor.SEVEN_YEARS, Tenor.EIGHT_YEARS, Tenor.NINE_YEARS, Tenor.TEN_YEARS);
   private static final String USD_CONFIG_NAME = "USD Deposit Config";
-  private static final String USD_DEPOSIT_CURVE_NAME = "USD Deposit";
   private static final ExternalId CONVENTION_ID = ExternalId.of("CONVENTION", "FX Forward");
   private static final List<Currency> DOMINANT_CURRENCY = Arrays.asList(Currency.EUR, Currency.GBP, Currency.AUD, Currency.NZD);
 
@@ -117,7 +116,7 @@ public class ExamplesFxImpliedCurveConfigsPopulator {
           MarketDataRequirementNames.MARKET_VALUE, DataFieldType.POINTS, ExternalSchemes.syntheticSecurityId(underlying), MarketDataRequirementNames.MARKET_VALUE));
     }
     final CurveDefinition definition = new InterpolatedCurveDefinition(curveName, nodes,
-        LinearInterpolator1dAdapter.NAME, LinearExtrapolator1dAdapter.NAME, LinearExtrapolator1dAdapter.NAME);
+        MonotonicConstrainedCubicSplineInterpolator1dAdapter.NAME, LinearExtrapolator1dAdapter.NAME, LinearExtrapolator1dAdapter.NAME);
     final CurveNodeIdMapper nodeIds = CurveNodeIdMapper.builder()
         .name(idMapperName)
         .fxForwardNodeIds(fxForwardIds)

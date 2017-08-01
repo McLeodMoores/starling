@@ -38,12 +38,12 @@ import com.opengamma.util.money.CurrencyAmount;
  * of FX options using a Black surface and curves constructed using the discounting method.
  */
 public class BlackDiscountingValueGammaSpotFXOptionFunction extends BlackDiscountingFXOptionFunction {
-  /** The value gamma spot calculator */
-  private static final InstrumentDerivativeVisitor<BlackForexSmileProviderInterface, CurrencyAmount> CALCULATOR =
+  /** The value gamma spot calculator. */
+  static final InstrumentDerivativeVisitor<BlackForexSmileProviderInterface, CurrencyAmount> CALCULATOR =
       ValueGammaSpotForexBlackSmileCalculator.getInstance();
 
   /**
-   * Sets the value requirement to {@link ValueRequirementNames#VALUE_GAMMA_P}
+   * Sets the value requirement to {@link ValueRequirementNames#VALUE_GAMMA_P}.
    */
   public BlackDiscountingValueGammaSpotFXOptionFunction() {
     super(VALUE_GAMMA_P);
@@ -63,8 +63,8 @@ public class BlackDiscountingValueGammaSpotFXOptionFunction extends BlackDiscoun
         final ValueProperties properties = desiredValue.getConstraints().copy().get();
         final String currency = Iterables.getOnlyElement(properties.getValues(CURRENCY));
         if (!currency.equals(valueGamma.getCurrency().getCode())) {
-          throw new OpenGammaRuntimeException("Currency of result " + valueGamma.getCurrency() + " did not match" +
-              " the expected currency " + currency);
+          throw new OpenGammaRuntimeException("Currency of result " + valueGamma.getCurrency() + " did not match"
+              + " the expected currency " + currency);
         }
         final ValueSpecification spec = new ValueSpecification(VALUE_GAMMA_P, target.toSpecification(), properties);
         return Collections.singleton(new ComputedValue(spec, valueGamma.getAmount()));

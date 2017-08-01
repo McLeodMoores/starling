@@ -35,12 +35,12 @@ import com.opengamma.engine.value.ValueSpecification;
  * curves constructed using the discounting method.
  */
 public class BlackDiscountingValueDeltaFXOptionFunction extends BlackDiscountingFXOptionFunction {
-  /** The value delta calculator */
-  private static final InstrumentDerivativeVisitor<BlackForexSmileProviderInterface, Double> CALCULATOR =
+  /** The value delta calculator. */
+  static final InstrumentDerivativeVisitor<BlackForexSmileProviderInterface, Double> CALCULATOR =
       ValueDeltaForexBlackSmileCalculator.getInstance();
 
   /**
-   * Sets the value requirement to {@link ValueRequirementNames#VALUE_DELTA}
+   * Sets the value requirement to {@link ValueRequirementNames#VALUE_DELTA}.
    */
   public BlackDiscountingValueDeltaFXOptionFunction() {
     super(VALUE_DELTA);

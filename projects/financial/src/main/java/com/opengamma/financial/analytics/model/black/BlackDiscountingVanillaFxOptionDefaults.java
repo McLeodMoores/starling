@@ -1,11 +1,32 @@
 /**
- *
+ * Copyright (C) 2017 - present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.financial.analytics.model.black;
 
 import static com.opengamma.engine.value.ValuePropertyNames.CURVE_EXPOSURES;
 import static com.opengamma.engine.value.ValuePropertyNames.SURFACE;
+import static com.opengamma.engine.value.ValueRequirementNames.BLOCK_CURVE_SENSITIVITIES;
+import static com.opengamma.engine.value.ValueRequirementNames.DELTA;
+import static com.opengamma.engine.value.ValueRequirementNames.FORWARD_DELTA;
+import static com.opengamma.engine.value.ValueRequirementNames.FORWARD_DRIFTLESS_THETA;
+import static com.opengamma.engine.value.ValueRequirementNames.FORWARD_GAMMA;
+import static com.opengamma.engine.value.ValueRequirementNames.FORWARD_VEGA;
+import static com.opengamma.engine.value.ValueRequirementNames.FX_CURRENCY_EXPOSURE;
 import static com.opengamma.engine.value.ValueRequirementNames.FX_PRESENT_VALUE;
+import static com.opengamma.engine.value.ValueRequirementNames.PRESENT_VALUE;
+import static com.opengamma.engine.value.ValueRequirementNames.RHO;
+import static com.opengamma.engine.value.ValueRequirementNames.SECURITY_IMPLIED_VOLATILITY;
+import static com.opengamma.engine.value.ValueRequirementNames.VALUE_CARRY_RHO;
+import static com.opengamma.engine.value.ValueRequirementNames.VALUE_DELTA;
+import static com.opengamma.engine.value.ValueRequirementNames.VALUE_GAMMA;
+import static com.opengamma.engine.value.ValueRequirementNames.VALUE_RHO;
+import static com.opengamma.engine.value.ValueRequirementNames.VALUE_THETA;
+import static com.opengamma.engine.value.ValueRequirementNames.VALUE_VANNA;
+import static com.opengamma.engine.value.ValueRequirementNames.VALUE_VEGA;
+import static com.opengamma.engine.value.ValueRequirementNames.VALUE_VOMMA;
+import static com.opengamma.engine.value.ValueRequirementNames.VEGA_MATRIX;
+import static com.opengamma.engine.value.ValueRequirementNames.VEGA_QUOTE_MATRIX;
+import static com.opengamma.engine.value.ValueRequirementNames.YIELD_CURVE_NODE_SENSITIVITIES;
 import static com.opengamma.financial.analytics.model.InterpolatedDataProperties.LEFT_X_EXTRAPOLATOR_NAME;
 import static com.opengamma.financial.analytics.model.InterpolatedDataProperties.RIGHT_X_EXTRAPOLATOR_NAME;
 import static com.opengamma.financial.analytics.model.InterpolatedDataProperties.X_INTERPOLATOR_NAME;
@@ -29,7 +50,28 @@ import com.opengamma.util.money.UnorderedCurrencyPair;
  */
 public class BlackDiscountingVanillaFxOptionDefaults extends DefaultPropertyFunction {
   private static final String[] VALUE_REQUIREMENTS = new String[] {
-      FX_PRESENT_VALUE
+      FX_PRESENT_VALUE,
+      PRESENT_VALUE,
+      BLOCK_CURVE_SENSITIVITIES,
+      YIELD_CURVE_NODE_SENSITIVITIES,
+      FX_CURRENCY_EXPOSURE,
+      DELTA,
+      FORWARD_DELTA,
+      FORWARD_GAMMA,
+      FORWARD_VEGA,
+      VEGA_MATRIX,
+      VEGA_QUOTE_MATRIX,
+      FORWARD_DRIFTLESS_THETA,
+      RHO,
+      VALUE_DELTA,
+      VALUE_GAMMA,
+      VALUE_VEGA,
+      VALUE_THETA,
+      VALUE_RHO,
+      VALUE_CARRY_RHO,
+      VALUE_VOMMA,
+      VALUE_VANNA,
+      SECURITY_IMPLIED_VOLATILITY
   };
   private final UnorderedCurrencyPair _underlying;
   private final String _surfaceName;

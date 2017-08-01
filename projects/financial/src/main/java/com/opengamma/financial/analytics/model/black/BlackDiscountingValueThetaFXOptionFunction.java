@@ -8,7 +8,6 @@ package com.opengamma.financial.analytics.model.black;
 import static com.opengamma.engine.value.ValuePropertyNames.CURRENCY;
 import static com.opengamma.engine.value.ValueRequirementNames.VALUE_THETA;
 import static com.opengamma.financial.analytics.model.CalculationPropertyNamesAndValues.PROPERTY_DAYS_PER_YEAR;
-import static com.opengamma.financial.analytics.model.horizon.ThetaPropertyNamesAndValues.DEFAULT_DAYS_PER_YEAR;
 import static com.opengamma.financial.analytics.model.horizon.ThetaPropertyNamesAndValues.OPTION_THETA;
 import static com.opengamma.financial.analytics.model.horizon.ThetaPropertyNamesAndValues.PROPERTY_THETA_CALCULATION_METHOD;
 
@@ -39,15 +38,16 @@ import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.util.money.CurrencyAmount;
 
 /**
- * Calculates the value (forward driftless) theta of FX options using a Black surface and curves constructed using the discounting method. The result is scaled by the number of days in a year, with
- * the default being 365.25.
+ * Calculates the value (forward driftless) theta of FX options using a Black surface and curves constructed using the discounting method.
+ * The result is scaled by the number of days in a year, with the default being 365.
  */
 public class BlackDiscountingValueThetaFXOptionFunction extends BlackDiscountingFXOptionFunction {
-  /** The value theta calculator */
-  private static final InstrumentDerivativeVisitor<BlackForexSmileProviderInterface, CurrencyAmount> CALCULATOR = ValueThetaForexBlackSmileCalculator.getInstance();
+  /** The value theta calculator. */
+  static final InstrumentDerivativeVisitor<BlackForexSmileProviderInterface, CurrencyAmount> CALCULATOR =
+      ValueThetaForexBlackSmileCalculator.getInstance();
 
   /**
-   * Sets the value requirement to {@link ValueRequirementNames#VALUE_THETA}
+   * Sets the value requirement to {@link ValueRequirementNames#VALUE_THETA}.
    */
   public BlackDiscountingValueThetaFXOptionFunction() {
     super(VALUE_THETA);
@@ -68,8 +68,8 @@ public class BlackDiscountingValueThetaFXOptionFunction extends BlackDiscounting
         final ValueProperties.Builder propertiesWithDaysPerYear = properties.copy().withoutAny(PROPERTY_DAYS_PER_YEAR);
         final Set<String> daysPerYearProperty = properties.getValues(PROPERTY_DAYS_PER_YEAR);
         if (daysPerYearProperty.isEmpty() || daysPerYearProperty.size() != 1) {
-          daysPerYear = DEFAULT_DAYS_PER_YEAR;
-          propertiesWithDaysPerYear.with(PROPERTY_DAYS_PER_YEAR, Double.toString(DEFAULT_DAYS_PER_YEAR));
+          daysPerYear = 365;
+          propertiesWithDaysPerYear.with(PROPERTY_DAYS_PER_YEAR, Double.toString(365));
         } else {
           daysPerYear = Double.parseDouble(Iterables.getOnlyElement(daysPerYearProperty));
           propertiesWithDaysPerYear.with(PROPERTY_DAYS_PER_YEAR, daysPerYearProperty);
@@ -85,7 +85,7 @@ public class BlackDiscountingValueThetaFXOptionFunction extends BlackDiscounting
       @Override
       protected Collection<ValueProperties.Builder> getResultProperties(final FunctionCompilationContext compilationContext, final ComputationTarget target) {
         final Collection<ValueProperties.Builder> properties = super.getResultProperties(compilationContext, target);
-        for (ValueProperties.Builder builder : properties) {
+        for (final ValueProperties.Builder builder : properties) {
           builder.with(PROPERTY_THETA_CALCULATION_METHOD, OPTION_THETA).withAny(PROPERTY_DAYS_PER_YEAR);
         }
         return properties;

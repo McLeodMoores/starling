@@ -217,6 +217,7 @@ public abstract class BlackDiscountingFXOptionFunction extends DiscountingFuncti
      * @param baseQuotePair The base/quote pair for the currencies in the security
      * @return The result currency code.
      */
+    //TODO this logic doesn't give the correct answer much of the time
     protected String getResultCurrency(final ComputationTarget target, final CurrencyPair baseQuotePair) {
       final FinancialSecurity security = (FinancialSecurity) target.getTrade().getSecurity();
       if (security instanceof FXDigitalOptionSecurity) {
