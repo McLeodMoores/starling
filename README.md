@@ -97,7 +97,7 @@ Eclipse
 -------
 Importing the projects into Eclipse requires following a very specific set of
 instructions to work properly.
-Full details are in the README of the eclipse subdirectory.
+Full details are in the [README of the eclipse subdirectory](https://github.com/McLeodMoores/starling/blob/mcleodmoores/eclipse/README.md).
 
 
 More information
