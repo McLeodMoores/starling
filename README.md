@@ -77,11 +77,19 @@ and run the following commands:
   mvn starling:server-run -Dconfig=fullstack
 ```
 
+Note that the "server-init" command only needs to be run once - the server can
+be stopped and restarted without having to repopulate the databases.
+
 Wait for the components to load and then point your browser at
 `http://localhost:8080` to see the web user interface.  
 Go to `http://localhost:8080/jax/components` to get a sense of
-the underlying power of the system, available via REST.
-Note that the "server-init" command only needs to be run once.
+the underlying power of the system, available via REST. Clicking
+on "Analytics" opens a UI that shows calculation results:
+
+**TODO** screenshot.
+
+An explanation of what the views calculation can be found 
+[here](https://github.com/McLeodMoores/starling/blob/mcleodmoores/examples/examples-simulated/README.md)
 
 ___
 
@@ -89,7 +97,7 @@ Eclipse
 -------
 Importing the projects into Eclipse requires following a very specific set of
 instructions to work properly.
-Full details are in the README of the eclipse subdirectory.
+Full details are in the [README of the eclipse subdirectory](https://github.com/McLeodMoores/starling/blob/mcleodmoores/eclipse/README.md).
 
 
 More information
