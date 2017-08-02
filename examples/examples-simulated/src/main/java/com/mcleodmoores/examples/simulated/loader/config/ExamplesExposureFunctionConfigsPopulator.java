@@ -62,6 +62,8 @@ public class ExamplesExposureFunctionConfigsPopulator {
     idsToNames.put(ExternalId.of(Currency.OBJECT_SCHEME, "CAD"), ExampleConfigUtils.generateVanillaFixedIncomeConfigName("CAD"));
     idsToNames.put(ExternalId.of(Currency.OBJECT_SCHEME, "EUR"), ExampleConfigUtils.generateVanillaFixedIncomeConfigName("EUR"));
     idsToNames.put(ExternalId.of(Currency.OBJECT_SCHEME, "GBP"), ExampleConfigUtils.generateVanillaFixedIncomeConfigName("GBP"));
+    idsToNames.put(ExternalId.of(Currency.OBJECT_SCHEME, "CHF"), ExampleConfigUtils.generateVanillaFixedIncomeConfigName("CHF"));
+    idsToNames.put(ExternalId.of(Currency.OBJECT_SCHEME, "JPY"), ExampleConfigUtils.generateVanillaFixedIncomeConfigName("JPY"));
     exposureFunctions = new ExposureFunctions(name, exposureFunctionNames, idsToNames);
     ConfigMasterUtils.storeByName(configMaster, makeConfig(exposureFunctions));
     name = "AUD Swaps (1)";

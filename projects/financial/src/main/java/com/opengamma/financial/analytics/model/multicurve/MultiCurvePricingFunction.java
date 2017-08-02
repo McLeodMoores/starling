@@ -213,9 +213,9 @@ public abstract class MultiCurvePricingFunction extends AbstractFunction {
     @Override
     public boolean canApplyTo(final FunctionCompilationContext context, final ComputationTarget target) {
       final Security security = target.getTrade().getSecurity();
-      return security instanceof CashSecurity || security instanceof CashFlowSecurity || security instanceof FRASecurity || security instanceof SwapSecurity ||
-          security instanceof FXForwardSecurity || security instanceof NonDeliverableFXForwardSecurity || security instanceof InterestRateFutureSecurity ||
-          security instanceof FederalFundsFutureSecurity;
+      return security instanceof CashSecurity || security instanceof CashFlowSecurity || security instanceof FRASecurity || security instanceof SwapSecurity
+          || security instanceof FXForwardSecurity || security instanceof NonDeliverableFXForwardSecurity || security instanceof InterestRateFutureSecurity
+          || security instanceof FederalFundsFutureSecurity;
     }
 
     @SuppressWarnings("synthetic-access")
@@ -234,7 +234,8 @@ public abstract class MultiCurvePricingFunction extends AbstractFunction {
 
     @SuppressWarnings("synthetic-access")
     @Override
-    public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
+    public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target,
+        final ValueRequirement desiredValue) {
       final ValueProperties desiredValueConstraints = desiredValue.getConstraints();
       if (!requirementsSet(desiredValueConstraints)) {
         return null;
@@ -246,14 +247,16 @@ public abstract class MultiCurvePricingFunction extends AbstractFunction {
         final Set<ValueRequirement> requirements = new HashSet<>();
         final ValueProperties.Builder commonCurveConstraints = getCurveConstraints(target, desiredValueConstraints);
         for (final String curveExposureConfig : curveExposureConfigs) {
-          final Set<String> curveConstructionConfigurationNames = _instrumentExposuresProvider.getCurveConstructionConfigurationsForConfig(curveExposureConfig, target.getTrade());
+          final Set<String> curveConstructionConfigurationNames =
+              _instrumentExposuresProvider.getCurveConstructionConfigurationsForConfig(curveExposureConfig, target.getTrade());
           for (final String curveConstructionConfigurationName : curveConstructionConfigurationNames) {
             final ValueProperties curveBundleConstraints = commonCurveConstraints.copy()
                 .with(CURVE_CONSTRUCTION_CONFIG, curveConstructionConfigurationName)
                 .get();
             requirements.add(new ValueRequirement(CURVE_BUNDLE, ComputationTargetSpecification.NULL, curveBundleConstraints));
             requirements.add(new ValueRequirement(JACOBIAN_BUNDLE, ComputationTargetSpecification.NULL, curveBundleConstraints));
-            final CurveConstructionConfiguration curveConstructionConfiguration = _curveConstructionConfigurationSource.getCurveConstructionConfiguration(curveConstructionConfigurationName);
+            final CurveConstructionConfiguration curveConstructionConfiguration =
+                _curveConstructionConfigurationSource.getCurveConstructionConfiguration(curveConstructionConfigurationName);
             if (curveConstructionConfiguration == null) {
               s_logger.error("Could not get curve construction configuration called {} from config master", curveConstructionConfigurationName);
               return null;
@@ -278,7 +281,7 @@ public abstract class MultiCurvePricingFunction extends AbstractFunction {
         requirements.addAll(timeSeriesRequirements);
         return requirements;
       } catch (final Exception e) {
-        s_logger.error(e.getMessage(), e);
+        s_logger.error(e.getMessage());
         return null;
       }
     }

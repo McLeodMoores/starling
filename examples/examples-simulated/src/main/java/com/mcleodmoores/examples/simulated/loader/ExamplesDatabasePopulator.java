@@ -179,7 +179,7 @@ public class ExamplesDatabasePopulator extends AbstractTool<ToolContext> {
     loadVanillaFxOptionPortfolio();
     loadEquityPortfolio();
     //    loadEquityOptionPortfolio();
-    //    loadFuturePortfolio();
+    loadFuturePortfolio();
     //    loadBondPortfolio();
     //    loadSwaptionPortfolio();
     //    loadEURFixedIncomePortfolio();

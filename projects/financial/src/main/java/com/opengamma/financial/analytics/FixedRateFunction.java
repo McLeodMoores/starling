@@ -38,7 +38,7 @@ public class FixedRateFunction extends AbstractFunction.NonCompiledInvoker {
     final FinancialSecurity security = (FinancialSecurity) target.getTrade().getSecurity();
     final double fixedRate = security.accept(FixedRateVisitor.INSTANCE);
     final ValueSpecification spec = new ValueSpecification(FIXED_RATE, target.toSpecification(), createValueProperties().get());
-    return Collections.singleton(new ComputedValue(spec, fixedRate));
+    return Collections.singleton(new ComputedValue(spec, fixedRate * 100));
   }
 
   @Override

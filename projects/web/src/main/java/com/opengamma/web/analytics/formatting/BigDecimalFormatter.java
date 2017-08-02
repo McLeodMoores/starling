@@ -180,6 +180,9 @@ import com.opengamma.web.server.conversion.PercentageValueSignificantFiguresForm
 
     // FX
     s_formatters.put(ValueRequirementNames.FX_PRESENT_VALUE, DoubleValueSizeBasedDecimalPlaceFormatter.CCY_DEFAULT);
+
+    // Fixed income
+    s_formatters.put(ValueRequirementNames.FIXED_RATE, DoubleValueDecimalPlaceFormatter.NON_CCY_3DP);
   }
 
   private final ResultsFormatter.CurrencyDisplay _currencyDisplay;

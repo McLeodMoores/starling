@@ -48,7 +48,7 @@ public class SimulatedHistoricalData {
   private final Map<Pair<ExternalId, String>, Double> _finishValues = new HashMap<>();
 
   private static final int NUM_FIELDS = 4;
-  private static final double SCALING_FACTOR = 0.005; // i.e. 0.5% * 1SD
+  private static final double SCALING_FACTOR = 0.0005; // i.e. 0.5% * 1SD
 
   public SimulatedHistoricalData() {
     readFinishValues(_finishValues);

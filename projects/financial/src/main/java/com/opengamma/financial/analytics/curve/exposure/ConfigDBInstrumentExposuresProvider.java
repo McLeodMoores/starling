@@ -49,7 +49,8 @@ public class ConfigDBInstrumentExposuresProvider implements InstrumentExposuresP
    * @param securitySource The security source, not null
    * @param configVersionCorrection The version/correction timestamp to make queries to the configuration with, not null
    */
-  public ConfigDBInstrumentExposuresProvider(final ConfigSource configSource, final SecuritySource securitySource, final VersionCorrection configVersionCorrection) {
+  public ConfigDBInstrumentExposuresProvider(final ConfigSource configSource, final SecuritySource securitySource,
+      final VersionCorrection configVersionCorrection) {
     this(new ConfigSourceQuery<>(configSource, ExposureFunctions.class, configVersionCorrection), securitySource);
   }
 
@@ -76,8 +77,8 @@ public class ConfigDBInstrumentExposuresProvider implements InstrumentExposuresP
   }
 
   @Override
-  public Set<String> getCurveConstructionConfigurationsForConfig(String instrumentExposureConfigurationName,
-                                                                 Trade trade) {
+  public Set<String> getCurveConstructionConfigurationsForConfig(final String instrumentExposureConfigurationName,
+                                                                 final Trade trade) {
     ArgumentChecker.notNull(instrumentExposureConfigurationName, "instrument exposure configuration name");
     ArgumentChecker.notNull(trade, "trade");
     final ExposureFunctions exposures = _query.get(instrumentExposureConfigurationName);
@@ -87,7 +88,7 @@ public class ConfigDBInstrumentExposuresProvider implements InstrumentExposuresP
     final List<String> exposureFunctionNames = exposures.getExposureFunctions();
     List<ExternalId> ids = null;
     final Set<String> curveConstructionConfigurationNames = new HashSet<>();
-    Multimap<String, ExternalId> functionToIds = LinkedHashMultimap.create();
+    final Multimap<String, ExternalId> functionToIds = LinkedHashMultimap.create();
     for (final String exposureFunctionName : exposureFunctionNames) {
       final ExposureFunction exposureFunction = ExposureFunctionFactory.getExposureFunction(_securitySource, exposureFunctionName);
       ids = exposureFunction.getIds(trade);
@@ -106,9 +107,10 @@ public class ConfigDBInstrumentExposuresProvider implements InstrumentExposuresP
         }
       }
     }
-    Security security = trade.getSecurity();
-    throw new OpenGammaRuntimeException("Could not find a matching list of ids for " + security.getClass().getSimpleName() + "/" + security.getExternalIdBundle() + " from ExposureFunctions object '"
-        + instrumentExposureConfigurationName + "'. Ids attempted for referenced functions: " + functionToIds);
+    final Security security = trade.getSecurity();
+    throw new OpenGammaRuntimeException("Could not find a matching list of ids for " + security.getClass().getSimpleName() + "/"
+        + security.getExternalIdBundle() + " from ExposureFunctions object '" + instrumentExposureConfigurationName
+        + "'. Ids attempted for referenced functions: " + functionToIds);
   }
 
 }

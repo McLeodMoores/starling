@@ -23,8 +23,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 
-import net.sf.ehcache.CacheManager;
-
 import org.apache.commons.io.IOUtils;
 import org.fudgemsg.FudgeContext;
 import org.fudgemsg.FudgeField;
@@ -33,8 +31,6 @@ import org.fudgemsg.MutableFudgeMsg;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.Resource;
-
-import au.com.bytecode.opencsv.CSVReader;
 
 import com.google.common.base.Function;
 import com.google.common.base.Predicates;
@@ -49,6 +45,9 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.NamedThreadPoolFactory;
 import com.opengamma.util.TerminatableJob;
 import com.opengamma.util.fudgemsg.OpenGammaFudgeContext;
+
+import au.com.bytecode.opencsv.CSVReader;
+import net.sf.ehcache.CacheManager;
 
 /**
  * An ultra-simple market data simulator, we load the initial values from a CSV file (with a header row)
@@ -95,8 +94,7 @@ public class ExampleLiveDataServer extends StandardLiveDataServer {
     try {
       reader = new CSVReader(new BufferedReader(new InputStreamReader(initialValuesFile.getInputStream())));
       // Read header row
-      @SuppressWarnings("unused")
-      final String[] headers = reader.readNext();
+      reader.readNext();
       String[] line;
       int lineNum = 1;
       while ((line = reader.readNext()) != null) {
@@ -104,14 +102,18 @@ public class ExampleLiveDataServer extends StandardLiveDataServer {
         if (line.length > 0 && line[0].startsWith("#")) {
           continue;
         }
-        if (line.length != NUM_FIELDS) {
+        if (line.length < NUM_FIELDS) {
           s_logger.error("Not enough fields in CSV on line " + lineNum);
         } else {
-          final String identifier = line[0];
-          final String fieldName = line[1];
-          final String valueStr = line[2];
-          final Double value = Double.parseDouble(valueStr);
-          addTicks(identifier, fieldName, value);
+          try {
+            final String identifier = line[0];
+            final String fieldName = line[1];
+            final String valueStr = line[2];
+            final Double value = Double.parseDouble(valueStr);
+            addTicks(identifier, fieldName, value);
+          } catch (final Exception e) {
+            s_logger.error("Problem with {} on line {}: {}", initialValuesFile.getFilename(), lineNum, e.getMessage());
+          }
         }
       }
     } catch (final FileNotFoundException e) {
@@ -198,7 +200,7 @@ public class ExampleLiveDataServer extends StandardLiveDataServer {
     final Map<String, Object> subscriptionHandles = Maps.toMap(validSubscriptions, new Function<String, Object>() {
       @Override
       public Object apply(final String uniqueId) {
-        return new AtomicReference<String>(uniqueId);
+        return new AtomicReference<>(uniqueId);
       }
     });
 

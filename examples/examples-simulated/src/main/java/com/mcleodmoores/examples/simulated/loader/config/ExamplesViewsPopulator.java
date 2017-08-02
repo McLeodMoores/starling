@@ -4,6 +4,7 @@
 package com.mcleodmoores.examples.simulated.loader.config;
 
 import static com.mcleodmoores.examples.simulated.loader.ExamplesDatabasePopulator.AUD_SWAP_PORFOLIO_NAME;
+import static com.mcleodmoores.examples.simulated.loader.ExamplesDatabasePopulator.FUTURE_PORTFOLIO_NAME;
 import static com.mcleodmoores.examples.simulated.loader.ExamplesDatabasePopulator.FX_FORWARD_PORTFOLIO_NAME;
 import static com.mcleodmoores.examples.simulated.loader.ExamplesDatabasePopulator.MULTI_CURRENCY_SWAP_PORTFOLIO_NAME;
 import static com.mcleodmoores.examples.simulated.loader.ExamplesDatabasePopulator.VANILLA_FX_OPTION_PORTFOLIO_NAME;
@@ -13,7 +14,10 @@ import static com.opengamma.engine.value.ValuePropertyNames.CURVE_EXPOSURES;
 import static com.opengamma.engine.value.ValuePropertyNames.SURFACE;
 import static com.opengamma.engine.value.ValueRequirementNames.CAPM_BETA;
 import static com.opengamma.engine.value.ValueRequirementNames.FAIR_VALUE;
+import static com.opengamma.engine.value.ValueRequirementNames.FIXED_CASH_FLOWS;
 import static com.opengamma.engine.value.ValueRequirementNames.FIXED_RATE;
+import static com.opengamma.engine.value.ValueRequirementNames.FLOATING_CASH_FLOWS;
+import static com.opengamma.engine.value.ValueRequirementNames.FORWARD;
 import static com.opengamma.engine.value.ValueRequirementNames.FORWARD_DELTA;
 import static com.opengamma.engine.value.ValueRequirementNames.FORWARD_DRIFTLESS_THETA;
 import static com.opengamma.engine.value.ValueRequirementNames.FORWARD_GAMMA;
@@ -21,7 +25,6 @@ import static com.opengamma.engine.value.ValueRequirementNames.FORWARD_VEGA;
 import static com.opengamma.engine.value.ValueRequirementNames.FX_CURRENCY_EXPOSURE;
 import static com.opengamma.engine.value.ValueRequirementNames.HISTORICAL_VAR;
 import static com.opengamma.engine.value.ValueRequirementNames.NOTIONAL;
-import static com.opengamma.engine.value.ValueRequirementNames.PAR_RATE;
 import static com.opengamma.engine.value.ValueRequirementNames.PNL;
 import static com.opengamma.engine.value.ValueRequirementNames.PRESENT_VALUE;
 import static com.opengamma.engine.value.ValueRequirementNames.SECURITY_IMPLIED_VOLATILITY;
@@ -52,12 +55,14 @@ import com.opengamma.core.config.impl.ConfigItem;
 import com.opengamma.engine.ComputationTargetSpecification;
 import com.opengamma.engine.value.ValueProperties;
 import com.opengamma.engine.value.ValueRequirement;
+import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.view.ViewCalculationConfiguration;
 import com.opengamma.engine.view.ViewDefinition;
 import com.opengamma.examples.simulated.loader.ExampleEquityPortfolioLoader;
 import com.opengamma.financial.analytics.model.curve.CurveCalculationPropertyNamesAndValues;
 import com.opengamma.financial.currency.CurrencyConversionFunction;
 import com.opengamma.financial.security.equity.EquitySecurity;
+import com.opengamma.financial.security.future.FutureSecurity;
 import com.opengamma.financial.security.fx.FXForwardSecurity;
 import com.opengamma.financial.security.option.FXOptionSecurity;
 import com.opengamma.financial.security.swap.SwapSecurity;
@@ -124,7 +129,7 @@ public class ExamplesViewsPopulator extends AbstractTool<ToolContext> {
   protected void doRun() {
     storeViewDefinition(getEquityViewDefinition(ExampleEquityPortfolioLoader.PORTFOLIO_NAME));
     //    storeViewDefinition(getSyntheticMultiCurrencySwapViewDefinitionWithSeparateOutputs(MULTI_CURRENCY_SWAP_PORTFOLIO_NAME));
-    storeViewDefinition(getMultiCurrencySwapViewDefinition(MULTI_CURRENCY_SWAP_PORTFOLIO_NAME));
+    storeViewDefinition(getSwapDetailsViewDefinition(MULTI_CURRENCY_SWAP_PORTFOLIO_NAME));
     storeViewDefinition(getAudSwapView1Definition(AUD_SWAP_PORFOLIO_NAME));
     //    storeViewDefinition(getSyntheticAudSwapView2Definition(AUD_SWAP_PORFOLIO_NAME));
     //    storeViewDefinition(getSyntheticAudSwapView3Definition(AUD_SWAP_PORFOLIO_NAME));
@@ -135,7 +140,7 @@ public class ExamplesViewsPopulator extends AbstractTool<ToolContext> {
     //    storeViewDefinition(getSyntheticSabrExtrapolationViewDefinition(MIXED_CMS_PORTFOLIO_NAME));
     //    storeViewDefinition(getSyntheticEurFixedIncomeViewDefinition(EUR_SWAP_PORTFOLIO_NAME, "EUR Swap Desk View"));
     storeViewDefinition(getFxForwardViewDefinition(FX_FORWARD_PORTFOLIO_NAME, "FX Forward View"));
-    //    storeViewDefinition(getSyntheticFutureViewDefinition(FUTURE_PORTFOLIO_NAME, "Futures View"));
+    storeViewDefinition(getFutureViewDefinition(FUTURE_PORTFOLIO_NAME, "Futures View"));
     //    storeViewDefinition(getSyntheticBondViewDefinition(US_GOVERNMENT_BOND_PORTFOLIO_NAME, "Government Bond View"));
     //    storeViewDefinition(getSyntheticFxVolatilitySwapViewDefinition(FX_VOLATILITY_SWAP_PORTFOLIO_NAME, "FX Volatility Swap View"));
     //    storeViewDefinition(getSyntheticOisViewDefinition(OIS_PORTFOLIO_NAME, "OIS View"));
@@ -145,11 +150,11 @@ public class ExamplesViewsPopulator extends AbstractTool<ToolContext> {
   /**
    * Creates a view definition for a portfolio containing only equities that produces:
    * <ul>
-   * <li> ValueRequirementNames#FAIR_VALUE
-   * <li> ValueRequirementNames#CAPM_BETA
-   * <li> ValueRequirementNames#HISTORICAL_VAR
-   * <li> ValueRequirementNames#SHARPE_RATIO
-   * <li> ValueRequirementNames#PNL
+   * <li> {@link ValueRequirementNames#FAIR_VALUE}
+   * <li> {@link ValueRequirementNames#CAPM_BETA}
+   * <li> {@link ValueRequirementNames#HISTORICAL_VAR}
+   * <li> {@link ValueRequirementNames#SHARPE_RATIO}
+   * <li> {@link ValueRequirementNames#PNL}
    * </ul>
    * @param portfolioName The portfolio name
    * @return The view definition
@@ -224,20 +229,15 @@ public class ExamplesViewsPopulator extends AbstractTool<ToolContext> {
   /**
    * Creates a view definition for a swap portfolio that produces:
    * <ul>
-   * <li> ValueRequirementNames#NOTIONAL
-   * <li> ValueRequirementNames#FIXED_RATE
-   * <li> ValueRequirementNames#SWAP_DETAILS
-   * <li> ValueRequirementNames#PAR_RATE
-   * <li> ValueRequirementNames#PRESENT_VALUE
-   * <li> ValueRequirementNames#PV01 for named curves
-   * <li> ValueRequirementNames#YIELD_CURVE_NODE_SENSITIVITIES for named curves
-   * <li> ValueRequirementNames#YIELD_CURVE
+   * <li> {@link ValueRequirementNames#NOTIONAL}
+   * <li> {@link ValueRequirementNames#FIXED_RATE}
+   * <li> {@link ValueRequirementNames#SWAP_DETAILS}
    * </ul>
    * The curve-specific risk outputs are not collapsed into a single column.
    * @param portfolioName  the portfolio name
    * @return  the view definition
    */
-  private ViewDefinition getMultiCurrencySwapViewDefinition(final String portfolioName) {
+  private ViewDefinition getSwapDetailsViewDefinition(final String portfolioName) {
     final UniqueId portfolioId = getPortfolioId(portfolioName).toLatest();
     final ViewDefinition viewDefinition = new ViewDefinition(portfolioName + " View", portfolioId, UserPrincipal.getTestUser());
     viewDefinition.setDefaultCurrency(Currency.USD);
@@ -251,47 +251,34 @@ public class ExamplesViewsPopulator extends AbstractTool<ToolContext> {
     final ViewCalculationConfiguration calcConfig = new ViewCalculationConfiguration(viewDefinition, DEFAULT_CALC_CONFIG);
     calcConfig.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, NOTIONAL, ValueProperties.none());
     calcConfig.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, FIXED_RATE, ValueProperties.none());
-    calcConfig.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, PAR_RATE, calcProperties);
     calcConfig.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, PRESENT_VALUE,
         calcProperties.compose(ValueProperties.with(CurrencyConversionFunction.ORIGINAL_CURRENCY, "Default")
             .withOptional(CurrencyConversionFunction.ORIGINAL_CURRENCY).get()));
-//    defaultCalcConfig.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, PRESENT_VALUE, ValueProperties.with(CURRENCY, "USD").get());
-//    final MergedOutput discountingPV01Output = new MergedOutput("Discounting PV01", MergedOutputAggregationType.LINEAR);
-//    final MergedOutput discountingYCNSOutput = new MergedOutput("Discounting Bucketed PV01", MergedOutputAggregationType.LINEAR);
-//    final MergedOutput forwardPV01Output = new MergedOutput("Forward PV01", MergedOutputAggregationType.LINEAR);
-//    final MergedOutput forwardYCNSOutput = new MergedOutput("Forward Bucketed PV01", MergedOutputAggregationType.LINEAR);
-    for (final Currency ccy : SWAP_CURRENCIES) {
-      final String ccyCode = ccy.getCode();
-      final ComputationTargetSpecification currencyTarget = ComputationTargetSpecification.of(ccy);
-//      final String forwardCurveName = ccyCode.equals("USD") ? "Forward3M" : "Forward6M";
-//      final ValueProperties discountingRiskProperties = ValueProperties.with(CURVE, "Discounting").with(CURVE_CURRENCY, ccyCode).get();
-//      final ValueProperties discountingCurveProperties = ValueProperties.with(CURVE, "Discounting").with(CURVE_CALCULATION_CONFIG, CURVE_CONFIG_NAMES[i]).get();
-//      final ValueProperties forwardRiskProperties = ValueProperties.with(CURVE, forwardCurveName).with(CURVE_CURRENCY, ccyCode).get();
-//      final ValueProperties forwardCurveProperties = ValueProperties.with(CURVE, forwardCurveName).with(CURVE_CALCULATION_CONFIG, CURVE_CONFIG_NAMES[i]).get();
-//      discountingPV01Output.addMergedRequirement(PV01, discountingRiskProperties);
-//      discountingYCNSOutput.addMergedRequirement(YIELD_CURVE_NODE_SENSITIVITIES, discountingRiskProperties);
-//      defaultCalcConfig.addSpecificRequirement(new ValueRequirement(YIELD_CURVE, currencyTarget, discountingCurveProperties));
-//      forwardYCNSOutput.addMergedRequirement(YIELD_CURVE_NODE_SENSITIVITIES, forwardRiskProperties);
-//      forwardPV01Output.addMergedRequirement(PV01, forwardRiskProperties);
-//      defaultCalcConfig.addSpecificRequirement(new ValueRequirement(YIELD_CURVE, currencyTarget, forwardCurveProperties));
-    }
-//    defaultCalcConfig.addMergedOutput(discountingPV01Output);
-//    defaultCalcConfig.addMergedOutput(discountingYCNSOutput);
-//    defaultCalcConfig.addMergedOutput(forwardPV01Output);
-//    defaultCalcConfig.addMergedOutput(forwardYCNSOutput);
+    calcConfig.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, PRESENT_VALUE, ValueProperties.with(CURRENCY, "USD").get());
+    calcConfig.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, FIXED_CASH_FLOWS, ValueProperties.none());
+    calcConfig.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, FLOATING_CASH_FLOWS, ValueProperties.none());
     viewDefinition.addViewCalculationConfiguration(calcConfig);
     return viewDefinition;
   }
 
   /**
+   * Creates a view definition for a swap portfolio that produces:
+   * <ul>
+   *  <li> {@link ValueRequirementNames#PRESENT_VALUE}
+   *  <li> {@link ValueRequirementNames#PAR_RATE}
+   *  <li> {@link ValueRequirementNames#PV01}
+   *  <li> {@link ValueRequirementNames#YIELD_CURVE_NODE_SENSITIVITIES}
+   * <ul>
+   */
+  /**
    * Creates a view definition for an FX option portfolio that produces:
    * <ul>
-   * <li> ValueRequirementNames#VOLATILITY_SURFACE_DATA
-   * <li> ValueRequirementNames#VEGA_QUOTE_MATRIX
-   * <li> ValueRequirementNames#VEGA_MATRIX
-   * <li> ValueRequirementNames#YIELD_CURVE_NODE_SENSITIVITIES
-   * <li> ValueRequirementNames#PRESENT_VALUE
-   * <li> ValueRequirementNames#FX_CURRENCY_EXPOSURE
+   * <li> {@link ValueRequirementNames#VOLATILITY_SURFACE_DATA}
+   * <li> {@link ValueRequirementNames#VEGA_QUOTE_MATRIX}
+   * <li> {@link ValueRequirementNames#VEGA_MATRIX}
+   * <li> {@link ValueRequirementNames#YIELD_CURVE_NODE_SENSITIVITIES}
+   * <li> {@link ValueRequirementNames#PRESENT_VALUE}
+   * <li> {@link ValueRequirementNames#FX_CURRENCY_EXPOSURE}
    * </ul>
    * @param portfolioName The portfolio name
    * @param viewName The view name
@@ -355,16 +342,16 @@ public class ExamplesViewsPopulator extends AbstractTool<ToolContext> {
   /**
    * Creates a view definition for an FX option portfolio that produces:
    * <ul>
-   * <li> ValueRequirementNames#PRESENT_VALUE
-   * <li> ValueRequirementNames#VALUE_DELTA
-   * <li> ValueRequirementNames#VALUE_VEGA
-   * <li> ValueRequirementNames#VALUE_GAMMA_P
-   * <li> ValueRequirementNames#VALUE_RHO
-   * <li> ValueRequirementNames#VALUE_PHI
-   * <li> ValueRequirementNames#VALUE_VOMMA
-   * <li> ValueRequirementNames#VALUE_VANNA
-   * <li> ValueRequirementNames#VALUE_THETA
-   * <li> ValueRequirementNames#SECURITY_IMPLIED_VOLATILITY
+   * <li> {@link ValueRequirementNames#PRESENT_VALUE}
+   * <li> {@link ValueRequirementNames#VALUE_DELTA}
+   * <li> {@link ValueRequirementNames#VALUE_VEGA}
+   * <li> {@link ValueRequirementNames#VALUE_GAMMA_P}
+   * <li> {@link ValueRequirementNames#VALUE_RHO}
+   * <li> {@link ValueRequirementNames#VALUE_PHI}
+   * <li> {@link ValueRequirementNames#VALUE_VOMMA}
+   * <li> {@link ValueRequirementNames#VALUE_VANNA}
+   * <li> {@link ValueRequirementNames#VALUE_THETA}
+   * <li> {@link ValueRequirementNames#SECURITY_IMPLIED_VOLATILITY}
    * </ul>
    * @param portfolioName The portfolio name
    * @param viewName The view name
@@ -436,9 +423,9 @@ public class ExamplesViewsPopulator extends AbstractTool<ToolContext> {
    * Creates a view definition for a portfolio of AUD swaps where the curve configuration generates the
    * three yield curves (discounting, 3m forward and 6m forward) simultaneously. This view produces:
    * <ul>
-   * <li> ValueRequirementNames#PRESENT_VALUE
-   * <li> ValueRequirementNames#YIELD_CURVE_NODE_SENSITIVITIES
-   * <li> ValueRequirementNames#YIELD_CURVE
+   * <li> {@link ValueRequirementNames#PRESENT_VALUE}
+   * <li> {@link ValueRequirementNames#YIELD_CURVE_NODE_SENSITIVITIES}
+   * <li> {@link ValueRequirementNames#YIELD_CURVE}
    * </ul>
    * @param portfolioName The portfolio name
    * @return The view definition
@@ -477,9 +464,9 @@ public class ExamplesViewsPopulator extends AbstractTool<ToolContext> {
    * the discounting curve and uses this as an exogenous input into the3m and 6m forward curve calculation.
    * This view produces:
    * <ul>
-   * <li> ValueRequirementNames#PRESENT_VALUE
-   * <li> ValueRequirementNames#YIELD_CURVE_NODE_SENSITIVITIES
-   * <li> ValueRequirementNames#YIELD_CURVE
+   * <li> {@link ValueRequirementNames#PRESENT_VALUE
+   * <li> {@link ValueRequirementNames#YIELD_CURVE_NODE_SENSITIVITIES
+   * <li> {@link ValueRequirementNames#YIELD_CURVE
    * </ul>
    * @param portfolioName The portfolio name
    * @return The view definition
@@ -803,8 +790,9 @@ public class ExamplesViewsPopulator extends AbstractTool<ToolContext> {
    * FX forward quotes directly.<p>
    * This view produces:
    * <ul>
-   * <li> ValueRequirementNames#PRESENT_VALUE
-   * <li> ValueRequirementNames#FX_CURRENCY_EXPOSURE
+   * <li> {@link ValueRequirementNames#PRESENT_VALUE}
+   * <li> {@link ValueRequirementNames#FX_CURRENCY_EXPOSURE}
+   * <li> {@link ValueRequirementNames#YIELD_CURVE_NODE_SENSITIVITIES}
    * </ul>
    * @param portfolioName The portfolio name
    * @param viewName The view name
@@ -819,9 +807,6 @@ public class ExamplesViewsPopulator extends AbstractTool<ToolContext> {
     viewDefinition.setMinDeltaCalculationPeriod(MIN_DELTA_PERIOD);
     viewDefinition.setMinFullCalculationPeriod(MIN_FULL_PERIOD);
     final ViewCalculationConfiguration calcConfig = new ViewCalculationConfiguration(viewDefinition, DEFAULT_CALC_CONFIG);
-    final ValueProperties calcProperties = ValueProperties.builder()
-        .with(CurveCalculationPropertyNamesAndValues.PROPERTY_CURVE_TYPE, CurveCalculationPropertyNamesAndValues.DISCOUNTING)
-        .get();
     final Set<Currency> ccysAdded = new HashSet<>();
     for (final UnorderedCurrencyPair pair : CURRENCY_PAIRS) {
       final ValueProperties currencyProperty = ValueProperties.builder().with(CURRENCY, "USD").get();
@@ -863,29 +848,27 @@ public class ExamplesViewsPopulator extends AbstractTool<ToolContext> {
   /**
    * Creates a view definition for an index future portfolio producing:
    * <ul>
-   * <li> ValueRequirementNames#PRESENT_VALUE
-   * <li> ValueRequirementNames#PV01
-   * <li> ValueRequirementNames#VALUE_DELTA
-   * <li> ValueRequirementNames#VALUE_RHO
-   * <li> ValueRequirementNames#FORWARD
+   * <li> {@link ValueRequirementNames#PRESENT_VALUE}
+   * <li> {@link ValueRequirementNames#VALUE_DELTA}
+   * <li> {@link ValueRequirementNames#VALUE_RHO}
    * </ul>
    * @param portfolioName The portfolio name
    * @param viewName The view name
    * @return The view definition
    */
-  //  private ViewDefinition getSyntheticFutureViewDefinition(final String portfolioName, final String viewName) {
-  //    final UniqueId portfolioId = getPortfolioId(portfolioName).toLatest();
-  //    final ViewDefinition viewDefinition = new ViewDefinition(viewName, portfolioId, UserPrincipal.getTestUser());
-  //    viewDefinition.setDefaultCurrency(Currency.USD);
-  //    viewDefinition.setMaxDeltaCalculationPeriod(MAX_DELTA_PERIOD);
-  //    viewDefinition.setMaxFullCalculationPeriod(MAX_FULL_PERIOD);
-  //    viewDefinition.setMinDeltaCalculationPeriod(MIN_DELTA_PERIOD);
-  //    viewDefinition.setMinFullCalculationPeriod(MIN_FULL_PERIOD);
-  //    final ViewCalculationConfiguration defaultCalConfig = new ViewCalculationConfiguration(viewDefinition, DEFAULT_CALC_CONFIG);
-  //    addValueRequirements(defaultCalConfig, FutureSecurity.SECURITY_TYPE, new String[] {PRESENT_VALUE, PV01, VALUE_DELTA, VALUE_RHO, FORWARD });
-  //    viewDefinition.addViewCalculationConfiguration(defaultCalConfig);
-  //    return viewDefinition;
-  //  }
+    private ViewDefinition getFutureViewDefinition(final String portfolioName, final String viewName) {
+      final UniqueId portfolioId = getPortfolioId(portfolioName).toLatest();
+      final ViewDefinition viewDefinition = new ViewDefinition(viewName, portfolioId, UserPrincipal.getTestUser());
+      viewDefinition.setDefaultCurrency(Currency.USD);
+      viewDefinition.setMaxDeltaCalculationPeriod(MAX_DELTA_PERIOD);
+      viewDefinition.setMaxFullCalculationPeriod(MAX_FULL_PERIOD);
+      viewDefinition.setMinDeltaCalculationPeriod(MIN_DELTA_PERIOD);
+      viewDefinition.setMinFullCalculationPeriod(MIN_FULL_PERIOD);
+      final ViewCalculationConfiguration defaultCalConfig = new ViewCalculationConfiguration(viewDefinition, DEFAULT_CALC_CONFIG);
+      addValueRequirements(defaultCalConfig, FutureSecurity.SECURITY_TYPE, new String[] {PRESENT_VALUE, VALUE_DELTA, FORWARD });
+      viewDefinition.addViewCalculationConfiguration(defaultCalConfig);
+      return viewDefinition;
+    }
 
   /**
    * Creates a view definition for a bond portfolio that showing the results of calculations that

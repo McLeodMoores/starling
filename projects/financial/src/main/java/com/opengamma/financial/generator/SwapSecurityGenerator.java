@@ -20,6 +20,7 @@ import com.opengamma.DataNotFoundException;
 import com.opengamma.core.convention.ConventionSource;
 import com.opengamma.core.historicaltimeseries.HistoricalTimeSeries;
 import com.opengamma.core.holiday.Holiday;
+import com.opengamma.core.id.ExternalSchemes;
 import com.opengamma.core.position.Counterparty;
 import com.opengamma.core.value.MarketDataRequirementNames;
 import com.opengamma.financial.convention.ConventionBundle;
@@ -56,6 +57,7 @@ public class SwapSecurityGenerator extends SecurityGenerator<SwapSecurity> {
       Tenor.ofYears(7), Tenor.ofYears(10), Tenor.ofYears(12), Tenor.ofYears(15), Tenor.ofYears(20) };
   private static final Map<Currency, ExternalId> FIXED_LEG_CONVENTION_FOR_CCY = new HashMap<>();
   private static final Map<Currency, ExternalId> IBOR_LEG_CONVENTION_FOR_CCY = new HashMap<>();
+  private static final Map<Currency, ExternalId> UNDERLYING_INDEX_FOR_CCY = new HashMap<>();
 
   static {
     FIXED_LEG_CONVENTION_FOR_CCY.put(Currency.USD, ExternalId.of("CONVENTION", "USD IBOR Fixed"));
@@ -68,6 +70,11 @@ public class SwapSecurityGenerator extends SecurityGenerator<SwapSecurity> {
     IBOR_LEG_CONVENTION_FOR_CCY.put(Currency.CHF, ExternalId.of("CONVENTION", "CHF 6M IBOR"));
     IBOR_LEG_CONVENTION_FOR_CCY.put(Currency.EUR, ExternalId.of("CONVENTION", "EUR 6M IBOR"));
     IBOR_LEG_CONVENTION_FOR_CCY.put(Currency.JPY, ExternalId.of("CONVENTION", "JPY 6M IBOR"));
+    UNDERLYING_INDEX_FOR_CCY.put(Currency.USD, ExternalSchemes.syntheticSecurityId("USDLIBORP3M"));
+    UNDERLYING_INDEX_FOR_CCY.put(Currency.GBP, ExternalSchemes.syntheticSecurityId("GBPLIBORP6M"));
+    UNDERLYING_INDEX_FOR_CCY.put(Currency.CHF, ExternalSchemes.syntheticSecurityId("CHFLIBORP6M"));
+    UNDERLYING_INDEX_FOR_CCY.put(Currency.EUR, ExternalSchemes.syntheticSecurityId("EURLIBORP6M"));
+    UNDERLYING_INDEX_FOR_CCY.put(Currency.JPY, ExternalSchemes.syntheticSecurityId("JPYLIBORP6M"));
   }
 
   private int _daysTrading = 60;
@@ -162,7 +169,7 @@ public class SwapSecurityGenerator extends SecurityGenerator<SwapSecurity> {
           floatingLegDayCount = indexConvention.getDayCount();
           floatingLegBusinessDayConvention = indexConvention.getBusinessDayConvention();
           floatingLegRegion = indexConvention.getRegionCalendar();
-          final SecuritySearchRequest indexRequest = new SecuritySearchRequest(indexConvention.getExternalIdBundle());
+          final SecuritySearchRequest indexRequest = new SecuritySearchRequest(UNDERLYING_INDEX_FOR_CCY.get(ccy));
           try {
             final SecuritySearchResult securities = getSecurityMaster().search(indexRequest);
             for (final ManageableSecurity security : securities.getSecurities()) {
@@ -175,7 +182,7 @@ public class SwapSecurityGenerator extends SecurityGenerator<SwapSecurity> {
               }
             }
           } catch (final Exception e) {
-            LOGGER.error("Could not get any securities with id {}", indexConvention.getExternalIdBundle());
+            LOGGER.error("Could not get any securities with id {}", UNDERLYING_INDEX_FOR_CCY.get(ccy));
           }
         } else {
           LOGGER.error("Could not get IborIndexConvention with identifier {}", indexConvention);
