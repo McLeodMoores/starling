@@ -50,12 +50,12 @@ public class ExampleChConventions extends ConventionMasterInitializer {
         DayCounts.ACT_365, BusinessDayConventions.FOLLOWING, 0, false, Currency.CHF, CH);
     // IBOR
     final ExternalIdBundle iborIds = ExternalIdBundle.of(ExternalId.of("CONVENTION", "CHFLIBORP3M"), ExternalId.of("CONVENTION", "CHFLIBORP6M"),
-        ExternalSchemes.syntheticSecurityId("CHFLIBORP3M"), ExternalSchemes.syntheticSecurityId("CHFLIBORP6M"));
+        ExternalSchemes.syntheticSecurityId("CHFLIBORP3M"), ExternalSchemes.syntheticSecurityId("CHFLIBORP6M"), ExternalId.of("CONVENTION", "CHF LIBOR"));
     final IborIndexConvention ibor = new IborIndexConvention("CHF LIBOR", iborIds, DayCounts.ACT_365, BusinessDayConventions.FOLLOWING, 0, false, Currency.CHF,
         LocalTime.of(11, 0), "US", CH, CH, "");
     // Overnight
     final OvernightIndexConvention overnight =
-        new OvernightIndexConvention("CHFFF", ExternalIdBundle.of(ExternalId.of("CONVENTION", "TOISTOIS"), ExternalSchemes.syntheticSecurityId("TOISTOIS")),
+        new OvernightIndexConvention("TOISTOIS", ExternalIdBundle.of(ExternalId.of("CONVENTION", "TOISTOIS"), ExternalSchemes.syntheticSecurityId("TOISTOIS")),
         DayCounts.ACT_365, 0, Currency.CHF, CH);
     // OIS
     final SwapFixedLegConvention oisFixedLeg = new SwapFixedLegConvention("CHF OIS Fixed",
@@ -65,11 +65,11 @@ public class ExampleChConventions extends ConventionMasterInitializer {
         ExternalId.of("CONVENTION", "TOISTOIS"), Tenor.ONE_YEAR, BusinessDayConventions.MODIFIED_FOLLOWING,
         0, false, StubType.SHORT_START, false, 1);
     // IBOR Swaps
-    final SwapFixedLegConvention iborFixedLeg = new SwapFixedLegConvention("CHF",
-        ExternalIdBundle.of(ExternalId.of("CONVENTION", "CHF"), ExternalSchemes.currencyRegionId(Currency.CHF)),
+    final SwapFixedLegConvention iborFixedLeg = new SwapFixedLegConvention("CHF IBOR Fixed",
+        ExternalIdBundle.of(ExternalId.of("CONVENTION", "CHF IBOR Fixed"), ExternalSchemes.currencyRegionId(Currency.CHF)),
         Tenor.SIX_MONTHS, DayCounts.ACT_365, BusinessDayConventions.MODIFIED_FOLLOWING, Currency.CHF, CH, 0, true, StubType.SHORT_START, false, 0);
-    final VanillaIborLegConvention ibor3mLeg = new VanillaIborLegConvention("CHF 6M",
-        ExternalIdBundle.of(ExternalId.of("CONVENTION", "CHF 6M"), ExternalSchemes.currencyRegionId(Currency.CHF)),
+    final VanillaIborLegConvention ibor3mLeg = new VanillaIborLegConvention("CHF 6M IBOR",
+        ExternalIdBundle.of(ExternalId.of("CONVENTION", "CHF 6M IBOR"), ExternalSchemes.currencyRegionId(Currency.CHF)),
         ExternalId.of("CONVENTION", "CHFLIBORP6M"), false, LinearInterpolator1dAdapter.NAME, Tenor.SIX_MONTHS, 0, false, StubType.SHORT_START, false, 0);
 
     // Bond conventions

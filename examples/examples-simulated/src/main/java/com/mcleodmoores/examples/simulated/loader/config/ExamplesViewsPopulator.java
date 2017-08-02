@@ -13,6 +13,7 @@ import static com.opengamma.engine.value.ValuePropertyNames.CURVE_EXPOSURES;
 import static com.opengamma.engine.value.ValuePropertyNames.SURFACE;
 import static com.opengamma.engine.value.ValueRequirementNames.CAPM_BETA;
 import static com.opengamma.engine.value.ValueRequirementNames.FAIR_VALUE;
+import static com.opengamma.engine.value.ValueRequirementNames.FIXED_RATE;
 import static com.opengamma.engine.value.ValueRequirementNames.FORWARD_DELTA;
 import static com.opengamma.engine.value.ValueRequirementNames.FORWARD_DRIFTLESS_THETA;
 import static com.opengamma.engine.value.ValueRequirementNames.FORWARD_GAMMA;
@@ -249,6 +250,7 @@ public class ExamplesViewsPopulator extends AbstractTool<ToolContext> {
         .get();
     final ViewCalculationConfiguration calcConfig = new ViewCalculationConfiguration(viewDefinition, DEFAULT_CALC_CONFIG);
     calcConfig.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, NOTIONAL, ValueProperties.none());
+    calcConfig.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, FIXED_RATE, ValueProperties.none());
     calcConfig.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, PAR_RATE, calcProperties);
     calcConfig.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, PRESENT_VALUE,
         calcProperties.compose(ValueProperties.with(CurrencyConversionFunction.ORIGINAL_CURRENCY, "Default")

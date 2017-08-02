@@ -43,7 +43,7 @@ public final class ExampleAuConventions extends ConventionMasterInitializer {
         DayCounts.ACT_365, BusinessDayConventions.FOLLOWING, 0, false, Currency.AUD, AU);
     // IBOR
     final ExternalIdBundle iborIds = ExternalIdBundle.of(ExternalId.of("CONVENTION", "AUDLIBORP3M"), ExternalId.of("CONVENTION", "AUDLIBORP6M"),
-        ExternalSchemes.syntheticSecurityId("AUDLIBORP3M"), ExternalSchemes.syntheticSecurityId("AUDLIBORP6M"));
+        ExternalSchemes.syntheticSecurityId("AUDLIBORP3M"), ExternalSchemes.syntheticSecurityId("AUDLIBORP6M"), ExternalId.of("CONVENTION", "AUD LIBOR"));
     final IborIndexConvention ibor = new IborIndexConvention("AUD LIBOR", iborIds, DayCounts.ACT_365, BusinessDayConventions.FOLLOWING, 0, false, Currency.AUD,
         LocalTime.of(11, 0), "AU", AU, AU, "");
     // Overnight
@@ -56,13 +56,13 @@ public final class ExampleAuConventions extends ConventionMasterInitializer {
         ExternalId.of("CONVENTION", "AUDON"), Tenor.ONE_YEAR, BusinessDayConventions.MODIFIED_FOLLOWING,
         0, false, StubType.SHORT_START, false, 0);
     // IBOR Swaps
-    final SwapFixedLegConvention ibor3mFixedLeg = new SwapFixedLegConvention("AUD 3M", ExternalIdBundle.of("CONVENTION", "AUD 3M"),
+    final SwapFixedLegConvention ibor3mFixedLeg = new SwapFixedLegConvention("AUD 3M IBOR Fixed", ExternalIdBundle.of("CONVENTION", "AUD 3M IBOR Fixed"),
         Tenor.THREE_MONTHS, DayCounts.ACT_365, BusinessDayConventions.MODIFIED_FOLLOWING, Currency.AUD, AU, 1, true, StubType.SHORT_START, false, 0);
-    final SwapFixedLegConvention ibor6mFixedLeg = new SwapFixedLegConvention("AUD 6M", ExternalIdBundle.of("CONVENTION", "AUD 6M"),
+    final SwapFixedLegConvention ibor6mFixedLeg = new SwapFixedLegConvention("AUD 6M IBOR Fixed", ExternalIdBundle.of("CONVENTION", "AUD 6M IBOR Fixed"),
         Tenor.SIX_MONTHS, DayCounts.ACT_365, BusinessDayConventions.MODIFIED_FOLLOWING, Currency.AUD, AU, 1, true, StubType.SHORT_START, false, 0);
-    final VanillaIborLegConvention ibor3mLeg = new VanillaIborLegConvention("AUD 3M", ExternalIdBundle.of("CONVENTION", "AUD 3M"),
+    final VanillaIborLegConvention ibor3mLeg = new VanillaIborLegConvention("AUD 3M IBOR", ExternalIdBundle.of("CONVENTION", "AUD 3M IBOR"),
         ExternalId.of("CONVENTION", "AUDLIBORP3M"), false, LinearInterpolator1dAdapter.NAME, Tenor.THREE_MONTHS, 0, false, StubType.SHORT_START, false, 0);
-    final VanillaIborLegConvention ibor6mLeg = new VanillaIborLegConvention("AUD 6M", ExternalIdBundle.of("CONVENTION", "AUD 6M"),
+    final VanillaIborLegConvention ibor6mLeg = new VanillaIborLegConvention("AUD 6M IBOR", ExternalIdBundle.of("CONVENTION", "AUD 6M IBOR"),
         ExternalId.of("CONVENTION", "AUDLIBORP6M"), false, LinearInterpolator1dAdapter.NAME, Tenor.SIX_MONTHS, 0, false, StubType.SHORT_START, false, 0);
 
     addConvention(master, deposit);

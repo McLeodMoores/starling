@@ -43,7 +43,7 @@ public final class ExampleNzConventions extends ConventionMasterInitializer {
         DayCounts.ACT_365, BusinessDayConventions.FOLLOWING, 0, false, Currency.NZD, NZ);
     // IBOR
     final ExternalIdBundle iborIds = ExternalIdBundle.of(ExternalId.of("CONVENTION", "NZDLIBORP3M"), ExternalId.of("CONVENTION", "NZDLIBORP6M"),
-        ExternalSchemes.syntheticSecurityId("NZDLIBORP3M"), ExternalSchemes.syntheticSecurityId("NZDLIBORP6M"));
+        ExternalSchemes.syntheticSecurityId("NZDLIBORP3M"), ExternalSchemes.syntheticSecurityId("NZDLIBORP6M"), ExternalId.of("CONVENTION", "NZD LIBOR"));
     final IborIndexConvention ibor = new IborIndexConvention("NZD LIBOR", iborIds, DayCounts.ACT_365, BusinessDayConventions.FOLLOWING, 0, false, Currency.NZD,
         LocalTime.of(11, 0), "NZ", NZ, NZ, "");
     // Overnight
@@ -56,13 +56,13 @@ public final class ExampleNzConventions extends ConventionMasterInitializer {
         ExternalId.of("CONVENTION", "NZDON"), Tenor.ONE_YEAR, BusinessDayConventions.MODIFIED_FOLLOWING,
         0, false, StubType.SHORT_START, false, 0);
     // IBOR Swaps
-    final SwapFixedLegConvention ibor3mFixedLeg = new SwapFixedLegConvention("NZD 3M", ExternalIdBundle.of("CONVENTION", "NZD 3M"),
+    final SwapFixedLegConvention ibor3mFixedLeg = new SwapFixedLegConvention("NZD 3M IBOR Fixed", ExternalIdBundle.of("CONVENTION", "NZD 3M IBOR Fixed"),
         Tenor.THREE_MONTHS, DayCounts.ACT_365, BusinessDayConventions.MODIFIED_FOLLOWING, Currency.NZD, NZ, 1, true, StubType.SHORT_START, false, 0);
-    final SwapFixedLegConvention ibor6mFixedLeg = new SwapFixedLegConvention("NZD 6M", ExternalIdBundle.of("CONVENTION", "NZD 6M"),
+    final SwapFixedLegConvention ibor6mFixedLeg = new SwapFixedLegConvention("NZD 6M IBOR Fixed", ExternalIdBundle.of("CONVENTION", "NZD 6M IBOR Fixed"),
         Tenor.SIX_MONTHS, DayCounts.ACT_365, BusinessDayConventions.MODIFIED_FOLLOWING, Currency.NZD, NZ, 1, true, StubType.SHORT_START, false, 0);
-    final VanillaIborLegConvention ibor3mLeg = new VanillaIborLegConvention("NZD 3M", ExternalIdBundle.of("CONVENTION", "NZD 3M"),
+    final VanillaIborLegConvention ibor3mLeg = new VanillaIborLegConvention("NZD 3M IBOR", ExternalIdBundle.of("CONVENTION", "NZD 3M IBOR"),
         ExternalId.of("CONVENTION", "NZDLIBORP3M"), false, LinearInterpolator1dAdapter.NAME, Tenor.THREE_MONTHS, 0, false, StubType.SHORT_START, false, 0);
-    final VanillaIborLegConvention ibor6mLeg = new VanillaIborLegConvention("NZD 6M", ExternalIdBundle.of("CONVENTION", "NZD 6M"),
+    final VanillaIborLegConvention ibor6mLeg = new VanillaIborLegConvention("NZD 6M IBOR", ExternalIdBundle.of("CONVENTION", "NZD 6M IBOR"),
         ExternalId.of("CONVENTION", "NZDLIBORP6M"), false, LinearInterpolator1dAdapter.NAME, Tenor.SIX_MONTHS, 0, false, StubType.SHORT_START, false, 0);
 
     addConvention(master, deposit);

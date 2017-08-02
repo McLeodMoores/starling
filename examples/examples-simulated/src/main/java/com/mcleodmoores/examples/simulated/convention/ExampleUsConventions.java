@@ -52,7 +52,7 @@ public class ExampleUsConventions extends ConventionMasterInitializer {
         DayCounts.ACT_360, BusinessDayConventions.FOLLOWING, 0, false, Currency.USD, US);
     // IBOR
     final ExternalIdBundle iborIds = ExternalIdBundle.of(ExternalId.of("CONVENTION", "USDLIBORP3M"), ExternalId.of("CONVENTION", "USDLIBORP6M"),
-        ExternalSchemes.syntheticSecurityId("USDLIBORP3M"), ExternalSchemes.syntheticSecurityId("USDLIBORP6M"));
+        ExternalSchemes.syntheticSecurityId("USDLIBORP3M"), ExternalSchemes.syntheticSecurityId("USDLIBORP6M"), ExternalId.of("CONVENTION", "USD LIBOR"));
     final IborIndexConvention ibor = new IborIndexConvention("USD LIBOR", iborIds, DayCounts.ACT_360, BusinessDayConventions.FOLLOWING, 0, false, Currency.USD,
         LocalTime.of(11, 0), "US", NYLON, US, "");
     // Overnight
@@ -67,11 +67,11 @@ public class ExampleUsConventions extends ConventionMasterInitializer {
         ExternalId.of("CONVENTION", "USDFF"), Tenor.ONE_YEAR, BusinessDayConventions.MODIFIED_FOLLOWING,
         0, false, StubType.SHORT_START, false, 0);
     // IBOR Swaps
-    final SwapFixedLegConvention iborFixedLeg = new SwapFixedLegConvention("USD",
-        ExternalIdBundle.of(ExternalId.of("CONVENTION", "USD"), ExternalSchemes.currencyRegionId(Currency.USD)),
+    final SwapFixedLegConvention iborFixedLeg = new SwapFixedLegConvention("USD IBOR Fixed",
+        ExternalIdBundle.of(ExternalId.of("CONVENTION", "USD IBOR Fixed"), ExternalSchemes.currencyRegionId(Currency.USD)),
         Tenor.SIX_MONTHS, DayCounts.ACT_360, BusinessDayConventions.MODIFIED_FOLLOWING, Currency.USD, US, 1, true, StubType.SHORT_START, false, 0);
-    final VanillaIborLegConvention ibor3mLeg = new VanillaIborLegConvention("USD 3M",
-        ExternalIdBundle.of(ExternalId.of("CONVENTION", "USD 3M"), ExternalSchemes.currencyRegionId(Currency.USD)),
+    final VanillaIborLegConvention ibor3mLeg = new VanillaIborLegConvention("USD 3M IBOR",
+        ExternalIdBundle.of(ExternalId.of("CONVENTION", "USD 3M IBOR"), ExternalSchemes.currencyRegionId(Currency.USD)),
         ExternalId.of("CONVENTION", "USDLIBORP3M"), false, LinearInterpolator1dAdapter.NAME, Tenor.THREE_MONTHS, 0, false, StubType.SHORT_START, false, 0);
 
     // Bond conventions

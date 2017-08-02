@@ -1,7 +1,5 @@
 /**
- * Copyright (C) 2014 - present by OpenGamma Inc. and the OpenGamma group of companies
- *
- * Please see distribution for license.
+ * Copyright (C) 2017 - present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.mcleodmoores.examples.simulated.loader.config;
 
@@ -82,26 +80,52 @@ public final class ExamplesFixedIncomeCurveConfigsPopulator {
 
   static {
     IBOR_SECURITY_FOR_CURRENCY.put(Pairs.of("USD", Tenor.THREE_MONTHS), ExternalSchemes.syntheticSecurityId("USDLIBORP3M"));
-    IBOR_SECURITY_FOR_CURRENCY.put(Pairs.of("AUD", Tenor.THREE_MONTHS), ExternalSchemes.syntheticSecurityId("AUDLIBORP3M"));
-    IBOR_SECURITY_FOR_CURRENCY.put(Pairs.of("AUD", Tenor.SIX_MONTHS), ExternalSchemes.syntheticSecurityId("AUDLIBORP6M"));
+    IBOR_SECURITY_FOR_CURRENCY.put(Pairs.of("GBP", Tenor.SIX_MONTHS), ExternalSchemes.syntheticSecurityId("GBPLIBORP6M"));
+    IBOR_SECURITY_FOR_CURRENCY.put(Pairs.of("CHF", Tenor.SIX_MONTHS), ExternalSchemes.syntheticSecurityId("CHFLIBORP6M"));
+    IBOR_SECURITY_FOR_CURRENCY.put(Pairs.of("JPY", Tenor.SIX_MONTHS), ExternalSchemes.syntheticSecurityId("JPYLIBORP6M"));
+    IBOR_SECURITY_FOR_CURRENCY.put(Pairs.of("EUR", Tenor.SIX_MONTHS), ExternalSchemes.syntheticSecurityId("EURLIBORP6M"));
 
     DEPOSIT_CONVENTION_FOR_CURRENCY.put("USD", ExternalId.of("CONVENTION", "USD Deposit"));
-    DEPOSIT_CONVENTION_FOR_CURRENCY.put("AUD", ExternalId.of("CONVENTION", "AUD Deposit"));
+    DEPOSIT_CONVENTION_FOR_CURRENCY.put("GBP", ExternalId.of("CONVENTION", "GBP Deposit"));
+    DEPOSIT_CONVENTION_FOR_CURRENCY.put("CHF", ExternalId.of("CONVENTION", "CHF Deposit"));
+    DEPOSIT_CONVENTION_FOR_CURRENCY.put("JPY", ExternalId.of("CONVENTION", "JPY Deposit"));
+    DEPOSIT_CONVENTION_FOR_CURRENCY.put("EUR", ExternalId.of("CONVENTION", "EUR Deposit"));
 
     OVERNIGHT_CONVENTION_FOR_CURRENCY.put("USD", ExternalSchemes.syntheticSecurityId("USDFF"));
-    OVERNIGHT_CONVENTION_FOR_CURRENCY.put("AUD", ExternalSchemes.syntheticSecurityId("AUDON"));
+    OVERNIGHT_CONVENTION_FOR_CURRENCY.put("GBP", ExternalSchemes.syntheticSecurityId("SONIA"));
+    OVERNIGHT_CONVENTION_FOR_CURRENCY.put("CHF", ExternalSchemes.syntheticSecurityId("TOISTOIS"));
+    OVERNIGHT_CONVENTION_FOR_CURRENCY.put("JPY", ExternalSchemes.syntheticSecurityId("TONAR"));
+    OVERNIGHT_CONVENTION_FOR_CURRENCY.put("EUR", ExternalSchemes.syntheticSecurityId("EONIA"));
 
-    FIXED_LEG_CONVENTION_FOR_CURRENCY.put("USD", ExternalId.of("CONVENTION", "USD"));
+    FIXED_LEG_CONVENTION_FOR_CURRENCY.put("USD", ExternalId.of("CONVENTION", "USD IBOR Fixed"));
+    FIXED_LEG_CONVENTION_FOR_CURRENCY.put("GBP", ExternalId.of("CONVENTION", "GBP IBOR Fixed"));
+    FIXED_LEG_CONVENTION_FOR_CURRENCY.put("CHF", ExternalId.of("CONVENTION", "CHF IBOR Fixed"));
+    FIXED_LEG_CONVENTION_FOR_CURRENCY.put("JPY", ExternalId.of("CONVENTION", "JPY IBOR Fixed"));
+    FIXED_LEG_CONVENTION_FOR_CURRENCY.put("EUR", ExternalId.of("CONVENTION", "EUR IBOR Fixed"));
 
-    IBOR_LEG_CONVENTION_FOR_CURRENCY.put(Pairs.of("USD", Tenor.THREE_MONTHS), ExternalId.of("CONVENTION", "USD 3M"));
+    IBOR_LEG_CONVENTION_FOR_CURRENCY.put(Pairs.of("USD", Tenor.THREE_MONTHS), ExternalId.of("CONVENTION", "USD 3M IBOR"));
+    IBOR_LEG_CONVENTION_FOR_CURRENCY.put(Pairs.of("GBP", Tenor.SIX_MONTHS), ExternalId.of("CONVENTION", "GBP 6M IBOR"));
+    IBOR_LEG_CONVENTION_FOR_CURRENCY.put(Pairs.of("CHF", Tenor.SIX_MONTHS), ExternalId.of("CONVENTION", "CHF 6M IBOR"));
+    IBOR_LEG_CONVENTION_FOR_CURRENCY.put(Pairs.of("JPY", Tenor.SIX_MONTHS), ExternalId.of("CONVENTION", "JPY 6M IBOR"));
+    IBOR_LEG_CONVENTION_FOR_CURRENCY.put(Pairs.of("EUR", Tenor.SIX_MONTHS), ExternalId.of("CONVENTION", "EUR 6M IBOR"));
 
     FIXED_OIS_LEG_CONVENTION_FOR_CURRENCY.put("USD", ExternalId.of("CONVENTION", "USD OIS Fixed"));
-    FIXED_OIS_LEG_CONVENTION_FOR_CURRENCY.put("AUD", ExternalId.of("CONVENTION", "AUD OIS Fixed"));
+    FIXED_OIS_LEG_CONVENTION_FOR_CURRENCY.put("GBP", ExternalId.of("CONVENTION", "GBP OIS Fixed"));
+    FIXED_OIS_LEG_CONVENTION_FOR_CURRENCY.put("CHF", ExternalId.of("CONVENTION", "CHF OIS Fixed"));
+    FIXED_OIS_LEG_CONVENTION_FOR_CURRENCY.put("JPY", ExternalId.of("CONVENTION", "JPY OIS Fixed"));
+    FIXED_OIS_LEG_CONVENTION_FOR_CURRENCY.put("EUR", ExternalId.of("CONVENTION", "EUR OIS Fixed"));
 
     OIS_LEG_CONVENTION_FOR_CURRENCY.put("USD", ExternalId.of("CONVENTION", "USD OIS"));
-    OIS_LEG_CONVENTION_FOR_CURRENCY.put("AUD", ExternalId.of("CONVENTION", "AUD OIS"));
+    OIS_LEG_CONVENTION_FOR_CURRENCY.put("GBP", ExternalId.of("CONVENTION", "GBP OIS"));
+    OIS_LEG_CONVENTION_FOR_CURRENCY.put("CHF", ExternalId.of("CONVENTION", "CHF OIS"));
+    OIS_LEG_CONVENTION_FOR_CURRENCY.put("JPY", ExternalId.of("CONVENTION", "JPY OIS"));
+    OIS_LEG_CONVENTION_FOR_CURRENCY.put("EUR", ExternalId.of("CONVENTION", "EUR OIS"));
 
     IBOR_TENOR_FOR_CURRENCY.add(Pairs.of("USD", Tenor.THREE_MONTHS));
+    IBOR_TENOR_FOR_CURRENCY.add(Pairs.of("GBP", Tenor.SIX_MONTHS));
+    IBOR_TENOR_FOR_CURRENCY.add(Pairs.of("JPY", Tenor.SIX_MONTHS));
+    IBOR_TENOR_FOR_CURRENCY.add(Pairs.of("CHF", Tenor.SIX_MONTHS));
+    IBOR_TENOR_FOR_CURRENCY.add(Pairs.of("EUR", Tenor.SIX_MONTHS));
   }
 
   /**
@@ -132,7 +156,8 @@ public final class ExamplesFixedIncomeCurveConfigsPopulator {
     curveTypes.put(forwardIborCurveName, Arrays.asList(forwardIborCurveType));
     final CurveGroupConfiguration group = new CurveGroupConfiguration(0, curveTypes);
     final List<CurveGroupConfiguration> groups = Arrays.asList(group);
-    ConfigMasterUtils.storeByName(configMaster, ExampleConfigUtils.makeConfig(new CurveConstructionConfiguration(name, groups, Collections.<String>emptyList())));
+    ConfigMasterUtils.storeByName(configMaster,
+        ExampleConfigUtils.makeConfig(new CurveConstructionConfiguration(name, groups, Collections.<String>emptyList())));
   }
 
   private static void makeDiscountingConfigsForCurrency(final String currency, final ConfigMaster configMaster) {
@@ -191,8 +216,8 @@ public final class ExamplesFixedIncomeCurveConfigsPopulator {
         .cashNodeIds(iborNodes)
         .swapNodeIds(swapNodes)
         .build();
-    final CurveDefinition iborCurveDefinition = new InterpolatedCurveDefinition(iborCurveName, iborCurveNodes, MonotonicConstrainedCubicSplineInterpolator1dAdapter.NAME,
-        LinearExtrapolator1dAdapter.NAME, LinearExtrapolator1dAdapter.NAME);
+    final CurveDefinition iborCurveDefinition = new InterpolatedCurveDefinition(iborCurveName, iborCurveNodes,
+        MonotonicConstrainedCubicSplineInterpolator1dAdapter.NAME, LinearExtrapolator1dAdapter.NAME, LinearExtrapolator1dAdapter.NAME);
     ConfigMasterUtils.storeByName(configMaster, ExampleConfigUtils.makeConfig(iborCurveDefinition));
     ConfigMasterUtils.storeByName(configMaster, ExampleConfigUtils.makeConfig(iborCurveNodeIds));
   }
@@ -205,37 +230,38 @@ public final class ExamplesFixedIncomeCurveConfigsPopulator {
     final String forward3mIborCurveName = ExampleConfigUtils.generateVanillaFixedIncomeIborCurveName(currency, Tenor.THREE_MONTHS);
     final String forward6mIborCurveName = ExampleConfigUtils.generateVanillaFixedIncomeIborCurveName(currency, Tenor.SIX_MONTHS);
     final DiscountingCurveTypeConfiguration discountingCurveType = new DiscountingCurveTypeConfiguration(currency);
-    final OvernightCurveTypeConfiguration overnightCurveType = new OvernightCurveTypeConfiguration(OVERNIGHT_CONVENTION_FOR_CURRENCY.get(currency));
+    final OvernightCurveTypeConfiguration overnightCurveType = new OvernightCurveTypeConfiguration(ExternalSchemes.syntheticSecurityId("AUDON"));
     final IborCurveTypeConfiguration ibor3mCurveType =
-        new IborCurveTypeConfiguration(IBOR_SECURITY_FOR_CURRENCY.get(Pairs.of(currency, Tenor.THREE_MONTHS)), Tenor.THREE_MONTHS);
+        new IborCurveTypeConfiguration(ExternalSchemes.syntheticSecurityId("AUDLIBORP3M"), Tenor.THREE_MONTHS);
     final IborCurveTypeConfiguration ibor6mCurveType =
-        new IborCurveTypeConfiguration(IBOR_SECURITY_FOR_CURRENCY.get(Pairs.of(currency, Tenor.SIX_MONTHS)), Tenor.SIX_MONTHS);
+        new IborCurveTypeConfiguration(ExternalSchemes.syntheticSecurityId("AUDLIBORP6M"), Tenor.SIX_MONTHS);
     final Map<String, List<? extends CurveTypeConfiguration>> curveTypes = new HashMap<>();
     curveTypes.put(discountingCurveName, Arrays.asList(discountingCurveType, overnightCurveType));
     curveTypes.put(forward3mIborCurveName, Arrays.asList(ibor3mCurveType));
     curveTypes.put(forward6mIborCurveName, Arrays.asList(ibor6mCurveType));
     final CurveGroupConfiguration group = new CurveGroupConfiguration(0, curveTypes);
     final List<CurveGroupConfiguration> groups = Arrays.asList(group);
-    ConfigMasterUtils.storeByName(configMaster, ExampleConfigUtils.makeConfig(new CurveConstructionConfiguration(name, groups, Collections.<String>emptyList())));
+    ConfigMasterUtils.storeByName(configMaster,
+        ExampleConfigUtils.makeConfig(new CurveConstructionConfiguration(name, groups, Collections.<String>emptyList())));
     // discounting curve
     final String discountingCurveNodeIdMapperName = currency + NODE_MAPPER_SUFFIX;
     final Set<CurveNode> discountingCurveNodes = new LinkedHashSet<>();
     final Map<Tenor, CurveInstrumentProvider> oisNodes = new HashMap<>();
-    discountingCurveNodes.add(new CashNode(ZERO, Tenor.TWO_DAYS, DEPOSIT_CONVENTION_FOR_CURRENCY.get(currency),
+    discountingCurveNodes.add(new CashNode(ZERO, Tenor.TWO_DAYS, ExternalId.of("CONVENTION", "AUD Deposit"),
         discountingCurveNodeIdMapperName));
     final Map<Tenor, CurveInstrumentProvider> depositNodes = new HashMap<>();
     depositNodes.put(Tenor.TWO_DAYS, new StaticCurveInstrumentProvider(ExternalSchemes.syntheticSecurityId(currency + "CASHP2D"),
         MarketDataRequirementNames.MARKET_VALUE, DataFieldType.OUTRIGHT));
     for (final int i : new int[] {1, 2, 3, 4, 5, 6, 9 }) {
       final Tenor nodeTenor = Tenor.ofMonths(i);
-      discountingCurveNodes.add(new SwapNode(ZERO, nodeTenor, FIXED_OIS_LEG_CONVENTION_FOR_CURRENCY.get(currency),
-          OIS_LEG_CONVENTION_FOR_CURRENCY.get(currency), discountingCurveNodeIdMapperName));
+      discountingCurveNodes.add(new SwapNode(ZERO, nodeTenor, ExternalId.of("CONVENTION", "AUD OIS Fixed"),
+          ExternalId.of("CONVENTION", "AUD OIS"), discountingCurveNodeIdMapperName));
       oisNodes.put(nodeTenor, new StaticCurveInstrumentProvider(ExternalSchemes.syntheticSecurityId(currency + "OIS_SWAP" + nodeTenor.toFormattedString())));
     }
     for (final int i : new int[] {1, 2, 3, 4, 5, 10 }) {
       final Tenor nodeTenor = Tenor.ofYears(i);
-      discountingCurveNodes.add(new SwapNode(ZERO, Tenor.ofYears(i), FIXED_OIS_LEG_CONVENTION_FOR_CURRENCY.get(currency),
-          OIS_LEG_CONVENTION_FOR_CURRENCY.get(currency), discountingCurveNodeIdMapperName));
+      discountingCurveNodes.add(new SwapNode(ZERO, Tenor.ofYears(i), ExternalId.of("CONVENTION", "AUD OIS Fixed"),
+          ExternalId.of("CONVENTION", "AUD OIS"), discountingCurveNodeIdMapperName));
       oisNodes.put(nodeTenor, new StaticCurveInstrumentProvider(ExternalSchemes.syntheticSecurityId(currency + "OIS_SWAP" + nodeTenor.toFormattedString())));
     }
     final CurveDefinition discountingCurveDefinition = new InterpolatedCurveDefinition(discountingCurveName, discountingCurveNodes,
@@ -256,17 +282,17 @@ public final class ExamplesFixedIncomeCurveConfigsPopulator {
     final Set<CurveNode> ibor3mCurveNodes = new LinkedHashSet<>();
     final Set<CurveNode> ibor6mCurveNodes = new LinkedHashSet<>();
     ibor3mCurveNodes.add(
-        new CashNode(ZERO, Tenor.THREE_MONTHS, IBOR_SECURITY_FOR_CURRENCY.get(Pairs.of("AUD", Tenor.THREE_MONTHS)), iborCurveNodeIdMapperName));
+        new CashNode(ZERO, Tenor.THREE_MONTHS, ExternalSchemes.syntheticSecurityId("AUDLIBORP3M"), iborCurveNodeIdMapperName));
     ibor6mCurveNodes.add(
-        new CashNode(ZERO, Tenor.SIX_MONTHS, IBOR_SECURITY_FOR_CURRENCY.get(Pairs.of("AUD", Tenor.SIX_MONTHS)), iborCurveNodeIdMapperName));
+        new CashNode(ZERO, Tenor.SIX_MONTHS, ExternalSchemes.syntheticSecurityId("AUDLIBORP6M"), iborCurveNodeIdMapperName));
     iborNodes.put(Tenor.THREE_MONTHS, new StaticCurveInstrumentProvider(ExternalSchemes.syntheticSecurityId("AUDLIBORP3M"),
         MarketDataRequirementNames.MARKET_VALUE, DataFieldType.OUTRIGHT));
     iborNodes.put(Tenor.SIX_MONTHS, new StaticCurveInstrumentProvider(ExternalSchemes.syntheticSecurityId("AUDLIBORP6M"),
         MarketDataRequirementNames.MARKET_VALUE, DataFieldType.OUTRIGHT));
-    final ExternalId fixed3mLegConvention = ExternalId.of("CONVENTION", "AUD 3M");
-    final ExternalId fixed6mLegConvention = ExternalId.of("CONVENTION", "AUD 6M");
-    final ExternalId ibor3mLegConvention = ExternalId.of("CONVENTION", "AUD 6M");
-    final ExternalId ibor6mLegConvention = ExternalId.of("CONVENTION", "AUD 6M");
+    final ExternalId fixed3mLegConvention = ExternalId.of("CONVENTION", "AUD 3M IBOR Fixed");
+    final ExternalId fixed6mLegConvention = ExternalId.of("CONVENTION", "AUD 6M IBOR Fixed");
+    final ExternalId ibor3mLegConvention = ExternalId.of("CONVENTION", "AUD 3M IBOR");
+    final ExternalId ibor6mLegConvention = ExternalId.of("CONVENTION", "AUD 6M IBOR");
     for (final int i : new int[] {1, 2, 3 }) {
       final Tenor nodeTenor = Tenor.ofYears(i);
       ibor3mCurveNodes.add(new SwapNode(ZERO, nodeTenor, fixed3mLegConvention, ibor3mLegConvention, iborCurveNodeIdMapperName));
@@ -295,9 +321,11 @@ public final class ExamplesFixedIncomeCurveConfigsPopulator {
         .name(basisSwapCurveNodeIdMapperName)
         .swapNodeIds(basisSwapNodes)
         .build();
-    final CurveDefinition ibor3mCurveDefinition = new InterpolatedCurveDefinition(forward3mIborCurveName, ibor3mCurveNodes, MonotonicConstrainedCubicSplineInterpolator1dAdapter.NAME,
+    final CurveDefinition ibor3mCurveDefinition =
+        new InterpolatedCurveDefinition(forward3mIborCurveName, ibor3mCurveNodes, MonotonicConstrainedCubicSplineInterpolator1dAdapter.NAME,
         LinearExtrapolator1dAdapter.NAME, LinearExtrapolator1dAdapter.NAME);
-    final CurveDefinition ibor6mCurveDefinition = new InterpolatedCurveDefinition(forward6mIborCurveName, ibor6mCurveNodes, MonotonicConstrainedCubicSplineInterpolator1dAdapter.NAME,
+    final CurveDefinition ibor6mCurveDefinition =
+        new InterpolatedCurveDefinition(forward6mIborCurveName, ibor6mCurveNodes, MonotonicConstrainedCubicSplineInterpolator1dAdapter.NAME,
         LinearExtrapolator1dAdapter.NAME, LinearExtrapolator1dAdapter.NAME);
     ConfigMasterUtils.storeByName(configMaster, ExampleConfigUtils.makeConfig(ibor3mCurveDefinition));
     ConfigMasterUtils.storeByName(configMaster, ExampleConfigUtils.makeConfig(ibor6mCurveDefinition));

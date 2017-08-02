@@ -50,12 +50,12 @@ public class ExampleJpConventions extends ConventionMasterInitializer {
         DayCounts.ACT_365, BusinessDayConventions.FOLLOWING, 0, false, Currency.JPY, JP);
     // IBOR
     final ExternalIdBundle iborIds = ExternalIdBundle.of(ExternalId.of("CONVENTION", "JPYLIBORP3M"), ExternalId.of("CONVENTION", "JPYLIBORP6M"),
-        ExternalSchemes.syntheticSecurityId("JPYLIBORP3M"), ExternalSchemes.syntheticSecurityId("JPYLIBORP6M"));
+        ExternalSchemes.syntheticSecurityId("JPYLIBORP3M"), ExternalSchemes.syntheticSecurityId("JPYLIBORP6M"), ExternalId.of("CONVENTION", "JPY LIBOR"));
     final IborIndexConvention ibor = new IborIndexConvention("JPY LIBOR", iborIds, DayCounts.ACT_365, BusinessDayConventions.FOLLOWING, 0, false, Currency.JPY,
         LocalTime.of(11, 0), "US", JP, JP, "");
     // Overnight
     final OvernightIndexConvention overnight =
-        new OvernightIndexConvention("JPYFF", ExternalIdBundle.of(ExternalId.of("CONVENTION", "TONAR"), ExternalSchemes.syntheticSecurityId("TONAR")),
+        new OvernightIndexConvention("TONAR", ExternalIdBundle.of(ExternalId.of("CONVENTION", "TONAR"), ExternalSchemes.syntheticSecurityId("TONAR")),
         DayCounts.ACT_365, 0, Currency.JPY, JP);
     // OIS
     final SwapFixedLegConvention oisFixedLeg = new SwapFixedLegConvention("JPY OIS Fixed",
@@ -65,11 +65,11 @@ public class ExampleJpConventions extends ConventionMasterInitializer {
         ExternalId.of("CONVENTION", "TONAR"), Tenor.ONE_YEAR, BusinessDayConventions.MODIFIED_FOLLOWING,
         0, false, StubType.SHORT_START, false, 1);
     // IBOR Swaps
-    final SwapFixedLegConvention iborFixedLeg = new SwapFixedLegConvention("JPY",
-        ExternalIdBundle.of(ExternalId.of("CONVENTION", "JPY"), ExternalSchemes.currencyRegionId(Currency.JPY)),
+    final SwapFixedLegConvention iborFixedLeg = new SwapFixedLegConvention("JPY IBOR Fixed",
+        ExternalIdBundle.of(ExternalId.of("CONVENTION", "JPY IBOR Fixed"), ExternalSchemes.currencyRegionId(Currency.JPY)),
         Tenor.SIX_MONTHS, DayCounts.ACT_365, BusinessDayConventions.MODIFIED_FOLLOWING, Currency.JPY, JP, 0, true, StubType.SHORT_START, false, 0);
-    final VanillaIborLegConvention ibor3mLeg = new VanillaIborLegConvention("JPY 6M",
-        ExternalIdBundle.of(ExternalId.of("CONVENTION", "JPY 6M"), ExternalSchemes.currencyRegionId(Currency.JPY)),
+    final VanillaIborLegConvention ibor3mLeg = new VanillaIborLegConvention("JPY 6M IBOR",
+        ExternalIdBundle.of(ExternalId.of("CONVENTION", "JPY 6M IBOR"), ExternalSchemes.currencyRegionId(Currency.JPY)),
         ExternalId.of("CONVENTION", "JPYLIBORP6M"), false, LinearInterpolator1dAdapter.NAME, Tenor.SIX_MONTHS, 0, false, StubType.SHORT_START, false, 0);
 
     // Bond conventions

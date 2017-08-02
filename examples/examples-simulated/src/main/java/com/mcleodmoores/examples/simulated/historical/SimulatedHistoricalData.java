@@ -33,7 +33,7 @@ import au.com.bytecode.opencsv.CSVReader;
  */
 public class SimulatedHistoricalData {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(SimulatedHistoricalData.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(SimulatedHistoricalData.class);
 
   /**
    * OG Simulated data provider name
@@ -45,7 +45,7 @@ public class SimulatedHistoricalData {
    */
   public static final String OG_DATA_SOURCE = "OG_DATA_SOURCE";
 
-  private final Map<Pair<ExternalId, String>, Double> _finishValues = new HashMap<Pair<ExternalId, String>, Double>();
+  private final Map<Pair<ExternalId, String>, Double> _finishValues = new HashMap<>();
 
   private static final int NUM_FIELDS = 4;
   private static final double SCALING_FACTOR = 0.005; // i.e. 0.5% * 1SD
@@ -67,19 +67,23 @@ public class SimulatedHistoricalData {
       String[] line;
       int lineNum = 0;
       while ((line = reader.readNext()) != null) {
-        lineNum++;
-        if (line.length == 0 || line[0].startsWith("#")) {
-          s_logger.debug("Empty line on {}", lineNum);
-        } else if (line.length != NUM_FIELDS) {
-          s_logger.error("Invalid number of fields ({}) in CSV on line {}", line.length, lineNum);
-        } else {
-          final String scheme = line[0];
-          final String identifier = line[1];
-          final String fieldName = line[2];
-          final String valueStr = line[3];
-          final Double value = Double.parseDouble(valueStr);
-          final ExternalId id = ExternalId.of(scheme, identifier);
-          finishValues.put(Pairs.of(id, fieldName), value);
+        try {
+          lineNum++;
+          if (line.length == 0 || line[0].startsWith("#")) {
+            LOGGER.debug("Empty line on {}", lineNum);
+          } else if (line.length < NUM_FIELDS) {
+            LOGGER.error("Invalid number of fields ({}) in CSV on line {}", line.length, lineNum);
+          } else {
+            final String scheme = line[0];
+            final String identifier = line[1];
+            final String fieldName = line[2];
+            final String valueStr = line[3];
+            final Double value = Double.parseDouble(valueStr);
+            final ExternalId id = ExternalId.of(scheme, identifier);
+            finishValues.put(Pairs.of(id, fieldName), value);
+          }
+        } catch (final Exception e) {
+          LOGGER.error("Problem parsing line {}: {}", lineNum, e.getMessage());
         }
       }
     } catch (final FileNotFoundException e) {

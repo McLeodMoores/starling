@@ -105,6 +105,7 @@ public class AnalyticsFunctions extends AbstractFunctionConfigurationBean {
     functions.add(functionConfiguration(PortfolioNodeWeightFunction.class));
     functions.add(functionConfiguration(PositionWeightFunction.class));
     functions.add(functionConfiguration(BucketedPV01Function.class));
+    functions.add(functionConfiguration(FixedRateFunction.class));
 
     //security attribute functions
     functions.add(functionConfiguration(DefaultSecurityAttributeFunction.class, SecurityAttribute.DIRECTION.name(), ValueRequirementNames.PAY_REC));
@@ -148,6 +149,7 @@ public class AnalyticsFunctions extends AbstractFunctionConfigurationBean {
     addSummingFunction(functions, ValueRequirementNames.EXTERNAL_SENSITIVITIES);
     addScalingAndSummingFunction(functions, ValueRequirementNames.FAIR_VALUE);
     addUnitScalingAndSummingFunction(functions, ValueRequirementNames.FIXED_PAY_CASH_FLOWS);
+    addUnitScalingFunction(functions, ValueRequirementNames.FIXED_RATE);
     addUnitScalingAndSummingFunction(functions, ValueRequirementNames.FIXED_RECEIVE_CASH_FLOWS);
     addUnitScalingAndSummingFunction(functions, ValueRequirementNames.FLOATING_PAY_CASH_FLOWS);
     addUnitScalingAndSummingFunction(functions, ValueRequirementNames.FLOATING_RECEIVE_CASH_FLOWS);

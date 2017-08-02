@@ -1195,18 +1195,22 @@ public final class ValueRequirementNames {
    */
   public static final String UNDERLYING_RETURN_SERIES = "Underlying Return Series";
   /**
-   * The notional of a security
+   * The notional of a security.
    */
   public static final String NOTIONAL = "Notional";
   /**
-   * The attributes of a security
+   * The fixed rate associated with a trade or security.
+   */
+  public static final String FIXED_RATE = "FixedRate";
+  /**
+   * The attributes of a security.
    */
   public static final String ATTRIBUTES = "Attributes";
   /**
-   * An ExternalId of a security
+   * An ExternalId of a security.
    */
   public static final String EXTERNAL_ID = "ExternalId";
-  /** 
+  /**
    * The realized variance of a time series.
    */
   public static final String REALIZED_VARIANCE = "Realized Variance";

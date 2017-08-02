@@ -6,7 +6,9 @@
 package com.opengamma.financial.generator;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,11 +17,9 @@ import org.threeten.bp.ZoneOffset;
 import org.threeten.bp.ZonedDateTime;
 
 import com.opengamma.DataNotFoundException;
-import com.opengamma.core.convention.Convention;
 import com.opengamma.core.convention.ConventionSource;
 import com.opengamma.core.historicaltimeseries.HistoricalTimeSeries;
 import com.opengamma.core.holiday.Holiday;
-import com.opengamma.core.id.ExternalSchemes;
 import com.opengamma.core.position.Counterparty;
 import com.opengamma.core.value.MarketDataRequirementNames;
 import com.opengamma.financial.convention.ConventionBundle;
@@ -39,7 +39,6 @@ import com.opengamma.financial.security.swap.InterestRateNotional;
 import com.opengamma.financial.security.swap.SwapLeg;
 import com.opengamma.financial.security.swap.SwapSecurity;
 import com.opengamma.id.ExternalId;
-import com.opengamma.id.VersionCorrection;
 import com.opengamma.master.position.ManageableTrade;
 import com.opengamma.master.security.ManageableSecurity;
 import com.opengamma.master.security.SecuritySearchRequest;
@@ -55,6 +54,21 @@ public class SwapSecurityGenerator extends SecurityGenerator<SwapSecurity> {
   private static final Logger LOGGER = LoggerFactory.getLogger(SwapSecurityGenerator.class);
   private static final Tenor[] TENORS = new Tenor[] {Tenor.ONE_YEAR, Tenor.TWO_YEARS, Tenor.THREE_YEARS, Tenor.FIVE_YEARS,
       Tenor.ofYears(7), Tenor.ofYears(10), Tenor.ofYears(12), Tenor.ofYears(15), Tenor.ofYears(20) };
+  private static final Map<Currency, ExternalId> FIXED_LEG_CONVENTION_FOR_CCY = new HashMap<>();
+  private static final Map<Currency, ExternalId> IBOR_LEG_CONVENTION_FOR_CCY = new HashMap<>();
+
+  static {
+    FIXED_LEG_CONVENTION_FOR_CCY.put(Currency.USD, ExternalId.of("CONVENTION", "USD IBOR Fixed"));
+    FIXED_LEG_CONVENTION_FOR_CCY.put(Currency.GBP, ExternalId.of("CONVENTION", "GBP IBOR Fixed"));
+    FIXED_LEG_CONVENTION_FOR_CCY.put(Currency.CHF, ExternalId.of("CONVENTION", "CHF IBOR Fixed"));
+    FIXED_LEG_CONVENTION_FOR_CCY.put(Currency.EUR, ExternalId.of("CONVENTION", "EUR IBOR Fixed"));
+    FIXED_LEG_CONVENTION_FOR_CCY.put(Currency.JPY, ExternalId.of("CONVENTION", "JPY IBOR Fixed"));
+    IBOR_LEG_CONVENTION_FOR_CCY.put(Currency.USD, ExternalId.of("CONVENTION", "USD 3M IBOR"));
+    IBOR_LEG_CONVENTION_FOR_CCY.put(Currency.GBP, ExternalId.of("CONVENTION", "GBP 6M IBOR"));
+    IBOR_LEG_CONVENTION_FOR_CCY.put(Currency.CHF, ExternalId.of("CONVENTION", "CHF 6M IBOR"));
+    IBOR_LEG_CONVENTION_FOR_CCY.put(Currency.EUR, ExternalId.of("CONVENTION", "EUR 6M IBOR"));
+    IBOR_LEG_CONVENTION_FOR_CCY.put(Currency.JPY, ExternalId.of("CONVENTION", "JPY 6M IBOR"));
+  }
 
   private int _daysTrading = 60;
   private LocalDate _swaptionExpiry;
@@ -120,23 +134,15 @@ public class SwapSecurityGenerator extends SecurityGenerator<SwapSecurity> {
     if (conventionSource != null) {
       SwapFixedLegConvention fixedLegConvention = null;
       VanillaIborLegConvention iborLegConvention = null;
-      final Collection<Convention> conventionsForCurrency =
-          conventionSource.get(ExternalSchemes.currencyRegionId(ccy).toBundle(), VersionCorrection.LATEST);
-      for (final Convention convention : conventionsForCurrency) {
-        if (convention instanceof SwapFixedLegConvention) {
-          if (fixedLegConvention != null) {
-            LOGGER.error("Already have a SwapFixedLegConvention for {}, ignoring", ccy);
-          } else {
-            fixedLegConvention = (SwapFixedLegConvention) convention;
-          }
-        }
-        if (convention instanceof VanillaIborLegConvention) {
-          if (iborLegConvention != null) {
-            LOGGER.error("Already have a VanillaIborLegConvention for {}, ignoring", ccy);
-          } else {
-            iborLegConvention = (VanillaIborLegConvention) convention;
-          }
-        }
+      try {
+        fixedLegConvention = conventionSource.getSingle(FIXED_LEG_CONVENTION_FOR_CCY.get(ccy), SwapFixedLegConvention.class);
+      } catch (final DataNotFoundException e) {
+        LOGGER.error("Could not get SwapFixedLegConvention with id {}", FIXED_LEG_CONVENTION_FOR_CCY.get(ccy));
+      }
+      try {
+        iborLegConvention = conventionSource.getSingle(IBOR_LEG_CONVENTION_FOR_CCY.get(ccy), VanillaIborLegConvention.class);
+      } catch (final DataNotFoundException e) {
+        LOGGER.error("Could not get VanillaIborLegConvention with id {}", IBOR_LEG_CONVENTION_FOR_CCY.get(ccy));
       }
       if (fixedLegConvention != null) {
         fixedLegDayCount = fixedLegConvention.getDayCount();
