@@ -69,82 +69,85 @@ public class ResultsFormatter {
     this(DISPLAY_CURRENCY);
   }
 
-  public ResultsFormatter(CurrencyDisplay currencyDisplay) {
-    BigDecimalFormatter bigDecimalFormatter = new BigDecimalFormatter(currencyDisplay);
-    DoubleFormatter doubleFormatter = new DoubleFormatter(bigDecimalFormatter);
-    CurrencyAmountFormatter currencyAmountFormatter = new CurrencyAmountFormatter(currencyDisplay, bigDecimalFormatter);
-    ZonedDateTimeFormatter zonedDateTimeFormatter = new ZonedDateTimeFormatter();
-    LocalDateDoubleTimeSeriesFormatter localDateDoubleTimeSeriesFormatter = new LocalDateDoubleTimeSeriesFormatter();
-    RateFormatter rateFormatter = new RateFormatter();
-    BasisPointsFormatter basisPointFormatter = new BasisPointsFormatter();
+  public ResultsFormatter(final CurrencyDisplay currencyDisplay) {
+    final BigDecimalFormatter bigDecimalFormatter = new BigDecimalFormatter(currencyDisplay);
+    final DoubleFormatter doubleFormatter = new DoubleFormatter(bigDecimalFormatter);
+    final CurrencyAmountFormatter currencyAmountFormatter = new CurrencyAmountFormatter(currencyDisplay, bigDecimalFormatter);
+    final ZonedDateTimeFormatter zonedDateTimeFormatter = new ZonedDateTimeFormatter();
+    final LocalDateDoubleTimeSeriesFormatter localDateDoubleTimeSeriesFormatter = new LocalDateDoubleTimeSeriesFormatter();
+    final RateFormatter rateFormatter = new RateFormatter();
+    final BasisPointsFormatter basisPointFormatter = new BasisPointsFormatter();
     addFormatters(doubleFormatter,
-                  bigDecimalFormatter,
-                  currencyAmountFormatter,
-                  zonedDateTimeFormatter,
-                  localDateDoubleTimeSeriesFormatter,
-                  new YieldCurveFormatter(),
-                  new PriceIndexCurveFormatter(),
-                  new ISDACompliantYieldCurveFormatter(),
-                  new ISDACompliantCurveFormatter(),
-                  new NodalObjectsCurveFormatter(), //TODO is not a general formatter - used only for (Tenor, Double) curves
-                  new VolatilityCubeDataFormatter(),
-                  new VolatilitySurfaceDataFormatter(),
-                  new VolatilitySurfaceFormatter(),
-                  new LabelledMatrix1DFormatter(doubleFormatter),
-                  new LocalDateLabelledMatrix1DFormatter(doubleFormatter),
-                  new LabelledMatrix2DFormatter(doubleFormatter),
-                  new LabelledMatrix3DFormatter(),
-                  new TenorLabelledLocalDateDoubleTimeSeriesMatrix1DFormatter(localDateDoubleTimeSeriesFormatter),
-                  new TenorFormatter(),
-                  new MultipleCurrencyAmountFormatter(doubleFormatter),
-                  new MissingInputFormatter(),
-                  new MissingOutputFormatter(),
-                  new ForwardCurveFormatter(),
-                  new BlackVolatilitySurfaceMoneynessFormatter(),
-                  new LocalVolatilitySurfaceMoneynessFormatter(),
-                  new BucketedGreekResultCollectionFormatter(),
-                  new DoublesCurveFormatter(),
-                  new HistoricalTimeSeriesFormatter(),
-                  new DoubleArrayFormatter(),
-                  new DoubleObjectArrayFormatter(),
-                  new FudgeMsgFormatter(),
-                  new ListDoubleArrayFormatter(),
-                  new PresentValueForexBlackVolatilitySensitivityFormatter(),
-                  new SnapshotDataBundleFormatter(doubleFormatter),
-                  new InterpolatedYieldCurveSpecificationWithSecuritiesFormatter(),
-                  new HistoricalTimeSeriesBundleFormatter(),
-                  new VolatilitySurfaceSpecificationFormatter(),
-                  new CurrencyPairsFormatter(),
-                  new NodeTargetFormatter(),
-                  new PositionTargetFormatter(),
-                  new FungibleTradeTargetFormatter(),
-                  new OtcTradeTargetFormatter(),
-                  new BlackVolatilitySurfaceMoneynessFcnBackedByGridFormatter(),
-                  new FrequencyFormatter(),
-                  new FXAmountsFormatter(doubleFormatter),
-                  new ExpiryFormatter(zonedDateTimeFormatter),
-                  new ValuePropertiesFormatter(),
-                  new FixedPaymentMatrixFormatter(currencyAmountFormatter),
-                  new FloatingPaymentMatrixFormatter(currencyAmountFormatter),
-                  new FixedSwapLegDetailsFormatter(new CurrencyAmountFormatter(CurrencyDisplay.SUPPRESS_CURRENCY, bigDecimalFormatter), rateFormatter),
-                  new FloatingSwapLegDetailsFormatter(new CurrencyAmountFormatter(CurrencyDisplay.SUPPRESS_CURRENCY, bigDecimalFormatter), rateFormatter, basisPointFormatter),
-                  new FXMatrixFormatter(),
-                  new YieldCurveDataFormatter(doubleFormatter));
+        bigDecimalFormatter,
+        currencyAmountFormatter,
+        zonedDateTimeFormatter,
+        localDateDoubleTimeSeriesFormatter,
+        new YieldCurveFormatter(),
+        new PriceIndexCurveFormatter(),
+        new ISDACompliantYieldCurveFormatter(),
+        new ISDACompliantCurveFormatter(),
+        new NodalObjectsCurveFormatter(), //TODO is not a general formatter - used only for (Tenor, Double) curves
+        new VolatilityCubeDataFormatter(),
+        new VolatilitySurfaceDataFormatter(),
+        new VolatilitySurfaceFormatter(),
+        new LabelledMatrix1DFormatter(doubleFormatter),
+        new LocalDateLabelledMatrix1DFormatter(doubleFormatter),
+        new LabelledMatrix2DFormatter(doubleFormatter),
+        new LabelledMatrix3DFormatter(),
+        new TenorLabelledLocalDateDoubleTimeSeriesMatrix1DFormatter(localDateDoubleTimeSeriesFormatter),
+        new TenorFormatter(),
+        new MultipleCurrencyAmountFormatter(doubleFormatter),
+        new MissingInputFormatter(),
+        new MissingOutputFormatter(),
+        new ForwardCurveFormatter(),
+        new BlackVolatilitySurfaceMoneynessFormatter(),
+        new LocalVolatilitySurfaceMoneynessFormatter(),
+        new BucketedGreekResultCollectionFormatter(),
+        new DoublesCurveFormatter(),
+        new HistoricalTimeSeriesFormatter(),
+        new DoubleArrayFormatter(),
+        new DoubleObjectArrayFormatter(),
+        new FudgeMsgFormatter(),
+        new ListDoubleArrayFormatter(),
+        new PresentValueForexBlackVolatilitySensitivityFormatter(),
+        new SnapshotDataBundleFormatter(doubleFormatter),
+        new InterpolatedYieldCurveSpecificationWithSecuritiesFormatter(),
+        new HistoricalTimeSeriesBundleFormatter(),
+        new VolatilitySurfaceSpecificationFormatter(),
+        new CurrencyPairsFormatter(),
+        new NodeTargetFormatter(),
+        new PositionTargetFormatter(),
+        new FungibleTradeTargetFormatter(),
+        new OtcTradeTargetFormatter(),
+        new BlackVolatilitySurfaceMoneynessFcnBackedByGridFormatter(),
+        new FrequencyFormatter(),
+        new FXAmountsFormatter(doubleFormatter),
+        new ExpiryFormatter(zonedDateTimeFormatter),
+        new ValuePropertiesFormatter(),
+        new FixedPaymentMatrixFormatter(currencyAmountFormatter),
+        new FloatingPaymentMatrixFormatter(currencyAmountFormatter),
+        new FixedSwapLegDetailsFormatter(new CurrencyAmountFormatter(CurrencyDisplay.SUPPRESS_CURRENCY, bigDecimalFormatter), rateFormatter),
+        new FloatingSwapLegDetailsFormatter(new CurrencyAmountFormatter(CurrencyDisplay.SUPPRESS_CURRENCY, bigDecimalFormatter), rateFormatter,
+            basisPointFormatter),
+        new FXMatrixFormatter(),
+        new YieldCurveDataFormatter(doubleFormatter),
+        new FxForwardDetailsFormatter(doubleFormatter, rateFormatter, currencyAmountFormatter),
+        new FxNdfDetailsFormatter(doubleFormatter, rateFormatter, currencyAmountFormatter));
   }
 
-  private void addFormatters(TypeFormatter<?>... formatters) {
-    for (TypeFormatter<?> formatter : formatters) {
+  private void addFormatters(final TypeFormatter<?>... formatters) {
+    for (final TypeFormatter<?> formatter : formatters) {
       _formatters.put(formatter.getType(), formatter);
     }
   }
 
-  private TypeFormatter getFormatter(Object value, ValueSpecification valueSpec) {
+  private TypeFormatter getFormatter(final Object value, final ValueSpecification valueSpec) {
     if (value == null) {
       return _nullFormatter;
     } else if (isError(value) || valueSpec == null) {
       return getFormatterForType(value.getClass());
     } else {
-      Class<?> type = ValueTypes.getTypeForValueName(valueSpec.getValueName());
+      final Class<?> type = ValueTypes.getTypeForValueName(valueSpec.getValueName());
       if (type != null) {
         if (type.isInstance(value)) {
           return getFormatterForType(type);
@@ -163,18 +166,18 @@ public class ResultsFormatter {
           //      but will be encoded as an integer if it won't fit into a byte. the fix for this scenario is the same
           //      as #2 above
           s_logger.warn("Unexpected type for value. Value name: '{}', expected type: {}, actual type: {}, value: {}",
-                        new Object[]{valueSpec.getValueName(), type.getName(), value.getClass().getName(), value});
+              new Object[]{valueSpec.getValueName(), type.getName(), value.getClass().getName(), value});
         }
       }
       return getFormatterForType(value.getClass());
     }
   }
 
-  private TypeFormatter getFormatterForType(Class<?> type) {
+  private TypeFormatter getFormatterForType(final Class<?> type) {
     if (type == null) {
       return _unknownTypeFormatter;
     }
-    TypeFormatter formatter = _formatters.get(type);
+    final TypeFormatter formatter = _formatters.get(type);
     if (formatter == null) {
       return _defaultFormatter;
     } else {
@@ -182,7 +185,7 @@ public class ResultsFormatter {
     }
   }
 
-  private static boolean isError(Object value) {
+  private static boolean isError(final Object value) {
     return value instanceof MissingValue;
   }
 
@@ -198,8 +201,8 @@ public class ResultsFormatter {
    * can't be formatted as requested or if the value doesn't have an entry for the specified key.
    */
   @SuppressWarnings("unchecked")
-  public Object format(Object value, ValueSpecification valueSpec, TypeFormatter.Format format, Object inlineKey) {
-    TypeFormatter formatter = getFormatter(value, valueSpec);
+  public Object format(final Object value, final ValueSpecification valueSpec, final TypeFormatter.Format format, final Object inlineKey) {
+    final TypeFormatter formatter = getFormatter(value, valueSpec);
     return formatter.format(value, valueSpec, format, inlineKey);
   }
 
@@ -208,7 +211,7 @@ public class ResultsFormatter {
    * @param type The value type
    * @return The formatter used for formatting the type
    */
-  public DataType getDataType(Class<?> type) {
+  public DataType getDataType(final Class<?> type) {
     return getFormatterForType(type).getDataType();
   }
 
@@ -219,7 +222,7 @@ public class ResultsFormatter {
    * @return The format type for the value, not null
    */
   @SuppressWarnings("unchecked")
-  public DataType getDataTypeForValue(Object value, ValueSpecification valueSpec) {
+  public DataType getDataTypeForValue(final Object value, final ValueSpecification valueSpec) {
     return getFormatter(value, valueSpec).getDataTypeForValue(value);
   }
 }

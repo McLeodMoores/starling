@@ -63,6 +63,9 @@ public class FixedRateFunction extends AbstractFunction.NonCompiledInvoker {
     return Collections.emptySet();
   }
 
+  /**
+   * Gets the fixed rate for securities where relevant.
+   */
   private static final class FixedRateVisitor extends FinancialSecurityVisitorAdapter<Double> {
     public static final FixedRateVisitor INSTANCE = new FixedRateVisitor();
 

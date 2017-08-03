@@ -6,6 +6,8 @@ package com.opengamma.financial.analytics.model.discounting;
 import static com.opengamma.engine.value.ValuePropertyNames.CURVE_EXPOSURES;
 import static com.opengamma.engine.value.ValueRequirementNames.BLOCK_CURVE_SENSITIVITIES;
 import static com.opengamma.engine.value.ValueRequirementNames.FX_CURRENCY_EXPOSURE;
+import static com.opengamma.engine.value.ValueRequirementNames.FX_FORWARD_DETAILS;
+import static com.opengamma.engine.value.ValueRequirementNames.FX_NDF_DETAILS;
 import static com.opengamma.engine.value.ValueRequirementNames.FX_PRESENT_VALUE;
 import static com.opengamma.engine.value.ValueRequirementNames.PAY_DISCOUNT_FACTOR;
 import static com.opengamma.engine.value.ValueRequirementNames.PAY_ZERO_RATE;
@@ -44,7 +46,9 @@ public class FxForwardAndNdfPerCurrencyPairDefaults extends DefaultPropertyFunct
       PAY_DISCOUNT_FACTOR,
       PAY_ZERO_RATE,
       RECEIVE_DISCOUNT_FACTOR,
-      RECEIVE_ZERO_RATE
+      RECEIVE_ZERO_RATE,
+      FX_FORWARD_DETAILS,
+      FX_NDF_DETAILS
   };
   private final UnorderedCurrencyPair _underlying;
   private final String _curveExposuresName;

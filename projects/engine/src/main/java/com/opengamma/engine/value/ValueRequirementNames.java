@@ -1643,6 +1643,40 @@ public final class ValueRequirementNames {
    */
   public static final String AFFINE_DIVIDENDS = "Affine Dividends";
 
+  ///// FX forward trade and pricing details
+  /**
+   * The pay amount.
+   */
+  public static final String PAY_AMOUNT = "Pay Amount";
+  /**
+   * The receive amount.
+   */
+  public static final String RECEIVE_AMOUNT = "Receive Amount";
+  /**
+   * The pay discount factor used for pricing.
+   */
+  public static final String PAY_DISCOUNT_FACTOR = "Pay Discount Factor";
+  /**
+   * The receive discount factor used for pricing.
+   */
+  public static final String RECEIVE_DISCOUNT_FACTOR = "Receive Discount Factor";
+  /**
+   * The pay zero rate used for pricing.
+   */
+  public static final String PAY_ZERO_RATE = "Pay Zero Rate";
+  /**
+   * The receive zero rate used for pricing.
+   */
+  public static final String RECEIVE_ZERO_RATE = "Receive Zero Rate";
+  /**
+   * All pricing details for FX forwards.
+   */
+  public static final String FX_FORWARD_DETAILS = "FX Forward Details";
+  /**
+   * All pricing details for FX NDFs.
+   */
+  public static final String FX_NDF_DETAILS = "Non-deliverable FX Forward Details";
+
   ///// Miscellaneous
 
   /**

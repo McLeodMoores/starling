@@ -134,7 +134,7 @@ import com.opengamma.web.server.conversion.PercentageValueSignificantFiguresForm
     s_formatters.put(ValueRequirementNames.PARAMETRIC_VAR, DoubleValueSizeBasedDecimalPlaceFormatter.CCY_DEFAULT);
     s_formatters.put(ValueRequirementNames.HISTORICAL_VAR_STDDEV, DoubleValueSizeBasedDecimalPlaceFormatter.CCY_DEFAULT);
     s_formatters.put(ValueRequirementNames.CONDITIONAL_HISTORICAL_VAR,
-                     DoubleValueSizeBasedDecimalPlaceFormatter.CCY_DEFAULT);
+        DoubleValueSizeBasedDecimalPlaceFormatter.CCY_DEFAULT);
 
     // Capital Asset Pricing
     s_formatters.put(ValueRequirementNames.CAPM_BETA, DoubleValueSignificantFiguresFormatter.NON_CCY_5SF);
@@ -183,6 +183,12 @@ import com.opengamma.web.server.conversion.PercentageValueSignificantFiguresForm
 
     // Fixed income
     s_formatters.put(ValueRequirementNames.FIXED_RATE, DoubleValueDecimalPlaceFormatter.NON_CCY_3DP);
+
+    // FX
+    s_formatters.put(ValueRequirementNames.PAY_DISCOUNT_FACTOR, DoubleValueDecimalPlaceFormatter.NON_CCY_6DP);
+    s_formatters.put(ValueRequirementNames.RECEIVE_DISCOUNT_FACTOR, DoubleValueDecimalPlaceFormatter.NON_CCY_6DP);
+    s_formatters.put(ValueRequirementNames.PAY_DISCOUNT_FACTOR, DoubleValueDecimalPlaceFormatter.NON_CCY_6DP);
+    s_formatters.put(ValueRequirementNames.RECEIVE_DISCOUNT_FACTOR, DoubleValueDecimalPlaceFormatter.NON_CCY_6DP);
   }
 
   private final ResultsFormatter.CurrencyDisplay _currencyDisplay;
@@ -248,13 +254,13 @@ import com.opengamma.web.server.conversion.PercentageValueSignificantFiguresForm
     final String formattedNumber = formatter.format(value);
     return formatter.isCurrencyAmount() && _currencyDisplay == DISPLAY_CURRENCY ?
         formatWithCurrency(formattedNumber, valueSpec) :
-        formattedNumber;
+          formattedNumber;
   }
 
   private String formatWithCurrency(final String formattedNumber, final ValueSpecification valueSpec) {
     final Set<String> currencyValues = valueSpec.getProperties().getValues(ValuePropertyNames.CURRENCY);
     return currencyValues == null || currencyValues.isEmpty() ?
         formattedNumber :
-        currencyValues.iterator().next() + " " + formattedNumber;
+          currencyValues.iterator().next() + " " + formattedNumber;
   }
 }

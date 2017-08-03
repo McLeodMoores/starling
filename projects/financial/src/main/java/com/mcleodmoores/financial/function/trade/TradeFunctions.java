@@ -25,6 +25,7 @@ public class TradeFunctions extends AbstractFunctionConfigurationBean {
   @Override
   protected void addAllConfigurations(final List<FunctionConfiguration> functions) {
     functions.add(functionConfiguration(FixedRateFunction.class));
-    functions.add(functionConfiguration(FxForwardPaymentsFunction.class));
+    functions.add(functionConfiguration(FxForwardDetailsFunction.class));
+    functions.add(functionConfiguration(FxNdfDetailsFunction.class));
   }
 }

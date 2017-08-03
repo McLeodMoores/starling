@@ -163,7 +163,9 @@ public class AnalyticsFunctions extends AbstractFunctionConfigurationBean {
     addScalingAndSummingFunction(functions, ValueRequirementNames.FUNDING_LEG_PV);
     addScalingAndSummingFunction(functions, ValueRequirementNames.FX_CURRENCY_EXPOSURE);
     addUnitScalingFunction(functions, ValueRequirementNames.FX_CURVE_SENSITIVITIES);
+    addUnitScalingFunction(functions, ValueRequirementNames.FX_FORWARD_DETAILS);
     addScalingAndSummingFunction(functions, ValueRequirementNames.FX_FORWARD_POINTS_NODE_SENSITIVITIES);
+    addUnitScalingFunction(functions, ValueRequirementNames.FX_NDF_DETAILS);
     addScalingAndSummingFunction(functions, ValueRequirementNames.FX_PRESENT_VALUE);
     addUnitScalingFunction(functions, ValueRequirementNames.FORWARD_DRIFTLESS_THETA);
     addUnitScalingFunction(functions, ValueRequirementNames.GAMMA);

@@ -19,7 +19,7 @@ import com.opengamma.analytics.math.curve.NodalDoublesCurve;
 import com.opengamma.engine.value.ValueSpecification;
 
 /**
- * TODO make this InterpolatedDoubleCurveFormatter
+ *
  */
 /* package */ class DoublesCurveFormatter extends AbstractFormatter<DoublesCurve> {
 
