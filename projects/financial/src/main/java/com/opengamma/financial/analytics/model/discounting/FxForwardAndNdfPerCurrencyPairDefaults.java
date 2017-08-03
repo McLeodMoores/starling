@@ -7,7 +7,11 @@ import static com.opengamma.engine.value.ValuePropertyNames.CURVE_EXPOSURES;
 import static com.opengamma.engine.value.ValueRequirementNames.BLOCK_CURVE_SENSITIVITIES;
 import static com.opengamma.engine.value.ValueRequirementNames.FX_CURRENCY_EXPOSURE;
 import static com.opengamma.engine.value.ValueRequirementNames.FX_PRESENT_VALUE;
+import static com.opengamma.engine.value.ValueRequirementNames.PAY_DISCOUNT_FACTOR;
+import static com.opengamma.engine.value.ValueRequirementNames.PAY_ZERO_RATE;
 import static com.opengamma.engine.value.ValueRequirementNames.PRESENT_VALUE;
+import static com.opengamma.engine.value.ValueRequirementNames.RECEIVE_DISCOUNT_FACTOR;
+import static com.opengamma.engine.value.ValueRequirementNames.RECEIVE_ZERO_RATE;
 import static com.opengamma.engine.value.ValueRequirementNames.YIELD_CURVE_NODE_SENSITIVITIES;
 
 import java.util.Collections;
@@ -36,7 +40,11 @@ public class FxForwardAndNdfPerCurrencyPairDefaults extends DefaultPropertyFunct
       PRESENT_VALUE,
       FX_CURRENCY_EXPOSURE,
       BLOCK_CURVE_SENSITIVITIES,
-      YIELD_CURVE_NODE_SENSITIVITIES
+      YIELD_CURVE_NODE_SENSITIVITIES,
+      PAY_DISCOUNT_FACTOR,
+      PAY_ZERO_RATE,
+      RECEIVE_DISCOUNT_FACTOR,
+      RECEIVE_ZERO_RATE
   };
   private final UnorderedCurrencyPair _underlying;
   private final String _curveExposuresName;

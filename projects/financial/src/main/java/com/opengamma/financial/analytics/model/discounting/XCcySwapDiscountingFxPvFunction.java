@@ -1,10 +1,11 @@
 /**
- * Copyright (C) 2016 - present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
+ *
+ * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.model.discounting;
 
-import static com.opengamma.engine.value.ValuePropertyNames.CURRENCY;
-import static com.opengamma.engine.value.ValueRequirementNames.PRESENT_VALUE;
+import static com.opengamma.engine.value.ValueRequirementNames.FX_PRESENT_VALUE;
 
 import java.util.Collections;
 import java.util.Set;
@@ -29,30 +30,28 @@ import com.opengamma.engine.value.ValueRequirement;
 import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.financial.analytics.fixedincome.InterestRateInstrumentType;
-import com.opengamma.financial.security.fx.FXForwardSecurity;
-import com.opengamma.financial.security.fx.NonDeliverableFXForwardSecurity;
+import com.opengamma.financial.analytics.model.forex.FXUtils;
 import com.opengamma.financial.security.swap.SwapSecurity;
-import com.opengamma.util.money.Currency;
 import com.opengamma.util.money.MultipleCurrencyAmount;
 
 /**
- * Calculates the present value of FX forwards using curves constructed using the discounting method.
+ * Calculates the FX present value of cross currency swaps.
  */
-public class DiscountingPvFxForwardFunction extends DiscountingFunction {
+public class XCcySwapDiscountingFxPvFunction extends DiscountingFunction {
   /** The present value calculator. */
   static final InstrumentDerivativeVisitor<MulticurveProviderInterface, MultipleCurrencyAmount> CALCULATOR =
       PresentValueDiscountingCalculator.getInstance();
 
   /**
-   * Sets the value requirement to {@link ValueRequirementNames#PRESENT_VALUE}.
+   * Sets the value requirement to {@link ValueRequirementNames#FX_PRESENT_VALUE}.
    */
-  public DiscountingPvFxForwardFunction() {
-    super(PRESENT_VALUE);
+  public XCcySwapDiscountingFxPvFunction() {
+    super(FX_PRESENT_VALUE);
   }
 
   @Override
   public CompiledFunctionDefinition compile(final FunctionCompilationContext context, final Instant atInstant) {
-    return new DiscountingCompiledFunction(getTargetToDefinitionConverter(context), getDefinitionToDerivativeConverter(context), true) {
+    return new DiscountingCompiledFunction(getTargetToDefinitionConverter(context), getDefinitionToDerivativeConverter(context), false) {
 
       @Override
       public boolean canApplyTo(final FunctionCompilationContext compilationContext, final ComputationTarget target) {
@@ -61,9 +60,8 @@ public class DiscountingPvFxForwardFunction extends DiscountingFunction {
           if (InterestRateInstrumentType.isFixedIncomeInstrumentType((SwapSecurity) security)) {
             return InterestRateInstrumentType.getInstrumentTypeFromSecurity((SwapSecurity) security) == InterestRateInstrumentType.SWAP_CROSS_CURRENCY;
           }
-          return false;
         }
-        return security instanceof FXForwardSecurity || security instanceof NonDeliverableFXForwardSecurity;
+        return false;
       }
 
       @Override
@@ -71,14 +69,13 @@ public class DiscountingPvFxForwardFunction extends DiscountingFunction {
           final ComputationTarget target, final Set<ValueRequirement> desiredValues, final InstrumentDerivative derivative,
           final FXMatrix fxMatrix) {
         final MulticurveProviderInterface data = getMergedProviders(inputs, fxMatrix);
-        final MultipleCurrencyAmount mca = derivative.accept(CALCULATOR, data);
         final ValueRequirement desiredValue = Iterables.getOnlyElement(desiredValues);
         final ValueProperties properties = desiredValue.getConstraints().copy().get();
-        final Currency currency = Currency.of(Iterables.getOnlyElement(properties.getValues(CURRENCY)));
-        final ValueSpecification spec = new ValueSpecification(PRESENT_VALUE, target.toSpecification(), properties);
-        return Collections.singleton(new ComputedValue(spec, mca.getAmount(currency)));
+        final MultipleCurrencyAmount mca = derivative.accept(CALCULATOR, data);
+        final ValueSpecification fxPvSpec = new ValueSpecification(FX_PRESENT_VALUE, target.toSpecification(), properties);
+        return Collections.singleton(new ComputedValue(fxPvSpec, FXUtils.getMultipleCurrencyAmountAsMatrix(mca)));
       }
-
     };
   }
+
 }

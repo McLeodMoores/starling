@@ -1,7 +1,7 @@
 /**
  * Copyright (C) 2017 - present McLeod Moores Software Limited.  All rights reserved.
  */
-package com.opengamma.financial.analytics;
+package com.mcleodmoores.financial.function.trade;
 
 import static com.opengamma.engine.value.ValueRequirementNames.FIXED_RATE;
 

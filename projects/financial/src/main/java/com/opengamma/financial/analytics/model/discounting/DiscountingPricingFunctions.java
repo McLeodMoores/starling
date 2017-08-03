@@ -45,8 +45,9 @@ public class DiscountingPricingFunctions extends AbstractFunctionConfigurationBe
     functions.add(functionConfiguration(DiscountingSwapLegDetailFunction.class, "false"));
     functions.add(functionConfiguration(DiscountingSwapLegDetailFunction.class, "true"));
     functions.add(functionConfiguration(DiscountingYCNSFunction.class));
-    functions.add(functionConfiguration(DiscountingPvFxForwardFunction.class));
+    functions.add(functionConfiguration(FxForwardDiscountingPvFunction.class));
 
+    functions.add(functionConfiguration(XCcySwapDiscountingFxPvFunction.class));
     functions.add(functionConfiguration(DiscountingInterpolatedPVFunction.class));
     functions.add(functionConfiguration(DiscountingInterpolatedAllPV01Function.class));
     functions.add(functionConfiguration(DiscountingInterpolatedPV01Function.class));
@@ -94,7 +95,7 @@ public class DiscountingPricingFunctions extends AbstractFunctionConfigurationBe
             key.getSecondCurrency().getCode(),
             value.getCurveExposuresName()
         };
-      functions.add(functionConfiguration(FxForwardAndNdfPerCurrencyPairDefaults.class, args));
+        functions.add(functionConfiguration(FxForwardAndNdfPerCurrencyPairDefaults.class, args));
       }
     }
 
@@ -140,7 +141,7 @@ public class DiscountingPricingFunctions extends AbstractFunctionConfigurationBe
             key.getCode(),
             value.getCurveExposuresName()
         };
-      functions.add(functionConfiguration(LinearRatesPerCurrencyDefaults.class, args));
+        functions.add(functionConfiguration(LinearRatesPerCurrencyDefaults.class, args));
       }
     }
 

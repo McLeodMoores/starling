@@ -42,7 +42,8 @@ public class SumUtils {
     if (currentTotal.getClass() != value.getClass()) {
       if (!(currentTotal.getClass() == MultipleCurrencyAmount.class && value.getClass() == CurrencyAmount.class)
           && !(currentTotal.getClass() == CurrencyAmount.class && value.getClass() == MultipleCurrencyAmount.class)) {
-        throw new IllegalArgumentException("Inputs have different value types for requirement " + valueName + " currentTotal type = " + currentTotal.getClass() + " value type = " + value.getClass());
+        throw new IllegalArgumentException("Inputs have different value types for requirement " + valueName
+            + " currentTotal type = " + currentTotal.getClass() + " value type = " + value.getClass());
       }
     }
     if (value instanceof Double) {

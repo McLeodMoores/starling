@@ -7,6 +7,7 @@ package com.opengamma.financial.analytics;
 
 import java.util.List;
 
+import com.mcleodmoores.financial.function.trade.TradeFunctions;
 import com.opengamma.engine.function.config.AbstractFunctionConfigurationBean;
 import com.opengamma.engine.function.config.CombiningFunctionConfigurationSource;
 import com.opengamma.engine.function.config.FunctionConfiguration;
@@ -105,7 +106,6 @@ public class AnalyticsFunctions extends AbstractFunctionConfigurationBean {
     functions.add(functionConfiguration(PortfolioNodeWeightFunction.class));
     functions.add(functionConfiguration(PositionWeightFunction.class));
     functions.add(functionConfiguration(BucketedPV01Function.class));
-    functions.add(functionConfiguration(FixedRateFunction.class));
 
     //security attribute functions
     functions.add(functionConfiguration(DefaultSecurityAttributeFunction.class, SecurityAttribute.DIRECTION.name(), ValueRequirementNames.PAY_REC));
@@ -210,7 +210,10 @@ public class AnalyticsFunctions extends AbstractFunctionConfigurationBean {
     addUnitScalingFunction(functions, ValueRequirementNames.PAR_SPREAD);
     addUnitScalingFunction(functions, ValueRequirementNames.PAR_RATE_CURVE_SENSITIVITY);
     addUnitScalingFunction(functions, ValueRequirementNames.PAR_RATE_PARALLEL_CURVE_SHIFT);
+    addUnitScalingFunction(functions, ValueRequirementNames.PAY_AMOUNT);
+    addUnitScalingFunction(functions, ValueRequirementNames.PAY_DISCOUNT_FACTOR);
     addScalingAndSummingFunction(functions, ValueRequirementNames.PAY_LEG_PRESENT_VALUE);
+    addUnitScalingFunction(functions, ValueRequirementNames.PAY_ZERO_RATE);
     addUnitScalingFunction(functions, ValueRequirementNames.PIECEWISE_SABR_VOL_SURFACE);
     addScalingAndSummingFunction(functions, ValueRequirementNames.PNL);
     addSummingFunction(functions, ValueRequirementNames.PNL_SERIES);
@@ -232,7 +235,10 @@ public class AnalyticsFunctions extends AbstractFunctionConfigurationBean {
     addSummingFunction(functions, ValueRequirementNames.PRICE_SERIES);
     addScalingAndSummingFunction(functions, ValueRequirementNames.PV01);
     addUnitScalingFunction(functions, ValueRequirementNames.QUANTITY);
+    addUnitScalingFunction(functions, ValueRequirementNames.RECEIVE_AMOUNT);
+    addUnitScalingFunction(functions, ValueRequirementNames.RECEIVE_DISCOUNT_FACTOR);
     addScalingAndSummingFunction(functions, ValueRequirementNames.RECEIVE_LEG_PRESENT_VALUE);
+    addUnitScalingFunction(functions, ValueRequirementNames.RECEIVE_ZERO_RATE);
     addUnitScalingFunction(functions, ValueRequirementNames.RHO);
     addUnitScalingFunction(functions, ValueRequirementNames.SWAP_PAY_LEG_DETAILS);
     addUnitScalingFunction(functions, ValueRequirementNames.SWAP_RECEIVE_LEG_DETAILS);
@@ -319,6 +325,7 @@ public class AnalyticsFunctions extends AbstractFunctionConfigurationBean {
     addUnitScalingAndSummingFunction(functions, ValueRequirementNames.BUCKETED_PV01);
 
     functions.add(functionConfiguration(MarketQuotePositionFunction.class));
+
   }
 
   protected FunctionConfigurationSource cashFlowFunctionConfiguration() {
@@ -355,8 +362,16 @@ public class AnalyticsFunctions extends AbstractFunctionConfigurationBean {
 
   @Override
   protected FunctionConfigurationSource createObject() {
-    return CombiningFunctionConfigurationSource.of(super.createObject(), cashFlowFunctionConfiguration(), covarianceFunctionConfiguration(), irCurveFunctionConfiguration(),
-        fxForwardCurveFunctionConfiguration(), modelFunctionConfiguration(), securityFunctionConfiguration(), timeSeriesFunctionConfiguration(), volatilityFunctionConfiguration());
+    return CombiningFunctionConfigurationSource.of(super.createObject(),
+        cashFlowFunctionConfiguration(),
+        covarianceFunctionConfiguration(),
+        irCurveFunctionConfiguration(),
+        fxForwardCurveFunctionConfiguration(),
+        modelFunctionConfiguration(),
+        securityFunctionConfiguration(),
+        timeSeriesFunctionConfiguration(),
+        volatilityFunctionConfiguration(),
+        TradeFunctions.instance());
   }
 
 }

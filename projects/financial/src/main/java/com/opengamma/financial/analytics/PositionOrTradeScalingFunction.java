@@ -43,6 +43,7 @@ public class PositionOrTradeScalingFunction extends AbstractFunction.NonCompiled
 
   public PositionOrTradeScalingFunction(final String requirementName) {
     Validate.notNull(requirementName, "Requirement name");
+    System.err.println(requirementName);
     _requirementName = requirementName;
   }
 
@@ -75,8 +76,8 @@ public class PositionOrTradeScalingFunction extends AbstractFunction.NonCompiled
   @Override
   public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
     final Security security = target.getPositionOrTrade().getSecurity();
-    final ValueRequirement requirement = new ValueRequirement(_requirementName, ComputationTargetType.SECURITY, security.getUniqueId(), desiredValue.getConstraints().withoutAny(
-        ValuePropertyNames.FUNCTION));
+    final ValueRequirement requirement = new ValueRequirement(_requirementName, ComputationTargetType.SECURITY, security.getUniqueId(),
+        desiredValue.getConstraints().withoutAny(ValuePropertyNames.FUNCTION));
     return Collections.singleton(requirement);
   }
 
@@ -85,14 +86,16 @@ public class PositionOrTradeScalingFunction extends AbstractFunction.NonCompiled
   }
 
   @Override
-  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
+  public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target,
+      final Map<ValueSpecification, ValueRequirement> inputs) {
     final ValueSpecification input = inputs.keySet().iterator().next();
     final ValueSpecification specification = new ValueSpecification(_requirementName, target.toSpecification(), getResultProperties(input));
     return Collections.singleton(specification);
   }
 
   @Override
-  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
+  public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+      final Set<ValueRequirement> desiredValues) {
     final ComputedValue input = inputs.getAllValues().iterator().next();
     final Object value = input.getValue();
     final ValueSpecification specification = new ValueSpecification(_requirementName, target.toSpecification(), getResultProperties(input.getSpecification()));
@@ -111,7 +114,8 @@ public class PositionOrTradeScalingFunction extends AbstractFunction.NonCompiled
       final String name = nodeSensitivities.getYieldCurveName();
       final DoubleLabelledMatrix1D m = nodeSensitivities.getLabelledMatrix();
       final double[] scaled = getScaledMatrix(m.getValues(), quantity);
-      scaledValue = new ComputedValue(specification, new YieldCurveNodeSensitivityDataBundle(ccy, new DoubleLabelledMatrix1D(m.getKeys(), m.getLabels(), scaled), name));
+      scaledValue = new ComputedValue(specification,
+          new YieldCurveNodeSensitivityDataBundle(ccy, new DoubleLabelledMatrix1D(m.getKeys(), m.getLabels(), scaled), name));
     } else if (value instanceof DoubleLabelledMatrix1D) {
       final DoubleLabelledMatrix1D m = (DoubleLabelledMatrix1D) value;
       final double[] scaled = getScaledMatrix(m.getValues(), quantity);
