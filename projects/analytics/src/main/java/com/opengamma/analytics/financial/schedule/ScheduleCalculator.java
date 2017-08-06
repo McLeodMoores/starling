@@ -553,6 +553,41 @@ public final class ScheduleCalculator {
     return dates.toArray(EMPTY_ARRAY);
   }
 
+  public static ZonedDateTime[] getUnadjustedDateSchedule(final ZonedDateTime startDate, final ZonedDateTime endDate, final Tenor tenor, final boolean stubShort,
+      final boolean fromEnd) {
+    ArgumentChecker.notNull(startDate, "Start date");
+    ArgumentChecker.notNull(endDate, "End date");
+    ArgumentChecker.notNull(tenor, "tenor");
+    ArgumentChecker.isTrue(startDate.isBefore(endDate), "Start date {} should be strictly before end date {}", startDate, endDate);
+    final List<ZonedDateTime> dates = new ArrayList<>();
+    int nbPeriod = 0;
+    if (!fromEnd) { // Add the periods from the start date
+      ZonedDateTime date = TenorUtils.adjustDateByTenor(startDate, tenor);
+      while (date.isBefore(endDate)) { // date is strictly before endDate
+        dates.add(date);
+        nbPeriod++;
+        date = TenorUtils.addTenors(startDate, tenor, nbPeriod + 1);
+      }
+      if (!stubShort && !date.equals(endDate) && nbPeriod >= 1) { // For long stub the last date before end date, if any, is removed.
+        dates.remove(nbPeriod - 1);
+      }
+      dates.add(endDate);
+      return dates.toArray(EMPTY_ARRAY);
+    }
+    // From end - Subtract the periods from the end date
+    ZonedDateTime date = endDate;
+    while (date.isAfter(startDate)) { // date is strictly after startDate
+      dates.add(date);
+      nbPeriod++;
+      date = TenorUtils.addTenors(endDate, tenor, -nbPeriod);
+    }
+    if (!stubShort && !date.equals(startDate) && nbPeriod > 1) { // For long stub the last date before end date, if any, is removed.
+      dates.remove(nbPeriod - 1);
+    }
+    Collections.sort(dates); // To obtain the dates in chronological order.
+    return dates.toArray(EMPTY_ARRAY);
+  }
+
   /**
    * Adjust an array of date with a given convention and EOM flag.
    * @param dates The array of unadjusted dates.
@@ -717,7 +752,7 @@ public final class ScheduleCalculator {
     return getAdjustedDateSchedule(unadjustedDateSchedule, convention, calendar, eomApply);
   }
 
-  public static ZonedDateTime[] getAdjustedDateSchedule(final ZonedDateTime startDate, final Tenor tenorTotal, final Period tenorPeriod, final boolean stubShort,
+  public static ZonedDateTime[] getAdjustedDateSchedule(final ZonedDateTime startDate, final Tenor tenorTotal, final Tenor tenorPeriod, final boolean stubShort,
       final boolean fromEnd, final BusinessDayConvention convention, final WorkingDayCalendar calendar, final boolean eomRule) {
     final ZonedDateTime endDate = TenorUtils.adjustDateByTenor(startDate, tenorTotal); //TODO check for business days
     final ZonedDateTime[] unadjustedDateSchedule = getUnadjustedDateSchedule(startDate, endDate, tenorPeriod, stubShort, fromEnd);

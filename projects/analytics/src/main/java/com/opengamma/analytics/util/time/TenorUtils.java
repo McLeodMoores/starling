@@ -246,6 +246,13 @@ public class TenorUtils {
     if (tenor1.equals(Tenor.ON) && tenor1.equals(Tenor.ON)) { // Both tenors are ON
       return Tenor.TN;
     }
-    throw new IllegalArgumentException("Can not add " + tenor1 + " and " + tenor2);
+    throw new IllegalArgumentException("Cannot add " + tenor1 + " and " + tenor2);
+  }
+
+  public static ZonedDateTime addTenors(final ZonedDateTime date, final Tenor tenor, final int n) {
+    if (!tenor.isBusinessDayTenor()) {
+      return date.plus(tenor.getPeriod().multipliedBy(n));
+    }
+    throw new IllegalArgumentException("Cannot add " + n + " " + tenor + " tenors to a date");
   }
 }

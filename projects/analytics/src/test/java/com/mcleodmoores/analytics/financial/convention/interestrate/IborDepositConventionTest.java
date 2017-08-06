@@ -74,6 +74,22 @@ public class IborDepositConventionTest {
   }
 
   /**
+   * Tests that the start tenor cannot be null.
+   */
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void testNullStartTenor() {
+    CONVENTION.toCurveInstrument(ZonedDateTime.now(), null, Tenor.ONE_MONTH, 1, 0.02);
+  }
+
+  /**
+   * Tests that the end tenor cannot be null.
+   */
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void testNullEndTenor() {
+    CONVENTION.toCurveInstrument(ZonedDateTime.now(), Tenor.ON, null, 1, 0.02);
+  }
+
+  /**
    * Tests the object.
    */
   @Test

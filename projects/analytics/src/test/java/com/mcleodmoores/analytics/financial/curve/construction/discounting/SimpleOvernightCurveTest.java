@@ -21,7 +21,8 @@ import com.mcleodmoores.analytics.financial.curve.interestrate.DiscountingMethod
 import com.mcleodmoores.date.WeekendWorkingDayCalendar;
 import com.opengamma.analytics.financial.forex.method.FXMatrix;
 import com.opengamma.analytics.financial.instrument.index.Index;
-import com.opengamma.analytics.financial.instrument.index.IndexON;
+import com.opengamma.analytics.financial.instrument.index.IndexConverter;
+import com.opengamma.analytics.financial.instrument.index.OvernightIndex;
 import com.opengamma.analytics.financial.provider.curve.CurveBuildingBlockBundle;
 import com.opengamma.analytics.financial.provider.description.interestrate.MulticurveProviderDiscount;
 import com.opengamma.analytics.math.interpolation.Interpolator1D;
@@ -59,7 +60,7 @@ public class SimpleOvernightCurveTest {
       .withCalendar(WeekendWorkingDayCalendar.SATURDAY_SUNDAY)
       .withDayCount(DayCounts.ACT_360)
       .build();
-  private static final IndexON INDEX = new IndexON("FED FUNDS", Currency.USD, DayCounts.ACT_360, 1);
+  private static final OvernightIndex INDEX = new OvernightIndex("FED FUNDS", Currency.USD, DayCounts.ACT_360, 1);
   private static final VanillaOisConvention OIS = VanillaOisConvention.builder()
       .withUnderlyingIndex(INDEX)
       .withPaymentPeriod(Tenor.ONE_YEAR)
@@ -82,7 +83,7 @@ public class SimpleOvernightCurveTest {
   private static final MulticurveProviderDiscount KNOWN_DATA = new MulticurveProviderDiscount(new FXMatrix());
   private static final DiscountingMethodCurveSetUp CURVE_BUILDER = DiscountingMethodCurveBuilder.setUp()
       .building(CURVE_NAME)
-      .using(CURVE_NAME).forDiscounting(Currency.USD).forOvernightIndex(INDEX).withInterpolator(INTERPOLATOR)
+      .using(CURVE_NAME).forDiscounting(Currency.USD).forOvernightIndex(IndexConverter.toIndexOn(INDEX)).withInterpolator(INTERPOLATOR)
       .withKnownData(KNOWN_DATA)
       .withFixingTs(FIXINGS);
 

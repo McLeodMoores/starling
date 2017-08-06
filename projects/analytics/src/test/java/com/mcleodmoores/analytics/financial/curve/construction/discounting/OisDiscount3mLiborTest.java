@@ -24,7 +24,7 @@ import com.opengamma.analytics.financial.forex.method.FXMatrix;
 import com.opengamma.analytics.financial.instrument.index.IborTypeIndex;
 import com.opengamma.analytics.financial.instrument.index.Index;
 import com.opengamma.analytics.financial.instrument.index.IndexConverter;
-import com.opengamma.analytics.financial.instrument.index.IndexON;
+import com.opengamma.analytics.financial.instrument.index.OvernightIndex;
 import com.opengamma.analytics.financial.provider.curve.CurveBuildingBlockBundle;
 import com.opengamma.analytics.financial.provider.description.interestrate.MulticurveProviderDiscount;
 import com.opengamma.analytics.math.interpolation.Interpolator1D;
@@ -66,8 +66,7 @@ public class OisDiscount3mLiborTest {
       0.015, 0.0187, 0.02, 0.0234, 0.0261, 0.0291,
       0.0314, 0.0367, 0.04, 0.042, 0.044, 0.048,
       0.05, 0.05};
-  //TODO switch to OvernightIndex
-  private static final IndexON FED_FUNDS_INDEX = new IndexON("FED FUNDS", Currency.USD, DayCounts.ACT_360, 1);
+  private static final OvernightIndex FED_FUNDS_INDEX = new OvernightIndex("FED FUNDS", Currency.USD, DayCounts.ACT_360, 1);
   private static final IborTypeIndex LIBOR_INDEX = new IborTypeIndex("3M USD LIBOR", Currency.USD, Tenor.THREE_MONTHS, 2, DayCounts.ACT_360,
       BusinessDayConventions.MODIFIED_FOLLOWING, true);
   private static final OvernightDepositConvention DEPOSIT = OvernightDepositConvention.builder()
@@ -112,7 +111,7 @@ public class OisDiscount3mLiborTest {
 
   private static final MulticurveProviderDiscount KNOWN_DATA = new MulticurveProviderDiscount(new FXMatrix());
   private static final DiscountingMethodCurveSetUp CURVE_BUILDER = DiscountingMethodCurveBuilder.setUp()
-      .building(OIS_CURVE_NAME).using(OIS_CURVE_NAME).forDiscounting(Currency.USD).forOvernightIndex(FED_FUNDS_INDEX).withInterpolator(INTERPOLATOR)
+      .building(OIS_CURVE_NAME).using(OIS_CURVE_NAME).forDiscounting(Currency.USD).forOvernightIndex(IndexConverter.toIndexOn(FED_FUNDS_INDEX)).withInterpolator(INTERPOLATOR)
       .thenBuilding(LIBOR_CURVE_NAME).using(LIBOR_CURVE_NAME).forIborIndex(IndexConverter.toIborIndex(LIBOR_INDEX)).withInterpolator(INTERPOLATOR)
       .withKnownData(KNOWN_DATA)
       .withFixingTs(FIXINGS);

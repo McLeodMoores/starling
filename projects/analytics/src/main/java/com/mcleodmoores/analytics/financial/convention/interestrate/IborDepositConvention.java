@@ -104,6 +104,8 @@ public class IborDepositConvention implements CurveDataConvention<DepositIborDef
   public DepositIborDefinition toCurveInstrument(final ZonedDateTime date, final Tenor startTenor, final Tenor endTenor, final double notional,
       final double fixedRate) {
     ArgumentChecker.notNull(date, "date");
+    ArgumentChecker.notNull(startTenor, "startTenor");
+    ArgumentChecker.notNull(endTenor, "endTenor");
     final Currency currency = _index.getCurrency();
     final int spotLag = _index.getSpotLag();
     final DayCount dayCount = _index.getDayCount();
