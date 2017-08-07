@@ -85,12 +85,18 @@ Wait for the server to start:
 ![Server startup](https://github.com/McLeodMoores/starling/blob/mcleodmoores/examples/examples-simulated/docs/images/example-server-startup.png)
 
 and then point your browser at
-`http://localhost:8080` to see the web user interface.  
-Go to `http://localhost:8080/jax/components` to get a sense of
-the underlying power of the system, available via REST. Clicking
-on "Analytics" opens a UI that shows calculation results:
+`http://localhost:8080` to see the web user interface:
 
-**TODO** screenshot.
+![UI landing page](https://github.com/McLeodMoores/starling/blob/mcleodmoores/examples/examples-simulated/docs/images/example-server-web-ui.png)
+
+Go to `http://localhost:8080/jax/components` to get a sense of
+the underlying power of the system, available via REST. Some of the components that are available can be seen below:
+
+![Rest](https://github.com/McLeodMoores/starling/blob/mcleodmoores/examples/examples-simulated/docs/images/example-server-rest-interface.png)
+
+Clicking on "Analytics" opens a UI that shows calculation results when a view is selected:
+
+![Analytics results](https://github.com/McLeodMoores/starling/blob/mcleodmoores/examples/examples-simulated/docs/images/example-server-analytics-ui.png)
 
 An explanation of what the views calculation can be found 
 [here](https://github.com/McLeodMoores/starling/blob/mcleodmoores/examples/examples-simulated/README.md)
