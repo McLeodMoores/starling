@@ -43,7 +43,6 @@ public class PositionOrTradeScalingFunction extends AbstractFunction.NonCompiled
 
   public PositionOrTradeScalingFunction(final String requirementName) {
     Validate.notNull(requirementName, "Requirement name");
-    System.err.println(requirementName);
     _requirementName = requirementName;
   }
 
