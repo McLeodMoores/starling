@@ -37,6 +37,7 @@ import com.mcleodmoores.examples.simulated.loader.securities.SimulatedIndexSecur
 import com.mcleodmoores.examples.simulated.loader.securities.SimulatedSecuritiesGenerator;
 import com.opengamma.OpenGammaRuntimeException;
 import com.opengamma.component.tool.AbstractTool;
+import com.opengamma.core.id.ExternalSchemes;
 import com.opengamma.examples.simulated.generator.SyntheticPortfolioGeneratorTool;
 import com.opengamma.examples.simulated.loader.ExampleCurrencyConfigurationLoader;
 import com.opengamma.examples.simulated.loader.ExampleEquityPortfolioLoader;
@@ -44,6 +45,7 @@ import com.opengamma.examples.simulated.loader.ExampleExchangeLoader;
 import com.opengamma.examples.simulated.loader.ExampleTimeSeriesRatingLoader;
 import com.opengamma.financial.generator.AbstractPortfolioGeneratorTool;
 import com.opengamma.financial.generator.StaticNameGenerator;
+import com.opengamma.financial.generator.SwapPortfolioGeneratorTool;
 import com.opengamma.financial.tool.ToolContext;
 import com.opengamma.integration.tool.portfolio.PortfolioLoader;
 import com.opengamma.master.convention.ConventionMaster;
@@ -364,9 +366,10 @@ public class ExamplesDatabasePopulator extends AbstractTool<ToolContext> {
   }
 
   private void loadMultiCurrencySwapPortfolio() {
-    final Log log = new Log("Creating example multi currency swap portfolio");
+    final Log log = new Log("Creating example multi-currency swap portfolio");
     try {
-      portfolioGeneratorTool().run(getToolContext(), MULTI_CURRENCY_SWAP_PORTFOLIO_NAME, "Swap", true, null);
+      portfolioGeneratorTool().run(getToolContext(), MULTI_CURRENCY_SWAP_PORTFOLIO_NAME,
+          new SwapPortfolioGeneratorTool(true, ExternalSchemes.OG_SYNTHETIC_TICKER), true, null);
       log.done();
     } catch (final RuntimeException t) {
       log.fail(t);

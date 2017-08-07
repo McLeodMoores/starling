@@ -32,6 +32,7 @@ import com.opengamma.analytics.math.interpolation.factory.FlatExtrapolator1dAdap
 import com.opengamma.analytics.math.interpolation.factory.LinearExtrapolator1dAdapter;
 import com.opengamma.analytics.math.interpolation.factory.MonotonicConstrainedCubicSplineInterpolator1dAdapter;
 import com.opengamma.analytics.math.interpolation.factory.NamedInterpolator1dFactory;
+import com.opengamma.financial.convention.StubType;
 import com.opengamma.financial.convention.businessday.BusinessDayConventions;
 import com.opengamma.financial.convention.daycount.DayCounts;
 import com.opengamma.timeseries.precise.zdt.ImmutableZonedDateTimeDoubleTimeSeries;
@@ -81,6 +82,8 @@ public class OisDiscount3mLiborTest {
       .withEndOfMonth(EndOfMonthConvention.ADJUST_FOR_END_OF_MONTH)
       .withPaymentLag(2)
       .withSpotLag(2)
+      .withStubType(StubType.SHORT_START)
+      .withEndOfMonth(EndOfMonthConvention.IGNORE_END_OF_MONTH)
       .withCalendar(WeekendWorkingDayCalendar.SATURDAY_SUNDAY)
       .build();
   private static final IborDepositConvention LIBOR_DEPOSIT = IborDepositConvention.builder()
@@ -102,7 +105,7 @@ public class OisDiscount3mLiborTest {
   private static final Map<Index, ZonedDateTimeDoubleTimeSeries> FIXINGS = new HashMap<>();
 
   static {
-    FIXINGS.put(FED_FUNDS_INDEX, OVERNIGHT_FIXINGS);
+    FIXINGS.put(IndexConverter.toIndexOn(FED_FUNDS_INDEX), OVERNIGHT_FIXINGS);
     FIXINGS.put(IndexConverter.toIborIndex(LIBOR_INDEX), LIBOR_3M_FIXINGS);
   }
 

@@ -79,6 +79,7 @@ public class SwapSecurityGenerator extends SecurityGenerator<SwapSecurity> {
 
   private int _daysTrading = 60;
   private LocalDate _swaptionExpiry;
+  private boolean _useLastAvailableSwapRate = false;
 
   public void setDaysTrading(final int daysTrading) {
     _daysTrading = daysTrading;
@@ -94,6 +95,10 @@ public class SwapSecurityGenerator extends SecurityGenerator<SwapSecurity> {
 
   public LocalDate getSwaptionExpiry() {
     return _swaptionExpiry;
+  }
+
+  public void useLastAvailableSwapRate(final boolean useLastAvailableSwapRate) {
+    _useLastAvailableSwapRate = useLastAvailableSwapRate;
   }
 
   /**
@@ -212,7 +217,7 @@ public class SwapSecurityGenerator extends SecurityGenerator<SwapSecurity> {
         tsIdentifier = getTimeSeriesIdentifier(liborConvention);
       }
       if (tsIdentifier == null) {
-        LOGGER.error("Could not get time series identifier for {}", liborConvention);
+        LOGGER.error("Could not get time series identifier for {}", tsIdentifier);
         return null;
       }
       if (fixedLegDayCount == null) {
@@ -235,10 +240,15 @@ public class SwapSecurityGenerator extends SecurityGenerator<SwapSecurity> {
         return null;
       }
     }
-    // look up the value on our chosen trade date
-    final HistoricalTimeSeries rateSeries =
-        getHistoricalSource().getHistoricalTimeSeries(MarketDataRequirementNames.MARKET_VALUE, tsIdentifier.toBundle(), null, tradeDate,
-        true, tradeDate, true);
+    // look up the value on our chosen trade date or use the last available data, dep
+    final HistoricalTimeSeries rateSeries;
+    if (_useLastAvailableSwapRate) {
+      rateSeries = getHistoricalSource().getHistoricalTimeSeries(MarketDataRequirementNames.MARKET_VALUE, tsIdentifier.toBundle(), null, null,
+      true, tradeDate, true);
+    } else {
+      rateSeries = getHistoricalSource().getHistoricalTimeSeries(MarketDataRequirementNames.MARKET_VALUE, tsIdentifier.toBundle(), null, tradeDate,
+      true, tradeDate, true);
+    }
     if (rateSeries == null || rateSeries.getTimeSeries().isEmpty()) {
       LOGGER.error("couldn't get series for {} on {}", tsIdentifier, tradeDate);
       return null;

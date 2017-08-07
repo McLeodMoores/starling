@@ -52,7 +52,6 @@ public class VanillaOisConvention implements CurveDataConvention<SwapFixedONDefi
 
   public static class Builder {
     private BusinessDayConvention _businessDayConvention;
-    private EndOfMonthConvention _endOfMonth;
     private WorkingDayCalendar _swapLegCalendar;
     private Tenor _swapLegPaymentTenor;
     private StubType _stubType;
@@ -70,8 +69,8 @@ public class VanillaOisConvention implements CurveDataConvention<SwapFixedONDefi
       return this;
     }
 
-    public Builder withEndOfMonth(final EndOfMonthConvention endOfMonth) {
-      _endOfMonth = endOfMonth;
+    public Builder withEndOfMonth(final EndOfMonthConvention endOfMonthConvention) {
+      _endOfMonthConvention = endOfMonthConvention;
       return this;
     }
 
