@@ -13,6 +13,9 @@ Example Views
 
 ## Introduction <a name="introduction"></a>
 ## Equities <a name="equity-example"></a>
+
+[Equity Portfolio View](https://github.com/McLeodMoores/starling/blob/mcleodmoores/examples/examples-simulated/docs/images/equity-portfolio-view.png)
+
 The "Equity Portfolio View" references a long/short equity portfolio consisting of stocks in the S&P 500 index. It shows some simple portfolio analytic values, the live daily P&L and VaR.
 
 ### FairValue
