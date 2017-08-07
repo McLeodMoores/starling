@@ -19,7 +19,8 @@ Example Views
 
 This view references a long-only equity portfolio consisting of stocks in the S&P 500 index. It shows some simple portfolio analytic values, the live daily P&L and VaR.
 
-The trades are originally arranged into sub-portfolios by sector. If a different aggregation method is used (e.g. currency, which in this case will put all trades into a single sub-portfolio), 
+The trades are originally arranged into sub-portfolios by sector. 
+
 #### FairValue
 This is the (live) price of one share multiplied by the number of shares held in the portfolio
 
