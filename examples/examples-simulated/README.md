@@ -13,7 +13,33 @@ Example Views
 
 ## Introduction <a name="introduction"></a>
 ## Equities <a name="equity-example"></a>
+
+### Equity Portfolio View
+![Equity Portfolio View](https://github.com/McLeodMoores/starling/blob/mcleodmoores/examples/examples-simulated/docs/images/equity-portfolio-view.png)
+
+This view references a long-only equity portfolio consisting of stocks in the S&P 500 index. It shows some simple portfolio analytic values, the live daily P&L and VaR.
+
+The trades are originally arranged into sub-portfolios by sector. If a different aggregation method is used (e.g. currency, which in this case will put all trades into a single sub-portfolio), 
+#### FairValue
+This is the (live) price of one share multiplied by the number of shares held in the portfolio
+
+#### CAPM Beta
+This is the ratio of the covariance of the trade / sub-portfolio returns and SPX returns (the underlying index) and the variance of SPX returns.
+
+#### Sharpe Ratio
+This measures the excess return (return of the trade / sub-portfolio minus the return of the index) with respect to SPX per unit of risk (i.e. the standard deviation of returns) for the trade / sub-portfolio.
+
+#### PnL
+This shows the live daily P&L - the difference between the last close price and current price multiplied by the number of shares. This is an additive quantity and so portfolio-level P&L is simply the sum of the P&l of its positions.
+
+#### HistoricalVaR
+This is one-day horizon VaR, assuming an underlying normal distribution of returns, at 99% confidence level. Two years of daily returns are used. 
+
 ## ETFs <a name="etf-example"></a>
+
+### Futures View
+![Futures View](https://github.com/McLeodMoores/starling/blob/mcleodmoores/examples/examples-simulated/docs/images/futures-view.png)
+
 ## Swaps <a name="swap-example"></a>
   ### Swap Portfolio View
   ### Swap Pricing Details View

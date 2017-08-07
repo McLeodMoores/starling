@@ -80,16 +80,26 @@ and run the following commands:
 Note that the "server-init" command only needs to be run once - the server can
 be stopped and restarted without having to repopulate the databases.
 
-Wait for the components to load and then point your browser at
-`http://localhost:8080` to see the web user interface.  
+Wait for the server to start:
+
+![Server startup](https://github.com/McLeodMoores/starling/blob/mcleodmoores/examples/examples-simulated/docs/images/example-server-startup.png)
+
+and then point your browser at
+`http://localhost:8080` to see the web user interface:
+
+![UI landing page](https://github.com/McLeodMoores/starling/blob/mcleodmoores/examples/examples-simulated/docs/images/example-server-web-ui.png)
+
 Go to `http://localhost:8080/jax/components` to get a sense of
-the underlying power of the system, available via REST. Clicking
-on "Analytics" opens a UI that shows calculation results:
+the underlying power of the system, available via REST. Some of the components that are available can be seen below:
 
-**TODO** screenshot.
+![Rest](https://github.com/McLeodMoores/starling/blob/mcleodmoores/examples/examples-simulated/docs/images/example-server-rest-interface.png)
 
-An explanation of what the views calculation can be found 
-[here](https://github.com/McLeodMoores/starling/blob/mcleodmoores/examples/examples-simulated/README.md)
+Clicking on "Analytics" opens a UI that shows calculation results when a view is selected:
+
+![Analytics results](https://github.com/McLeodMoores/starling/blob/mcleodmoores/examples/examples-simulated/docs/images/example-server-analytics-ui.png)
+
+An explanation of what the example views calculate can be found 
+[here](https://github.com/McLeodMoores/starling/blob/mcleodmoores/examples/examples-simulated/README.md).
 
 ___
 
