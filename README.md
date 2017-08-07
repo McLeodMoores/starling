@@ -99,7 +99,7 @@ Clicking on "Analytics" opens a UI that shows calculation results when a view is
 ![Analytics results](https://github.com/McLeodMoores/starling/blob/mcleodmoores/examples/examples-simulated/docs/images/example-server-analytics-ui.png)
 
 An explanation of what the example views calculate can be found 
-[here](https://github.com/McLeodMoores/starling/blob/mcleodmoores/examples/examples-simulated/README.md)
+[here](https://github.com/McLeodMoores/starling/blob/mcleodmoores/examples/examples-simulated/README.md).
 
 ___
 
