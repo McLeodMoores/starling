@@ -82,7 +82,7 @@ be stopped and restarted without having to repopulate the databases.
 
 Wait for the server to start:
 
-(https://github.com/McLeodMoores/starling/blob/mcleodmoores/examples/examples-simulated/docs/images/example-server-startup.png)
+![Server startup](https://github.com/McLeodMoores/starling/blob/mcleodmoores/examples/examples-simulated/docs/images/example-server-startup.png)
 
 and then point your browser at
 `http://localhost:8080` to see the web user interface.  
