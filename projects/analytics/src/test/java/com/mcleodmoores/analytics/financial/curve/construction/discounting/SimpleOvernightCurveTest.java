@@ -30,6 +30,7 @@ import com.opengamma.analytics.math.interpolation.factory.FlatExtrapolator1dAdap
 import com.opengamma.analytics.math.interpolation.factory.LinearExtrapolator1dAdapter;
 import com.opengamma.analytics.math.interpolation.factory.MonotonicConstrainedCubicSplineInterpolator1dAdapter;
 import com.opengamma.analytics.math.interpolation.factory.NamedInterpolator1dFactory;
+import com.opengamma.financial.convention.StubType;
 import com.opengamma.financial.convention.businessday.BusinessDayConventions;
 import com.opengamma.financial.convention.daycount.DayCounts;
 import com.opengamma.timeseries.precise.zdt.ImmutableZonedDateTimeDoubleTimeSeries;
@@ -69,13 +70,14 @@ public class SimpleOvernightCurveTest {
       .withPaymentLag(2)
       .withSpotLag(2)
       .withCalendar(WeekendWorkingDayCalendar.SATURDAY_SUNDAY)
+      .withStubType(StubType.SHORT_START)
       .build();
   private static final ZonedDateTimeDoubleTimeSeries TS_ON_USD_WITH_TODAY = ImmutableZonedDateTimeDoubleTimeSeries.ofUTC(
       new ZonedDateTime[] {VALUATION_DATE.minusDays(1), VALUATION_DATE}, new double[] {OVERNIGHT_QUOTE, OVERNIGHT_QUOTE});
   private static final Map<Index, ZonedDateTimeDoubleTimeSeries> FIXINGS = new HashMap<>();
 
   static {
-    FIXINGS.put(INDEX, TS_ON_USD_WITH_TODAY);
+    FIXINGS.put(IndexConverter.toIndexOn(INDEX), TS_ON_USD_WITH_TODAY);
   }
 
   private static final String CURVE_NAME = "USD OIS";
