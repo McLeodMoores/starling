@@ -80,7 +80,11 @@ and run the following commands:
 Note that the "server-init" command only needs to be run once - the server can
 be stopped and restarted without having to repopulate the databases.
 
-Wait for the components to load and then point your browser at
+Wait for the server to start:
+
+![Server startup](https://github.com/McLeodMoores/starling/blob/mcleodmoores/examples/examples-simulated/docs/images/example-server-startup.png)
+
+and then point your browser at
 `http://localhost:8080` to see the web user interface.  
 Go to `http://localhost:8080/jax/components` to get a sense of
 the underlying power of the system, available via REST. Clicking
