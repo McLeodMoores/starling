@@ -72,21 +72,54 @@ After saving this view definition, we go back to the analyics viewer and see tha
 
 This view shows analytics for a small equity futures portfolio, calculated with a mark-to-market method (i.e. using market quotes directly, rather than implying a forward curve).
 
-### Present Value
+#### Present Value
 The mark-to-market price of the position: market quote minus the previous close (i.e. the margined amount) multiplied by number of contracts.
 
-### Delta
+#### Delta
 The change in value of the position for a change in value of the underlying - for mark-to-market pricing, this is the unit amount multiplied by the number of contracts multiplied by the future price.
 
-### Forward
+#### Forward
 The forward rate implied by the future - for mark-to-market pricing, this is just the future market quote.
 
 ## Swaps <a name="swap-example"></a>
   ### Swap Portfolio View
   ### Swap Pricing Details View
   ### AUD Swaps View
+
 ## Swaptions
+
 ## FX Forwards <a name="fx-forwards-example"></a>
+Both FX forward examples reference a portfolio containing AUD, EUR, CHF and GBP vs USD forwards. All prices are calculated using a discounting method, where each pay / receive leg is discounted with a currency-specific curve.
+
+The USD discounting curve is a simple curve constructed from cash deposits. The discounting curves for the other currencies are constructed using FX forward quotes, which are used with the USD curve to imply the interest rate. The interpolation in all cases is a monotonic constrained cubic spline with linear extrapolation at both ends. The instruments used to construct the curves are shown in the table below.
+
+| Tenor | AUD        | CHF        | EUR        | GBP        | USD     |
+|-------|------------|------------|------------|------------|---------|
+|  1W   | FX Forward | FX Forward | FX Forward | FX Forward | Deposit |
+|  2W   | FX Forward | FX Forward | FX Forward | FX Forward | Deposit |
+|  3W   | FX Forward | FX Forward | FX Forward | FX Forward | Deposit |
+|  1M   | FX Forward | FX Forward | FX Forward | FX Forward | Deposit |
+|  2M   |            |            |            |            |         |
+|  3M   | FX Forward | FX Forward | FX Forward | FX Forward | Deposit |
+|  4M   |            |            |            |            | Deposit |
+|  5M   |            |            |            |            | Deposit |
+|  6M   | FX Forward | FX Forward | FX Forward | FX Forward | Deposit |
+|  9M   | FX Forward | FX Forward | FX Forward | FX Forward | Deposit |
+|  1Y   | FX Forward | FX Forward | FX Forward | FX Forward | Deposit |
+|  2Y   | FX Forward | FX Forward | FX Forward | FX Forward | Deposit |
+|  3Y   | FX Forward | FX Forward | FX Forward | FX Forward | Deposit |
+|  4Y   | FX Forward | FX Forward | FX Forward | FX Forward | Deposit |
+|  5Y   | FX Forward | FX Forward | FX Forward | FX Forward | Deposit |
+|  6Y   | FX Forward | FX Forward | FX Forward | FX Forward |         |
+|  7Y   | FX Forward | FX Forward | FX Forward | FX Forward |         |
+|  8Y   | FX Forward | FX Forward | FX Forward | FX Forward |         |
+|  9Y   | FX Forward | FX Forward | FX Forward | FX Forward |         |
+| 10Y   | FX Forward | FX Forward | FX Forward | FX Forward |         |
+
+
+### FX Forward View
+
+### FX Forward Details View
 ## FX Options <a name="fx-options-example"></a>
 ## Bonds
   ### US Treasuries View
