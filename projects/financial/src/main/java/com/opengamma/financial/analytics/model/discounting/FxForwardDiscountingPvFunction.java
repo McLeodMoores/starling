@@ -68,7 +68,8 @@ public class FxForwardDiscountingPvFunction extends DiscountingFunction {
         final ValueProperties properties = desiredValue.getConstraints().copy().get();
         final Currency currency = Currency.of(Iterables.getOnlyElement(properties.getValues(CURRENCY)));
         final ValueSpecification spec = new ValueSpecification(PRESENT_VALUE, target.toSpecification(), properties);
-        return Collections.singleton(new ComputedValue(spec, mca.getAmount(currency)));
+        final double pv = data.getFxRates().convert(mca, currency).getAmount();
+        return Collections.singleton(new ComputedValue(spec, pv));
       }
 
     };

@@ -24,6 +24,7 @@ import static com.opengamma.engine.value.ValueRequirementNames.FORWARD_GAMMA;
 import static com.opengamma.engine.value.ValueRequirementNames.FORWARD_VEGA;
 import static com.opengamma.engine.value.ValueRequirementNames.FX_CURRENCY_EXPOSURE;
 import static com.opengamma.engine.value.ValueRequirementNames.FX_FORWARD_DETAILS;
+import static com.opengamma.engine.value.ValueRequirementNames.FX_PRESENT_VALUE;
 import static com.opengamma.engine.value.ValueRequirementNames.HISTORICAL_VAR;
 import static com.opengamma.engine.value.ValueRequirementNames.NOTIONAL;
 import static com.opengamma.engine.value.ValueRequirementNames.PNL;
@@ -458,7 +459,8 @@ public class ExamplesViewsPopulator extends AbstractTool<ToolContext> {
     final ValueProperties calculationMethodProperty = ValueProperties.builder()
         .with(CurveCalculationPropertyNamesAndValues.PROPERTY_CURVE_TYPE, CurveCalculationPropertyNamesAndValues.DISCOUNTING)
         .get();
-    calcConfig.addPortfolioRequirement(FXForwardSecurity.SECURITY_TYPE, PRESENT_VALUE, calculationMethodProperty);
+    calcConfig.addPortfolioRequirement(FXForwardSecurity.SECURITY_TYPE, FX_PRESENT_VALUE, calculationMethodProperty);
+    calcConfig.addPortfolioRequirement(FXForwardSecurity.SECURITY_TYPE, PRESENT_VALUE, calculationMethodProperty.copy().with(CURRENCY, "USD").get());
     calcConfig.addPortfolioRequirement(FXForwardSecurity.SECURITY_TYPE, FX_FORWARD_DETAILS, calculationMethodProperty);
     viewDefinition.addViewCalculationConfiguration(calcConfig);
     return viewDefinition;
