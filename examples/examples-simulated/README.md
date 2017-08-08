@@ -84,7 +84,7 @@ The forward rate implied by the future - for mark-to-market pricing, this is jus
 ## FX Forwards <a name="fx-forwards-example"></a>
 Both FX forward examples reference a portfolio containing AUD, EUR, CHF and GBP vs USD forwards. All prices are calculated using a discounting method, where each pay / receive leg is discounted with a currency-specific curve.
 
-The USD discounting curve is a simple curve constructed from cash deposits. The discounting curves for the other currencies are constructed using FX forward quotes, which are used with the USD curve to imply the interest rate. The interpolation in all cases is a monotonic constrained cubic spline with linear extrapolation at both ends. The instruments used to construct the curves are shown in the table below.
+The USD discounting curve is a simple curve constructed from cash deposits, and is constructed first. The discounting curves for the other currencies are constructed using FX forward quotes, which are used with the USD curve to imply the interest rate. The interpolation in all cases is a monotonic constrained cubic spline with linear extrapolation at both ends. The instruments used to construct the curves are shown in the table below.
 
 | Tenor \ Curve Name| AUD FX     | CHF FX     | EUR FX     | GBP FX     | USD Deposit |
 |-------|------------|------------|------------|------------|-------------|
@@ -126,9 +126,15 @@ This output gives the pricing details for each leg of the trade: the pay and rec
 
 ![FX Forward Details](https://github.com/McLeodMoores/starling/blob/mcleodmoores/examples/examples-simulated/docs/images/fx-forward-details-details.png)
 
-Note that this value is not summed at portfolio node level (which is why the column appears to be empty when the positions are collapsed to portfolio nodes). Whether or not a value can be summed is a decision for the person writing the code that integrates analytics and the engines.
+Note that this value is not summed at portfolio node level (which is why the column appears to be empty when the positions are collapsed to portfolio nodes). Whether or not a value can be summed is a decision for the person writing the code that integrates an analytics library and the engine.
 
 ### FX Forward View
+
+![FX Forward View](https://github.com/McLeodMoores/starling/blob/mcleodmoores/examples/examples-simulated/docs/images/fx-forward-view.png)
+
+![FX Result Properties](https://github.com/McLeodMoores/starling/blob/mcleodmoores/examples/examples-simulated/docs/images/fx-forward-properties.png)
+
+![FX YCNS](https://github.com/McLeodMoores/starling/blob/mcleodmoores/examples/examples-simulated/docs/images/fx-forward-ycns.png)
 
 ## FX Options <a name="fx-options-example"></a>
 
