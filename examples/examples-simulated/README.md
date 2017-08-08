@@ -6,9 +6,9 @@ Example Views
 1. [Introduction](#introduction)
 2. [Equities](#equity-example)
 3. [ETFs](#etf-example)
-4. [Swaps](#swap-example)
-5. [FX Forwards](#fx-forwards-example)
-6. [FX Options](#fx-options-example)
+4. [FX Forwards](#fx-forwards-example)
+5. [FX Options](#fx-options-example)
+6. [Swaps](#swap-example)
 7. [CDS](#cds-example)
 
 ## Introduction <a name="introduction"></a>
@@ -81,48 +81,73 @@ The change in value of the position for a change in value of the underlying - fo
 #### Forward
 The forward rate implied by the future - for mark-to-market pricing, this is just the future market quote.
 
-## Swaps <a name="swap-example"></a>
-  ### Swap Portfolio View
-  ### Swap Pricing Details View
-  ### AUD Swaps View
-
-## Swaptions
-
 ## FX Forwards <a name="fx-forwards-example"></a>
 Both FX forward examples reference a portfolio containing AUD, EUR, CHF and GBP vs USD forwards. All prices are calculated using a discounting method, where each pay / receive leg is discounted with a currency-specific curve.
 
 The USD discounting curve is a simple curve constructed from cash deposits. The discounting curves for the other currencies are constructed using FX forward quotes, which are used with the USD curve to imply the interest rate. The interpolation in all cases is a monotonic constrained cubic spline with linear extrapolation at both ends. The instruments used to construct the curves are shown in the table below.
 
-| Tenor | AUD        | CHF        | EUR        | GBP        | USD     |
-|-------|------------|------------|------------|------------|---------|
-|  1W   | FX Forward | FX Forward | FX Forward | FX Forward | Deposit |
-|  2W   | FX Forward | FX Forward | FX Forward | FX Forward | Deposit |
-|  3W   | FX Forward | FX Forward | FX Forward | FX Forward | Deposit |
-|  1M   | FX Forward | FX Forward | FX Forward | FX Forward | Deposit |
-|  2M   |            |            |            |            |         |
-|  3M   | FX Forward | FX Forward | FX Forward | FX Forward | Deposit |
-|  4M   |            |            |            |            | Deposit |
-|  5M   |            |            |            |            | Deposit |
-|  6M   | FX Forward | FX Forward | FX Forward | FX Forward | Deposit |
-|  9M   | FX Forward | FX Forward | FX Forward | FX Forward | Deposit |
-|  1Y   | FX Forward | FX Forward | FX Forward | FX Forward | Deposit |
-|  2Y   | FX Forward | FX Forward | FX Forward | FX Forward | Deposit |
-|  3Y   | FX Forward | FX Forward | FX Forward | FX Forward | Deposit |
-|  4Y   | FX Forward | FX Forward | FX Forward | FX Forward | Deposit |
-|  5Y   | FX Forward | FX Forward | FX Forward | FX Forward | Deposit |
-|  6Y   | FX Forward | FX Forward | FX Forward | FX Forward |         |
-|  7Y   | FX Forward | FX Forward | FX Forward | FX Forward |         |
-|  8Y   | FX Forward | FX Forward | FX Forward | FX Forward |         |
-|  9Y   | FX Forward | FX Forward | FX Forward | FX Forward |         |
-| 10Y   | FX Forward | FX Forward | FX Forward | FX Forward |         |
+| Tenor \ Curve Name| AUD FX     | CHF FX     | EUR FX     | GBP FX     | USD Deposit |
+|-------|------------|------------|------------|------------|-------------|
+|  1W   | FX Forward | FX Forward | FX Forward | FX Forward | Deposit     |
+|  2W   | FX Forward | FX Forward | FX Forward | FX Forward | Deposit     |
+|  3W   | FX Forward | FX Forward | FX Forward | FX Forward | Deposit     |
+|  1M   | FX Forward | FX Forward | FX Forward | FX Forward | Deposit     |
+|  2M   |            |            |            |            | Deposit     |
+|  3M   | FX Forward | FX Forward | FX Forward | FX Forward | Deposit     |
+|  4M   |            |            |            |            | Deposit     |
+|  5M   |            |            |            |            | Deposit     |
+|  6M   | FX Forward | FX Forward | FX Forward | FX Forward | Deposit     |
+|  9M   | FX Forward | FX Forward | FX Forward | FX Forward | Deposit     |
+|  1Y   | FX Forward | FX Forward | FX Forward | FX Forward | Deposit     |
+|  2Y   | FX Forward | FX Forward | FX Forward | FX Forward | Deposit     |
+|  3Y   | FX Forward | FX Forward | FX Forward | FX Forward | Deposit     |
+|  4Y   | FX Forward | FX Forward | FX Forward | FX Forward | Deposit     |
+|  5Y   | FX Forward | FX Forward | FX Forward | FX Forward | Deposit     |
+|  6Y   | FX Forward | FX Forward | FX Forward | FX Forward |             |
+|  7Y   | FX Forward | FX Forward | FX Forward | FX Forward |             |
+|  8Y   | FX Forward | FX Forward | FX Forward | FX Forward |             |
+|  9Y   | FX Forward | FX Forward | FX Forward | FX Forward |             |
+| 10Y   | FX Forward | FX Forward | FX Forward | FX Forward |             |
 
+### FX Forward Details View
+
+![FX Forward Details View](https://github.com/McLeodMoores/starling/blob/mcleodmoores/examples/examples-simulated/docs/images/fx-forward-details.png)
+
+#### FX Present Value
+The FX present value is the discounted value of the pay and receive amounts of the forward. This multi-valued output is summed at the portfolio level, giving a total PV in each currency.
+
+![FX PV](https://github.com/McLeodMoores/starling/blob/mcleodmoores/examples/examples-simulated/docs/images/fx-forward-fx-pv-top-level.png)
+
+#### Present Value
+The present value is the sum of the discounted pay and receive amounts converted into the required currency.
+
+#### FX Forward Details
+This output gives the pricing details for each leg of the trade: the pay and recieve amounts, the discount factors used for each leg and equivalent zero rate.
+
+![FX Forward Details](https://github.com/McLeodMoores/starling/blob/mcleodmoores/examples/examples-simulated/docs/images/fx-forward-details-details.png)
+
+Note that this value is not summed at portfolio node level (which is why the column appears to be empty when the positions are collapsed to portfolio nodes). Whether or not a value can be summed is a decision for the person writing the code that integrates analytics and the engines.
 
 ### FX Forward View
 
-### FX Forward Details View
 ## FX Options <a name="fx-options-example"></a>
+
+## Swaps <a name="swap-example"></a>
+
+### Swap Portfolio View
+
+### Swap Pricing Details View
+
+### AUD Swaps View
+
+## Swaptions
+
 ## Bonds
-  ### US Treasuries View
-  ### GB Corporates View
+
+### US Treasuries View
+
+### GB Corporates View
+
 ## CDS <a name="cds-example"></a>
+
 ## Equity Options
