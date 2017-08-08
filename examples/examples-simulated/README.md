@@ -126,6 +126,8 @@ This output gives the pricing details for each leg of the trade: the pay and rec
 
 ![FX Forward Details](https://github.com/McLeodMoores/starling/blob/mcleodmoores/examples/examples-simulated/docs/images/fx-forward-details-details.png)
 
+Note that this value is not summed at portfolio node level (which is why the column appears to be empty when the positions are collapsed to portfolio nodes). Whether or not a value can be summed is a decision for the person writing the code that integrates analytics and the engines.
+
 ### FX Forward View
 
 ## FX Options <a name="fx-options-example"></a>
