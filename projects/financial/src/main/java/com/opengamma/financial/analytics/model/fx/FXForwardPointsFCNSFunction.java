@@ -8,7 +8,7 @@ package com.opengamma.financial.analytics.model.fx;
 import static com.opengamma.engine.value.ValuePropertyNames.CURVE;
 import static com.opengamma.engine.value.ValuePropertyNames.FORWARD_CURVE_NAME;
 import static com.opengamma.engine.value.ValueRequirementNames.CURRENCY_PAIRS;
-import static com.opengamma.engine.value.ValueRequirementNames.CURVE_DEFINITION;
+import static com.opengamma.engine.value.ValueRequirementNames.CURVE_SPECIFICATION;
 import static com.opengamma.engine.value.ValueRequirementNames.FX_FORWARD_POINTS_NODE_SENSITIVITIES;
 
 import java.util.Collections;
@@ -34,7 +34,7 @@ import com.opengamma.engine.value.ValueProperties;
 import com.opengamma.engine.value.ValueRequirement;
 import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.financial.analytics.DoubleLabelledMatrix1D;
-import com.opengamma.financial.analytics.curve.CurveDefinition;
+import com.opengamma.financial.analytics.curve.CurveSpecification;
 import com.opengamma.financial.analytics.model.multicurve.MultiCurveUtils;
 import com.opengamma.financial.currency.CurrencyPairs;
 import com.opengamma.util.money.Currency;
@@ -72,9 +72,9 @@ public class FXForwardPointsFCNSFunction extends FXForwardPointsFunction {
           ccyPair = Pairs.of(currency2, currency1);
         }
         final double[] sensitivities = CALCULATOR.presentValueForwardPointsSensitivity(forex, data, forwardPoints, ccyPair);
-        final CurveDefinition definition = (CurveDefinition) inputs.getValue(
-            new ValueRequirement(CURVE_DEFINITION, ComputationTargetSpecification.NULL, ValueProperties.with(CURVE, fxForwardCurveName).get()));
-        final DoubleLabelledMatrix1D matrix = MultiCurveUtils.getLabelledMatrix(new DoubleMatrix1D(sensitivities), definition);
+        final CurveSpecification specification = (CurveSpecification) inputs.getValue(
+            new ValueRequirement(CURVE_SPECIFICATION, ComputationTargetSpecification.NULL, ValueProperties.with(CURVE, fxForwardCurveName).get()));
+        final DoubleLabelledMatrix1D matrix = MultiCurveUtils.getLabelledMatrix(new DoubleMatrix1D(sensitivities), specification);
         final ValueProperties properties = desiredValue.getConstraints().copy().get();
         final ValueSpecification spec = new ValueSpecification(FX_FORWARD_POINTS_NODE_SENSITIVITIES, target.toSpecification(), properties);
         return Collections.singleton(new ComputedValue(spec, matrix));

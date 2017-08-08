@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2014 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.model.trs;
@@ -12,7 +12,7 @@ import static com.opengamma.engine.value.ValuePropertyNames.CURVE_SENSITIVITY_CU
 import static com.opengamma.engine.value.ValuePropertyNames.FUNCTION;
 import static com.opengamma.engine.value.ValueRequirementNames.BLOCK_CURVE_SENSITIVITIES;
 import static com.opengamma.engine.value.ValueRequirementNames.CURVE_BUNDLE;
-import static com.opengamma.engine.value.ValueRequirementNames.CURVE_DEFINITION;
+import static com.opengamma.engine.value.ValueRequirementNames.CURVE_SPECIFICATION;
 import static com.opengamma.engine.value.ValueRequirementNames.YIELD_CURVE_NODE_SENSITIVITIES;
 import static com.opengamma.financial.analytics.model.curve.CurveCalculationPropertyNamesAndValues.DISCOUNTING;
 import static com.opengamma.financial.analytics.model.curve.CurveCalculationPropertyNamesAndValues.PROPERTY_CURVE_TYPE;
@@ -48,7 +48,7 @@ import com.opengamma.engine.value.ValueRequirement;
 import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.financial.analytics.DoubleLabelledMatrix1D;
-import com.opengamma.financial.analytics.curve.CurveDefinition;
+import com.opengamma.financial.analytics.curve.CurveSpecification;
 import com.opengamma.financial.analytics.model.multicurve.MultiCurveUtils;
 import com.opengamma.financial.security.swap.BondTotalReturnSwapSecurity;
 import com.opengamma.util.money.Currency;
@@ -56,31 +56,31 @@ import com.opengamma.util.tuple.ObjectsPair;
 import com.opengamma.util.tuple.Pair;
 
 /**
- * 
+ *
  */
 public class BondTotalReturnSwapYCNSFunction extends BondTotalReturnSwapFunction {
 
-  
+
   private static final Logger s_logger = LoggerFactory.getLogger(BondTotalReturnSwapYCNSFunction.class);
-  
+
   /**
-   * 
+   *
    */
   public BondTotalReturnSwapYCNSFunction() {
     super(YIELD_CURVE_NODE_SENSITIVITIES);
   }
-  
+
   @Override
-  public CompiledFunctionDefinition compile(FunctionCompilationContext context, Instant atInstant) {
-    return new BondTotalReturnSwapCompiledFunction(getTargetToDefinitionConverter(context), 
+  public CompiledFunctionDefinition compile(final FunctionCompilationContext context, final Instant atInstant) {
+    return new BondTotalReturnSwapCompiledFunction(getTargetToDefinitionConverter(context),
         getDefinitionToDerivativeConverter(context), true) {
-      
+
       @Override
-      protected Set<ComputedValue> getValues(FunctionExecutionContext executionContext, FunctionInputs inputs, ComputationTarget target, Set<ValueRequirement> desiredValues,
-          InstrumentDerivative derivative, FXMatrix fxMatrix) {
+      protected Set<ComputedValue> getValues(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues,
+          final InstrumentDerivative derivative, final FXMatrix fxMatrix) {
         final MultipleCurrencyParameterSensitivity sensitivities = (MultipleCurrencyParameterSensitivity) inputs.getValue(BLOCK_CURVE_SENSITIVITIES);
-        Set<ComputedValue> results = Sets.newHashSet();
-        for (ValueRequirement desiredValue : desiredValues) {
+        final Set<ComputedValue> results = Sets.newHashSet();
+        for (final ValueRequirement desiredValue : desiredValues) {
           final ValueProperties properties = desiredValue.getConstraints();
           final String desiredCurveName = desiredValue.getConstraint(CURVE);
           final Map<Pair<String, Currency>, DoubleMatrix1D> entries = sensitivities.getSensitivities();
@@ -91,9 +91,9 @@ public class BondTotalReturnSwapYCNSFunction extends BondTotalReturnSwapFunction
                   .withoutAny(CURVE)
                   .with(CURVE, curveName)
                   .get();
-              final CurveDefinition curveDefinition = (CurveDefinition) inputs.getValue(new ValueRequirement(CURVE_DEFINITION, ComputationTargetSpecification.NULL,
+              final CurveSpecification curveSpecification = (CurveSpecification) inputs.getValue(new ValueRequirement(CURVE_SPECIFICATION, ComputationTargetSpecification.NULL,
                   ValueProperties.builder().with(CURVE, curveName).get()));
-              final DoubleLabelledMatrix1D ycns = MultiCurveUtils.getLabelledMatrix(entry.getValue(), curveDefinition);
+              final DoubleLabelledMatrix1D ycns = MultiCurveUtils.getLabelledMatrix(entry.getValue(), curveSpecification);
               final ValueSpecification spec = new ValueSpecification(YIELD_CURVE_NODE_SENSITIVITIES, target.toSpecification(), curveSpecificProperties);
               results.add(new ComputedValue(spec, ycns));
             }
@@ -102,39 +102,39 @@ public class BondTotalReturnSwapYCNSFunction extends BondTotalReturnSwapFunction
         return results;
 
       }
-      
+
       @Override
       protected String getCurrencyOfResult(final BondTotalReturnSwapSecurity security) {
         throw new IllegalStateException("BondTotalReturnSwapYCNSFunction does not set the Currency property in this method");
       }
-      
+
       @Override
-      public Set<ValueSpecification> getResults(FunctionCompilationContext context, ComputationTarget target) {
-        Set<ValueSpecification> spec = super.getResults(context, target);
+      public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target) {
+        final Set<ValueSpecification> spec = super.getResults(context, target);
         return spec;
       }
 
       @Override
-      public Set<ValueRequirement> getRequirements(FunctionCompilationContext context, ComputationTarget target, ValueRequirement desiredValue) {
-        String curveExposures = desiredValue.getConstraint(CURVE_EXPOSURES);
-        String curveType = desiredValue.getConstraint(PROPERTY_CURVE_TYPE);
-        Builder builder = ValueProperties.builder();
+      public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
+        final String curveExposures = desiredValue.getConstraint(CURVE_EXPOSURES);
+        final String curveType = desiredValue.getConstraint(PROPERTY_CURVE_TYPE);
+        final Builder builder = ValueProperties.builder();
         builder.with(CURVE_EXPOSURES, curveExposures);
         builder.with(PROPERTY_CURVE_TYPE, curveType);
-        ImmutableSet<ValueRequirement> bcsReq = ImmutableSet.of(new ValueRequirement(ValueRequirementNames.BLOCK_CURVE_SENSITIVITIES, target.toSpecification(), builder.get()));
+        final ImmutableSet<ValueRequirement> bcsReq = ImmutableSet.of(new ValueRequirement(ValueRequirementNames.BLOCK_CURVE_SENSITIVITIES, target.toSpecification(), builder.get()));
         return Sets.union(bcsReq, super.getRequirements(context, target, desiredValue));
       }
 
       @Override
-      public Set<ValueSpecification> getResults(FunctionCompilationContext context, ComputationTarget target, Map<ValueSpecification, ValueRequirement> inputs) {
+      public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
         final Set<String> functionNames = new HashSet<>();
-        List<Pair<String, String>> ccyCurvePairs = Lists.newArrayList();
+        final List<Pair<String, String>> ccyCurvePairs = Lists.newArrayList();
         for (final Map.Entry<ValueSpecification, ValueRequirement> entry : inputs.entrySet()) {
           final ValueSpecification specification = entry.getKey();
           if (specification.getValueName().equals(CURVE_BUNDLE)) {
             final ValueProperties constraints = specification.getProperties();
-            for (String ccy : constraints.getValues(CURVE_SENSITIVITY_CURRENCY)) {
-              for (String curve : constraints.getValues(CURVE)) {
+            for (final String ccy : constraints.getValues(CURVE_SENSITIVITY_CURRENCY)) {
+              for (final String curve : constraints.getValues(CURVE)) {
                 ccyCurvePairs.add(ObjectsPair.of(ccy, curve));
               }
             }
@@ -146,7 +146,7 @@ public class BondTotalReturnSwapYCNSFunction extends BondTotalReturnSwapFunction
           return null;
         }
         final Set<ValueSpecification> results = new HashSet<>();
-        for (Pair<String, String> ccyCurvePair : ccyCurvePairs) {
+        for (final Pair<String, String> ccyCurvePair : ccyCurvePairs) {
           final ValueProperties properties = createValueProperties()
               .with(PROPERTY_CURVE_TYPE, DISCOUNTING)
               .withAny(CURVE_EXPOSURES)
@@ -158,7 +158,7 @@ public class BondTotalReturnSwapYCNSFunction extends BondTotalReturnSwapFunction
         }
         return results;
       }
-      
+
       @SuppressWarnings("synthetic-access")
       @Override
       protected Collection<ValueProperties.Builder> getResultProperties(final FunctionCompilationContext compilationContext, final ComputationTarget target) {
@@ -173,8 +173,8 @@ public class BondTotalReturnSwapYCNSFunction extends BondTotalReturnSwapFunction
       }
 
     };
-    
-    
+
+
   }
 
 }

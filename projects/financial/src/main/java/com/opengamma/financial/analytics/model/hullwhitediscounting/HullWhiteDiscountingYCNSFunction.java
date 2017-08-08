@@ -8,7 +8,7 @@ package com.opengamma.financial.analytics.model.hullwhitediscounting;
 import static com.opengamma.engine.value.ValuePropertyNames.CURVE;
 import static com.opengamma.engine.value.ValuePropertyNames.CURVE_EXPOSURES;
 import static com.opengamma.engine.value.ValueRequirementNames.BLOCK_CURVE_SENSITIVITIES;
-import static com.opengamma.engine.value.ValueRequirementNames.CURVE_DEFINITION;
+import static com.opengamma.engine.value.ValueRequirementNames.CURVE_SPECIFICATION;
 import static com.opengamma.engine.value.ValueRequirementNames.YIELD_CURVE_NODE_SENSITIVITIES;
 import static com.opengamma.financial.analytics.model.curve.CurveCalculationPropertyNamesAndValues.HULL_WHITE_DISCOUNTING;
 import static com.opengamma.financial.analytics.model.curve.CurveCalculationPropertyNamesAndValues.PROPERTY_CURVE_TYPE;
@@ -43,7 +43,7 @@ import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.financial.OpenGammaCompilationContext;
 import com.opengamma.financial.analytics.DoubleLabelledMatrix1D;
-import com.opengamma.financial.analytics.curve.CurveDefinition;
+import com.opengamma.financial.analytics.curve.CurveSpecification;
 import com.opengamma.financial.analytics.model.multicurve.MultiCurveUtils;
 import com.opengamma.financial.security.FinancialSecurity;
 import com.opengamma.util.money.Currency;
@@ -77,10 +77,11 @@ public class HullWhiteDiscountingYCNSFunction extends HullWhiteDiscountingFuncti
         for (final Map.Entry<Pair<String, Currency>, DoubleMatrix1D> entry : entries.entrySet()) {
           if (curveName.equals(entry.getKey().getFirst())) {
             final ValueProperties properties = desiredValue.getConstraints().copy().with(CURVE, curveName).get();
-            final CurveDefinition curveDefinition = (CurveDefinition) inputs.getValue(new ValueRequirement(CURVE_DEFINITION, ComputationTargetSpecification.NULL, ValueProperties.builder()
-                .with(CURVE, curveName).get()));
+            final CurveSpecification curveSpecification =
+                (CurveSpecification) inputs.getValue(new ValueRequirement(CURVE_SPECIFICATION, ComputationTargetSpecification.NULL, ValueProperties.builder()
+                    .with(CURVE, curveName).get()));
             final ValueSpecification spec = new ValueSpecification(YIELD_CURVE_NODE_SENSITIVITIES, target.toSpecification(), properties);
-            final DoubleLabelledMatrix1D ycns = MultiCurveUtils.getLabelledMatrix(entry.getValue(), curveDefinition);
+            final DoubleLabelledMatrix1D ycns = MultiCurveUtils.getLabelledMatrix(entry.getValue(), curveSpecification);
             return Collections.singleton(new ComputedValue(spec, ycns));
           }
         }
@@ -109,7 +110,7 @@ public class HullWhiteDiscountingYCNSFunction extends HullWhiteDiscountingFuncti
         final Set<ValueRequirement> requirements = new HashSet<>();
         final FinancialSecurity security = (FinancialSecurity) target.getTrade().getSecurity();
         final SecuritySource securitySource = OpenGammaCompilationContext.getSecuritySource(context);
-        requirements.add(new ValueRequirement(CURVE_DEFINITION, ComputationTargetSpecification.NULL, curveProperties));
+        requirements.add(new ValueRequirement(CURVE_SPECIFICATION, ComputationTargetSpecification.NULL, curveProperties));
         requirements.add(new ValueRequirement(BLOCK_CURVE_SENSITIVITIES, target.toSpecification(), properties));
         requirements.addAll(getFXRequirements(security, securitySource));
         final Set<ValueRequirement> tsRequirements = getTimeSeriesRequirements(context, target);
@@ -123,7 +124,7 @@ public class HullWhiteDiscountingYCNSFunction extends HullWhiteDiscountingFuncti
       @Override
       protected Collection<ValueProperties.Builder> getResultProperties(final FunctionCompilationContext compilationContext, final ComputationTarget target) {
         final Collection<ValueProperties.Builder> properties = super.getResultProperties(compilationContext, target);
-        for (ValueProperties.Builder builder : properties) {
+        for (final ValueProperties.Builder builder : properties) {
           builder.withAny(CURVE);
         }
         return properties;

@@ -8,7 +8,7 @@ package com.opengamma.financial.analytics.model.bondcurves;
 import static com.opengamma.engine.value.ValuePropertyNames.CURVE;
 import static com.opengamma.engine.value.ValuePropertyNames.CURVE_EXPOSURES;
 import static com.opengamma.engine.value.ValueRequirementNames.BLOCK_CURVE_SENSITIVITIES;
-import static com.opengamma.engine.value.ValueRequirementNames.CURVE_DEFINITION;
+import static com.opengamma.engine.value.ValueRequirementNames.CURVE_SPECIFICATION;
 import static com.opengamma.engine.value.ValueRequirementNames.YIELD_CURVE_NODE_SENSITIVITIES;
 import static com.opengamma.financial.analytics.model.curve.CurveCalculationPropertyNamesAndValues.PROPERTY_CURVE_TYPE;
 
@@ -36,7 +36,7 @@ import com.opengamma.engine.value.ValueRequirement;
 import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.financial.analytics.DoubleLabelledMatrix1D;
-import com.opengamma.financial.analytics.curve.CurveDefinition;
+import com.opengamma.financial.analytics.curve.CurveSpecification;
 import com.opengamma.financial.analytics.model.multicurve.MultiCurveUtils;
 import com.opengamma.util.async.AsynchronousExecution;
 import com.opengamma.util.money.Currency;
@@ -74,9 +74,10 @@ public class BondAndBondFutureYCNSFunction extends BondAndBondFutureFromCurvesFu
             .withoutAny(CURVE)
             .with(CURVE, curveName)
             .get();
-        final CurveDefinition curveDefinition = (CurveDefinition) inputs.getValue(new ValueRequirement(CURVE_DEFINITION, ComputationTargetSpecification.NULL,
-            ValueProperties.builder().with(CURVE, curveName).get()));
-        final DoubleLabelledMatrix1D ycns = MultiCurveUtils.getLabelledMatrix(entry.getValue(), curveDefinition);
+        final CurveSpecification curveSpecification =
+            (CurveSpecification) inputs.getValue(new ValueRequirement(CURVE_SPECIFICATION, ComputationTargetSpecification.NULL,
+                ValueProperties.builder().with(CURVE, curveName).get()));
+        final DoubleLabelledMatrix1D ycns = MultiCurveUtils.getLabelledMatrix(entry.getValue(), curveSpecification);
         final ValueSpecification spec = new ValueSpecification(YIELD_CURVE_NODE_SENSITIVITIES, target.toSpecification(), curveSpecificProperties);
         results.add(new ComputedValue(spec, ycns));
         return results;
@@ -112,7 +113,7 @@ public class BondAndBondFutureYCNSFunction extends BondAndBondFutureFromCurvesFu
         .with(PROPERTY_CURVE_TYPE, curveType)
         .with(CURVE_EXPOSURES, curveExposureConfigs)
         .get();
-    requirements.add(new ValueRequirement(CURVE_DEFINITION, ComputationTargetSpecification.NULL, curveProperties));
+    requirements.add(new ValueRequirement(CURVE_SPECIFICATION, ComputationTargetSpecification.NULL, curveProperties));
     requirements.add(new ValueRequirement(BLOCK_CURVE_SENSITIVITIES, target.toSpecification(), properties));
     return requirements;
   }

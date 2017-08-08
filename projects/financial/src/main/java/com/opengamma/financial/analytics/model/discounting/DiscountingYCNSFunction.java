@@ -9,7 +9,7 @@ import static com.opengamma.engine.value.ValuePropertyNames.CURRENCY;
 import static com.opengamma.engine.value.ValuePropertyNames.CURVE;
 import static com.opengamma.engine.value.ValuePropertyNames.CURVE_EXPOSURES;
 import static com.opengamma.engine.value.ValueRequirementNames.BLOCK_CURVE_SENSITIVITIES;
-import static com.opengamma.engine.value.ValueRequirementNames.CURVE_DEFINITION;
+import static com.opengamma.engine.value.ValueRequirementNames.CURVE_SPECIFICATION;
 import static com.opengamma.engine.value.ValueRequirementNames.YIELD_CURVE_NODE_SENSITIVITIES;
 import static com.opengamma.financial.analytics.model.curve.CurveCalculationPropertyNamesAndValues.DISCOUNTING;
 import static com.opengamma.financial.analytics.model.curve.CurveCalculationPropertyNamesAndValues.PROPERTY_CURVE_TYPE;
@@ -39,12 +39,13 @@ import com.opengamma.engine.function.FunctionExecutionContext;
 import com.opengamma.engine.function.FunctionInputs;
 import com.opengamma.engine.value.ComputedValue;
 import com.opengamma.engine.value.ValueProperties;
+import com.opengamma.engine.value.ValueProperties.Builder;
 import com.opengamma.engine.value.ValueRequirement;
 import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.financial.OpenGammaCompilationContext;
 import com.opengamma.financial.analytics.DoubleLabelledMatrix1D;
-import com.opengamma.financial.analytics.curve.CurveDefinition;
+import com.opengamma.financial.analytics.curve.CurveSpecification;
 import com.opengamma.financial.analytics.fixedincome.InterestRateInstrumentType;
 import com.opengamma.financial.analytics.model.forex.ForexVisitors;
 import com.opengamma.financial.analytics.model.multicurve.MultiCurveUtils;
@@ -63,7 +64,7 @@ import com.opengamma.util.tuple.Pairs;
  * Calculates the yield curve node sensitivities of instruments using curves constructed using the discounting method.
  */
 public class DiscountingYCNSFunction extends DiscountingFunction {
-  
+
   /** The constraint name to select the currency for which the sensitivity is returned */
   public static final String SENSITIVITY_CURRENCY_PROPERTY = "SensitivityCurrency";
 
@@ -84,10 +85,11 @@ public class DiscountingYCNSFunction extends DiscountingFunction {
         final MultipleCurrencyParameterSensitivity sensitivities = (MultipleCurrencyParameterSensitivity) inputs.getValue(BLOCK_CURVE_SENSITIVITIES);
         final Map<Pair<String, Currency>, DoubleMatrix1D> sensitivityEntries = sensitivities.getSensitivities();
         final Set<ComputedValue> results = Sets.newHashSetWithExpectedSize(desiredValues.size());
-        for (ValueRequirement desiredValue : desiredValues) {
+        for (final ValueRequirement desiredValue : desiredValues) {
           final String curveName = desiredValue.getConstraint(CURVE);
-          final CurveDefinition curveDefinition = (CurveDefinition) inputs.getValue(new ValueRequirement(CURVE_DEFINITION, ComputationTargetSpecification.NULL, ValueProperties.builder()
-              .with(CURVE, curveName).get()));
+          final CurveSpecification curveSpecification =
+              (CurveSpecification) inputs.getValue(new ValueRequirement(CURVE_SPECIFICATION, ComputationTargetSpecification.NULL,
+                  ValueProperties.builder().with(CURVE, curveName).get()));
           final String currency = desiredValue.getConstraints().getSingleValue(SENSITIVITY_CURRENCY_PROPERTY);
           DoubleMatrix1D sensitivityMatrix = null;
           if (currency != null) {
@@ -95,7 +97,7 @@ public class DiscountingYCNSFunction extends DiscountingFunction {
             sensitivityMatrix = sensitivityEntries.get(Pairs.of(curveName, Currency.of(currency)));
           } else {
             // No currency constraint so make an arbitrary choice.
-            for (Map.Entry<Pair<String, Currency>, DoubleMatrix1D> sensitivityEntry : sensitivityEntries.entrySet()) {
+            for (final Map.Entry<Pair<String, Currency>, DoubleMatrix1D> sensitivityEntry : sensitivityEntries.entrySet()) {
               if (curveName.equals(sensitivityEntry.getKey().getFirst())) {
                 sensitivityMatrix = sensitivityEntry.getValue();
                 break;
@@ -103,18 +105,19 @@ public class DiscountingYCNSFunction extends DiscountingFunction {
             }
           }
           if (sensitivityMatrix == null) {
-            final double[] zeroes = new double[curveDefinition.getNodes().size()];
+            final double[] zeroes = new double[curveSpecification.getNodes().size()];
             sensitivityMatrix = new DoubleMatrix1D(zeroes);
           }
           final ValueSpecification valueSpec = new ValueSpecification(YIELD_CURVE_NODE_SENSITIVITIES, target.toSpecification(), desiredValue.getConstraints());
-          final DoubleLabelledMatrix1D ycns = MultiCurveUtils.getLabelledMatrix(sensitivityMatrix, curveDefinition);
+          final DoubleLabelledMatrix1D ycns = MultiCurveUtils.getLabelledMatrix(sensitivityMatrix, curveSpecification);
           results.add(new ComputedValue(valueSpec, ycns));
         }
         return results;
       }
 
       @Override
-      public Set<ValueRequirement> getRequirements(final FunctionCompilationContext compilationContext, final ComputationTarget target, final ValueRequirement desiredValue) {
+      public Set<ValueRequirement> getRequirements(final FunctionCompilationContext compilationContext, final ComputationTarget target,
+          final ValueRequirement desiredValue) {
         final ValueProperties constraints = desiredValue.getConstraints();
         final Set<String> curveNames = constraints.getValues(CURVE);
         if (curveNames == null || curveNames.size() != 1) {
@@ -124,12 +127,21 @@ public class DiscountingYCNSFunction extends DiscountingFunction {
         if (curveExposureConfigs == null) {
           return null;
         }
-        final ValueProperties properties = ValueProperties.with(PROPERTY_CURVE_TYPE, DISCOUNTING).with(CURVE_EXPOSURES, curveExposureConfigs).get();
+        final ValueProperties.Builder builder = ValueProperties.with(PROPERTY_CURVE_TYPE, DISCOUNTING).with(CURVE_EXPOSURES, curveExposureConfigs);
+        final String sensitivityCurrency = constraints.getSingleValue(SENSITIVITY_CURRENCY_PROPERTY);
+        if (sensitivityCurrency != null) {
+          builder.with(SENSITIVITY_CURRENCY_PROPERTY, sensitivityCurrency).withOptional(SENSITIVITY_CURRENCY_PROPERTY);
+        }
+        final String currency = constraints.getSingleValue(CURRENCY);
+        if (currency != null) {
+          builder.with(CURRENCY, currency).withOptional(CURRENCY);
+        }
+        final ValueProperties properties = builder.get();
         final ValueProperties curveProperties = ValueProperties.with(CURVE, curveNames).get();
         final Set<ValueRequirement> requirements = new HashSet<>();
         final FinancialSecurity security = (FinancialSecurity) target.getTrade().getSecurity();
         final SecuritySource securitySource = OpenGammaCompilationContext.getSecuritySource(context);
-        requirements.add(new ValueRequirement(CURVE_DEFINITION, ComputationTargetSpecification.NULL, curveProperties));
+        requirements.add(new ValueRequirement(CURVE_SPECIFICATION, ComputationTargetSpecification.NULL, curveProperties));
         requirements.add(new ValueRequirement(BLOCK_CURVE_SENSITIVITIES, target.toSpecification(), properties));
         requirements.addAll(getFXRequirements(security, securitySource));
         final Set<ValueRequirement> tsRequirements = getTimeSeriesRequirements(context, target);
@@ -140,45 +152,86 @@ public class DiscountingYCNSFunction extends DiscountingFunction {
         return requirements;
       }
 
-      private Currency getLegCurrency(final SwapLeg leg) {
-        return (leg.getNotional() instanceof InterestRateNotional) ? ((InterestRateNotional) leg.getNotional()).getCurrency() : null;
-      }      private Collection<ValueProperties.Builder> addCurrencies(final ValueProperties.Builder properties, final Currency c1, final Currency c2) {
-        if (c1 != null) {
-          if (c2 != null) {
-            final List<ValueProperties.Builder> result = new ArrayList<ValueProperties.Builder>();
-            result.add(properties.copy().with(SENSITIVITY_CURRENCY_PROPERTY, c1.getCode()).with(CURRENCY, c1.getCode()));
-            result.add(properties.with(SENSITIVITY_CURRENCY_PROPERTY, c2.getCode()).with(CURRENCY, c2.getCode()));
-            return result;
-          } else {
-            return Collections.singleton(properties.with(SENSITIVITY_CURRENCY_PROPERTY, c1.getCode()).with(CURRENCY, c1.getCode()));
-          }
-        } else {
-          if (c2 != null) {
-            return Collections.singleton(properties.with(SENSITIVITY_CURRENCY_PROPERTY, c2.getCode()).with(CURRENCY, c2.getCode()));
-          } else {
-            return Collections.singleton(properties.withAny(SENSITIVITY_CURRENCY_PROPERTY).withAny(CURRENCY));
+      @Override
+      public Set<ValueSpecification> getResults(final FunctionCompilationContext compilationContext, final ComputationTarget target,
+          final Map<ValueSpecification, ValueRequirement> inputs) {
+        final Set<ValueSpecification> results = getResults(compilationContext, target);
+        String sensitivityCurrency = null;
+        for (final Map.Entry<ValueSpecification, ValueRequirement> entry : inputs.entrySet()) {
+          final ValueRequirement resolved = entry.getValue();
+          if (resolved.getValueName().equals(BLOCK_CURVE_SENSITIVITIES)) {
+            sensitivityCurrency = resolved.getConstraint(SENSITIVITY_CURRENCY_PROPERTY);
           }
         }
+        final Set<ValueSpecification> newResults = new HashSet<>();
+        final Collection<Builder> resultProperties = getResultProperties(target, false);
+        for (final Builder resultProperty : resultProperties) {
+          if (sensitivityCurrency != null) {
+            resultProperty.withoutAny(SENSITIVITY_CURRENCY_PROPERTY).with(SENSITIVITY_CURRENCY_PROPERTY, sensitivityCurrency);
+          }
+          for (final ValueSpecification result : results) {
+            newResults.add(new ValueSpecification(result.getValueName(), result.getTargetSpecification(), resultProperty.get()));
+          }
+        }
+        return newResults;
+      }
+
+      private Currency getLegCurrency(final SwapLeg leg) {
+        return leg.getNotional() instanceof InterestRateNotional ? ((InterestRateNotional) leg.getNotional()).getCurrency() : null;
+      }
+
+      @Override
+      protected Collection<ValueProperties.Builder> getResultProperties(final FunctionCompilationContext compilationContext, final ComputationTarget target) {
+        return getResultProperties(target, true);
       }
 
       @SuppressWarnings("synthetic-access")
-      @Override
-      protected Collection<ValueProperties.Builder> getResultProperties(final FunctionCompilationContext compilationContext, final ComputationTarget target) {
+      protected Collection<ValueProperties.Builder> getResultProperties(final ComputationTarget target, final boolean withAny) {
         final ValueProperties.Builder properties = createValueProperties().with(PROPERTY_CURVE_TYPE, DISCOUNTING).withAny(CURVE_EXPOSURES).withAny(CURVE);
         final Security security = target.getTrade().getSecurity();
         if (security instanceof SwapSecurity && InterestRateInstrumentType.isFixedIncomeInstrumentType((SwapSecurity) security)) {
           final SwapSecurity swapSecurity = (SwapSecurity) security;
           final Currency pay = getLegCurrency(swapSecurity.getPayLeg());
           final Currency receive = getLegCurrency(swapSecurity.getReceiveLeg());
-          return addCurrencies(properties, pay, receive);
+          return addCurrencies(properties, pay, receive, withAny);
         } else if (security instanceof FXForwardSecurity || security instanceof NonDeliverableFXForwardSecurity) {
           final Currency pay = ((FinancialSecurity) security).accept(ForexVisitors.getPayCurrencyVisitor());
           final Currency receive = ((FinancialSecurity) security).accept(ForexVisitors.getReceiveCurrencyVisitor());
-          return addCurrencies(properties, pay, receive);
+          return addCurrencies(properties, pay, receive, withAny);
         } else {
           final String ccy = FinancialSecurityUtils.getCurrency(target.getTrade().getSecurity()).getCode();
           return Collections.singleton(properties.with(SENSITIVITY_CURRENCY_PROPERTY, ccy).with(CURRENCY, ccy));
         }
+      }
+
+      private Collection<ValueProperties.Builder> addCurrencies(final ValueProperties.Builder properties, final Currency c1, final Currency c2,
+          final boolean withAny) {
+        if (c1 != null) {
+          final String c1Code = c1.getCode();
+          if (c2 != null) {
+            final String c2Code = c2.getCode();
+            final List<ValueProperties.Builder> result = new ArrayList<>();
+            if (withAny) {
+              result.add(properties.copy().withAny(SENSITIVITY_CURRENCY_PROPERTY).with(CURRENCY, c1Code));
+              result.add(properties.withAny(SENSITIVITY_CURRENCY_PROPERTY).with(CURRENCY, c2Code));
+            } else {
+              result.add(properties.copy().with(SENSITIVITY_CURRENCY_PROPERTY, c1Code).with(CURRENCY, c1Code));
+              result.add(properties.with(SENSITIVITY_CURRENCY_PROPERTY, c2Code).with(CURRENCY, c2Code));
+            }
+            return result;
+          }
+          if (withAny) {
+            return Collections.singleton(properties.withAny(SENSITIVITY_CURRENCY_PROPERTY).with(CURRENCY, c1Code));
+          }
+          return Collections.singleton(properties.with(SENSITIVITY_CURRENCY_PROPERTY, c1Code).with(CURRENCY, c1Code));
+        }
+        if (c2 != null) {
+          if (withAny) {
+            return Collections.singleton(properties.withAny(SENSITIVITY_CURRENCY_PROPERTY).with(CURRENCY, c2.getCode()));
+          }
+          return Collections.singleton(properties.with(SENSITIVITY_CURRENCY_PROPERTY, c2.getCode()).with(CURRENCY, c2.getCode()));
+        }
+        return Collections.singleton(properties.withAny(SENSITIVITY_CURRENCY_PROPERTY).withAny(CURRENCY));
       }
 
     };

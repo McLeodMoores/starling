@@ -69,7 +69,8 @@ public abstract class DiscountingFunction extends MultiCurvePricingFunction {
      * @param definitionToDerivativeConverter Converts definitions to derivatives, not null
      * @param withCurrency True if the result properties set the {@link ValuePropertyNames#CURRENCY} property
      */
-    protected DiscountingCompiledFunction(final DefaultTradeConverter tradeToDefinitionConverter, final FixedIncomeConverterDataProvider definitionToDerivativeConverter, final boolean withCurrency) {
+    protected DiscountingCompiledFunction(final DefaultTradeConverter tradeToDefinitionConverter,
+        final FixedIncomeConverterDataProvider definitionToDerivativeConverter, final boolean withCurrency) {
       super(tradeToDefinitionConverter, definitionToDerivativeConverter);
       _withCurrency = withCurrency;
     }

@@ -9,7 +9,7 @@ import static com.opengamma.engine.value.ValuePropertyNames.CURVE;
 import static com.opengamma.engine.value.ValuePropertyNames.CURVE_EXPOSURES;
 import static com.opengamma.engine.value.ValuePropertyNames.SURFACE;
 import static com.opengamma.engine.value.ValueRequirementNames.BLOCK_CURVE_SENSITIVITIES;
-import static com.opengamma.engine.value.ValueRequirementNames.CURVE_DEFINITION;
+import static com.opengamma.engine.value.ValueRequirementNames.CURVE_SPECIFICATION;
 import static com.opengamma.engine.value.ValueRequirementNames.YIELD_CURVE_NODE_SENSITIVITIES;
 import static com.opengamma.financial.analytics.model.curve.CurveCalculationPropertyNamesAndValues.DISCOUNTING;
 import static com.opengamma.financial.analytics.model.curve.CurveCalculationPropertyNamesAndValues.PROPERTY_CURVE_TYPE;
@@ -45,7 +45,7 @@ import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.financial.OpenGammaCompilationContext;
 import com.opengamma.financial.analytics.DoubleLabelledMatrix1D;
-import com.opengamma.financial.analytics.curve.CurveDefinition;
+import com.opengamma.financial.analytics.curve.CurveSpecification;
 import com.opengamma.financial.analytics.model.multicurve.MultiCurveUtils;
 import com.opengamma.financial.security.FinancialSecurity;
 import com.opengamma.util.money.Currency;
@@ -77,10 +77,11 @@ public class BlackDiscountingYCNSIRFutureOptionFunction extends BlackDiscounting
         for (final Map.Entry<Pair<String, Currency>, DoubleMatrix1D> entry : entries.entrySet()) {
           if (curveName.equals(entry.getKey().getFirst())) {
             final ValueProperties properties = desiredValue.getConstraints().copy().with(CURVE, curveName).get();
-            final CurveDefinition curveDefinition = (CurveDefinition) inputs.getValue(new ValueRequirement(CURVE_DEFINITION, ComputationTargetSpecification.NULL, ValueProperties.builder()
-                .with(CURVE, curveName).get()));
+            final CurveSpecification curveSpecification =
+                (CurveSpecification) inputs.getValue(new ValueRequirement(CURVE_SPECIFICATION, ComputationTargetSpecification.NULL, ValueProperties.builder()
+                    .with(CURVE, curveName).get()));
             final ValueSpecification spec = new ValueSpecification(YIELD_CURVE_NODE_SENSITIVITIES, target.toSpecification(), properties);
-            final DoubleLabelledMatrix1D ycns = MultiCurveUtils.getLabelledMatrix(entry.getValue(), curveDefinition);
+            final DoubleLabelledMatrix1D ycns = MultiCurveUtils.getLabelledMatrix(entry.getValue(), curveSpecification);
             return Collections.singleton(new ComputedValue(spec, ycns));
           }
         }
@@ -108,7 +109,7 @@ public class BlackDiscountingYCNSIRFutureOptionFunction extends BlackDiscounting
         final Set<ValueRequirement> requirements = new HashSet<>();
         final FinancialSecurity security = (FinancialSecurity) target.getTrade().getSecurity();
         final SecuritySource securitySource = OpenGammaCompilationContext.getSecuritySource(context);
-        requirements.add(new ValueRequirement(CURVE_DEFINITION, ComputationTargetSpecification.NULL, curveProperties));
+        requirements.add(new ValueRequirement(CURVE_SPECIFICATION, ComputationTargetSpecification.NULL, curveProperties));
         requirements.add(new ValueRequirement(BLOCK_CURVE_SENSITIVITIES, target.toSpecification(), properties));
         requirements.addAll(getFXRequirements(security, securitySource));
         final Set<ValueRequirement> tsRequirements = getTimeSeriesRequirements(context, target);
@@ -122,7 +123,7 @@ public class BlackDiscountingYCNSIRFutureOptionFunction extends BlackDiscounting
       @Override
       protected Collection<ValueProperties.Builder> getResultProperties(final FunctionCompilationContext compilationContext, final ComputationTarget target) {
         final Collection<ValueProperties.Builder> properties = super.getResultProperties(compilationContext, target);
-        for (ValueProperties.Builder builder : properties) {
+        for (final ValueProperties.Builder builder : properties) {
           builder.withAny(CURVE);
         }
         return properties;
@@ -133,7 +134,7 @@ public class BlackDiscountingYCNSIRFutureOptionFunction extends BlackDiscounting
         String curveName = null;
         for (final Map.Entry<ValueSpecification, ValueRequirement> entry : inputs.entrySet()) {
           final ValueRequirement requirement = entry.getValue();
-          if (requirement.getValueName().equals(CURVE_DEFINITION)) {
+          if (requirement.getValueName().equals(CURVE_SPECIFICATION)) {
             curveName = requirement.getConstraint(CURVE);
             break;
           }
@@ -143,7 +144,7 @@ public class BlackDiscountingYCNSIRFutureOptionFunction extends BlackDiscounting
         }
         final Collection<ValueProperties.Builder> propertiesSet = getResultProperties(compilationContext, target);
         final Set<ValueSpecification> results = Sets.newHashSetWithExpectedSize(propertiesSet.size());
-        for (ValueProperties.Builder properties : propertiesSet) {
+        for (final ValueProperties.Builder properties : propertiesSet) {
           properties.withoutAny(CURVE).with(CURVE, curveName);
           results.add(new ValueSpecification(YIELD_CURVE_NODE_SENSITIVITIES, target.toSpecification(), properties.get()));
         }
