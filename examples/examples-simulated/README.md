@@ -72,7 +72,14 @@ After saving this view definition, we go back to the analyics viewer and see tha
 
 This view shows analytics for a small equity futures portfolio, calculated with a mark-to-market method (i.e. using market quotes directly, rather than implying a forward curve).
 
+### Present Value
+The mark-to-market price of the position: market quote minus the previous close (i.e. the margined amount) multiplied by number of contracts.
 
+### Delta
+The change in value of the position for a change in value of the underlying - for mark-to-market pricing, this is the unit amount multiplied by the number of contracts multiplied by the future price.
+
+### Forward
+The forward rate implied by the future - for mark-to-market pricing, this is just the future market quote.
 
 ## Swaps <a name="swap-example"></a>
   ### Swap Portfolio View
