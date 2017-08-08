@@ -86,7 +86,7 @@ Both FX forward examples reference a portfolio containing AUD, EUR, CHF and GBP 
 
 The USD discounting curve is a simple curve constructed from cash deposits. The discounting curves for the other currencies are constructed using FX forward quotes, which are used with the USD curve to imply the interest rate. The interpolation in all cases is a monotonic constrained cubic spline with linear extrapolation at both ends. The instruments used to construct the curves are shown in the table below.
 
-| Tenor | AUD FX     | CHF FX     | EUR FX     | GBP FX     | USD Deposit |
+| Tenor \ Curve Name| AUD FX     | CHF FX     | EUR FX     | GBP FX     | USD Deposit |
 |-------|------------|------------|------------|------------|-------------|
 |  1W   | FX Forward | FX Forward | FX Forward | FX Forward | Deposit     |
 |  2W   | FX Forward | FX Forward | FX Forward | FX Forward | Deposit     |
