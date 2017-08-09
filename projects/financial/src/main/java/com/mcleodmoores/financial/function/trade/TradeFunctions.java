@@ -27,5 +27,6 @@ public class TradeFunctions extends AbstractFunctionConfigurationBean {
     functions.add(functionConfiguration(FixedRateFunction.class));
     functions.add(functionConfiguration(FxForwardDetailsFunction.class));
     functions.add(functionConfiguration(FxNdfDetailsFunction.class));
+    functions.add(functionConfiguration(SwapDetailsFunction.class));
   }
 }

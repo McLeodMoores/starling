@@ -149,8 +149,10 @@ public class AnalyticsFunctions extends AbstractFunctionConfigurationBean {
     addSummingFunction(functions, ValueRequirementNames.EXTERNAL_SENSITIVITIES);
     addScalingAndSummingFunction(functions, ValueRequirementNames.FAIR_VALUE);
     addUnitScalingAndSummingFunction(functions, ValueRequirementNames.FIXED_PAY_CASH_FLOWS);
+    addUnitScalingFunction(functions, ValueRequirementNames.FIXED_CASH_FLOWS);
     addUnitScalingFunction(functions, ValueRequirementNames.FIXED_RATE);
     addUnitScalingAndSummingFunction(functions, ValueRequirementNames.FIXED_RECEIVE_CASH_FLOWS);
+    addUnitScalingFunction(functions, ValueRequirementNames.FLOATING_CASH_FLOWS);
     addUnitScalingAndSummingFunction(functions, ValueRequirementNames.FLOATING_PAY_CASH_FLOWS);
     addUnitScalingAndSummingFunction(functions, ValueRequirementNames.FLOATING_RECEIVE_CASH_FLOWS);
     addUnitScalingFunction(functions, ValueRequirementNames.FORWARD);

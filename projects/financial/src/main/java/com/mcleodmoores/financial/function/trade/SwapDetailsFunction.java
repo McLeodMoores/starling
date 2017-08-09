@@ -1,18 +1,13 @@
 /**
- * Copyright (C) 2017 - present McLeod Moores Software Limited.  All rights reserved.
+ *
  */
 package com.mcleodmoores.financial.function.trade;
 
 import static com.opengamma.engine.value.ValuePropertyNames.CURVE_CONSTRUCTION_CONFIG;
 import static com.opengamma.engine.value.ValuePropertyNames.CURVE_EXPOSURES;
 import static com.opengamma.engine.value.ValueRequirementNames.CURVE_BUNDLE;
-import static com.opengamma.engine.value.ValueRequirementNames.FX_FORWARD_DETAILS;
-import static com.opengamma.engine.value.ValueRequirementNames.PAY_AMOUNT;
-import static com.opengamma.engine.value.ValueRequirementNames.PAY_DISCOUNT_FACTOR;
-import static com.opengamma.engine.value.ValueRequirementNames.PAY_ZERO_RATE;
-import static com.opengamma.engine.value.ValueRequirementNames.RECEIVE_AMOUNT;
-import static com.opengamma.engine.value.ValueRequirementNames.RECEIVE_DISCOUNT_FACTOR;
-import static com.opengamma.engine.value.ValueRequirementNames.RECEIVE_ZERO_RATE;
+import static com.opengamma.engine.value.ValueRequirementNames.FIXED_CASH_FLOWS;
+import static com.opengamma.engine.value.ValueRequirementNames.FLOATING_CASH_FLOWS;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -25,12 +20,18 @@ import org.slf4j.LoggerFactory;
 import org.threeten.bp.Clock;
 import org.threeten.bp.ZonedDateTime;
 
+import com.opengamma.OpenGammaRuntimeException;
 import com.opengamma.analytics.financial.forex.method.FXMatrix;
+import com.opengamma.analytics.financial.instrument.InstrumentDefinition;
+import com.opengamma.analytics.financial.instrument.swap.SwapDefinition;
 import com.opengamma.analytics.financial.interestrate.InstrumentDerivative;
-import com.opengamma.analytics.financial.provider.calculator.generic.LastTimeCalculator;
 import com.opengamma.analytics.financial.provider.description.interestrate.MulticurveProviderDiscount;
 import com.opengamma.analytics.financial.provider.description.interestrate.MulticurveProviderInterface;
 import com.opengamma.analytics.financial.provider.description.interestrate.ProviderUtils;
+import com.opengamma.core.convention.ConventionSource;
+import com.opengamma.core.holiday.HolidaySource;
+import com.opengamma.core.position.Trade;
+import com.opengamma.core.region.RegionSource;
 import com.opengamma.core.security.SecuritySource;
 import com.opengamma.engine.ComputationTarget;
 import com.opengamma.engine.ComputationTargetSpecification;
@@ -46,83 +47,88 @@ import com.opengamma.engine.value.ValueRequirement;
 import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.financial.OpenGammaCompilationContext;
-import com.opengamma.financial.analytics.conversion.FXForwardSecurityConverter;
+import com.opengamma.financial.analytics.conversion.DefaultTradeConverter;
+import com.opengamma.financial.analytics.conversion.FixedIncomeConverterDataProvider;
+import com.opengamma.financial.analytics.conversion.SwapSecurityConverter;
 import com.opengamma.financial.analytics.curve.ConfigDBCurveConstructionConfigurationSource;
 import com.opengamma.financial.analytics.curve.CurveConstructionConfiguration;
 import com.opengamma.financial.analytics.curve.CurveConstructionConfigurationSource;
 import com.opengamma.financial.analytics.curve.exposure.ConfigDBInstrumentExposuresProvider;
 import com.opengamma.financial.analytics.curve.exposure.InstrumentExposuresProvider;
 import com.opengamma.financial.analytics.model.curve.CurveCalculationPropertyNamesAndValues;
-import com.opengamma.financial.analytics.model.forex.ForexVisitors;
+import com.opengamma.financial.analytics.model.fixedincome.SwapLegCashFlows;
+import com.opengamma.financial.analytics.timeseries.HistoricalTimeSeriesBundle;
+import com.opengamma.financial.analytics.timeseries.HistoricalTimeSeriesFunctionUtils;
 import com.opengamma.financial.currency.CurrencyPair;
 import com.opengamma.financial.security.FinancialSecurity;
 import com.opengamma.financial.security.FinancialSecurityUtils;
-import com.opengamma.financial.security.fx.FXForwardSecurity;
+import com.opengamma.financial.security.irs.PayReceiveType;
+import com.opengamma.financial.security.swap.FixedInterestRateLeg;
+import com.opengamma.financial.security.swap.SwapSecurity;
+import com.opengamma.master.historicaltimeseries.HistoricalTimeSeriesResolver;
 import com.opengamma.util.async.AsynchronousExecution;
 import com.opengamma.util.money.Currency;
-import com.opengamma.util.money.CurrencyAmount;
 
 /**
- * Returns pricing information for FX forwards.
+ *
  */
-public class FxForwardDetailsFunction extends AbstractFunction.NonCompiledInvoker {
-  private static final Logger LOGGER = LoggerFactory.getLogger(FxForwardDetailsFunction.class);
-  private static final FXForwardSecurityConverter SECURITY_CONVERTER = new FXForwardSecurityConverter();
+public class SwapDetailsFunction extends AbstractFunction.NonCompiledInvoker {
+  public static final String LEG_TYPE_PROPERTY = "LegTypeProperty";
+  public static final String PAY_LEG = "PayLeg";
+  public static final String RECEIVE_LEG = "ReceiveLeg";
+  private static final Logger LOGGER = LoggerFactory.getLogger(SwapDetailsFunction.class);
+  private static final SwapDetailsCalculator CALCULATOR = new SwapDetailsCalculator();
   private CurveConstructionConfigurationSource _curveConstructionConfigurationSource;
   private InstrumentExposuresProvider _instrumentExposuresProvider;
+  private DefaultTradeConverter _tradeConverter;
+  private FixedIncomeConverterDataProvider _definitionConverter;
 
   @Override
   public void init(final FunctionCompilationContext context) {
     _curveConstructionConfigurationSource = ConfigDBCurveConstructionConfigurationSource.init(context, this);
     _instrumentExposuresProvider = ConfigDBInstrumentExposuresProvider.init(context, this);
+    final SecuritySource securitySource = OpenGammaCompilationContext.getSecuritySource(context);
+    final HolidaySource holidaySource = OpenGammaCompilationContext.getHolidaySource(context);
+    final ConventionSource conventionSource = OpenGammaCompilationContext.getConventionSource(context);
+    final RegionSource regionSource = OpenGammaCompilationContext.getRegionSource(context);
+    final HistoricalTimeSeriesResolver timeSeriesResolver = OpenGammaCompilationContext.getHistoricalTimeSeriesResolver(context);
+    final SwapSecurityConverter securityConverter = new SwapSecurityConverter(securitySource, holidaySource, conventionSource, regionSource);
+    _tradeConverter = new DefaultTradeConverter(securityConverter);
+    _definitionConverter = new FixedIncomeConverterDataProvider(null, securitySource, timeSeriesResolver);
   }
 
   @Override
   public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs,
       final ComputationTarget target, final Set<ValueRequirement> desiredValues) throws AsynchronousExecution {
-    final ValueProperties.Builder curvePropertiesBuilder = createValueProperties();
+    // find out what type the graph is expecting
+    ValueRequirement payLegReq = null;
+    ValueRequirement receiveLegReq = null;
     for (final ValueRequirement requirement : desiredValues) {
-      if (requirement.getConstraint(CurveCalculationPropertyNamesAndValues.PROPERTY_CURVE_TYPE) != null) {
-        curvePropertiesBuilder.with(CurveCalculationPropertyNamesAndValues.PROPERTY_CURVE_TYPE,
-            requirement.getConstraint(CurveCalculationPropertyNamesAndValues.PROPERTY_CURVE_TYPE));
-        curvePropertiesBuilder.with(ValuePropertyNames.CURVE_EXPOSURES,
-            requirement.getConstraint(ValuePropertyNames.CURVE_EXPOSURES));
-        break;
+      if (PAY_LEG.equals(requirement.getConstraint(LEG_TYPE_PROPERTY))) {
+        payLegReq = requirement;
+      } else if (RECEIVE_LEG.equals(requirement.getConstraint(LEG_TYPE_PROPERTY))) {
+        receiveLegReq = requirement;
       }
     }
-    final ValueProperties curveProperties = curvePropertiesBuilder.get();
+    if (payLegReq == null || receiveLegReq == null) {
+      throw new OpenGammaRuntimeException("Could not get requirements");
+    }
+    final HistoricalTimeSeriesBundle timeSeries = HistoricalTimeSeriesFunctionUtils.getHistoricalTimeSeriesInputs(executionContext, inputs);
     final Clock snapshotClock = executionContext.getValuationClock();
     final ZonedDateTime now = ZonedDateTime.now(snapshotClock);
     final MulticurveProviderInterface curves = getMergedProviders(inputs, target, executionContext.getSecuritySource());
-    final FinancialSecurity security = (FinancialSecurity) target.getTrade().getSecurity();
-    final InstrumentDerivative instrument = security.accept(SECURITY_CONVERTER).toDerivative(now);
-    final Currency payCurrency = security.accept(ForexVisitors.getPayCurrencyVisitor());
-    final Currency receiveCurrency = security.accept(ForexVisitors.getReceiveCurrencyVisitor());
-    final CurrencyAmount pay = CurrencyAmount.of(payCurrency, security.accept(ForexVisitors.getPayAmountVisitor()));
-    final CurrencyAmount receive = CurrencyAmount.of(receiveCurrency, security.accept(ForexVisitors.getReceiveAmountVisitor()));
-    final double paymentTime = instrument.accept(LastTimeCalculator.getInstance());
-    final double payDiscountFactor = curves.getDiscountFactor(payCurrency, paymentTime);
-    final double receiveDiscountFactor = curves.getDiscountFactor(receiveCurrency, paymentTime);
-    final double payZeroRate = -Math.log(payDiscountFactor) / paymentTime;
-    final double receiveZeroRate = -Math.log(receiveDiscountFactor) / paymentTime;
-    final FxForwardDetails details = FxForwardDetails.builder()
-        .withPayAmount(pay)
-        .withReceiveAmount(receive)
-        .withPayDiscountFactor(payDiscountFactor)
-        .withReceiveDiscountFactor(receiveDiscountFactor)
-        .withPayZeroRate(payZeroRate)
-        .withReceiveZeroRate(receiveZeroRate)
-        .withPaymentTime(paymentTime)
-        .build();
-    final ValueProperties emptyProperties = createValueProperties().get();
+    final SwapSecurity security = (SwapSecurity) target.getTrade().getSecurity();
+    final SwapDefinition definition = (SwapDefinition) _tradeConverter.convert(target.getTrade());
+    final InstrumentDerivative derivative = _definitionConverter.convert(target.getTrade().getSecurity(), definition, now, timeSeries);
+    final SwapLegCashFlows payResult = derivative.accept(CALCULATOR, new SwapDetailsProvider(curves, now, definition, security, PayReceiveType.PAY));
+    final SwapLegCashFlows receiveResult = derivative.accept(CALCULATOR, new SwapDetailsProvider(curves, now, definition, security, PayReceiveType.RECEIVE));
+    final ValueSpecification payLegSpec = new ValueSpecification(payLegReq.getValueName(), target.toSpecification(),
+        payLegReq.getConstraints().copy().get());
+    final ValueSpecification receiveLegSpec = new ValueSpecification(receiveLegReq.getValueName(), target.toSpecification(),
+        receiveLegReq.getConstraints().copy().get());
     final Set<ComputedValue> results = new HashSet<>();
-    results.add(new ComputedValue(new ValueSpecification(PAY_AMOUNT, target.toSpecification(), emptyProperties), pay));
-    results.add(new ComputedValue(new ValueSpecification(RECEIVE_AMOUNT, target.toSpecification(), emptyProperties), receive));
-    results.add(new ComputedValue(new ValueSpecification(PAY_DISCOUNT_FACTOR, target.toSpecification(), curveProperties), payDiscountFactor));
-    results.add(new ComputedValue(new ValueSpecification(RECEIVE_DISCOUNT_FACTOR, target.toSpecification(), curveProperties), receiveDiscountFactor));
-    results.add(new ComputedValue(new ValueSpecification(PAY_ZERO_RATE, target.toSpecification(), curveProperties), payZeroRate));
-    results.add(new ComputedValue(new ValueSpecification(RECEIVE_ZERO_RATE, target.toSpecification(), curveProperties), receiveZeroRate));
-    results.add(new ComputedValue(new ValueSpecification(FX_FORWARD_DETAILS, target.toSpecification(), curveProperties), details));
+    results.add(new ComputedValue(payLegSpec, payResult));
+    results.add(new ComputedValue(receiveLegSpec, receiveResult));
     return results;
   }
 
@@ -133,24 +139,26 @@ public class FxForwardDetailsFunction extends AbstractFunction.NonCompiledInvoke
 
   @Override
   public boolean canApplyTo(final FunctionCompilationContext context, final ComputationTarget target) {
-    return target.getTrade().getSecurity() instanceof FXForwardSecurity;
+    return target.getTrade().getSecurity() instanceof SwapSecurity;
   }
 
   @Override
   public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target) {
     final Set<ValueSpecification> results = new HashSet<>();
-    final ValueProperties emptyProperties = createValueProperties().get();
-    final ValueProperties curveProperties = createValueProperties()
+    final ValueProperties.Builder properties = createValueProperties()
         .withAny(CurveCalculationPropertyNamesAndValues.PROPERTY_CURVE_TYPE)
-        .withAny(ValuePropertyNames.CURVE_EXPOSURES)
-        .get();
-    results.add(new ValueSpecification(PAY_AMOUNT, target.toSpecification(), emptyProperties));
-    results.add(new ValueSpecification(RECEIVE_AMOUNT, target.toSpecification(), emptyProperties));
-    results.add(new ValueSpecification(PAY_DISCOUNT_FACTOR, target.toSpecification(), curveProperties));
-    results.add(new ValueSpecification(RECEIVE_DISCOUNT_FACTOR, target.toSpecification(), curveProperties));
-    results.add(new ValueSpecification(PAY_ZERO_RATE, target.toSpecification(), curveProperties));
-    results.add(new ValueSpecification(RECEIVE_ZERO_RATE, target.toSpecification(), curveProperties));
-    results.add(new ValueSpecification(FX_FORWARD_DETAILS, target.toSpecification(), curveProperties));
+        .withAny(ValuePropertyNames.CURVE_EXPOSURES);
+    final SwapSecurity security = (SwapSecurity) target.getTrade().getSecurity();
+    if (security.getPayLeg() instanceof FixedInterestRateLeg) {
+      results.add(new ValueSpecification(FIXED_CASH_FLOWS, target.toSpecification(), properties.copy().with(LEG_TYPE_PROPERTY, PAY_LEG).get()));
+    } else {
+      results.add(new ValueSpecification(FLOATING_CASH_FLOWS, target.toSpecification(), properties.copy().with(LEG_TYPE_PROPERTY, PAY_LEG).get()));
+    }
+    if (security.getReceiveLeg() instanceof FixedInterestRateLeg) {
+      results.add(new ValueSpecification(FIXED_CASH_FLOWS, target.toSpecification(), properties.copy().with(LEG_TYPE_PROPERTY, RECEIVE_LEG).get()));
+    } else {
+      results.add(new ValueSpecification(FLOATING_CASH_FLOWS, target.toSpecification(), properties.copy().with(LEG_TYPE_PROPERTY, RECEIVE_LEG).get()));
+    }
     return results;
   }
 
@@ -159,11 +167,11 @@ public class FxForwardDetailsFunction extends AbstractFunction.NonCompiledInvoke
       final ValueRequirement desiredValue) {
     final ValueProperties constraints = desiredValue.getConstraints();
     final String curveType = constraints.getSingleValue(CurveCalculationPropertyNamesAndValues.PROPERTY_CURVE_TYPE);
-    final ValueProperties.Builder curveProperties = ValueProperties.builder();
+    final ValueProperties.Builder properties = ValueProperties.builder();
     if (curveType == null) {
-      curveProperties.withAny(CurveCalculationPropertyNamesAndValues.PROPERTY_CURVE_TYPE);
+      properties.withAny(CurveCalculationPropertyNamesAndValues.PROPERTY_CURVE_TYPE);
     } else {
-      curveProperties.with(CurveCalculationPropertyNamesAndValues.PROPERTY_CURVE_TYPE, curveType);
+      properties.with(CurveCalculationPropertyNamesAndValues.PROPERTY_CURVE_TYPE, curveType);
     }
     final Set<String> curveExposureConfigs = constraints.getValues(CURVE_EXPOSURES);
     if (curveExposureConfigs == null) {
@@ -177,7 +185,7 @@ public class FxForwardDetailsFunction extends AbstractFunction.NonCompiledInvoke
         final Set<String> curveConstructionConfigurationNames =
             _instrumentExposuresProvider.getCurveConstructionConfigurationsForConfig(curveExposureConfig, target.getTrade());
         for (final String curveConstructionConfigurationName : curveConstructionConfigurationNames) {
-          final ValueProperties curveBundleConstraints = curveProperties.copy()
+          final ValueProperties curveBundleConstraints = properties.copy()
               .with(CURVE_CONSTRUCTION_CONFIG, curveConstructionConfigurationName)
               .with(CURVE_EXPOSURES, curveExposureConfig).withOptional(CURVE_EXPOSURES)
               .get();
@@ -199,6 +207,14 @@ public class FxForwardDetailsFunction extends AbstractFunction.NonCompiledInvoke
               CurrencyPair.TYPE.specification(CurrencyPair.of(iter.next(), initialCurrency))));
         }
       }
+      final Trade trade = target.getTrade();
+      final InstrumentDefinition<?> definition = _tradeConverter.convert(trade);
+      final Set<ValueRequirement> timeSeriesRequirements = _definitionConverter.getConversionTimeSeriesRequirements(trade.getSecurity(), definition);
+      if (timeSeriesRequirements == null) {
+        LOGGER.error("Could not get fixing time series requirements for {}", security);
+        return null;
+      }
+      requirements.addAll(timeSeriesRequirements);
       return requirements;
     } catch (final Exception e) {
       LOGGER.error(e.getMessage());
@@ -214,31 +230,31 @@ public class FxForwardDetailsFunction extends AbstractFunction.NonCompiledInvoke
     for (final Map.Entry<ValueSpecification, ValueRequirement> entry : inputs.entrySet()) {
       final ValueRequirement value = entry.getValue();
       if (value.getValueName().equals(CURVE_BUNDLE)) {
-        curveType = value.getConstraint(CurveCalculationPropertyNamesAndValues.PROPERTY_CURVE_TYPE);
+        final Set<String> curveTypes = value.getConstraints().getValues(CurveCalculationPropertyNamesAndValues.PROPERTY_CURVE_TYPE);
+        if (curveTypes != null && !curveTypes.isEmpty()) {
+          curveType = value.getConstraint(CurveCalculationPropertyNamesAndValues.PROPERTY_CURVE_TYPE);
+        }
         curveExposuresName = value.getConstraint(CURVE_EXPOSURES);
         break;
       }
     }
-    if (curveType == null) {
-      return null;
-    }
     if (curveExposuresName == null) {
+      // need the curve exposures name to be set - either in the view definition or a defaults function
       return null;
     }
-    final ValueProperties emptyProperties = createValueProperties().get();
-    final ValueProperties curveProperties = createValueProperties()
-        .with(CurveCalculationPropertyNamesAndValues.PROPERTY_CURVE_TYPE, curveType)
-        .with(ValuePropertyNames.CURVE_EXPOSURES, curveExposuresName)
-        .get();
-    final Set<ValueSpecification> results = new HashSet<>();
-    results.add(new ValueSpecification(PAY_AMOUNT, target.toSpecification(), emptyProperties));
-    results.add(new ValueSpecification(RECEIVE_AMOUNT, target.toSpecification(), emptyProperties));
-    results.add(new ValueSpecification(PAY_DISCOUNT_FACTOR, target.toSpecification(), curveProperties));
-    results.add(new ValueSpecification(RECEIVE_DISCOUNT_FACTOR, target.toSpecification(), curveProperties));
-    results.add(new ValueSpecification(PAY_ZERO_RATE, target.toSpecification(), curveProperties));
-    results.add(new ValueSpecification(RECEIVE_ZERO_RATE, target.toSpecification(), curveProperties));
-    results.add(new ValueSpecification(FX_FORWARD_DETAILS, target.toSpecification(), curveProperties));
-    return results;
+    final Set<ValueSpecification> results = getResults(context, target);
+    final Set<ValueSpecification> newResults = new HashSet<>();
+    for (final ValueSpecification result : results) {
+      // replace withAny if there's a specific value
+      final ValueProperties.Builder properties = result.getProperties().copy()
+          .withoutAny(CURVE_EXPOSURES).with(CURVE_EXPOSURES, curveExposuresName);
+      if (curveType != null) {
+        properties.withoutAny(CurveCalculationPropertyNamesAndValues.PROPERTY_CURVE_TYPE)
+                  .with(CurveCalculationPropertyNamesAndValues.PROPERTY_CURVE_TYPE, curveType);
+      }
+      newResults.add(new ValueSpecification(result.getValueName(), result.getTargetSpecification(), properties.get()));
+    }
+    return newResults;
   }
 
   private static MulticurveProviderDiscount getMergedProviders(final FunctionInputs inputs, final ComputationTarget target,

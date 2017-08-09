@@ -132,7 +132,9 @@ public class ResultsFormatter {
         new FXMatrixFormatter(),
         new YieldCurveDataFormatter(doubleFormatter),
         new FxForwardDetailsFormatter(doubleFormatter, rateFormatter, currencyAmountFormatter),
-        new FxNdfDetailsFormatter(doubleFormatter, rateFormatter, currencyAmountFormatter));
+        new FxNdfDetailsFormatter(doubleFormatter, rateFormatter, currencyAmountFormatter),
+        new FixedCashFlowFormatter(doubleFormatter, rateFormatter, currencyAmountFormatter),
+        new FloatingCashFlowFormatter(doubleFormatter, rateFormatter, currencyAmountFormatter));
   }
 
   private void addFormatters(final TypeFormatter<?>... formatters) {

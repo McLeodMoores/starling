@@ -1208,7 +1208,7 @@ public final class ValueRequirementNames {
   /**
    * The fixed rate associated with a trade or security.
    */
-  public static final String FIXED_RATE = "FixedRate";
+  public static final String FIXED_RATE = "Fixed Rate";
   /**
    * The attributes of a security.
    */

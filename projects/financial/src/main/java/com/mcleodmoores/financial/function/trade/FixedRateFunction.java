@@ -5,6 +5,7 @@ package com.mcleodmoores.financial.function.trade;
 
 import static com.opengamma.engine.value.ValueRequirementNames.FIXED_RATE;
 
+import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.Set;
 
@@ -38,7 +39,7 @@ public class FixedRateFunction extends AbstractFunction.NonCompiledInvoker {
     final FinancialSecurity security = (FinancialSecurity) target.getTrade().getSecurity();
     final double fixedRate = security.accept(FixedRateVisitor.INSTANCE);
     final ValueSpecification spec = new ValueSpecification(FIXED_RATE, target.toSpecification(), createValueProperties().get());
-    return Collections.singleton(new ComputedValue(spec, fixedRate * 100));
+    return Collections.singleton(new ComputedValue(spec, BigDecimal.valueOf(fixedRate)));
   }
 
   @Override

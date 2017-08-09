@@ -5,6 +5,8 @@ package com.opengamma.financial.analytics.model.discounting;
 
 import static com.opengamma.engine.value.ValuePropertyNames.CURVE_EXPOSURES;
 import static com.opengamma.engine.value.ValueRequirementNames.BLOCK_CURVE_SENSITIVITIES;
+import static com.opengamma.engine.value.ValueRequirementNames.FIXED_CASH_FLOWS;
+import static com.opengamma.engine.value.ValueRequirementNames.FLOATING_CASH_FLOWS;
 import static com.opengamma.engine.value.ValueRequirementNames.PAR_RATE;
 import static com.opengamma.engine.value.ValueRequirementNames.PRESENT_VALUE;
 import static com.opengamma.engine.value.ValueRequirementNames.YIELD_CURVE_NODE_SENSITIVITIES;
@@ -33,7 +35,9 @@ public class LinearRatesPerCurrencyDefaults extends DefaultPropertyFunction {
       PRESENT_VALUE,
       BLOCK_CURVE_SENSITIVITIES,
       YIELD_CURVE_NODE_SENSITIVITIES,
-      PAR_RATE
+      PAR_RATE,
+      FIXED_CASH_FLOWS,
+      FLOATING_CASH_FLOWS
   };
   private final Currency _ccy;
   private final String _curveExposuresName;

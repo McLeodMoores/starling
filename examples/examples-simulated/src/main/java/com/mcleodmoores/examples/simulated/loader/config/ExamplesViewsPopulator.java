@@ -16,7 +16,6 @@ import static com.opengamma.engine.value.ValueRequirementNames.BUCKETED_PV01;
 import static com.opengamma.engine.value.ValueRequirementNames.CAPM_BETA;
 import static com.opengamma.engine.value.ValueRequirementNames.FAIR_VALUE;
 import static com.opengamma.engine.value.ValueRequirementNames.FIXED_CASH_FLOWS;
-import static com.opengamma.engine.value.ValueRequirementNames.FIXED_RATE;
 import static com.opengamma.engine.value.ValueRequirementNames.FLOATING_CASH_FLOWS;
 import static com.opengamma.engine.value.ValueRequirementNames.FORWARD;
 import static com.opengamma.engine.value.ValueRequirementNames.FORWARD_DELTA;
@@ -131,7 +130,7 @@ public class ExamplesViewsPopulator extends AbstractTool<ToolContext> {
   @Override
   protected void doRun() {
     storeViewDefinition(getEquityViewDefinition(ExampleEquityPortfolioLoader.PORTFOLIO_NAME));
-    storeViewDefinition(getSwapDetailsViewDefinition(MULTI_CURRENCY_SWAP_PORTFOLIO_NAME));
+    storeViewDefinition(getSwapDetailsViewDefinition(MULTI_CURRENCY_SWAP_PORTFOLIO_NAME, "Swap Details View"));
     storeViewDefinition(getAudSwapView1Definition(AUD_SWAP_PORFOLIO_NAME));
     storeViewDefinition(getFxOptionViewDefinition(VANILLA_FX_OPTION_PORTFOLIO_NAME, "FX Option View"));
     storeViewDefinition(getFxOptionGreeksViewDefinition(VANILLA_FX_OPTION_PORTFOLIO_NAME, "FX Option Greeks View"));
@@ -183,9 +182,9 @@ public class ExamplesViewsPopulator extends AbstractTool<ToolContext> {
    * @param portfolioName  the portfolio name
    * @return  the view definition
    */
-  private ViewDefinition getSwapDetailsViewDefinition(final String portfolioName) {
+  private ViewDefinition getSwapDetailsViewDefinition(final String portfolioName, final String viewName) {
     final UniqueId portfolioId = getPortfolioId(portfolioName).toLatest();
-    final ViewDefinition viewDefinition = new ViewDefinition(portfolioName + " View", portfolioId, UserPrincipal.getTestUser());
+    final ViewDefinition viewDefinition = new ViewDefinition(viewName, portfolioId, UserPrincipal.getTestUser());
     viewDefinition.setDefaultCurrency(Currency.USD);
     viewDefinition.setMaxDeltaCalculationPeriod(MAX_DELTA_PERIOD);
     viewDefinition.setMaxFullCalculationPeriod(MAX_FULL_PERIOD);
@@ -196,13 +195,13 @@ public class ExamplesViewsPopulator extends AbstractTool<ToolContext> {
         .get();
     final ViewCalculationConfiguration calcConfig = new ViewCalculationConfiguration(viewDefinition, DEFAULT_CALC_CONFIG);
     calcConfig.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, NOTIONAL, ValueProperties.none());
-    calcConfig.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, FIXED_RATE, ValueProperties.none());
     calcConfig.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, PRESENT_VALUE,
         calcProperties.compose(ValueProperties.with(CurrencyConversionFunction.ORIGINAL_CURRENCY, "Default")
             .withOptional(CurrencyConversionFunction.ORIGINAL_CURRENCY).get()));
-    calcConfig.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, PRESENT_VALUE, ValueProperties.with(CURRENCY, "USD").get());
-    calcConfig.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, FIXED_CASH_FLOWS, ValueProperties.none());
-    calcConfig.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, FLOATING_CASH_FLOWS, ValueProperties.none());
+    calcConfig.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, PRESENT_VALUE,
+        calcProperties.compose(ValueProperties.with(CURRENCY, "USD").get()));
+    calcConfig.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, FIXED_CASH_FLOWS, calcProperties);
+    calcConfig.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, FLOATING_CASH_FLOWS, calcProperties);
     viewDefinition.addViewCalculationConfiguration(calcConfig);
     return viewDefinition;
   }
