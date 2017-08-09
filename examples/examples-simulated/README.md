@@ -132,9 +132,26 @@ Note that this value is not summed at portfolio node level (which is why the col
 
 ![FX Forward View](https://github.com/McLeodMoores/starling/blob/mcleodmoores/examples/examples-simulated/docs/images/fx-forward-view.png)
 
+This view shows the present value and exposures to the underlyings for the portfolio of FX forwards.
+
+#### Present Value
+The same output as in the previous view: the discounted value of each leg converted into the result currency and then summed.
+
+#### FX Currency Exposure
+This is the sensitivity of the PV of each leg to changes in the spot rate.
+
+#### Bucketed PV01
+This is the change in PV of the trade to a change of 1 basis point in the **market quote** used to construct the curve. Each trade has sensitivities to two curves - the pay and receive currency discounting curves. We have made the decision to return vectors of zeroes when there is no sensitivity (e.g. a GBP/USD trade does not have any sensitivity to the EUR curve), but returning no result at all is a valid output - in this case, the cells in the grid would be empty.
+
+**Note:** all trades in this portfolio are CCY/USD, so there will be sensitivities to the USD discounting curve and the CCY discounting curve. If the trade were CCY1/CCY2, there would be sensitivities to the two currency discounting curves *plus* the USD discounting curve, as the USD curve was used as the base curve when constructing curves from FX forwards.
+
+When there are multiple columns with the same output name but different properties , hovering over the header will show details of which column is which:
+
 ![FX Result Properties](https://github.com/McLeodMoores/starling/blob/mcleodmoores/examples/examples-simulated/docs/images/fx-forward-properties.png)
 
-![FX YCNS](https://github.com/McLeodMoores/starling/blob/mcleodmoores/examples/examples-simulated/docs/images/fx-forward-ycns.png)
+Looking at an AUD/USD trade, we can see sensitivities to the USD and AUD curves at approximately the maturity of the trade (the inteprolation is not local, so there are some values outside the two surrounding nodes), and no sensitivity to a curve in another currency.
+
+![FX Bucketed PV01](https://github.com/McLeodMoores/starling/blob/mcleodmoores/examples/examples-simulated/docs/images/fx-forward-pv01.png)
 
 ## FX Options <a name="fx-options-example"></a>
 
