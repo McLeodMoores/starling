@@ -149,7 +149,7 @@ When there are multiple columns with the same output name but different properti
 
 ![FX Result Properties](https://github.com/McLeodMoores/starling/blob/mcleodmoores/examples/examples-simulated/docs/images/fx-forward-properties.png)
 
-Looking at an AUD/USD trade, we can see sensitivities to the USD and AUD curves at approximately the maturity of the trade (the inteprolation is not local, so there are some values outside the two surrounding nodes), and no sensitivity to a curve in another currency.
+Looking at an AUD/USD trade, we can see sensitivities to the USD and AUD curves at approximately the maturity of the trade (the interpolation is not local, so there are some values outside the two surrounding nodes), and no sensitivity to a curve in another currency.
 
 ![FX Bucketed PV01](https://github.com/McLeodMoores/starling/blob/mcleodmoores/examples/examples-simulated/docs/images/fx-forward-pv01.png)
 
