@@ -12,6 +12,7 @@ import static com.opengamma.engine.value.ValuePropertyNames.CURRENCY;
 import static com.opengamma.engine.value.ValuePropertyNames.CURVE;
 import static com.opengamma.engine.value.ValuePropertyNames.CURVE_EXPOSURES;
 import static com.opengamma.engine.value.ValuePropertyNames.SURFACE;
+import static com.opengamma.engine.value.ValueRequirementNames.BUCKETED_PV01;
 import static com.opengamma.engine.value.ValueRequirementNames.CAPM_BETA;
 import static com.opengamma.engine.value.ValueRequirementNames.FAIR_VALUE;
 import static com.opengamma.engine.value.ValueRequirementNames.FIXED_CASH_FLOWS;
@@ -408,13 +409,13 @@ public class ExamplesViewsPopulator extends AbstractTool<ToolContext> {
         if (pair.getFirstCurrency().equals(Currency.USD)) {
           final ValueProperties curveProperties = ValueProperties.builder().with(CURVE, ExamplesFxImpliedCurveConfigsPopulator.USD_DEPOSIT_CURVE_NAME)
               .with(DiscountingYCNSFunction.SENSITIVITY_CURRENCY_PROPERTY, "USD").with(CURRENCY, "USD").get();
-          calcConfig.addPortfolioRequirement(FXForwardSecurity.SECURITY_TYPE, YIELD_CURVE_NODE_SENSITIVITIES, curveProperties);
+          calcConfig.addPortfolioRequirement(FXForwardSecurity.SECURITY_TYPE, BUCKETED_PV01, curveProperties);
           calcConfig.addSpecificRequirement(new ValueRequirement(YIELD_CURVE, ComputationTargetSpecification.NULL, curveProperties));
           ccysAdded.add(pair.getFirstCurrency());
         } else {
           final ValueProperties curveProperties = ValueProperties.builder().with(CURVE,
               ExampleConfigUtils.generateFxImpliedCurveName(ccy)).get();
-          calcConfig.addPortfolioRequirement(FXForwardSecurity.SECURITY_TYPE, YIELD_CURVE_NODE_SENSITIVITIES, curveProperties
+          calcConfig.addPortfolioRequirement(FXForwardSecurity.SECURITY_TYPE, BUCKETED_PV01, curveProperties
               .copy().with(DiscountingYCNSFunction.SENSITIVITY_CURRENCY_PROPERTY, ccy).with(CURRENCY, "USD").get());
           calcConfig.addSpecificRequirement(new ValueRequirement(YIELD_CURVE, ComputationTargetSpecification.NULL, curveProperties));
           ccysAdded.add(pair.getFirstCurrency());
@@ -424,13 +425,13 @@ public class ExamplesViewsPopulator extends AbstractTool<ToolContext> {
         if (pair.getSecondCurrency().equals(Currency.USD)) {
           final ValueProperties curveProperties = ValueProperties.builder().with(CURVE, ExamplesFxImpliedCurveConfigsPopulator.USD_DEPOSIT_CURVE_NAME)
               .with(DiscountingYCNSFunction.SENSITIVITY_CURRENCY_PROPERTY, "USD").with(CURRENCY, "USD").get();
-          calcConfig.addPortfolioRequirement(FXForwardSecurity.SECURITY_TYPE, YIELD_CURVE_NODE_SENSITIVITIES, curveProperties);
+          calcConfig.addPortfolioRequirement(FXForwardSecurity.SECURITY_TYPE, BUCKETED_PV01, curveProperties);
           calcConfig.addSpecificRequirement(new ValueRequirement(YIELD_CURVE, ComputationTargetSpecification.NULL, curveProperties));
           ccysAdded.add(pair.getFirstCurrency());
         } else {
           final ValueProperties curveProperties = ValueProperties.builder().with(CURVE,
               ExampleConfigUtils.generateFxImpliedCurveName(ccy)).get();
-          calcConfig.addPortfolioRequirement(FXForwardSecurity.SECURITY_TYPE, YIELD_CURVE_NODE_SENSITIVITIES, curveProperties
+          calcConfig.addPortfolioRequirement(FXForwardSecurity.SECURITY_TYPE, BUCKETED_PV01, curveProperties
               .copy().with(DiscountingYCNSFunction.SENSITIVITY_CURRENCY_PROPERTY, ccy).with(CURRENCY, "USD").get());
           calcConfig.addSpecificRequirement(new ValueRequirement(YIELD_CURVE, ComputationTargetSpecification.NULL, curveProperties));
           ccysAdded.add(pair.getFirstCurrency());
