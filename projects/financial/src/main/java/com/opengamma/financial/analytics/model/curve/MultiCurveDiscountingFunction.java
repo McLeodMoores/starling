@@ -269,7 +269,7 @@ public class MultiCurveDiscountingFunction extends
       final FXMatrix fxMatrix = (FXMatrix) inputs.getValue(ValueRequirementNames.FX_MATRIX);
       final MulticurveProviderDiscount knownData;
       if (getExogenousRequirements().isEmpty()) {
-        knownData = new MulticurveProviderDiscount();
+        knownData = new MulticurveProviderDiscount(fxMatrix);
       } else {
         knownData = ((MulticurveProviderDiscount) inputs.getValue(ValueRequirementNames.CURVE_BUNDLE)).copy();
         final FXMatrix knownFxMatrix = knownData.getFxRates();

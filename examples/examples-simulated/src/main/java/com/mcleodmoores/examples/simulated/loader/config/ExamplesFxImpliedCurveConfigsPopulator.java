@@ -60,13 +60,13 @@ public class ExamplesFxImpliedCurveConfigsPopulator {
   }
 
   private static void makeUsdConfigs(final ConfigMaster configMaster) {
-    final DiscountingCurveTypeConfiguration discountingCurveType = new DiscountingCurveTypeConfiguration(Currency.USD.getCode());
-    final Map<String, List<? extends CurveTypeConfiguration>> curveTypes = new HashMap<>();
-    curveTypes.put(USD_DEPOSIT_CURVE_NAME, Arrays.asList(discountingCurveType));
-    final CurveGroupConfiguration group = new CurveGroupConfiguration(0, curveTypes);
-    final List<CurveGroupConfiguration> groups = Arrays.asList(group);
-    ConfigMasterUtils.storeByName(configMaster,
-        ExampleConfigUtils.makeConfig(new CurveConstructionConfiguration(USD_CONFIG_NAME, groups, Collections.<String>emptyList())));
+//    final DiscountingCurveTypeConfiguration discountingCurveType = new DiscountingCurveTypeConfiguration(Currency.USD.getCode());
+//    final Map<String, List<? extends CurveTypeConfiguration>> curveTypes = new HashMap<>();
+//    curveTypes.put(USD_DEPOSIT_CURVE_NAME, Arrays.asList(discountingCurveType));
+//    final CurveGroupConfiguration group = new CurveGroupConfiguration(0, curveTypes);
+//    final List<CurveGroupConfiguration> groups = Arrays.asList(group);
+//    ConfigMasterUtils.storeByName(configMaster,
+//        ExampleConfigUtils.makeConfig(new CurveConstructionConfiguration(USD_CONFIG_NAME, groups, Collections.<String>emptyList())));
     final String idMapperName = "USD Deposit Tickers";
     final Map<Tenor, CurveInstrumentProvider> cashIds = new HashMap<>();
     final Set<CurveNode> nodes = new LinkedHashSet<>();
@@ -87,14 +87,18 @@ public class ExamplesFxImpliedCurveConfigsPopulator {
   private static void makeTwoCurveConfiguration(final Currency ccy, final ConfigMaster configMaster) {
     final String ccyString = ccy.getCode();
     final String name = ExampleConfigUtils.generateFxImpliedConfigName(ccyString);
-    final String discountingCurveName = ExampleConfigUtils.generateFxImpliedCurveName(ccyString);
-    final DiscountingCurveTypeConfiguration discountingCurveType = new DiscountingCurveTypeConfiguration(ccyString);
-    final Map<String, List<? extends CurveTypeConfiguration>> curveTypes = new HashMap<>();
-    curveTypes.put(discountingCurveName, Arrays.asList(discountingCurveType));
-    final CurveGroupConfiguration group = new CurveGroupConfiguration(0, curveTypes);
-    final List<CurveGroupConfiguration> groups = Arrays.asList(group);
+    final String ccyDiscountingCurveName = ExampleConfigUtils.generateFxImpliedCurveName(ccyString);
+    final DiscountingCurveTypeConfiguration usdDiscountingCurveType = new DiscountingCurveTypeConfiguration("USD");
+    final DiscountingCurveTypeConfiguration ccyDiscountingCurveType = new DiscountingCurveTypeConfiguration(ccyString);
+    final Map<String, List<? extends CurveTypeConfiguration>> usdCurveTypes = new HashMap<>();
+    usdCurveTypes.put(USD_DEPOSIT_CURVE_NAME, Collections.singletonList(usdDiscountingCurveType));
+    final Map<String, List<? extends CurveTypeConfiguration>> ccyCurveTypes = new HashMap<>();
+    ccyCurveTypes.put(ccyDiscountingCurveName, Collections.singletonList(ccyDiscountingCurveType));
+    final CurveGroupConfiguration group1 = new CurveGroupConfiguration(0, usdCurveTypes);
+    final CurveGroupConfiguration group2 = new CurveGroupConfiguration(1, ccyCurveTypes);
+    final List<CurveGroupConfiguration> groups = Arrays.asList(group1, group2);
     ConfigMasterUtils.storeByName(configMaster,
-        ExampleConfigUtils.makeConfig(new CurveConstructionConfiguration(name, groups, Collections.singletonList(USD_CONFIG_NAME))));
+        ExampleConfigUtils.makeConfig(new CurveConstructionConfiguration(name, groups, Collections.<String>emptyList())));
   }
 
   private static void makeCurveDefinition(final Currency ccy, final ConfigMaster configMaster) {

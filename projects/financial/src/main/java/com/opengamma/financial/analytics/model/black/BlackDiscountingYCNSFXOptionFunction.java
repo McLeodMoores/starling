@@ -5,6 +5,7 @@
  */
 package com.opengamma.financial.analytics.model.black;
 
+import static com.opengamma.engine.value.ValuePropertyNames.CURRENCY;
 import static com.opengamma.engine.value.ValuePropertyNames.CURVE;
 import static com.opengamma.engine.value.ValuePropertyNames.CURVE_EXPOSURES;
 import static com.opengamma.engine.value.ValuePropertyNames.SURFACE;
@@ -17,19 +18,19 @@ import static com.opengamma.financial.analytics.model.volatility.SmileFittingPro
 import static com.opengamma.financial.analytics.model.volatility.SmileFittingPropertyNamesAndValues.PROPERTY_VOLATILITY_MODEL;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
 import org.threeten.bp.Instant;
 
-import com.google.common.collect.Iterables;
 import com.google.common.collect.Sets;
+import com.opengamma.OpenGammaRuntimeException;
 import com.opengamma.analytics.financial.forex.method.FXMatrix;
 import com.opengamma.analytics.financial.interestrate.InstrumentDerivative;
 import com.opengamma.analytics.financial.provider.sensitivity.multicurve.MultipleCurrencyParameterSensitivity;
 import com.opengamma.analytics.math.matrix.DoubleMatrix1D;
+import com.opengamma.analytics.math.matrix.OGMatrixAlgebra;
 import com.opengamma.core.security.SecuritySource;
 import com.opengamma.engine.ComputationTarget;
 import com.opengamma.engine.ComputationTargetSpecification;
@@ -45,16 +46,21 @@ import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.financial.OpenGammaCompilationContext;
 import com.opengamma.financial.analytics.DoubleLabelledMatrix1D;
 import com.opengamma.financial.analytics.curve.CurveSpecification;
+import com.opengamma.financial.analytics.model.discounting.DiscountingYCNSFunction;
+import com.opengamma.financial.analytics.model.forex.ForexVisitors;
 import com.opengamma.financial.analytics.model.multicurve.MultiCurveUtils;
+import com.opengamma.financial.currency.CurrencyPair;
 import com.opengamma.financial.security.FinancialSecurity;
 import com.opengamma.util.money.Currency;
 import com.opengamma.util.tuple.Pair;
+import com.opengamma.util.tuple.Pairs;
 
 /**
  * Calculates the yield curve node sensitivities of FX options using curves constructed using the
  * discounting method and a Black surface.
  */
 public class BlackDiscountingYCNSFXOptionFunction extends BlackDiscountingFXOptionFunction {
+  static final OGMatrixAlgebra ALG = new OGMatrixAlgebra();
 
   /**
    * Sets the value requirements to {@link ValueRequirementNames#YIELD_CURVE_NODE_SENSITIVITIES}.
@@ -71,24 +77,60 @@ public class BlackDiscountingYCNSFXOptionFunction extends BlackDiscountingFXOpti
       protected Set<ComputedValue> getValues(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
           final Set<ValueRequirement> desiredValues, final InstrumentDerivative derivative, final FXMatrix fxMatrix) {
         final MultipleCurrencyParameterSensitivity sensitivities = (MultipleCurrencyParameterSensitivity) inputs.getValue(BLOCK_CURVE_SENSITIVITIES);
-        final ValueRequirement desiredValue = Iterables.getOnlyElement(desiredValues);
-        final String curveName = desiredValue.getConstraint(CURVE);
-        final CurveSpecification curveSpecification =
-            (CurveSpecification) inputs.getValue(new ValueRequirement(CURVE_SPECIFICATION, ComputationTargetSpecification.NULL, ValueProperties.builder()
-                .with(CURVE, curveName).get()));
-        final ValueProperties properties = desiredValue.getConstraints().copy().with(CURVE, curveName).get();
-        final Map<Pair<String, Currency>, DoubleMatrix1D> entries = sensitivities.getSensitivities();
-        final ValueSpecification spec = new ValueSpecification(YIELD_CURVE_NODE_SENSITIVITIES, target.toSpecification(), properties);
-        for (final Map.Entry<Pair<String, Currency>, DoubleMatrix1D> entry : entries.entrySet()) {
-          if (curveName.equals(entry.getKey().getFirst())) {
-            final DoubleLabelledMatrix1D ycns = MultiCurveUtils.getLabelledMatrix(entry.getValue(), curveSpecification);
-            return Collections.singleton(new ComputedValue(spec, ycns));
+        final Map<Pair<String, Currency>, DoubleMatrix1D> sensitivityEntries = sensitivities.getSensitivities();
+        final Set<ComputedValue> results = Sets.newHashSetWithExpectedSize(desiredValues.size());
+        for (final ValueRequirement desiredValue : desiredValues) {
+          final String curveName = desiredValue.getConstraint(CURVE);
+          final CurveSpecification curveSpecification =
+              (CurveSpecification) inputs.getValue(new ValueRequirement(CURVE_SPECIFICATION, ComputationTargetSpecification.NULL,
+                  ValueProperties.builder().with(CURVE, curveName).get()));
+          final String currency = desiredValue.getConstraints().getSingleValue(DiscountingYCNSFunction.SENSITIVITY_CURRENCY_PROPERTY);
+          DoubleMatrix1D sensitivityMatrix = null;
+          final FinancialSecurity security = (FinancialSecurity) target.getTrade().getSecurity();
+          final Currency putCurrency = security.accept(ForexVisitors.getPutCurrencyVisitor());
+          final Currency callCurrency = security.accept(ForexVisitors.getCallCurrencyVisitor());
+          final Currency ccy = Currency.of(currency);
+          if (currency != null) {
+            // Currency is specified - look up directly
+            sensitivityMatrix = sensitivityEntries.get(Pairs.of(curveName, ccy));
+            if (sensitivityMatrix == null) {
+              // might be in the other currency - get matrix and convert
+              for (final Map.Entry<Pair<String, Currency>, DoubleMatrix1D> entry : sensitivityEntries.entrySet()) {
+                if (curveName.equals(entry.getKey().getFirst())) {
+                  // found a match, now use matrix to convert elements or get from inputs if currency is not put or call currency
+                  final Double conversion;
+                  if (ccy.equals(putCurrency) || ccy.equals(callCurrency)) {
+                    conversion = fxMatrix.getFxRate(entry.getKey().getSecond(), ccy);
+                  } else {
+                    conversion = (Double) inputs.getComputedValue(new ValueRequirement(ValueRequirementNames.SPOT_RATE,
+                            CurrencyPair.TYPE.specification(CurrencyPair.of(entry.getKey().getSecond(), ccy)))).getValue();
+                    if (conversion == null) {
+                      throw new OpenGammaRuntimeException("Could not get FX conversion for " + entry.getKey().getSecond() + "/" + ccy);
+                    }
+                  }
+                  sensitivityMatrix = (DoubleMatrix1D) ALG.scale(entry.getValue(), conversion);
+                  break;
+                }
+              }
+            }
+          } else {
+            // No currency constraint so make an arbitrary choice.
+            for (final Map.Entry<Pair<String, Currency>, DoubleMatrix1D> entry : sensitivityEntries.entrySet()) {
+              if (curveName.equals(entry.getKey().getFirst())) {
+                sensitivityMatrix = entry.getValue();
+                break;
+              }
+            }
           }
+          if (sensitivityMatrix == null) {
+            final double[] zeroes = new double[curveSpecification.getNodes().size()];
+            sensitivityMatrix = new DoubleMatrix1D(zeroes);
+          }
+          final ValueSpecification valueSpec = new ValueSpecification(YIELD_CURVE_NODE_SENSITIVITIES, target.toSpecification(), desiredValue.getConstraints());
+          final DoubleLabelledMatrix1D ycns = MultiCurveUtils.getLabelledMatrix(sensitivityMatrix, curveSpecification);
+          results.add(new ComputedValue(valueSpec, ycns));
         }
-        // return an array with zero sensitivities for all nodes
-        final DoubleMatrix1D zeroes = new DoubleMatrix1D(new double[curveSpecification.getNodes().size()]);
-        final DoubleLabelledMatrix1D ycns = MultiCurveUtils.getLabelledMatrix(zeroes, curveSpecification);
-        return Collections.singleton(new ComputedValue(spec, ycns));
+        return results;
       }
 
       @Override
@@ -107,17 +149,32 @@ public class BlackDiscountingYCNSFXOptionFunction extends BlackDiscountingFXOpti
         if (surfaces == null) {
           return null;
         }
-        final ValueProperties properties = ValueProperties
+        final ValueProperties.Builder builder = ValueProperties
             .with(PROPERTY_CURVE_TYPE, DISCOUNTING)
             .with(CURVE_EXPOSURES, curveExposureConfigs)
             .with(SURFACE, surfaces)
-            .with(PROPERTY_VOLATILITY_MODEL, BLACK).get();
-        final ValueProperties curveProperties = ValueProperties.with(CURVE, curveNames).get();
+            .with(PROPERTY_VOLATILITY_MODEL, BLACK);
+        final String sensitivityCurrency = constraints.getSingleValue(DiscountingYCNSFunction.SENSITIVITY_CURRENCY_PROPERTY);
         final Set<ValueRequirement> requirements = new HashSet<>();
+        if (sensitivityCurrency != null) {
+          builder.with(DiscountingYCNSFunction.SENSITIVITY_CURRENCY_PROPERTY, sensitivityCurrency)
+                 .withOptional(DiscountingYCNSFunction.SENSITIVITY_CURRENCY_PROPERTY);
+          final FinancialSecurity security = (FinancialSecurity) target.getTrade().getSecurity();
+          final Currency ccy = Currency.of(sensitivityCurrency);
+          final Currency putCurrency = security.accept(ForexVisitors.getPutCurrencyVisitor());
+          final Currency callCurrency = security.accept(ForexVisitors.getCallCurrencyVisitor());
+          if (!ccy.equals(putCurrency) && !ccy.equals(callCurrency)) {
+            requirements.add(new ValueRequirement(ValueRequirementNames.SPOT_RATE, CurrencyPair.TYPE.specification(CurrencyPair.of(putCurrency, ccy))));
+            requirements.add(new ValueRequirement(ValueRequirementNames.SPOT_RATE, CurrencyPair.TYPE.specification(CurrencyPair.of(callCurrency, ccy))));
+          }
+        } else {
+          builder.withAny(DiscountingYCNSFunction.SENSITIVITY_CURRENCY_PROPERTY).withOptional(DiscountingYCNSFunction.SENSITIVITY_CURRENCY_PROPERTY);
+        }
+        final ValueProperties curveProperties = ValueProperties.with(CURVE, curveNames).get();
         final FinancialSecurity security = (FinancialSecurity) target.getTrade().getSecurity();
         final SecuritySource securitySource = OpenGammaCompilationContext.getSecuritySource(context);
         requirements.add(new ValueRequirement(CURVE_SPECIFICATION, ComputationTargetSpecification.NULL, curveProperties));
-        requirements.add(new ValueRequirement(BLOCK_CURVE_SENSITIVITIES, target.toSpecification(), properties));
+        requirements.add(new ValueRequirement(BLOCK_CURVE_SENSITIVITIES, target.toSpecification(), builder.get()));
         requirements.addAll(getFXRequirements(security, securitySource));
         final Set<ValueRequirement> tsRequirements = getTimeSeriesRequirements(context, target);
         if (tsRequirements == null) {
@@ -129,34 +186,60 @@ public class BlackDiscountingYCNSFXOptionFunction extends BlackDiscountingFXOpti
 
       @Override
       protected Collection<ValueProperties.Builder> getResultProperties(final FunctionCompilationContext compilationContext, final ComputationTarget target) {
+        final FinancialSecurity security = (FinancialSecurity) target.getTrade().getSecurity();
+        final String putCurrency = security.accept(ForexVisitors.getPutCurrencyVisitor()).getCode();
+        final String callCurrency = security.accept(ForexVisitors.getCallCurrencyVisitor()).getCode();
         final Collection<ValueProperties.Builder> properties = super.getResultProperties(compilationContext, target);
+        final Collection<ValueProperties.Builder> withCurrencyProperties = new HashSet<>();
         for (final ValueProperties.Builder builder : properties) {
           builder.withAny(CURVE);
+          withCurrencyProperties.add(
+              builder.copy().withAny(DiscountingYCNSFunction.SENSITIVITY_CURRENCY_PROPERTY).withoutAny(CURRENCY).with(CURRENCY, putCurrency));
+          withCurrencyProperties.add(
+              builder.withAny(DiscountingYCNSFunction.SENSITIVITY_CURRENCY_PROPERTY).withoutAny(CURRENCY).with(CURRENCY, callCurrency));
         }
-        return properties;
+        return withCurrencyProperties;
       }
+
 
       @Override
       public Set<ValueSpecification> getResults(final FunctionCompilationContext compilationContext, final ComputationTarget target,
           final Map<ValueSpecification, ValueRequirement> inputs) {
-        String curveName = null;
+        final Set<ValueSpecification> results = getResults(compilationContext, target);
+        String sensitivityCurrency = null;
         for (final Map.Entry<ValueSpecification, ValueRequirement> entry : inputs.entrySet()) {
           final ValueRequirement requirement = entry.getValue();
-          if (requirement.getValueName().equals(CURVE_SPECIFICATION)) {
-            curveName = requirement.getConstraint(CURVE);
+          if (requirement.getValueName().equals(BLOCK_CURVE_SENSITIVITIES)) {
+            sensitivityCurrency = requirement.getConstraint(DiscountingYCNSFunction.SENSITIVITY_CURRENCY_PROPERTY);
             break;
           }
         }
-        if (curveName == null) {
-          return null;
+        final Set<ValueSpecification> specificResults = new HashSet<>();
+        final FinancialSecurity security = (FinancialSecurity) target.getTrade().getSecurity();
+        final String putCurrency = security.accept(ForexVisitors.getPutCurrencyVisitor()).getCode();
+        final String callCurrency = security.accept(ForexVisitors.getCallCurrencyVisitor()).getCode();
+        for (final ValueSpecification result : results) {
+          final ValueProperties.Builder properties = result.getProperties().copy()
+              .withoutAny(DiscountingYCNSFunction.SENSITIVITY_CURRENCY_PROPERTY)
+              .withoutAny(CURRENCY);
+          if (sensitivityCurrency != null) {
+            // want sensitivities for a third currency - will return zeroes, but avoids empty results
+            specificResults.add(new ValueSpecification(result.getValueName(), result.getTargetSpecification(),
+                properties.copy().with(DiscountingYCNSFunction.SENSITIVITY_CURRENCY_PROPERTY, sensitivityCurrency).with(CURRENCY, putCurrency).get()));
+            specificResults.add(new ValueSpecification(result.getValueName(), result.getTargetSpecification(),
+                properties.copy().with(DiscountingYCNSFunction.SENSITIVITY_CURRENCY_PROPERTY, sensitivityCurrency).with(CURRENCY, callCurrency).get()));
+          } else {
+            specificResults.add(new ValueSpecification(result.getValueName(), result.getTargetSpecification(),
+                properties.copy().with(DiscountingYCNSFunction.SENSITIVITY_CURRENCY_PROPERTY, putCurrency).with(CURRENCY, putCurrency).get()));
+            specificResults.add(new ValueSpecification(result.getValueName(), result.getTargetSpecification(),
+                properties.copy().with(DiscountingYCNSFunction.SENSITIVITY_CURRENCY_PROPERTY, putCurrency).with(CURRENCY, callCurrency).get()));
+            specificResults.add(new ValueSpecification(result.getValueName(), result.getTargetSpecification(),
+                properties.copy().with(DiscountingYCNSFunction.SENSITIVITY_CURRENCY_PROPERTY, callCurrency).with(CURRENCY, putCurrency).get()));
+            specificResults.add(new ValueSpecification(result.getValueName(), result.getTargetSpecification(),
+                properties.copy().with(DiscountingYCNSFunction.SENSITIVITY_CURRENCY_PROPERTY, callCurrency).with(CURRENCY, callCurrency).get()));
+          }
         }
-        final Collection<ValueProperties.Builder> propertiesSet = getResultProperties(compilationContext, target);
-        final Set<ValueSpecification> results = Sets.newHashSetWithExpectedSize(propertiesSet.size());
-        for (final ValueProperties.Builder properties : propertiesSet) {
-          properties.withoutAny(CURVE).with(CURVE, curveName);
-          results.add(new ValueSpecification(YIELD_CURVE_NODE_SENSITIVITIES, target.toSpecification(), properties.get()));
-        }
-        return results;
+        return specificResults;
       }
     };
   }
