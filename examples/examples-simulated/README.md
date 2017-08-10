@@ -172,7 +172,7 @@ This is the change in PV of the trade to a change of 1 basis point in the **mark
 
 Note that in this porfolio, there are options that are not CCY/USD (EUR/GBP, in this case). These options have sensitivities to the GBP, EUR and USD curves, because the USD curve was used to construct the EUR and GBP curves.
 
-![FX Option PV01](ttps://github.com/McLeodMoores/starling/blob/mcleodmoores/examples/examples-simulated/docs/images/fx-option-pv01.png)
+![FX Option PV01](https://github.com/McLeodMoores/starling/blob/mcleodmoores/examples/examples-simulated/docs/images/fx-option-pv01.png)
 
 #### Vega Matrix
 This is the vega with respect to the node points of the put delta matrix. The total vega is dispersed to surrounding node points: the amounts depend on the time and delta interpolation methods used.
