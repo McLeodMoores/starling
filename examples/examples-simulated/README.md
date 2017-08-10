@@ -84,7 +84,7 @@ The forward rate implied by the future - for mark-to-market pricing, this is jus
 ## FX Forwards <a name="fx-forwards-example"></a>
 Both FX forward examples reference a portfolio containing AUD, EUR, CHF and GBP vs USD forwards. All prices are calculated using a discounting method, where each pay / receive leg is discounted with a currency-specific curve.
 
-The USD discounting curve is a simple curve constructed from cash deposits, and is constructed first. The discounting curves for the other currencies are constructed using FX forward quotes, which are used with the USD curve to imply the interest rate. The interpolation in all cases is a monotonic constrained cubic spline with linear extrapolation at both ends. The instruments used to construct the curves are shown in the table below.
+The USD discounting curve is a simple curve constructed from cash deposits and is constructed first for each currency pair. The discounting curves for the other currencies are constructed using FX forward quotes, which are used with the USD curve to imply the interest rate. The interpolation in all cases is a monotonic constrained cubic spline with linear extrapolation at both ends. The instruments used to construct the curves are shown in the table below.
 
 | Tenor \ Curve Name| AUD FX     | CHF FX     | EUR FX     | GBP FX     | USD Deposit |
 |-------|------------|------------|------------|------------|-------------|
@@ -154,6 +154,38 @@ Looking at an AUD/USD trade, we can see sensitivities to the USD and AUD curves 
 ![FX Bucketed PV01](https://github.com/McLeodMoores/starling/blob/mcleodmoores/examples/examples-simulated/docs/images/fx-forward-pv01.png)
 
 ## FX Options <a name="fx-options-example"></a>
+
+### FX Option View
+
+![FX Optiopn View](https://github.com/McLeodMoores/starling/blob/mcleodmoores/examples/examples-simulated/docs/images/fx-option-view.png)
+
+This view shows analytics for a portfolio of vanilla European FX options priced using the Black model. The curve configurations are the same as those used to price [FX forwards](#fx-forwards-example). The volatility surfaces for each currency pair are quoted as ATM, 15 risk-reversal and butterfly, and 25 risk reversal and butterfly. These data are converted to an interpolated delta matrix before pricing. 
+
+#### Present Value
+The present value of the trade as calculated by the Black model.
+
+#### FX Currency Exposure
+The spot delta in each currency.
+
+#### Bucketed PV01
+This is the change in PV of the trade to a change of 1 basis point in the **market quote** used to construct the curve. 
+
+Note that in this porfolio, there are options that are not CCY/USD (EUR/GBP, in this case). These options have sensitivities to the GBP, EUR and USD curves, because the USD curve was used to construct the EUR and GBP curves.
+
+![FX Option PV01](ttps://github.com/McLeodMoores/starling/blob/mcleodmoores/examples/examples-simulated/docs/images/fx-option-pv01.png)
+
+#### Vega Matrix
+This is the vega with respect to the node points of the put delta matrix. The total vega is dispersed to surrounding node points: the amounts depend on the time and delta interpolation methods used.
+
+![Vega Matrix](https://github.com/McLeodMoores/starling/blob/mcleodmoores/examples/examples-simulated/docs/images/fx-vega-matrix.png)
+
+#### Vega Quote Matrix
+This is the vega with respect to the **market quotes** that the volatility surface was constructed from.
+
+![Vega Quote Matrix](https://github.com/McLeodMoores/starling/blob/mcleodmoores/examples/examples-simulated/docs/images/fx-vega-quote-matrix.png)
+
+### FX Option Greeks View
+
 
 ## Swaps <a name="swap-example"></a>
 
