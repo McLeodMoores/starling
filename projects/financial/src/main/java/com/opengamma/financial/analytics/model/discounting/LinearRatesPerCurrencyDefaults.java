@@ -9,6 +9,7 @@ import static com.opengamma.engine.value.ValueRequirementNames.FIXED_CASH_FLOWS;
 import static com.opengamma.engine.value.ValueRequirementNames.FLOATING_CASH_FLOWS;
 import static com.opengamma.engine.value.ValueRequirementNames.PAR_RATE;
 import static com.opengamma.engine.value.ValueRequirementNames.PRESENT_VALUE;
+import static com.opengamma.engine.value.ValueRequirementNames.PV01;
 import static com.opengamma.engine.value.ValueRequirementNames.YIELD_CURVE_NODE_SENSITIVITIES;
 
 import java.util.Collections;
@@ -36,6 +37,7 @@ public class LinearRatesPerCurrencyDefaults extends DefaultPropertyFunction {
       BLOCK_CURVE_SENSITIVITIES,
       YIELD_CURVE_NODE_SENSITIVITIES,
       PAR_RATE,
+      PV01,
       FIXED_CASH_FLOWS,
       FLOATING_CASH_FLOWS
   };

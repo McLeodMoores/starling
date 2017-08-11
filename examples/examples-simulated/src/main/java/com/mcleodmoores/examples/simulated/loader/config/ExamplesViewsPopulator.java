@@ -27,6 +27,7 @@ import static com.opengamma.engine.value.ValueRequirementNames.FX_FORWARD_DETAIL
 import static com.opengamma.engine.value.ValueRequirementNames.FX_PRESENT_VALUE;
 import static com.opengamma.engine.value.ValueRequirementNames.HISTORICAL_VAR;
 import static com.opengamma.engine.value.ValueRequirementNames.NOTIONAL;
+import static com.opengamma.engine.value.ValueRequirementNames.PAR_RATE;
 import static com.opengamma.engine.value.ValueRequirementNames.PNL;
 import static com.opengamma.engine.value.ValueRequirementNames.PRESENT_VALUE;
 import static com.opengamma.engine.value.ValueRequirementNames.SECURITY_IMPLIED_VOLATILITY;
@@ -129,6 +130,7 @@ public class ExamplesViewsPopulator extends AbstractTool<ToolContext> {
   protected void doRun() {
     storeViewDefinition(getEquityViewDefinition(ExampleEquityPortfolioLoader.PORTFOLIO_NAME));
     storeViewDefinition(getSwapDetailsViewDefinition(MULTI_CURRENCY_SWAP_PORTFOLIO_NAME, "Swap Details View"));
+    storeViewDefinition(getSwapViewDefinition(MULTI_CURRENCY_SWAP_PORTFOLIO_NAME, "Swap View"));
     storeViewDefinition(getAudSwapView1Definition(AUD_SWAP_PORFOLIO_NAME));
     storeViewDefinition(getFxOptionViewDefinition(VANILLA_FX_OPTION_PORTFOLIO_NAME, "FX Option View"));
     storeViewDefinition(getFxOptionGreeksViewDefinition(VANILLA_FX_OPTION_PORTFOLIO_NAME, "FX Option Greeks View"));
@@ -200,6 +202,44 @@ public class ExamplesViewsPopulator extends AbstractTool<ToolContext> {
         calcProperties.compose(ValueProperties.with(CURRENCY, "USD").get()));
     calcConfig.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, FIXED_CASH_FLOWS, calcProperties);
     calcConfig.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, FLOATING_CASH_FLOWS, calcProperties);
+    viewDefinition.addViewCalculationConfiguration(calcConfig);
+    return viewDefinition;
+  }
+
+  private ViewDefinition getSwapViewDefinition(final String portfolioName, final String viewName) {
+    final UniqueId portfolioId = getPortfolioId(portfolioName).toLatest();
+    final ViewDefinition viewDefinition = new ViewDefinition(viewName, portfolioId, UserPrincipal.getTestUser());
+    viewDefinition.setDefaultCurrency(Currency.USD);
+    viewDefinition.setMaxDeltaCalculationPeriod(MAX_DELTA_PERIOD);
+    viewDefinition.setMaxFullCalculationPeriod(MAX_FULL_PERIOD);
+    viewDefinition.setMinDeltaCalculationPeriod(MIN_DELTA_PERIOD);
+    viewDefinition.setMinFullCalculationPeriod(MIN_FULL_PERIOD);
+    final ValueProperties calcProperties =  ValueProperties.builder()
+        .with(CurveCalculationPropertyNamesAndValues.PROPERTY_CURVE_TYPE, CurveCalculationPropertyNamesAndValues.DISCOUNTING)
+        .get();
+    final ViewCalculationConfiguration calcConfig = new ViewCalculationConfiguration(viewDefinition, DEFAULT_CALC_CONFIG);
+    calcConfig.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, PRESENT_VALUE, calcProperties.copy().with(CURRENCY, "USD").get());
+    calcConfig.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, PAR_RATE, calcProperties.copy().get());
+    calcConfig.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, BUCKETED_PV01,
+        calcProperties.copy().with(CURVE, "USD Discounting").with(CURRENCY, "USD").with(DiscountingYCNSFunction.SENSITIVITY_CURRENCY_PROPERTY, "USD").get());
+    calcConfig.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, BUCKETED_PV01,
+        calcProperties.copy().with(CURVE, "USD 3M XIBOR").with(CURRENCY, "USD").with(DiscountingYCNSFunction.SENSITIVITY_CURRENCY_PROPERTY, "USD").get());
+    calcConfig.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, BUCKETED_PV01,
+        calcProperties.copy().with(CURVE, "EUR Discounting").with(CURRENCY, "USD").with(DiscountingYCNSFunction.SENSITIVITY_CURRENCY_PROPERTY, "EUR").get());
+    calcConfig.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, BUCKETED_PV01,
+        calcProperties.copy().with(CURVE, "EUR 6M XIBOR").with(CURRENCY, "USD").with(DiscountingYCNSFunction.SENSITIVITY_CURRENCY_PROPERTY, "EUR").get());
+    calcConfig.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, BUCKETED_PV01,
+        calcProperties.copy().with(CURVE, "CHF Discounting").with(CURRENCY, "USD").with(DiscountingYCNSFunction.SENSITIVITY_CURRENCY_PROPERTY, "CHF").get());
+    calcConfig.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, BUCKETED_PV01,
+        calcProperties.copy().with(CURVE, "CHF 6M XIBOR").with(CURRENCY, "USD").with(DiscountingYCNSFunction.SENSITIVITY_CURRENCY_PROPERTY, "CHF").get());
+    calcConfig.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, BUCKETED_PV01,
+        calcProperties.copy().with(CURVE, "GBP Discounting").with(CURRENCY, "USD").with(DiscountingYCNSFunction.SENSITIVITY_CURRENCY_PROPERTY, "GBP").get());
+    calcConfig.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, BUCKETED_PV01,
+        calcProperties.copy().with(CURVE, "GBP 6M XIBOR").with(CURRENCY, "USD").with(DiscountingYCNSFunction.SENSITIVITY_CURRENCY_PROPERTY, "GBP").get());
+    calcConfig.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, BUCKETED_PV01,
+        calcProperties.copy().with(CURVE, "JPY Discounting").with(CURRENCY, "USD").with(DiscountingYCNSFunction.SENSITIVITY_CURRENCY_PROPERTY, "JPY").get());
+    calcConfig.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, BUCKETED_PV01,
+        calcProperties.copy().with(CURVE, "JPY 6M XIBOR").with(CURRENCY, "USD").with(DiscountingYCNSFunction.SENSITIVITY_CURRENCY_PROPERTY, "JPY").get());
     viewDefinition.addViewCalculationConfiguration(calcConfig);
     return viewDefinition;
   }
