@@ -185,7 +185,44 @@ This is the vega with respect to the **market quotes** that the volatility surfa
 ![Vega Quote Matrix](https://github.com/McLeodMoores/starling/blob/mcleodmoores/examples/examples-simulated/docs/images/fx-vega-quote-matrix.png)
 
 ### FX Option Greeks View
+This is another view of the same portfolio, this time returning greeks and their value equivalents (i.e. the greeks scaled by trade details). Again, Black pricing and the same curves / surface definitions are used.
 
+![FX Option Greeks](https://github.com/McLeodMoores/starling/blob/mcleodmoores/examples/examples-simulated/docs/images/fx-option-greeks.png)
+
+Note that there are several non-additive quantities (e.g. implied volatility) that only give values at position level.
+
+#### Present Value
+The Black present value of the trade.
+
+#### Security Implied Volatility
+The implied volatility that was used in the Black equations. This is taken from an interpolated surface.
+
+#### Forward Delta
+The change in the price (not present value) with respect to the forward FX rate.
+
+#### Forward Vega
+The change in price with respect to the implied volatility.
+
+#### Forward Gamma
+The change in forward delta with respect to the forward FX rate: equivalently, the second derivative of the price with respect to the forward FX rate.
+
+#### Forward Driftless Theta
+The change in price of the option due to time decay only, i.e. not considering the drift of any other underlyings.
+
+#### ValueDelta
+The change in present value of the trade with respect to the forward FX rate.
+
+#### ValueGamma
+The change in value delta of the trade with respect to the forward FX rate.
+
+#### ValueVega
+The change in present value of the trade with respect to the implied volatility.
+
+#### ValueVanna
+The change in present value of the trade with respect to the forward FX rate and volatility: equivalently, the change in value delta with respect to implied volatility or change in value vega with respect to the forward FX rate.
+
+#### ValueVomma 
+The change in value vega of the trade with respect to the implied volatility i.e. the second derivative of the present value with respect to volatility.
 
 ## Swaps <a name="swap-example"></a>
 
