@@ -13,9 +13,12 @@ Example Views
 
 ## Introduction <a name="introduction"></a>
 
+
 ### The Analytics UI
 
+
 ## Equities <a name="equity-example"></a>
+
 
 ### Equity Portfolio View
 
@@ -81,10 +84,11 @@ The change in value of the position for a change in value of the underlying - fo
 #### Forward
 The forward rate implied by the future - for mark-to-market pricing, this is just the future market quote.
 
+
 ## FX Forwards <a name="fx-forwards-example"></a>
 Both FX forward examples reference a portfolio containing AUD, EUR, CHF and GBP vs USD forwards. All prices are calculated using a discounting method, where each pay / receive leg is discounted with a currency-specific curve.
 
-The USD discounting curve is a simple curve constructed from cash deposits, and is constructed first. The discounting curves for the other currencies are constructed using FX forward quotes, which are used with the USD curve to imply the interest rate. The interpolation in all cases is a monotonic constrained cubic spline with linear extrapolation at both ends. The instruments used to construct the curves are shown in the table below.
+The USD discounting curve is a simple curve constructed from cash deposits and is constructed first for each currency pair. The discounting curves for the other currencies are constructed using FX forward quotes, which are used with the USD curve to imply the interest rate. The interpolation in all cases is a monotonic constrained cubic spline with linear extrapolation at both ends. The instruments used to construct the curves are shown in the table below.
 
 | Tenor \ Curve Name| AUD FX     | CHF FX     | EUR FX     | GBP FX     | USD Deposit |
 |-------|------------|------------|------------|------------|-------------|
@@ -153,7 +157,78 @@ Looking at an AUD/USD trade, we can see sensitivities to the USD and AUD curves 
 
 ![FX Bucketed PV01](https://github.com/McLeodMoores/starling/blob/mcleodmoores/examples/examples-simulated/docs/images/fx-forward-pv01.png)
 
+
 ## FX Options <a name="fx-options-example"></a>
+
+### FX Option View
+
+![FX Optiopn View](https://github.com/McLeodMoores/starling/blob/mcleodmoores/examples/examples-simulated/docs/images/fx-option-view.png)
+
+This view shows analytics for a portfolio of vanilla European FX options priced using the Black model. The curve configurations are the same as those used to price [FX forwards](#fx-forwards-example). The volatility surfaces for each currency pair are quoted as ATM, 15 risk reversal and butterfly, and 25 risk reversal and butterfly. These data are converted to an interpolated delta matrix before pricing. 
+
+#### Present Value
+The present value of the trade as calculated by the Black model.
+
+#### FX Currency Exposure
+The spot delta in each currency.
+
+#### Bucketed PV01
+This is the change in PV of the trade to a change of 1 basis point in the **market quote** used to construct the curve. 
+
+Note that in this porfolio, there are options that are not CCY/USD (EUR/GBP, in this case). These options have sensitivities to the GBP, EUR and USD curves, because the USD curve was used to construct the EUR and GBP curves.
+
+![FX Option PV01](https://github.com/McLeodMoores/starling/blob/mcleodmoores/examples/examples-simulated/docs/images/fx-option-pv01.png)
+
+#### Vega Matrix
+This is the vega with respect to the node points of the put delta matrix. The total vega is dispersed to surrounding node points: the amounts depend on the time and delta interpolation methods used.
+
+![Vega Matrix](https://github.com/McLeodMoores/starling/blob/mcleodmoores/examples/examples-simulated/docs/images/fx-vega-matrix.png)
+
+#### Vega Quote Matrix
+This is the vega with respect to the **market quotes** that the volatility surface was constructed from.
+
+![Vega Quote Matrix](https://github.com/McLeodMoores/starling/blob/mcleodmoores/examples/examples-simulated/docs/images/fx-vega-quote-matrix.png)
+
+### FX Option Greeks View
+This is another view of the same portfolio, this time returning greeks and their value equivalents (i.e. the greeks scaled by trade details). Again, Black pricing and the same curves / surface definitions are used.
+
+![FX Option Greeks](https://github.com/McLeodMoores/starling/blob/mcleodmoores/examples/examples-simulated/docs/images/fx-option-greeks.png)
+
+Note that there are several non-additive quantities (e.g. implied volatility) that only give values at position level.
+
+#### Present Value
+The Black present value of the trade.
+
+#### Security Implied Volatility
+The implied volatility that was used in the Black equations. This is taken from an interpolated surface.
+
+#### Forward Delta
+The change in the price (not present value) with respect to the forward FX rate.
+
+#### Forward Vega
+The change in price with respect to the implied volatility.
+
+#### Forward Gamma
+The change in forward delta with respect to the forward FX rate: equivalently, the second derivative of the price with respect to the forward FX rate.
+
+#### Forward Driftless Theta
+The change in price of the option due to time decay only, i.e. not considering the drift of any other underlyings.
+
+#### ValueDelta
+The change in present value of the trade with respect to the forward FX rate.
+
+#### ValueGamma
+The change in value delta of the trade with respect to the forward FX rate.
+
+#### ValueVega
+The change in present value of the trade with respect to the implied volatility.
+
+#### ValueVanna
+The change in present value of the trade with respect to the forward FX rate and volatility: equivalently, the change in value delta with respect to implied volatility or change in value vega with respect to the forward FX rate.
+
+#### ValueVomma 
+The change in value vega of the trade with respect to the implied volatility i.e. the second derivative of the present value with respect to volatility.
+
 
 ## Swaps <a name="swap-example"></a>
 
@@ -163,7 +238,9 @@ Looking at an AUD/USD trade, we can see sensitivities to the USD and AUD curves 
 
 ### AUD Swaps View
 
+
 ## Swaptions
+
 
 ## Bonds
 
@@ -171,6 +248,8 @@ Looking at an AUD/USD trade, we can see sensitivities to the USD and AUD curves 
 
 ### GB Corporates View
 
+
 ## CDS <a name="cds-example"></a>
+
 
 ## Equity Options
