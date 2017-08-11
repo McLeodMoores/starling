@@ -13,9 +13,12 @@ Example Views
 
 ## Introduction <a name="introduction"></a>
 
+
 ### The Analytics UI
 
+
 ## Equities <a name="equity-example"></a>
+
 
 ### Equity Portfolio View
 
@@ -80,6 +83,7 @@ The change in value of the position for a change in value of the underlying - fo
 
 #### Forward
 The forward rate implied by the future - for mark-to-market pricing, this is just the future market quote.
+
 
 ## FX Forwards <a name="fx-forwards-example"></a>
 Both FX forward examples reference a portfolio containing AUD, EUR, CHF and GBP vs USD forwards. All prices are calculated using a discounting method, where each pay / receive leg is discounted with a currency-specific curve.
@@ -153,6 +157,7 @@ Looking at an AUD/USD trade, we can see sensitivities to the USD and AUD curves 
 
 ![FX Bucketed PV01](https://github.com/McLeodMoores/starling/blob/mcleodmoores/examples/examples-simulated/docs/images/fx-forward-pv01.png)
 
+
 ## FX Options <a name="fx-options-example"></a>
 
 ### FX Option View
@@ -224,6 +229,7 @@ The change in present value of the trade with respect to the forward FX rate and
 #### ValueVomma 
 The change in value vega of the trade with respect to the implied volatility i.e. the second derivative of the present value with respect to volatility.
 
+
 ## Swaps <a name="swap-example"></a>
 
 ### Swap Portfolio View
@@ -232,7 +238,9 @@ The change in value vega of the trade with respect to the implied volatility i.e
 
 ### AUD Swaps View
 
+
 ## Swaptions
+
 
 ## Bonds
 
@@ -240,6 +248,8 @@ The change in value vega of the trade with respect to the implied volatility i.e
 
 ### GB Corporates View
 
+
 ## CDS <a name="cds-example"></a>
+
 
 ## Equity Options
