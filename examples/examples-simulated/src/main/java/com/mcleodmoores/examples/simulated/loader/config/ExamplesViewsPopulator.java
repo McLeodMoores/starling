@@ -104,9 +104,7 @@ public class ExamplesViewsPopulator extends AbstractTool<ToolContext> {
       UnorderedCurrencyPair.of(Currency.USD, Currency.CHF),
       UnorderedCurrencyPair.of(Currency.USD, Currency.AUD),
       UnorderedCurrencyPair.of(Currency.USD, Currency.GBP),
-      //      UnorderedCurrencyPair.of(Currency.USD, Currency.JPY),
-      UnorderedCurrencyPair.of(Currency.GBP, Currency.EUR),
-      UnorderedCurrencyPair.of(Currency.CHF, Currency.JPY) };
+      UnorderedCurrencyPair.of(Currency.GBP, Currency.EUR)};
   /** The default maximum delta calculation period */
   private static final long MAX_DELTA_PERIOD = 500L;
   /** The default maximum full calculation period */
