@@ -260,6 +260,12 @@ All swap example views reference a portfolio containing vanilla USD, EUR, CHF, J
                    
 ### Swap Details View
 
+![Swap Details](https://github.com/McLeodMoores/starling/blob/mcleodmoores/examples/examples-simulated/docs/images/swap-details-view.png)
+
+![Swap Fixed Leg](https://github.com/McLeodMoores/starling/blob/mcleodmoores/examples/examples-simulated/docs/images/swap-fixed-leg-details.png)
+
+![Swap Floating Leg](https://github.com/McLeodMoores/starling/blob/mcleodmoores/examples/examples-simulated/docs/images/swap-floating-leg-details.png)
+
 ### Swap View
 
 
