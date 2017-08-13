@@ -1,6 +1,6 @@
 
-Example Views
--------------
+# Examples Using Simulated Data
+-----------------------------
 
 # Table of Contents
 1. [Introduction](#introduction)
@@ -11,14 +11,14 @@ Example Views
 6. [Swaps](#swap-example)
 7. [CDS](#cds-example)
 
-## Introduction <a name="introduction"></a>
 
+## Introduction <a name="introduction"></a>
+-------------------------------------------
 
 ### The Analytics UI
 
-
 ## Equities <a name="equity-example"></a>
-
+-----------------------------------------
 
 ### Equity Portfolio View
 
@@ -68,6 +68,7 @@ After saving this view definition, we go back to the analyics viewer and see tha
 
 
 ## ETFs <a name="etf-example"></a>
+----------------------------------
 
 ### Futures View
 
@@ -159,6 +160,7 @@ Looking at an AUD/USD trade, we can see sensitivities to the USD and AUD curves 
 
 
 ## FX Options <a name="fx-options-example"></a>
+-----------------------------------------------
 
 ### FX Option View
 
@@ -229,8 +231,8 @@ The change in present value of the trade with respect to the forward FX rate and
 #### ValueVomma 
 The change in value vega of the trade with respect to the implied volatility i.e. the second derivative of the present value with respect to volatility.
 
-
 ## Swaps <a name="swap-example"></a>
+------------------------------------
 All swap example views reference a portfolio containing vanilla USD, EUR, CHF, JPY and GBP swaps. The curves for each currency are constructed using two-curve configurations: a discounting curve constructed with cash and OIS, and a forward LIBOR/TIBOR/etc. curve constructed using the appropriate index and vanilla fixed / \*IBOR swaps. The interpolation in all cases is a monotonic constrained cubic spline with linear extrapolation at both ends. The interpolation on the \*IBOR curves (used to project the forward rate) is performed on the zero rates.
 
 | Tenor \ Curve Name | CHF Discounting | CHF 6M LIBOR | EUR Discounting | EUR 6M EURIBOR | GBP Discounting | GBP 6M LIBOR | JPY Discounting | JPY 6M TIBOR | USD Discounting | USD 3M LIBOR |
@@ -273,9 +275,10 @@ All swap example views reference a portfolio containing vanilla USD, EUR, CHF, J
 
 
 ## Swaptions
-
+------------
 
 ## Bonds
+--------
 
 ### US Treasuries View
 
@@ -283,6 +286,7 @@ All swap example views reference a portfolio containing vanilla USD, EUR, CHF, J
 
 
 ## CDS <a name="cds-example"></a>
-
+---------------------------------
 
 ## Equity Options
+-----------------
