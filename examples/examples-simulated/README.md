@@ -1,6 +1,6 @@
 
-Example Views
--------------
+# Examples Using Simulated Data
+-----------------------------
 
 # Table of Contents
 1. [Introduction](#introduction)
@@ -11,14 +11,14 @@ Example Views
 6. [Swaps](#swap-example)
 7. [CDS](#cds-example)
 
-## Introduction <a name="introduction"></a>
 
+## Introduction <a name="introduction"></a>
+-------------------------------------------
 
 ### The Analytics UI
 
-
 ## Equities <a name="equity-example"></a>
-
+-----------------------------------------
 
 ### Equity Portfolio View
 
@@ -68,6 +68,7 @@ After saving this view definition, we go back to the analyics viewer and see tha
 
 
 ## ETFs <a name="etf-example"></a>
+----------------------------------
 
 ### Futures View
 
@@ -159,6 +160,7 @@ Looking at an AUD/USD trade, we can see sensitivities to the USD and AUD curves 
 
 
 ## FX Options <a name="fx-options-example"></a>
+-----------------------------------------------
 
 ### FX Option View
 
@@ -229,20 +231,54 @@ The change in present value of the trade with respect to the forward FX rate and
 #### ValueVomma 
 The change in value vega of the trade with respect to the implied volatility i.e. the second derivative of the present value with respect to volatility.
 
-
 ## Swaps <a name="swap-example"></a>
+------------------------------------
+All swap example views reference a portfolio containing vanilla USD, EUR, CHF, JPY and GBP swaps. The curves for each currency are constructed using two-curve configurations: a discounting curve constructed with cash and OIS, and a forward LIBOR/TIBOR/etc. curve constructed using the appropriate index and vanilla fixed / \*IBOR swaps. The interpolation in all cases is a monotonic constrained cubic spline with linear extrapolation at both ends. The interpolation on the \*IBOR curves (used to project the forward rate) is performed on the zero rates.
 
-### Swap Portfolio View
+| Tenor \ Curve Name | CHF Discounting | CHF 6M LIBOR | EUR Discounting | EUR 6M EURIBOR | GBP Discounting | GBP 6M LIBOR | JPY Discounting | JPY 6M TIBOR | USD Discounting | USD 3M LIBOR |
+|--------------------|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|
+|ON|Deposit||Deposit||Deposit||Deposit||Deposit||
+|1M|OIS||OIS||OIS||OIS||OIS||
+|2M|OIS||OIS||OIS||OIS||OIS||
+|3M|OIS||OIS||OIS||OIS||OIS|LIBOR|
+|4M|OIS||OIS||OIS||OIS||OIS||
+|5M|OIS||OIS||OIS||OIS||OIS||
+|6M|OIS|LIBOR|OIS|EURIBOR|OIS|LIBOR|OIS|TIBOR|OIS||
+|9M|OIS||OIS||OIS||OIS||OIS||
+|1Y|OIS|SWAP|OIS|SWAP|OIS|SWAP|OIS|SWAP|OIS|SWAP|
+|2Y|OIS|SWAP|OIS|SWAP|OIS|SWAP|OIS|SWAP|OIS|SWAP|
+|3Y|OIS|SWAP|OIS|SWAP|OIS|SWAP|OIS|SWAP|OIS|SWAP|
+|4Y|OIS|SWAP|OIS|SWAP|OIS|SWAP|OIS|SWAP|OIS|SWAP|
+|5Y|OIS|SWAP|OIS|SWAP|OIS|SWAP|OIS|SWAP|OIS|SWAP|
+|6Y||SWAP||SWAP||SWAP||SWAP||SWAP|
+|7Y||SWAP||SWAP||SWAP||SWAP||SWAP|
+|8Y||SWAP||SWAP||SWAP||SWAP||SWAP|
+|9Y||SWAP||SWAP||SWAP||SWAP||SWAP|
+|10Y|OIS|SWAP|OIS|SWAP|OIS|SWAP|OIS|SWAP|OIS|SWAP|
+|15Y||SWAP||SWAP||SWAP||SWAP||SWAP|
+|20Y||SWAP||SWAP||SWAP||SWAP||SWAP|
+|25Y||SWAP||SWAP||SWAP||SWAP||SWAP|
+|30Y||SWAP||SWAP||SWAP||SWAP||SWAP|
+                   
+### Swap Details View
 
-### Swap Pricing Details View
+![Swap Details](https://github.com/McLeodMoores/starling/blob/mcleodmoores/examples/examples-simulated/docs/images/swap-details-view.png)
+
+![Swap Fixed Leg](https://github.com/McLeodMoores/starling/blob/mcleodmoores/examples/examples-simulated/docs/images/swap-fixed-leg-details.png)
+
+![Swap Floating Leg](https://github.com/McLeodMoores/starling/blob/mcleodmoores/examples/examples-simulated/docs/images/swap-floating-leg-details.png)
+
+### Swap View
+
 
 ### AUD Swaps View
 
 
 ## Swaptions
-
+------------
 
 ## Bonds
+--------
 
 ### US Treasuries View
 
@@ -250,6 +286,7 @@ The change in value vega of the trade with respect to the implied volatility i.e
 
 
 ## CDS <a name="cds-example"></a>
-
+---------------------------------
 
 ## Equity Options
+-----------------
