@@ -86,7 +86,7 @@ public class AUDSwapPortfolioGeneratorTool extends AbstractPortfolioGeneratorToo
     final FloatingInterestRateLeg receiveLeg4 = new FloatingInterestRateLeg(ACT_365, QUARTERLY, REGION, FOLLOWING, NOTIONAL, true, AUD_LIBOR_3M, FloatingRateType.IBOR);
     final FixedInterestRateLeg payLeg4 = new FixedInterestRateLeg(ACT_360, QUARTERLY, REGION, FOLLOWING, NOTIONAL, true, 0.036);
     final SwapSecurity swap4 = new SwapSecurity(TRADE_DATE, TRADE_DATE, MATURITY, COUNTERPARTY, payLeg4, receiveLeg4);
-    swap4.setName("Swap: receive 3.60% fixed ACT/360 vs 3m Bank Bill");
+    swap4.setName("Swap: pay 3.60% fixed vs 3m Bank Bill");
     swap4.addExternalId(ExternalId.of(ID_SCHEME, GUIDGenerator.generate().toString()));
     SWAPS[0] = swap1;
     SWAPS[1] = swap2;

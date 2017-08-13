@@ -3,6 +3,9 @@
  */
 package com.mcleodmoores.examples.simulated.loader.config;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.opengamma.core.config.impl.ConfigItem;
 import com.opengamma.financial.analytics.curve.CurveConstructionConfiguration;
 import com.opengamma.financial.analytics.curve.CurveDefinition;
@@ -18,7 +21,16 @@ public class ExampleConfigUtils {
   private static final String CURVE_CONSTRUCTION_CONFIG_PREFIX = "Default ";
   private static final String CURVE_CONSTRUCTION_CONFIG_SUFFIX = " Curves";
   private static final String DISCOUNTING_CURVE_NAME_SUFFIX = " Discounting";
-  private static final String IBOR_CURVE_NAME_SUFFIX = " XIBOR";
+  private static final Map<String, String> INDEX_NAMES = new HashMap<>();
+
+  static {
+    INDEX_NAMES.put("AUD", "BANK BILL");
+    INDEX_NAMES.put("CHF", "LIBOR");
+    INDEX_NAMES.put("EUR", "EURIBOR");
+    INDEX_NAMES.put("GBP", "LIBOR");
+    INDEX_NAMES.put("JPY", "TIBOR");
+    INDEX_NAMES.put("USD", "LIBOR");
+  }
 
   public static String generateFxImpliedConfigName(final String currency) {
     return currency + FX_IMPLIED_CONSTRUCTION_SUFFIX;
@@ -37,7 +49,7 @@ public class ExampleConfigUtils {
   }
 
   public static String generateVanillaFixedIncomeIborCurveName(final String currency, final Tenor tenor) {
-    return currency + " " + tenor.toFormattedString().substring(1) + IBOR_CURVE_NAME_SUFFIX;
+    return currency + " " + tenor.toFormattedString().substring(1) + " " + INDEX_NAMES.get(currency);
   }
 
   public static ConfigItem<CurveConstructionConfiguration> makeConfig(final CurveConstructionConfiguration curveConfig) {

@@ -64,7 +64,7 @@ public class SimulatedOisPortfolioGenerator extends AbstractPortfolioGeneratorTo
     private static final List<Pair<Currency, ExternalId>> FIXINGS = new ArrayList<>();
     /** The swap tenors */
     private static final Tenor[] TENORS = new Tenor[] {Tenor.TWO_YEARS, Tenor.THREE_YEARS, Tenor.FIVE_YEARS,
-        Tenor.ofYears(7), Tenor.TEN_YEARS, Tenor.ofYears(15), Tenor.ofYears(20) };
+        Tenor.ofYears(7), Tenor.TEN_YEARS};
     /** The trade date */
     private static final LocalDate TODAY = LocalDate.now();
     /** The counterparty */
@@ -74,7 +74,7 @@ public class SimulatedOisPortfolioGenerator extends AbstractPortfolioGeneratorTo
 
     static {
       FIXINGS.add(Pairs.of(Currency.USD, ExternalId.of(ExternalSchemes.OG_SYNTHETIC_TICKER, "USDFF")));
-      FIXINGS.add(Pairs.of(Currency.GBP, ExternalId.of(ExternalSchemes.OG_SYNTHETIC_TICKER, "SONIO")));
+      FIXINGS.add(Pairs.of(Currency.GBP, ExternalId.of(ExternalSchemes.OG_SYNTHETIC_TICKER, "SONIA")));
       FIXINGS.add(Pairs.of(Currency.EUR, ExternalId.of(ExternalSchemes.OG_SYNTHETIC_TICKER, "EONIA")));
       FIXINGS.add(Pairs.of(Currency.JPY, ExternalId.of(ExternalSchemes.OG_SYNTHETIC_TICKER, "TONAR")));
     }

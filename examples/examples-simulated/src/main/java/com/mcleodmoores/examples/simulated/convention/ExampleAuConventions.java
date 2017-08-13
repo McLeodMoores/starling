@@ -47,13 +47,13 @@ public final class ExampleAuConventions extends ConventionMasterInitializer {
     final IborIndexConvention ibor = new IborIndexConvention("AUD LIBOR", iborIds, DayCounts.ACT_365, BusinessDayConventions.FOLLOWING, 0, false, Currency.AUD,
         LocalTime.of(11, 0), "AU", AU, AU, "");
     // Overnight
-    final OvernightIndexConvention overnight = new OvernightIndexConvention("AUD O/N",
-        ExternalIdBundle.of(ExternalId.of("CONVENTION", "AUDON"), ExternalSchemes.syntheticSecurityId("AUDON")), DayCounts.ACT_365, 0, Currency.AUD, AU);
+    final OvernightIndexConvention overnight = new OvernightIndexConvention("RBA IBOC",
+        ExternalIdBundle.of(ExternalId.of("CONVENTION", "RBA IBOC"), ExternalSchemes.syntheticSecurityId("RBA IBOC")), DayCounts.ACT_365, 0, Currency.AUD, AU);
     // OIS
     final SwapFixedLegConvention oisFixedLeg = new SwapFixedLegConvention("AUD OIS Fixed", ExternalIdBundle.of("CONVENTION", "AUD OIS Fixed"),
         Tenor.ONE_YEAR, DayCounts.ACT_365, BusinessDayConventions.MODIFIED_FOLLOWING, Currency.AUD, AU, 1, true, StubType.SHORT_START, false, 0);
     final OISLegConvention oisLeg = new OISLegConvention("AUD OIS", ExternalId.of("CONVENTION", "AUD OIS").toBundle(),
-        ExternalId.of("CONVENTION", "AUDON"), Tenor.ONE_YEAR, BusinessDayConventions.MODIFIED_FOLLOWING,
+        ExternalId.of("CONVENTION", "RBA IBOC"), Tenor.ONE_YEAR, BusinessDayConventions.MODIFIED_FOLLOWING,
         0, false, StubType.SHORT_START, false, 0);
     // IBOR Swaps
     final SwapFixedLegConvention ibor3mFixedLeg = new SwapFixedLegConvention("AUD 3M IBOR Fixed", ExternalIdBundle.of("CONVENTION", "AUD 3M IBOR Fixed"),

@@ -14,7 +14,8 @@ import com.google.common.collect.Sets;
 import com.opengamma.analytics.financial.legalentity.LegalEntity;
 import com.opengamma.analytics.financial.legalentity.LegalEntityFilter;
 import com.opengamma.analytics.financial.legalentity.LegalEntityRegion;
-import com.opengamma.analytics.math.interpolation.Interpolator1DFactory;
+import com.opengamma.analytics.math.interpolation.factory.LinearExtrapolator1dAdapter;
+import com.opengamma.analytics.math.interpolation.factory.MonotonicAkimaCubicSplineInterpolator1dAdapter;
 import com.opengamma.core.config.impl.ConfigItem;
 import com.opengamma.core.id.ExternalSchemes;
 import com.opengamma.core.value.MarketDataRequirementNames;
@@ -94,8 +95,10 @@ public class ExamplesUsBondCurveConfigsPopulator {
     final CurveGroupConfiguration oisGroup = new CurveGroupConfiguration(0, issuerCurveTypes);
     final List<CurveGroupConfiguration> oisGroups = Arrays.asList(oisGroup);
     final List<String> exogenousConfigs = Collections.singletonList("Default USD Curves");
-    final CurveConstructionConfiguration bondCurveConfig = new CurveConstructionConfiguration(BOND_CURVE_CONSTRUCTION_CONFIG_NAME, bondGroups, exogenousConfigs);
-    final CurveConstructionConfiguration oisCurveConfig = new CurveConstructionConfiguration(OIS_CURVE_CONSTRUCTION_CONFIG_NAME, oisGroups, exogenousConfigs);
+    final CurveConstructionConfiguration bondCurveConfig =
+        new CurveConstructionConfiguration(BOND_CURVE_CONSTRUCTION_CONFIG_NAME, bondGroups, exogenousConfigs);
+    final CurveConstructionConfiguration oisCurveConfig =
+        new CurveConstructionConfiguration(OIS_CURVE_CONSTRUCTION_CONFIG_NAME, oisGroups, exogenousConfigs);
     return Arrays.asList(bondCurveConfig, oisCurveConfig);
   }
 
@@ -114,7 +117,7 @@ public class ExamplesUsBondCurveConfigsPopulator {
       curveNodes.add(new BondNode(Tenor.ofYears(i), CURVE_NODE_ID_MAPPER_NAME));
     }
     final CurveDefinition curveDefinition = new InterpolatedCurveDefinition(CURVE_NAME, curveNodes,
-        Interpolator1DFactory.DOUBLE_QUADRATIC, Interpolator1DFactory.LINEAR_EXTRAPOLATOR, Interpolator1DFactory.LINEAR_EXTRAPOLATOR);
+        MonotonicAkimaCubicSplineInterpolator1dAdapter.NAME, LinearExtrapolator1dAdapter.NAME, LinearExtrapolator1dAdapter.NAME);
     return curveDefinition;
   }
 
@@ -135,7 +138,8 @@ public class ExamplesUsBondCurveConfigsPopulator {
         suffix = "0" + Integer.toString(i);
       }
       final ExternalId isin = ExternalSchemes.syntheticSecurityId("USB000000" + suffix);
-      final CurveInstrumentProvider instrumentProvider = new StaticCurveInstrumentProvider(isin, MarketDataRequirementNames.YIELD_YIELD_TO_MATURITY_MID, DataFieldType.OUTRIGHT);
+      final CurveInstrumentProvider instrumentProvider =
+          new StaticCurveInstrumentProvider(isin, MarketDataRequirementNames.YIELD_YIELD_TO_MATURITY_MID, DataFieldType.OUTRIGHT);
       billNodes.put(tenor, instrumentProvider);
     }
     for (final int i : new int[] {2, 3, 5, 7, 10, 20, 30 }) {
@@ -149,7 +153,8 @@ public class ExamplesUsBondCurveConfigsPopulator {
         suffix = Integer.toString(i);
       }
       final ExternalId isin = ExternalSchemes.syntheticSecurityId("UST000000" + suffix);
-      final CurveInstrumentProvider instrumentProvider = new StaticCurveInstrumentProvider(isin, MarketDataRequirementNames.YIELD_YIELD_TO_MATURITY_MID, DataFieldType.OUTRIGHT);
+      final CurveInstrumentProvider instrumentProvider =
+          new StaticCurveInstrumentProvider(isin, MarketDataRequirementNames.YIELD_YIELD_TO_MATURITY_MID, DataFieldType.OUTRIGHT);
       bondNodes.put(tenor, instrumentProvider);
     }
     final CurveNodeIdMapper curveNodeIdMapper = CurveNodeIdMapper.builder()

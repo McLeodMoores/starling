@@ -54,7 +54,7 @@ import com.opengamma.util.tuple.Pair;
 public class DiscountingPV01Function extends DiscountingFunction {
 
   /**
-   * Sets the value requirements to {@link ValueRequirementNames#PV01}
+   * Sets the value requirements to {@link ValueRequirementNames#PV01}.
    */
   public DiscountingPV01Function() {
     super(PV01);
@@ -69,6 +69,7 @@ public class DiscountingPV01Function extends DiscountingFunction {
           final Set<ValueRequirement> desiredValues) throws AsynchronousExecution {
         final ValueRequirement desiredValue = Iterables.getOnlyElement(desiredValues);
         final String desiredCurveName = desiredValue.getConstraint(CURVE);
+        final String sensitivityCurrency = desiredValue.getConstraint(DiscountingYCNSFunction.SENSITIVITY_CURRENCY_PROPERTY);
         final ValueProperties properties = desiredValue.getConstraints();
         final Object allPV01s = inputs.getValue(ALL_PV01S);
         if (allPV01s == null) {
@@ -80,12 +81,24 @@ public class DiscountingPV01Function extends DiscountingFunction {
         for (final Map.Entry<Pair<String, Currency>, Double> entry : pv01s.entrySet()) {
           final String curveName = entry.getKey().getFirst();
           if (desiredCurveName.equals(curveName)) {
-            final ValueProperties curveSpecificProperties = properties.copy().withoutAny(CURVE).with(CURVE, curveName).get();
-            final ValueSpecification spec = new ValueSpecification(PV01, target.toSpecification(), curveSpecificProperties);
-            results.add(new ComputedValue(spec, entry.getValue()));
-            return results;
+            if (sensitivityCurrency != null) {
+              // want a specific sensitivity currency
+              if (sensitivityCurrency.equals(entry.getKey().getSecond().getCode())) {
+                final ValueProperties curveSpecificProperties = properties.copy().withoutAny(CURVE).with(CURVE, curveName).get();
+                final ValueSpecification spec = new ValueSpecification(PV01, target.toSpecification(), curveSpecificProperties);
+                results.add(new ComputedValue(spec, entry.getValue()));
+                return results;
+              }
+            } else {
+              // don't care about the sensitivity currency, return the first match
+              final ValueProperties curveSpecificProperties = properties.copy().withoutAny(CURVE).with(CURVE, curveName).get();
+              final ValueSpecification spec = new ValueSpecification(PV01, target.toSpecification(), curveSpecificProperties);
+              results.add(new ComputedValue(spec, entry.getValue()));
+              return results;
+            }
           }
         }
+        // return 0 when there is no sensitivity to the named curve
         final ValueProperties curveSpecificProperties = properties.copy().withoutAny(CURVE).with(CURVE, desiredCurveName).get();
         final ValueSpecification spec = new ValueSpecification(PV01, target.toSpecification(), curveSpecificProperties);
         results.add(new ComputedValue(spec, 0.));
@@ -93,7 +106,8 @@ public class DiscountingPV01Function extends DiscountingFunction {
       }
 
       @Override
-      public Set<ValueRequirement> getRequirements(final FunctionCompilationContext compilationContext, final ComputationTarget target, final ValueRequirement desiredValue) {
+      public Set<ValueRequirement> getRequirements(final FunctionCompilationContext compilationContext, final ComputationTarget target,
+          final ValueRequirement desiredValue) {
         final ValueProperties constraints = desiredValue.getConstraints();
         final Set<String> curveNames = constraints.getValues(CURVE);
         if (curveNames == null || curveNames.size() != 1) {
@@ -116,10 +130,11 @@ public class DiscountingPV01Function extends DiscountingFunction {
         final ValueProperties.Builder properties = createValueProperties()
             .with(PROPERTY_CURVE_TYPE, DISCOUNTING)
             .withAny(CURVE_EXPOSURES)
+            .withAny(DiscountingYCNSFunction.SENSITIVITY_CURRENCY_PROPERTY)
             .withAny(CURVE);
         final Security security = target.getTrade().getSecurity();
         if (security instanceof SwapSecurity && InterestRateInstrumentType.isFixedIncomeInstrumentType((SwapSecurity) security)) {
-          if ((InterestRateInstrumentType.getInstrumentTypeFromSecurity((SwapSecurity) security) != InterestRateInstrumentType.SWAP_CROSS_CURRENCY)) {
+          if (InterestRateInstrumentType.getInstrumentTypeFromSecurity((SwapSecurity) security) != InterestRateInstrumentType.SWAP_CROSS_CURRENCY) {
             final SwapSecurity swapSecurity = (SwapSecurity) security;
             if (swapSecurity.getPayLeg().getNotional() instanceof InterestRateNotional) {
               final String currency = ((InterestRateNotional) swapSecurity.getPayLeg().getNotional()).getCurrency().getCode();
@@ -134,14 +149,14 @@ public class DiscountingPV01Function extends DiscountingFunction {
         } else {
           properties.with(CURRENCY, FinancialSecurityUtils.getCurrency(target.getTrade().getSecurity()).getCode());
         }
-        // TODO: Handle instruments with multiple currencies correctly
         return Collections.singleton(properties);
       }
 
       @Override
-      protected Set<ComputedValue> getValues(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues,
+      protected Set<ComputedValue> getValues(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
+          final Set<ValueRequirement> desiredValues,
           final InstrumentDerivative derivative, final FXMatrix fxMatrix) {
-        return null;
+        throw new UnsupportedOperationException();
       }
     };
   }
