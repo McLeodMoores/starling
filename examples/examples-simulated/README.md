@@ -324,7 +324,46 @@ As for the FX forward and option views, these are the sensitivities of a swap to
 ![Swap PV01](https://github.com/McLeodMoores/starling/blob/mcleodmoores/examples/examples-simulated/docs/images/swap-pv01.png)
 
 
-### AUD Swaps View
+### AUD Swap View
+In the previous swap examples, the portfolio contained swaps one underlying index per currency (e.g. 3M LIBOR for USD, 6M LIBOR for GBP). This meant that we only needed to construct two curves for each currency, a discounting and forward curve. The Australian swap market is different: the most liquid fixed / floating swaps are quarterly / quarterly up to three years and semi-annual / semi-annual for longer maturities. Obviously, we could construct the 3M bank bill curve up to three years and extrapolate for longer maturities, or the 6M bank bill with sparse data for maturities between six months and four years, but this introduces a fair amount of model risk due to the interpolation / extrapolation methods chosen. Instead, we can use basis (3M x 6M bank bill) swaps on the 3M and 6M curves. This means that there is coupling between the two bank bill curves and they must be constructed at the same time.
+
+| Tenor \ Curve Name | AUD Discounting | AUD 3M BANK BILL | AUD 6M BANK BILL |
+|--------------------|-----------------|------------------|------------------|
+| ON                 | Overnight index |                  |                  |
+| 1M                 | OIS             |                  |                  |
+| 2M                 | OIS             |                  |                  |
+| 3M                 | OIS             | Bank bill index  |                  |
+| 4M                 | OIS             |                  |                  |
+| 5M                 | OIS             |                  |                  |
+| 6M                 | OIS             | 3x6M FRA         | Bank bill index  |
+| 9M                 | OIS             | 6x9M FRA         |                  |
+| 1Y                 | OIS             | 3M fixed/3M bank bill swap       | 3M bank bill/6M bank bill swap |
+| 2Y                 | OIS             | 3M fixed/3M bank bill swap       | 3M bank bill/6M bank bill swap |
+| 3Y                 | OIS             | 3M fixed/3M bank bill swap       | 3M bank bill/6M bank bill swap |
+| 4Y                 | OIS             |                  |                  |
+| 5Y                 | OIS             | 3M bank bill/6M bank bill swap   | 6M fixed/6M bank bill swap|
+| 7Y                 |                 | 3M bank bill/6M bank bill swap   | 6M fixed/6M bank bill swap|
+| 10Y                | OIS             | 3M bank bill/6M bank bill swap   | 6M fixed/6M bank bill swap|
+
+We have some choice about the calculation method: although the 3M and 6M curves depend on the discounting curve, the discounting curve does not depend on either of the bank bill curves. This means that we can either construct all three curves at once, or we can construct the discounting curve first and use this as an input when building bank bill curves. The latter method means that the root-finding problem is smaller and so the calculation is faster. However, the results are the same:
+
+![AUD swap view](https://github.com/McLeodMoores/starling/blob/mcleodmoores/examples/examples-simulated/docs/images/aud-swap-view.png)
+
+Going to the ```PRIMITIVES``` tab:
+
+![Primitives tab](https://github.com/McLeodMoores/starling/blob/mcleodmoores/examples/examples-simulated/docs/images/aud-swap-primitives.png)
+
+we display the three curves calculated using the two methods:
+
+![AUD 6M bank bill](https://github.com/McLeodMoores/starling/blob/mcleodmoores/examples/examples-simulated/docs/images/aud-6m-bank-bill.png)
+
+We have constructed this view with side-by-side comparisons of calculations (```Column Sets```):
+
+![Column Set 1](https://github.com/McLeodMoores/starling/blob/mcleodmoores/examples/examples-simulated/docs/images/aud-column-set-1.png)
+
+![Column Set 2](https://github.com/McLeodMoores/starling/blob/mcleodmoores/examples/examples-simulated/docs/images/aud-column-set-2.png)
+
+This is a convenient way of seeing the effects of different calculation methods and makes retrieving the correct values programmatically or via REST easier.
 
 
 ## Swaptions
