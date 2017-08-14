@@ -308,6 +308,21 @@ This table shows all data for each cash-flow that is used to calculate the prese
 
 ### Swap View
 
+This is a view that shows present value and PV01s for the same swap portfolio as above, using the same curve configurations.
+
+![Swap View](https://github.com/McLeodMoores/starling/blob/mcleodmoores/examples/examples-simulated/docs/images/swap-view.png)
+
+#### Present Value
+The present value of the swaps in USD.
+
+#### Par Rate
+The par rate of the swap i.e. the rate that would price the swap to par. This is not additivie, so there are only values at the trade level.
+
+#### Bucketed PV01
+As for the FX forward and option views, these are the sensitivities of a swap to each curve used overall in the portfolio. As there is no coupling between curves of different currencies in the configuration used in this view, each swap will have sensitivities to the discounting and forward curve for the appropriate currency, and zero sensitivities to all other curves.
+
+![Swap PV01](https://github.com/McLeodMoores/starling/blob/mcleodmoores/examples/examples-simulated/docs/images/swap-pv01.png)
+
 
 ### AUD Swaps View
 
