@@ -127,7 +127,7 @@ The FX present value is the discounted value of the pay and receive amounts of t
 The present value is the sum of the discounted pay and receive amounts converted into the required currency.
 
 #### FX Forward Details
-This output gives the pricing details for each leg of the trade: the pay and recieve amounts, the discount factors used for each leg and equivalent zero rate.
+This output gives the pricing details for each leg of the trade: the pay and receive amounts, the discount factors used for each leg and equivalent zero rate.
 
 ![FX Forward Details](https://github.com/McLeodMoores/starling/blob/mcleodmoores/examples/examples-simulated/docs/images/fx-forward-details-details.png)
 
@@ -233,7 +233,7 @@ The change in value vega of the trade with respect to the implied volatility i.e
 
 ## Swaps <a name="swap-example"></a>
 ------------------------------------
-All swap example views reference a portfolio containing vanilla USD, EUR, CHF, JPY and GBP swaps. The curves for each currency are constructed using two-curve configurations: a discounting curve constructed with cash and OIS, and a forward LIBOR/TIBOR/etc. curve constructed using the appropriate index and vanilla fixed / \*IBOR swaps. The interpolation in all cases is a monotonic constrained cubic spline with linear extrapolation at both ends. The interpolation on the \*IBOR curves (used to project the forward rate) is performed on the zero rates.
+All swap example views reference a portfolio containing vanilla USD, EUR, CHF, JPY and GBP swaps. The curves for each currency are constructed using two-curve configurations: a discounting curve constructed with cash and OIS, and a forward LIBOR/TIBOR/etc. curve constructed using the appropriate index and vanilla fixed / \*IBOR swaps. The interpolation in all cases is a monotonic constrained cubic spline with linear extrapolation at both ends. The interpolation on the \*IBOR curves (used to calculate the forward rates) is performed on the zero rates.
 
 | Tenor \ Curve Name | CHF Discounting | CHF 6M LIBOR | EUR Discounting | EUR 6M EURIBOR | GBP Discounting | GBP 6M LIBOR | JPY Discounting | JPY 6M TIBOR | USD Discounting | USD 3M LIBOR |
 |--------------------|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|
@@ -262,16 +262,108 @@ All swap example views reference a portfolio containing vanilla USD, EUR, CHF, J
                    
 ### Swap Details View
 
+This view shows the present value of the swaps and details of the inputs used to calculate this value.
+
 ![Swap Details](https://github.com/McLeodMoores/starling/blob/mcleodmoores/examples/examples-simulated/docs/images/swap-details-view.png)
+
+#### Present Value
+The present value of the swaps, using one curve for discounting cash-flows and the appropriate index curve to calculate the forward rates of the swaps. Note that there is not a portfolio-level value because we haven't specified a currency for the results.
+
+#### Fixed Cash Flows
 
 ![Swap Fixed Leg](https://github.com/McLeodMoores/starling/blob/mcleodmoores/examples/examples-simulated/docs/images/swap-fixed-leg-details.png)
 
+The table shows all data for each cash-flow that is used to calculate the present value of the fixed leg:
+    - The notional.
+    - The fixed rate.
+    - The start and end interest accrual dates. These dates are adjusted by the fixed leg business day convention, using the appropriate regional holiday calendar.
+    - The payment year fraction - this is calculated from the accrual dates using the fixed leg day-count convention.
+    - The payment amount - this is the notional multiplied by the fixed rate multiplied by the payment year fraction.
+    - This is the payment time that is used to get the discount factor from the discounting yield curve
+    - The discount factor used to get the present value of the payment amount. The zero rate is continuously compounded.
+    - The discounted payment amount.
+    
+#### Floating Cash Flows
+
 ![Swap Floating Leg](https://github.com/McLeodMoores/starling/blob/mcleodmoores/examples/examples-simulated/docs/images/swap-floating-leg-details.png)
+
+This table shows all data for each cash-flow that is used to calculate the present vlaue of the floating leg:
+  - The notional.
+  - The spread (added to the underlying index level).
+  - The gearing (multiplied by the underlying index level).
+  - The underlying index tenor.
+  - The payment date.
+  - The payment time.
+  - The start and end accrual date. 
+  - The accrual year fraction.
+  - The start and end fixing dates. Note that these dates are not neccesarily the same as the accrual start and end dates, as different business day adjustments may apply.
+  - The fixing year fraction.
+  - The fixed rate. This is only available for seasoned swaps where the floating rate has fixed.
+  - The payment discount factor. This is the discount factor applied to any known or projected payments and is taken from the discounting curve.
+  - The payment amount. This is a known amount if a floating rate has fixed.
+  - The discounted payment amount. The known payment amount multiplied by the discount factor.
+  - The forward rate. This is calculated using the forward (projection) curve.
+  - The projected amount. This is the notional multiplied by the forward rate multiplied by the fixing year fraction.
+  - The discounted projected amount. This is the projected amount discounted using the discounting curve.
 
 ### Swap View
 
+This is a view that shows present value and PV01s for the same swap portfolio as above, using the same curve configurations.
 
-### AUD Swaps View
+![Swap View](https://github.com/McLeodMoores/starling/blob/mcleodmoores/examples/examples-simulated/docs/images/swap-view.png)
+
+#### Present Value
+The present value of the swaps in USD.
+
+#### Par Rate
+The par rate of the swap i.e. the rate that would price the swap to par. This is not additivie, so there are only values at the trade level.
+
+#### Bucketed PV01
+As for the FX forward and option views, these are the sensitivities of a swap to each curve used overall in the portfolio. As there is no coupling between curves of different currencies in the configuration used in this view, each swap will have sensitivities to the discounting and forward curve for the appropriate currency, and zero sensitivities to all other curves.
+
+![Swap PV01](https://github.com/McLeodMoores/starling/blob/mcleodmoores/examples/examples-simulated/docs/images/swap-pv01.png)
+
+
+### AUD Swap View
+In the previous swap examples, the portfolio contained swaps one underlying index per currency (e.g. 3M LIBOR for USD, 6M LIBOR for GBP). This meant that we only needed to construct two curves for each currency, a discounting and forward curve. The Australian swap market is different: the most liquid fixed / floating swaps are quarterly / quarterly up to three years and semi-annual / semi-annual for longer maturities. Obviously, we could construct the 3M bank bill curve up to three years and extrapolate for longer maturities, or the 6M bank bill with sparse data for maturities between six months and four years, but this introduces a fair amount of model risk due to the interpolation / extrapolation methods chosen. Instead, we can use basis (3M x 6M bank bill) swaps on the 3M and 6M curves. This means that there is coupling between the two bank bill curves and they must be constructed at the same time.
+
+| Tenor \ Curve Name | AUD Discounting | AUD 3M BANK BILL | AUD 6M BANK BILL |
+|--------------------|-----------------|------------------|------------------|
+| ON                 | Overnight index |                  |                  |
+| 1M                 | OIS             |                  |                  |
+| 2M                 | OIS             |                  |                  |
+| 3M                 | OIS             | Bank bill index  |                  |
+| 4M                 | OIS             |                  |                  |
+| 5M                 | OIS             |                  |                  |
+| 6M                 | OIS             | 3x6M FRA         | Bank bill index  |
+| 9M                 | OIS             | 6x9M FRA         |                  |
+| 1Y                 | OIS             | 3M fixed/3M bank bill swap       | 3M bank bill/6M bank bill swap |
+| 2Y                 | OIS             | 3M fixed/3M bank bill swap       | 3M bank bill/6M bank bill swap |
+| 3Y                 | OIS             | 3M fixed/3M bank bill swap       | 3M bank bill/6M bank bill swap |
+| 4Y                 | OIS             |                  |                  |
+| 5Y                 | OIS             | 3M bank bill/6M bank bill swap   | 6M fixed/6M bank bill swap|
+| 7Y                 |                 | 3M bank bill/6M bank bill swap   | 6M fixed/6M bank bill swap|
+| 10Y                | OIS             | 3M bank bill/6M bank bill swap   | 6M fixed/6M bank bill swap|
+
+We have some choice about the calculation method: although the 3M and 6M curves depend on the discounting curve, the discounting curve does not depend on either of the bank bill curves. This means that we can either construct all three curves at once, or we can construct the discounting curve first and use this as an input when building bank bill curves. The latter method means that the root-finding problem is smaller and so the calculation is faster. However, the results are the same:
+
+![AUD swap view](https://github.com/McLeodMoores/starling/blob/mcleodmoores/examples/examples-simulated/docs/images/aud-swap-view.png)
+
+Going to the ```PRIMITIVES``` tab:
+
+![Primitives tab](https://github.com/McLeodMoores/starling/blob/mcleodmoores/examples/examples-simulated/docs/images/aud-swap-primitives.png)
+
+we display the three curves calculated using the two methods:
+
+![AUD 6M bank bill](https://github.com/McLeodMoores/starling/blob/mcleodmoores/examples/examples-simulated/docs/images/aud-6m-bank-bill.png)
+
+We have constructed this view with side-by-side comparisons of calculations (```Column Sets```):
+
+![Column Set 1](https://github.com/McLeodMoores/starling/blob/mcleodmoores/examples/examples-simulated/docs/images/aud-column-set-1.png)
+
+![Column Set 2](https://github.com/McLeodMoores/starling/blob/mcleodmoores/examples/examples-simulated/docs/images/aud-column-set-2.png)
+
+This is a convenient way of seeing the effects of different calculation methods and makes retrieving the correct values programmatically or via REST easier.
 
 
 ## Swaptions
