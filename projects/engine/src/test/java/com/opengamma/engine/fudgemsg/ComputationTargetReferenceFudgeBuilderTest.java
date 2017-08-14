@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.fudgemsg;
@@ -31,7 +31,8 @@ public class ComputationTargetReferenceFudgeBuilderTest extends AbstractFudgeBui
   }
 
   public void testRequirement_null() {
-    assertEncodeDecodeCycle(ComputationTargetReference.class, new ComputationTargetRequirement(ComputationTargetType.NULL, (ExternalId) null));
+    assertEncodeDecodeCycle(ComputationTargetReference.class, new ComputationTargetSpecification(ComputationTargetType.NULL, null));
+//    assertEncodeDecodeCycle(ComputationTargetReference.class, new ComputationTargetRequirement(ComputationTargetType.NULL, ExternalIdBundle.EMPTY));
   }
 
   public void testSpecification_null() {

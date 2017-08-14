@@ -122,7 +122,7 @@ public class ComputationTargetReferenceFudgeBuilder implements FudgeBuilder<Comp
     if (types == null) {
       final FudgeField typeFieldName = message.getByName(TYPE_FIELD_NAME);
       if (identifierFieldName == null) {
-        return ComputationTargetSpecification.NULL;
+      return ComputationTargetSpecification.NULL;
       } else {
         final Object identifierFieldValue = identifierFieldName.getValue();
         if (typeFieldName.getValue().equals("NULL") && identifierFieldValue instanceof FudgeMsg && ((FudgeMsg) identifierFieldValue).isEmpty()) {
