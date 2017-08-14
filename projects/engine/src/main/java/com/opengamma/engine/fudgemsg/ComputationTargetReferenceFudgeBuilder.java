@@ -56,6 +56,7 @@ public class ComputationTargetReferenceFudgeBuilder implements FudgeBuilder<Comp
    * Fudge field name.
    */
   private static final String IDENTIFIER_FIELD_NAME = "computationTargetIdentifier";
+  private static final String TYPE_FIELD_NAME = "computationTargetType";
 
   private static final ComputationTargetReferenceVisitor<Object> s_encodeIdentifier = new ComputationTargetReferenceVisitor<Object>() {
 
@@ -117,14 +118,20 @@ public class ComputationTargetReferenceFudgeBuilder implements FudgeBuilder<Comp
   public static ComputationTargetReference buildObjectImpl(final FudgeDeserializer deserializer, final FudgeMsg message) {
     ComputationTargetType type = ComputationTargetTypeFudgeBuilder.buildObjectImpl(message);
     final List<ComputationTargetType> types = type.accept(s_getNestedType, null);
+    final FudgeField identifierFieldName = message.getByName(IDENTIFIER_FIELD_NAME);
     if (types == null) {
-      if (message.getByName(IDENTIFIER_FIELD_NAME) == null) {
+      final FudgeField typeFieldName = message.getByName(TYPE_FIELD_NAME);
+      if (identifierFieldName == null) {
         return ComputationTargetSpecification.NULL;
       } else {
+        final Object identifierFieldValue = identifierFieldName.getValue();
+        if (typeFieldName.getValue().equals("NULL") && identifierFieldValue instanceof FudgeMsg && ((FudgeMsg) identifierFieldValue).isEmpty()) {
+          return ComputationTargetSpecification.NULL;
+        }
         return new ComputationTargetRequirement(type, ExternalIdBundle.EMPTY);
       }
     } else if (types.isEmpty()) {
-      FudgeField field = message.getByName(IDENTIFIER_FIELD_NAME);
+      FudgeField field = identifierFieldName;
       if (field == null) {
         field = message.getByName("computationTargetId");
       }

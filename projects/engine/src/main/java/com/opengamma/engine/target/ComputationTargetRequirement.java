@@ -32,7 +32,7 @@ public final class ComputationTargetRequirement extends ComputationTargetReferen
 
   /**
    * Creates a reference to a required computation target.
-   * 
+   *
    * @param targetType the type of the target, not null
    * @param id the target identifier, may be null for {@link ComputationTargetType#NULL} target type only
    */
@@ -49,7 +49,7 @@ public final class ComputationTargetRequirement extends ComputationTargetReferen
 
   /**
    * Creates a reference to a required computation target.
-   * 
+   *
    * @param targetType the type of the target, not null
    * @param bundle the identifier bundle, may be null or empty for {@link ComputationTargetType#NULL} target type only
    */
@@ -60,7 +60,7 @@ public final class ComputationTargetRequirement extends ComputationTargetReferen
       ArgumentChecker.isFalse(bundle.isEmpty(), "bundle");
       _identifiers = bundle;
     } else {
-      ArgumentChecker.isTrue((bundle == null) || bundle.isEmpty(), "bundle");
+      ArgumentChecker.isTrue(bundle == null || bundle.isEmpty(), "bundle");
       _identifiers = ExternalIdBundle.EMPTY;
     }
   }
@@ -79,7 +79,7 @@ public final class ComputationTargetRequirement extends ComputationTargetReferen
 
   /**
    * Creates a requirement that describes an arbitrary target. The identifier is not resolved to a target but will be presented as an arbitrary parameter to a function.
-   * 
+   *
    * @param identifier the identifier to hold, not null
    * @return the target requirement, not null
    */
@@ -90,7 +90,7 @@ public final class ComputationTargetRequirement extends ComputationTargetReferen
   /**
    * Creates a requirement that describes an arbitrary target. The identifiers are not resolved to a target but the preferred one from the bundle will be presented as an arbitrary parameter to a
    * function.
-   * 
+   *
    * @param bundle the identifiers to hold, not null
    * @return the target specification, not null
    */
@@ -100,7 +100,7 @@ public final class ComputationTargetRequirement extends ComputationTargetReferen
 
   /**
    * Gets the external identifier bundle, if one exists.
-   * 
+   *
    * @return the external identifier bundle, may be null
    */
   public ExternalIdBundle getIdentifiers() {
@@ -118,7 +118,7 @@ public final class ComputationTargetRequirement extends ComputationTargetReferen
       return true;
     }
     if (obj instanceof ComputationTargetRequirement) {
-      ComputationTargetRequirement other = (ComputationTargetRequirement) obj;
+      final ComputationTargetRequirement other = (ComputationTargetRequirement) obj;
       return super.equals(obj) && ObjectUtils.equals(_identifiers, other._identifiers);
     }
     return false;
