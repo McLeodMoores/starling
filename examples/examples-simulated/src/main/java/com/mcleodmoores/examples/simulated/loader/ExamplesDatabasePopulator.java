@@ -29,6 +29,7 @@ import com.mcleodmoores.examples.simulated.loader.convention.ExamplesConventionM
 import com.mcleodmoores.examples.simulated.loader.data.ExampleHistoricalDataGeneratorTool;
 import com.mcleodmoores.examples.simulated.loader.holiday.ExamplesCurrencyHolidayLoader;
 import com.mcleodmoores.examples.simulated.loader.legalentity.SimulatedLegalEntityLoader;
+import com.mcleodmoores.examples.simulated.loader.portfolio.BondAndFuturePortfolioLoader;
 import com.mcleodmoores.examples.simulated.loader.portfolio.SimulatedMultiCountryBondPortfolioGenerator;
 import com.mcleodmoores.examples.simulated.loader.portfolio.SimulatedOisPortfolioGenerator;
 import com.mcleodmoores.examples.simulated.loader.portfolio.SimulatedUsBondPortfolioGenerator;
@@ -58,41 +59,41 @@ public class ExamplesDatabasePopulator extends AbstractTool<ToolContext> {
   /**
    * The properties file.
    */
-  public static final String TOOLCONTEXT_EXAMPLE_PROPERTIES = "classpath:/toolcontext/toolcontext.properties";
+  public static final String TOOLCONTEXT_EXAMPLE_PROPERTIES = "classpath:/toolcontext/toolcontext-mmexamples.properties";
   /**
    * The name of the multi-currency swap portfolio.
    */
   public static final String MULTI_CURRENCY_SWAP_PORTFOLIO_NAME = "Swap Portfolio";
   /**
-   * The name of Cap/Floor portfolio
+   * The name of Cap/Floor portfolio.
    */
   public static final String CAP_FLOOR_PORTFOLIO_NAME = "Cap/Floor Portfolio";
   /**
-   * The name of the AUD swap portfolio
+   * The name of the AUD swap portfolio.
    */
   public static final String AUD_SWAP_PORFOLIO_NAME = "AUD Swap Portfolio";
   /**
-   * The name of the swaption portfolio
+   * The name of the swaption portfolio.
    */
   public static final String SWAPTION_PORTFOLIO_NAME = "Swap / Swaption Portfolio";
   /**
-   * The name of the mixed CMS portfolio
+   * The name of the mixed CMS portfolio.
    */
   public static final String MIXED_CMS_PORTFOLIO_NAME = "Constant Maturity Swap Portfolio";
   /**
-   * The name of a vanilla FX option portfolio
+   * The name of a vanilla FX option portfolio.
    */
   public static final String VANILLA_FX_OPTION_PORTFOLIO_NAME = "Vanilla FX Option Portfolio";
   /**
-   * The name of a FX volatility swap portfolio
+   * The name of a FX volatility swap portfolio.
    */
   public static final String FX_VOLATILITY_SWAP_PORTFOLIO_NAME = "FX Volatility Swap Portfolio";
   /**
-   * The name of a EUR fixed income portfolio
+   * The name of a EUR fixed income portfolio.
    */
   public static final String EUR_SWAP_PORTFOLIO_NAME = "EUR Fixed Income Portfolio";
   /**
-   * The name of a mixed currency swaption portfolio
+   * The name of a mixed currency swaption portfolio.
    */
   public static final String MULTI_CURRENCY_SWAPTION_PORTFOLIO_NAME = "Swaption Portfolio";
   /**
@@ -100,13 +101,17 @@ public class ExamplesDatabasePopulator extends AbstractTool<ToolContext> {
    */
   public static final String FX_FORWARD_PORTFOLIO_NAME = "FX Forward Portfolio";
   /**
-   * Equity options portfolio
+   * Equity options portfolio.
    */
   public static final String EQUITY_OPTION_PORTFOLIO_NAME = "Equity Option Portfolio";
   /**
-   * Futures portfolio
+   * Futures portfolio.
    */
   public static final String FUTURE_PORTFOLIO_NAME = "Futures Portfolio";
+  /**
+   * US bond and bond futures.
+   */
+  public static final String USD_TREASURIES_PORTFOLIO_NAME = "US Treasuries";
   /**
    * The name of an ER future portfolio.
    */
@@ -159,19 +164,13 @@ public class ExamplesDatabasePopulator extends AbstractTool<ToolContext> {
     loadHolidays();
     loadLegalEntities();
     loadConventions();
-    //loadCurveAndSurfaceDefinitions();
-    //    loadCurveCalculationConfigurations();
     loadTimeSeriesRating();
     loadSimulatedHistoricalData();
     loadMultiCurrencySwapPortfolio();
-    // SWAP
     // Swap + swaption w/cubes and comparison btwn black + various SABRS
-    // AUD swap
     // EUR swap desk
-    // equities
     // equity options
     // futures
-    // FX options + FX forwards
     // CDS with new curve configs
     // GBP corporate bonds
 
@@ -190,6 +189,7 @@ public class ExamplesDatabasePopulator extends AbstractTool<ToolContext> {
     //    loadFXVolatilitySwapPortfolio();
     loadOisPortfolio();
     loadMultiCountryBondPortfolio();
+    loadBondAndFuturePortfolio();
     loadViews();
     loadFunctionConfigurations();
     loadExposureFunctions();
@@ -345,6 +345,19 @@ public class ExamplesDatabasePopulator extends AbstractTool<ToolContext> {
           file, true,
           true, true, false, true, false, null);
       equityOptionLoader.execute();
+      log.done();
+    } catch (final RuntimeException t) {
+      log.fail(t);
+    }
+  }
+
+  private void loadBondAndFuturePortfolio() {
+    final Log log = new Log("Creating example bond / bond future portfolio");
+    try {
+      final URL resource = BondAndFuturePortfolioLoader.class.getResource("usd-bond-and-futures.csv");
+      final String file = unpackJar(resource);
+      final BondAndFuturePortfolioLoader loader = new BondAndFuturePortfolioLoader(USD_TREASURIES_PORTFOLIO_NAME, file);
+      loader.run(getToolContext());
       log.done();
     } catch (final RuntimeException t) {
       log.fail(t);
