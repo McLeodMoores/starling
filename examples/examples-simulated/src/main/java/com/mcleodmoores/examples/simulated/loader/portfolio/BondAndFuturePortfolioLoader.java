@@ -22,6 +22,9 @@ import org.threeten.bp.ZoneOffset;
 import org.threeten.bp.ZonedDateTime;
 
 import com.opengamma.component.tool.AbstractTool;
+import com.opengamma.core.position.Position;
+import com.opengamma.core.position.impl.SimplePortfolio;
+import com.opengamma.core.position.impl.SimplePortfolioNode;
 import com.opengamma.financial.convention.daycount.DayCount;
 import com.opengamma.financial.convention.daycount.DayCountFactory;
 import com.opengamma.financial.convention.frequency.Frequency;
@@ -30,12 +33,22 @@ import com.opengamma.financial.convention.yield.YieldConvention;
 import com.opengamma.financial.convention.yield.YieldConventionFactory;
 import com.opengamma.financial.generator.MasterSecurityPersister;
 import com.opengamma.financial.generator.SecurityPersister;
+import com.opengamma.financial.generator.SimplePositionGenerator;
 import com.opengamma.financial.security.bond.BondSecurity;
 import com.opengamma.financial.security.bond.GovernmentBondSecurity;
 import com.opengamma.financial.tool.ToolContext;
 import com.opengamma.id.ExternalId;
 import com.opengamma.id.ExternalIdBundle;
+import com.opengamma.master.portfolio.ManageablePortfolio;
+import com.opengamma.master.portfolio.ManageablePortfolioNode;
+import com.opengamma.master.portfolio.PortfolioDocument;
+import com.opengamma.master.portfolio.PortfolioSearchRequest;
+import com.opengamma.master.portfolio.PortfolioSearchResult;
+import com.opengamma.master.position.ManageablePosition;
 import com.opengamma.master.position.ManageableTrade;
+import com.opengamma.master.position.PositionDocument;
+import com.opengamma.master.position.PositionMaster;
+import com.opengamma.master.security.ManageableSecurityLink;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
 import com.opengamma.util.time.Expiry;
@@ -52,7 +65,6 @@ public class BondAndFuturePortfolioLoader extends AbstractTool<ToolContext> {
   private static final ZoneOffset ZONE = ZoneOffset.UTC;
   private final String _portfolioName;
   private final File _tradeFile;
-  private SecurityPersister _securityPersister;
 
   public BondAndFuturePortfolioLoader(final String portfolioName, final String tradeFileName) {
     _portfolioName = ArgumentChecker.notNull(portfolioName, "portfolioName");
@@ -61,54 +73,64 @@ public class BondAndFuturePortfolioLoader extends AbstractTool<ToolContext> {
 
   @Override
   protected void doRun() throws Exception {
-    _securityPersister = new MasterSecurityPersister(getToolContext().getSecurityMaster());
-    try (CSVReader reader = new CSVReader(new BufferedReader(new FileReader(_tradeFile)))) {
-      final List<ManageableTrade> trades = new ArrayList<>();
-      String[] line = reader.readNext();
-      if (line == null || line.length != 1 && !line[0].startsWith("#")) {
-        LOGGER.error("First line was not a trade type: expecting \"# Bond\" or \"# Bond future\"");
-        return;
-      }
-      // bonds then futures
-      if (line[0].equalsIgnoreCase("# Bond")) {
-        // read bonds until we reach the end of the file or bond futures
-        line = reader.readNext(); // ignore the headers
-        line = reader.readNext();
-        while (line != null && line.length > 0 && !line[0].startsWith("#")) {
-          final ManageableTrade trade = createBondTrade(line);
-          if (trade != null) {
-            trades.add(trade);
-          }
-          line = reader.readNext();
+    try (final ToolContext context = getToolContext()) {
+      try (CSVReader reader = new CSVReader(new BufferedReader(new FileReader(_tradeFile)))) {
+        final List<ManageableTrade> trades = new ArrayList<>();
+        String[] line = reader.readNext();
+        if (line == null || line.length != 1 && !line[0].startsWith("#")) {
+          LOGGER.error("First line was not a trade type: expecting \"# Bond\" or \"# Bond future\"");
+          return;
         }
-        if (line != null && line[0].equalsIgnoreCase("# Bond future")) {
-          // read bond futures until we reach the end of the file
+        // bonds then futures
+        if (line[0].equalsIgnoreCase("# Bond")) {
+          // read bonds until we reach the end of the file or bond futures
           line = reader.readNext(); // ignore the headers
+          line = reader.readNext();
+          while (line != null && line.length > 0 && !line[0].startsWith("#")) {
+            final ManageableTrade trade = createBondTrade(context, line);
+            if (trade != null) {
+              trades.add(trade);
+            }
+            line = reader.readNext();
+          }
+          if (line != null && line[0].equalsIgnoreCase("# Bond future")) {
+            // read bond futures until we reach the end of the file
+            line = reader.readNext(); // ignore the headers
+            while (line != null && line.length > 0 && !line[0].startsWith("#")) {
+              line = reader.readNext();
+            }
+          }
+        } else if (line[0].equalsIgnoreCase("# Bond")) {
+          // futures then bonds
+          // read bonds until we reach the end of the file or bond futures
+          line = reader.readNext();
           while (line != null && line.length > 0 && !line[0].startsWith("#")) {
             line = reader.readNext();
           }
-        }
-      } else if (line[0].equalsIgnoreCase("# Bond")) {
-        // futures then bonds
-        // read bonds until we reach the end of the file or bond futures
-        line = reader.readNext();
-        while (line != null && line.length > 0 && !line[0].startsWith("#")) {
-          line = reader.readNext();
-        }
-        if (line != null && line[0].equalsIgnoreCase("# Bond future")) {
-          // read bond futures until we reach the end of the file
-          line = reader.readNext();
-          while (line != null && line.length > 0 && !line[0].startsWith("#")) {
+          if (line != null && line[0].equalsIgnoreCase("# Bond future")) {
+            // read bond futures until we reach the end of the file
             line = reader.readNext();
+            while (line != null && line.length > 0 && !line[0].startsWith("#")) {
+              line = reader.readNext();
+            }
           }
         }
+        if (trades.isEmpty()) {
+          LOGGER.error("Could not create any trades");
+          return;
+        }
+        LOGGER.warn("{} trades created. Generating portfolio...", trades.size());
+        createPortfolio(context, trades, _portfolioName);
+      } catch (final Exception e) {
+        LOGGER.error(e.getMessage());
       }
     } catch (final Exception e) {
       LOGGER.error(e.getMessage());
     }
   }
 
-  private ManageableTrade createBondTrade(final String[] details) {
+  private static ManageableTrade createBondTrade(final ToolContext context, final String[] details) {
+    final SecurityPersister securityPersister = new MasterSecurityPersister(context.getSecurityMaster());
     try {
       final String tradeName = details[0];
       final String issuerName = details[1];
@@ -153,16 +175,48 @@ public class BondAndFuturePortfolioLoader extends AbstractTool<ToolContext> {
       }
       security.setName(tradeName);
       security.setExternalIdBundle(ids);
-      final ManageableTrade trade = new ManageableTrade(quantity, _securityPersister.storeSecurity(security), tradeDate, tradeTime, counterparty);
+      final ManageableTrade trade = new ManageableTrade(quantity, securityPersister.storeSecurity(security), tradeDate, tradeTime, counterparty);
       trade.setPremiumCurrency(currency);
       trade.setPremiumDate(premiumDate);
       trade.setPremiumTime(premiumTime);
       trade.setPremium(quantity.doubleValue() * issuancePrice);
       return trade;
     } catch (final Exception e) {
-      e.printStackTrace(System.err);
       LOGGER.error("Error creating bond {}, error was {}", Arrays.toString(details), e.getMessage());
       return null;
+    }
+  }
+
+  private static void createPortfolio(final ToolContext context, final List<ManageableTrade> trades, final String portfolioName) {
+    final PositionMaster positionMaster = context.getPositionMaster();
+    final SimplePortfolio portfolio = new SimplePortfolio(portfolioName);
+    final SimplePortfolioNode root = portfolio.getRootNode();
+    final ManageablePortfolioNode manageableRoot = new ManageablePortfolioNode(root.getName());
+    for (final ManageableTrade trade : trades) {
+      final Position position = SimplePositionGenerator.createPositionFromTrade(trade);
+      root.addPosition(position);
+      final ManageablePosition newPosition = new ManageablePosition();
+      newPosition.setAttributes(position.getAttributes());
+      newPosition.setQuantity(position.getQuantity());
+      newPosition.setSecurityLink(new ManageableSecurityLink(position.getSecurityLink()));
+      newPosition.addTrade(trade);
+      manageableRoot.addPosition(positionMaster.add(new PositionDocument(newPosition)).getUniqueId());
+    }
+    final ManageablePortfolio manageablePortfolio = new ManageablePortfolio(portfolioName);
+    manageablePortfolio.setRootNode(manageableRoot);
+    final PortfolioSearchRequest request = new PortfolioSearchRequest();
+    request.setDepth(0);
+    request.setIncludePositions(false);
+    request.setName(portfolio.getName());
+    final PortfolioSearchResult result = context.getPortfolioMaster().search(request);
+    PortfolioDocument document = result.getFirstDocument();
+    if (document != null) {
+      LOGGER.info("Overwriting portfolio {}", document.getUniqueId());
+      document.setPortfolio(manageablePortfolio);
+      context.getPortfolioMaster().update(document);
+    } else {
+      document = new PortfolioDocument(manageablePortfolio);
+      context.getPortfolioMaster().add(document);
     }
   }
 }
