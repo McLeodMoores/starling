@@ -23,17 +23,15 @@ import com.mcleodmoores.examples.simulated.loader.config.ExamplesExposureFunctio
 import com.mcleodmoores.examples.simulated.loader.config.ExamplesFunctionConfigsPopulator;
 import com.mcleodmoores.examples.simulated.loader.config.ExamplesFxImpliedCurveConfigsLoader;
 import com.mcleodmoores.examples.simulated.loader.config.ExamplesFxVolatilitySurfaceConfigsLoader;
-import com.mcleodmoores.examples.simulated.loader.config.ExamplesUsBondCurveConfigsLoader;
+import com.mcleodmoores.examples.simulated.loader.config.ExamplesUsTreasuryCurveConfigsLoader;
 import com.mcleodmoores.examples.simulated.loader.config.ExamplesViewsPopulator;
 import com.mcleodmoores.examples.simulated.loader.convention.ExamplesConventionMasterInitializer;
 import com.mcleodmoores.examples.simulated.loader.data.ExampleHistoricalDataGeneratorTool;
 import com.mcleodmoores.examples.simulated.loader.holiday.ExamplesCurrencyHolidayLoader;
 import com.mcleodmoores.examples.simulated.loader.legalentity.SimulatedLegalEntityLoader;
 import com.mcleodmoores.examples.simulated.loader.portfolio.BondAndFuturePortfolioLoader;
-import com.mcleodmoores.examples.simulated.loader.portfolio.SimulatedMultiCountryBondPortfolioGenerator;
 import com.mcleodmoores.examples.simulated.loader.portfolio.SimulatedOisPortfolioGenerator;
 import com.mcleodmoores.examples.simulated.loader.portfolio.SimulatedUsBondPortfolioGenerator;
-import com.mcleodmoores.examples.simulated.loader.securities.SimulatedBondCurveSecuritiesGenerator;
 import com.mcleodmoores.examples.simulated.loader.securities.SimulatedIndexSecuritiesGenerator;
 import com.mcleodmoores.examples.simulated.loader.securities.SimulatedSecuritiesGenerator;
 import com.opengamma.OpenGammaRuntimeException;
@@ -158,7 +156,6 @@ public class ExamplesDatabasePopulator extends AbstractTool<ToolContext> {
   //-------------------------------------------------------------------------
   @Override
   protected void doRun() {
-    loadBondCurveSecurities();
     loadIndexSecurities();
     loadExchanges();
     loadHolidays();
@@ -188,7 +185,6 @@ public class ExamplesDatabasePopulator extends AbstractTool<ToolContext> {
     //    loadERFuturePortfolio();
     //    loadFXVolatilitySwapPortfolio();
     loadOisPortfolio();
-    loadMultiCountryBondPortfolio();
     loadBondAndFuturePortfolio();
     loadViews();
     loadFunctionConfigurations();
@@ -196,7 +192,7 @@ public class ExamplesDatabasePopulator extends AbstractTool<ToolContext> {
     loadCurveConfigurations();
     loadFxVolatilitySurfaceConfigurations();
     loadFxImpliedCurveCalculationConfigurations();
-    loadUsBondCurveConfigurations(); // bond curve configurations to use a bond curve
+    loadUsTreasuryCurveConfigurations();
   }
 
   /**
@@ -535,19 +531,6 @@ public class ExamplesDatabasePopulator extends AbstractTool<ToolContext> {
   }
 
   /**
-   * Adds a portfolio containing government bonds.
-   */
-  private void loadMultiCountryBondPortfolio() {
-    final Log log = new Log("Creating example bond portfolio");
-    try {
-      portfolioGeneratorTool().run(getToolContext(), BONDS_PORTFOLIO_NAME, new SimulatedMultiCountryBondPortfolioGenerator(), true, null);
-      log.done();
-    } catch (final RuntimeException t) {
-      log.fail(t);
-    }
-  }
-
-  /**
    * Loads example exposure functions.
    */
   private void loadExposureFunctions() {
@@ -555,19 +538,6 @@ public class ExamplesDatabasePopulator extends AbstractTool<ToolContext> {
     try {
       final ExamplesExposureFunctionLoader exposureFunctionLoader = new ExamplesExposureFunctionLoader();
       exposureFunctionLoader.run(getToolContext());
-      log.done();
-    } catch (final RuntimeException t) {
-      log.fail(t);
-    }
-  }
-
-  /**
-   * Loads a list of bond securities used in curves.
-   */
-  private void loadBondCurveSecurities() {
-    final Log log = new Log("Creating bond curve securities");
-    try {
-      securitiesGeneratorTool().run(getToolContext(), new SimulatedBondCurveSecuritiesGenerator(), true);
       log.done();
     } catch (final RuntimeException t) {
       log.fail(t);
@@ -601,38 +571,24 @@ public class ExamplesDatabasePopulator extends AbstractTool<ToolContext> {
     }
   }
 
-  //  /**
-  //   * Loads example Ugandan bond curve construction configurations.
-  //   */
-  //  private void loadUgandanBondCurveConfigurations() {
-  //    final Log log = new Log("Creating Ugandan bond curve construction configurations");
-  //    try {
-  //      final ExampleUgandanBondCurveConfigurationsLoader loader = new ExampleUgandanBondCurveConfigurationsLoader();
-  //      loader.run(getToolContext());
-  //      log.done();
-  //    } catch (final RuntimeException t) {
-  //      log.fail(t);
-  //    }
-  //  }
+  /**
+   * Loads example US treasury curve configurations.
+   */
+  private void loadUsTreasuryCurveConfigurations() {
+    final Log log = new Log("Creating US Treasury curve configurations");
+    try {
+      final ExamplesUsTreasuryCurveConfigsLoader loader = new ExamplesUsTreasuryCurveConfigsLoader();
+      loader.run(getToolContext());
+      log.done();
+    } catch (final RuntimeException e) {
+      log.fail(e);
+    }
+  }
 
   private void loadFxImpliedCurveCalculationConfigurations() {
     final Log log = new Log("Creating FX implied curve construction configurations");
     try {
       final ExamplesFxImpliedCurveConfigsLoader loader = new ExamplesFxImpliedCurveConfigsLoader();
-      loader.run(getToolContext());
-      log.done();
-    } catch (final RuntimeException t) {
-      log.fail(t);
-    }
-  }
-
-  /**
-   * Loads simulated US bond curve construction configurations.
-   */
-  private void loadUsBondCurveConfigurations() {
-    final Log log = new Log("Creating US bond curve construction configurations");
-    try {
-      final ExamplesUsBondCurveConfigsLoader loader = new ExamplesUsBondCurveConfigsLoader();
       loader.run(getToolContext());
       log.done();
     } catch (final RuntimeException t) {

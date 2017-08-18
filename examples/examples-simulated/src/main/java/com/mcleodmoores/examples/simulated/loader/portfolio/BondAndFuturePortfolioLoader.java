@@ -22,6 +22,7 @@ import org.threeten.bp.ZoneOffset;
 import org.threeten.bp.ZonedDateTime;
 
 import com.opengamma.component.tool.AbstractTool;
+import com.opengamma.core.id.ExternalSchemes;
 import com.opengamma.core.position.Position;
 import com.opengamma.core.position.impl.SimplePortfolio;
 import com.opengamma.core.position.impl.SimplePortfolioNode;
@@ -31,9 +32,8 @@ import com.opengamma.financial.convention.frequency.Frequency;
 import com.opengamma.financial.convention.frequency.PeriodFrequency;
 import com.opengamma.financial.convention.yield.YieldConvention;
 import com.opengamma.financial.convention.yield.YieldConventionFactory;
-import com.opengamma.financial.generator.MasterSecurityPersister;
-import com.opengamma.financial.generator.SecurityPersister;
 import com.opengamma.financial.generator.SimplePositionGenerator;
+import com.opengamma.financial.security.bond.BillSecurity;
 import com.opengamma.financial.security.bond.BondSecurity;
 import com.opengamma.financial.security.bond.GovernmentBondSecurity;
 import com.opengamma.financial.tool.ToolContext;
@@ -49,7 +49,9 @@ import com.opengamma.master.position.ManageableTrade;
 import com.opengamma.master.position.PositionDocument;
 import com.opengamma.master.position.PositionMaster;
 import com.opengamma.master.security.ManageableSecurityLink;
+import com.opengamma.master.security.SecurityDocument;
 import com.opengamma.util.ArgumentChecker;
+import com.opengamma.util.i18n.Country;
 import com.opengamma.util.money.Currency;
 import com.opengamma.util.time.Expiry;
 import com.opengamma.util.time.ExpiryAccuracy;
@@ -73,64 +75,50 @@ public class BondAndFuturePortfolioLoader extends AbstractTool<ToolContext> {
 
   @Override
   protected void doRun() throws Exception {
-    try (final ToolContext context = getToolContext()) {
-      try (CSVReader reader = new CSVReader(new BufferedReader(new FileReader(_tradeFile)))) {
-        final List<ManageableTrade> trades = new ArrayList<>();
-        String[] line = reader.readNext();
-        if (line == null || line.length != 1 && !line[0].startsWith("#")) {
-          LOGGER.error("First line was not a trade type: expecting \"# Bond\" or \"# Bond future\"");
-          return;
-        }
-        // bonds then futures
-        if (line[0].equalsIgnoreCase("# Bond")) {
-          // read bonds until we reach the end of the file or bond futures
+    final ToolContext context = getToolContext();
+    try (CSVReader reader = new CSVReader(new BufferedReader(new FileReader(_tradeFile)))) {
+      final List<ManageableTrade> trades = new ArrayList<>();
+      String[] line = reader.readNext();
+      if (line == null || line.length != 1 && !line[0].startsWith("#")) {
+        LOGGER.error("First line was not a trade type: expecting \"# Bond\", \"# Bond future\" or \"# Bill\"");
+        return;
+      }
+      String label = "";
+      while (line != null && line.length > 0) {
+        if (line[0].startsWith("#")) {
+          // new trade section
+          label = line[0].toUpperCase();
           line = reader.readNext(); // ignore the headers
           line = reader.readNext();
-          while (line != null && line.length > 0 && !line[0].startsWith("#")) {
-            final ManageableTrade trade = createBondTrade(context, line);
-            if (trade != null) {
-              trades.add(trade);
-            }
-            line = reader.readNext();
-          }
-          if (line != null && line[0].equalsIgnoreCase("# Bond future")) {
-            // read bond futures until we reach the end of the file
-            line = reader.readNext(); // ignore the headers
-            while (line != null && line.length > 0 && !line[0].startsWith("#")) {
-              line = reader.readNext();
-            }
-          }
-        } else if (line[0].equalsIgnoreCase("# Bond")) {
-          // futures then bonds
-          // read bonds until we reach the end of the file or bond futures
-          line = reader.readNext();
-          while (line != null && line.length > 0 && !line[0].startsWith("#")) {
-            line = reader.readNext();
-          }
-          if (line != null && line[0].equalsIgnoreCase("# Bond future")) {
-            // read bond futures until we reach the end of the file
-            line = reader.readNext();
-            while (line != null && line.length > 0 && !line[0].startsWith("#")) {
-              line = reader.readNext();
-            }
-          }
         }
-        if (trades.isEmpty()) {
-          LOGGER.error("Could not create any trades");
-          return;
+        ManageableTrade trade = null;
+        if (label.contains("BOND")) {
+          if (label.contains("FUTURE")) {
+          } else {
+            trade = createBondTrade(context, line);
+          }
+        } else if (label.contains("BILL")) {
+          trade = createBillTrade(context, line);
+        } else {
+          LOGGER.error("Unknown trade type {}", label);
         }
-        LOGGER.warn("{} trades created. Generating portfolio...", trades.size());
-        createPortfolio(context, trades, _portfolioName);
-      } catch (final Exception e) {
-        LOGGER.error(e.getMessage());
+        if (trade != null) {
+          trades.add(trade);
+        }
+        line = reader.readNext();
       }
+      if (trades.isEmpty()) {
+        LOGGER.error("Could not create any trades");
+        return;
+      }
+      LOGGER.warn("{} trades created. Generating portfolio...", trades.size());
+      createPortfolio(context, trades, _portfolioName);
     } catch (final Exception e) {
       LOGGER.error(e.getMessage());
     }
   }
 
   private static ManageableTrade createBondTrade(final ToolContext context, final String[] details) {
-    final SecurityPersister securityPersister = new MasterSecurityPersister(context.getSecurityMaster());
     try {
       final String tradeName = details[0];
       final String issuerName = details[1];
@@ -169,13 +157,14 @@ public class BondAndFuturePortfolioLoader extends AbstractTool<ToolContext> {
       final OffsetTime tradeTime = LocalTime.parse(details[24]).atOffset(ZONE);
       final LocalDate premiumDate = LocalDate.parse(details[25]);
       final OffsetTime premiumTime = LocalTime.parse(details[26]).atOffset(ZONE);
-      final ExternalIdBundle ids = ExternalIdBundle.EMPTY;
+      ExternalIdBundle ids = ExternalIdBundle.EMPTY;
       for (int i = 27; i < details.length; i++) {
-        ids.withExternalId(ExternalId.parse(details[i]));
+        ids = ids.withExternalId(ExternalId.parse(details[i]));
       }
       security.setName(tradeName);
       security.setExternalIdBundle(ids);
-      final ManageableTrade trade = new ManageableTrade(quantity, securityPersister.storeSecurity(security), tradeDate, tradeTime, counterparty);
+      final SecurityDocument stored = context.getSecurityMaster().add(new SecurityDocument(security));
+      final ManageableTrade trade = new ManageableTrade(quantity, stored.getSecurity().getExternalIdBundle(), tradeDate, tradeTime, counterparty);
       trade.setPremiumCurrency(currency);
       trade.setPremiumDate(premiumDate);
       trade.setPremiumTime(premiumTime);
@@ -183,6 +172,60 @@ public class BondAndFuturePortfolioLoader extends AbstractTool<ToolContext> {
       return trade;
     } catch (final Exception e) {
       LOGGER.error("Error creating bond {}, error was {}", Arrays.toString(details), e.getMessage());
+      return null;
+    }
+  }
+
+  private static ManageableTrade createBillTrade(final ToolContext context, final String[] details) {
+    try {
+      final String tradeName = details[0];
+      final String issuerName = details[1];
+      final String issuerType = details[2];
+      final String issuerDomicile = details[3];
+      final String market = details[4];
+      final Currency currency = Currency.of(details[5]);
+      final Expiry lastTradeDate =
+          new Expiry(ZonedDateTime.of(LocalDateTime.of(LocalDate.parse(details[6]), EXPIRY_TIME), ZONE), ExpiryAccuracy.DAY_MONTH_YEAR);
+      final YieldConvention yieldConvention = YieldConventionFactory.INSTANCE.getYieldConvention(details[7]);
+      final DayCount dayCount = DayCountFactory.of(details[8]);
+      final ZonedDateTime settlementDate = ZonedDateTime.of(LocalDateTime.of(LocalDate.parse(details[9]), EXPIRY_TIME), ZONE);
+      final int daysToSettle = Integer.parseInt(details[10]);
+      final double minimumIncrement = Double.parseDouble(details[11]);
+      final ExternalId legalEntityId = ExternalId.parse(details[12]);
+      final ExternalId regionId = ExternalSchemes.countryRegionId(Country.of(issuerDomicile));
+      final BillSecurity security;
+      if (issuerType.equalsIgnoreCase("Sovereign")) {
+        security = new BillSecurity(currency, lastTradeDate, settlementDate.minusDays(daysToSettle), minimumIncrement, daysToSettle,
+            regionId, yieldConvention, dayCount, legalEntityId);
+      } else {
+        LOGGER.error("Unhandled issuer type {}", issuerType);
+        return null;
+      }
+      final BigDecimal quantity = BigDecimal.valueOf(Double.parseDouble(details[13]));
+      final ExternalId counterparty = ExternalId.parse(details[14]);
+      final LocalDate tradeDate = LocalDate.parse(details[15]);
+      final OffsetTime tradeTime = LocalTime.parse(details[16]).atOffset(ZONE);
+      final LocalDate premiumDate = LocalDate.parse(details[17]);
+      final OffsetTime premiumTime = LocalTime.parse(details[18]).atOffset(ZONE);
+      final Double premium = Double.parseDouble(details[19]);
+      ExternalIdBundle ids = ExternalIdBundle.EMPTY;
+      for (int i = 20; i < details.length; i++) {
+        ids = ids.withExternalId(ExternalId.parse(details[i]));
+      }
+      security.setName(tradeName);
+      security.setExternalIdBundle(ids);
+      security.addAttribute("Issuer name", issuerName);
+      security.addAttribute("Issuer type", issuerType);
+      security.addAttribute("Market", market);
+      final SecurityDocument stored = context.getSecurityMaster().add(new SecurityDocument(security));
+      final ManageableTrade trade = new ManageableTrade(quantity, stored.getSecurity().getExternalIdBundle(), tradeDate, tradeTime, counterparty);
+      trade.setPremiumCurrency(currency);
+      trade.setPremiumDate(premiumDate);
+      trade.setPremiumTime(premiumTime);
+      trade.setPremium(premium);
+      return trade;
+    } catch (final Exception e) {
+      LOGGER.error("Error creating bill {}, error was {}", Arrays.toString(details), e.getMessage());
       return null;
     }
   }

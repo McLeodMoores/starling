@@ -8,6 +8,7 @@ import static com.mcleodmoores.examples.simulated.loader.ExamplesDatabasePopulat
 import static com.mcleodmoores.examples.simulated.loader.ExamplesDatabasePopulator.FX_FORWARD_PORTFOLIO_NAME;
 import static com.mcleodmoores.examples.simulated.loader.ExamplesDatabasePopulator.MULTI_CURRENCY_SWAP_PORTFOLIO_NAME;
 import static com.mcleodmoores.examples.simulated.loader.ExamplesDatabasePopulator.OIS_PORTFOLIO_NAME;
+import static com.mcleodmoores.examples.simulated.loader.ExamplesDatabasePopulator.USD_TREASURIES_PORTFOLIO_NAME;
 import static com.mcleodmoores.examples.simulated.loader.ExamplesDatabasePopulator.VANILLA_FX_OPTION_PORTFOLIO_NAME;
 import static com.opengamma.engine.value.ValuePropertyNames.CURRENCY;
 import static com.opengamma.engine.value.ValuePropertyNames.CURVE;
@@ -46,6 +47,7 @@ import static com.opengamma.engine.value.ValueRequirementNames.VOLATILITY_SURFAC
 import static com.opengamma.engine.value.ValueRequirementNames.YIELD_CURVE;
 import static com.opengamma.financial.analytics.model.InstrumentTypeProperties.FOREX;
 import static com.opengamma.financial.analytics.model.InstrumentTypeProperties.PROPERTY_SURFACE_INSTRUMENT_TYPE;
+import static com.opengamma.financial.analytics.model.curve.CurveCalculationPropertyNamesAndValues.DISCOUNTING;
 import static com.opengamma.financial.analytics.model.curve.CurveCalculationPropertyNamesAndValues.PROPERTY_CURVE_TYPE;
 
 import java.util.HashSet;
@@ -67,6 +69,7 @@ import com.opengamma.examples.simulated.loader.ExampleEquityPortfolioLoader;
 import com.opengamma.financial.analytics.model.curve.CurveCalculationPropertyNamesAndValues;
 import com.opengamma.financial.analytics.model.discounting.DiscountingYCNSFunction;
 import com.opengamma.financial.currency.CurrencyConversionFunction;
+import com.opengamma.financial.security.bond.BondSecurity;
 import com.opengamma.financial.security.equity.EquitySecurity;
 import com.opengamma.financial.security.future.FutureSecurity;
 import com.opengamma.financial.security.fx.FXForwardSecurity;
@@ -134,6 +137,7 @@ public class ExamplesViewsPopulator extends AbstractTool<ToolContext> {
     storeViewDefinition(getFxForwardViewDefinition(FX_FORWARD_PORTFOLIO_NAME, "FX Forward View"));
     storeViewDefinition(getFxForwardDetailsViewDefinition(FX_FORWARD_PORTFOLIO_NAME, "FX Forward Details View"));
     storeViewDefinition(getFutureViewDefinition(FUTURE_PORTFOLIO_NAME, "Futures View"));
+    storeViewDefinition(getUsTreasuriesViewDefinition(USD_TREASURIES_PORTFOLIO_NAME, "US Treasuries View"));
   }
 
   /**
@@ -428,7 +432,7 @@ public class ExamplesViewsPopulator extends AbstractTool<ToolContext> {
     viewDefinition.setMinDeltaCalculationPeriod(MIN_DELTA_PERIOD);
     viewDefinition.setMinFullCalculationPeriod(MIN_FULL_PERIOD);
     final ValueProperties.Builder properties1 = ValueProperties.builder()
-        .with(PROPERTY_CURVE_TYPE, CurveCalculationPropertyNamesAndValues.DISCOUNTING)
+        .with(PROPERTY_CURVE_TYPE, DISCOUNTING)
         .with(CURVE_EXPOSURES, "AUD Swaps (1)");
     final ViewCalculationConfiguration viewConfig1 = new ViewCalculationConfiguration(viewDefinition, "Simultaneous curve construction");
     viewConfig1.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, PRESENT_VALUE, properties1.get());
@@ -439,17 +443,17 @@ public class ExamplesViewsPopulator extends AbstractTool<ToolContext> {
     viewConfig1.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, BUCKETED_PV01,
         properties1.copy().with(CURVE, "AUD 6M BANK BILL").get());
     viewConfig1.addSpecificRequirement(new ValueRequirement(YIELD_CURVE, ComputationTargetSpecification.NULL,
-        ValueProperties.with(PROPERTY_CURVE_TYPE, CurveCalculationPropertyNamesAndValues.DISCOUNTING)
+        ValueProperties.with(PROPERTY_CURVE_TYPE, DISCOUNTING)
         .with(CURVE_CONSTRUCTION_CONFIG, "AUD Bank Bill Curves (1)").with(CURVE, "AUD Discounting").get()));
     viewConfig1.addSpecificRequirement(new ValueRequirement(YIELD_CURVE, ComputationTargetSpecification.NULL,
-        ValueProperties.with(PROPERTY_CURVE_TYPE, CurveCalculationPropertyNamesAndValues.DISCOUNTING)
+        ValueProperties.with(PROPERTY_CURVE_TYPE, DISCOUNTING)
         .with(CURVE_CONSTRUCTION_CONFIG, "AUD Bank Bill Curves (1)").with(CURVE, "AUD 3M BANK BILL").get()));
     viewConfig1.addSpecificRequirement(new ValueRequirement(YIELD_CURVE, ComputationTargetSpecification.NULL,
-        ValueProperties.with(PROPERTY_CURVE_TYPE, CurveCalculationPropertyNamesAndValues.DISCOUNTING)
+        ValueProperties.with(PROPERTY_CURVE_TYPE, DISCOUNTING)
         .with(CURVE_CONSTRUCTION_CONFIG, "AUD Bank Bill Curves (1)").with(CURVE, "AUD 6M BANK BILL").get()));
     viewDefinition.addViewCalculationConfiguration(viewConfig1);
     final ValueProperties.Builder properties2 = ValueProperties.builder()
-        .with(PROPERTY_CURVE_TYPE, CurveCalculationPropertyNamesAndValues.DISCOUNTING)
+        .with(PROPERTY_CURVE_TYPE, DISCOUNTING)
         .with(CURVE_EXPOSURES, "AUD Swaps (2)");
     final ViewCalculationConfiguration viewConfig2 = new ViewCalculationConfiguration(viewDefinition, "Successive curve construction");
     viewConfig2.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, PRESENT_VALUE, properties1.get());
@@ -460,13 +464,13 @@ public class ExamplesViewsPopulator extends AbstractTool<ToolContext> {
     viewConfig2.addPortfolioRequirement(SwapSecurity.SECURITY_TYPE, BUCKETED_PV01,
         properties2.copy().with(CURVE, "AUD 6M BANK BILL").get());
     viewConfig2.addSpecificRequirement(new ValueRequirement(YIELD_CURVE, ComputationTargetSpecification.NULL,
-        ValueProperties.with(PROPERTY_CURVE_TYPE, CurveCalculationPropertyNamesAndValues.DISCOUNTING)
+        ValueProperties.with(PROPERTY_CURVE_TYPE, DISCOUNTING)
         .with(CURVE_CONSTRUCTION_CONFIG, "AUD Bank Bill Curves (2)").with(CURVE, "AUD Discounting").get()));
     viewConfig2.addSpecificRequirement(new ValueRequirement(YIELD_CURVE, ComputationTargetSpecification.NULL,
-        ValueProperties.with(PROPERTY_CURVE_TYPE, CurveCalculationPropertyNamesAndValues.DISCOUNTING)
+        ValueProperties.with(PROPERTY_CURVE_TYPE, DISCOUNTING)
         .with(CURVE_CONSTRUCTION_CONFIG, "AUD Bank Bill Curves (2)").with(CURVE, "AUD 3M BANK BILL").get()));
     viewConfig2.addSpecificRequirement(new ValueRequirement(YIELD_CURVE, ComputationTargetSpecification.NULL,
-        ValueProperties.with(PROPERTY_CURVE_TYPE, CurveCalculationPropertyNamesAndValues.DISCOUNTING)
+        ValueProperties.with(PROPERTY_CURVE_TYPE, DISCOUNTING)
         .with(CURVE_CONSTRUCTION_CONFIG, "AUD Bank Bill Curves (2)").with(CURVE, "AUD 6M BANK BILL").get()));
     viewDefinition.addViewCalculationConfiguration(viewConfig2);
     return viewDefinition;
@@ -499,9 +503,9 @@ public class ExamplesViewsPopulator extends AbstractTool<ToolContext> {
     for (final UnorderedCurrencyPair pair : CURRENCY_PAIRS) {
       final ValueProperties currencyProperty = ValueProperties.builder().with(CURRENCY, "USD").get();
       calcConfig.addPortfolioRequirement(FXForwardSecurity.SECURITY_TYPE, PRESENT_VALUE, currencyProperty.copy()
-          .with(CurveCalculationPropertyNamesAndValues.PROPERTY_CURVE_TYPE, CurveCalculationPropertyNamesAndValues.DISCOUNTING).get());
+          .with(CurveCalculationPropertyNamesAndValues.PROPERTY_CURVE_TYPE, DISCOUNTING).get());
       calcConfig.addPortfolioRequirement(FXForwardSecurity.SECURITY_TYPE, FX_CURRENCY_EXPOSURE,
-          ValueProperties.with(CurveCalculationPropertyNamesAndValues.PROPERTY_CURVE_TYPE, CurveCalculationPropertyNamesAndValues.DISCOUNTING).get());
+          ValueProperties.with(CurveCalculationPropertyNamesAndValues.PROPERTY_CURVE_TYPE, DISCOUNTING).get());
       final String ccy = pair.getFirstCurrency().getCode();
       if (!ccysAdded.contains(pair.getFirstCurrency())) {
         if (pair.getFirstCurrency().equals(Currency.USD)) {
@@ -564,7 +568,7 @@ public class ExamplesViewsPopulator extends AbstractTool<ToolContext> {
     viewDefinition.setMinFullCalculationPeriod(MIN_FULL_PERIOD);
     final ViewCalculationConfiguration calcConfig = new ViewCalculationConfiguration(viewDefinition, DEFAULT_CALC_CONFIG);
     final ValueProperties calculationMethodProperty = ValueProperties.builder()
-        .with(CurveCalculationPropertyNamesAndValues.PROPERTY_CURVE_TYPE, CurveCalculationPropertyNamesAndValues.DISCOUNTING)
+        .with(CurveCalculationPropertyNamesAndValues.PROPERTY_CURVE_TYPE, DISCOUNTING)
         .get();
     calcConfig.addPortfolioRequirement(FXForwardSecurity.SECURITY_TYPE, FX_PRESENT_VALUE, calculationMethodProperty);
     calcConfig.addPortfolioRequirement(FXForwardSecurity.SECURITY_TYPE, PRESENT_VALUE, calculationMethodProperty.copy().with(CURRENCY, "USD").get());
@@ -595,6 +599,25 @@ public class ExamplesViewsPopulator extends AbstractTool<ToolContext> {
     final ViewCalculationConfiguration defaultCalConfig = new ViewCalculationConfiguration(viewDefinition, DEFAULT_CALC_CONFIG);
     addValueRequirements(defaultCalConfig, FutureSecurity.SECURITY_TYPE, new String[] {PRESENT_VALUE, VALUE_DELTA, FORWARD });
     viewDefinition.addViewCalculationConfiguration(defaultCalConfig);
+    return viewDefinition;
+  }
+
+  private ViewDefinition getUsTreasuriesViewDefinition(final String portfolioName, final String viewName) {
+    final UniqueId portfolioId = getPortfolioId(portfolioName).toLatest();
+    final ViewDefinition viewDefinition = new ViewDefinition(viewName, portfolioId, UserPrincipal.getTestUser());
+    viewDefinition.setDefaultCurrency(Currency.USD);
+    viewDefinition.setMaxDeltaCalculationPeriod(MAX_DELTA_PERIOD);
+    viewDefinition.setMaxFullCalculationPeriod(MAX_FULL_PERIOD);
+    viewDefinition.setMinDeltaCalculationPeriod(MIN_DELTA_PERIOD);
+    viewDefinition.setMinFullCalculationPeriod(MIN_FULL_PERIOD);
+    final ViewCalculationConfiguration calcConfig = new ViewCalculationConfiguration(viewDefinition, DEFAULT_CALC_CONFIG);
+    final ValueProperties properties = ValueProperties.builder()
+        .with(CURRENCY, "USD")
+        .with(CURVE_EXPOSURES, "US Treasury Exposures")
+        .with(PROPERTY_CURVE_TYPE, DISCOUNTING)
+        .get();
+    calcConfig.addPortfolioRequirement(BondSecurity.SECURITY_TYPE, PRESENT_VALUE, properties);
+    viewDefinition.addViewCalculationConfiguration(calcConfig);
     return viewDefinition;
   }
 

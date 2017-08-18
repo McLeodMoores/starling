@@ -38,8 +38,8 @@ public class SimulatedLegalEntityLoader extends AbstractTool<ToolContext> {
   @Override
   protected void doRun() {
     final ManageableLegalEntity usGovernment = new ManageableLegalEntity("US Government",
-        ExternalIdBundle.of(ExternalId.of(DbLegalEntityBeanMaster.IDENTIFIER_SCHEME_DEFAULT, "US Government")));
-    usGovernment.setRatings(Arrays.asList(new Rating("Moodys", CreditRating.AA, null)));
+        ExternalIdBundle.of(ExternalId.of(DbLegalEntityBeanMaster.IDENTIFIER_SCHEME_DEFAULT, "USGVT")));
+    usGovernment.setRatings(Arrays.asList(new Rating("Fitch", CreditRating.AAA, null)));
     storeLegalEntity(usGovernment);
   }
 

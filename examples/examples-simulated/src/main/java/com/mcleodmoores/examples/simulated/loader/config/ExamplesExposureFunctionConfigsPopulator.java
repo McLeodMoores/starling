@@ -4,12 +4,12 @@
 package com.mcleodmoores.examples.simulated.loader.config;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import com.opengamma.core.config.impl.ConfigItem;
-import com.opengamma.financial.analytics.curve.exposure.ExposureFunction;
 import com.opengamma.financial.analytics.curve.exposure.ExposureFunctions;
 import com.opengamma.id.ExternalId;
 import com.opengamma.master.config.ConfigMaster;
@@ -28,44 +28,17 @@ public class ExamplesExposureFunctionConfigsPopulator {
    */
   public static void populateConfigMaster(final ConfigMaster configMaster) {
     ArgumentChecker.notNull(configMaster, "configMaster");
-    String name = "FX Exposures";
-    List<String> exposureFunctionNames = Arrays.asList("Currency");
-    Map<ExternalId, String> idsToNames = new HashMap<>();
-    idsToNames.put(ExternalId.of(Currency.OBJECT_SCHEME, "USD"), ExampleConfigUtils.generateFxImpliedConfigName("CHF"));
-    idsToNames.put(ExternalId.of(Currency.OBJECT_SCHEME, "CHF"), ExampleConfigUtils.generateFxImpliedConfigName("CHF"));
-    idsToNames.put(ExternalId.of(Currency.OBJECT_SCHEME, "EUR"), ExampleConfigUtils.generateFxImpliedConfigName("EUR"));
-    idsToNames.put(ExternalId.of(Currency.OBJECT_SCHEME, "JPY"), ExampleConfigUtils.generateFxImpliedConfigName("JPY"));
-    idsToNames.put(ExternalId.of(Currency.OBJECT_SCHEME, "GBP"), ExampleConfigUtils.generateFxImpliedConfigName("GBP"));
-    idsToNames.put(ExternalId.of(Currency.OBJECT_SCHEME, "AUD"), ExampleConfigUtils.generateFxImpliedConfigName("AUD"));
-    idsToNames.put(ExternalId.of(Currency.OBJECT_SCHEME, "NZD"), ExampleConfigUtils.generateFxImpliedConfigName("NZD"));
-    ExposureFunctions exposureFunctions = new ExposureFunctions(name, exposureFunctionNames, idsToNames);
-    ConfigMasterUtils.storeByName(configMaster, makeConfig(exposureFunctions));
-    name = "Bond Exposures";
-    exposureFunctionNames = Arrays.asList("Security / Region", "Security / Currency", "Currency");
-    idsToNames = new HashMap<>();
-    idsToNames.put(ExternalId.of(ExposureFunction.SECURITY_IDENTIFIER, "BOND_US"), "US Government Bond Configuration");
-    idsToNames.put(ExternalId.of(Currency.OBJECT_SCHEME, "USD"), ExampleConfigUtils.generateVanillaFixedIncomeConfigName("USD"));
-    idsToNames.put(ExternalId.of(Currency.OBJECT_SCHEME, "UGX"), "UG Government Bond Configuration");
-    exposureFunctions = new ExposureFunctions(name, exposureFunctionNames, idsToNames);
-    ConfigMasterUtils.storeByName(configMaster, makeConfig(exposureFunctions));
-    name = "Bond OIS Exposures";
-    exposureFunctionNames = Arrays.asList("Security / Region");
-    idsToNames = new HashMap<>();
-    idsToNames.put(ExternalId.of(ExposureFunction.SECURITY_IDENTIFIER, "BOND_US"), "US Government Bond Configuration (OIS)");
-    exposureFunctions = new ExposureFunctions(name, exposureFunctionNames, idsToNames);
-    ConfigMasterUtils.storeByName(configMaster, makeConfig(exposureFunctions));
-    name = "Fixed Income Exposures";
-    exposureFunctionNames = Arrays.asList("Currency");
-    idsToNames = new HashMap<>();
-    idsToNames.put(ExternalId.of(Currency.OBJECT_SCHEME, "USD"), ExampleConfigUtils.generateVanillaFixedIncomeConfigName("USD"));
-    idsToNames.put(ExternalId.of(Currency.OBJECT_SCHEME, "AUD"), ExampleConfigUtils.generateVanillaFixedIncomeConfigName("AUD"));
-    idsToNames.put(ExternalId.of(Currency.OBJECT_SCHEME, "CAD"), ExampleConfigUtils.generateVanillaFixedIncomeConfigName("CAD"));
-    idsToNames.put(ExternalId.of(Currency.OBJECT_SCHEME, "EUR"), ExampleConfigUtils.generateVanillaFixedIncomeConfigName("EUR"));
-    idsToNames.put(ExternalId.of(Currency.OBJECT_SCHEME, "GBP"), ExampleConfigUtils.generateVanillaFixedIncomeConfigName("GBP"));
-    idsToNames.put(ExternalId.of(Currency.OBJECT_SCHEME, "CHF"), ExampleConfigUtils.generateVanillaFixedIncomeConfigName("CHF"));
-    idsToNames.put(ExternalId.of(Currency.OBJECT_SCHEME, "JPY"), ExampleConfigUtils.generateVanillaFixedIncomeConfigName("JPY"));
-    exposureFunctions = new ExposureFunctions(name, exposureFunctionNames, idsToNames);
-    ConfigMasterUtils.storeByName(configMaster, makeConfig(exposureFunctions));
+    storeAudFixedIncomeExposures(configMaster);
+    storeFixedIncomeExposures(configMaster);
+    storeFxExposures(configMaster);
+    storeUsTreasuryExposures(configMaster);
+  }
+
+  private static void storeAudFixedIncomeExposures(final ConfigMaster configMaster) {
+    String name;
+    List<String> exposureFunctionNames;
+    Map<ExternalId, String> idsToNames;
+    ExposureFunctions exposureFunctions;
     name = "AUD Swaps (1)";
     exposureFunctionNames = Arrays.asList("Currency");
     idsToNames = new HashMap<>();
@@ -80,11 +53,48 @@ public class ExamplesExposureFunctionConfigsPopulator {
     ConfigMasterUtils.storeByName(configMaster, makeConfig(exposureFunctions));
   }
 
-  /**
-   * Creates a config item from an exposure functions configuration object.
-   * @param exposureFunctions The exposure functions
-   * @return The config item
-   */
+  private static void storeFixedIncomeExposures(final ConfigMaster configMaster) {
+    String name;
+    List<String> exposureFunctionNames;
+    Map<ExternalId, String> idsToNames;
+    ExposureFunctions exposureFunctions;
+    name = "Fixed Income Exposures";
+    exposureFunctionNames = Arrays.asList("Currency");
+    idsToNames = new HashMap<>();
+    idsToNames.put(ExternalId.of(Currency.OBJECT_SCHEME, "USD"), ExampleConfigUtils.generateVanillaFixedIncomeConfigName("USD"));
+    idsToNames.put(ExternalId.of(Currency.OBJECT_SCHEME, "AUD"), ExampleConfigUtils.generateVanillaFixedIncomeConfigName("AUD"));
+    idsToNames.put(ExternalId.of(Currency.OBJECT_SCHEME, "CAD"), ExampleConfigUtils.generateVanillaFixedIncomeConfigName("CAD"));
+    idsToNames.put(ExternalId.of(Currency.OBJECT_SCHEME, "EUR"), ExampleConfigUtils.generateVanillaFixedIncomeConfigName("EUR"));
+    idsToNames.put(ExternalId.of(Currency.OBJECT_SCHEME, "GBP"), ExampleConfigUtils.generateVanillaFixedIncomeConfigName("GBP"));
+    idsToNames.put(ExternalId.of(Currency.OBJECT_SCHEME, "CHF"), ExampleConfigUtils.generateVanillaFixedIncomeConfigName("CHF"));
+    idsToNames.put(ExternalId.of(Currency.OBJECT_SCHEME, "JPY"), ExampleConfigUtils.generateVanillaFixedIncomeConfigName("JPY"));
+    exposureFunctions = new ExposureFunctions(name, exposureFunctionNames, idsToNames);
+    ConfigMasterUtils.storeByName(configMaster, makeConfig(exposureFunctions));
+  }
+
+  private static void storeFxExposures(final ConfigMaster configMaster) {
+    final String name = "FX Exposures";
+    final List<String> exposureFunctionNames = Arrays.asList("Currency");
+    final Map<ExternalId, String> idsToNames = new HashMap<>();
+    idsToNames.put(ExternalId.of(Currency.OBJECT_SCHEME, "USD"), ExampleConfigUtils.generateFxImpliedConfigName("CHF"));
+    idsToNames.put(ExternalId.of(Currency.OBJECT_SCHEME, "CHF"), ExampleConfigUtils.generateFxImpliedConfigName("CHF"));
+    idsToNames.put(ExternalId.of(Currency.OBJECT_SCHEME, "EUR"), ExampleConfigUtils.generateFxImpliedConfigName("EUR"));
+    idsToNames.put(ExternalId.of(Currency.OBJECT_SCHEME, "JPY"), ExampleConfigUtils.generateFxImpliedConfigName("JPY"));
+    idsToNames.put(ExternalId.of(Currency.OBJECT_SCHEME, "GBP"), ExampleConfigUtils.generateFxImpliedConfigName("GBP"));
+    idsToNames.put(ExternalId.of(Currency.OBJECT_SCHEME, "AUD"), ExampleConfigUtils.generateFxImpliedConfigName("AUD"));
+    idsToNames.put(ExternalId.of(Currency.OBJECT_SCHEME, "NZD"), ExampleConfigUtils.generateFxImpliedConfigName("NZD"));
+    final ExposureFunctions exposureFunctions = new ExposureFunctions(name, exposureFunctionNames, idsToNames);
+    ConfigMasterUtils.storeByName(configMaster, makeConfig(exposureFunctions));
+  }
+
+  private static void storeUsTreasuryExposures(final ConfigMaster configMaster) {
+    final String name = "US Treasury Exposures";
+    final List<String> exposureFunctionNames = Arrays.asList("Currency");
+    final Map<ExternalId, String> idsToNames = Collections.singletonMap(ExternalId.of(Currency.OBJECT_SCHEME, "USD"), "US Treasury");
+    final ExposureFunctions exposureFunctions = new ExposureFunctions(name, exposureFunctionNames, idsToNames);
+    ConfigMasterUtils.storeByName(configMaster, makeConfig(exposureFunctions));
+  }
+
   private static ConfigItem<ExposureFunctions> makeConfig(final ExposureFunctions exposureFunctions) {
     final ConfigItem<ExposureFunctions> config = ConfigItem.of(exposureFunctions);
     config.setName(exposureFunctions.getName());
