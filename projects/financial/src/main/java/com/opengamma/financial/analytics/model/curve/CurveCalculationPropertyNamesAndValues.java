@@ -8,7 +8,7 @@ package com.opengamma.financial.analytics.model.curve;
 /**
  *
  */
-public class CurveCalculationPropertyNamesAndValues {
+public final class CurveCalculationPropertyNamesAndValues {
 
   /**
    * Property name indicating the type of the curves (e.g. discounting or forward).
@@ -37,6 +37,11 @@ public class CurveCalculationPropertyNamesAndValues {
   public static final String FORWARD = "Forward";
 
   /**
+   * Property value indicating that issuer-specific curves should be used.
+   */
+  public static final String ISSUER = "Issuer";
+
+  /**
    * Property value indicating that a constant curve is constructed using a single direct rate.
    */
   public static final String CONSTANT_FROM_RATE = "ConstantFromRate";
@@ -49,7 +54,7 @@ public class CurveCalculationPropertyNamesAndValues {
   public static final String HULL_WHITE_DISCOUNTING = "Hull-White Discounting";
 
   /**
-   * The property indicating the name of a set of Hull-White parameters
+   * The property indicating the name of a set of Hull-White parameters.
    */
   public static final String PROPERTY_HULL_WHITE_PARAMETERS = "HullWhiteOneFactorParameters";
 
@@ -59,22 +64,25 @@ public class CurveCalculationPropertyNamesAndValues {
   public static final String PROPERTY_HULL_WHITE_CURRENCY = "HullWhiteCurrency";
 
   /**
-   * The property indicating the name of a set of G2++ parameters
+   * The property indicating the name of a set of G2++ parameters.
    */
   public static final String PROPERTY_G2PP_PARAMETERS = "G2ppParameters";
 
   /**
-   * The mean reversion property
+   * The mean reversion property.
    */
   public static final String PROPERTY_HW_MEAN_REVERSION = "HullWhiteOneFactorMeanReversion";
 
   /**
-   * The volatilities property
+   * The volatilities property.
    */
   public static final String PROPERTY_HW_VOLATILITIES = "HullWhiteOneFactorVolatilities";
 
   /**
-   * The volatility times property
+   * The volatility times property.
    */
   public static final String PROPERTY_HW_TIMES = "HullWhiteOneFactorTimes";
+
+  private CurveCalculationPropertyNamesAndValues() {
+  }
 }

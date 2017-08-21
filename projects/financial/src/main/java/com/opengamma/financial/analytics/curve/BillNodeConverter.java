@@ -152,6 +152,7 @@ public class BillNodeConverter extends CurveNodeVisitorAdapter<InstrumentDefinit
     }
     final BillSecurityDefinition securityDefinition = new BillSecurityDefinition(currency, maturityDate, 1, settlementDays, calendar,
         yieldConvention, dayCount, legalEntity);
+    // TODO what if it isn't a yield quote
     return BillTransactionDefinition.fromYield(securityDefinition, 1, _valuationTime, yield, calendar);
   }
 

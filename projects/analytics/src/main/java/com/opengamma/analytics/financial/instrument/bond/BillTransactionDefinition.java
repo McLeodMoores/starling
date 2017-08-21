@@ -80,7 +80,7 @@ public class BillTransactionDefinition implements InstrumentDefinition<BillTrans
   public static BillTransactionDefinition fromYield(final BillSecurityDefinition underlying, final double quantity, final ZonedDateTime settlementDate,
       final double yield, final Calendar calendar) {
     return fromYield(underlying, quantity, settlementDate, yield,
-        (WorkingDayCalendar) new WorkingDayCalendarAdapter(calendar, DayOfWeek.SATURDAY, DayOfWeek.SUNDAY));
+        new WorkingDayCalendarAdapter(calendar, DayOfWeek.SATURDAY, DayOfWeek.SUNDAY));
   }
 
   /**

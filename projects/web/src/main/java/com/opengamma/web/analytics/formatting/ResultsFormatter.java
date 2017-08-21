@@ -134,7 +134,9 @@ public class ResultsFormatter {
         new FxForwardDetailsFormatter(doubleFormatter, rateFormatter, currencyAmountFormatter),
         new FxNdfDetailsFormatter(doubleFormatter, rateFormatter, currencyAmountFormatter),
         new FixedCashFlowFormatter(doubleFormatter, rateFormatter, currencyAmountFormatter),
-        new FloatingCashFlowFormatter(doubleFormatter, rateFormatter, currencyAmountFormatter));
+        new FloatingCashFlowFormatter(doubleFormatter, rateFormatter, currencyAmountFormatter),
+        new FixedCouponBondCashFlowFormatter(doubleFormatter, rateFormatter, currencyAmountFormatter),
+        new DiscountBondCashFlowFormatter(doubleFormatter, rateFormatter, currencyAmountFormatter));
   }
 
   private void addFormatters(final TypeFormatter<?>... formatters) {

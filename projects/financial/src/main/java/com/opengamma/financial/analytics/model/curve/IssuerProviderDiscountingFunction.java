@@ -21,6 +21,8 @@ import static com.opengamma.engine.value.ValueRequirementNames.FX_MATRIX;
 import static com.opengamma.engine.value.ValueRequirementNames.JACOBIAN_BUNDLE;
 import static com.opengamma.engine.value.ValueRequirementNames.YIELD_CURVE;
 import static com.opengamma.financial.analytics.model.curve.CurveCalculationPropertyNamesAndValues.DISCOUNTING;
+import static com.opengamma.financial.analytics.model.curve.CurveCalculationPropertyNamesAndValues.ISSUER;
+import static com.opengamma.financial.analytics.model.curve.CurveCalculationPropertyNamesAndValues.PROPERTY_CURVE_TYPE;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -121,7 +123,7 @@ import com.opengamma.util.tuple.Pair;
 import com.opengamma.util.tuple.Pairs;
 
 /**
- * Produces price index curves using the discounting method.
+ * Produces discounting curves for an issuer (i.e. a bond curve) using the discounting method.
  */
 public class IssuerProviderDiscountingFunction extends
 MultiCurveFunction<ParameterIssuerProviderInterface, IssuerDiscountBuildingRepository, GeneratorYDCurve, MulticurveSensitivity> {
@@ -207,7 +209,8 @@ MultiCurveFunction<ParameterIssuerProviderInterface, IssuerDiscountBuildingRepos
     @SuppressWarnings("unchecked")
     @Override
     protected Pair<ParameterIssuerProviderInterface, CurveBuildingBlockBundle> getCurves(final FunctionInputs inputs, final ZonedDateTime now,
-        final IssuerDiscountBuildingRepository builder, final ParameterIssuerProviderInterface knownData, final FunctionExecutionContext context, final FXMatrix fx) {
+        final IssuerDiscountBuildingRepository builder, final ParameterIssuerProviderInterface knownData, final FunctionExecutionContext context,
+        final FXMatrix fx) {
       final SecuritySource securitySource = OpenGammaExecutionContext.getSecuritySource(context);
       final ConventionSource conventionSource = OpenGammaExecutionContext.getConventionSource(context);
       final ValueProperties curveConstructionProperties = ValueProperties.builder()
@@ -332,7 +335,8 @@ MultiCurveFunction<ParameterIssuerProviderInterface, IssuerDiscountBuildingRepos
         unitBundles.put(entry.getKey(), entry.getValue());
       }
       unitBundles.putAll(temp.getSecond().getData());
-      final Pair<ParameterIssuerProviderInterface, CurveBuildingBlockBundle> result = Pairs.of((ParameterIssuerProviderInterface) temp.getFirst(), new CurveBuildingBlockBundle(unitBundles));
+      final Pair<ParameterIssuerProviderInterface, CurveBuildingBlockBundle> result =
+          Pairs.of((ParameterIssuerProviderInterface) temp.getFirst(), new CurveBuildingBlockBundle(unitBundles));
       return result;
     }
 
@@ -402,6 +406,7 @@ MultiCurveFunction<ParameterIssuerProviderInterface, IssuerDiscountBuildingRepos
             .withoutAny(CURVE)
             .withoutAny(CURVE_SENSITIVITY_CURRENCY)
             .with(CURVE, curveName)
+            .with(PROPERTY_CURVE_TYPE, ISSUER)
             .get();
         YieldAndDiscountCurve curve = provider.getIssuerCurve(curveName);
         if (curve == null) {

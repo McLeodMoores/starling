@@ -76,9 +76,9 @@ public abstract class BondTransactionDefinition<N extends PaymentDefinition, C e
     _settlementExCouponDate = ScheduleCalculator.getAdjustedDate(_settlementDate, _underlyingBond.getExCouponDays(), _underlyingBond.getCalendar());
     _price = price;
     final int nbCoupon = underlyingBond.getCoupons().getNumberOfPayments();
-    for (int loopcpn = 0; loopcpn < nbCoupon; loopcpn++) {
-      if (underlyingBond.getCoupons().getNthPayment(loopcpn).getAccrualEndDate().isAfter(_settlementExCouponDate)) {
-        _couponIndex = loopcpn;
+    for (int i = 0; i < nbCoupon; i++) {
+      if (underlyingBond.getCoupons().getNthPayment(i).getAccrualEndDate().isAfter(_settlementExCouponDate)) {
+        _couponIndex = i;
         break;
       }
     }
@@ -156,9 +156,9 @@ public abstract class BondTransactionDefinition<N extends PaymentDefinition, C e
     int result = 1;
     long temp;
     temp = Double.doubleToLongBits(_price);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_quantity);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     result = prime * result + _settlementDate.hashCode();
     result = prime * result + _underlyingBond.hashCode();
     return result;

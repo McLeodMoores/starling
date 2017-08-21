@@ -11,10 +11,8 @@ import static com.opengamma.engine.value.ValuePropertyNames.CURVE_EXPOSURES;
 import static com.opengamma.engine.value.ValueRequirementNames.CURVE_BUNDLE;
 import static com.opengamma.engine.value.ValueRequirementNames.JACOBIAN_BUNDLE;
 import static com.opengamma.financial.analytics.model.CalculationPropertyNamesAndValues.CURVES_METHOD;
+import static com.opengamma.financial.analytics.model.curve.CurveCalculationPropertyNamesAndValues.ISSUER;
 import static com.opengamma.financial.analytics.model.curve.CurveCalculationPropertyNamesAndValues.PROPERTY_CURVE_TYPE;
-import static com.opengamma.financial.analytics.model.curve.interestrate.MultiYieldCurvePropertiesAndDefaults.PROPERTY_ROOT_FINDER_ABSOLUTE_TOLERANCE;
-import static com.opengamma.financial.analytics.model.curve.interestrate.MultiYieldCurvePropertiesAndDefaults.PROPERTY_ROOT_FINDER_MAX_ITERATIONS;
-import static com.opengamma.financial.analytics.model.curve.interestrate.MultiYieldCurvePropertiesAndDefaults.PROPERTY_ROOT_FINDER_RELATIVE_TOLERANCE;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -62,7 +60,7 @@ import com.opengamma.util.async.AsynchronousExecution;
  */
 public abstract class BondAndBondFutureFromCurvesFunction<S extends ParameterIssuerProviderInterface, T> extends AbstractFunction.NonCompiledInvoker {
   /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(BondAndBondFutureFromCurvesFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(BondAndBondFutureFromCurvesFunction.class);
   /** The value requirement name */
   private final String _valueRequirementName;
   /** The calculator */
@@ -127,28 +125,27 @@ public abstract class BondAndBondFutureFromCurvesFunction<S extends ParameterIss
     if (curveExposureConfigs == null || curveExposureConfigs.size() != 1) {
       return null;
     }
-    final Set<String> absoluteTolerances = constraints.getValues(PROPERTY_ROOT_FINDER_ABSOLUTE_TOLERANCE);
-    if (absoluteTolerances == null || absoluteTolerances.size() != 1) {
-      return null;
-    }
     final Set<String> curveTypes = constraints.getValues(PROPERTY_CURVE_TYPE);
     if (curveTypes == null || curveTypes.size() != 1) {
       return null;
     }
+    final Set<String> typesWithIssuerProperty = new HashSet<>(curveTypes);
+    typesWithIssuerProperty.add(ISSUER);
     final FinancialSecurity security = (FinancialSecurity) target.getTrade().getSecurity();
     final Set<ValueRequirement> requirements = new HashSet<>();
     try {
       for (final String curveExposureConfig : curveExposureConfigs) {
-        final Set<String> curveConstructionConfigurationNames = _instrumentExposuresProvider.getCurveConstructionConfigurationsForConfig(curveExposureConfig, target.getTrade());
+        final Set<String> curveConstructionConfigurationNames =
+            _instrumentExposuresProvider.getCurveConstructionConfigurationsForConfig(curveExposureConfig, target.getTrade());
         if (curveConstructionConfigurationNames == null) {
-          s_logger.error("Could not get curve construction configuration names for curve exposure configuration called {}", curveExposureConfig);
+          LOGGER.error("Could not get curve construction configuration names for curve exposure configuration called {}", curveExposureConfig);
           return null;
         }
         for (final String curveConstructionConfigurationName : curveConstructionConfigurationNames) {
-          final ValueProperties properties = ValueProperties.builder().with(CURVE_CONSTRUCTION_CONFIG, curveConstructionConfigurationName)
-              .with(PROPERTY_ROOT_FINDER_ABSOLUTE_TOLERANCE, constraints.getValues(PROPERTY_ROOT_FINDER_ABSOLUTE_TOLERANCE))
-              .with(PROPERTY_ROOT_FINDER_RELATIVE_TOLERANCE, constraints.getValues(PROPERTY_ROOT_FINDER_RELATIVE_TOLERANCE))
-              .with(PROPERTY_ROOT_FINDER_MAX_ITERATIONS, constraints.getValues(PROPERTY_ROOT_FINDER_MAX_ITERATIONS)).with(PROPERTY_CURVE_TYPE, curveTypes).get();
+          final ValueProperties properties = ValueProperties.builder()
+              .with(CURVE_CONSTRUCTION_CONFIG, curveConstructionConfigurationName)
+              .with(PROPERTY_CURVE_TYPE, typesWithIssuerProperty)
+              .get();
           requirements.add(new ValueRequirement(CURVE_BUNDLE, ComputationTargetSpecification.NULL, properties));
           requirements.add(new ValueRequirement(JACOBIAN_BUNDLE, ComputationTargetSpecification.NULL, properties));
         }
@@ -157,13 +154,14 @@ public abstract class BondAndBondFutureFromCurvesFunction<S extends ParameterIss
       requirements.addAll(BondAndBondFutureFunctionUtils.getConversionRequirements(security, timeSeriesResolver));
       return requirements;
     } catch (final Exception e) {
-      s_logger.error(e.getMessage());
+      e.printStackTrace(System.err);
+      LOGGER.error(e.getMessage());
       return null;
     }
   }
 
   /**
-   * Gets the value properties of the result
+   * Gets the value properties of the result.
    *
    * @param target The computation target
    * @return The properties
@@ -171,10 +169,8 @@ public abstract class BondAndBondFutureFromCurvesFunction<S extends ParameterIss
   protected Collection<ValueProperties.Builder> getResultProperties(final ComputationTarget target) {
     return Collections.singleton(createValueProperties()
         .with(CALCULATION_METHOD, CURVES_METHOD)
-        .withAny(CURVE_EXPOSURES).withAny(PROPERTY_CURVE_TYPE)
-        .withAny(PROPERTY_ROOT_FINDER_ABSOLUTE_TOLERANCE)
-        .withAny(PROPERTY_ROOT_FINDER_RELATIVE_TOLERANCE)
-        .withAny(PROPERTY_ROOT_FINDER_MAX_ITERATIONS));
+        .withAny(CURVE_EXPOSURES)
+        .withAny(PROPERTY_CURVE_TYPE));
   }
 
 }

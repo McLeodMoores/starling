@@ -40,7 +40,6 @@ import com.opengamma.financial.OpenGammaExecutionContext;
 import com.opengamma.financial.analytics.conversion.BondAndBondFutureTradeWithEntityConverter;
 import com.opengamma.financial.analytics.timeseries.DateConstraint;
 import com.opengamma.financial.analytics.timeseries.HistoricalTimeSeriesFunctionUtils;
-import com.opengamma.financial.convention.ConventionBundleSource;
 import com.opengamma.financial.security.FinancialSecurity;
 import com.opengamma.financial.security.bond.BillSecurity;
 import com.opengamma.financial.security.bond.BondSecurity;
@@ -115,12 +114,11 @@ public class BondAndBondFutureFunctionUtils {
     ArgumentChecker.isTrue(target.getType() == ComputationTargetType.TRADE, "Computation target must be a trade");
     final Trade trade = target.getTrade();
     final HolidaySource holidaySource = OpenGammaExecutionContext.getHolidaySource(context);
-    final ConventionBundleSource conventionBundleSource = OpenGammaExecutionContext.getConventionBundleSource(context);
     final ConventionSource conventionSource = OpenGammaExecutionContext.getConventionSource(context);
     final RegionSource regionSource = OpenGammaExecutionContext.getRegionSource(context);
     final SecuritySource securitySource = OpenGammaExecutionContext.getSecuritySource(context);
     final LegalEntitySource legalEntitySource = OpenGammaExecutionContext.getLegalEntitySource(context);
-    final BondAndBondFutureTradeWithEntityConverter converter = new BondAndBondFutureTradeWithEntityConverter(holidaySource, conventionBundleSource,
+    final BondAndBondFutureTradeWithEntityConverter converter = new BondAndBondFutureTradeWithEntityConverter(holidaySource,
         conventionSource, regionSource, securitySource, legalEntitySource);
     return converter.convert(trade);
   }

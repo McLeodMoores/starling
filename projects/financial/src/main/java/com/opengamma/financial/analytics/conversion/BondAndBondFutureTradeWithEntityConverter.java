@@ -205,10 +205,8 @@ public class BondAndBondFutureTradeWithEntityConverter extends FinancialSecurity
   public InstrumentDefinition<?> convert(final Trade trade) {
     ArgumentChecker.notNull(trade, "trade");
     final FinancialSecurity security = (FinancialSecurity) trade.getSecurity();
-    ArgumentChecker.isTrue(security instanceof BondSecurity ||
-        security instanceof BondFutureSecurity ||
-        security instanceof BillSecurity ||
-        security instanceof FloatingRateNoteSecurity,
+    ArgumentChecker.isTrue(security instanceof BondSecurity || security instanceof BondFutureSecurity
+        || security instanceof BillSecurity || security instanceof FloatingRateNoteSecurity,
         "Can only handle trades with security type BondSecurity, BondFutureSecurity, BillSecurity or FloatingRateNotSecuritys; have {}" + security);
     final LocalDate tradeDate = trade.getTradeDate();
     if (tradeDate == null) {
@@ -248,7 +246,8 @@ public class BondAndBondFutureTradeWithEntityConverter extends FinancialSecurity
       } else {
         calendar = CalendarUtils.getCalendar(_regionSource, _holidaySource, regionId);
       }
-      final ZonedDateTime settlementDateTime = ScheduleCalculator.getAdjustedDate(tradeDateTime, Integer.parseInt(bondSecurity.attributes().get().get("daysToSettle")), calendar);
+      final ZonedDateTime settlementDateTime =
+          ScheduleCalculator.getAdjustedDate(tradeDateTime, Integer.parseInt(bondSecurity.attributes().get().get("daysToSettle")), calendar);
       final LegalEntity legalEntity = getLegalEntityForBond(trade.getAttributes(), bondSecurity);
       final BondCapitalIndexedSecurityDefinition<?> bond = (BondCapitalIndexedSecurityDefinition<?>) getInflationBond(bondSecurity, legalEntity);
       return new BondCapitalIndexedTransactionDefinition<>(bond, quantity, settlementDateTime, price);
@@ -272,7 +271,8 @@ public class BondAndBondFutureTradeWithEntityConverter extends FinancialSecurity
         legalEntity = getLegalEntityForBill(Collections.<String, String>emptyMap(), billSecurity);
       }
       final BillSecurityDefinition underlying = getBill(billSecurity, legalEntity);
-      return new BillTransactionDefinition(underlying, quantity, settlementDate, price);
+      final double settlementAmount = -price * quantity * underlying.getNotional();
+      return new BillTransactionDefinition(underlying, quantity, settlementDate, settlementAmount);
     }
     if (security instanceof FloatingRateNoteSecurity) {
       final FloatingRateNoteSecurity frn = (FloatingRateNoteSecurity) security;
@@ -680,7 +680,6 @@ public class BondAndBondFutureTradeWithEntityConverter extends FinancialSecurity
 
   private static LegalEntity convertToAnalyticsLegalEntity(final com.opengamma.core.legalentity.LegalEntity entity, final FinancialSecurity security) {
     final Collection<Rating> ratings = entity.getRatings();
-    //    final Map<String, String> securityAttributes = security.getAttributes();
     final ExternalIdBundle identifiers = security.getExternalIdBundle();
     final String ticker;
     if (identifiers != null) {
@@ -698,17 +697,12 @@ public class BondAndBondFutureTradeWithEntityConverter extends FinancialSecurity
       //TODO seniority level needs to go into the credit rating
       creditRatings.add(CreditRating.of(rating.getRater(), rating.getScore().toString(), true));
     }
-    //    final String sectorName = security.getIssuerType();
-    //    final FlexiBean classifications = new FlexiBean();
-    //    classifications.put(MARKET_STRING, security.getMarket());
-    //    if (tradeAttributes.containsKey(SECTOR_STRING)) {
-    //      classifications.put(SECTOR_STRING, tradeAttributes.get(SECTOR_STRING));
-    //    }
-    //    final Sector sector = Sector.of(sectorName, classifications);
-    //    final Region region = Region.of(security.getIssuerDomicile(), Country.of(security.getIssuerDomicile()), security.getCurrency());
-    //    final LegalEntity legalEntity = new LegalEntity(ticker, shortName, creditRatings, sector, region);
-    final LegalEntity legalEntity = new LegalEntity(ticker, shortName, creditRatings, null, null);
-    return legalEntity;
+    if (security instanceof BillSecurity) {
+      final BillSecurity bill = (BillSecurity) security;
+      final Region region = Region.of(bill.getRegionId().getValue(), Country.of(bill.getRegionId().getValue()), bill.getCurrency());
+      return new LegalEntity(ticker, shortName, creditRatings, null, region);
+    }
+    return new LegalEntity(ticker, shortName, creditRatings, null, null);
   }
 
 }
