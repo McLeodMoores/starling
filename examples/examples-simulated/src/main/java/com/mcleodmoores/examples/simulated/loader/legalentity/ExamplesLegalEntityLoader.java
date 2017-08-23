@@ -23,16 +23,16 @@ import com.opengamma.scripts.Scriptable;
  * Simple implementation of a legal entity loader.
  */
 @Scriptable
-public class SimulatedLegalEntityLoader extends AbstractTool<ToolContext> {
+public class ExamplesLegalEntityLoader extends AbstractTool<ToolContext> {
   /** The logger */
-  private static final Logger LOGGER = LoggerFactory.getLogger(SimulatedLegalEntityLoader.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ExamplesLegalEntityLoader.class);
 
   /**
    * Main method to run this loader.
    * @param args The program arguments
    */
   public static void main(final String[] args) {
-    new SimulatedLegalEntityLoader().invokeAndTerminate(args);
+    new ExamplesLegalEntityLoader().invokeAndTerminate(args);
   }
 
   @Override

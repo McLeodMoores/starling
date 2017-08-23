@@ -28,8 +28,8 @@ import com.mcleodmoores.examples.simulated.loader.config.ExamplesViewsPopulator;
 import com.mcleodmoores.examples.simulated.loader.convention.ExamplesConventionMasterInitializer;
 import com.mcleodmoores.examples.simulated.loader.data.ExampleHistoricalDataGeneratorTool;
 import com.mcleodmoores.examples.simulated.loader.holiday.ExamplesCurrencyHolidayLoader;
-import com.mcleodmoores.examples.simulated.loader.legalentity.SimulatedLegalEntityLoader;
-import com.mcleodmoores.examples.simulated.loader.portfolio.BondAndFuturePortfolioLoader;
+import com.mcleodmoores.examples.simulated.loader.legalentity.ExamplesLegalEntityLoader;
+import com.mcleodmoores.examples.simulated.loader.portfolio.ExamplesBondAndFuturePortfolioLoader;
 import com.mcleodmoores.examples.simulated.loader.portfolio.SimulatedOisPortfolioGenerator;
 import com.mcleodmoores.examples.simulated.loader.portfolio.SimulatedUsBondPortfolioGenerator;
 import com.mcleodmoores.examples.simulated.loader.securities.SimulatedIndexSecuritiesGenerator;
@@ -350,9 +350,9 @@ public class ExamplesDatabasePopulator extends AbstractTool<ToolContext> {
   private void loadBondAndFuturePortfolio() {
     final Log log = new Log("Creating example bond / bond future portfolio");
     try {
-      final URL resource = BondAndFuturePortfolioLoader.class.getResource("usd-bond-and-futures.csv");
+      final URL resource = ExamplesBondAndFuturePortfolioLoader.class.getResource("usd-bond-and-futures.csv");
       final String file = unpackJar(resource);
-      final BondAndFuturePortfolioLoader loader = new BondAndFuturePortfolioLoader(USD_TREASURIES_PORTFOLIO_NAME, file);
+      final ExamplesBondAndFuturePortfolioLoader loader = new ExamplesBondAndFuturePortfolioLoader(USD_TREASURIES_PORTFOLIO_NAME, file);
       loader.run(getToolContext());
       log.done();
     } catch (final RuntimeException t) {
@@ -642,7 +642,7 @@ public class ExamplesDatabasePopulator extends AbstractTool<ToolContext> {
   private void loadLegalEntities() {
     final Log log = new Log("Creating legal entity data");
     try {
-      final SimulatedLegalEntityLoader loader = new SimulatedLegalEntityLoader();
+      final ExamplesLegalEntityLoader loader = new ExamplesLegalEntityLoader();
       loader.run(getToolContext());
       log.done();
     } catch (final RuntimeException t) {

@@ -15,6 +15,7 @@ import static com.opengamma.engine.value.ValuePropertyNames.CURVE;
 import static com.opengamma.engine.value.ValuePropertyNames.CURVE_CONSTRUCTION_CONFIG;
 import static com.opengamma.engine.value.ValuePropertyNames.CURVE_EXPOSURES;
 import static com.opengamma.engine.value.ValuePropertyNames.SURFACE;
+import static com.opengamma.engine.value.ValueRequirementNames.BOND_DETAILS;
 import static com.opengamma.engine.value.ValueRequirementNames.BUCKETED_PV01;
 import static com.opengamma.engine.value.ValueRequirementNames.CAPM_BETA;
 import static com.opengamma.engine.value.ValueRequirementNames.FAIR_VALUE;
@@ -69,6 +70,7 @@ import com.opengamma.examples.simulated.loader.ExampleEquityPortfolioLoader;
 import com.opengamma.financial.analytics.model.curve.CurveCalculationPropertyNamesAndValues;
 import com.opengamma.financial.analytics.model.discounting.DiscountingYCNSFunction;
 import com.opengamma.financial.currency.CurrencyConversionFunction;
+import com.opengamma.financial.security.bond.BillSecurity;
 import com.opengamma.financial.security.bond.BondSecurity;
 import com.opengamma.financial.security.equity.EquitySecurity;
 import com.opengamma.financial.security.future.FutureSecurity;
@@ -612,11 +614,13 @@ public class ExamplesViewsPopulator extends AbstractTool<ToolContext> {
     viewDefinition.setMinFullCalculationPeriod(MIN_FULL_PERIOD);
     final ViewCalculationConfiguration calcConfig = new ViewCalculationConfiguration(viewDefinition, DEFAULT_CALC_CONFIG);
     final ValueProperties properties = ValueProperties.builder()
-        .with(CURRENCY, "USD")
         .with(CURVE_EXPOSURES, "US Treasury Exposures")
         .with(PROPERTY_CURVE_TYPE, DISCOUNTING)
         .get();
-    calcConfig.addPortfolioRequirement(BondSecurity.SECURITY_TYPE, PRESENT_VALUE, properties);
+    calcConfig.addPortfolioRequirement(BondSecurity.SECURITY_TYPE, PRESENT_VALUE, properties.copy().with(CURRENCY, "USD").get());
+    calcConfig.addPortfolioRequirement(BillSecurity.SECURITY_TYPE, PRESENT_VALUE, properties.copy().with(CURRENCY, "USD").get());
+    calcConfig.addPortfolioRequirement(BondSecurity.SECURITY_TYPE, BOND_DETAILS, properties);
+    calcConfig.addPortfolioRequirement(BillSecurity.SECURITY_TYPE, BOND_DETAILS, properties);
     viewDefinition.addViewCalculationConfiguration(calcConfig);
     return viewDefinition;
   }

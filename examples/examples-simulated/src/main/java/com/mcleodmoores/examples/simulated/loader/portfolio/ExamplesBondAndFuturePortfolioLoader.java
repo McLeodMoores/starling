@@ -61,14 +61,14 @@ import au.com.bytecode.opencsv.CSVReader;
 /**
  *
  */
-public class BondAndFuturePortfolioLoader extends AbstractTool<ToolContext> {
-  private static final Logger LOGGER = LoggerFactory.getLogger(BondAndFuturePortfolioLoader.class);
+public class ExamplesBondAndFuturePortfolioLoader extends AbstractTool<ToolContext> {
+  private static final Logger LOGGER = LoggerFactory.getLogger(ExamplesBondAndFuturePortfolioLoader.class);
   private static final LocalTime EXPIRY_TIME = LocalTime.of(16, 00);
   private static final ZoneOffset ZONE = ZoneOffset.UTC;
   private final String _portfolioName;
   private final File _tradeFile;
 
-  public BondAndFuturePortfolioLoader(final String portfolioName, final String tradeFileName) {
+  public ExamplesBondAndFuturePortfolioLoader(final String portfolioName, final String tradeFileName) {
     _portfolioName = ArgumentChecker.notNull(portfolioName, "portfolioName");
     _tradeFile = new File(ArgumentChecker.notNull(tradeFileName, "tradeFileName"));
   }
