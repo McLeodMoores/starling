@@ -1,7 +1,7 @@
 /**
  * Copyright (C) 2017 - present McLeod Moores Software Limited.  All rights reserved.
  */
-package com.opengamma.financial.analytics.model.discounting;
+package com.mcleodmoores.financial.function.defaults;
 
 import static com.opengamma.engine.value.ValuePropertyNames.CURVE_EXPOSURES;
 import static com.opengamma.engine.value.ValueRequirementNames.BLOCK_CURVE_SENSITIVITIES;

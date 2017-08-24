@@ -1,7 +1,7 @@
 /**
  * Copyright (C) 2017 - present McLeod Moores Software Limited.  All rights reserved.
  */
-package com.opengamma.financial.analytics.model.black;
+package com.mcleodmoores.financial.function.defaults;
 
 import static com.opengamma.engine.value.ValuePropertyNames.CURVE_EXPOSURES;
 import static com.opengamma.engine.value.ValuePropertyNames.SURFACE;
@@ -48,7 +48,7 @@ import com.opengamma.util.money.UnorderedCurrencyPair;
 /**
  *
  */
-public class BlackDiscountingVanillaFxOptionPerCurrencyPairDefaults extends DefaultPropertyFunction {
+public class VanillaFxOptionPerCurrencyPairDefaults extends DefaultPropertyFunction {
   private static final String[] VALUE_REQUIREMENTS = new String[] {
       FX_PRESENT_VALUE,
       PRESENT_VALUE,
@@ -80,7 +80,7 @@ public class BlackDiscountingVanillaFxOptionPerCurrencyPairDefaults extends Defa
   private final String _leftXExtrapolatorName;
   private final String _rightXExtrapolatorName;
 
-  public BlackDiscountingVanillaFxOptionPerCurrencyPairDefaults(final String ccy1, final String ccy2, final String surfaceName,
+  public VanillaFxOptionPerCurrencyPairDefaults(final String ccy1, final String ccy2, final String surfaceName,
       final String curveExposuresName, final String xInterpolatorName, final String leftXExtrapolatorName, final String rightXExtrapolatorName) {
     super(ComputationTargetType.TRADE, true);
     ArgumentChecker.notNull(ccy1, "ccy1");

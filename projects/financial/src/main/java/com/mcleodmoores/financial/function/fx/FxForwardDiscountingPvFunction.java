@@ -1,7 +1,7 @@
 /**
  * Copyright (C) 2016 - present McLeod Moores Software Limited.  All rights reserved.
  */
-package com.opengamma.financial.analytics.model.discounting;
+package com.mcleodmoores.financial.function.fx;
 
 import static com.opengamma.engine.value.ValuePropertyNames.CURRENCY;
 import static com.opengamma.engine.value.ValueRequirementNames.PRESENT_VALUE;
@@ -28,6 +28,7 @@ import com.opengamma.engine.value.ValueProperties;
 import com.opengamma.engine.value.ValueRequirement;
 import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
+import com.opengamma.financial.analytics.model.discounting.DiscountingFunction;
 import com.opengamma.financial.security.fx.FXForwardSecurity;
 import com.opengamma.financial.security.fx.NonDeliverableFXForwardSecurity;
 import com.opengamma.util.money.Currency;

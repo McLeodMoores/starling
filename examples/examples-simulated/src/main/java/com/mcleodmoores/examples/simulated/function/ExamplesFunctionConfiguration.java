@@ -11,18 +11,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 
+import com.mcleodmoores.financial.function.bond.config.BondDiscountingMethodFunctions;
+import com.mcleodmoores.financial.function.fx.config.FxBlackMethodFunctions;
+import com.mcleodmoores.financial.function.fx.config.FxDiscountingMethodFunctions;
+import com.mcleodmoores.financial.function.rates.config.RatesDiscountingMethodFunctions;
 import com.opengamma.engine.function.config.CombiningFunctionConfigurationSource;
 import com.opengamma.engine.function.config.FunctionConfiguration;
 import com.opengamma.engine.function.config.FunctionConfigurationSource;
-import com.opengamma.financial.analytics.model.black.BlackDiscountingPricingFunctions;
-import com.opengamma.financial.analytics.model.black.BlackDiscountingPricingFunctions.FxOptionDefaults;
-import com.opengamma.financial.analytics.model.discounting.DiscountingPricingFunctions;
-import com.opengamma.financial.analytics.model.discounting.DiscountingPricingFunctions.FxForwardDefaults;
-import com.opengamma.financial.analytics.model.discounting.DiscountingPricingFunctions.LinearRatesDefaults;
 import com.opengamma.financial.analytics.model.equity.option.EquityOptionFunctions;
 import com.opengamma.financial.currency.CurrencyMatrixConfigPopulator;
 import com.opengamma.financial.currency.CurrencyMatrixLookupFunction;
 import com.opengamma.lambdava.functions.Function1;
+import com.opengamma.util.i18n.Country;
 import com.opengamma.util.money.Currency;
 import com.opengamma.util.money.UnorderedCurrencyPair;
 import com.opengamma.web.spring.StandardFunctionConfiguration;
@@ -36,18 +36,20 @@ public class ExamplesFunctionConfiguration extends StandardFunctionConfiguration
   private final Map<UnorderedCurrencyPair, FxOptionInfo> _vanillaFxOptionInfo = new HashMap<>();
   private final Map<UnorderedCurrencyPair, FxForwardInfo> _fxForwardInfo = new HashMap<>();
   private final Map<Currency, LinearRatesInfo> _linearRatesInfo = new HashMap<>();
+  private final Map<Currency, BondInfo> _bondPerCurrencyInfo = new HashMap<>();
+  private final Map<Country, BondInfo> _bondPerCountryInfo = new HashMap<>();
 
   public ExamplesFunctionConfiguration() {
     setEquityOptionInfo();
     setVanillaFxOptionInfo();
     setFxForwardInfo();
     setLinearRatesInfo();
+    setGovernmentBondInfo();
   }
 
   @Override
   protected void addCurrencyConversionFunctions(final List<FunctionConfiguration> functionConfigs) {
     super.addCurrencyConversionFunctions(functionConfigs);
-    functionConfigs.add(functionConfiguration(CurrencyMatrixLookupFunction.class, CurrencyMatrixConfigPopulator.BLOOMBERG_LIVE_DATA));
     functionConfigs.add(functionConfiguration(CurrencyMatrixLookupFunction.class, CurrencyMatrixConfigPopulator.SYNTHETIC_LIVE_DATA));
   }
 
@@ -61,6 +63,9 @@ public class ExamplesFunctionConfiguration extends StandardFunctionConfiguration
   }
 
   protected void setLinearRatesInfo() {
+  }
+
+  protected void setGovernmentBondInfo() {
   }
 
   @Override
@@ -130,10 +135,6 @@ public class ExamplesFunctionConfiguration extends StandardFunctionConfiguration
     return _vanillaFxOptionInfo.get(UnorderedCurrencyPair.of(ccy1, ccy2));
   }
 
-  protected FxOptionInfo defaultVanillaFxOptionInfo(final Currency ccy1, final Currency ccy2) {
-    return new FxOptionInfo(ccy1, ccy2);
-  }
-
   public void setFxForwardInfo(final Map<UnorderedCurrencyPair, FxForwardInfo> info) {
     _fxForwardInfo.clear();
     _fxForwardInfo.putAll(info);
@@ -149,10 +150,6 @@ public class ExamplesFunctionConfiguration extends StandardFunctionConfiguration
 
   public FxForwardInfo getFxForwardInfo(final Currency ccy1, final Currency ccy2) {
     return _fxForwardInfo.get(UnorderedCurrencyPair.of(ccy1, ccy2));
-  }
-
-  protected FxForwardInfo defaultFxForwardInfo(final Currency ccy1, final Currency ccy2) {
-    return new FxForwardInfo(ccy1, ccy2);
   }
 
   public void setLinearRatesInfo(final Map<Currency, LinearRatesInfo> info) {
@@ -172,8 +169,38 @@ public class ExamplesFunctionConfiguration extends StandardFunctionConfiguration
     return _linearRatesInfo.get(ccy);
   }
 
-  protected LinearRatesInfo defaultLinearRatesInfo(final Currency ccy) {
-    return new LinearRatesInfo(ccy);
+  public void setBondPerCurrencyInfo(final Map<Currency, BondInfo> info) {
+    _bondPerCurrencyInfo.clear();
+    _bondPerCurrencyInfo.putAll(info);
+  }
+
+  public Map<Currency, BondInfo> getBondPerCurrencyInfo() {
+    return _bondPerCurrencyInfo;
+  }
+
+  protected void setBondPerCurrencyInfo(final Currency ccy, final BondInfo info) {
+    _bondPerCurrencyInfo.put(ccy, info);
+  }
+
+  protected BondInfo getBondPerCurrencyInfo(final Currency ccy) {
+    return _bondPerCurrencyInfo.get(ccy);
+  }
+
+  public void setBondPerCountryInfo(final Map<Country, BondInfo> info) {
+    _bondPerCountryInfo.clear();
+    _bondPerCountryInfo.putAll(info);
+  }
+
+  public Map<Country, BondInfo> getBondPerCountryInfo() {
+    return _bondPerCountryInfo;
+  }
+
+  protected void setBondPerCountryInfo(final Country country, final BondInfo info) {
+    _bondPerCountryInfo.put(country, info);
+  }
+
+  protected BondInfo getBondPerCountryInfo(final Country country) {
+    return _bondPerCountryInfo.get(country);
   }
 
   /**
@@ -280,12 +307,12 @@ public class ExamplesFunctionConfiguration extends StandardFunctionConfiguration
     defaults.setForwardCurveCalculationMethod(i.getForwardCurveCalculationMethod("model/equityoption"));
   }
 
-  protected void setVanillaFxOptionDefaults(final BlackDiscountingPricingFunctions.FxOptionDefaults defaults) {
-    defaults.setCurrencyPairInfo(getVanillaFxOptionInfo(new Function1<FxOptionInfo, BlackDiscountingPricingFunctions.FxOptionDefaults.CurrencyPairInfo>() {
+  protected void setVanillaFxOptionDefaults(final FxBlackMethodFunctions.FxOptionDefaults defaults) {
+    defaults.setCurrencyPairInfo(getVanillaFxOptionInfo(new Function1<FxOptionInfo, FxBlackMethodFunctions.FxOptionDefaults.CurrencyPairInfo>() {
 
       @Override
-      public BlackDiscountingPricingFunctions.FxOptionDefaults.CurrencyPairInfo execute(final FxOptionInfo i) {
-        final BlackDiscountingPricingFunctions.FxOptionDefaults.CurrencyPairInfo d = new BlackDiscountingPricingFunctions.FxOptionDefaults.CurrencyPairInfo();
+      public FxBlackMethodFunctions.FxOptionDefaults.CurrencyPairInfo execute(final FxOptionInfo i) {
+        final FxBlackMethodFunctions.FxOptionDefaults.CurrencyPairInfo d = new FxBlackMethodFunctions.FxOptionDefaults.CurrencyPairInfo();
         setVanillaFxOptionDefaults(i, d);
         return d;
       }
@@ -293,7 +320,7 @@ public class ExamplesFunctionConfiguration extends StandardFunctionConfiguration
     }));
   }
 
-  protected void setVanillaFxOptionDefaults(final FxOptionInfo i, final BlackDiscountingPricingFunctions.FxOptionDefaults.CurrencyPairInfo d) {
+  protected void setVanillaFxOptionDefaults(final FxOptionInfo i, final FxBlackMethodFunctions.FxOptionDefaults.CurrencyPairInfo d) {
     d.setCurveExposuresName(i.getCurveExposureName("model/vanillafxoption"));
     d.setLeftXExtrapolatorName(i.getLeftXExtrapolatorName("model/vanillafxoption"));
     d.setRightXExtrapolatorName(i.getRightXExtrapolatorName("model/vanillafxoption"));
@@ -301,48 +328,66 @@ public class ExamplesFunctionConfiguration extends StandardFunctionConfiguration
     d.setXInterpolatorName(i.getXInterpolatorName("model/vanillafxoption"));
   }
 
-  protected void setFxForwardDefaults(final DiscountingPricingFunctions.FxForwardDefaults defaults) {
-    defaults.setCurrencyPairInfo(getFxForwardInfo(new Function1<FxForwardInfo, DiscountingPricingFunctions.FxForwardDefaults.CurrencyPairInfo>() {
+  protected void setFxForwardDefaults(final FxDiscountingMethodFunctions.FxForwardDefaults defaults) {
+    defaults.setCurrencyPairInfo(getFxForwardInfo(new Function1<FxForwardInfo, FxDiscountingMethodFunctions.FxForwardDefaults.CurrencyPairInfo>() {
 
       @Override
-      public DiscountingPricingFunctions.FxForwardDefaults.CurrencyPairInfo execute(final FxForwardInfo i) {
-        final DiscountingPricingFunctions.FxForwardDefaults.CurrencyPairInfo d = new DiscountingPricingFunctions.FxForwardDefaults.CurrencyPairInfo();
+      public FxDiscountingMethodFunctions.FxForwardDefaults.CurrencyPairInfo execute(final FxForwardInfo i) {
+        final FxDiscountingMethodFunctions.FxForwardDefaults.CurrencyPairInfo d = new FxDiscountingMethodFunctions.FxForwardDefaults.CurrencyPairInfo();
         setFxForwardDefaults(i, d);
         return d;
       }
     }));
   }
 
-  protected void setFxForwardDefaults(final FxForwardInfo i, final DiscountingPricingFunctions.FxForwardDefaults.CurrencyPairInfo d) {
+  protected void setFxForwardDefaults(final FxForwardInfo i, final FxDiscountingMethodFunctions.FxForwardDefaults.CurrencyPairInfo d) {
     d.setCurveExposuresName(i.getCurveExposureName("model/fxforward"));
   }
 
-  protected void setLinearRatesDefaults(final DiscountingPricingFunctions.LinearRatesDefaults defaults) {
-    defaults.setCurrencyInfo(getLinearRatesInfo(new Function1<LinearRatesInfo, DiscountingPricingFunctions.LinearRatesDefaults.CurrencyInfo>() {
+  protected void setLinearRatesDefaults(final RatesDiscountingMethodFunctions.LinearRatesDefaults defaults) {
+    defaults.setCurrencyInfo(getLinearRatesInfo(new Function1<LinearRatesInfo, RatesDiscountingMethodFunctions.LinearRatesDefaults.CurrencyInfo>() {
 
       @Override
-      public DiscountingPricingFunctions.LinearRatesDefaults.CurrencyInfo execute(final LinearRatesInfo i) {
-        final DiscountingPricingFunctions.LinearRatesDefaults.CurrencyInfo d = new DiscountingPricingFunctions.LinearRatesDefaults.CurrencyInfo();
+      public RatesDiscountingMethodFunctions.LinearRatesDefaults.CurrencyInfo execute(final LinearRatesInfo i) {
+        final RatesDiscountingMethodFunctions.LinearRatesDefaults.CurrencyInfo d = new RatesDiscountingMethodFunctions.LinearRatesDefaults.CurrencyInfo();
         setLinearRatesDefaults(i, d);
         return d;
       }
     }));
   }
 
-  protected void setLinearRatesDefaults(final LinearRatesInfo i, final DiscountingPricingFunctions.LinearRatesDefaults.CurrencyInfo d) {
+  protected void setLinearRatesDefaults(final LinearRatesInfo i, final RatesDiscountingMethodFunctions.LinearRatesDefaults.CurrencyInfo d) {
     d.setCurveExposuresName(i.getCurveExposureName("model/linearrates"));
   }
 
+  protected void setGovernmentBondDefaults(final BondDiscountingMethodFunctions.GovernmentBondDefaults defaults) {
+    defaults.setCountryInfo(getBondPerCountryInfo(new Function1<BondInfo, BondDiscountingMethodFunctions.GovernmentBondDefaults.CountryInfo>() {
+
+      @Override
+      public BondDiscountingMethodFunctions.GovernmentBondDefaults.CountryInfo execute(final BondInfo i) {
+        final BondDiscountingMethodFunctions.GovernmentBondDefaults.CountryInfo d = new BondDiscountingMethodFunctions.GovernmentBondDefaults.CountryInfo();
+        setBondPerCountryDefaults(i, d);
+        return d;
+      }
+    }));
+  }
+
+  protected void setBondPerCountryDefaults(final BondInfo i, final BondDiscountingMethodFunctions.GovernmentBondDefaults.CountryInfo d) {
+    d.setCurveExposuresName(i.getCurveExposureName("model/bond/govt"));
+  }
+
   protected FunctionConfigurationSource discountingFunctionConfiguration() {
-    final FxForwardDefaults fxForwardDefaults = new DiscountingPricingFunctions.FxForwardDefaults();
+    final FxDiscountingMethodFunctions.FxForwardDefaults fxForwardDefaults = new FxDiscountingMethodFunctions.FxForwardDefaults();
     setFxForwardDefaults(fxForwardDefaults);
-    final LinearRatesDefaults linearRatesDefaults = new DiscountingPricingFunctions.LinearRatesDefaults();
+    final RatesDiscountingMethodFunctions.LinearRatesDefaults linearRatesDefaults = new RatesDiscountingMethodFunctions.LinearRatesDefaults();
     setLinearRatesDefaults(linearRatesDefaults);
-    return CombiningFunctionConfigurationSource.of(getRepository(fxForwardDefaults), getRepository(linearRatesDefaults));
+    final BondDiscountingMethodFunctions.GovernmentBondDefaults govtBondDefaults = new BondDiscountingMethodFunctions.GovernmentBondDefaults();
+    setGovernmentBondDefaults(govtBondDefaults);
+    return CombiningFunctionConfigurationSource.of(getRepository(fxForwardDefaults), getRepository(linearRatesDefaults), getRepository(govtBondDefaults));
   }
 
   protected FunctionConfigurationSource blackDiscountingFunctionConfiguration() {
-    final FxOptionDefaults vanillaDefaults = new BlackDiscountingPricingFunctions.FxOptionDefaults();
+    final FxBlackMethodFunctions.FxOptionDefaults vanillaDefaults = new FxBlackMethodFunctions.FxOptionDefaults();
     setVanillaFxOptionDefaults(vanillaDefaults);
     return CombiningFunctionConfigurationSource.of(getRepository(vanillaDefaults));
   }
@@ -369,16 +414,11 @@ public class ExamplesFunctionConfiguration extends StandardFunctionConfiguration
 
 
   public static class FxOptionInfo {
-    private final UnorderedCurrencyPair _currencyPair;
     private final Value _surfaceName = new Value();
     private final Value _curveExposuresName = new Value();
     private final Value _xInterpolatorName = new Value();
     private final Value _leftXExtrapolatorName = new Value();
     private final Value _rightXExtrapolatorName = new Value();
-
-    public FxOptionInfo(final Currency ccy1, final Currency ccy2) {
-      _currencyPair = UnorderedCurrencyPair.of(ccy1, ccy2);
-    }
 
     public void setSurfaceName(final String key, final String name) {
       _surfaceName.set(key, name);
@@ -443,12 +483,7 @@ public class ExamplesFunctionConfiguration extends StandardFunctionConfiguration
   }
 
   public static class FxForwardInfo {
-    private final UnorderedCurrencyPair _currencyPair;
     private final Value _curveExposuresName = new Value();
-
-    public FxForwardInfo(final Currency ccy1, final Currency ccy2) {
-      _currencyPair = UnorderedCurrencyPair.of(ccy1, ccy2);
-    }
 
     public void setCurveExposureName(final String key, final String name) {
       _curveExposuresName.set(key, name);
@@ -481,12 +516,62 @@ public class ExamplesFunctionConfiguration extends StandardFunctionConfiguration
   }
 
   public static class LinearRatesInfo {
-    private final Currency _ccy;
     private final Value _curveExposuresName = new Value();
 
-    public LinearRatesInfo(final Currency ccy) {
-      _ccy = ccy;
+    public LinearRatesInfo() {
     }
+
+    public void setCurveExposureName(final String key, final String name) {
+      _curveExposuresName.set(key, name);
+    }
+
+    public String getCurveExposureName(final String key) {
+      return _curveExposuresName.get(key);
+    }
+  }
+
+  protected <T> Map<Currency, T> getBondPerCurrencyInfo(final Function1<BondInfo, T> filter) {
+    final Map<Currency, T> result = new HashMap<>();
+    for (final Map.Entry<Currency, BondInfo> e : getBondPerCurrencyInfo().entrySet()) {
+      final T entry = filter.execute(e.getValue());
+      if (entry instanceof InitializingBean) {
+        try {
+          ((InitializingBean) entry).afterPropertiesSet();
+        } catch (final Exception ex) {
+          LOGGER.debug("Skipping {}", e.getKey());
+          LOGGER.trace("Caught exception", e);
+          continue;
+        }
+      }
+      if (entry != null) {
+        result.put(e.getKey(), entry);
+      }
+    }
+    return result;
+  }
+
+  protected <T> Map<Country, T> getBondPerCountryInfo(final Function1<BondInfo, T> filter) {
+    final Map<Country, T> result = new HashMap<>();
+    for (final Map.Entry<Country, BondInfo> e : getBondPerCountryInfo().entrySet()) {
+      final T entry = filter.execute(e.getValue());
+      if (entry instanceof InitializingBean) {
+        try {
+          ((InitializingBean) entry).afterPropertiesSet();
+        } catch (final Exception ex) {
+          LOGGER.debug("Skipping {}", e.getKey());
+          LOGGER.trace("Caught exception", e);
+          continue;
+        }
+      }
+      if (entry != null) {
+        result.put(e.getKey(), entry);
+      }
+    }
+    return result;
+  }
+
+  public static class BondInfo {
+    private final Value _curveExposuresName = new Value();
 
     public void setCurveExposureName(final String key, final String name) {
       _curveExposuresName.set(key, name);

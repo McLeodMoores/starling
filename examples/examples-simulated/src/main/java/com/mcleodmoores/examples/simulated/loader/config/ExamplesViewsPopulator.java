@@ -10,6 +10,7 @@ import static com.mcleodmoores.examples.simulated.loader.ExamplesDatabasePopulat
 import static com.mcleodmoores.examples.simulated.loader.ExamplesDatabasePopulator.OIS_PORTFOLIO_NAME;
 import static com.mcleodmoores.examples.simulated.loader.ExamplesDatabasePopulator.USD_TREASURIES_PORTFOLIO_NAME;
 import static com.mcleodmoores.examples.simulated.loader.ExamplesDatabasePopulator.VANILLA_FX_OPTION_PORTFOLIO_NAME;
+import static com.opengamma.engine.value.ValuePropertyNames.CALCULATION_METHOD;
 import static com.opengamma.engine.value.ValuePropertyNames.CURRENCY;
 import static com.opengamma.engine.value.ValuePropertyNames.CURVE;
 import static com.opengamma.engine.value.ValuePropertyNames.CURVE_CONSTRUCTION_CONFIG;
@@ -30,6 +31,8 @@ import static com.opengamma.engine.value.ValueRequirementNames.FX_CURRENCY_EXPOS
 import static com.opengamma.engine.value.ValueRequirementNames.FX_FORWARD_DETAILS;
 import static com.opengamma.engine.value.ValueRequirementNames.FX_PRESENT_VALUE;
 import static com.opengamma.engine.value.ValueRequirementNames.HISTORICAL_VAR;
+import static com.opengamma.engine.value.ValueRequirementNames.MACAULAY_DURATION;
+import static com.opengamma.engine.value.ValueRequirementNames.MODIFIED_DURATION;
 import static com.opengamma.engine.value.ValueRequirementNames.NOTIONAL;
 import static com.opengamma.engine.value.ValueRequirementNames.PAR_RATE;
 import static com.opengamma.engine.value.ValueRequirementNames.PNL;
@@ -46,6 +49,7 @@ import static com.opengamma.engine.value.ValueRequirementNames.VEGA_MATRIX;
 import static com.opengamma.engine.value.ValueRequirementNames.VEGA_QUOTE_MATRIX;
 import static com.opengamma.engine.value.ValueRequirementNames.VOLATILITY_SURFACE_DATA;
 import static com.opengamma.engine.value.ValueRequirementNames.YIELD_CURVE;
+import static com.opengamma.financial.analytics.model.CalculationPropertyNamesAndValues.CURVES_METHOD;
 import static com.opengamma.financial.analytics.model.InstrumentTypeProperties.FOREX;
 import static com.opengamma.financial.analytics.model.InstrumentTypeProperties.PROPERTY_SURFACE_INSTRUMENT_TYPE;
 import static com.opengamma.financial.analytics.model.curve.CurveCalculationPropertyNamesAndValues.DISCOUNTING;
@@ -614,11 +618,15 @@ public class ExamplesViewsPopulator extends AbstractTool<ToolContext> {
     viewDefinition.setMinFullCalculationPeriod(MIN_FULL_PERIOD);
     final ViewCalculationConfiguration calcConfig = new ViewCalculationConfiguration(viewDefinition, DEFAULT_CALC_CONFIG);
     final ValueProperties properties = ValueProperties.builder()
-        .with(CURVE_EXPOSURES, "US Treasury Exposures")
         .with(PROPERTY_CURVE_TYPE, DISCOUNTING)
+        .with(CALCULATION_METHOD, CURVES_METHOD)
         .get();
     calcConfig.addPortfolioRequirement(BondSecurity.SECURITY_TYPE, PRESENT_VALUE, properties.copy().with(CURRENCY, "USD").get());
     calcConfig.addPortfolioRequirement(BillSecurity.SECURITY_TYPE, PRESENT_VALUE, properties.copy().with(CURRENCY, "USD").get());
+    calcConfig.addPortfolioRequirement(BondSecurity.SECURITY_TYPE, MODIFIED_DURATION, properties);
+    calcConfig.addPortfolioRequirement(BillSecurity.SECURITY_TYPE, MODIFIED_DURATION, properties);
+    calcConfig.addPortfolioRequirement(BondSecurity.SECURITY_TYPE, MACAULAY_DURATION, properties);
+    calcConfig.addPortfolioRequirement(BillSecurity.SECURITY_TYPE, MACAULAY_DURATION, properties);
     calcConfig.addPortfolioRequirement(BondSecurity.SECURITY_TYPE, BOND_DETAILS, properties);
     calcConfig.addPortfolioRequirement(BillSecurity.SECURITY_TYPE, BOND_DETAILS, properties);
     viewDefinition.addViewCalculationConfiguration(calcConfig);

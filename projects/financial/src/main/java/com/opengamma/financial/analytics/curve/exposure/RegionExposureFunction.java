@@ -8,11 +8,15 @@ package com.opengamma.financial.analytics.curve.exposure;
 import java.util.Arrays;
 import java.util.List;
 
+import com.opengamma.core.id.ExternalSchemes;
 import com.opengamma.core.position.Trade;
 import com.opengamma.core.security.Security;
 import com.opengamma.core.security.SecuritySource;
 import com.opengamma.financial.security.FinancialSecurity;
 import com.opengamma.financial.security.FinancialSecurityVisitorSameValueAdapter;
+import com.opengamma.financial.security.bond.BillSecurity;
+import com.opengamma.financial.security.bond.CorporateBondSecurity;
+import com.opengamma.financial.security.bond.GovernmentBondSecurity;
 import com.opengamma.financial.security.cash.CashSecurity;
 import com.opengamma.financial.security.cds.CreditDefaultSwapSecurity;
 import com.opengamma.financial.security.cds.LegacyFixedRecoveryCDSSecurity;
@@ -33,17 +37,18 @@ import com.opengamma.financial.security.swap.ZeroCouponInflationSwapSecurity;
 import com.opengamma.id.ExternalId;
 import com.opengamma.id.ExternalIdBundle;
 import com.opengamma.util.ArgumentChecker;
+import com.opengamma.util.i18n.Country;
 
 /**
  * Exposure function that returns the regions for a given trade.
  */
 public class RegionExposureFunction implements ExposureFunction {
-  
+
   /**
    * The name of the exposure function.
    */
   public static final String NAME = "Region";
-  
+
   private final RegionVisitor _visitor;
 
   public RegionExposureFunction(final SecuritySource securitySource) {
@@ -55,40 +60,55 @@ public class RegionExposureFunction implements ExposureFunction {
   public String getName() {
     return NAME;
   }
-  
+
   @Override
-  public List<ExternalId> getIds(Trade trade) {
-    Security security = trade.getSecurity();
+  public List<ExternalId> getIds(final Trade trade) {
+    final Security security = trade.getSecurity();
     if (security instanceof FinancialSecurity) {
       return ((FinancialSecurity) security).accept(_visitor);
     }
     return null;
   }
-  
+
   private static final class RegionVisitor extends FinancialSecurityVisitorSameValueAdapter<List<ExternalId>> {
-    
+
     private final SecuritySource _securitySource;
-    
-    public RegionVisitor(SecuritySource securitySource) {
+
+    public RegionVisitor(final SecuritySource securitySource) {
       super(null);
       _securitySource = ArgumentChecker.notNull(securitySource, "securitySource");
     }
-  
+
+    @Override
+    public List<ExternalId> visitGovernmentBondSecurity(final GovernmentBondSecurity security) {
+      return Arrays.asList(ExternalSchemes.countryRegionId(Country.of(security.getIssuerDomicile())));
+    }
+
+    @Override
+    public List<ExternalId> visitCorporateBondSecurity(final CorporateBondSecurity security) {
+      return Arrays.asList(ExternalSchemes.countryRegionId(Country.of(security.getIssuerDomicile())));
+    }
+
+    @Override
+    public List<ExternalId> visitBillSecurity(final BillSecurity security) {
+      return Arrays.asList(security.getRegionId());
+    }
+
     @Override
     public List<ExternalId> visitCashSecurity(final CashSecurity security) {
       return Arrays.asList(security.getRegionId());
     }
-  
+
     @Override
     public List<ExternalId> visitContinuousZeroDepositSecurity(final ContinuousZeroDepositSecurity security) {
       return Arrays.asList(security.getRegion());
     }
-  
+
     @Override
     public List<ExternalId> visitFRASecurity(final FRASecurity security) {
       return Arrays.asList(security.getRegionId());
     }
-  
+
     @Override
     public List<ExternalId> visitForwardSwapSecurity(final ForwardSwapSecurity security) {
       final SwapLeg payLeg = security.getPayLeg();
@@ -98,7 +118,7 @@ public class RegionExposureFunction implements ExposureFunction {
       }
       return Arrays.asList(payLeg.getRegionId(), receiveLeg.getRegionId());
     }
-  
+
     @Override
     public List<ExternalId> visitSwapSecurity(final SwapSecurity security) {
       final SwapLeg payLeg = security.getPayLeg();
@@ -108,7 +128,7 @@ public class RegionExposureFunction implements ExposureFunction {
       }
       return Arrays.asList(payLeg.getRegionId(), receiveLeg.getRegionId());
     }
-  
+
     @Override
     public List<ExternalId> visitSwaptionSecurity(final SwaptionSecurity security) {
       final SwapSecurity underlyingSwap = (SwapSecurity) _securitySource.getSingle(ExternalIdBundle.of(security.getUnderlyingId())); //TODO version
@@ -119,43 +139,43 @@ public class RegionExposureFunction implements ExposureFunction {
       }
       return Arrays.asList(payLeg.getRegionId(), receiveLeg.getRegionId());
     }
-  
+
     @Override
     public List<ExternalId> visitStandardVanillaCDSSecurity(final StandardVanillaCDSSecurity security) {
       return Arrays.asList(security.getRegionId());
     }
-  
+
     @Override
     public List<ExternalId> visitStandardFixedRecoveryCDSSecurity(final StandardFixedRecoveryCDSSecurity security) {
       return Arrays.asList(security.getRegionId());
     }
-  
+
     @Override
     public List<ExternalId> visitStandardRecoveryLockCDSSecurity(final StandardRecoveryLockCDSSecurity security) {
       return Arrays.asList(security.getRegionId());
     }
-  
+
     @Override
     public List<ExternalId> visitLegacyVanillaCDSSecurity(final LegacyVanillaCDSSecurity security) {
       return Arrays.asList(security.getRegionId());
     }
-  
+
     @Override
     public List<ExternalId> visitLegacyFixedRecoveryCDSSecurity(final LegacyFixedRecoveryCDSSecurity security) {
       return Arrays.asList(security.getRegionId());
     }
-  
+
     @Override
     public List<ExternalId> visitLegacyRecoveryLockCDSSecurity(final LegacyRecoveryLockCDSSecurity security) {
       return Arrays.asList(security.getRegionId());
     }
-  
+
     @Override
     public List<ExternalId> visitCreditDefaultSwapOptionSecurity(final CreditDefaultSwapOptionSecurity security) {
       final CreditDefaultSwapSecurity underlyingCDS = (CreditDefaultSwapSecurity) _securitySource.getSingle(ExternalIdBundle.of(security.getUnderlyingId())); //TODO version
       return Arrays.asList(underlyingCDS.getRegionId());
     }
-  
+
     @Override
     public List<ExternalId> visitZeroCouponInflationSwapSecurity(final ZeroCouponInflationSwapSecurity security) {
       final SwapLeg payLeg = security.getPayLeg();
@@ -165,7 +185,7 @@ public class RegionExposureFunction implements ExposureFunction {
       }
       return Arrays.asList(payLeg.getRegionId(), receiveLeg.getRegionId());
     }
-  
+
     @Override
     public List<ExternalId> visitYearOnYearInflationSwapSecurity(final YearOnYearInflationSwapSecurity security) {
       final SwapLeg payLeg = security.getPayLeg();

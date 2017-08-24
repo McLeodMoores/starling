@@ -1,5 +1,5 @@
 /**
- *
+ * Copyright (C) 2017 - present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.mcleodmoores.financial.function.trade;
 
@@ -47,6 +47,10 @@ public class FixedCouponBondDetailsCalculator extends
     final double quantity = bond.getQuantity();
     for (int i = 0; i < n; i++) {
       final CouponFixedDefinition couponDefinition = couponDefinitions.getNthPayment(i);
+      if (couponDefinition.getAccrualEndDate().isBefore(data.getValuationTime())) {
+        // skip payments in the past
+        continue;
+      }
       final CouponFixed coupon = coupons.getNthPayment(i);
       startAccrualDates.add(couponDefinition.getAccrualStartDate().toLocalDate());
       endAccrualDates.add(couponDefinition.getAccrualEndDate().toLocalDate());

@@ -8,6 +8,7 @@ package com.opengamma.financial.analytics.model;
 import java.util.Collections;
 import java.util.List;
 
+import com.mcleodmoores.financial.function.bond.config.BondDiscountingMethodFunctions;
 import com.opengamma.engine.function.config.AbstractFunctionConfigurationBean;
 import com.opengamma.engine.function.config.CombiningFunctionConfigurationSource;
 import com.opengamma.engine.function.config.FunctionConfiguration;
@@ -105,7 +106,7 @@ public class ModelFunctions extends AbstractFunctionConfigurationBean {
    * @return A configuration source containing bond functions
    */
   protected FunctionConfigurationSource bondCurveFunctionConfiguration() {
-    return BondCurveFunctions.instance();
+    return CombiningFunctionConfigurationSource.of(BondCurveFunctions.instance(), BondDiscountingMethodFunctions.instance());
   }
 
   /**

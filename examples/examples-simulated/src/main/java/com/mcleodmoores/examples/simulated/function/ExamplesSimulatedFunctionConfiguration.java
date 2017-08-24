@@ -6,6 +6,7 @@ package com.mcleodmoores.examples.simulated.function;
 import static com.opengamma.engine.value.ValuePropertyNames.DIVIDEND_TYPE_NONE;
 
 import java.util.List;
+import java.util.Set;
 
 import com.mcleodmoores.examples.simulated.loader.config.ExamplesViewsPopulator;
 import com.opengamma.analytics.math.interpolation.factory.DoubleQuadraticInterpolator1dAdapter;
@@ -15,6 +16,7 @@ import com.opengamma.engine.function.config.FunctionConfiguration;
 import com.opengamma.engine.function.config.FunctionConfigurationSource;
 import com.opengamma.financial.analytics.model.curve.forward.ForwardCurveValuePropertyNames;
 import com.opengamma.financial.analytics.model.volatility.surface.black.BlackVolatilitySurfacePropertyNamesAndValues;
+import com.opengamma.util.i18n.Country;
 import com.opengamma.util.money.Currency;
 import com.opengamma.util.money.UnorderedCurrencyPair;
 
@@ -66,6 +68,14 @@ public class ExamplesSimulatedFunctionConfiguration extends ExamplesFunctionConf
     }
   }
 
+  @Override
+  protected void setGovernmentBondInfo() {
+    final Set<Country> countries = Country.getAvailableCountries();
+    for (final Country c : countries) {
+      setGovernmentBondPerCountryInfo(c);
+    }
+  }
+
   /**
    * Creates empty default per-equity information objects for equity options.
    * @param ticker The equity ticker
@@ -91,7 +101,7 @@ public class ExamplesSimulatedFunctionConfiguration extends ExamplesFunctionConf
   }
 
   protected void setVanillaFxOptionInfo(final Currency ccy1, final Currency ccy2) {
-    final FxOptionInfo i = defaultVanillaFxOptionInfo(ccy1, ccy2);
+    final FxOptionInfo i = new FxOptionInfo();
     i.setSurfaceName("model/vanillafxoption", "DEFAULT");
     i.setCurveExposureName("model/vanillafxoption", "FX Exposures");
     i.setXInterpolatorName("model/vanillafxoption", LinearInterpolator1dAdapter.NAME);
@@ -101,14 +111,20 @@ public class ExamplesSimulatedFunctionConfiguration extends ExamplesFunctionConf
   }
 
   protected void setFxForwardInfo(final Currency ccy1, final Currency ccy2) {
-    final FxForwardInfo i = defaultFxForwardInfo(ccy1, ccy2);
+    final FxForwardInfo i = new FxForwardInfo();
     i.setCurveExposureName("model/fxforward", "FX Exposures");
     setFxForwardInfo(ccy1, ccy2, i);
   }
 
   protected void setLinearRatesInfo(final Currency ccy) {
-    final LinearRatesInfo i = defaultLinearRatesInfo(ccy);
+    final LinearRatesInfo i = new LinearRatesInfo();
     i.setCurveExposureName("model/linearrates", "Fixed Income Exposures");
     setLinearRatesInfo(ccy, i);
+  }
+
+  protected void setGovernmentBondPerCountryInfo(final Country country) {
+    final BondInfo i = new BondInfo();
+    i.setCurveExposureName("model/bond/govt", "Govt Bond Exposures");
+    setBondPerCountryInfo(country, i);
   }
 }

@@ -10,11 +10,13 @@ import java.util.List;
 import java.util.Map;
 
 import com.opengamma.core.config.impl.ConfigItem;
+import com.opengamma.core.id.ExternalSchemes;
 import com.opengamma.financial.analytics.curve.exposure.ExposureFunctions;
 import com.opengamma.id.ExternalId;
 import com.opengamma.master.config.ConfigMaster;
 import com.opengamma.master.config.ConfigMasterUtils;
 import com.opengamma.util.ArgumentChecker;
+import com.opengamma.util.i18n.Country;
 import com.opengamma.util.money.Currency;
 
 /**
@@ -31,7 +33,7 @@ public class ExamplesExposureFunctionConfigsPopulator {
     storeAudFixedIncomeExposures(configMaster);
     storeFixedIncomeExposures(configMaster);
     storeFxExposures(configMaster);
-    storeUsTreasuryExposures(configMaster);
+    storeGovernmentBondExposures(configMaster);
   }
 
   private static void storeAudFixedIncomeExposures(final ConfigMaster configMaster) {
@@ -87,10 +89,10 @@ public class ExamplesExposureFunctionConfigsPopulator {
     ConfigMasterUtils.storeByName(configMaster, makeConfig(exposureFunctions));
   }
 
-  private static void storeUsTreasuryExposures(final ConfigMaster configMaster) {
-    final String name = "US Treasury Exposures";
-    final List<String> exposureFunctionNames = Arrays.asList("Currency");
-    final Map<ExternalId, String> idsToNames = Collections.singletonMap(ExternalId.of(Currency.OBJECT_SCHEME, "USD"), "US Treasury");
+  private static void storeGovernmentBondExposures(final ConfigMaster configMaster) {
+    final String name = "Govt Bond Exposures";
+    final List<String> exposureFunctionNames = Arrays.asList("Region");
+    final Map<ExternalId, String> idsToNames = Collections.singletonMap(ExternalSchemes.countryRegionId(Country.US), "US Treasury");
     final ExposureFunctions exposureFunctions = new ExposureFunctions(name, exposureFunctionNames, idsToNames);
     ConfigMasterUtils.storeByName(configMaster, makeConfig(exposureFunctions));
   }
