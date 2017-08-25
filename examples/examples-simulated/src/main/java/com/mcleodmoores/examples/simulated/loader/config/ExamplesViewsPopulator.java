@@ -49,6 +49,7 @@ import static com.opengamma.engine.value.ValueRequirementNames.VEGA_MATRIX;
 import static com.opengamma.engine.value.ValueRequirementNames.VEGA_QUOTE_MATRIX;
 import static com.opengamma.engine.value.ValueRequirementNames.VOLATILITY_SURFACE_DATA;
 import static com.opengamma.engine.value.ValueRequirementNames.YIELD_CURVE;
+import static com.opengamma.engine.value.ValueRequirementNames.YTM;
 import static com.opengamma.financial.analytics.model.CalculationPropertyNamesAndValues.CURVES_METHOD;
 import static com.opengamma.financial.analytics.model.InstrumentTypeProperties.FOREX;
 import static com.opengamma.financial.analytics.model.InstrumentTypeProperties.PROPERTY_SURFACE_INSTRUMENT_TYPE;
@@ -623,6 +624,8 @@ public class ExamplesViewsPopulator extends AbstractTool<ToolContext> {
         .get();
     calcConfig.addPortfolioRequirement(BondSecurity.SECURITY_TYPE, PRESENT_VALUE, properties.copy().with(CURRENCY, "USD").get());
     calcConfig.addPortfolioRequirement(BillSecurity.SECURITY_TYPE, PRESENT_VALUE, properties.copy().with(CURRENCY, "USD").get());
+    calcConfig.addPortfolioRequirement(BondSecurity.SECURITY_TYPE, YTM, properties);
+    calcConfig.addPortfolioRequirement(BillSecurity.SECURITY_TYPE, YTM, properties);
     calcConfig.addPortfolioRequirement(BondSecurity.SECURITY_TYPE, MODIFIED_DURATION, properties);
     calcConfig.addPortfolioRequirement(BillSecurity.SECURITY_TYPE, MODIFIED_DURATION, properties);
     calcConfig.addPortfolioRequirement(BondSecurity.SECURITY_TYPE, MACAULAY_DURATION, properties);

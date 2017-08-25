@@ -2,6 +2,10 @@
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
  *
  * Please see distribution for license.
+ *
+ * Modified by McLeod Moores Software Limited.
+ *
+ * Copyright (C) 2017 - present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.analytics.financial.interestrate.bond.provider;
 
@@ -36,10 +40,6 @@ public final class BillSecurityDiscountingMethod {
    * The unique instance of the class.
    */
   private static final BillSecurityDiscountingMethod INSTANCE = new BillSecurityDiscountingMethod();
-  /**
-   * The root bracket used for yield finding.
-   */
-  private static final BracketRoot BRACKETER = new BracketRoot();
   /**
    * The root finder used for yield finding.
    */
@@ -258,6 +258,19 @@ public final class BillSecurityDiscountingMethod {
    */
   public double zSpreadFromCurvesAndYield(final BillSecurity bill, final IssuerProviderInterface issuerMulticurves, final double yield) {
     return zSpreadFromCurvesAndPV(bill, issuerMulticurves, presentValueFromYield(bill, yield, issuerMulticurves));
+  }
+
+  public double macaulayDurationFromCurves(final BillSecurity bill, final IssuerProviderInterface marketData) {
+    return bill.getEndTime();
+  }
+
+  public double modifiedDurationFromCurves(final BillSecurity bill, final IssuerProviderInterface marketData) {
+    return macaulayDurationFromCurves(bill, marketData) / (1 + yieldFromCurves(bill, marketData));
+  }
+
+  public double convexityFromCurves(final BillSecurity bill, final IssuerProviderInterface marketData) {
+    final double yield = yieldFromCurves(bill, marketData);
+    return 0; //convexityFromYield(bill, yield);
   }
 
 }

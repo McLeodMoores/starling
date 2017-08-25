@@ -12,6 +12,7 @@ import static com.opengamma.engine.value.ValueRequirementNames.MODIFIED_DURATION
 import static com.opengamma.engine.value.ValueRequirementNames.PRESENT_VALUE;
 import static com.opengamma.engine.value.ValueRequirementNames.PV01;
 import static com.opengamma.engine.value.ValueRequirementNames.YIELD_CURVE_NODE_SENSITIVITIES;
+import static com.opengamma.engine.value.ValueRequirementNames.YTM;
 
 import java.util.Collections;
 import java.util.Set;
@@ -43,7 +44,8 @@ public class GovernmentBondPerCountryDefaults extends DefaultPropertyFunction {
       BOND_DETAILS,
       MODIFIED_DURATION,
       MACAULAY_DURATION,
-      CONVEXITY
+      CONVEXITY,
+      YTM
   };
   private final String _countryCode;
   private final String _curveExposuresName;

@@ -6,8 +6,11 @@
 package com.opengamma.analytics.financial.provider.calculator.issuer;
 
 import com.opengamma.analytics.financial.interestrate.InstrumentDerivativeVisitorAdapter;
+import com.opengamma.analytics.financial.interestrate.bond.definition.BillSecurity;
+import com.opengamma.analytics.financial.interestrate.bond.definition.BillTransaction;
 import com.opengamma.analytics.financial.interestrate.bond.definition.BondFixedSecurity;
 import com.opengamma.analytics.financial.interestrate.bond.definition.BondFixedTransaction;
+import com.opengamma.analytics.financial.interestrate.bond.provider.BillSecurityDiscountingMethod;
 import com.opengamma.analytics.financial.interestrate.bond.provider.BondSecurityDiscountingMethod;
 import com.opengamma.analytics.financial.provider.description.interestrate.IssuerProviderInterface;
 import com.opengamma.util.ArgumentChecker;
@@ -36,20 +39,31 @@ public final class ConvexityFromCurvesCalculator extends InstrumentDerivativeVis
   private ConvexityFromCurvesCalculator() {
   }
 
-  /** The method used for bonds */
-  private static final BondSecurityDiscountingMethod METHOD_BOND_SECURITY = BondSecurityDiscountingMethod.getInstance();
-
   @Override
-  public Double visitBondFixedSecurity(final BondFixedSecurity bond, final IssuerProviderInterface issuer) {
+  public Double visitBondFixedSecurity(final BondFixedSecurity bond, final IssuerProviderInterface marketData) {
     ArgumentChecker.notNull(bond, "bond");
-    ArgumentChecker.notNull(issuer, "Issuer provider");
-    return METHOD_BOND_SECURITY.convexityFromCurves(bond, issuer) / 100;
+    ArgumentChecker.notNull(marketData, "marketData");
+    return BondSecurityDiscountingMethod.getInstance().convexityFromCurves(bond, marketData) / 100;
   }
 
   @Override
-  public Double visitBondFixedTransaction(final BondFixedTransaction bond, final IssuerProviderInterface issuer) {
+  public Double visitBondFixedTransaction(final BondFixedTransaction bond, final IssuerProviderInterface marketData) {
     ArgumentChecker.notNull(bond, "bond");
-    ArgumentChecker.notNull(issuer, "Issuer provider");
-    return METHOD_BOND_SECURITY.convexityFromCurves(bond.getBondTransaction(), issuer) / 100;
+    ArgumentChecker.notNull(marketData, "marketData");
+    return BondSecurityDiscountingMethod.getInstance().convexityFromCurves(bond.getBondTransaction(), marketData) / 100;
+  }
+
+  @Override
+  public Double visitBillSecurity(final BillSecurity bill, final IssuerProviderInterface marketData) {
+    ArgumentChecker.notNull(bill, "bill");
+    ArgumentChecker.notNull(marketData, "marketData");
+    return BillSecurityDiscountingMethod.getInstance().convexityFromCurves(bill, marketData) / 100;
+  }
+
+  @Override
+  public Double visitBillTransaction(final BillTransaction bill, final IssuerProviderInterface marketData) {
+    ArgumentChecker.notNull(bill, "bill");
+    ArgumentChecker.notNull(marketData, "marketData");
+    return BillSecurityDiscountingMethod.getInstance().convexityFromCurves(bill.getBillPurchased(), marketData) / 100;
   }
 }

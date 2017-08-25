@@ -12,6 +12,7 @@ import static com.opengamma.engine.value.ValueRequirementNames.MODIFIED_DURATION
 import static com.opengamma.engine.value.ValueRequirementNames.PRESENT_VALUE;
 import static com.opengamma.engine.value.ValueRequirementNames.PV01;
 import static com.opengamma.engine.value.ValueRequirementNames.YIELD_CURVE_NODE_SENSITIVITIES;
+import static com.opengamma.engine.value.ValueRequirementNames.YTM;
 
 import java.util.Collections;
 import java.util.Set;
@@ -22,7 +23,6 @@ import com.opengamma.engine.function.FunctionCompilationContext;
 import com.opengamma.engine.target.ComputationTargetType;
 import com.opengamma.engine.value.ValueRequirement;
 import com.opengamma.financial.property.DefaultPropertyFunction;
-import com.opengamma.financial.security.FinancialSecurityUtils;
 import com.opengamma.financial.security.bond.BillSecurity;
 import com.opengamma.financial.security.bond.GovernmentBondSecurity;
 import com.opengamma.util.ArgumentChecker;
@@ -39,7 +39,8 @@ public class GovernmentBondPerCurrencyDefaults extends DefaultPropertyFunction {
       BOND_DETAILS,
       MODIFIED_DURATION,
       MACAULAY_DURATION,
-      CONVEXITY
+      CONVEXITY,
+      YTM
   };
   private final String _currency;
   private final String _curveExposuresName;
@@ -54,7 +55,6 @@ public class GovernmentBondPerCurrencyDefaults extends DefaultPropertyFunction {
   public boolean canApplyTo(final FunctionCompilationContext context, final ComputationTarget target) {
     final Security security = target.getTrade().getSecurity();
     if (security instanceof GovernmentBondSecurity || security instanceof BillSecurity) {
-      final String currency = FinancialSecurityUtils.getCurrency(security).getCode();
       return ((GovernmentBondSecurity) security).getIssuerDomicile().equals(_currency);
     }
     return false;

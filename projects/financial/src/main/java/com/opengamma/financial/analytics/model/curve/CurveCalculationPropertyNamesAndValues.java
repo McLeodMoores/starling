@@ -83,6 +83,12 @@ public final class CurveCalculationPropertyNamesAndValues {
    */
   public static final String PROPERTY_HW_TIMES = "HullWhiteOneFactorTimes";
 
+
+  /**
+   * A Nelson-Siegel curve.
+   */
+  public static final String NELSON_SIEGEL = "NelsonSeigel";
+
   private CurveCalculationPropertyNamesAndValues() {
   }
 }

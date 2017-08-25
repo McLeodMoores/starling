@@ -1,0 +1,3 @@
+# Bond
+name,issuer name,issuer type,issuer domicile,market,currency,last trade date,yield convention,coupon type,coupon rate,coupon frequency,day count convention,interest accrual date,settlement date,first coupon date,issuance price, total amount issued,minimum amount,minimum increment,par amount,redemption value,quantity,counterparty id,trade date,trade time,premium date,premium time,identifiers
+AUG 2017 USD 3Y NOTE @ 1.15%,US TREASURY N/B,Sovereign,US,US GOVERNMENT,USD,2020-08-15,US street,FIXED,1.15,P6M,ACT/ACT ICMA,2017-08-15,2017-08-15,2018-02-15,100,100000000000,100,100,100,100,100000,COUNTER_PARTY~USGVT,2017-08-15,11:00,2017-08-15,11:00,ISIN~USN000000001,OG_SYNTHETIC_TICKER~USN000000001
