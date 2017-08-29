@@ -5,7 +5,9 @@ package com.mcleodmoores.examples.simulated.loader.portfolio;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.OutputStreamWriter;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -20,6 +22,7 @@ import org.threeten.bp.OffsetTime;
 import org.threeten.bp.Period;
 import org.threeten.bp.ZoneOffset;
 import org.threeten.bp.ZonedDateTime;
+import org.threeten.bp.format.DateTimeFormatter;
 
 import com.opengamma.component.tool.AbstractTool;
 import com.opengamma.core.id.ExternalSchemes;
@@ -57,6 +60,7 @@ import com.opengamma.util.time.Expiry;
 import com.opengamma.util.time.ExpiryAccuracy;
 
 import au.com.bytecode.opencsv.CSVReader;
+import au.com.bytecode.opencsv.CSVWriter;
 
 /**
  *
@@ -67,10 +71,13 @@ public class ExamplesBondAndFuturePortfolioLoader extends AbstractTool<ToolConte
   private static final ZoneOffset ZONE = ZoneOffset.UTC;
   private final String _portfolioName;
   private final File _tradeFile;
+  private final boolean _updateTrades;
+  private static final int UPDATE_AFTER_DAY = 15;
 
-  public ExamplesBondAndFuturePortfolioLoader(final String portfolioName, final String tradeFileName) {
+  public ExamplesBondAndFuturePortfolioLoader(final String portfolioName, final String tradeFileName, final boolean updateTrades) {
     _portfolioName = ArgumentChecker.notNull(portfolioName, "portfolioName");
     _tradeFile = new File(ArgumentChecker.notNull(tradeFileName, "tradeFileName"));
+    _updateTrades = updateTrades;
   }
 
   @Override
@@ -115,6 +122,74 @@ public class ExamplesBondAndFuturePortfolioLoader extends AbstractTool<ToolConte
       createPortfolio(context, trades, _portfolioName);
     } catch (final Exception e) {
       LOGGER.error(e.getMessage());
+    }
+    if (_updateTrades) {
+      final List<String[]> updatedLines = new ArrayList<>();
+      try (CSVReader reader = new CSVReader(new BufferedReader(new FileReader(_tradeFile)))) {
+        String[] line = reader.readNext();
+        String label = "";
+        while (line != null && line.length > 0) {
+          if (line[0].startsWith("#")) {
+            label = line[0].toUpperCase();
+            updatedLines.add(line);
+            line = reader.readNext(); // ignore the headers
+            updatedLines.add(line);
+            line = reader.readNext();
+            updatedLines.add(line);
+          }
+          final String[] updatedLine = new String[line.length];
+          if (label.contains("BOND")) {
+            if (label.contains("FUTURE")) {
+            } else {
+              final LocalDate settlementDate = LocalDate.parse(line[13]);
+              final Period diff = settlementDate.until(LocalDate.now());
+              final int yearDiff = diff.getYears();
+              final int monthDiff = diff.getMonths();
+              if (monthDiff > 0 || yearDiff > 0) {
+                final Period offset = Period.ofYears(yearDiff).plusMonths(monthDiff);
+                System.arraycopy(line, 0, updatedLine, 0, line.length);
+                updatedLine[6] = LocalDate.parse(line[6]).plus(offset).format(DateTimeFormatter.ISO_DATE);
+                updatedLine[12] = LocalDate.parse(line[12]).plus(offset).format(DateTimeFormatter.ISO_DATE);
+                updatedLine[13] = settlementDate.plus(offset).format(DateTimeFormatter.ISO_DATE);
+                updatedLine[14] = LocalDate.parse(line[14]).plus(offset).format(DateTimeFormatter.ISO_DATE);
+                updatedLine[23] = LocalDate.parse(line[23]).plus(offset).format(DateTimeFormatter.ISO_DATE);
+                updatedLine[25] = LocalDate.parse(line[25]).plus(offset).format(DateTimeFormatter.ISO_DATE);
+              }
+            }
+          } else if (label.contains("BILL")) {
+            final LocalDate settlementDate = LocalDate.parse(line[9]);
+            final Period diff = settlementDate.until(LocalDate.now());
+            final int yearDiff = diff.getYears();
+            final int monthDiff = diff.getMonths();
+            if (monthDiff > 0 || yearDiff > 0) {
+              final Period offset = Period.ofYears(yearDiff).plusMonths(monthDiff);
+              System.arraycopy(line, 0, updatedLine, 0, line.length);
+              updatedLine[6] = LocalDate.parse(line[6]).plus(offset).format(DateTimeFormatter.ISO_DATE);
+              updatedLine[9] = settlementDate.plus(offset).format(DateTimeFormatter.ISO_DATE);
+              updatedLine[15] = LocalDate.parse(line[15]).plus(offset).format(DateTimeFormatter.ISO_DATE);
+              updatedLine[17] = LocalDate.parse(line[17]).plus(offset).format(DateTimeFormatter.ISO_DATE);
+            }
+          } else {
+            LOGGER.error("Unknown trade type {}", label);
+          }
+          updatedLines.add(updatedLine);
+          line = reader.readNext();
+        }
+      } catch (final Exception e) {
+        LOGGER.error(e.getMessage());
+      }
+      final String absolutePath = _tradeFile.getAbsolutePath();
+      final boolean deleted = _tradeFile.delete();
+      if (!deleted) {
+        LOGGER.error("Could not delete {} when trying to update positions: file will be unchanged", absolutePath);
+        return;
+      }
+      final File newFile = new File(absolutePath);
+      try (CSVWriter writer = new CSVWriter(new OutputStreamWriter(new FileOutputStream(newFile)))) {
+        writer.writeAll(updatedLines);
+      } catch (final Exception e) {
+        LOGGER.error(e.getMessage());
+      }
     }
   }
 
@@ -195,7 +270,7 @@ public class ExamplesBondAndFuturePortfolioLoader extends AbstractTool<ToolConte
       final ExternalId regionId = ExternalSchemes.countryRegionId(Country.of(issuerDomicile));
       final BillSecurity security;
       if (issuerType.equalsIgnoreCase("Sovereign")) {
-        security = new BillSecurity(currency, lastTradeDate, settlementDate.minusDays(daysToSettle), minimumIncrement, daysToSettle,
+        security = new BillSecurity(currency, lastTradeDate, settlementDate, minimumIncrement, daysToSettle,
             regionId, yieldConvention, dayCount, legalEntityId);
       } else {
         LOGGER.error("Unhandled issuer type {}", issuerType);

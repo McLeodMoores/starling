@@ -352,7 +352,7 @@ public class ExamplesDatabasePopulator extends AbstractTool<ToolContext> {
     try {
       final URL resource = ExamplesBondAndFuturePortfolioLoader.class.getResource("usd-bond-and-futures.csv");
       final String file = unpackJar(resource);
-      final ExamplesBondAndFuturePortfolioLoader loader = new ExamplesBondAndFuturePortfolioLoader(USD_TREASURIES_PORTFOLIO_NAME, file);
+      final ExamplesBondAndFuturePortfolioLoader loader = new ExamplesBondAndFuturePortfolioLoader(USD_TREASURIES_PORTFOLIO_NAME, file, true);
       loader.run(getToolContext());
       log.done();
     } catch (final RuntimeException t) {
