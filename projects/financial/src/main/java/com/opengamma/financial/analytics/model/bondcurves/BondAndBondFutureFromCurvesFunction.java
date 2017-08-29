@@ -11,7 +11,6 @@ import static com.opengamma.engine.value.ValuePropertyNames.CURVE_EXPOSURES;
 import static com.opengamma.engine.value.ValueRequirementNames.CURVE_BUNDLE;
 import static com.opengamma.engine.value.ValueRequirementNames.JACOBIAN_BUNDLE;
 import static com.opengamma.financial.analytics.model.CalculationPropertyNamesAndValues.CURVES_METHOD;
-import static com.opengamma.financial.analytics.model.curve.CurveCalculationPropertyNamesAndValues.ISSUER;
 import static com.opengamma.financial.analytics.model.curve.CurveCalculationPropertyNamesAndValues.PROPERTY_CURVE_TYPE;
 
 import java.util.Collection;
@@ -126,11 +125,6 @@ public abstract class BondAndBondFutureFromCurvesFunction<S extends ParameterIss
       return null;
     }
     final Set<String> curveTypes = constraints.getValues(PROPERTY_CURVE_TYPE);
-    if (curveTypes == null || curveTypes.size() != 1) {
-      return null;
-    }
-    final Set<String> typesWithIssuerProperty = new HashSet<>(curveTypes);
-    typesWithIssuerProperty.add(ISSUER);
     final FinancialSecurity security = (FinancialSecurity) target.getTrade().getSecurity();
     final Set<ValueRequirement> requirements = new HashSet<>();
     try {
@@ -142,10 +136,12 @@ public abstract class BondAndBondFutureFromCurvesFunction<S extends ParameterIss
           return null;
         }
         for (final String curveConstructionConfigurationName : curveConstructionConfigurationNames) {
-          final ValueProperties properties = ValueProperties.builder()
-              .with(CURVE_CONSTRUCTION_CONFIG, curveConstructionConfigurationName)
-              .with(PROPERTY_CURVE_TYPE, typesWithIssuerProperty)
-              .get();
+          ValueProperties.Builder builder = ValueProperties.builder()
+              .with(CURVE_CONSTRUCTION_CONFIG, curveConstructionConfigurationName);
+          if (curveTypes != null && !curveTypes.isEmpty()) {
+            builder = builder.with(PROPERTY_CURVE_TYPE, curveTypes);
+          }
+          final ValueProperties properties = builder.get();
           requirements.add(new ValueRequirement(CURVE_BUNDLE, ComputationTargetSpecification.NULL, properties));
           requirements.add(new ValueRequirement(JACOBIAN_BUNDLE, ComputationTargetSpecification.NULL, properties));
         }
@@ -154,7 +150,6 @@ public abstract class BondAndBondFutureFromCurvesFunction<S extends ParameterIss
       requirements.addAll(BondAndBondFutureFunctionUtils.getConversionRequirements(security, timeSeriesResolver));
       return requirements;
     } catch (final Exception e) {
-      e.printStackTrace(System.err);
       LOGGER.error(e.getMessage());
       return null;
     }

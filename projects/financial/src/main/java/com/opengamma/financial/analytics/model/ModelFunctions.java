@@ -155,7 +155,8 @@ public class ModelFunctions extends AbstractFunctionConfigurationBean {
    * @return A configuration source containing curve functions
    */
   protected FunctionConfigurationSource curveFunctionConfiguration() {
-    return CurveFunctions.instance();
+    return CombiningFunctionConfigurationSource.of(CurveFunctions.instance(),
+        com.mcleodmoores.financial.function.curve.config.CurveFunctions.instance());
   }
 
   /**

@@ -21,6 +21,11 @@ public final class CurveCalculationPropertyNamesAndValues {
   public static final String ROOT_FINDING = "RootFinding";
 
   /**
+   * Property value indicating that the curve calculation method is non-linear least square.
+   */
+  public static final String NON_LINEAR_LEAST_SQUARE = "NonLinearLeastSquare";
+
+  /**
    * Property value indicating that the curves were created using the market data quotes directly.
    */
   public static final String DIRECT = "Direct";
@@ -87,7 +92,7 @@ public final class CurveCalculationPropertyNamesAndValues {
   /**
    * A Nelson-Siegel curve.
    */
-  public static final String NELSON_SIEGEL = "NelsonSeigel";
+  public static final String NELSON_SIEGEL = "NelsonSiegel";
 
   private CurveCalculationPropertyNamesAndValues() {
   }

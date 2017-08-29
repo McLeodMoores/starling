@@ -21,8 +21,6 @@ import static com.opengamma.engine.value.ValueRequirementNames.FX_MATRIX;
 import static com.opengamma.engine.value.ValueRequirementNames.JACOBIAN_BUNDLE;
 import static com.opengamma.engine.value.ValueRequirementNames.YIELD_CURVE;
 import static com.opengamma.financial.analytics.model.curve.CurveCalculationPropertyNamesAndValues.DISCOUNTING;
-import static com.opengamma.financial.analytics.model.curve.CurveCalculationPropertyNamesAndValues.ISSUER;
-import static com.opengamma.financial.analytics.model.curve.CurveCalculationPropertyNamesAndValues.PROPERTY_CURVE_TYPE;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -84,7 +82,6 @@ import com.opengamma.engine.function.FunctionInputs;
 import com.opengamma.engine.value.ComputedValue;
 import com.opengamma.engine.value.ValueProperties;
 import com.opengamma.engine.value.ValueRequirement;
-import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.financial.OpenGammaExecutionContext;
 import com.opengamma.financial.analytics.conversion.BondAndBondFutureTradeWithEntityConverter;
@@ -201,7 +198,7 @@ MultiCurveFunction<ParameterIssuerProviderInterface, IssuerDiscountBuildingRepos
     protected MyCompiledFunctionDefinition(final ZonedDateTime earliestInvokation, final ZonedDateTime latestInvokation, final String[] curveNames,
         final Set<ValueRequirement> exogenousRequirements, final CurveConstructionConfiguration curveConstructionConfiguration,
         final String[] currencies) {
-      super(earliestInvokation, latestInvokation, curveNames, ValueRequirementNames.YIELD_CURVE, exogenousRequirements, currencies);
+      super(earliestInvokation, latestInvokation, curveNames, YIELD_CURVE, exogenousRequirements, currencies);
       ArgumentChecker.notNull(curveConstructionConfiguration, "curve construction configuration");
       _curveConstructionConfiguration = curveConstructionConfiguration;
     }
@@ -406,7 +403,7 @@ MultiCurveFunction<ParameterIssuerProviderInterface, IssuerDiscountBuildingRepos
             .withoutAny(CURVE)
             .withoutAny(CURVE_SENSITIVITY_CURRENCY)
             .with(CURVE, curveName)
-            .with(PROPERTY_CURVE_TYPE, ISSUER)
+            //            .with(PROPERTY_CURVE_TYPE, ISSUER)
             .get();
         YieldAndDiscountCurve curve = provider.getIssuerCurve(curveName);
         if (curve == null) {

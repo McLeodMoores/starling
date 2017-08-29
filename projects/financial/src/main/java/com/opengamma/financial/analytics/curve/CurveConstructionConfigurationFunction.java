@@ -5,9 +5,13 @@
  */
 package com.opengamma.financial.analytics.curve;
 
+import static com.opengamma.engine.value.ValuePropertyNames.CURVE;
 import static com.opengamma.engine.value.ValuePropertyNames.CURVE_CONSTRUCTION_CONFIG;
 
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.threeten.bp.Instant;
@@ -27,7 +31,6 @@ import com.opengamma.engine.target.ComputationTargetType;
 import com.opengamma.engine.value.ComputedValue;
 import com.opengamma.engine.value.ValueProperties;
 import com.opengamma.engine.value.ValueRequirement;
-import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.async.AsynchronousExecution;
@@ -58,13 +61,22 @@ public class CurveConstructionConfigurationFunction extends AbstractFunction {
   @Override
   public CompiledFunctionDefinition compile(final FunctionCompilationContext context, final Instant atInstant) {
     final ZonedDateTime atZDT = ZonedDateTime.ofInstant(atInstant, ZoneOffset.UTC);
-    final CurveConstructionConfiguration curveConstructionConfiguration = _curveConstructionConfigurationSource.getCurveConstructionConfiguration(_configurationName);
+    final CurveConstructionConfiguration curveConstructionConfiguration =
+        _curveConstructionConfigurationSource.getCurveConstructionConfiguration(_configurationName);
     if (curveConstructionConfiguration == null) {
       throw new OpenGammaRuntimeException("Could not get curve construction configuration called " + _configurationName);
     }
-    //TODO also return any exogenous configs
-    final ValueProperties properties = createValueProperties().with(CURVE_CONSTRUCTION_CONFIG, _configurationName).get();
-    final ValueSpecification spec = new ValueSpecification(ValueRequirementNames.CURVE_CONSTRUCTION_CONFIG, ComputationTargetSpecification.NULL, properties);
+    final Set<String> curveNames = new HashSet<>();
+    for (final CurveGroupConfiguration group : curveConstructionConfiguration.getCurveGroups()) {
+      for (final Map.Entry<String, List<? extends CurveTypeConfiguration>> entry : group.getTypesForCurves().entrySet()) {
+        curveNames.add(entry.getKey());
+      }
+    }
+    final ValueProperties properties = createValueProperties()
+        .with(CURVE_CONSTRUCTION_CONFIG, _configurationName)
+        .with(CURVE, curveNames)
+        .get();
+    final ValueSpecification spec = new ValueSpecification(CURVE_CONSTRUCTION_CONFIG, ComputationTargetSpecification.NULL, properties);
     final Set<ComputedValue> result = Collections.singleton(new ComputedValue(spec, curveConstructionConfiguration));
     return new AbstractInvokingCompiledFunction(atZDT.with(LocalTime.MIDNIGHT), atZDT.plusDays(1).with(LocalTime.MIDNIGHT).minusNanos(1000000)) {
 
@@ -85,7 +97,8 @@ public class CurveConstructionConfigurationFunction extends AbstractFunction {
       }
 
       @Override
-      public Set<ValueRequirement> getRequirements(final FunctionCompilationContext myContext, final ComputationTarget target, final ValueRequirement desiredValue) {
+      public Set<ValueRequirement> getRequirements(final FunctionCompilationContext myContext, final ComputationTarget target,
+          final ValueRequirement desiredValue) {
         return Collections.emptySet();
       }
 

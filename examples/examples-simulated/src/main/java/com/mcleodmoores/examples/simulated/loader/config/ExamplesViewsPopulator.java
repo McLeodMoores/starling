@@ -54,6 +54,7 @@ import static com.opengamma.financial.analytics.model.CalculationPropertyNamesAn
 import static com.opengamma.financial.analytics.model.InstrumentTypeProperties.FOREX;
 import static com.opengamma.financial.analytics.model.InstrumentTypeProperties.PROPERTY_SURFACE_INSTRUMENT_TYPE;
 import static com.opengamma.financial.analytics.model.curve.CurveCalculationPropertyNamesAndValues.DISCOUNTING;
+import static com.opengamma.financial.analytics.model.curve.CurveCalculationPropertyNamesAndValues.NELSON_SIEGEL;
 import static com.opengamma.financial.analytics.model.curve.CurveCalculationPropertyNamesAndValues.PROPERTY_CURVE_TYPE;
 
 import java.util.HashSet;
@@ -618,20 +619,40 @@ public class ExamplesViewsPopulator extends AbstractTool<ToolContext> {
     viewDefinition.setMinDeltaCalculationPeriod(MIN_DELTA_PERIOD);
     viewDefinition.setMinFullCalculationPeriod(MIN_FULL_PERIOD);
     final ViewCalculationConfiguration calcConfig = new ViewCalculationConfiguration(viewDefinition, DEFAULT_CALC_CONFIG);
-    final ValueProperties properties = ValueProperties.builder()
+    final ValueProperties properties1 = ValueProperties.builder()
         .with(PROPERTY_CURVE_TYPE, DISCOUNTING)
         .with(CALCULATION_METHOD, CURVES_METHOD)
         .get();
-    calcConfig.addPortfolioRequirement(BondSecurity.SECURITY_TYPE, PRESENT_VALUE, properties.copy().with(CURRENCY, "USD").get());
-    calcConfig.addPortfolioRequirement(BillSecurity.SECURITY_TYPE, PRESENT_VALUE, properties.copy().with(CURRENCY, "USD").get());
-    calcConfig.addPortfolioRequirement(BondSecurity.SECURITY_TYPE, YTM, properties);
-    calcConfig.addPortfolioRequirement(BillSecurity.SECURITY_TYPE, YTM, properties);
-    calcConfig.addPortfolioRequirement(BondSecurity.SECURITY_TYPE, MODIFIED_DURATION, properties);
-    calcConfig.addPortfolioRequirement(BillSecurity.SECURITY_TYPE, MODIFIED_DURATION, properties);
-    calcConfig.addPortfolioRequirement(BondSecurity.SECURITY_TYPE, MACAULAY_DURATION, properties);
-    calcConfig.addPortfolioRequirement(BillSecurity.SECURITY_TYPE, MACAULAY_DURATION, properties);
-    calcConfig.addPortfolioRequirement(BondSecurity.SECURITY_TYPE, BOND_DETAILS, properties);
-    calcConfig.addPortfolioRequirement(BillSecurity.SECURITY_TYPE, BOND_DETAILS, properties);
+    final ValueProperties properties2 = ValueProperties.builder()
+        .with(PROPERTY_CURVE_TYPE, NELSON_SIEGEL)
+        .with(CALCULATION_METHOD, CURVES_METHOD)
+        .get();
+    calcConfig.addSpecificRequirement(
+        new ValueRequirement(YIELD_CURVE, ComputationTargetSpecification.NULL,
+            ValueProperties.with(PROPERTY_CURVE_TYPE, DISCOUNTING).with(CURVE_CONSTRUCTION_CONFIG, "US Treasury").get()));
+    calcConfig.addSpecificRequirement(
+        new ValueRequirement(YIELD_CURVE, ComputationTargetSpecification.NULL,
+            ValueProperties.with(PROPERTY_CURVE_TYPE, NELSON_SIEGEL).with(CURVE_CONSTRUCTION_CONFIG, "US Treasury").get()));
+    calcConfig.addPortfolioRequirement(BondSecurity.SECURITY_TYPE, PRESENT_VALUE, properties1.copy().with(CURRENCY, "USD").get());
+    calcConfig.addPortfolioRequirement(BondSecurity.SECURITY_TYPE, PRESENT_VALUE, properties2.copy().with(CURRENCY, "USD").get());
+    calcConfig.addPortfolioRequirement(BillSecurity.SECURITY_TYPE, PRESENT_VALUE, properties1.copy().with(CURRENCY, "USD").get());
+    calcConfig.addPortfolioRequirement(BillSecurity.SECURITY_TYPE, PRESENT_VALUE, properties2.copy().with(CURRENCY, "USD").get());
+    calcConfig.addPortfolioRequirement(BondSecurity.SECURITY_TYPE, YTM, properties1);
+    calcConfig.addPortfolioRequirement(BondSecurity.SECURITY_TYPE, YTM, properties2);
+    calcConfig.addPortfolioRequirement(BillSecurity.SECURITY_TYPE, YTM, properties1);
+    calcConfig.addPortfolioRequirement(BillSecurity.SECURITY_TYPE, YTM, properties2);
+    calcConfig.addPortfolioRequirement(BondSecurity.SECURITY_TYPE, MODIFIED_DURATION, properties1);
+    calcConfig.addPortfolioRequirement(BondSecurity.SECURITY_TYPE, MODIFIED_DURATION, properties2);
+    calcConfig.addPortfolioRequirement(BillSecurity.SECURITY_TYPE, MODIFIED_DURATION, properties1);
+    calcConfig.addPortfolioRequirement(BillSecurity.SECURITY_TYPE, MODIFIED_DURATION, properties2);
+    calcConfig.addPortfolioRequirement(BondSecurity.SECURITY_TYPE, MACAULAY_DURATION, properties1);
+    calcConfig.addPortfolioRequirement(BondSecurity.SECURITY_TYPE, MACAULAY_DURATION, properties2);
+    calcConfig.addPortfolioRequirement(BillSecurity.SECURITY_TYPE, MACAULAY_DURATION, properties1);
+    calcConfig.addPortfolioRequirement(BillSecurity.SECURITY_TYPE, MACAULAY_DURATION, properties2);
+    calcConfig.addPortfolioRequirement(BondSecurity.SECURITY_TYPE, BOND_DETAILS, properties1);
+    calcConfig.addPortfolioRequirement(BondSecurity.SECURITY_TYPE, BOND_DETAILS, properties2);
+    calcConfig.addPortfolioRequirement(BillSecurity.SECURITY_TYPE, BOND_DETAILS, properties1);
+    calcConfig.addPortfolioRequirement(BillSecurity.SECURITY_TYPE, BOND_DETAILS, properties2);
     viewDefinition.addViewCalculationConfiguration(calcConfig);
     return viewDefinition;
   }
