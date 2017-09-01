@@ -279,7 +279,15 @@ public class ISDACompliantYieldCurveBuild {
       return curve;
     }
     final double[] bracket = BRACKETER.getBracketedPoints(func, 0.8 * guess, 1.25 * guess, -5, Double.POSITIVE_INFINITY);
-    final double r = ROOTFINDER.getRoot(func, grad, bracket[0], bracket[1]);
+    final double lower, upper;
+    if (bracket[0] < bracket[1]) {
+      lower = bracket[0];
+      upper = bracket[1];
+    } else {
+      lower = bracket[1];
+      upper = bracket[0];
+    }
+    final double r = ROOTFINDER.getRoot(func, grad, lower, upper);
     return curve.withRate(r, curveIndex);
   }
 
