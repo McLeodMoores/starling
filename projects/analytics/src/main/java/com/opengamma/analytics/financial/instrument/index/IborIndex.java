@@ -13,6 +13,7 @@ import java.util.Objects;
 
 import org.threeten.bp.Period;
 
+import com.mcleodmoores.analytics.financial.index.IborTypeIndex;
 import com.opengamma.financial.convention.businessday.BusinessDayConvention;
 import com.opengamma.financial.convention.daycount.DayCount;
 import com.opengamma.util.money.Currency;

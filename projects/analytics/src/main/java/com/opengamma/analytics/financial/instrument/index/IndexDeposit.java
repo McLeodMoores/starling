@@ -7,6 +7,7 @@ package com.opengamma.analytics.financial.instrument.index;
 
 import org.apache.commons.lang.ObjectUtils;
 
+import com.mcleodmoores.analytics.financial.index.Index;
 import com.opengamma.util.money.Currency;
 
 /**

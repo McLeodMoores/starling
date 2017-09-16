@@ -11,6 +11,7 @@ package com.opengamma.analytics.financial.instrument.index;
 
 import org.apache.commons.lang.ObjectUtils;
 
+import com.mcleodmoores.analytics.financial.index.OvernightIndex;
 import com.opengamma.financial.convention.daycount.DayCount;
 import com.opengamma.util.money.Currency;
 

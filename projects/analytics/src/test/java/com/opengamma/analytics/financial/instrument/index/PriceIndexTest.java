@@ -10,6 +10,7 @@ import static org.testng.Assert.assertNotEquals;
 import org.testng.annotations.Test;
 import org.testng.annotations.Test;
 
+import com.mcleodmoores.analytics.financial.index.PriceIndex;
 import com.opengamma.util.money.Currency;
 import com.opengamma.util.money.Currency;
 

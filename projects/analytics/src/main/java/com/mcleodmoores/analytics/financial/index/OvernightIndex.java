@@ -1,7 +1,7 @@
 /**
  * Copyright (C) 2015 - present McLeod Moores Software Limited.  All rights reserved.
  */
-package com.opengamma.analytics.financial.instrument.index;
+package com.mcleodmoores.analytics.financial.index;
 
 import java.util.Objects;
 

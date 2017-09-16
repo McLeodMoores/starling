@@ -1,7 +1,7 @@
 /**
  * Copyright (C) 2015 - present McLeod Moores Software Limited.  All rights reserved.
  */
-package com.opengamma.analytics.financial.instrument.index;
+package com.mcleodmoores.analytics.financial.index;
 
 import java.util.Objects;
 
@@ -34,7 +34,8 @@ public class SwapIndex extends Index {
    * @param iborIndex  the ibor index, not null
    * @param tenor  the swap tenor, not null
    */
-  public SwapIndex(final String name, final Currency currency, final Tenor fixedLegPaymentTenor, final DayCount fixedLegDayCount, final IborTypeIndex iborIndex, final Tenor tenor) {
+  public SwapIndex(final String name, final Currency currency, final Tenor fixedLegPaymentTenor, final DayCount fixedLegDayCount, final IborTypeIndex iborIndex,
+      final Tenor tenor) {
     super(name, currency);
     // TODO swap generator
     _fixedLegPaymentTenor = ArgumentChecker.notNull(fixedLegPaymentTenor, "fixedLegPaymentTenor");
