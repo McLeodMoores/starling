@@ -172,7 +172,7 @@ public class UsdDiscountingGovernment3Test extends CurveBuildingTests {
   /** The curve builder */
   private static final DiscountingMethodBondCurveSetUp BUILDER_FOR_TEST = DiscountingMethodBondCurveBuilder.setUp()
       .building(CURVE_NAME_DSC_USD, CURVE_NAME_GOVTUS_USD)
-      .using(CURVE_NAME_DSC_USD).forDiscounting(Currency.USD).forOvernightIndex(FED_FUNDS_INDEX).withInterpolator(INTERPOLATOR)
+      .using(CURVE_NAME_DSC_USD).forDiscounting(Currency.USD).forOvernightIndex(FED_FUNDS_INDEX.toOvernightIndex()).withInterpolator(INTERPOLATOR)
       .using(CURVE_NAME_GOVTUS_USD).forIssuer(Pairs.<Object, LegalEntityFilter<LegalEntity>>of(NAME_COUNTERPART, new LegalEntityShortName()))
             .withInterpolator(INTERPOLATOR)
       .withKnownData(KNOWN_DATA);

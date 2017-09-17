@@ -5,6 +5,8 @@ package com.mcleodmoores.analytics.financial.curve.interestrate;
 
 import org.threeten.bp.ZonedDateTime;
 
+import com.mcleodmoores.analytics.financial.index.IborTypeIndex;
+import com.mcleodmoores.analytics.financial.index.OvernightIndex;
 import com.opengamma.analytics.financial.curve.interestrate.generator.GeneratorCurveAddYieldExisiting;
 import com.opengamma.analytics.financial.curve.interestrate.generator.GeneratorCurveDiscountFactorInterpolated;
 import com.opengamma.analytics.financial.curve.interestrate.generator.GeneratorCurveDiscountFactorInterpolatedNode;
@@ -13,8 +15,6 @@ import com.opengamma.analytics.financial.curve.interestrate.generator.GeneratorC
 import com.opengamma.analytics.financial.curve.interestrate.generator.GeneratorCurveYieldNelsonSiegel;
 import com.opengamma.analytics.financial.curve.interestrate.generator.GeneratorCurveYieldPeriodicInterpolated;
 import com.opengamma.analytics.financial.curve.interestrate.generator.GeneratorYDCurve;
-import com.opengamma.analytics.financial.instrument.index.IborIndex;
-import com.opengamma.analytics.financial.instrument.index.IndexON;
 import com.opengamma.analytics.financial.interestrate.InstrumentDerivativeVisitor;
 import com.opengamma.analytics.financial.legalentity.LegalEntity;
 import com.opengamma.analytics.financial.legalentity.LegalEntityFilter;
@@ -58,7 +58,7 @@ public class DiscountingMethodBondCurveTypeSetUp extends DiscountingMethodBondCu
   //TODO versions that only take a single index
   //TODO should store currency, indices in this object rather than in super class
   @Override
-  public DiscountingMethodBondCurveTypeSetUp forIborIndex(final IborIndex... indices) {
+  public DiscountingMethodBondCurveTypeSetUp forIborIndex(final IborTypeIndex... indices) {
     _iborCurves.put(_curveName, indices);
     return this;
   }
@@ -70,7 +70,7 @@ public class DiscountingMethodBondCurveTypeSetUp extends DiscountingMethodBondCu
   }
 
   @Override
-  public DiscountingMethodBondCurveTypeSetUp forOvernightIndex(final IndexON... indices) {
+  public DiscountingMethodBondCurveTypeSetUp forOvernightIndex(final OvernightIndex... indices) {
     _overnightCurves.put(_curveName, indices);
     return this;
   }

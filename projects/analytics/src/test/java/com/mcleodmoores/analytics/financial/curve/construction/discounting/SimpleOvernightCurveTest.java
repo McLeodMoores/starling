@@ -85,7 +85,7 @@ public class SimpleOvernightCurveTest {
   private static final MulticurveProviderDiscount KNOWN_DATA = new MulticurveProviderDiscount(new FXMatrix());
   private static final DiscountingMethodCurveSetUp CURVE_BUILDER = DiscountingMethodCurveBuilder.setUp()
       .building(CURVE_NAME)
-      .using(CURVE_NAME).forDiscounting(Currency.USD).forOvernightIndex(IndexConverter.toIndexOn(INDEX)).withInterpolator(INTERPOLATOR)
+      .using(CURVE_NAME).forDiscounting(Currency.USD).forOvernightIndex(INDEX).withInterpolator(INTERPOLATOR)
       .withKnownData(KNOWN_DATA)
       .withFixingTs(FIXINGS);
 

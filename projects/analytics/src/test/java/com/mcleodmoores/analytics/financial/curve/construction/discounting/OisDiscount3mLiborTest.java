@@ -93,9 +93,8 @@ public class OisDiscount3mLiborTest {
   private static final VanillaFixedIborSwapConvention FIXED_LIBOR = VanillaFixedIborSwapConvention.builder()
       .withCalendar(WeekendWorkingDayCalendar.SATURDAY_SUNDAY)
       .withFixedLegDayCount(DayCounts.THIRTY_U_360)
-      .withFixedLegPaymentPeriod(Tenor.SIX_MONTHS)
-      .withFromEnd(false)
-      .withShortStub(false)
+      .withFixedLegPaymentTenor(Tenor.SIX_MONTHS)
+      .withStub(StubType.SHORT_START)
       .withUnderlyingIndex(LIBOR_INDEX)
       .build();
   private static final ZonedDateTimeDoubleTimeSeries OVERNIGHT_FIXINGS = ImmutableZonedDateTimeDoubleTimeSeries.ofUTC(
@@ -114,8 +113,8 @@ public class OisDiscount3mLiborTest {
 
   private static final MulticurveProviderDiscount KNOWN_DATA = new MulticurveProviderDiscount(new FXMatrix());
   private static final DiscountingMethodCurveSetUp CURVE_BUILDER = DiscountingMethodCurveBuilder.setUp()
-      .building(OIS_CURVE_NAME).using(OIS_CURVE_NAME).forDiscounting(Currency.USD).forOvernightIndex(IndexConverter.toIndexOn(FED_FUNDS_INDEX)).withInterpolator(INTERPOLATOR)
-      .thenBuilding(LIBOR_CURVE_NAME).using(LIBOR_CURVE_NAME).forIborIndex(IndexConverter.toIborIndex(LIBOR_INDEX)).withInterpolator(INTERPOLATOR)
+      .building(OIS_CURVE_NAME).using(OIS_CURVE_NAME).forDiscounting(Currency.USD).forOvernightIndex(FED_FUNDS_INDEX).withInterpolator(INTERPOLATOR)
+      .thenBuilding(LIBOR_CURVE_NAME).using(LIBOR_CURVE_NAME).forIborIndex(LIBOR_INDEX).withInterpolator(INTERPOLATOR)
       .withKnownData(KNOWN_DATA)
       .withFixingTs(FIXINGS);
 

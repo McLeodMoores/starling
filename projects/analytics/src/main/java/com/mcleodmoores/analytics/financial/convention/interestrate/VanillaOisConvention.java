@@ -32,35 +32,31 @@ import com.opengamma.util.time.Tenor;
  * </ul>
  */
 public class VanillaOisConvention implements CurveDataConvention<SwapFixedONDefinition> {
-  //  private final BusinessDayConvention _businessDayConvention;
-  //  private final boolean _endOfMonth;
-  //  private final WorkingDayCalendar _swapLegCalendar;
-  //  private final Tenor _swapLegPaymentTenor;
-  //  private final boolean _isShortStub;
-  //  private final boolean _isLegGeneratedFromEnd;
-  //  private final int _swapLegPaymentLag;
-  //  private final int _swapLegSpotLag;
-  //  private final IndexON _underlyingIndex;
 
   /**
-   * Gets the builder.
-   * @return
+   * Gets the convention builder.
+   * @return  the builder
    */
   public static VanillaOisConvention.Builder builder() {
     return new Builder();
   }
 
+  /**
+   * A builder for this convention.
+   */
   public static class Builder {
     private BusinessDayConvention _businessDayConvention;
-    private WorkingDayCalendar _swapLegCalendar;
+    private WorkingDayCalendar _calendar;
     private Tenor _swapLegPaymentTenor;
     private StubType _stubType;
-    private boolean _isLegGeneratedFromEnd;
     private int _swapLegPaymentLag;
     private int _swapLegSpotLag;
     private OvernightIndex _underlyingIndex;
     private EndOfMonthConvention _endOfMonthConvention;
 
+    /**
+     * Constructs the builder.
+     */
     /* package */ Builder() {
     }
 
@@ -75,7 +71,7 @@ public class VanillaOisConvention implements CurveDataConvention<SwapFixedONDefi
     }
 
     public Builder withCalendar(final WorkingDayCalendar calendar) {
-      _swapLegCalendar = calendar;
+      _calendar = calendar;
       return this;
     }
 
@@ -86,11 +82,6 @@ public class VanillaOisConvention implements CurveDataConvention<SwapFixedONDefi
 
     public Builder withStubType(final StubType stubType) {
       _stubType = stubType;
-      return this;
-    }
-
-    public Builder isFromEnd(final boolean isFromEnd) {
-      _isLegGeneratedFromEnd = isFromEnd;
       return this;
     }
 
@@ -110,7 +101,7 @@ public class VanillaOisConvention implements CurveDataConvention<SwapFixedONDefi
     }
 
     public VanillaOisConvention build() {
-      return new VanillaOisConvention(_businessDayConvention, _swapLegCalendar, _swapLegPaymentTenor, _isLegGeneratedFromEnd, _swapLegPaymentLag,
+      return new VanillaOisConvention(_businessDayConvention, _calendar, _swapLegPaymentTenor, _swapLegPaymentLag,
           _swapLegSpotLag, _underlyingIndex, _stubType, _endOfMonthConvention);
     }
   }
@@ -123,13 +114,12 @@ public class VanillaOisConvention implements CurveDataConvention<SwapFixedONDefi
   private final boolean _isLegGeneratedFromEnd;
   private final int _swapLegPaymentLag;
   private final int _swapLegSpotLag;
-  private final IndexON _underlyingIndex;
+  private final OvernightIndex _underlyingIndex;
 
   /**
    * @param businessDayConvention  the swap leg business day convention
    * @param swapLegCalendar  the swap leg holiday calendar
    * @param swapLegPaymentTenor  the swap leg payment tenor
-   * @param isLegGeneratedFromEnd  true if the swap payments are generated from the maturity date
    * @param swapLegPaymentLag  the payment lag of the swap leg
    * @param swapLegSpotLag  the lag to the settlement date
    * @param underlyingIndex  the underlying overnight index
@@ -137,23 +127,33 @@ public class VanillaOisConvention implements CurveDataConvention<SwapFixedONDefi
    * @param endOfMonth  how dates at the end of months are handled
    */
   /* package */VanillaOisConvention(final BusinessDayConvention businessDayConvention, final WorkingDayCalendar swapLegCalendar,
-      final Tenor swapLegPaymentTenor, final boolean isLegGeneratedFromEnd, final int swapLegPaymentLag, final int swapLegSpotLag,
+      final Tenor swapLegPaymentTenor, final int swapLegPaymentLag, final int swapLegSpotLag,
       final OvernightIndex underlyingIndex, final StubType stubType, final EndOfMonthConvention endOfMonth) {
     _businessDayConvention = businessDayConvention;
     _swapLegCalendar = swapLegCalendar;
     _swapLegPaymentTenor = swapLegPaymentTenor;
-    _isLegGeneratedFromEnd = isLegGeneratedFromEnd;
     _swapLegPaymentLag = swapLegPaymentLag;
     _swapLegSpotLag = swapLegSpotLag;
-    _underlyingIndex = IndexConverter.toIndexOn(underlyingIndex);
+    _underlyingIndex = underlyingIndex;
     switch (stubType) {
       case NONE:
+        _isLegGeneratedFromEnd = false;
+        _isShortStub = false;
+        break;
       case LONG_START:
+        _isLegGeneratedFromEnd = true;
+        _isShortStub = false;
+        break;
       case LONG_END:
+        _isLegGeneratedFromEnd = false;
         _isShortStub = false;
         break;
       case SHORT_START:
+        _isLegGeneratedFromEnd = true;
+        _isShortStub = true;
+        break;
       case SHORT_END:
+        _isLegGeneratedFromEnd = false;
         _isShortStub = true;
         break;
       default:
@@ -184,15 +184,16 @@ public class VanillaOisConvention implements CurveDataConvention<SwapFixedONDefi
         _isShortStub, _isLegGeneratedFromEnd, _businessDayConvention, _swapLegCalendar, _endOfMonth);
     final CouponONDefinition[] coupons = new CouponONDefinition[fixingPeriodEndDates.length];
     final CouponFixedDefinition[] cpnFixed = new CouponFixedDefinition[fixingPeriodEndDates.length];
-    coupons[0] = CouponONDefinition.from(_underlyingIndex, settlementDate, fixingPeriodEndDates[0], notional, _swapLegPaymentLag, holidays);
+    final IndexON index = IndexConverter.toIndexOn(_underlyingIndex);
+    coupons[0] = CouponONDefinition.from(index, settlementDate, fixingPeriodEndDates[0], notional, _swapLegPaymentLag, holidays);
     cpnFixed[0] = new CouponFixedDefinition(currency, coupons[0].getPaymentDate(), coupons[0].getAccrualStartDate(),
         coupons[0].getAccrualEndDate(), coupons[0].getPaymentYearFraction(), -notional, fixedRate);
     for (int i = 1; i < fixingPeriodEndDates.length; i++) {
-      coupons[i] = CouponONDefinition.from(_underlyingIndex, fixingPeriodEndDates[i - 1], fixingPeriodEndDates[i], notional, _swapLegPaymentLag, holidays);
+      coupons[i] = CouponONDefinition.from(index, fixingPeriodEndDates[i - 1], fixingPeriodEndDates[i], notional, _swapLegPaymentLag, holidays);
       cpnFixed[i] = new CouponFixedDefinition(currency, coupons[i].getPaymentDate(), coupons[i].getAccrualStartDate(),
           coupons[i].getAccrualEndDate(), coupons[i].getPaymentYearFraction(), -notional, fixedRate);
     }
-    return new SwapFixedONDefinition(new AnnuityCouponFixedDefinition(cpnFixed, holidays), new AnnuityCouponONDefinition(coupons, _underlyingIndex, holidays));
+    return new SwapFixedONDefinition(new AnnuityCouponFixedDefinition(cpnFixed, holidays), new AnnuityCouponONDefinition(coupons, index, holidays));
   }
 
 }

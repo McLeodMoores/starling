@@ -156,9 +156,9 @@ public class UsdDiscounting3mLibor1Test extends CurveBuildingTests {
   /** The curve builder */
   private static final DiscountingMethodCurveSetUp BUILDER_FOR_TEST = DiscountingMethodCurveBuilder.setUp()
       .buildingFirst(CURVE_NAME_DSC_USD)
-      .using(CURVE_NAME_DSC_USD).forDiscounting(Currency.USD).forOvernightIndex(FED_FUNDS_INDEX).withInterpolator(INTERPOLATOR)
+      .using(CURVE_NAME_DSC_USD).forDiscounting(Currency.USD).forOvernightIndex(FED_FUNDS_INDEX.toOvernightIndex()).withInterpolator(INTERPOLATOR)
       .thenBuilding(CURVE_NAME_FWD3_USD)
-      .using(CURVE_NAME_FWD3_USD).forIborIndex(USD_3M_LIBOR_INDEX).withInterpolator(INTERPOLATOR)
+      .using(CURVE_NAME_FWD3_USD).forIborIndex(USD_3M_LIBOR_INDEX.toIborTypeIndex()).withInterpolator(INTERPOLATOR)
       .withKnownData(KNOWN_DATA);
   // initialize the curve builder with market data for both curves
   static {

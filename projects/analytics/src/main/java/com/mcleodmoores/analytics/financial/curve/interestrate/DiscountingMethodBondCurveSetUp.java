@@ -10,12 +10,12 @@ import java.util.List;
 import java.util.Map;
 
 import com.google.common.collect.LinkedListMultimap;
+import com.mcleodmoores.analytics.financial.index.IborTypeIndex;
 import com.mcleodmoores.analytics.financial.index.Index;
+import com.mcleodmoores.analytics.financial.index.OvernightIndex;
 import com.opengamma.analytics.financial.instrument.InstrumentDefinition;
 import com.opengamma.analytics.financial.instrument.index.GeneratorAttribute;
 import com.opengamma.analytics.financial.instrument.index.GeneratorInstrument;
-import com.opengamma.analytics.financial.instrument.index.IborIndex;
-import com.opengamma.analytics.financial.instrument.index.IndexON;
 import com.opengamma.analytics.financial.legalentity.LegalEntity;
 import com.opengamma.analytics.financial.legalentity.LegalEntityFilter;
 import com.opengamma.analytics.financial.provider.curve.CurveBuildingBlockBundle;
@@ -33,8 +33,8 @@ public class DiscountingMethodBondCurveSetUp implements BondCurveSetUpInterface<
   protected final List<String[]> _curveNames;
   //TODO should these live in curve type setup?
   protected final LinkedHashMap<String, Currency> _discountingCurves;
-  protected final LinkedHashMap<String, IborIndex[]> _iborCurves;
-  protected final LinkedHashMap<String, IndexON[]> _overnightCurves;
+  protected final LinkedHashMap<String, IborTypeIndex[]> _iborCurves;
+  protected final LinkedHashMap<String, OvernightIndex[]> _overnightCurves;
   protected final LinkedListMultimap<String, Pair<Object, LegalEntityFilter<LegalEntity>>> _issuerCurves;
   protected final Map<String, DiscountingMethodBondCurveTypeSetUp> _curveTypes;
   protected final Map<String, Map<Pair<GeneratorInstrument, GeneratorAttribute>, Double>> _nodes;
@@ -74,8 +74,9 @@ public class DiscountingMethodBondCurveSetUp implements BondCurveSetUpInterface<
     _knownBundle = setup._knownBundle;
   }
 
-  protected DiscountingMethodBondCurveSetUp(final List<String[]> curveNames, final LinkedHashMap<String, Currency> discountingCurves, final LinkedHashMap<String, IborIndex[]> iborCurves,
-      final LinkedHashMap<String, IndexON[]> overnightCurves, final LinkedListMultimap<String, Pair<Object, LegalEntityFilter<LegalEntity>>> issuerCurves,
+  protected DiscountingMethodBondCurveSetUp(final List<String[]> curveNames, final LinkedHashMap<String, Currency> discountingCurves,
+      final LinkedHashMap<String, IborTypeIndex[]> iborCurves,
+      final LinkedHashMap<String, OvernightIndex[]> overnightCurves, final LinkedListMultimap<String, Pair<Object, LegalEntityFilter<LegalEntity>>> issuerCurves,
       final Map<String, Map<Pair<GeneratorInstrument, GeneratorAttribute>, Double>> nodes,
       final Map<String, List<InstrumentDefinition<?>>> newNodes,
       final Map<Index, ZonedDateTimeDoubleTimeSeries> fixingTs,

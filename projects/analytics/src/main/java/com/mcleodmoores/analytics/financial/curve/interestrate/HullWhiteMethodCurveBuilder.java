@@ -12,12 +12,15 @@ import java.util.Map;
 import org.threeten.bp.ZonedDateTime;
 
 import com.mcleodmoores.analytics.financial.curve.CurveUtils;
+import com.mcleodmoores.analytics.financial.index.IborTypeIndex;
 import com.mcleodmoores.analytics.financial.index.Index;
+import com.mcleodmoores.analytics.financial.index.OvernightIndex;
 import com.opengamma.analytics.financial.curve.interestrate.generator.GeneratorYDCurve;
 import com.opengamma.analytics.financial.instrument.InstrumentDefinition;
 import com.opengamma.analytics.financial.instrument.index.GeneratorAttribute;
 import com.opengamma.analytics.financial.instrument.index.GeneratorInstrument;
 import com.opengamma.analytics.financial.instrument.index.IborIndex;
+import com.opengamma.analytics.financial.instrument.index.IndexConverter;
 import com.opengamma.analytics.financial.instrument.index.IndexON;
 import com.opengamma.analytics.financial.interestrate.InstrumentDerivative;
 import com.opengamma.analytics.financial.provider.calculator.discounting.ParSpreadMarketQuoteCurveSensitivityDiscountingCalculator;
@@ -56,7 +59,7 @@ public class HullWhiteMethodCurveBuilder extends CurveBuilder<HullWhiteOneFactor
   }
 
   HullWhiteMethodCurveBuilder(final List<String[]> curveNames, final LinkedHashMap<String, Currency> discountingCurves,
-      final LinkedHashMap<String, IborIndex[]> iborCurves, final LinkedHashMap<String, IndexON[]> overnightCurves,
+      final LinkedHashMap<String, IborTypeIndex[]> iborCurves, final LinkedHashMap<String, OvernightIndex[]> overnightCurves,
       final Map<String, Map<Pair<GeneratorInstrument, GeneratorAttribute>, Double>> nodes,
       final Map<String, List<InstrumentDefinition<?>>> newNodes,
       final Map<String, ? extends CurveTypeSetUpInterface<HullWhiteOneFactorProviderDiscount>> curveGenerators,
@@ -68,13 +71,31 @@ public class HullWhiteMethodCurveBuilder extends CurveBuilder<HullWhiteOneFactor
   @Override
   Pair<HullWhiteOneFactorProviderDiscount, CurveBuildingBlockBundle> buildCurves(final MultiCurveBundle[] curveBundles,
       final HullWhiteOneFactorProviderDiscount knownData, final CurveBuildingBlockBundle knownBundle,
-      final LinkedHashMap<String, Currency> discountingCurves, final LinkedHashMap<String, IborIndex[]> iborCurves,
-      final LinkedHashMap<String, IndexON[]> overnightCurves) {
+      final LinkedHashMap<String, Currency> discountingCurves, final LinkedHashMap<String, IborTypeIndex[]> iborCurves,
+      final LinkedHashMap<String, OvernightIndex[]> overnightCurves) {
+    final LinkedHashMap<String, IborIndex[]> convertedIborCurves = new LinkedHashMap<>();
+    for (final Map.Entry<String, IborTypeIndex[]> entry : iborCurves.entrySet()) {
+      final IborIndex[] converted = new IborIndex[entry.getValue().length];
+      int i = 0;
+      for (final IborTypeIndex index : entry.getValue()) {
+        converted[i++] = IndexConverter.toIborIndex(index);
+      }
+      convertedIborCurves.put(entry.getKey(), converted);
+    }
+    final LinkedHashMap<String, IndexON[]> convertedOvernightCurves = new LinkedHashMap<>();
+    for (final Map.Entry<String, OvernightIndex[]> entry : overnightCurves.entrySet()) {
+      final IndexON[] converted = new IndexON[entry.getValue().length];
+      int i = 0;
+      for (final OvernightIndex index : entry.getValue()) {
+        converted[i++] = IndexConverter.toIndexOn(index);
+      }
+      convertedOvernightCurves.put(entry.getKey(), converted);
+    }
     if (knownBundle != null) {
-      return _curveBuildingRepository.makeCurvesFromDerivatives(curveBundles, knownData, knownBundle, discountingCurves, iborCurves, overnightCurves,
+      return _curveBuildingRepository.makeCurvesFromDerivatives(curveBundles, knownData, knownBundle, discountingCurves, convertedIborCurves, convertedOvernightCurves,
           CALCULATOR, SENSITIVITY_CALCULATOR);
     }
-    return _curveBuildingRepository.makeCurvesFromDerivatives(curveBundles, knownData, discountingCurves, iborCurves, overnightCurves, CALCULATOR,
+    return _curveBuildingRepository.makeCurvesFromDerivatives(curveBundles, knownData, discountingCurves, convertedIborCurves, convertedOvernightCurves, CALCULATOR,
         SENSITIVITY_CALCULATOR);
   }
 
@@ -82,8 +103,8 @@ public class HullWhiteMethodCurveBuilder extends CurveBuilder<HullWhiteOneFactor
   CurveBuilder<HullWhiteOneFactorProviderDiscount> replaceMarketQuote(
       final List<String[]> curveNames,
       final LinkedHashMap<String, Currency> discountingCurves,
-      final LinkedHashMap<String, IborIndex[]> iborCurves,
-      final LinkedHashMap<String, IndexON[]> overnightCurves,
+      final LinkedHashMap<String, IborTypeIndex[]> iborCurves,
+      final LinkedHashMap<String, OvernightIndex[]> overnightCurves,
       final Map<String, Map<Pair<GeneratorInstrument, GeneratorAttribute>, Double>> newNodesForCurve,
       final Map<String, ? extends CurveTypeSetUpInterface<HullWhiteOneFactorProviderDiscount>> curveGenerators,
           final HullWhiteOneFactorProviderDiscount knownData,
@@ -127,13 +148,31 @@ public class HullWhiteMethodCurveBuilder extends CurveBuilder<HullWhiteOneFactor
     final MulticurveDiscountBuildingRepository curveBuildingRepository =
         new MulticurveDiscountBuildingRepository(_absoluteTolerance, _relativeTolerance, _maxSteps);
     final MulticurveProviderDiscount knownData = getKnownData().getMulticurveProvider();
+    final LinkedHashMap<String, IborIndex[]> convertedIborCurves = new LinkedHashMap<>();
+    for (final Map.Entry<String, IborTypeIndex[]> entry : getIborCurves().entrySet()) {
+      final IborIndex[] converted = new IborIndex[entry.getValue().length];
+      int i = 0;
+      for (final IborTypeIndex index : entry.getValue()) {
+        converted[i++] = IndexConverter.toIborIndex(index);
+      }
+      convertedIborCurves.put(entry.getKey(), converted);
+    }
+    final LinkedHashMap<String, IndexON[]> convertedOvernightCurves = new LinkedHashMap<>();
+    for (final Map.Entry<String, OvernightIndex[]> entry : getOvernightCurves().entrySet()) {
+      final IndexON[] converted = new IndexON[entry.getValue().length];
+      int i = 0;
+      for (final OvernightIndex index : entry.getValue()) {
+        converted[i++] = IndexConverter.toIndexOn(index);
+      }
+      convertedOvernightCurves.put(entry.getKey(), converted);
+    }
     if (getKnownBundle() != null) {
       return curveBuildingRepository.makeCurvesFromDerivatives(
-          curveBundles, knownData, getKnownBundle(), getDiscountingCurves(), getIborCurves(), getOvernightCurves(),
+          curveBundles, knownData, getKnownBundle(), getDiscountingCurves(), convertedIborCurves, convertedOvernightCurves,
           ParSpreadMarketQuoteDiscountingCalculator.getInstance(), ParSpreadMarketQuoteCurveSensitivityDiscountingCalculator.getInstance());
     }
     return curveBuildingRepository.makeCurvesFromDerivatives(
-        curveBundles, knownData, getDiscountingCurves(), getIborCurves(), getOvernightCurves(),
+        curveBundles, knownData, getDiscountingCurves(), convertedIborCurves, convertedOvernightCurves,
         ParSpreadMarketQuoteDiscountingCalculator.getInstance(), ParSpreadMarketQuoteCurveSensitivityDiscountingCalculator.getInstance());
   }
 }

@@ -108,7 +108,7 @@ public class IborDepositConventionTest {
   }
 
   /**
-   * Tests that the definitions is the same as that produced using the generator.
+   * Tests that the definition is the same as that produced using the generator.
    */
   @Test
   public void testGeneratorEquivalence() {

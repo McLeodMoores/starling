@@ -153,7 +153,7 @@ public class Usd3mLiborKnownDiscountingTest extends CurveBuildingTests {
   /** Builds the discounting curve */
   private static final DiscountingMethodCurveSetUp DSC_BUILDER = DiscountingMethodCurveBuilder.setUp()
       .building(CURVE_NAME_DSC_USD)
-      .using(CURVE_NAME_DSC_USD).forDiscounting(Currency.USD).forOvernightIndex(FED_FUNDS_INDEX).withInterpolator(INTERPOLATOR)
+      .using(CURVE_NAME_DSC_USD).forDiscounting(Currency.USD).forOvernightIndex(FED_FUNDS_INDEX.toOvernightIndex()).withInterpolator(INTERPOLATOR)
       .withKnownData(new MulticurveProviderDiscount(FX_MATRIX));
   static {
     for (int i = 0; i < DSC_USD_MARKET_QUOTES.length; i++) {
@@ -171,7 +171,7 @@ public class Usd3mLiborKnownDiscountingTest extends CurveBuildingTests {
   /** Builds the LIBOR curve */
   private static final DiscountingMethodCurveSetUp LIBOR_BUILDER = DiscountingMethodCurveBuilder.setUp()
       .building(CURVE_NAME_FWD3_USD)
-      .using(CURVE_NAME_FWD3_USD).forIborIndex(USD_3M_LIBOR_INDEX).withInterpolator(INTERPOLATOR);
+      .using(CURVE_NAME_FWD3_USD).forIborIndex(USD_3M_LIBOR_INDEX.toIborTypeIndex()).withInterpolator(INTERPOLATOR);
   /** LIBOR curve before today's fixing */
   private static final Pair<MulticurveProviderDiscount, CurveBuildingBlockBundle> LIBOR_BEFORE_FIXING;
   /** LIBOR curve after today's fixing */

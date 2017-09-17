@@ -112,7 +112,7 @@ public class BrlDiscountingOvernight1Test extends CurveBuildingTests {
   /** The curve builder */
   private static final DiscountingMethodCurveSetUp BUILDER_FOR_TEST = DiscountingMethodCurveBuilder.setUp()
       .building(CURVE_NAME_DSC_BRL)
-      .using(CURVE_NAME_DSC_BRL).forDiscounting(Currency.BRL).forOvernightIndex(CDI_INDEX).withInterpolator(INTERPOLATOR)
+      .using(CURVE_NAME_DSC_BRL).forDiscounting(Currency.BRL).forOvernightIndex(CDI_INDEX.toOvernightIndex()).withInterpolator(INTERPOLATOR)
       .withKnownData(KNOWN_DATA);
   // initialize the curve builder with market data
   static {

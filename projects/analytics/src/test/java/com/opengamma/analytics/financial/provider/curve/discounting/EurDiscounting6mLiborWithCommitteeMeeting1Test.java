@@ -159,10 +159,10 @@ public class EurDiscounting6mLiborWithCommitteeMeeting1Test extends CurveBuildin
   /** The curve builder */
   private static final DiscountingMethodCurveSetUp BUILDER_FOR_TEST = DiscountingMethodCurveBuilder.setUp()
       .buildingFirst(CURVE_NAME_DSC_EUR)
-      .using(CURVE_NAME_DSC_EUR).forDiscounting(Currency.EUR).forOvernightIndex(EONIA_INDEX).withInterpolator(LOG_LINEAR_INTERPOLATOR)
+      .using(CURVE_NAME_DSC_EUR).forDiscounting(Currency.EUR).forOvernightIndex(EONIA_INDEX.toOvernightIndex()).withInterpolator(LOG_LINEAR_INTERPOLATOR)
             .usingNodeDates(MEETING_ECB_DATE)
       .thenBuilding(CURVE_NAME_FWD6_EUR)
-      .using(CURVE_NAME_FWD6_EUR).forIborIndex(EURIBOR_6M_INDEX).withInterpolator(LINEAR_INTERPOLATOR)
+      .using(CURVE_NAME_FWD6_EUR).forIborIndex(EURIBOR_6M_INDEX.toIborTypeIndex()).withInterpolator(LINEAR_INTERPOLATOR)
       .withKnownData(KNOWN_DATA);
   static {
     for (int i = 0; i < DSC_EUR_MARKET_QUOTES.length; i++) {

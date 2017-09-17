@@ -5,9 +5,9 @@ package com.mcleodmoores.analytics.financial.curve.interestrate;
 
 import org.threeten.bp.ZonedDateTime;
 
+import com.mcleodmoores.analytics.financial.index.IborTypeIndex;
+import com.mcleodmoores.analytics.financial.index.OvernightIndex;
 import com.opengamma.analytics.financial.curve.interestrate.generator.GeneratorYDCurve;
-import com.opengamma.analytics.financial.instrument.index.IborIndex;
-import com.opengamma.analytics.financial.instrument.index.IndexON;
 import com.opengamma.analytics.financial.legalentity.LegalEntity;
 import com.opengamma.analytics.financial.legalentity.LegalEntityFilter;
 import com.opengamma.analytics.financial.provider.description.interestrate.ParameterProviderInterface;
@@ -25,10 +25,10 @@ public interface BondCurveTypeSetUpInterface<T extends ParameterProviderInterfac
 
   //TODO versions that only take a single index
   @Override
-  BondCurveTypeSetUpInterface forIborIndex(final IborIndex... indices);
+  BondCurveTypeSetUpInterface forIborIndex(final IborTypeIndex... indices);
 
   @Override
-  BondCurveTypeSetUpInterface forOvernightIndex(final IndexON... indices);
+  BondCurveTypeSetUpInterface forOvernightIndex(final OvernightIndex... indices);
 
   BondCurveTypeSetUpInterface forIssuer(Pair<Object, LegalEntityFilter<LegalEntity>> issuer);
 

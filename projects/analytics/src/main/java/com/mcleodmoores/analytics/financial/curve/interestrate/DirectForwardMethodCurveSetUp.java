@@ -9,12 +9,12 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.mcleodmoores.analytics.financial.index.IborTypeIndex;
 import com.mcleodmoores.analytics.financial.index.Index;
+import com.mcleodmoores.analytics.financial.index.OvernightIndex;
 import com.opengamma.analytics.financial.instrument.InstrumentDefinition;
 import com.opengamma.analytics.financial.instrument.index.GeneratorAttribute;
 import com.opengamma.analytics.financial.instrument.index.GeneratorInstrument;
-import com.opengamma.analytics.financial.instrument.index.IborIndex;
-import com.opengamma.analytics.financial.instrument.index.IndexON;
 import com.opengamma.analytics.financial.provider.curve.CurveBuildingBlockBundle;
 import com.opengamma.analytics.financial.provider.description.interestrate.MulticurveProviderForward;
 import com.opengamma.timeseries.precise.zdt.ZonedDateTimeDoubleTimeSeries;
@@ -30,8 +30,8 @@ public class DirectForwardMethodCurveSetUp implements CurveSetUpInterface<Multic
   protected final List<String[]> _curveNames;
   //TODO should these live in curve type setup?
   protected final LinkedHashMap<String, Currency> _discountingCurves;
-  protected final LinkedHashMap<String, IborIndex[]> _iborCurves;
-  protected final LinkedHashMap<String, IndexON[]> _overnightCurves;
+  protected final LinkedHashMap<String, IborTypeIndex[]> _iborCurves;
+  protected final LinkedHashMap<String, OvernightIndex[]> _overnightCurves;
   protected final Map<String, DirectForwardMethodCurveTypeSetUp> _curveTypes;
   protected final Map<String, Map<Pair<GeneratorInstrument, GeneratorAttribute>, Double>> _nodes;
   protected final Map<String, List<InstrumentDefinition<?>>> _newNodes;
@@ -68,10 +68,15 @@ public class DirectForwardMethodCurveSetUp implements CurveSetUpInterface<Multic
     _knownBundle = setup._knownBundle;
   }
 
-  protected DirectForwardMethodCurveSetUp(final List<String[]> curveNames, final LinkedHashMap<String, Currency> discountingCurves, final LinkedHashMap<String, IborIndex[]> iborCurves,
-      final LinkedHashMap<String, IndexON[]> overnightCurves, final Map<String, Map<Pair<GeneratorInstrument, GeneratorAttribute>, Double>> nodes,
+  protected DirectForwardMethodCurveSetUp(final List<String[]> curveNames,
+      final LinkedHashMap<String, Currency> discountingCurves,
+      final LinkedHashMap<String, IborTypeIndex[]> iborCurves,
+      final LinkedHashMap<String, OvernightIndex[]> overnightCurves,
+      final Map<String, Map<Pair<GeneratorInstrument, GeneratorAttribute>, Double>> nodes,
       final Map<String, List<InstrumentDefinition<?>>> newNodes,
-      final Map<Index, ZonedDateTimeDoubleTimeSeries> fixingTs, final Map<String, DirectForwardMethodCurveTypeSetUp> curveTypes,  final MulticurveProviderForward knownData,
+      final Map<Index, ZonedDateTimeDoubleTimeSeries> fixingTs,
+      final Map<String, DirectForwardMethodCurveTypeSetUp> curveTypes,
+      final MulticurveProviderForward knownData,
       final CurveBuildingBlockBundle knownBundle) {
     _curveNames = new ArrayList<>(curveNames);
     _discountingCurves = new LinkedHashMap<>(discountingCurves);

@@ -153,7 +153,7 @@ public class AudDiscounting3mBankBill6mBankBillTest extends CurveBuildingTests {
       new double[] {0.0400, 0.0400, 0.0400, 0.0400, 0.0400, 0.0400, 0.0400, 0.0400, 0.0400, 0.0400, 0.0400, 0.0400 };
   /** Vanilla instrument generators for the discounting curve */
   private static final GeneratorInstrument<? extends GeneratorAttribute>[] DSC_AUD_GENERATORS =
-      new GeneratorInstrument<?>[] {GENERATOR_DEPOSIT_ON_AUD, GENERATOR_OIS_AUD, GENERATOR_OIS_AUD,
+    new GeneratorInstrument<?>[] {GENERATOR_DEPOSIT_ON_AUD, GENERATOR_OIS_AUD, GENERATOR_OIS_AUD,
     GENERATOR_OIS_AUD, GENERATOR_OIS_AUD, GENERATOR_OIS_AUD, GENERATOR_OIS_AUD, GENERATOR_OIS_AUD, GENERATOR_OIS_AUD,
     GENERATOR_OIS_AUD, GENERATOR_OIS_AUD, GENERATOR_OIS_AUD };
   /** Tenors for the discounting curve */
@@ -186,9 +186,9 @@ public class AudDiscounting3mBankBill6mBankBillTest extends CurveBuildingTests {
   private static final double[] FWD6_AUD_MARKET_QUOTES = new double[] {0.0440, 0.0020, 0.0020, 0.0020, 0.0560, 0.0610, 0.0620 };
   /** Vanilla instrument generators for the 6m bank bill curve */
   private static final GeneratorInstrument<? extends GeneratorAttribute>[] FWD6_AUD_GENERATORS =
-      new GeneratorInstrument<?>[] {GENERATOR_AUDBB6M, AUDBBSW3MBBSW6M, AUDBBSW3MBBSW6M, AUDBBSW3MBBSW6M, AUD6MBBSW6M, AUD6MBBSW6M, AUD6MBBSW6M };
-  /** Attribute generators for the 6m bank bill curve */
-    private static final GeneratorAttributeIR[] FWD6_AUD_ATTR;
+    new GeneratorInstrument<?>[] {GENERATOR_AUDBB6M, AUDBBSW3MBBSW6M, AUDBBSW3MBBSW6M, AUDBBSW3MBBSW6M, AUD6MBBSW6M, AUD6MBBSW6M, AUD6MBBSW6M };
+      /** Attribute generators for the 6m bank bill curve */
+  private static final GeneratorAttributeIR[] FWD6_AUD_ATTR;
   static {
     final Period[] tenors = new Period[] {Period.ofMonths(0), Period.ofYears(1), Period.ofYears(2), Period.ofYears(3), Period.ofYears(5),
         Period.ofYears(7), Period.ofYears(10) };
@@ -202,17 +202,17 @@ public class AudDiscounting3mBankBill6mBankBillTest extends CurveBuildingTests {
   /** Builder that constructs the discounting curve before the two bank bill curves */
   private static final DiscountingMethodCurveSetUp DISCOUNTING_THEN_BANK_BILLS_BUILDER = DiscountingMethodCurveBuilder.setUp()
       .buildingFirst(CURVE_NAME_DSC_AUD)
-      .using(CURVE_NAME_DSC_AUD).forDiscounting(Currency.AUD).forOvernightIndex(AUD_OVERNIGHT_INDEX).withInterpolator(INTERPOLATOR)
+      .using(CURVE_NAME_DSC_AUD).forDiscounting(Currency.AUD).forOvernightIndex(AUD_OVERNIGHT_INDEX.toOvernightIndex()).withInterpolator(INTERPOLATOR)
       .thenBuilding(CURVE_NAME_FWD3_AUD, CURVE_NAME_FWD6_AUD)
-      .using(CURVE_NAME_FWD3_AUD).forIborIndex(AUD_3M_BANK_BILL_INDEX).withInterpolator(INTERPOLATOR)
-      .using(CURVE_NAME_FWD6_AUD).forIborIndex(AUD_6M_BANK_BILL_INDEX).withInterpolator(INTERPOLATOR)
+      .using(CURVE_NAME_FWD3_AUD).forIborIndex(AUD_3M_BANK_BILL_INDEX.toIborTypeIndex()).withInterpolator(INTERPOLATOR)
+      .using(CURVE_NAME_FWD6_AUD).forIborIndex(AUD_6M_BANK_BILL_INDEX.toIborTypeIndex()).withInterpolator(INTERPOLATOR)
       .withKnownData(MULTICURVE_KNOWN_DATA);
   /** Builder that constructs three curves */
   private static final DiscountingMethodCurveSetUp DISCOUNTING_AND_BANK_BILLS_BUILDER = DiscountingMethodCurveBuilder.setUp()
       .building(CURVE_NAME_DSC_AUD, CURVE_NAME_FWD3_AUD, CURVE_NAME_FWD6_AUD)
-      .using(CURVE_NAME_DSC_AUD).forDiscounting(Currency.AUD).forOvernightIndex(AUD_OVERNIGHT_INDEX).withInterpolator(INTERPOLATOR)
-      .using(CURVE_NAME_FWD3_AUD).forIborIndex(AUD_3M_BANK_BILL_INDEX).withInterpolator(INTERPOLATOR)
-      .using(CURVE_NAME_FWD6_AUD).forIborIndex(AUD_6M_BANK_BILL_INDEX).withInterpolator(INTERPOLATOR)
+      .using(CURVE_NAME_DSC_AUD).forDiscounting(Currency.AUD).forOvernightIndex(AUD_OVERNIGHT_INDEX.toOvernightIndex()).withInterpolator(INTERPOLATOR)
+      .using(CURVE_NAME_FWD3_AUD).forIborIndex(AUD_3M_BANK_BILL_INDEX.toIborTypeIndex()).withInterpolator(INTERPOLATOR)
+      .using(CURVE_NAME_FWD6_AUD).forIborIndex(AUD_6M_BANK_BILL_INDEX.toIborTypeIndex()).withInterpolator(INTERPOLATOR)
       .withKnownData(MULTICURVE_KNOWN_DATA);
   static {
     for (int i = 0; i < DSC_AUD_MARKET_QUOTES.length; i++) {

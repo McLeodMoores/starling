@@ -156,7 +156,7 @@ public class UsdGovernmentKnownDiscountingTest extends CurveBuildingTests {
   static {
     final DiscountingMethodCurveSetUp builder = DiscountingMethodCurveBuilder.setUp()
         .building(CURVE_NAME_DSC_USD)
-        .using(CURVE_NAME_DSC_USD).forDiscounting(Currency.USD).forOvernightIndex(FED_FUNDS_INDEX).withInterpolator(INTERPOLATOR)
+        .using(CURVE_NAME_DSC_USD).forDiscounting(Currency.USD).forOvernightIndex(FED_FUNDS_INDEX.toOvernightIndex()).withInterpolator(INTERPOLATOR)
         .withKnownData(new MulticurveProviderDiscount(FX_MATRIX));
     for (int i = 0; i < DSC_USD_GENERATORS.length; i++) {
       builder.withNode(CURVE_NAME_DSC_USD, DSC_USD_GENERATORS[i], DSC_USD_ATTR[i], DSC_USD_MARKET_QUOTES[i]);

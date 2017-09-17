@@ -5,9 +5,9 @@ package com.mcleodmoores.analytics.financial.curve.interestrate;
 
 import org.threeten.bp.ZonedDateTime;
 
+import com.mcleodmoores.analytics.financial.index.IborTypeIndex;
+import com.mcleodmoores.analytics.financial.index.OvernightIndex;
 import com.opengamma.analytics.financial.curve.interestrate.generator.GeneratorYDCurve;
-import com.opengamma.analytics.financial.instrument.index.IborIndex;
-import com.opengamma.analytics.financial.instrument.index.IndexON;
 import com.opengamma.analytics.financial.provider.description.interestrate.ParameterProviderInterface;
 import com.opengamma.analytics.math.interpolation.Interpolator1D;
 import com.opengamma.util.money.Currency;
@@ -24,9 +24,9 @@ public interface CurveTypeSetUpInterface<T extends ParameterProviderInterface> {
   CurveTypeSetUpInterface forDiscounting(final Currency currency);
 
   //TODO versions that only take a single index
-  CurveTypeSetUpInterface forIborIndex(final IborIndex... indices);
+  CurveTypeSetUpInterface forIborIndex(final IborTypeIndex... indices);
 
-  CurveTypeSetUpInterface forOvernightIndex(final IndexON... indices);
+  CurveTypeSetUpInterface forOvernightIndex(final OvernightIndex... indices);
 
   CurveTypeSetUpInterface withInterpolator(final Interpolator1D interpolator);
 

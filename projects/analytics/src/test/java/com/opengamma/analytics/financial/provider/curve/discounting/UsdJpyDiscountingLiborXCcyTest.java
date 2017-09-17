@@ -173,20 +173,20 @@ public class UsdJpyDiscountingLiborXCcyTest extends CurveBuildingTests {
       .buildingFirst(CURVE_NAME_DSC_USD)
       .thenBuilding(CURVE_NAME_FWD3_USD)
       .thenBuilding(CURVE_NAME_DSC_JPY, CURVE_NAME_FWD3_JPY, CURVE_NAME_FWD6_JPY)
-      .using(CURVE_NAME_DSC_USD).forDiscounting(Currency.USD).forOvernightIndex(FED_FUNDS_INDEX).withInterpolator(INTERPOLATOR)
-      .using(CURVE_NAME_FWD3_USD).forIborIndex(USD_3M_LIBOR_INDEX).withInterpolator(INTERPOLATOR)
-      .using(CURVE_NAME_DSC_JPY).forDiscounting(Currency.JPY).forOvernightIndex(TONAR_INDEX).withInterpolator(INTERPOLATOR)
-      .using(CURVE_NAME_FWD3_JPY).forIborIndex(JPY_3M_LIBOR_INDEX).withInterpolator(INTERPOLATOR)
-      .using(CURVE_NAME_FWD6_JPY).forIborIndex(JPY_6M_LIBOR_INDEX).withInterpolator(INTERPOLATOR)
+      .using(CURVE_NAME_DSC_USD).forDiscounting(Currency.USD).forOvernightIndex(FED_FUNDS_INDEX.toOvernightIndex()).withInterpolator(INTERPOLATOR)
+      .using(CURVE_NAME_FWD3_USD).forIborIndex(USD_3M_LIBOR_INDEX.toIborTypeIndex()).withInterpolator(INTERPOLATOR)
+      .using(CURVE_NAME_DSC_JPY).forDiscounting(Currency.JPY).forOvernightIndex(TONAR_INDEX.toOvernightIndex()).withInterpolator(INTERPOLATOR)
+      .using(CURVE_NAME_FWD3_JPY).forIborIndex(JPY_3M_LIBOR_INDEX.toIborTypeIndex()).withInterpolator(INTERPOLATOR)
+      .using(CURVE_NAME_FWD6_JPY).forIborIndex(JPY_6M_LIBOR_INDEX.toIborTypeIndex()).withInterpolator(INTERPOLATOR)
       .withKnownData(KNOWN_DATA);
   /** Builds USD discounting, USD LIBOR and three JPY curves simultaneously */
   private static final DiscountingMethodCurveSetUp BUILDER_2 = DiscountingMethodCurveBuilder.setUp()
       .building(CURVE_NAME_DSC_USD, CURVE_NAME_FWD3_USD, CURVE_NAME_DSC_JPY, CURVE_NAME_FWD3_JPY, CURVE_NAME_FWD6_JPY)
-      .using(CURVE_NAME_DSC_USD).forDiscounting(Currency.USD).forOvernightIndex(FED_FUNDS_INDEX).withInterpolator(INTERPOLATOR)
-      .using(CURVE_NAME_FWD3_USD).forIborIndex(USD_3M_LIBOR_INDEX).withInterpolator(INTERPOLATOR)
-      .using(CURVE_NAME_DSC_JPY).forDiscounting(Currency.JPY).forOvernightIndex(TONAR_INDEX).withInterpolator(INTERPOLATOR)
-      .using(CURVE_NAME_FWD3_JPY).forIborIndex(JPY_3M_LIBOR_INDEX).withInterpolator(INTERPOLATOR)
-      .using(CURVE_NAME_FWD6_JPY).forIborIndex(JPY_6M_LIBOR_INDEX).withInterpolator(INTERPOLATOR)
+      .using(CURVE_NAME_DSC_USD).forDiscounting(Currency.USD).forOvernightIndex(FED_FUNDS_INDEX.toOvernightIndex()).withInterpolator(INTERPOLATOR)
+      .using(CURVE_NAME_FWD3_USD).forIborIndex(USD_3M_LIBOR_INDEX.toIborTypeIndex()).withInterpolator(INTERPOLATOR)
+      .using(CURVE_NAME_DSC_JPY).forDiscounting(Currency.JPY).forOvernightIndex(TONAR_INDEX.toOvernightIndex()).withInterpolator(INTERPOLATOR)
+      .using(CURVE_NAME_FWD3_JPY).forIborIndex(JPY_3M_LIBOR_INDEX.toIborTypeIndex()).withInterpolator(INTERPOLATOR)
+      .using(CURVE_NAME_FWD6_JPY).forIborIndex(JPY_6M_LIBOR_INDEX.toIborTypeIndex()).withInterpolator(INTERPOLATOR)
       .withKnownData(KNOWN_DATA);
   /** Market values for the USD discounting curve */
   private static final double[] DSC_USD_MARKET_QUOTES =

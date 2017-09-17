@@ -198,18 +198,18 @@ public class EurDiscounting3mLibor6mLiborTest extends CurveBuildingTests {
   /** Builder that constructs the curves one at a time */
   private static final DiscountingMethodCurveSetUp CONSECUTIVE_BUILDER = DiscountingMethodCurveBuilder.setUp()
       .buildingFirst(CURVE_NAME_DSC_EUR)
-      .using(CURVE_NAME_DSC_EUR).forDiscounting(Currency.EUR).forOvernightIndex(EONIA_INDEX).withInterpolator(INTERPOLATOR)
+      .using(CURVE_NAME_DSC_EUR).forDiscounting(Currency.EUR).forOvernightIndex(EONIA_INDEX.toOvernightIndex()).withInterpolator(INTERPOLATOR)
       .thenBuilding(CURVE_NAME_FWD3_EUR)
-      .using(CURVE_NAME_FWD3_EUR).forIborIndex(EUR_3M_EURIBOR_INDEX).withInterpolator(INTERPOLATOR)
+      .using(CURVE_NAME_FWD3_EUR).forIborIndex(EUR_3M_EURIBOR_INDEX.toIborTypeIndex()).withInterpolator(INTERPOLATOR)
       .thenBuilding(CURVE_NAME_FWD6_EUR)
-      .using(CURVE_NAME_FWD6_EUR).forIborIndex(EUR_6M_EURIBOR_INDEX).withInterpolator(INTERPOLATOR)
+      .using(CURVE_NAME_FWD6_EUR).forIborIndex(EUR_6M_EURIBOR_INDEX.toIborTypeIndex()).withInterpolator(INTERPOLATOR)
       .withKnownData(MULTICURVE_KNOWN_DATA);
   /** Builder that constructs the curves simultaneously */
   private static final DiscountingMethodCurveSetUp SIMULTANEOUS_BUILDER = DiscountingMethodCurveBuilder.setUp()
       .building(CURVE_NAME_DSC_EUR, CURVE_NAME_FWD3_EUR, CURVE_NAME_FWD6_EUR)
-      .using(CURVE_NAME_DSC_EUR).forDiscounting(Currency.EUR).forOvernightIndex(EONIA_INDEX).withInterpolator(INTERPOLATOR)
-      .using(CURVE_NAME_FWD3_EUR).forIborIndex(EUR_3M_EURIBOR_INDEX).withInterpolator(INTERPOLATOR)
-      .using(CURVE_NAME_FWD6_EUR).forIborIndex(EUR_6M_EURIBOR_INDEX).withInterpolator(INTERPOLATOR)
+      .using(CURVE_NAME_DSC_EUR).forDiscounting(Currency.EUR).forOvernightIndex(EONIA_INDEX.toOvernightIndex()).withInterpolator(INTERPOLATOR)
+      .using(CURVE_NAME_FWD3_EUR).forIborIndex(EUR_3M_EURIBOR_INDEX.toIborTypeIndex()).withInterpolator(INTERPOLATOR)
+      .using(CURVE_NAME_FWD6_EUR).forIborIndex(EUR_6M_EURIBOR_INDEX.toIborTypeIndex()).withInterpolator(INTERPOLATOR)
       .withKnownData(MULTICURVE_KNOWN_DATA);
   static {
     for (int i = 0; i < DSC_EUR_MARKET_QUOTES.length; i++) {
