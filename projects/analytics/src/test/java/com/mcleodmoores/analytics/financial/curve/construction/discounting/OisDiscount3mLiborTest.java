@@ -25,6 +25,7 @@ import com.mcleodmoores.analytics.financial.index.OvernightIndex;
 import com.mcleodmoores.date.WeekendWorkingDayCalendar;
 import com.opengamma.analytics.financial.forex.method.FXMatrix;
 import com.opengamma.analytics.financial.instrument.index.IndexConverter;
+import com.opengamma.analytics.financial.model.interestrate.curve.YieldAndDiscountCurve;
 import com.opengamma.analytics.financial.provider.curve.CurveBuildingBlockBundle;
 import com.opengamma.analytics.financial.provider.description.interestrate.MulticurveProviderDiscount;
 import com.opengamma.analytics.math.interpolation.Interpolator1D;
@@ -43,7 +44,7 @@ import com.opengamma.util.time.Tenor;
 import com.opengamma.util.tuple.Pair;
 
 /**
- *
+ * Tests construction of a discounting / overnight and 3M LIBOR curve.
  */
 public class OisDiscount3mLiborTest {
   private static final ZonedDateTime VALUATION_DATE = DateUtils.getUTCDate(2017, 1, 3);
@@ -77,7 +78,7 @@ public class OisDiscount3mLiborTest {
       .build();
   private static final VanillaOisConvention OIS = VanillaOisConvention.builder()
       .withUnderlyingIndex(FED_FUNDS_INDEX)
-      .withPaymentPeriod(Tenor.ONE_YEAR)
+      .withPaymentTenor(Tenor.ONE_YEAR)
       .withBusinessDayConvention(BusinessDayConventions.MODIFIED_FOLLOWING)
       .withEndOfMonth(EndOfMonthConvention.ADJUST_FOR_END_OF_MONTH)
       .withPaymentLag(2)
@@ -130,13 +131,20 @@ public class OisDiscount3mLiborTest {
     }
   }
 
+  /**
+   * Tests the number of node points in the curves.
+   */
   @Test
-  public void testNodeTimes() {
+  public void testDataInBundle() {
     final Pair<MulticurveProviderDiscount, CurveBuildingBlockBundle> result = CURVE_BUILDER.getBuilder().buildCurves1(VALUATION_DATE);
     final MulticurveProviderDiscount curves = result.getFirst();
     assertEquals(curves.getDiscountingCurves().size(), 1);
     assertEquals(curves.getForwardIborCurves().size(), 1);
     assertEquals(curves.getForwardONCurves().size(), 1);
+    final YieldAndDiscountCurve discounting = curves.getCurve(Currency.USD);
+    assertEquals(discounting.getNumberOfParameters(), OIS_TENORS.length + 1);
+    assertEquals(discounting, curves.getCurve(IndexConverter.toIndexOn(FED_FUNDS_INDEX)));
+    assertEquals(curves.getCurve(IndexConverter.toIborIndex(LIBOR_INDEX)).getNumberOfParameters(), LIBOR_SWAP_TENORS.length + 1);
   }
 
 }

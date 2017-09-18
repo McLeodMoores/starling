@@ -1,7 +1,7 @@
 /**
  * Copyright (C) 2015 - present McLeod Moores Software Limited.  All rights reserved.
  */
-package com.opengamma.analytics.financial.instrument.index;
+package com.mcleodmoores.analytics.financial.index;
 
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotEquals;
@@ -9,6 +9,7 @@ import static org.testng.Assert.assertNotEquals;
 import org.testng.annotations.Test;
 
 import com.mcleodmoores.analytics.financial.index.OvernightIndex;
+import com.opengamma.analytics.financial.instrument.index.IndexON;
 import com.opengamma.financial.convention.daycount.DayCount;
 import com.opengamma.financial.convention.daycount.DayCounts;
 import com.opengamma.util.money.Currency;

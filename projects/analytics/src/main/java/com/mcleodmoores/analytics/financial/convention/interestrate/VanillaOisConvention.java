@@ -3,6 +3,8 @@
  */
 package com.mcleodmoores.analytics.financial.convention.interestrate;
 
+import java.util.Objects;
+
 import org.threeten.bp.ZonedDateTime;
 
 import com.mcleodmoores.analytics.financial.index.OvernightIndex;
@@ -27,8 +29,13 @@ import com.opengamma.util.time.Tenor;
  * A convention for vanilla OIS that contains sufficient information to build a {@link SwapFixedONDefinition}
  * when the fixing rate and start and end tenors are supplied:
  * <ul>
- *  <li>
- *
+ *  <li> The business day convention used for date adjustments.
+ *  <li> A working day calendar that contains information about weekends and holidays.
+ *  <li> The leg payment tenor.
+ *  <li> Fields indicating the stub type and if the leg schedules are generated from the start or end of the
+ *       swap.
+ *  <li> The payment and spot lag.
+ *  <li> The underlying index.
  * </ul>
  */
 public class VanillaOisConvention implements CurveDataConvention<SwapFixedONDefinition> {
@@ -47,10 +54,10 @@ public class VanillaOisConvention implements CurveDataConvention<SwapFixedONDefi
   public static class Builder {
     private BusinessDayConvention _businessDayConvention;
     private WorkingDayCalendar _calendar;
-    private Tenor _swapLegPaymentTenor;
+    private Tenor _paymentTenor;
     private StubType _stubType;
-    private int _swapLegPaymentLag;
-    private int _swapLegSpotLag;
+    private int _paymentLag;
+    private int _spotLag;
     private OvernightIndex _underlyingIndex;
     private EndOfMonthConvention _endOfMonthConvention;
 
@@ -60,81 +67,143 @@ public class VanillaOisConvention implements CurveDataConvention<SwapFixedONDefi
     /* package */ Builder() {
     }
 
+    /**
+     * Sets the business day convention.
+     * @param businessDayConvention  the business day convention, not null
+     * @return  the builder
+     */
     public Builder withBusinessDayConvention(final BusinessDayConvention businessDayConvention) {
-      _businessDayConvention = businessDayConvention;
+      _businessDayConvention = ArgumentChecker.notNull(businessDayConvention, "businessDayConvention");
       return this;
     }
 
+    /**
+     * Sets the end of month convention.
+     * @param endOfMonthConvention  the convention, not null
+     * @return  the builder
+     */
     public Builder withEndOfMonth(final EndOfMonthConvention endOfMonthConvention) {
-      _endOfMonthConvention = endOfMonthConvention;
+      _endOfMonthConvention = ArgumentChecker.notNull(endOfMonthConvention, "endOfMonthConvention");
       return this;
     }
 
+    /**
+     * Sets the working day calendar.
+     * @param calendar  the working day calendar, not null
+     * @return  the builder
+     */
     public Builder withCalendar(final WorkingDayCalendar calendar) {
-      _calendar = calendar;
+      _calendar = ArgumentChecker.notNull(calendar, "calendar");
       return this;
     }
 
-    public Builder withPaymentPeriod(final Tenor paymentPeriod) {
-      _swapLegPaymentTenor = paymentPeriod;
+    /**
+     * Sets the payment tenor.
+     * @param paymentTenor  the payment tenor, not null
+     * @return  the builder
+     */
+    public Builder withPaymentTenor(final Tenor paymentTenor) {
+      _paymentTenor = ArgumentChecker.notNull(paymentTenor, "paymentTenor");
       return this;
     }
 
+    /**
+     * Sets the stub type.
+     * @param stubType  the stub type, not null
+     * @return  the builder
+     */
     public Builder withStubType(final StubType stubType) {
-      _stubType = stubType;
+      _stubType = ArgumentChecker.notNull(stubType, "stubType");
       return this;
     }
 
+    /**
+     * Sets the payment lag.
+     * @param paymentLag  the payment lag, not negative
+     * @return  the builder
+     */
     public Builder withPaymentLag(final int paymentLag) {
-      _swapLegPaymentLag = paymentLag;
+      _paymentLag = ArgumentChecker.notNegative(paymentLag, "paymentLag");
       return this;
     }
 
+    /**
+     * Sets the spot lag.
+     * @param spotLag  the spot lag, not negative
+     * @return  the builder
+     */
     public Builder withSpotLag(final int spotLag) {
-      _swapLegSpotLag = spotLag;
+      _spotLag = ArgumentChecker.notNegative(spotLag, "spotLag");
       return this;
     }
 
+    /**
+     * Sets the overnight index.
+     * @param underlyingIndex  the overnight index, not null
+     * @return  the builder
+     */
     public Builder withUnderlyingIndex(final OvernightIndex underlyingIndex) {
-      _underlyingIndex = underlyingIndex;
+      _underlyingIndex = ArgumentChecker.notNull(underlyingIndex, "underlyingIndex");
       return this;
     }
 
+    /**
+     * Builds the convention.
+     * @return  the convention
+     */
     public VanillaOisConvention build() {
-      return new VanillaOisConvention(_businessDayConvention, _calendar, _swapLegPaymentTenor, _swapLegPaymentLag,
-          _swapLegSpotLag, _underlyingIndex, _stubType, _endOfMonthConvention);
+      if (_businessDayConvention == null) {
+        throw new IllegalStateException("The business day convention must be supplied");
+      }
+      if (_calendar == null) {
+        throw new IllegalStateException("The calendar must be supplied");
+      }
+      if (_endOfMonthConvention == null) {
+        throw new IllegalStateException("The end of month convention must be supplied");
+      }
+      if (_paymentTenor == null) {
+        throw new IllegalStateException("The payment tenor must be supplied");
+      }
+      if (_stubType == null) {
+        throw new IllegalStateException("The stub type must be supplied");
+      }
+      if (_underlyingIndex == null) {
+        throw new IllegalStateException("The underlying index must be supplied");
+      }
+      return new VanillaOisConvention(_businessDayConvention, _calendar, _paymentTenor, _paymentLag,
+          _spotLag, _underlyingIndex, _stubType, _endOfMonthConvention);
     }
   }
 
   private final BusinessDayConvention _businessDayConvention;
   private final boolean _endOfMonth;
-  private final WorkingDayCalendar _swapLegCalendar;
-  private final Tenor _swapLegPaymentTenor;
+  private final WorkingDayCalendar _calendar;
+  private final Tenor _paymentTenor;
   private final boolean _isShortStub;
   private final boolean _isLegGeneratedFromEnd;
-  private final int _swapLegPaymentLag;
-  private final int _swapLegSpotLag;
-  private final OvernightIndex _underlyingIndex;
+  private final int _paymentLag;
+  private final int _spotLag;
+  private final OvernightIndex _index;
 
   /**
    * @param businessDayConvention  the swap leg business day convention
-   * @param swapLegCalendar  the swap leg holiday calendar
-   * @param swapLegPaymentTenor  the swap leg payment tenor
-   * @param swapLegPaymentLag  the payment lag of the swap leg
-   * @param swapLegSpotLag  the lag to the settlement date
-   * @param underlyingIndex  the underlying overnight index
+   * @param calendar  the swap leg holiday calendar
+   * @param paymentTenor  the swap leg payment tenor
+   * @param paymentLag  the payment lag of the swap leg
+   * @param spotLag  the lag to the settlement date
+   * @param index  the underlying overnight index
    * @param stubType  the payment schedule stub type
    * @param endOfMonth  how dates at the end of months are handled
    */
-  /* package */VanillaOisConvention(final BusinessDayConvention businessDayConvention, final WorkingDayCalendar swapLegCalendar,
-      final Tenor swapLegPaymentTenor, final int swapLegPaymentLag, final int swapLegSpotLag,
-      final OvernightIndex underlyingIndex, final StubType stubType, final EndOfMonthConvention endOfMonth) {
+  /* package */VanillaOisConvention(final BusinessDayConvention businessDayConvention, final WorkingDayCalendar calendar,
+      final Tenor paymentTenor, final int paymentLag, final int spotLag,
+      final OvernightIndex index, final StubType stubType, final EndOfMonthConvention endOfMonth) {
     _businessDayConvention = businessDayConvention;
-    _swapLegCalendar = swapLegCalendar;
-    _swapLegPaymentTenor = swapLegPaymentTenor;
-    _swapLegPaymentLag = swapLegPaymentLag;
-    _swapLegSpotLag = swapLegSpotLag;
-    _underlyingIndex = underlyingIndex;
+    _calendar = calendar;
+    _paymentTenor = paymentTenor;
+    _paymentLag = paymentLag;
+    _spotLag = spotLag;
+    _index = index;
     switch (stubType) {
       case NONE:
         _isLegGeneratedFromEnd = false;
@@ -177,23 +246,107 @@ public class VanillaOisConvention implements CurveDataConvention<SwapFixedONDefi
     ArgumentChecker.notNull(date, "date");
     ArgumentChecker.notNull(startTenor, "startTenor");
     ArgumentChecker.notNull(endTenor, "endTenor");
-    final Currency currency = _underlyingIndex.getCurrency();
-    final Calendar holidays = new CalendarAdapter(_swapLegCalendar);
-    final ZonedDateTime settlementDate = ScheduleCalculator.getAdjustedDate(date, _swapLegSpotLag, _swapLegCalendar);
-    final ZonedDateTime[] fixingPeriodEndDates = ScheduleCalculator.getAdjustedDateSchedule(settlementDate, endTenor, _swapLegPaymentTenor,
-        _isShortStub, _isLegGeneratedFromEnd, _businessDayConvention, _swapLegCalendar, _endOfMonth);
-    final CouponONDefinition[] coupons = new CouponONDefinition[fixingPeriodEndDates.length];
-    final CouponFixedDefinition[] cpnFixed = new CouponFixedDefinition[fixingPeriodEndDates.length];
-    final IndexON index = IndexConverter.toIndexOn(_underlyingIndex);
-    coupons[0] = CouponONDefinition.from(index, settlementDate, fixingPeriodEndDates[0], notional, _swapLegPaymentLag, holidays);
-    cpnFixed[0] = new CouponFixedDefinition(currency, coupons[0].getPaymentDate(), coupons[0].getAccrualStartDate(),
-        coupons[0].getAccrualEndDate(), coupons[0].getPaymentYearFraction(), -notional, fixedRate);
+    final Currency currency = _index.getCurrency();
+    final Calendar holidays = new CalendarAdapter(_calendar);
+    final ZonedDateTime settlementDate = ScheduleCalculator.getAdjustedDate(date, _spotLag, _calendar);
+    final ZonedDateTime[] fixingPeriodEndDates = ScheduleCalculator.getAdjustedDateSchedule(settlementDate, endTenor, _paymentTenor,
+        _isShortStub, _isLegGeneratedFromEnd, _businessDayConvention, _calendar, _endOfMonth);
+    final CouponONDefinition[] overnightCoupons = new CouponONDefinition[fixingPeriodEndDates.length];
+    final CouponFixedDefinition[] fixedCoupons = new CouponFixedDefinition[fixingPeriodEndDates.length];
+    final IndexON index = IndexConverter.toIndexOn(_index);
+    overnightCoupons[0] = CouponONDefinition.from(index, settlementDate, fixingPeriodEndDates[0], notional, _paymentLag, holidays);
+    fixedCoupons[0] = new CouponFixedDefinition(currency, overnightCoupons[0].getPaymentDate(), overnightCoupons[0].getAccrualStartDate(),
+        overnightCoupons[0].getAccrualEndDate(), overnightCoupons[0].getPaymentYearFraction(), -notional, fixedRate);
     for (int i = 1; i < fixingPeriodEndDates.length; i++) {
-      coupons[i] = CouponONDefinition.from(index, fixingPeriodEndDates[i - 1], fixingPeriodEndDates[i], notional, _swapLegPaymentLag, holidays);
-      cpnFixed[i] = new CouponFixedDefinition(currency, coupons[i].getPaymentDate(), coupons[i].getAccrualStartDate(),
-          coupons[i].getAccrualEndDate(), coupons[i].getPaymentYearFraction(), -notional, fixedRate);
+      overnightCoupons[i] = CouponONDefinition.from(index, fixingPeriodEndDates[i - 1], fixingPeriodEndDates[i], notional, _paymentLag, holidays);
+      fixedCoupons[i] = new CouponFixedDefinition(currency, overnightCoupons[i].getPaymentDate(), overnightCoupons[i].getAccrualStartDate(),
+          overnightCoupons[i].getAccrualEndDate(), overnightCoupons[i].getPaymentYearFraction(), -notional, fixedRate);
     }
-    return new SwapFixedONDefinition(new AnnuityCouponFixedDefinition(cpnFixed, holidays), new AnnuityCouponONDefinition(coupons, index, holidays));
+    return new SwapFixedONDefinition(new AnnuityCouponFixedDefinition(fixedCoupons, holidays),
+        new AnnuityCouponONDefinition(overnightCoupons, index, holidays));
+  }
+
+  @Override
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + (_businessDayConvention == null ? 0 : _businessDayConvention.hashCode());
+    result = prime * result + (_calendar == null ? 0 : _calendar.hashCode());
+    result = prime * result + (_endOfMonth ? 1231 : 1237);
+    result = prime * result + (_index == null ? 0 : _index.hashCode());
+    result = prime * result + (_isLegGeneratedFromEnd ? 1231 : 1237);
+    result = prime * result + (_isShortStub ? 1231 : 1237);
+    result = prime * result + _paymentLag;
+    result = prime * result + (_paymentTenor == null ? 0 : _paymentTenor.hashCode());
+    result = prime * result + _spotLag;
+    return result;
+  }
+
+  @Override
+  public boolean equals(final Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
+    final VanillaOisConvention other = (VanillaOisConvention) obj;
+    if (_isLegGeneratedFromEnd != other._isLegGeneratedFromEnd) {
+      return false;
+    }
+    if (_isShortStub != other._isShortStub) {
+      return false;
+    }
+    if (_paymentLag != other._paymentLag) {
+      return false;
+    }
+    if (_endOfMonth != other._endOfMonth) {
+      return false;
+    }
+    if (_spotLag != other._spotLag) {
+      return false;
+    }
+    if (!Objects.equals(_businessDayConvention.getName(), other._businessDayConvention.getName())) {
+      return false;
+    }
+    if (!Objects.equals(_paymentTenor, other._paymentTenor)) {
+      return false;
+    }
+    if (!Objects.equals(_index, other._index)) {
+      return false;
+    }
+    if (!Objects.equals(_calendar, other._calendar)) {
+      return false;
+    }
+    return true;
+  }
+
+  @Override
+  public String toString() {
+    final StringBuilder builder = new StringBuilder();
+    builder.append("VanillaOisConvention [index=");
+    builder.append(_index);
+    builder.append(", paymentTenor=");
+    builder.append(_paymentTenor);
+    builder.append(", endOfMonth=");
+    builder.append(_endOfMonth);
+    builder.append(", calendar=");
+    builder.append(_calendar);
+    builder.append(", businessDayConvention=");
+    builder.append(_businessDayConvention);
+    builder.append(", isShortStub=");
+    builder.append(_isShortStub);
+    builder.append(", isLegGeneratedFromEnd=");
+    builder.append(_isLegGeneratedFromEnd);
+    builder.append(", paymentLag=");
+    builder.append(_paymentLag);
+    builder.append(", spotLag=");
+    builder.append(_spotLag);
+    builder.append("]");
+    return builder.toString();
   }
 
 }
