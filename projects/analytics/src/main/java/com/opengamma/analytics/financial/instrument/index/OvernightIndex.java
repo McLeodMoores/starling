@@ -6,6 +6,7 @@ package com.opengamma.analytics.financial.instrument.index;
 import java.util.Objects;
 
 import com.opengamma.financial.convention.daycount.DayCount;
+import com.opengamma.id.UniqueId;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
 
@@ -14,6 +15,7 @@ import com.opengamma.util.money.Currency;
  * fixing period for this index is one day.
  */
 public class OvernightIndex extends Index {
+  public static final String OBJECT_SCHEME = "OvernightIndex";
   /** The day count convention associated with the overnight rate */
   private final DayCount _dayCount;
   /** The number of days between start of the fixing period and the publication of the index value */
@@ -50,6 +52,11 @@ public class OvernightIndex extends Index {
    */
   public int getPublicationLag() {
     return _publicationLag;
+  }
+
+  @Override
+  public UniqueId getUniqueId() {
+    return UniqueId.of(OBJECT_SCHEME, getName());
   }
 
   @Override

@@ -7,6 +7,7 @@ import java.util.Objects;
 
 import com.opengamma.financial.convention.businessday.BusinessDayConvention;
 import com.opengamma.financial.convention.daycount.DayCount;
+import com.opengamma.id.UniqueId;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
 import com.opengamma.util.time.Tenor;
@@ -15,6 +16,8 @@ import com.opengamma.util.time.Tenor;
  * A class describing an IBOR-like index.
  */
 public class IborTypeIndex extends Index {
+  public static final String OBJECT_SCHEME = "IborIndex";
+
   /** The index spot lag in days between trade and settlement date */
   private final int _spotLag;
   /** The day count convention associated with the index */
@@ -87,6 +90,11 @@ public class IborTypeIndex extends Index {
    */
   public boolean isEndOfMonth() {
     return _endOfMonth;
+  }
+
+  @Override
+  public UniqueId getUniqueId() {
+    return UniqueId.of(OBJECT_SCHEME, getName());
   }
 
   @Override

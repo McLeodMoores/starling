@@ -12,6 +12,7 @@ package com.opengamma.analytics.financial.instrument.index;
 import org.apache.commons.lang.ObjectUtils;
 
 import com.opengamma.financial.convention.daycount.DayCount;
+import com.opengamma.id.UniqueId;
 import com.opengamma.util.money.Currency;
 
 /**
@@ -55,6 +56,11 @@ public class IndexON extends IndexDeposit {
    */
   public int getPublicationLag() {
     return _index.getPublicationLag();
+  }
+
+  @Override
+  public UniqueId getUniqueId() {
+    return _index.getUniqueId();
   }
 
   @Override

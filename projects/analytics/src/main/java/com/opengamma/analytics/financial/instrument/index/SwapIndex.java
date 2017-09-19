@@ -6,6 +6,7 @@ package com.opengamma.analytics.financial.instrument.index;
 import java.util.Objects;
 
 import com.opengamma.financial.convention.daycount.DayCount;
+import com.opengamma.id.UniqueId;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
 import com.opengamma.util.time.Tenor;
@@ -14,6 +15,7 @@ import com.opengamma.util.time.Tenor;
  * A class describing a swap index, for example the reference for a constant-maturity swap.
  */
 public class SwapIndex extends Index {
+  public static final String OBJECT_SCHEME = "SwapIndex";
   /** The fixed leg payment tenor */
   private final Tenor _fixedLegPaymentTenor;
   /** The fixed leg day count */
@@ -74,6 +76,11 @@ public class SwapIndex extends Index {
    */
   public Tenor getSwapTenor() {
     return _tenor;
+  }
+
+  @Override
+  public UniqueId getUniqueId() {
+    return UniqueId.of(OBJECT_SCHEME, getName());
   }
 
   @Override

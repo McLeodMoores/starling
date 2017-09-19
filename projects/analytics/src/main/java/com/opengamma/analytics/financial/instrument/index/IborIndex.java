@@ -15,6 +15,7 @@ import org.threeten.bp.Period;
 
 import com.opengamma.financial.convention.businessday.BusinessDayConvention;
 import com.opengamma.financial.convention.daycount.DayCount;
+import com.opengamma.id.UniqueId;
 import com.opengamma.util.money.Currency;
 import com.opengamma.util.time.Tenor;
 
@@ -103,6 +104,11 @@ public class IborIndex extends IndexDeposit {
    */
   public boolean isEndOfMonth() {
     return _index.isEndOfMonth();
+  }
+
+  @Override
+  public UniqueId getUniqueId() {
+    return _index.getUniqueId();
   }
 
   @Override

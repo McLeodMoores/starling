@@ -3,12 +3,14 @@
  */
 package com.opengamma.analytics.financial.instrument.index;
 
+import com.opengamma.id.UniqueId;
 import com.opengamma.util.money.Currency;
 
 /**
  * A class describing a price index, for example the UK CPI index.
  */
 public class PriceIndex extends Index {
+  public static final String OBJECT_SCHEME = "PriceIndex";
   /** This object is used as a key within the curve system, so the hash code should be pre-calculated */
   private final int _hashCode;
 
@@ -20,6 +22,11 @@ public class PriceIndex extends Index {
   public PriceIndex(final String name, final Currency currency) {
     super(name, currency);
     _hashCode = generateHashCode();
+  }
+
+  @Override
+  public UniqueId getUniqueId() {
+    return UniqueId.of(OBJECT_SCHEME, getName());
   }
 
   @Override

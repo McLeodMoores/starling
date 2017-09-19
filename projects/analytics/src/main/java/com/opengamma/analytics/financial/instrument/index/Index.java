@@ -5,13 +5,14 @@ package com.opengamma.analytics.financial.instrument.index;
 
 import java.util.Objects;
 
+import com.opengamma.id.UniqueIdentifiable;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
 
 /**
  * Base class for objects that describe indices.
  */
-public abstract class Index {
+public abstract class Index implements UniqueIdentifiable {
   /** The index name */
   private final String _name;
   /** The index currency */
