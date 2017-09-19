@@ -5,10 +5,10 @@ package com.mcleodmoores.analytics.financial.curve.interestrate;
 
 import java.util.Map;
 
+import com.mcleodmoores.analytics.financial.index.Index;
 import com.opengamma.analytics.financial.instrument.InstrumentDefinition;
 import com.opengamma.analytics.financial.instrument.index.GeneratorAttribute;
 import com.opengamma.analytics.financial.instrument.index.GeneratorInstrument;
-import com.opengamma.analytics.financial.instrument.index.Index;
 import com.opengamma.analytics.financial.provider.curve.CurveBuildingBlockBundle;
 import com.opengamma.analytics.financial.provider.description.interestrate.ParameterProviderInterface;
 import com.opengamma.timeseries.precise.zdt.ZonedDateTimeDoubleTimeSeries;
@@ -18,29 +18,29 @@ import com.opengamma.timeseries.precise.zdt.ZonedDateTimeDoubleTimeSeries;
  */
 public interface CurveSetUpInterface<T extends ParameterProviderInterface> {
 
-  public CurveSetUpInterface<T> building(final String... curveNames);
+  CurveSetUpInterface<T> building(final String... curveNames);
 
-  public CurveSetUpInterface<T> buildingFirst(final String... curveNames);
+  CurveSetUpInterface<T> buildingFirst(final String... curveNames);
 
-  public CurveSetUpInterface<T> thenBuilding(final String... curveNames);
+  CurveSetUpInterface<T> thenBuilding(final String... curveNames);
 
-  public CurveTypeSetUpInterface<T> using(final String curveName);
+  CurveTypeSetUpInterface<T> using(final String curveName);
 
-  public CurveSetUpInterface<T> withNode(final String curveName, final GeneratorInstrument instrumentGenerator, final GeneratorAttribute attributeGenerator, final double marketData);
+  CurveSetUpInterface<T> withNode(final String curveName, final GeneratorInstrument instrumentGenerator, final GeneratorAttribute attributeGenerator, final double marketData);
 
   //TODO don't need market data here
-  public CurveSetUpInterface<T> withNode(final String curveName, InstrumentDefinition<?> definition);
+  CurveSetUpInterface<T> withNode(final String curveName, InstrumentDefinition<?> definition);
 
-  public CurveBuilder<T> getBuilder();
-
-  //TODO rename this
-  public CurveSetUpInterface<T> withKnownData(final T knownData);
+  CurveBuilder<T> getBuilder();
 
   //TODO rename this
-  public CurveSetUpInterface<T> withKnownBundle(final CurveBuildingBlockBundle knownBundle);
+  CurveSetUpInterface<T> withKnownData(final T knownData);
 
-  public CurveSetUpInterface<T> withFixingTs(final Map<Index, ZonedDateTimeDoubleTimeSeries> fixingTs);
+  //TODO rename this
+  CurveSetUpInterface<T> withKnownBundle(final CurveBuildingBlockBundle knownBundle);
 
-  public CurveSetUpInterface<T> copy();
+  CurveSetUpInterface<T> withFixingTs(final Map<Index, ZonedDateTimeDoubleTimeSeries> fixingTs);
+
+  CurveSetUpInterface<T> copy();
 
 }

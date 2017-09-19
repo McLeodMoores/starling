@@ -3,6 +3,9 @@
  */
 package com.opengamma.analytics.financial.instrument.index;
 
+import com.mcleodmoores.analytics.financial.index.IborTypeIndex;
+import com.mcleodmoores.analytics.financial.index.Index;
+import com.mcleodmoores.analytics.financial.index.OvernightIndex;
 import com.opengamma.util.ArgumentChecker;
 
 /**

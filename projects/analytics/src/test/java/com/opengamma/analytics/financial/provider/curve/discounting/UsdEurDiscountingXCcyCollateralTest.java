@@ -20,6 +20,7 @@ import org.threeten.bp.ZonedDateTime;
 
 import com.mcleodmoores.analytics.financial.curve.interestrate.DiscountingMethodCurveBuilder;
 import com.mcleodmoores.analytics.financial.curve.interestrate.DiscountingMethodCurveSetUp;
+import com.mcleodmoores.analytics.financial.index.Index;
 import com.mcleodmoores.date.CalendarAdapter;
 import com.mcleodmoores.date.WeekendWorkingDayCalendar;
 import com.opengamma.analytics.financial.forex.method.FXMatrix;
@@ -38,7 +39,6 @@ import com.opengamma.analytics.financial.instrument.index.GeneratorSwapFixedON;
 import com.opengamma.analytics.financial.instrument.index.GeneratorSwapFixedONMaster;
 import com.opengamma.analytics.financial.instrument.index.GeneratorSwapXCcyIborIbor;
 import com.opengamma.analytics.financial.instrument.index.IborIndex;
-import com.opengamma.analytics.financial.instrument.index.Index;
 import com.opengamma.analytics.financial.instrument.index.IndexON;
 import com.opengamma.analytics.financial.provider.calculator.discounting.PresentValueDiscountingCalculator;
 import com.opengamma.analytics.financial.provider.curve.CurveBuildingBlock;
@@ -163,13 +163,13 @@ public class UsdEurDiscountingXCcyCollateralTest extends CurveBuildingTests {
   /** Builder that constructs EUR and USD discounting, EURIBOR and LIBOR curves */
   private static final DiscountingMethodCurveSetUp BUILDER = DiscountingMethodCurveBuilder.setUp()
       .buildingFirst(CURVE_NAME_USD_DSC_FF)
-      .using(CURVE_NAME_USD_DSC_FF).forDiscounting(Currency.USD).forOvernightIndex(FED_FUNDS_INDEX).withInterpolator(INTERPOLATOR_LINEAR)
+      .using(CURVE_NAME_USD_DSC_FF).forDiscounting(Currency.USD).forOvernightIndex(FED_FUNDS_INDEX.toOvernightIndex()).withInterpolator(INTERPOLATOR_LINEAR)
       .thenBuilding(CURVE_NAME_USD_FWD_L3)
-      .using(CURVE_NAME_USD_FWD_L3).forIborIndex(LIBOR_INDEX).withInterpolator(INTERPOLATOR_LINEAR)
+      .using(CURVE_NAME_USD_FWD_L3).forIborIndex(LIBOR_INDEX.toIborTypeIndex()).withInterpolator(INTERPOLATOR_LINEAR)
       .thenBuilding(CURVE_NAME_EUR_DSC_EO)
-      .using(CURVE_NAME_EUR_DSC_EO).forDiscounting(Currency.EUR).forOvernightIndex(EONIA_INDEX).withInterpolator(INTERPOLATOR_LINEAR)
+      .using(CURVE_NAME_EUR_DSC_EO).forDiscounting(Currency.EUR).forOvernightIndex(EONIA_INDEX.toOvernightIndex()).withInterpolator(INTERPOLATOR_LINEAR)
       .thenBuilding(CURVE_NAME_EUR_FWD_E3)
-      .using(CURVE_NAME_EUR_FWD_E3).forIborIndex(EURIBOR_INDEX).withInterpolator(INTERPOLATOR_LINEAR)
+      .using(CURVE_NAME_EUR_FWD_E3).forIborIndex(EURIBOR_INDEX.toIborTypeIndex()).withInterpolator(INTERPOLATOR_LINEAR)
       .withKnownData(MULTICURVE_KNOWN_DATA);
   /** Market quotes for the USD discounting curve */
   private static final double[] USD_DSC_FF_MARKET_QUOTES = new double[] {

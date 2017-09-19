@@ -5,6 +5,8 @@ package com.mcleodmoores.analytics.financial.curve.interestrate;
 
 import org.threeten.bp.ZonedDateTime;
 
+import com.mcleodmoores.analytics.financial.index.IborTypeIndex;
+import com.mcleodmoores.analytics.financial.index.OvernightIndex;
 import com.opengamma.analytics.financial.curve.interestrate.generator.GeneratorCurveAddYieldExisiting;
 import com.opengamma.analytics.financial.curve.interestrate.generator.GeneratorCurveDiscountFactorInterpolated;
 import com.opengamma.analytics.financial.curve.interestrate.generator.GeneratorCurveDiscountFactorInterpolatedNode;
@@ -13,8 +15,6 @@ import com.opengamma.analytics.financial.curve.interestrate.generator.GeneratorC
 import com.opengamma.analytics.financial.curve.interestrate.generator.GeneratorCurveYieldNelsonSiegel;
 import com.opengamma.analytics.financial.curve.interestrate.generator.GeneratorCurveYieldPeriodicInterpolated;
 import com.opengamma.analytics.financial.curve.interestrate.generator.GeneratorYDCurve;
-import com.opengamma.analytics.financial.instrument.index.IborIndex;
-import com.opengamma.analytics.financial.instrument.index.IndexON;
 import com.opengamma.analytics.financial.interestrate.InstrumentDerivativeVisitor;
 import com.opengamma.analytics.financial.provider.calculator.generic.LastFixingStartTimeCalculator;
 import com.opengamma.analytics.financial.provider.calculator.generic.LastTimeCalculator;
@@ -55,7 +55,7 @@ public class DirectForwardMethodCurveTypeSetUp extends DirectForwardMethodCurveS
   //TODO versions that only take a single index
   //TODO should store currency, indices in this object rather than in super class
   @Override
-  public DirectForwardMethodCurveTypeSetUp forIborIndex(final IborIndex... indices) {
+  public DirectForwardMethodCurveTypeSetUp forIborIndex(final IborTypeIndex... indices) {
     if (indices.length != 1) {
       throw new IllegalStateException();
     }
@@ -64,7 +64,7 @@ public class DirectForwardMethodCurveTypeSetUp extends DirectForwardMethodCurveS
   }
 
   @Override
-  public DirectForwardMethodCurveTypeSetUp forOvernightIndex(final IndexON... indices) {
+  public DirectForwardMethodCurveTypeSetUp forOvernightIndex(final OvernightIndex... indices) {
     if (indices.length != 1) {
       throw new IllegalStateException();
     }

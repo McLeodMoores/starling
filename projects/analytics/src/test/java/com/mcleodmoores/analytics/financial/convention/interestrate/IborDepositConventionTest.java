@@ -10,13 +10,13 @@ import org.testng.annotations.Test;
 import org.threeten.bp.Period;
 import org.threeten.bp.ZonedDateTime;
 
+import com.mcleodmoores.analytics.financial.index.IborTypeIndex;
 import com.mcleodmoores.date.CalendarAdapter;
 import com.mcleodmoores.date.WeekendWorkingDayCalendar;
 import com.mcleodmoores.date.WorkingDayCalendar;
 import com.opengamma.analytics.financial.instrument.cash.CashDefinition;
 import com.opengamma.analytics.financial.instrument.index.GeneratorAttributeIR;
 import com.opengamma.analytics.financial.instrument.index.GeneratorDepositIbor;
-import com.opengamma.analytics.financial.instrument.index.IborTypeIndex;
 import com.opengamma.analytics.financial.instrument.index.IndexConverter;
 import com.opengamma.financial.convention.businessday.BusinessDayConventions;
 import com.opengamma.financial.convention.daycount.DayCounts;
@@ -108,7 +108,7 @@ public class IborDepositConventionTest {
   }
 
   /**
-   * Tests that the definitions is the same as that produced using the generator.
+   * Tests that the definition is the same as that produced using the generator.
    */
   @Test
   public void testGeneratorEquivalence() {

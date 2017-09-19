@@ -13,12 +13,15 @@ import org.threeten.bp.ZonedDateTime;
 
 import com.google.common.collect.LinkedListMultimap;
 import com.mcleodmoores.analytics.financial.curve.CurveUtils;
+import com.mcleodmoores.analytics.financial.index.IborTypeIndex;
+import com.mcleodmoores.analytics.financial.index.Index;
+import com.mcleodmoores.analytics.financial.index.OvernightIndex;
 import com.opengamma.analytics.financial.curve.interestrate.generator.GeneratorYDCurve;
 import com.opengamma.analytics.financial.instrument.InstrumentDefinition;
 import com.opengamma.analytics.financial.instrument.index.GeneratorAttribute;
 import com.opengamma.analytics.financial.instrument.index.GeneratorInstrument;
 import com.opengamma.analytics.financial.instrument.index.IborIndex;
-import com.opengamma.analytics.financial.instrument.index.Index;
+import com.opengamma.analytics.financial.instrument.index.IndexConverter;
 import com.opengamma.analytics.financial.instrument.index.IndexON;
 import com.opengamma.analytics.financial.interestrate.InstrumentDerivative;
 import com.opengamma.analytics.financial.legalentity.LegalEntity;
@@ -58,7 +61,7 @@ public class DiscountingMethodBondCurveBuilder extends CurveBuilder<IssuerProvid
   }
 
   DiscountingMethodBondCurveBuilder(final List<String[]> curveNames, final LinkedHashMap<String, Currency> discountingCurves,
-      final LinkedHashMap<String, IborIndex[]> iborCurves, final LinkedHashMap<String, IndexON[]> overnightCurves,
+      final LinkedHashMap<String, IborTypeIndex[]> iborCurves, final LinkedHashMap<String, OvernightIndex[]> overnightCurves,
       final LinkedListMultimap<String, Pair<Object, LegalEntityFilter<LegalEntity>>> issuerCurves,
       final Map<String, Map<Pair<GeneratorInstrument, GeneratorAttribute>, Double>> nodes,
       final Map<String, List<InstrumentDefinition<?>>> newNodes,
@@ -145,19 +148,37 @@ public class DiscountingMethodBondCurveBuilder extends CurveBuilder<IssuerProvid
 
   @Override
   Pair<IssuerProviderDiscount, CurveBuildingBlockBundle> buildCurves(final MultiCurveBundle[] curveBundles, final IssuerProviderDiscount knownData,
-      final CurveBuildingBlockBundle knownBundle, final LinkedHashMap<String, Currency> discountingCurves, final LinkedHashMap<String, IborIndex[]> iborCurves,
-      final LinkedHashMap<String, IndexON[]> overnightCurves) {
+      final CurveBuildingBlockBundle knownBundle, final LinkedHashMap<String, Currency> discountingCurves, final LinkedHashMap<String, IborTypeIndex[]> iborCurves,
+      final LinkedHashMap<String, OvernightIndex[]> overnightCurves) {
     throw new IllegalStateException();
   }
 
   Pair<IssuerProviderDiscount, CurveBuildingBlockBundle> buildCurves(final MultiCurveBundle[] curveBundles, final IssuerProviderDiscount knownData,
-      final CurveBuildingBlockBundle knownBundle, final LinkedHashMap<String, Currency> discountingCurves, final LinkedHashMap<String, IborIndex[]> iborCurves,
-      final LinkedHashMap<String, IndexON[]> overnightCurves, final LinkedListMultimap<String, Pair<Object, LegalEntityFilter<LegalEntity>>> issuerCurves) {
+      final CurveBuildingBlockBundle knownBundle, final LinkedHashMap<String, Currency> discountingCurves, final LinkedHashMap<String, IborTypeIndex[]> iborCurves,
+      final LinkedHashMap<String, OvernightIndex[]> overnightCurves, final LinkedListMultimap<String, Pair<Object, LegalEntityFilter<LegalEntity>>> issuerCurves) {
+    final LinkedHashMap<String, IborIndex[]> convertedIborCurves = new LinkedHashMap<>();
+    for (final Map.Entry<String, IborTypeIndex[]> entry : getIborCurves().entrySet()) {
+      final IborIndex[] converted = new IborIndex[entry.getValue().length];
+      int i = 0;
+      for (final IborTypeIndex index : entry.getValue()) {
+        converted[i++] = IndexConverter.toIborIndex(index);
+      }
+      convertedIborCurves.put(entry.getKey(), converted);
+    }
+    final LinkedHashMap<String, IndexON[]> convertedOvernightCurves = new LinkedHashMap<>();
+    for (final Map.Entry<String, OvernightIndex[]> entry : getOvernightCurves().entrySet()) {
+      final IndexON[] converted = new IndexON[entry.getValue().length];
+      int i = 0;
+      for (final OvernightIndex index : entry.getValue()) {
+        converted[i++] = IndexConverter.toIndexOn(index);
+      }
+      convertedOvernightCurves.put(entry.getKey(), converted);
+    }
     if (knownBundle != null) {
-      return _curveBuildingRepository.makeCurvesFromDerivatives(curveBundles, knownData, knownBundle, discountingCurves, iborCurves, overnightCurves, issuerCurves, CALCULATOR,
+      return _curveBuildingRepository.makeCurvesFromDerivatives(curveBundles, knownData, knownBundle, discountingCurves, convertedIborCurves, convertedOvernightCurves, issuerCurves, CALCULATOR,
           SENSITIVITY_CALCULATOR);
     }
-    return _curveBuildingRepository.makeCurvesFromDerivatives(curveBundles, knownData, discountingCurves, iborCurves, overnightCurves, issuerCurves, CALCULATOR,
+    return _curveBuildingRepository.makeCurvesFromDerivatives(curveBundles, knownData, discountingCurves, convertedIborCurves, convertedOvernightCurves, issuerCurves, CALCULATOR,
         SENSITIVITY_CALCULATOR);
   }
 
@@ -183,8 +204,8 @@ public class DiscountingMethodBondCurveBuilder extends CurveBuilder<IssuerProvid
   CurveBuilder<IssuerProviderDiscount> replaceMarketQuote(
       final List<String[]> curveNames,
       final LinkedHashMap<String, Currency> discountingCurves,
-      final LinkedHashMap<String, IborIndex[]> iborCurves,
-      final LinkedHashMap<String, IndexON[]> overnightCurves,
+      final LinkedHashMap<String, IborTypeIndex[]> iborCurves,
+      final LinkedHashMap<String, OvernightIndex[]> overnightCurves,
       final Map<String, Map<Pair<GeneratorInstrument, GeneratorAttribute>, Double>> newNodesForCurve,
       final Map<String, ? extends CurveTypeSetUpInterface<IssuerProviderDiscount>> curveGenerators,
           final IssuerProviderDiscount knownData,

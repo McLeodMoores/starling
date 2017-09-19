@@ -13,13 +13,13 @@ import java.util.Map;
 import org.threeten.bp.ZonedDateTime;
 
 import com.mcleodmoores.analytics.financial.curve.CurveUtils;
+import com.mcleodmoores.analytics.financial.index.IborTypeIndex;
+import com.mcleodmoores.analytics.financial.index.Index;
+import com.mcleodmoores.analytics.financial.index.OvernightIndex;
 import com.opengamma.analytics.financial.curve.interestrate.generator.GeneratorYDCurve;
 import com.opengamma.analytics.financial.instrument.InstrumentDefinition;
 import com.opengamma.analytics.financial.instrument.index.GeneratorAttribute;
 import com.opengamma.analytics.financial.instrument.index.GeneratorInstrument;
-import com.opengamma.analytics.financial.instrument.index.IborIndex;
-import com.opengamma.analytics.financial.instrument.index.Index;
-import com.opengamma.analytics.financial.instrument.index.IndexON;
 import com.opengamma.analytics.financial.interestrate.InstrumentDerivative;
 import com.opengamma.analytics.financial.provider.curve.CurveBuildingBlockBundle;
 import com.opengamma.analytics.financial.provider.curve.MultiCurveBundle;
@@ -36,8 +36,8 @@ import com.opengamma.util.tuple.Pairs;
 public abstract class CurveBuilder<T extends ParameterProviderInterface> {
   private final List<String[]> _curveNames;
   private final LinkedHashMap<String, Currency> _discountingCurves;
-  private final LinkedHashMap<String, IborIndex[]> _iborCurves;
-  private final LinkedHashMap<String, IndexON[]> _overnightCurves;
+  private final LinkedHashMap<String, IborTypeIndex[]> _iborCurves;
+  private final LinkedHashMap<String, OvernightIndex[]> _overnightCurves;
   private final Map<String, ? extends CurveTypeSetUpInterface<T>> _curveGenerators;
   private final CurveBuildingBlockBundle _knownBundle;
   private final Map<Index, ZonedDateTimeDoubleTimeSeries> _fixingTs;
@@ -46,9 +46,14 @@ public abstract class CurveBuilder<T extends ParameterProviderInterface> {
   private final Map<String, Map<Pair<GeneratorInstrument, GeneratorAttribute>, Double>> _nodes;
   private final Map<ZonedDateTime, MultiCurveBundle[]> _cached;
 
-  CurveBuilder(final List<String[]> curveNames, final LinkedHashMap<String, Currency> discountingCurves, final LinkedHashMap<String, IborIndex[]> iborCurves,
-      final LinkedHashMap<String, IndexON[]> overnightCurves, final Map<String, Map<Pair<GeneratorInstrument, GeneratorAttribute>, Double>> nodes,
-      final Map<String, List<InstrumentDefinition<?>>> newNodes, final Map<String, ? extends CurveTypeSetUpInterface<T>> curveGenerators, final T knownData, final CurveBuildingBlockBundle knownBundle,
+  CurveBuilder(final List<String[]> curveNames,
+      final LinkedHashMap<String, Currency> discountingCurves,
+      final LinkedHashMap<String, IborTypeIndex[]> iborCurves,
+      final LinkedHashMap<String, OvernightIndex[]> overnightCurves,
+      final Map<String, Map<Pair<GeneratorInstrument, GeneratorAttribute>, Double>> nodes,
+      final Map<String, List<InstrumentDefinition<?>>> newNodes,
+      final Map<String, ? extends CurveTypeSetUpInterface<T>> curveGenerators,
+          final T knownData, final CurveBuildingBlockBundle knownBundle,
           final Map<Index, ZonedDateTimeDoubleTimeSeries> fixingTs) {
     _curveNames = new ArrayList<>(curveNames);
     _discountingCurves = new LinkedHashMap<>(discountingCurves);
@@ -136,7 +141,7 @@ public abstract class CurveBuilder<T extends ParameterProviderInterface> {
   }
 
   abstract Pair<T, CurveBuildingBlockBundle> buildCurves(MultiCurveBundle[] curveBundles, T knownData, CurveBuildingBlockBundle knownBundle,
-      LinkedHashMap<String, Currency> discountingCurves, LinkedHashMap<String, IborIndex[]> iborCurves, LinkedHashMap<String, IndexON[]> overnightCurves);
+      LinkedHashMap<String, Currency> discountingCurves, LinkedHashMap<String, IborTypeIndex[]> iborCurves, LinkedHashMap<String, OvernightIndex[]> overnightCurves);
 
   public Map<String, InstrumentDefinition<?>[]> getDefinitionsForCurves(final ZonedDateTime valuationDate) {
     _cached.clear();
@@ -174,7 +179,7 @@ public abstract class CurveBuilder<T extends ParameterProviderInterface> {
   }
 
   abstract CurveBuilder<T> replaceMarketQuote(List<String[]> curveNames, LinkedHashMap<String, Currency> discountingCurves,
-      LinkedHashMap<String, IborIndex[]> iborCurves, LinkedHashMap<String, IndexON[]> overnightCurves,
+      LinkedHashMap<String, IborTypeIndex[]> iborCurves, LinkedHashMap<String, OvernightIndex[]> overnightCurves,
       Map<String, Map<Pair<GeneratorInstrument, GeneratorAttribute>, Double>> nodes, Map<String, ? extends CurveTypeSetUpInterface<T>> curveGenerators,
           T knownData, CurveBuildingBlockBundle knownBundle, Map<Index, ZonedDateTimeDoubleTimeSeries> fixingTs);
 
@@ -186,11 +191,11 @@ public abstract class CurveBuilder<T extends ParameterProviderInterface> {
     return _discountingCurves;
   }
 
-  LinkedHashMap<String, IborIndex[]> getIborCurves() {
+  LinkedHashMap<String, IborTypeIndex[]> getIborCurves() {
     return _iborCurves;
   }
 
-  LinkedHashMap<String, IndexON[]> getOvernightCurves() {
+  LinkedHashMap<String, OvernightIndex[]> getOvernightCurves() {
     return _overnightCurves;
   }
 
