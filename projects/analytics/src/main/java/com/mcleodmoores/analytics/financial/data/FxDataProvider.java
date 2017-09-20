@@ -3,7 +3,6 @@
  */
 package com.mcleodmoores.analytics.financial.data;
 
-import com.opengamma.analytics.financial.forex.method.FXMatrix;
 import com.opengamma.util.money.Currency;
 
 /**
@@ -16,5 +15,4 @@ public interface FxDataProvider extends DataProvider {
 
   double getFxRate(Currency ccy1, Currency ccy2);
 
-  FXMatrix getFxRates();
 }

@@ -15,7 +15,7 @@ import com.opengamma.util.time.Tenor;
  * A class describing a swap index, for example the reference for a constant-maturity swap.
  */
 public class SwapIndex extends Index {
-  public static final String OBJECT_SCHEME = "SwapIndex";
+  public static final String OBJECT_SCHEME = SwapIndex.class.getSimpleName();
   /** The fixed leg payment tenor */
   private final Tenor _fixedLegPaymentTenor;
   /** The fixed leg day count */

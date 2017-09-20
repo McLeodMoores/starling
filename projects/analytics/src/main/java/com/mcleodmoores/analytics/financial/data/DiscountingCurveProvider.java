@@ -11,13 +11,14 @@ import com.opengamma.id.UniqueIdentifiable;
 /**
  *
  */
-public interface DiscountingCurveDataProvider extends CurveDataProvider {
+public interface DiscountingCurveProvider extends CurveProvider {
 
   @Override
-  DiscountingCurveDataProvider copy();
+  DiscountingCurveProvider copy();
 
   double getDiscountFactor(UniqueIdentifiable id, double time);
 
-  double[] parameterForwardSensitivity(String name, List<ForwardSensitivity> pointSensitivity);
+  //TODO should this be in here? probably a separate calculator
+  double[] parameterForwardSensitivity(UniqueIdentifiable id, List<ForwardSensitivity> pointSensitivity);
 
 }

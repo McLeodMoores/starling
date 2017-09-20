@@ -5,13 +5,12 @@ package com.mcleodmoores.examples.simulated.loader.portfolio;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.FileReader;
-import java.io.OutputStreamWriter;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,6 +22,7 @@ import org.threeten.bp.Period;
 import org.threeten.bp.ZoneOffset;
 import org.threeten.bp.ZonedDateTime;
 import org.threeten.bp.format.DateTimeFormatter;
+import org.threeten.bp.format.TextStyle;
 
 import com.opengamma.component.tool.AbstractTool;
 import com.opengamma.core.id.ExternalSchemes;
@@ -60,7 +60,6 @@ import com.opengamma.util.time.Expiry;
 import com.opengamma.util.time.ExpiryAccuracy;
 
 import au.com.bytecode.opencsv.CSVReader;
-import au.com.bytecode.opencsv.CSVWriter;
 
 /**
  *
@@ -83,29 +82,51 @@ public class ExamplesBondAndFuturePortfolioLoader extends AbstractTool<ToolConte
   @Override
   protected void doRun() throws Exception {
     final ToolContext context = getToolContext();
+    final List<ManageableTrade> trades = new ArrayList<>();
     try (CSVReader reader = new CSVReader(new BufferedReader(new FileReader(_tradeFile)))) {
-      final List<ManageableTrade> trades = new ArrayList<>();
       String[] line = reader.readNext();
-      if (line == null || line.length != 1 && !line[0].startsWith("#")) {
-        LOGGER.error("First line was not a trade type: expecting \"# Bond\", \"# Bond future\" or \"# Bill\"");
-        return;
-      }
       String label = "";
       while (line != null && line.length > 0) {
         if (line[0].startsWith("#")) {
-          // new trade section
           label = line[0].toUpperCase();
           line = reader.readNext(); // ignore the headers
           line = reader.readNext();
         }
         ManageableTrade trade = null;
+        final String[] updatedLine = new String[line.length];
         if (label.contains("BOND")) {
           if (label.contains("FUTURE")) {
           } else {
-            trade = createBondTrade(context, line);
+            final LocalDate settlementDate = LocalDate.parse(line[13]);
+            final Period diff = settlementDate.until(LocalDate.now());
+            final int yearDiff = diff.getYears();
+            final int monthDiff = diff.getMonths();
+            final Period offset = _updateTrades ? Period.ofYears(yearDiff).plusMonths(monthDiff) : Period.ZERO;
+            System.arraycopy(line, 0, updatedLine, 0, line.length);
+            updatedLine[6] = LocalDate.parse(line[6]).plus(offset).format(DateTimeFormatter.ISO_DATE);
+            updatedLine[12] = LocalDate.parse(line[12]).plus(offset).format(DateTimeFormatter.ISO_DATE);
+            updatedLine[13] = settlementDate.plus(offset).format(DateTimeFormatter.ISO_DATE);
+            updatedLine[14] = LocalDate.parse(line[14]).plus(offset).format(DateTimeFormatter.ISO_DATE);
+            updatedLine[23] = LocalDate.parse(line[23]).plus(offset).format(DateTimeFormatter.ISO_DATE);
+            updatedLine[25] = LocalDate.parse(line[25]).plus(offset).format(DateTimeFormatter.ISO_DATE);
+            final String name = updatedLine[0];
+            updatedLine[0] = _updateTrades ? updateName(name, LocalDate.parse(updatedLine[13])) : name;
+            trade = createBondTrade(context, updatedLine);
           }
         } else if (label.contains("BILL")) {
-          trade = createBillTrade(context, line);
+          final LocalDate settlementDate = LocalDate.parse(line[9]);
+          final Period diff = settlementDate.until(LocalDate.now());
+          final int yearDiff = diff.getYears();
+          final int monthDiff = diff.getMonths();
+          final Period offset = _updateTrades ? Period.ofYears(yearDiff).plusMonths(monthDiff) : Period.ZERO;
+          System.arraycopy(line, 0, updatedLine, 0, line.length);
+          updatedLine[6] = LocalDate.parse(line[6]).plus(offset).format(DateTimeFormatter.ISO_DATE);
+          updatedLine[9] = settlementDate.plus(offset).format(DateTimeFormatter.ISO_DATE);
+          updatedLine[15] = LocalDate.parse(line[15]).plus(offset).format(DateTimeFormatter.ISO_DATE);
+          updatedLine[17] = LocalDate.parse(line[17]).plus(offset).format(DateTimeFormatter.ISO_DATE);
+          final String name = updatedLine[0];
+          updatedLine[0] = _updateTrades ? updateName(name, LocalDate.parse(updatedLine[9])) : name;
+          trade = createBillTrade(context, updatedLine);
         } else {
           LOGGER.error("Unknown trade type {}", label);
         }
@@ -120,76 +141,7 @@ public class ExamplesBondAndFuturePortfolioLoader extends AbstractTool<ToolConte
       }
       LOGGER.warn("{} trades created. Generating portfolio...", trades.size());
       createPortfolio(context, trades, _portfolioName);
-    } catch (final Exception e) {
-      LOGGER.error(e.getMessage());
-    }
-    if (_updateTrades) {
-      final List<String[]> updatedLines = new ArrayList<>();
-      try (CSVReader reader = new CSVReader(new BufferedReader(new FileReader(_tradeFile)))) {
-        String[] line = reader.readNext();
-        String label = "";
-        while (line != null && line.length > 0) {
-          if (line[0].startsWith("#")) {
-            label = line[0].toUpperCase();
-            updatedLines.add(line);
-            line = reader.readNext(); // ignore the headers
-            updatedLines.add(line);
-            line = reader.readNext();
-            updatedLines.add(line);
-          }
-          final String[] updatedLine = new String[line.length];
-          if (label.contains("BOND")) {
-            if (label.contains("FUTURE")) {
-            } else {
-              final LocalDate settlementDate = LocalDate.parse(line[13]);
-              final Period diff = settlementDate.until(LocalDate.now());
-              final int yearDiff = diff.getYears();
-              final int monthDiff = diff.getMonths();
-              if (monthDiff > 0 || yearDiff > 0) {
-                final Period offset = Period.ofYears(yearDiff).plusMonths(monthDiff);
-                System.arraycopy(line, 0, updatedLine, 0, line.length);
-                updatedLine[6] = LocalDate.parse(line[6]).plus(offset).format(DateTimeFormatter.ISO_DATE);
-                updatedLine[12] = LocalDate.parse(line[12]).plus(offset).format(DateTimeFormatter.ISO_DATE);
-                updatedLine[13] = settlementDate.plus(offset).format(DateTimeFormatter.ISO_DATE);
-                updatedLine[14] = LocalDate.parse(line[14]).plus(offset).format(DateTimeFormatter.ISO_DATE);
-                updatedLine[23] = LocalDate.parse(line[23]).plus(offset).format(DateTimeFormatter.ISO_DATE);
-                updatedLine[25] = LocalDate.parse(line[25]).plus(offset).format(DateTimeFormatter.ISO_DATE);
-              }
-            }
-          } else if (label.contains("BILL")) {
-            final LocalDate settlementDate = LocalDate.parse(line[9]);
-            final Period diff = settlementDate.until(LocalDate.now());
-            final int yearDiff = diff.getYears();
-            final int monthDiff = diff.getMonths();
-            if (monthDiff > 0 || yearDiff > 0) {
-              final Period offset = Period.ofYears(yearDiff).plusMonths(monthDiff);
-              System.arraycopy(line, 0, updatedLine, 0, line.length);
-              updatedLine[6] = LocalDate.parse(line[6]).plus(offset).format(DateTimeFormatter.ISO_DATE);
-              updatedLine[9] = settlementDate.plus(offset).format(DateTimeFormatter.ISO_DATE);
-              updatedLine[15] = LocalDate.parse(line[15]).plus(offset).format(DateTimeFormatter.ISO_DATE);
-              updatedLine[17] = LocalDate.parse(line[17]).plus(offset).format(DateTimeFormatter.ISO_DATE);
-            }
-          } else {
-            LOGGER.error("Unknown trade type {}", label);
-          }
-          updatedLines.add(updatedLine);
-          line = reader.readNext();
-        }
-      } catch (final Exception e) {
-        LOGGER.error(e.getMessage());
-      }
-      final String absolutePath = _tradeFile.getAbsolutePath();
-      final boolean deleted = _tradeFile.delete();
-      if (!deleted) {
-        LOGGER.error("Could not delete {} when trying to update positions: file will be unchanged", absolutePath);
-        return;
-      }
-      final File newFile = new File(absolutePath);
-      try (CSVWriter writer = new CSVWriter(new OutputStreamWriter(new FileOutputStream(newFile)))) {
-        writer.writeAll(updatedLines);
-      } catch (final Exception e) {
-        LOGGER.error(e.getMessage());
-      }
+      line = reader.readNext();
     }
   }
 
@@ -243,7 +195,7 @@ public class ExamplesBondAndFuturePortfolioLoader extends AbstractTool<ToolConte
       trade.setPremiumCurrency(currency);
       trade.setPremiumDate(premiumDate);
       trade.setPremiumTime(premiumTime);
-      trade.setPremium(quantity.doubleValue() * issuancePrice);
+      trade.setPremium(issuancePrice / 100.);
       return trade;
     } catch (final Exception e) {
       LOGGER.error("Error creating bond {}, error was {}", Arrays.toString(details), e.getMessage());
@@ -336,5 +288,50 @@ public class ExamplesBondAndFuturePortfolioLoader extends AbstractTool<ToolConte
       document = new PortfolioDocument(manageablePortfolio);
       context.getPortfolioMaster().add(document);
     }
+  }
+
+  private static String updateName(final String name, final LocalDate updatedStart) {
+    // want to update AUG to SEP and 2017 to 2018, for example
+    final String[] parts = name.split(" ");
+    if (parts.length < 2) {
+      return name;
+    }
+    final StringBuilder sb = new StringBuilder();
+    if (parts[0].toUpperCase().matches("(JAN|FEB|MAR|APR|MAY|JUN|JUL|AUG|SEP|OCT|NOV|DEC)[A-Z]{0,6}")) {
+      final String originalMonthName = parts[0];
+      if (originalMonthName.length() == 3) {
+        if (originalMonthName.toUpperCase().equals(originalMonthName)) {
+          sb.append(updatedStart.getMonth().getDisplayName(TextStyle.SHORT_STANDALONE, Locale.getDefault()).toUpperCase());
+        } else {
+          sb.append(updatedStart.getMonth().getDisplayName(TextStyle.SHORT_STANDALONE, Locale.getDefault()));
+        }
+      } else {
+        // know length was greater than 3 or it wouldn't have matched
+        // making an assumption that the name is in fact a month name
+        if (originalMonthName.toUpperCase().equals(originalMonthName)) {
+          sb.append(updatedStart.getMonth().getDisplayName(TextStyle.FULL_STANDALONE, Locale.getDefault()).toUpperCase());
+        } else {
+          sb.append(updatedStart.getMonth().getDisplayName(TextStyle.FULL_STANDALONE, Locale.getDefault()));
+        }
+      }
+    } else {
+      sb.append(parts[0]);
+    }
+    sb.append(" ");
+    if (parts[1].matches("20\\d\\d")) {
+      sb.append(updatedStart.getYear());
+    } else {
+      sb.append(parts[1]);
+    }
+    if (parts.length > 2) {
+      sb.append(" ");
+    }
+    for (int i = 2; i < parts.length; i++) {
+      sb.append(parts[i]);
+      if (i < name.length() - 1) {
+        sb.append(" ");
+      }
+    }
+    return sb.toString();
   }
 }

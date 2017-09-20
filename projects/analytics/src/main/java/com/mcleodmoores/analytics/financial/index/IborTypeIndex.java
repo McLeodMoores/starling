@@ -16,7 +16,7 @@ import com.opengamma.util.time.Tenor;
  * A class describing an IBOR-like index.
  */
 public class IborTypeIndex extends Index {
-  public static final String OBJECT_SCHEME = "IborIndex";
+  public static final String OBJECT_SCHEME = IborTypeIndex.class.getSimpleName();
 
   /** The index spot lag in days between trade and settlement date */
   private final int _spotLag;

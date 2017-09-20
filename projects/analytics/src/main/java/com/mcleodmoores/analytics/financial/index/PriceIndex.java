@@ -10,7 +10,7 @@ import com.opengamma.util.money.Currency;
  * A class describing a price index, for example the UK CPI index.
  */
 public class PriceIndex extends Index {
-  public static final String OBJECT_SCHEME = "PriceIndex";
+  public static final String OBJECT_SCHEME = PriceIndex.class.getSimpleName();
   /** This object is used as a key within the curve system, so the hash code should be pre-calculated */
   private final int _hashCode;
 

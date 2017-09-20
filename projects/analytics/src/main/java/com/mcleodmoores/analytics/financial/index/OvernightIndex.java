@@ -15,7 +15,7 @@ import com.opengamma.util.money.Currency;
  * fixing period for this index is one day.
  */
 public class OvernightIndex extends Index {
-  public static final String OBJECT_SCHEME = "OvernightIndex";
+  public static final String OBJECT_SCHEME = OvernightIndex.class.getSimpleName();
   /** The day count convention associated with the overnight rate */
   private final DayCount _dayCount;
   /** The number of days between start of the fixing period and the publication of the index value */

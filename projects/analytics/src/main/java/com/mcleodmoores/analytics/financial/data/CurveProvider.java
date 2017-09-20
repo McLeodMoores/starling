@@ -12,16 +12,13 @@ import com.opengamma.util.tuple.DoublesPair;
 /**
  *
  */
-public interface CurveDataProvider extends DataProvider {
+public interface CurveProvider extends DataProvider {
 
   @Override
-  CurveDataProvider copy();
+  CurveProvider copy();
 
+  //TODO should this be in here? probably a separate calculator
   double[] parameterSensitivity(UniqueIdentifiable id, List<DoublesPair> pointSensitivity);
-
-  Set<String> getAllCurveNames();
-
-  String getCurveNameForId(UniqueIdentifiable id);
 
   Set<UniqueIdentifiable> getIdentifiers();
 
