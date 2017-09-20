@@ -9,6 +9,7 @@ import java.util.Collections;
 import java.util.List;
 
 import com.mcleodmoores.financial.function.bond.config.BondDiscountingMethodFunctions;
+import com.mcleodmoores.financial.function.fx.config.FxDiscountingMethodFunctions;
 import com.opengamma.engine.function.config.AbstractFunctionConfigurationBean;
 import com.opengamma.engine.function.config.CombiningFunctionConfigurationSource;
 import com.opengamma.engine.function.config.FunctionConfiguration;
@@ -182,7 +183,7 @@ public class ModelFunctions extends AbstractFunctionConfigurationBean {
    * @return A configuration source containing these functions.
    */
   protected FunctionConfigurationSource discountingFunctionConfiguration() {
-    return DiscountingPricingFunctions.instance();
+    return CombiningFunctionConfigurationSource.of(DiscountingPricingFunctions.instance(), FxDiscountingMethodFunctions.instance());
   }
 
   /**
