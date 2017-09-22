@@ -7,7 +7,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
@@ -29,17 +28,15 @@ import com.google.common.collect.ImmutableMap;
 import com.mcleodmoores.analytics.financial.index.Index;
 import com.opengamma.analytics.financial.forex.method.FXMatrix;
 import com.opengamma.analytics.financial.model.interestrate.curve.YieldAndDiscountCurve;
-import com.opengamma.analytics.financial.provider.sensitivity.multicurve.ForwardSensitivity;
 import com.opengamma.id.UniqueIdentifiable;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
-import com.opengamma.util.tuple.DoublesPair;
 
 /**
  *
  */
 @BeanDefinition
-public class FixedIncomeCurveProvider implements FxDataProvider, DiscountingCurveProvider, IndexCurveProvider, ImmutableBean {
+public class FixedIncomeCurvesProvider implements FxDataProvider, DiscountingCurveProvider, IndexCurveProvider, ImmutableBean {
   @PropertyDefinition
   private final Map<UniqueIdentifiable, YieldAndDiscountCurve> _discountingCurves;
   @PropertyDefinition
@@ -48,7 +45,7 @@ public class FixedIncomeCurveProvider implements FxDataProvider, DiscountingCurv
   private final FXMatrix _fxMatrix;
 
   @ImmutableConstructor
-  private FixedIncomeCurveProvider(final Map<UniqueIdentifiable, YieldAndDiscountCurve> discountingCurves,
+  private FixedIncomeCurvesProvider(final Map<UniqueIdentifiable, YieldAndDiscountCurve> discountingCurves,
       final Map<Index, YieldAndDiscountCurve> indexCurves,
       final FXMatrix fxMatrix) {
     _discountingCurves = discountingCurves == null
@@ -67,8 +64,8 @@ public class FixedIncomeCurveProvider implements FxDataProvider, DiscountingCurv
   }
 
   @Override
-  public FixedIncomeCurveProvider copy() {
-    return new FixedIncomeCurveProvider(_discountingCurves, _indexCurves, _fxMatrix);
+  public FixedIncomeCurvesProvider copy() {
+    return new FixedIncomeCurvesProvider(_discountingCurves, _indexCurves, _fxMatrix);
   }
 
   @Override
@@ -93,6 +90,19 @@ public class FixedIncomeCurveProvider implements FxDataProvider, DiscountingCurv
       }
     }
     return result;
+  }
+
+  @Override
+  public YieldAndDiscountCurve getCurve(final UniqueIdentifiable id) {
+    YieldAndDiscountCurve curve = _discountingCurves.get(id);
+    if (curve != null) {
+      return curve;
+    }
+    curve = _indexCurves.get(id);
+    if (curve != null) {
+      return curve;
+    }
+    throw new IllegalArgumentException("Could not get curve with id " + id);
   }
 
   @Override
@@ -137,68 +147,6 @@ public class FixedIncomeCurveProvider implements FxDataProvider, DiscountingCurv
   }
 
   @Override
-  public double[] parameterSensitivity(final UniqueIdentifiable id, final List<DoublesPair> pointSensitivity) {
-    YieldAndDiscountCurve curve = _discountingCurves.get(id);
-    if (curve == null) {
-      curve = _indexCurves.get(id);
-        if (curve == null) {
-          throw new IllegalArgumentException("Could not get curve with id " + id);
-      }
-    }
-    // want to only return results for cases where a curve is present, even if they're empty
-    final int n = curve.getNumberOfParameters();
-    if (pointSensitivity == null || pointSensitivity.size() <= 0) {
-      // sensitivities are 0
-      return new double[n];
-    }
-    final double[] result = new double[n];
-    for (final DoublesPair pair : pointSensitivity) {
-      final double t = pair.getFirst();
-      final double dy = pair.getSecond();
-      final double[] sensitivities = curve.getInterestRateParameterSensitivity(t);
-      for (int i = 0; i < n; i++) {
-        result[i] += dy * sensitivities[i];
-      }
-    }
-    return result;
-  }
-
-  @Override
-  public double[] parameterForwardSensitivity(final UniqueIdentifiable id, final List<ForwardSensitivity> pointSensitivity) {
-    YieldAndDiscountCurve curve = _discountingCurves.get(id);
-    if (curve == null) {
-      curve = _indexCurves.get(id);
-        if (curve == null) {
-          throw new IllegalArgumentException("Could not get curve with id " + id);
-      }
-    }
-    final int n = curve.getNumberOfParameters();
-    final double[] result = new double[n];
-    // want to only return results for cases where a curve is present, even if they're empty
-    if (pointSensitivity == null || pointSensitivity.size() <= 0) {
-      // sensitivities are 0
-      return new double[n];
-    }
-    for (final ForwardSensitivity pair : pointSensitivity) {
-      final double t1 = pair.getStartTime();
-      final double t2 = pair.getEndTime();
-      final double fBar = pair.getValue();
-      // only the sensitivity to the forward is available; the sensitivity to the pseudo-discount factors needs to be computed.
-      final double dfT1 = curve.getDiscountFactor(t1);
-      final double dfT2 = curve.getDiscountFactor(t2);
-      final double dFdyT1 = pair.derivativeToYieldStart(dfT1, dfT2);
-      final double dFdyT2 = pair.derivativeToYieldEnd(dfT1, dfT2);
-      final double[] sensitivityT1 = curve.getInterestRateParameterSensitivity(t1);
-      final double[] sensitivityT2 = curve.getInterestRateParameterSensitivity(t2);
-      for (int i = 0; i < n; i++) {
-        result[i] += dFdyT1 * sensitivityT1[i] * fBar;
-        result[i] += dFdyT2 * sensitivityT2[i] * fBar;
-      }
-    }
-    return result;
-  }
-
-  @Override
   public double getFxRate(final Currency ccy1, final Currency ccy2) {
     return _fxMatrix.getFxRate(ccy1, ccy2);
   }
@@ -206,28 +154,28 @@ public class FixedIncomeCurveProvider implements FxDataProvider, DiscountingCurv
   //------------------------- AUTOGENERATED START -------------------------
   ///CLOVER:OFF
   /**
-   * The meta-bean for {@code FixedIncomeCurveProvider}.
+   * The meta-bean for {@code FixedIncomeCurvesProvider}.
    * @return the meta-bean, not null
    */
-  public static FixedIncomeCurveProvider.Meta meta() {
-    return FixedIncomeCurveProvider.Meta.INSTANCE;
+  public static FixedIncomeCurvesProvider.Meta meta() {
+    return FixedIncomeCurvesProvider.Meta.INSTANCE;
   }
 
   static {
-    JodaBeanUtils.registerMetaBean(FixedIncomeCurveProvider.Meta.INSTANCE);
+    JodaBeanUtils.registerMetaBean(FixedIncomeCurvesProvider.Meta.INSTANCE);
   }
 
   /**
    * Returns a builder used to create an instance of the bean.
    * @return the builder, not null
    */
-  public static FixedIncomeCurveProvider.Builder builder() {
-    return new FixedIncomeCurveProvider.Builder();
+  public static FixedIncomeCurvesProvider.Builder builder() {
+    return new FixedIncomeCurvesProvider.Builder();
   }
 
   @Override
-  public FixedIncomeCurveProvider.Meta metaBean() {
-    return FixedIncomeCurveProvider.Meta.INSTANCE;
+  public FixedIncomeCurvesProvider.Meta metaBean() {
+    return FixedIncomeCurvesProvider.Meta.INSTANCE;
   }
 
   @Override
@@ -282,7 +230,7 @@ public class FixedIncomeCurveProvider implements FxDataProvider, DiscountingCurv
       return true;
     }
     if (obj != null && obj.getClass() == this.getClass()) {
-      FixedIncomeCurveProvider other = (FixedIncomeCurveProvider) obj;
+      FixedIncomeCurvesProvider other = (FixedIncomeCurvesProvider) obj;
       return JodaBeanUtils.equal(getDiscountingCurves(), other.getDiscountingCurves()) &&
           JodaBeanUtils.equal(getIndexCurves(), other.getIndexCurves()) &&
           JodaBeanUtils.equal(getFxMatrix(), other.getFxMatrix());
@@ -302,7 +250,7 @@ public class FixedIncomeCurveProvider implements FxDataProvider, DiscountingCurv
   @Override
   public String toString() {
     StringBuilder buf = new StringBuilder(128);
-    buf.append("FixedIncomeCurveProvider{");
+    buf.append("FixedIncomeCurvesProvider{");
     int len = buf.length();
     toString(buf);
     if (buf.length() > len) {
@@ -320,7 +268,7 @@ public class FixedIncomeCurveProvider implements FxDataProvider, DiscountingCurv
 
   //-----------------------------------------------------------------------
   /**
-   * The meta-bean for {@code FixedIncomeCurveProvider}.
+   * The meta-bean for {@code FixedIncomeCurvesProvider}.
    */
   public static class Meta extends DirectMetaBean {
     /**
@@ -333,18 +281,18 @@ public class FixedIncomeCurveProvider implements FxDataProvider, DiscountingCurv
      */
     @SuppressWarnings({"unchecked", "rawtypes" })
     private final MetaProperty<Map<UniqueIdentifiable, YieldAndDiscountCurve>> _discountingCurves = DirectMetaProperty.ofImmutable(
-        this, "discountingCurves", FixedIncomeCurveProvider.class, (Class) Map.class);
+        this, "discountingCurves", FixedIncomeCurvesProvider.class, (Class) Map.class);
     /**
      * The meta-property for the {@code indexCurves} property.
      */
     @SuppressWarnings({"unchecked", "rawtypes" })
     private final MetaProperty<Map<Index, YieldAndDiscountCurve>> _indexCurves = DirectMetaProperty.ofImmutable(
-        this, "indexCurves", FixedIncomeCurveProvider.class, (Class) Map.class);
+        this, "indexCurves", FixedIncomeCurvesProvider.class, (Class) Map.class);
     /**
      * The meta-property for the {@code fxMatrix} property.
      */
     private final MetaProperty<FXMatrix> _fxMatrix = DirectMetaProperty.ofImmutable(
-        this, "fxMatrix", FixedIncomeCurveProvider.class, FXMatrix.class);
+        this, "fxMatrix", FixedIncomeCurvesProvider.class, FXMatrix.class);
     /**
      * The meta-properties.
      */
@@ -374,13 +322,13 @@ public class FixedIncomeCurveProvider implements FxDataProvider, DiscountingCurv
     }
 
     @Override
-    public FixedIncomeCurveProvider.Builder builder() {
-      return new FixedIncomeCurveProvider.Builder();
+    public FixedIncomeCurvesProvider.Builder builder() {
+      return new FixedIncomeCurvesProvider.Builder();
     }
 
     @Override
-    public Class<? extends FixedIncomeCurveProvider> beanType() {
-      return FixedIncomeCurveProvider.class;
+    public Class<? extends FixedIncomeCurvesProvider> beanType() {
+      return FixedIncomeCurvesProvider.class;
     }
 
     @Override
@@ -418,11 +366,11 @@ public class FixedIncomeCurveProvider implements FxDataProvider, DiscountingCurv
     protected Object propertyGet(Bean bean, String propertyName, boolean quiet) {
       switch (propertyName.hashCode()) {
         case -1937730619:  // discountingCurves
-          return ((FixedIncomeCurveProvider) bean).getDiscountingCurves();
+          return ((FixedIncomeCurvesProvider) bean).getDiscountingCurves();
         case 886361302:  // indexCurves
-          return ((FixedIncomeCurveProvider) bean).getIndexCurves();
+          return ((FixedIncomeCurvesProvider) bean).getIndexCurves();
         case -1198118093:  // fxMatrix
-          return ((FixedIncomeCurveProvider) bean).getFxMatrix();
+          return ((FixedIncomeCurvesProvider) bean).getFxMatrix();
       }
       return super.propertyGet(bean, propertyName, quiet);
     }
@@ -440,9 +388,9 @@ public class FixedIncomeCurveProvider implements FxDataProvider, DiscountingCurv
 
   //-----------------------------------------------------------------------
   /**
-   * The bean-builder for {@code FixedIncomeCurveProvider}.
+   * The bean-builder for {@code FixedIncomeCurvesProvider}.
    */
-  public static class Builder extends DirectFieldsBeanBuilder<FixedIncomeCurveProvider> {
+  public static class Builder extends DirectFieldsBeanBuilder<FixedIncomeCurvesProvider> {
 
     private Map<UniqueIdentifiable, YieldAndDiscountCurve> _discountingCurves;
     private Map<Index, YieldAndDiscountCurve> _indexCurves;
@@ -458,7 +406,7 @@ public class FixedIncomeCurveProvider implements FxDataProvider, DiscountingCurv
      * Restricted copy constructor.
      * @param beanToCopy  the bean to copy from, not null
      */
-    protected Builder(FixedIncomeCurveProvider beanToCopy) {
+    protected Builder(FixedIncomeCurvesProvider beanToCopy) {
       this._discountingCurves = (beanToCopy.getDiscountingCurves() != null ? ImmutableMap.copyOf(beanToCopy.getDiscountingCurves()) : null);
       this._indexCurves = (beanToCopy.getIndexCurves() != null ? ImmutableMap.copyOf(beanToCopy.getIndexCurves()) : null);
       this._fxMatrix = beanToCopy.getFxMatrix();
@@ -523,8 +471,8 @@ public class FixedIncomeCurveProvider implements FxDataProvider, DiscountingCurv
     }
 
     @Override
-    public FixedIncomeCurveProvider build() {
-      return new FixedIncomeCurveProvider(
+    public FixedIncomeCurvesProvider build() {
+      return new FixedIncomeCurvesProvider(
           _discountingCurves,
           _indexCurves,
           _fxMatrix);
@@ -565,7 +513,7 @@ public class FixedIncomeCurveProvider implements FxDataProvider, DiscountingCurv
     @Override
     public String toString() {
       StringBuilder buf = new StringBuilder(128);
-      buf.append("FixedIncomeCurveProvider.Builder{");
+      buf.append("FixedIncomeCurvesProvider.Builder{");
       int len = buf.length();
       toString(buf);
       if (buf.length() > len) {
