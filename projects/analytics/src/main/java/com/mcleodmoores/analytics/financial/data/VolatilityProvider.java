@@ -3,8 +3,6 @@
  */
 package com.mcleodmoores.analytics.financial.data;
 
-import java.util.Set;
-
 import com.opengamma.id.UniqueIdentifiable;
 
 /**
@@ -15,12 +13,11 @@ public interface VolatilityProvider extends DataProvider {
   @Override
   VolatilityProvider copy();
 
-  Set<UniqueIdentifiable> getIdentifiers();
+  UniqueIdentifiable getIdentifier();
 
-  Set<UniqueIdentifiable> getIdentifiersForScheme(String scheme);
+  double getVolatility(double x, double y, double z);
 
   //FX
-//  double getVolatility(Currency ccy1, Currency ccy2, double time);
 //  double getVolatility(final Currency ccy1, final Currency ccy2, final double time, final double strike, final double forward);
 //  SmileDeltaParameters getSmile(final Currency ccy1, final Currency ccy2, final double time);
 
