@@ -238,10 +238,10 @@ public class AudDiscounting3mBankBill6mBankBillTest extends CurveBuildingTests {
   private static final Pair<MulticurveProviderDiscount, CurveBuildingBlockBundle> DSC_THEN_BANK_BILLS_AFTER_FIXING;
 
   static {
-    DSC_BANK_BILLS_SIMULTANEOUS_BEFORE_FIXING = DISCOUNTING_AND_BANK_BILLS_BUILDER.copy().withFixingTs(FIXING_TS_WITHOUT_TODAY).getBuilder().buildCurves(NOW);
-    DSC_BANK_BILLS_SIMULTANEOUS_AFTER_FIXING = DISCOUNTING_AND_BANK_BILLS_BUILDER.copy().withFixingTs(FIXING_TS_WITH_TODAY).getBuilder().buildCurves(NOW);
-    DSC_THEN_BANK_BILLS_BEFORE_FIXING = DISCOUNTING_THEN_BANK_BILLS_BUILDER.copy().withFixingTs(FIXING_TS_WITHOUT_TODAY).getBuilder().buildCurves(NOW);
-    DSC_THEN_BANK_BILLS_AFTER_FIXING = DISCOUNTING_THEN_BANK_BILLS_BUILDER.copy().withFixingTs(FIXING_TS_WITH_TODAY).getBuilder().buildCurves(NOW);
+    DSC_BANK_BILLS_SIMULTANEOUS_BEFORE_FIXING = DISCOUNTING_AND_BANK_BILLS_BUILDER.copy().getBuilder().buildCurves(NOW, FIXING_TS_WITHOUT_TODAY);
+    DSC_BANK_BILLS_SIMULTANEOUS_AFTER_FIXING = DISCOUNTING_AND_BANK_BILLS_BUILDER.copy().getBuilder().buildCurves(NOW, FIXING_TS_WITH_TODAY);
+    DSC_THEN_BANK_BILLS_BEFORE_FIXING = DISCOUNTING_THEN_BANK_BILLS_BUILDER.copy().getBuilder().buildCurves(NOW, FIXING_TS_WITHOUT_TODAY);
+    DSC_THEN_BANK_BILLS_AFTER_FIXING = DISCOUNTING_THEN_BANK_BILLS_BUILDER.copy().getBuilder().buildCurves(NOW, FIXING_TS_WITH_TODAY);
   }
   /** Calculation tolerance */
   private static final double EPS = 1.0e-9;
@@ -284,8 +284,7 @@ public class AudDiscounting3mBankBill6mBankBillTest extends CurveBuildingTests {
     // discounting then 3m then 6m
     Map<String, InstrumentDefinition<?>[]> definitions;
     // before fixing
-    definitions = DISCOUNTING_THEN_BANK_BILLS_BUILDER.copy()
-        .withFixingTs(FIXING_TS_WITHOUT_TODAY).getBuilder().getDefinitionsForCurves(NOW);
+    definitions = DISCOUNTING_THEN_BANK_BILLS_BUILDER.copy().getBuilder().getDefinitionsForCurves(NOW);
     curveConstructionTest(definitions.get(CURVE_NAME_DSC_AUD), DSC_THEN_BANK_BILLS_BEFORE_FIXING.getFirst(), PresentValueDiscountingCalculator.getInstance(),
         FIXING_TS_WITHOUT_TODAY, FX_MATRIX, NOW, Currency.AUD);
     curveConstructionTest(definitions.get(CURVE_NAME_FWD3_AUD), DSC_THEN_BANK_BILLS_BEFORE_FIXING.getFirst(), PresentValueDiscountingCalculator.getInstance(),
@@ -293,8 +292,7 @@ public class AudDiscounting3mBankBill6mBankBillTest extends CurveBuildingTests {
     curveConstructionTest(definitions.get(CURVE_NAME_FWD6_AUD), DSC_THEN_BANK_BILLS_BEFORE_FIXING.getFirst(), PresentValueDiscountingCalculator.getInstance(),
         FIXING_TS_WITHOUT_TODAY, FX_MATRIX, NOW, Currency.AUD);
     // after fixing
-    definitions = DISCOUNTING_THEN_BANK_BILLS_BUILDER.copy()
-        .withFixingTs(FIXING_TS_WITH_TODAY).getBuilder().getDefinitionsForCurves(NOW);
+    definitions = DISCOUNTING_THEN_BANK_BILLS_BUILDER.copy().getBuilder().getDefinitionsForCurves(NOW);
     curveConstructionTest(definitions.get(CURVE_NAME_DSC_AUD), DSC_THEN_BANK_BILLS_AFTER_FIXING.getFirst(),
         PresentValueDiscountingCalculator.getInstance(), FIXING_TS_WITH_TODAY, FX_MATRIX, NOW, Currency.AUD);
     curveConstructionTest(definitions.get(CURVE_NAME_FWD3_AUD), DSC_THEN_BANK_BILLS_AFTER_FIXING.getFirst(),
@@ -303,8 +301,7 @@ public class AudDiscounting3mBankBill6mBankBillTest extends CurveBuildingTests {
         PresentValueDiscountingCalculator.getInstance(), FIXING_TS_WITH_TODAY, FX_MATRIX, NOW, Currency.AUD);
     // discounting and bank bills
     // before fixing
-    definitions = DISCOUNTING_AND_BANK_BILLS_BUILDER.copy()
-        .withFixingTs(FIXING_TS_WITHOUT_TODAY).getBuilder().getDefinitionsForCurves(NOW);
+    definitions = DISCOUNTING_AND_BANK_BILLS_BUILDER.copy().getBuilder().getDefinitionsForCurves(NOW);
     curveConstructionTest(definitions.get(CURVE_NAME_DSC_AUD), DSC_BANK_BILLS_SIMULTANEOUS_BEFORE_FIXING.getFirst(),
         PresentValueDiscountingCalculator.getInstance(), FIXING_TS_WITHOUT_TODAY, FX_MATRIX, NOW, Currency.AUD);
     curveConstructionTest(definitions.get(CURVE_NAME_FWD3_AUD), DSC_BANK_BILLS_SIMULTANEOUS_BEFORE_FIXING.getFirst(),
@@ -312,7 +309,7 @@ public class AudDiscounting3mBankBill6mBankBillTest extends CurveBuildingTests {
     curveConstructionTest(definitions.get(CURVE_NAME_FWD6_AUD), DSC_BANK_BILLS_SIMULTANEOUS_BEFORE_FIXING.getFirst(),
         PresentValueDiscountingCalculator.getInstance(), FIXING_TS_WITHOUT_TODAY, FX_MATRIX, NOW, Currency.AUD);
     // after fixing
-    definitions = DISCOUNTING_AND_BANK_BILLS_BUILDER.copy().withFixingTs(FIXING_TS_WITH_TODAY).getBuilder().getDefinitionsForCurves(NOW);
+    definitions = DISCOUNTING_AND_BANK_BILLS_BUILDER.copy().getBuilder().getDefinitionsForCurves(NOW);
     curveConstructionTest(definitions.get(CURVE_NAME_DSC_AUD), DSC_BANK_BILLS_SIMULTANEOUS_AFTER_FIXING.getFirst(),
         PresentValueDiscountingCalculator.getInstance(), FIXING_TS_WITH_TODAY, FX_MATRIX, NOW, Currency.AUD);
     curveConstructionTest(definitions.get(CURVE_NAME_FWD3_AUD), DSC_BANK_BILLS_SIMULTANEOUS_AFTER_FIXING.getFirst(),
@@ -456,18 +453,18 @@ public class AudDiscounting3mBankBill6mBankBillTest extends CurveBuildingTests {
     final int nbTest = 100;
 
     startTime = System.currentTimeMillis();
-    DiscountingMethodCurveBuilder builder = DISCOUNTING_THEN_BANK_BILLS_BUILDER.copy().withFixingTs(FIXING_TS_WITHOUT_TODAY).getBuilder();
+    DiscountingMethodCurveBuilder builder = DISCOUNTING_THEN_BANK_BILLS_BUILDER.copy().getBuilder();
     for (int i = 0; i < nbTest; i++) {
-      builder.buildCurves(NOW);
+      builder.buildCurves(NOW, FIXING_TS_WITHOUT_TODAY);
     }
     endTime = System.currentTimeMillis();
     System.out.println(nbTest + " x 3 curves construction / 2 units: " + (endTime - startTime) + " ms");
     // Performance note: Curve construction 2 units: 08-Nov-12: On Mac Pro 3.2 GHz Quad-Core Intel Xeon: 810 ms for 100 sets.
 
     startTime = System.currentTimeMillis();
-    builder = DISCOUNTING_AND_BANK_BILLS_BUILDER.copy().withFixingTs(FIXING_TS_WITHOUT_TODAY).getBuilder();
+    builder = DISCOUNTING_AND_BANK_BILLS_BUILDER.copy().getBuilder();
     for (int looptest = 0; looptest < nbTest; looptest++) {
-      builder.buildCurves(NOW);
+      builder.buildCurves(NOW, FIXING_TS_WITHOUT_TODAY);
     }
     endTime = System.currentTimeMillis();
     System.out.println(nbTest + " x 3 curves construction / 1 unit: " + (endTime - startTime) + " ms");

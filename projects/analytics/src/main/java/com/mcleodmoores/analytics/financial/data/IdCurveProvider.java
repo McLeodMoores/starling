@@ -11,10 +11,10 @@ import com.opengamma.id.UniqueIdentifiable;
 /**
  *
  */
-public interface CurveProvider extends DataProvider {
+public interface IdCurveProvider extends DataProvider {
 
   @Override
-  CurveProvider copy();
+  IdCurveProvider copy();
 
   Set<UniqueIdentifiable> getIdentifiers();
 

@@ -4,7 +4,6 @@
 package com.mcleodmoores.analytics.financial.curve.interestrate;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,8 +16,6 @@ import com.mcleodmoores.analytics.financial.index.Index;
 import com.mcleodmoores.analytics.financial.index.OvernightIndex;
 import com.opengamma.analytics.financial.curve.interestrate.generator.GeneratorYDCurve;
 import com.opengamma.analytics.financial.instrument.InstrumentDefinition;
-import com.opengamma.analytics.financial.instrument.index.GeneratorAttribute;
-import com.opengamma.analytics.financial.instrument.index.GeneratorInstrument;
 import com.opengamma.analytics.financial.instrument.index.IborIndex;
 import com.opengamma.analytics.financial.instrument.index.IndexConverter;
 import com.opengamma.analytics.financial.instrument.index.IndexON;
@@ -60,11 +57,10 @@ public class HullWhiteMethodCurveBuilder extends CurveBuilder<HullWhiteOneFactor
 
   HullWhiteMethodCurveBuilder(final List<String[]> curveNames, final LinkedHashMap<String, Currency> discountingCurves,
       final LinkedHashMap<String, IborTypeIndex[]> iborCurves, final LinkedHashMap<String, OvernightIndex[]> overnightCurves,
-      final Map<String, Map<Pair<GeneratorInstrument, GeneratorAttribute>, Double>> nodes,
-      final Map<String, List<InstrumentDefinition<?>>> newNodes,
+      final Map<String, List<InstrumentDefinition<?>>> nodes,
       final Map<String, ? extends CurveTypeSetUpInterface<HullWhiteOneFactorProviderDiscount>> curveGenerators,
-          final HullWhiteOneFactorProviderDiscount knownData, final CurveBuildingBlockBundle knownBundle, final Map<Index, ZonedDateTimeDoubleTimeSeries> fixingTs) {
-    super(curveNames, discountingCurves, iborCurves, overnightCurves, nodes, newNodes, curveGenerators, knownData, knownBundle, fixingTs);
+      final HullWhiteOneFactorProviderDiscount knownData, final CurveBuildingBlockBundle knownBundle) {
+    super(curveNames, discountingCurves, iborCurves, overnightCurves, nodes, curveGenerators, knownData, knownBundle);
     _curveBuildingRepository = new HullWhiteProviderDiscountBuildingRepository(_absoluteTolerance, _relativeTolerance, _maxSteps);
   }
 
@@ -99,23 +95,9 @@ public class HullWhiteMethodCurveBuilder extends CurveBuilder<HullWhiteOneFactor
         SENSITIVITY_CALCULATOR);
   }
 
-  @Override
-  CurveBuilder<HullWhiteOneFactorProviderDiscount> replaceMarketQuote(
-      final List<String[]> curveNames,
-      final LinkedHashMap<String, Currency> discountingCurves,
-      final LinkedHashMap<String, IborTypeIndex[]> iborCurves,
-      final LinkedHashMap<String, OvernightIndex[]> overnightCurves,
-      final Map<String, Map<Pair<GeneratorInstrument, GeneratorAttribute>, Double>> newNodesForCurve,
-      final Map<String, ? extends CurveTypeSetUpInterface<HullWhiteOneFactorProviderDiscount>> curveGenerators,
-          final HullWhiteOneFactorProviderDiscount knownData,
-          final CurveBuildingBlockBundle knownBundle,
-          final Map<Index, ZonedDateTimeDoubleTimeSeries> fixingTs) {
-    return new HullWhiteMethodCurveBuilder(curveNames, discountingCurves, iborCurves, overnightCurves, newNodesForCurve, new HashMap<String, List<InstrumentDefinition<?>>>(),
-        curveGenerators, knownData, knownBundle, fixingTs);
-  }
-
   //TODO cache definitions on LocalDate
-  public Pair<MulticurveProviderDiscount, CurveBuildingBlockBundle> buildCurvesWithoutConvexityAdjustment(final ZonedDateTime valuationDate) {
+  public Pair<MulticurveProviderDiscount, CurveBuildingBlockBundle> buildCurvesWithoutConvexityAdjustment(final ZonedDateTime valuationDate,
+      final Map<Index, ZonedDateTimeDoubleTimeSeries> fixings) {
     final Map<String, GeneratorYDCurve> generatorForCurve = new HashMap<>();
     final int size = getCurveNames().size();
     final MultiCurveBundle[] curveBundles = new MultiCurveBundle[size];
@@ -124,19 +106,17 @@ public class HullWhiteMethodCurveBuilder extends CurveBuilder<HullWhiteOneFactor
       final SingleCurveBundle[] unitBundle = new SingleCurveBundle[curveNamesForUnit.length];
       for (int j = 0; j < curveNamesForUnit.length; j++) {
         final String curveName = curveNamesForUnit[j];
-        final Map<Pair<GeneratorInstrument, GeneratorAttribute>, Double> nodesForCurve = getNodes().get(curveName);
+        final List<InstrumentDefinition<?>> nodesForCurve = getNodes().get(curveName);
         if (nodesForCurve == null) {
           throw new IllegalStateException();
         }
-        final Iterator<Map.Entry<Pair<GeneratorInstrument, GeneratorAttribute>, Double>> nodesIterator = nodesForCurve.entrySet().iterator();
         final int nNodes = nodesForCurve.size();
         final InstrumentDerivative[] instruments = new InstrumentDerivative[nNodes];
         //TODO could do sorting of derivatives here
         final double[] curveInitialGuess = new double[nNodes];
         for (int k = 0; k < nNodes; k++) {
-          final Map.Entry<Pair<GeneratorInstrument, GeneratorAttribute>, Double> info = nodesIterator.next();
-          final InstrumentDefinition<?> definition = info.getKey().getFirst().generateInstrument(valuationDate, info.getValue(), 1, info.getKey().getSecond());
-          instruments[k] = CurveUtils.convert(definition, getFixingTs(), valuationDate);
+          final InstrumentDefinition<?> definition = nodesForCurve.get(k);
+          instruments[k] = CurveUtils.convert(definition, fixings, valuationDate);
           curveInitialGuess[k] = definition.accept(CurveUtils.RATES_INITIALIZATION);
         }
         final GeneratorYDCurve instrumentGenerator = getCurveGenerators().get(curveName).buildCurveGenerator(valuationDate).finalGenerator(instruments);

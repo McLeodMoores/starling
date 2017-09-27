@@ -3,15 +3,9 @@
  */
 package com.mcleodmoores.analytics.financial.curve.interestrate;
 
-import java.util.Map;
-
-import com.mcleodmoores.analytics.financial.index.Index;
 import com.opengamma.analytics.financial.instrument.InstrumentDefinition;
-import com.opengamma.analytics.financial.instrument.index.GeneratorAttribute;
-import com.opengamma.analytics.financial.instrument.index.GeneratorInstrument;
 import com.opengamma.analytics.financial.provider.curve.CurveBuildingBlockBundle;
 import com.opengamma.analytics.financial.provider.description.interestrate.ParameterProviderInterface;
-import com.opengamma.timeseries.precise.zdt.ZonedDateTimeDoubleTimeSeries;
 
 /**
  *
@@ -26,10 +20,9 @@ public interface CurveSetUpInterface<T extends ParameterProviderInterface> {
 
   CurveTypeSetUpInterface<T> using(final String curveName);
 
-  CurveSetUpInterface<T> withNode(final String curveName, final GeneratorInstrument instrumentGenerator, final GeneratorAttribute attributeGenerator, final double marketData);
+  CurveSetUpInterface<T> addNode(final String curveName, InstrumentDefinition<?> definition);
 
-  //TODO don't need market data here
-  CurveSetUpInterface<T> withNode(final String curveName, InstrumentDefinition<?> definition);
+  CurveSetUpInterface<T> removeNodes(String curveName);
 
   CurveBuilder<T> getBuilder();
 
@@ -38,8 +31,6 @@ public interface CurveSetUpInterface<T extends ParameterProviderInterface> {
 
   //TODO rename this
   CurveSetUpInterface<T> withKnownBundle(final CurveBuildingBlockBundle knownBundle);
-
-  CurveSetUpInterface<T> withFixingTs(final Map<Index, ZonedDateTimeDoubleTimeSeries> fixingTs);
 
   CurveSetUpInterface<T> copy();
 

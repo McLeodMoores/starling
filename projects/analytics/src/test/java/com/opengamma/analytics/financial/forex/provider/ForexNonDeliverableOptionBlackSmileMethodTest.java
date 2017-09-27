@@ -263,8 +263,6 @@ public class ForexNonDeliverableOptionBlackSmileMethodTest {
     final double pvUp = ForexOptionVanillaBlackSmileMethod.getInstance().presentValue(DELIVERABLE_EQUIVALENT_OPTION, spotUp).getAmount(Currency.EUR);
     final double pvDown = ForexOptionVanillaBlackSmileMethod.getInstance().presentValue(DELIVERABLE_EQUIVALENT_OPTION, spotDown).getAmount(Currency.EUR);
     final double delta = (pvUp - pvDown) / 2 / eps / STRIKE / EUR_NOTIONAL;
-    System.err.println(spotDelta);
-    System.err.println(delta);
   }
 
 }

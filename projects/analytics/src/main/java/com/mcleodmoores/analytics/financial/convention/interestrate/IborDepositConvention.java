@@ -137,9 +137,6 @@ public class IborDepositConvention implements CurveDataConvention<DepositIborDef
       return false;
     }
     final IborDepositConvention other = (IborDepositConvention) obj;
-    if (!Objects.equals(_tenor, other._tenor)) {
-      return false;
-    }
     if (!Objects.equals(_index, other._index)) {
       return false;
     }

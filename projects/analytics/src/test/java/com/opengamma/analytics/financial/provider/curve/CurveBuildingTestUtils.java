@@ -178,7 +178,7 @@ public class CurveBuildingTestUtils {
 
   public static <T extends ParameterProviderInterface> void assertFiniteDifferenceSensitivities(final CurveBuildingBlockBundle fullInverseJacobian,
       final Map<Index, ZonedDateTimeDoubleTimeSeries> fixingTs, final CurveSetUpInterface<T> builder, final String curveToTest,
-      final String sensitivityCurve, final ZonedDateTime valuationTime, final GeneratorInstrument<? extends GeneratorAttribute>[] generators,
+      final String sensitivityCurve, final ZonedDateTime valuationTime, final GeneratorInstrument[] generators,
       final GeneratorAttribute[] attributes, final double[] marketQuotes, final boolean expectZeroSensitivities) {
     final double bump = 1e-6;
     final Pair<CurveBuildingBlock, DoubleMatrix2D> curveToTestBlock = fullInverseJacobian.getBlock(curveToTest);
@@ -192,16 +192,19 @@ public class CurveBuildingTestUtils {
     final int offsetIntoMatrix = curveToTestBlock.getFirst().getStart(sensitivityCurve);
       // check sensitivities against those calculated using finite difference
     for (int i = 0; i < sensitivityCurveSize; i++) {
-      final Pair<T, CurveBuildingBlockBundle> upResults = builder.copy()
-          .withFixingTs(fixingTs)
-          .getBuilder()
-          .replaceMarketQuote(sensitivityCurve, generators[i], attributes[i], marketQuotes[i] + bump)
-          .buildCurves(valuationTime);
-      final Pair<T, CurveBuildingBlockBundle> downResults = builder.copy()
-          .withFixingTs(fixingTs)
-          .getBuilder()
-          .replaceMarketQuote(sensitivityCurve, generators[i], attributes[i], marketQuotes[i] - bump)
-          .buildCurves(valuationTime);
+      final CurveSetUpInterface<T> upBuilder = builder.copy().removeNodes(sensitivityCurve);
+      final CurveSetUpInterface<T> downBuilder = builder.copy().removeNodes(sensitivityCurve);
+      for (int j = 0; j < sensitivityCurveSize; j++) {
+        if (i == j) {
+          upBuilder.addNode(sensitivityCurve, generators[j].generateInstrument(valuationTime, marketQuotes[j] + bump, 1, attributes[j]));
+          downBuilder.addNode(sensitivityCurve, generators[j].generateInstrument(valuationTime, marketQuotes[j] - bump, 1, attributes[j]));
+        } else {
+          upBuilder.addNode(sensitivityCurve, generators[j].generateInstrument(valuationTime, marketQuotes[j], 1, attributes[j]));
+          downBuilder.addNode(sensitivityCurve, generators[j].generateInstrument(valuationTime, marketQuotes[j], 1, attributes[j]));
+        }
+      }
+      final Pair<T, CurveBuildingBlockBundle> upResults = upBuilder.getBuilder().buildCurves(valuationTime, fixingTs);
+      final Pair<T, CurveBuildingBlockBundle> downResults = downBuilder.getBuilder().buildCurves(valuationTime, fixingTs);
       final Double[] upYields = getYData(upResults.getFirst(), curveToTest);
       final Double[] downYields = getYData(downResults.getFirst(), curveToTest);
       final int offset = i + offsetIntoMatrix;

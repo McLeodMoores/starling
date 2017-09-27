@@ -8,7 +8,7 @@ import com.opengamma.id.UniqueIdentifiable;
 /**
  *
  */
-public interface DiscountingCurveProvider extends CurveProvider {
+public interface DiscountingCurveProvider extends IdCurveProvider {
 
   @Override
   DiscountingCurveProvider copy();

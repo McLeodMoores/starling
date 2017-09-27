@@ -101,9 +101,10 @@ public class IborDepositConventionTest {
         + "business day convention=Modified Following, spot lag=2, end-of-month], tenor=Tenor[P3M], calendar=Saturday / Sunday: [SATURDAY, SUNDAY]]");
     other = IborDepositConvention.builder().withCalendar(WeekendWorkingDayCalendar.FRIDAY_SATURDAY).withIborIndex(INDEX).build();
     assertNotEquals(CONVENTION, other);
-    other = IborDepositConvention.builder().withCalendar(CALENDAR)
-        .withIborIndex(new IborTypeIndex("NAME", Currency.USD, Tenor.THREE_MONTHS, 1,
-            DayCounts.ACT_360, BusinessDayConventions.MODIFIED_FOLLOWING, true)).build();
+    other = IborDepositConvention.builder()
+        .withCalendar(CALENDAR)
+        .withIborIndex(new IborTypeIndex("NAME", Currency.USD, Tenor.THREE_MONTHS, 1, DayCounts.ACT_360,
+            BusinessDayConventions.MODIFIED_FOLLOWING, true)).build();
     assertNotEquals(CONVENTION, other);
   }
 
@@ -128,7 +129,7 @@ public class IborDepositConventionTest {
   public void testDefinition() {
     final ZonedDateTime date = DateUtils.getUTCDate(2017, 1, 27);
     final double rate = 0.01;
-    final CashDefinition cash = CONVENTION.toCurveInstrument(date, null, null, 1, rate);
+    final CashDefinition cash = CONVENTION.toCurveInstrument(date, Tenor.of(Period.ZERO), Tenor.THREE_MONTHS, 1, rate);
     assertEquals(cash.getStartDate(), DateUtils.getUTCDate(2017, 1, 31));
     assertEquals(cash.getEndDate(), DateUtils.getUTCDate(2017, 4, 30));
     assertEquals(cash.getAccrualFactor(), 89 / 360., 1e-15);

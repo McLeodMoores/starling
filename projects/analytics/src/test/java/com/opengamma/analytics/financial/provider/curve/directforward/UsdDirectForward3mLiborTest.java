@@ -166,8 +166,8 @@ public class UsdDirectForward3mLiborTest extends CurveBuildingTests {
   /** Curves constructed after today's fixing */
   private static final Pair<MulticurveProviderForward, CurveBuildingBlockBundle> AFTER_TODAYS_FIXING;
   static {
-    BEFORE_TODAYS_FIXING = BUILDER_FOR_TEST.copy().withFixingTs(FIXING_TS_WITHOUT_TODAY).getBuilder().buildCurves(NOW);
-    AFTER_TODAYS_FIXING = BUILDER_FOR_TEST.copy().withFixingTs(FIXING_TS_WITH_TODAY).getBuilder().buildCurves(NOW);
+    BEFORE_TODAYS_FIXING = BUILDER_FOR_TEST.copy().getBuilder().buildCurves(NOW, FIXING_TS_WITHOUT_TODAY);
+    AFTER_TODAYS_FIXING = BUILDER_FOR_TEST.copy().getBuilder().buildCurves(NOW, FIXING_TS_WITH_TODAY);
   }
 
   /**
@@ -193,7 +193,6 @@ public class UsdDirectForward3mLiborTest extends CurveBuildingTests {
   @Test
   public void testInstrumentsInCurvePriceToZero() {
     Map<String, InstrumentDefinition<?>[]> definitions = BUILDER_FOR_TEST.copy()
-        .withFixingTs(FIXING_TS_WITHOUT_TODAY)
         .getBuilder()
         .getDefinitionsForCurves(NOW);
     curveConstructionTest(definitions.get(CURVE_NAME_DSC_USD), BEFORE_TODAYS_FIXING.getFirst(),
@@ -201,7 +200,6 @@ public class UsdDirectForward3mLiborTest extends CurveBuildingTests {
     curveConstructionTest(definitions.get(CURVE_NAME_FWD3_USD), BEFORE_TODAYS_FIXING.getFirst(),
         PresentValueDiscountingCalculator.getInstance(), FIXING_TS_WITHOUT_TODAY, FX_MATRIX, NOW, Currency.USD);
     definitions = BUILDER_FOR_TEST.copy()
-        .withFixingTs(FIXING_TS_WITH_TODAY)
         .getBuilder()
         .getDefinitionsForCurves(NOW);
     curveConstructionTest(definitions.get(CURVE_NAME_DSC_USD), AFTER_TODAYS_FIXING.getFirst(),

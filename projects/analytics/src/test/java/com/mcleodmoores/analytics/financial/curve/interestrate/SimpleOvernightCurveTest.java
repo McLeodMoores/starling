@@ -1,7 +1,7 @@
 /**
  * Copyright (C) 2017 - present McLeod Moores Software Limited.  All rights reserved.
  */
-package com.mcleodmoores.analytics.financial.curve.construction.discounting;
+package com.mcleodmoores.analytics.financial.curve.interestrate;
 
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
@@ -17,8 +17,6 @@ import org.threeten.bp.ZonedDateTime;
 import com.mcleodmoores.analytics.financial.convention.interestrate.CurveDataConvention.EndOfMonthConvention;
 import com.mcleodmoores.analytics.financial.convention.interestrate.OvernightDepositConvention;
 import com.mcleodmoores.analytics.financial.convention.interestrate.VanillaOisConvention;
-import com.mcleodmoores.analytics.financial.curve.interestrate.DiscountingMethodCurveBuilder;
-import com.mcleodmoores.analytics.financial.curve.interestrate.DiscountingMethodCurveSetUp;
 import com.mcleodmoores.analytics.financial.index.Index;
 import com.mcleodmoores.analytics.financial.index.OvernightIndex;
 import com.mcleodmoores.date.WeekendWorkingDayCalendar;
@@ -94,14 +92,13 @@ public class SimpleOvernightCurveTest {
   private static final DiscountingMethodCurveSetUp CURVE_BUILDER = DiscountingMethodCurveBuilder.setUp()
       .building(CURVE_NAME)
       .using(CURVE_NAME).forDiscounting(Currency.USD).forOvernightIndex(INDEX).withInterpolator(INTERPOLATOR)
-      .withKnownData(KNOWN_DATA)
-      .withFixingTs(FIXINGS);
+      .withKnownData(KNOWN_DATA);
 
   static {
     final Tenor startTenor = Tenor.of(Period.ZERO);
-    CURVE_BUILDER.withNode(CURVE_NAME, DEPOSIT.toCurveInstrument(VALUATION_DATE, startTenor, Tenor.ON, 1, OVERNIGHT_QUOTE));
+    CURVE_BUILDER.addNode(CURVE_NAME, DEPOSIT.toCurveInstrument(VALUATION_DATE, startTenor, Tenor.ON, 1, OVERNIGHT_QUOTE));
     for (int i = 0; i < OIS_TENORS.length; i++) {
-      CURVE_BUILDER.withNode(CURVE_NAME, OIS.toCurveInstrument(VALUATION_DATE, startTenor, OIS_TENORS[i], 1, OIS_QUOTES[i]));
+      CURVE_BUILDER.addNode(CURVE_NAME, OIS.toCurveInstrument(VALUATION_DATE, startTenor, OIS_TENORS[i], 1, OIS_QUOTES[i]));
     }
   }
 
@@ -112,7 +109,7 @@ public class SimpleOvernightCurveTest {
    */
   @Test
   public void testDataInBundle() {
-    final Pair<MulticurveProviderDiscount, CurveBuildingBlockBundle> result = CURVE_BUILDER.getBuilder().buildCurves1(VALUATION_DATE);
+    final Pair<MulticurveProviderDiscount, CurveBuildingBlockBundle> result = CURVE_BUILDER.getBuilder().buildCurves(VALUATION_DATE, FIXINGS);
     final MulticurveProviderDiscount curves = result.getFirst();
     assertEquals(curves.getDiscountingCurves().size(), 1);
     assertTrue(curves.getForwardIborCurves().isEmpty());
@@ -127,7 +124,7 @@ public class SimpleOvernightCurveTest {
    */
   @Test
   public void testCurveInstrumentsPriceToZero() {
-    final MulticurveProviderDiscount curves = CURVE_BUILDER.getBuilder().buildCurves1(VALUATION_DATE).getFirst();
+    final MulticurveProviderDiscount curves = CURVE_BUILDER.getBuilder().buildCurves(VALUATION_DATE, FIXINGS).getFirst();
     final Tenor startTenor = Tenor.of(Period.ZERO);
     final CashDefinition deposit = DEPOSIT.toCurveInstrument(VALUATION_DATE, startTenor, Tenor.ON, 1, OVERNIGHT_QUOTE);
     assertEquals(deposit.toDerivative(VALUATION_DATE).accept(PresentValueDiscountingCalculator.getInstance(), curves).getAmount(Currency.USD), 0, EPS);
@@ -142,7 +139,7 @@ public class SimpleOvernightCurveTest {
    */
   @Test
   public void regression() {
-    final Pair<MulticurveProviderDiscount, CurveBuildingBlockBundle> result = CURVE_BUILDER.getBuilder().buildCurves1(VALUATION_DATE);
+    final Pair<MulticurveProviderDiscount, CurveBuildingBlockBundle> result = CURVE_BUILDER.getBuilder().buildCurves(VALUATION_DATE, FIXINGS);
     final MulticurveProviderDiscount curves = result.getFirst();
     final DoublesCurve discounting = ((YieldCurve) curves.getCurve(Currency.USD)).getCurve();
     assertTrue(discounting instanceof InterpolatedDoublesCurve);

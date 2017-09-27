@@ -5,7 +5,7 @@ package com.mcleodmoores.analytics.financial.curve.calculator;
 
 import java.util.List;
 
-import com.mcleodmoores.analytics.financial.data.CurveProvider;
+import com.mcleodmoores.analytics.financial.data.IdCurveProvider;
 import com.opengamma.analytics.financial.model.interestrate.curve.YieldAndDiscountCurve;
 import com.opengamma.analytics.financial.provider.sensitivity.multicurve.ForwardSensitivity;
 import com.opengamma.id.UniqueIdentifiable;
@@ -16,7 +16,7 @@ import com.opengamma.id.UniqueIdentifiable;
 public class ForwardSensitivityCalculator implements SensitivityCalculator<ForwardSensitivity> {
 
   @Override
-  public double[] getSensitivities(final UniqueIdentifiable id, final CurveProvider curveProvider, final List<ForwardSensitivity> pointSensitivities) {
+  public double[] getSensitivities(final UniqueIdentifiable id, final IdCurveProvider curveProvider, final List<ForwardSensitivity> pointSensitivities) {
     final YieldAndDiscountCurve curve = curveProvider.getCurve(id);
     final int n = curve.getNumberOfParameters();
     final double[] result = new double[n];

@@ -10,17 +10,11 @@ import java.util.List;
 import java.util.Map;
 
 import com.mcleodmoores.analytics.financial.index.IborTypeIndex;
-import com.mcleodmoores.analytics.financial.index.Index;
 import com.mcleodmoores.analytics.financial.index.OvernightIndex;
 import com.opengamma.analytics.financial.instrument.InstrumentDefinition;
-import com.opengamma.analytics.financial.instrument.index.GeneratorAttribute;
-import com.opengamma.analytics.financial.instrument.index.GeneratorInstrument;
 import com.opengamma.analytics.financial.provider.curve.CurveBuildingBlockBundle;
 import com.opengamma.analytics.financial.provider.description.interestrate.MulticurveProviderDiscount;
-import com.opengamma.timeseries.precise.zdt.ZonedDateTimeDoubleTimeSeries;
 import com.opengamma.util.money.Currency;
-import com.opengamma.util.tuple.Pair;
-import com.opengamma.util.tuple.Pairs;
 
 /**
  *
@@ -33,9 +27,7 @@ public class DiscountingMethodCurveSetUp implements CurveSetUpInterface<Multicur
   protected final LinkedHashMap<String, IborTypeIndex[]> _iborCurves;
   protected final LinkedHashMap<String, OvernightIndex[]> _overnightCurves;
   protected final Map<String, DiscountingMethodCurveTypeSetUp> _curveTypes;
-  protected final Map<String, Map<Pair<GeneratorInstrument, GeneratorAttribute>, Double>> _nodes;
-  protected final Map<String, List<InstrumentDefinition<?>>> _newNodes;
-  protected final Map<Index, ZonedDateTimeDoubleTimeSeries> _fixingTs;
+  protected final Map<String, List<InstrumentDefinition<?>>> _nodes;
   protected MulticurveProviderDiscount _knownData;
   protected CurveBuildingBlockBundle _knownBundle;
 
@@ -45,10 +37,7 @@ public class DiscountingMethodCurveSetUp implements CurveSetUpInterface<Multicur
     _iborCurves = new LinkedHashMap<>();
     _overnightCurves = new LinkedHashMap<>();
     _curveTypes = new HashMap<>();
-    //TODO currently have to add things in the right order for each curve - need to have comparator for attribute generator tenors
     _nodes = new LinkedHashMap<>();
-    _newNodes = new LinkedHashMap<>();
-    _fixingTs = new HashMap<>();
     _knownData = null;
     _knownBundle = null;
   }
@@ -60,27 +49,23 @@ public class DiscountingMethodCurveSetUp implements CurveSetUpInterface<Multicur
     _iborCurves = setup._iborCurves;
     _overnightCurves = setup._overnightCurves;
     _curveTypes = setup._curveTypes;
-    //TODO currently have to add things in the right order for each curve - need to have comparator for attribute generator tenors
+    // TODO sort
     _nodes = setup._nodes;
-    _newNodes = setup._newNodes;
-    _fixingTs = setup._fixingTs;
     _knownData = setup._knownData;
     _knownBundle = setup._knownBundle;
   }
 
   protected DiscountingMethodCurveSetUp(final List<String[]> curveNames, final LinkedHashMap<String, Currency> discountingCurves, final LinkedHashMap<String, IborTypeIndex[]> iborCurves,
-      final LinkedHashMap<String, OvernightIndex[]> overnightCurves, final Map<String, Map<Pair<GeneratorInstrument, GeneratorAttribute>, Double>> nodes,
+      final LinkedHashMap<String, OvernightIndex[]> overnightCurves,
       final Map<String, List<InstrumentDefinition<?>>> newNodes,
-      final Map<Index, ZonedDateTimeDoubleTimeSeries> fixingTs, final Map<String, DiscountingMethodCurveTypeSetUp> curveTypes,  final MulticurveProviderDiscount knownData,
+      final Map<String, DiscountingMethodCurveTypeSetUp> curveTypes,  final MulticurveProviderDiscount knownData,
       final CurveBuildingBlockBundle knownBundle) {
     _curveNames = new ArrayList<>(curveNames);
     _discountingCurves = new LinkedHashMap<>(discountingCurves);
     _iborCurves = new LinkedHashMap<>(iborCurves);
     _overnightCurves = new LinkedHashMap<>(overnightCurves);
-    _nodes = new HashMap<>(nodes);
-    _newNodes = new HashMap<>(newNodes);
+    _nodes = new HashMap<>(newNodes);
     _curveTypes = new HashMap<>(curveTypes);
-    _fixingTs = new HashMap<>(fixingTs);
     _knownData = knownData == null ? null : knownData.copy();
     _knownBundle = knownBundle == null ? null : knownBundle; //TODO no copy
   }
@@ -88,13 +73,14 @@ public class DiscountingMethodCurveSetUp implements CurveSetUpInterface<Multicur
 
   @Override
   public DiscountingMethodCurveBuilder getBuilder() {
-    return new DiscountingMethodCurveBuilder(_curveNames, _discountingCurves, _iborCurves, _overnightCurves, _nodes, _newNodes, _curveTypes,
-        _knownData, _knownBundle, _fixingTs);
+    return new DiscountingMethodCurveBuilder(_curveNames, _discountingCurves, _iborCurves, _overnightCurves, _nodes, _curveTypes,
+        _knownData, _knownBundle);
   }
 
   @Override
   public DiscountingMethodCurveSetUp copy() {
-    return new DiscountingMethodCurveSetUp(_curveNames, _discountingCurves, _iborCurves, _overnightCurves, _nodes, _newNodes, _fixingTs, _curveTypes,
+    // TODO not a copy
+    return new DiscountingMethodCurveSetUp(_curveNames, _discountingCurves, _iborCurves, _overnightCurves, _nodes, _curveTypes,
         _knownData, _knownBundle);
   }
 
@@ -135,30 +121,22 @@ public class DiscountingMethodCurveSetUp implements CurveSetUpInterface<Multicur
     return type;
   }
 
-
   @Override
-  public DiscountingMethodCurveSetUp withNode(final String curveName, final GeneratorInstrument instrumentGenerator, final GeneratorAttribute attributeGenerator, final double marketData) {
-    Map<Pair<GeneratorInstrument, GeneratorAttribute>, Double> nodesForCurve = _nodes.get(curveName);
-    if (nodesForCurve == null) {
-      nodesForCurve = new LinkedHashMap<>();
-      _nodes.put(curveName, nodesForCurve);
-    }
-    nodesForCurve.put(Pairs.<GeneratorInstrument, GeneratorAttribute>of(instrumentGenerator, attributeGenerator), marketData);
-    //TODO if market data is already present, log then overwrite
-    return this;
-  }
-
-  @Override
-  public DiscountingMethodCurveSetUp withNode(final String curveName, final InstrumentDefinition<?> definition) {
-    List<InstrumentDefinition<?>> nodesForCurve = _newNodes.get(curveName);
+  public DiscountingMethodCurveSetUp addNode(final String curveName, final InstrumentDefinition<?> definition) {
+    List<InstrumentDefinition<?>> nodesForCurve = _nodes.get(curveName);
     if (nodesForCurve == null) {
       nodesForCurve = new ArrayList<>();
-      _newNodes.put(curveName, nodesForCurve);
+      _nodes.put(curveName, nodesForCurve);
     }
     nodesForCurve.add(definition);
     return this;
   }
 
+  @Override
+  public DiscountingMethodCurveSetUp removeNodes(final String curveName) {
+    _nodes.put(curveName, null);
+    return this;
+  }
   //TODO add a withNode that takes definitions
 
   @Override
@@ -171,12 +149,6 @@ public class DiscountingMethodCurveSetUp implements CurveSetUpInterface<Multicur
   @Override
   public DiscountingMethodCurveSetUp withKnownBundle(final CurveBuildingBlockBundle knownBundle) {
     _knownBundle = knownBundle;
-    return this;
-  }
-
-  @Override
-  public DiscountingMethodCurveSetUp withFixingTs(final Map<Index, ZonedDateTimeDoubleTimeSeries> fixingTs) {
-    _fixingTs.putAll(fixingTs);
     return this;
   }
 

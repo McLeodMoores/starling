@@ -220,8 +220,8 @@ public class UsdDiscountingGovernment3Test extends CurveBuildingTests {
   private static final Pair<IssuerProviderDiscount, CurveBuildingBlockBundle> AFTER_TODAYS_FIXING;
   // build curves before and after today's fixing
   static {
-    BEFORE_TODAYS_FIXING = BUILDER_FOR_TEST.copy().withFixingTs(FIXING_TS_WITHOUT_TODAY).getBuilder().buildCurves(NOW);
-    AFTER_TODAYS_FIXING = BUILDER_FOR_TEST.copy().withFixingTs(FIXING_TS_WITH_TODAY).getBuilder().buildCurves(NOW);
+    BEFORE_TODAYS_FIXING = BUILDER_FOR_TEST.copy().getBuilder().buildCurves(NOW, FIXING_TS_WITHOUT_TODAY);
+    AFTER_TODAYS_FIXING = BUILDER_FOR_TEST.copy().getBuilder().buildCurves(NOW, FIXING_TS_WITH_TODAY);
   }
 
   @Override
@@ -242,7 +242,6 @@ public class UsdDiscountingGovernment3Test extends CurveBuildingTests {
   @Test
   public void testInstrumentsInCurvePriceToZero() {
     Map<String, InstrumentDefinition<?>[]> definitions = BUILDER_FOR_TEST.copy()
-        .withFixingTs(FIXING_TS_WITHOUT_TODAY)
         .getBuilder()
         .getDefinitionsForCurves(NOW);
     curveConstructionTest(definitions.get(CURVE_NAME_DSC_USD), BEFORE_TODAYS_FIXING.getFirst(),
@@ -250,7 +249,6 @@ public class UsdDiscountingGovernment3Test extends CurveBuildingTests {
     curveConstructionTest(definitions.get(CURVE_NAME_GOVTUS_USD), BEFORE_TODAYS_FIXING.getFirst(),
         PresentValueIssuerCalculator.getInstance(), FIXING_TS_WITHOUT_TODAY, FX_MATRIX, NOW, Currency.USD);
     definitions = BUILDER_FOR_TEST.copy()
-        .withFixingTs(FIXING_TS_WITH_TODAY)
         .getBuilder()
         .getDefinitionsForCurves(NOW);
     curveConstructionTest(definitions.get(CURVE_NAME_DSC_USD), AFTER_TODAYS_FIXING.getFirst(),
@@ -318,9 +316,9 @@ public class UsdDiscountingGovernment3Test extends CurveBuildingTests {
     final int nbTest = 100;
 
     startTime = System.currentTimeMillis();
-    final CurveBuilder<IssuerProviderDiscount> builder = BUILDER_FOR_TEST.copy().withFixingTs(FIXING_TS_WITHOUT_TODAY).getBuilder();
+    final CurveBuilder<IssuerProviderDiscount> builder = BUILDER_FOR_TEST.copy().getBuilder();
     for (int i = 0; i < nbTest; i++) {
-      builder.buildCurves(NOW);
+      builder.buildCurves(NOW, FIXING_TS_WITHOUT_TODAY);
     }
     endTime = System.currentTimeMillis();
     System.out.println(nbTest + " curve construction / 2 units: " + (endTime - startTime) + " ms");

@@ -124,8 +124,8 @@ public class BrlDiscountingOvernight2Test extends CurveBuildingTests {
   /** Curves constructed after today's fixing */
   private static final Pair<MulticurveProviderDiscount, CurveBuildingBlockBundle> AFTER_TODAYS_FIXING;
   static {
-    BEFORE_TODAYS_FIXING = BUILDER_FOR_TEST.copy().withFixingTs(FIXING_TS_WITHOUT_TODAY).getBuilder().buildCurves(NOW);
-    AFTER_TODAYS_FIXING = BUILDER_FOR_TEST.copy().withFixingTs(FIXING_TS_WITH_TODAY).getBuilder().buildCurves(NOW);
+    BEFORE_TODAYS_FIXING = BUILDER_FOR_TEST.copy().getBuilder().buildCurves(NOW, FIXING_TS_WITHOUT_TODAY);
+    AFTER_TODAYS_FIXING = BUILDER_FOR_TEST.copy().getBuilder().buildCurves(NOW, FIXING_TS_WITH_TODAY);
   }
 
   @Override
@@ -143,11 +143,9 @@ public class BrlDiscountingOvernight2Test extends CurveBuildingTests {
   @Test
   public void testInstrumentsInCurvePriceToZero() {
     final Map<String, InstrumentDefinition<?>[]> definitionsForCurvesBeforeFixing = BUILDER_FOR_TEST.copy()
-        .withFixingTs(FIXING_TS_WITHOUT_TODAY)
         .getBuilder()
         .getDefinitionsForCurves(NOW);
     final Map<String, InstrumentDefinition<?>[]> definitionsForCurvesAfterFixing = BUILDER_FOR_TEST.copy()
-        .withFixingTs(FIXING_TS_WITH_TODAY)
         .getBuilder()
         .getDefinitionsForCurves(NOW);
     curveConstructionTest(definitionsForCurvesBeforeFixing.get(CURVE_NAME_DSC_BRL),
@@ -188,9 +186,9 @@ public class BrlDiscountingOvernight2Test extends CurveBuildingTests {
     final int nbTest = 100;
 
     startTime = System.currentTimeMillis();
-    final DiscountingMethodCurveBuilder builder = BUILDER_FOR_TEST.copy().withFixingTs(FIXING_TS_WITHOUT_TODAY).getBuilder();
+    final DiscountingMethodCurveBuilder builder = BUILDER_FOR_TEST.copy().getBuilder();
     for (int i = 0; i < nbTest; i++) {
-      builder.buildCurves(NOW);
+      builder.buildCurves(NOW, FIXING_TS_WITHOUT_TODAY);
     }
     endTime = System.currentTimeMillis();
     System.out.println(nbTest + " curve construction Brazilian CDI EUR 1 units: " + (endTime - startTime) + " ms");

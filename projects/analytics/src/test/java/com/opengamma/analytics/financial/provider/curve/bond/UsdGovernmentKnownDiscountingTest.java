@@ -161,8 +161,8 @@ public class UsdGovernmentKnownDiscountingTest extends CurveBuildingTests {
     for (int i = 0; i < DSC_USD_GENERATORS.length; i++) {
       builder.withNode(CURVE_NAME_DSC_USD, DSC_USD_GENERATORS[i], DSC_USD_ATTR[i], DSC_USD_MARKET_QUOTES[i]);
     }
-    final MulticurveProviderDiscount beforeFixing = builder.withFixingTs(FIXING_TS_WITHOUT_TODAY).getBuilder().buildCurves(NOW).getFirst();
-    final MulticurveProviderDiscount afterFixing = builder.withFixingTs(FIXING_TS_WITH_TODAY).getBuilder().buildCurves(NOW).getFirst();
+    final MulticurveProviderDiscount beforeFixing = builder.getBuilder().buildCurves(NOW, FIXING_TS_WITHOUT_TODAY).getFirst();
+    final MulticurveProviderDiscount afterFixing = builder.getBuilder().buildCurves(NOW, FIXING_TS_WITH_TODAY).getFirst();
     KNOWN_DATA_BEFORE_FIXING = new IssuerProviderDiscount(beforeFixing);
     KNOWN_DATA_AFTER_FIXING = new IssuerProviderDiscount(afterFixing);
   }
@@ -193,15 +193,13 @@ public class UsdGovernmentKnownDiscountingTest extends CurveBuildingTests {
   // build curves before and after today's fixing
   static {
     BEFORE_TODAYS_FIXING = BUILDER_FOR_TEST.copy()
-        .withFixingTs(FIXING_TS_WITHOUT_TODAY)
         .withKnownData(KNOWN_DATA_BEFORE_FIXING)
         .getBuilder()
-        .buildCurves(NOW);
+        .buildCurves(NOW, FIXING_TS_WITHOUT_TODAY);
     AFTER_TODAYS_FIXING = BUILDER_FOR_TEST.copy()
-        .withFixingTs(FIXING_TS_WITH_TODAY)
         .withKnownData(KNOWN_DATA_AFTER_FIXING)
         .getBuilder()
-        .buildCurves(NOW);
+        .buildCurves(NOW, FIXING_TS_WITH_TODAY);
   }
 
   @Override
@@ -219,7 +217,6 @@ public class UsdGovernmentKnownDiscountingTest extends CurveBuildingTests {
   @Test
   public void testInstrumentsInCurvePriceToZero() {
     final Map<String, InstrumentDefinition<?>[]> definitions = BUILDER_FOR_TEST.copy()
-        .withFixingTs(FIXING_TS_WITH_TODAY)
         .getBuilder()
         .getDefinitionsForCurves(NOW);
     curveConstructionTest(definitions.get(CURVE_NAME_GOVTUS_USD), AFTER_TODAYS_FIXING.getFirst(),
@@ -268,9 +265,9 @@ public class UsdGovernmentKnownDiscountingTest extends CurveBuildingTests {
     final int nbTest = 100;
 
     startTime = System.currentTimeMillis();
-    final CurveBuilder<IssuerProviderDiscount> builder = BUILDER_FOR_TEST.copy().withFixingTs(FIXING_TS_WITHOUT_TODAY).getBuilder();
+    final CurveBuilder<IssuerProviderDiscount> builder = BUILDER_FOR_TEST.copy().getBuilder();
     for (int i = 0; i < nbTest; i++) {
-      builder.buildCurves(NOW);
+      builder.buildCurves(NOW, FIXING_TS_WITHOUT_TODAY);
     }
     endTime = System.currentTimeMillis();
     System.out.println(nbTest + " curve construction / 1 units: " + (endTime - startTime) + " ms");

@@ -8,7 +8,7 @@ import com.mcleodmoores.analytics.financial.index.Index;
 /**
  *
  */
-public interface IndexCurveProvider extends CurveProvider {
+public interface IndexCurveProvider extends IdCurveProvider {
 
   @Override
   IndexCurveProvider copy();

@@ -206,13 +206,22 @@ public class CashConventionTest {
   @Test
   public void testCashDefinition() {
     final ZonedDateTime date = DateUtils.getUTCDate(2017, 1, 27);
-    final Tenor startTenor = Tenor.ON;
-    final Tenor endTenor = Tenor.ONE_MONTH;
+    Tenor startTenor = Tenor.ON;
+    Tenor endTenor = Tenor.ONE_MONTH;
     final double rate = 0.01;
-    final CashDefinition cash = CONVENTION.toCurveInstrument(date, startTenor, endTenor, 1, rate);
+    CashDefinition cash = CONVENTION.toCurveInstrument(date, startTenor, endTenor, 1, rate);
     assertEquals(cash.getStartDate(), DateUtils.getUTCDate(2017, 1, 31));
     assertEquals(cash.getEndDate(), DateUtils.getUTCDate(2017, 2, 28));
     assertEquals(cash.getAccrualFactor(), 28 / 360., 1e-15);
+    assertEquals(cash.getRate(), rate, 1e-15);
+    assertEquals(cash.getCurrency(), CCY);
+    assertEquals(cash.getNotional(), 1, 1e-15);
+    startTenor = Tenor.of(Period.ZERO);
+    endTenor = Tenor.SN;
+    cash = CONVENTION.toCurveInstrument(date, startTenor, endTenor, 1, rate);
+    assertEquals(cash.getStartDate(), DateUtils.getUTCDate(2017, 1, 27));
+    assertEquals(cash.getEndDate(), DateUtils.getUTCDate(2017, 1, 30));
+    assertEquals(cash.getAccrualFactor(), 3 / 360., 1e-15);
     assertEquals(cash.getRate(), rate, 1e-15);
     assertEquals(cash.getCurrency(), CCY);
     assertEquals(cash.getNotional(), 1, 1e-15);

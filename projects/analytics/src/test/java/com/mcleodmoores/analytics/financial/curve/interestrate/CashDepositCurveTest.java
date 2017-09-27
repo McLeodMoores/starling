@@ -1,11 +1,13 @@
 /**
  * Copyright (C) 2017 - present McLeod Moores Software Limited.  All rights reserved.
  */
-package com.mcleodmoores.analytics.financial.curve.construction.discounting;
+package com.mcleodmoores.analytics.financial.curve.interestrate;
 
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
 import static org.testng.internal.junit.ArrayAsserts.assertArrayEquals;
+
+import java.util.Collections;
 
 import org.testng.annotations.Test;
 import org.threeten.bp.Period;
@@ -13,8 +15,7 @@ import org.threeten.bp.ZonedDateTime;
 
 import com.mcleodmoores.analytics.financial.convention.interestrate.CashConvention;
 import com.mcleodmoores.analytics.financial.convention.interestrate.CurveDataConvention.EndOfMonthConvention;
-import com.mcleodmoores.analytics.financial.curve.interestrate.DiscountingMethodCurveBuilder;
-import com.mcleodmoores.analytics.financial.curve.interestrate.DiscountingMethodCurveSetUp;
+import com.mcleodmoores.analytics.financial.index.Index;
 import com.mcleodmoores.date.WeekendWorkingDayCalendar;
 import com.opengamma.analytics.financial.forex.method.FXMatrix;
 import com.opengamma.analytics.financial.instrument.cash.CashDefinition;
@@ -31,6 +32,7 @@ import com.opengamma.analytics.math.interpolation.factory.MonotonicConstrainedCu
 import com.opengamma.analytics.math.interpolation.factory.NamedInterpolator1dFactory;
 import com.opengamma.financial.convention.businessday.BusinessDayConventions;
 import com.opengamma.financial.convention.daycount.DayCounts;
+import com.opengamma.timeseries.precise.zdt.ZonedDateTimeDoubleTimeSeries;
 import com.opengamma.util.money.Currency;
 import com.opengamma.util.time.DateUtils;
 import com.opengamma.util.time.Tenor;
@@ -70,7 +72,7 @@ public class CashDepositCurveTest {
   static {
     final Tenor startTenor = Tenor.of(Period.ZERO);
     for (int i = 0; i < CURVE_TENORS.length; i++) {
-      CURVE_BUILDER.withNode(CURVE_NAME, US_CONVENTION.toCurveInstrument(VALUATION_DATE, startTenor, CURVE_TENORS[i], 1, MARKET_QUOTES[i]));
+      CURVE_BUILDER.addNode(CURVE_NAME, US_CONVENTION.toCurveInstrument(VALUATION_DATE, startTenor, CURVE_TENORS[i], 1, MARKET_QUOTES[i]));
     }
   }
 
@@ -81,7 +83,8 @@ public class CashDepositCurveTest {
    */
   @Test
   public void testDataInBundle() {
-    final Pair<MulticurveProviderDiscount, CurveBuildingBlockBundle> result = CURVE_BUILDER.getBuilder().buildCurves1(VALUATION_DATE);
+    final Pair<MulticurveProviderDiscount, CurveBuildingBlockBundle> result =
+        CURVE_BUILDER.getBuilder().buildCurves(VALUATION_DATE, Collections.<Index, ZonedDateTimeDoubleTimeSeries>emptyMap());
     final MulticurveProviderDiscount curves = result.getFirst();
     assertEquals(curves.getDiscountingCurves().size(), 1);
     assertTrue(curves.getForwardIborCurves().isEmpty());
@@ -94,7 +97,8 @@ public class CashDepositCurveTest {
    */
   @Test
   public void testCurveInstrumentsPriceToZero() {
-    final MulticurveProviderDiscount curves = CURVE_BUILDER.getBuilder().buildCurves1(VALUATION_DATE).getFirst();
+    final MulticurveProviderDiscount curves =
+        CURVE_BUILDER.getBuilder().buildCurves(VALUATION_DATE, Collections.<Index, ZonedDateTimeDoubleTimeSeries>emptyMap()).getFirst();
     final Tenor startTenor = Tenor.of(Period.ZERO);
     for (int i = 0; i < CURVE_TENORS.length; i++) {
       final CashDefinition instrument = US_CONVENTION.toCurveInstrument(VALUATION_DATE, startTenor, CURVE_TENORS[i], 1, MARKET_QUOTES[i]);
@@ -107,7 +111,8 @@ public class CashDepositCurveTest {
    */
   @Test
   public void regression() {
-    final Pair<MulticurveProviderDiscount, CurveBuildingBlockBundle> result = CURVE_BUILDER.getBuilder().buildCurves1(VALUATION_DATE);
+    final Pair<MulticurveProviderDiscount, CurveBuildingBlockBundle> result =
+        CURVE_BUILDER.getBuilder().buildCurves(VALUATION_DATE, Collections.<Index, ZonedDateTimeDoubleTimeSeries>emptyMap());
     final MulticurveProviderDiscount curves = result.getFirst();
     final DoublesCurve curve = ((YieldCurve) curves.getCurve(Currency.USD)).getCurve();
     assertTrue(curve instanceof InterpolatedDoublesCurve);

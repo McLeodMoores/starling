@@ -1,9 +1,11 @@
 /**
  * Copyright (C) 2017 - present McLeod Moores Software Limited.  All rights reserved.
  */
-package com.mcleodmoores.analytics.financial.curve.construction.discounting;
+package com.mcleodmoores.analytics.financial.curve.interestrate;
 
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertTrue;
+import static org.testng.internal.junit.ArrayAsserts.assertArrayEquals;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -17,17 +19,22 @@ import com.mcleodmoores.analytics.financial.convention.interestrate.IborDepositC
 import com.mcleodmoores.analytics.financial.convention.interestrate.OvernightDepositConvention;
 import com.mcleodmoores.analytics.financial.convention.interestrate.VanillaFixedIborSwapConvention;
 import com.mcleodmoores.analytics.financial.convention.interestrate.VanillaOisConvention;
-import com.mcleodmoores.analytics.financial.curve.interestrate.DiscountingMethodCurveBuilder;
-import com.mcleodmoores.analytics.financial.curve.interestrate.DiscountingMethodCurveSetUp;
 import com.mcleodmoores.analytics.financial.index.IborTypeIndex;
 import com.mcleodmoores.analytics.financial.index.Index;
 import com.mcleodmoores.analytics.financial.index.OvernightIndex;
 import com.mcleodmoores.date.WeekendWorkingDayCalendar;
 import com.opengamma.analytics.financial.forex.method.FXMatrix;
+import com.opengamma.analytics.financial.instrument.InstrumentDefinition;
+import com.opengamma.analytics.financial.instrument.cash.CashDefinition;
+import com.opengamma.analytics.financial.instrument.cash.DepositIborDefinition;
 import com.opengamma.analytics.financial.instrument.index.IndexConverter;
 import com.opengamma.analytics.financial.model.interestrate.curve.YieldAndDiscountCurve;
+import com.opengamma.analytics.financial.model.interestrate.curve.YieldCurve;
+import com.opengamma.analytics.financial.provider.calculator.discounting.PresentValueDiscountingCalculator;
 import com.opengamma.analytics.financial.provider.curve.CurveBuildingBlockBundle;
 import com.opengamma.analytics.financial.provider.description.interestrate.MulticurveProviderDiscount;
+import com.opengamma.analytics.math.curve.DoublesCurve;
+import com.opengamma.analytics.math.curve.InterpolatedDoublesCurve;
 import com.opengamma.analytics.math.interpolation.Interpolator1D;
 import com.opengamma.analytics.math.interpolation.factory.FlatExtrapolator1dAdapter;
 import com.opengamma.analytics.math.interpolation.factory.LinearExtrapolator1dAdapter;
@@ -116,27 +123,28 @@ public class OisDiscount3mLiborTest {
   private static final DiscountingMethodCurveSetUp CURVE_BUILDER = DiscountingMethodCurveBuilder.setUp()
       .building(OIS_CURVE_NAME).using(OIS_CURVE_NAME).forDiscounting(Currency.USD).forOvernightIndex(FED_FUNDS_INDEX).withInterpolator(INTERPOLATOR)
       .thenBuilding(LIBOR_CURVE_NAME).using(LIBOR_CURVE_NAME).forIborIndex(LIBOR_INDEX).withInterpolator(INTERPOLATOR)
-      .withKnownData(KNOWN_DATA)
-      .withFixingTs(FIXINGS);
+      .withKnownData(KNOWN_DATA);
 
   static {
     final Tenor startTenor = Tenor.of(Period.ZERO);
-    CURVE_BUILDER.withNode(OIS_CURVE_NAME, DEPOSIT.toCurveInstrument(VALUATION_DATE, startTenor, Tenor.ON, 1, OVERNIGHT_QUOTE));
+    CURVE_BUILDER.addNode(OIS_CURVE_NAME, DEPOSIT.toCurveInstrument(VALUATION_DATE, startTenor, Tenor.ON, 1, OVERNIGHT_QUOTE));
     for (int i = 0; i < OIS_TENORS.length; i++) {
-      CURVE_BUILDER.withNode(OIS_CURVE_NAME, OIS.toCurveInstrument(VALUATION_DATE, startTenor, OIS_TENORS[i], 1, OIS_QUOTES[i]));
+      CURVE_BUILDER.addNode(OIS_CURVE_NAME, OIS.toCurveInstrument(VALUATION_DATE, startTenor, OIS_TENORS[i], 1, OIS_QUOTES[i]));
     }
-    CURVE_BUILDER.withNode(LIBOR_CURVE_NAME, LIBOR_DEPOSIT.toCurveInstrument(VALUATION_DATE, startTenor, Tenor.THREE_MONTHS, 1, LIBOR_3M_QUOTE));
+    CURVE_BUILDER.addNode(LIBOR_CURVE_NAME, LIBOR_DEPOSIT.toCurveInstrument(VALUATION_DATE, startTenor, Tenor.THREE_MONTHS, 1, LIBOR_3M_QUOTE));
     for (int i = 0; i < LIBOR_SWAP_TENORS.length; i++) {
-      CURVE_BUILDER.withNode(LIBOR_CURVE_NAME, FIXED_LIBOR.toCurveInstrument(VALUATION_DATE, startTenor, LIBOR_SWAP_TENORS[i], 1, LIBOR_SWAP_QUOTES[i]));
+      CURVE_BUILDER.addNode(LIBOR_CURVE_NAME, FIXED_LIBOR.toCurveInstrument(VALUATION_DATE, startTenor, LIBOR_SWAP_TENORS[i], 1, LIBOR_SWAP_QUOTES[i]));
     }
   }
+
+  private static final double EPS = 1e-13;
 
   /**
    * Tests the number of node points in the curves.
    */
   @Test
   public void testDataInBundle() {
-    final Pair<MulticurveProviderDiscount, CurveBuildingBlockBundle> result = CURVE_BUILDER.getBuilder().buildCurves1(VALUATION_DATE);
+    final Pair<MulticurveProviderDiscount, CurveBuildingBlockBundle> result = CURVE_BUILDER.getBuilder().buildCurves(VALUATION_DATE, FIXINGS);
     final MulticurveProviderDiscount curves = result.getFirst();
     assertEquals(curves.getDiscountingCurves().size(), 1);
     assertEquals(curves.getForwardIborCurves().size(), 1);
@@ -147,4 +155,82 @@ public class OisDiscount3mLiborTest {
     assertEquals(curves.getCurve(IndexConverter.toIborIndex(LIBOR_INDEX)).getNumberOfParameters(), LIBOR_SWAP_TENORS.length + 1);
   }
 
+  /**
+   * Tests that the present value of each instrument used to price the curve is zero.
+   */
+  @Test
+  public void testCurveInstrumentsPriceToZero() {
+    final MulticurveProviderDiscount curves = CURVE_BUILDER.getBuilder().buildCurves(VALUATION_DATE, FIXINGS).getFirst();
+    // discount curve
+    final Tenor startTenor = Tenor.of(Period.ZERO);
+    final CashDefinition deposit = DEPOSIT.toCurveInstrument(VALUATION_DATE, startTenor, Tenor.ON, 1, OVERNIGHT_QUOTE);
+    assertEquals(deposit.toDerivative(VALUATION_DATE).accept(PresentValueDiscountingCalculator.getInstance(), curves).getAmount(Currency.USD), 0, EPS);
+    for (int i = 0; i < OIS_TENORS.length; i++) {
+      final InstrumentDefinition<?> instrument = OIS.toCurveInstrument(VALUATION_DATE, startTenor, OIS_TENORS[i], 1, OIS_QUOTES[i]);
+      assertEquals(instrument.toDerivative(VALUATION_DATE).accept(PresentValueDiscountingCalculator.getInstance(), curves).getAmount(Currency.USD), 0, EPS);
+    }
+    final DepositIborDefinition libor = LIBOR_DEPOSIT.toCurveInstrument(VALUATION_DATE, startTenor, Tenor.THREE_MONTHS, 1, LIBOR_3M_QUOTE);
+    assertEquals(libor.toDerivative(VALUATION_DATE).accept(PresentValueDiscountingCalculator.getInstance(), curves).getAmount(Currency.USD), 0, EPS);
+    for (int i = 0; i < LIBOR_SWAP_TENORS.length; i++) {
+      final InstrumentDefinition<?> instrument = FIXED_LIBOR.toCurveInstrument(VALUATION_DATE, startTenor, LIBOR_SWAP_TENORS[i], 1, LIBOR_SWAP_QUOTES[i]);
+      assertEquals(instrument.toDerivative(VALUATION_DATE).accept(PresentValueDiscountingCalculator.getInstance(), curves).getAmount(Currency.USD), 0, EPS);
+    }
+  }
+
+  /**
+   * Detects regressions.
+   */
+  @Test
+  public void regression() {
+    final Pair<MulticurveProviderDiscount, CurveBuildingBlockBundle> result = CURVE_BUILDER.getBuilder().buildCurves(VALUATION_DATE, FIXINGS);
+    final MulticurveProviderDiscount curves = result.getFirst();
+    final DoublesCurve discounting = ((YieldCurve) curves.getCurve(Currency.USD)).getCurve();
+    assertTrue(discounting instanceof InterpolatedDoublesCurve);
+    InterpolatedDoublesCurve interpolated = (InterpolatedDoublesCurve) discounting;
+    double[] xs = {
+        0.0027397260273972603, 0.09863013698630137, 0.17534246575342466, 0.25753424657534246, 0.3452054794520548, 0.4246575342465753,
+        0.5068493150684932, 0.7643835616438356, 1.0164383561643835, 2.0164383561643833, 3.013646231005315, 4.010958904109589,
+        5.010958904109589, 6.016438356164383, 7.016378471442473, 8.013698630136986, 9.01095890410959, 10.01095890410959
+    };
+    double[] ys = {
+        5.069440923725009E-4, 0.001963151552692394, 0.0020862845878990254, 0.0022050037351620784, 0.0025722931697927938,
+        0.004094423296710267, 0.005068273350377301, 0.00723207771729943, 0.009883166934284508, 0.012088050497133587, 0.014724649501476696,
+        0.015444714270769539, 0.017088151414733955, 0.01728341885816411, 0.025837207158120174, 0.02863597530702982, 0.03071389917451138,
+        0.032368430068847945
+    };
+    assertArrayEquals(interpolated.getXDataAsPrimitive(), xs, EPS);
+    assertArrayEquals(interpolated.getYDataAsPrimitive(), ys, EPS);
+    final DoublesCurve overnight = ((YieldCurve) curves.getCurve(IndexConverter.toIndexOn(FED_FUNDS_INDEX))).getCurve();
+    assertTrue(overnight instanceof InterpolatedDoublesCurve);
+    interpolated = (InterpolatedDoublesCurve) overnight;
+    xs = new double[] {
+        0.0027397260273972603, 0.09863013698630137, 0.17534246575342466, 0.25753424657534246, 0.3452054794520548, 0.4246575342465753,
+        0.5068493150684932, 0.7643835616438356, 1.0164383561643835, 2.0164383561643833, 3.013646231005315, 4.010958904109589,
+        5.010958904109589, 6.016438356164383, 7.016378471442473, 8.013698630136986, 9.01095890410959, 10.01095890410959
+    };
+    ys = new double[] {
+        5.069440923725009E-4, 0.001963151552692394, 0.0020862845878990254, 0.0022050037351620784, 0.0025722931697927938,
+        0.004094423296710267, 0.005068273350377301, 0.00723207771729943, 0.009883166934284508, 0.012088050497133587, 0.014724649501476696,
+        0.015444714270769539, 0.017088151414733955, 0.01728341885816411, 0.025837207158120174, 0.02863597530702982, 0.03071389917451138,
+        0.032368430068847945
+    };
+    assertArrayEquals(interpolated.getXDataAsPrimitive(), xs, EPS);
+    assertArrayEquals(interpolated.getYDataAsPrimitive(), ys, EPS);
+    final DoublesCurve libor3m = ((YieldCurve) curves.getCurve(IndexConverter.toIborIndex(LIBOR_INDEX))).getCurve();
+    assertTrue(libor3m instanceof InterpolatedDoublesCurve);
+    interpolated = (InterpolatedDoublesCurve) libor3m;
+    xs = new double[] {
+        0.25205479452054796, 0.5013698630136987, 1.0054794520547945, 2.010958904109589, 3.0109139905681563, 4.005479452054795,
+        5.005479452054795, 6.005479452054795, 7.00544950969384, 8.01095890410959, 9.008219178082191, 10.005479452054795,
+        12.005479452054795, 15.008181750130998, 20.008219178082193, 25.01095890410959, 30.01095890410959, 50.00547945205479
+    };
+    ys = new double[] {
+        0.0010137621738958282, 0.0015056912202893553, 0.00497885793838705, 0.011985836685393377, 0.015011379700096413,
+        0.018753191643790558, 0.020063311302053598, 0.02357355206368933, 0.02641889295500896, 0.02973752959732278,
+        0.03230497626087138, 0.03845583385469678, 0.04213916554013367, 0.0442645417072746, 0.046680480172319065,
+        0.05421830994482493, 0.05858199850074908, 0.05206504985989509
+    };
+    assertArrayEquals(interpolated.getXDataAsPrimitive(), xs, EPS);
+    assertArrayEquals(interpolated.getYDataAsPrimitive(), ys, EPS);
+  }
 }
