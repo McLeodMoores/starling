@@ -26,7 +26,6 @@ import com.mcleodmoores.date.CalendarAdapter;
 import com.mcleodmoores.date.WeekendWorkingDayCalendar;
 import com.opengamma.analytics.financial.forex.method.FXMatrix;
 import com.opengamma.analytics.financial.instrument.InstrumentDefinition;
-import com.opengamma.analytics.financial.instrument.index.GeneratorAttribute;
 import com.opengamma.analytics.financial.instrument.index.GeneratorAttributeIR;
 import com.opengamma.analytics.financial.instrument.index.GeneratorDepositIbor;
 import com.opengamma.analytics.financial.instrument.index.GeneratorFRA;
@@ -126,7 +125,7 @@ public class EurDiscounting6mLiborWithCommitteeMeeting1Test extends CurveBuildin
   private static final double[] DSC_EUR_MARKET_QUOTES =
       new double[] {0.0060, 0.0050, 0.0055, 0.0070, 0.0080, 0.0075, 0.0070, 0.0075, 0.0080, 0.0075, 0.0080, 0.0075 };
   /** Vanilla instrument generators for the discounting curve  */
-  private static final GeneratorInstrument<? extends GeneratorAttribute>[] DSC_EUR_GENERATORS = new GeneratorInstrument<?>[] {
+  private static final GeneratorInstrument[] DSC_EUR_GENERATORS = new GeneratorInstrument[] {
     GENERATOR_OIS_EUR, GENERATOR_OIS_EUR, GENERATOR_OIS_EUR, GENERATOR_OIS_EUR, GENERATOR_OIS_EUR, GENERATOR_OIS_EUR, GENERATOR_OIS_EUR,
     GENERATOR_OIS_EUR, GENERATOR_OIS_EUR, GENERATOR_OIS_EUR, GENERATOR_OIS_EUR, GENERATOR_OIS_EUR };
   /** Attribute generators for the discounting curve */
@@ -142,7 +141,7 @@ public class EurDiscounting6mLiborWithCommitteeMeeting1Test extends CurveBuildin
   /** Market values for the Fwd 3M EUR curve */
   private static final double[] FWD6_EUR_MARKET_QUOTES = new double[] {0.0100, 0.0150, 0.0175, 0.0175, 0.0200, 0.00175, 0.0200, 0.00175 };
   /** Vanilla instrument generators for the EURIBOR curve */
-  private static final GeneratorInstrument<? extends GeneratorAttribute>[] FWD6_EUR_GENERATORS = new GeneratorInstrument<?>[] {
+  private static final GeneratorInstrument[] FWD6_EUR_GENERATORS = new GeneratorInstrument[] {
     GENERATOR_EURIBOR6M, GENERATOR_FRA_6M, GENERATOR_FRA_6M, EUR1YEURIBOR6M, EUR1YEURIBOR6M, EUR1YEURIBOR6M, EUR1YEURIBOR6M, EUR1YEURIBOR6M };
   /** Attribute generators for the EURIBOR curve */
   private static final GeneratorAttributeIR[] FWD6_EUR_ATTR;
@@ -166,10 +165,10 @@ public class EurDiscounting6mLiborWithCommitteeMeeting1Test extends CurveBuildin
       .withKnownData(KNOWN_DATA);
   static {
     for (int i = 0; i < DSC_EUR_MARKET_QUOTES.length; i++) {
-      BUILDER_FOR_TEST.withNode(CURVE_NAME_DSC_EUR, DSC_EUR_GENERATORS[i], DSC_EUR_ATTR[i], DSC_EUR_MARKET_QUOTES[i]);
+      BUILDER_FOR_TEST.addNode(CURVE_NAME_DSC_EUR, DSC_EUR_GENERATORS[i].generateInstrument(NOW, DSC_EUR_MARKET_QUOTES[i], 1, DSC_EUR_ATTR[i]));
     }
     for (int i = 0; i < FWD6_EUR_MARKET_QUOTES.length; i++) {
-      BUILDER_FOR_TEST.withNode(CURVE_NAME_FWD6_EUR, FWD6_EUR_GENERATORS[i], FWD6_EUR_ATTR[i], FWD6_EUR_MARKET_QUOTES[i]);
+      BUILDER_FOR_TEST.addNode(CURVE_NAME_FWD6_EUR, FWD6_EUR_GENERATORS[i].generateInstrument(NOW, FWD6_EUR_MARKET_QUOTES[i], 1, FWD6_EUR_ATTR[i]));
     }
   }
   /** Curves constructed before today's fixing */

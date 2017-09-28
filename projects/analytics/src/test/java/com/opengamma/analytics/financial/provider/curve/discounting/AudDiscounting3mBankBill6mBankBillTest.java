@@ -28,7 +28,6 @@ import com.mcleodmoores.date.CalendarAdapter;
 import com.mcleodmoores.date.WeekendWorkingDayCalendar;
 import com.opengamma.analytics.financial.forex.method.FXMatrix;
 import com.opengamma.analytics.financial.instrument.InstrumentDefinition;
-import com.opengamma.analytics.financial.instrument.index.GeneratorAttribute;
 import com.opengamma.analytics.financial.instrument.index.GeneratorAttributeIR;
 import com.opengamma.analytics.financial.instrument.index.GeneratorDepositIbor;
 import com.opengamma.analytics.financial.instrument.index.GeneratorDepositON;
@@ -152,8 +151,8 @@ public class AudDiscounting3mBankBill6mBankBillTest extends CurveBuildingTests {
   private static final double[] DSC_AUD_MARKET_QUOTES =
       new double[] {0.0400, 0.0400, 0.0400, 0.0400, 0.0400, 0.0400, 0.0400, 0.0400, 0.0400, 0.0400, 0.0400, 0.0400 };
   /** Vanilla instrument generators for the discounting curve */
-  private static final GeneratorInstrument<? extends GeneratorAttribute>[] DSC_AUD_GENERATORS =
-    new GeneratorInstrument<?>[] {GENERATOR_DEPOSIT_ON_AUD, GENERATOR_OIS_AUD, GENERATOR_OIS_AUD,
+  private static final GeneratorInstrument[] DSC_AUD_GENERATORS =
+    new GeneratorInstrument[] {GENERATOR_DEPOSIT_ON_AUD, GENERATOR_OIS_AUD, GENERATOR_OIS_AUD,
     GENERATOR_OIS_AUD, GENERATOR_OIS_AUD, GENERATOR_OIS_AUD, GENERATOR_OIS_AUD, GENERATOR_OIS_AUD, GENERATOR_OIS_AUD,
     GENERATOR_OIS_AUD, GENERATOR_OIS_AUD, GENERATOR_OIS_AUD };
   /** Tenors for the discounting curve */
@@ -169,8 +168,8 @@ public class AudDiscounting3mBankBill6mBankBillTest extends CurveBuildingTests {
   /** Market values for the 3m bank bill curve */
   private static final double[] FWD3_AUD_MARKET_QUOTES = new double[] {0.0420, 0.0420, 0.0420, 0.0420, 0.0430, 0.0470, 0.0020, 0.0020, 0.0020 };
   /** Vanilla instrument generators for the 3m bank bill curve */
-  private static final GeneratorInstrument<? extends GeneratorAttribute>[] FWD3_AUD_GENERATORS =
-      new GeneratorInstrument<?>[] {GENERATOR_AUDBB3M, GENERATOR_FRA_3M, GENERATOR_FRA_3M, AUD3MBBSW3M, AUD3MBBSW3M, AUD3MBBSW3M, AUDBBSW3MBBSW6M,
+  private static final GeneratorInstrument[] FWD3_AUD_GENERATORS =
+      new GeneratorInstrument[] {GENERATOR_AUDBB3M, GENERATOR_FRA_3M, GENERATOR_FRA_3M, AUD3MBBSW3M, AUD3MBBSW3M, AUD3MBBSW3M, AUDBBSW3MBBSW6M,
     AUDBBSW3MBBSW6M, AUDBBSW3MBBSW6M };
   /** Attribute generators for the 3m bank bill curve */
   private static final GeneratorAttributeIR[] FWD3_AUD_ATTR;
@@ -185,8 +184,8 @@ public class AudDiscounting3mBankBill6mBankBillTest extends CurveBuildingTests {
   /** Market values for the 6m bank bill curve */
   private static final double[] FWD6_AUD_MARKET_QUOTES = new double[] {0.0440, 0.0020, 0.0020, 0.0020, 0.0560, 0.0610, 0.0620 };
   /** Vanilla instrument generators for the 6m bank bill curve */
-  private static final GeneratorInstrument<? extends GeneratorAttribute>[] FWD6_AUD_GENERATORS =
-    new GeneratorInstrument<?>[] {GENERATOR_AUDBB6M, AUDBBSW3MBBSW6M, AUDBBSW3MBBSW6M, AUDBBSW3MBBSW6M, AUD6MBBSW6M, AUD6MBBSW6M, AUD6MBBSW6M };
+  private static final GeneratorInstrument[] FWD6_AUD_GENERATORS =
+    new GeneratorInstrument[] {GENERATOR_AUDBB6M, AUDBBSW3MBBSW6M, AUDBBSW3MBBSW6M, AUDBBSW3MBBSW6M, AUD6MBBSW6M, AUD6MBBSW6M, AUD6MBBSW6M };
       /** Attribute generators for the 6m bank bill curve */
   private static final GeneratorAttributeIR[] FWD6_AUD_ATTR;
   static {
@@ -216,16 +215,22 @@ public class AudDiscounting3mBankBill6mBankBillTest extends CurveBuildingTests {
       .withKnownData(MULTICURVE_KNOWN_DATA);
   static {
     for (int i = 0; i < DSC_AUD_MARKET_QUOTES.length; i++) {
-      DISCOUNTING_THEN_BANK_BILLS_BUILDER.withNode(CURVE_NAME_DSC_AUD, DSC_AUD_GENERATORS[i], DSC_AUD_ATTR[i], DSC_AUD_MARKET_QUOTES[i]);
-      DISCOUNTING_AND_BANK_BILLS_BUILDER.withNode(CURVE_NAME_DSC_AUD, DSC_AUD_GENERATORS[i], DSC_AUD_ATTR[i], DSC_AUD_MARKET_QUOTES[i]);
+      DISCOUNTING_THEN_BANK_BILLS_BUILDER.addNode(CURVE_NAME_DSC_AUD,
+          DSC_AUD_GENERATORS[i].generateInstrument(NOW, DSC_AUD_MARKET_QUOTES[i], 1, DSC_AUD_ATTR[i]));
+      DISCOUNTING_AND_BANK_BILLS_BUILDER.addNode(CURVE_NAME_DSC_AUD,
+          DSC_AUD_GENERATORS[i].generateInstrument(NOW, DSC_AUD_MARKET_QUOTES[i], 1, DSC_AUD_ATTR[i]));
     }
     for (int i = 0; i < FWD3_AUD_MARKET_QUOTES.length; i++) {
-      DISCOUNTING_THEN_BANK_BILLS_BUILDER.withNode(CURVE_NAME_FWD3_AUD, FWD3_AUD_GENERATORS[i], FWD3_AUD_ATTR[i], FWD3_AUD_MARKET_QUOTES[i]);
-      DISCOUNTING_AND_BANK_BILLS_BUILDER.withNode(CURVE_NAME_FWD3_AUD, FWD3_AUD_GENERATORS[i], FWD3_AUD_ATTR[i], FWD3_AUD_MARKET_QUOTES[i]);
+      DISCOUNTING_THEN_BANK_BILLS_BUILDER.addNode(CURVE_NAME_FWD3_AUD,
+          FWD3_AUD_GENERATORS[i].generateInstrument(NOW, FWD3_AUD_MARKET_QUOTES[i], 1, FWD3_AUD_ATTR[i]));
+      DISCOUNTING_AND_BANK_BILLS_BUILDER.addNode(CURVE_NAME_FWD3_AUD,
+          FWD3_AUD_GENERATORS[i].generateInstrument(NOW, FWD3_AUD_MARKET_QUOTES[i], 1, FWD3_AUD_ATTR[i]));
     }
     for (int i = 0; i < FWD6_AUD_MARKET_QUOTES.length; i++) {
-      DISCOUNTING_THEN_BANK_BILLS_BUILDER.withNode(CURVE_NAME_FWD6_AUD, FWD6_AUD_GENERATORS[i], FWD6_AUD_ATTR[i], FWD6_AUD_MARKET_QUOTES[i]);
-      DISCOUNTING_AND_BANK_BILLS_BUILDER.withNode(CURVE_NAME_FWD6_AUD, FWD6_AUD_GENERATORS[i], FWD6_AUD_ATTR[i], FWD6_AUD_MARKET_QUOTES[i]);
+      DISCOUNTING_THEN_BANK_BILLS_BUILDER.addNode(CURVE_NAME_FWD6_AUD,
+          FWD6_AUD_GENERATORS[i].generateInstrument(NOW, FWD6_AUD_MARKET_QUOTES[i], 1, FWD6_AUD_ATTR[i]));
+      DISCOUNTING_AND_BANK_BILLS_BUILDER.addNode(CURVE_NAME_FWD6_AUD,
+          FWD6_AUD_GENERATORS[i].generateInstrument(NOW, FWD6_AUD_MARKET_QUOTES[i], 1, FWD6_AUD_ATTR[i]));
     }
   }
   /** Simultaneous discounting and bank bill curves before today's fixing */

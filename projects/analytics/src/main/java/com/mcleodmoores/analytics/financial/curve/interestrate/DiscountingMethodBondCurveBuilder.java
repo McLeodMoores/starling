@@ -88,7 +88,7 @@ public class DiscountingMethodBondCurveBuilder extends CurveBuilder<IssuerProvid
           //TODO could do sorting of derivatives here
           final double[] curveInitialGuess = new double[nNodes];
           for (int k = 0; k < nNodes; k++) {
-            final InstrumentDefinition<?> definition = nodesForCurve.get(i);
+            final InstrumentDefinition<?> definition = nodesForCurve.get(k);
             instruments[k] = CurveUtils.convert(definition, fixings, valuationDate);
             curveInitialGuess[k] = definition.accept(CurveUtils.RATES_INITIALIZATION);
           }

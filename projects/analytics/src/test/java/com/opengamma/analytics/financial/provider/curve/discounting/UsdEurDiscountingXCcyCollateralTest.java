@@ -175,7 +175,7 @@ public class UsdEurDiscountingXCcyCollateralTest extends CurveBuildingTests {
   private static final double[] USD_DSC_FF_MARKET_QUOTES = new double[] {
       0.0015, 0.0015, 0.0010, 0.0010, 0.0010, 0.0010, 0.0010, 0.0010, 0.0015, 0.0020, 0.0035, 0.0050, 0.0130 };
   /** Vanilla instrument generators for the USD discounting curve */
-  private static final GeneratorInstrument<? extends GeneratorAttribute>[] USD_DSC_FF_GENERATORS = new GeneratorInstrument<?>[] {
+  private static final GeneratorInstrument[] USD_DSC_FF_GENERATORS = new GeneratorInstrument[] {
     GENERATOR_DEPOSIT_ON_USD, GENERATOR_DEPOSIT_ON_USD, GENERATOR_OIS_USD, GENERATOR_OIS_USD, GENERATOR_OIS_USD, GENERATOR_OIS_USD, GENERATOR_OIS_USD,
     GENERATOR_OIS_USD, GENERATOR_OIS_USD, GENERATOR_OIS_USD, GENERATOR_OIS_USD, GENERATOR_OIS_USD, GENERATOR_OIS_USD };
   /** Attributes for the USD discounting curve */
@@ -187,17 +187,19 @@ public class UsdEurDiscountingXCcyCollateralTest extends CurveBuildingTests {
     USD_DSC_FF_ATTR = new GeneratorAttributeIR[tenors.length];
     for (int i = 0; i < 2; i++) {
       USD_DSC_FF_ATTR[i] = new GeneratorAttributeIR(tenors[i], Period.ZERO);
-      BUILDER.withNode(CURVE_NAME_USD_DSC_FF, USD_DSC_FF_GENERATORS[i], USD_DSC_FF_ATTR[i], USD_DSC_FF_MARKET_QUOTES[i]);
+      BUILDER.addNode(CURVE_NAME_USD_DSC_FF,
+          USD_DSC_FF_GENERATORS[i].generateInstrument(NOW, USD_DSC_FF_MARKET_QUOTES[i], 1, USD_DSC_FF_ATTR[i]));
     }
     for (int i = 2; i < tenors.length; i++) {
       USD_DSC_FF_ATTR[i] = new GeneratorAttributeIR(tenors[i]);
-      BUILDER.withNode(CURVE_NAME_USD_DSC_FF, USD_DSC_FF_GENERATORS[i], USD_DSC_FF_ATTR[i], USD_DSC_FF_MARKET_QUOTES[i]);
+      BUILDER.addNode(CURVE_NAME_USD_DSC_FF,
+          USD_DSC_FF_GENERATORS[i].generateInstrument(NOW, USD_DSC_FF_MARKET_QUOTES[i], 1, USD_DSC_FF_ATTR[i]));
     }
   }
   /** Market values for the USD LIBOR curve */
   private static final double[] USD_FWD_L3_MARKET_QUOTES = new double[] {0.0045, 0.0045, 0.0045, 0.0045, 0.0060, 0.0070, 0.0080, 0.0160 };
   /** Vanilla instrument generators for the USD LIBOR curve */
-  private static final GeneratorInstrument<? extends GeneratorAttribute>[] USD_FWD_L3_GENERATORS = new GeneratorInstrument<?>[] {
+  private static final GeneratorInstrument[] USD_FWD_L3_GENERATORS = new GeneratorInstrument[] {
     GENERATOR_USDLIBOR3M, GENERATOR_USD_FRA_3M, USD6MLIBOR3M, USD6MLIBOR3M, USD6MLIBOR3M, USD6MLIBOR3M, USD6MLIBOR3M, USD6MLIBOR3M };
   /** Attributes for the USD LIBOR curve */
   private static final GeneratorAttributeIR[] USD_FWD_L3_ATTR;
@@ -208,14 +210,15 @@ public class UsdEurDiscountingXCcyCollateralTest extends CurveBuildingTests {
     USD_FWD_L3_ATTR = new GeneratorAttributeIR[tenors.length];
     for (int i = 0; i < tenors.length; i++) {
       USD_FWD_L3_ATTR[i] = new GeneratorAttributeIR(tenors[i]);
-      BUILDER.withNode(CURVE_NAME_USD_FWD_L3, USD_FWD_L3_GENERATORS[i], USD_FWD_L3_ATTR[i], USD_FWD_L3_MARKET_QUOTES[i]);
+      BUILDER.addNode(CURVE_NAME_USD_FWD_L3,
+          USD_FWD_L3_GENERATORS[i].generateInstrument(NOW, USD_FWD_L3_MARKET_QUOTES[i], 1, USD_FWD_L3_ATTR[i]));
     }
   }
   /** Market values for the EUR discounting curve */
   private static final double[] EUR_DSC_EO_MARKET_QUOTES = new double[] {
       0.0400, 0.0400, 0.0400, 0.0400, 0.0400, 0.0400, 0.0400, 0.0400, 0.0400, 0.0400, 0.0400, 0.0400 };
   /** Vanilla instrument generators for the EUR discounting curve */
-  private static final GeneratorInstrument<? extends GeneratorAttribute>[] EUR_DSC_EO_GENERATORS = new GeneratorInstrument<?>[] {
+  private static final GeneratorInstrument[] EUR_DSC_EO_GENERATORS = new GeneratorInstrument[] {
     GENERATOR_DEPOSIT_ON_EUR, GENERATOR_OIS_EUR, GENERATOR_OIS_EUR, GENERATOR_OIS_EUR, GENERATOR_OIS_EUR, GENERATOR_OIS_EUR,
     GENERATOR_OIS_EUR, GENERATOR_OIS_EUR, GENERATOR_OIS_EUR, GENERATOR_OIS_EUR, GENERATOR_OIS_EUR, GENERATOR_OIS_EUR };
   /** Attributes for the EUR discounting curve */
@@ -227,13 +230,14 @@ public class UsdEurDiscountingXCcyCollateralTest extends CurveBuildingTests {
     EUR_DSC_EO_ATTR = new GeneratorAttributeIR[tenors.length];
     for (int i = 0; i < tenors.length; i++) {
       EUR_DSC_EO_ATTR[i] = new GeneratorAttributeIR(tenors[i]);
-      BUILDER.withNode(CURVE_NAME_EUR_DSC_EO, EUR_DSC_EO_GENERATORS[i], EUR_DSC_EO_ATTR[i], EUR_DSC_EO_MARKET_QUOTES[i]);
+      BUILDER.addNode(CURVE_NAME_EUR_DSC_EO,
+          EUR_DSC_EO_GENERATORS[i].generateInstrument(NOW, EUR_DSC_EO_MARKET_QUOTES[i], 1, EUR_DSC_EO_ATTR[i]));
     }
   }
   /** Market values for the EURIBOR curve */
   private static final double[] EUR_FWD_E3_MARKET_QUOTES = new double[] {0.0045, 0.0045, 0.0045, 0.0045, 0.0050, 0.0060, 0.0085, 0.0160 };
   /** Vanilla instrument generators for the EURIBOR curve */
-  private static final GeneratorInstrument<? extends GeneratorAttribute>[] EUR_FWD_E3_GENERATORS = new GeneratorInstrument<?>[] {
+  private static final GeneratorInstrument[] EUR_FWD_E3_GENERATORS = new GeneratorInstrument[] {
     GENERATOR_EURIBOR3M, EUR1YEURIBOR3M, EUR1YEURIBOR3M, EUR1YEURIBOR3M, EUR1YEURIBOR3M, EUR1YEURIBOR3M, EUR1YEURIBOR3M, EUR1YEURIBOR3M };
   /** Attributes for the EURIBOR curve */
   private static final GeneratorAttributeIR[] EUR_FWD_E3_ATTR;
@@ -244,7 +248,8 @@ public class UsdEurDiscountingXCcyCollateralTest extends CurveBuildingTests {
     EUR_FWD_E3_ATTR = new GeneratorAttributeIR[tenors.length];
     for (int i = 0; i < tenors.length; i++) {
       EUR_FWD_E3_ATTR[i] = new GeneratorAttributeIR(tenors[i]);
-      BUILDER.withNode(CURVE_NAME_EUR_FWD_E3, EUR_FWD_E3_GENERATORS[i], EUR_FWD_E3_ATTR[i], EUR_FWD_E3_MARKET_QUOTES[i]);
+      BUILDER.addNode(CURVE_NAME_EUR_FWD_E3,
+          EUR_FWD_E3_GENERATORS[i].generateInstrument(NOW, EUR_FWD_E3_MARKET_QUOTES[i], 1, EUR_FWD_E3_ATTR[i]));
     }
   }
   /** Builds the EUR discounting with USD collateral curve */
@@ -270,7 +275,7 @@ public class UsdEurDiscountingXCcyCollateralTest extends CurveBuildingTests {
   private static final double[] EUR_DSC_USDFF_MARKET_QUOTES = new double[] {
       0.0010, 0.0010, 0.00025, 0.0005, 0.00075, 0.0020, 0.0030, 0.0038, -0.0050, -0.0050, -0.0050, -0.0045, -0.0040 };
   /** Vanilla instrument generators for the EUR discounting with USD collateral curve */
-  private static final GeneratorInstrument<? extends GeneratorAttribute>[] EUR_DSC_USDFF_GENERATORS = new GeneratorInstrument<?>[] {
+  private static final GeneratorInstrument[] EUR_DSC_USDFF_GENERATORS = new GeneratorInstrument[] {
     GENERATOR_DEPOSIT_ON_EUR, GENERATOR_DEPOSIT_ON_EUR, GENERATOR_FX_EURUSD, GENERATOR_FX_EURUSD, GENERATOR_FX_EURUSD, GENERATOR_FX_EURUSD, GENERATOR_FX_EURUSD,
     GENERATOR_FX_EURUSD, EURIBOR3MUSDLIBOR3M, EURIBOR3MUSDLIBOR3M, EURIBOR3MUSDLIBOR3M, EURIBOR3MUSDLIBOR3M, EURIBOR3MUSDLIBOR3M };
   /** Attributes for the EUR discounting with USD collateral curve */
@@ -281,11 +286,13 @@ public class UsdEurDiscountingXCcyCollateralTest extends CurveBuildingTests {
     EUR_DSC_USDFF_ATTR = new GeneratorAttribute[tenors.length];
     for (int i = 0; i < 2; i++) {
       EUR_DSC_USDFF_ATTR[i] = new GeneratorAttributeIR(tenors[i], Period.ZERO);
-      COLLATERAL_BUILDER.withNode(CURVE_NAME_EUR_DSC_USDFF, EUR_DSC_USDFF_GENERATORS[i], EUR_DSC_USDFF_ATTR[i], EUR_DSC_USDFF_MARKET_QUOTES[i]);
+      COLLATERAL_BUILDER.addNode(CURVE_NAME_EUR_DSC_USDFF,
+          EUR_DSC_USDFF_GENERATORS[i].generateInstrument(NOW, EUR_DSC_USDFF_MARKET_QUOTES[i], 1, EUR_DSC_USDFF_ATTR[i]));
     }
     for (int i = 2; i < tenors.length; i++) {
       EUR_DSC_USDFF_ATTR[i] = new GeneratorAttributeFX(tenors[i], FX_MATRIX);
-      COLLATERAL_BUILDER.withNode(CURVE_NAME_EUR_DSC_USDFF, EUR_DSC_USDFF_GENERATORS[i], EUR_DSC_USDFF_ATTR[i], EUR_DSC_USDFF_MARKET_QUOTES[i]);
+      COLLATERAL_BUILDER.addNode(CURVE_NAME_EUR_DSC_USDFF,
+          EUR_DSC_USDFF_GENERATORS[i].generateInstrument(NOW, EUR_DSC_USDFF_MARKET_QUOTES[i], 1, EUR_DSC_USDFF_ATTR[i]));
     }
     final MulticurveProviderDiscount knownDataBeforeFixing = BEFORE_FIXING.getFirst().copy();
     knownDataBeforeFixing.removeCurve(Currency.EUR);

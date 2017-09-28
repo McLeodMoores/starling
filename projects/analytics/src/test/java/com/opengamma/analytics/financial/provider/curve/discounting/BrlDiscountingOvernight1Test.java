@@ -24,7 +24,6 @@ import com.mcleodmoores.date.CalendarAdapter;
 import com.mcleodmoores.date.WeekendWorkingDayCalendar;
 import com.opengamma.analytics.financial.forex.method.FXMatrix;
 import com.opengamma.analytics.financial.instrument.InstrumentDefinition;
-import com.opengamma.analytics.financial.instrument.index.GeneratorAttribute;
 import com.opengamma.analytics.financial.instrument.index.GeneratorAttributeIR;
 import com.opengamma.analytics.financial.instrument.index.GeneratorDepositON;
 import com.opengamma.analytics.financial.instrument.index.GeneratorInstrument;
@@ -93,8 +92,8 @@ public class BrlDiscountingOvernight1Test extends CurveBuildingTests {
   private static final double[] DSC_BRL_MARKET_QUOTES =
       new double[] {0.0400, 0.0400, 0.0400, 0.0400, 0.0400, 0.0400, 0.0400, 0.0400, 0.0400, 0.0400, 0.0400, 0.0400 };
   /** Vanilla instrument generators */
-  private static final GeneratorInstrument<? extends GeneratorAttribute>[] DSC_BRL_GENERATORS =
-      new GeneratorInstrument<?>[] {GENERATOR_DEPOSIT_ON_BRL, GENERATOR_OIS_BRL, GENERATOR_OIS_BRL, GENERATOR_OIS_BRL, GENERATOR_OIS_BRL, GENERATOR_OIS_BRL,
+  private static final GeneratorInstrument[] DSC_BRL_GENERATORS =
+      new GeneratorInstrument[] {GENERATOR_DEPOSIT_ON_BRL, GENERATOR_OIS_BRL, GENERATOR_OIS_BRL, GENERATOR_OIS_BRL, GENERATOR_OIS_BRL, GENERATOR_OIS_BRL,
     GENERATOR_OIS_BRL, GENERATOR_OIS_BRL, GENERATOR_OIS_BRL, GENERATOR_OIS_BRL, GENERATOR_OIS_BRL, GENERATOR_OIS_BRL };
   /** Attribute generators */
   private static final GeneratorAttributeIR[] DSC_BRL_ATTR;
@@ -117,7 +116,7 @@ public class BrlDiscountingOvernight1Test extends CurveBuildingTests {
   // initialize the curve builder with market data
   static {
     for (int i = 0; i < DSC_BRL_MARKET_QUOTES.length; i++) {
-      BUILDER_FOR_TEST.withNode(CURVE_NAME_DSC_BRL, DSC_BRL_GENERATORS[i], DSC_BRL_ATTR[i], DSC_BRL_MARKET_QUOTES[i]);
+      BUILDER_FOR_TEST.addNode(CURVE_NAME_DSC_BRL, DSC_BRL_GENERATORS[i].generateInstrument(NOW, DSC_BRL_MARKET_QUOTES[i], 1, DSC_BRL_ATTR[i]));
     }
   }
   /** Curves constructed before today's fixing */

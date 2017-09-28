@@ -24,7 +24,6 @@ import com.mcleodmoores.date.CalendarAdapter;
 import com.mcleodmoores.date.WeekendWorkingDayCalendar;
 import com.opengamma.analytics.financial.forex.method.FXMatrix;
 import com.opengamma.analytics.financial.instrument.InstrumentDefinition;
-import com.opengamma.analytics.financial.instrument.index.GeneratorAttribute;
 import com.opengamma.analytics.financial.instrument.index.GeneratorAttributeIR;
 import com.opengamma.analytics.financial.instrument.index.GeneratorInstrument;
 import com.opengamma.analytics.financial.instrument.index.GeneratorSwapFixedCompoundedONCompounded;
@@ -91,7 +90,7 @@ public class BrlDiscountingOvernight2Test extends CurveBuildingTests {
       new double[] {0.092925, 0.09325, 0.09458, 0.09545, 0.09665, 0.09845, 0.1001, 0.10101, 0.10335, 0.10565, 0.10725, 0.10865, 0.1098,
           0.11085, 0.1113, 0.11165, 0.11205, 0.1127 };
   /** Vanilla instrument generators */
-  private static final GeneratorInstrument<? extends GeneratorAttribute>[] DSC_BRL_GENERATORS = new GeneratorInstrument<?>[] {
+  private static final GeneratorInstrument[] DSC_BRL_GENERATORS = new GeneratorInstrument[] {
     GENERATOR_OIS_BRL, GENERATOR_OIS_BRL, GENERATOR_OIS_BRL, GENERATOR_OIS_BRL, GENERATOR_OIS_BRL, GENERATOR_OIS_BRL, GENERATOR_OIS_BRL,
     GENERATOR_OIS_BRL, GENERATOR_OIS_BRL, GENERATOR_OIS_BRL, GENERATOR_OIS_BRL, GENERATOR_OIS_BRL, GENERATOR_OIS_BRL, GENERATOR_OIS_BRL,
     GENERATOR_OIS_BRL, GENERATOR_OIS_BRL, GENERATOR_OIS_BRL, GENERATOR_OIS_BRL };
@@ -116,7 +115,7 @@ public class BrlDiscountingOvernight2Test extends CurveBuildingTests {
       .withKnownData(KNOWN_DATA);
   static {
     for (int i = 0; i < DSC_BRL_MARKET_QUOTES.length; i++) {
-      BUILDER_FOR_TEST.withNode(CURVE_NAME_DSC_BRL, DSC_BRL_GENERATORS[i], DSC_BRL_ATTR[i], DSC_BRL_MARKET_QUOTES[i]);
+      BUILDER_FOR_TEST.addNode(CURVE_NAME_DSC_BRL, DSC_BRL_GENERATORS[i].generateInstrument(NOW, DSC_BRL_MARKET_QUOTES[i], 1, DSC_BRL_ATTR[i]));
     }
   }
   /** Curves constructed before today's fixing */
