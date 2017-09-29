@@ -3,6 +3,7 @@
  */
 package com.mcleodmoores.analytics.financial.curve.interestrate;
 
+import java.util.Arrays;
 import java.util.List;
 
 import com.mcleodmoores.analytics.financial.index.IborTypeIndex;
@@ -25,12 +26,14 @@ public class DiscountingMethodPreConstructedCurveTypeSetUp extends DiscountingMe
 
   @Override
   public DiscountingMethodPreConstructedCurveTypeSetUp forIborIndex(final IborTypeIndex... indices) {
-    return null;
+    _iborCurveIndices = Arrays.asList(indices);
+    return this;
   }
 
   @Override
   public DiscountingMethodPreConstructedCurveTypeSetUp forOvernightIndex(final OvernightIndex... indices) {
-    return null;
+    _overnightCurveIndices = Arrays.asList(indices);
+    return this;
   }
 
 }
