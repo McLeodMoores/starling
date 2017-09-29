@@ -3,6 +3,9 @@
  */
 package com.mcleodmoores.analytics.financial.curve.interestrate;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.threeten.bp.ZonedDateTime;
 
 import com.mcleodmoores.analytics.financial.index.IborTypeIndex;
@@ -18,15 +21,16 @@ import com.opengamma.analytics.financial.curve.interestrate.generator.GeneratorY
 import com.opengamma.analytics.financial.interestrate.InstrumentDerivativeVisitor;
 import com.opengamma.analytics.financial.provider.calculator.generic.LastFixingStartTimeCalculator;
 import com.opengamma.analytics.financial.provider.calculator.generic.LastTimeCalculator;
-import com.opengamma.analytics.financial.provider.description.interestrate.MulticurveProviderForward;
 import com.opengamma.analytics.math.interpolation.Interpolator1D;
 import com.opengamma.analytics.util.time.TimeCalculator;
-import com.opengamma.util.money.Currency;
+import com.opengamma.id.UniqueIdentifiable;
+import com.opengamma.util.tuple.Pair;
+import com.opengamma.util.tuple.Pairs;
 
 /**
  *
  */
-public class DirectForwardMethodCurveTypeSetUp extends DirectForwardMethodCurveSetUp implements CurveTypeSetUpInterface<MulticurveProviderForward> {
+public class DirectForwardMethodCurveTypeSetUp extends DirectForwardMethodCurveSetUp implements CurveTypeSetUpInterface {
   private final String _curveName;
   private String _otherCurveName;
   private Interpolator1D _interpolator;
@@ -47,8 +51,8 @@ public class DirectForwardMethodCurveTypeSetUp extends DirectForwardMethodCurveS
   }
 
   @Override
-  public DirectForwardMethodCurveTypeSetUp forDiscounting(final Currency currency) {
-    _discountingCurves.put(_curveName, currency);
+  public DirectForwardMethodCurveTypeSetUp forDiscounting(final UniqueIdentifiable id) {
+    getDiscountingCurves().add(Pairs.of(_curveName, id));
     return this;
   }
 
@@ -59,7 +63,7 @@ public class DirectForwardMethodCurveTypeSetUp extends DirectForwardMethodCurveS
     if (indices.length != 1) {
       throw new IllegalStateException();
     }
-    _iborCurves.put(_curveName, indices);
+    getIborCurves().add(Pairs.of(_curveName, Arrays.asList(indices)));
     return this;
   }
 
@@ -68,7 +72,7 @@ public class DirectForwardMethodCurveTypeSetUp extends DirectForwardMethodCurveS
     if (indices.length != 1) {
       throw new IllegalStateException();
     }
-    _overnightCurves.put(_curveName, indices);
+    getOvernightCurves().add(Pairs.of(_curveName, Arrays.asList(indices)));
     return this;
   }
 
@@ -169,11 +173,12 @@ public class DirectForwardMethodCurveTypeSetUp extends DirectForwardMethodCurveS
   }
 
   public GeneratorYDCurve buildCurveGenerator(final ZonedDateTime valuationDate, final String curveName) {
-    final InstrumentDerivativeVisitor<Object, Double> nodeTimeCalculator;
-    if (_iborCurves.containsKey(curveName)) { //TODO
-      nodeTimeCalculator = LastFixingStartTimeCalculator.getInstance();
-    } else {
-      nodeTimeCalculator = LastTimeCalculator.getInstance(); //TODO hard-coding shouldn't be done here
+    InstrumentDerivativeVisitor<Object, Double> nodeTimeCalculator = LastTimeCalculator.getInstance();
+    for (final Pair<String, List<IborTypeIndex>> entry : getIborCurves()) {
+      if (entry.getKey().equals(curveName)) {
+        nodeTimeCalculator = LastFixingStartTimeCalculator.getInstance();
+        break;
+      }
     }
     if (_otherCurveName != null) {
       //TODO duplicated code

@@ -4,6 +4,7 @@
 package com.mcleodmoores.analytics.financial.curve.interestrate;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -11,34 +12,38 @@ import java.util.Map;
 
 import com.mcleodmoores.analytics.financial.index.IborTypeIndex;
 import com.mcleodmoores.analytics.financial.index.OvernightIndex;
+import com.opengamma.analytics.financial.forex.method.FXMatrix;
 import com.opengamma.analytics.financial.instrument.InstrumentDefinition;
 import com.opengamma.analytics.financial.provider.curve.CurveBuildingBlockBundle;
 import com.opengamma.analytics.financial.provider.description.interestrate.HullWhiteOneFactorProviderDiscount;
-import com.opengamma.util.money.Currency;
+import com.opengamma.id.UniqueIdentifiable;
+import com.opengamma.util.tuple.Pair;
 
 /**
  *
  */
 public class HullWhiteMethodCurveSetUp implements CurveSetUpInterface<HullWhiteOneFactorProviderDiscount> {
   //TODO method that takes definitions
-  protected final List<String[]> _curveNames;
+  private final List<List<String>> _curveNames;
   //TODO should these live in curve type setup?
-  protected final LinkedHashMap<String, Currency> _discountingCurves;
-  protected final LinkedHashMap<String, IborTypeIndex[]> _iborCurves;
-  protected final LinkedHashMap<String, OvernightIndex[]> _overnightCurves;
-  protected final Map<String, HullWhiteMethodCurveTypeSetUp> _curveTypes;
-  protected final Map<String, List<InstrumentDefinition<?>>> _nodes;
-  protected HullWhiteOneFactorProviderDiscount _knownData;
-  protected CurveBuildingBlockBundle _knownBundle;
+  private final List<Pair<String, UniqueIdentifiable>> _discountingCurves;
+  private final List<Pair<String, List<IborTypeIndex>>> _iborCurves;
+  private final List<Pair<String, List<OvernightIndex>>> _overnightCurves;
+  private final Map<String, HullWhiteMethodCurveTypeSetUp> _curveTypes;
+  private FXMatrix _fxMatrix;
+  private final Map<String, List<InstrumentDefinition<?>>> _nodes;
+  private HullWhiteOneFactorProviderDiscount _knownData;
+  private CurveBuildingBlockBundle _knownBundle;
 
   protected HullWhiteMethodCurveSetUp() {
     _curveNames = new ArrayList<>();
-    _discountingCurves = new LinkedHashMap<>();
-    _iborCurves = new LinkedHashMap<>();
-    _overnightCurves = new LinkedHashMap<>();
+    _discountingCurves = new ArrayList<>();
+    _iborCurves = new ArrayList<>();
+    _overnightCurves = new ArrayList<>();
     _curveTypes = new HashMap<>();
     //TODO currently have to add things in the right order for each curve - need to have comparator for attribute generator tenors
     _nodes = new LinkedHashMap<>();
+    _fxMatrix = new FXMatrix();
     _knownData = null;
     _knownBundle = null;
   }
@@ -52,21 +57,26 @@ public class HullWhiteMethodCurveSetUp implements CurveSetUpInterface<HullWhiteO
     _curveTypes = setup._curveTypes;
     //TODO currently have to add things in the right order for each curve - need to have comparator for attribute generator tenors
     _nodes = setup._nodes;
+    _fxMatrix = setup._fxMatrix;
     _knownData = setup._knownData;
     _knownBundle = setup._knownBundle;
   }
 
-  protected HullWhiteMethodCurveSetUp(final List<String[]> curveNames, final LinkedHashMap<String, Currency> discountingCurves, final LinkedHashMap<String, IborTypeIndex[]> iborCurves,
-      final LinkedHashMap<String, OvernightIndex[]> overnightCurves,
+  protected HullWhiteMethodCurveSetUp(final List<List<String>> curveNames, final List<Pair<String, UniqueIdentifiable>> discountingCurves,
+      final List<Pair<String, List<IborTypeIndex>>> iborCurves,
+      final List<Pair<String, List<OvernightIndex>>> overnightCurves,
       final Map<String, List<InstrumentDefinition<?>>> nodes,
-      final Map<String, HullWhiteMethodCurveTypeSetUp> curveTypes,  final HullWhiteOneFactorProviderDiscount knownData,
+      final Map<String, HullWhiteMethodCurveTypeSetUp> curveTypes,
+      final FXMatrix fxMatrix,
+      final HullWhiteOneFactorProviderDiscount knownData,
       final CurveBuildingBlockBundle knownBundle) {
     _curveNames = new ArrayList<>(curveNames);
-    _discountingCurves = new LinkedHashMap<>(discountingCurves);
-    _iborCurves = new LinkedHashMap<>(iborCurves);
-    _overnightCurves = new LinkedHashMap<>(overnightCurves);
+    _discountingCurves = new ArrayList<>(discountingCurves);
+    _iborCurves = new ArrayList<>(iborCurves);
+    _overnightCurves = new ArrayList<>(overnightCurves);
     _nodes = new HashMap<>(nodes);
     _curveTypes = new HashMap<>(curveTypes);
+    _fxMatrix = fxMatrix;
     _knownData = knownData == null ? null : knownData.copy();
     _knownBundle = knownBundle == null ? null : knownBundle; //TODO no copy
   }
@@ -74,20 +84,26 @@ public class HullWhiteMethodCurveSetUp implements CurveSetUpInterface<HullWhiteO
 
   @Override
   public HullWhiteMethodCurveBuilder getBuilder() {
+    final HullWhiteOneFactorProviderDiscount knownData;
+    if (_knownData != null) {
+      knownData = _knownData;
+    } else {
+      knownData = null; // TODO add constants etc. new HullWhiteOneFactorProviderDiscount(new MulticurveProviderDiscount(fxMatrix));
+    }
     return new HullWhiteMethodCurveBuilder(_curveNames, _discountingCurves, _iborCurves, _overnightCurves, _nodes, _curveTypes,
-        _knownData, _knownBundle);
+        knownData, _knownBundle);
   }
 
   @Override
   public HullWhiteMethodCurveSetUp copy() {
     return new HullWhiteMethodCurveSetUp(_curveNames, _discountingCurves, _iborCurves, _overnightCurves, _nodes, _curveTypes,
-        _knownData, _knownBundle);
+        _fxMatrix, _knownData, _knownBundle);
   }
 
   @Override
   public HullWhiteMethodCurveSetUp building(final String... curveNames) {
     if (_curveNames.isEmpty()) {
-      _curveNames.add(curveNames);
+      _curveNames.add(Arrays.asList(curveNames));
       return this;
     }
     throw new IllegalStateException();
@@ -96,7 +112,7 @@ public class HullWhiteMethodCurveSetUp implements CurveSetUpInterface<HullWhiteO
   @Override
   public HullWhiteMethodCurveSetUp buildingFirst(final String... curveNames) {
     if (_curveNames.isEmpty()) {
-      _curveNames.add(curveNames);
+      _curveNames.add(Arrays.asList(curveNames));
       return this;
     }
     throw new IllegalStateException();
@@ -107,7 +123,7 @@ public class HullWhiteMethodCurveSetUp implements CurveSetUpInterface<HullWhiteO
     if (_curveNames.isEmpty()) {
       throw new IllegalStateException();
     }
-    _curveNames.add(curveNames);
+    _curveNames.add(Arrays.asList(curveNames));
     return this;
   }
 
@@ -134,6 +150,15 @@ public class HullWhiteMethodCurveSetUp implements CurveSetUpInterface<HullWhiteO
   }
 
   @Override
+  public HullWhiteMethodCurveSetUp addFxMatrix(final FXMatrix fxMatrix) {
+    if (_knownData != null) {
+      throw new IllegalStateException();
+    }
+    _fxMatrix = fxMatrix;
+    return this;
+  }
+
+  @Override
   public HullWhiteMethodCurveSetUp removeNodes(final String curveName) {
     _nodes.put(curveName, null);
     return this;
@@ -141,6 +166,9 @@ public class HullWhiteMethodCurveSetUp implements CurveSetUpInterface<HullWhiteO
 
   @Override
   public HullWhiteMethodCurveSetUp withKnownData(final HullWhiteOneFactorProviderDiscount knownData) {
+    if (_fxMatrix != null) {
+      throw new IllegalStateException();
+    }
     // probably better to merge this
     _knownData = knownData;
     return this;
@@ -151,5 +179,38 @@ public class HullWhiteMethodCurveSetUp implements CurveSetUpInterface<HullWhiteO
     _knownBundle = knownBundle;
     return this;
   }
+
+  List<List<String>> getCurveNames() {
+    return _curveNames;
+  }
+
+  List<Pair<String, UniqueIdentifiable>> getDiscountingCurves() {
+    return _discountingCurves;
+  }
+
+  List<Pair<String, List<IborTypeIndex>>> getIborCurves() {
+    return _iborCurves;
+  }
+
+  List<Pair<String, List<OvernightIndex>>> getOvernightCurves() {
+    return _overnightCurves;
+  }
+
+  Map<String, HullWhiteMethodCurveTypeSetUp> getCurveTypes() {
+    return _curveTypes;
+  }
+
+  Map<String, List<InstrumentDefinition<?>>> getNodes() {
+    return _nodes;
+  }
+
+  HullWhiteOneFactorProviderDiscount getKnownData() {
+    return _knownData;
+  }
+
+  CurveBuildingBlockBundle getKnownBundle() {
+    return _knownBundle;
+  }
+
 
 }

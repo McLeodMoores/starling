@@ -3,6 +3,8 @@
  */
 package com.mcleodmoores.analytics.financial.curve.interestrate;
 
+import java.util.Arrays;
+
 import org.threeten.bp.ZonedDateTime;
 
 import com.mcleodmoores.analytics.financial.index.IborTypeIndex;
@@ -18,15 +20,15 @@ import com.opengamma.analytics.financial.curve.interestrate.generator.GeneratorY
 import com.opengamma.analytics.financial.interestrate.InstrumentDerivativeVisitor;
 import com.opengamma.analytics.financial.provider.calculator.generic.LastFixingEndTimeCalculator;
 import com.opengamma.analytics.financial.provider.calculator.generic.LastTimeCalculator;
-import com.opengamma.analytics.financial.provider.description.interestrate.HullWhiteOneFactorProviderDiscount;
 import com.opengamma.analytics.math.interpolation.Interpolator1D;
 import com.opengamma.analytics.util.time.TimeCalculator;
-import com.opengamma.util.money.Currency;
+import com.opengamma.id.UniqueIdentifiable;
+import com.opengamma.util.tuple.Pairs;
 
 /**
  *
  */
-public class HullWhiteMethodCurveTypeSetUp extends HullWhiteMethodCurveSetUp implements CurveTypeSetUpInterface<HullWhiteOneFactorProviderDiscount> {
+public class HullWhiteMethodCurveTypeSetUp extends HullWhiteMethodCurveSetUp implements CurveTypeSetUpInterface {
   private final String _curveName;
   private String _otherCurveName;
   private Interpolator1D _interpolator;
@@ -47,8 +49,8 @@ public class HullWhiteMethodCurveTypeSetUp extends HullWhiteMethodCurveSetUp imp
   }
 
   @Override
-  public HullWhiteMethodCurveTypeSetUp forDiscounting(final Currency currency) {
-    _discountingCurves.put(_curveName, currency);
+  public HullWhiteMethodCurveTypeSetUp forDiscounting(final UniqueIdentifiable id) {
+    getDiscountingCurves().add(Pairs.of(_curveName, id));
     return this;
   }
 
@@ -56,13 +58,13 @@ public class HullWhiteMethodCurveTypeSetUp extends HullWhiteMethodCurveSetUp imp
   //TODO should store currency, indices in this object rather than in super class
   @Override
   public HullWhiteMethodCurveTypeSetUp forIborIndex(final IborTypeIndex... indices) {
-    _iborCurves.put(_curveName, indices);
+    getIborCurves().add(Pairs.of(_curveName, Arrays.asList(indices)));
     return this;
   }
 
   @Override
   public HullWhiteMethodCurveTypeSetUp forOvernightIndex(final OvernightIndex... indices) {
-    _overnightCurves.put(_curveName, indices);
+    getOvernightCurves().add(Pairs.of(_curveName, Arrays.asList(indices)));
     return this;
   }
 

@@ -21,7 +21,7 @@ public interface BondCurveSetUpInterface<T extends ParameterProviderInterface> e
   public BondCurveSetUpInterface<T> thenBuilding(final String... curveNames);
 
   @Override
-  public CurveTypeSetUpInterface<T> using(final String curveName);
+  public CurveTypeSetUpInterface using(final String curveName);
 
   @Override
   public CurveBuilder<T> getBuilder();

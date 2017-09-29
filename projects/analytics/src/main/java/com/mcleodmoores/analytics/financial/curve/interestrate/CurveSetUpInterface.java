@@ -3,6 +3,7 @@
  */
 package com.mcleodmoores.analytics.financial.curve.interestrate;
 
+import com.opengamma.analytics.financial.forex.method.FXMatrix;
 import com.opengamma.analytics.financial.instrument.InstrumentDefinition;
 import com.opengamma.analytics.financial.provider.curve.CurveBuildingBlockBundle;
 import com.opengamma.analytics.financial.provider.description.interestrate.ParameterProviderInterface;
@@ -18,9 +19,11 @@ public interface CurveSetUpInterface<T extends ParameterProviderInterface> {
 
   CurveSetUpInterface<T> thenBuilding(final String... curveNames);
 
-  CurveTypeSetUpInterface<T> using(final String curveName);
+  CurveTypeSetUpInterface using(final String curveName);
 
   CurveSetUpInterface<T> addNode(final String curveName, InstrumentDefinition<?> definition);
+
+  CurveSetUpInterface<T> addFxMatrix(FXMatrix fxMatrix);
 
   CurveSetUpInterface<T> removeNodes(String curveName);
 

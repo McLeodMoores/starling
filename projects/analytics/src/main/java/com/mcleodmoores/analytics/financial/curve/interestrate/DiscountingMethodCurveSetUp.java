@@ -4,6 +4,7 @@
 package com.mcleodmoores.analytics.financial.curve.interestrate;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -11,83 +12,99 @@ import java.util.Map;
 
 import com.mcleodmoores.analytics.financial.index.IborTypeIndex;
 import com.mcleodmoores.analytics.financial.index.OvernightIndex;
+import com.opengamma.analytics.financial.forex.method.FXMatrix;
 import com.opengamma.analytics.financial.instrument.InstrumentDefinition;
+import com.opengamma.analytics.financial.model.interestrate.curve.YieldAndDiscountCurve;
 import com.opengamma.analytics.financial.provider.curve.CurveBuildingBlockBundle;
 import com.opengamma.analytics.financial.provider.description.interestrate.MulticurveProviderDiscount;
-import com.opengamma.util.money.Currency;
+import com.opengamma.id.UniqueIdentifiable;
+import com.opengamma.util.tuple.Pair;
+import com.opengamma.util.tuple.Pairs;
 
 /**
  *
  */
 public class DiscountingMethodCurveSetUp implements CurveSetUpInterface<MulticurveProviderDiscount> {
-  //TODO method that takes definitions
-  protected final List<String[]> _curveNames;
-  //TODO should these live in curve type setup?
-  protected final LinkedHashMap<String, Currency> _discountingCurves;
-  protected final LinkedHashMap<String, IborTypeIndex[]> _iborCurves;
-  protected final LinkedHashMap<String, OvernightIndex[]> _overnightCurves;
-  protected final Map<String, DiscountingMethodCurveTypeSetUp> _curveTypes;
-  protected final Map<String, List<InstrumentDefinition<?>>> _nodes;
-  protected MulticurveProviderDiscount _knownData;
-  protected CurveBuildingBlockBundle _knownBundle;
+  private final List<List<String>> _curveNames;
+  private final Map<String, DiscountingMethodCurveTypeSetUp> _curveTypes;
+  private final Map<String, List<InstrumentDefinition<?>>> _nodes;
+  private FXMatrix _fxMatrix;
+  private MulticurveProviderDiscount _knownData;
+  private CurveBuildingBlockBundle _knownBundle;
 
   protected DiscountingMethodCurveSetUp() {
     _curveNames = new ArrayList<>();
-    _discountingCurves = new LinkedHashMap<>();
-    _iborCurves = new LinkedHashMap<>();
-    _overnightCurves = new LinkedHashMap<>();
     _curveTypes = new HashMap<>();
     _nodes = new LinkedHashMap<>();
     _knownData = null;
     _knownBundle = null;
+    _fxMatrix = new FXMatrix();
   }
 
   protected DiscountingMethodCurveSetUp(final DiscountingMethodCurveSetUp setup) {
     //TODO copy
     _curveNames = setup._curveNames;
-    _discountingCurves = setup._discountingCurves;
-    _iborCurves = setup._iborCurves;
-    _overnightCurves = setup._overnightCurves;
     _curveTypes = setup._curveTypes;
     // TODO sort
     _nodes = setup._nodes;
     _knownData = setup._knownData;
     _knownBundle = setup._knownBundle;
+    _fxMatrix = setup._fxMatrix;
   }
 
-  protected DiscountingMethodCurveSetUp(final List<String[]> curveNames, final LinkedHashMap<String, Currency> discountingCurves, final LinkedHashMap<String, IborTypeIndex[]> iborCurves,
-      final LinkedHashMap<String, OvernightIndex[]> overnightCurves,
+  protected DiscountingMethodCurveSetUp(final List<List<String>> curveNames,
       final Map<String, List<InstrumentDefinition<?>>> newNodes,
-      final Map<String, DiscountingMethodCurveTypeSetUp> curveTypes,  final MulticurveProviderDiscount knownData,
-      final CurveBuildingBlockBundle knownBundle) {
+      final Map<String, DiscountingMethodCurveTypeSetUp> curveTypes,
+      final FXMatrix fxMatrix,
+      final MulticurveProviderDiscount knownData, final CurveBuildingBlockBundle knownBundle) {
     _curveNames = new ArrayList<>(curveNames);
-    _discountingCurves = new LinkedHashMap<>(discountingCurves);
-    _iborCurves = new LinkedHashMap<>(iborCurves);
-    _overnightCurves = new LinkedHashMap<>(overnightCurves);
     _nodes = new HashMap<>(newNodes);
     _curveTypes = new HashMap<>(curveTypes);
+    _fxMatrix = fxMatrix;
     _knownData = knownData == null ? null : knownData.copy();
     _knownBundle = knownBundle == null ? null : knownBundle; //TODO no copy
   }
 
-
   @Override
   public DiscountingMethodCurveBuilder getBuilder() {
-    return new DiscountingMethodCurveBuilder(_curveNames, _discountingCurves, _iborCurves, _overnightCurves, _nodes, _curveTypes,
-        _knownData, _knownBundle);
+    final List<Pair<String, UniqueIdentifiable>> discountingCurves = new ArrayList<>();
+    final List<Pair<String, List<IborTypeIndex>>> iborCurves = new ArrayList<>();
+    final List<Pair<String, List<OvernightIndex>>> overnightCurves = new ArrayList<>();
+    for (final Map.Entry<String, DiscountingMethodCurveTypeSetUp> entry : _curveTypes.entrySet()) {
+      final String curveName = entry.getKey();
+      final DiscountingMethodCurveTypeSetUp setUp = entry.getValue();
+      final UniqueIdentifiable discountingCurveId = setUp.getDiscountingCurveId();
+      if (discountingCurveId != null) {
+        discountingCurves.add(Pairs.of(curveName, discountingCurveId));
+      }
+      final List<IborTypeIndex> iborCurveIndices = setUp.getIborCurveIndices();
+      if (iborCurveIndices != null) {
+        iborCurves.add(Pairs.of(curveName, iborCurveIndices));
+      }
+      final List<OvernightIndex> overnightCurveIndices = setUp.getOvernightCurveIndices();
+      if (overnightCurveIndices != null) {
+        overnightCurves.add(Pairs.of(curveName, overnightCurveIndices));
+      }
+    }
+    final MulticurveProviderDiscount knownData;
+    if (_knownData != null) {
+      knownData = _knownData;
+    } else {
+      knownData = new MulticurveProviderDiscount(_fxMatrix);
+    }
+    return new DiscountingMethodCurveBuilder(_curveNames, discountingCurves, iborCurves, overnightCurves, _nodes, _curveTypes, knownData, _knownBundle);
   }
 
   @Override
   public DiscountingMethodCurveSetUp copy() {
     // TODO not a copy
-    return new DiscountingMethodCurveSetUp(_curveNames, _discountingCurves, _iborCurves, _overnightCurves, _nodes, _curveTypes,
-        _knownData, _knownBundle);
+    return new DiscountingMethodCurveSetUp(_curveNames, _nodes, _curveTypes, _fxMatrix, _knownData, _knownBundle);
   }
 
   @Override
   public DiscountingMethodCurveSetUp building(final String... curveNames) {
     if (_curveNames.isEmpty()) {
-      _curveNames.add(curveNames);
+      _curveNames.add(Arrays.asList(curveNames));
       return this;
     }
     throw new IllegalStateException();
@@ -96,7 +113,7 @@ public class DiscountingMethodCurveSetUp implements CurveSetUpInterface<Multicur
   @Override
   public DiscountingMethodCurveSetUp buildingFirst(final String... curveNames) {
     if (_curveNames.isEmpty()) {
-      _curveNames.add(curveNames);
+      _curveNames.add(Arrays.asList(curveNames));
       return this;
     }
     throw new IllegalStateException();
@@ -107,18 +124,22 @@ public class DiscountingMethodCurveSetUp implements CurveSetUpInterface<Multicur
     if (_curveNames.isEmpty()) {
       throw new IllegalStateException();
     }
-    _curveNames.add(curveNames);
+    _curveNames.add(Arrays.asList(curveNames));
     return this;
   }
 
   @Override
   public DiscountingMethodCurveTypeSetUp using(final String curveName) {
-    final DiscountingMethodCurveTypeSetUp type = new DiscountingMethodCurveTypeSetUp(curveName, this);
+    final DiscountingMethodCurveTypeSetUp type = new DiscountingMethodCurveTypeSetUp(this);
     final Object replaced = _curveTypes.put(curveName, type);
     if (replaced != null) {
       throw new IllegalStateException();
     }
     return type;
+  }
+
+  public DiscountingMethodPreConstructedCurveTypeSetUp using(final YieldAndDiscountCurve curve) {
+    return null;
   }
 
   @Override
@@ -133,14 +154,25 @@ public class DiscountingMethodCurveSetUp implements CurveSetUpInterface<Multicur
   }
 
   @Override
+  public DiscountingMethodCurveSetUp addFxMatrix(final FXMatrix fxMatrix) {
+    if (_knownData != null) {
+      throw new IllegalStateException();
+    }
+    _fxMatrix = fxMatrix;
+    return this;
+  }
+
+  @Override
   public DiscountingMethodCurveSetUp removeNodes(final String curveName) {
     _nodes.put(curveName, null);
     return this;
   }
-  //TODO add a withNode that takes definitions
 
   @Override
   public DiscountingMethodCurveSetUp withKnownData(final MulticurveProviderDiscount knownData) {
+    if (_fxMatrix != null) {
+      throw new IllegalStateException();
+    }
     // probably better to merge this
     _knownData = knownData;
     return this;

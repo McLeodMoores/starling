@@ -10,30 +10,28 @@ import com.mcleodmoores.analytics.financial.index.OvernightIndex;
 import com.opengamma.analytics.financial.curve.interestrate.generator.GeneratorYDCurve;
 import com.opengamma.analytics.financial.legalentity.LegalEntity;
 import com.opengamma.analytics.financial.legalentity.LegalEntityFilter;
-import com.opengamma.analytics.financial.provider.description.interestrate.ParameterProviderInterface;
 import com.opengamma.analytics.math.interpolation.Interpolator1D;
-import com.opengamma.util.money.Currency;
+import com.opengamma.id.UniqueIdentifiable;
 import com.opengamma.util.tuple.Pair;
 
 /**
  *
  */
-public interface BondCurveTypeSetUpInterface<T extends ParameterProviderInterface> extends CurveTypeSetUpInterface<T> {
+public interface BondCurveTypeSetUpInterface extends CurveTypeSetUpInterface {
 
   @Override
-  BondCurveTypeSetUpInterface forDiscounting(final Currency currency);
-
-  //TODO versions that only take a single index
-  @Override
-  BondCurveTypeSetUpInterface forIborIndex(final IborTypeIndex... indices);
+  BondCurveTypeSetUpInterface forDiscounting(UniqueIdentifiable id);
 
   @Override
-  BondCurveTypeSetUpInterface forOvernightIndex(final OvernightIndex... indices);
+  BondCurveTypeSetUpInterface forIborIndex(IborTypeIndex... indices);
+
+  @Override
+  BondCurveTypeSetUpInterface forOvernightIndex(OvernightIndex... indices);
 
   BondCurveTypeSetUpInterface forIssuer(Pair<Object, LegalEntityFilter<LegalEntity>> issuer);
 
   @Override
-  BondCurveTypeSetUpInterface withInterpolator(final Interpolator1D interpolator);
+  BondCurveTypeSetUpInterface withInterpolator(Interpolator1D interpolator);
 
   //TODO asSpread under to indicate subtraction?
   @Override
@@ -65,6 +63,6 @@ public interface BondCurveTypeSetUpInterface<T extends ParameterProviderInterfac
   BondCurveTypeSetUpInterface usingLastFixingEndTime();
 
   @Override
-  GeneratorYDCurve buildCurveGenerator(final ZonedDateTime valuationDate);
+  GeneratorYDCurve buildCurveGenerator(ZonedDateTime valuationDate);
 
 }

@@ -3,6 +3,8 @@
  */
 package com.mcleodmoores.analytics.financial.curve.interestrate;
 
+import java.util.Arrays;
+
 import org.threeten.bp.ZonedDateTime;
 
 import com.mcleodmoores.analytics.financial.index.IborTypeIndex;
@@ -20,16 +22,16 @@ import com.opengamma.analytics.financial.legalentity.LegalEntity;
 import com.opengamma.analytics.financial.legalentity.LegalEntityFilter;
 import com.opengamma.analytics.financial.provider.calculator.generic.LastFixingEndTimeCalculator;
 import com.opengamma.analytics.financial.provider.calculator.generic.LastTimeCalculator;
-import com.opengamma.analytics.financial.provider.description.interestrate.IssuerProviderDiscount;
 import com.opengamma.analytics.math.interpolation.Interpolator1D;
 import com.opengamma.analytics.util.time.TimeCalculator;
-import com.opengamma.util.money.Currency;
+import com.opengamma.id.UniqueIdentifiable;
 import com.opengamma.util.tuple.Pair;
+import com.opengamma.util.tuple.Pairs;
 
 /**
  *
  */
-public class DiscountingMethodBondCurveTypeSetUp extends DiscountingMethodBondCurveSetUp implements BondCurveTypeSetUpInterface<IssuerProviderDiscount> {
+public class DiscountingMethodBondCurveTypeSetUp extends DiscountingMethodBondCurveSetUp implements BondCurveTypeSetUpInterface {
   private final String _curveName;
   private String _otherCurveName;
   private Interpolator1D _interpolator;
@@ -50,8 +52,8 @@ public class DiscountingMethodBondCurveTypeSetUp extends DiscountingMethodBondCu
   }
 
   @Override
-  public DiscountingMethodBondCurveTypeSetUp forDiscounting(final Currency currency) {
-    _discountingCurves.put(_curveName, currency);
+  public DiscountingMethodBondCurveTypeSetUp forDiscounting(final UniqueIdentifiable id) {
+    getDiscountingCurves().add(Pairs.of(_curveName, id));
     return this;
   }
 
@@ -59,19 +61,19 @@ public class DiscountingMethodBondCurveTypeSetUp extends DiscountingMethodBondCu
   //TODO should store currency, indices in this object rather than in super class
   @Override
   public DiscountingMethodBondCurveTypeSetUp forIborIndex(final IborTypeIndex... indices) {
-    _iborCurves.put(_curveName, indices);
+    getIborCurves().add(Pairs.of(_curveName, Arrays.asList(indices)));
     return this;
   }
 
   @Override
   public DiscountingMethodBondCurveTypeSetUp forIssuer(final Pair<Object, LegalEntityFilter<LegalEntity>> issuer) {
-    _issuerCurves.put(_curveName, issuer);
+    getIssuerCurves().put(_curveName, issuer);
     return this;
   }
 
   @Override
   public DiscountingMethodBondCurveTypeSetUp forOvernightIndex(final OvernightIndex... indices) {
-    _overnightCurves.put(_curveName, indices);
+    getOvernightCurves().add(Pairs.of(_curveName, Arrays.asList(indices)));
     return this;
   }
 

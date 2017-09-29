@@ -5,7 +5,6 @@ package com.mcleodmoores.analytics.financial.curve.interestrate;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -22,35 +21,35 @@ import com.opengamma.analytics.financial.provider.curve.CurveBuildingBlockBundle
 import com.opengamma.analytics.financial.provider.curve.MultiCurveBundle;
 import com.opengamma.analytics.financial.provider.curve.SingleCurveBundle;
 import com.opengamma.analytics.financial.provider.description.interestrate.ParameterProviderInterface;
+import com.opengamma.id.UniqueIdentifiable;
 import com.opengamma.timeseries.precise.zdt.ZonedDateTimeDoubleTimeSeries;
-import com.opengamma.util.money.Currency;
 import com.opengamma.util.tuple.Pair;
 
 /**
  *
  */
 public abstract class CurveBuilder<T extends ParameterProviderInterface> {
-  private final List<String[]> _curveNames;
-  private final LinkedHashMap<String, Currency> _discountingCurves;
-  private final LinkedHashMap<String, IborTypeIndex[]> _iborCurves;
-  private final LinkedHashMap<String, OvernightIndex[]> _overnightCurves;
-  private final Map<String, ? extends CurveTypeSetUpInterface<T>> _curveGenerators;
+  private final List<List<String>> _curveNames;
+  private final List<Pair<String, UniqueIdentifiable>> _discountingCurves;
+  private final List<Pair<String, List<IborTypeIndex>>> _iborCurves;
+  private final List<Pair<String, List<OvernightIndex>>> _overnightCurves;
+  private final Map<String, ? extends CurveTypeSetUpInterface> _curveGenerators;
   private final CurveBuildingBlockBundle _knownBundle;
   private final T _knownData;
   private final Map<String, List<InstrumentDefinition<?>>> _nodes;
   private final Map<ZonedDateTime, MultiCurveBundle[]> _cached;
 
-  CurveBuilder(final List<String[]> curveNames,
-      final LinkedHashMap<String, Currency> discountingCurves,
-      final LinkedHashMap<String, IborTypeIndex[]> iborCurves,
-      final LinkedHashMap<String, OvernightIndex[]> overnightCurves,
+  CurveBuilder(final List<List<String>> curveNames,
+      final List<Pair<String, UniqueIdentifiable>> discountingCurves,
+      final List<Pair<String, List<IborTypeIndex>>> iborCurves,
+      final List<Pair<String, List<OvernightIndex>>> overnightCurves,
       final Map<String, List<InstrumentDefinition<?>>> nodes,
-      final Map<String, ? extends CurveTypeSetUpInterface<T>> curveGenerators,
+      final Map<String, ? extends CurveTypeSetUpInterface> curveGenerators,
       final T knownData, final CurveBuildingBlockBundle knownBundle) {
     _curveNames = new ArrayList<>(curveNames);
-    _discountingCurves = new LinkedHashMap<>(discountingCurves);
-    _iborCurves = new LinkedHashMap<>(iborCurves);
-    _overnightCurves = new LinkedHashMap<>(overnightCurves);
+    _discountingCurves = new ArrayList<>(discountingCurves);
+    _iborCurves = new ArrayList<>(iborCurves);
+    _overnightCurves = new ArrayList<>(overnightCurves);
     _nodes = new HashMap<>(nodes);
     _curveGenerators = new HashMap<>(curveGenerators);
     _knownData = knownData == null ? null : (T) knownData.copy();
@@ -65,10 +64,10 @@ public abstract class CurveBuilder<T extends ParameterProviderInterface> {
       final Map<String, GeneratorYDCurve> generatorForCurve = new HashMap<>();
       curveBundles = new MultiCurveBundle[_curveNames.size()];
       for (int i = 0; i < _curveNames.size(); i++) {
-        final String[] curveNamesForUnit = _curveNames.get(i);
-        final SingleCurveBundle[] unitBundle = new SingleCurveBundle[curveNamesForUnit.length];
-        for (int j = 0; j < curveNamesForUnit.length; j++) {
-          final String curveName = curveNamesForUnit[j];
+        final List<String> curveNamesForUnit = _curveNames.get(i);
+        final SingleCurveBundle[] unitBundle = new SingleCurveBundle[curveNamesForUnit.size()];
+        for (int j = 0; j < curveNamesForUnit.size(); j++) {
+          final String curveName = curveNamesForUnit.get(j);
           final List<InstrumentDefinition<?>> nodesForCurve = _nodes.get(curveName);
           if (nodesForCurve == null) {
             throw new IllegalStateException("No nodes found for curve called " + curveName);
@@ -94,13 +93,14 @@ public abstract class CurveBuilder<T extends ParameterProviderInterface> {
   }
 
   abstract Pair<T, CurveBuildingBlockBundle> buildCurves(MultiCurveBundle[] curveBundles, T knownData, CurveBuildingBlockBundle knownBundle,
-      LinkedHashMap<String, Currency> discountingCurves, LinkedHashMap<String, IborTypeIndex[]> iborCurves, LinkedHashMap<String, OvernightIndex[]> overnightCurves);
+      List<Pair<String, UniqueIdentifiable>> discountingCurves, List<Pair<String, List<IborTypeIndex>>> iborCurves,
+      List<Pair<String, List<OvernightIndex>>> overnightCurves);
 
   public Map<String, InstrumentDefinition<?>[]> getDefinitionsForCurves(final ZonedDateTime valuationDate) {
     _cached.clear();
     final Map<String, InstrumentDefinition<?>[]> definitionsForCurves = new HashMap<>();
     for (int i = 0; i < _curveNames.size(); i++) {
-      final String[] curveNamesForUnit = _curveNames.get(i);
+      final List<String> curveNamesForUnit = _curveNames.get(i);
       for (final String curveNameForUnit : curveNamesForUnit) {
         final List<InstrumentDefinition<?>> nodes = _nodes.get(curveNameForUnit);
         final int nNodes = nodes.size();
@@ -114,23 +114,23 @@ public abstract class CurveBuilder<T extends ParameterProviderInterface> {
     return definitionsForCurves;
   }
 
-  List<String[]> getCurveNames() {
+  List<List<String>> getCurveNames() {
     return _curveNames;
   }
 
-  LinkedHashMap<String, Currency> getDiscountingCurves() {
+  List<Pair<String, UniqueIdentifiable>> getDiscountingCurves() {
     return _discountingCurves;
   }
 
-  LinkedHashMap<String, IborTypeIndex[]> getIborCurves() {
+  List<Pair<String, List<IborTypeIndex>>> getIborCurves() {
     return _iborCurves;
   }
 
-  LinkedHashMap<String, OvernightIndex[]> getOvernightCurves() {
+  List<Pair<String, List<OvernightIndex>>> getOvernightCurves() {
     return _overnightCurves;
   }
 
-  Map<String, ? extends CurveTypeSetUpInterface<T>> getCurveGenerators() {
+  Map<String, ? extends CurveTypeSetUpInterface> getCurveGenerators() {
     return _curveGenerators;
   }
 
@@ -149,6 +149,5 @@ public abstract class CurveBuilder<T extends ParameterProviderInterface> {
   Map<ZonedDateTime, MultiCurveBundle[]> getCached() {
     return _cached;
   }
-
 
 }

@@ -27,6 +27,7 @@ import com.opengamma.analytics.financial.provider.curve.MultiCurveBundle;
 import com.opengamma.analytics.financial.provider.curve.SingleCurveBundle;
 import com.opengamma.analytics.financial.provider.curve.multicurve.MulticurveProviderForwardBuildingRepository;
 import com.opengamma.analytics.financial.provider.description.interestrate.MulticurveProviderForward;
+import com.opengamma.id.UniqueIdentifiable;
 import com.opengamma.timeseries.precise.zdt.ZonedDateTimeDoubleTimeSeries;
 import com.opengamma.util.money.Currency;
 import com.opengamma.util.tuple.Pair;
@@ -51,12 +52,12 @@ public class DirectForwardMethodCurveBuilder extends CurveBuilder<MulticurveProv
     return new DirectForwardMethodCurveSetUp();
   }
 
-  DirectForwardMethodCurveBuilder(final List<String[]> curveNames,
-      final LinkedHashMap<String, Currency> discountingCurves,
-      final LinkedHashMap<String, IborTypeIndex[]> iborCurves,
-      final LinkedHashMap<String, OvernightIndex[]> overnightCurves,
+  DirectForwardMethodCurveBuilder(final List<List<String>> curveNames,
+      final List<Pair<String, UniqueIdentifiable>> discountingCurves,
+      final List<Pair<String, List<IborTypeIndex>>> iborCurves,
+      final List<Pair<String, List<OvernightIndex>>> overnightCurves,
       final Map<String, List<InstrumentDefinition<?>>> nodes,
-      final Map<String, ? extends CurveTypeSetUpInterface<MulticurveProviderForward>> curveGenerators,
+      final Map<String, ? extends CurveTypeSetUpInterface> curveGenerators,
       final MulticurveProviderForward knownData,
       final CurveBuildingBlockBundle knownBundle) {
     super(curveNames, discountingCurves, iborCurves, overnightCurves, nodes, curveGenerators, knownData, knownBundle);
@@ -65,16 +66,17 @@ public class DirectForwardMethodCurveBuilder extends CurveBuilder<MulticurveProv
   }
 
   @Override
-  public Pair<MulticurveProviderForward, CurveBuildingBlockBundle> buildCurves(final ZonedDateTime valuationDate, final Map<Index, ZonedDateTimeDoubleTimeSeries> fixings) {
+  public Pair<MulticurveProviderForward, CurveBuildingBlockBundle> buildCurves(final ZonedDateTime valuationDate,
+      final Map<Index, ZonedDateTimeDoubleTimeSeries> fixings) {
     MultiCurveBundle<GeneratorYDCurve>[] curveBundles = _cached.get(valuationDate);
     if (curveBundles == null) {
       final Map<String, GeneratorYDCurve> generatorForCurve = new HashMap<>();
       curveBundles = new MultiCurveBundle[getCurveNames().size()];
       for (int i = 0; i < getCurveNames().size(); i++) {
-        final String[] curveNamesForUnit = getCurveNames().get(i);
-        final SingleCurveBundle[] unitBundle = new SingleCurveBundle[curveNamesForUnit.length];
-        for (int j = 0; j < curveNamesForUnit.length; j++) {
-          final String curveName = curveNamesForUnit[j];
+        final List<String> curveNamesForUnit = getCurveNames().get(i);
+        final SingleCurveBundle[] unitBundle = new SingleCurveBundle[curveNamesForUnit.size()];
+        for (int j = 0; j < curveNamesForUnit.size(); j++) {
+          final String curveName = curveNamesForUnit.get(j);
           final List<InstrumentDefinition<?>> nodesForCurve = getNodes().get(curveName);
           if (nodesForCurve == null) {
             throw new IllegalStateException();
@@ -88,10 +90,11 @@ public class DirectForwardMethodCurveBuilder extends CurveBuilder<MulticurveProv
             instruments[k] = CurveUtils.convert(definition, fixings, valuationDate);
             curveInitialGuess[k] = definition.accept(CurveUtils.RATES_INITIALIZATION);
           }
-          final CurveTypeSetUpInterface<MulticurveProviderForward> curveTypeSetUpInterface = getCurveGenerators().get(curveName);
+          final CurveTypeSetUpInterface curveTypeSetUpInterface = getCurveGenerators().get(curveName);
           final GeneratorYDCurve instrumentGenerator;
           if (curveTypeSetUpInterface instanceof DirectForwardMethodCurveTypeSetUp) {
-            instrumentGenerator = ((DirectForwardMethodCurveTypeSetUp) curveTypeSetUpInterface).buildCurveGenerator(valuationDate, curveName).finalGenerator(instruments);
+            instrumentGenerator =
+                ((DirectForwardMethodCurveTypeSetUp) curveTypeSetUpInterface).buildCurveGenerator(valuationDate, curveName).finalGenerator(instruments);
           } else {
             instrumentGenerator = curveTypeSetUpInterface.buildCurveGenerator(valuationDate).finalGenerator(instruments);
           }
@@ -107,29 +110,38 @@ public class DirectForwardMethodCurveBuilder extends CurveBuilder<MulticurveProv
 
   @Override
   Pair<MulticurveProviderForward, CurveBuildingBlockBundle> buildCurves(final MultiCurveBundle[] curveBundles, final MulticurveProviderForward knownData,
-      final CurveBuildingBlockBundle knownBundle, final LinkedHashMap<String, Currency> discountingCurves, final LinkedHashMap<String, IborTypeIndex[]> iborCurves,
-      final LinkedHashMap<String, OvernightIndex[]> overnightCurves) {
+      final CurveBuildingBlockBundle knownBundle, final List<Pair<String, UniqueIdentifiable>> discountingCurves,
+      final List<Pair<String, List<IborTypeIndex>>> iborCurves,
+      final List<Pair<String, List<OvernightIndex>>> overnightCurves) {
+    final LinkedHashMap<String, Currency> convertedDiscountingCurves = new LinkedHashMap<>();
+    for (final Pair<String, UniqueIdentifiable> entry : discountingCurves) {
+      if (entry.getValue() instanceof Currency) {
+        convertedDiscountingCurves.put(entry.getKey(), (Currency) entry.getValue());
+      } else {
+        throw new UnsupportedOperationException();
+      }
+    }
     final LinkedHashMap<String, IborIndex> singleIborIndices = new LinkedHashMap<>();
-    for (final Map.Entry<String, IborTypeIndex[]> entry : iborCurves.entrySet()) {
-      if (entry.getValue().length != 1) {
+    for (final Pair<String, List<IborTypeIndex>> entry : iborCurves) {
+      if (entry.getValue().size() != 1) {
         // TODO should be checked when created
         throw new IllegalStateException();
       }
-      singleIborIndices.put(entry.getKey(), IndexConverter.toIborIndex(entry.getValue()[0]));
+      singleIborIndices.put(entry.getKey(), IndexConverter.toIborIndex(entry.getValue().get(0)));
     }
     final LinkedHashMap<String, IndexON> singleOvernightIndices = new LinkedHashMap<>();
-    for (final Map.Entry<String, OvernightIndex[]> entry : overnightCurves.entrySet()) {
-      if (entry.getValue().length != 1) {
+    for (final Pair<String, List<OvernightIndex>> entry : overnightCurves) {
+      if (entry.getValue().size() != 1) {
         // TODO should be checked when created
         throw new IllegalStateException();
       }
-      singleOvernightIndices.put(entry.getKey(), IndexConverter.toIndexOn(entry.getValue()[0]));
+      singleOvernightIndices.put(entry.getKey(), IndexConverter.toIndexOn(entry.getValue().get(0)));
     }
     if (knownBundle != null) {
-      return _curveBuildingRepository.makeCurvesFromDerivatives(curveBundles, knownData, knownBundle, discountingCurves, singleIborIndices,
+      return _curveBuildingRepository.makeCurvesFromDerivatives(curveBundles, knownData, knownBundle, convertedDiscountingCurves, singleIborIndices,
           singleOvernightIndices, CALCULATOR, SENSITIVITY_CALCULATOR);
     }
-    return _curveBuildingRepository.makeCurvesFromDerivatives(curveBundles, knownData, discountingCurves, singleIborIndices, singleOvernightIndices, CALCULATOR,
+    return _curveBuildingRepository.makeCurvesFromDerivatives(curveBundles, knownData, convertedDiscountingCurves, singleIborIndices, singleOvernightIndices, CALCULATOR,
         SENSITIVITY_CALCULATOR);
   }
 

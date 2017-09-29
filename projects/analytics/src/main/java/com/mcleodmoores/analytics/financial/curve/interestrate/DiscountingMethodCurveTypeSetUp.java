@@ -3,6 +3,9 @@
  */
 package com.mcleodmoores.analytics.financial.curve.interestrate;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.threeten.bp.ZonedDateTime;
 
 import com.mcleodmoores.analytics.financial.index.IborTypeIndex;
@@ -18,16 +21,14 @@ import com.opengamma.analytics.financial.curve.interestrate.generator.GeneratorY
 import com.opengamma.analytics.financial.interestrate.InstrumentDerivativeVisitor;
 import com.opengamma.analytics.financial.provider.calculator.generic.LastFixingEndTimeCalculator;
 import com.opengamma.analytics.financial.provider.calculator.generic.LastTimeCalculator;
-import com.opengamma.analytics.financial.provider.description.interestrate.MulticurveProviderDiscount;
 import com.opengamma.analytics.math.interpolation.Interpolator1D;
 import com.opengamma.analytics.util.time.TimeCalculator;
-import com.opengamma.util.money.Currency;
+import com.opengamma.id.UniqueIdentifiable;
 
 /**
  *
  */
-public class DiscountingMethodCurveTypeSetUp extends DiscountingMethodCurveSetUp implements CurveTypeSetUpInterface<MulticurveProviderDiscount> {
-  private final String _curveName;
+public class DiscountingMethodCurveTypeSetUp extends DiscountingMethodCurveSetUp implements CurveTypeSetUpInterface {
   private String _otherCurveName;
   private Interpolator1D _interpolator;
   private ZonedDateTime[] _dates;
@@ -40,30 +41,29 @@ public class DiscountingMethodCurveTypeSetUp extends DiscountingMethodCurveSetUp
   private boolean _timeCalculatorAlreadySet;
   private boolean _maturityCalculator;
   private boolean _lastFixingEndCalculator;
+  private UniqueIdentifiable _discountingCurveId;
+  private List<IborTypeIndex> _iborCurveIndices;
+  private List<OvernightIndex> _overnightCurveIndices;
 
-  public DiscountingMethodCurveTypeSetUp(final String curveName, final DiscountingMethodCurveSetUp builder) {
+  DiscountingMethodCurveTypeSetUp(final DiscountingMethodCurveSetUp builder) {
     super(builder);
-    _curveName = curveName;
   }
 
   @Override
-  public DiscountingMethodCurveTypeSetUp forDiscounting(final Currency currency) {
-    _discountingCurves.put(_curveName, currency);
+  public DiscountingMethodCurveTypeSetUp forDiscounting(final UniqueIdentifiable id) {
+    _discountingCurveId = id;
     return this;
   }
 
-  //TODO versions that only take a single index
-  //TODO should store currency, indices in this object rather than in super class
-  //TODO IborTypeIndex version, same for overnight index
   @Override
   public DiscountingMethodCurveTypeSetUp forIborIndex(final IborTypeIndex... indices) {
-    _iborCurves.put(_curveName, indices);
+    _iborCurveIndices = Arrays.asList(indices);
     return this;
   }
 
   @Override
   public DiscountingMethodCurveTypeSetUp forOvernightIndex(final OvernightIndex... indices) {
-    _overnightCurves.put(_curveName, indices);
+    _overnightCurveIndices = Arrays.asList(indices);
     return this;
   }
 
@@ -81,8 +81,6 @@ public class DiscountingMethodCurveTypeSetUp extends DiscountingMethodCurveSetUp
     }
   }
 
-
-  //TODO move interpolator to curve name setup (have a map from name to interpolator)
   @Override
   public DiscountingMethodCurveTypeSetUp withInterpolator(final Interpolator1D interpolator) {
     if (_functionalForm != null) {
@@ -165,6 +163,18 @@ public class DiscountingMethodCurveTypeSetUp extends DiscountingMethodCurveSetUp
     _timeCalculatorAlreadySet = true;
     _lastFixingEndCalculator = true;
     return this;
+  }
+
+  UniqueIdentifiable getDiscountingCurveId() {
+    return _discountingCurveId;
+  }
+
+  List<IborTypeIndex> getIborCurveIndices() {
+    return _iborCurveIndices;
+  }
+
+  List<OvernightIndex> getOvernightCurveIndices() {
+    return _overnightCurveIndices;
   }
 
   @Override

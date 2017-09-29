@@ -8,20 +8,19 @@ import org.threeten.bp.ZonedDateTime;
 import com.mcleodmoores.analytics.financial.index.IborTypeIndex;
 import com.mcleodmoores.analytics.financial.index.OvernightIndex;
 import com.opengamma.analytics.financial.curve.interestrate.generator.GeneratorYDCurve;
-import com.opengamma.analytics.financial.provider.description.interestrate.ParameterProviderInterface;
 import com.opengamma.analytics.math.interpolation.Interpolator1D;
-import com.opengamma.util.money.Currency;
+import com.opengamma.id.UniqueIdentifiable;
 
 /**
  *
  */
-public interface CurveTypeSetUpInterface<T extends ParameterProviderInterface> {
+public interface CurveTypeSetUpInterface {
 
   public enum CurveFunction {
     NELSON_SIEGEL
   }
 
-  CurveTypeSetUpInterface forDiscounting(final Currency currency);
+  CurveTypeSetUpInterface forDiscounting(final UniqueIdentifiable id);
 
   //TODO versions that only take a single index
   CurveTypeSetUpInterface forIborIndex(final IborTypeIndex... indices);
