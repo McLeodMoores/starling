@@ -166,28 +166,26 @@ public class UsdJpyDiscountingLiborXCcyTest extends CurveBuildingTests {
   private static final String CURVE_NAME_FWD3_JPY = "JPY Fwd 3M";
   /** JPY 6m LIBOR curve name */
   private static final String CURVE_NAME_FWD6_JPY = "JPY Fwd 6M";
-  /** Already known data - contains only the FX matrix */
-  private static final MulticurveProviderDiscount KNOWN_DATA = new MulticurveProviderDiscount(FX_MATRIX);
   /** Builds USD discounting, then USD LIBOR, then three JPY curves */
   private static final DiscountingMethodCurveSetUp BUILDER_1 = DiscountingMethodCurveBuilder.setUp()
       .buildingFirst(CURVE_NAME_DSC_USD)
       .thenBuilding(CURVE_NAME_FWD3_USD)
       .thenBuilding(CURVE_NAME_DSC_JPY, CURVE_NAME_FWD3_JPY, CURVE_NAME_FWD6_JPY)
-      .using(CURVE_NAME_DSC_USD).forDiscounting(Currency.USD).forOvernightIndex(FED_FUNDS_INDEX.toOvernightIndex()).withInterpolator(INTERPOLATOR)
-      .using(CURVE_NAME_FWD3_USD).forIborIndex(USD_3M_LIBOR_INDEX.toIborTypeIndex()).withInterpolator(INTERPOLATOR)
-      .using(CURVE_NAME_DSC_JPY).forDiscounting(Currency.JPY).forOvernightIndex(TONAR_INDEX.toOvernightIndex()).withInterpolator(INTERPOLATOR)
-      .using(CURVE_NAME_FWD3_JPY).forIborIndex(JPY_3M_LIBOR_INDEX.toIborTypeIndex()).withInterpolator(INTERPOLATOR)
-      .using(CURVE_NAME_FWD6_JPY).forIborIndex(JPY_6M_LIBOR_INDEX.toIborTypeIndex()).withInterpolator(INTERPOLATOR)
-      .withKnownData(KNOWN_DATA);
+      .using(CURVE_NAME_DSC_USD).forDiscounting(Currency.USD).forIndex(FED_FUNDS_INDEX.toOvernightIndex()).withInterpolator(INTERPOLATOR)
+      .using(CURVE_NAME_FWD3_USD).forIndex(USD_3M_LIBOR_INDEX.toIborTypeIndex()).withInterpolator(INTERPOLATOR)
+      .using(CURVE_NAME_DSC_JPY).forDiscounting(Currency.JPY).forIndex(TONAR_INDEX.toOvernightIndex()).withInterpolator(INTERPOLATOR)
+      .using(CURVE_NAME_FWD3_JPY).forIndex(JPY_3M_LIBOR_INDEX.toIborTypeIndex()).withInterpolator(INTERPOLATOR)
+      .using(CURVE_NAME_FWD6_JPY).forIndex(JPY_6M_LIBOR_INDEX.toIborTypeIndex()).withInterpolator(INTERPOLATOR)
+      .addFxMatrix(FX_MATRIX);
   /** Builds USD discounting, USD LIBOR and three JPY curves simultaneously */
   private static final DiscountingMethodCurveSetUp BUILDER_2 = DiscountingMethodCurveBuilder.setUp()
       .building(CURVE_NAME_DSC_USD, CURVE_NAME_FWD3_USD, CURVE_NAME_DSC_JPY, CURVE_NAME_FWD3_JPY, CURVE_NAME_FWD6_JPY)
-      .using(CURVE_NAME_DSC_USD).forDiscounting(Currency.USD).forOvernightIndex(FED_FUNDS_INDEX.toOvernightIndex()).withInterpolator(INTERPOLATOR)
-      .using(CURVE_NAME_FWD3_USD).forIborIndex(USD_3M_LIBOR_INDEX.toIborTypeIndex()).withInterpolator(INTERPOLATOR)
-      .using(CURVE_NAME_DSC_JPY).forDiscounting(Currency.JPY).forOvernightIndex(TONAR_INDEX.toOvernightIndex()).withInterpolator(INTERPOLATOR)
-      .using(CURVE_NAME_FWD3_JPY).forIborIndex(JPY_3M_LIBOR_INDEX.toIborTypeIndex()).withInterpolator(INTERPOLATOR)
-      .using(CURVE_NAME_FWD6_JPY).forIborIndex(JPY_6M_LIBOR_INDEX.toIborTypeIndex()).withInterpolator(INTERPOLATOR)
-      .withKnownData(KNOWN_DATA);
+      .using(CURVE_NAME_DSC_USD).forDiscounting(Currency.USD).forIndex(FED_FUNDS_INDEX.toOvernightIndex()).withInterpolator(INTERPOLATOR)
+      .using(CURVE_NAME_FWD3_USD).forIndex(USD_3M_LIBOR_INDEX.toIborTypeIndex()).withInterpolator(INTERPOLATOR)
+      .using(CURVE_NAME_DSC_JPY).forDiscounting(Currency.JPY).forIndex(TONAR_INDEX.toOvernightIndex()).withInterpolator(INTERPOLATOR)
+      .using(CURVE_NAME_FWD3_JPY).forIndex(JPY_3M_LIBOR_INDEX.toIborTypeIndex()).withInterpolator(INTERPOLATOR)
+      .using(CURVE_NAME_FWD6_JPY).forIndex(JPY_6M_LIBOR_INDEX.toIborTypeIndex()).withInterpolator(INTERPOLATOR)
+      .addFxMatrix(FX_MATRIX);
   /** Market values for the USD discounting curve */
   private static final double[] DSC_USD_MARKET_QUOTES =
       new double[] {0.0010, 0.0010, 0.0010, 0.0010, 0.0010, 0.0010, 0.0010, 0.0010, 0.0015, 0.0020, 0.0035, 0.0050, 0.0130 };
@@ -647,7 +645,7 @@ public class UsdJpyDiscountingLiborXCcyTest extends CurveBuildingTests {
   @Test(enabled = true)
   public void performance() {
     long startTime, endTime;
-    final int nbTest = 10;
+    final int nbTest = 100;
 
     startTime = System.currentTimeMillis();
     DiscountingMethodCurveBuilder builder = BUILDER_1.copy().getBuilder();

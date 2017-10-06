@@ -36,6 +36,7 @@ import com.opengamma.analytics.financial.instrument.index.GeneratorSwapFixedON;
 import com.opengamma.analytics.financial.instrument.index.GeneratorSwapFixedONMaster;
 import com.opengamma.analytics.financial.instrument.index.IborIndex;
 import com.opengamma.analytics.financial.instrument.index.IndexON;
+import com.opengamma.analytics.financial.model.interestrate.curve.YieldAndDiscountCurve;
 import com.opengamma.analytics.financial.provider.calculator.discounting.PresentValueDiscountingCalculator;
 import com.opengamma.analytics.financial.provider.curve.CurveBuildingBlock;
 import com.opengamma.analytics.financial.provider.curve.CurveBuildingBlockBundle;
@@ -152,8 +153,8 @@ public class Usd3mLiborKnownDiscountingTest extends CurveBuildingTests {
   /** Builds the discounting curve */
   private static final DiscountingMethodCurveSetUp DSC_BUILDER = DiscountingMethodCurveBuilder.setUp()
       .building(CURVE_NAME_DSC_USD)
-      .using(CURVE_NAME_DSC_USD).forDiscounting(Currency.USD).forOvernightIndex(FED_FUNDS_INDEX.toOvernightIndex()).withInterpolator(INTERPOLATOR)
-      .withKnownData(new MulticurveProviderDiscount(FX_MATRIX));
+      .using(CURVE_NAME_DSC_USD).forDiscounting(Currency.USD).forIndex(FED_FUNDS_INDEX.toOvernightIndex()).withInterpolator(INTERPOLATOR)
+      .addFxMatrix(FX_MATRIX);
   static {
     for (int i = 0; i < DSC_USD_MARKET_QUOTES.length; i++) {
       DSC_BUILDER.addNode(CURVE_NAME_DSC_USD, DSC_USD_GENERATORS[i].generateInstrument(NOW, DSC_USD_MARKET_QUOTES[i], 1, DSC_USD_ATTR[i]));
@@ -161,16 +162,20 @@ public class Usd3mLiborKnownDiscountingTest extends CurveBuildingTests {
   }
   /** Discounting curve before today's fixing */
   private static final Pair<MulticurveProviderDiscount, CurveBuildingBlockBundle> DSC_BEFORE_FIXING;
+  private static final YieldAndDiscountCurve DSC_CURVE_BEFORE_FIXING;
   /** Discounting curve after today's fixing */
   private static final Pair<MulticurveProviderDiscount, CurveBuildingBlockBundle> DSC_AFTER_FIXING;
+  private static final YieldAndDiscountCurve DSC_CURVE_AFTER_FIXING;
   static {
     DSC_BEFORE_FIXING = DSC_BUILDER.copy().getBuilder().buildCurves(NOW, FIXING_TS_WITHOUT_TODAY);
+    DSC_CURVE_BEFORE_FIXING = DSC_BEFORE_FIXING.getFirst().getCurve(Currency.USD);
     DSC_AFTER_FIXING = DSC_BUILDER.copy().getBuilder().buildCurves(NOW, FIXING_TS_WITH_TODAY);
+    DSC_CURVE_AFTER_FIXING = DSC_AFTER_FIXING.getFirst().getCurve(Currency.USD);
   }
   /** Builds the LIBOR curve */
   private static final DiscountingMethodCurveSetUp LIBOR_BUILDER = DiscountingMethodCurveBuilder.setUp()
       .building(CURVE_NAME_FWD3_USD)
-      .using(CURVE_NAME_FWD3_USD).forIborIndex(USD_3M_LIBOR_INDEX.toIborTypeIndex()).withInterpolator(INTERPOLATOR);
+      .using(CURVE_NAME_FWD3_USD).forIndex(USD_3M_LIBOR_INDEX.toIborTypeIndex()).withInterpolator(INTERPOLATOR);
   /** LIBOR curve before today's fixing */
   private static final Pair<MulticurveProviderDiscount, CurveBuildingBlockBundle> LIBOR_BEFORE_FIXING;
   /** LIBOR curve after today's fixing */
@@ -179,8 +184,10 @@ public class Usd3mLiborKnownDiscountingTest extends CurveBuildingTests {
     for (int i = 0; i < FWD3_USD_MARKET_QUOTES.length; i++) {
       LIBOR_BUILDER.addNode(CURVE_NAME_FWD3_USD, FWD3_USD_GENERATORS[i].generateInstrument(NOW, FWD3_USD_MARKET_QUOTES[i], 1, FWD3_USD_ATTR[i]));
     }
-    LIBOR_BEFORE_FIXING = LIBOR_BUILDER.copy().withKnownData(DSC_BEFORE_FIXING.getFirst()).getBuilder().buildCurves(NOW, FIXING_TS_WITHOUT_TODAY);
-    LIBOR_AFTER_FIXING = LIBOR_BUILDER.copy().withKnownData(DSC_AFTER_FIXING.getFirst()).getBuilder().buildCurves(NOW, FIXING_TS_WITH_TODAY);
+    LIBOR_BEFORE_FIXING =
+        LIBOR_BUILDER.copy().using(DSC_CURVE_BEFORE_FIXING).forDiscounting(Currency.USD).getBuilder().buildCurves(NOW, FIXING_TS_WITHOUT_TODAY);
+    LIBOR_AFTER_FIXING =
+        LIBOR_BUILDER.copy().using(DSC_CURVE_AFTER_FIXING).forDiscounting(Currency.USD).getBuilder().buildCurves(NOW, FIXING_TS_WITH_TODAY);
   }
 
   @Override
@@ -242,10 +249,10 @@ public class Usd3mLiborKnownDiscountingTest extends CurveBuildingTests {
     assertNoSensitivities(LIBOR_AFTER_FIXING.getSecond(), CURVE_NAME_FWD3_USD, CURVE_NAME_DSC_USD);
     // LIBOR curve has sensitivities to its market data
     assertFiniteDifferenceSensitivities(LIBOR_BEFORE_FIXING.getSecond(), FIXING_TS_WITHOUT_TODAY,
-        LIBOR_BUILDER.copy().withKnownData(DSC_BEFORE_FIXING.getFirst()), CURVE_NAME_FWD3_USD,
+        LIBOR_BUILDER.copy().using(DSC_CURVE_BEFORE_FIXING).forDiscounting(Currency.USD), CURVE_NAME_FWD3_USD,
         CURVE_NAME_FWD3_USD, NOW, FWD3_USD_GENERATORS, FWD3_USD_ATTR, FWD3_USD_MARKET_QUOTES, false);
     assertFiniteDifferenceSensitivities(LIBOR_AFTER_FIXING.getSecond(), FIXING_TS_WITH_TODAY,
-        LIBOR_BUILDER.copy().withKnownData(DSC_AFTER_FIXING.getFirst()), CURVE_NAME_FWD3_USD,
+        LIBOR_BUILDER.copy().using(DSC_CURVE_AFTER_FIXING).forDiscounting(Currency.USD), CURVE_NAME_FWD3_USD,
         CURVE_NAME_FWD3_USD, NOW, FWD3_USD_GENERATORS, FWD3_USD_ATTR, FWD3_USD_MARKET_QUOTES, false);
   }
 

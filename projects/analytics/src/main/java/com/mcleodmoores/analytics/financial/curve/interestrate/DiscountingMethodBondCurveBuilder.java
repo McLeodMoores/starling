@@ -57,12 +57,15 @@ public class DiscountingMethodBondCurveBuilder extends CurveBuilder<IssuerProvid
 
   DiscountingMethodBondCurveBuilder(final List<List<String>> curveNames, final List<Pair<String, UniqueIdentifiable>> discountingCurves,
       final List<Pair<String, List<IborTypeIndex>>> iborCurves, final List<Pair<String, List<OvernightIndex>>> overnightCurves,
-      final LinkedListMultimap<String, Pair<Object, LegalEntityFilter<LegalEntity>>> issuerCurves,
+      final List<Pair<String, List<Pair<Object, LegalEntityFilter<LegalEntity>>>>> issuerCurves,
       final Map<String, List<InstrumentDefinition<?>>> nodes,
       final Map<String, ? extends CurveTypeSetUpInterface> curveGenerators,
-          final IssuerProviderDiscount knownData, final CurveBuildingBlockBundle knownBundle) {
+      final IssuerProviderDiscount knownData, final CurveBuildingBlockBundle knownBundle) {
     super(curveNames, discountingCurves, iborCurves, overnightCurves, nodes, curveGenerators, knownData, knownBundle);
-    _issuerCurves = LinkedListMultimap.create(issuerCurves);
+    _issuerCurves = LinkedListMultimap.create();
+    for (final Pair<String, List<Pair<Object, LegalEntityFilter<LegalEntity>>>> issuerCurve : issuerCurves) {
+      _issuerCurves.put(issuerCurve.getKey(), issuerCurve.getValue().get(0));
+    }
     _curveBuildingRepository = new IssuerDiscountBuildingRepository(_absoluteTolerance, _relativeTolerance, _maxSteps);
     _cached = new HashMap<>();
   }

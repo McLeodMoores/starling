@@ -153,16 +153,14 @@ public class EurDiscounting6mLiborWithCommitteeMeeting1Test extends CurveBuildin
       FWD6_EUR_ATTR[i] = new GeneratorAttributeIR(tenors[i]);
     }
   }
-  /** Already known data - contains only the FX matrix */
-  private static final MulticurveProviderDiscount KNOWN_DATA = new MulticurveProviderDiscount(FX_MATRIX);
   /** The curve builder */
   private static final DiscountingMethodCurveSetUp BUILDER_FOR_TEST = DiscountingMethodCurveBuilder.setUp()
       .buildingFirst(CURVE_NAME_DSC_EUR)
-      .using(CURVE_NAME_DSC_EUR).forDiscounting(Currency.EUR).forOvernightIndex(EONIA_INDEX.toOvernightIndex()).withInterpolator(LOG_LINEAR_INTERPOLATOR)
-            .usingNodeDates(MEETING_ECB_DATE)
+      .using(CURVE_NAME_DSC_EUR).forDiscounting(Currency.EUR).forIndex(EONIA_INDEX.toOvernightIndex()).withInterpolator(LOG_LINEAR_INTERPOLATOR)
+      .usingNodeDates(MEETING_ECB_DATE)
       .thenBuilding(CURVE_NAME_FWD6_EUR)
-      .using(CURVE_NAME_FWD6_EUR).forIborIndex(EURIBOR_6M_INDEX.toIborTypeIndex()).withInterpolator(LINEAR_INTERPOLATOR)
-      .withKnownData(KNOWN_DATA);
+      .using(CURVE_NAME_FWD6_EUR).forIndex(EURIBOR_6M_INDEX.toIborTypeIndex()).withInterpolator(LINEAR_INTERPOLATOR)
+      .addFxMatrix(FX_MATRIX);
   static {
     for (int i = 0; i < DSC_EUR_MARKET_QUOTES.length; i++) {
       BUILDER_FOR_TEST.addNode(CURVE_NAME_DSC_EUR, DSC_EUR_GENERATORS[i].generateInstrument(NOW, DSC_EUR_MARKET_QUOTES[i], 1, DSC_EUR_ATTR[i]));

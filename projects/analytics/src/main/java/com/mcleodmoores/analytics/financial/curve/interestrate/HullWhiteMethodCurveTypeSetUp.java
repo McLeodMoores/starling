@@ -57,13 +57,13 @@ public class HullWhiteMethodCurveTypeSetUp extends HullWhiteMethodCurveSetUp imp
   //TODO versions that only take a single index
   //TODO should store currency, indices in this object rather than in super class
   @Override
-  public HullWhiteMethodCurveTypeSetUp forIborIndex(final IborTypeIndex... indices) {
+  public HullWhiteMethodCurveTypeSetUp forIndex(final IborTypeIndex... indices) {
     getIborCurves().add(Pairs.of(_curveName, Arrays.asList(indices)));
     return this;
   }
 
   @Override
-  public HullWhiteMethodCurveTypeSetUp forOvernightIndex(final OvernightIndex... indices) {
+  public HullWhiteMethodCurveTypeSetUp forIndex(final OvernightIndex... indices) {
     getOvernightCurves().add(Pairs.of(_curveName, Arrays.asList(indices)));
     return this;
   }

@@ -14,6 +14,7 @@ import com.mcleodmoores.analytics.financial.index.IborTypeIndex;
 import com.mcleodmoores.analytics.financial.index.OvernightIndex;
 import com.opengamma.analytics.financial.forex.method.FXMatrix;
 import com.opengamma.analytics.financial.instrument.InstrumentDefinition;
+import com.opengamma.analytics.financial.model.interestrate.curve.YieldAndDiscountCurve;
 import com.opengamma.analytics.financial.provider.curve.CurveBuildingBlockBundle;
 import com.opengamma.analytics.financial.provider.description.interestrate.MulticurveProviderForward;
 import com.opengamma.id.UniqueIdentifiable;
@@ -22,13 +23,10 @@ import com.opengamma.util.tuple.Pair;
 /**
  *
  */
-public class DirectForwardMethodCurveSetUp implements CurveSetUpInterface<MulticurveProviderForward> {
+public class DirectForwardMethodCurveSetUp implements CurveSetUpInterface {
   private final List<List<String>> _curveNames;
-  //TODO should these live in curve type setup?
-  private final List<Pair<String, UniqueIdentifiable>> _discountingCurves;
-  private final List<Pair<String, List<IborTypeIndex>>> _iborCurves;
-  private final List<Pair<String, List<OvernightIndex>>> _overnightCurves;
   private final Map<String, DirectForwardMethodCurveTypeSetUp> _curveTypes;
+  private final Map<DiscountingMethodPreConstructedCurveTypeSetUp, YieldAndDiscountCurve> _preConstructedCurves;
   private final Map<String, List<InstrumentDefinition<?>>> _nodes;
   private FXMatrix _fxMatrix;
   private MulticurveProviderForward _knownData;
@@ -36,23 +34,16 @@ public class DirectForwardMethodCurveSetUp implements CurveSetUpInterface<Multic
 
   protected DirectForwardMethodCurveSetUp() {
     _curveNames = new ArrayList<>();
-    _discountingCurves = new ArrayList<>();
-    _iborCurves = new ArrayList<>();
-    _overnightCurves = new ArrayList<>();
     _curveTypes = new HashMap<>();
-    //TODO currently have to add things in the right order for each curve - need to have comparator for attribute generator tenors
+    _preConstructedCurves = new HashMap<>();
     _nodes = new LinkedHashMap<>();
     _fxMatrix = new FXMatrix();
-    _knownData = null;
     _knownBundle = null;
   }
 
   protected DirectForwardMethodCurveSetUp(final DirectForwardMethodCurveSetUp setup) {
     //TODO copy
     _curveNames = setup._curveNames;
-    _discountingCurves = setup._discountingCurves;
-    _iborCurves = setup._iborCurves;
-    _overnightCurves = setup._overnightCurves;
     _curveTypes = setup._curveTypes;
     _nodes = setup._nodes;
     _fxMatrix = setup._fxMatrix;

@@ -45,7 +45,8 @@ public class DiscountingMethodCurveBuilder extends CurveBuilder<MulticurveProvid
       final List<Pair<String, List<IborTypeIndex>>> iborCurves, final List<Pair<String, List<OvernightIndex>>> overnightCurves,
       final Map<String, List<InstrumentDefinition<?>>> newNodes,
       final Map<String, ? extends CurveTypeSetUpInterface> curveGenerators,
-      final MulticurveProviderDiscount knownData, final CurveBuildingBlockBundle knownBundle) {
+      final MulticurveProviderDiscount knownData,
+      final CurveBuildingBlockBundle knownBundle) {
     super(curveNames, discountingCurves, iborCurves, overnightCurves, newNodes, curveGenerators, knownData, knownBundle);
     _curveBuildingRepository = new MulticurveDiscountBuildingRepository(_absoluteTolerance, _relativeTolerance, _maxSteps);
   }

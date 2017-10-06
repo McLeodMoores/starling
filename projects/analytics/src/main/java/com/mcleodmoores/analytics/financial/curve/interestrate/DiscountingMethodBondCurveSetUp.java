@@ -10,98 +10,133 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.google.common.collect.LinkedListMultimap;
 import com.mcleodmoores.analytics.financial.index.IborTypeIndex;
 import com.mcleodmoores.analytics.financial.index.OvernightIndex;
 import com.opengamma.analytics.financial.forex.method.FXMatrix;
 import com.opengamma.analytics.financial.instrument.InstrumentDefinition;
+import com.opengamma.analytics.financial.instrument.index.IborIndex;
+import com.opengamma.analytics.financial.instrument.index.IndexConverter;
+import com.opengamma.analytics.financial.instrument.index.IndexON;
 import com.opengamma.analytics.financial.legalentity.LegalEntity;
 import com.opengamma.analytics.financial.legalentity.LegalEntityFilter;
+import com.opengamma.analytics.financial.model.interestrate.curve.YieldAndDiscountCurve;
 import com.opengamma.analytics.financial.provider.curve.CurveBuildingBlockBundle;
 import com.opengamma.analytics.financial.provider.description.interestrate.IssuerProviderDiscount;
 import com.opengamma.id.UniqueIdentifiable;
+import com.opengamma.util.money.Currency;
 import com.opengamma.util.tuple.Pair;
+import com.opengamma.util.tuple.Pairs;
 
 /**
  *
  */
-public class DiscountingMethodBondCurveSetUp implements BondCurveSetUpInterface<IssuerProviderDiscount> {
+public class DiscountingMethodBondCurveSetUp implements BondCurveSetUpInterface {
   private final List<List<String>> _curveNames;
-  //TODO should these live in curve type setup?
-  private final List<Pair<String, UniqueIdentifiable>> _discountingCurves;
-  private final List<Pair<String, List<IborTypeIndex>>> _iborCurves;
-  private final List<Pair<String, List<OvernightIndex>>> _overnightCurves;
-  private final LinkedListMultimap<String, Pair<Object, LegalEntityFilter<LegalEntity>>> _issuerCurves;
   private final Map<String, DiscountingMethodBondCurveTypeSetUp> _curveTypes;
+  private final Map<DiscountingMethodPreConstructedBondCurveTypeSetUp, YieldAndDiscountCurve> _preConstructedCurves;
   private final Map<String, List<InstrumentDefinition<?>>> _nodes;
   private FXMatrix _fxMatrix;
-  private IssuerProviderDiscount _knownData;
   private CurveBuildingBlockBundle _knownBundle;
 
-  protected DiscountingMethodBondCurveSetUp() {
+  DiscountingMethodBondCurveSetUp() {
     _curveNames = new ArrayList<>();
-    _discountingCurves = new ArrayList<>();
-    _iborCurves = new ArrayList<>();
-    _overnightCurves = new ArrayList<>();
-    _issuerCurves = LinkedListMultimap.create();
     _curveTypes = new HashMap<>();
+    _preConstructedCurves = new HashMap<>();
     _nodes = new LinkedHashMap<>();
     _fxMatrix = new FXMatrix();
-    _knownData = null;
     _knownBundle = null;
   }
 
   protected DiscountingMethodBondCurveSetUp(final DiscountingMethodBondCurveSetUp setup) {
     //TODO copy
     _curveNames = setup._curveNames;
-    _discountingCurves = setup._discountingCurves;
-    _iborCurves = setup._iborCurves;
-    _overnightCurves = setup._overnightCurves;
-    _issuerCurves = setup._issuerCurves;
     _curveTypes = setup._curveTypes;
+    _preConstructedCurves = setup._preConstructedCurves;
     //TODO currently have to add things in the right order for each curve - need to have comparator for attribute generator tenors
     _nodes = setup._nodes;
     _fxMatrix = setup._fxMatrix;
-    _knownData = setup._knownData;
     _knownBundle = setup._knownBundle;
   }
 
-  protected DiscountingMethodBondCurveSetUp(final List<List<String>> curveNames, final List<Pair<String, UniqueIdentifiable>> discountingCurves,
-      final List<Pair<String, List<IborTypeIndex>>> iborCurves, final List<Pair<String, List<OvernightIndex>>> overnightCurves,
-      final LinkedListMultimap<String, Pair<Object, LegalEntityFilter<LegalEntity>>> issuerCurves,
+  protected DiscountingMethodBondCurveSetUp(final List<List<String>> curveNames,
       final Map<String, List<InstrumentDefinition<?>>> nodes,
       final Map<String, DiscountingMethodBondCurveTypeSetUp> curveTypes,
+      final Map<DiscountingMethodPreConstructedBondCurveTypeSetUp, YieldAndDiscountCurve> preConstructedCurves,
       final FXMatrix fxMatrix,
-      final IssuerProviderDiscount knownData,
       final CurveBuildingBlockBundle knownBundle) {
     _curveNames = new ArrayList<>(curveNames);
-    _discountingCurves = new ArrayList<>(discountingCurves);
-    _iborCurves = new ArrayList<>(iborCurves);
-    _overnightCurves = new ArrayList<>(overnightCurves);
-    _issuerCurves = LinkedListMultimap.create(issuerCurves);
     _nodes = new HashMap<>(nodes);
     _curveTypes = new HashMap<>(curveTypes);
+    _preConstructedCurves = new HashMap<>(preConstructedCurves);
     _fxMatrix = fxMatrix;
-    _knownData = knownData == null ? null : knownData.copy();
     _knownBundle = knownBundle == null ? null : knownBundle; //TODO no copy
   }
 
   @Override
   public DiscountingMethodBondCurveBuilder getBuilder() {
-    final IssuerProviderDiscount knownData;
-    if (_knownData != null) {
-      knownData = _knownData;
-    } else {
-      knownData = new IssuerProviderDiscount(_fxMatrix);
+    final List<Pair<String, UniqueIdentifiable>> discountingCurves = new ArrayList<>();
+    final List<Pair<String, List<IborTypeIndex>>> iborCurves = new ArrayList<>();
+    final List<Pair<String, List<OvernightIndex>>> overnightCurves = new ArrayList<>();
+    final List<Pair<String, List<Pair<Object, LegalEntityFilter<LegalEntity>>>>> issuerCurves = new ArrayList<>();
+    for (final Map.Entry<String, DiscountingMethodBondCurveTypeSetUp> entry : _curveTypes.entrySet()) {
+      final String curveName = entry.getKey();
+      final DiscountingMethodBondCurveTypeSetUp setUp = entry.getValue();
+      final UniqueIdentifiable discountingCurveId = setUp.getDiscountingCurveId();
+      if (discountingCurveId != null) {
+        discountingCurves.add(Pairs.of(curveName, discountingCurveId));
+      }
+      final List<IborTypeIndex> iborCurveIndices = setUp.getIborCurveIndices();
+      if (iborCurveIndices != null) {
+        iborCurves.add(Pairs.of(curveName, iborCurveIndices));
+      }
+      final List<OvernightIndex> overnightCurveIndices = setUp.getOvernightCurveIndices();
+      if (overnightCurveIndices != null) {
+        overnightCurves.add(Pairs.of(curveName, overnightCurveIndices));
+      }
+      final List<Pair<Object, LegalEntityFilter<LegalEntity>>> issuers = setUp.getIssuers();
+      if (issuers != null) {
+        issuerCurves.add(Pairs.of(curveName, issuers));
+      }
     }
-    return new DiscountingMethodBondCurveBuilder(_curveNames, _discountingCurves, _iborCurves, _overnightCurves, _issuerCurves, _nodes, _curveTypes,
+    final Map<Currency, YieldAndDiscountCurve> knownDiscountingCurves = new HashMap<>();
+    final Map<IborIndex, YieldAndDiscountCurve> knownIborCurves = new HashMap<>();
+    final Map<IndexON, YieldAndDiscountCurve> knownOvernightCurves = new HashMap<>();
+    final Map<Pair<Object, LegalEntityFilter<LegalEntity>>, YieldAndDiscountCurve> knownIssuerCurves = new HashMap<>();
+    for (final Map.Entry<DiscountingMethodPreConstructedBondCurveTypeSetUp, YieldAndDiscountCurve> entry : _preConstructedCurves.entrySet()) {
+      final DiscountingMethodPreConstructedBondCurveTypeSetUp setUp = entry.getKey();
+      final YieldAndDiscountCurve curve = entry.getValue();
+      final UniqueIdentifiable discountingCurveId = setUp.getDiscountingCurveId();
+      if (discountingCurveId != null) {
+        knownDiscountingCurves.put((Currency) discountingCurveId, curve);
+      }
+      final List<IborTypeIndex> iborCurveIndices = setUp.getIborCurveIndices();
+      if (iborCurveIndices != null) {
+        for (final IborTypeIndex index : iborCurveIndices) {
+          knownIborCurves.put(IndexConverter.toIborIndex(index), curve);
+        }
+      }
+      final List<OvernightIndex> overnightCurveIndices = setUp.getOvernightCurveIndices();
+      if (overnightCurveIndices != null) {
+        for (final OvernightIndex index : overnightCurveIndices) {
+          knownOvernightCurves.put(IndexConverter.toIndexOn(index), curve);
+        }
+      }
+      final List<Pair<Object, LegalEntityFilter<LegalEntity>>> issuers = setUp.getIssuers();
+      if (issuers != null) {
+        for (final Pair<Object, LegalEntityFilter<LegalEntity>> issuer : issuers) {
+          knownIssuerCurves.put(issuer, curve);
+        }
+      }
+    }
+    final IssuerProviderDiscount knownData =
+        new IssuerProviderDiscount(knownDiscountingCurves, knownIborCurves, knownOvernightCurves, knownIssuerCurves, _fxMatrix);
+    return new DiscountingMethodBondCurveBuilder(_curveNames, discountingCurves, iborCurves, overnightCurves, issuerCurves, _nodes, _curveTypes,
         knownData, _knownBundle);
   }
 
   @Override
   public DiscountingMethodBondCurveSetUp copy() {
-    return new DiscountingMethodBondCurveSetUp(_curveNames, _discountingCurves, _iborCurves, _overnightCurves, _issuerCurves, _nodes, _curveTypes,
-        _fxMatrix, _knownData, _knownBundle);
+    return new DiscountingMethodBondCurveSetUp(_curveNames, _nodes, _curveTypes, _preConstructedCurves, _fxMatrix, _knownBundle);
   }
 
   @Override
@@ -155,9 +190,6 @@ public class DiscountingMethodBondCurveSetUp implements BondCurveSetUpInterface<
 
   @Override
   public DiscountingMethodBondCurveSetUp addFxMatrix(final FXMatrix fxMatrix) {
-    if (_knownData != null) {
-      throw new IllegalStateException();
-    }
     _fxMatrix = fxMatrix;
     return this;
   }
@@ -165,16 +197,6 @@ public class DiscountingMethodBondCurveSetUp implements BondCurveSetUpInterface<
   @Override
   public DiscountingMethodBondCurveSetUp removeNodes(final String curveName) {
     _nodes.put(curveName, null);
-    return this;
-  }
-
-  @Override
-  public DiscountingMethodBondCurveSetUp withKnownData(final IssuerProviderDiscount knownData) {
-    if (_fxMatrix != null) {
-      throw new IllegalStateException();
-    }
-    // probably better to merge this
-    _knownData = knownData;
     return this;
   }
 
@@ -188,22 +210,6 @@ public class DiscountingMethodBondCurveSetUp implements BondCurveSetUpInterface<
     return _curveNames;
   }
 
-  List<Pair<String, UniqueIdentifiable>> getDiscountingCurves() {
-    return _discountingCurves;
-  }
-
-  List<Pair<String, List<IborTypeIndex>>> getIborCurves() {
-    return _iborCurves;
-  }
-
-  List<Pair<String, List<OvernightIndex>>> getOvernightCurves() {
-    return _overnightCurves;
-  }
-
-  LinkedListMultimap<String, Pair<Object, LegalEntityFilter<LegalEntity>>> getIssuerCurves() {
-    return _issuerCurves;
-  }
-
   Map<String, DiscountingMethodBondCurveTypeSetUp> getCurveTypes() {
     return _curveTypes;
   }
@@ -212,12 +218,13 @@ public class DiscountingMethodBondCurveSetUp implements BondCurveSetUpInterface<
     return _nodes;
   }
 
-  IssuerProviderDiscount getKnownData() {
-    return _knownData;
-  }
-
   CurveBuildingBlockBundle getKnownBundle() {
     return _knownBundle;
+  }
+
+  @Override
+  public PreConstructedCurveTypeSetUp using(final YieldAndDiscountCurve curve) {
+    return null;
   }
 
 }

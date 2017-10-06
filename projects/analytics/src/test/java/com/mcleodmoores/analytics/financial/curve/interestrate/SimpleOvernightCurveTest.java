@@ -89,7 +89,7 @@ public class SimpleOvernightCurveTest {
 
   private static final DiscountingMethodCurveSetUp CURVE_BUILDER = DiscountingMethodCurveBuilder.setUp()
       .building(CURVE_NAME)
-      .using(CURVE_NAME).forDiscounting(Currency.USD).forOvernightIndex(INDEX).withInterpolator(INTERPOLATOR);
+      .using(CURVE_NAME).forDiscounting(Currency.USD).forIndex(INDEX).withInterpolator(INTERPOLATOR);
 
   static {
     final Tenor startTenor = Tenor.of(Period.ZERO);

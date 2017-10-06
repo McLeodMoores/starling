@@ -56,13 +56,13 @@ public class DiscountingMethodCurveTypeSetUp extends DiscountingMethodCurveSetUp
   }
 
   @Override
-  public DiscountingMethodCurveTypeSetUp forIborIndex(final IborTypeIndex... indices) {
+  public DiscountingMethodCurveTypeSetUp forIndex(final IborTypeIndex... indices) {
     _iborCurveIndices = Arrays.asList(indices);
     return this;
   }
 
   @Override
-  public DiscountingMethodCurveTypeSetUp forOvernightIndex(final OvernightIndex... indices) {
+  public DiscountingMethodCurveTypeSetUp forIndex(final OvernightIndex... indices) {
     _overnightCurveIndices = Arrays.asList(indices);
     return this;
   }

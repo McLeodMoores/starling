@@ -12,32 +12,28 @@ import com.opengamma.analytics.financial.provider.description.interestrate.Param
 /**
  *
  */
-public interface CurveSetUpInterface<T extends ParameterProviderInterface> {
+public interface CurveSetUpInterface {
 
-  CurveSetUpInterface<T> building(final String... curveNames);
+  CurveSetUpInterface building(String... curveNames);
 
-  CurveSetUpInterface<T> buildingFirst(final String... curveNames);
+  CurveSetUpInterface buildingFirst(String... curveNames);
 
-  CurveSetUpInterface<T> thenBuilding(final String... curveNames);
+  CurveSetUpInterface thenBuilding(String... curveNames);
 
-  CurveTypeSetUpInterface using(final String curveName);
+  CurveTypeSetUpInterface using(String curveName);
 
-  CurveTypeSetUpInterface using(YieldAndDiscountCurve curve);
+  PreConstructedCurveTypeSetUp using(YieldAndDiscountCurve curve);
 
-  CurveSetUpInterface<T> addNode(final String curveName, InstrumentDefinition<?> definition);
+  CurveSetUpInterface addNode(String curveName, InstrumentDefinition<?> definition);
 
-  CurveSetUpInterface<T> addFxMatrix(FXMatrix fxMatrix);
+  CurveSetUpInterface addFxMatrix(FXMatrix fxMatrix);
 
-  CurveSetUpInterface<T> removeNodes(String curveName);
+  CurveSetUpInterface removeNodes(String curveName);
 
-  CurveBuilder<T> getBuilder();
+  CurveBuilder<? extends ParameterProviderInterface> getBuilder();
 
-  //TODO rename this
-  CurveSetUpInterface<T> withKnownData(final T knownData);
+  CurveSetUpInterface copy();
 
-  //TODO rename this
-  CurveSetUpInterface<T> withKnownBundle(final CurveBuildingBlockBundle knownBundle);
-
-  CurveSetUpInterface<T> copy();
+  CurveSetUpInterface withKnownBundle(CurveBuildingBlockBundle bundle);
 
 }

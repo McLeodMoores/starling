@@ -20,14 +20,14 @@ public interface CurveTypeSetUpInterface {
     NELSON_SIEGEL
   }
 
-  CurveTypeSetUpInterface forDiscounting(final UniqueIdentifiable id);
+  CurveTypeSetUpInterface forDiscounting(UniqueIdentifiable id);
 
   //TODO versions that only take a single index
-  CurveTypeSetUpInterface forIborIndex(final IborTypeIndex... indices);
+  CurveTypeSetUpInterface forIndex(IborTypeIndex... indices);
 
-  CurveTypeSetUpInterface forOvernightIndex(final OvernightIndex... indices);
+  CurveTypeSetUpInterface forIndex(OvernightIndex... indices);
 
-  CurveTypeSetUpInterface withInterpolator(final Interpolator1D interpolator);
+  CurveTypeSetUpInterface withInterpolator(Interpolator1D interpolator);
 
   //TODO asSpread under to indicate subtraction?
   CurveTypeSetUpInterface asSpreadOver(String otherCurveName);
@@ -50,6 +50,6 @@ public interface CurveTypeSetUpInterface {
 
   CurveTypeSetUpInterface usingLastFixingEndTime();
 
-  GeneratorYDCurve buildCurveGenerator(final ZonedDateTime valuationDate);
+  GeneratorYDCurve buildCurveGenerator(ZonedDateTime valuationDate);
 
 }

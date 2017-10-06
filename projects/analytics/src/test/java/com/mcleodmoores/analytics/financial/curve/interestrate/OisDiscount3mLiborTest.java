@@ -119,8 +119,8 @@ public class OisDiscount3mLiborTest {
   private static final String LIBOR_CURVE_NAME = "USD 3M LIBOR";
 
   private static final DiscountingMethodCurveSetUp CURVE_BUILDER = DiscountingMethodCurveBuilder.setUp()
-      .building(OIS_CURVE_NAME).using(OIS_CURVE_NAME).forDiscounting(Currency.USD).forOvernightIndex(FED_FUNDS_INDEX).withInterpolator(INTERPOLATOR)
-      .thenBuilding(LIBOR_CURVE_NAME).using(LIBOR_CURVE_NAME).forIborIndex(LIBOR_INDEX).withInterpolator(INTERPOLATOR);
+      .building(OIS_CURVE_NAME).using(OIS_CURVE_NAME).forDiscounting(Currency.USD).forIndex(FED_FUNDS_INDEX).withInterpolator(INTERPOLATOR)
+      .thenBuilding(LIBOR_CURVE_NAME).using(LIBOR_CURVE_NAME).forIndex(LIBOR_INDEX).withInterpolator(INTERPOLATOR);
 
   static {
     final Tenor startTenor = Tenor.of(Period.ZERO);

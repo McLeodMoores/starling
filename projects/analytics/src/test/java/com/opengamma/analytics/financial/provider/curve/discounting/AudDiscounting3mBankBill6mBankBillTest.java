@@ -196,23 +196,21 @@ public class AudDiscounting3mBankBill6mBankBillTest extends CurveBuildingTests {
       FWD6_AUD_ATTR[i] = new GeneratorAttributeIR(tenors[i]);
     }
   }
-  /** Already known curve data - contains only an empty FX matrix */
-  private static final MulticurveProviderDiscount MULTICURVE_KNOWN_DATA = new MulticurveProviderDiscount(FX_MATRIX);
   /** Builder that constructs the discounting curve before the two bank bill curves */
   private static final DiscountingMethodCurveSetUp DISCOUNTING_THEN_BANK_BILLS_BUILDER = DiscountingMethodCurveBuilder.setUp()
       .buildingFirst(CURVE_NAME_DSC_AUD)
-      .using(CURVE_NAME_DSC_AUD).forDiscounting(Currency.AUD).forOvernightIndex(AUD_OVERNIGHT_INDEX.toOvernightIndex()).withInterpolator(INTERPOLATOR)
+      .using(CURVE_NAME_DSC_AUD).forDiscounting(Currency.AUD).forIndex(AUD_OVERNIGHT_INDEX.toOvernightIndex()).withInterpolator(INTERPOLATOR)
       .thenBuilding(CURVE_NAME_FWD3_AUD, CURVE_NAME_FWD6_AUD)
-      .using(CURVE_NAME_FWD3_AUD).forIborIndex(AUD_3M_BANK_BILL_INDEX.toIborTypeIndex()).withInterpolator(INTERPOLATOR)
-      .using(CURVE_NAME_FWD6_AUD).forIborIndex(AUD_6M_BANK_BILL_INDEX.toIborTypeIndex()).withInterpolator(INTERPOLATOR)
-      .withKnownData(MULTICURVE_KNOWN_DATA);
+      .using(CURVE_NAME_FWD3_AUD).forIndex(AUD_3M_BANK_BILL_INDEX.toIborTypeIndex()).withInterpolator(INTERPOLATOR)
+      .using(CURVE_NAME_FWD6_AUD).forIndex(AUD_6M_BANK_BILL_INDEX.toIborTypeIndex()).withInterpolator(INTERPOLATOR)
+      .addFxMatrix(FX_MATRIX);
   /** Builder that constructs three curves */
   private static final DiscountingMethodCurveSetUp DISCOUNTING_AND_BANK_BILLS_BUILDER = DiscountingMethodCurveBuilder.setUp()
       .building(CURVE_NAME_DSC_AUD, CURVE_NAME_FWD3_AUD, CURVE_NAME_FWD6_AUD)
-      .using(CURVE_NAME_DSC_AUD).forDiscounting(Currency.AUD).forOvernightIndex(AUD_OVERNIGHT_INDEX.toOvernightIndex()).withInterpolator(INTERPOLATOR)
-      .using(CURVE_NAME_FWD3_AUD).forIborIndex(AUD_3M_BANK_BILL_INDEX.toIborTypeIndex()).withInterpolator(INTERPOLATOR)
-      .using(CURVE_NAME_FWD6_AUD).forIborIndex(AUD_6M_BANK_BILL_INDEX.toIborTypeIndex()).withInterpolator(INTERPOLATOR)
-      .withKnownData(MULTICURVE_KNOWN_DATA);
+      .using(CURVE_NAME_DSC_AUD).forDiscounting(Currency.AUD).forIndex(AUD_OVERNIGHT_INDEX.toOvernightIndex()).withInterpolator(INTERPOLATOR)
+      .using(CURVE_NAME_FWD3_AUD).forIndex(AUD_3M_BANK_BILL_INDEX.toIborTypeIndex()).withInterpolator(INTERPOLATOR)
+      .using(CURVE_NAME_FWD6_AUD).forIndex(AUD_6M_BANK_BILL_INDEX.toIborTypeIndex()).withInterpolator(INTERPOLATOR)
+      .addFxMatrix(FX_MATRIX);
   static {
     for (int i = 0; i < DSC_AUD_MARKET_QUOTES.length; i++) {
       DISCOUNTING_THEN_BANK_BILLS_BUILDER.addNode(CURVE_NAME_DSC_AUD,

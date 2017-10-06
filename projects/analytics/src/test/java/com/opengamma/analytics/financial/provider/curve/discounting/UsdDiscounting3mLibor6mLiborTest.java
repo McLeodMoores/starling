@@ -231,41 +231,40 @@ public class UsdDiscounting3mLibor6mLiborTest {
       FWD6_USD_ATTR[loopins] = new GeneratorAttributeIR(FWD6_USD_TENOR[loopins]);
     }
   }
-
   private static final MulticurveProviderDiscount KNOWN_DATA = new MulticurveProviderDiscount(FX_MATRIX);
   private static final DiscountingMethodCurveSetUp DISCOUNTING_THEN_3M_LIBOR_BUILDER_1 = DiscountingMethodCurveBuilder.setUp()
-      .building(CURVE_NAME_DSC_USD).using(CURVE_NAME_DSC_USD).forDiscounting(Currency.USD).forOvernightIndex(FED_FUNDS.toOvernightIndex()).withInterpolator(INTERPOLATOR_LINEAR)
-      .thenBuilding(CURVE_NAME_FWD3_USD).using(CURVE_NAME_FWD3_USD).forIborIndex(USD_3M_LIBOR_INDEX.toIborTypeIndex()).withInterpolator(INTERPOLATOR_LINEAR)
-      .withKnownData(KNOWN_DATA);
+      .building(CURVE_NAME_DSC_USD).using(CURVE_NAME_DSC_USD).forDiscounting(Currency.USD).forIndex(FED_FUNDS.toOvernightIndex()).withInterpolator(INTERPOLATOR_LINEAR)
+      .thenBuilding(CURVE_NAME_FWD3_USD).using(CURVE_NAME_FWD3_USD).forIndex(USD_3M_LIBOR_INDEX.toIborTypeIndex()).withInterpolator(INTERPOLATOR_LINEAR);
   private static final DiscountingMethodCurveSetUp DISCOUNTING_THEN_3M_LIBOR_BUILDER_2 = DiscountingMethodCurveBuilder.setUp()
-      .building(CURVE_NAME_DSC_USD).using(CURVE_NAME_DSC_USD).forDiscounting(Currency.USD).forOvernightIndex(FED_FUNDS.toOvernightIndex()).withInterpolator(INTERPOLATOR_LL).continuousInterpolationOnDiscountFactors()
-      .thenBuilding(CURVE_NAME_FWD3_USD).using(CURVE_NAME_FWD3_USD).forIborIndex(USD_3M_LIBOR_INDEX.toIborTypeIndex()).withInterpolator(INTERPOLATOR_LL)
-      .withKnownData(KNOWN_DATA);
+      .building(CURVE_NAME_DSC_USD).using(CURVE_NAME_DSC_USD).forDiscounting(Currency.USD).forIndex(FED_FUNDS.toOvernightIndex()).withInterpolator(INTERPOLATOR_LL).continuousInterpolationOnDiscountFactors()
+      .thenBuilding(CURVE_NAME_FWD3_USD).using(CURVE_NAME_FWD3_USD).forIndex(USD_3M_LIBOR_INDEX.toIborTypeIndex()).withInterpolator(INTERPOLATOR_LL);
   private static final DiscountingMethodCurveSetUp PERIODIC_DISCOUNTING_THEN_3M_LIBOR_BUILDER_1 = DiscountingMethodCurveBuilder.setUp()
-      .building(CURVE_NAME_DSC_USD).using(CURVE_NAME_DSC_USD).forDiscounting(Currency.USD).forOvernightIndex(FED_FUNDS.toOvernightIndex()).withInterpolator(INTERPOLATOR_LINEAR).periodicInterpolationOnYield(1)
-      .thenBuilding(CURVE_NAME_FWD3_USD).using(CURVE_NAME_FWD3_USD).forIborIndex(USD_3M_LIBOR_INDEX.toIborTypeIndex()).withInterpolator(INTERPOLATOR_LINEAR).periodicInterpolationOnYield(1)
-      .withKnownData(KNOWN_DATA);
+      .building(CURVE_NAME_DSC_USD).using(CURVE_NAME_DSC_USD).forDiscounting(Currency.USD).forIndex(FED_FUNDS.toOvernightIndex()).withInterpolator(INTERPOLATOR_LINEAR).periodicInterpolationOnYield(1)
+      .thenBuilding(CURVE_NAME_FWD3_USD).using(CURVE_NAME_FWD3_USD).forIndex(USD_3M_LIBOR_INDEX.toIborTypeIndex()).withInterpolator(INTERPOLATOR_LINEAR).periodicInterpolationOnYield(1);
   private static final DiscountingMethodCurveSetUp DISCOUNTING_THEN_3M_THEN_6M_LIBOR_BUILDER_1 = DiscountingMethodCurveBuilder.setUp()
-      .building(CURVE_NAME_DSC_USD).using(CURVE_NAME_DSC_USD).forDiscounting(Currency.USD).forOvernightIndex(FED_FUNDS.toOvernightIndex()).withInterpolator(INTERPOLATOR_DQ)
-      .thenBuilding(CURVE_NAME_FWD3_USD).using(CURVE_NAME_FWD3_USD).forIborIndex(USD_3M_LIBOR_INDEX.toIborTypeIndex()).withInterpolator(INTERPOLATOR_DQ)
-      .thenBuilding(CURVE_NAME_FWD6_USD).using(CURVE_NAME_FWD6_USD).forIborIndex(USD_6M_LIBOR_INDEX.toIborTypeIndex()).withInterpolator(INTERPOLATOR_DQ)
-      .withKnownData(KNOWN_DATA);
+      .building(CURVE_NAME_DSC_USD).using(CURVE_NAME_DSC_USD).forDiscounting(Currency.USD).forIndex(FED_FUNDS.toOvernightIndex()).withInterpolator(INTERPOLATOR_DQ)
+      .thenBuilding(CURVE_NAME_FWD3_USD).using(CURVE_NAME_FWD3_USD).forIndex(USD_3M_LIBOR_INDEX.toIborTypeIndex()).withInterpolator(INTERPOLATOR_DQ)
+      .thenBuilding(CURVE_NAME_FWD6_USD).using(CURVE_NAME_FWD6_USD).forIndex(USD_6M_LIBOR_INDEX.toIborTypeIndex()).withInterpolator(INTERPOLATOR_DQ);
   private static final DiscountingMethodCurveSetUp DISCOUNTING_THEN_3M_THEN_6M_LIBOR_BUILDER_2 = DiscountingMethodCurveBuilder.setUp()
-      .building(CURVE_NAME_DSC_USD).using(CURVE_NAME_DSC_USD).forDiscounting(Currency.USD).forOvernightIndex(FED_FUNDS.toOvernightIndex()).withInterpolator(INTERPOLATOR_DQ)
-      .thenBuilding(CURVE_NAME_FWD3_USD).using(CURVE_NAME_FWD3_USD).forIborIndex(USD_3M_LIBOR_INDEX.toIborTypeIndex()).withInterpolator(INTERPOLATOR_DQ)
-      .thenBuilding(CURVE_NAME_FWD6_USD).using(CURVE_NAME_FWD6_USD).forIborIndex(USD_6M_LIBOR_INDEX.toIborTypeIndex()).withInterpolator(INTERPOLATOR_LINEAR).asSpreadOver(CURVE_NAME_FWD3_USD)
-      .withKnownData(KNOWN_DATA);
+      .building(CURVE_NAME_DSC_USD).using(CURVE_NAME_DSC_USD).forDiscounting(Currency.USD).forIndex(FED_FUNDS.toOvernightIndex()).withInterpolator(INTERPOLATOR_DQ)
+      .thenBuilding(CURVE_NAME_FWD3_USD).using(CURVE_NAME_FWD3_USD).forIndex(USD_3M_LIBOR_INDEX.toIborTypeIndex()).withInterpolator(INTERPOLATOR_DQ)
+      .thenBuilding(CURVE_NAME_FWD6_USD).using(CURVE_NAME_FWD6_USD).forIndex(USD_6M_LIBOR_INDEX.toIborTypeIndex()).withInterpolator(INTERPOLATOR_LINEAR).asSpreadOver(CURVE_NAME_FWD3_USD);
   private static final DiscountingMethodCurveSetUp LIBOR_AND_DISCOUNTING_BUILDER_1 = DiscountingMethodCurveBuilder.setUp()
       .building(CURVE_NAME_FWD3_USD, CURVE_NAME_DSC_USD)
-      .using(CURVE_NAME_FWD3_USD).forIborIndex(USD_3M_LIBOR_INDEX.toIborTypeIndex()).withInterpolator(INTERPOLATOR_DQ)
-      .using(CURVE_NAME_DSC_USD).forDiscounting(Currency.USD).forOvernightIndex(FED_FUNDS.toOvernightIndex()).withInterpolator(INTERPOLATOR_DQ)
-      .withKnownData(KNOWN_DATA);
+      .using(CURVE_NAME_FWD3_USD).forIndex(USD_3M_LIBOR_INDEX.toIborTypeIndex()).withInterpolator(INTERPOLATOR_DQ)
+      .using(CURVE_NAME_DSC_USD).forDiscounting(Currency.USD).forIndex(FED_FUNDS.toOvernightIndex()).withInterpolator(INTERPOLATOR_DQ);
   private static final DiscountingMethodCurveSetUp LIBOR_AND_DISCOUNTING_BUILDER_2 = DiscountingMethodCurveBuilder.setUp()
       .building(CURVE_NAME_FWD3_USD, CURVE_NAME_DSC_USD)
-      .using(CURVE_NAME_FWD3_USD).forIborIndex(USD_3M_LIBOR_INDEX.toIborTypeIndex()).withInterpolator(INTERPOLATOR_LINEAR)
-      .using(CURVE_NAME_DSC_USD).forDiscounting(Currency.USD).forOvernightIndex(FED_FUNDS.toOvernightIndex()).withInterpolator(INTERPOLATOR_LINEAR).asSpreadOver(CURVE_NAME_FWD3_USD)
-      .withKnownData(KNOWN_DATA);
+      .using(CURVE_NAME_FWD3_USD).forIndex(USD_3M_LIBOR_INDEX.toIborTypeIndex()).withInterpolator(INTERPOLATOR_LINEAR)
+      .using(CURVE_NAME_DSC_USD).forDiscounting(Currency.USD).forIndex(FED_FUNDS.toOvernightIndex()).withInterpolator(INTERPOLATOR_LINEAR).asSpreadOver(CURVE_NAME_FWD3_USD);
   static {
+    DISCOUNTING_THEN_3M_LIBOR_BUILDER_1.addFxMatrix(FX_MATRIX);
+    DISCOUNTING_THEN_3M_LIBOR_BUILDER_2.addFxMatrix(FX_MATRIX);
+    PERIODIC_DISCOUNTING_THEN_3M_LIBOR_BUILDER_1.addFxMatrix(FX_MATRIX);
+    DISCOUNTING_THEN_3M_THEN_6M_LIBOR_BUILDER_2.addFxMatrix(FX_MATRIX);
+    DISCOUNTING_THEN_3M_THEN_6M_LIBOR_BUILDER_2.addFxMatrix(FX_MATRIX);
+    LIBOR_AND_DISCOUNTING_BUILDER_1.addFxMatrix(FX_MATRIX);
+    LIBOR_AND_DISCOUNTING_BUILDER_2.addFxMatrix(FX_MATRIX);
     for (int i = 0; i < DSC_USD_MARKET_QUOTES.length; i++) {
       DISCOUNTING_THEN_3M_LIBOR_BUILDER_1.addNode(CURVE_NAME_DSC_USD, DSC_USD_GENERATORS[i].generateInstrument(NOW, DSC_USD_MARKET_QUOTES[i], 1, DSC_USD_ATTR[i]));
       DISCOUNTING_THEN_3M_LIBOR_BUILDER_2.addNode(CURVE_NAME_DSC_USD, DSC_USD_GENERATORS[i].generateInstrument(NOW, DSC_USD_MARKET_QUOTES[i], 1, DSC_USD_ATTR[i]));

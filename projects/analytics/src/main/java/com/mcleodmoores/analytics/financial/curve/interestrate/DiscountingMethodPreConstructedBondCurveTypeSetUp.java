@@ -8,35 +8,45 @@ import java.util.List;
 
 import com.mcleodmoores.analytics.financial.index.IborTypeIndex;
 import com.mcleodmoores.analytics.financial.index.OvernightIndex;
+import com.opengamma.analytics.financial.legalentity.LegalEntity;
+import com.opengamma.analytics.financial.legalentity.LegalEntityFilter;
 import com.opengamma.id.UniqueIdentifiable;
+import com.opengamma.util.tuple.Pair;
 
 /**
  *
  */
-public class DiscountingMethodPreConstructedCurveTypeSetUp extends DiscountingMethodCurveSetUp implements PreConstructedCurveTypeSetUp {
+public class DiscountingMethodPreConstructedBondCurveTypeSetUp extends DiscountingMethodBondCurveSetUp implements PreConstructedBondCurveTypeSetUp {
   private UniqueIdentifiable _discountingCurveId;
   private List<IborTypeIndex> _iborCurveIndices;
   private List<OvernightIndex> _overnightCurveIndices;
+  private List<Pair<Object, LegalEntityFilter<LegalEntity>>> _issuers;
 
-  DiscountingMethodPreConstructedCurveTypeSetUp(final DiscountingMethodCurveSetUp builder) {
+  DiscountingMethodPreConstructedBondCurveTypeSetUp(final DiscountingMethodBondCurveSetUp builder) {
     super(builder);
   }
 
   @Override
-  public DiscountingMethodPreConstructedCurveTypeSetUp forDiscounting(final UniqueIdentifiable id) {
+  public PreConstructedBondCurveTypeSetUp forDiscounting(final UniqueIdentifiable id) {
     _discountingCurveId = id;
     return this;
   }
 
   @Override
-  public DiscountingMethodPreConstructedCurveTypeSetUp forIndex(final IborTypeIndex... indices) {
+  public PreConstructedBondCurveTypeSetUp forIndex(final IborTypeIndex... indices) {
     _iborCurveIndices = Arrays.asList(indices);
     return this;
   }
 
   @Override
-  public DiscountingMethodPreConstructedCurveTypeSetUp forIndex(final OvernightIndex... indices) {
+  public PreConstructedBondCurveTypeSetUp forIndex(final OvernightIndex... indices) {
     _overnightCurveIndices = Arrays.asList(indices);
+    return this;
+  }
+
+  @Override
+  public PreConstructedBondCurveTypeSetUp forIssuer(final Pair<Object, LegalEntityFilter<LegalEntity>>... issuers) {
+    _issuers = Arrays.asList(issuers);
     return this;
   }
 
@@ -50,5 +60,9 @@ public class DiscountingMethodPreConstructedCurveTypeSetUp extends DiscountingMe
 
   List<OvernightIndex> getOvernightCurveIndices() {
     return _overnightCurveIndices;
+  }
+
+  List<Pair<Object, LegalEntityFilter<LegalEntity>>> getIssuers() {
+    return _issuers;
   }
 }

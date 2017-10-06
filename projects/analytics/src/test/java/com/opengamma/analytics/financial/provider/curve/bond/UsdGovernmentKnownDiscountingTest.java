@@ -155,8 +155,8 @@ public class UsdGovernmentKnownDiscountingTest extends CurveBuildingTests {
   static {
     final DiscountingMethodCurveSetUp builder = DiscountingMethodCurveBuilder.setUp()
         .building(CURVE_NAME_DSC_USD)
-        .using(CURVE_NAME_DSC_USD).forDiscounting(Currency.USD).forOvernightIndex(FED_FUNDS_INDEX.toOvernightIndex()).withInterpolator(INTERPOLATOR)
-        .withKnownData(new MulticurveProviderDiscount(FX_MATRIX));
+        .using(CURVE_NAME_DSC_USD).forDiscounting(Currency.USD).forIndex(FED_FUNDS_INDEX.toOvernightIndex()).withInterpolator(INTERPOLATOR)
+        .addFxMatrix(FX_MATRIX);
     for (int i = 0; i < DSC_USD_GENERATORS.length; i++) {
       builder.addNode(CURVE_NAME_DSC_USD, DSC_USD_GENERATORS[i].generateInstrument(NOW, DSC_USD_MARKET_QUOTES[i], 1, DSC_USD_ATTR[i]));
     }
@@ -169,7 +169,7 @@ public class UsdGovernmentKnownDiscountingTest extends CurveBuildingTests {
   private static final DiscountingMethodBondCurveSetUp BUILDER_FOR_TEST = DiscountingMethodBondCurveBuilder.setUp()
       .building(CURVE_NAME_GOVTUS_USD)
       .using(CURVE_NAME_GOVTUS_USD).forIssuer(Pairs.<Object, LegalEntityFilter<LegalEntity>>of(NAME_COUNTERPART, new LegalEntityShortName()))
-            .withInterpolator(INTERPOLATOR);
+      .withInterpolator(INTERPOLATOR);
   /** Market values for the government curve */
   private static final double[] GOVTUS_USD_MARKET_QUOTES = new double[] {0.0010, 0.0015, 0.0020, 0.0015 };
   /** Vanilla instrument generators for the government curve */

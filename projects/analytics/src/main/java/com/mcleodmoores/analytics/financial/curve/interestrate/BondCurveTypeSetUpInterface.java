@@ -23,12 +23,12 @@ public interface BondCurveTypeSetUpInterface extends CurveTypeSetUpInterface {
   BondCurveTypeSetUpInterface forDiscounting(UniqueIdentifiable id);
 
   @Override
-  BondCurveTypeSetUpInterface forIborIndex(IborTypeIndex... indices);
+  BondCurveTypeSetUpInterface forIndex(IborTypeIndex... indices);
 
   @Override
-  BondCurveTypeSetUpInterface forOvernightIndex(OvernightIndex... indices);
+  BondCurveTypeSetUpInterface forIndex(OvernightIndex... indices);
 
-  BondCurveTypeSetUpInterface forIssuer(Pair<Object, LegalEntityFilter<LegalEntity>> issuer);
+  BondCurveTypeSetUpInterface forIssuer(Pair<Object, LegalEntityFilter<LegalEntity>>... issuer);
 
   @Override
   BondCurveTypeSetUpInterface withInterpolator(Interpolator1D interpolator);

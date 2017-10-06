@@ -3,37 +3,48 @@
  */
 package com.mcleodmoores.analytics.financial.curve.interestrate;
 
+import com.opengamma.analytics.financial.forex.method.FXMatrix;
+import com.opengamma.analytics.financial.instrument.InstrumentDefinition;
+import com.opengamma.analytics.financial.model.interestrate.curve.YieldAndDiscountCurve;
 import com.opengamma.analytics.financial.provider.curve.CurveBuildingBlockBundle;
-import com.opengamma.analytics.financial.provider.description.interestrate.ParameterProviderInterface;
+import com.opengamma.analytics.financial.provider.description.interestrate.IssuerProviderInterface;
 
 /**
  *
  */
-public interface BondCurveSetUpInterface<T extends ParameterProviderInterface> extends CurveSetUpInterface<T> {
+public interface BondCurveSetUpInterface extends CurveSetUpInterface {
 
   @Override
-  public BondCurveSetUpInterface<T> building(final String... curveNames);
+  BondCurveSetUpInterface building(String... curveNames);
 
   @Override
-  public BondCurveSetUpInterface<T> buildingFirst(final String... curveNames);
+  BondCurveSetUpInterface buildingFirst(String... curveNames);
 
   @Override
-  public BondCurveSetUpInterface<T> thenBuilding(final String... curveNames);
+  BondCurveSetUpInterface thenBuilding(String... curveNames);
 
   @Override
-  public CurveTypeSetUpInterface using(final String curveName);
+  BondCurveTypeSetUpInterface using(String curveName);
 
   @Override
-  public CurveBuilder<T> getBuilder();
-
-  //TODO rename this
-  @Override
-  public BondCurveSetUpInterface<T> withKnownData(final T knownData);
-
-  //TODO rename this
-  @Override
-  public BondCurveSetUpInterface<T> withKnownBundle(final CurveBuildingBlockBundle knownBundle);
+  PreConstructedCurveTypeSetUp using(YieldAndDiscountCurve curve);
 
   @Override
-  public BondCurveSetUpInterface<T> copy();
+  BondCurveSetUpInterface addNode(String curveName, InstrumentDefinition<?> definition);
+
+  @Override
+  BondCurveSetUpInterface addFxMatrix(FXMatrix fxMatrix);
+
+  @Override
+  BondCurveSetUpInterface removeNodes(String curveName);
+
+  @Override
+  CurveBuilder<? extends IssuerProviderInterface> getBuilder();
+
+  @Override
+  BondCurveSetUpInterface copy();
+
+  @Override
+  BondCurveSetUpInterface withKnownBundle(CurveBuildingBlockBundle bundle);
+
 }

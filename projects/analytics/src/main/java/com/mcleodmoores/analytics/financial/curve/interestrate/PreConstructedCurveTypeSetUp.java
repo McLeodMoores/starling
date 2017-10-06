@@ -14,8 +14,8 @@ public interface PreConstructedCurveTypeSetUp {
 
   PreConstructedCurveTypeSetUp forDiscounting(UniqueIdentifiable id);
 
-  PreConstructedCurveTypeSetUp forIborIndex(IborTypeIndex... indices);
+  PreConstructedCurveTypeSetUp forIndex(IborTypeIndex... indices);
 
-  PreConstructedCurveTypeSetUp forOvernightIndex(OvernightIndex... indices);
+  PreConstructedCurveTypeSetUp forIndex(OvernightIndex... indices);
 
 }

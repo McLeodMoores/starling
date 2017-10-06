@@ -44,6 +44,9 @@ public class DirectForwardMethodCurveTypeSetUp extends DirectForwardMethodCurveS
   private boolean _timeCalculatorAlreadySet;
   private boolean _maturityCalculator;
   private boolean _lastFixingEndCalculator;
+  private UniqueIdentifiable _discountingCurveId;
+  private List<IborTypeIndex> _iborCurveIndices;
+  private List<OvernightIndex> _overnightCurveIndices;
 
   public DirectForwardMethodCurveTypeSetUp(final String curveName, final DirectForwardMethodCurveSetUp builder) {
     super(builder);
@@ -59,7 +62,7 @@ public class DirectForwardMethodCurveTypeSetUp extends DirectForwardMethodCurveS
   //TODO versions that only take a single index
   //TODO should store currency, indices in this object rather than in super class
   @Override
-  public DirectForwardMethodCurveTypeSetUp forIborIndex(final IborTypeIndex... indices) {
+  public DirectForwardMethodCurveTypeSetUp forIndex(final IborTypeIndex... indices) {
     if (indices.length != 1) {
       throw new IllegalStateException();
     }
@@ -68,7 +71,7 @@ public class DirectForwardMethodCurveTypeSetUp extends DirectForwardMethodCurveS
   }
 
   @Override
-  public DirectForwardMethodCurveTypeSetUp forOvernightIndex(final OvernightIndex... indices) {
+  public DirectForwardMethodCurveTypeSetUp forIndex(final OvernightIndex... indices) {
     if (indices.length != 1) {
       throw new IllegalStateException();
     }
