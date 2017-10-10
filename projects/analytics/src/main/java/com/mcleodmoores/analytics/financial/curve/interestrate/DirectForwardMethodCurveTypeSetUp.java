@@ -25,13 +25,11 @@ import com.opengamma.analytics.math.interpolation.Interpolator1D;
 import com.opengamma.analytics.util.time.TimeCalculator;
 import com.opengamma.id.UniqueIdentifiable;
 import com.opengamma.util.tuple.Pair;
-import com.opengamma.util.tuple.Pairs;
 
 /**
  *
  */
 public class DirectForwardMethodCurveTypeSetUp extends DirectForwardMethodCurveSetUp implements CurveTypeSetUpInterface {
-  private final String _curveName;
   private String _otherCurveName;
   private Interpolator1D _interpolator;
   private ZonedDateTime[] _dates;
@@ -48,25 +46,22 @@ public class DirectForwardMethodCurveTypeSetUp extends DirectForwardMethodCurveS
   private List<IborTypeIndex> _iborCurveIndices;
   private List<OvernightIndex> _overnightCurveIndices;
 
-  public DirectForwardMethodCurveTypeSetUp(final String curveName, final DirectForwardMethodCurveSetUp builder) {
+  public DirectForwardMethodCurveTypeSetUp(final DirectForwardMethodCurveSetUp builder) {
     super(builder);
-    _curveName = curveName;
   }
 
   @Override
   public DirectForwardMethodCurveTypeSetUp forDiscounting(final UniqueIdentifiable id) {
-    getDiscountingCurves().add(Pairs.of(_curveName, id));
+    _discountingCurveId = id;
     return this;
   }
 
-  //TODO versions that only take a single index
-  //TODO should store currency, indices in this object rather than in super class
   @Override
   public DirectForwardMethodCurveTypeSetUp forIndex(final IborTypeIndex... indices) {
     if (indices.length != 1) {
       throw new IllegalStateException();
     }
-    getIborCurves().add(Pairs.of(_curveName, Arrays.asList(indices)));
+    _iborCurveIndices = Arrays.asList(indices);
     return this;
   }
 
@@ -75,7 +70,7 @@ public class DirectForwardMethodCurveTypeSetUp extends DirectForwardMethodCurveS
     if (indices.length != 1) {
       throw new IllegalStateException();
     }
-    getOvernightCurves().add(Pairs.of(_curveName, Arrays.asList(indices)));
+    _overnightCurveIndices = Arrays.asList(indices);
     return this;
   }
 

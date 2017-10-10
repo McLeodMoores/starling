@@ -10,15 +10,11 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.mcleodmoores.analytics.financial.index.IborTypeIndex;
-import com.mcleodmoores.analytics.financial.index.OvernightIndex;
 import com.opengamma.analytics.financial.forex.method.FXMatrix;
 import com.opengamma.analytics.financial.instrument.InstrumentDefinition;
 import com.opengamma.analytics.financial.model.interestrate.curve.YieldAndDiscountCurve;
 import com.opengamma.analytics.financial.provider.curve.CurveBuildingBlockBundle;
 import com.opengamma.analytics.financial.provider.description.interestrate.MulticurveProviderForward;
-import com.opengamma.id.UniqueIdentifiable;
-import com.opengamma.util.tuple.Pair;
 
 /**
  *
@@ -26,10 +22,9 @@ import com.opengamma.util.tuple.Pair;
 public class DirectForwardMethodCurveSetUp implements CurveSetUpInterface {
   private final List<List<String>> _curveNames;
   private final Map<String, DirectForwardMethodCurveTypeSetUp> _curveTypes;
-  private final Map<DiscountingMethodPreConstructedCurveTypeSetUp, YieldAndDiscountCurve> _preConstructedCurves;
+  private final Map<DirectForwardMethodPreConstructedCurveTypeSetUp, YieldAndDiscountCurve> _preConstructedCurves;
   private final Map<String, List<InstrumentDefinition<?>>> _nodes;
   private FXMatrix _fxMatrix;
-  private MulticurveProviderForward _knownData;
   private CurveBuildingBlockBundle _knownBundle;
 
   protected DirectForwardMethodCurveSetUp() {
@@ -45,30 +40,24 @@ public class DirectForwardMethodCurveSetUp implements CurveSetUpInterface {
     //TODO copy
     _curveNames = setup._curveNames;
     _curveTypes = setup._curveTypes;
+    _preConstructedCurves = setup._preConstructedCurves;
     _nodes = setup._nodes;
     _fxMatrix = setup._fxMatrix;
-    _knownData = setup._knownData;
     _knownBundle = setup._knownBundle;
   }
 
   protected DirectForwardMethodCurveSetUp(final List<List<String>> curveNames,
-      final List<Pair<String, UniqueIdentifiable>> discountingCurves,
-      final List<Pair<String, List<IborTypeIndex>>> iborCurves,
-      final List<Pair<String, List<OvernightIndex>>> overnightCurves,
       final Map<String, List<InstrumentDefinition<?>>> nodes,
       final Map<String, DirectForwardMethodCurveTypeSetUp> curveTypes,
+      final Map<DirectForwardMethodPreConstructedCurveTypeSetUp, YieldAndDiscountCurve> preConstructedCurves,
       final FXMatrix fxMatrix,
-      final MulticurveProviderForward knownData,
       final CurveBuildingBlockBundle knownBundle) {
     _curveNames = new ArrayList<>(curveNames);
-    _discountingCurves = new ArrayList<>(discountingCurves);
-    _iborCurves = new ArrayList<>(iborCurves);
-    _overnightCurves = new ArrayList<>(overnightCurves);
     _nodes = new HashMap<>(nodes);
     _curveTypes = new HashMap<>(curveTypes);
+    _preConstructedCurves = new HashMap<>(preConstructedCurves);
     _fxMatrix = fxMatrix;
-    _knownData = knownData == null ? null : knownData.copy();
-    _knownBundle = knownBundle == null ? null : knownBundle; //TODO no copy
+    _knownBundle = knownBundle;
   }
 
 
@@ -86,8 +75,7 @@ public class DirectForwardMethodCurveSetUp implements CurveSetUpInterface {
 
   @Override
   public DirectForwardMethodCurveSetUp copy() {
-    return new DirectForwardMethodCurveSetUp(_curveNames, _discountingCurves, _iborCurves, _overnightCurves, _nodes, _curveTypes,
-        _fxMatrix, _knownData, _knownBundle);
+    return new DirectForwardMethodCurveSetUp(_curveNames, _nodes, _curveTypes, _preConstructedCurves, _fxMatrix, _knownBundle);
   }
 
   @Override
@@ -119,7 +107,7 @@ public class DirectForwardMethodCurveSetUp implements CurveSetUpInterface {
 
   @Override
   public DirectForwardMethodCurveTypeSetUp using(final String curveName) {
-    final DirectForwardMethodCurveTypeSetUp type = new DirectForwardMethodCurveTypeSetUp(curveName, this);
+    final DirectForwardMethodCurveTypeSetUp type = new DirectForwardMethodCurveTypeSetUp(this);
     final Object replaced = _curveTypes.put(curveName, type);
     if (replaced != null) {
       throw new IllegalStateException();
@@ -141,9 +129,6 @@ public class DirectForwardMethodCurveSetUp implements CurveSetUpInterface {
 
   @Override
   public DirectForwardMethodCurveSetUp addFxMatrix(final FXMatrix fxMatrix) {
-    if (_knownData != null) {
-      throw new IllegalStateException();
-    }
     _fxMatrix = fxMatrix;
     return this;
   }
@@ -155,51 +140,9 @@ public class DirectForwardMethodCurveSetUp implements CurveSetUpInterface {
   }
 
   @Override
-  public DirectForwardMethodCurveSetUp withKnownData(final MulticurveProviderForward knownData) {
-    if (_fxMatrix != null) {
-      throw new IllegalStateException();
-    }
-    // probably better to merge this
-    _knownData = knownData;
-    return this;
-  }
-
-  @Override
   public DirectForwardMethodCurveSetUp withKnownBundle(final CurveBuildingBlockBundle knownBundle) {
     _knownBundle = knownBundle;
     return this;
-  }
-
-  List<List<String>> getCurveNames() {
-    return _curveNames;
-  }
-
-  List<Pair<String, UniqueIdentifiable>> getDiscountingCurves() {
-    return _discountingCurves;
-  }
-
-  List<Pair<String, List<IborTypeIndex>>> getIborCurves() {
-    return _iborCurves;
-  }
-
-  List<Pair<String, List<OvernightIndex>>> getOvernightCurves() {
-    return _overnightCurves;
-  }
-
-  Map<String, DirectForwardMethodCurveTypeSetUp> getCurveTypes() {
-    return _curveTypes;
-  }
-
-  Map<String, List<InstrumentDefinition<?>>> getNodes() {
-    return _nodes;
-  }
-
-  MulticurveProviderForward getKnownData() {
-    return _knownData;
-  }
-
-  CurveBuildingBlockBundle getKnownBundle() {
-    return _knownBundle;
   }
 
 }

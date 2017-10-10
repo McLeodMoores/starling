@@ -41,8 +41,10 @@ public class DiscountingMethodCurveBuilder extends CurveBuilder<MulticurveProvid
     return new DiscountingMethodCurveSetUp();
   }
 
-  DiscountingMethodCurveBuilder(final List<List<String>> curveNames, final List<Pair<String, UniqueIdentifiable>> discountingCurves,
-      final List<Pair<String, List<IborTypeIndex>>> iborCurves, final List<Pair<String, List<OvernightIndex>>> overnightCurves,
+  DiscountingMethodCurveBuilder(final List<List<String>> curveNames,
+      final List<Pair<String, UniqueIdentifiable>> discountingCurves,
+      final List<Pair<String, List<IborTypeIndex>>> iborCurves,
+      final List<Pair<String, List<OvernightIndex>>> overnightCurves,
       final Map<String, List<InstrumentDefinition<?>>> newNodes,
       final Map<String, ? extends CurveTypeSetUpInterface> curveGenerators,
       final MulticurveProviderDiscount knownData,
