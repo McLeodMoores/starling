@@ -177,7 +177,7 @@ public class CurveBuildingTestUtils {
   }
 
   public static <T extends ParameterProviderInterface> void assertFiniteDifferenceSensitivities(final CurveBuildingBlockBundle fullInverseJacobian,
-      final Map<Index, ZonedDateTimeDoubleTimeSeries> fixingTs, final CurveSetUpInterface<T> builder, final String curveToTest,
+      final Map<Index, ZonedDateTimeDoubleTimeSeries> fixingTs, final CurveSetUpInterface builder, final String curveToTest,
       final String sensitivityCurve, final ZonedDateTime valuationTime, final GeneratorInstrument[] generators,
       final GeneratorAttribute[] attributes, final double[] marketQuotes, final boolean expectZeroSensitivities) {
     final double bump = 1e-6;
@@ -192,8 +192,8 @@ public class CurveBuildingTestUtils {
     final int offsetIntoMatrix = curveToTestBlock.getFirst().getStart(sensitivityCurve);
       // check sensitivities against those calculated using finite difference
     for (int i = 0; i < sensitivityCurveSize; i++) {
-      final CurveSetUpInterface<T> upBuilder = builder.copy().removeNodes(sensitivityCurve);
-      final CurveSetUpInterface<T> downBuilder = builder.copy().removeNodes(sensitivityCurve);
+      final CurveSetUpInterface upBuilder = builder.copy().removeNodes(sensitivityCurve);
+      final CurveSetUpInterface downBuilder = builder.copy().removeNodes(sensitivityCurve);
       for (int j = 0; j < sensitivityCurveSize; j++) {
         if (i == j) {
           upBuilder.addNode(sensitivityCurve, generators[j].generateInstrument(valuationTime, marketQuotes[j] + bump, 1, attributes[j]));
@@ -203,8 +203,8 @@ public class CurveBuildingTestUtils {
           downBuilder.addNode(sensitivityCurve, generators[j].generateInstrument(valuationTime, marketQuotes[j], 1, attributes[j]));
         }
       }
-      final Pair<T, CurveBuildingBlockBundle> upResults = upBuilder.getBuilder().buildCurves(valuationTime, fixingTs);
-      final Pair<T, CurveBuildingBlockBundle> downResults = downBuilder.getBuilder().buildCurves(valuationTime, fixingTs);
+      final Pair<? extends ParameterProviderInterface, CurveBuildingBlockBundle> upResults = upBuilder.getBuilder().buildCurves(valuationTime, fixingTs);
+      final Pair<? extends ParameterProviderInterface, CurveBuildingBlockBundle> downResults = downBuilder.getBuilder().buildCurves(valuationTime, fixingTs);
       final Double[] upYields = getYData(upResults.getFirst(), curveToTest);
       final Double[] downYields = getYData(downResults.getFirst(), curveToTest);
       final int offset = i + offsetIntoMatrix;

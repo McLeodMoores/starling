@@ -173,8 +173,7 @@ public class UsdDiscountingGovernment3Test extends CurveBuildingTests {
       .building(CURVE_NAME_DSC_USD, CURVE_NAME_GOVTUS_USD)
       .using(CURVE_NAME_DSC_USD).forDiscounting(Currency.USD).forIndex(FED_FUNDS_INDEX.toOvernightIndex()).withInterpolator(INTERPOLATOR)
       .using(CURVE_NAME_GOVTUS_USD).forIssuer(Pairs.<Object, LegalEntityFilter<LegalEntity>>of(NAME_COUNTERPART, new LegalEntityShortName()))
-            .withInterpolator(INTERPOLATOR)
-      .withKnownData(KNOWN_DATA);
+      .withInterpolator(INTERPOLATOR);
   /** Market values for the discounting curve */
   private static final double[] DSC_USD_MARKET_QUOTES =
       new double[] {0.0400, 0.0400, 0.0400, 0.0400, 0.0400, 0.0400, 0.0400, 0.0400, 0.0400, 0.0400, 0.0400, 0.0400 };

@@ -223,8 +223,13 @@ public class DiscountingMethodBondCurveSetUp implements BondCurveSetUpInterface 
   }
 
   @Override
-  public PreConstructedCurveTypeSetUp using(final YieldAndDiscountCurve curve) {
-    return null;
+  public DiscountingMethodPreConstructedBondCurveTypeSetUp using(final YieldAndDiscountCurve curve) {
+    final DiscountingMethodPreConstructedBondCurveTypeSetUp type = new DiscountingMethodPreConstructedBondCurveTypeSetUp(this);
+    final Object replaced = _preConstructedCurves.put(type, curve);
+    if (replaced != null) {
+      throw new IllegalStateException();
+    }
+    return type;
   }
 
 }

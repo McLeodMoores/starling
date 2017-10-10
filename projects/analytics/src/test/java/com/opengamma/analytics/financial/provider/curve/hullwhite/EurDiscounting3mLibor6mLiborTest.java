@@ -178,19 +178,21 @@ public class EurDiscounting3mLibor6mLiborTest extends CurveBuildingTests {
   /** Builder that constructs the curves one at a time */
   private static final HullWhiteMethodCurveSetUp CONSECUTIVE_BUILDER = HullWhiteMethodCurveBuilder.setUp()
       .buildingFirst(CURVE_NAME_DSC_EUR)
-      .using(CURVE_NAME_DSC_EUR).forDiscounting(Currency.EUR).forIndex(EONIA_INDEX.toOvernightIndex()).withInterpolator(INTERPOLATOR)
       .thenBuilding(CURVE_NAME_FWD3_EUR)
-      .using(CURVE_NAME_FWD3_EUR).forIndex(EUR_3M_EURIBOR_INDEX.toIborTypeIndex()).withInterpolator(INTERPOLATOR)
       .thenBuilding(CURVE_NAME_FWD6_EUR)
+      .using(CURVE_NAME_DSC_EUR).forDiscounting(Currency.EUR).forIndex(EONIA_INDEX.toOvernightIndex()).withInterpolator(INTERPOLATOR)
+      .using(CURVE_NAME_FWD3_EUR).forIndex(EUR_3M_EURIBOR_INDEX.toIborTypeIndex()).withInterpolator(INTERPOLATOR)
       .using(CURVE_NAME_FWD6_EUR).forIndex(EUR_6M_EURIBOR_INDEX.toIborTypeIndex()).withInterpolator(INTERPOLATOR)
-      .withKnownData(HW_KNOWN_DATA);
+      .addHullWhiteParameters(MODEL_PARAMETERS)
+      .forHullWhiteCurrency(Currency.EUR);
   /** Builder that constructs the curves simultaneously */
   private static final HullWhiteMethodCurveSetUp SIMULTANEOUS_BUILDER = HullWhiteMethodCurveBuilder.setUp()
       .building(CURVE_NAME_DSC_EUR, CURVE_NAME_FWD3_EUR, CURVE_NAME_FWD6_EUR)
       .using(CURVE_NAME_DSC_EUR).forDiscounting(Currency.EUR).forIndex(EONIA_INDEX.toOvernightIndex()).withInterpolator(INTERPOLATOR)
       .using(CURVE_NAME_FWD3_EUR).forIndex(EUR_3M_EURIBOR_INDEX.toIborTypeIndex()).withInterpolator(INTERPOLATOR)
       .using(CURVE_NAME_FWD6_EUR).forIndex(EUR_6M_EURIBOR_INDEX.toIborTypeIndex()).withInterpolator(INTERPOLATOR)
-      .withKnownData(HW_KNOWN_DATA);
+      .addHullWhiteParameters(MODEL_PARAMETERS)
+      .forHullWhiteCurrency(Currency.EUR);
   /** Market values for the discounting curve  */
   private static final double[] DSC_EUR_MARKET_QUOTES =
       new double[] {0.0400, 0.0400, 0.0400, 0.0400, 0.0400, 0.0400, 0.0400, 0.0400, 0.0400, 0.0400, 0.0400, 0.0400 };
@@ -353,6 +355,7 @@ public class EurDiscounting3mLibor6mLiborTest extends CurveBuildingTests {
   @Override
   @Test
   public void testFiniteDifferenceSensitivities() {
+    final Object temp = CONSECUTIVE_BUILDER;
     testDiscountingCurveSensitivities1(CONSECUTIVE_BEFORE_FIXING.getSecond(), FIXING_TS_WITHOUT_TODAY, CONSECUTIVE_BUILDER);
     testDiscountingCurveSensitivities1(CONSECUTIVE_AFTER_FIXING.getSecond(), FIXING_TS_WITH_TODAY, CONSECUTIVE_BUILDER);
     testDiscountingCurveSensitivities2(SIMULTANEOUS_BEFORE_FIXING.getSecond(), FIXING_TS_WITHOUT_TODAY, SIMULTANEOUS_BUILDER);

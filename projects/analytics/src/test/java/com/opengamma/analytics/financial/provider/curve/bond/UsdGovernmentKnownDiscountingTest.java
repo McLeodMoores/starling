@@ -26,6 +26,7 @@ import com.mcleodmoores.analytics.financial.curve.interestrate.DiscountingMethod
 import com.mcleodmoores.analytics.financial.curve.interestrate.DiscountingMethodBondCurveSetUp;
 import com.mcleodmoores.analytics.financial.curve.interestrate.DiscountingMethodCurveBuilder;
 import com.mcleodmoores.analytics.financial.curve.interestrate.DiscountingMethodCurveSetUp;
+import com.mcleodmoores.analytics.financial.curve.interestrate.DiscountingMethodPreConstructedBondCurveTypeSetUp;
 import com.mcleodmoores.analytics.financial.index.Index;
 import com.mcleodmoores.date.CalendarAdapter;
 import com.mcleodmoores.date.WeekendWorkingDayCalendar;
@@ -192,11 +193,11 @@ public class UsdGovernmentKnownDiscountingTest extends CurveBuildingTests {
   // build curves before and after today's fixing
   static {
     BEFORE_TODAYS_FIXING = BUILDER_FOR_TEST.copy()
-        .withKnownData(KNOWN_DATA_BEFORE_FIXING)
+        .using(KNOWN_DATA_BEFORE_FIXING.getCurve(CURVE_NAME_DSC_USD)).forDiscounting(Currency.USD).forIndex(FED_FUNDS_INDEX.toOvernightIndex())
         .getBuilder()
         .buildCurves(NOW, FIXING_TS_WITHOUT_TODAY);
     AFTER_TODAYS_FIXING = BUILDER_FOR_TEST.copy()
-        .withKnownData(KNOWN_DATA_AFTER_FIXING)
+        .using(KNOWN_DATA_AFTER_FIXING.getCurve(CURVE_NAME_DSC_USD)).forDiscounting(Currency.USD).forIndex(FED_FUNDS_INDEX.toOvernightIndex())
         .getBuilder()
         .buildCurves(NOW, FIXING_TS_WITH_TODAY);
   }
@@ -242,7 +243,9 @@ public class UsdGovernmentKnownDiscountingTest extends CurveBuildingTests {
     // sensitivities to discounting don't exist
     assertNoSensitivities(fullInverseJacobian, CURVE_NAME_GOVTUS_USD, CURVE_NAME_DSC_USD);
     // sensitivities to the government curve
-    assertFiniteDifferenceSensitivities(fullInverseJacobian, fixingTs, BUILDER_FOR_TEST.withKnownData(knownData), CURVE_NAME_GOVTUS_USD,
+    final DiscountingMethodPreConstructedBondCurveTypeSetUp builder = BUILDER_FOR_TEST.copy()
+        .using(knownData.getCurve(CURVE_NAME_DSC_USD)).forDiscounting(Currency.USD).forIndex(FED_FUNDS_INDEX.toOvernightIndex());
+    assertFiniteDifferenceSensitivities(fullInverseJacobian, fixingTs, builder, CURVE_NAME_GOVTUS_USD,
         CURVE_NAME_GOVTUS_USD, NOW, GOVTUS_USD_GENERATORS, GOVTUS_USD_ATTR, GOVTUS_USD_MARKET_QUOTES, false);
   }
 

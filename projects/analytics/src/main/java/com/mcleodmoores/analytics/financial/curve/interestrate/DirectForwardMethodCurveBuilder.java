@@ -20,8 +20,11 @@ import com.opengamma.analytics.financial.instrument.index.IborIndex;
 import com.opengamma.analytics.financial.instrument.index.IndexConverter;
 import com.opengamma.analytics.financial.instrument.index.IndexON;
 import com.opengamma.analytics.financial.interestrate.InstrumentDerivative;
+import com.opengamma.analytics.financial.interestrate.InstrumentDerivativeVisitor;
 import com.opengamma.analytics.financial.provider.calculator.discounting.ParSpreadMarketQuoteCurveSensitivityDiscountingCalculator;
 import com.opengamma.analytics.financial.provider.calculator.discounting.ParSpreadMarketQuoteDiscountingCalculator;
+import com.opengamma.analytics.financial.provider.calculator.generic.LastFixingStartTimeCalculator;
+import com.opengamma.analytics.financial.provider.calculator.generic.LastTimeCalculator;
 import com.opengamma.analytics.financial.provider.curve.CurveBuildingBlockBundle;
 import com.opengamma.analytics.financial.provider.curve.MultiCurveBundle;
 import com.opengamma.analytics.financial.provider.curve.SingleCurveBundle;
@@ -93,8 +96,15 @@ public class DirectForwardMethodCurveBuilder extends CurveBuilder<MulticurveProv
           final CurveTypeSetUpInterface curveTypeSetUpInterface = getCurveGenerators().get(curveName);
           final GeneratorYDCurve instrumentGenerator;
           if (curveTypeSetUpInterface instanceof DirectForwardMethodCurveTypeSetUp) {
+            InstrumentDerivativeVisitor<Object, Double> nodeTimeCalculator = LastTimeCalculator.getInstance();
+            for (final Pair<String, List<IborTypeIndex>> entry : getIborCurves()) {
+              if (entry.getKey().equals(curveName)) {
+                nodeTimeCalculator = LastFixingStartTimeCalculator.getInstance();
+                break;
+              }
+            }
             instrumentGenerator =
-                ((DirectForwardMethodCurveTypeSetUp) curveTypeSetUpInterface).buildCurveGenerator(valuationDate, curveName).finalGenerator(instruments);
+                ((DirectForwardMethodCurveTypeSetUp) curveTypeSetUpInterface).buildCurveGenerator(valuationDate, nodeTimeCalculator).finalGenerator(instruments);
           } else {
             instrumentGenerator = curveTypeSetUpInterface.buildCurveGenerator(valuationDate).finalGenerator(instruments);
           }

@@ -45,7 +45,8 @@ public abstract class CurveBuilder<T extends ParameterProviderInterface> {
       final List<Pair<String, List<OvernightIndex>>> overnightCurves,
       final Map<String, List<InstrumentDefinition<?>>> nodes,
       final Map<String, ? extends CurveTypeSetUpInterface> curveGenerators,
-      final T knownData, final CurveBuildingBlockBundle knownBundle) {
+      final T knownData,
+      final CurveBuildingBlockBundle knownBundle) {
     _curveNames = new ArrayList<>(curveNames);
     _discountingCurves = new ArrayList<>(discountingCurves);
     _iborCurves = new ArrayList<>(iborCurves);

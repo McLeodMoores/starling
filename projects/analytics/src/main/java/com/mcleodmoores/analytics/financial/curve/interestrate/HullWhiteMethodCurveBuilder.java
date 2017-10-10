@@ -45,8 +45,6 @@ public class HullWhiteMethodCurveBuilder extends CurveBuilder<HullWhiteOneFactor
   private static final ParSpreadMarketQuoteCurveSensitivityHullWhiteCalculator SENSITIVITY_CALCULATOR =
       ParSpreadMarketQuoteCurveSensitivityHullWhiteCalculator.getInstance();
   private final HullWhiteProviderDiscountBuildingRepository _curveBuildingRepository;
-  //TODO fixing ts, known data should be passed into the build method
-  //TODO market data should be passed into the build method - painful now because constructing attributes is annoying
   //TODO bad hard-coding
   protected final double _absoluteTolerance = 1e-12;
   protected final double _relativeTolerance = 1e-12;
@@ -56,11 +54,14 @@ public class HullWhiteMethodCurveBuilder extends CurveBuilder<HullWhiteOneFactor
     return new HullWhiteMethodCurveSetUp();
   }
 
-  HullWhiteMethodCurveBuilder(final List<List<String>> curveNames, final List<Pair<String, UniqueIdentifiable>> discountingCurves,
-      final List<Pair<String, List<IborTypeIndex>>> iborCurves, final List<Pair<String, List<OvernightIndex>>> overnightCurves,
+  HullWhiteMethodCurveBuilder(final List<List<String>> curveNames,
+      final List<Pair<String, UniqueIdentifiable>> discountingCurves,
+      final List<Pair<String, List<IborTypeIndex>>> iborCurves,
+      final List<Pair<String, List<OvernightIndex>>> overnightCurves,
       final Map<String, List<InstrumentDefinition<?>>> nodes,
       final Map<String, ? extends CurveTypeSetUpInterface> curveGenerators,
-      final HullWhiteOneFactorProviderDiscount knownData, final CurveBuildingBlockBundle knownBundle) {
+      final HullWhiteOneFactorProviderDiscount knownData,
+      final CurveBuildingBlockBundle knownBundle) {
     super(curveNames, discountingCurves, iborCurves, overnightCurves, nodes, curveGenerators, knownData, knownBundle);
     _curveBuildingRepository = new HullWhiteProviderDiscountBuildingRepository(_absoluteTolerance, _relativeTolerance, _maxSteps);
   }

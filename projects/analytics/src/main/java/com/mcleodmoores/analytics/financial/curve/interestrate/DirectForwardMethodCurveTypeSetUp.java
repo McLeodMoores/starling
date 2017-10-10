@@ -19,12 +19,9 @@ import com.opengamma.analytics.financial.curve.interestrate.generator.GeneratorC
 import com.opengamma.analytics.financial.curve.interestrate.generator.GeneratorCurveYieldPeriodicInterpolated;
 import com.opengamma.analytics.financial.curve.interestrate.generator.GeneratorYDCurve;
 import com.opengamma.analytics.financial.interestrate.InstrumentDerivativeVisitor;
-import com.opengamma.analytics.financial.provider.calculator.generic.LastFixingStartTimeCalculator;
-import com.opengamma.analytics.financial.provider.calculator.generic.LastTimeCalculator;
 import com.opengamma.analytics.math.interpolation.Interpolator1D;
 import com.opengamma.analytics.util.time.TimeCalculator;
 import com.opengamma.id.UniqueIdentifiable;
-import com.opengamma.util.tuple.Pair;
 
 /**
  *
@@ -165,19 +162,24 @@ public class DirectForwardMethodCurveTypeSetUp extends DirectForwardMethodCurveS
     throw new IllegalStateException();
   }
 
+  UniqueIdentifiable getDiscountingCurveId() {
+    return _discountingCurveId;
+  }
+
+  List<IborTypeIndex> getIborCurveIndices() {
+    return _iborCurveIndices;
+  }
+
+  List<OvernightIndex> getOvernightCurveIndices() {
+    return _overnightCurveIndices;
+  }
+
   @Override
   public GeneratorYDCurve buildCurveGenerator(final ZonedDateTime valuationDate) {
     throw new IllegalStateException();
   }
 
-  public GeneratorYDCurve buildCurveGenerator(final ZonedDateTime valuationDate, final String curveName) {
-    InstrumentDerivativeVisitor<Object, Double> nodeTimeCalculator = LastTimeCalculator.getInstance();
-    for (final Pair<String, List<IborTypeIndex>> entry : getIborCurves()) {
-      if (entry.getKey().equals(curveName)) {
-        nodeTimeCalculator = LastFixingStartTimeCalculator.getInstance();
-        break;
-      }
-    }
+  public GeneratorYDCurve buildCurveGenerator(final ZonedDateTime valuationDate, final InstrumentDerivativeVisitor<Object, Double> nodeTimeCalculator) {
     if (_otherCurveName != null) {
       //TODO duplicated code
       GeneratorYDCurve generator;

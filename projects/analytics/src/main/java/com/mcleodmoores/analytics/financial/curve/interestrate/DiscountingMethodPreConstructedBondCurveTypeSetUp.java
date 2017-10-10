@@ -27,25 +27,25 @@ public class DiscountingMethodPreConstructedBondCurveTypeSetUp extends Discounti
   }
 
   @Override
-  public PreConstructedBondCurveTypeSetUp forDiscounting(final UniqueIdentifiable id) {
+  public DiscountingMethodPreConstructedBondCurveTypeSetUp forDiscounting(final UniqueIdentifiable id) {
     _discountingCurveId = id;
     return this;
   }
 
   @Override
-  public PreConstructedBondCurveTypeSetUp forIndex(final IborTypeIndex... indices) {
+  public DiscountingMethodPreConstructedBondCurveTypeSetUp forIndex(final IborTypeIndex... indices) {
     _iborCurveIndices = Arrays.asList(indices);
     return this;
   }
 
   @Override
-  public PreConstructedBondCurveTypeSetUp forIndex(final OvernightIndex... indices) {
+  public DiscountingMethodPreConstructedBondCurveTypeSetUp forIndex(final OvernightIndex... indices) {
     _overnightCurveIndices = Arrays.asList(indices);
     return this;
   }
 
   @Override
-  public PreConstructedBondCurveTypeSetUp forIssuer(final Pair<Object, LegalEntityFilter<LegalEntity>>... issuers) {
+  public DiscountingMethodPreConstructedBondCurveTypeSetUp forIssuer(final Pair<Object, LegalEntityFilter<LegalEntity>>... issuers) {
     _issuers = Arrays.asList(issuers);
     return this;
   }

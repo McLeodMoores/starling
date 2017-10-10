@@ -114,15 +114,12 @@ public class UsdDirectForward3mLiborTest extends CurveBuildingTests {
   private static final String CURVE_NAME_DSC_USD = "USD Dsc";
   /** The LIBOR curve name */
   private static final String CURVE_NAME_FWD3_USD = "USD Fwd 3M";
-  /** Already known market data - contains only an empty FX matrix */
-  private static final MulticurveProviderForward KNOWN_DATA = new MulticurveProviderForward(FX_MATRIX);
   /** The curve builder */
   private static final DirectForwardMethodCurveSetUp BUILDER_FOR_TEST = DirectForwardMethodCurveBuilder.setUp()
       .buildingFirst(CURVE_NAME_DSC_USD)
       .using(CURVE_NAME_DSC_USD).forDiscounting(Currency.USD).forIndex(FED_FUNDS_INDEX.toOvernightIndex()).withInterpolator(INTERPOLATOR)
       .thenBuilding(CURVE_NAME_FWD3_USD)
-      .using(CURVE_NAME_FWD3_USD).forIndex(USD_3M_LIBOR_INDEX.toIborTypeIndex()).withInterpolator(INTERPOLATOR)
-      .withKnownData(KNOWN_DATA);
+      .using(CURVE_NAME_FWD3_USD).forIndex(USD_3M_LIBOR_INDEX.toIborTypeIndex()).withInterpolator(INTERPOLATOR);
   /** Market values for the discounting curve */
   private static final double[] DSC_USD_MARKET_QUOTES =
       new double[] {0.0400, 0.0400, 0.0400, 0.0400, 0.0400, 0.0400, 0.0400, 0.0400, 0.0400, 0.0400, 0.0400, 0.0400 };
