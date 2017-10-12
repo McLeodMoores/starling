@@ -168,7 +168,7 @@ public class DiscountingMethodBondCurveSetUp implements BondCurveSetUpInterface 
 
   @Override
   public DiscountingMethodBondCurveTypeSetUp using(final String curveName) {
-    final DiscountingMethodBondCurveTypeSetUp type = new DiscountingMethodBondCurveTypeSetUp(curveName, this);
+    final DiscountingMethodBondCurveTypeSetUp type = new DiscountingMethodBondCurveTypeSetUp(this);
     final Object replaced = _curveTypes.put(curveName, type);
     if (replaced != null) {
       throw new IllegalStateException();

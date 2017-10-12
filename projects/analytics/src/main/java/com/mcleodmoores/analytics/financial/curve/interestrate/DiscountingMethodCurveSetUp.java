@@ -21,6 +21,7 @@ import com.opengamma.analytics.financial.model.interestrate.curve.YieldAndDiscou
 import com.opengamma.analytics.financial.provider.curve.CurveBuildingBlockBundle;
 import com.opengamma.analytics.financial.provider.description.interestrate.MulticurveProviderDiscount;
 import com.opengamma.id.UniqueIdentifiable;
+import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
 import com.opengamma.util.tuple.Pair;
 import com.opengamma.util.tuple.Pairs;
@@ -46,6 +47,7 @@ public class DiscountingMethodCurveSetUp implements CurveSetUpInterface {
   }
 
   protected DiscountingMethodCurveSetUp(final DiscountingMethodCurveSetUp setup) {
+    ArgumentChecker.notNull(setup, "setup");
     //TODO copy
     _curveNames = setup._curveNames;
     _curveTypes = setup._curveTypes;

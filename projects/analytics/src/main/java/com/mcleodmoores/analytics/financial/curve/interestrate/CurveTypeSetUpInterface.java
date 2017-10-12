@@ -30,7 +30,7 @@ public interface CurveTypeSetUpInterface {
   CurveTypeSetUpInterface withInterpolator(Interpolator1D interpolator);
 
   //TODO asSpread under to indicate subtraction?
-  CurveTypeSetUpInterface asSpreadOver(String otherCurveName);
+  CurveTypeSetUpInterface asSpreadOver(String baseCurveName);
 
   //TODO curve operations setup to allow A = B + C + D logic
   CurveTypeSetUpInterface functionalForm(CurveFunction function);

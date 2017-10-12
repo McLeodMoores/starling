@@ -3,6 +3,7 @@
  */
 package com.mcleodmoores.analytics.financial.curve.interestrate;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -24,12 +25,13 @@ import com.opengamma.analytics.financial.provider.calculator.generic.LastTimeCal
 import com.opengamma.analytics.math.interpolation.Interpolator1D;
 import com.opengamma.analytics.util.time.TimeCalculator;
 import com.opengamma.id.UniqueIdentifiable;
+import com.opengamma.util.ArgumentChecker;
 
 /**
  *
  */
 public class DiscountingMethodCurveTypeSetUp extends DiscountingMethodCurveSetUp implements CurveTypeSetUpInterface {
-  private String _otherCurveName;
+  private String _baseCurveName;
   private Interpolator1D _interpolator;
   private ZonedDateTime[] _dates;
   private boolean _typeAlreadySet;
@@ -45,73 +47,93 @@ public class DiscountingMethodCurveTypeSetUp extends DiscountingMethodCurveSetUp
   private List<IborTypeIndex> _iborCurveIndices;
   private List<OvernightIndex> _overnightCurveIndices;
 
+  /**
+   * Constructor that creates an empty builder.
+   */
+  DiscountingMethodCurveTypeSetUp() {
+    super();
+  }
+
+  /**
+   * Constructor that copies the data in an existing builder.
+   * @param builder  the builder, not null
+   */
   DiscountingMethodCurveTypeSetUp(final DiscountingMethodCurveSetUp builder) {
     super(builder);
   }
 
   @Override
   public DiscountingMethodCurveTypeSetUp forDiscounting(final UniqueIdentifiable id) {
-    _discountingCurveId = id;
+    _discountingCurveId = ArgumentChecker.notNull(id, "id");
     return this;
   }
 
   @Override
   public DiscountingMethodCurveTypeSetUp forIndex(final IborTypeIndex... indices) {
-    _iborCurveIndices = Arrays.asList(indices);
+    ArgumentChecker.notNull(indices, "indices");
+    if (_iborCurveIndices == null) {
+      _iborCurveIndices = new ArrayList<>(Arrays.asList(indices));
+    } else {
+      _iborCurveIndices.addAll(Arrays.asList(indices));
+    }
     return this;
   }
 
   @Override
   public DiscountingMethodCurveTypeSetUp forIndex(final OvernightIndex... indices) {
-    _overnightCurveIndices = Arrays.asList(indices);
+    ArgumentChecker.notNull(indices, "indices");
+    if (_overnightCurveIndices == null) {
+      _overnightCurveIndices = new ArrayList<>(Arrays.asList(indices));
+    } else {
+      _overnightCurveIndices.addAll(Arrays.asList(indices));
+    }
     return this;
   }
 
   @Override
   public DiscountingMethodCurveTypeSetUp functionalForm(final CurveFunction function) {
-    if (_interpolator != null || _dates != null || _typeAlreadySet) {
-      throw new IllegalStateException();
+    if (_interpolator != null || _dates != null || _typeAlreadySet || _baseCurveName != null) {
+      throw new IllegalStateException("Have already set up curve type");
     }
-    switch (function) {
-      case NELSON_SIEGEL:
-        _functionalForm = function;
-        return this;
-      default:
-        throw new IllegalStateException();
-    }
+    _functionalForm = ArgumentChecker.notNull(function, "function");
+    return this;
   }
 
   @Override
   public DiscountingMethodCurveTypeSetUp withInterpolator(final Interpolator1D interpolator) {
     if (_functionalForm != null) {
-      throw new IllegalStateException();
+      throw new IllegalStateException("Have already set curve type to be functional");
     }
-    _interpolator = interpolator;
+    _interpolator = ArgumentChecker.notNull(interpolator, "interpolator");
     return this;
   }
 
   @Override
-  public DiscountingMethodCurveTypeSetUp asSpreadOver(final String otherCurveName) {
-    _otherCurveName = otherCurveName;
+  public DiscountingMethodCurveTypeSetUp asSpreadOver(final String baseCurveName) {
+    if (_functionalForm != null) {
+      throw new IllegalStateException("Cannot set a functional curve as a spread over another");
+    }
+    _baseCurveName = ArgumentChecker.notNull(baseCurveName, "baseCurveName");
     return this;
   }
 
   @Override
   public DiscountingMethodCurveTypeSetUp usingNodeDates(final ZonedDateTime[] dates) {
     if (_functionalForm != null) {
-      throw new IllegalStateException();
+      throw new IllegalStateException("Have already set curve type to be functional");
     }
-    _dates = dates;
+    if (_periodicInterpolationOnYield) {
+      throw new IllegalStateException("Cannot set node dates for a periodically-compounded curve");
+    }
+    _dates = ArgumentChecker.notNull(dates, "dates");
+    ArgumentChecker.isTrue(_dates.length > 1, "Must have at least two node dates to interpolate");
     return this;
   }
 
   @Override
   public DiscountingMethodCurveTypeSetUp continuousInterpolationOnYield() {
-    if (_functionalForm != null) {
-      throw new IllegalStateException();
-    }
-    if (_typeAlreadySet) {
-      throw new IllegalStateException();
+    if (_functionalForm != null || _typeAlreadySet) {
+      throw new IllegalStateException("Have already set up curve type");
     }
     _typeAlreadySet = true;
     _continuousInterpolationOnYield = true;
@@ -120,11 +142,12 @@ public class DiscountingMethodCurveTypeSetUp extends DiscountingMethodCurveSetUp
 
   @Override
   public DiscountingMethodCurveTypeSetUp periodicInterpolationOnYield(final int compoundingPeriodsPerYear) {
-    if (_functionalForm != null) {
-      throw new IllegalStateException();
+    ArgumentChecker.isTrue(compoundingPeriodsPerYear > 0, "Must have at least one compounding period per year");
+    if (_functionalForm != null || _typeAlreadySet) {
+      throw new IllegalStateException("Have already set up curve type");
     }
-    if (_typeAlreadySet) {
-      throw new IllegalStateException();
+    if (_dates != null) {
+      throw new IllegalStateException("Cannot use a periodically-compounded curve with fixed nodes");
     }
     _typeAlreadySet = true;
     _periodicInterpolationOnYield = true;
@@ -134,11 +157,8 @@ public class DiscountingMethodCurveTypeSetUp extends DiscountingMethodCurveSetUp
 
   @Override
   public DiscountingMethodCurveTypeSetUp continuousInterpolationOnDiscountFactors() {
-    if (_functionalForm != null) {
-      throw new IllegalStateException();
-    }
-    if (_typeAlreadySet) {
-      throw new IllegalStateException();
+    if (_functionalForm != null || _typeAlreadySet) {
+      throw new IllegalStateException("Have already set up curve type");
     }
     _typeAlreadySet = true;
     _continuousInterpolationOnDiscountFactors = true;
@@ -148,7 +168,7 @@ public class DiscountingMethodCurveTypeSetUp extends DiscountingMethodCurveSetUp
   @Override
   public DiscountingMethodCurveTypeSetUp usingInstrumentMaturity() {
     if (_timeCalculatorAlreadySet) {
-      throw new IllegalStateException();
+      throw new IllegalStateException("The node time calculator has already been set");
     }
     _timeCalculatorAlreadySet = true;
     _maturityCalculator = true;
@@ -158,21 +178,33 @@ public class DiscountingMethodCurveTypeSetUp extends DiscountingMethodCurveSetUp
   @Override
   public DiscountingMethodCurveTypeSetUp usingLastFixingEndTime() {
     if (_timeCalculatorAlreadySet) {
-      throw new IllegalStateException();
+      throw new IllegalStateException("The node time calculator has already been set");
     }
     _timeCalculatorAlreadySet = true;
     _lastFixingEndCalculator = true;
     return this;
   }
 
+  /**
+   * Gets the discounting curve identifier.
+   * @return  the identifier, can be null
+   */
   UniqueIdentifiable getDiscountingCurveId() {
     return _discountingCurveId;
   }
 
+  /**
+   * Gets the ibor curve indices.
+   * @return  the indices, can be null or empty
+   */
   List<IborTypeIndex> getIborCurveIndices() {
     return _iborCurveIndices;
   }
 
+  /**
+   * Gets the overnight curve indices.
+   * @return  the indices, can be null or empty
+   */
   List<OvernightIndex> getOvernightCurveIndices() {
     return _overnightCurveIndices;
   }
@@ -180,32 +212,33 @@ public class DiscountingMethodCurveTypeSetUp extends DiscountingMethodCurveSetUp
   @Override
   public GeneratorYDCurve buildCurveGenerator(final ZonedDateTime valuationDate) {
     final InstrumentDerivativeVisitor<Object, Double> nodeTimeCalculator = getNodeTimeCalculator();
-    if (_otherCurveName != null) {
-      //TODO duplicated code
-      GeneratorYDCurve generator;
-      if (_functionalForm != null) {
-        switch (_functionalForm) {
-          case NELSON_SIEGEL:
-            return new GeneratorCurveYieldNelsonSiegel();
-          default:
-            throw new IllegalStateException();
-        }
+    if (_functionalForm != null) {
+      switch (_functionalForm) {
+        case NELSON_SIEGEL:
+          return new GeneratorCurveYieldNelsonSiegel();
+        default:
+          throw new IllegalStateException("Unsupported functional form " + _functionalForm);
       }
-      if (_dates != null) {
-        final double[] meetingTimes = new double[_dates.length];
-        for (int i = 0; i < meetingTimes.length; i++) {
-          meetingTimes[i] = TimeCalculator.getTimeBetween(valuationDate, _dates[i]);
-        }
-        if (_continuousInterpolationOnYield) {
-          generator = new GeneratorCurveYieldInterpolatedNode(meetingTimes, _interpolator);
-        } else if (_continuousInterpolationOnDiscountFactors) {
-          generator = new GeneratorCurveDiscountFactorInterpolatedNode(meetingTimes, _interpolator);
-        } else if (_typeAlreadySet) { //i.e. some other type like periodic that there's no generator for
-          throw new IllegalStateException();
-        } else {
-          generator = new GeneratorCurveYieldInterpolatedNode(meetingTimes, _interpolator);
-        }
+    }
+    if (_interpolator == null) {
+      throw new IllegalStateException("Must supply an interpolator to create an interpolated curve");
+    }
+    GeneratorYDCurve generator;
+    if (_dates != null) {
+      final double[] meetingTimes = new double[_dates.length];
+      for (int i = 0; i < meetingTimes.length; i++) {
+        meetingTimes[i] = TimeCalculator.getTimeBetween(valuationDate, _dates[i]);
       }
+      if (_continuousInterpolationOnYield) {
+        generator = new GeneratorCurveYieldInterpolatedNode(meetingTimes, _interpolator);
+      } else if (_continuousInterpolationOnDiscountFactors) {
+        generator = new GeneratorCurveDiscountFactorInterpolatedNode(meetingTimes, _interpolator);
+      } else if (_typeAlreadySet) {
+        throw new IllegalStateException("Could not create curve generator for this curve type: " + toString());
+      } else {
+        generator = new GeneratorCurveYieldInterpolatedNode(meetingTimes, _interpolator);
+      }
+    } else {
       if (_continuousInterpolationOnYield) {
         generator = new GeneratorCurveYieldInterpolated(nodeTimeCalculator, _interpolator);
       } else if (_continuousInterpolationOnDiscountFactors) {
@@ -213,47 +246,16 @@ public class DiscountingMethodCurveTypeSetUp extends DiscountingMethodCurveSetUp
       } else if (_periodicInterpolationOnYield) {
         generator = new GeneratorCurveYieldPeriodicInterpolated(nodeTimeCalculator, _periodsPerYear, _interpolator);
       } else if (_typeAlreadySet) {
-        throw new IllegalStateException();
+        throw new IllegalStateException("Could not create curve generator for this curve type: " + toString());
       } else {
         generator = new GeneratorCurveYieldInterpolated(nodeTimeCalculator, _interpolator);
       }
+    }
+    if (_baseCurveName != null) {
       //TODO positive or negative spread
-      return new GeneratorCurveAddYieldExisiting(generator, false, _otherCurveName);
+      return new GeneratorCurveAddYieldExisiting(generator, false, _baseCurveName);
     }
-    if (_functionalForm != null) {
-      switch (_functionalForm) {
-        case NELSON_SIEGEL:
-          return new GeneratorCurveYieldNelsonSiegel();
-        default:
-          throw new IllegalStateException();
-      }
-    }
-    if (_dates != null) {
-      final double[] meetingTimes = new double[_dates.length];
-      for (int i = 0; i < meetingTimes.length; i++) {
-        meetingTimes[i] = TimeCalculator.getTimeBetween(valuationDate, _dates[i]);
-      }
-      if (_continuousInterpolationOnYield) {
-        return new GeneratorCurveYieldInterpolatedNode(meetingTimes, _interpolator);
-      } else if (_continuousInterpolationOnDiscountFactors) {
-        return new GeneratorCurveDiscountFactorInterpolatedNode(meetingTimes, _interpolator);
-      } else if (_typeAlreadySet) {
-        throw new IllegalStateException();
-      } else {
-        return new GeneratorCurveYieldInterpolatedNode(meetingTimes, _interpolator);
-      }
-    }
-    if (_continuousInterpolationOnYield) {
-      return new GeneratorCurveYieldInterpolated(nodeTimeCalculator, _interpolator);
-    } else if (_continuousInterpolationOnDiscountFactors) {
-      return new GeneratorCurveDiscountFactorInterpolated(nodeTimeCalculator, _interpolator);
-    } else if (_periodicInterpolationOnYield) {
-      return new GeneratorCurveYieldPeriodicInterpolated(nodeTimeCalculator, _periodsPerYear, _interpolator);
-    } else if (_typeAlreadySet) {
-      throw new IllegalStateException();
-    } else {
-      return new GeneratorCurveYieldInterpolated(nodeTimeCalculator, _interpolator);
-    }
+    return generator;
   }
 
   private InstrumentDerivativeVisitor<Object, Double> getNodeTimeCalculator() {
@@ -265,4 +267,47 @@ public class DiscountingMethodCurveTypeSetUp extends DiscountingMethodCurveSetUp
     return LastTimeCalculator.getInstance();
   }
 
+  @Override
+  public String toString() {
+    final StringBuilder sb = new StringBuilder("DiscountingMethodCurveTypeSetUp[discountingCurveId=");
+    sb.append(_discountingCurveId);
+    sb.append(", iborIndices=");
+    sb.append(_iborCurveIndices);
+    sb.append(", overnightIndices=");
+    sb.append(_overnightCurveIndices);
+    if (_functionalForm != null) {
+      sb.append(", functionalForm=");
+      sb.append(_functionalForm);
+    } else {
+      sb.append(", interpolator=");
+      sb.append(_interpolator);
+      if (_dates != null) {
+        sb.append(", nodeDates=");
+        sb.append(Arrays.toString(_dates));
+      }
+      if (_periodicInterpolationOnYield) {
+        sb.append(", periodsPerYear=");
+        sb.append(_periodsPerYear);
+        sb.append(", interpolation on yield");
+      }
+      if (_continuousInterpolationOnYield) {
+        sb.append(", interpolation on yield");
+      }
+      if (_continuousInterpolationOnDiscountFactors) {
+        sb.append(", interpolation on discount factors");
+      }
+      if (_maturityCalculator) {
+        sb.append(", using instrument maturity");
+      }
+      if (_lastFixingEndCalculator) {
+        sb.append(", using last fixing period end");
+      }
+    }
+    if (_baseCurveName != null) {
+      sb.append(", baseCurve=");
+      sb.append(_baseCurveName);
+    }
+    sb.append("]");
+    return sb.toString();
+  }
 }

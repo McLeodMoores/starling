@@ -32,7 +32,6 @@ import com.opengamma.util.tuple.Pair;
  *
  */
 public class DiscountingMethodBondCurveTypeSetUp extends DiscountingMethodBondCurveSetUp implements BondCurveTypeSetUpInterface {
-  private final String _curveName;
   private String _otherCurveName;
   private Interpolator1D _interpolator;
   private ZonedDateTime[] _dates;
@@ -50,9 +49,8 @@ public class DiscountingMethodBondCurveTypeSetUp extends DiscountingMethodBondCu
   private List<OvernightIndex> _overnightCurveIndices;
   private List<Pair<Object, LegalEntityFilter<LegalEntity>>> _issuers;
 
-  public DiscountingMethodBondCurveTypeSetUp(final String curveName, final DiscountingMethodBondCurveSetUp builder) {
+  DiscountingMethodBondCurveTypeSetUp(final DiscountingMethodBondCurveSetUp builder) {
     super(builder);
-    _curveName = curveName;
   }
 
   @Override
