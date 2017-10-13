@@ -46,10 +46,6 @@ public class DiscountingMethodBondCurveBuilder extends CurveBuilder<IssuerProvid
   private final IssuerDiscountBuildingRepository _curveBuildingRepository;
   private final LinkedListMultimap<String, Pair<Object, LegalEntityFilter<LegalEntity>>> _issuerCurves;
   private final Map<ZonedDateTime, MultiCurveBundle[]> _cached;
-  //TODO bad hard-coding
-  protected final double _absoluteTolerance = 1e-12;
-  protected final double _relativeTolerance = 1e-12;
-  protected final int _maxSteps = 100;
 
   public static DiscountingMethodBondCurveSetUp setUp() {
     return new DiscountingMethodBondCurveSetUp();
@@ -60,13 +56,14 @@ public class DiscountingMethodBondCurveBuilder extends CurveBuilder<IssuerProvid
       final List<Pair<String, List<Pair<Object, LegalEntityFilter<LegalEntity>>>>> issuerCurves,
       final Map<String, List<InstrumentDefinition<?>>> nodes,
       final Map<String, ? extends CurveTypeSetUpInterface> curveGenerators,
-      final IssuerProviderDiscount knownData, final CurveBuildingBlockBundle knownBundle) {
+      final IssuerProviderDiscount knownData, final CurveBuildingBlockBundle knownBundle,
+      final double absoluteTolerance, final double relativeTolerance, final int maxSteps) {
     super(curveNames, discountingCurves, iborCurves, overnightCurves, nodes, curveGenerators, knownData, knownBundle);
     _issuerCurves = LinkedListMultimap.create();
     for (final Pair<String, List<Pair<Object, LegalEntityFilter<LegalEntity>>>> issuerCurve : issuerCurves) {
       _issuerCurves.put(issuerCurve.getKey(), issuerCurve.getValue().get(0));
     }
-    _curveBuildingRepository = new IssuerDiscountBuildingRepository(_absoluteTolerance, _relativeTolerance, _maxSteps);
+    _curveBuildingRepository = new IssuerDiscountBuildingRepository(absoluteTolerance, relativeTolerance, maxSteps);
     _cached = new HashMap<>();
   }
 
@@ -114,7 +111,7 @@ public class DiscountingMethodBondCurveBuilder extends CurveBuilder<IssuerProvid
     throw new IllegalStateException();
   }
 
-  Pair<IssuerProviderDiscount, CurveBuildingBlockBundle> buildCurves(final MultiCurveBundle[] curveBundles,
+  private Pair<IssuerProviderDiscount, CurveBuildingBlockBundle> buildCurves(final MultiCurveBundle[] curveBundles,
       final IssuerProviderDiscount knownData, final CurveBuildingBlockBundle knownBundle,
       final List<Pair<String, UniqueIdentifiable>> discountingCurves, final List<Pair<String, List<IborTypeIndex>>> iborCurves,
       final List<Pair<String, List<OvernightIndex>>> overnightCurves,

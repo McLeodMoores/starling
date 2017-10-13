@@ -278,7 +278,7 @@ public class EurDiscounting3mLibor6mLiborTest extends CurveBuildingTests {
     Map<String, InstrumentDefinition<?>[]> definitions;
     // discounting then 3m then 6m
     // before fixing
-    definitions = CONSECUTIVE_BUILDER.copy().getBuilder().getDefinitionsForCurves(NOW);
+    definitions = CONSECUTIVE_BUILDER.copy().getBuilder().getDefinitionsForCurves();
     curveConstructionTest(definitions.get(CURVE_NAME_DSC_EUR), CONSECUTIVE_BEFORE_FIXING.getFirst(),
         PresentValueDiscountingCalculator.getInstance(), FIXING_TS_WITHOUT_TODAY, FX_MATRIX, NOW, Currency.EUR);
     curveConstructionTest(definitions.get(CURVE_NAME_FWD3_EUR), CONSECUTIVE_BEFORE_FIXING.getFirst(),
@@ -286,7 +286,7 @@ public class EurDiscounting3mLibor6mLiborTest extends CurveBuildingTests {
     curveConstructionTest(definitions.get(CURVE_NAME_FWD6_EUR), CONSECUTIVE_BEFORE_FIXING.getFirst(),
         PresentValueDiscountingCalculator.getInstance(), FIXING_TS_WITHOUT_TODAY, FX_MATRIX, NOW, Currency.EUR);
     // after fixing
-    definitions = CONSECUTIVE_BUILDER.copy().getBuilder().getDefinitionsForCurves(NOW);
+    definitions = CONSECUTIVE_BUILDER.copy().getBuilder().getDefinitionsForCurves();
     curveConstructionTest(definitions.get(CURVE_NAME_DSC_EUR), CONSECUTIVE_AFTER_FIXING.getFirst(),
         PresentValueDiscountingCalculator.getInstance(), FIXING_TS_WITH_TODAY, FX_MATRIX, NOW, Currency.EUR);
     curveConstructionTest(definitions.get(CURVE_NAME_FWD3_EUR), CONSECUTIVE_AFTER_FIXING.getFirst(),
@@ -295,7 +295,7 @@ public class EurDiscounting3mLibor6mLiborTest extends CurveBuildingTests {
         PresentValueDiscountingCalculator.getInstance(), FIXING_TS_WITH_TODAY, FX_MATRIX, NOW, Currency.EUR);
     // discounting and euribors
     // before fixing
-    definitions = SIMULTANEOUS_BUILDER.copy().getBuilder().getDefinitionsForCurves(NOW);
+    definitions = SIMULTANEOUS_BUILDER.copy().getBuilder().getDefinitionsForCurves();
     curveConstructionTest(definitions.get(CURVE_NAME_DSC_EUR), SIMULTANEOUS_BEFORE_FIXING.getFirst(),
         PresentValueDiscountingCalculator.getInstance(), FIXING_TS_WITHOUT_TODAY, FX_MATRIX, NOW, Currency.EUR);
     curveConstructionTest(definitions.get(CURVE_NAME_FWD3_EUR), SIMULTANEOUS_BEFORE_FIXING.getFirst(),
@@ -303,7 +303,7 @@ public class EurDiscounting3mLibor6mLiborTest extends CurveBuildingTests {
     curveConstructionTest(definitions.get(CURVE_NAME_FWD6_EUR), SIMULTANEOUS_BEFORE_FIXING.getFirst(),
         PresentValueDiscountingCalculator.getInstance(), FIXING_TS_WITHOUT_TODAY, FX_MATRIX, NOW, Currency.EUR);
     // after fixing
-    definitions = SIMULTANEOUS_BUILDER.copy().getBuilder().getDefinitionsForCurves(NOW);
+    definitions = SIMULTANEOUS_BUILDER.copy().getBuilder().getDefinitionsForCurves();
     curveConstructionTest(definitions.get(CURVE_NAME_DSC_EUR), SIMULTANEOUS_AFTER_FIXING.getFirst(),
         PresentValueDiscountingCalculator.getInstance(), FIXING_TS_WITH_TODAY, FX_MATRIX, NOW, Currency.EUR);
     curveConstructionTest(definitions.get(CURVE_NAME_FWD3_EUR), SIMULTANEOUS_AFTER_FIXING.getFirst(),

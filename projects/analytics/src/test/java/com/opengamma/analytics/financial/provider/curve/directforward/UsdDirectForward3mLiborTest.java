@@ -190,14 +190,14 @@ public class UsdDirectForward3mLiborTest extends CurveBuildingTests {
   public void testInstrumentsInCurvePriceToZero() {
     Map<String, InstrumentDefinition<?>[]> definitions = BUILDER_FOR_TEST.copy()
         .getBuilder()
-        .getDefinitionsForCurves(NOW);
+        .getDefinitionsForCurves();
     curveConstructionTest(definitions.get(CURVE_NAME_DSC_USD), BEFORE_TODAYS_FIXING.getFirst(),
         PresentValueDiscountingCalculator.getInstance(), FIXING_TS_WITHOUT_TODAY, FX_MATRIX, NOW, Currency.USD);
     curveConstructionTest(definitions.get(CURVE_NAME_FWD3_USD), BEFORE_TODAYS_FIXING.getFirst(),
         PresentValueDiscountingCalculator.getInstance(), FIXING_TS_WITHOUT_TODAY, FX_MATRIX, NOW, Currency.USD);
     definitions = BUILDER_FOR_TEST.copy()
         .getBuilder()
-        .getDefinitionsForCurves(NOW);
+        .getDefinitionsForCurves();
     curveConstructionTest(definitions.get(CURVE_NAME_DSC_USD), AFTER_TODAYS_FIXING.getFirst(),
         PresentValueDiscountingCalculator.getInstance(), FIXING_TS_WITH_TODAY, FX_MATRIX, NOW, Currency.USD);
     curveConstructionTest(definitions.get(CURVE_NAME_FWD3_USD), AFTER_TODAYS_FIXING.getFirst(),

@@ -213,20 +213,20 @@ public class Usd3mLiborKnownDiscountingTest extends CurveBuildingTests {
   public void testInstrumentsInCurvePriceToZero() {
     Map<String, InstrumentDefinition<?>[]> definitionsForCurvesBeforeFixing = DSC_BUILDER.copy()
         .getBuilder()
-        .getDefinitionsForCurves(NOW);
+        .getDefinitionsForCurves();
     Map<String, InstrumentDefinition<?>[]> definitionsForCurvesAfterFixing = DSC_BUILDER.copy()
         .getBuilder()
-        .getDefinitionsForCurves(NOW);
+        .getDefinitionsForCurves();
     curveConstructionTest(definitionsForCurvesBeforeFixing.get(CURVE_NAME_DSC_USD),
         DSC_BEFORE_FIXING.getFirst(), PresentValueDiscountingCalculator.getInstance(), FIXING_TS_WITHOUT_TODAY, FX_MATRIX, NOW, Currency.USD);
     curveConstructionTest(definitionsForCurvesAfterFixing.get(CURVE_NAME_DSC_USD),
         DSC_AFTER_FIXING.getFirst(), PresentValueDiscountingCalculator.getInstance(), FIXING_TS_WITH_TODAY, FX_MATRIX, NOW, Currency.USD);
     definitionsForCurvesBeforeFixing = LIBOR_BUILDER.copy()
         .getBuilder()
-        .getDefinitionsForCurves(NOW);
+        .getDefinitionsForCurves();
     definitionsForCurvesAfterFixing = LIBOR_BUILDER.copy()
         .getBuilder()
-        .getDefinitionsForCurves(NOW);
+        .getDefinitionsForCurves();
     curveConstructionTest(definitionsForCurvesBeforeFixing.get(CURVE_NAME_FWD3_USD),
         LIBOR_BEFORE_FIXING.getFirst(), PresentValueDiscountingCalculator.getInstance(), FIXING_TS_WITHOUT_TODAY, FX_MATRIX, NOW, Currency.USD);
     curveConstructionTest(definitionsForCurvesAfterFixing.get(CURVE_NAME_FWD3_USD),

@@ -151,8 +151,6 @@ public class UsdEurDiscountingLiborXCcyTest extends CurveBuildingTests {
   private static final String CURVE_NAME_DSC_USD = "USD Dsc";
   /** 3m LIBOR curve name */
   private static final String CURVE_NAME_FWD3_USD = "USD Fwd 3M";
-  /** Already known data - contains only the FX matrix */
-  private static final MulticurveProviderDiscount KNOWN_DATA = new MulticurveProviderDiscount(FX_MATRIX);
   /** Builds USD discounting, then LIBOR, then two EUR curves using the first set of data */
   private static final DiscountingMethodCurveSetUp BUILDER_1 = DiscountingMethodCurveBuilder.setUp()
       .buildingFirst(CURVE_NAME_DSC_USD)
@@ -476,7 +474,7 @@ public class UsdEurDiscountingLiborXCcyTest extends CurveBuildingTests {
    */
   private static void testInstrumentsInCurvePriceToZero(final CurveBuilder<MulticurveProviderDiscount> builder, final MulticurveProviderDiscount curves,
       final boolean beforeFixing) {
-    final Map<String, InstrumentDefinition<?>[]> definitions = builder.getDefinitionsForCurves(NOW);
+    final Map<String, InstrumentDefinition<?>[]> definitions = builder.getDefinitionsForCurves();
     final Map<Index, ZonedDateTimeDoubleTimeSeries> fixingTs = beforeFixing ? FIXING_TS_WITHOUT_TODAY : FIXING_TS_WITH_TODAY;
     for (final String curveName : curves.getAllCurveNames()) {
       curveConstructionTest(definitions.get(curveName), curves, PresentValueDiscountingCalculator.getInstance(),

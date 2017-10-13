@@ -37,6 +37,9 @@ public class DirectForwardMethodCurveSetUp implements CurveSetUpInterface {
   private final Map<String, List<InstrumentDefinition<?>>> _nodes;
   private FXMatrix _fxMatrix;
   private CurveBuildingBlockBundle _knownBundle;
+  private double _absoluteTolerance = 1e-12;
+  private double _relativeTolerance = 1e-12;
+  private int _maxSteps = 100;
 
   protected DirectForwardMethodCurveSetUp() {
     _curveNames = new ArrayList<>();
@@ -55,6 +58,9 @@ public class DirectForwardMethodCurveSetUp implements CurveSetUpInterface {
     _nodes = setup._nodes;
     _fxMatrix = setup._fxMatrix;
     _knownBundle = setup._knownBundle;
+    _absoluteTolerance = setup._absoluteTolerance;
+    _relativeTolerance = setup._relativeTolerance;
+    _maxSteps = setup._maxSteps;
   }
 
   protected DirectForwardMethodCurveSetUp(final List<List<String>> curveNames,
@@ -62,13 +68,19 @@ public class DirectForwardMethodCurveSetUp implements CurveSetUpInterface {
       final Map<String, DirectForwardMethodCurveTypeSetUp> curveTypes,
       final Map<DirectForwardMethodPreConstructedCurveTypeSetUp, YieldAndDiscountCurve> preConstructedCurves,
       final FXMatrix fxMatrix,
-      final CurveBuildingBlockBundle knownBundle) {
+      final CurveBuildingBlockBundle knownBundle,
+      final double absoluteTolerance,
+      final double relativeTolerance,
+      final int maxSteps) {
     _curveNames = new ArrayList<>(curveNames);
     _nodes = new HashMap<>(nodes);
     _curveTypes = new HashMap<>(curveTypes);
     _preConstructedCurves = new HashMap<>(preConstructedCurves);
     _fxMatrix = fxMatrix;
     _knownBundle = knownBundle;
+    _absoluteTolerance = absoluteTolerance;
+    _relativeTolerance = relativeTolerance;
+    _maxSteps = maxSteps;
   }
 
   @Override
@@ -119,12 +131,14 @@ public class DirectForwardMethodCurveSetUp implements CurveSetUpInterface {
       }
     }
     final MulticurveProviderForward knownData = new MulticurveProviderForward(knownDiscountingCurves, knownIborCurves, knownOvernightCurves, _fxMatrix);
-    return new DirectForwardMethodCurveBuilder(_curveNames, discountingCurves, iborCurves, overnightCurves, _nodes, _curveTypes, knownData, _knownBundle);
+    return new DirectForwardMethodCurveBuilder(_curveNames, discountingCurves, iborCurves, overnightCurves, _nodes, _curveTypes, knownData, _knownBundle,
+        _absoluteTolerance, _relativeTolerance, _maxSteps);
   }
 
   @Override
   public DirectForwardMethodCurveSetUp copy() {
-    return new DirectForwardMethodCurveSetUp(_curveNames, _nodes, _curveTypes, _preConstructedCurves, _fxMatrix, _knownBundle);
+    return new DirectForwardMethodCurveSetUp(_curveNames, _nodes, _curveTypes, _preConstructedCurves, _fxMatrix, _knownBundle,
+        _absoluteTolerance, _relativeTolerance, _maxSteps);
   }
 
   @Override
@@ -204,4 +218,22 @@ public class DirectForwardMethodCurveSetUp implements CurveSetUpInterface {
     return type;
   }
 
+
+  @Override
+  public CurveSetUpInterface rootFindingAbsoluteTolerance(final double tolerance) {
+    _absoluteTolerance = tolerance;
+    return this;
+  }
+
+  @Override
+  public CurveSetUpInterface rootFindingRelativeTolerance(final double tolerance) {
+    _relativeTolerance = tolerance;
+    return this;
+  }
+
+  @Override
+  public CurveSetUpInterface rootFindingMaximumSteps(final int maxSteps) {
+    _maxSteps = maxSteps;
+    return this;
+  }
 }

@@ -39,6 +39,9 @@ public class HullWhiteMethodCurveSetUp implements CurveSetUpInterface {
   private FXMatrix _fxMatrix;
   private HullWhiteOneFactorPiecewiseConstantParameters _parameters;
   private Currency _currency;
+  private double _absoluteTolerance = 1e-12;
+  private double _relativeTolerance = 1e-12;
+  private int _maxSteps = 100;
 
   HullWhiteMethodCurveSetUp() {
     _curveNames = new ArrayList<>();
@@ -61,6 +64,9 @@ public class HullWhiteMethodCurveSetUp implements CurveSetUpInterface {
     _knownBundle = setup._knownBundle;
     _parameters = setup._parameters;
     _currency = setup._currency;
+    _absoluteTolerance = setup._absoluteTolerance;
+    _relativeTolerance = setup._relativeTolerance;
+    _maxSteps = setup._maxSteps;
   }
 
   HullWhiteMethodCurveSetUp(final List<List<String>> curveNames,
@@ -70,7 +76,10 @@ public class HullWhiteMethodCurveSetUp implements CurveSetUpInterface {
       final FXMatrix fxMatrix,
       final CurveBuildingBlockBundle knownBundle,
       final HullWhiteOneFactorPiecewiseConstantParameters parameters,
-      final Currency currency) {
+      final Currency currency,
+      final double absoluteTolerance,
+      final double relativeTolerance,
+      final int maxSteps) {
     _curveNames = new ArrayList<>(curveNames);
     _nodes = new HashMap<>(nodes);
     _curveTypes = new HashMap<>(curveTypes);
@@ -79,6 +88,9 @@ public class HullWhiteMethodCurveSetUp implements CurveSetUpInterface {
     _knownBundle = knownBundle;
     _parameters = parameters;
     _currency = currency;
+    _absoluteTolerance = absoluteTolerance;
+    _relativeTolerance = relativeTolerance;
+    _maxSteps = maxSteps;
   }
 
   @Override
@@ -134,7 +146,8 @@ public class HullWhiteMethodCurveSetUp implements CurveSetUpInterface {
 
   @Override
   public HullWhiteMethodCurveSetUp copy() {
-    return new HullWhiteMethodCurveSetUp(_curveNames, _nodes, _curveTypes, _preConstructedCurves, _fxMatrix, _knownBundle, _parameters, _currency);
+    return new HullWhiteMethodCurveSetUp(_curveNames, _nodes, _curveTypes, _preConstructedCurves, _fxMatrix, _knownBundle, _parameters, _currency,
+        _absoluteTolerance, _relativeTolerance, _maxSteps);
   }
 
   @Override
@@ -222,6 +235,25 @@ public class HullWhiteMethodCurveSetUp implements CurveSetUpInterface {
   //TODO rename
   public HullWhiteMethodCurveSetUp forHullWhiteCurrency(final Currency currency) {
     _currency = currency;
+    return this;
+  }
+
+
+  @Override
+  public HullWhiteMethodCurveSetUp rootFindingAbsoluteTolerance(final double tolerance) {
+    _absoluteTolerance = tolerance;
+    return this;
+  }
+
+  @Override
+  public HullWhiteMethodCurveSetUp rootFindingRelativeTolerance(final double tolerance) {
+    _relativeTolerance = tolerance;
+    return this;
+  }
+
+  @Override
+  public HullWhiteMethodCurveSetUp rootFindingMaximumSteps(final int maxSteps) {
+    _maxSteps = maxSteps;
     return this;
   }
 }

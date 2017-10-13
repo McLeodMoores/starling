@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.threeten.bp.LocalDateTime;
 import org.threeten.bp.ZonedDateTime;
 
 import com.mcleodmoores.analytics.financial.index.IborTypeIndex;
@@ -33,7 +34,7 @@ import com.opengamma.util.ArgumentChecker;
 public class DiscountingMethodCurveTypeSetUp extends DiscountingMethodCurveSetUp implements CurveTypeSetUpInterface {
   private String _baseCurveName;
   private Interpolator1D _interpolator;
-  private ZonedDateTime[] _dates;
+  private List<LocalDateTime> _dates;
   private boolean _typeAlreadySet;
   private CurveFunction _functionalForm;
   private boolean _continuousInterpolationOnYield;
@@ -55,7 +56,7 @@ public class DiscountingMethodCurveTypeSetUp extends DiscountingMethodCurveSetUp
   }
 
   /**
-   * Constructor that copies the data in an existing builder.
+   * Constructor that takes an existing builder. Note that this is not a copy constructor.
    * @param builder  the builder, not null
    */
   DiscountingMethodCurveTypeSetUp(final DiscountingMethodCurveSetUp builder) {
@@ -72,10 +73,9 @@ public class DiscountingMethodCurveTypeSetUp extends DiscountingMethodCurveSetUp
   public DiscountingMethodCurveTypeSetUp forIndex(final IborTypeIndex... indices) {
     ArgumentChecker.notNull(indices, "indices");
     if (_iborCurveIndices == null) {
-      _iborCurveIndices = new ArrayList<>(Arrays.asList(indices));
-    } else {
-      _iborCurveIndices.addAll(Arrays.asList(indices));
+      _iborCurveIndices = new ArrayList<>();
     }
+    _iborCurveIndices.addAll(Arrays.asList(indices));
     return this;
   }
 
@@ -83,10 +83,9 @@ public class DiscountingMethodCurveTypeSetUp extends DiscountingMethodCurveSetUp
   public DiscountingMethodCurveTypeSetUp forIndex(final OvernightIndex... indices) {
     ArgumentChecker.notNull(indices, "indices");
     if (_overnightCurveIndices == null) {
-      _overnightCurveIndices = new ArrayList<>(Arrays.asList(indices));
-    } else {
-      _overnightCurveIndices.addAll(Arrays.asList(indices));
+      _overnightCurveIndices = new ArrayList<>();
     }
+    _overnightCurveIndices.addAll(Arrays.asList(indices));
     return this;
   }
 
@@ -118,15 +117,18 @@ public class DiscountingMethodCurveTypeSetUp extends DiscountingMethodCurveSetUp
   }
 
   @Override
-  public DiscountingMethodCurveTypeSetUp usingNodeDates(final ZonedDateTime[] dates) {
+  public DiscountingMethodCurveTypeSetUp usingNodeDates(final LocalDateTime... dates) {
     if (_functionalForm != null) {
       throw new IllegalStateException("Have already set curve type to be functional");
     }
     if (_periodicInterpolationOnYield) {
       throw new IllegalStateException("Cannot set node dates for a periodically-compounded curve");
     }
-    _dates = ArgumentChecker.notNull(dates, "dates");
-    ArgumentChecker.isTrue(_dates.length > 1, "Must have at least two node dates to interpolate");
+    ArgumentChecker.notNull(dates, "dates");
+    if (_dates == null) {
+      _dates = new ArrayList<>();
+    }
+    _dates.addAll(Arrays.asList(dates));
     return this;
   }
 
@@ -225,9 +227,11 @@ public class DiscountingMethodCurveTypeSetUp extends DiscountingMethodCurveSetUp
     }
     GeneratorYDCurve generator;
     if (_dates != null) {
-      final double[] meetingTimes = new double[_dates.length];
-      for (int i = 0; i < meetingTimes.length; i++) {
-        meetingTimes[i] = TimeCalculator.getTimeBetween(valuationDate, _dates[i]);
+      ArgumentChecker.isTrue(_dates.size() > 1, "Must have at least two node dates to interpolate");
+      final double[] meetingTimes = new double[_dates.size()];
+      int i = 0;
+      for (final LocalDateTime date : _dates) {
+        meetingTimes[i++] = TimeCalculator.getTimeBetween(valuationDate, ZonedDateTime.of(date, valuationDate.getZone()));
       }
       if (_continuousInterpolationOnYield) {
         generator = new GeneratorCurveYieldInterpolatedNode(meetingTimes, _interpolator);
@@ -283,7 +287,7 @@ public class DiscountingMethodCurveTypeSetUp extends DiscountingMethodCurveSetUp
       sb.append(_interpolator);
       if (_dates != null) {
         sb.append(", nodeDates=");
-        sb.append(Arrays.toString(_dates));
+        sb.append(_dates);
       }
       if (_periodicInterpolationOnYield) {
         sb.append(", periodsPerYear=");

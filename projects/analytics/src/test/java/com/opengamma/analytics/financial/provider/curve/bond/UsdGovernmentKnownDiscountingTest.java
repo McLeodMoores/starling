@@ -218,7 +218,7 @@ public class UsdGovernmentKnownDiscountingTest extends CurveBuildingTests {
   public void testInstrumentsInCurvePriceToZero() {
     final Map<String, InstrumentDefinition<?>[]> definitions = BUILDER_FOR_TEST.copy()
         .getBuilder()
-        .getDefinitionsForCurves(NOW);
+        .getDefinitionsForCurves();
     curveConstructionTest(definitions.get(CURVE_NAME_GOVTUS_USD), AFTER_TODAYS_FIXING.getFirst(),
         PresentValueIssuerCalculator.getInstance(), FIXING_TS_WITH_TODAY, FX_MATRIX, NOW, Currency.USD);
   }

@@ -6,6 +6,7 @@ package com.mcleodmoores.analytics.financial.curve.interestrate;
 import java.util.Arrays;
 import java.util.List;
 
+import org.threeten.bp.LocalDateTime;
 import org.threeten.bp.ZonedDateTime;
 
 import com.mcleodmoores.analytics.financial.index.IborTypeIndex;
@@ -31,7 +32,7 @@ import com.opengamma.id.UniqueIdentifiable;
 public class HullWhiteMethodCurveTypeSetUp extends HullWhiteMethodCurveSetUp implements CurveTypeSetUpInterface {
   private String _otherCurveName;
   private Interpolator1D _interpolator;
-  private ZonedDateTime[] _dates;
+  private LocalDateTime[] _dates;
   private boolean _typeAlreadySet;
   private CurveFunction _functionalForm;
   private boolean _continuousInterpolationOnYield;
@@ -97,7 +98,7 @@ public class HullWhiteMethodCurveTypeSetUp extends HullWhiteMethodCurveSetUp imp
   }
 
   @Override
-  public HullWhiteMethodCurveTypeSetUp usingNodeDates(final ZonedDateTime[] dates) {
+  public HullWhiteMethodCurveTypeSetUp usingNodeDates(final LocalDateTime[] dates) {
     if (_functionalForm != null) {
       throw new IllegalStateException();
     }
@@ -194,7 +195,7 @@ public class HullWhiteMethodCurveTypeSetUp extends HullWhiteMethodCurveSetUp imp
       if (_dates != null) {
         final double[] meetingTimes = new double[_dates.length];
         for (int i = 0; i < meetingTimes.length; i++) {
-          meetingTimes[i] = TimeCalculator.getTimeBetween(valuationDate, _dates[i]);
+          meetingTimes[i] = TimeCalculator.getTimeBetween(valuationDate, ZonedDateTime.of(_dates[i], valuationDate.getZone()));
         }
         if (_continuousInterpolationOnYield) {
           generator = new GeneratorCurveYieldInterpolatedNode(meetingTimes, _interpolator);
@@ -231,7 +232,7 @@ public class HullWhiteMethodCurveTypeSetUp extends HullWhiteMethodCurveSetUp imp
     if (_dates != null) {
       final double[] meetingTimes = new double[_dates.length];
       for (int i = 0; i < meetingTimes.length; i++) {
-        meetingTimes[i] = TimeCalculator.getTimeBetween(valuationDate, _dates[i]);
+        meetingTimes[i] = TimeCalculator.getTimeBetween(valuationDate, ZonedDateTime.of(_dates[i], valuationDate.getZone()));
       }
       if (_continuousInterpolationOnYield) {
         return new GeneratorCurveYieldInterpolatedNode(meetingTimes, _interpolator);

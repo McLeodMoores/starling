@@ -37,6 +37,9 @@ public class DiscountingMethodBondCurveSetUp implements BondCurveSetUpInterface 
   private final Map<String, List<InstrumentDefinition<?>>> _nodes;
   private FXMatrix _fxMatrix;
   private CurveBuildingBlockBundle _knownBundle;
+  private double _absoluteTolerance = 1e-12;
+  private double _relativeTolerance = 1e-12;
+  private int _maxSteps = 100;
 
   DiscountingMethodBondCurveSetUp() {
     _curveNames = new ArrayList<>();
@@ -56,6 +59,9 @@ public class DiscountingMethodBondCurveSetUp implements BondCurveSetUpInterface 
     _nodes = setup._nodes;
     _fxMatrix = setup._fxMatrix;
     _knownBundle = setup._knownBundle;
+    _absoluteTolerance = setup._absoluteTolerance;
+    _relativeTolerance = setup._relativeTolerance;
+    _maxSteps = setup._maxSteps;
   }
 
   protected DiscountingMethodBondCurveSetUp(final List<List<String>> curveNames,
@@ -63,13 +69,20 @@ public class DiscountingMethodBondCurveSetUp implements BondCurveSetUpInterface 
       final Map<String, DiscountingMethodBondCurveTypeSetUp> curveTypes,
       final Map<DiscountingMethodPreConstructedBondCurveTypeSetUp, YieldAndDiscountCurve> preConstructedCurves,
       final FXMatrix fxMatrix,
-      final CurveBuildingBlockBundle knownBundle) {
+      final CurveBuildingBlockBundle knownBundle,
+      final double absoluteTolerance,
+      final double relativeTolerance,
+      final int maxSteps) {
     _curveNames = new ArrayList<>(curveNames);
     _nodes = new HashMap<>(nodes);
     _curveTypes = new HashMap<>(curveTypes);
     _preConstructedCurves = new HashMap<>(preConstructedCurves);
     _fxMatrix = fxMatrix;
     _knownBundle = knownBundle == null ? null : knownBundle; //TODO no copy
+    _absoluteTolerance = absoluteTolerance;
+    _relativeTolerance = relativeTolerance;
+    _maxSteps = maxSteps;
+
   }
 
   @Override
@@ -131,12 +144,13 @@ public class DiscountingMethodBondCurveSetUp implements BondCurveSetUpInterface 
     final IssuerProviderDiscount knownData =
         new IssuerProviderDiscount(knownDiscountingCurves, knownIborCurves, knownOvernightCurves, knownIssuerCurves, _fxMatrix);
     return new DiscountingMethodBondCurveBuilder(_curveNames, discountingCurves, iborCurves, overnightCurves, issuerCurves, _nodes, _curveTypes,
-        knownData, _knownBundle);
+        knownData, _knownBundle, _absoluteTolerance, _relativeTolerance, _maxSteps);
   }
 
   @Override
   public DiscountingMethodBondCurveSetUp copy() {
-    return new DiscountingMethodBondCurveSetUp(_curveNames, _nodes, _curveTypes, _preConstructedCurves, _fxMatrix, _knownBundle);
+    return new DiscountingMethodBondCurveSetUp(_curveNames, _nodes, _curveTypes, _preConstructedCurves, _fxMatrix, _knownBundle,
+        _absoluteTolerance, _relativeTolerance, _maxSteps);
   }
 
   @Override
@@ -230,6 +244,24 @@ public class DiscountingMethodBondCurveSetUp implements BondCurveSetUpInterface 
       throw new IllegalStateException();
     }
     return type;
+  }
+
+  @Override
+  public DiscountingMethodBondCurveSetUp rootFindingAbsoluteTolerance(final double tolerance) {
+    _absoluteTolerance = tolerance;
+    return this;
+  }
+
+  @Override
+  public DiscountingMethodBondCurveSetUp rootFindingRelativeTolerance(final double tolerance) {
+    _relativeTolerance = tolerance;
+    return this;
+  }
+
+  @Override
+  public DiscountingMethodBondCurveSetUp rootFindingMaximumSteps(final int maxSteps) {
+    _maxSteps = maxSteps;
+    return this;
   }
 
 }

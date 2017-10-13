@@ -3,6 +3,7 @@
  */
 package com.mcleodmoores.analytics.financial.curve.interestrate;
 
+import org.threeten.bp.LocalDateTime;
 import org.threeten.bp.ZonedDateTime;
 
 import com.mcleodmoores.analytics.financial.index.IborTypeIndex;
@@ -35,8 +36,7 @@ public interface CurveTypeSetUpInterface {
   //TODO curve operations setup to allow A = B + C + D logic
   CurveTypeSetUpInterface functionalForm(CurveFunction function);
 
-  //TODO local dates would be better
-  CurveTypeSetUpInterface usingNodeDates(ZonedDateTime[] dates);
+  CurveTypeSetUpInterface usingNodeDates(LocalDateTime... dates);
 
   CurveTypeSetUpInterface continuousInterpolationOnYield();
 

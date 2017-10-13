@@ -255,20 +255,20 @@ public class UsdDiscounting3mLibor2Test extends CurveBuildingTests {
     // discounting then LIBOR
     Map<String, InstrumentDefinition<?>[]> definitions;
     // before fixing
-    definitions = DISCOUNTING_THEN_LIBOR_BUILDER.copy().getBuilder().getDefinitionsForCurves(NOW);
+    definitions = DISCOUNTING_THEN_LIBOR_BUILDER.copy().getBuilder().getDefinitionsForCurves();
     curveConstructionTest(definitions.get(CURVE_NAME_DSC_USD), DSC_THEN_LIBOR_BEFORE_FIXING.getFirst(),
         PresentValueDiscountingCalculator.getInstance(), FIXING_TS_WITHOUT_TODAY, FX_MATRIX, NOW, Currency.USD);
     curveConstructionTest(definitions.get(CURVE_NAME_FWD3_USD), DSC_THEN_LIBOR_BEFORE_FIXING.getFirst(),
         PresentValueDiscountingCalculator.getInstance(), FIXING_TS_WITHOUT_TODAY, FX_MATRIX, NOW, Currency.USD);
     // after fixing
-    definitions = DISCOUNTING_THEN_LIBOR_BUILDER.copy().getBuilder().getDefinitionsForCurves(NOW);
+    definitions = DISCOUNTING_THEN_LIBOR_BUILDER.copy().getBuilder().getDefinitionsForCurves();
     curveConstructionTest(definitions.get(CURVE_NAME_DSC_USD), DSC_THEN_LIBOR_AFTER_FIXING.getFirst(),
         PresentValueDiscountingCalculator.getInstance(), FIXING_TS_WITH_TODAY, FX_MATRIX, NOW, Currency.USD);
     curveConstructionTest(definitions.get(CURVE_NAME_FWD3_USD), DSC_THEN_LIBOR_AFTER_FIXING.getFirst(),
         PresentValueDiscountingCalculator.getInstance(), FIXING_TS_WITH_TODAY, FX_MATRIX, NOW, Currency.USD);
     // discounting and LIBOR
     // before fixing
-    definitions = DISCOUNTING_AND_LIBOR_BUILDER.copy().getBuilder().getDefinitionsForCurves(NOW);
+    definitions = DISCOUNTING_AND_LIBOR_BUILDER.copy().getBuilder().getDefinitionsForCurves();
     curveConstructionTest(definitions.get(CURVE_NAME_DSC_USD), DSC_LIBOR_SIMULTANEOUS_BEFORE_FIXING.getFirst(),
         PresentValueDiscountingCalculator.getInstance(), FIXING_TS_WITHOUT_TODAY, FX_MATRIX,
         NOW, Currency.USD);
@@ -276,7 +276,7 @@ public class UsdDiscounting3mLibor2Test extends CurveBuildingTests {
         PresentValueDiscountingCalculator.getInstance(), FIXING_TS_WITHOUT_TODAY, FX_MATRIX,
         NOW, Currency.USD);
     // after fixing
-    definitions = DISCOUNTING_AND_LIBOR_BUILDER.copy().getBuilder().getDefinitionsForCurves(NOW);
+    definitions = DISCOUNTING_AND_LIBOR_BUILDER.copy().getBuilder().getDefinitionsForCurves();
     curveConstructionTest(definitions.get(CURVE_NAME_DSC_USD), DSC_LIBOR_SIMULTANEOUS_AFTER_FIXING.getFirst(),
         PresentValueDiscountingCalculator.getInstance(), FIXING_TS_WITH_TODAY, FX_MATRIX,
         NOW, Currency.USD);
@@ -284,7 +284,7 @@ public class UsdDiscounting3mLibor2Test extends CurveBuildingTests {
         PresentValueDiscountingCalculator.getInstance(), FIXING_TS_WITH_TODAY, FX_MATRIX,
         NOW, Currency.USD);
     // discounting only
-    definitions = DISCOUNTING_ONLY_BUILDER.copy().getBuilder().getDefinitionsForCurves(NOW);
+    definitions = DISCOUNTING_ONLY_BUILDER.copy().getBuilder().getDefinitionsForCurves();
     curveConstructionTest(definitions.get(CURVE_NAME_DSC_USD), DSC_BEFORE_FIXING.getFirst(),
         PresentValueDiscountingCalculator.getInstance(), FIXING_TS_WITHOUT_TODAY, FX_MATRIX, NOW, Currency.USD);
     curveConstructionTest(definitions.get(CURVE_NAME_DSC_USD), DSC_AFTER_FIXING.getFirst(),

@@ -47,4 +47,13 @@ public interface BondCurveSetUpInterface extends CurveSetUpInterface {
   @Override
   BondCurveSetUpInterface withKnownBundle(CurveBuildingBlockBundle bundle);
 
+  @Override
+  BondCurveSetUpInterface rootFindingAbsoluteTolerance(double tolerance);
+
+  @Override
+  BondCurveSetUpInterface rootFindingRelativeTolerance(double tolerance);
+
+  @Override
+  BondCurveSetUpInterface rootFindingMaximumSteps(int maxSteps);
+
 }

@@ -45,11 +45,6 @@ public class DirectForwardMethodCurveBuilder extends CurveBuilder<MulticurveProv
       ParSpreadMarketQuoteCurveSensitivityDiscountingCalculator.getInstance();
   private final MulticurveProviderForwardBuildingRepository _curveBuildingRepository;
   private final Map<ZonedDateTime, MultiCurveBundle[]> _cached;
-  //TODO market data should be passed into the build method - painful now because constructing attributes is annoying
-  //TODO bad hard-coding
-  protected final double _absoluteTolerance = 1e-10;
-  protected final double _relativeTolerance = 1e-10;
-  protected final int _maxSteps = 100;
 
   public static DirectForwardMethodCurveSetUp setUp() {
     return new DirectForwardMethodCurveSetUp();
@@ -62,9 +57,12 @@ public class DirectForwardMethodCurveBuilder extends CurveBuilder<MulticurveProv
       final Map<String, List<InstrumentDefinition<?>>> nodes,
       final Map<String, ? extends CurveTypeSetUpInterface> curveGenerators,
       final MulticurveProviderForward knownData,
-      final CurveBuildingBlockBundle knownBundle) {
+      final CurveBuildingBlockBundle knownBundle,
+      final double absoluteTolerance,
+      final double relativeTolerance,
+      final int maxSteps) {
     super(curveNames, discountingCurves, iborCurves, overnightCurves, nodes, curveGenerators, knownData, knownBundle);
-    _curveBuildingRepository = new MulticurveProviderForwardBuildingRepository(_absoluteTolerance, _relativeTolerance, _maxSteps);
+    _curveBuildingRepository = new MulticurveProviderForwardBuildingRepository(absoluteTolerance, relativeTolerance, maxSteps);
     _cached = new HashMap<>();
   }
 

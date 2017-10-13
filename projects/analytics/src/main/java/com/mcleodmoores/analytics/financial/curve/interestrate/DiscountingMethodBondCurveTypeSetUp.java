@@ -3,9 +3,11 @@
  */
 package com.mcleodmoores.analytics.financial.curve.interestrate;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.threeten.bp.LocalDateTime;
 import org.threeten.bp.ZonedDateTime;
 
 import com.mcleodmoores.analytics.financial.index.IborTypeIndex;
@@ -34,7 +36,7 @@ import com.opengamma.util.tuple.Pair;
 public class DiscountingMethodBondCurveTypeSetUp extends DiscountingMethodBondCurveSetUp implements BondCurveTypeSetUpInterface {
   private String _otherCurveName;
   private Interpolator1D _interpolator;
-  private ZonedDateTime[] _dates;
+  private List<LocalDateTime> _dates;
   private boolean _typeAlreadySet;
   private CurveFunction _functionalForm;
   private boolean _continuousInterpolationOnYield;
@@ -48,6 +50,10 @@ public class DiscountingMethodBondCurveTypeSetUp extends DiscountingMethodBondCu
   private List<IborTypeIndex> _iborCurveIndices;
   private List<OvernightIndex> _overnightCurveIndices;
   private List<Pair<Object, LegalEntityFilter<LegalEntity>>> _issuers;
+
+  DiscountingMethodBondCurveTypeSetUp() {
+    super();
+  }
 
   DiscountingMethodBondCurveTypeSetUp(final DiscountingMethodBondCurveSetUp builder) {
     super(builder);
@@ -107,11 +113,14 @@ public class DiscountingMethodBondCurveTypeSetUp extends DiscountingMethodBondCu
   }
 
   @Override
-  public DiscountingMethodBondCurveTypeSetUp usingNodeDates(final ZonedDateTime[] dates) {
+  public DiscountingMethodBondCurveTypeSetUp usingNodeDates(final LocalDateTime... dates) {
     if (_functionalForm != null) {
       throw new IllegalStateException();
     }
-    _dates = dates;
+    if (_dates == null) {
+      _dates = new ArrayList<>();
+    }
+    _dates.addAll(Arrays.asList(dates));
     return this;
   }
 
@@ -206,9 +215,10 @@ public class DiscountingMethodBondCurveTypeSetUp extends DiscountingMethodBondCu
         }
       }
       if (_dates != null) {
-        final double[] meetingTimes = new double[_dates.length];
-        for (int i = 0; i < meetingTimes.length; i++) {
-          meetingTimes[i] = TimeCalculator.getTimeBetween(valuationDate, _dates[i]);
+        final double[] meetingTimes = new double[_dates.size()];
+        int i = 0;
+        for (final LocalDateTime date : _dates) {
+          meetingTimes[i++] = TimeCalculator.getTimeBetween(valuationDate, ZonedDateTime.of(date, valuationDate.getZone()));
         }
         if (_continuousInterpolationOnYield) {
           generator = new GeneratorCurveYieldInterpolatedNode(meetingTimes, _interpolator);
@@ -243,9 +253,10 @@ public class DiscountingMethodBondCurveTypeSetUp extends DiscountingMethodBondCu
       }
     }
     if (_dates != null) {
-      final double[] meetingTimes = new double[_dates.length];
-      for (int i = 0; i < meetingTimes.length; i++) {
-        meetingTimes[i] = TimeCalculator.getTimeBetween(valuationDate, _dates[i]);
+      final double[] meetingTimes = new double[_dates.size()];
+      int i = 0;
+      for (final LocalDateTime date : _dates) {
+        meetingTimes[i++] = TimeCalculator.getTimeBetween(valuationDate, ZonedDateTime.of(date, valuationDate.getZone()));
       }
       if (_continuousInterpolationOnYield) {
         return new GeneratorCurveYieldInterpolatedNode(meetingTimes, _interpolator);

@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.testng.annotations.Test;
+import org.threeten.bp.LocalDateTime;
 import org.threeten.bp.Period;
 import org.threeten.bp.ZonedDateTime;
 
@@ -91,10 +92,10 @@ public class EurDiscounting6mLiborWithCommitteeMeeting1Test extends CurveBuildin
   /** The previous week date */
   private static final ZonedDateTime PREVIOUS_DATE = NOW.minusDays(1);
   /** ECB meeting dates */
-  private static final ZonedDateTime[] MEETING_ECB_DATE = new ZonedDateTime[] {
-      DateUtils.getUTCDate(2013, 3, 7), DateUtils.getUTCDate(2013, 4, 4), DateUtils.getUTCDate(2013, 5, 2), DateUtils.getUTCDate(2013, 6, 6),
-      DateUtils.getUTCDate(2013, 7, 4), DateUtils.getUTCDate(2013, 8, 1), DateUtils.getUTCDate(2013, 9, 5), DateUtils.getUTCDate(2013, 10, 2),
-      DateUtils.getUTCDate(2013, 11, 7), DateUtils.getUTCDate(2013, 12, 5), DateUtils.getUTCDate(2014, 1, 9), DateUtils.getUTCDate(2014, 2, 6)};
+  private static final LocalDateTime[] MEETING_ECB_DATE = new LocalDateTime[] {
+      LocalDateTime.of(2013, 3, 7, 0, 0), LocalDateTime.of(2013, 4, 4, 0, 0), LocalDateTime.of(2013, 5, 2, 0, 0), LocalDateTime.of(2013, 6, 6, 0, 0),
+      LocalDateTime.of(2013, 7, 4, 0, 0), LocalDateTime.of(2013, 8, 1, 0, 0), LocalDateTime.of(2013, 9, 5, 0, 0), LocalDateTime.of(2013, 10, 2, 0, 0),
+      LocalDateTime.of(2013, 11, 7, 0, 0), LocalDateTime.of(2013, 12, 5, 0, 0), LocalDateTime.of(2014, 1, 9, 0, 0), LocalDateTime.of(2014, 2, 6, 0, 0)};
   /** Overnight rate fixing time series after today's fixing */
   private static final ZonedDateTimeDoubleTimeSeries TS_ON_EUR_WITH_TODAY =
       ImmutableZonedDateTimeDoubleTimeSeries.ofUTC(new ZonedDateTime[] { PREVIOUS_DATE, NOW }, new double[] {0.07, 0.08 });
@@ -197,14 +198,14 @@ public class EurDiscounting6mLiborWithCommitteeMeeting1Test extends CurveBuildin
   public void testInstrumentsInCurvePriceToZero() {
     Map<String, InstrumentDefinition<?>[]> definitions = BUILDER_FOR_TEST.copy()
         .getBuilder()
-        .getDefinitionsForCurves(NOW);
+        .getDefinitionsForCurves();
     curveConstructionTest(definitions.get(CURVE_NAME_DSC_EUR), BEFORE_TODAYS_FIXING.getFirst(),
         PresentValueDiscountingCalculator.getInstance(), FIXING_TS_WITHOUT_TODAY, FX_MATRIX, NOW, Currency.EUR);
     curveConstructionTest(definitions.get(CURVE_NAME_FWD6_EUR), BEFORE_TODAYS_FIXING.getFirst(),
         PresentValueDiscountingCalculator.getInstance(), FIXING_TS_WITHOUT_TODAY, FX_MATRIX, NOW, Currency.EUR);
     definitions = BUILDER_FOR_TEST.copy()
         .getBuilder()
-        .getDefinitionsForCurves(NOW);
+        .getDefinitionsForCurves();
     curveConstructionTest(definitions.get(CURVE_NAME_DSC_EUR), AFTER_TODAYS_FIXING.getFirst(),
         PresentValueDiscountingCalculator.getInstance(), FIXING_TS_WITH_TODAY, FX_MATRIX, NOW, Currency.EUR);
     curveConstructionTest(definitions.get(CURVE_NAME_FWD6_EUR), AFTER_TODAYS_FIXING.getFirst(),

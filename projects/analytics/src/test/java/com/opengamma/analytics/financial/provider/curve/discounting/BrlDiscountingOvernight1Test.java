@@ -141,10 +141,10 @@ public class BrlDiscountingOvernight1Test extends CurveBuildingTests {
   public void testInstrumentsInCurvePriceToZero() {
     final Map<String, InstrumentDefinition<?>[]> definitionsForCurvesBeforeFixing = BUILDER_FOR_TEST.copy()
         .getBuilder()
-        .getDefinitionsForCurves(NOW);
+        .getDefinitionsForCurves();
     final Map<String, InstrumentDefinition<?>[]> definitionsForCurvesAfterFixing = BUILDER_FOR_TEST.copy()
         .getBuilder()
-        .getDefinitionsForCurves(NOW);
+        .getDefinitionsForCurves();
     curveConstructionTest(definitionsForCurvesBeforeFixing.get(CURVE_NAME_DSC_BRL),
         BEFORE_TODAYS_FIXING.getFirst(), PresentValueDiscountingCalculator.getInstance(), FIXING_TS_WITHOUT_TODAY, FX_MATRIX, NOW, Currency.BRL);
     curveConstructionTest(definitionsForCurvesAfterFixing.get(CURVE_NAME_DSC_BRL),

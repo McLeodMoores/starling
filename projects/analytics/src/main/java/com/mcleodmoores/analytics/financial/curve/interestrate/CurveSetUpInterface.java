@@ -36,4 +36,9 @@ public interface CurveSetUpInterface {
 
   CurveSetUpInterface withKnownBundle(CurveBuildingBlockBundle bundle);
 
+  CurveSetUpInterface rootFindingAbsoluteTolerance(double tolerance);
+
+  CurveSetUpInterface rootFindingRelativeTolerance(double tolerance);
+
+  CurveSetUpInterface rootFindingMaximumSteps(int maxSteps);
 }

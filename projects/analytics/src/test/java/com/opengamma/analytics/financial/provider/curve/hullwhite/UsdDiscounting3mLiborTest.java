@@ -284,20 +284,20 @@ public class UsdDiscounting3mLiborTest extends CurveBuildingTests {
     // discounting then LIBOR
     Map<String, InstrumentDefinition<?>[]> definitions;
     // before fixing
-    definitions = CONSECUTIVE_BUILDER.copy().getBuilder().getDefinitionsForCurves(NOW);
+    definitions = CONSECUTIVE_BUILDER.copy().getBuilder().getDefinitionsForCurves();
     curveConstructionTest(definitions.get(CURVE_NAME_DSC_USD), CONSECUTIVE_BEFORE_FIXING.getFirst(),
         PresentValueHullWhiteCalculator.getInstance(), FIXING_TS_WITHOUT_TODAY, FX_MATRIX, NOW, Currency.USD, EPS);
     curveConstructionTest(definitions.get(CURVE_NAME_FWD3_USD), CONSECUTIVE_BEFORE_FIXING.getFirst(),
         PresentValueHullWhiteCalculator.getInstance(), FIXING_TS_WITHOUT_TODAY, FX_MATRIX, NOW, Currency.USD, EPS);
     // after fixing
-    definitions = CONSECUTIVE_BUILDER.copy().getBuilder().getDefinitionsForCurves(NOW);
+    definitions = CONSECUTIVE_BUILDER.copy().getBuilder().getDefinitionsForCurves();
     curveConstructionTest(definitions.get(CURVE_NAME_DSC_USD), CONSECUTIVE_AFTER_FIXING.getFirst(),
         PresentValueHullWhiteCalculator.getInstance(), FIXING_TS_WITH_TODAY, FX_MATRIX, NOW, Currency.USD, EPS);
     curveConstructionTest(definitions.get(CURVE_NAME_FWD3_USD), CONSECUTIVE_AFTER_FIXING.getFirst(),
         PresentValueHullWhiteCalculator.getInstance(), FIXING_TS_WITH_TODAY, FX_MATRIX, NOW, Currency.USD, EPS);
     // discounting and LIBOR
     // before fixing
-    definitions = SIMULTANEOUS_BUILDER.copy().getBuilder().getDefinitionsForCurves(NOW);
+    definitions = SIMULTANEOUS_BUILDER.copy().getBuilder().getDefinitionsForCurves();
     curveConstructionTest(definitions.get(CURVE_NAME_DSC_USD), SIMULTANEOUS_BEFORE_FIXING.getFirst(),
         PresentValueHullWhiteCalculator.getInstance(), FIXING_TS_WITHOUT_TODAY, FX_MATRIX,
         NOW, Currency.USD, EPS);
@@ -305,7 +305,7 @@ public class UsdDiscounting3mLiborTest extends CurveBuildingTests {
         PresentValueHullWhiteCalculator.getInstance(), FIXING_TS_WITHOUT_TODAY, FX_MATRIX,
         NOW, Currency.USD, EPS);
     // after fixing
-    definitions = SIMULTANEOUS_BUILDER.copy().getBuilder().getDefinitionsForCurves(NOW);
+    definitions = SIMULTANEOUS_BUILDER.copy().getBuilder().getDefinitionsForCurves();
     curveConstructionTest(definitions.get(CURVE_NAME_DSC_USD), SIMULTANEOUS_AFTER_FIXING.getFirst(),
         PresentValueHullWhiteCalculator.getInstance(), FIXING_TS_WITH_TODAY, FX_MATRIX,
         NOW, Currency.USD, EPS);

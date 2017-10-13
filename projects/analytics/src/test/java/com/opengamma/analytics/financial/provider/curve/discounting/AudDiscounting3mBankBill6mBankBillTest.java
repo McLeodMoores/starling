@@ -287,7 +287,7 @@ public class AudDiscounting3mBankBill6mBankBillTest extends CurveBuildingTests {
     // discounting then 3m then 6m
     Map<String, InstrumentDefinition<?>[]> definitions;
     // before fixing
-    definitions = DISCOUNTING_THEN_BANK_BILLS_BUILDER.copy().getBuilder().getDefinitionsForCurves(NOW);
+    definitions = DISCOUNTING_THEN_BANK_BILLS_BUILDER.copy().getBuilder().getDefinitionsForCurves();
     curveConstructionTest(definitions.get(CURVE_NAME_DSC_AUD), DSC_THEN_BANK_BILLS_BEFORE_FIXING.getFirst(), PresentValueDiscountingCalculator.getInstance(),
         FIXING_TS_WITHOUT_TODAY, FX_MATRIX, NOW, Currency.AUD);
     curveConstructionTest(definitions.get(CURVE_NAME_FWD3_AUD), DSC_THEN_BANK_BILLS_BEFORE_FIXING.getFirst(), PresentValueDiscountingCalculator.getInstance(),
@@ -295,7 +295,7 @@ public class AudDiscounting3mBankBill6mBankBillTest extends CurveBuildingTests {
     curveConstructionTest(definitions.get(CURVE_NAME_FWD6_AUD), DSC_THEN_BANK_BILLS_BEFORE_FIXING.getFirst(), PresentValueDiscountingCalculator.getInstance(),
         FIXING_TS_WITHOUT_TODAY, FX_MATRIX, NOW, Currency.AUD);
     // after fixing
-    definitions = DISCOUNTING_THEN_BANK_BILLS_BUILDER.copy().getBuilder().getDefinitionsForCurves(NOW);
+    definitions = DISCOUNTING_THEN_BANK_BILLS_BUILDER.copy().getBuilder().getDefinitionsForCurves();
     curveConstructionTest(definitions.get(CURVE_NAME_DSC_AUD), DSC_THEN_BANK_BILLS_AFTER_FIXING.getFirst(),
         PresentValueDiscountingCalculator.getInstance(), FIXING_TS_WITH_TODAY, FX_MATRIX, NOW, Currency.AUD);
     curveConstructionTest(definitions.get(CURVE_NAME_FWD3_AUD), DSC_THEN_BANK_BILLS_AFTER_FIXING.getFirst(),
@@ -304,7 +304,7 @@ public class AudDiscounting3mBankBill6mBankBillTest extends CurveBuildingTests {
         PresentValueDiscountingCalculator.getInstance(), FIXING_TS_WITH_TODAY, FX_MATRIX, NOW, Currency.AUD);
     // discounting and bank bills
     // before fixing
-    definitions = DISCOUNTING_AND_BANK_BILLS_BUILDER.copy().getBuilder().getDefinitionsForCurves(NOW);
+    definitions = DISCOUNTING_AND_BANK_BILLS_BUILDER.copy().getBuilder().getDefinitionsForCurves();
     curveConstructionTest(definitions.get(CURVE_NAME_DSC_AUD), DSC_BANK_BILLS_SIMULTANEOUS_BEFORE_FIXING.getFirst(),
         PresentValueDiscountingCalculator.getInstance(), FIXING_TS_WITHOUT_TODAY, FX_MATRIX, NOW, Currency.AUD);
     curveConstructionTest(definitions.get(CURVE_NAME_FWD3_AUD), DSC_BANK_BILLS_SIMULTANEOUS_BEFORE_FIXING.getFirst(),
@@ -312,7 +312,7 @@ public class AudDiscounting3mBankBill6mBankBillTest extends CurveBuildingTests {
     curveConstructionTest(definitions.get(CURVE_NAME_FWD6_AUD), DSC_BANK_BILLS_SIMULTANEOUS_BEFORE_FIXING.getFirst(),
         PresentValueDiscountingCalculator.getInstance(), FIXING_TS_WITHOUT_TODAY, FX_MATRIX, NOW, Currency.AUD);
     // after fixing
-    definitions = DISCOUNTING_AND_BANK_BILLS_BUILDER.copy().getBuilder().getDefinitionsForCurves(NOW);
+    definitions = DISCOUNTING_AND_BANK_BILLS_BUILDER.copy().getBuilder().getDefinitionsForCurves();
     curveConstructionTest(definitions.get(CURVE_NAME_DSC_AUD), DSC_BANK_BILLS_SIMULTANEOUS_AFTER_FIXING.getFirst(),
         PresentValueDiscountingCalculator.getInstance(), FIXING_TS_WITH_TODAY, FX_MATRIX, NOW, Currency.AUD);
     curveConstructionTest(definitions.get(CURVE_NAME_FWD3_AUD), DSC_BANK_BILLS_SIMULTANEOUS_AFTER_FIXING.getFirst(),

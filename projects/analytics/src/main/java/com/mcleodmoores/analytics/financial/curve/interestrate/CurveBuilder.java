@@ -37,7 +37,6 @@ public abstract class CurveBuilder<T extends ParameterProviderInterface> {
   private final CurveBuildingBlockBundle _knownBundle;
   private final T _knownData;
   private final Map<String, List<InstrumentDefinition<?>>> _nodes;
-  private final Map<ZonedDateTime, MultiCurveBundle[]> _cached;
 
   CurveBuilder(final List<List<String>> curveNames,
       final List<Pair<String, UniqueIdentifiable>> discountingCurves,
@@ -55,12 +54,11 @@ public abstract class CurveBuilder<T extends ParameterProviderInterface> {
     _curveGenerators = new HashMap<>(curveGenerators);
     _knownData = knownData == null ? null : (T) knownData.copy();
     _knownBundle = knownBundle; // TODO copy this
-    _cached = new HashMap<>();
   }
 
   //TODO cache definitions on LocalDate
   public Pair<T, CurveBuildingBlockBundle> buildCurves(final ZonedDateTime valuationDate, final Map<Index, ZonedDateTimeDoubleTimeSeries> fixings) {
-    MultiCurveBundle<GeneratorYDCurve>[] curveBundles = _cached.get(valuationDate);
+    MultiCurveBundle<GeneratorYDCurve>[] curveBundles = null;
     if (curveBundles == null) {
       final Map<String, GeneratorYDCurve> generatorForCurve = new HashMap<>();
       curveBundles = new MultiCurveBundle[_curveNames.size()];
@@ -88,17 +86,17 @@ public abstract class CurveBuilder<T extends ParameterProviderInterface> {
         }
         curveBundles[i] = new MultiCurveBundle<>(unitBundle);
       }
-      _cached.put(valuationDate, curveBundles);
     }
     return buildCurves(curveBundles, _knownData, _knownBundle, _discountingCurves, _iborCurves, _overnightCurves);
   }
 
-  abstract Pair<T, CurveBuildingBlockBundle> buildCurves(MultiCurveBundle[] curveBundles, T knownData, CurveBuildingBlockBundle knownBundle,
-      List<Pair<String, UniqueIdentifiable>> discountingCurves, List<Pair<String, List<IborTypeIndex>>> iborCurves,
+  abstract Pair<T, CurveBuildingBlockBundle> buildCurves(
+      MultiCurveBundle[] curveBundles, T knownData, CurveBuildingBlockBundle knownBundle,
+      List<Pair<String, UniqueIdentifiable>> discountingCurves,
+      List<Pair<String, List<IborTypeIndex>>> iborCurves,
       List<Pair<String, List<OvernightIndex>>> overnightCurves);
 
-  public Map<String, InstrumentDefinition<?>[]> getDefinitionsForCurves(final ZonedDateTime valuationDate) {
-    _cached.clear();
+  public Map<String, InstrumentDefinition<?>[]> getDefinitionsForCurves() {
     final Map<String, InstrumentDefinition<?>[]> definitionsForCurves = new HashMap<>();
     for (int i = 0; i < _curveNames.size(); i++) {
       final List<String> curveNamesForUnit = _curveNames.get(i);
@@ -145,10 +143,6 @@ public abstract class CurveBuilder<T extends ParameterProviderInterface> {
 
   Map<String, List<InstrumentDefinition<?>>> getNodes() {
     return _nodes;
-  }
-
-  Map<ZonedDateTime, MultiCurveBundle[]> getCached() {
-    return _cached;
   }
 
 }

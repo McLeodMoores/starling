@@ -32,10 +32,6 @@ public class DiscountingMethodCurveBuilder extends CurveBuilder<MulticurveProvid
   private static final ParSpreadMarketQuoteCurveSensitivityDiscountingCalculator SENSITIVITY_CALCULATOR =
       ParSpreadMarketQuoteCurveSensitivityDiscountingCalculator.getInstance();
   private final MulticurveDiscountBuildingRepository _curveBuildingRepository;
-  //TODO bad hard-coding
-  protected final double _absoluteTolerance = 1e-12;
-  protected final double _relativeTolerance = 1e-12;
-  protected final int _maxSteps = 100;
 
   public static DiscountingMethodCurveSetUp setUp() {
     return new DiscountingMethodCurveSetUp();
@@ -48,13 +44,17 @@ public class DiscountingMethodCurveBuilder extends CurveBuilder<MulticurveProvid
       final Map<String, List<InstrumentDefinition<?>>> nodes,
       final Map<String, ? extends CurveTypeSetUpInterface> curveGenerators,
       final MulticurveProviderDiscount knownData,
-      final CurveBuildingBlockBundle knownBundle) {
+      final CurveBuildingBlockBundle knownBundle,
+      final double absoluteTolerance,
+      final double relativeTolerance,
+      final int maxSteps) {
     super(curveNames, discountingCurves, iborCurves, overnightCurves, nodes, curveGenerators, knownData, knownBundle);
-    _curveBuildingRepository = new MulticurveDiscountBuildingRepository(_absoluteTolerance, _relativeTolerance, _maxSteps);
+    _curveBuildingRepository = new MulticurveDiscountBuildingRepository(absoluteTolerance, relativeTolerance, maxSteps);
   }
 
   @Override
-  Pair<MulticurveProviderDiscount, CurveBuildingBlockBundle> buildCurves(final MultiCurveBundle[] curveBundles,
+  Pair<MulticurveProviderDiscount, CurveBuildingBlockBundle> buildCurves(
+      final MultiCurveBundle[] curveBundles,
       final MulticurveProviderDiscount knownData, final CurveBuildingBlockBundle knownBundle,
       final List<Pair<String, UniqueIdentifiable>> discountingCurves,
       final List<Pair<String, List<IborTypeIndex>>> iborCurves,

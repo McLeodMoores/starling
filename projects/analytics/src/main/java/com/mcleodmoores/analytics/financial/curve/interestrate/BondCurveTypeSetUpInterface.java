@@ -3,6 +3,7 @@
  */
 package com.mcleodmoores.analytics.financial.curve.interestrate;
 
+import org.threeten.bp.LocalDateTime;
 import org.threeten.bp.ZonedDateTime;
 
 import com.mcleodmoores.analytics.financial.index.IborTypeIndex;
@@ -43,8 +44,8 @@ public interface BondCurveTypeSetUpInterface extends CurveTypeSetUpInterface {
 
   //TODO local dates would be better
   @Override
-  BondCurveTypeSetUpInterface usingNodeDates(ZonedDateTime[] dates);
 
+  BondCurveTypeSetUpInterface usingNodeDates(LocalDateTime... dates);
   @Override
   BondCurveTypeSetUpInterface continuousInterpolationOnYield();
 

@@ -6,6 +6,7 @@ package com.mcleodmoores.analytics.financial.curve.interestrate;
 import java.util.Arrays;
 import java.util.List;
 
+import org.threeten.bp.LocalDateTime;
 import org.threeten.bp.ZonedDateTime;
 
 import com.mcleodmoores.analytics.financial.index.IborTypeIndex;
@@ -27,18 +28,15 @@ import com.opengamma.id.UniqueIdentifiable;
  *
  */
 public class DirectForwardMethodCurveTypeSetUp extends DirectForwardMethodCurveSetUp implements CurveTypeSetUpInterface {
-  private String _otherCurveName;
+  private String _baseCurveName;
   private Interpolator1D _interpolator;
-  private ZonedDateTime[] _dates;
+  private LocalDateTime[] _dates;
   private boolean _typeAlreadySet;
   private CurveFunction _functionalForm;
   private boolean _continuousInterpolationOnYield;
   private boolean _periodicInterpolationOnYield;
   private int _periodsPerYear;
   private boolean _continuousInterpolationOnDiscountFactors;
-  private boolean _timeCalculatorAlreadySet;
-  private boolean _maturityCalculator;
-  private boolean _lastFixingEndCalculator;
   private UniqueIdentifiable _discountingCurveId;
   private List<IborTypeIndex> _iborCurveIndices;
   private List<OvernightIndex> _overnightCurveIndices;
@@ -96,12 +94,12 @@ public class DirectForwardMethodCurveTypeSetUp extends DirectForwardMethodCurveS
 
   @Override
   public DirectForwardMethodCurveTypeSetUp asSpreadOver(final String otherCurveName) {
-    _otherCurveName = otherCurveName;
+    _baseCurveName = otherCurveName;
     return this;
   }
 
   @Override
-  public DirectForwardMethodCurveTypeSetUp usingNodeDates(final ZonedDateTime[] dates) {
+  public DirectForwardMethodCurveTypeSetUp usingNodeDates(final LocalDateTime[] dates) {
     if (_functionalForm != null) {
       throw new IllegalStateException();
     }
@@ -180,7 +178,7 @@ public class DirectForwardMethodCurveTypeSetUp extends DirectForwardMethodCurveS
   }
 
   public GeneratorYDCurve buildCurveGenerator(final ZonedDateTime valuationDate, final InstrumentDerivativeVisitor<Object, Double> nodeTimeCalculator) {
-    if (_otherCurveName != null) {
+    if (_baseCurveName != null) {
       //TODO duplicated code
       GeneratorYDCurve generator;
       if (_functionalForm != null) {
@@ -194,7 +192,7 @@ public class DirectForwardMethodCurveTypeSetUp extends DirectForwardMethodCurveS
       if (_dates != null) {
         final double[] meetingTimes = new double[_dates.length];
         for (int i = 0; i < meetingTimes.length; i++) {
-          meetingTimes[i] = TimeCalculator.getTimeBetween(valuationDate, _dates[i]);
+          meetingTimes[i] = TimeCalculator.getTimeBetween(valuationDate, ZonedDateTime.of(_dates[i], valuationDate.getZone()));
         }
         if (_continuousInterpolationOnYield) {
           generator = new GeneratorCurveYieldInterpolatedNode(meetingTimes, _interpolator);
@@ -218,7 +216,7 @@ public class DirectForwardMethodCurveTypeSetUp extends DirectForwardMethodCurveS
         generator = new GeneratorCurveYieldInterpolated(nodeTimeCalculator, _interpolator);
       }
       //TODO positive or negative spread
-      return new GeneratorCurveAddYieldExisiting(generator, false, _otherCurveName);
+      return new GeneratorCurveAddYieldExisiting(generator, false, _baseCurveName);
     }
     if (_functionalForm != null) {
       switch (_functionalForm) {
@@ -231,7 +229,7 @@ public class DirectForwardMethodCurveTypeSetUp extends DirectForwardMethodCurveS
     if (_dates != null) {
       final double[] meetingTimes = new double[_dates.length];
       for (int i = 0; i < meetingTimes.length; i++) {
-        meetingTimes[i] = TimeCalculator.getTimeBetween(valuationDate, _dates[i]);
+        meetingTimes[i] = TimeCalculator.getTimeBetween(valuationDate, ZonedDateTime.of(_dates[i], valuationDate.getZone()));
       }
       if (_continuousInterpolationOnYield) {
         return new GeneratorCurveYieldInterpolatedNode(meetingTimes, _interpolator);

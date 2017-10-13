@@ -36,6 +36,9 @@ public class DiscountingMethodCurveSetUp implements CurveSetUpInterface {
   private CurveBuildingBlockBundle _knownBundle;
   private final Map<String, List<InstrumentDefinition<?>>> _nodes;
   private FXMatrix _fxMatrix;
+  private double _absoluteTolerance = 1e-12;
+  private double _relativeTolerance = 1e-12;
+  private int _maxSteps = 100;
 
   protected DiscountingMethodCurveSetUp() {
     _curveNames = new ArrayList<>();
@@ -56,6 +59,9 @@ public class DiscountingMethodCurveSetUp implements CurveSetUpInterface {
     _nodes = setup._nodes;
     _fxMatrix = setup._fxMatrix;
     _knownBundle = setup._knownBundle;
+    _absoluteTolerance = setup._absoluteTolerance;
+    _relativeTolerance = setup._relativeTolerance;
+    _maxSteps = setup._maxSteps;
   }
 
   protected DiscountingMethodCurveSetUp(final List<List<String>> curveNames,
@@ -63,13 +69,19 @@ public class DiscountingMethodCurveSetUp implements CurveSetUpInterface {
       final Map<String, DiscountingMethodCurveTypeSetUp> curveTypes,
       final Map<DiscountingMethodPreConstructedCurveTypeSetUp, YieldAndDiscountCurve> preConstructedCurves,
       final FXMatrix fxMatrix,
-      final CurveBuildingBlockBundle knownBundle) {
+      final CurveBuildingBlockBundle knownBundle,
+      final double absoluteTolerance,
+      final double relativeTolerance,
+      final int maxSteps) {
     _curveNames = new ArrayList<>(curveNames);
     _nodes = new HashMap<>(nodes);
     _curveTypes = new HashMap<>(curveTypes);
     _preConstructedCurves = new HashMap<>(preConstructedCurves);
     _fxMatrix = fxMatrix;
     _knownBundle = knownBundle;
+    _absoluteTolerance = absoluteTolerance;
+    _relativeTolerance = relativeTolerance;
+    _maxSteps = maxSteps;
   }
 
   @Override
@@ -117,13 +129,15 @@ public class DiscountingMethodCurveSetUp implements CurveSetUpInterface {
       }
     }
     final MulticurveProviderDiscount knownData = new MulticurveProviderDiscount(knownDiscountingCurves, knownIborCurves, knownOvernightCurves, _fxMatrix);
-    return new DiscountingMethodCurveBuilder(_curveNames, discountingCurves, iborCurves, overnightCurves, _nodes, _curveTypes, knownData, _knownBundle);
+    return new DiscountingMethodCurveBuilder(_curveNames, discountingCurves, iborCurves, overnightCurves, _nodes, _curveTypes, knownData, _knownBundle,
+        _absoluteTolerance, _relativeTolerance, _maxSteps);
   }
 
   @Override
   public DiscountingMethodCurveSetUp copy() {
     // TODO not a copy
-    return new DiscountingMethodCurveSetUp(_curveNames, _nodes, _curveTypes, _preConstructedCurves, _fxMatrix, _knownBundle);
+    return new DiscountingMethodCurveSetUp(_curveNames, _nodes, _curveTypes, _preConstructedCurves, _fxMatrix,
+        _knownBundle, _absoluteTolerance, _relativeTolerance, _maxSteps);
   }
 
   @Override
@@ -199,6 +213,24 @@ public class DiscountingMethodCurveSetUp implements CurveSetUpInterface {
   @Override
   public DiscountingMethodCurveSetUp withKnownBundle(final CurveBuildingBlockBundle bundle) {
     _knownBundle = bundle;
+    return this;
+  }
+
+  @Override
+  public CurveSetUpInterface rootFindingAbsoluteTolerance(final double tolerance) {
+    _absoluteTolerance = tolerance;
+    return this;
+  }
+
+  @Override
+  public CurveSetUpInterface rootFindingRelativeTolerance(final double tolerance) {
+    _relativeTolerance = tolerance;
+    return this;
+  }
+
+  @Override
+  public CurveSetUpInterface rootFindingMaximumSteps(final int maxSteps) {
+    _maxSteps = maxSteps;
     return this;
   }
 
