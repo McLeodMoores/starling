@@ -3,6 +3,8 @@
  */
 package com.mcleodmoores.analytics.financial.curve.interestrate;
 
+import java.util.List;
+
 import com.mcleodmoores.analytics.financial.index.IborTypeIndex;
 import com.mcleodmoores.analytics.financial.index.OvernightIndex;
 import com.opengamma.id.UniqueIdentifiable;
@@ -18,4 +20,9 @@ public interface PreConstructedCurveTypeSetUp {
 
   PreConstructedCurveTypeSetUp forIndex(OvernightIndex... indices);
 
+  UniqueIdentifiable getDiscountingCurveId();
+
+  List<IborTypeIndex> getIborCurveIndices();
+
+  List<OvernightIndex> getOvernightCurveIndices();
 }

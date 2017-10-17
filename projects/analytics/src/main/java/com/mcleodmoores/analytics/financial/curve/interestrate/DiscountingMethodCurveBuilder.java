@@ -9,10 +9,12 @@ import java.util.Map;
 
 import com.mcleodmoores.analytics.financial.index.IborTypeIndex;
 import com.mcleodmoores.analytics.financial.index.OvernightIndex;
+import com.opengamma.analytics.financial.forex.method.FXMatrix;
 import com.opengamma.analytics.financial.instrument.InstrumentDefinition;
 import com.opengamma.analytics.financial.instrument.index.IborIndex;
 import com.opengamma.analytics.financial.instrument.index.IndexConverter;
 import com.opengamma.analytics.financial.instrument.index.IndexON;
+import com.opengamma.analytics.financial.model.interestrate.curve.YieldAndDiscountCurve;
 import com.opengamma.analytics.financial.provider.calculator.discounting.ParSpreadMarketQuoteCurveSensitivityDiscountingCalculator;
 import com.opengamma.analytics.financial.provider.calculator.discounting.ParSpreadMarketQuoteDiscountingCalculator;
 import com.opengamma.analytics.financial.provider.curve.CurveBuildingBlockBundle;
@@ -26,7 +28,7 @@ import com.opengamma.util.tuple.Pair;
 /**
  *
  */
-public class DiscountingMethodCurveBuilder extends CurveBuilder<MulticurveProviderDiscount> {
+public class DiscountingMethodCurveBuilder extends CurveBuilder {
   private static final ParSpreadMarketQuoteDiscountingCalculator CALCULATOR =
       ParSpreadMarketQuoteDiscountingCalculator.getInstance();
   private static final ParSpreadMarketQuoteCurveSensitivityDiscountingCalculator SENSITIVITY_CALCULATOR =
@@ -42,13 +44,14 @@ public class DiscountingMethodCurveBuilder extends CurveBuilder<MulticurveProvid
       final List<Pair<String, List<IborTypeIndex>>> iborCurves,
       final List<Pair<String, List<OvernightIndex>>> overnightCurves,
       final Map<String, List<InstrumentDefinition<?>>> nodes,
-      final Map<String, ? extends CurveTypeSetUpInterface> curveGenerators,
-      final MulticurveProviderDiscount knownData,
+      final Map<String, ? extends CurveTypeSetUpInterface> curveTypes,
+      final FXMatrix fxMatrix,
+      final Map<? extends PreConstructedCurveTypeSetUp, YieldAndDiscountCurve> preConstructedCurves,
       final CurveBuildingBlockBundle knownBundle,
       final double absoluteTolerance,
       final double relativeTolerance,
       final int maxSteps) {
-    super(curveNames, discountingCurves, iborCurves, overnightCurves, nodes, curveGenerators, knownData, knownBundle);
+    super(curveNames, discountingCurves, iborCurves, overnightCurves, nodes, curveTypes, fxMatrix, preConstructedCurves, knownBundle);
     _curveBuildingRepository = new MulticurveDiscountBuildingRepository(absoluteTolerance, relativeTolerance, maxSteps);
   }
 

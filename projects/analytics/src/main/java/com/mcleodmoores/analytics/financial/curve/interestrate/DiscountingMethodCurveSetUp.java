@@ -129,8 +129,8 @@ public class DiscountingMethodCurveSetUp implements CurveSetUpInterface {
       }
     }
     final MulticurveProviderDiscount knownData = new MulticurveProviderDiscount(knownDiscountingCurves, knownIborCurves, knownOvernightCurves, _fxMatrix);
-    return new DiscountingMethodCurveBuilder(_curveNames, discountingCurves, iborCurves, overnightCurves, _nodes, _curveTypes, knownData, _knownBundle,
-        _absoluteTolerance, _relativeTolerance, _maxSteps);
+    return new DiscountingMethodCurveBuilder(_curveNames, discountingCurves, iborCurves, overnightCurves, _nodes, _curveTypes,
+        _fxMatrix, _preConstructedCurves, _knownBundle, _absoluteTolerance, _relativeTolerance, _maxSteps);
   }
 
   @Override
