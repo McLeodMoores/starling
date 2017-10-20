@@ -40,15 +40,18 @@ public class DirectForwardMethodPreConstructedCurveTypeSetUp extends DirectForwa
     return this;
   }
 
-  UniqueIdentifiable getDiscountingCurveId() {
+  @Override
+  public UniqueIdentifiable getDiscountingCurveId() {
     return _discountingCurveId;
   }
 
-  List<IborTypeIndex> getIborCurveIndices() {
+  @Override
+  public List<IborTypeIndex> getIborCurveIndices() {
     return _iborCurveIndices;
   }
 
-  List<OvernightIndex> getOvernightCurveIndices() {
+  @Override
+  public List<OvernightIndex> getOvernightCurveIndices() {
     return _overnightCurveIndices;
   }
 

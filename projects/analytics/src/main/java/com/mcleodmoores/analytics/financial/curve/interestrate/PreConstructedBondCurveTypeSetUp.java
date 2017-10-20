@@ -3,6 +3,8 @@
  */
 package com.mcleodmoores.analytics.financial.curve.interestrate;
 
+import java.util.List;
+
 import com.mcleodmoores.analytics.financial.index.IborTypeIndex;
 import com.mcleodmoores.analytics.financial.index.OvernightIndex;
 import com.opengamma.analytics.financial.legalentity.LegalEntity;
@@ -25,4 +27,7 @@ public interface PreConstructedBondCurveTypeSetUp extends PreConstructedCurveTyp
   PreConstructedBondCurveTypeSetUp forIndex(OvernightIndex... indices);
 
   PreConstructedBondCurveTypeSetUp forIssuer(Pair<Object, LegalEntityFilter<LegalEntity>>... issuer);
+
+  List<Pair<Object, LegalEntityFilter<LegalEntity>>> getIssuers();
+
 }

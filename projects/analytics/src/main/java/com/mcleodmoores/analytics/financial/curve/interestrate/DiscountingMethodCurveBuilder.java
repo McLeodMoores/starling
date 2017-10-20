@@ -28,7 +28,7 @@ import com.opengamma.util.tuple.Pair;
 /**
  *
  */
-public class DiscountingMethodCurveBuilder extends CurveBuilder {
+public class DiscountingMethodCurveBuilder extends CurveBuilder<MulticurveProviderDiscount> {
   private static final ParSpreadMarketQuoteDiscountingCalculator CALCULATOR =
       ParSpreadMarketQuoteDiscountingCalculator.getInstance();
   private static final ParSpreadMarketQuoteCurveSensitivityDiscountingCalculator SENSITIVITY_CALCULATOR =
@@ -58,10 +58,14 @@ public class DiscountingMethodCurveBuilder extends CurveBuilder {
   @Override
   Pair<MulticurveProviderDiscount, CurveBuildingBlockBundle> buildCurves(
       final MultiCurveBundle[] curveBundles,
-      final MulticurveProviderDiscount knownData, final CurveBuildingBlockBundle knownBundle,
+      final CurveBuildingBlockBundle knownBundle,
       final List<Pair<String, UniqueIdentifiable>> discountingCurves,
       final List<Pair<String, List<IborTypeIndex>>> iborCurves,
-      final List<Pair<String, List<OvernightIndex>>> overnightCurves) {
+      final List<Pair<String, List<OvernightIndex>>> overnightCurves,
+      final FXMatrix fxMatrix,
+      final Map<Currency, YieldAndDiscountCurve> knownDiscountingCurves,
+      final Map<IborIndex, YieldAndDiscountCurve> knownIborCurves,
+      final Map<IndexON, YieldAndDiscountCurve> knownOvernightCurves) {
     final LinkedHashMap<String, Currency> convertedDiscountingCurves = new LinkedHashMap<>();
     for (final Pair<String, UniqueIdentifiable> entry : discountingCurves) {
       if (entry.getValue() instanceof Currency) {
@@ -88,6 +92,7 @@ public class DiscountingMethodCurveBuilder extends CurveBuilder {
       }
       convertedOvernightCurves.put(entry.getKey(), converted);
     }
+    final MulticurveProviderDiscount knownData = new MulticurveProviderDiscount(knownDiscountingCurves, knownIborCurves, knownOvernightCurves, fxMatrix);
     if (knownBundle != null) {
       return _curveBuildingRepository.makeCurvesFromDerivatives(curveBundles, knownData, knownBundle, convertedDiscountingCurves,
           convertedIborCurves, convertedOvernightCurves, CALCULATOR,

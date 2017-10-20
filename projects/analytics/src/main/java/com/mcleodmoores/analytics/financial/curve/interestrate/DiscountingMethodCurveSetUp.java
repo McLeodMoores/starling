@@ -19,7 +19,6 @@ import com.opengamma.analytics.financial.instrument.index.IndexConverter;
 import com.opengamma.analytics.financial.instrument.index.IndexON;
 import com.opengamma.analytics.financial.model.interestrate.curve.YieldAndDiscountCurve;
 import com.opengamma.analytics.financial.provider.curve.CurveBuildingBlockBundle;
-import com.opengamma.analytics.financial.provider.description.interestrate.MulticurveProviderDiscount;
 import com.opengamma.id.UniqueIdentifiable;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
@@ -40,7 +39,7 @@ public class DiscountingMethodCurveSetUp implements CurveSetUpInterface {
   private double _relativeTolerance = 1e-12;
   private int _maxSteps = 100;
 
-  protected DiscountingMethodCurveSetUp() {
+  DiscountingMethodCurveSetUp() {
     _curveNames = new ArrayList<>();
     _curveTypes = new HashMap<>();
     _preConstructedCurves = new HashMap<>();
@@ -49,7 +48,7 @@ public class DiscountingMethodCurveSetUp implements CurveSetUpInterface {
     _knownBundle = null;
   }
 
-  protected DiscountingMethodCurveSetUp(final DiscountingMethodCurveSetUp setup) {
+  DiscountingMethodCurveSetUp(final DiscountingMethodCurveSetUp setup) {
     ArgumentChecker.notNull(setup, "setup");
     //TODO copy
     _curveNames = setup._curveNames;
@@ -64,7 +63,7 @@ public class DiscountingMethodCurveSetUp implements CurveSetUpInterface {
     _maxSteps = setup._maxSteps;
   }
 
-  protected DiscountingMethodCurveSetUp(final List<List<String>> curveNames,
+  DiscountingMethodCurveSetUp(final List<List<String>> curveNames,
       final Map<String, List<InstrumentDefinition<?>>> nodes,
       final Map<String, DiscountingMethodCurveTypeSetUp> curveTypes,
       final Map<DiscountingMethodPreConstructedCurveTypeSetUp, YieldAndDiscountCurve> preConstructedCurves,
@@ -128,7 +127,6 @@ public class DiscountingMethodCurveSetUp implements CurveSetUpInterface {
         }
       }
     }
-    final MulticurveProviderDiscount knownData = new MulticurveProviderDiscount(knownDiscountingCurves, knownIborCurves, knownOvernightCurves, _fxMatrix);
     return new DiscountingMethodCurveBuilder(_curveNames, discountingCurves, iborCurves, overnightCurves, _nodes, _curveTypes,
         _fxMatrix, _preConstructedCurves, _knownBundle, _absoluteTolerance, _relativeTolerance, _maxSteps);
   }

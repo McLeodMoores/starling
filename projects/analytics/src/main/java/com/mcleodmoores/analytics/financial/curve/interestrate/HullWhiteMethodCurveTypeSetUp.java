@@ -46,7 +46,11 @@ public class HullWhiteMethodCurveTypeSetUp extends HullWhiteMethodCurveSetUp imp
   private List<IborTypeIndex> _iborCurveIndices;
   private List<OvernightIndex> _overnightCurveIndices;
 
-  public HullWhiteMethodCurveTypeSetUp(final HullWhiteMethodCurveSetUp builder) {
+  HullWhiteMethodCurveTypeSetUp(final HullWhiteMethodCurveSetUp builder) {
+    super(builder);
+  }
+
+  HullWhiteMethodCurveTypeSetUp(final HullWhiteMethodCurveTypeSetUp builder) {
     super(builder);
   }
 
@@ -98,7 +102,7 @@ public class HullWhiteMethodCurveTypeSetUp extends HullWhiteMethodCurveSetUp imp
   }
 
   @Override
-  public HullWhiteMethodCurveTypeSetUp usingNodeDates(final LocalDateTime[] dates) {
+  public HullWhiteMethodCurveTypeSetUp usingNodeDates(final LocalDateTime... dates) {
     if (_functionalForm != null) {
       throw new IllegalStateException();
     }
@@ -166,15 +170,15 @@ public class HullWhiteMethodCurveTypeSetUp extends HullWhiteMethodCurveSetUp imp
     return this;
   }
 
-  UniqueIdentifiable getDiscountingCurveId() {
+  public UniqueIdentifiable getDiscountingCurveId() {
     return _discountingCurveId;
   }
 
-  List<IborTypeIndex> getIborCurveIndices() {
+  public List<IborTypeIndex> getIborCurveIndices() {
     return _iborCurveIndices;
   }
 
-  List<OvernightIndex> getOvernightCurveIndices() {
+  public List<OvernightIndex> getOvernightCurveIndices() {
     return _overnightCurveIndices;
   }
 

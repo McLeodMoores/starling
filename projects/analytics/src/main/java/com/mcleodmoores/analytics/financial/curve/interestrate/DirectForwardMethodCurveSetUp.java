@@ -20,7 +20,6 @@ import com.opengamma.analytics.financial.instrument.index.IndexON;
 import com.opengamma.analytics.financial.model.interestrate.curve.YieldAndDiscountCurve;
 import com.opengamma.analytics.financial.model.interestrate.curve.YieldCurve;
 import com.opengamma.analytics.financial.provider.curve.CurveBuildingBlockBundle;
-import com.opengamma.analytics.financial.provider.description.interestrate.MulticurveProviderForward;
 import com.opengamma.analytics.math.curve.DoublesCurve;
 import com.opengamma.id.UniqueIdentifiable;
 import com.opengamma.util.money.Currency;
@@ -130,9 +129,8 @@ public class DirectForwardMethodCurveSetUp implements CurveSetUpInterface {
         }
       }
     }
-    final MulticurveProviderForward knownData = new MulticurveProviderForward(knownDiscountingCurves, knownIborCurves, knownOvernightCurves, _fxMatrix);
-    return new DirectForwardMethodCurveBuilder(_curveNames, discountingCurves, iborCurves, overnightCurves, _nodes, _curveTypes, knownData, _knownBundle,
-        _absoluteTolerance, _relativeTolerance, _maxSteps);
+    return new DirectForwardMethodCurveBuilder(_curveNames, discountingCurves, iborCurves, overnightCurves, _nodes, _curveTypes,
+        _fxMatrix, _preConstructedCurves, _knownBundle, _absoluteTolerance, _relativeTolerance, _maxSteps);
   }
 
   @Override

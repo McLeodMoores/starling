@@ -20,8 +20,6 @@ import com.opengamma.analytics.financial.instrument.index.IndexON;
 import com.opengamma.analytics.financial.model.interestrate.curve.YieldAndDiscountCurve;
 import com.opengamma.analytics.financial.model.interestrate.definition.HullWhiteOneFactorPiecewiseConstantParameters;
 import com.opengamma.analytics.financial.provider.curve.CurveBuildingBlockBundle;
-import com.opengamma.analytics.financial.provider.description.interestrate.HullWhiteOneFactorProviderDiscount;
-import com.opengamma.analytics.financial.provider.description.interestrate.MulticurveProviderDiscount;
 import com.opengamma.id.UniqueIdentifiable;
 import com.opengamma.util.money.Currency;
 import com.opengamma.util.tuple.Pair;
@@ -137,11 +135,9 @@ public class HullWhiteMethodCurveSetUp implements CurveSetUpInterface {
         }
       }
     }
-    final HullWhiteOneFactorProviderDiscount knownData =
-        new HullWhiteOneFactorProviderDiscount(
-            new MulticurveProviderDiscount(knownDiscountingCurves, knownIborCurves, knownOvernightCurves, _fxMatrix), _parameters, _currency);
     return new HullWhiteMethodCurveBuilder(_curveNames, discountingCurves, iborCurves, overnightCurves, _nodes, _curveTypes,
-        knownData, _knownBundle);
+        _fxMatrix, knownDiscountingCurves, knownIborCurves, knownOvernightCurves, _knownBundle, _parameters, _currency,
+        _absoluteTolerance, _relativeTolerance, _maxSteps);
   }
 
   @Override

@@ -50,19 +50,23 @@ public class DiscountingMethodPreConstructedBondCurveTypeSetUp extends Discounti
     return this;
   }
 
-  UniqueIdentifiable getDiscountingCurveId() {
+  @Override
+  public UniqueIdentifiable getDiscountingCurveId() {
     return _discountingCurveId;
   }
 
-  List<IborTypeIndex> getIborCurveIndices() {
+  @Override
+  public List<IborTypeIndex> getIborCurveIndices() {
     return _iborCurveIndices;
   }
 
-  List<OvernightIndex> getOvernightCurveIndices() {
+  @Override
+  public List<OvernightIndex> getOvernightCurveIndices() {
     return _overnightCurveIndices;
   }
 
-  List<Pair<Object, LegalEntityFilter<LegalEntity>>> getIssuers() {
+  @Override
+  public List<Pair<Object, LegalEntityFilter<LegalEntity>>> getIssuers() {
     return _issuers;
   }
 }

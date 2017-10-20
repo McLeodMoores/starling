@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.provider.calculator.generic;
@@ -47,13 +47,6 @@ public final class LastFixingStartTimeCalculator extends InstrumentDerivativeVis
   private LastFixingStartTimeCalculator() {
   }
 
-  // -----     Deposit     ------
-
-  //  @Override
-  //  public Double visitCash(final Cash cash) {
-  //    return cash.getEndTime();
-  //  }
-
   @Override
   public Double visitDepositIbor(final DepositIbor deposit) {
     return deposit.getStartTime();
@@ -75,11 +68,6 @@ public final class LastFixingStartTimeCalculator extends InstrumentDerivativeVis
   public Double visitCouponIbor(final CouponIbor payment) {
     return payment.getFixingPeriodStartTime();
   }
-
-  //  @Override
-  //  public Double visitCouponOIS(final CouponOIS payment) {
-  //    return payment.getFixingPeriodEndTime();
-  //  }
 
   // -----     Annuity     ------
 

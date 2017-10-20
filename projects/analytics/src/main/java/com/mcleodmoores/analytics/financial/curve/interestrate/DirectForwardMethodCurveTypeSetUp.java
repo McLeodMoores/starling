@@ -20,6 +20,8 @@ import com.opengamma.analytics.financial.curve.interestrate.generator.GeneratorC
 import com.opengamma.analytics.financial.curve.interestrate.generator.GeneratorCurveYieldPeriodicInterpolated;
 import com.opengamma.analytics.financial.curve.interestrate.generator.GeneratorYDCurve;
 import com.opengamma.analytics.financial.interestrate.InstrumentDerivativeVisitor;
+import com.opengamma.analytics.financial.provider.calculator.generic.LastFixingStartTimeCalculator;
+import com.opengamma.analytics.financial.provider.calculator.generic.LastTimeCalculator;
 import com.opengamma.analytics.math.interpolation.Interpolator1D;
 import com.opengamma.analytics.util.time.TimeCalculator;
 import com.opengamma.id.UniqueIdentifiable;
@@ -99,7 +101,7 @@ public class DirectForwardMethodCurveTypeSetUp extends DirectForwardMethodCurveS
   }
 
   @Override
-  public DirectForwardMethodCurveTypeSetUp usingNodeDates(final LocalDateTime[] dates) {
+  public DirectForwardMethodCurveTypeSetUp usingNodeDates(final LocalDateTime... dates) {
     if (_functionalForm != null) {
       throw new IllegalStateException();
     }
@@ -174,10 +176,8 @@ public class DirectForwardMethodCurveTypeSetUp extends DirectForwardMethodCurveS
 
   @Override
   public GeneratorYDCurve buildCurveGenerator(final ZonedDateTime valuationDate) {
-    throw new IllegalStateException();
-  }
-
-  public GeneratorYDCurve buildCurveGenerator(final ZonedDateTime valuationDate, final InstrumentDerivativeVisitor<Object, Double> nodeTimeCalculator) {
+    final InstrumentDerivativeVisitor<Object, Double> nodeTimeCalculator =
+        _iborCurveIndices == null || _iborCurveIndices.isEmpty() ? LastTimeCalculator.getInstance() : LastFixingStartTimeCalculator.getInstance();
     if (_baseCurveName != null) {
       //TODO duplicated code
       GeneratorYDCurve generator;

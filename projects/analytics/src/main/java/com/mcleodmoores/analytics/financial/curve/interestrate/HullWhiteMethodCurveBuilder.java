@@ -15,11 +15,14 @@ import com.mcleodmoores.analytics.financial.index.IborTypeIndex;
 import com.mcleodmoores.analytics.financial.index.Index;
 import com.mcleodmoores.analytics.financial.index.OvernightIndex;
 import com.opengamma.analytics.financial.curve.interestrate.generator.GeneratorYDCurve;
+import com.opengamma.analytics.financial.forex.method.FXMatrix;
 import com.opengamma.analytics.financial.instrument.InstrumentDefinition;
 import com.opengamma.analytics.financial.instrument.index.IborIndex;
 import com.opengamma.analytics.financial.instrument.index.IndexConverter;
 import com.opengamma.analytics.financial.instrument.index.IndexON;
 import com.opengamma.analytics.financial.interestrate.InstrumentDerivative;
+import com.opengamma.analytics.financial.model.interestrate.curve.YieldAndDiscountCurve;
+import com.opengamma.analytics.financial.model.interestrate.definition.HullWhiteOneFactorPiecewiseConstantParameters;
 import com.opengamma.analytics.financial.provider.calculator.discounting.ParSpreadMarketQuoteCurveSensitivityDiscountingCalculator;
 import com.opengamma.analytics.financial.provider.calculator.discounting.ParSpreadMarketQuoteDiscountingCalculator;
 import com.opengamma.analytics.financial.provider.calculator.hullwhite.ParSpreadMarketQuoteCurveSensitivityHullWhiteCalculator;
@@ -45,10 +48,8 @@ public class HullWhiteMethodCurveBuilder extends CurveBuilder<HullWhiteOneFactor
   private static final ParSpreadMarketQuoteCurveSensitivityHullWhiteCalculator SENSITIVITY_CALCULATOR =
       ParSpreadMarketQuoteCurveSensitivityHullWhiteCalculator.getInstance();
   private final HullWhiteProviderDiscountBuildingRepository _curveBuildingRepository;
-  //TODO bad hard-coding
-  protected final double _absoluteTolerance = 1e-12;
-  protected final double _relativeTolerance = 1e-12;
-  protected final int _maxSteps = 100;
+  private final HullWhiteOneFactorPiecewiseConstantParameters _parameters;
+  private final Currency _currency;
 
   public static HullWhiteMethodCurveSetUp setUp() {
     return new HullWhiteMethodCurveSetUp();
@@ -59,18 +60,32 @@ public class HullWhiteMethodCurveBuilder extends CurveBuilder<HullWhiteOneFactor
       final List<Pair<String, List<IborTypeIndex>>> iborCurves,
       final List<Pair<String, List<OvernightIndex>>> overnightCurves,
       final Map<String, List<InstrumentDefinition<?>>> nodes,
-      final Map<String, ? extends CurveTypeSetUpInterface> curveGenerators,
-      final HullWhiteOneFactorProviderDiscount knownData,
-      final CurveBuildingBlockBundle knownBundle) {
-    super(curveNames, discountingCurves, iborCurves, overnightCurves, nodes, curveGenerators, knownData, knownBundle);
-    _curveBuildingRepository = new HullWhiteProviderDiscountBuildingRepository(_absoluteTolerance, _relativeTolerance, _maxSteps);
+      final Map<String, ? extends CurveTypeSetUpInterface> curveTypes,
+      final FXMatrix fxMatrix,
+      final Map<? extends PreConstructedCurveTypeSetUp, YieldAndDiscountCurve> preConstructedCurves,
+      final CurveBuildingBlockBundle knownBundle,
+      final HullWhiteOneFactorPiecewiseConstantParameters parameters,
+      final Currency currency,
+      final double absoluteTolerance,
+      final double relativeTolerance,
+      final int maxSteps) {
+    super(curveNames, discountingCurves, iborCurves, overnightCurves, nodes, curveTypes, fxMatrix, preConstructedCurves, knownBundle);
+    _parameters = parameters;
+    _currency = currency;
+    _curveBuildingRepository = new HullWhiteProviderDiscountBuildingRepository(absoluteTolerance, relativeTolerance, maxSteps);
   }
 
   @Override
-  Pair<HullWhiteOneFactorProviderDiscount, CurveBuildingBlockBundle> buildCurves(final MultiCurveBundle[] curveBundles,
-      final HullWhiteOneFactorProviderDiscount knownData, final CurveBuildingBlockBundle knownBundle,
-      final List<Pair<String, UniqueIdentifiable>> discountingCurves, final List<Pair<String, List<IborTypeIndex>>> iborCurves,
-      final List<Pair<String, List<OvernightIndex>>> overnightCurves) {
+  Pair<HullWhiteOneFactorProviderDiscount, CurveBuildingBlockBundle> buildCurves(
+      final MultiCurveBundle[] curveBundles,
+      final CurveBuildingBlockBundle knownBundle,
+      final List<Pair<String, UniqueIdentifiable>> discountingCurves,
+      final List<Pair<String, List<IborTypeIndex>>> iborCurves,
+      final List<Pair<String, List<OvernightIndex>>> overnightCurves,
+      final FXMatrix fxMatrix,
+      final Map<Currency, YieldAndDiscountCurve> knownDiscountingCurves,
+      final Map<IborIndex, YieldAndDiscountCurve> knownIborCurves,
+      final Map<IndexON, YieldAndDiscountCurve> knownOvernightCurves) {
     final LinkedHashMap<String, Currency> convertedDiscountingCurves = new LinkedHashMap<>();
     for (final Pair<String, UniqueIdentifiable> entry : discountingCurves) {
       if (entry.getValue() instanceof Currency) {
@@ -97,6 +112,9 @@ public class HullWhiteMethodCurveBuilder extends CurveBuilder<HullWhiteOneFactor
       }
       convertedOvernightCurves.put(entry.getKey(), converted);
     }
+    final HullWhiteOneFactorProviderDiscount knownData =
+        new HullWhiteOneFactorProviderDiscount(
+            new MulticurveProviderDiscount(knownDiscountingCurves, knownIborCurves, knownOvernightCurves, fxMatrix), _parameters, _currency);
     if (knownBundle != null) {
       return _curveBuildingRepository.makeCurvesFromDerivatives(curveBundles, knownData, knownBundle, convertedDiscountingCurves,
           convertedIborCurves, convertedOvernightCurves,
@@ -107,7 +125,6 @@ public class HullWhiteMethodCurveBuilder extends CurveBuilder<HullWhiteOneFactor
         SENSITIVITY_CALCULATOR);
   }
 
-  //TODO cache definitions on LocalDate
   public Pair<MulticurveProviderDiscount, CurveBuildingBlockBundle> buildCurvesWithoutConvexityAdjustment(final ZonedDateTime valuationDate,
       final Map<Index, ZonedDateTimeDoubleTimeSeries> fixings) {
     final Map<String, GeneratorYDCurve> generatorForCurve = new HashMap<>();
