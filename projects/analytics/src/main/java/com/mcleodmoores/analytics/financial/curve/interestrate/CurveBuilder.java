@@ -78,8 +78,10 @@ public abstract class CurveBuilder<T extends ParameterProviderInterface> {
     _iborCurves = new ArrayList<>(iborCurves);
     _overnightCurves = new ArrayList<>(overnightCurves);
     _issuerCurves = LinkedListMultimap.create();
-    for (final Pair<String, List<Pair<Object, LegalEntityFilter<LegalEntity>>>> issuerCurve : issuerCurves) {
-      _issuerCurves.put(issuerCurve.getKey(), issuerCurve.getValue().get(0)); //TODO only one handled
+    if (issuerCurves != null) {
+      for (final Pair<String, List<Pair<Object, LegalEntityFilter<LegalEntity>>>> issuerCurve : issuerCurves) {
+        _issuerCurves.put(issuerCurve.getKey(), issuerCurve.getValue().get(0)); //TODO only one handled
+      }
     }
     _nodes = new HashMap<>(nodes);
     _curveTypes = new HashMap<>(curveTypes);
@@ -174,28 +176,47 @@ public abstract class CurveBuilder<T extends ParameterProviderInterface> {
     return definitionsForCurves;
   }
 
-//  List<List<String>> getCurveNames() {
-//    return _curveNames;
-//  }
-//
-//  List<Pair<String, UniqueIdentifiable>> getDiscountingCurves() {
-//    return _discountingCurves;
-//  }
-//
-//  List<Pair<String, List<IborTypeIndex>>> getIborCurves() {
-//    return _iborCurves;
-//  }
-//
-//  List<Pair<String, List<OvernightIndex>>> getOvernightCurves() {
-//    return _overnightCurves;
-//  }
-//
-//  Map<String, ? extends CurveTypeSetUpInterface> getCurveGenerators() {
-//    return _curveTypes;
-//  }
-//
-//  Map<String, List<InstrumentDefinition<?>>> getNodes() {
-//    return _nodes;
-//  }
+  List<List<String>> getCurveNames() {
+    return _curveNames;
+  }
 
+  List<Pair<String, UniqueIdentifiable>> getDiscountingCurves() {
+    return _discountingCurves;
+  }
+
+  List<Pair<String, List<IborTypeIndex>>> getIborCurves() {
+    return _iborCurves;
+  }
+
+  List<Pair<String, List<OvernightIndex>>> getOvernightCurves() {
+    return _overnightCurves;
+  }
+
+  Map<String, ? extends CurveTypeSetUpInterface> getCurveGenerators() {
+    return _curveTypes;
+  }
+
+  Map<String, List<InstrumentDefinition<?>>> getNodes() {
+    return _nodes;
+  }
+
+  Map<Currency, YieldAndDiscountCurve> getKnownDiscountingCurves() {
+    return _knownDiscountingCurves;
+  }
+
+  Map<IborIndex, YieldAndDiscountCurve> getKnownIborCurves() {
+    return _knownIborCurves;
+  }
+
+  Map<IndexON, YieldAndDiscountCurve> getKnownOvernightCurves() {
+    return _knownOvernightCurves;
+  }
+
+  FXMatrix getFxMatrix() {
+    return _fxMatrix;
+  }
+
+  CurveBuildingBlockBundle getKnownBundle() {
+    return _knownBundle;
+  }
 }

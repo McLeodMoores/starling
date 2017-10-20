@@ -50,29 +50,37 @@ public class HullWhiteMethodCurveBuilder extends CurveBuilder<HullWhiteOneFactor
   private final HullWhiteProviderDiscountBuildingRepository _curveBuildingRepository;
   private final HullWhiteOneFactorPiecewiseConstantParameters _parameters;
   private final Currency _currency;
+  private final double _absoluteTolerance;
+  private final double _relativeTolerance;
+  private final int _maxSteps;
 
   public static HullWhiteMethodCurveSetUp setUp() {
     return new HullWhiteMethodCurveSetUp();
   }
 
-  HullWhiteMethodCurveBuilder(final List<List<String>> curveNames,
+  HullWhiteMethodCurveBuilder(
+      final List<List<String>> curveNames,
       final List<Pair<String, UniqueIdentifiable>> discountingCurves,
       final List<Pair<String, List<IborTypeIndex>>> iborCurves,
       final List<Pair<String, List<OvernightIndex>>> overnightCurves,
       final Map<String, List<InstrumentDefinition<?>>> nodes,
-      final Map<String, ? extends CurveTypeSetUpInterface> curveTypes,
+      final Map<String, HullWhiteMethodCurveTypeSetUp> curveTypes,
       final FXMatrix fxMatrix,
       final Map<? extends PreConstructedCurveTypeSetUp, YieldAndDiscountCurve> preConstructedCurves,
+      final Map<Currency, YieldAndDiscountCurve> knownDiscountingCurves,
+      final Map<IborIndex, YieldAndDiscountCurve> knownIborCurves,
+      final Map<IndexON, YieldAndDiscountCurve> knownOvernightCurves,
       final CurveBuildingBlockBundle knownBundle,
       final HullWhiteOneFactorPiecewiseConstantParameters parameters,
-      final Currency currency,
-      final double absoluteTolerance,
-      final double relativeTolerance,
+      final Currency currency, final double absoluteTolerance, final double relativeTolerance,
       final int maxSteps) {
     super(curveNames, discountingCurves, iborCurves, overnightCurves, nodes, curveTypes, fxMatrix, preConstructedCurves, knownBundle);
     _parameters = parameters;
     _currency = currency;
     _curveBuildingRepository = new HullWhiteProviderDiscountBuildingRepository(absoluteTolerance, relativeTolerance, maxSteps);
+    _absoluteTolerance = absoluteTolerance;
+    _relativeTolerance = relativeTolerance;
+    _maxSteps = maxSteps;
   }
 
   @Override
@@ -125,7 +133,8 @@ public class HullWhiteMethodCurveBuilder extends CurveBuilder<HullWhiteOneFactor
         SENSITIVITY_CALCULATOR);
   }
 
-  public Pair<MulticurveProviderDiscount, CurveBuildingBlockBundle> buildCurvesWithoutConvexityAdjustment(final ZonedDateTime valuationDate,
+  public Pair<MulticurveProviderDiscount, CurveBuildingBlockBundle> buildCurvesWithoutConvexityAdjustment(
+      final ZonedDateTime valuationDate,
       final Map<Index, ZonedDateTimeDoubleTimeSeries> fixings) {
     final Map<String, GeneratorYDCurve> generatorForCurve = new HashMap<>();
     final int size = getCurveNames().size();
@@ -156,7 +165,8 @@ public class HullWhiteMethodCurveBuilder extends CurveBuilder<HullWhiteOneFactor
     }
     final MulticurveDiscountBuildingRepository curveBuildingRepository =
         new MulticurveDiscountBuildingRepository(_absoluteTolerance, _relativeTolerance, _maxSteps);
-    final MulticurveProviderDiscount knownData = getKnownData().getMulticurveProvider();
+    final MulticurveProviderDiscount knownData = new MulticurveProviderDiscount(getKnownDiscountingCurves(), getKnownIborCurves(),
+        getKnownOvernightCurves(), getFxMatrix());
     final LinkedHashMap<String, Currency> convertedDiscountingCurves = new LinkedHashMap<>();
     for (final Pair<String, UniqueIdentifiable> entry : getDiscountingCurves()) {
       if (entry.getValue() instanceof Currency) {

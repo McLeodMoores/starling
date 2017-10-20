@@ -21,7 +21,6 @@ import com.opengamma.analytics.financial.legalentity.LegalEntity;
 import com.opengamma.analytics.financial.legalentity.LegalEntityFilter;
 import com.opengamma.analytics.financial.model.interestrate.curve.YieldAndDiscountCurve;
 import com.opengamma.analytics.financial.provider.curve.CurveBuildingBlockBundle;
-import com.opengamma.analytics.financial.provider.description.interestrate.IssuerProviderDiscount;
 import com.opengamma.id.UniqueIdentifiable;
 import com.opengamma.util.money.Currency;
 import com.opengamma.util.tuple.Pair;
@@ -141,10 +140,8 @@ public class DiscountingMethodBondCurveSetUp implements BondCurveSetUpInterface 
         }
       }
     }
-    final IssuerProviderDiscount knownData =
-        new IssuerProviderDiscount(knownDiscountingCurves, knownIborCurves, knownOvernightCurves, knownIssuerCurves, _fxMatrix);
     return new DiscountingMethodBondCurveBuilder(_curveNames, discountingCurves, iborCurves, overnightCurves, issuerCurves, _nodes, _curveTypes,
-        knownData, _knownBundle, _absoluteTolerance, _relativeTolerance, _maxSteps);
+        _fxMatrix, _preConstructedCurves, _knownBundle, _absoluteTolerance, _relativeTolerance, _maxSteps);
   }
 
   @Override

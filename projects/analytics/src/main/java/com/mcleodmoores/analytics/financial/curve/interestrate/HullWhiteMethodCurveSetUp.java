@@ -136,7 +136,7 @@ public class HullWhiteMethodCurveSetUp implements CurveSetUpInterface {
       }
     }
     return new HullWhiteMethodCurveBuilder(_curveNames, discountingCurves, iborCurves, overnightCurves, _nodes, _curveTypes,
-        _fxMatrix, knownDiscountingCurves, knownIborCurves, knownOvernightCurves, _knownBundle, _parameters, _currency,
+        _fxMatrix, _preConstructedCurves, knownDiscountingCurves, knownIborCurves, knownOvernightCurves, _knownBundle, _parameters, _currency,
         _absoluteTolerance, _relativeTolerance, _maxSteps);
   }
 

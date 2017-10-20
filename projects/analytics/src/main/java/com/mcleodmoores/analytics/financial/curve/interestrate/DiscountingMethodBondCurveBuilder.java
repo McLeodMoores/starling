@@ -3,6 +3,7 @@
  */
 package com.mcleodmoores.analytics.financial.curve.interestrate;
 
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,12 +11,14 @@ import java.util.Map;
 import com.google.common.collect.LinkedListMultimap;
 import com.mcleodmoores.analytics.financial.index.IborTypeIndex;
 import com.mcleodmoores.analytics.financial.index.OvernightIndex;
+import com.opengamma.analytics.financial.forex.method.FXMatrix;
 import com.opengamma.analytics.financial.instrument.InstrumentDefinition;
 import com.opengamma.analytics.financial.instrument.index.IborIndex;
 import com.opengamma.analytics.financial.instrument.index.IndexConverter;
 import com.opengamma.analytics.financial.instrument.index.IndexON;
 import com.opengamma.analytics.financial.legalentity.LegalEntity;
 import com.opengamma.analytics.financial.legalentity.LegalEntityFilter;
+import com.opengamma.analytics.financial.model.interestrate.curve.YieldAndDiscountCurve;
 import com.opengamma.analytics.financial.provider.calculator.issuer.ParSpreadMarketQuoteCurveSensitivityIssuerDiscountingCalculator;
 import com.opengamma.analytics.financial.provider.calculator.issuer.ParSpreadMarketQuoteIssuerDiscountingCalculator;
 import com.opengamma.analytics.financial.provider.curve.CurveBuildingBlockBundle;
@@ -36,32 +39,49 @@ public class DiscountingMethodBondCurveBuilder extends CurveBuilder<IssuerProvid
       ParSpreadMarketQuoteCurveSensitivityIssuerDiscountingCalculator.getInstance();
   private final IssuerDiscountBuildingRepository _curveBuildingRepository;
   private final LinkedListMultimap<String, Pair<Object, LegalEntityFilter<LegalEntity>>> _issuerCurves;
+  private final Map<Pair<Object, LegalEntityFilter<LegalEntity>>, YieldAndDiscountCurve> _knownIssuerCurves;
 
   public static DiscountingMethodBondCurveSetUp setUp() {
     return new DiscountingMethodBondCurveSetUp();
   }
 
-  DiscountingMethodBondCurveBuilder(final List<List<String>> curveNames, final List<Pair<String, UniqueIdentifiable>> discountingCurves,
-      final List<Pair<String, List<IborTypeIndex>>> iborCurves, final List<Pair<String, List<OvernightIndex>>> overnightCurves,
+  DiscountingMethodBondCurveBuilder(
+      final List<List<String>> curveNames,
+      final List<Pair<String, UniqueIdentifiable>> discountingCurves,
+      final List<Pair<String, List<IborTypeIndex>>> iborCurves,
+      final List<Pair<String, List<OvernightIndex>>> overnightCurves,
       final List<Pair<String, List<Pair<Object, LegalEntityFilter<LegalEntity>>>>> issuerCurves,
       final Map<String, List<InstrumentDefinition<?>>> nodes,
-      final Map<String, ? extends CurveTypeSetUpInterface> curveGenerators,
-      final IssuerProviderDiscount knownData, final CurveBuildingBlockBundle knownBundle,
-      final double absoluteTolerance, final double relativeTolerance, final int maxSteps) {
-    super(curveNames, discountingCurves, iborCurves, overnightCurves, nodes, curveGenerators, knownData, knownBundle);
+      final Map<String, ? extends CurveTypeSetUpInterface> curveTypes,
+      final FXMatrix fxMatrix,
+      final Map<? extends PreConstructedCurveTypeSetUp, YieldAndDiscountCurve> preConstructedCurves,
+      final CurveBuildingBlockBundle knownBundle,
+      final double absoluteTolerance,
+      final double relativeTolerance,
+      final int maxSteps) {
+    super(curveNames, discountingCurves, iborCurves, overnightCurves, nodes, curveTypes, fxMatrix, preConstructedCurves, knownBundle);
     _issuerCurves = LinkedListMultimap.create();
     for (final Pair<String, List<Pair<Object, LegalEntityFilter<LegalEntity>>>> issuerCurve : issuerCurves) {
       _issuerCurves.put(issuerCurve.getKey(), issuerCurve.getValue().get(0));
+    }
+    _knownIssuerCurves = new HashMap<>();
+    for (final Map.Entry<? extends PreConstructedCurveTypeSetUp, YieldAndDiscountCurve> entry : preConstructedCurves.entrySet()) {
+      // TODO
     }
     _curveBuildingRepository = new IssuerDiscountBuildingRepository(absoluteTolerance, relativeTolerance, maxSteps);
   }
 
   @Override
-  public Pair<IssuerProviderDiscount, CurveBuildingBlockBundle> buildCurves(final MultiCurveBundle[] curveBundles,
-      final IssuerProviderDiscount knownData, final CurveBuildingBlockBundle knownBundle,
+  public Pair<IssuerProviderDiscount, CurveBuildingBlockBundle> buildCurves(
+      final MultiCurveBundle[] curveBundles,
+      final CurveBuildingBlockBundle knownBundle,
       final List<Pair<String, UniqueIdentifiable>> discountingCurves,
       final List<Pair<String, List<IborTypeIndex>>> iborCurves,
-      final List<Pair<String, List<OvernightIndex>>> overnightCurves) {
+      final List<Pair<String, List<OvernightIndex>>> overnightCurves,
+      final FXMatrix fxMatrix,
+      final Map<Currency, YieldAndDiscountCurve> knownDiscountingCurves,
+      final Map<IborIndex, YieldAndDiscountCurve> knownIborCurves,
+      final Map<IndexON, YieldAndDiscountCurve> knownOvernightCurves) {
     final LinkedHashMap<String, Currency> convertedDiscountingCurves = new LinkedHashMap<>();
     for (final Pair<String, UniqueIdentifiable> entry : discountingCurves) {
       if (entry.getValue() instanceof Currency) {
@@ -88,6 +108,7 @@ public class DiscountingMethodBondCurveBuilder extends CurveBuilder<IssuerProvid
       }
       convertedOvernightCurves.put(entry.getKey(), converted);
     }
+    final IssuerProviderDiscount knownData = new IssuerProviderDiscount(knownDiscountingCurves, knownIborCurves, knownOvernightCurves, fxMatrix);
     if (knownBundle != null) {
       return _curveBuildingRepository.makeCurvesFromDerivatives(curveBundles, knownData, knownBundle, convertedDiscountingCurves,
           convertedIborCurves, convertedOvernightCurves, _issuerCurves, CALCULATOR,

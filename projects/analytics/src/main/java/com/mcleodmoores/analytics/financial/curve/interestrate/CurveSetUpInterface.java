@@ -7,6 +7,7 @@ import com.opengamma.analytics.financial.forex.method.FXMatrix;
 import com.opengamma.analytics.financial.instrument.InstrumentDefinition;
 import com.opengamma.analytics.financial.model.interestrate.curve.YieldAndDiscountCurve;
 import com.opengamma.analytics.financial.provider.curve.CurveBuildingBlockBundle;
+import com.opengamma.analytics.financial.provider.description.interestrate.ParameterProviderInterface;
 
 /**
  *
@@ -29,7 +30,7 @@ public interface CurveSetUpInterface {
 
   CurveSetUpInterface removeNodes(String curveName);
 
-  CurveBuilder getBuilder();
+  CurveBuilder<? extends ParameterProviderInterface> getBuilder();
 
   CurveSetUpInterface copy();
 
