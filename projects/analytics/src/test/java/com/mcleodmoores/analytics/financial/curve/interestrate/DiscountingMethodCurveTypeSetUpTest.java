@@ -22,6 +22,8 @@ import org.threeten.bp.ZonedDateTime;
 import com.mcleodmoores.analytics.financial.curve.interestrate.CurveTypeSetUpInterface.CurveFunction;
 import com.mcleodmoores.analytics.financial.index.IborTypeIndex;
 import com.mcleodmoores.analytics.financial.index.OvernightIndex;
+import com.mcleodmoores.date.CalendarAdapter;
+import com.mcleodmoores.date.WeekendWorkingDayCalendar;
 import com.opengamma.analytics.financial.curve.interestrate.generator.GeneratorCurveAddYieldExisiting;
 import com.opengamma.analytics.financial.curve.interestrate.generator.GeneratorCurveDiscountFactorInterpolated;
 import com.opengamma.analytics.financial.curve.interestrate.generator.GeneratorCurveDiscountFactorInterpolatedNode;
@@ -29,12 +31,19 @@ import com.opengamma.analytics.financial.curve.interestrate.generator.GeneratorC
 import com.opengamma.analytics.financial.curve.interestrate.generator.GeneratorCurveYieldInterpolatedNode;
 import com.opengamma.analytics.financial.curve.interestrate.generator.GeneratorCurveYieldNelsonSiegel;
 import com.opengamma.analytics.financial.curve.interestrate.generator.GeneratorCurveYieldPeriodicInterpolated;
+import com.opengamma.analytics.financial.curve.interestrate.generator.GeneratorYDCurve;
+import com.opengamma.analytics.financial.instrument.index.IndexConverter;
+import com.opengamma.analytics.financial.instrument.payment.CouponIborDefinition;
+import com.opengamma.analytics.financial.interestrate.InstrumentDerivative;
+import com.opengamma.analytics.financial.model.interestrate.curve.YieldCurve;
+import com.opengamma.analytics.financial.provider.description.interestrate.MulticurveProviderDiscount;
 import com.opengamma.analytics.math.interpolation.factory.LinearInterpolator1dAdapter;
 import com.opengamma.analytics.math.interpolation.factory.NamedInterpolator1dFactory;
 import com.opengamma.financial.convention.businessday.BusinessDayConventions;
 import com.opengamma.financial.convention.daycount.DayCounts;
 import com.opengamma.id.UniqueIdentifiable;
 import com.opengamma.util.money.Currency;
+import com.opengamma.util.time.DateUtils;
 import com.opengamma.util.time.Tenor;
 
 /**
@@ -628,6 +637,55 @@ public class DiscountingMethodCurveTypeSetUpTest {
         .forIndex(OVERNIGHT_INDICES[1]);
     assertEquals(setup1.getIborCurveIndices(), setup2.getIborCurveIndices());
     assertEquals(setup1.getOvernightCurveIndices(), setup2.getOvernightCurveIndices());
+  }
+
+  /**
+   * Test node date equivalence with multiple calls.
+   */
+  @Test
+  public void testMultipleNodeDateCalls() {
+    final DiscountingMethodCurveTypeSetUp setup1 = new DiscountingMethodCurveTypeSetUp()
+        .usingNodeDates(LocalDateTime.of(LocalDate.now(), LocalTime.of(12, 0)), LocalDateTime.of(LocalDate.now().plusDays(1), LocalTime.of(12, 0)),
+            LocalDateTime.of(LocalDate.now().plusDays(2), LocalTime.of(12, 0)));
+    final DiscountingMethodCurveTypeSetUp setup2 = new DiscountingMethodCurveTypeSetUp()
+        .usingNodeDates(LocalDateTime.of(LocalDate.now(), LocalTime.of(12, 0)))
+        .usingNodeDates(LocalDateTime.of(LocalDate.now().plusDays(1), LocalTime.of(12, 0)), LocalDateTime.of(LocalDate.now().plusDays(2), LocalTime.of(12, 0)));
+    final DiscountingMethodCurveTypeSetUp setup3 = new DiscountingMethodCurveTypeSetUp()
+        .usingNodeDates(LocalDateTime.of(LocalDate.now(), LocalTime.of(12, 0)))
+        .usingNodeDates(LocalDateTime.of(LocalDate.now().plusDays(1), LocalTime.of(12, 0)))
+        .usingNodeDates(LocalDateTime.of(LocalDate.now().plusDays(2), LocalTime.of(12, 0)));
+    assertEquals(setup1.getFixedNodeDates(), setup2.getFixedNodeDates());
+    assertEquals(setup1.getFixedNodeDates(), setup3.getFixedNodeDates());
+  }
+
+  /**
+   * Tests that the different node point calculators produce different node points in the curve.
+   */
+  @Test
+  public void testTimeCalculator() {
+    final ZonedDateTime date = DateUtils.getUTCDate(2016, 12, 1);
+    final ZonedDateTime fixingStart = DateUtils.getUTCDate(2017, 1, 1);
+    final ZonedDateTime fixingEnd = fixingStart.plusMonths(3);
+    final ZonedDateTime payment = fixingEnd.plusDays(2);
+    final IborTypeIndex ibor = new IborTypeIndex("I", Currency.USD, Tenor.THREE_MONTHS, 0, DayCounts.ACT_360, BusinessDayConventions.FOLLOWING, false);
+    final DiscountingMethodCurveTypeSetUp setup1 = new DiscountingMethodCurveTypeSetUp()
+        .forDiscounting(Currency.USD)
+        .forIndex(ibor)
+        .withInterpolator(NamedInterpolator1dFactory.of(LinearInterpolator1dAdapter.NAME))
+        .usingInstrumentMaturity();
+    final DiscountingMethodCurveTypeSetUp setup2 = new DiscountingMethodCurveTypeSetUp()
+        .forDiscounting(Currency.USD)
+        .forIndex(ibor)
+        .withInterpolator(NamedInterpolator1dFactory.of(LinearInterpolator1dAdapter.NAME))
+        .usingLastFixingEndTime();
+    final CouponIborDefinition coupon = new CouponIborDefinition(Currency.USD, payment, fixingStart, fixingEnd, 0.25, 1, fixingStart, fixingStart,
+        fixingEnd, 0.25, IndexConverter.toIborIndex(ibor), new CalendarAdapter(WeekendWorkingDayCalendar.SATURDAY_SUNDAY));
+    final InstrumentDerivative[] data = new InstrumentDerivative[] {coupon.toDerivative(date)};
+    final GeneratorYDCurve generator1 = setup1.buildCurveGenerator(date).finalGenerator(data);
+    final GeneratorYDCurve generator2 = setup2.buildCurveGenerator(date).finalGenerator(data);
+    final double node1 = ((YieldCurve) generator1.generateCurve("A", new MulticurveProviderDiscount(), new double[] {0.01})).getCurve().getXData()[0];
+    final double node2 = ((YieldCurve) generator2.generateCurve("A", new MulticurveProviderDiscount(), new double[] {0.01})).getCurve().getXData()[0];
+    assertTrue(node1 > node2);
   }
 }
 

@@ -103,7 +103,7 @@ public class UsdDiscounting3mLibor6mLiborTest {
   private static final double TOLERANCE_ROOT = 1.0E-12;
   private static final int STEP_MAX = 100;
 
-  private static final CalendarAdapter NYC = new CalendarAdapter(WeekendWorkingDayCalendar.SATURDAY_SUNDAY);;
+  private static final CalendarAdapter NYC = new CalendarAdapter(WeekendWorkingDayCalendar.SATURDAY_SUNDAY);
   private static final FXMatrix FX_MATRIX = new FXMatrix(Currency.USD);
 
   private static final double NOTIONAL = 1.0;

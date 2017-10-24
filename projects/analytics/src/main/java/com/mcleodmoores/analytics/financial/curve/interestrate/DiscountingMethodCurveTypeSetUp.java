@@ -5,6 +5,7 @@ package com.mcleodmoores.analytics.financial.curve.interestrate;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import org.threeten.bp.LocalDateTime;
@@ -200,7 +201,7 @@ public class DiscountingMethodCurveTypeSetUp extends DiscountingMethodCurveSetUp
    * @return  the indices, can be null or empty
    */
   List<IborTypeIndex> getIborCurveIndices() {
-    return _iborCurveIndices;
+    return Collections.unmodifiableList(_iborCurveIndices);
   }
 
   /**
@@ -208,7 +209,15 @@ public class DiscountingMethodCurveTypeSetUp extends DiscountingMethodCurveSetUp
    * @return  the indices, can be null or empty
    */
   List<OvernightIndex> getOvernightCurveIndices() {
-    return _overnightCurveIndices;
+    return Collections.unmodifiableList(_overnightCurveIndices);
+  }
+
+  /**
+   * Gets the fixed node dates.
+   * @return  the fixed node dates, can be null or empty.
+   */
+  List<LocalDateTime> getFixedNodeDates() {
+    return Collections.unmodifiableList(_dates);
   }
 
   @Override
