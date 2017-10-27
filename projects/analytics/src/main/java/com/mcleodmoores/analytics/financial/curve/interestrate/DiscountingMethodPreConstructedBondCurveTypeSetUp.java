@@ -69,4 +69,5 @@ public class DiscountingMethodPreConstructedBondCurveTypeSetUp extends Discounti
   public List<Pair<Object, LegalEntityFilter<LegalEntity>>> getIssuers() {
     return _issuers;
   }
+
 }

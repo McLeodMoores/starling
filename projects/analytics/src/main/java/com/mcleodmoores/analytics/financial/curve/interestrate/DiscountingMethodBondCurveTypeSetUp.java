@@ -281,7 +281,8 @@ public class DiscountingMethodBondCurveTypeSetUp extends DiscountingMethodBondCu
     }
   }
 
-  private InstrumentDerivativeVisitor<Object, Double> getNodeTimeCalculator() {
+  @Override
+  public InstrumentDerivativeVisitor<Object, Double> getNodeTimeCalculator() {
     if (_maturityCalculator) {
       return LastTimeCalculator.getInstance();
     } else if (_lastFixingEndCalculator) {

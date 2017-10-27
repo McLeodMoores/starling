@@ -608,7 +608,7 @@ public class UsdEurJpyDiscountingLiborXCcyTest {
         final double[] rates = new double[nInstruments];
         for (int k = 0; k < nInstruments; k++) {
           derivatives[k] = CurveUtils.convert(definitions[i][j][k], withToday ? FIXING_TS_WITH_TODAY : FIXING_TS_WITHOUT_TODAY, NOW);
-          rates[k] = definitions[i][j][k].accept(CurveUtils.RATES_INITIALIZATION);
+          rates[k] = derivatives [k].accept(CurveUtils.RATES_INITIALIZATION);
         }
         final GeneratorYDCurve generator = curveGenerators[i][j].finalGenerator(derivatives);
         final double[] initialGuess = generator.initialGuess(rates);

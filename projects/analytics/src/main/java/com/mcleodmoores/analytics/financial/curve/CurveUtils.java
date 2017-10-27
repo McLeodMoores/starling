@@ -3,6 +3,7 @@
  */
 package com.mcleodmoores.analytics.financial.curve;
 
+import java.util.Comparator;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
@@ -28,13 +29,18 @@ import com.opengamma.analytics.financial.instrument.payment.CouponONDefinition;
 import com.opengamma.analytics.financial.instrument.payment.PaymentDefinition;
 import com.opengamma.analytics.financial.instrument.payment.PaymentFixedDefinition;
 import com.opengamma.analytics.financial.instrument.swap.SwapDefinition;
-import com.opengamma.analytics.financial.instrument.swap.SwapFixedCompoundedONCompoundedDefinition;
 import com.opengamma.analytics.financial.instrument.swap.SwapFixedIborDefinition;
 import com.opengamma.analytics.financial.instrument.swap.SwapFixedInflationZeroCouponDefinition;
 import com.opengamma.analytics.financial.instrument.swap.SwapFixedONDefinition;
 import com.opengamma.analytics.financial.instrument.swap.SwapIborIborDefinition;
 import com.opengamma.analytics.financial.instrument.swap.SwapXCcyIborIborDefinition;
 import com.opengamma.analytics.financial.interestrate.InstrumentDerivative;
+import com.opengamma.analytics.financial.interestrate.InstrumentDerivativeVisitor;
+import com.opengamma.analytics.financial.interestrate.InstrumentDerivativeVisitorSameValueAdapter;
+import com.opengamma.analytics.financial.interestrate.cash.derivative.Cash;
+import com.opengamma.analytics.financial.interestrate.fra.derivative.ForwardRateAgreement;
+import com.opengamma.analytics.financial.interestrate.future.derivative.InterestRateFutureTransaction;
+import com.opengamma.analytics.financial.interestrate.swap.derivative.SwapFixedCoupon;
 import com.opengamma.timeseries.precise.zdt.ImmutableZonedDateTimeDoubleTimeSeries;
 import com.opengamma.timeseries.precise.zdt.ZonedDateTimeDoubleTimeSeries;
 
@@ -43,7 +49,7 @@ import com.opengamma.timeseries.precise.zdt.ZonedDateTimeDoubleTimeSeries;
  */
 public class CurveUtils {
 
-  public static final InstrumentDefinitionVisitor<Void, Double> RATES_INITIALIZATION = new InitialGuessForRates();
+  public static final InstrumentDerivativeVisitor<Void, Double> RATES_INITIALIZATION = new InitialGuessForRates();
   public static final InstrumentDefinitionVisitor<Void, Double> INFLATION_INITIALIZATION = new InitialGuessForInflation();
   public static final InstrumentDefinitionVisitor<Map<Index, ZonedDateTimeDoubleTimeSeries>, ZonedDateTimeDoubleTimeSeries[]> FIXING_TIME_SERIES_PROVIDER = new FixingTimeSeriesProvider();
 
@@ -138,41 +144,30 @@ public class CurveUtils {
     }
   }
 
-  protected static class InitialGuessForRates extends InstrumentDefinitionVisitorSameValueAdapter<Void, Double> {
+  protected static class InitialGuessForRates extends InstrumentDerivativeVisitorSameValueAdapter<Void, Double> {
 
     protected InitialGuessForRates() {
       super(0.01);
     }
 
     @Override
-    public Double visitSwapFixedIborDefinition(final SwapFixedIborDefinition swap) {
-      return swap.getFixedLeg().getNthPayment(0).getRate();
+    public Double visitFixedCouponSwap(final SwapFixedCoupon<?> swap) {
+      return swap.getFixedLeg().getNthPayment(0).getFixedRate();
     }
 
     @Override
-    public Double visitSwapDefinition(final SwapDefinition swap) {
-      if (swap instanceof SwapFixedONDefinition) {
-        return ((SwapFixedONDefinition) swap).getFixedLeg().getNthPayment(0).getRate();
-      }
-      if (swap instanceof SwapFixedCompoundedONCompoundedDefinition) {
-        return ((SwapFixedCompoundedONCompoundedDefinition) swap).getFixedLeg().getNthPayment(0).getRate();
-      }
-      throw new IllegalStateException("Swaps of type " + swap.getClass() + " not supported");
-    }
-
-    @Override
-    public Double visitForwardRateAgreementDefinition(final ForwardRateAgreementDefinition fra) {
+    public Double visitForwardRateAgreement(final ForwardRateAgreement fra) {
       return fra.getRate();
     }
 
     @Override
-    public Double visitCashDefinition(final CashDefinition cash) {
+    public Double visitCash(final Cash cash) {
       return cash.getRate();
     }
 
     @Override
-    public Double visitInterestRateFutureTransactionDefinition(final InterestRateFutureTransactionDefinition irFuture) {
-      return 1 - irFuture.getTradePrice();
+    public Double visitInterestRateFutureTransaction(final InterestRateFutureTransaction irFuture) {
+      return 1 - irFuture.getReferencePrice();
     }
 
     //TODO instrument types
@@ -260,5 +255,19 @@ public class CurveUtils {
       instruments[i] = convert(definitions[i], fixingTs, valuationDate);
     }
     return instruments;
+  }
+
+  public static class NodeOrderCalculator implements Comparator<InstrumentDerivative> {
+    private final InstrumentDerivativeVisitor<?, Double> _nodeTimeCalculator;
+
+    public NodeOrderCalculator(final InstrumentDerivativeVisitor<?, Double> nodeTimeCalculator) {
+      _nodeTimeCalculator = nodeTimeCalculator;
+    }
+
+    @Override
+    public int compare(final InstrumentDerivative arg0, final InstrumentDerivative arg1) {
+      return arg0.accept(_nodeTimeCalculator).compareTo(arg1.accept(_nodeTimeCalculator));
+    }
+
   }
 }

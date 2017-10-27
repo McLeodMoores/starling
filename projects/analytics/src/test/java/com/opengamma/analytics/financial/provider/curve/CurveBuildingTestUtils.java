@@ -77,7 +77,7 @@ public class CurveBuildingTestUtils {
         final double[] initialGuess = new double[nInstruments];
         for (int k = 0; k < nInstruments; k++) {
           derivatives[k] = CurveUtils.convert(definitions[i][j][k], fixingTs, valuationDate);
-          initialGuess[k] = definitions[i][j][k].accept(CurveUtils.RATES_INITIALIZATION);
+          initialGuess[k] = derivatives[k].accept(CurveUtils.RATES_INITIALIZATION);
         }
         final GeneratorYDCurve generator = curveGenerators[i][j].finalGenerator(derivatives);
         singleCurves[j] = new SingleCurveBundle<>(curveNames[i][j], derivatives, initialGuess, generator);

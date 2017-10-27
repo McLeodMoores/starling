@@ -57,7 +57,8 @@ public class DiscountingMethodCurveTypeSetUp extends DiscountingMethodCurveSetUp
   }
 
   /**
-   * Constructor that takes an existing builder. Note that this is not a copy constructor.
+   * Constructor that takes an existing builder. Note that this is not a copy constructor,
+   * i.e. any object references are shared.
    * @param builder  the builder, not null
    */
   DiscountingMethodCurveTypeSetUp(final DiscountingMethodCurveSetUp builder) {
@@ -201,7 +202,7 @@ public class DiscountingMethodCurveTypeSetUp extends DiscountingMethodCurveSetUp
    * @return  the indices, can be null or empty
    */
   List<IborTypeIndex> getIborCurveIndices() {
-    return Collections.unmodifiableList(_iborCurveIndices);
+    return _iborCurveIndices == null ? null : Collections.unmodifiableList(_iborCurveIndices);
   }
 
   /**
@@ -209,7 +210,7 @@ public class DiscountingMethodCurveTypeSetUp extends DiscountingMethodCurveSetUp
    * @return  the indices, can be null or empty
    */
   List<OvernightIndex> getOvernightCurveIndices() {
-    return Collections.unmodifiableList(_overnightCurveIndices);
+    return _overnightCurveIndices == null ? null : Collections.unmodifiableList(_overnightCurveIndices);
   }
 
   /**
@@ -217,7 +218,7 @@ public class DiscountingMethodCurveTypeSetUp extends DiscountingMethodCurveSetUp
    * @return  the fixed node dates, can be null or empty.
    */
   List<LocalDateTime> getFixedNodeDates() {
-    return Collections.unmodifiableList(_dates);
+    return _dates == null ? null : Collections.unmodifiableList(_dates);
   }
 
   @Override
@@ -271,7 +272,8 @@ public class DiscountingMethodCurveTypeSetUp extends DiscountingMethodCurveSetUp
     return generator;
   }
 
-  private InstrumentDerivativeVisitor<Object, Double> getNodeTimeCalculator() {
+  @Override
+  public InstrumentDerivativeVisitor<Object, Double> getNodeTimeCalculator() {
     if (_maturityCalculator) {
       return LastTimeCalculator.getInstance();
     } else if (_lastFixingEndCalculator) {

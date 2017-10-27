@@ -176,8 +176,7 @@ public class DirectForwardMethodCurveTypeSetUp extends DirectForwardMethodCurveS
 
   @Override
   public GeneratorYDCurve buildCurveGenerator(final ZonedDateTime valuationDate) {
-    final InstrumentDerivativeVisitor<Object, Double> nodeTimeCalculator =
-        _iborCurveIndices == null || _iborCurveIndices.isEmpty() ? LastTimeCalculator.getInstance() : LastFixingStartTimeCalculator.getInstance();
+    final InstrumentDerivativeVisitor<Object, Double> nodeTimeCalculator = getNodeTimeCalculator();
     if (_baseCurveName != null) {
       //TODO duplicated code
       GeneratorYDCurve generator;
@@ -254,4 +253,9 @@ public class DirectForwardMethodCurveTypeSetUp extends DirectForwardMethodCurveS
     }
   }
 
+  @Override
+  public InstrumentDerivativeVisitor<Object, Double> getNodeTimeCalculator() {
+    return _iborCurveIndices == null || _iborCurveIndices.isEmpty()
+        ? LastTimeCalculator.getInstance() : LastFixingStartTimeCalculator.getInstance();
+  }
 }

@@ -4,6 +4,7 @@
 package com.mcleodmoores.analytics.financial.curve.interestrate;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,6 +13,7 @@ import org.threeten.bp.ZonedDateTime;
 
 import com.google.common.collect.LinkedListMultimap;
 import com.mcleodmoores.analytics.financial.curve.CurveUtils;
+import com.mcleodmoores.analytics.financial.curve.CurveUtils.NodeOrderCalculator;
 import com.mcleodmoores.analytics.financial.index.IborTypeIndex;
 import com.mcleodmoores.analytics.financial.index.Index;
 import com.mcleodmoores.analytics.financial.index.OvernightIndex;
@@ -109,39 +111,45 @@ public abstract class CurveBuilder<T extends ParameterProviderInterface> {
         }
       }
     }
-    _knownBundle = knownBundle; // TODO copy this
+    if (knownBundle == null) {
+      _knownBundle = null;
+    } else {
+      _knownBundle = new CurveBuildingBlockBundle();
+      _knownBundle.addAll(knownBundle);
+    }
   }
 
-  //TODO cache definitions on LocalDate
   public Pair<T, CurveBuildingBlockBundle> buildCurves(final ZonedDateTime valuationDate, final Map<Index, ZonedDateTimeDoubleTimeSeries> fixings) {
     MultiCurveBundle<GeneratorYDCurve>[] curveBundles = null;
-    if (curveBundles == null) {
-      final Map<String, GeneratorYDCurve> generatorForCurve = new HashMap<>();
-      curveBundles = new MultiCurveBundle[_curveNames.size()];
-      for (int i = 0; i < _curveNames.size(); i++) {
-        final List<String> curveNamesForUnit = _curveNames.get(i);
-        final SingleCurveBundle[] unitBundle = new SingleCurveBundle[curveNamesForUnit.size()];
-        for (int j = 0; j < curveNamesForUnit.size(); j++) {
-          final String curveName = curveNamesForUnit.get(j);
-          final List<InstrumentDefinition<?>> nodesForCurve = _nodes.get(curveName);
-          if (nodesForCurve == null) {
-            throw new IllegalStateException("No nodes found for curve called " + curveName);
-          }
-          final int nNodes = nodesForCurve.size();
-          final InstrumentDerivative[] instruments = new InstrumentDerivative[nNodes];
-          //TODO could do sorting of derivatives here
-          final double[] curveInitialGuess = new double[nNodes];
-          for (int k = 0; k < nNodes; k++) {
-            final InstrumentDefinition<?> definition = nodesForCurve.get(k);
-            instruments[k] = CurveUtils.convert(definition, fixings, valuationDate);
-            curveInitialGuess[k] = definition.accept(CurveUtils.RATES_INITIALIZATION);
-          }
-          final GeneratorYDCurve instrumentGenerator = _curveTypes.get(curveName).buildCurveGenerator(valuationDate).finalGenerator(instruments);
-          generatorForCurve.put(curveName, instrumentGenerator);
-          unitBundle[j] = new SingleCurveBundle<>(curveName, instruments, instrumentGenerator.initialGuess(curveInitialGuess), instrumentGenerator);
+    final Map<String, GeneratorYDCurve> generatorForCurve = new HashMap<>();
+    curveBundles = new MultiCurveBundle[_curveNames.size()];
+    for (int i = 0; i < _curveNames.size(); i++) {
+      final List<String> curveNamesForUnit = _curveNames.get(i);
+      final SingleCurveBundle[] unitBundle = new SingleCurveBundle[curveNamesForUnit.size()];
+      for (int j = 0; j < curveNamesForUnit.size(); j++) {
+        final String curveName = curveNamesForUnit.get(j);
+        // TODO sensible behaviour if not set
+        final NodeOrderCalculator nodeOrderCalculator = new CurveUtils.NodeOrderCalculator(_curveTypes.get(curveName).getNodeTimeCalculator());
+        final List<InstrumentDefinition<?>> nodesForCurve = _nodes.get(curveName);
+        if (nodesForCurve == null) {
+          throw new IllegalStateException("No nodes found for curve called " + curveName);
         }
-        curveBundles[i] = new MultiCurveBundle<>(unitBundle);
+        final int nNodes = nodesForCurve.size();
+        final InstrumentDerivative[] instruments = new InstrumentDerivative[nNodes];
+        final double[] curveInitialGuess = new double[nNodes];
+        for (int k = 0; k < nNodes; k++) {
+          final InstrumentDefinition<?> definition = nodesForCurve.get(k);
+          instruments[k] = CurveUtils.convert(definition, fixings, valuationDate);
+        }
+        Arrays.sort(instruments, nodeOrderCalculator);
+        for (int k = 0; k < nNodes; k++) {
+          curveInitialGuess[k] = instruments[k].accept(CurveUtils.RATES_INITIALIZATION);
+        }
+        final GeneratorYDCurve instrumentGenerator = _curveTypes.get(curveName).buildCurveGenerator(valuationDate).finalGenerator(instruments);
+        generatorForCurve.put(curveName, instrumentGenerator);
+        unitBundle[j] = new SingleCurveBundle<>(curveName, instruments, instrumentGenerator.initialGuess(curveInitialGuess), instrumentGenerator);
       }
+      curveBundles[i] = new MultiCurveBundle<>(unitBundle);
     }
     return buildCurves(curveBundles, _knownBundle, _discountingCurves, _iborCurves, _overnightCurves, _fxMatrix, _knownDiscountingCurves,
         _knownIborCurves, _knownOvernightCurves);
@@ -218,5 +226,9 @@ public abstract class CurveBuilder<T extends ParameterProviderInterface> {
 
   CurveBuildingBlockBundle getKnownBundle() {
     return _knownBundle;
+  }
+
+  Map<String, ? extends CurveTypeSetUpInterface> getCurveTypes() {
+    return _curveTypes;
   }
 }

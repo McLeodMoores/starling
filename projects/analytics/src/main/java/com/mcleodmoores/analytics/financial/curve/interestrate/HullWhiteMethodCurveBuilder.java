@@ -3,6 +3,7 @@
  */
 package com.mcleodmoores.analytics.financial.curve.interestrate;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -11,6 +12,7 @@ import java.util.Map;
 import org.threeten.bp.ZonedDateTime;
 
 import com.mcleodmoores.analytics.financial.curve.CurveUtils;
+import com.mcleodmoores.analytics.financial.curve.CurveUtils.NodeOrderCalculator;
 import com.mcleodmoores.analytics.financial.index.IborTypeIndex;
 import com.mcleodmoores.analytics.financial.index.Index;
 import com.mcleodmoores.analytics.financial.index.OvernightIndex;
@@ -133,6 +135,7 @@ public class HullWhiteMethodCurveBuilder extends CurveBuilder<HullWhiteOneFactor
         SENSITIVITY_CALCULATOR);
   }
 
+  //TODO should disappear - get correct builders etc by choosing a curve building type in buildCurves()
   public Pair<MulticurveProviderDiscount, CurveBuildingBlockBundle> buildCurvesWithoutConvexityAdjustment(
       final ZonedDateTime valuationDate,
       final Map<Index, ZonedDateTimeDoubleTimeSeries> fixings) {
@@ -144,18 +147,22 @@ public class HullWhiteMethodCurveBuilder extends CurveBuilder<HullWhiteOneFactor
       final SingleCurveBundle[] unitBundle = new SingleCurveBundle[curveNamesForUnit.size()];
       for (int j = 0; j < curveNamesForUnit.size(); j++) {
         final String curveName = curveNamesForUnit.get(j);
+        // TODO sensible behaviour if not set
+        final NodeOrderCalculator nodeOrderCalculator = new CurveUtils.NodeOrderCalculator(getCurveTypes().get(curveName).getNodeTimeCalculator());
         final List<InstrumentDefinition<?>> nodesForCurve = getNodes().get(curveName);
         if (nodesForCurve == null) {
           throw new IllegalStateException();
         }
         final int nNodes = nodesForCurve.size();
         final InstrumentDerivative[] instruments = new InstrumentDerivative[nNodes];
-        //TODO could do sorting of derivatives here
         final double[] curveInitialGuess = new double[nNodes];
         for (int k = 0; k < nNodes; k++) {
           final InstrumentDefinition<?> definition = nodesForCurve.get(k);
           instruments[k] = CurveUtils.convert(definition, fixings, valuationDate);
-          curveInitialGuess[k] = definition.accept(CurveUtils.RATES_INITIALIZATION);
+        }
+        Arrays.sort(instruments, nodeOrderCalculator);
+        for (int k = 0; k < nNodes; k++) {
+          curveInitialGuess[k] = instruments[k].accept(CurveUtils.RATES_INITIALIZATION);
         }
         final GeneratorYDCurve instrumentGenerator = getCurveGenerators().get(curveName).buildCurveGenerator(valuationDate).finalGenerator(instruments);
         generatorForCurve.put(curveName, instrumentGenerator);

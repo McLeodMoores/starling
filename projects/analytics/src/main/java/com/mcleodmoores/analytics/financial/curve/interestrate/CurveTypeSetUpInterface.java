@@ -9,6 +9,7 @@ import org.threeten.bp.ZonedDateTime;
 import com.mcleodmoores.analytics.financial.index.IborTypeIndex;
 import com.mcleodmoores.analytics.financial.index.OvernightIndex;
 import com.opengamma.analytics.financial.curve.interestrate.generator.GeneratorYDCurve;
+import com.opengamma.analytics.financial.interestrate.InstrumentDerivativeVisitor;
 import com.opengamma.analytics.math.interpolation.Interpolator1D;
 import com.opengamma.id.UniqueIdentifiable;
 
@@ -51,5 +52,7 @@ public interface CurveTypeSetUpInterface {
   CurveTypeSetUpInterface usingLastFixingEndTime();
 
   GeneratorYDCurve buildCurveGenerator(ZonedDateTime valuationDate);
+
+  InstrumentDerivativeVisitor<Object, Double> getNodeTimeCalculator();
 
 }

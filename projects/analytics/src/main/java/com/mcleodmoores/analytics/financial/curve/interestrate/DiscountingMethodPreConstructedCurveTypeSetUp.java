@@ -8,7 +8,10 @@ import java.util.List;
 
 import com.mcleodmoores.analytics.financial.index.IborTypeIndex;
 import com.mcleodmoores.analytics.financial.index.OvernightIndex;
+import com.opengamma.analytics.financial.legalentity.LegalEntity;
+import com.opengamma.analytics.financial.legalentity.LegalEntityFilter;
 import com.opengamma.id.UniqueIdentifiable;
+import com.opengamma.util.tuple.Pair;
 
 /**
  *
@@ -17,6 +20,7 @@ public class DiscountingMethodPreConstructedCurveTypeSetUp extends DiscountingMe
   private UniqueIdentifiable _discountingCurveId;
   private List<IborTypeIndex> _iborCurveIndices;
   private List<OvernightIndex> _overnightCurveIndices;
+  private List<Pair<Object, LegalEntityFilter<LegalEntity>>> _issuers;
 
   DiscountingMethodPreConstructedCurveTypeSetUp(final DiscountingMethodCurveSetUp builder) {
     super(builder);
@@ -54,4 +58,5 @@ public class DiscountingMethodPreConstructedCurveTypeSetUp extends DiscountingMe
   public List<OvernightIndex> getOvernightCurveIndices() {
     return _overnightCurveIndices;
   }
+
 }
