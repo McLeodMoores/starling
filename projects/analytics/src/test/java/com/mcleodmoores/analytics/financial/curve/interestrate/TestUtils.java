@@ -30,7 +30,7 @@ public final class TestUtils {
     try {
       final Method[] methods = parent.getDeclaredMethods();
       for (final Method method : methods) {
-        if (methodAcceptsNull != null && methodAcceptsNull.length > 0 && Arrays.binarySearch(methodAcceptsNull, method.getName()) < 0) {
+        if (methodAcceptsNull != null && methodAcceptsNull.length > 0 && Arrays.binarySearch(methodAcceptsNull, method.getName()) >= 0) {
           continue;
         }
         if (method.getReturnType().isAssignableFrom(clazz) && method.getParameterTypes().length == 1) {

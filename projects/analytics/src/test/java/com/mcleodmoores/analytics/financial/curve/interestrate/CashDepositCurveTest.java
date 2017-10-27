@@ -33,6 +33,7 @@ import com.opengamma.financial.convention.businessday.BusinessDayConventions;
 import com.opengamma.financial.convention.daycount.DayCounts;
 import com.opengamma.timeseries.precise.zdt.ZonedDateTimeDoubleTimeSeries;
 import com.opengamma.util.money.Currency;
+import com.opengamma.util.test.TestGroup;
 import com.opengamma.util.time.DateUtils;
 import com.opengamma.util.time.Tenor;
 import com.opengamma.util.tuple.Pair;
@@ -40,6 +41,7 @@ import com.opengamma.util.tuple.Pair;
 /**
  * Tests the construction of a curve containing only cash instruments.
  */
+@Test(groups = TestGroup.UNIT)
 public class CashDepositCurveTest {
   private static final ZonedDateTime VALUATION_DATE = DateUtils.getUTCDate(2017, 1, 3);
   private static final Interpolator1D INTERPOLATOR = NamedInterpolator1dFactory.of(MonotonicConstrainedCubicSplineInterpolator1dAdapter.NAME,

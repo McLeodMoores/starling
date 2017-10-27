@@ -35,11 +35,13 @@ import com.opengamma.financial.convention.businessday.BusinessDayConventions;
 import com.opengamma.financial.convention.daycount.DayCounts;
 import com.opengamma.id.UniqueIdentifiable;
 import com.opengamma.util.money.Currency;
+import com.opengamma.util.test.TestGroup;
 import com.opengamma.util.time.Tenor;
 
 /**
  * Unit tests for {@link DiscountingMethodBondCurveTypeSetUp}.
  */
+@Test(groups = TestGroup.UNIT)
 public class DiscountingMethodBondCurveTypeSetUpTest {
   private static final Logger LOGGER = LoggerFactory.getLogger(DiscountingMethodBondCurveTypeSetUpTest.class);
   private static final UniqueIdentifiable DISCOUNTING_ID = Currency.USD;
