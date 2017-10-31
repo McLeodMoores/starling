@@ -66,7 +66,7 @@ public class DiscountingMethodCurveTypeSetUpTest {
    */
   @Test
   public void testNullBuilderMethodInputs() {
-    TestUtils.testNullBuilderMethodInputs(DiscountingMethodCurveTypeSetUp.class, CurveTypeSetUpInterface.class);
+    TestUtils.testNullBuilderMethodInputs(DiscountingMethodCurveTypeSetUp.class, CurveTypeSetUpInterface.class, null);
   }
 
   /**

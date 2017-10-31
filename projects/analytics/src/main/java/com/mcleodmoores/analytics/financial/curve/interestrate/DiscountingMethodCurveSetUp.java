@@ -164,7 +164,7 @@ public class DiscountingMethodCurveSetUp implements CurveSetUpInterface {
 
   @Override
   public DiscountingMethodCurveSetUp building(final String... curveNames) {
-    ArgumentChecker.notNull(curveNames, "curveNames");
+    ArgumentChecker.notEmpty(curveNames, "curveNames");
     if (_curveNames.isEmpty()) {
       _curveNames.add(Arrays.asList(curveNames));
       return this;
@@ -174,7 +174,7 @@ public class DiscountingMethodCurveSetUp implements CurveSetUpInterface {
 
   @Override
   public DiscountingMethodCurveSetUp buildingFirst(final String... curveNames) {
-    ArgumentChecker.notNull(curveNames, "curveNames");
+    ArgumentChecker.notEmpty(curveNames, "curveNames");
     if (_curveNames.isEmpty()) {
       _curveNames.add(Arrays.asList(curveNames));
       return this;
@@ -184,7 +184,7 @@ public class DiscountingMethodCurveSetUp implements CurveSetUpInterface {
 
   @Override
   public DiscountingMethodCurveSetUp thenBuilding(final String... curveNames) {
-    ArgumentChecker.notNull(curveNames, "curveNames");
+    ArgumentChecker.notEmpty(curveNames, "curveNames");
     if (_curveNames.isEmpty()) {
       throw new IllegalStateException();
     }
@@ -194,6 +194,7 @@ public class DiscountingMethodCurveSetUp implements CurveSetUpInterface {
 
   @Override
   public DiscountingMethodCurveTypeSetUp using(final String curveName) {
+    ArgumentChecker.notNull(curveName, "curveName");
     final DiscountingMethodCurveTypeSetUp type = new DiscountingMethodCurveTypeSetUp(this);
     final Object replaced = _curveTypes.put(curveName, type);
     if (replaced != null) {
@@ -204,6 +205,7 @@ public class DiscountingMethodCurveSetUp implements CurveSetUpInterface {
 
   @Override
   public DiscountingMethodPreConstructedCurveTypeSetUp using(final YieldAndDiscountCurve curve) {
+    ArgumentChecker.notNull(curve, "curve");
     final DiscountingMethodPreConstructedCurveTypeSetUp type = new DiscountingMethodPreConstructedCurveTypeSetUp(this);
     final Object replaced = _preConstructedCurves.put(type, curve);
     if (replaced != null) {
@@ -214,6 +216,8 @@ public class DiscountingMethodCurveSetUp implements CurveSetUpInterface {
 
   @Override
   public DiscountingMethodCurveSetUp addNode(final String curveName, final InstrumentDefinition<?> definition) {
+    ArgumentChecker.notNull(curveName, "curveName");
+    ArgumentChecker.notNull(definition, "definition");
     List<InstrumentDefinition<?>> nodesForCurve = _nodes.get(curveName);
     if (nodesForCurve == null) {
       nodesForCurve = new ArrayList<>();
@@ -231,6 +235,7 @@ public class DiscountingMethodCurveSetUp implements CurveSetUpInterface {
 
   @Override
   public DiscountingMethodCurveSetUp removeNodes(final String curveName) {
+    ArgumentChecker.notNull(curveName, "curveName");
     _nodes.put(curveName, null);
     return this;
   }
@@ -243,19 +248,19 @@ public class DiscountingMethodCurveSetUp implements CurveSetUpInterface {
 
   @Override
   public CurveSetUpInterface rootFindingAbsoluteTolerance(final double tolerance) {
-    _absoluteTolerance = tolerance;
+    _absoluteTolerance = ArgumentChecker.notNegative(tolerance, "tolerance");
     return this;
   }
 
   @Override
   public CurveSetUpInterface rootFindingRelativeTolerance(final double tolerance) {
-    _relativeTolerance = tolerance;
+    _relativeTolerance = ArgumentChecker.notNegative(tolerance, "tolerance");
     return this;
   }
 
   @Override
   public CurveSetUpInterface rootFindingMaximumSteps(final int maxSteps) {
-    _maxSteps = maxSteps;
+    _maxSteps = ArgumentChecker.notNegative(maxSteps, "maxSteps");
     return this;
   }
 

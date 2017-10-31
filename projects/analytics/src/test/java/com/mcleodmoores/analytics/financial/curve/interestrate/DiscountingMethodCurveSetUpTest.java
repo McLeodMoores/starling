@@ -18,7 +18,14 @@ public class DiscountingMethodCurveSetUpTest {
    */
   @Test
   public void testNullBuilderMethodInputs() {
-    TestUtils.testNullBuilderMethodInputs(DiscountingMethodCurveSetUp.class, CurveSetUpInterface.class, "removeNodes", "withKnownBundle");
+    TestUtils.testNullBuilderMethodInputs(DiscountingMethodCurveSetUp.class, CurveSetUpInterface.class, null, "removeNodes", "withKnownBundle");
   }
 
+  /**
+   * Tests that empty collections / arrays cannot be passed into builder methods.
+   */
+  @Test
+  public void testEmptyBuilderMethodInputs() {
+    TestUtils.testEmptyBuilderMethodInputs(DiscountingMethodCurveSetUp.class, CurveSetUpInterface.class, null);
+  }
 }
