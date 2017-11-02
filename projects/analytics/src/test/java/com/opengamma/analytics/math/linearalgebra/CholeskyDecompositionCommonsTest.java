@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math.linearalgebra;
@@ -40,7 +40,7 @@ public class CholeskyDecompositionCommonsTest {
     checkEquals(A, a);
   }
 
-  public void checkEquals(final DoubleMatrix2D x, final DoubleMatrix2D y) {
+  void checkEquals(final DoubleMatrix2D x, final DoubleMatrix2D y) {
     final int n = x.getNumberOfRows();
     final int m = x.getNumberOfColumns();
     assertEquals(n, y.getNumberOfRows());

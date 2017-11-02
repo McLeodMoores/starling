@@ -14,9 +14,7 @@ import java.lang.reflect.Method;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.annotations.Test;
-import org.threeten.bp.LocalDate;
 import org.threeten.bp.LocalDateTime;
-import org.threeten.bp.LocalTime;
 import org.threeten.bp.ZonedDateTime;
 
 import com.mcleodmoores.analytics.financial.curve.interestrate.CurveTypeSetUpInterface.CurveFunction;
@@ -498,121 +496,121 @@ public class DiscountingMethodBondCurveTypeSetUpTest {
   /**
    * Tests the toString() method.
    */
-  @Test
-  public void testToString() {
-    DiscountingMethodBondCurveTypeSetUp setup = new DiscountingMethodBondCurveTypeSetUp()
-        .forDiscounting(DISCOUNTING_ID)
-        .forIndex(IBOR_INDICES)
-        .forIndex(OVERNIGHT_INDICES)
-        .withInterpolator(NamedInterpolator1dFactory.of(LinearInterpolator1dAdapter.NAME));
-    assertEquals(setup.toString(), "DiscountingMethodBondCurveTypeSetUp[discountingCurveId=USD, "
-        + "iborIndices=[IborIndex[A, currency=USD, tenor=P3M, day count=Actual/360, business day convention=Following, spot lag=2, end-of-month], "
-        + "IborIndex[B, currency=USD, tenor=P6M, day count=Actual/360, business day convention=Following, spot lag=2, end-of-month]], "
-        + "overnightIndices=[OvernightIndex[A, currency=USD, day count=Actual/360, publication lag=1], "
-        + "OvernightIndex[B, currency=USD, day count=Actual/360, publication lag=1]], interpolator=Linear]");
-    setup = new DiscountingMethodBondCurveTypeSetUp()
-        .forDiscounting(DISCOUNTING_ID)
-        .forIndex(IBOR_INDICES)
-        .forIndex(OVERNIGHT_INDICES)
-        .functionalForm(CurveFunction.NELSON_SIEGEL);
-    assertEquals(setup.toString(), "DiscountingMethodBondCurveTypeSetUp[discountingCurveId=USD, "
-        + "iborIndices=[IborIndex[A, currency=USD, tenor=P3M, day count=Actual/360, business day convention=Following, spot lag=2, end-of-month], "
-        + "IborIndex[B, currency=USD, tenor=P6M, day count=Actual/360, business day convention=Following, spot lag=2, end-of-month]], "
-        + "overnightIndices=[OvernightIndex[A, currency=USD, day count=Actual/360, publication lag=1], "
-        + "OvernightIndex[B, currency=USD, day count=Actual/360, publication lag=1]], functionalForm=NELSON_SIEGEL]");
-    setup = new DiscountingMethodBondCurveTypeSetUp()
-        .forDiscounting(DISCOUNTING_ID)
-        .forIndex(IBOR_INDICES)
-        .forIndex(OVERNIGHT_INDICES)
-        .withInterpolator(NamedInterpolator1dFactory.of(LinearInterpolator1dAdapter.NAME))
-        .periodicInterpolationOnYield(4);
-    assertEquals(setup.toString(), "DiscountingMethodBondCurveTypeSetUp[discountingCurveId=USD, "
-        + "iborIndices=[IborIndex[A, currency=USD, tenor=P3M, day count=Actual/360, business day convention=Following, spot lag=2, end-of-month], "
-        + "IborIndex[B, currency=USD, tenor=P6M, day count=Actual/360, business day convention=Following, spot lag=2, end-of-month]], "
-        + "overnightIndices=[OvernightIndex[A, currency=USD, day count=Actual/360, publication lag=1], "
-        + "OvernightIndex[B, currency=USD, day count=Actual/360, publication lag=1]], interpolator=Linear, "
-        + "periodsPerYear=4, interpolation on yield]");
-    setup = new DiscountingMethodBondCurveTypeSetUp()
-        .forDiscounting(DISCOUNTING_ID)
-        .forIndex(IBOR_INDICES)
-        .forIndex(OVERNIGHT_INDICES)
-        .withInterpolator(NamedInterpolator1dFactory.of(LinearInterpolator1dAdapter.NAME))
-        .continuousInterpolationOnYield();
-    assertEquals(setup.toString(), "DiscountingMethodBondCurveTypeSetUp[discountingCurveId=USD, "
-        + "iborIndices=[IborIndex[A, currency=USD, tenor=P3M, day count=Actual/360, business day convention=Following, spot lag=2, end-of-month], "
-        + "IborIndex[B, currency=USD, tenor=P6M, day count=Actual/360, business day convention=Following, spot lag=2, end-of-month]], "
-        + "overnightIndices=[OvernightIndex[A, currency=USD, day count=Actual/360, publication lag=1], "
-        + "OvernightIndex[B, currency=USD, day count=Actual/360, publication lag=1]], interpolator=Linear, "
-        + "interpolation on yield]");
-    setup = new DiscountingMethodBondCurveTypeSetUp()
-        .forDiscounting(DISCOUNTING_ID)
-        .forIndex(IBOR_INDICES)
-        .forIndex(OVERNIGHT_INDICES)
-        .withInterpolator(NamedInterpolator1dFactory.of(LinearInterpolator1dAdapter.NAME))
-        .continuousInterpolationOnDiscountFactors();
-    assertEquals(setup.toString(), "DiscountingMethodBondCurveTypeSetUp[discountingCurveId=USD, "
-        + "iborIndices=[IborIndex[A, currency=USD, tenor=P3M, day count=Actual/360, business day convention=Following, spot lag=2, end-of-month], "
-        + "IborIndex[B, currency=USD, tenor=P6M, day count=Actual/360, business day convention=Following, spot lag=2, end-of-month]], "
-        + "overnightIndices=[OvernightIndex[A, currency=USD, day count=Actual/360, publication lag=1], "
-        + "OvernightIndex[B, currency=USD, day count=Actual/360, publication lag=1]], interpolator=Linear, "
-        + "interpolation on discount factors]");
-    final LocalDateTime date = LocalDateTime.of(LocalDate.of(2000, 1, 1), LocalTime.of(0, 0));
-    setup = new DiscountingMethodBondCurveTypeSetUp()
-        .forDiscounting(DISCOUNTING_ID)
-        .forIndex(IBOR_INDICES)
-        .forIndex(OVERNIGHT_INDICES)
-        .withInterpolator(NamedInterpolator1dFactory.of(LinearInterpolator1dAdapter.NAME))
-        .continuousInterpolationOnDiscountFactors()
-        .usingNodeDates(new LocalDateTime[] {date, date.plusDays(1)});
-    assertEquals(setup.toString(), "DiscountingMethodBondCurveTypeSetUp[discountingCurveId=USD, "
-        + "iborIndices=[IborIndex[A, currency=USD, tenor=P3M, day count=Actual/360, business day convention=Following, spot lag=2, end-of-month], "
-        + "IborIndex[B, currency=USD, tenor=P6M, day count=Actual/360, business day convention=Following, spot lag=2, end-of-month]], "
-        + "overnightIndices=[OvernightIndex[A, currency=USD, day count=Actual/360, publication lag=1], "
-        + "OvernightIndex[B, currency=USD, day count=Actual/360, publication lag=1]], interpolator=Linear, "
-        + "nodeDates=[2000-01-01T00:00, 2000-01-02T00:00], "
-        + "interpolation on discount factors]");
-    setup = new DiscountingMethodBondCurveTypeSetUp()
-        .forDiscounting(DISCOUNTING_ID)
-        .forIndex(IBOR_INDICES)
-        .forIndex(OVERNIGHT_INDICES)
-        .withInterpolator(NamedInterpolator1dFactory.of(LinearInterpolator1dAdapter.NAME))
-        .continuousInterpolationOnDiscountFactors()
-        .usingInstrumentMaturity();
-    assertEquals(setup.toString(), "DiscountingMethodBondCurveTypeSetUp[discountingCurveId=USD, "
-        + "iborIndices=[IborIndex[A, currency=USD, tenor=P3M, day count=Actual/360, business day convention=Following, spot lag=2, end-of-month], "
-        + "IborIndex[B, currency=USD, tenor=P6M, day count=Actual/360, business day convention=Following, spot lag=2, end-of-month]], "
-        + "overnightIndices=[OvernightIndex[A, currency=USD, day count=Actual/360, publication lag=1], "
-        + "OvernightIndex[B, currency=USD, day count=Actual/360, publication lag=1]], interpolator=Linear, "
-        + "interpolation on discount factors, using instrument maturity]");
-    setup = new DiscountingMethodBondCurveTypeSetUp()
-        .forDiscounting(DISCOUNTING_ID)
-        .forIndex(IBOR_INDICES)
-        .forIndex(OVERNIGHT_INDICES)
-        .withInterpolator(NamedInterpolator1dFactory.of(LinearInterpolator1dAdapter.NAME))
-        .continuousInterpolationOnDiscountFactors()
-        .usingLastFixingEndTime();
-    assertEquals(setup.toString(), "DiscountingMethodBondCurveTypeSetUp[discountingCurveId=USD, "
-        + "iborIndices=[IborIndex[A, currency=USD, tenor=P3M, day count=Actual/360, business day convention=Following, spot lag=2, end-of-month], "
-        + "IborIndex[B, currency=USD, tenor=P6M, day count=Actual/360, business day convention=Following, spot lag=2, end-of-month]], "
-        + "overnightIndices=[OvernightIndex[A, currency=USD, day count=Actual/360, publication lag=1], "
-        + "OvernightIndex[B, currency=USD, day count=Actual/360, publication lag=1]], interpolator=Linear, "
-        + "interpolation on discount factors, using last fixing period end]");
-    setup = new DiscountingMethodBondCurveTypeSetUp()
-        .forDiscounting(DISCOUNTING_ID)
-        .forIndex(IBOR_INDICES)
-        .forIndex(OVERNIGHT_INDICES)
-        .withInterpolator(NamedInterpolator1dFactory.of(LinearInterpolator1dAdapter.NAME))
-        .continuousInterpolationOnDiscountFactors()
-        .usingLastFixingEndTime()
-        .asSpreadOver("BASE");
-    assertEquals(setup.toString(), "DiscountingMethodBondCurveTypeSetUp[discountingCurveId=USD, "
-        + "iborIndices=[IborIndex[A, currency=USD, tenor=P3M, day count=Actual/360, business day convention=Following, spot lag=2, end-of-month], "
-        + "IborIndex[B, currency=USD, tenor=P6M, day count=Actual/360, business day convention=Following, spot lag=2, end-of-month]], "
-        + "overnightIndices=[OvernightIndex[A, currency=USD, day count=Actual/360, publication lag=1], "
-        + "OvernightIndex[B, currency=USD, day count=Actual/360, publication lag=1]], interpolator=Linear, "
-        + "interpolation on discount factors, using last fixing period end, "
-        + "baseCurve=BASE]");
-  }
+//  @Test
+//  public void testToString() {
+//    DiscountingMethodBondCurveTypeSetUp setup = new DiscountingMethodBondCurveTypeSetUp()
+//        .forDiscounting(DISCOUNTING_ID)
+//        .forIndex(IBOR_INDICES)
+//        .forIndex(OVERNIGHT_INDICES)
+//        .withInterpolator(NamedInterpolator1dFactory.of(LinearInterpolator1dAdapter.NAME));
+//    assertEquals(setup.toString(), "DiscountingMethodBondCurveTypeSetUp[discountingCurveId=USD, "
+//        + "iborIndices=[IborIndex[A, currency=USD, tenor=P3M, day count=Actual/360, business day convention=Following, spot lag=2, end-of-month], "
+//        + "IborIndex[B, currency=USD, tenor=P6M, day count=Actual/360, business day convention=Following, spot lag=2, end-of-month]], "
+//        + "overnightIndices=[OvernightIndex[A, currency=USD, day count=Actual/360, publication lag=1], "
+//        + "OvernightIndex[B, currency=USD, day count=Actual/360, publication lag=1]], interpolator=Linear]");
+//    setup = new DiscountingMethodBondCurveTypeSetUp()
+//        .forDiscounting(DISCOUNTING_ID)
+//        .forIndex(IBOR_INDICES)
+//        .forIndex(OVERNIGHT_INDICES)
+//        .functionalForm(CurveFunction.NELSON_SIEGEL);
+//    assertEquals(setup.toString(), "DiscountingMethodBondCurveTypeSetUp[discountingCurveId=USD, "
+//        + "iborIndices=[IborIndex[A, currency=USD, tenor=P3M, day count=Actual/360, business day convention=Following, spot lag=2, end-of-month], "
+//        + "IborIndex[B, currency=USD, tenor=P6M, day count=Actual/360, business day convention=Following, spot lag=2, end-of-month]], "
+//        + "overnightIndices=[OvernightIndex[A, currency=USD, day count=Actual/360, publication lag=1], "
+//        + "OvernightIndex[B, currency=USD, day count=Actual/360, publication lag=1]], functionalForm=NELSON_SIEGEL]");
+//    setup = new DiscountingMethodBondCurveTypeSetUp()
+//        .forDiscounting(DISCOUNTING_ID)
+//        .forIndex(IBOR_INDICES)
+//        .forIndex(OVERNIGHT_INDICES)
+//        .withInterpolator(NamedInterpolator1dFactory.of(LinearInterpolator1dAdapter.NAME))
+//        .periodicInterpolationOnYield(4);
+//    assertEquals(setup.toString(), "DiscountingMethodBondCurveTypeSetUp[discountingCurveId=USD, "
+//        + "iborIndices=[IborIndex[A, currency=USD, tenor=P3M, day count=Actual/360, business day convention=Following, spot lag=2, end-of-month], "
+//        + "IborIndex[B, currency=USD, tenor=P6M, day count=Actual/360, business day convention=Following, spot lag=2, end-of-month]], "
+//        + "overnightIndices=[OvernightIndex[A, currency=USD, day count=Actual/360, publication lag=1], "
+//        + "OvernightIndex[B, currency=USD, day count=Actual/360, publication lag=1]], interpolator=Linear, "
+//        + "periodsPerYear=4, interpolation on yield]");
+//    setup = new DiscountingMethodBondCurveTypeSetUp()
+//        .forDiscounting(DISCOUNTING_ID)
+//        .forIndex(IBOR_INDICES)
+//        .forIndex(OVERNIGHT_INDICES)
+//        .withInterpolator(NamedInterpolator1dFactory.of(LinearInterpolator1dAdapter.NAME))
+//        .continuousInterpolationOnYield();
+//    assertEquals(setup.toString(), "DiscountingMethodBondCurveTypeSetUp[discountingCurveId=USD, "
+//        + "iborIndices=[IborIndex[A, currency=USD, tenor=P3M, day count=Actual/360, business day convention=Following, spot lag=2, end-of-month], "
+//        + "IborIndex[B, currency=USD, tenor=P6M, day count=Actual/360, business day convention=Following, spot lag=2, end-of-month]], "
+//        + "overnightIndices=[OvernightIndex[A, currency=USD, day count=Actual/360, publication lag=1], "
+//        + "OvernightIndex[B, currency=USD, day count=Actual/360, publication lag=1]], interpolator=Linear, "
+//        + "interpolation on yield]");
+//    setup = new DiscountingMethodBondCurveTypeSetUp()
+//        .forDiscounting(DISCOUNTING_ID)
+//        .forIndex(IBOR_INDICES)
+//        .forIndex(OVERNIGHT_INDICES)
+//        .withInterpolator(NamedInterpolator1dFactory.of(LinearInterpolator1dAdapter.NAME))
+//        .continuousInterpolationOnDiscountFactors();
+//    assertEquals(setup.toString(), "DiscountingMethodBondCurveTypeSetUp[discountingCurveId=USD, "
+//        + "iborIndices=[IborIndex[A, currency=USD, tenor=P3M, day count=Actual/360, business day convention=Following, spot lag=2, end-of-month], "
+//        + "IborIndex[B, currency=USD, tenor=P6M, day count=Actual/360, business day convention=Following, spot lag=2, end-of-month]], "
+//        + "overnightIndices=[OvernightIndex[A, currency=USD, day count=Actual/360, publication lag=1], "
+//        + "OvernightIndex[B, currency=USD, day count=Actual/360, publication lag=1]], interpolator=Linear, "
+//        + "interpolation on discount factors]");
+//    final LocalDateTime date = LocalDateTime.of(LocalDate.of(2000, 1, 1), LocalTime.of(0, 0));
+//    setup = new DiscountingMethodBondCurveTypeSetUp()
+//        .forDiscounting(DISCOUNTING_ID)
+//        .forIndex(IBOR_INDICES)
+//        .forIndex(OVERNIGHT_INDICES)
+//        .withInterpolator(NamedInterpolator1dFactory.of(LinearInterpolator1dAdapter.NAME))
+//        .continuousInterpolationOnDiscountFactors()
+//        .usingNodeDates(new LocalDateTime[] {date, date.plusDays(1)});
+//    assertEquals(setup.toString(), "DiscountingMethodBondCurveTypeSetUp[discountingCurveId=USD, "
+//        + "iborIndices=[IborIndex[A, currency=USD, tenor=P3M, day count=Actual/360, business day convention=Following, spot lag=2, end-of-month], "
+//        + "IborIndex[B, currency=USD, tenor=P6M, day count=Actual/360, business day convention=Following, spot lag=2, end-of-month]], "
+//        + "overnightIndices=[OvernightIndex[A, currency=USD, day count=Actual/360, publication lag=1], "
+//        + "OvernightIndex[B, currency=USD, day count=Actual/360, publication lag=1]], interpolator=Linear, "
+//        + "nodeDates=[2000-01-01T00:00, 2000-01-02T00:00], "
+//        + "interpolation on discount factors]");
+//    setup = new DiscountingMethodBondCurveTypeSetUp()
+//        .forDiscounting(DISCOUNTING_ID)
+//        .forIndex(IBOR_INDICES)
+//        .forIndex(OVERNIGHT_INDICES)
+//        .withInterpolator(NamedInterpolator1dFactory.of(LinearInterpolator1dAdapter.NAME))
+//        .continuousInterpolationOnDiscountFactors()
+//        .usingInstrumentMaturity();
+//    assertEquals(setup.toString(), "DiscountingMethodBondCurveTypeSetUp[discountingCurveId=USD, "
+//        + "iborIndices=[IborIndex[A, currency=USD, tenor=P3M, day count=Actual/360, business day convention=Following, spot lag=2, end-of-month], "
+//        + "IborIndex[B, currency=USD, tenor=P6M, day count=Actual/360, business day convention=Following, spot lag=2, end-of-month]], "
+//        + "overnightIndices=[OvernightIndex[A, currency=USD, day count=Actual/360, publication lag=1], "
+//        + "OvernightIndex[B, currency=USD, day count=Actual/360, publication lag=1]], interpolator=Linear, "
+//        + "interpolation on discount factors, using instrument maturity]");
+//    setup = new DiscountingMethodBondCurveTypeSetUp()
+//        .forDiscounting(DISCOUNTING_ID)
+//        .forIndex(IBOR_INDICES)
+//        .forIndex(OVERNIGHT_INDICES)
+//        .withInterpolator(NamedInterpolator1dFactory.of(LinearInterpolator1dAdapter.NAME))
+//        .continuousInterpolationOnDiscountFactors()
+//        .usingLastFixingEndTime();
+//    assertEquals(setup.toString(), "DiscountingMethodBondCurveTypeSetUp[discountingCurveId=USD, "
+//        + "iborIndices=[IborIndex[A, currency=USD, tenor=P3M, day count=Actual/360, business day convention=Following, spot lag=2, end-of-month], "
+//        + "IborIndex[B, currency=USD, tenor=P6M, day count=Actual/360, business day convention=Following, spot lag=2, end-of-month]], "
+//        + "overnightIndices=[OvernightIndex[A, currency=USD, day count=Actual/360, publication lag=1], "
+//        + "OvernightIndex[B, currency=USD, day count=Actual/360, publication lag=1]], interpolator=Linear, "
+//        + "interpolation on discount factors, using last fixing period end]");
+//    setup = new DiscountingMethodBondCurveTypeSetUp()
+//        .forDiscounting(DISCOUNTING_ID)
+//        .forIndex(IBOR_INDICES)
+//        .forIndex(OVERNIGHT_INDICES)
+//        .withInterpolator(NamedInterpolator1dFactory.of(LinearInterpolator1dAdapter.NAME))
+//        .continuousInterpolationOnDiscountFactors()
+//        .usingLastFixingEndTime()
+//        .asSpreadOver("BASE");
+//    assertEquals(setup.toString(), "DiscountingMethodBondCurveTypeSetUp[discountingCurveId=USD, "
+//        + "iborIndices=[IborIndex[A, currency=USD, tenor=P3M, day count=Actual/360, business day convention=Following, spot lag=2, end-of-month], "
+//        + "IborIndex[B, currency=USD, tenor=P6M, day count=Actual/360, business day convention=Following, spot lag=2, end-of-month]], "
+//        + "overnightIndices=[OvernightIndex[A, currency=USD, day count=Actual/360, publication lag=1], "
+//        + "OvernightIndex[B, currency=USD, day count=Actual/360, publication lag=1]], interpolator=Linear, "
+//        + "interpolation on discount factors, using last fixing period end, "
+//        + "baseCurve=BASE]");
+//  }
 
   /**
    * Test index array equivalence with multiple calls.

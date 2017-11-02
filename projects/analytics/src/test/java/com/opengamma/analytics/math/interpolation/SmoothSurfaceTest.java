@@ -12,10 +12,6 @@ import java.util.List;
 import org.apache.commons.lang.Validate;
 import org.testng.annotations.Test;
 
-import cern.jet.random.engine.MersenneTwister;
-import cern.jet.random.engine.MersenneTwister64;
-import cern.jet.random.engine.RandomEngine;
-
 import com.opengamma.analytics.math.function.Function1D;
 import com.opengamma.analytics.math.matrix.DoubleMatrix1D;
 import com.opengamma.analytics.math.minimization.BrentMinimizer1D;
@@ -26,6 +22,10 @@ import com.opengamma.analytics.math.statistics.distribution.ProbabilityDistribut
 import com.opengamma.util.test.TestGroup;
 import com.opengamma.util.tuple.Pair;
 import com.opengamma.util.tuple.Pairs;
+
+import cern.jet.random.engine.MersenneTwister;
+import cern.jet.random.engine.MersenneTwister64;
+import cern.jet.random.engine.RandomEngine;
 
 /**
  * Test.
@@ -67,7 +67,7 @@ public class SmoothSurfaceTest {
     fit(NOISY_DATA, basisFunction, true, NODE_POS);
   }
 
-  public void fit(final List<Pair<double[], Double>> data, final Function1D<Double, Double> basisFunction, final boolean isNormalized, final List<double[]> nodePos) {
+  void fit(final List<Pair<double[], Double>> data, final Function1D<Double, Double> basisFunction, final boolean isNormalized, final List<double[]> nodePos) {
     final Function1D<DoubleMatrix1D, Double> fom = new Function1D<DoubleMatrix1D, Double>() {
 
       @SuppressWarnings("synthetic-access")

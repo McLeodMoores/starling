@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.volatility.smile.function;
@@ -10,13 +10,13 @@ import static org.testng.AssertJUnit.assertTrue;
 
 import org.testng.annotations.Test;
 
-import cern.jet.random.engine.MersenneTwister;
-import cern.jet.random.engine.MersenneTwister64;
-import cern.jet.random.engine.RandomEngine;
-
 import com.opengamma.analytics.financial.model.option.pricing.analytic.formula.EuropeanVanillaOption;
 import com.opengamma.analytics.math.function.Function1D;
 import com.opengamma.util.test.TestGroup;
+
+import cern.jet.random.engine.MersenneTwister;
+import cern.jet.random.engine.MersenneTwister64;
+import cern.jet.random.engine.RandomEngine;
 
 /**
  * Test.
@@ -120,7 +120,7 @@ public class MixedLogNormalVolatilityModelTest {
     volatilityAdjointTest(LARGE_SYSTEM);
   }
 
-  public void volatilityAdjointTest(final MixedLogNormalModelData data) {
+  void volatilityAdjointTest(final MixedLogNormalModelData data) {
     final double strike = 0.8 * FORWARD;
     final EuropeanVanillaOption option = new EuropeanVanillaOption(strike, T, true);
     final Function1D<MixedLogNormalModelData, double[]> modelAdjointFunc = VOL_FUNC.getVolatilityAdjointFunction(option, FORWARD);

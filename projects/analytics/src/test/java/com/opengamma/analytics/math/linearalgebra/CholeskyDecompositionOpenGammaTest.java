@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math.linearalgebra;
@@ -51,9 +51,9 @@ public class CholeskyDecompositionOpenGammaTest {
    */
   public void solveVector() {
     final CholeskyDecompositionResult result = CDOG.evaluate(A5);
-    double[] b = new double[] {1.0, 2.0, 3.0, 4.0, -1.0};
-    double[] x = result.solve(b);
-    DoubleMatrix1D ax = (DoubleMatrix1D) ALGEBRA.multiply(A5, new DoubleMatrix1D(x));
+    final double[] b = new double[] {1.0, 2.0, 3.0, 4.0, -1.0};
+    final double[] x = result.solve(b);
+    final DoubleMatrix1D ax = (DoubleMatrix1D) ALGEBRA.multiply(A5, new DoubleMatrix1D(x));
     ArrayAsserts.assertArrayEquals("Cholesky decomposition OpenGamma - solve", b, ax.getData(), 1.0E-10);
   }
 
@@ -63,9 +63,9 @@ public class CholeskyDecompositionOpenGammaTest {
    */
   public void solveMatrix() {
     final CholeskyDecompositionResult result = CDOG.evaluate(A5);
-    double[][] b = new double[][] { {1.0, 2.0}, {2.0, 3.0}, {3.0, 4.0}, {4.0, -2.0}, {-1.0, -1.0}};
-    DoubleMatrix2D x = result.solve(new DoubleMatrix2D(b));
-    DoubleMatrix2D ax = (DoubleMatrix2D) ALGEBRA.multiply(A5, x);
+    final double[][] b = new double[][] { {1.0, 2.0}, {2.0, 3.0}, {3.0, 4.0}, {4.0, -2.0}, {-1.0, -1.0}};
+    final DoubleMatrix2D x = result.solve(new DoubleMatrix2D(b));
+    final DoubleMatrix2D ax = (DoubleMatrix2D) ALGEBRA.multiply(A5, x);
     ArrayAsserts.assertArrayEquals("Cholesky decomposition OpenGamma - solve", b[0], ax.getData()[0], 1.0E-10);
     ArrayAsserts.assertArrayEquals("Cholesky decomposition OpenGamma - solve", b[1], ax.getData()[1], 1.0E-10);
   }
@@ -88,7 +88,7 @@ public class CholeskyDecompositionOpenGammaTest {
    */
   public void performance() {
     long startTime, endTime;
-    int nbTest = 100000;
+    final int nbTest = 100000;
 
     CholeskyDecompositionResult resultOG3 = CDOG.evaluate(A3);
     CholeskyDecompositionResult resultC3 = CDC.evaluate(A3);
@@ -109,7 +109,7 @@ public class CholeskyDecompositionOpenGammaTest {
     }
     endTime = System.currentTimeMillis();
     System.out.println(nbTest + " Cholesky decomposition 3x3 (Common wrapper): " + (endTime - startTime) + " ms - " + resultC3.getL());
-    // Performance note: Cholesky decomposition: 4-Nov-11: On Mac Pro 3.2 GHz Quad-Core Intel Xeon: 205 ms for 10000 decomposition 3x3.  
+    // Performance note: Cholesky decomposition: 4-Nov-11: On Mac Pro 3.2 GHz Quad-Core Intel Xeon: 205 ms for 10000 decomposition 3x3.
 
     // ===== 5 x 5 =====
     startTime = System.currentTimeMillis();
@@ -128,7 +128,7 @@ public class CholeskyDecompositionOpenGammaTest {
     // Performance note: Cholesky decomposition: 4-Nov-11: On Mac Pro 3.2 GHz Quad-Core Intel Xeon: 205 ms for 10000 decomposition 5x5.
   }
 
-  public void checkEquals(final DoubleMatrix2D x, final DoubleMatrix2D y) {
+  void checkEquals(final DoubleMatrix2D x, final DoubleMatrix2D y) {
     final int n = x.getNumberOfRows();
     final int m = x.getNumberOfColumns();
     assertEquals(n, y.getNumberOfRows());

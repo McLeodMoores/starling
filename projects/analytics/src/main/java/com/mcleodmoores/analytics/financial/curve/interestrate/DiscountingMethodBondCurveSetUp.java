@@ -22,6 +22,7 @@ import com.opengamma.analytics.financial.legalentity.LegalEntityFilter;
 import com.opengamma.analytics.financial.model.interestrate.curve.YieldAndDiscountCurve;
 import com.opengamma.analytics.financial.provider.curve.CurveBuildingBlockBundle;
 import com.opengamma.id.UniqueIdentifiable;
+import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
 import com.opengamma.util.tuple.Pair;
 import com.opengamma.util.tuple.Pairs;
@@ -50,7 +51,7 @@ public class DiscountingMethodBondCurveSetUp implements BondCurveSetUpInterface 
   }
 
   protected DiscountingMethodBondCurveSetUp(final DiscountingMethodBondCurveSetUp setup) {
-    //TODO copy
+    ArgumentChecker.notNull(setup, "setup");
     _curveNames = setup._curveNames;
     _curveTypes = setup._curveTypes;
     _preConstructedCurves = setup._preConstructedCurves;

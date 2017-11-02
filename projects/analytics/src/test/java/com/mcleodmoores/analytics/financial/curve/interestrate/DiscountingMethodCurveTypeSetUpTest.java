@@ -70,6 +70,14 @@ public class DiscountingMethodCurveTypeSetUpTest {
   }
 
   /**
+   * Tests that empty collections / arrays cannot be passed into builder methods.
+   */
+  @Test
+  public void testEmptyBuilderMethodInputs() {
+    TestUtils.testEmptyBuilderMethodInputs(DiscountingMethodCurveTypeSetUp.class, CurveTypeSetUpInterface.class, null);
+  }
+
+  /**
    * Tests that a functional curve type cannot be created if an interpolated / fixed date curve type has already started
    * to be constructed.
    */

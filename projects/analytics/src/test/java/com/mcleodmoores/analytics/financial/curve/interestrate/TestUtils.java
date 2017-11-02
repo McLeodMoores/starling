@@ -23,7 +23,7 @@ public final class TestUtils {
   private static final Logger LOGGER = LoggerFactory.getLogger(TestUtils.class);
 
   /**
-   * Reflective testing of builder methods - assumes that any method that returns the same type is
+   * Reflective testing of builder methods. Assumes that any method that returns the same type is
    * a builder method, and that null inputs are invalid for all.
    * @param clazz  the builder to be tested, not null
    * @param parent  the parent class containing the method declarations to be tested, not null
@@ -64,6 +64,14 @@ public final class TestUtils {
     }
   }
 
+  /**
+   * Reflective testing of builder methods. Assumes that any method that returns the same type is a builder
+   * method, and that any collection / array inputs cannot be empty.
+   * @param clazz  the builder to be tested, not null
+   * @param parent  the parent class containing the method declarations to be tested, not null
+   * @param constructorArguments  any arguments for the constructor, null or empty means the no-arg constructor will be used
+   * @param methodAcceptsEmpty  the names of any methods that can accept empty collections or arrays
+   */
   public static void testEmptyBuilderMethodInputs(final Class<?> clazz, final Class<?> parent, final Object[] constructorArguments,
       final String... methodAcceptsEmpty) {
       final Method[] methods = parent.getDeclaredMethods();

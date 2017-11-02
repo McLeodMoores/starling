@@ -73,7 +73,7 @@ public class DiscountingMethodCurveTypeSetUp extends DiscountingMethodCurveSetUp
 
   @Override
   public DiscountingMethodCurveTypeSetUp forIndex(final IborTypeIndex... indices) {
-    ArgumentChecker.notNull(indices, "indices");
+    ArgumentChecker.notEmpty(indices, "indices");
     if (_iborCurveIndices == null) {
       _iborCurveIndices = new ArrayList<>();
     }
@@ -83,7 +83,7 @@ public class DiscountingMethodCurveTypeSetUp extends DiscountingMethodCurveSetUp
 
   @Override
   public DiscountingMethodCurveTypeSetUp forIndex(final OvernightIndex... indices) {
-    ArgumentChecker.notNull(indices, "indices");
+    ArgumentChecker.notEmpty(indices, "indices");
     if (_overnightCurveIndices == null) {
       _overnightCurveIndices = new ArrayList<>();
     }
@@ -126,7 +126,7 @@ public class DiscountingMethodCurveTypeSetUp extends DiscountingMethodCurveSetUp
     if (_periodicInterpolationOnYield) {
       throw new IllegalStateException("Cannot set node dates for a periodically-compounded curve");
     }
-    ArgumentChecker.notNull(dates, "dates");
+    ArgumentChecker.notEmpty(dates, "dates");
     if (_dates == null) {
       _dates = new ArrayList<>();
     }
