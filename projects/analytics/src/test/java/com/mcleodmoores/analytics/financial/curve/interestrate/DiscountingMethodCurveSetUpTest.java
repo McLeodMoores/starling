@@ -18,7 +18,7 @@ public class DiscountingMethodCurveSetUpTest {
    */
   @Test
   public void testNullBuilderMethodInputs() {
-    TestUtils.testNullBuilderMethodInputs(DiscountingMethodCurveSetUp.class, CurveSetUpInterface.class, null, "removeNodes", "withKnownBundle");
+    TestUtils.testNullBuilderMethodInputs(DiscountingMethodCurveSetUp.class, CurveSetUpInterface.class, "removeNodes", "withKnownBundle");
   }
 
   /**
@@ -26,6 +26,6 @@ public class DiscountingMethodCurveSetUpTest {
    */
   @Test
   public void testEmptyBuilderMethodInputs() {
-    TestUtils.testEmptyBuilderMethodInputs(DiscountingMethodCurveSetUp.class, CurveSetUpInterface.class, null);
+    TestUtils.testEmptyBuilderMethodInputs(DiscountingMethodCurveSetUp.class, CurveSetUpInterface.class);
   }
 }

@@ -66,7 +66,7 @@ public class DiscountingMethodCurveTypeSetUpTest {
    */
   @Test
   public void testNullBuilderMethodInputs() {
-    TestUtils.testNullBuilderMethodInputs(DiscountingMethodCurveTypeSetUp.class, CurveTypeSetUpInterface.class, null);
+    TestUtils.testNullBuilderMethodInputs(DiscountingMethodCurveTypeSetUp.class, CurveTypeSetUpInterface.class);
   }
 
   /**
@@ -74,7 +74,7 @@ public class DiscountingMethodCurveTypeSetUpTest {
    */
   @Test
   public void testEmptyBuilderMethodInputs() {
-    TestUtils.testEmptyBuilderMethodInputs(DiscountingMethodCurveTypeSetUp.class, CurveTypeSetUpInterface.class, null);
+    TestUtils.testEmptyBuilderMethodInputs(DiscountingMethodCurveTypeSetUp.class, CurveTypeSetUpInterface.class);
   }
 
   /**
