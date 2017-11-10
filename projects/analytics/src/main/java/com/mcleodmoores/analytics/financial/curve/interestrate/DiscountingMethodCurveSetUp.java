@@ -248,19 +248,22 @@ public class DiscountingMethodCurveSetUp implements CurveSetUpInterface {
 
   @Override
   public CurveSetUpInterface rootFindingAbsoluteTolerance(final double tolerance) {
-    _absoluteTolerance = ArgumentChecker.notNegative(tolerance, "tolerance");
+    ArgumentChecker.isTrue(tolerance > 0, "Absolute tolerance must be greater than zero");
+    _absoluteTolerance = tolerance;
     return this;
   }
 
   @Override
   public CurveSetUpInterface rootFindingRelativeTolerance(final double tolerance) {
-    _relativeTolerance = ArgumentChecker.notNegative(tolerance, "tolerance");
+    ArgumentChecker.isTrue(tolerance > 0, "Relative tolerance must be greater than zero");
+    _relativeTolerance = tolerance;
     return this;
   }
 
   @Override
   public CurveSetUpInterface rootFindingMaximumSteps(final int maxSteps) {
-    _maxSteps = ArgumentChecker.notNegative(maxSteps, "maxSteps");
+    ArgumentChecker.isTrue(maxSteps > 0, "Maximum number of steps must be greater than zero");
+    _maxSteps = maxSteps;
     return this;
   }
 

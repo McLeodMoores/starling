@@ -338,43 +338,163 @@ public final class TestUtils {
    */
   public static void testBuilderMethodsInputRange(final Class<?> clazz, final Class<?> parent, final Object[] constructorArguments,
       final double lowerRange, final boolean inclusiveLower, final double upperRange, final boolean inclusiveUpper, final String... methodNames) {
+    if (lowerRange >= upperRange) {
+      throw new IllegalArgumentException("Upper range " + upperRange + " must be greater than lower range " + lowerRange);
+    }
     final Method[] methods = parent.getDeclaredMethods();
-    for (final String methodName : methodNames) {
-      boolean found = false;
-      for (final Method method : methods) {
-        if (!method.getName().equals(methodName)) {
-          continue;
+    if (methodNames != null && methodNames.length > 0) {
+      for (final String methodName : methodNames) {
+        Method method = null;
+        for (final Method m : methods) {
+          if (m.getName().equals(methodName)) {
+            method = m;
+            break;
+          }
         }
-        found = true;
+        if (method == null) {
+          fail("Method called " + methodName + " not found in " + clazz.getSimpleName());
+          return;
+        }
         if (method.getReturnType().isAssignableFrom(clazz) && method.getParameterTypes().length == 1) {
-          final Object builder = createBuilder(clazz, constructorArguments);
-          if (builder == null) {
-            fail("An instance of " + clazz.getSimpleName() + " could not be created with the arguments " + Arrays.toString(constructorArguments));
-          }
-          final Object[] args = new Object[1];
-          // lower range
-          if (inclusiveLower) {
-            args[0] = lowerRange;
-            try {
-              method.invoke(builder, args);
-              fail("Method called " + method.getName() + " should check that the input is not in the range "
-                  + lowerRange + (inclusiveLower ? " <= " : " < ") + "x" + (inclusiveUpper ? " <= " : " < ") + upperRange);
-            } catch (final InvocationTargetException e) {
-              final Throwable cause = e.getTargetException();
-              assertTrue(cause instanceof IllegalArgumentException,
-                  method.getName() + "(" + Arrays.toString(method.getParameters()) + ") in " + clazz.getSimpleName()
-                    + " threw " + cause + "(" + cause.getMessage() + "): ");
-              assertTrue(cause.getMessage().startsWith("Input parameter"));
-            } catch (final Exception e) {
-              fail(method.getName() + ": " + e);
-              e.printStackTrace();
-            }
-          }
+          testLowerRangeForMethod(method, clazz, constructorArguments, lowerRange, inclusiveLower);
+          testUpperRangeForMethod(method, clazz, constructorArguments, upperRange, inclusiveUpper);
         }
       }
-      if (!found) {
-        fail("Method called " + methodName + " not found in " + clazz.getSimpleName());
+      return;
+    }
+    for (final Method method : methods) {
+      if (method.getReturnType().isAssignableFrom(clazz) && method.getParameterTypes().length == 1
+          && (method.getParameterTypes()[0].isPrimitive() || Number.class.isAssignableFrom(method.getParameterTypes()[0]))) {
+        testLowerRangeForMethod(method, clazz, constructorArguments, lowerRange, inclusiveLower);
+        testUpperRangeForMethod(method, clazz, constructorArguments, upperRange, inclusiveUpper);
       }
+    }
+  }
+
+  private static void testLowerRangeForMethod(final Method method, final Class<?> clazz, final Object[] constructorArguments, final double range,
+      final boolean inclusive) {
+    if (Double.isInfinite(range)) {
+      return;
+    }
+    final Object builder = createBuilder(clazz, constructorArguments);
+    if (builder == null) {
+      fail("An instance of " + clazz.getSimpleName() + " could not be created with the arguments " + Arrays.toString(constructorArguments));
+    }
+    final Object[] args = new Object[1];
+    // TODO think about under / overflow?
+    final Class<?> expectedType = method.getParameterTypes()[0];
+    if (expectedType == Byte.TYPE || expectedType.equals(Byte.class)) {
+      final byte r = (byte) range;
+      if (r == Byte.MIN_VALUE) {
+        return;
+      }
+      args[0] = Byte.valueOf(inclusive ? (byte) (r - 1) : r);
+    } else if (expectedType == Short.TYPE || expectedType.equals(Short.class)) {
+      final short r = (short) range;
+      if (r == Short.MIN_VALUE) {
+        return;
+      }
+      args[0] = Short.valueOf(inclusive ? (short) (r - 1) : r);
+    } else if (expectedType == Integer.TYPE || expectedType.equals(Integer.class)) {
+      final int r = (int) range;
+      if (r == Integer.MIN_VALUE) {
+        return;
+      }
+      args[0] = Integer.valueOf(inclusive ? r - 1 : r);
+    } else if (expectedType == Long.TYPE || expectedType.equals(Long.class)) {
+      final long r = (long) range;
+      if (r == Long.MIN_VALUE) {
+        return;
+      }
+      args[0] = Long.valueOf(inclusive ? (long) (r - 1) : r);
+    } else if (expectedType == Float.TYPE || expectedType.equals(Float.class)) {
+      final float r = (float) range;
+      if (Float.isInfinite(r)) {
+        return;
+      }
+      args[0] = Float.valueOf(inclusive ? (float) (r - 1) : r);
+    } else if (expectedType == Double.TYPE || expectedType.equals(Double.class)) {
+      args[0] = Double.valueOf(inclusive ? range - 1 : range);
+    } else {
+      throw new IllegalStateException("Cannot handle " + expectedType);
+    }
+    try {
+      method.invoke(builder, args);
+      fail("Method called " + method.getName() + " should check that the input is in the range "
+          + range + (inclusive ? " <= " : " < ") + "x");
+    } catch (final InvocationTargetException e) {
+      final Throwable cause = e.getTargetException();
+      assertTrue(cause instanceof IllegalArgumentException,
+          method.getName() + "(" + Arrays.toString(method.getParameters()) + ") in " + clazz.getSimpleName()
+            + " threw " + cause + "(" + cause.getMessage() + "): ");
+    } catch (final Exception e) {
+      fail(method.getName() + ": " + e);
+      e.printStackTrace();
+    }
+  }
+
+  private static void testUpperRangeForMethod(final Method method, final Class<?> clazz, final Object[] constructorArguments, final double range,
+      final boolean inclusive) {
+    if (Double.isInfinite(range)) {
+      return;
+    }
+    final Object builder = createBuilder(clazz, constructorArguments);
+    if (builder == null) {
+      fail("An instance of " + clazz.getSimpleName() + " could not be created with the arguments " + Arrays.toString(constructorArguments));
+    }
+    final Object[] args = new Object[1];
+    // TODO think about under / overflow?
+    final Class<?> expectedType = method.getParameterTypes()[0];
+    if (expectedType == Byte.TYPE || expectedType.equals(Byte.class)) {
+      final byte r = (byte) range;
+      if (r == Byte.MAX_VALUE) {
+        return;
+      }
+      args[0] = Byte.valueOf(inclusive ? (byte) (r + 1) : r);
+    } else if (expectedType == Short.TYPE || expectedType.equals(Short.class)) {
+      final short r = (short) range;
+      if (r == Short.MAX_VALUE) {
+        return;
+      }
+      args[0] = Short.valueOf(inclusive ? (short) (r + 1) : r);
+    } else if (expectedType == Integer.TYPE || expectedType.equals(Integer.class)) {
+      final int r = (int) range;
+      if (r == Integer.MAX_VALUE) {
+        return;
+      }
+      args[0] = Integer.valueOf(inclusive ? r + 1 : r);
+    } else if (expectedType == Long.TYPE || expectedType.equals(Long.class)) {
+      final long r = (long) range;
+      if (r == Long.MAX_VALUE) {
+        return;
+      }
+      args[0] = Long.valueOf(inclusive ? (long) (r + 1) : r);
+    } else if (expectedType == Float.TYPE || expectedType.equals(Float.class)) {
+      final float r = (float) range;
+      if (Float.isInfinite(r)) {
+        return;
+      }
+      args[0] = Float.valueOf(inclusive ? (float) (r + 1) : r);
+    } else if (expectedType == Double.TYPE || expectedType.equals(Double.class)) {
+      if (Double.isInfinite(range)) {
+        return;
+      }
+      args[0] = Double.valueOf(inclusive ? range + 1 : range);
+    } else {
+      throw new IllegalStateException("Cannot handle " + expectedType);
+    }
+    try {
+      method.invoke(builder, args);
+      fail("Method called " + method.getName() + " should check that the input is in the range x "
+          + (inclusive ? " >= " : " > ") + range);
+    } catch (final InvocationTargetException e) {
+      final Throwable cause = e.getTargetException();
+      assertTrue(cause instanceof IllegalArgumentException,
+          method.getName() + "(" + Arrays.toString(method.getParameters()) + ") in " + clazz.getSimpleName()
+            + " threw " + cause + "(" + cause.getMessage() + "): ");
+    } catch (final Exception e) {
+      fail(method.getName() + ": " + e);
+      e.printStackTrace();
     }
   }
 
@@ -391,12 +511,14 @@ public final class TestUtils {
               builder = constructor.newInstance(constructorArguments);
               break;
             } catch (final InstantiationException | InvocationTargetException  | IllegalAccessException | IllegalArgumentException e) {
+              LOGGER.info("Could not create {} using {}: {}", clazz.getSimpleName(), Arrays.toString(constructorArguments), e.getMessage());
               // carry on trying to find matching constructor
             }
           }
         }
       }
     } catch (final IllegalAccessException | InstantiationException e) {
+      LOGGER.info("Could not create {}: {}", clazz.getSimpleName(), e.getMessage());
     }
     return builder;
   }

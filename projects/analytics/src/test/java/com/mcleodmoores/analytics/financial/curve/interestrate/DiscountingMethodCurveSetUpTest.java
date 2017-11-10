@@ -28,4 +28,12 @@ public class DiscountingMethodCurveSetUpTest {
   public void testEmptyBuilderMethodInputs() {
     TestUtils.testEmptyBuilderMethodInputs(DiscountingMethodCurveSetUp.class, CurveSetUpInterface.class);
   }
+
+  /**
+   * Tests that the tolerances and max steps must be greater than zero.
+   */
+  @Test
+  public void testNegativeBuilderMethodInputs() {
+    TestUtils.testBuilderMethodsLowerRange(DiscountingMethodCurveSetUp.class, CurveSetUpInterface.class, 0, false);
+  }
 }
