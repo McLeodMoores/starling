@@ -4,6 +4,7 @@
 package com.mcleodmoores.analytics.financial.curve.interestrate;
 
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertNotEquals;
 import static org.testng.Assert.assertTrue;
 import static org.testng.internal.junit.ArrayAsserts.assertArrayEquals;
 
@@ -477,6 +478,28 @@ public class DiscountingMethodCurveTypeSetUpTest {
     new DiscountingMethodCurveTypeSetUp()
       .usingLastFixingEndTime()
       .usingInstrumentMaturity();
+  }
+
+  /**
+   * Tests that hashCode() and equals() method.
+   */
+  @Test
+  public void testHashCodeEquals() {
+    final DiscountingMethodCurveTypeSetUp setup = new DiscountingMethodCurveTypeSetUp()
+        .forIndex(IBOR_INDICES);
+    DiscountingMethodCurveTypeSetUp other = new DiscountingMethodCurveTypeSetUp()
+        .forIndex(IBOR_INDICES);
+    assertEquals(setup, other);
+    assertEquals(setup.hashCode(), other.hashCode());
+    assertEquals(setup, setup);
+    assertNotEquals(null, setup);
+    assertNotEquals(new DiscountingMethodCurveSetUp(), setup);
+    other = new DiscountingMethodCurveTypeSetUp();
+    assertNotEquals(setup, other);
+    other = new DiscountingMethodCurveTypeSetUp().continuousInterpolationOnDiscountFactors();
+    assertNotEquals(setup, other);
+    other = new DiscountingMethodCurveTypeSetUp().continuousInterpolationOnYield();
+    assertNotEquals(setup, other);
   }
 
   /**

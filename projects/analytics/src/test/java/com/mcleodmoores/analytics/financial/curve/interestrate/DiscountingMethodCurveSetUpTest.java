@@ -36,4 +36,36 @@ public class DiscountingMethodCurveSetUpTest {
   public void testNegativeBuilderMethodInputs() {
     TestUtils.testBuilderMethodsLowerRange(DiscountingMethodCurveSetUp.class, CurveSetUpInterface.class, 0, false);
   }
+
+  /**
+   * Tests that the building() method cannot be used twice.
+   */
+  @Test(expectedExceptions = IllegalStateException.class)
+  public void testBuilding() {
+    new DiscountingMethodCurveSetUp().building("A").building("B");
+  }
+
+  /**
+   * Tests that the buildingFirst() method cannot be used twice.
+   */
+  @Test(expectedExceptions = IllegalStateException.class)
+  public void testBuildingFirst() {
+    new DiscountingMethodCurveSetUp().building("A").buildingFirst("B");
+  }
+
+  /**
+   * Tests that the building() method cannot be used twice.
+   */
+  @Test(expectedExceptions = IllegalStateException.class)
+  public void testThenBuilding() {
+    new DiscountingMethodCurveSetUp().thenBuilding("A");
+  }
+
+  /**
+   * Test duplicated curve type.
+   */
+  @Test(expectedExceptions = IllegalStateException.class)
+  public void testDuplicatedCurveType() {
+    new DiscountingMethodCurveSetUp().using("A").using("A");
+  }
 }

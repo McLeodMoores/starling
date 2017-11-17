@@ -157,11 +157,11 @@ public class DiscountingMethodCurveSetUp implements CurveSetUpInterface {
 
   @Override
   public DiscountingMethodCurveSetUp copy() {
-    // TODO not a copy
     return new DiscountingMethodCurveSetUp(_curveNames, _nodes, _curveTypes, _preConstructedCurves, _fxMatrix,
         _knownBundle, _absoluteTolerance, _relativeTolerance, _maxSteps);
   }
 
+  //TODO test that curve names don't already exist?
   @Override
   public DiscountingMethodCurveSetUp building(final String... curveNames) {
     ArgumentChecker.notEmpty(curveNames, "curveNames");
@@ -169,9 +169,10 @@ public class DiscountingMethodCurveSetUp implements CurveSetUpInterface {
       _curveNames.add(Arrays.asList(curveNames));
       return this;
     }
-    throw new IllegalStateException();
+    throw new IllegalStateException("Have already set curves to construct");
   }
 
+  //TODO next two methods should be step builders and thenBuilding()
   @Override
   public DiscountingMethodCurveSetUp buildingFirst(final String... curveNames) {
     ArgumentChecker.notEmpty(curveNames, "curveNames");
@@ -179,14 +180,14 @@ public class DiscountingMethodCurveSetUp implements CurveSetUpInterface {
       _curveNames.add(Arrays.asList(curveNames));
       return this;
     }
-    throw new IllegalStateException();
+    throw new IllegalStateException("Have already set curves to construct");
   }
 
   @Override
   public DiscountingMethodCurveSetUp thenBuilding(final String... curveNames) {
     ArgumentChecker.notEmpty(curveNames, "curveNames");
     if (_curveNames.isEmpty()) {
-      throw new IllegalStateException();
+      throw new IllegalStateException("Have not set the first curves to construct");
     }
     _curveNames.add(Arrays.asList(curveNames));
     return this;
@@ -198,7 +199,7 @@ public class DiscountingMethodCurveSetUp implements CurveSetUpInterface {
     final DiscountingMethodCurveTypeSetUp type = new DiscountingMethodCurveTypeSetUp(this);
     final Object replaced = _curveTypes.put(curveName, type);
     if (replaced != null) {
-      throw new IllegalStateException();
+      throw new IllegalStateException("Already constructing a curve called " + curveName);
     }
     return type;
   }
