@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 import org.threeten.bp.LocalDateTime;
 import org.threeten.bp.ZonedDateTime;
@@ -32,6 +33,7 @@ import com.opengamma.util.ArgumentChecker;
 /**
  *
  */
+//TODO needs a copy()
 public class DiscountingMethodCurveTypeSetUp extends DiscountingMethodCurveSetUp implements CurveTypeSetUpInterface {
   private String _baseCurveName;
   private Interpolator1D _interpolator;
@@ -367,52 +369,28 @@ public class DiscountingMethodCurveTypeSetUp extends DiscountingMethodCurveSetUp
     if (_functionalForm != other._functionalForm) {
       return false;
     }
-    if (_baseCurveName == null) {
-      if (other._baseCurveName != null) {
-        return false;
-      }
-    } else if (!_baseCurveName.equals(other._baseCurveName)) {
+    if (!Objects.equals(_discountingCurveId, other._discountingCurveId)) {
       return false;
     }
-    if (_dates == null) {
-      if (other._dates != null) {
-        return false;
-      }
-    } else if (!_dates.equals(other._dates)) {
+    if (!Objects.equals(_overnightCurveIndices, other._overnightCurveIndices)) {
       return false;
     }
-    if (_discountingCurveId == null) {
-      if (other._discountingCurveId != null) {
-        return false;
-      }
-    } else if (!_discountingCurveId.equals(other._discountingCurveId)) {
+    if (!Objects.equals(_iborCurveIndices, other._iborCurveIndices)) {
       return false;
     }
-    if (_iborCurveIndices == null) {
-      if (other._iborCurveIndices != null) {
-        return false;
-      }
-    } else if (!_iborCurveIndices.equals(other._iborCurveIndices)) {
+    if (!Objects.equals(_interpolator, other._interpolator)) {
       return false;
     }
-    if (_interpolator == null) {
-      if (other._interpolator != null) {
-        return false;
-      }
-    } else if (!_interpolator.equals(other._interpolator)) {
+    if (!Objects.equals(_dates, other._dates)) {
+      return false;
+    }
+    if (!Objects.equals(_baseCurveName, other._baseCurveName)) {
       return false;
     }
     if (_lastFixingEndCalculator != other._lastFixingEndCalculator) {
       return false;
     }
     if (_maturityCalculator != other._maturityCalculator) {
-      return false;
-    }
-    if (_overnightCurveIndices == null) {
-      if (other._overnightCurveIndices != null) {
-        return false;
-      }
-    } else if (!_overnightCurveIndices.equals(other._overnightCurveIndices)) {
       return false;
     }
     if (_periodicInterpolationOnYield != other._periodicInterpolationOnYield) {

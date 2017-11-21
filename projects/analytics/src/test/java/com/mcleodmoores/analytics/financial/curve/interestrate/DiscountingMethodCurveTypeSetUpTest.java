@@ -32,6 +32,7 @@ import com.opengamma.analytics.financial.instrument.payment.CouponIborDefinition
 import com.opengamma.analytics.financial.interestrate.InstrumentDerivative;
 import com.opengamma.analytics.financial.model.interestrate.curve.YieldCurve;
 import com.opengamma.analytics.financial.provider.description.interestrate.MulticurveProviderDiscount;
+import com.opengamma.analytics.math.interpolation.LinearInterpolator1D;
 import com.opengamma.analytics.math.interpolation.factory.LinearInterpolator1dAdapter;
 import com.opengamma.analytics.math.interpolation.factory.NamedInterpolator1dFactory;
 import com.opengamma.financial.convention.businessday.BusinessDayConventions;
@@ -485,7 +486,7 @@ public class DiscountingMethodCurveTypeSetUpTest {
    */
   @Test
   public void testHashCodeEquals() {
-    final DiscountingMethodCurveTypeSetUp setup = new DiscountingMethodCurveTypeSetUp()
+    DiscountingMethodCurveTypeSetUp setup = new DiscountingMethodCurveTypeSetUp()
         .forIndex(IBOR_INDICES);
     DiscountingMethodCurveTypeSetUp other = new DiscountingMethodCurveTypeSetUp()
         .forIndex(IBOR_INDICES);
@@ -499,6 +500,46 @@ public class DiscountingMethodCurveTypeSetUpTest {
     other = new DiscountingMethodCurveTypeSetUp().continuousInterpolationOnDiscountFactors();
     assertNotEquals(setup, other);
     other = new DiscountingMethodCurveTypeSetUp().continuousInterpolationOnYield();
+    assertNotEquals(setup, other);
+    other = new DiscountingMethodCurveTypeSetUp().functionalForm(CurveFunction.NELSON_SIEGEL);
+    assertNotEquals(setup, other);
+    other = new DiscountingMethodCurveTypeSetUp().forDiscounting(Currency.USD);
+    assertNotEquals(setup, other);
+    other = new DiscountingMethodCurveTypeSetUp().forIndex(OVERNIGHT_INDICES[0]);
+    assertNotEquals(setup, other);
+    other = new DiscountingMethodCurveTypeSetUp().forIndex(IBOR_INDICES[0]);
+    assertNotEquals(setup, other);
+    other = new DiscountingMethodCurveTypeSetUp()
+        .forIndex(IBOR_INDICES).withInterpolator(new LinearInterpolator1D());
+    assertNotEquals(setup, other);
+    setup = new DiscountingMethodCurveTypeSetUp()
+        .forIndex(IBOR_INDICES)
+        .usingNodeDates(LocalDateTime.now());
+    other = new DiscountingMethodCurveTypeSetUp()
+        .forIndex(IBOR_INDICES)
+        .usingNodeDates(LocalDateTime.now(), LocalDateTime.now().plusDays(10));
+    assertNotEquals(setup, other);
+    setup = new DiscountingMethodCurveTypeSetUp()
+        .forIndex(IBOR_INDICES);
+    other = new DiscountingMethodCurveTypeSetUp()
+        .forIndex(IBOR_INDICES)
+        .asSpreadOver("C");
+    assertNotEquals(setup, other);
+    other = new DiscountingMethodCurveTypeSetUp()
+        .forIndex(IBOR_INDICES)
+        .usingLastFixingEndTime();
+    assertNotEquals(setup, other);
+    other = new DiscountingMethodCurveTypeSetUp()
+        .forIndex(IBOR_INDICES)
+        .usingInstrumentMaturity();
+    assertNotEquals(setup, other);
+    other = new DiscountingMethodCurveTypeSetUp()
+        .forIndex(IBOR_INDICES)
+        .periodicInterpolationOnYield(3);
+    assertNotEquals(setup, other);
+    setup = new DiscountingMethodCurveTypeSetUp()
+        .forIndex(IBOR_INDICES)
+        .periodicInterpolationOnYield(4);
     assertNotEquals(setup, other);
   }
 

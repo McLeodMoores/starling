@@ -18,7 +18,7 @@ public class DiscountingMethodCurveSetUpTest {
    */
   @Test
   public void testNullBuilderMethodInputs() {
-    TestUtils.testNullBuilderMethodInputs(DiscountingMethodCurveSetUp.class, CurveSetUpInterface.class, "removeNodes", "withKnownBundle");
+    TestUtils.testNullBuilderMethodInputs(DiscountingMethodCurveSetUp.class, CurveSetUpInterface.class, "withKnownBundle");
   }
 
   /**
@@ -35,6 +35,14 @@ public class DiscountingMethodCurveSetUpTest {
   @Test
   public void testNegativeBuilderMethodInputs() {
     TestUtils.testBuilderMethodsLowerRange(DiscountingMethodCurveSetUp.class, CurveSetUpInterface.class, 0, false);
+  }
+
+  /**
+   * Tests that the builder cannot be null.
+   */
+  @Test(expectedExceptions = IllegalArgumentException.class)
+  public void testNullBuilder() {
+    new DiscountingMethodCurveSetUp(null);
   }
 
   /**
