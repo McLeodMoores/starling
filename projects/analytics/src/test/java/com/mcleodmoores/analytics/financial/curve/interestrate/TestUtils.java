@@ -146,39 +146,49 @@ public final class TestUtils {
   public static void testEmptyBuilderMethodInputs(final Class<?> clazz, final Class<?> parent, final Object[] constructorArguments,
       final String... methodAcceptsEmpty) {
     final Method[] methods = parent.getDeclaredMethods();
-    for (final Method method : methods) {
-      if (method.getReturnType().isAssignableFrom(clazz) && method.getParameterTypes().length == 1) {
-        final Object builder = createBuilder(clazz, constructorArguments);
-        if (builder == null) {
-          fail("An instance of " + clazz.getSimpleName() + " could not be created with the arguments " + Arrays.toString(constructorArguments));
+    for (final Method declaredMethod : methods) {
+      try {
+        // covers cases with covariant return types
+        final Method method = clazz.getMethod(declaredMethod.getName(), declaredMethod.getParameterTypes());
+        if (methodAcceptsEmpty != null && methodAcceptsEmpty.length > 0 && Arrays.binarySearch(methodAcceptsEmpty, method.getName()) >= 0) {
+          continue;
         }
-        final Class<?> parameter = method.getParameterTypes()[0];
-        final Object[] args = new Object[1];
-        try {
-          if (Collection.class.isAssignableFrom(parameter)) {
-            args[0] = parameter.newInstance();
-          } else if (parameter.isArray()) {
-            final Class<?> arrayType = parameter.getComponentType();
-            args[0] = Array.newInstance(arrayType, 0);
-          } else {
-            continue;
+        if ((method.getReturnType().isAssignableFrom(clazz) || clazz.isAssignableFrom(method.getReturnType())) && method.getParameterTypes().length == 1) {
+          final Object builder = createBuilder(clazz, constructorArguments);
+          if (builder == null) {
+            fail("An instance of " + clazz.getSimpleName() + " could not be created with the arguments " + Arrays.toString(constructorArguments));
           }
-        } catch (InstantiationException | IllegalAccessException e) {
-          fail(e.getMessage());
+          final Class<?> parameter = method.getParameterTypes()[0];
+          final Object[] args = new Object[1];
+          try {
+            if (Collection.class.isAssignableFrom(parameter)) {
+              args[0] = parameter.newInstance();
+            } else if (parameter.isArray()) {
+              final Class<?> arrayType = parameter.getComponentType();
+              args[0] = Array.newInstance(arrayType, 0);
+            } else {
+              continue;
+            }
+          } catch (InstantiationException | IllegalAccessException e) {
+            fail(e.getMessage());
+          }
+          try {
+            method.invoke(builder, args);
+            fail("Method called " + method.getName() + " should check that the input is not empty");
+          } catch (final InvocationTargetException e) {
+            final Throwable cause = e.getTargetException();
+            assertTrue(cause instanceof IllegalArgumentException,
+                method.getName() + "(" + Arrays.toString(method.getParameters()) + ") in " + clazz.getSimpleName()
+                  + " threw " + cause + "(" + cause.getMessage() + "): ");
+            assertTrue(cause.getMessage().startsWith("Input parameter"));
+          } catch (final Exception e) {
+            fail(method.getName() + ": " + e);
+            e.printStackTrace();
+          }
         }
-        try {
-          method.invoke(builder, args);
-          fail("Method called " + method.getName() + " should check that the input is not empty");
-        } catch (final InvocationTargetException e) {
-          final Throwable cause = e.getTargetException();
-          assertTrue(cause instanceof IllegalArgumentException,
-              method.getName() + "(" + Arrays.toString(method.getParameters()) + ") in " + clazz.getSimpleName()
-                + " threw " + cause + "(" + cause.getMessage() + "): ");
-          assertTrue(cause.getMessage().startsWith("Input parameter"));
-        } catch (final Exception e) {
-          fail(method.getName() + ": " + e);
-          e.printStackTrace();
-        }
+      } catch (final Exception e) {
+        fail(declaredMethod.getName() + ": " + e);
+        e.printStackTrace();
       }
     }
   }
