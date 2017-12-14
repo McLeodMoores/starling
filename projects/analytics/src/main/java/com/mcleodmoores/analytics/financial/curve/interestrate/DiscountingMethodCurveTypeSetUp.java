@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 
 import org.threeten.bp.LocalDateTime;
 import org.threeten.bp.ZonedDateTime;
@@ -327,80 +326,5 @@ public class DiscountingMethodCurveTypeSetUp extends DiscountingMethodCurveSetUp
     sb.append("]");
     return sb.toString();
   }
-
-  @Override
-  public int hashCode() {
-    final int prime = 31;
-    int result = 1;
-    result = prime * result + (_baseCurveName == null ? 0 : _baseCurveName.hashCode());
-    result = prime * result + (_continuousInterpolationOnDiscountFactors ? 1231 : 1237);
-    result = prime * result + (_continuousInterpolationOnYield ? 1231 : 1237);
-    result = prime * result + (_dates == null ? 0 : _dates.hashCode());
-    result = prime * result + (_discountingCurveId == null ? 0 : _discountingCurveId.hashCode());
-    result = prime * result + (_functionalForm == null ? 0 : _functionalForm.hashCode());
-    result = prime * result + (_iborCurveIndices == null ? 0 : _iborCurveIndices.hashCode());
-    result = prime * result + (_interpolator == null ? 0 : _interpolator.hashCode());
-    result = prime * result + (_lastFixingEndCalculator ? 1231 : 1237);
-    result = prime * result + (_maturityCalculator ? 1231 : 1237);
-    result = prime * result + (_overnightCurveIndices == null ? 0 : _overnightCurveIndices.hashCode());
-    result = prime * result + (_periodicInterpolationOnYield ? 1231 : 1237);
-    result = prime * result + _periodsPerYear;
-    return result;
-  }
-
-  @Override
-  public boolean equals(final Object obj) {
-    if (this == obj) {
-      return true;
-    }
-    if (obj == null) {
-      return false;
-    }
-    if (!(obj instanceof DiscountingMethodCurveTypeSetUp)) {
-      return false;
-    }
-    final DiscountingMethodCurveTypeSetUp other = (DiscountingMethodCurveTypeSetUp) obj;
-    if (_continuousInterpolationOnDiscountFactors != other._continuousInterpolationOnDiscountFactors) {
-      return false;
-    }
-    if (_continuousInterpolationOnYield != other._continuousInterpolationOnYield) {
-      return false;
-    }
-    if (_functionalForm != other._functionalForm) {
-      return false;
-    }
-    if (!Objects.equals(_discountingCurveId, other._discountingCurveId)) {
-      return false;
-    }
-    if (!Objects.equals(_overnightCurveIndices, other._overnightCurveIndices)) {
-      return false;
-    }
-    if (!Objects.equals(_iborCurveIndices, other._iborCurveIndices)) {
-      return false;
-    }
-    if (!Objects.equals(_interpolator, other._interpolator)) {
-      return false;
-    }
-    if (!Objects.equals(_dates, other._dates)) {
-      return false;
-    }
-    if (!Objects.equals(_baseCurveName, other._baseCurveName)) {
-      return false;
-    }
-    if (_lastFixingEndCalculator != other._lastFixingEndCalculator) {
-      return false;
-    }
-    if (_maturityCalculator != other._maturityCalculator) {
-      return false;
-    }
-    if (_periodicInterpolationOnYield != other._periodicInterpolationOnYield) {
-      return false;
-    }
-    if (_periodsPerYear != other._periodsPerYear) {
-      return false;
-    }
-    return true;
-  }
-
 
 }

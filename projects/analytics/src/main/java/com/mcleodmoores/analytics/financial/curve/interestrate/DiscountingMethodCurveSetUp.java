@@ -27,6 +27,7 @@ import com.opengamma.util.tuple.Pairs;
 /**
  *
  */
+//PerCurveSetUp?
 public class DiscountingMethodCurveSetUp implements CurveSetUpInterface {
   private final List<List<String>> _curveNames;
   private final Map<String, DiscountingMethodCurveTypeSetUp> _curveTypes;
@@ -109,9 +110,38 @@ public class DiscountingMethodCurveSetUp implements CurveSetUpInterface {
 
   @Override
   public DiscountingMethodCurveBuilder getBuilder() {
+    if (_curveNames.isEmpty()) {
+      throw new IllegalStateException("Have not configured any curves");
+    }
     final List<Pair<String, UniqueIdentifiable>> discountingCurves = new ArrayList<>();
     final List<Pair<String, List<IborTypeIndex>>> iborCurves = new ArrayList<>();
     final List<Pair<String, List<OvernightIndex>>> overnightCurves = new ArrayList<>();
+    // check that nodes have been added for all curves
+    int nameCount = 0;
+    for (final List<String> names : _curveNames) {
+      for (final String name : names) {
+        if (!_nodes.containsKey(name)) {
+          throw new IllegalStateException("Have not added nodes for " + name);
+        }
+        if (!_curveTypes.containsKey(name)) {
+          throw new IllegalStateException("Have not set up curve type for " + name);
+        }
+        nameCount++;
+      }
+    }
+    // check that nodes haven't been added for curves that aren't configured
+    if (nameCount != _nodes.size()) {
+      // only do this to get the name - it's failed anyway
+      String name = null;
+      for (final Map.Entry<String, List<InstrumentDefinition<?>>> entry : _nodes.entrySet()) {
+        for (final List<String> names : _curveNames) {
+          if (names.contains(entry.getKey())) {
+            name = entry.getKey();
+          }
+        }
+      }
+      throw new IllegalStateException("Have added nodes for " + name + " but it has not been configured");
+    }
     for (final Map.Entry<String, DiscountingMethodCurveTypeSetUp> entry : _curveTypes.entrySet()) {
       final String curveName = entry.getKey();
       final DiscountingMethodCurveTypeSetUp setUp = entry.getValue();
@@ -136,18 +166,27 @@ public class DiscountingMethodCurveSetUp implements CurveSetUpInterface {
       final YieldAndDiscountCurve curve = entry.getValue();
       final UniqueIdentifiable discountingCurveId = setUp.getDiscountingCurveId();
       if (discountingCurveId != null) {
-        knownDiscountingCurves.put((Currency) discountingCurveId, curve);
+        final YieldAndDiscountCurve previous = knownDiscountingCurves.put((Currency) discountingCurveId, curve);
+        if (previous != null) {
+          throw new IllegalStateException("Have already set a pre-constructed curve for " + discountingCurveId);
+        }
       }
       final List<IborTypeIndex> iborCurveIndices = setUp.getIborCurveIndices();
       if (iborCurveIndices != null) {
         for (final IborTypeIndex index : iborCurveIndices) {
-          knownIborCurves.put(IndexConverter.toIborIndex(index), curve);
+          final YieldAndDiscountCurve previous = knownIborCurves.put(IndexConverter.toIborIndex(index), curve);
+          if (previous != null) {
+            throw new IllegalStateException("Have already set a pre-constructed curve for " + index);
+          }
         }
       }
       final List<OvernightIndex> overnightCurveIndices = setUp.getOvernightCurveIndices();
       if (overnightCurveIndices != null) {
         for (final OvernightIndex index : overnightCurveIndices) {
-          knownOvernightCurves.put(IndexConverter.toIndexOn(index), curve);
+          final YieldAndDiscountCurve previous = knownOvernightCurves.put(IndexConverter.toIndexOn(index), curve);
+          if (previous != null) {
+            throw new IllegalStateException("Have already set a pre-constructed curve for " + index);
+          }
         }
       }
     }
@@ -161,7 +200,7 @@ public class DiscountingMethodCurveSetUp implements CurveSetUpInterface {
         _knownBundle, _absoluteTolerance, _relativeTolerance, _maxSteps);
   }
 
-  //TODO test that curve names don't already exist?
+  //TODO test that curve names don't already exist
   @Override
   public DiscountingMethodCurveSetUp building(final String... curveNames) {
     ArgumentChecker.notEmpty(curveNames, "curveNames");
@@ -199,7 +238,7 @@ public class DiscountingMethodCurveSetUp implements CurveSetUpInterface {
     final DiscountingMethodCurveTypeSetUp type = new DiscountingMethodCurveTypeSetUp(this);
     final Object replaced = _curveTypes.put(curveName, type);
     if (replaced != null) {
-      throw new IllegalStateException("Already constructing a curve called " + curveName);
+      throw new IllegalStateException("Have already set up a configuration for a curve called " + curveName);
     }
     return type;
   }
@@ -208,10 +247,7 @@ public class DiscountingMethodCurveSetUp implements CurveSetUpInterface {
   public DiscountingMethodPreConstructedCurveTypeSetUp using(final YieldAndDiscountCurve curve) {
     ArgumentChecker.notNull(curve, "curve");
     final DiscountingMethodPreConstructedCurveTypeSetUp type = new DiscountingMethodPreConstructedCurveTypeSetUp(this);
-    final Object replaced = _preConstructedCurves.put(type, curve);
-    if (replaced != null) {
-      throw new IllegalStateException();
-    }
+    _preConstructedCurves.put(type, curve);
     return type;
   }
 
