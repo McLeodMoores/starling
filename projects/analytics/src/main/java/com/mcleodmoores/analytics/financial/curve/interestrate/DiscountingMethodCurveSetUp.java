@@ -13,14 +13,10 @@ import com.mcleodmoores.analytics.financial.index.IborTypeIndex;
 import com.mcleodmoores.analytics.financial.index.OvernightIndex;
 import com.opengamma.analytics.financial.forex.method.FXMatrix;
 import com.opengamma.analytics.financial.instrument.InstrumentDefinition;
-import com.opengamma.analytics.financial.instrument.index.IborIndex;
-import com.opengamma.analytics.financial.instrument.index.IndexConverter;
-import com.opengamma.analytics.financial.instrument.index.IndexON;
 import com.opengamma.analytics.financial.model.interestrate.curve.YieldAndDiscountCurve;
 import com.opengamma.analytics.financial.provider.curve.CurveBuildingBlockBundle;
 import com.opengamma.id.UniqueIdentifiable;
 import com.opengamma.util.ArgumentChecker;
-import com.opengamma.util.money.Currency;
 import com.opengamma.util.tuple.Pair;
 import com.opengamma.util.tuple.Pairs;
 
@@ -156,38 +152,6 @@ public class DiscountingMethodCurveSetUp implements CurveSetUpInterface {
       final List<OvernightIndex> overnightCurveIndices = setUp.getOvernightCurveIndices();
       if (overnightCurveIndices != null) {
         overnightCurves.add(Pairs.of(curveName, overnightCurveIndices));
-      }
-    }
-    final Map<Currency, YieldAndDiscountCurve> knownDiscountingCurves = new HashMap<>();
-    final Map<IborIndex, YieldAndDiscountCurve> knownIborCurves = new HashMap<>();
-    final Map<IndexON, YieldAndDiscountCurve> knownOvernightCurves = new HashMap<>();
-    for (final Map.Entry<DiscountingMethodPreConstructedCurveTypeSetUp, YieldAndDiscountCurve> entry : _preConstructedCurves.entrySet()) {
-      final DiscountingMethodPreConstructedCurveTypeSetUp setUp = entry.getKey();
-      final YieldAndDiscountCurve curve = entry.getValue();
-      final UniqueIdentifiable discountingCurveId = setUp.getDiscountingCurveId();
-      if (discountingCurveId != null) {
-        final YieldAndDiscountCurve previous = knownDiscountingCurves.put((Currency) discountingCurveId, curve);
-        if (previous != null) {
-          throw new IllegalStateException("Have already set a pre-constructed curve for " + discountingCurveId);
-        }
-      }
-      final List<IborTypeIndex> iborCurveIndices = setUp.getIborCurveIndices();
-      if (iborCurveIndices != null) {
-        for (final IborTypeIndex index : iborCurveIndices) {
-          final YieldAndDiscountCurve previous = knownIborCurves.put(IndexConverter.toIborIndex(index), curve);
-          if (previous != null) {
-            throw new IllegalStateException("Have already set a pre-constructed curve for " + index);
-          }
-        }
-      }
-      final List<OvernightIndex> overnightCurveIndices = setUp.getOvernightCurveIndices();
-      if (overnightCurveIndices != null) {
-        for (final OvernightIndex index : overnightCurveIndices) {
-          final YieldAndDiscountCurve previous = knownOvernightCurves.put(IndexConverter.toIndexOn(index), curve);
-          if (previous != null) {
-            throw new IllegalStateException("Have already set a pre-constructed curve for " + index);
-          }
-        }
       }
     }
     return new DiscountingMethodCurveBuilder(_curveNames, discountingCurves, iborCurves, overnightCurves, _nodes, _curveTypes,

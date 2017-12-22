@@ -33,6 +33,7 @@ import com.opengamma.analytics.financial.provider.curve.SingleCurveBundle;
 import com.opengamma.analytics.financial.provider.description.interestrate.ParameterProviderInterface;
 import com.opengamma.id.UniqueIdentifiable;
 import com.opengamma.timeseries.precise.zdt.ZonedDateTimeDoubleTimeSeries;
+import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
 import com.opengamma.util.tuple.Pair;
 
@@ -75,19 +76,19 @@ public abstract class CurveBuilder<T extends ParameterProviderInterface> {
       final FXMatrix fxMatrix,
       final Map<? extends PreConstructedCurveTypeSetUp, YieldAndDiscountCurve> preConstructedCurves,
       final CurveBuildingBlockBundle knownBundle) {
-    _curveNames = new ArrayList<>(curveNames);
-    _discountingCurves = new ArrayList<>(discountingCurves);
-    _iborCurves = new ArrayList<>(iborCurves);
-    _overnightCurves = new ArrayList<>(overnightCurves);
+    _curveNames = new ArrayList<>(ArgumentChecker.notEmpty(curveNames, "curveNames"));
+    _discountingCurves = new ArrayList<>(ArgumentChecker.notNull(discountingCurves, "discountingCurves"));
+    _iborCurves = new ArrayList<>(ArgumentChecker.notNull(iborCurves, "iborCurves"));
+    _overnightCurves = new ArrayList<>(ArgumentChecker.notNull(overnightCurves, "overnightCurves"));
     _issuerCurves = LinkedListMultimap.create();
     if (issuerCurves != null) {
       for (final Pair<String, List<Pair<Object, LegalEntityFilter<LegalEntity>>>> issuerCurve : issuerCurves) {
         _issuerCurves.put(issuerCurve.getKey(), issuerCurve.getValue().get(0)); //TODO only one handled
       }
     }
-    _nodes = new HashMap<>(nodes);
-    _curveTypes = new HashMap<>(curveTypes);
-    _fxMatrix = fxMatrix;
+    _nodes = new HashMap<>(ArgumentChecker.notEmpty(nodes, "nodes"));
+    _curveTypes = new HashMap<>(ArgumentChecker.notEmpty(curveTypes, "curveTypes"));
+    _fxMatrix = fxMatrix == null ? new FXMatrix() : fxMatrix;
     _knownDiscountingCurves = new HashMap<>();
     _knownIborCurves = new HashMap<>();
     _knownOvernightCurves = new HashMap<>();
