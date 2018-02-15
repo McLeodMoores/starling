@@ -196,7 +196,7 @@ public class PortfolioLoaderResource {
       return SheetFormat.XLS;
     }
 
-    final Response response = Response.status(Response.Status.BAD_REQUEST).entity("Portfolio upload only supports CSV/XLS" +
+    final Response response = Response.status(Response.Status.BAD_REQUEST).entity("Portfolio upload only supports CSV/XLS " +
                                                                                 "files and Excel worksheets").build();
     throw new WebApplicationException(response);
   }
