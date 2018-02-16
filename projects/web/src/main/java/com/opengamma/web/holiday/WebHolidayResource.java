@@ -34,6 +34,8 @@ import org.joda.beans.impl.flexi.FlexiBean;
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.Year;
 
+import com.opengamma.core.holiday.WeekendType;
+import com.opengamma.core.holiday.WeekendTypeProvider;
 import com.opengamma.id.UniqueId;
 import com.opengamma.master.holiday.HolidayDocument;
 import com.opengamma.master.holiday.ManageableHoliday;
@@ -205,6 +207,15 @@ public class WebHolidayResource extends AbstractWebHolidayResource {
     out.put("holidayDescriptionMap", getHolidayTypesProvider().getDescription(doc.getHoliday().getType().name()));
     out.put("deleted", !doc.isLatest());
     out.put("holidayDatesByYear", getHolidayDatesByYear(doc));
+    final String weekendType;
+    // not all holidays have the weekend explicitly set
+    if (doc.getHoliday() instanceof WeekendTypeProvider) {
+      weekendType = ((WeekendTypeProvider) doc.getHoliday()).getWeekendType().name();
+    } else {
+      weekendType = WeekendType.SATURDAY_SUNDAY.name();
+    }
+    out.put("weekendType", weekendType);
+    out.put("holidayType", doc.getHoliday().getType());
     return out;
   }
 

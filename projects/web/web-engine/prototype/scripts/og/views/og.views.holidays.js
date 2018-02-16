@@ -21,7 +21,33 @@ $.register_module({
             routes = common.routes, ui = common.util.ui, module = this,
             page_name = module.name.split('.').pop(), json = {},
             view, holiday_name,
+            create_holiday = function () {
+        		$(this).dialog('close');
+        		api.rest.holidays.put({
+        			handler: function (result) {
+        				var args = routes.current().args, rule = view.rules.load_item;
+        				console.log(args);
+        				if (result.error) return view.error(result.message);
+        				view.search(args);
+        				routes.go(routes.hash(rule, args, {
+        					add: {id: result.meta.id}, del: ['version']}));
+        			},
+        			name: ui.dialog({return_field_value: 'name'})
+        		});
+        	},
             toolbar_buttons = {
+        		'new': function() {
+        			ui.dialog({
+        				width: 400, height: 190,
+        				type: 'input',
+        				title: 'Add New Holidays',
+        				fields: [{type: 'input', name: 'Holiday Name', id: 'name'}],
+        				buttons: {
+        					'OK': create_holiday,
+        					'Cancel': function () {$(this).dialog('close'); }
+        				}
+        			});
+        		},
         		'import': og.views.data_forms.toolbar.upload_holidays,
                 'delete': function () {
                     ui.dialog({
@@ -116,6 +142,7 @@ $.register_module({
                                      <option>BANK</option>\
                                      <option>SETTLEMENT</option>\
                                      <option>TRADING</option>\
+                            	     <option>CUSTOM</option>\
                                    </select>'
                         }
                     ]
@@ -123,8 +150,7 @@ $.register_module({
                 toolbar: {
                     'default': {
                         buttons: [
-                            {id: 'new', tooltip: 'New', enabled: 'OG-disabled'},
-//                            {id: 'new', tooltip: 'New', handler: toolbar_buttons['new']},
+                            {id: 'new', tooltip: 'New', handler: toolbar_buttons['new']},
                             {id: 'import', tooltip: 'Import', handler: toolbar_buttons['import']},
                             {id: 'save', tooltip: 'Save', enabled: 'OG-disabled'},
                             {id: 'saveas', tooltip: 'Save as', enabled: 'OG-disabled'},
@@ -134,8 +160,7 @@ $.register_module({
                     },
                     active: {
                         buttons: [
-                            {id: 'new', tooltip: 'New', enabled: 'OG-disabled'},
-//                            {id: 'new', tooltip: 'New', handler: toolbar_buttons['new']},
+                            {id: 'new', tooltip: 'New', handler: toolbar_buttons['new']},
                             {id: 'import', tooltip: 'Import', handler: toolbar_buttons['import']},
                             {id: 'save', tooltip: 'Save', enabled: 'OG-disabled'},
                             {id: 'saveas', tooltip: 'Save as', enabled: 'OG-disabled'},
