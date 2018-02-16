@@ -494,7 +494,8 @@
     <fragment>/scripts/og/views/config_forms/og.views.config_forms.yieldcurvedefinition.js</fragment>
     <!-- /config forms -->
     <!--  data_forms forms -->
-    <fragment>/scripts/og/views/data_forms/og.views.data_forms.toolbar.upload_holidays.js</fragment>
+    <fragment>/scripts/og/views/data_forms/og.views.data_forms.toolbar.new_holiday.js</fragment>
+    <fragment>/scripts/og/views/data_forms/og.views.data_forms.toolbar.upload_holiday.js</fragment>
     <!-- /data_forms forms -->
     <fragment>/scripts/og/views/extras/og.views.extras.portfolios_sync.js</fragment>
     <fragment>/scripts/og/views/og.views.legalentities.js</fragment>

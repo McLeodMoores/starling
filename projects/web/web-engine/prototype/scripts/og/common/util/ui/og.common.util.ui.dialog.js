@@ -6,7 +6,7 @@ $.register_module({
     name: 'og.common.util.ui.dialog',
     dependencies: [],
     obj: function () {
-        return function (obj) {
+        return function (obj) {        	
             var constructor = this, $obj, css_class, class_name, default_options;
             constructor.close = function () {
                 $(css_class).dialog('close');

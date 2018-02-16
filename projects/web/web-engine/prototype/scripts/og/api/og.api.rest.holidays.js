@@ -10,7 +10,11 @@ $.register_module({
         return { // all requests that begin with /holidays
             root: 'holidays',
             get: api.default_get.partial(['name', 'type', 'currency'], null),
-            put: common.not_implemented_put,
+            put: function (config) {
+            	config = config || {};
+//            	var root = this.root, method = [root], data = {}, meta, id = str(config.id),
+            	console.log(config);
+            },
             del: function (config) {
                 config = config || {};
                 var root = this.root, method = [root], meta,

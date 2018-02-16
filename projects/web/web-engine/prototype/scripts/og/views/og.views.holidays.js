@@ -21,34 +21,9 @@ $.register_module({
             routes = common.routes, ui = common.util.ui, module = this,
             page_name = module.name.split('.').pop(), json = {},
             view, holiday_name,
-            create_holiday = function () {
-        		$(this).dialog('close');
-        		api.rest.holidays.put({
-        			handler: function (result) {
-        				var args = routes.current().args, rule = view.rules.load_item;
-        				console.log(args);
-        				if (result.error) return view.error(result.message);
-        				view.search(args);
-        				routes.go(routes.hash(rule, args, {
-        					add: {id: result.meta.id}, del: ['version']}));
-        			},
-        			name: ui.dialog({return_field_value: 'name'})
-        		});
-        	},
             toolbar_buttons = {
-        		'new': function() {
-        			ui.dialog({
-        				width: 400, height: 190,
-        				type: 'input',
-        				title: 'Add New Holidays',
-        				fields: [{type: 'input', name: 'Holiday Name', id: 'name'}],
-        				buttons: {
-        					'OK': create_holiday,
-        					'Cancel': function () {$(this).dialog('close'); }
-        				}
-        			});
-        		},
-        		'import': og.views.data_forms.toolbar.upload_holidays,
+        		'new': og.views.data_forms.toolbar.new_holiday,
+        		'import': og.views.data_forms.toolbar.upload_holiday,
                 'delete': function () {
                     ui.dialog({
                         type: 'confirm',
