@@ -222,6 +222,9 @@ public class WebHolidayResource extends AbstractWebHolidayResource {
   private static List<Pair<Year, List<LocalDate>>> getHolidayDatesByYear(final HolidayDocument doc) {
     final List<LocalDate> holidayDates = doc.getHoliday().getHolidayDates();
     final List<Pair<Year, List<LocalDate>>> datesByYear = new ArrayList<>();
+    if (holidayDates.isEmpty()) {
+      datesByYear.add(Pairs.of(Year.of(LocalDate.now().getYear()), holidayDates));
+    }
     if (holidayDates.size() > 0) {
       int year = holidayDates.get(0).getYear();
       int start = 0;

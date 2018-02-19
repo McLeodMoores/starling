@@ -10,6 +10,7 @@
 package com.opengamma.web.holiday;
 
 import java.net.URI;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -25,15 +26,18 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.joda.beans.impl.flexi.FlexiBean;
+import org.threeten.bp.LocalDate;
 
 import com.opengamma.DataNotFoundException;
 import com.opengamma.core.holiday.HolidayType;
+import com.opengamma.core.holiday.WeekendType;
 import com.opengamma.id.ExternalId;
 import com.opengamma.id.ExternalIdBundle;
 import com.opengamma.id.ObjectId;
@@ -48,12 +52,12 @@ import com.opengamma.master.holiday.HolidaySearchRequest;
 import com.opengamma.master.holiday.HolidaySearchResult;
 import com.opengamma.master.holiday.HolidaySearchSortOrder;
 import com.opengamma.master.holiday.ManageableHoliday;
+import com.opengamma.master.holiday.ManageableHolidayWithWeekend;
 import com.opengamma.util.money.Currency;
 import com.opengamma.util.paging.PagingRequest;
 import com.opengamma.web.WebPaging;
 import com.opengamma.web.analytics.rest.MasterType;
 import com.opengamma.web.analytics.rest.SubscribeMaster;
-import com.sun.jersey.api.client.ClientResponse.Status;
 
 /**
  * RESTful resource for all holidays.
@@ -174,35 +178,67 @@ public class WebHolidaysResource extends AbstractWebHolidayResource {
   @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
   @Produces(MediaType.APPLICATION_JSON)
   public Response postJSON(
+      @FormParam("holidayType") final String holidayTypeStr,
+      @FormParam("identifier") final String identifierStr,
+      @FormParam("weekendType") final String weekendTypeStr,
       @FormParam("name") final String name,
       @FormParam("holidayJSON") final String json,
       @FormParam("holidayXML") final String xml,
-      @FormParam("type") final String typeName) {
+      @FormParam("type") final String type) {
     final String trimmedName = StringUtils.trimToNull(name);
     final String trimmedJson = StringUtils.trimToNull(json);
     final String trimmedXml = StringUtils.trimToNull(xml);
-
-    Response result = null;
-    if (trimmedName == null || trimmedJson == null && trimmedXml == null) {
-      result = Response.status(Status.BAD_REQUEST).build();
-    } else {
-      ManageableHoliday holiday = null;
-      if (trimmedJson != null) {
+    final String trimmedType = StringUtils.trimToEmpty(type);
+    final String holidayName;
+    final ManageableHoliday holiday;
+    switch (trimmedType) {
+      case "json":
         holiday = (ManageableHoliday) parseJSON(trimmedJson);
-      } else if (trimmedXml != null) {
-        holiday = parseXML(trimmedXml, ManageableHoliday.class);
-      }
-      if (holiday == null) {
-        result = Response.status(Status.BAD_REQUEST).build();
-      } else {
-        final HolidayDocument doc = new HolidayDocument(holiday);
-        doc.setName(trimmedName);
-        final HolidayDocument added = data().getHolidayMaster().add(doc);
-        final URI uri = data().getUriInfo().getAbsolutePathBuilder().path(added.getUniqueId().toLatest().toString()).build();
-        result = Response.created(uri).build();
-      }
+        holidayName = trimmedName;
+        break;
+      case "xml":
+        holiday = (ManageableHoliday) parseXML(trimmedXml);
+        holidayName = trimmedName;
+        break;
+      case StringUtils.EMPTY:
+        if (holidayTypeStr == null || identifierStr == null || weekendTypeStr == null) {
+          return Response.status(Status.BAD_REQUEST).build();
+        }
+        final HolidayType holidayType = HolidayType.valueOf(holidayTypeStr);
+        final ExternalId id = ExternalId.parse(identifierStr);
+        final WeekendType weekendType = WeekendType.valueOf(weekendTypeStr);
+        holiday = new ManageableHolidayWithWeekend();
+        holiday.setType(holidayType);
+        //TODO change when form defines acceptable schemes
+        switch (holidayType) {
+          case CURRENCY:
+            holiday.setCurrency(Currency.of(id.getValue()));
+            break;
+          case BANK:
+            holiday.setRegionExternalId(id);
+            break;
+          case SETTLEMENT:
+          case TRADING:
+            holiday.setExchangeExternalId(id);
+            break;
+          case CUSTOM:
+            holiday.setCustomExternalId(id);
+            break;
+          default:
+            throw new IllegalArgumentException("Unrecognised holiday type " + holidayType);
+        }
+        ((ManageableHolidayWithWeekend) holiday).setWeekendType(weekendType);
+        holidayName = id.getValue();
+        holiday.setHolidayDates(Collections.<LocalDate>emptyList());
+        break;
+      default:
+        throw new IllegalArgumentException("Can only add holiday by XML, JSON or completing the web form");
     }
-    return result;
+    final HolidayDocument doc = new HolidayDocument(holiday);
+    doc.setName(holidayName);
+    final HolidayDocument added = data().getHolidayMaster().add(doc);
+    final URI uri = data().getUriInfo().getAbsolutePathBuilder().path(added.getUniqueId().toLatest().toString()).build();
+    return Response.created(uri).build();
   }
 
   private FlexiBean createSearchResultData(final PagingRequest pr, final HolidaySearchSortOrder sort, final String name,

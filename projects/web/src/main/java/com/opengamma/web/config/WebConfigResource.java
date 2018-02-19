@@ -97,7 +97,7 @@ public class WebConfigResource extends AbstractWebConfigResource {
   public Response putHTML(
       @FormParam("name") String name,
       @FormParam(CONFIG_XML) String configXml) {
-    if (data().getConfig().isLatest() == false) {
+    if (!data().getConfig().isLatest()) {
       return Response.status(Status.FORBIDDEN).entity(getHTML()).build();
     }
 
@@ -116,7 +116,7 @@ public class WebConfigResource extends AbstractWebConfigResource {
       return Response.ok(html).build();
     }
 
-    Object parsed = parseXML(configXml, data().getConfig().getConfig().getType());
+    final Object parsed = parseXML(configXml, data().getConfig().getConfig().getType());
     final URI uri = updateConfig(name, parsed);
     return Response.seeOther(uri).build();
   }
@@ -128,7 +128,7 @@ public class WebConfigResource extends AbstractWebConfigResource {
       @FormParam("name") String name,
       @FormParam("configJSON") String json,
       @FormParam(CONFIG_XML) String configXml) {
-    if (data().getConfig().isLatest() == false) {
+    if (!data().getConfig().isLatest()) {
       return Response.status(Status.FORBIDDEN).entity(getHTML()).build();
     }
 
@@ -143,7 +143,7 @@ public class WebConfigResource extends AbstractWebConfigResource {
     if (json != null) {
       configValue = parseJSON(json);
     } else if (configXml != null) {
-      Object parsed = parseXML(configXml, data().getConfig().getConfig().getType());
+      final Object parsed = parseXML(configXml, data().getConfig().getConfig().getType());
       configValue = parsed;
     }
     updateConfig(name, configValue);

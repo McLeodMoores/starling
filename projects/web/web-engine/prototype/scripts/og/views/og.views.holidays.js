@@ -22,7 +22,7 @@ $.register_module({
             page_name = module.name.split('.').pop(), json = {},
             view, holiday_name,
             toolbar_buttons = {
-        		'new': og.views.data_forms.toolbar.new_holiday,
+            	'new': og.views.data_forms.toolbar.new_holiday,
         		'import': og.views.data_forms.toolbar.upload_holiday,
                 'delete': function () {
                     ui.dialog({

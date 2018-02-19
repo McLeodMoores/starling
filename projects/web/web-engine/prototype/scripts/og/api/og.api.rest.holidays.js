@@ -12,8 +12,18 @@ $.register_module({
             get: api.default_get.partial(['name', 'type', 'currency'], null),
             put: function (config) {
             	config = config || {};
-//            	var root = this.root, method = [root], data = {}, meta, id = str(config.id),
-            	console.log(config);
+            	var root = this.root, method = [root], data = {}, meta, id = str(config.id),
+            	fields = ['holiday_type', 'identifier', 'weekend_type'];
+            	api_fields = ['holidayType', 'identifier', 'weekendType'];
+                meta = check({
+                    bundle: {method: root + '#put', config: config},
+                    required: [
+                    	{condition: !id, all_of: ['identifier']}
+                    ]
+                });
+                meta.type = id ? 'PUT' : 'POST';
+                fields.forEach(function (val, idx) { if (val = str(config[val])) data[api_fields[idx]] = val; });
+                return api.request(method, {data: data, meta: meta});            	
             },
             del: function (config) {
                 config = config || {};
