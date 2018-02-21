@@ -189,4 +189,14 @@ public final class ConventionTypesProvider {
   public ImmutableSortedMap<String, Map<String, String>> getConventionDetails() {
     return _conventionDetails;
   }
+
+  //TODO temporary method
+  public ConventionType getConventionTypeForClassName(final String className) {
+    for (final Map.Entry<String, Class<? extends ManageableConvention>> entry : _conventionTypeMap.entrySet()) {
+      if (entry.getValue().getSimpleName().equals(className)) {
+        return ConventionType.of(entry.getKey());
+      }
+    }
+    return ConventionType.of(className);
+  }
 }

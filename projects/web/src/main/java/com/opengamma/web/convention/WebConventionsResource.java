@@ -28,7 +28,6 @@ import org.apache.commons.lang.StringUtils;
 import org.joda.beans.impl.flexi.FlexiBean;
 
 import com.opengamma.DataNotFoundException;
-import com.opengamma.core.convention.ConventionType;
 import com.opengamma.id.ObjectId;
 import com.opengamma.id.UniqueId;
 import com.opengamma.master.convention.ConventionDocument;
@@ -110,7 +109,7 @@ public class WebConventionsResource extends AbstractWebConventionResource {
     searchRequest.setExternalIdValue(StringUtils.trimToNull(id));
     typeName = StringUtils.trimToNull(typeName);
     if (typeName != null) {
-      searchRequest.setConventionType(ConventionType.of(typeName));
+      searchRequest.setConventionType(getConventionTypesProvider().getConventionTypeForClassName(typeName));
     }
     searchRequest.setPagingRequest(request);
     searchRequest.setSortOrder(so);
