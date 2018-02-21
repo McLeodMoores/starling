@@ -5,7 +5,7 @@
  *
  * Modified by McLeod Moores Software Limited.
  *
- * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2015 - present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.web.holiday;
 

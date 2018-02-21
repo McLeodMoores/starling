@@ -50,7 +50,7 @@ import com.sun.jersey.api.client.ClientResponse.Status;
  * RESTful resource for all convention documents.
  * <p>
  * The convention documents resource represents all the data for one element type in the convention master.
- * 
+ *
  */
 @Path("/conventions")
 public class WebConventionsResource extends AbstractWebConventionResource {
@@ -68,18 +68,18 @@ public class WebConventionsResource extends AbstractWebConventionResource {
   @Produces(MediaType.TEXT_HTML)
   @SubscribeMaster(MasterType.CONFIG)
   public String getHTML(
-      @QueryParam("pgIdx") Integer pgIdx,
-      @QueryParam("pgNum") Integer pgNum,
-      @QueryParam("pgSze") Integer pgSze,
-      @QueryParam("sort") String sort,
-      @QueryParam("name") String name,
-      @QueryParam("identifier") String id,
-      @QueryParam("type") String type,
-      @QueryParam("conventionId") List<String> conventionIdStrs,
-      @Context UriInfo uriInfo) {
-    PagingRequest pr = buildPagingRequest(pgIdx, pgNum, pgSze);
-    ConventionSearchSortOrder so = buildSortOrder(sort, ConventionSearchSortOrder.NAME_ASC);
-    FlexiBean out = search(pr, so, name, id, type, conventionIdStrs, uriInfo);
+      @QueryParam("pgIdx") final Integer pgIdx,
+      @QueryParam("pgNum") final Integer pgNum,
+      @QueryParam("pgSze") final Integer pgSze,
+      @QueryParam("sort") final String sort,
+      @QueryParam("name") final String name,
+      @QueryParam("identifier") final String id,
+      @QueryParam("type") final String type,
+      @QueryParam("conventionId") final List<String> conventionIdStrs,
+      @Context final UriInfo uriInfo) {
+    final PagingRequest pr = buildPagingRequest(pgIdx, pgNum, pgSze);
+    final ConventionSearchSortOrder so = buildSortOrder(sort, ConventionSearchSortOrder.NAME_ASC);
+    final FlexiBean out = search(pr, so, name, id, type, conventionIdStrs, uriInfo);
     return getFreemarker().build(HTML_DIR + "conventions.ftl", out);
   }
 
@@ -87,26 +87,26 @@ public class WebConventionsResource extends AbstractWebConventionResource {
   @Produces(MediaType.APPLICATION_JSON)
   @SubscribeMaster(MasterType.CONFIG)
   public String getJSON(
-      @QueryParam("pgIdx") Integer pgIdx,
-      @QueryParam("pgNum") Integer pgNum,
-      @QueryParam("pgSze") Integer pgSze,
-      @QueryParam("sort") String sort,
-      @QueryParam("name") String name,
-      @QueryParam("identifier") String id,
-      @QueryParam("type") String type,
-      @QueryParam("conventionId") List<String> conventionIdStrs,
-      @Context UriInfo uriInfo) {
-    PagingRequest pr = buildPagingRequest(pgIdx, pgNum, pgSze);
-    ConventionSearchSortOrder so = buildSortOrder(sort, ConventionSearchSortOrder.NAME_ASC);
-    FlexiBean out = search(pr, so, name, id, type, conventionIdStrs, uriInfo);
+      @QueryParam("pgIdx") final Integer pgIdx,
+      @QueryParam("pgNum") final Integer pgNum,
+      @QueryParam("pgSze") final Integer pgSze,
+      @QueryParam("sort") final String sort,
+      @QueryParam("name") final String name,
+      @QueryParam("identifier") final String id,
+      @QueryParam("type") final String type,
+      @QueryParam("conventionId") final List<String> conventionIdStrs,
+      @Context final UriInfo uriInfo) {
+    final PagingRequest pr = buildPagingRequest(pgIdx, pgNum, pgSze);
+    final ConventionSearchSortOrder so = buildSortOrder(sort, ConventionSearchSortOrder.NAME_ASC);
+    final FlexiBean out = search(pr, so, name, id, type, conventionIdStrs, uriInfo);
     return getFreemarker().build(JSON_DIR + "conventions.ftl", out);
   }
 
-  private FlexiBean search(PagingRequest request, ConventionSearchSortOrder so, String name, String id,
-      String typeName, List<String> conventionIdStrs, UriInfo uriInfo) {
-    FlexiBean out = createRootData();
+  private FlexiBean search(final PagingRequest request, final ConventionSearchSortOrder so, final String name, final String id,
+      String typeName, final List<String> conventionIdStrs, final UriInfo uriInfo) {
+    final FlexiBean out = createRootData();
 
-    ConventionSearchRequest searchRequest = new ConventionSearchRequest();
+    final ConventionSearchRequest searchRequest = new ConventionSearchRequest();
     searchRequest.setExternalIdValue(StringUtils.trimToNull(id));
     typeName = StringUtils.trimToNull(typeName);
     if (typeName != null) {
@@ -117,12 +117,12 @@ public class WebConventionsResource extends AbstractWebConventionResource {
     searchRequest.setName(StringUtils.trimToNull(name));
     out.put("searchRequest", searchRequest);
     out.put("type", typeName);
-    for (String conventionIdStr : conventionIdStrs) {
+    for (final String conventionIdStr : conventionIdStrs) {
       searchRequest.addObjectId(ObjectId.parse(conventionIdStr));
     }
 
     if (data().getUriInfo().getQueryParameters().size() > 0) {
-      ConventionSearchResult searchResult = data().getConventionMaster().search(searchRequest);
+      final ConventionSearchResult searchResult = data().getConventionMaster().search(searchRequest);
       out.put("searchResult", searchResult);
       out.put("paging", new WebPaging(searchResult.getPaging(), uriInfo));
     }
@@ -141,9 +141,9 @@ public class WebConventionsResource extends AbstractWebConventionResource {
     xml = StringUtils.trimToNull(xml);
     typeName = StringUtils.trimToNull(typeName);
 
-    final Class<? extends ManageableConvention> typeClazz = (typeName != null ? data().getTypeMap().get(typeName) : null);
+    final Class<? extends ManageableConvention> typeClazz = typeName != null ? data().getTypeMap().get(typeName) : null;
     if (name == null || xml == null || typeClazz == null) {
-      FlexiBean out = createRootData();
+      final FlexiBean out = createRootData();
       if (name == null) {
         out.put("err_nameMissing", true);
       }
@@ -158,23 +158,23 @@ public class WebConventionsResource extends AbstractWebConventionResource {
       out.put("name", StringUtils.defaultString(name));
       out.put("type", StringUtils.defaultString(typeName));
       out.put("conventionXml", StringEscapeUtils.escapeJava(StringUtils.defaultString(xml)));
-      String html = getFreemarker().build(HTML_DIR + "convention-add.ftl", out);
+      final String html = getFreemarker().build(HTML_DIR + "convention-add.ftl", out);
       return Response.ok(html).build();
     }
     try {
       final ManageableConvention convention = parseXML(xml, typeClazz);
       convention.setName(name);
-      ConventionDocument doc = new ConventionDocument(convention);
-      ConventionDocument added = data().getConventionMaster().add(doc);
-      URI uri = data().getUriInfo().getAbsolutePathBuilder().path(added.getUniqueId().toLatest().toString()).build();
+      final ConventionDocument doc = new ConventionDocument(convention);
+      final ConventionDocument added = data().getConventionMaster().add(doc);
+      final URI uri = data().getUriInfo().getAbsolutePathBuilder().path(added.getUniqueId().toLatest().toString()).build();
       return Response.seeOther(uri).build();
-    } catch (Exception ex) {
-      FlexiBean out = createRootData();
+    } catch (final Exception ex) {
+      final FlexiBean out = createRootData();
       out.put("name", StringUtils.defaultString(name));
       out.put("type", StringUtils.defaultString(typeName));
       out.put("conventionXml", StringEscapeUtils.escapeJava(StringUtils.defaultString(xml)));
       out.put("err_conventionXmlMsg", StringUtils.defaultString(ex.getMessage()));
-      String html = getFreemarker().build(HTML_DIR + "convention-add.ftl", out);
+      final String html = getFreemarker().build(HTML_DIR + "convention-add.ftl", out);
       return Response.ok(html).build();
     }
   }
@@ -192,7 +192,7 @@ public class WebConventionsResource extends AbstractWebConventionResource {
     xml = StringUtils.trimToNull(xml);
     typeName = StringUtils.trimToNull(typeName);
 
-    final Class<? extends ManageableConvention> typeClazz = (typeName != null ? data().getTypeMap().get(typeName) : null);
+    final Class<? extends ManageableConvention> typeClazz = typeName != null ? data().getTypeMap().get(typeName) : null;
     Response result = null;
     if (name == null || typeClazz == null || isEmptyConventionData(json, xml)) {
       result = Response.status(Status.BAD_REQUEST).build();
@@ -207,17 +207,17 @@ public class WebConventionsResource extends AbstractWebConventionResource {
         result = Response.status(Status.BAD_REQUEST).build();
       } else {
         convention.setName(name);
-        ConventionDocument doc = new ConventionDocument(convention);
-        ConventionDocument added = data().getConventionMaster().add(doc);
-        URI uri = data().getUriInfo().getAbsolutePathBuilder().path(added.getUniqueId().toLatest().toString()).build();
+        final ConventionDocument doc = new ConventionDocument(convention);
+        final ConventionDocument added = data().getConventionMaster().add(doc);
+        final URI uri = data().getUriInfo().getAbsolutePathBuilder().path(added.getUniqueId().toLatest().toString()).build();
         result = Response.created(uri).build();
       }
     }
     return result;
   }
 
-  private boolean isEmptyConventionData(String json, String xml) {
-    return (json == null && xml == null);
+  private boolean isEmptyConventionData(final String json, final String xml) {
+    return json == null && xml == null;
   }
 
   //-------------------------------------------------------------------------
@@ -225,22 +225,22 @@ public class WebConventionsResource extends AbstractWebConventionResource {
   @Path("metaData")
   @Produces(MediaType.APPLICATION_JSON)
   public String getMetaDataJSON() {
-    FlexiBean out = createRootData();
+    final FlexiBean out = createRootData();
     return getFreemarker().build(JSON_DIR + "metadata.ftl", out);
   }
 
   //-------------------------------------------------------------------------
   @Path("{conventionId}")
-  public Object findConventionHTML(@Subscribe @PathParam("conventionId") String idStr, @Context HttpHeaders headers) {
+  public Object findConventionHTML(@Subscribe @PathParam("conventionId") final String idStr, @Context final HttpHeaders headers) {
     data().setUriConventionId(idStr);
-    UniqueId oid = UniqueId.parse(idStr);
+    final UniqueId oid = UniqueId.parse(idStr);
     try {
-      ConventionDocument doc = data().getConventionMaster().get(oid);
+      final ConventionDocument doc = data().getConventionMaster().get(oid);
       data().setConvention(doc);
-    } catch (DataNotFoundException ex) {
-      ConventionHistoryRequest historyRequest = new ConventionHistoryRequest(oid);
+    } catch (final DataNotFoundException ex) {
+      final ConventionHistoryRequest historyRequest = new ConventionHistoryRequest(oid);
       historyRequest.setPagingRequest(PagingRequest.ONE);
-      ConventionHistoryResult historyResult = data().getConventionMaster().history(historyRequest);
+      final ConventionHistoryResult historyResult = data().getConventionMaster().history(historyRequest);
       if (historyResult.getDocuments().size() == 0) {
         throw ex;
       }
@@ -254,13 +254,16 @@ public class WebConventionsResource extends AbstractWebConventionResource {
    * Creates the output root data.
    * @return the output root data, not null
    */
+  @Override
   protected FlexiBean createRootData() {
-    FlexiBean out = super.createRootData();
-    ConventionSearchRequest searchRequest = new ConventionSearchRequest();
+    final FlexiBean out = super.createRootData();
+    final ConventionSearchRequest searchRequest = new ConventionSearchRequest();
     out.put("searchRequest", searchRequest);
     out.put("type", "");
     out.put("conventionTypes", getConventionTypesProvider().getTypeSet());
     out.put("conventionDescriptionMap", getConventionTypesProvider().getDescriptionMap());
+    out.put("conventionGroups", getConventionTypesProvider().getConventionDescriptions());
+    out.put("conventionDetails", getConventionTypesProvider().getConventionDetails());
     return out;
   }
 
@@ -270,8 +273,8 @@ public class WebConventionsResource extends AbstractWebConventionResource {
    * @param data  the data, not null
    * @return the URI, not null
    */
-  public static URI uri(WebConventionData data) {
-    UriBuilder builder = data.getUriInfo().getBaseUriBuilder().path(WebConventionsResource.class);
+  public static URI uri(final WebConventionData data) {
+    final UriBuilder builder = data.getUriInfo().getBaseUriBuilder().path(WebConventionsResource.class);
     return builder.build();
   }
 

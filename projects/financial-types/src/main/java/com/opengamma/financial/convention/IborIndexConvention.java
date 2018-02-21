@@ -19,6 +19,8 @@ import org.joda.beans.impl.direct.DirectMetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 import org.threeten.bp.LocalTime;
 
+import com.opengamma.core.convention.ConventionGroups;
+import com.opengamma.core.convention.ConventionMetaData;
 import com.opengamma.core.convention.ConventionType;
 import com.opengamma.financial.convention.businessday.BusinessDayConvention;
 import com.opengamma.financial.convention.daycount.DayCount;
@@ -30,6 +32,7 @@ import com.opengamma.util.money.Currency;
 /**
  * Convention for ibor indices.
  */
+@ConventionMetaData(description = "*IBOR", group = ConventionGroups.INDEX)
 @BeanDefinition
 public class IborIndexConvention extends FinancialConvention {
 
@@ -103,7 +106,7 @@ public class IborIndexConvention extends FinancialConvention {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param name  the convention name, not null
    * @param externalIdBundle  the external identifiers for this convention, not null
    * @param dayCount  the day-count, not null
@@ -138,7 +141,7 @@ public class IborIndexConvention extends FinancialConvention {
   //-------------------------------------------------------------------------
   /**
    * Gets the type identifying this convention.
-   * 
+   *
    * @return the {@link #TYPE} constant, not null
    */
   @Override

@@ -312,6 +312,7 @@
     <fragment>/scripts/og/api/og.api.rest.user.js</fragment>
     <fragment>/scripts/og/api/og.api.rest.compressor.js</fragment>
     <fragment>/scripts/og/api/og.api.rest.configs.js</fragment>
+    <fragment>/scripts/og/api/og.api.rest.conventions.js</fragment>
     <fragment>/scripts/og/api/og.api.rest.exchanges.js</fragment>
     <fragment>/scripts/og/api/og.api.rest.handshake.js</fragment>
     <fragment>/scripts/og/api/og.api.rest.holidays.js</fragment>
@@ -507,6 +508,7 @@
     <fragment>/scripts/og/views/og.views.holidays.js</fragment>
     <fragment>/scripts/og/views/og.views.regions.js</fragment>
     <fragment>/scripts/og/views/og.views.configs.js</fragment>
+    <fragment>/scripts/og/views/og.views.conventions.js</fragment>
     <bundle idref="blotter.js" />
   </bundle>
   <bundle id="env.js">

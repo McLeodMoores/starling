@@ -21,22 +21,19 @@ public abstract class AbstractWebConventionResource
     extends AbstractPerRequestWebResource<WebConventionData> {
 
   /**
-   * HTML ftl directory
+   * HTML ftl directory.
    */
   protected static final String HTML_DIR = "conventions/html/";
   /**
-   * JSON ftl directory
+   * JSON ftl directory.
    */
   protected static final String JSON_DIR = "conventions/json/";
 
-  /**
-   * The Convention types provider
-   */
   private final ConventionTypesProvider _conventionTypesProvider = ConventionTypesProvider.getInstance();
 
   /**
    * Creates the resource.
-   * 
+   *
    * @param conventionMaster  the convention master, not null
    */
   protected AbstractWebConventionResource(final ConventionMaster conventionMaster) {
@@ -48,14 +45,14 @@ public abstract class AbstractWebConventionResource
 
   //init meta-data
   private void initializeMetaData() {
-    for (Entry<String, Class<? extends ManageableConvention>> entry : _conventionTypesProvider.getTypeMap().entrySet()) {
+    for (final Entry<String, Class<? extends ManageableConvention>> entry : _conventionTypesProvider.getTypeMap().entrySet()) {
       data().getTypeMap().put(entry.getKey(), entry.getValue());
     }
   }
 
   /**
    * Creates the resource.
-   * 
+   *
    * @param parent  the parent resource, not null
    */
   protected AbstractWebConventionResource(final AbstractWebConventionResource parent) {
@@ -65,12 +62,12 @@ public abstract class AbstractWebConventionResource
   //-------------------------------------------------------------------------
   /**
    * Creates the output root data.
-   * 
+   *
    * @return the output root data, not null
    */
   @Override
   protected FlexiBean createRootData() {
-    FlexiBean out = super.createRootData();
+    final FlexiBean out = super.createRootData();
     out.put("uris", new WebConventionUris(data()));
     return out;
   }
@@ -78,7 +75,7 @@ public abstract class AbstractWebConventionResource
   //-------------------------------------------------------------------------
   /**
    * Gets the convention types provider.
-   * 
+   *
    * @return the convention types provider
    */
   public ConventionTypesProvider getConventionTypesProvider() {

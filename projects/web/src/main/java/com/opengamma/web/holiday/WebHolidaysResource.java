@@ -5,7 +5,7 @@
  *
  * Modified by McLeod Moores Software Limited.
  *
- * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2015 - present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.web.holiday;
 
@@ -285,7 +285,7 @@ public class WebHolidaysResource extends AbstractWebHolidayResource {
   @Produces(MediaType.APPLICATION_JSON)
   public String getMetaDataJSON() {
     final FlexiBean out = createRootData();
-    return getFreemarker().build("holidays/jsonmetadata.ftl", out);
+    return getFreemarker().build("holidays/json/metadata.ftl", out);
   }
 
   //-------------------------------------------------------------------------

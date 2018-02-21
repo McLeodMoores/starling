@@ -18,6 +18,8 @@ import org.joda.beans.impl.direct.DirectBeanBuilder;
 import org.joda.beans.impl.direct.DirectMetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 
+import com.opengamma.core.convention.ConventionGroups;
+import com.opengamma.core.convention.ConventionMetaData;
 import com.opengamma.core.convention.ConventionType;
 import com.opengamma.financial.convention.daycount.DayCount;
 import com.opengamma.id.ExternalId;
@@ -28,6 +30,7 @@ import com.opengamma.util.money.Currency;
 /**
  * Convention for overnight indices.
  */
+@ConventionMetaData(description = "Overnight", group = ConventionGroups.INDEX)
 @BeanDefinition
 public class OvernightIndexConvention extends FinancialConvention {
 
@@ -69,7 +72,7 @@ public class OvernightIndexConvention extends FinancialConvention {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param name  the convention name, not null
    * @param externalIdBundle  the external identifiers for this convention, not null
    * @param dayCount  the day-count, not null
@@ -90,7 +93,7 @@ public class OvernightIndexConvention extends FinancialConvention {
   //-------------------------------------------------------------------------
   /**
    * Gets the type identifying this convention.
-   * 
+   *
    * @return the {@link #TYPE} constant, not null
    */
   @Override

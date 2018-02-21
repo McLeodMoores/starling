@@ -18,6 +18,8 @@ import org.joda.beans.impl.direct.DirectBeanBuilder;
 import org.joda.beans.impl.direct.DirectMetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 
+import com.opengamma.core.convention.ConventionGroups;
+import com.opengamma.core.convention.ConventionMetaData;
 import com.opengamma.core.convention.ConventionType;
 import com.opengamma.financial.convention.businessday.BusinessDayConvention;
 import com.opengamma.financial.convention.daycount.DayCount;
@@ -30,6 +32,7 @@ import com.opengamma.util.time.Tenor;
 /**
  * Convention for a fixed swap leg.
  */
+@ConventionMetaData(description = "Fixed swap leg", group = ConventionGroups.FIXED_INCOME)
 @BeanDefinition
 public class SwapFixedLegConvention extends FinancialConvention {
 
@@ -101,7 +104,7 @@ public class SwapFixedLegConvention extends FinancialConvention {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param name  the name of the convention, not null
    * @param externalIdBundle  the external identifiers for this convention, not null
    * @param paymentTenor  the payment tenor, not null
@@ -136,7 +139,7 @@ public class SwapFixedLegConvention extends FinancialConvention {
   //-------------------------------------------------------------------------
   /**
    * Gets the type identifying this convention.
-   * 
+   *
    * @return the {@link #TYPE} constant, not null
    */
   @Override

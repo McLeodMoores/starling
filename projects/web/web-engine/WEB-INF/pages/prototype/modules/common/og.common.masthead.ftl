@@ -10,7 +10,12 @@
       </div>
     </li>
     <li>
-        <a href="admin.ftl#/configs/" class="og-menu-button og-datas">Data</a>
+      <a href="admin.ftl#/conventions/" class="og-menu-button og-conventions">Conventions</a>
+      <div class="og-convention og-menu og-active OG-shadow">
+      </div> 
+    </li>
+    <li>
+        <a href="admin.ftl#" class="og-menu-button og-datas">Data</a>
         <div class="og-data og-menu og-active OG-shadow">
             <table>
                 <tr>

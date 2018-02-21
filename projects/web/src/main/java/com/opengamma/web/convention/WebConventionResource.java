@@ -2,6 +2,10 @@
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
  *
  * Please see distribution for license.
+ *
+ * Modified by McLeod Moores Software Limited.
+ *
+ * Copyright (C) 2018 - present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.web.convention;
 
@@ -97,10 +101,10 @@ public class WebConventionResource extends AbstractWebConventionResource {
     }
 
     try {
-      ManageableConvention convention = parseXML(xml, data().getConvention().getConvention().getClass());
+      final ManageableConvention convention = parseXML(xml, data().getConvention().getConvention().getClass());
       final URI uri = updateConvention(name, convention);
       return Response.seeOther(uri).build();
-    } catch (Exception ex) {
+    } catch (final Exception ex) {
       final FlexiBean out = createRootData();
       out.put("conventionXml", StringEscapeUtils.escapeJava(StringUtils.defaultString(xml)));
       out.put("err_conventionXmlMsg", StringUtils.defaultString(ex.getMessage()));
