@@ -9,10 +9,12 @@ import java.util.Map.Entry;
 
 import org.joda.beans.impl.flexi.FlexiBean;
 
+import com.opengamma.financial.convention.IborIndexConvention;
 import com.opengamma.master.convention.ConventionMaster;
 import com.opengamma.master.convention.ManageableConvention;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.web.AbstractPerRequestWebResource;
+import com.opengamma.web.json.IborIndexConventionBuilder;
 
 /**
  * Abstract base class for RESTful convention resources.
@@ -20,6 +22,14 @@ import com.opengamma.web.AbstractPerRequestWebResource;
 public abstract class AbstractWebConventionResource
     extends AbstractPerRequestWebResource<WebConventionData> {
 
+  /**
+   * Config XML form parameter name.
+   */
+  protected static final String CONFIG_XML = "configXML";
+  /**
+   * Config JSON form parameter name.
+   */
+  protected static final String CONFIG_JSON = "configJSON";
   /**
    * HTML ftl directory.
    */
@@ -41,6 +51,7 @@ public abstract class AbstractWebConventionResource
     ArgumentChecker.notNull(conventionMaster, "conventionMaster");
     data().setConventionMaster(conventionMaster);
     initializeMetaData();
+    initializeJsonBuilders();
   }
 
   //init meta-data
@@ -49,6 +60,10 @@ public abstract class AbstractWebConventionResource
       data().getTypeMap().put(entry.getKey(), entry.getValue());
       data().getClassNameMap().put(entry.getValue().getSimpleName(), entry.getValue());
     }
+  }
+
+  private void initializeJsonBuilders() {
+    data().getJsonBuilderMap().put(IborIndexConvention.class, IborIndexConventionBuilder.INSTANCE);
   }
 
   /**

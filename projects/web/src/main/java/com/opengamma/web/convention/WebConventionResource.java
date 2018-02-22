@@ -33,6 +33,8 @@ import org.joda.beans.impl.flexi.FlexiBean;
 import com.opengamma.id.UniqueId;
 import com.opengamma.master.convention.ConventionDocument;
 import com.opengamma.master.convention.ManageableConvention;
+import com.opengamma.web.json.AbstractJSONBuilder;
+import com.opengamma.web.json.JSONBuilder;
 
 /**
  * RESTful resource for a convention document.
@@ -69,12 +71,24 @@ public class WebConventionResource extends AbstractWebConventionResource {
     }
     final FlexiBean out = createRootData();
     final ConventionDocument doc = data().getConvention();
-    out.put("conventionXML", StringEscapeUtils.escapeJava(createBeanXML(doc.getConvention())));
-    out.put("type", data().getTypeMap().inverse().get(doc.getConvention().getClass()));
+    final String jsonConfig = StringUtils.stripToNull(toJson(doc.getConvention()));
+    if (jsonConfig != null) {
+      out.put(CONFIG_JSON, jsonConfig);
+    }
+    out.put(CONFIG_XML, StringEscapeUtils.escapeJava(createBeanXML(doc.getConvention())));
     final String json = getFreemarker().build(JSON_DIR + "convention.ftl", out);
     return Response.ok(json).tag(etag).build();
   }
 
+  @SuppressWarnings("unchecked")
+  private <T> String toJson(final Object convention) {
+    final Object temp = data().getJsonBuilderMap();
+    final JSONBuilder<T> jsonBuilder = (JSONBuilder<T>) data().getJsonBuilderMap().get(convention.getClass());
+    if (jsonBuilder != null) {
+      return jsonBuilder.toJSON((T) convention);
+    }
+    return AbstractJSONBuilder.fudgeToJson(convention);
+  }
   //-------------------------------------------------------------------------
   @PUT
   @Consumes(MediaType.APPLICATION_FORM_URLENCODED)

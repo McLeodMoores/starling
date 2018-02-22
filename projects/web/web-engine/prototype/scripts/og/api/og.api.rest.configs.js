@@ -17,7 +17,6 @@ $.register_module({
                     all = fields.concat('id', 'version', 'page_size', 'page', 'from', 'to'),
                     ids = config.ids, id_search = ids && $.isArray(ids) && ids.length,
                     meta_request = config.meta, template = str(config.template);
-                console.log("Configs: " + JSON.stringify(config) + " " + field_search);
                 meta = check({
                     bundle: {method: root + '#get', config: config},
                     dependencies: [{fields: ['version'], require: 'id'}],

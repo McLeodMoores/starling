@@ -17,7 +17,6 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
-import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
@@ -232,7 +231,7 @@ public class WebConventionsResource extends AbstractWebConventionResource {
 
   //-------------------------------------------------------------------------
   @Path("{conventionId}")
-  public Object findConventionHTML(@Subscribe @PathParam("conventionId") final String idStr, @Context final HttpHeaders headers) {
+  public Object findConvention(@Subscribe @PathParam("conventionId") final String idStr) {
     data().setUriConventionId(idStr);
     final UniqueId oid = UniqueId.parse(idStr);
     try {
