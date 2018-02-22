@@ -27,6 +27,7 @@ import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.joda.beans.impl.flexi.FlexiBean;
 
+import com.google.common.collect.BiMap;
 import com.opengamma.DataNotFoundException;
 import com.opengamma.id.ObjectId;
 import com.opengamma.id.UniqueId;
@@ -43,6 +44,7 @@ import com.opengamma.web.WebPaging;
 import com.opengamma.web.analytics.rest.MasterType;
 import com.opengamma.web.analytics.rest.Subscribe;
 import com.opengamma.web.analytics.rest.SubscribeMaster;
+import com.opengamma.web.json.JSONBuilder;
 import com.sun.jersey.api.client.ClientResponse.Status;
 
 /**
@@ -246,6 +248,27 @@ public class WebConventionsResource extends AbstractWebConventionResource {
       data().setConvention(historyResult.getFirstDocument());
     }
     return new WebConventionResource(this);
+  }
+
+  @GET
+  @Path("templates/{conventionType}")
+  @Produces(MediaType.APPLICATION_JSON)
+  public String getTemplateJSON(@PathParam("conventionType") final String conventionType) {
+    final BiMap<String, Class<? extends ManageableConvention>> typeMap = data().getClassNameMap();
+    final Class<? extends ManageableConvention> typeClazz = typeMap.get(conventionType);
+    String template = null;
+    if (typeClazz != null) {
+      final JSONBuilder<?> jsonBuilder = data().getJsonBuilderMap().get(typeClazz);
+      if (jsonBuilder != null) {
+        template = jsonBuilder.getTemplate();
+      }
+    }
+    final FlexiBean out = super.createRootData();
+    out.put("template", template);
+    if (typeClazz != null) {
+      out.put("type", typeClazz.getSimpleName());
+    }
+    return getFreemarker().build(JSON_DIR + "template.ftl", out);
   }
 
   //-------------------------------------------------------------------------

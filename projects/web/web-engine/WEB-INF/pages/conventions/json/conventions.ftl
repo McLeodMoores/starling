@@ -11,7 +11,7 @@
     },
     "data" : [<#if searchResult??>
        <#list searchResult.documents as doc>
-           "${doc.uniqueId.objectId}|${doc.convention.name}<#if type = ''>|${doc.convention.value.class.simpleName}</#if>"<#if doc_has_next>,</#if>
+           "${doc.uniqueId.objectId}|${doc.convention.name}<#if type = ''>|${doc.convention.class.simpleName}</#if>"<#if doc_has_next>,</#if>
        </#list>
     </#if>]
 }

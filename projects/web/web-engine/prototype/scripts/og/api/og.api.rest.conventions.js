@@ -36,8 +36,23 @@ $.register_module({
 				if (id) method = method.concat(version ? [id, 'versions', version_search ? '' : version] : id);
 				return api.request(method, {data: data, meta: meta});
 			},
-		    put: common.not_implemented_put,
-		    del: common.not_implemented_del
+		    put: function (config) {
+		    	config = config || {};
+		    	var root = this.root, method = [root], data = {}, meta, id = str(config.id), 
+		    	fields = ['name', 'json', 'type', 'xml'],
+		    	api_fields = ['name', 'configJSON', 'type', 'configXML'];
+		    	meta = check({
+		    		bundle: { method: root + '#put', config: config},
+		    		empties: [{
+		    			condition: !!config.json, label: 'json and xml are mutually exclusive', fields: ['xml']
+		    		}]
+		    	});
+		    	meta.type = id ? 'PUT' : 'POST';
+		    	fields.forEach(function (val, idx) { if (vale = str(config[val])) data[api_fields[idx]] = val; });
+		    	if (id) method.push(id);
+		    	return api.request(method, { data: data, meta: meta });
+		    },
+		    del: api.default_del
 		}
 	}
 })

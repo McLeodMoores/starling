@@ -494,6 +494,9 @@
     <fragment>/scripts/og/views/config_forms/og.views.config_forms.volatilitysurfacespecification.js</fragment>
     <fragment>/scripts/og/views/config_forms/og.views.config_forms.yieldcurvedefinition.js</fragment>
     <!-- /config forms -->
+    <!--  convention_forms  -->
+    <fragment>/scripts/og/views/convention_forms/og.views.convention_forms.default.js</fragment> <!-- keep this first! -->
+    <!-- /convention forms -->
     <!--  data_forms forms -->
     <fragment>/scripts/og/views/data_forms/og.views.data_forms.toolbar.new_holiday.js</fragment>
     <fragment>/scripts/og/views/data_forms/og.views.data_forms.toolbar.upload_holiday.js</fragment>

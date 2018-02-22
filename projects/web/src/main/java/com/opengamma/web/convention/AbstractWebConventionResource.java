@@ -47,6 +47,7 @@ public abstract class AbstractWebConventionResource
   private void initializeMetaData() {
     for (final Entry<String, Class<? extends ManageableConvention>> entry : _conventionTypesProvider.getTypeMap().entrySet()) {
       data().getTypeMap().put(entry.getKey(), entry.getValue());
+      data().getClassNameMap().put(entry.getValue().getSimpleName(), entry.getValue());
     }
   }
 
