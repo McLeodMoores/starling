@@ -127,6 +127,7 @@ $.register_module({
                     if (!og.views.config_forms[config_type]) {
                         render_type = 'default';
                     }
+                    console.log(og.views.config_forms);
                     render_options = {
                         is_new: is_new,
                         data: details_json,

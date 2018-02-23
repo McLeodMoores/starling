@@ -22,8 +22,12 @@ $.register_module({
 				selector: selector
 			}),
 			form_id = '#' + form.id;
+    		form.children = [
+    			new form.Block({module: 'og.views.forms.currency_tash'})
+    		]
             form.dom();
 		};
+		constructor.type_map = [];
 		return constructor;
 	}
 })

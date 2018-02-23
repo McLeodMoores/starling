@@ -3,17 +3,17 @@
  * Please see distribution for license.
  */
 
-.OG-config label span {
+.OG-convention label span {
   display: block;
 }
 
-.OG-config p, .desc {
+.OG-convention p, .desc {
   color: #999;
   font-style: italic;
   margin-bottom: 10px;
 }
 
-.OG-config p em {
+.OG-convention p em {
   font-weight: bold;
 }
 

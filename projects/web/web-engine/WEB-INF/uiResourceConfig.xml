@@ -126,10 +126,12 @@
     <fragment>/styles/common/details/og.common.OG-details.OG-timeseries.css</fragment>
     <fragment>/styles/common/details/og.common.OG-details.OG-holiday.css</fragment>
     <fragment>/styles/common/details/og.common.OG-details.OG-config.css</fragment>
+    <fragment>/styles/common/details/og.common.OG-details.OG-convention.css</fragment>
   </bundle>
   <bundle id="common.forms.css">
     <fragment>/styles/common/forms/og.common.forms.OG-grid-box.css</fragment>
     <fragment>/styles/views/forms/configs/og.views.forms.configs.css</fragment>
+    <fragment>/styles/views/forms/conventions/og.views.forms.conventions.css</fragment>
     <fragment>/styles/common/forms/og.common.forms.OG-form.og-id-cur.css</fragment>
     <fragment>/styles/common/forms/og.common.forms.OG-form.og-results-model-def.css</fragment>
     <fragment>/styles/common/forms/og.common.forms.OG-form.og-ex-params.css</fragment>
