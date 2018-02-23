@@ -191,7 +191,7 @@ $.register_module({
                     type: details_json.template_data.type
                 };
                 $(render_options.selector).css({'overflow': 'auto'});
-                og.views.config_forms[render_type](render_options);
+                og.views.convention_forms[render_type](render_options);
             };
             view.layout.inner.options.south.onclose = null;
             view.layout.inner.close('south');

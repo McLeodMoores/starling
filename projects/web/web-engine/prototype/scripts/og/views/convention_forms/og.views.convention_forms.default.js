@@ -40,7 +40,7 @@ $.register_module({
 							name: new_name, xml: editor.getSession().getValue(), type: config_type, loading: loading
 				}).pipe(as_new ? save_new_handler : save_handler);
 			};
-			og.dev.warn('using default convention template for convention type:\n' + config_type);
+			og.dev.warn('using default convention template for convention type:\n' + convention_type);
 			form.on('form:load', function () {
 				var textarea, id = og.common.id(), header = '\
 					<header class="OG-header-generic">\
