@@ -1,15 +1,30 @@
 <section>
-	<div class="OG-details-content OG-config OG-grid OG-form">
+	<div class="OG-details-content OG-convention OG-grid OG-form">
 		<section class="OG-mod-0 OG-c7 og-id-cur">
 			<div class="og-mod-content">
 				<label>
 					<span>Name</span>
-					<span><input type="text" name="name" value="{{name}}"/></span>
 				</label>
+				<span><input type="text" name="name" value="{{name}}"/></span>
+				<!-- Daycount, business day convention, settlement days, EOM, fixing time, fixing time zone, fixing calendar, region calendar, fixing page-->
 				<label>
-					<span>Identifiers</span>
-					<span><textarea cols=100 rows=4 name="identifiers">{{{identifiers}}}}</textarea></span>
+					<span>Currency</span>
 				</label>
+				<span>{{{item_0}}}</span>
+			</div>
+		</section>
+		<section class="OG-mod-0 OG-c7 og-external-ids">
+			<h3>Identifiers</h3>
+			<div class="og-mod-content">
+				<div class="og-a-list-header">
+					<span class="og-scheme">Scheme</span>
+					<span class="og-scheme">New Scheme</span>
+					<span class="og-value">Value</span>
+				</div>
+				{{{item_1}}}
+				<div class="og-footer">
+					<span class="OG-link-add og-js-add">add identifier</span>
+				</div>
 			</div>
 		</section>
 	</div>
