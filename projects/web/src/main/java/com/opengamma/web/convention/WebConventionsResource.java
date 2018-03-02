@@ -66,7 +66,7 @@ public class WebConventionsResource extends AbstractWebConventionResource {
   //-------------------------------------------------------------------------
   @GET
   @Produces(MediaType.TEXT_HTML)
-  @SubscribeMaster(MasterType.CONFIG)
+  @SubscribeMaster(MasterType.CONVENTION)
   public String getHTML(
       @QueryParam("pgIdx") final Integer pgIdx,
       @QueryParam("pgNum") final Integer pgNum,
@@ -85,7 +85,7 @@ public class WebConventionsResource extends AbstractWebConventionResource {
 
   @GET
   @Produces(MediaType.APPLICATION_JSON)
-  @SubscribeMaster(MasterType.CONFIG)
+  @SubscribeMaster(MasterType.CONVENTION)
   public String getJSON(
       @QueryParam("pgIdx") final Integer pgIdx,
       @QueryParam("pgNum") final Integer pgNum,
@@ -103,13 +103,13 @@ public class WebConventionsResource extends AbstractWebConventionResource {
   }
 
   private FlexiBean search(final PagingRequest request, final ConventionSearchSortOrder so, final String name, final String id,
-      String typeName, final List<String> conventionIdStrs, final UriInfo uriInfo) {
+      final String typeName, final List<String> conventionIdStrs, final UriInfo uriInfo) {
     final FlexiBean out = createRootData();
 
     final ConventionSearchRequest searchRequest = new ConventionSearchRequest();
     searchRequest.setExternalIdValue(StringUtils.trimToNull(id));
-    typeName = StringUtils.trimToNull(typeName);
-    if (typeName != null) {
+    final String trimmedTypeName = StringUtils.trimToNull(typeName);
+    if (trimmedTypeName != null) {
       searchRequest.setConventionType(getConventionTypesProvider().getConventionTypeForClassName(typeName));
     }
     searchRequest.setPagingRequest(request);
@@ -134,45 +134,45 @@ public class WebConventionsResource extends AbstractWebConventionResource {
   @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
   @Produces(MediaType.TEXT_HTML)
   public Response postHTML(
-      @FormParam("name") String name,
-      @FormParam("conventionxml") String xml,
-      @FormParam("type") String typeName) {
-    name = StringUtils.trimToNull(name);
-    xml = StringUtils.trimToNull(xml);
-    typeName = StringUtils.trimToNull(typeName);
+      @FormParam("name") final String name,
+      @FormParam("conventionxml") final String xml,
+      @FormParam("type") final String typeName) {
+    final String trimmedName = StringUtils.trimToNull(name);
+    final String trimmedXml = StringUtils.trimToNull(xml);
+    final String trimedTypeName = StringUtils.trimToNull(typeName);
 
-    final Class<? extends ManageableConvention> typeClazz = typeName != null ? data().getTypeMap().get(typeName) : null;
-    if (name == null || xml == null || typeClazz == null) {
+    final Class<? extends ManageableConvention> typeClazz = trimedTypeName != null ? data().getTypeMap().get(trimedTypeName) : null;
+    if (trimmedName == null || trimmedXml == null || typeClazz == null) {
       final FlexiBean out = createRootData();
-      if (name == null) {
+      if (trimmedName == null) {
         out.put("err_nameMissing", true);
       }
-      if (xml == null) {
+      if (trimmedXml == null) {
         out.put("err_xmlMissing", true);
       }
-      if (typeName == null) {
+      if (trimedTypeName == null) {
         out.put("err_typeMissing", true);
       } else if (typeClazz == null) {
         out.put("err_typeInvalid", true);
       }
-      out.put("name", StringUtils.defaultString(name));
-      out.put("type", StringUtils.defaultString(typeName));
-      out.put("conventionXml", StringEscapeUtils.escapeJava(StringUtils.defaultString(xml)));
+      out.put("name", StringUtils.defaultString(trimmedName));
+      out.put("type", StringUtils.defaultString(trimedTypeName));
+      out.put("conventionXml", StringEscapeUtils.escapeJava(StringUtils.defaultString(trimmedXml)));
       final String html = getFreemarker().build(HTML_DIR + "convention-add.ftl", out);
       return Response.ok(html).build();
     }
     try {
-      final ManageableConvention convention = parseXML(xml, typeClazz);
-      convention.setName(name);
+      final ManageableConvention convention = parseXML(trimmedXml, typeClazz);
+      convention.setName(trimmedName);
       final ConventionDocument doc = new ConventionDocument(convention);
       final ConventionDocument added = data().getConventionMaster().add(doc);
       final URI uri = data().getUriInfo().getAbsolutePathBuilder().path(added.getUniqueId().toLatest().toString()).build();
       return Response.seeOther(uri).build();
     } catch (final Exception ex) {
       final FlexiBean out = createRootData();
-      out.put("name", StringUtils.defaultString(name));
-      out.put("type", StringUtils.defaultString(typeName));
-      out.put("conventionXml", StringEscapeUtils.escapeJava(StringUtils.defaultString(xml)));
+      out.put("name", StringUtils.defaultString(trimmedName));
+      out.put("type", StringUtils.defaultString(trimedTypeName));
+      out.put("conventionXml", StringEscapeUtils.escapeJava(StringUtils.defaultString(trimmedXml)));
       out.put("err_conventionXmlMsg", StringUtils.defaultString(ex.getMessage()));
       final String html = getFreemarker().build(HTML_DIR + "convention-add.ftl", out);
       return Response.ok(html).build();
@@ -183,30 +183,30 @@ public class WebConventionsResource extends AbstractWebConventionResource {
   @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
   @Produces(MediaType.APPLICATION_JSON)
   public Response postJSON(
-      @FormParam("name") String name,
-      @FormParam("conventionJSON") String json,
-      @FormParam("conventionXML") String xml,
-      @FormParam("type") String typeName) {
-    name = StringUtils.trimToNull(name);
-    json = StringUtils.trimToNull(json);
-    xml = StringUtils.trimToNull(xml);
-    typeName = StringUtils.trimToNull(typeName);
+      @FormParam("name") final String name,
+      @FormParam("conventionJSON") final String json,
+      @FormParam("conventionXML") final String xml,
+      @FormParam("type") final String typeName) {
+    final String trimmedName = StringUtils.trimToNull(name);
+    final String trimmedJson = StringUtils.trimToNull(json);
+    final String trimmedXml = StringUtils.trimToNull(xml);
+    final String trimmedTypeName = StringUtils.trimToNull(typeName);
 
-    final Class<? extends ManageableConvention> typeClazz = typeName != null ? data().getTypeMap().get(typeName) : null;
+    final Class<? extends ManageableConvention> typeClazz = trimmedTypeName != null ? data().getTypeMap().get(trimmedTypeName) : null;
     Response result = null;
-    if (name == null || typeClazz == null || isEmptyConventionData(json, xml)) {
+    if (trimmedName == null || typeClazz == null || isEmptyConventionData(trimmedJson, trimmedXml)) {
       result = Response.status(Status.BAD_REQUEST).build();
     } else {
       ManageableConvention convention = null;
-      if (json != null) {
-        convention = (ManageableConvention) parseJSON(json);
-      } else if (xml != null) {
-        convention = parseXML(xml, typeClazz);
+      if (trimmedJson != null) {
+        convention = (ManageableConvention) parseJSON(trimmedJson);
+      } else if (trimmedXml != null) {
+        convention = parseXML(trimmedXml, typeClazz);
       }
       if (convention == null) {
         result = Response.status(Status.BAD_REQUEST).build();
       } else {
-        convention.setName(name);
+        convention.setName(trimmedName);
         final ConventionDocument doc = new ConventionDocument(convention);
         final ConventionDocument added = data().getConventionMaster().add(doc);
         final URI uri = data().getUriInfo().getAbsolutePathBuilder().path(added.getUniqueId().toLatest().toString()).build();

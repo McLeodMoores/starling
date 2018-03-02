@@ -38,7 +38,7 @@ public final class IborIndexConventionJsonBuilder extends AbstractJSONBuilder<Ib
   }
 
   private static IborIndexConvention getDummyIborIndexConvention() {
-    return new IborIndexConvention("UNTITLED", ExternalIdBundle.EMPTY, DayCounts.ACT_360, BusinessDayConventions.MODIFIED_FOLLOWING,
+    return new IborIndexConvention("XXXX", ExternalIdBundle.EMPTY, DayCounts.ACT_360, BusinessDayConventions.MODIFIED_FOLLOWING,
         2, false, Currency.USD, LocalTime.of(11, 0), "", ExternalSchemes.financialRegionId("US"), ExternalSchemes.financialRegionId("US"),
         "");
   }

@@ -29,7 +29,6 @@ $.register_module({
     	};
 		return function () {
 			var identifierHint = function (select) {
-				console.log(select.value);
 			};
 			og.common.util.ui.dialog({
 				width: 400, 

@@ -83,7 +83,7 @@ public final class ConventionTypesProvider {
       if (Modifier.isAbstract(conventionClass.getModifiers())) {
         continue;
       }
-      ConventionType type;
+      final ConventionType type;
       try {
         type = (ConventionType) conventionClass.getDeclaredField("TYPE").get(null);
       } catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException | SecurityException ex) {
