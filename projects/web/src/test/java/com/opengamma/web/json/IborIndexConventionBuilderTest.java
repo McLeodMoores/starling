@@ -16,7 +16,7 @@ import com.opengamma.id.ExternalIdBundle;
 import com.opengamma.util.money.Currency;
 
 /**
- * Unit tests for {@link IborIndexConventionBuilder}.
+ * Unit tests for {@link IborIndexConventionJsonBuilder}.
  */
 public class IborIndexConventionBuilderTest {
 
@@ -28,6 +28,6 @@ public class IborIndexConventionBuilderTest {
     final IborIndexConvention convention = new IborIndexConvention("IBOR", ExternalIdBundle.of("TEST", "TEST"),
         DayCounts.ACT_360, BusinessDayConventions.FOLLOWING, 2, true, Currency.AUD, LocalTime.of(11, 0),
         "LONDON", ExternalId.of("TEST", "LONDON"), ExternalId.of("TEST", "NY"), "");
-    assertEquals(convention, IborIndexConventionBuilder.INSTANCE.fromJSON(IborIndexConventionBuilder.INSTANCE.toJSON(convention)));
+    assertEquals(convention, IborIndexConventionJsonBuilder.INSTANCE.fromJSON(IborIndexConventionJsonBuilder.INSTANCE.toJSON(convention)));
   }
 }

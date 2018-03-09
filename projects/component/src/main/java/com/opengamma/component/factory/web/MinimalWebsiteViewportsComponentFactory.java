@@ -51,6 +51,7 @@ import com.opengamma.financial.security.lookup.SecurityAttributeMapper;
 import com.opengamma.livedata.UserPrincipal;
 import com.opengamma.master.config.ConfigMaster;
 import com.opengamma.master.config.impl.MasterConfigSource;
+import com.opengamma.master.convention.ConventionMaster;
 import com.opengamma.master.historicaltimeseries.HistoricalTimeSeriesMaster;
 import com.opengamma.master.legalentity.LegalEntityMaster;
 import com.opengamma.master.marketdatasnapshot.MarketDataSnapshotMaster;
@@ -165,6 +166,12 @@ public class MinimalWebsiteViewportsComponentFactory extends AbstractComponentFa
    */
   @PropertyDefinition
   private LegalEntityMaster _legalEntityMaster;
+
+  /**
+   * The convention master.
+   */
+  @PropertyDefinition
+  private ConventionMaster _conventionMaster;
 
   /**
    * The user master.
@@ -363,9 +370,13 @@ public class MinimalWebsiteViewportsComponentFactory extends AbstractComponentFa
     }
     if (getLegalEntityMaster() != null) {
       providers.put(MasterType.ORGANIZATION, getLegalEntityMaster());
+      providers.put(MasterType.LEGAL_ENTITY, getLegalEntityMaster());
     }
     if (getMarketDataSnapshotMaster() != null) {
       providers.put(MasterType.MARKET_DATA_SNAPSHOT, getMarketDataSnapshotMaster());
+    }
+    if (getConventionMaster() != null) {
+      providers.put(MasterType.CONVENTION, getConventionMaster());
     }
     return new MasterChangeManager(providers);
   }
@@ -643,6 +654,31 @@ public class MinimalWebsiteViewportsComponentFactory extends AbstractComponentFa
    */
   public final Property<LegalEntityMaster> legalEntityMaster() {
     return metaBean().legalEntityMaster().createProperty(this);
+  }
+
+  //-----------------------------------------------------------------------
+  /**
+   * Gets the convention master.
+   * @return the value of the property
+   */
+  public ConventionMaster getConventionMaster() {
+    return _conventionMaster;
+  }
+
+  /**
+   * Sets the convention master.
+   * @param conventionMaster  the new value of the property
+   */
+  public void setConventionMaster(ConventionMaster conventionMaster) {
+    this._conventionMaster = conventionMaster;
+  }
+
+  /**
+   * Gets the the {@code conventionMaster} property.
+   * @return the property, not null
+   */
+  public final Property<ConventionMaster> conventionMaster() {
+    return metaBean().conventionMaster().createProperty(this);
   }
 
   //-----------------------------------------------------------------------
@@ -980,6 +1016,7 @@ public class MinimalWebsiteViewportsComponentFactory extends AbstractComponentFa
           JodaBeanUtils.equal(getFunctions(), other.getFunctions()) &&
           JodaBeanUtils.equal(getHistoricalTimeSeriesMaster(), other.getHistoricalTimeSeriesMaster()) &&
           JodaBeanUtils.equal(getLegalEntityMaster(), other.getLegalEntityMaster()) &&
+          JodaBeanUtils.equal(getConventionMaster(), other.getConventionMaster()) &&
           JodaBeanUtils.equal(getUserPositionMaster(), other.getUserPositionMaster()) &&
           JodaBeanUtils.equal(getUserPortfolioMaster(), other.getUserPortfolioMaster()) &&
           JodaBeanUtils.equal(getUserConfigMaster(), other.getUserConfigMaster()) &&
@@ -1010,6 +1047,7 @@ public class MinimalWebsiteViewportsComponentFactory extends AbstractComponentFa
     hash = hash * 31 + JodaBeanUtils.hashCode(getFunctions());
     hash = hash * 31 + JodaBeanUtils.hashCode(getHistoricalTimeSeriesMaster());
     hash = hash * 31 + JodaBeanUtils.hashCode(getLegalEntityMaster());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getConventionMaster());
     hash = hash * 31 + JodaBeanUtils.hashCode(getUserPositionMaster());
     hash = hash * 31 + JodaBeanUtils.hashCode(getUserPortfolioMaster());
     hash = hash * 31 + JodaBeanUtils.hashCode(getUserConfigMaster());
@@ -1027,7 +1065,7 @@ public class MinimalWebsiteViewportsComponentFactory extends AbstractComponentFa
 
   @Override
   public String toString() {
-    StringBuilder buf = new StringBuilder(736);
+    StringBuilder buf = new StringBuilder(768);
     buf.append("MinimalWebsiteViewportsComponentFactory{");
     int len = buf.length();
     toString(buf);
@@ -1051,6 +1089,7 @@ public class MinimalWebsiteViewportsComponentFactory extends AbstractComponentFa
     buf.append("functions").append('=').append(JodaBeanUtils.toString(getFunctions())).append(',').append(' ');
     buf.append("historicalTimeSeriesMaster").append('=').append(JodaBeanUtils.toString(getHistoricalTimeSeriesMaster())).append(',').append(' ');
     buf.append("legalEntityMaster").append('=').append(JodaBeanUtils.toString(getLegalEntityMaster())).append(',').append(' ');
+    buf.append("conventionMaster").append('=').append(JodaBeanUtils.toString(getConventionMaster())).append(',').append(' ');
     buf.append("userPositionMaster").append('=').append(JodaBeanUtils.toString(getUserPositionMaster())).append(',').append(' ');
     buf.append("userPortfolioMaster").append('=').append(JodaBeanUtils.toString(getUserPortfolioMaster())).append(',').append(' ');
     buf.append("userConfigMaster").append('=').append(JodaBeanUtils.toString(getUserConfigMaster())).append(',').append(' ');
@@ -1126,6 +1165,11 @@ public class MinimalWebsiteViewportsComponentFactory extends AbstractComponentFa
     private final MetaProperty<LegalEntityMaster> _legalEntityMaster = DirectMetaProperty.ofReadWrite(
         this, "legalEntityMaster", MinimalWebsiteViewportsComponentFactory.class, LegalEntityMaster.class);
     /**
+     * The meta-property for the {@code conventionMaster} property.
+     */
+    private final MetaProperty<ConventionMaster> _conventionMaster = DirectMetaProperty.ofReadWrite(
+        this, "conventionMaster", MinimalWebsiteViewportsComponentFactory.class, ConventionMaster.class);
+    /**
      * The meta-property for the {@code userPositionMaster} property.
      */
     private final MetaProperty<PositionMaster> _userPositionMaster = DirectMetaProperty.ofReadWrite(
@@ -1200,6 +1244,7 @@ public class MinimalWebsiteViewportsComponentFactory extends AbstractComponentFa
         "functions",
         "historicalTimeSeriesMaster",
         "legalEntityMaster",
+        "conventionMaster",
         "userPositionMaster",
         "userPortfolioMaster",
         "userConfigMaster",
@@ -1242,6 +1287,8 @@ public class MinimalWebsiteViewportsComponentFactory extends AbstractComponentFa
           return _historicalTimeSeriesMaster;
         case -1944474242:  // legalEntityMaster
           return _legalEntityMaster;
+        case 41113907:  // conventionMaster
+          return _conventionMaster;
         case 1808868758:  // userPositionMaster
           return _userPositionMaster;
         case 686514815:  // userPortfolioMaster
@@ -1367,6 +1414,14 @@ public class MinimalWebsiteViewportsComponentFactory extends AbstractComponentFa
     }
 
     /**
+     * The meta-property for the {@code conventionMaster} property.
+     * @return the meta-property, not null
+     */
+    public final MetaProperty<ConventionMaster> conventionMaster() {
+      return _conventionMaster;
+    }
+
+    /**
      * The meta-property for the {@code userPositionMaster} property.
      * @return the meta-property, not null
      */
@@ -1486,6 +1541,8 @@ public class MinimalWebsiteViewportsComponentFactory extends AbstractComponentFa
           return ((MinimalWebsiteViewportsComponentFactory) bean).getHistoricalTimeSeriesMaster();
         case -1944474242:  // legalEntityMaster
           return ((MinimalWebsiteViewportsComponentFactory) bean).getLegalEntityMaster();
+        case 41113907:  // conventionMaster
+          return ((MinimalWebsiteViewportsComponentFactory) bean).getConventionMaster();
         case 1808868758:  // userPositionMaster
           return ((MinimalWebsiteViewportsComponentFactory) bean).getUserPositionMaster();
         case 686514815:  // userPortfolioMaster
@@ -1546,6 +1603,9 @@ public class MinimalWebsiteViewportsComponentFactory extends AbstractComponentFa
           return;
         case -1944474242:  // legalEntityMaster
           ((MinimalWebsiteViewportsComponentFactory) bean).setLegalEntityMaster((LegalEntityMaster) newValue);
+          return;
+        case 41113907:  // conventionMaster
+          ((MinimalWebsiteViewportsComponentFactory) bean).setConventionMaster((ConventionMaster) newValue);
           return;
         case 1808868758:  // userPositionMaster
           ((MinimalWebsiteViewportsComponentFactory) bean).setUserPositionMaster((PositionMaster) newValue);

@@ -22,9 +22,12 @@ $.register_module({
         };
         /** @private */
         /** @private */
-        var meta_build = function (input, type_map, find) {
-            var result = {}, key, empty = '<EMPTY>', index = '<INDEX>',
+        var meta_build = function (input, type_map, find) {        	
+            var result = {}, key, empty = '<EMPTY>', index = '<INDEX>',            
                 data = input.data, path = input.path, warns = input.warns, null_path = path === null, new_path;
+//            console.log('--------------------------------------');
+//            console.log(data);
+//            console.log(path + "\t\t" + type_map[path]);
             if ($.isArray(data)) return data.map(function (val, idx) {
                 var value = meta_build({
                     data: val, path: null_path ? idx : [path, index].join('.'), warns: warns
@@ -127,8 +130,10 @@ $.register_module({
                 }
             });
             form.process(data, errors);
-            if (type_map)
+            if (type_map) {
+            	
                 built_meta = meta_build({data: data, path: null, warns: meta_warns}, type_map, form.meta_find);
+            }
             meta_warns = meta_warns.sort().reduce(function (acc, val) {
                 return acc[acc.length - 1] !== val ? (acc.push(val), acc) : acc;
             }, []).join(', ');

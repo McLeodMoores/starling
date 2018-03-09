@@ -1,16 +1,66 @@
+<!-- TODO check the style sheet - shouldn't need line breaks for span / label elements -->
+<!-- TODO break out into logical sections and add information tooltips + links to docs -->
 <section>
 	<div class="OG-details-content OG-convention OG-grid OG-form">
 		<section class="OG-mod-0 OG-c7 og-id-cur">
 			<div class="og-mod-content">
 				<label>
-					<span>Name</span>
+					<span>Name</span><br/>
 					<span><input type="text" name="name" value="{{name}}"/></span>
 				</label>
+				<!-- fixing time zone, fixing page-->
 				<label>
-					<span>Identifiers</span>
-					<span><textarea cols=100 rows=4 name="identifiers">{{{identifiers}}}</textarea></span>
+					<span>Currency</span><br/>
+					<span>{{{item_0}}}</span>
+				</label>
+				<label>
+					<span>Fixing Region Holidays</span><br/>					
+					<span>{{{item_1}}}</span>
+				</label>
+				<label>
+					<span>Region Holidays</span><br/>
+					<span>{{{item_2}}}</span>
+				</label>
+				<label>
+				<!-- TODO a time picker -->
+					<span>Fixing Time</span><br/>
+					<span><input type="text" name = "fixingTime" value="{{{fixingTime}}}"/></span>
+				</label>
+				<label>
+				<!-- TODO populate a list of time zones with some logic wrt fixing region? -->
+					<span>Fixing Time Zone</span><br/>
+					<span><input type="text" name="fixingTimeZone" value="{{{fixingTimeZone}}}"/></span>
+				</label>
+				<label>
+					<span>Fixing Page</span><small>(Optional)</small><br/>
+					<span><input type="text" name="fixingPage" value="{{{fixingPage}}}"/></span>
+				</label>
+				<label>
+					<span>Day-count Convention</span><br/>
+					<span>{{{item_3}}}</span>
+				</label>
+				<label>
+					<span>Business Day Convention</span><br/>
+					<span>{{{item_4}}}</span>
+				</label>
+				<label>
+					<span>End of Month Convention?<br/>
+						<input type="checkbox" name = "isEOM" {{{isEOM}}}/>
+					</span>
+				</label>
+				<label>
+					<span>Settlement days</span><br/>
+					<span><input class="og-num" type="text", name="settlementDays" value="{{settlementDays}}"/></span>
 				</label>
 			</div>
+		</section>
+    <section class="OG-mod-0 OG-c7 og-id-cur">
+      <div class="og-mod-content">
+    	  {{{item_5}}} <!--  external id bundle  -->
+    	</div>
+		</section>
+		<section class="OG-mod-0 OG-c7 og-attributes">
+			<h3>Attributes</h3>
 		</section>
 	</div>
 </section>

@@ -14,7 +14,7 @@ import com.opengamma.master.convention.ConventionMaster;
 import com.opengamma.master.convention.ManageableConvention;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.web.AbstractPerRequestWebResource;
-import com.opengamma.web.json.IborIndexConventionBuilder;
+import com.opengamma.web.json.IborIndexConventionJsonBuilder;
 
 /**
  * Abstract base class for RESTful convention resources.
@@ -63,7 +63,7 @@ public abstract class AbstractWebConventionResource
   }
 
   private void initializeJsonBuilders() {
-    data().getJsonBuilderMap().put(IborIndexConvention.class, IborIndexConventionBuilder.INSTANCE);
+    data().getJsonBuilderMap().put(IborIndexConvention.class, IborIndexConventionJsonBuilder.INSTANCE);
   }
 
   /**

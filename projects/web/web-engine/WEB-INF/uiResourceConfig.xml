@@ -144,10 +144,11 @@
     <fragment>/styles/common/forms/og.common.forms.OG-form.og-yc-strips.css</fragment>
     <fragment>/styles/common/forms/og.common.forms.OG-form.og-vol-surf-def.css</fragment>
     <fragment>/styles/common/forms/og.common.forms.OG-form.og-csb.css</fragment>
+    <fragment>/styles/common/forms/og.common.forms.OG-form.og-external-ids.css</fragment>
   </bundle>
   <bundle id="views.css">
     <fragment>/styles/views/analytics/og.views.OG-analytics.css</fragment>
-    <fragment>/styles/views/forms/configs/og.views.forms.configs.OG-form-column-sets.css</fragment>
+    <!-- fragment>/styles/views/forms/configs/og.views.forms.configs.OG-form-column-sets.css</fragment-->
     <fragment>/styles/views/forms/og.views.forms.OG-add-trades.css</fragment>
   </bundle>
   <bundle id="libs.css">
@@ -467,6 +468,7 @@
     <fragment>/scripts/og/views/common/og.views.common.toolbar.upload.js</fragment>
     <fragment>/scripts/og/views/common/og.views.common.default_details.js</fragment>
     <fragment>/scripts/og/views/common/og.views.common.core.js</fragment>
+    <fragment>/scripts/og/views/common/og.views.common.externalidbundle.js</fragment>
   </bundle>
   <bundle id="views_admin.js">
     <!-- config blocks -->

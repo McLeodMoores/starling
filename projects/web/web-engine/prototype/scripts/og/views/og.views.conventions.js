@@ -36,7 +36,7 @@ $.register_module({
 						value: function () { return current_type; }}],
 					buttons: {
 						'OK': function () {
-							var convention_type = ui.dialog({ return_field_value: 'convention_type'});
+							var convention_type = ui.dialog({ return_field_value: 'convention_type' });
 							$(this).dialog('close');
 							routes.go(routes.hash(view.rules.load_new, routes.current().args, {
 								add: {convention_type: convention_type}
@@ -99,7 +99,7 @@ $.register_module({
 					view.notify(null);
 					return view.error(result.message);
 				}
-				current_type = details_json.template_data.type.split('.').reverse()[0];
+				current_type = details_json.template_data.configJSON.data['0'][0].split('.').reverse()[0];
 				convention_type = current_type.toLowerCase();
 				if (is_new) {
 					if (!result.data) {
@@ -213,7 +213,7 @@ $.register_module({
                 toolbar_action = false;
                 return void 0;
             }
-            var msg = unsaved_txt + ' ' + form_state.data.name + '. \n\n' +
+            var msg = unsaved_txt + ' ' + (form_state ? form_state.data.name : "") + '. \n\n' +
                 'OK to discard changes \n' +
                 'Cancel to continue editing';
             if (!Object.equals(form_state, form_inst.compile()) && !window.confirm(msg)) {

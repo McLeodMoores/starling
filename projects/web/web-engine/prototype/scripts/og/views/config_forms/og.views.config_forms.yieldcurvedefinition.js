@@ -126,6 +126,8 @@ $.register_module({
             }).on('click', form_id + ' .og-js-add', function (event) { // add a strip
                 var block = new_strip({}, master.strip.push({}) - 1);
                 block.html(function (html) {$(form_id + ' .og-js-strips').append($(html)), block.load();});
+                console.log("YieldCurveDefinition master:");
+                console.log(master);
             });
             form.children = [
                 new form.Block({module: 'og.views.forms.currency_tash'}), // item_0
