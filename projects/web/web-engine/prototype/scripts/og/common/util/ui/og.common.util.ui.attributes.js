@@ -39,9 +39,12 @@ $.register_module({
                 $(add_list).prepend(template({key: key, value: value}));
                 $group.find('[class^=attr_]').val('');
                 $('.attr_key').focus();
+            }).on('form:load', function () {
+            	var item, $widget =  $('#' + id);
+            	console.log('Loading attributes');
             });
         };
-        Attributes.prototype = new Block(); // inherit Block prototype
+        Attributes.prototype = new Block(null, { module: 'og.views.forms.attributes_tash' }); // inherit Block prototype
         return Attributes;
     }
 });

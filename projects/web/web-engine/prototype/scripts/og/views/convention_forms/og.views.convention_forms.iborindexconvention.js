@@ -6,13 +6,15 @@ $.register_module({
 	dependencies: [
 		'og.api.rest',
 		'og.common.util.ui',
-		'og.views.common.ExternalIdBundle'
 	],
 	obj: function () {
 		var ui = og.common.util.ui, forms = og.views.forms, api = og.api.rest, Form = ui.Form, common = og.views.common,
-		INDEX = '<INDEX>', EMPTY = '<EMPTY>',
+		EIDS = 'externalIdBundle',
+		ATTR = 'attributes',
+		INDX = '<INDEX>', 
+		EMPT = '<EMPTY>',
 		type_map = [
-			[['0', INDEX].join('.'),									Form.type.STR],
+			[['0', INDX].join('.'),									Form.type.STR],
 			['name', 												Form.type.STR],
 			['currency', 											Form.type.STR],
 			['businessDayConvention',             		            Form.type.STR],
@@ -25,19 +27,27 @@ $.register_module({
 			['regionCalendar',										Form.type.STR],
 			['settlementDays',										Form.type.BYT],
 			['uniqueId',											Form.type.STR],
-			[['externalIdBundle', 'ID', INDEX, 'Scheme'].join('.'),	Form.type.STR],
-			[['externalIdBundle', 'ID', INDEX, 'Value'].join('.'),	Form.type.STR],
-			[['id', EMPTY, 'scheme'].join('.'),						Form.type.STR],
-			[['id', EMPTY, 'value'].join('.'),						Form.type.STR]		
+			[[EIDS, 'ID', INDX, 'Scheme'].join('.'),	 			Form.type.STR],
+			[[EIDS, 'ID', INDX, 'Value'].join('.'),					Form.type.STR],
+			[['id', EMPT, 'scheme'].join('.'),						Form.type.STR],
+			[['id', EMPT, 'value'].join('.'),						Form.type.STR]		
 		].reduce(function (acc, val) { return acc[val[0]] = val[1], acc; }, {});
         var arr = function (obj) { return arr && $.isArray(obj) ? obj : typeof obj !== 'undefined' ? [obj] : [] };
 		var constructor = function (config) {
-            var load_handler = config.handler || $.noop, selector = config.selector,
-            	loading = config.loading || $.noop, deleted = config.data.template_data.deleted, is_new = config.is_new,
+            var load_handler = config.handler || $.noop, 
+            	selector = config.selector,
+            	loading = config.loading || $.noop, 
+            	deleted = config.data.template_data.deleted, 
+            	is_new = config.is_new,
             	orig_name = config.data.template_data.name,
             	resource_id = config.data.template_data.object_id,
-            	save_new_handler = config.save_new_handler, save_handler = config.save_handler,
-            	master = config.data.template_data.configJSON.data, ids, attributes, sep = '~', convention_type = config.type,
+            	save_new_handler = config.save_new_handler, 
+            	save_handler = config.save_handler,
+            	master = config.data.template_data.configJSON.data, 
+            	ids, 
+            	attributes, 
+            	sep = '~', 
+            	convention_type = config.type,
             	form = new Form({
             		module: 'og.views.forms.ibor-index-convention_tash',
             		data: master, 
@@ -47,10 +57,12 @@ $.register_module({
             			name: master.name,
             			currency: master.currency || (master.currency = 'USD')
             		},
-            		processor: function (data) {
-            			data.id = data.id.filter(function (v) { return v !== void 0;});
-            			
-            		}
+//            		processor: function (data) {
+//            			data.id = data.id.filter(function (v) { return v !== void 0;});      
+////            			data[EIDS] = arr(data[EIDS]).filter(function (v) { return v !== void 0; });
+////            			data[ATTR] = arr(data[ATTR]).filter(function (v) { return v !== void 0; });
+////            			console.log(data);
+//            		}
             	}),
             	form_id = '#' + form.id,
             	save_resource = function (result) {
@@ -143,22 +155,29 @@ $.register_module({
                 	form: form, 
             		placeholder: 'Please select...',
                 	resource: 'blotter.daycountconventions',
-                	index: 'dayCount'
+                	index: 'dayCount',
+                	value: master.dayCount ? master.dayCount : "",
                 }),
                 // item_4
                 new ui.Dropdown({
                 	form: form, 
                 	placeholder: 'Please select...',
                 	resource: 'blotter.businessdayconventions',
-                	index: 'businessDayConvention'
+                	index: 'businessDayConvention',
+                	value: master.businessDayConvention ? master.businessDayConvention : ""
                 }),
                 // item_5
-                new common.ExternalIdBundle({
+                new ui.ExternalIdBundle({
                 	form: form,
-                	index: 0
-                })
+                	data: master.externalIdBundle,
+                	index: 'externalIdBundle'
+                }),
             	// item_6
-            	//TODO attributes
+            	new ui.Attributes({
+            		form: form,
+            		attributes: master.attributes,
+            		index: 'iborindexconvention.attributes'
+            	})
          	];
            	form.dom();
 		};

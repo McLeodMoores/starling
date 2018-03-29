@@ -21,13 +21,9 @@ $.register_module({
             if (results.length && !results.some(Boolean)) return false;
         };
         /** @private */
-        /** @private */
         var meta_build = function (input, type_map, find) {        	
             var result = {}, key, empty = '<EMPTY>', index = '<INDEX>',            
                 data = input.data, path = input.path, warns = input.warns, null_path = path === null, new_path;
-//            console.log('--------------------------------------');
-//            console.log(data);
-//            console.log(path + "\t\t" + type_map[path]);
             if ($.isArray(data)) return data.map(function (val, idx) {
                 var value = meta_build({
                     data: val, path: null_path ? idx : [path, index].join('.'), warns: warns
@@ -114,6 +110,9 @@ $.register_module({
          * @throws {Error} if form field names do not correspond with data keys to drill down into
          */
         Form.prototype.compile = function () {
+        	if (!form || !form.root) {
+        		i = 0;
+        	}
             var form = this, raw = form.root.serializeArray(), built_meta = null, meta_warns = [],
                 data = $.extend(true, {}, form.data), errors = [], type_map = form.config.type_map;
             if (!form.meta_find && type_map) form.meta_find = meta_find([], type_map); // cache this function

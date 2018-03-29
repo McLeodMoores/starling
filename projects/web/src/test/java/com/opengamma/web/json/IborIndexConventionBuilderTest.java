@@ -5,6 +5,9 @@ package com.opengamma.web.json;
 
 import static org.testng.Assert.assertEquals;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.testng.annotations.Test;
 import org.threeten.bp.LocalTime;
 
@@ -25,9 +28,14 @@ public class IborIndexConventionBuilderTest {
    */
   @Test
   public void test() {
-    final IborIndexConvention convention = new IborIndexConvention("IBOR", ExternalIdBundle.of("TEST", "TEST"),
+    final ExternalIdBundle externalIds = ExternalIdBundle.of("TEST", "TEST");
+    final Map<String, String> attributes = new HashMap<>();
+    attributes.put("ATTR1", "VAL1");
+    attributes.put("ATTR2", "VAL2");
+    final IborIndexConvention convention = new IborIndexConvention("IBOR", externalIds,
         DayCounts.ACT_360, BusinessDayConventions.FOLLOWING, 2, true, Currency.AUD, LocalTime.of(11, 0),
         "LONDON", ExternalId.of("TEST", "LONDON"), ExternalId.of("TEST", "NY"), "");
+    convention.setAttributes(attributes);
     assertEquals(convention, IborIndexConventionJsonBuilder.INSTANCE.fromJSON(IborIndexConventionJsonBuilder.INSTANCE.toJSON(convention)));
   }
 }

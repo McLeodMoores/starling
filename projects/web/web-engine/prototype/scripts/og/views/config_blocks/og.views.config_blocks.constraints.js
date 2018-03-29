@@ -83,7 +83,11 @@ $.register_module({
                         $replace.replaceWith($row);
                     }
                 };
-                for (item in data) render[item](data[item]);
+//                for (item in data) render[item](data[item]);
+                for (item in data) {
+                	console.log(data[item]);
+                	render[item](data[item]);
+                }
             }).on('change', '#' + ids.widget + ' input.og-js-radio', function (event) {
                 var target = event.target, value = target.value;
                 if (value === 'without' && $('#' + ids.widget + ' .og-js-without-field').length)

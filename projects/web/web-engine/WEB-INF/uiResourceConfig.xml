@@ -358,6 +358,7 @@
     <fragment>/scripts/og/common/util/ui/og.common.util.ui.attributes.js</fragment>
     <fragment>/scripts/og/common/util/ui/og.common.util.ui.portfolio.js</fragment>
     <fragment>/scripts/og/common/util/ui/og.common.util.ui.contextmenu.js</fragment>
+    <fragment>/scripts/og/common/util/ui/og.common.util.ui.external_id_bundle.js</fragment>
   </bundle>
   <bundle id="common.js">
     <fragment>/scripts/og/common/slickgrid/formatters/og.common.slickgrid.formatters.timeseries.js</fragment>
@@ -468,7 +469,6 @@
     <fragment>/scripts/og/views/common/og.views.common.toolbar.upload.js</fragment>
     <fragment>/scripts/og/views/common/og.views.common.default_details.js</fragment>
     <fragment>/scripts/og/views/common/og.views.common.core.js</fragment>
-    <fragment>/scripts/og/views/common/og.views.common.externalidbundle.js</fragment>
   </bundle>
   <bundle id="views_admin.js">
     <!-- config blocks -->
