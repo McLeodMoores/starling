@@ -135,7 +135,7 @@ public class WebConventionsResource extends AbstractWebConventionResource {
   @Produces(MediaType.TEXT_HTML)
   public Response postHTML(
       @FormParam("name") final String name,
-      @FormParam("conventionxml") final String xml,
+      @FormParam("conventionXML") final String xml,
       @FormParam("type") final String typeName) {
     final String trimmedName = StringUtils.trimToNull(name);
     final String trimmedXml = StringUtils.trimToNull(xml);
@@ -172,7 +172,7 @@ public class WebConventionsResource extends AbstractWebConventionResource {
       final FlexiBean out = createRootData();
       out.put("name", StringUtils.defaultString(trimmedName));
       out.put("type", StringUtils.defaultString(trimedTypeName));
-      out.put("conventionXml", StringEscapeUtils.escapeJava(StringUtils.defaultString(trimmedXml)));
+      out.put("conventionXML", StringEscapeUtils.escapeJava(StringUtils.defaultString(trimmedXml)));
       out.put("err_conventionXmlMsg", StringUtils.defaultString(ex.getMessage()));
       final String html = getFreemarker().build(HTML_DIR + "convention-add.ftl", out);
       return Response.ok(html).build();
@@ -199,7 +199,11 @@ public class WebConventionsResource extends AbstractWebConventionResource {
     } else {
       ManageableConvention convention = null;
       if (trimmedJson != null) {
-        convention = (ManageableConvention) parseJSON(trimmedJson);
+        final JSONBuilder<?> jsonBuilder = data().getJsonBuilderMap().get(typeClazz);
+        if (jsonBuilder != null) {
+          convention = (ManageableConvention) jsonBuilder.fromJSON(trimmedJson);
+        }
+//        convention = (ManageableConvention) parseJSON(trimmedJson);
       } else if (trimmedXml != null) {
         convention = parseXML(trimmedXml, typeClazz);
       }

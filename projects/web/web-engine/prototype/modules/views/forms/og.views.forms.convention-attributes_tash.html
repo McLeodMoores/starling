@@ -1,0 +1,19 @@
+<section>
+  <table class="OG-table">
+    <col style="width: 30%"/>
+    <col style="width: 70%"/>
+    <thead>
+      <tr><th colspan="2"><span><em>Attributes</em></span></th></tr>
+      <tr><th><div><em>Name</em></div></th>                           <th><div><em>Value</em></div></th></tr>
+    </thead>
+    <tbody class="og.attributes-add-table">
+      {{if data}}
+        {{each(attr_key, attr_value) data}}
+          <tr><td>${attr_key}</td>                                    <td>${attr_value}</td></tr>
+        {{/each}}
+      {{else}}
+          <tr><td colspan="2"><span>(no values)</span></td></tr>
+      {{/if}}
+    </tbody>
+  </table>
+</section>

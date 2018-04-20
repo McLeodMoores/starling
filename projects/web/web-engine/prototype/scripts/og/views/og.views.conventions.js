@@ -18,196 +18,217 @@ $.register_module({
 		'og.views.convention_forms.default'
 	],
 	obj: function () {
-		var api = og.api, common = og.common, details = common.details, events = common.events,
-			history = common.util.history, masthead = common.masthead, routes = common.routes,
+		var api = og.api, 
+			common = og.common, 
+			details = common.details, 
+			events = common.events,
+			history = common.util.history, 
+			masthead = common.masthead, 
+			routes = common.routes,
 			ui = common.util.ui,
-			form_inst, form_state, unsaved_txt = 'You have unsaved changes to', toolbar_action = false,
-			search, suppress_update = false, module = this, view, page_name = module.name.split('.').pop(),
-			current_type, convention_types = [],
-		toolbar_buttons = {
-			'new': function () {
-				toolbar_action = true;
-				ui.dialog({
-					type: 'input',
-					title: 'Add convention',
-					width: 400,
-					height: 190,
-					fields: [{type: 'optselect', name: 'Convention Type', id: 'convention_type', options: convention_types,
-						value: function () { return current_type; }}],
-					buttons: {
-						'OK': function () {
-							var convention_type = ui.dialog({ return_field_value: 'convention_type' });
-							$(this).dialog('close');
-							routes.go(routes.hash(view.rules.load_new, routes.current().args, {
-								add: {convention_type: convention_type}
-							}));
-						},
-						'Cancel': function () {$(this).dialog('close'); }
-					}
+			form_inst, 
+			form_state, 
+			unsaved_txt = 'You have unsaved changes to', 
+			toolbar_action = false,
+			search, 
+			suppress_update = false, 
+			module = this, 
+			view, 
+			page_name = module.name.split('.').pop(),
+			current_type, 
+			convention_types = [],
+			toolbar_buttons = {
+				'new': function () {
+					toolbar_action = true;
+					ui.dialog({
+						type: 'input',
+						title: 'Add convention',
+						width: 400,
+						height: 190,
+						fields: [{
+								type: 'optselect',
+								name: 'Convention Type', 
+								id: 'convention_type', 
+								options: convention_types,
+								value: function () { return current_type; }
+						}],
+						buttons: {
+							'OK': function () {
+								var convention_type = ui.dialog({ return_field_value: 'convention_type' });
+								$(this).dialog('close');
+								routes.go(routes.hash(view.rules.load_new, routes.current().args, {
+									add: {convention_type: convention_type}
+								}));
+							},
+							'Cancel': function () {$(this).dialog('close'); }
+						}
+					});
+				},
+				'delete': function () {
+					toolbar_action = true;
+					ui.dialog({
+						type: 'confirm',
+						title: 'Delete convention?',
+						width: 400,
+						height: 190,
+						message: 'Are you sure you want to permanently delete this convention?',
+						buttons: {
+							'Delete': function () {
+								var args = routes.current().args;
+								suppress_update = true;
+								form_inst = form_state = null;
+								$(this).dialog('close');
+								api.rest.conventions.del({
+									handler: function (result) {
+										if (result.error) {
+											return view.error(result.message);
+										}
+										routes.go(routes.hash(view.rules.load, args, {del: ['id']}));
+										setTimeout(function () { view.search(args); });
+									},
+									id: routes.current().args.id
+								});
+							},
+							'Cancel': function () { $(this).dialog('close'); }
+						}
+					});
+				},
+			},
+			toolbar = function (options) {
+				ui.toolbar(options);
+				if (convention_types.length) {
+					return;
+				}
+				$('.OG-tools .og-js-new').addClass('OG-disabled').unbind();
+				api.rest.conventions.get({
+					meta: true,
+					handler: function (result) {
+						convention_types = result.data.groups;
+						ui.toolbar(options);
+					},
+					cache_for: 60 * 60 * 1000
 				});
 			},
-			'delete': function () {
-				toolbar_action = true;
-				ui.dialog({
-					type: 'confirm',
-					title: 'Delete convention?',
-					width: 400,
-					height: 190,
-					message: 'Are you sure you want to permanently delete this convention?',
-					buttons: {
-						'Delete': function () {
+			details_page = function (args, new_convention_type) {
+				var rest_options, 
+				is_new = !!new_convention_type, 
+				rest_handler = function (result) {
+					var details_json = result.data, 
+						convention_type, 
+						render_type, 
+						render_options;
+					if (result.error) {
+						view.notify(null);
+						return view.error(result.message);
+					}
+					current_type = details_json.template_data.configJSON.data['0'][0].split('.').reverse()[0];
+					convention_type = current_type.toLowerCase();
+					if (is_new) {
+						if (!result.data) {
+							return view.error('No template for: ' + new_convention_type);
+						}
+						if (!result.data.template_data.configJSON) {
+							result.data.template_data.configJSON = {};
+						}
+						result.data.template_data.name = 'UNTITLED';
+						result.data.template_data.configJSON.name = 'UNTITLED';
+					} else {
+						history.put({ name: details_json.template_data.name, item: 'history.' + page_name + '.recent', value: routes.current().hash });
+					}
+					render_type = convention_type;
+					if (!og.views.convention_forms[convention_type]) {
+						render_type = 'default';
+					}
+					render_options = {
+						is_new: is_new,
+						data: details_json,
+						loading: view.notify.partial('saving...'),
+						save_new_handler: function (result) {
 							var args = routes.current().args;
-							suppress_update = true;
-							form_ints = form_state = null;
-							$(this).dialog('close');
-							api.rest.conventions.del({
-								handler: function (result) {
-									if (result.error) {
-										return view.error(result.message);
-									}
-									routes.go(routes.hash(view.rules.load, args, {del: ['id']}));
-									setTimeout(function () { view.search(args); });
-								},
-								id: routes.current().args.id
-							});
-						},
-						'Cancel': function () { $(this).dialog('close'); }
-					}
-				});
-			},
-		},
-		toolbar = function (options) {
-		    ui.toolbar(options);
-		    if (convention_types.length) {
-		    	return;
-		    }
-		    $('.OG-tools .og-js-new').addClass('OG-disabled').unbind();
-		    api.rest.conventions.get({
-		    	meta: true,
-		    	handler: function (result) {
-		    		convention_types = result.data.groups;
-		    		ui.toolbar(options);
-		    	},
-		    	cache_for: 60 * 60 * 1000
-		    });
-		},
-		details_page = function (args, new_convention_type) {
-			var rest_options, is_new = !!new_convention_type, rest_handler;
-			rest_handler = function (result) {
-				var details_json = result.data, convention_type, render_type, render_options;
-				if (result.error) {
-					view.notify(null);
-					return view.error(result.message);
-				}
-				current_type = details_json.template_data.configJSON.data['0'][0].split('.').reverse()[0];
-				convention_type = current_type.toLowerCase();
-				if (is_new) {
-					if (!result.data) {
-						return view.error('No template for: ' + new_convention_type);
-					}
-					if (!result.data.template_data.configJSON) {
-						result.data.template_data.configJSON = {};
-					}
-					result.data.template_data.name = 'UNTITLED';
-					result.data.template_data.configJSON.name = 'UNTITLED';
-				} else {
-					history.put({ name: details_json.template_data.name, item: 'history.' + page_name + '.recent', value: routes.current().hash });
-				}
-				render_type = convention_type;
-				if (!og.views.convention_forms[convention_type]) {
-					render_type = 'default';
-				}
-				render_options = {
-					is_new: is_new,
-					data: details_json,
-					loading: view.notify.partial('saving...'),
-					save_new_handler: function (result) {
-						var args = routes.current().args;
-						view.notify(null);
-						if (result.error()) {
-							return view.error(result.message);
-						}
-						toolbar_action = true;
-						view.search(args);
-						routes.go(routes.hash(view.rules.load_item, args, { add: {id: result.meta.id} }));
-					},
-					save_handler: function (result) {
-						var args = routes.current().args;
-						view.notify(null);
-						if (result.error()) {
-							return view.error(result.message);
-						}
-						view.notify('saved');
-						setTimeout(function () {
 							view.notify(null);
+							if (result.error()) {
+								return view.error(result.message);
+							}
+							toolbar_action = true;
 							view.search(args);
-							view.details(args);
-						}, 300);
-					},
-					handler: function (form) {
-						var json = details_json.template_data,
-                        	error_html = '\
-                        		<section class="OG-box og-box-glass og-box-error OG-shadow-light">This configuration has been deleted</section>';
-                        if (json.deleted) {
-                        	$('.OG-layout-admin-details-north').html(error_html);
-                            view.layout.inner.sizePane('north', '0');
-                            view.layout.inner.open('north');
-                        } else {
-                            view.layout.inner.close('north');
-                            $('.OG-layout-admin-details-north').empty();
-                        }
-                        if (is_new || json.deleted) {
-                            toolbar({
-                                buttons: [
-                                    {id: 'new', tooltip: 'New', handler: toolbar_buttons['new']},
-                                    {id: 'import', tooltip: 'Import', enabled: 'OG-disabled'},
-                                    {id: 'save', tooltip: 'Save', handler: form.submit.partial({as_new: true})},
-                                    {id: 'saveas', tooltip: 'Save as', enabled: 'OG-disabled'},
-                                    {id: 'delete', tooltip: 'Delete', enabled: 'OG-disabled'}
-                                ],
-                                location: '.OG-tools'
-                            });
-                        } else {
-                            toolbar({
-                                buttons: [
-                                    {id: 'new', tooltip: 'New', handler: toolbar_buttons['new']},
-                                    {id: 'import', tooltip: 'Import', enabled: 'OG-disabled'},
-                                    {id: 'save', tooltip: 'Save', handler: function () {
-                                        suppress_update = true;
-                                        form.submit();
-                                    }},
-                                    {id: 'saveas', tooltip: 'Save as', handler: form.submit.partial({as_new: true})},
-                                    {id: 'delete', tooltip: 'Delete', handler: toolbar_buttons['delete']}
-                                ],
-                                location: '.OG-tools'
-                            });
-                        }
-                        view.notify(null);
-                        setTimeout(view.layout.inner.resizeAll);
-                        form_inst = form;
-                        form_state = form_inst.compile();
-                    },
-                    selector: '.OG-layout-admin-details-center .ui-layout-content',
-                    type: details_json.template_data.type
-                };
-                $(render_options.selector).css({'overflow': 'auto'});
-                og.views.convention_forms[render_type](render_options);
-            };
-            view.layout.inner.options.south.onclose = null;
-            view.layout.inner.close('south');
-            rest_options = {
-                dependencies: view.dependencies,
-                update: is_new ? (void 0) : view.update,
-                handler: rest_handler,
-                loading: view.notify.partial({0: 'loading...', 3000: 'still loading...'})
-            };
-            if (new_convention_type) {
-                rest_options.template = new_convention_type;
-            } else {
-                rest_options.id = args.id;
-            }
-            api.rest.conventions.get(rest_options);
-        };
+							routes.go(routes.hash(view.rules.load_item, args, { add: {id: result.meta.id} }));
+						},
+						save_handler: function (result) {
+							var args = routes.current().args;
+							view.notify(null);
+							if (result.error) {
+								return view.error(result.message);
+							}
+							view.notify('saved');
+							setTimeout(function () {
+								view.notify(null);
+								view.search(args);
+								view.details(args);
+							}, 300);
+						},
+						handler: function (form) {
+							var json = details_json.template_data,
+								error_html = '<section class="OG-box og-box-glass og-box-error OG-shadow-light">This configuration has been deleted</section>';
+							if (json.deleted) {
+								$('.OG-layout-admin-details-north').html(error_html);
+								view.layout.inner.sizePane('north', '0');
+								view.layout.inner.open('north');
+							} else {
+								view.layout.inner.close('north');
+								$('.OG-layout-admin-details-north').empty();
+							}
+							if (is_new || json.deleted) {
+								toolbar({
+									buttons: [
+										{id: 'new', tooltip: 'New', handler: toolbar_buttons['new']},
+										{id: 'import', tooltip: 'Import', enabled: 'OG-disabled'},
+										{id: 'save', tooltip: 'Save', handler: form.submit.partial({as_new: true})},
+										{id: 'saveas', tooltip: 'Save as', enabled: 'OG-disabled'},
+										{id: 'delete', tooltip: 'Delete', enabled: 'OG-disabled'}
+									],
+									location: '.OG-tools'
+								});
+							} else {
+								toolbar({
+									buttons: [
+										{id: 'new', tooltip: 'New', handler: toolbar_buttons['new']},
+										{id: 'import', tooltip: 'Import', enabled: 'OG-disabled'},
+										{id: 'save', tooltip: 'Save', handler: function () {
+											suppress_update = true;
+											form.submit();
+										}},
+										{id: 'saveas', tooltip: 'Save as', handler: form.submit.partial({as_new: true})},
+										{id: 'delete', tooltip: 'Delete', handler: toolbar_buttons['delete']}
+									],
+									location: '.OG-tools'
+								});
+							}
+							view.notify(null);
+							setTimeout(view.layout.inner.resizeAll);
+							form_inst = form;
+							form_state = form_inst.compile();
+						},
+						selector: '.OG-layout-admin-details-center .ui-layout-content',
+						type: details_json.template_data.type
+					};
+					$(render_options.selector).css({'overflow': 'auto'});
+					og.views.convention_forms[render_type](render_options);
+				};
+				view.layout.inner.options.south.onclose = null;
+				view.layout.inner.close('south');
+				rest_options = {
+						dependencies: view.dependencies,
+						update: is_new ? (void 0) : view.update,
+						handler: rest_handler,
+						loading: view.notify.partial({0: 'loading...', 3000: 'still loading...'})
+				};
+				if (new_convention_type) {
+					rest_options.template = new_convention_type;
+				} else {
+					rest_options.id = args.id;
+				}
+				api.rest.conventions.get(rest_options);
+			};
         events.on('hashchange', function () {
             if (!form_inst && !form_state || toolbar_action) {
                 toolbar_action = false;
@@ -233,8 +254,7 @@ $.register_module({
             return true;
         });
         var build_menu = function (list) {
-            var menu_html = '<select class="og-js-type-filter" style="width: 80px">' +
-                '<option value="">Type</option>';
+            var menu_html = '<select class="og-js-type-filter" style="width: 80px"><option value="">Type</option>';
             list.forEach(function (entry) {
                 menu_html += '<optgroup label="' + entry.group + '">';
                 entry.types.forEach(function (type) {
@@ -252,12 +272,14 @@ $.register_module({
 			details: details_page,
 			load: function (args) {
 				view.layout = og.views.common.layout;
-				view.check_state({ args: args, conditions: [
-					{new_page: function (args) {
-						view.search(args);
-						masthead.menu.set_tab(page_name);
-					}}
-				]});
+				view.check_state({ 
+					args: args, 
+					conditions: [
+						{ new_page: function (args) {
+							view.search(args);
+							masthead.menu.set_tab(page_name);
+						} }
+					]});
 				if (!args.id && !args.convention_type) {
 					view.default_details();
 				}
@@ -295,7 +317,7 @@ $.register_module({
                             {id: 'import', tooltip: 'Import', enabled: 'OG-disabled'},
                             {id: 'save', tooltip: 'Save', enabled: 'OG-disabled'},
                             {id: 'saveas', tooltip: 'Save as', enabled: 'OG-disabled'},
-							{id: 'delete', tooltip: 'Delete', handler: toolbar_buttons['delete']}
+							{id: 'delete', tooltip: 'Delete', enabled: 'OG-disabled'}
 						],
 						location: '.OG-tools'
 					}

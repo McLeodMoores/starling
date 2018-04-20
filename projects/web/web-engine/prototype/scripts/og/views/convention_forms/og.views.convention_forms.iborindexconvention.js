@@ -29,8 +29,9 @@ $.register_module({
 			['uniqueId',											Form.type.STR],
 			[[EIDS, 'ID', INDX, 'Scheme'].join('.'),	 			Form.type.STR],
 			[[EIDS, 'ID', INDX, 'Value'].join('.'),					Form.type.STR],
-			[['id', EMPT, 'scheme'].join('.'),						Form.type.STR],
-			[['id', EMPT, 'value'].join('.'),						Form.type.STR]		
+//			[['id', EMPT, 'scheme'].join('.'),						Form.type.STR],
+//			[['id', EMPT, 'value'].join('.'),						Form.type.STR],
+			[[ATTR, INDX].join('.'),								Form.type.STR]
 		].reduce(function (acc, val) { return acc[val[0]] = val[1], acc; }, {});
         var arr = function (obj) { return arr && $.isArray(obj) ? obj : typeof obj !== 'undefined' ? [obj] : [] };
 		var constructor = function (config) {
@@ -57,14 +58,13 @@ $.register_module({
             			name: master.name,
             			currency: master.currency || (master.currency = 'USD')
             		},
-//            		processor: function (data) {
-//            			data.id = data.id.filter(function (v) { return v !== void 0;});      
-////            			data[EIDS] = arr(data[EIDS]).filter(function (v) { return v !== void 0; });
-////            			data[ATTR] = arr(data[ATTR]).filter(function (v) { return v !== void 0; });
-////            			console.log(data);
-//            		}
+            		processor: function (data) {
+            			data.id = data.id.filter(function (v) { return v !== void 0;});      
+            			data[EIDS] = arr(data[EIDS]).filter(function (v) { return v !== void 0; });
+            			data[ATTR] = arr(data[ATTR]).filter(function (v) { return v !== void 0; });
+            		}
             	}),
-            	form_id = '#' + form.id,
+            	form_id = '#' + form.id;
             	save_resource = function (result) {
             		var data = result.data, 
             		meta = result.meta,
@@ -74,7 +74,7 @@ $.register_module({
             			id: as_new ? void 0 : resource_id,
             			name: data.name,
             			json: JSON.stringify({ data: data, meta: meta }),
-            			type: config_type,
+            			type: convention_type,
             			loading: loading,
             			handler: as_new ? save_new_handler : save_handler
             		});
@@ -90,17 +90,11 @@ $.register_module({
             			</header>\
             			';
             		$('.OG-layout-admin-details-center .ui-layout-header').html(header);
-            		$(form_id);
-            		$(form_id + ' select[name=currency]').val(master.currency);
-            		$(form_id + ' select[name=dayCount]').val(master.dayCount);
-            		$(form_id + ' select[name=businessDayConvention]').val(master.businessDayConvention);
-            		//TODO shouldn't need these
             		$(form_id + ' input[name=fixingTime').val(master.fixingTime);
             		$(form_id + ' input[name=fixingTimeZone').val(master.fixingTimeZone);
             		$(form_id + ' input[name=fixingPage').val(master.fixingPage);
             		$(form_id + ' input[name=isEOM').val(master.isEOM ? 'checked' : '');
             		$(form_id + ' input[name=settlementDays').val(master.settlementDays.toString());
-            		
             		setTimeout(load_handler.partial(form));
             	};
             	add_id_resource = function (event) {
@@ -127,7 +121,11 @@ $.register_module({
             	.on('form:load', load_resource);
             form.children = [
             	// item_0
-            	new form.Block({ module: 'og.views.forms.currency_tash' }), 
+            	new form.Block({ 
+            		module: 'og.views.forms.currency_tash' 
+            	}).on('form:load', function () {
+            		$(form_id + ' select[name=currency]').val(master.currency);
+            	}), 
             	// item_1
                 new ui.Dropdown({ 
                     form: form, 

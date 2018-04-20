@@ -130,7 +130,6 @@ $.register_module({
             });
             form.process(data, errors);
             if (type_map) {
-            	
                 built_meta = meta_build({data: data, path: null, warns: meta_warns}, type_map, form.meta_find);
             }
             meta_warns = meta_warns.sort().reduce(function (acc, val) {
