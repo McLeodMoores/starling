@@ -28,6 +28,7 @@ import com.mcleodmoores.examples.simulated.loader.config.ExamplesViewsPopulator;
 import com.mcleodmoores.examples.simulated.loader.convention.ExamplesConventionMasterInitializer;
 import com.mcleodmoores.examples.simulated.loader.data.ExampleHistoricalDataGeneratorTool;
 import com.mcleodmoores.examples.simulated.loader.holiday.ExamplesCurrencyHolidayLoader;
+import com.mcleodmoores.examples.simulated.loader.holiday.ExamplesSettlementHolidayLoader;
 import com.mcleodmoores.examples.simulated.loader.legalentity.ExamplesLegalEntityLoader;
 import com.mcleodmoores.examples.simulated.loader.portfolio.ExamplesBondAndFuturePortfolioLoader;
 import com.mcleodmoores.examples.simulated.loader.portfolio.SimulatedOisPortfolioGenerator;
@@ -627,8 +628,10 @@ public class ExamplesDatabasePopulator extends AbstractTool<ToolContext> {
       // note that this holiday loader uses the currency pairs configuration, so the call to this method has
       // been moved into this method to avoid having to remember this ordering
       loadCurrencyConfiguration();
-      final ExamplesCurrencyHolidayLoader loader = new ExamplesCurrencyHolidayLoader();
-      loader.run(getToolContext());
+      final ExamplesCurrencyHolidayLoader currency = new ExamplesCurrencyHolidayLoader();
+      final ExamplesSettlementHolidayLoader settlement = new ExamplesSettlementHolidayLoader();
+      currency.run(getToolContext());
+      settlement.run(getToolContext());
       log.done();
     } catch (final RuntimeException t) {
       log.fail(t);

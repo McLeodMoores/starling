@@ -10,7 +10,7 @@ $.register_module({
 	obj: function () {
 		var ui = og.common.util.ui, forms = og.views.forms, api = og.api.rest, Form = ui.Form, common = og.views.common,
 		EIDS = 'externalIdBundle',
-		ATTR = 'attributes',
+		ATTR = 'ATTR',
 		INDX = '<INDEX>', 
 		EMPT = '<EMPTY>',
 		type_map = [
@@ -31,7 +31,8 @@ $.register_module({
 			[[EIDS, 'ID', INDX, 'Value'].join('.'),					Form.type.STR],
 //			[['id', EMPT, 'scheme'].join('.'),						Form.type.STR],
 //			[['id', EMPT, 'value'].join('.'),						Form.type.STR],
-			[[ATTR, INDX].join('.'),								Form.type.STR]
+			[[ATTR, INDX, 'Key'].join('.'),							Form.type.STR],
+			[[ATTR, INDX, 'Value'].join('.'),						Form.type.STR]
 		].reduce(function (acc, val) { return acc[val[0]] = val[1], acc; }, {});
         var arr = function (obj) { return arr && $.isArray(obj) ? obj : typeof obj !== 'undefined' ? [obj] : [] };
 		var constructor = function (config) {
@@ -171,10 +172,10 @@ $.register_module({
                 	index: 'externalIdBundle'
                 }),
             	// item_6
-            	new ui.Attributes({
+            	new og.views.convention_forms.Attributes({
             		form: form,
-            		attributes: master.attributes,
-            		index: 'iborindexconvention.attributes'
+            		attributes: master.ATTR,
+            		index: 'attributes'
             	})
          	];
            	form.dom();

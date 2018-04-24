@@ -3,14 +3,22 @@
  */
 package com.opengamma.web.json;
 
+import java.io.StringReader;
+import java.io.StringWriter;
 import java.util.Map;
 
 import org.fudgemsg.FudgeContext;
+import org.fudgemsg.FudgeField;
 import org.fudgemsg.FudgeMsg;
+import org.fudgemsg.FudgeRuntimeException;
 import org.fudgemsg.MutableFudgeMsg;
 import org.fudgemsg.mapping.FudgeBuilder;
 import org.fudgemsg.mapping.FudgeDeserializer;
 import org.fudgemsg.mapping.FudgeSerializer;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.json.JSONTokener;
 import org.threeten.bp.LocalTime;
 
 import com.opengamma.core.id.ExternalSchemes;
@@ -31,36 +39,55 @@ public final class IborIndexConventionJsonBuilder extends AbstractJSONBuilder<Ib
    * Static instance.
    */
   public static final IborIndexConventionJsonBuilder INSTANCE = new IborIndexConventionJsonBuilder();
+  private static final String ORIGINAL_FIELD_NAME = "attributes";
   private static final String ATTR_FIELD_NAME = "ATTR";
+  private static final String KEY_FIELD_NAME = "Key";
+  private static final String VALUE_FIELD_NAME = "Value";
   private static final FudgeContext s_fudgeContext = OpenGammaFudgeContext.getInstance();
 
   @Override
   public IborIndexConvention fromJSON(final String json) {
-    return fromJSON(IborIndexConvention.class, ArgumentChecker.notNull(json, "json"));
+    final IborIndexConvention convention = fromJSON(IborIndexConvention.class, ArgumentChecker.notNull(json, "json"));
+    final StringReader sr = new StringReader(json);
+    try {
+      final JSONObject jsonObject = new JSONObject(new JSONTokener(sr));
+      final JSONObject data = (JSONObject) jsonObject.get("data");
+      if (data != null) {
+        final JSONArray attributeJson = data.getJSONArray(ATTR_FIELD_NAME);
+        if (attributeJson != null) {
+          for (int i = 0; i < attributeJson.length(); i++) {
+            final JSONObject entry = attributeJson.getJSONObject(i);
+            convention.addAttribute(entry.getString(KEY_FIELD_NAME), entry.getString(VALUE_FIELD_NAME));
+          }
+        }
+      }
+    } catch (final JSONException ex) {
+      throw new FudgeRuntimeException("Error " + ex.getMessage() + " from JSON stream", ex);
+    }
+    return convention;
   }
 
   @Override
   public String toJSON(final IborIndexConvention object) {
-    return fudgeToJson(object);
-/*    final Map<String, String> attributes = object.getAttributes();
+    final Map<String, String> attributes = object.getAttributes();
     final IborIndexConvention copy = object.clone();
     final FudgeSerializer serializer = new FudgeSerializer(s_fudgeContext);
     final FudgeMsg fudgeMsg = s_fudgeContext.toFudgeMsg(copy).getMessage();
-    final FudgeMsg attributesFudgeMsg = AttributesFudgeBuilder.INSTANCE.buildMessage(serializer, attributes);
-    final MutableFudgeMsg newMessage = serializer.newMessage();
+    final FudgeMsg attributesFudgeMsg = AttributesFudgeBuilder.BUILDER.buildMessage(serializer, attributes);
+    final MutableFudgeMsg newMsg = serializer.newMessage();
     for (final FudgeField field : fudgeMsg.getAllFields()) {
-      if (!"attributes".equals(field.getName())) {
-        newMessage.add(field);
+      if (!ORIGINAL_FIELD_NAME.equals(field.getName())) {
+        newMsg.add(field);
       }
     }
     for (final FudgeField field : attributesFudgeMsg.getAllFields()) {
-      newMessage.add(field);
+      newMsg.add(field);
     }
     final StringWriter sw = new StringWriter();
     try (FudgeMsgJSONWriter fudgeJSONWriter = new FudgeMsgJSONWriter(s_fudgeContext, sw)) {
-      fudgeJSONWriter.writeMessage(fudgeMsg);
+      fudgeJSONWriter.writeMessage(newMsg);
       return sw.toString();
-    }*/
+    }
   }
 
   @Override
@@ -78,9 +105,7 @@ public final class IborIndexConventionJsonBuilder extends AbstractJSONBuilder<Ib
   }
 
   private static class AttributesFudgeBuilder extends AbstractFudgeBuilder implements FudgeBuilder<Map<String, String>> {
-    public static final FudgeBuilder<Map<String, String>> INSTANCE = new AttributesFudgeBuilder();
-    private static final String KEY_FIELD_NAME = "Key";
-    private static final String VALUE_FIELD_NAME = "Value";
+    public static final FudgeBuilder<Map<String, String>> BUILDER = new AttributesFudgeBuilder();
 
     @Override
     public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final Map<String, String> object) {
@@ -96,7 +121,7 @@ public final class IborIndexConventionJsonBuilder extends AbstractJSONBuilder<Ib
 
     @Override
     public Map<String, String> buildObject(final FudgeDeserializer deserializer, final FudgeMsg message) {
-      return null;
+      throw new UnsupportedOperationException();
     }
 
     private AttributesFudgeBuilder() {

@@ -132,21 +132,24 @@ public class WebConventionResource extends AbstractWebConventionResource {
   public Response putJSON(
       @FormParam("name") final String name,
       @FormParam("conventionJSON") final String json,
-      @FormParam("conventionXML") final String xml) {
+      @FormParam("conventionXML") final String xml,
+      @FormParam("type") final String typeName) {
     if (data().getConvention().isLatest() == false) {
       return Response.status(Status.FORBIDDEN).entity(getHTML()).build();
     }
     final String trimmedName = StringUtils.trimToNull(name);
     final String trimmedJson = StringUtils.trimToNull(json);
     final String trimmedXml = StringUtils.trimToNull(xml);
-
+    final String trimmedTypeName = StringUtils.trimToNull(typeName);
     // JSON allows a null convention to just change the name
     if (trimmedName == null) {
       return Response.status(Status.BAD_REQUEST).build();
     }
     ManageableConvention conventionValue = null;
     if (trimmedJson != null) {
-      conventionValue = (ManageableConvention) parseJSON(json);
+      final Class<? extends ManageableConvention> typeClazz = trimmedTypeName != null ? getConventionTypesProvider().getClassFromDisplayName(trimmedTypeName) : null;
+      final JSONBuilder<?> jsonBuilder = data().getJsonBuilderMap().get(typeClazz);
+      conventionValue = (ManageableConvention) jsonBuilder.fromJSON(trimmedJson);
     } else if (trimmedXml != null) {
       conventionValue = parseXML(xml, ManageableConvention.class);
     }
