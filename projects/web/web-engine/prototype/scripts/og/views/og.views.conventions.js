@@ -109,9 +109,9 @@ $.register_module({
 					cache_for: 60 * 60 * 1000
 				});
 			},
-			details_page = function (args, new_convention_type) {
+			details_page = function (args, config) {
 				var rest_options, 
-				is_new = !!new_convention_type, 
+				is_new = !!config, 
 				rest_handler = function (result) {
 					var details_json = result.data, 
 						convention_type, 
@@ -125,7 +125,7 @@ $.register_module({
 					convention_type = current_type.toLowerCase();
 					if (is_new) {
 						if (!result.data) {
-							return view.error('No template for: ' + new_convention_type);
+							return view.error('No template for: ' + config);
 						}
 						if (!result.data.template_data.configJSON) {
 							result.data.template_data.configJSON = {};
@@ -222,8 +222,8 @@ $.register_module({
 						handler: rest_handler,
 						loading: view.notify.partial({0: 'loading...', 3000: 'still loading...'})
 				};
-				if (new_convention_type) {
-					rest_options.template = new_convention_type;
+				if (config) {
+					rest_options.template = config;
 				} else {
 					rest_options.id = args.id;
 				}

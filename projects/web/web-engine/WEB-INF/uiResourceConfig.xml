@@ -56,6 +56,7 @@
     <fragment>/styles/common/classes/og.common.classes.OG-list.css</fragment>
     <fragment>/styles/common/classes/og.common.classes.OG-link.css</fragment>
     <fragment>/styles/common/classes/og.common.classes.OG-link-add.css</fragment>
+    <fragment>/styles/common/classes/og.common.classes.OG-link-remove.css</fragment>
     <fragment>/styles/common/classes/og.common.classes.OG-link-action.css</fragment>
     <fragment>/styles/common/classes/og.common.classes.OG-link-small.css</fragment>
     <fragment>/styles/common/classes/og.common.classes.OG-link-cancel.css</fragment>
