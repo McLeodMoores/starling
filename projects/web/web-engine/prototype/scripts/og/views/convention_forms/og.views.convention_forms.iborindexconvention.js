@@ -29,8 +29,8 @@ $.register_module({
 			['uniqueId',											Form.type.STR],
 			[[EIDS, 'ID', INDX, 'Scheme'].join('.'),	 			Form.type.STR],
 			[[EIDS, 'ID', INDX, 'Value'].join('.'),					Form.type.STR],
-//			[['id', EMPT, 'scheme'].join('.'),						Form.type.STR],
-//			[['id', EMPT, 'value'].join('.'),						Form.type.STR],
+			[['id', EMPT, 'scheme'].join('.'),						Form.type.STR],
+			[['id', EMPT, 'value'].join('.'),						Form.type.STR],
 			[[ATTR, INDX, 'Key'].join('.'),							Form.type.STR],
 			[[ATTR, INDX, 'Value'].join('.'),						Form.type.STR]
 		].reduce(function (acc, val) { return acc[val[0]] = val[1], acc; }, {});

@@ -5,14 +5,12 @@ $.register_module({
         var module = this, Block = og.common.util.ui.Block, add_table = '.og-add-table',
             template = Handlebars.compile('<tr><td>{{{key}}}</td>\
                     <td>{{{value}}}</td>\
-                    <td><a class="OG-link-add og-js-rem-attribute" href="#">remove</a></td></tr>');
+                    <td><a class="OG-link-remove og-js-rem-attribute" href="#">remove</a></td></tr>');
         var Attributes = function (config) {
             var block = this, id = og.common.id('attributes'), form = config.form;
                 attr_data = config.attributes ? Object.keys(config.attributes).reduce(function (acc, val) {
                     return acc.concat({key: config.attributes[val]['Key'], value: config.attributes[val]['Value']});
                 }, []) : {};
-                console.log(config.attributes);
-                console.log(attr_data);
             form.Block.call(block, {
                 module: 'og.views.forms.convention-attributes_tash',
                 extras: {id: id, data: attr_data},
