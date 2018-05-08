@@ -16,13 +16,13 @@
       </thead>   
       <tbody class="og-add-table">
         {{#each data}}
-          <tr class="og-js-row">
-            <td>{{{key}}}</td>
-            <td>{{{value}}}</td>
+          <tr class="og-js-attr-row">
+            <td class="attr_key">{{{key}}}</td>
+            <td class="attr_val">{{{value}}}</td>
             <td><a class="OG-link-remove og-js-rem-attribute" href="#">remove</a></td>
           </tr>
         {{/each}}
-        <tr class="og-js-row">
+        <tr class="og-js-add-attr-row">
           <td><input type="text" class="attr_key" placeholder="name"></td>
           <td><input type="text" class="attr_val" placeholder="value"></td>
           <td><a class="OG-link-add og-js-add-attribute" href="#">add</a></td>

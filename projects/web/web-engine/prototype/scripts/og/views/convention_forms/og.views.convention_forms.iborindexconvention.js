@@ -9,8 +9,8 @@ $.register_module({
 	],
 	obj: function () {
 		var ui = og.common.util.ui, forms = og.views.forms, api = og.api.rest, Form = ui.Form, common = og.views.common,
+		ATTR = 'attributes',
 		EIDS = 'externalIdBundle',
-		ATTR = 'ATTR',
 		INDX = '<INDEX>', 
 		EMPT = '<EMPTY>',
 		type_map = [
@@ -31,8 +31,9 @@ $.register_module({
 			[[EIDS, 'ID', INDX, 'Value'].join('.'),					Form.type.STR],
 			[['id', EMPT, 'scheme'].join('.'),						Form.type.STR],
 			[['id', EMPT, 'value'].join('.'),						Form.type.STR],
-			[[ATTR, INDX, 'Key'].join('.'),							Form.type.STR],
-			[[ATTR, INDX, 'Value'].join('.'),						Form.type.STR]
+			[[ATTR, EMPT].join('.'),								Form.type.STR], 
+			[[ATTR, INDX, 'Key'].join('.'),							Form.type.STR], 
+			[[ATTR, INDX, 'Value'].join('.'),						Form.type.STR], 
 		].reduce(function (acc, val) { return acc[val[0]] = val[1], acc; }, {});
         var arr = function (obj) { return arr && $.isArray(obj) ? obj : typeof obj !== 'undefined' ? [obj] : [] };
 		var constructor = function (config) {
@@ -166,7 +167,7 @@ $.register_module({
                 	value: master.businessDayConvention ? master.businessDayConvention : ""
                 }),
                 // item_5
-                new ui.ExternalIdBundle({
+                new og.views.convention_forms.ExternalIdBundle({
                 	form: form,
                 	data: master.externalIdBundle,
                 	index: 'externalIdBundle'
@@ -174,7 +175,7 @@ $.register_module({
             	// item_6
             	new og.views.convention_forms.Attributes({
             		form: form,
-            		attributes: master.ATTR,
+            		attributes: master.attributes,
             		index: 'attributes'
             	})
          	];

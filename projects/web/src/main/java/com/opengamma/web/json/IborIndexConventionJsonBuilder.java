@@ -5,6 +5,7 @@ package com.opengamma.web.json;
 
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.fudgemsg.FudgeContext;
@@ -12,7 +13,6 @@ import org.fudgemsg.FudgeField;
 import org.fudgemsg.FudgeMsg;
 import org.fudgemsg.FudgeRuntimeException;
 import org.fudgemsg.MutableFudgeMsg;
-import org.fudgemsg.mapping.FudgeBuilder;
 import org.fudgemsg.mapping.FudgeDeserializer;
 import org.fudgemsg.mapping.FudgeSerializer;
 import org.json.JSONArray;
@@ -39,32 +39,38 @@ public final class IborIndexConventionJsonBuilder extends AbstractJSONBuilder<Ib
    * Static instance.
    */
   public static final IborIndexConventionJsonBuilder INSTANCE = new IborIndexConventionJsonBuilder();
-  private static final String ORIGINAL_FIELD_NAME = "attributes";
-  private static final String ATTR_FIELD_NAME = "ATTR";
+  private static final String ATTR_FIELD_NAME = "attributes";
   private static final String KEY_FIELD_NAME = "Key";
   private static final String VALUE_FIELD_NAME = "Value";
   private static final FudgeContext s_fudgeContext = OpenGammaFudgeContext.getInstance();
 
   @Override
   public IborIndexConvention fromJSON(final String json) {
-    final IborIndexConvention convention = fromJSON(IborIndexConvention.class, ArgumentChecker.notNull(json, "json"));
+    ArgumentChecker.notNull(json, "json");
     final StringReader sr = new StringReader(json);
+    final Map<String, String> attributes = new HashMap<>();
     try {
       final JSONObject jsonObject = new JSONObject(new JSONTokener(sr));
       final JSONObject data = (JSONObject) jsonObject.get("data");
       if (data != null) {
         final JSONArray attributeJson = data.getJSONArray(ATTR_FIELD_NAME);
+        // collect attributes into map
         if (attributeJson != null) {
           for (int i = 0; i < attributeJson.length(); i++) {
             final JSONObject entry = attributeJson.getJSONObject(i);
-            convention.addAttribute(entry.getString(KEY_FIELD_NAME), entry.getString(VALUE_FIELD_NAME));
+            attributes.put(entry.getString(KEY_FIELD_NAME), entry.getString(VALUE_FIELD_NAME));
           }
         }
+        // remove changed form to deserialize without changed attributes message
+        data.remove(ATTR_FIELD_NAME);
       }
+      // convert then add attributes map
+      final IborIndexConvention convention = fromJSON(IborIndexConvention.class, jsonObject.toString());
+      convention.setAttributes(attributes);
+      return convention;
     } catch (final JSONException ex) {
       throw new FudgeRuntimeException("Error " + ex.getMessage() + " from JSON stream", ex);
     }
-    return convention;
   }
 
   @Override
@@ -76,7 +82,7 @@ public final class IborIndexConventionJsonBuilder extends AbstractJSONBuilder<Ib
     final FudgeMsg attributesFudgeMsg = AttributesFudgeBuilder.BUILDER.buildMessage(serializer, attributes);
     final MutableFudgeMsg newMsg = serializer.newMessage();
     for (final FudgeField field : fudgeMsg.getAllFields()) {
-      if (!ORIGINAL_FIELD_NAME.equals(field.getName())) {
+      if (!ATTR_FIELD_NAME.equals(field.getName())) {
         newMsg.add(field);
       }
     }
@@ -104,10 +110,10 @@ public final class IborIndexConventionJsonBuilder extends AbstractJSONBuilder<Ib
   private IborIndexConventionJsonBuilder() {
   }
 
-  private static class AttributesFudgeBuilder extends AbstractFudgeBuilder implements FudgeBuilder<Map<String, String>> {
-    public static final FudgeBuilder<Map<String, String>> BUILDER = new AttributesFudgeBuilder();
+  private static class AttributesFudgeBuilder extends AbstractFudgeBuilder /*implements FudgeBuilder<Map<String, String>> */{
+    public static final AttributesFudgeBuilder BUILDER = new AttributesFudgeBuilder();
 
-    @Override
+    //@Override
     public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final Map<String, String> object) {
       final MutableFudgeMsg msg = serializer.newMessage();
       for (final Map.Entry<String, String> entry : object.entrySet()) {
@@ -119,7 +125,7 @@ public final class IborIndexConventionJsonBuilder extends AbstractJSONBuilder<Ib
       return msg;
     }
 
-    @Override
+    //@Override
     public Map<String, String> buildObject(final FudgeDeserializer deserializer, final FudgeMsg message) {
       throw new UnsupportedOperationException();
     }
