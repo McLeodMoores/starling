@@ -40,12 +40,12 @@ $.register_module({
         constructor.type_map = type_map;
         return constructor;
         /* dead code below */
-        return function (config) {
+/*        return function (config) {
             var form = new Form({
                 module: 'og.views.forms.volatility-surface-definition_tash',
                 type_map: type_map, selector: config.selector
             });
             form.dom();
-        };
+        };*/
     }
 });
