@@ -95,7 +95,6 @@ $.register_module({
                             // update button
                             $('.OG-layout-admin-details-center .og-update').on('click', function () {
                             	var args = routes.current().args;
-                            	console.log(view)
                             });
                             if (show_loading) view.notify(null);
                             details.calendar_ui_changes(json.dates);

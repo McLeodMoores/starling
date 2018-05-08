@@ -56,6 +56,7 @@
     <fragment>/styles/common/classes/og.common.classes.OG-list.css</fragment>
     <fragment>/styles/common/classes/og.common.classes.OG-link.css</fragment>
     <fragment>/styles/common/classes/og.common.classes.OG-link-add.css</fragment>
+    <fragment>/styles/common/classes/og.common.classes.OG-link-remove.css</fragment>
     <fragment>/styles/common/classes/og.common.classes.OG-link-action.css</fragment>
     <fragment>/styles/common/classes/og.common.classes.OG-link-small.css</fragment>
     <fragment>/styles/common/classes/og.common.classes.OG-link-cancel.css</fragment>
@@ -502,6 +503,7 @@
     <fragment>/scripts/og/views/convention_forms/og.views.convention_forms.default.js</fragment> <!-- keep this first! -->
     <fragment>/scripts/og/views/convention_forms/og.views.convention_forms.iborindexconvention.js</fragment>
     <fragment>/scripts/og/views/convention_forms/og.views.convention_forms.overnightindexconvention.js</fragment>
+    <fragment>/scripts/og/views/convention_forms/og.views.convention_forms.attributes.js</fragment> 
     <!-- /convention forms -->
     <!--  data_forms forms -->
     <fragment>/scripts/og/views/data_forms/og.views.data_forms.toolbar.new_holiday.js</fragment>

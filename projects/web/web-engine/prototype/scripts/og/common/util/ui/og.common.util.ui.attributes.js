@@ -11,7 +11,7 @@ $.register_module({
                 <input type="hidden" class="og-attributes-key" value="{{{key}}} ">\
                 <input type="hidden" class="og-attributes-value" value="{{{value}}}"></li>');
         var Attributes = function (config) {
-            var block = this, id = og.common.id('attributes'), form = config.form,
+            var block = this, id = og.common.id('attributes'), form = config.form,            
                 attr_data = config.attributes ? Object.keys(config.attributes).reduce(function (acc, val) {
                     return acc.concat({key: val, value: config.attributes[val]});
                 }, []) : {};
@@ -39,9 +39,6 @@ $.register_module({
                 $(add_list).prepend(template({key: key, value: value}));
                 $group.find('[class^=attr_]').val('');
                 $('.attr_key').focus();
-            }).on('form:load', function () {
-            	var item, $widget =  $('#' + id);
-            	console.log('Loading attributes');
             });
         };
         Attributes.prototype = new Block(null, { module: 'og.views.forms.attributes_tash' }); // inherit Block prototype

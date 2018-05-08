@@ -190,6 +190,15 @@ public final class ConventionTypesProvider {
     return _conventionDetails;
   }
 
+  public Class<? extends ManageableConvention> getClassFromDisplayName(final String displayName) {
+    final String typeName = HashBiMap.create(_conventionDescriptionMap).inverse().get(displayName);
+    Class<? extends ManageableConvention> clazz = null;
+    if (typeName != null) {
+      clazz = _conventionTypeMap.get(typeName);
+    }
+    return clazz != null ? clazz : _conventionTypeMap.get(displayName);
+  }
+
   //TODO temporary method
   public ConventionType getConventionTypeForClassName(final String className) {
     for (final Map.Entry<String, Class<? extends ManageableConvention>> entry : _conventionTypeMap.entrySet()) {
