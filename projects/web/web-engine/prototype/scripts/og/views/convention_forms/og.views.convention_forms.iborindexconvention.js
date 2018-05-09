@@ -8,33 +8,37 @@ $.register_module({
 		'og.common.util.ui',
 	],
 	obj: function () {
-		var ui = og.common.util.ui, forms = og.views.forms, api = og.api.rest, Form = ui.Form, common = og.views.common,
-		ATTR = 'attributes',
-		EIDS = 'externalIdBundle',
-		INDX = '<INDEX>', 
-		EMPT = '<EMPTY>',
-		type_map = [
-			[['0', INDX].join('.'),									Form.type.STR],
-			['name', 												Form.type.STR],
-			['currency', 											Form.type.STR],
-			['businessDayConvention',             		            Form.type.STR],
-			['dayCount',      										Form.type.STR],
-			['fixingCalendar',										Form.type.STR],
-			['fixingPage',											Form.type.STR],
-			['fixingTime',											Form.type.STR],
-			['fixingTimeZone',										Form.type.STR],
-			['isEOM',												Form.type.BOO],
-			['regionCalendar',										Form.type.STR],
-			['settlementDays',										Form.type.BYT],
-			['uniqueId',											Form.type.STR],
-			[[EIDS, 'ID', INDX, 'Scheme'].join('.'),	 			Form.type.STR],
-			[[EIDS, 'ID', INDX, 'Value'].join('.'),					Form.type.STR],
-			[['id', EMPT, 'scheme'].join('.'),						Form.type.STR],
-			[['id', EMPT, 'value'].join('.'),						Form.type.STR],
-			[[ATTR, EMPT].join('.'),								Form.type.STR], 
-			[[ATTR, INDX, 'Key'].join('.'),							Form.type.STR], 
-			[[ATTR, INDX, 'Value'].join('.'),						Form.type.STR], 
-		].reduce(function (acc, val) { return acc[val[0]] = val[1], acc; }, {});
+		var ui = og.common.util.ui, 
+			forms = og.views.forms, 
+			api = og.api.rest, 
+			Form = ui.Form, 
+			common = og.views.common,
+			ATTR = 'attributes',
+			EIDS = 'externalIdBundle',
+			INDX = '<INDEX>', 
+			EMPT = '<EMPTY>',
+			type_map = [
+				[['0', INDX].join('.'),									Form.type.STR],
+				['name', 												Form.type.STR],
+				['currency', 											Form.type.STR],
+				['businessDayConvention',             		            Form.type.STR],
+				['dayCount',      										Form.type.STR],
+				['fixingCalendar',										Form.type.STR],
+				['fixingPage',											Form.type.STR],
+				['fixingTime',											Form.type.STR],
+				['fixingTimeZone',										Form.type.STR],
+				['isEOM',												Form.type.BOO],
+				['regionCalendar',										Form.type.STR],
+				['settlementDays',										Form.type.BYT],
+				['uniqueId',											Form.type.STR],
+				[[EIDS, 'ID', INDX, 'Scheme'].join('.'),	 			Form.type.STR],
+				[[EIDS, 'ID', INDX, 'Value'].join('.'),					Form.type.STR],
+				[['id', EMPT, 'scheme'].join('.'),						Form.type.STR],
+				[['id', EMPT, 'value'].join('.'),						Form.type.STR],
+				[[ATTR, EMPT].join('.'),								Form.type.STR], 
+				[[ATTR, INDX, 'Key'].join('.'),							Form.type.STR], 
+				[[ATTR, INDX, 'Value'].join('.'),						Form.type.STR], 
+				].reduce(function (acc, val) { return acc[val[0]] = val[1], acc; }, {});
         var arr = function (obj) { return arr && $.isArray(obj) ? obj : typeof obj !== 'undefined' ? [obj] : [] };
 		var constructor = function (config) {
             var load_handler = config.handler || $.noop, 
@@ -47,8 +51,6 @@ $.register_module({
             	save_new_handler = config.save_new_handler, 
             	save_handler = config.save_handler,
             	master = config.data.template_data.configJSON.data, 
-            	ids, 
-            	attributes, 
             	sep = '~', 
             	convention_type = config.type,
             	isEom = master.isEOM,
@@ -90,7 +92,7 @@ $.register_module({
             			<h1>\
             			<span class="og-js-name">' + master.name + '</span>\
             			</h1>\
-            			(*IBOR Index Convention)\
+            			  &nbsp(*IBOR Index Convention)\
             			</header>\
             			';
             		$('.OG-layout-admin-details-center .ui-layout-header').html(header);
@@ -152,7 +154,7 @@ $.register_module({
             		placeholder: 'Please select...',
                 	resource: 'blotter.daycountconventions',
                 	index: 'dayCount',
-                	value: master.dayCount ? master.dayCount : "",
+                	value: master.dayCount ? master.dayCount : ""
                 }),
                 // item_4
                 new ui.Dropdown({

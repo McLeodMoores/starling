@@ -8,20 +8,30 @@ $.register_module({
 		'og.common.util.ui'
 	],
 	obj: function () {
-		var ui = og.common.util.ui, forms = og.views.forms, api = og.api.rest, Form = ui.Form,
-		EIDS = 'externalIdBundle',
-		INDX = '<INDEX>',
-		type_map = [
-			[['0', INDX].join('.'),								Form.type.STR],
-			['name', 											Form.type.STR],
-			['currency',  										Form.type.STR],
-			['dayCount', 										Form.type.STR],
-			['publicationLag',									Form.type.BYT],
-			['regionCalendar', 									Form.type.STR],
-			['uniqueId',										Form.type.STR],
-			[[EIDS, 'ID', INDX, 'Scheme'].join('.'),	 		Form.type.STR],
-			[[EIDS, 'ID', INDX, 'Value'].join('.'),				Form.type.STR],
-		].reduce(function (acc, val) { return acc[val[0]] = val[1], acc; }, {});
+		var ui = og.common.util.ui, 
+			forms = og.views.forms, 
+			api = og.api.rest, 
+			Form = ui.Form,
+			ATTR = 'attributes',
+			EIDS = 'externalIdBundle',
+			INDX = '<INDEX>',
+			EMPT = '<EMPTY>'
+			type_map = [
+				[['0', INDX].join('.'),								Form.type.STR],
+				['name', 											Form.type.STR],
+				['currency',  										Form.type.STR],
+				['dayCount', 										Form.type.STR],
+				['publicationLag',									Form.type.BYT],
+				['regionCalendar', 									Form.type.STR],
+				['uniqueId',										Form.type.STR],
+				[[EIDS, 'ID', INDX, 'Scheme'].join('.'),	 		Form.type.STR],
+				[[EIDS, 'ID', INDX, 'Value'].join('.'),				Form.type.STR],
+				[['id', EMPT, 'scheme'].join('.'),					Form.type.STR],
+				[['id', EMPT, 'value'].join('.'),					Form.type.STR],
+				[[ATTR, EMPT].join('.'),							Form.type.STR], 
+				[[ATTR, INDX, 'Key'].join('.'),						Form.type.STR], 
+				[[ATTR, INDX, 'Value'].join('.'),					Form.type.STR], 
+				].reduce(function (acc, val) { return acc[val[0]] = val[1], acc; }, {});
         var arr = function (obj) { return arr && $.isArray(obj) ? obj : typeof obj !== 'undefined' ? [obj] : [] };
         var constructor = function (config) {
         	var load_handler = config.handler || $.noop,
@@ -35,7 +45,7 @@ $.register_module({
 	        	save_handler = config.save_handler,
 	        	master = config.data.template_data.configJSON.data,
 	        	convention_type = config.type,
-	        	externalIdBundle, attributes, sep = '~', 
+	        	sep = '~', 
 	        	form = new Form({
 	        		module: 'og.views.forms.overnight-index-convention_tash',
 	        		data: master,
@@ -47,30 +57,11 @@ $.register_module({
 	        		},
 	        		processor: function (data) {
 	        			data.id = data.id.filter(function (v) { return v !== void 0; });
+            			data[EIDS] = arr(data[EIDS]).filter(function (v) { return v !== void 0; });
+            			data[ATTR] = arr(data[ATTR]).filter(function (v) { return v !== void 0; });
 	        		}
 	        	}),
 	        	form_id = '#' + form.id,
-	        	new_identifier = function (row, idx) {
-        			return new form.Block({
-        				module: 'og.views.forms.external-identifiers_tash',
-        				extras: { idx : idx }
-        			}).on('form:load', function () {
-        				$(form_id + ' [name="' + ['id', idx, 'scheme'].join('.') + '"]').val(row.scheme);
-        				$(form_id + ' [name="' + ['id', idx, 'value'].join('.') + '"]').val(row.value);
-        				if (row.scheme !== 'Other') {
-        					$(form_id + ' [name="' + ['id', idx, 'new_scheme'].join('.') + '"]').attr('disabled', 'disabled')
-        				}
-        			}).on('change', form_id + ' [name="' + ['id', idx, 'scheme'].join('.') + '"]', function (event) {
-        				var $el = $(form_id + ' [name="' + ['id', idx, 'new_scheme'].join('.') + '"]'),
-        				is_new_scheme = $(event.target).val() === 'Other';
-        				if (is_new_scheme) {
-        					$el.removeAttr('disabled');
-        				} else {
-        					$el.attr('disabled', 'disabled');
-        					$el.attr('value', '');
-        				}
-        			})
-        		},
         		save_resource = function (result) {
         			var data = result.data,
         				meta = result.meta,
@@ -97,19 +88,8 @@ $.register_module({
             			';
             		$('.OG-layout-admin-details-center .ui-layout-header').html(header);
             		$(form_id);
-            		$(form_id + ' select[name=currency]').val(master.currency);
-            		$(form_id + ' select[name=dayCount]').val(master.dayCount);
-            		$(form_id + ' input[name=publicationLag').val(master.publicationLag.toString());
+            		$(form_id + ' input[name=publicationLag]').val(master.publicationLag.toString());
             		setTimeout(load_handler.partial(form));
-        		},
-        		add_id_resource = function (event) {
-        			var block = new_identifier({}, master.externalIdBundle.push({}) - 1);
-        			block.html(function (html) { $(form_id + ' og-js-external-ids').append($(html)), block.load(); });
-        		},
-        		remove_id_resource = function (event) {
-        			var $el = $(event.target).parents('og-js-external-ids:first');
-        			master.id[$el.find('input').attr('name')] = void 0;
-        			$el.remove();
         		},
             	holiday_handler = function (handler) {
                 	api.holidays.get({ page: '*' }).pipe(function (result) {
@@ -123,20 +103,15 @@ $.register_module({
                 	});
                 };
             form.on('form:submit', save_resource)
-            	.on('form:load', load_resource)
-            	.on('click', form_id + ' .og-js-add', add_id_resource)
-            	.on('click', form_id + ' .og-js-rem', remove_id_resource);
-            form_children = [
+            	.on('form:load', load_resource);
+            form.children = [
             	// item_0
-            	new form.Block({ module: 'og.views.forms.currency_tash' }),
-/*            	// item_1
-            	new ui.Dropdown({
-            		form: form,
-            		placeholder: 'Please select...',
-            		resource: 'blotter.daycountconventions',
-            		index: master.dayCount ? master.dayCount : "",
+            	new form.Block({ 
+            		module: 'og.views.forms.currency_tash' 
+            	}).on('form:load', function () {
+            		$(form_id + ' select[name=currency]').val(master.currency);
             	}),
-            	// item_2
+            	// item_1
             	new ui.Dropdown({
             		form: form,
             		placeholder: 'Please select...',
@@ -144,9 +119,30 @@ $.register_module({
        				//TODO
             		processor: function (selector, data, errors) {
             			data.regionCalendar = master.regionCalendar.split(sep)[0] + sep + $(selector).val();
-            		}
+            		},
+            		data_generator: holiday_handler
+            	}),
+            	// item_2
+            	new ui.Dropdown({
+            		form: form,
+            		placeholder: 'Please select...',
+            		resource: 'blotter.daycountconventions',
+            		index: 'dayCount',
+            		value: master.dayCount ? master.dayCount : ""
+            	}),
+            	// item_3
+            	new og.views.convention_forms.ExternalIdBundle({
+            		form: form,
+            		data: master.externalIdBundle,
+            		index: 'externalIdBundle'
+            	}),
+            	// item_4
+            	new og.views.convention_forms.Attributes({
+            		form: form,
+            		attributes: master.attributes,
+            		index: 'attributes'
             	})
-*/            ];
+            ];
             form.dom();
         };
         constructor.type_map = type_map;

@@ -1,63 +1,51 @@
-<!-- TODO break out into logical sections and add information tooltips + links to docs -->
+<!-- TODO add information tooltips + links to docs -->
 <section>
-	<div class="OG-details-content OG-conventions OG-grid OG-form">
-		<section class="OG-mod-0 OG-c7 og-id-cur">
-			<div class="og-mod-content">
-				<label>
-					<span>Name</span><br/>
-					<span><input type="text" name="name" value="{{name}}"/></span>
-				</label>
-				<label>
-					<span>Currency</span><br/>
-					<span>{{{item_0}}}</span>
-				</label>
-			</div>
-		</section>
+  <div class="OG-details-content OG-convention OG-grid OG-form">
+	<section class="OG-mod-0 OG-c7 og-id-cur">
+	  <div class="og-mod-content">
+	    <table class="OG-table">
+	      <col style="width: 30%"/>
+	      <col style="width: 50%"/>
+	      <col style="width: 20%"/>	      
+	      <tbody>
+	        <tr>
+  	          <td>Name</td>
+	          <td><input type="text" name="name" value="{{name}}"/></td>
+	          <td></td>
+	        </tr>
+	        <tr>
+	          <td>Currency</td>
+	          <td>{{{item_0}}}</td>
+	          <td></td>
+            </tr>
+            <tr>
+	          <td>Region Holidays</td>
+	          <td>{{{item_1}}}</td>
+	          <td></td>
+	        </tr>
+    		<tr>
+    		  <td>Day-count Convention</td>
+    		  <td>{{{item_2}}}</td>
+    		  <td></td>
+    		</tr>
+			<tr>
+			  <td>Publication Lag</td>
+			  <td><input class="og-num" type="text" name="publicationLag" value="{{publicationLag}}"/></td>
+			  <td></td>
+			</tr>    	
+	      </tbody>
+	    </table>
+	  </div>
+	</section>
+    <section class="OG-mod-0 OG-c7 og-id-cur">
+      <div class="og-mod-content">
+    	  {{{item_3}}} 
+    	</div>
+	  </section>
+	  <section class="OG-mod-0 OG-c7 og-attributes">
+		<div class="og-mod-content">
+		 {{{item_4}}}
+		</div>
+	  </section>
 	</div>
 </section>
-				
-<!-- <article>
-  <section>
-	<div class="OG-details-content OG-conventions OG-grid OG-form">
-	  <section class="OG-c7 OG-mod-0 og-id-cur">
-	  <div class="og-mod-content">
-					<span>Currency</span><br/>
-					<span>{{{item_0}}}</span>
-    	</div>
-<!--   	<table class="OG-table">
-	  	  <col style="width: 30%" />
-	  	  <col style="width: 50%" />
-	  	  <thead>
-	  	    <tr><th>&nbsp;</th>									<th>&nbsp;</th>
-	  	    </tr>
-	  	  </thead>
-	  	  <tbody>
-	  	    <tr><td><span>Name</span></td>						<td><span><input type="text" name="name" value="{{name}}"/></span></td></tr>
-<!-- 	  	    <tr><td><span>Currency</span></td>					<td><span>{{{item_0}}}</span></td></tr>
-	  	    <tr><td><span>Region Holidays</span></td>			<td><span>{{{item_1}}}</span></td></tr>
-	  	    <tr><td><span>Day-count Convention</span></td>		<td><span>{{{item_2}}}</span></td></tr>
-	  	    <tr><td><span>Publication Lag</span></td>			<td><span><input type="text" name="publicationLag" value="{{publicationLag}}"/></span></td></tr>
-	  	  </tbody>
-	  	</table>
-	  </section>
-	  <section>
-	    <table class="OG-table">
-	      <col style="width: 30%" />
-	      <col style="width: 70%" />
-	      <thead>
-	        <tr><th>Identifiers</th>							<th>&nbsp;</th></tr>
-	      </thead>
-	    </table>
-	  </section>
-	  <section>
-	    <table class="OG-table">
-	      <col style="width: 30%" />
-	      <col style="width: 70%" />
-	      <thead>
-	        <tr><th>Attributes</th>								<th>&nbsp;</th></tr>
-	      </thead>
-	    </table>
-	  </section>
-	</div>
-  </section>
-</article>-->

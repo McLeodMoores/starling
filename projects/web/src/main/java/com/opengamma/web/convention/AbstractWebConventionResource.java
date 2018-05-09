@@ -10,17 +10,19 @@ import java.util.Map.Entry;
 import org.joda.beans.impl.flexi.FlexiBean;
 
 import com.opengamma.financial.convention.IborIndexConvention;
+import com.opengamma.financial.convention.OvernightIndexConvention;
 import com.opengamma.master.convention.ConventionMaster;
 import com.opengamma.master.convention.ManageableConvention;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.web.AbstractPerRequestWebResource;
 import com.opengamma.web.json.IborIndexConventionJsonBuilder;
+import com.opengamma.web.json.OvernightIndexConventionJsonBuilder;
 
 /**
  * Abstract base class for RESTful convention resources.
  */
 public abstract class AbstractWebConventionResource
-    extends AbstractPerRequestWebResource<WebConventionData> {
+extends AbstractPerRequestWebResource<WebConventionData> {
 
   /**
    * Config XML form parameter name.
@@ -64,6 +66,7 @@ public abstract class AbstractWebConventionResource
 
   private void initializeJsonBuilders() {
     data().getJsonBuilderMap().put(IborIndexConvention.class, IborIndexConventionJsonBuilder.INSTANCE);
+    data().getJsonBuilderMap().put(OvernightIndexConvention.class, OvernightIndexConventionJsonBuilder.INSTANCE);
   }
 
   /**
