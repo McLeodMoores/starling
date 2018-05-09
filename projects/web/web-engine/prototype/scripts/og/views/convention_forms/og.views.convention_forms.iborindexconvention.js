@@ -115,9 +115,7 @@ $.register_module({
             form.on('form:submit', save_resource)
             	.on('form:load', load_resource)
             	.on('click', form_id + ' input[name=isEOM]', function (event) {
-            		event.preventDefault();
             		isEom = !isEom;
-            		$(event.target).prop('checked', isEom);
             	});
             form.children = [
             	// item_0
