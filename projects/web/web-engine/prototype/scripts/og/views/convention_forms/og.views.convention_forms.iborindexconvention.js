@@ -51,6 +51,7 @@ $.register_module({
             	attributes, 
             	sep = '~', 
             	convention_type = config.type,
+            	isEom = master.isEOM,
             	form = new Form({
             		module: 'og.views.forms.ibor-index-convention_tash',
             		data: master, 
@@ -69,8 +70,9 @@ $.register_module({
             	form_id = '#' + form.id;
             	save_resource = function (result) {
             		var data = result.data, 
-            		meta = result.meta,
-            		as_new = result.extras.as_new;
+            			meta = result.meta,
+            			as_new = result.extras.as_new;
+            		data.isEOM = isEom;
             		if (as_new && (orig.name === data.name)) { return window.alert('Please select a new name.') };
             		api.conventions.put({
             			id: as_new ? void 0 : resource_id,
@@ -92,21 +94,12 @@ $.register_module({
             			</header>\
             			';
             		$('.OG-layout-admin-details-center .ui-layout-header').html(header);
-            		$(form_id + ' input[name=fixingTime').val(master.fixingTime);
-            		$(form_id + ' input[name=fixingTimeZone').val(master.fixingTimeZone);
-            		$(form_id + ' input[name=fixingPage').val(master.fixingPage);
-            		$(form_id + ' input[name=isEOM').val(master.isEOM ? 'checked' : '');
-            		$(form_id + ' input[name=settlementDays').val(master.settlementDays.toString());
+            		$(form_id + ' input[name=fixingTime]').val(master.fixingTime);
+            		$(form_id + ' input[name=fixingTimeZone]').val(master.fixingTimeZone);
+            		$(form_id + ' input[name=fixingPage]').val(master.fixingPage);
+            		$(form_id + ' input[name=isEOM]').prop('checked', isEom);
+            		$(form_id + ' input[name=settlementDays]').val(master.settlementDays.toString());
             		setTimeout(load_handler.partial(form));
-            	};
-            	add_id_resource = function (event) {
-            		var block = new_identifier({}, master.externalIdBundle.push({}) - 1);
-            		block.html(function (html) { $(form_id + ' .og-js-external-ids').append($(html)), block.load(); });
-            	};
-            	remove_id_resource = function (event) {
-            		var $el = $(event.target).parents('.og-js-external-ids:first');
-            		master.id[$el.find('input').attr('name')] = void 0;
-            		$el.remove();
             	};
             	holiday_handler = function (handler) {
                 	api.holidays.get({ page: '*' }).pipe(function (result) {
@@ -120,7 +113,12 @@ $.register_module({
                 	});
                 };
             form.on('form:submit', save_resource)
-            	.on('form:load', load_resource);
+            	.on('form:load', load_resource)
+            	.on('click', form_id + ' input[name=isEOM]', function (event) {
+            		event.preventDefault();
+            		isEom = !isEom;
+            		$(event.target).prop('checked', isEom);
+            	});
             form.children = [
             	// item_0
             	new form.Block({ 
