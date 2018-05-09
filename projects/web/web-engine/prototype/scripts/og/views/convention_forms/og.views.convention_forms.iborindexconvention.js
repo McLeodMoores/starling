@@ -61,7 +61,6 @@ $.register_module({
             		selector: selector,
             		extras: {
             			name: master.name,
-            			currency: master.currency || (master.currency = 'USD')
             		},
             		processor: function (data) {
             			data.id = data.id.filter(function (v) { return v !== void 0;});      

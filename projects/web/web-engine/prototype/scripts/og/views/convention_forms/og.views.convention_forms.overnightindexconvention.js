@@ -31,7 +31,7 @@ $.register_module({
 				[[ATTR, EMPT].join('.'),							Form.type.STR], 
 				[[ATTR, INDX, 'Key'].join('.'),						Form.type.STR], 
 				[[ATTR, INDX, 'Value'].join('.'),					Form.type.STR], 
-				].reduce(function (acc, val) { return acc[val[0]] = val[1], acc; }, {});
+			].reduce(function (acc, val) { return acc[val[0]] = val[1], acc; }, {});
         var arr = function (obj) { return arr && $.isArray(obj) ? obj : typeof obj !== 'undefined' ? [obj] : [] };
         var constructor = function (config) {
         	var load_handler = config.handler || $.noop,
@@ -53,7 +53,6 @@ $.register_module({
 	        		selector: selector,
 	        		extras: {
 	        			name: master.name,
-	        			currency: master.currency || (master.currency = 'USD')
 	        		},
 	        		processor: function (data) {
 	        			data.id = data.id.filter(function (v) { return v !== void 0; });
@@ -71,7 +70,7 @@ $.register_module({
         				id: as_new ? void 0 : resource_id,
         				name: data.name,
         				json: JSON.stringify({ data: data, meta: meta }),
-        				type: config_type,
+        				type: convention_type,
         				loading: loading,
         				handler: as_new ? save_new_handler : save_handler
         			});
