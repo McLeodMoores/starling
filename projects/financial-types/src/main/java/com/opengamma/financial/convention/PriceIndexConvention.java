@@ -53,8 +53,10 @@ public class PriceIndexConvention extends FinancialConvention {
   private ExternalId _region;
   /**
    * The id of the price index.
+   * @deprecated  the identifier should be in the ExternalIdBundle
    */
   @PropertyDefinition(validate = "notNull")
+  @Deprecated
   private ExternalId _priceIndexId;
 
   /**
@@ -180,16 +182,20 @@ public class PriceIndexConvention extends FinancialConvention {
   //-----------------------------------------------------------------------
   /**
    * Gets the id of the price index.
+   * @deprecated  the identifier should be in the ExternalIdBundle
    * @return the value of the property, not null
    */
+  @Deprecated
   public ExternalId getPriceIndexId() {
     return _priceIndexId;
   }
 
   /**
    * Sets the id of the price index.
+   * @deprecated  the identifier should be in the ExternalIdBundle
    * @param priceIndexId  the new value of the property, not null
    */
+  @Deprecated
   public void setPriceIndexId(ExternalId priceIndexId) {
     JodaBeanUtils.notNull(priceIndexId, "priceIndexId");
     this._priceIndexId = priceIndexId;
@@ -197,8 +203,10 @@ public class PriceIndexConvention extends FinancialConvention {
 
   /**
    * Gets the the {@code priceIndexId} property.
+   * @deprecated  the identifier should be in the ExternalIdBundle
    * @return the property, not null
    */
+  @Deprecated
   public final Property<ExternalId> priceIndexId() {
     return metaBean().priceIndexId().createProperty(this);
   }
@@ -341,8 +349,10 @@ public class PriceIndexConvention extends FinancialConvention {
 
     /**
      * The meta-property for the {@code priceIndexId} property.
+     * @deprecated  the identifier should be in the ExternalIdBundle
      * @return the meta-property, not null
      */
+    @Deprecated
     public final MetaProperty<ExternalId> priceIndexId() {
       return _priceIndexId;
     }
