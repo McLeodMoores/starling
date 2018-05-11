@@ -2,7 +2,7 @@
  * Copyright (C) 2018 - present McLeod Moores Software Limited.  All rights reserved.
  */
 $.register_module({
-	name: 'og.views.convention_forms.bondconvention',
+	name: 'og.views.convention_forms.fxspotconvention',
 	dependencies: [
 		'og.api.rest',
 		'og.common.util.ui'
@@ -19,11 +19,8 @@ $.register_module({
 			type_map = [
 				[['0', INDX].join('.'),								Form.type.STR],
 				['name',											Form.type.STR],
-				['exDividendDays',									Form.type.BYT],
 				['settlementDays',									Form.type.BYT],
-				['businessDayConvention',							Form.type.STR],
-				['isEOM', 											Form.type.BOO],
-				['isCalculateScheduleFromMaturity', 				Form.type.BOO],
+				['useIntermediateUsHolidays',	 					Form.type.BOO],
 				['uniqueId',										Form.type.STR],
 				[[EIDS, 'ID', INDX, 'Scheme'].join('.'),	 		Form.type.STR],
 				[[EIDS, 'ID', INDX, 'Value'].join('.'),				Form.type.STR],
@@ -46,11 +43,10 @@ $.register_module({
 	        	save_handler = config.save_handler,
 	        	master = config.data.template_data.configJSON.data,
 	        	convention_type = config.type,
-            	isEom = master.isEOM,
-            	isCalculateScheduleFromMaturity = master.isCalculateScheduleFromMaturity,
+	        	useIntermediateUsHolidays = master.useIntermediateUsHolidays,
 	        	sep = '~', 
 	        	form = new Form({
-	        		module: 'og.views.forms.bond-convention_tash',
+	        		module: 'og.views.forms.fx-spot-convention_tash',
 	        		data: master,
 	        		type_map: type_map,
 	        		selector: selector,
@@ -68,8 +64,7 @@ $.register_module({
         			var data = result.data,
         				meta = result.meta,
         				as_new = result.extras.as_new;
-        			data.isEOM = isEom;
-        			data.isCalculateScheduleFromMaturity = isCalculateScheduleFromMaturity;
+        			data.useIntermediateUsHolidays = useIntermediateUsHolidays;
         			if (as_new && (orig.name == data.name)) { return window.alert('Please select a new name.') };
         			api.conventions.put({
         				id: as_new ? void 0 : resource_id,
@@ -87,40 +82,28 @@ $.register_module({
             			<h1>\
             			<span class="og-js-name">' + master.name + '</span>\
             			</h1>\
-            			  &nbsp(Bond Convention)\
+            			  &nbsp(FX Spot Convention)\
             			</header>\
             			';
             		$('.OG-layout-admin-details-center .ui-layout-header').html(header);
             		$(form_id);
-            		$(form_id + ' input[name=exDividendDays]').val(master.exDividendDays.toString());
             		$(form_id + ' input[name=settlementDays]').val(master.settlementDays.toString());
-            		$(form_id + ' input[name=isEOM]').prop('checked', isEom);
-            		$(form_id + ' input[name=isCalculateScheduleFromMaturity]').prop('checked', isCalculateScheduleFromMaturity);
+            		$(form_id + ' input[name=useIntermediateUsHolidays]').prop('checked', useIntermediateUsHolidays);
             		setTimeout(load_handler.partial(form));
         		};
             form.on('form:submit', save_resource)
             	.on('form:load', load_resource)
-            	.on('click', form_id + ' input[name=isEOM]', function (event) {
-            		isEom = !isEom;
-            	}).on('click', form_id + ' input[name=isCalculateScheduleFromMaturity]', function (event) {
-            		isCalculateScheduleFromMaturity = !isCalculateScheduleFromMaturity;
+            	.on('click', form_id + ' input[name=useIntermediateUsHolidays]', function (event) {
+            		useIntermediateUsHolidays = !useIntermediateUsHolidays;
             	});
-            form.children = [
+            form.children = [            	
             	// item_0
-            	new ui.Dropdown({
-            		form: form,
-            		placeholder: 'Please select...',
-            		resource: 'blotter.businessdayconventions',
-            		index: 'businessDayConvention',
-            		value: master.businessDayConvention ? master.businessDayConvention : ""
-            	}),
-            	// item_1
             	new og.views.convention_forms.ExternalIdBundle({
             		form: form,
             		data: master.externalIdBundle,
             		index: 'externalIdBundle'
             	}),
-            	// item_2
+            	// item_1
             	new og.views.convention_forms.Attributes({
             		form: form,
             		attributes: master.attributes,

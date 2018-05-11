@@ -4,7 +4,7 @@ $.register_module({
     obj: function () {
         var module = this, 
         	Block = og.common.util.ui.Block, 
-        	add_table = '.og-add-table',
+        	add_table = '.og-add-attr-table',
             template = Handlebars.compile('<tr class="og-js-attr-row">\
             		<td class="attr_key">{{{key}}}</td>\
                     <td class="attr_val">{{{value}}}</td>\
@@ -13,11 +13,22 @@ $.register_module({
         var Attributes = function (config) {
             var block = this, 
             	id = og.common.id('attributes'), 
-            	form = config.form;           
-            attr_data = config.attributes ? 
-             	Object.keys(config.attributes).reduce(function (acc, val) {
-              		return acc.concat({ key: config.attributes[val]['Key'], value: config.attributes[val]['Value'] });
-               	}, []) : {};
+            	form = config.form;   
+			if (config.attributes) {
+				if (config.attributes.length) { 
+					attr_data = Object.keys(config.attributes).reduce(function (acc, val) {
+   	              		return acc.concat({ key: config.attributes[val]['Key'], value: config.attributes[val]['Value'] });
+    	               }, []);
+				} else { // only one attribute so hasn't been translated to an array
+					attr_data = [{ key: config.attributes['Key'], value: config.attributes['Value'] }];
+				}
+			} else {
+				attr_data = {};
+			}
+//            attr_data = (config.attributes ? 
+//             	Object.keys(config.attributes).reduce(function (acc, val) {
+//              		return acc.concat({ key: config.attributes[val]['Key'], value: config.attributes[val]['Value'] });
+//               	}, []) : {});
             form.Block.call(block, {
                 module: 'og.views.forms.convention-attributes_tash',
                 extras: { id: id, data: attr_data },
@@ -33,10 +44,10 @@ $.register_module({
             });
             block.on('click', '#' + id + ' ' + add_table + ' .og-js-rem-attribute', function (event) {
             	event.preventDefault();
-                $(event.target).closest(".og-js-attr-row").remove();
+                $(event.target).parent().parent().remove();
             }).on('click', '#' + id + ' .og-js-add-attribute', function (event) {
                 event.preventDefault();
-                var row = $(event.target).closest(".og-js-add-attr-row"), //TODO don't use closest
+                var row = $(event.target).parent().parent(), 
                     key = row.find('.attr_key').val(),
                     value = row.find('.attr_val').val();
                 if (!key || !value) {

@@ -6,34 +6,34 @@ package com.mcleodmoores.web.json;
 import java.util.Map;
 
 import com.opengamma.financial.convention.FXSpotConvention;
+import com.opengamma.id.ExternalIdBundle;
 
 /**
  * Custom JSON builder to convert a {@link FXSpotConvention} to JSON and back again.
  */
-public class FxSpotConventionJsonBuilder extends ConventionJsonBuilder<FXSpotConvention> {
-
-  /* (non-Javadoc)
-   * @see com.opengamma.web.json.JSONBuilder#getTemplate()
+public final class FxSpotConventionJsonBuilder extends ConventionJsonBuilder<FXSpotConvention> {
+  /**
+   * Static instance.
    */
-  @Override
-  public String getTemplate() {
-    return null;
-  }
+  public static final FxSpotConventionJsonBuilder INSTANCE = new FxSpotConventionJsonBuilder();
 
-  /* (non-Javadoc)
-   * @see com.mcleodmoores.web.json.ConventionJsonBuilder#fromJson(java.lang.String, java.util.Map)
-   */
   @Override
   FXSpotConvention fromJson(final String json, final Map<String, String> attributes) {
-    return null;
+    final FXSpotConvention convention = fromJSON(FXSpotConvention.class, json);
+    convention.setAttributes(attributes);
+    return convention;
   }
 
-  /* (non-Javadoc)
-   * @see com.mcleodmoores.web.json.ConventionJsonBuilder#getCopy(com.opengamma.core.convention.Convention)
-   */
   @Override
   FXSpotConvention getCopy(final FXSpotConvention convention) {
-    return null;
+    return convention.clone();
   }
 
+  @Override
+  public String getTemplate() {
+    return toJSON(new FXSpotConvention("", ExternalIdBundle.EMPTY, 2, false));
+  }
+
+  private FxSpotConventionJsonBuilder() {
+  }
 }
