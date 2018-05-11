@@ -1,7 +1,7 @@
 /**
  * Copyright (C) 2018 - present McLeod Moores Software Limited.  All rights reserved.
  */
-package com.opengamma.web.json;
+package com.mcleodmoores.web.json;
 
 import static org.testng.Assert.assertEquals;
 
@@ -37,5 +37,8 @@ public class IborIndexConventionBuilderTest {
         "LONDON", ExternalId.of("TEST", "LONDON"), ExternalId.of("TEST", "NY"), "");
     convention.setAttributes(attributes);
     assertEquals(convention, IborIndexConventionJsonBuilder.INSTANCE.fromJSON(IborIndexConventionJsonBuilder.INSTANCE.toJSON(convention)));
+    // template convention
+    final String conventionJson = IborIndexConventionJsonBuilder.INSTANCE.getTemplate();
+    assertEquals(conventionJson, IborIndexConventionJsonBuilder.INSTANCE.toJSON(IborIndexConventionJsonBuilder.INSTANCE.fromJSON(conventionJson)));
   }
 }

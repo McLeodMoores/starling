@@ -1,7 +1,7 @@
 /**
- *
+ * Copyright (C) 2018 - present McLeod Moores Software Limited.  All rights reserved.
  */
-package com.opengamma.web.json;
+package com.mcleodmoores.web.json;
 
 import java.io.StringReader;
 import java.io.StringWriter;
@@ -23,6 +23,8 @@ import com.opengamma.core.convention.Convention;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.fudgemsg.AbstractFudgeBuilder;
 import com.opengamma.util.fudgemsg.OpenGammaFudgeContext;
+import com.opengamma.web.json.AbstractJSONBuilder;
+import com.opengamma.web.json.FudgeMsgJSONWriter;
 
 /**
  * Base class for builders that encode / decode JSON and provide templates for {@link Convention} types.
@@ -71,16 +73,18 @@ public abstract class ConventionJsonBuilder<T extends Convention> extends Abstra
       final JSONObject jsonObject = new JSONObject(new JSONTokener(sr));
       final JSONObject data = (JSONObject) jsonObject.get("data");
       if (data != null) {
-        final JSONArray attributeJson = data.getJSONArray(ATTR_FIELD_NAME);
-        // collect attributes into map
-        if (attributeJson != null) {
-          for (int i = 0; i < attributeJson.length(); i++) {
-            final JSONObject entry = attributeJson.getJSONObject(i);
-            attributes.put(entry.getString(KEY_FIELD_NAME), entry.getString(VALUE_FIELD_NAME));
+        if (data.has(ATTR_FIELD_NAME)) {
+          final JSONArray attributeJson = data.getJSONArray(ATTR_FIELD_NAME);
+          // collect attributes into map
+          if (attributeJson != null) {
+            for (int i = 0; i < attributeJson.length(); i++) {
+              final JSONObject entry = attributeJson.getJSONObject(i);
+              attributes.put(entry.getString(KEY_FIELD_NAME), entry.getString(VALUE_FIELD_NAME));
+            }
           }
+          // remove changed form to deserialize without changed attributes message
+          data.remove(ATTR_FIELD_NAME);
         }
-        // remove changed form to deserialize without changed attributes message
-        data.remove(ATTR_FIELD_NAME);
       }
       // convert the specific convention and return
       return fromJson(jsonObject.toString(), attributes);
@@ -115,7 +119,7 @@ public abstract class ConventionJsonBuilder<T extends Convention> extends Abstra
   /**
    * Partial implementation of a Fudge builder for the attribute map. Only the message builder is implemented.
    */
-  private static class AttributesFudgeBuilder extends AbstractFudgeBuilder {
+  private static final class AttributesFudgeBuilder extends AbstractFudgeBuilder {
     public static final AttributesFudgeBuilder BUILDER = new AttributesFudgeBuilder();
 
     /**

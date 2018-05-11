@@ -1,13 +1,12 @@
 /**
- *
+ * Copyright (C) 2018 - present McLeod Moores Software Limited.  All rights reserved.
  */
-package com.opengamma.web.json;
+package com.mcleodmoores.web.json;
 
 import java.util.Map;
 
 import com.opengamma.core.id.ExternalSchemes;
 import com.opengamma.financial.convention.PriceIndexConvention;
-import com.opengamma.id.ExternalId;
 import com.opengamma.id.ExternalIdBundle;
 import com.opengamma.util.money.Currency;
 
@@ -34,9 +33,9 @@ public final class PriceIndexConventionJsonBuilder extends ConventionJsonBuilder
 
   @Override
   public String getTemplate() {
-    return toJSON(new PriceIndexConvention("", ExternalIdBundle.EMPTY, Currency.USD, ExternalSchemes.financialRegionId("US"),
-        ExternalId.of("SCHEME", "VALUE")));
+    return toJSON(new PriceIndexConvention("", ExternalIdBundle.EMPTY, Currency.USD, ExternalSchemes.financialRegionId("US")));
   }
+
   private PriceIndexConventionJsonBuilder() {
   }
 }

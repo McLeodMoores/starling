@@ -1,7 +1,7 @@
 /**
- *
+ * Copyright (C) 2018 - present McLeod Moores Software Limited.  All rights reserved.
  */
-package com.opengamma.web.json;
+package com.mcleodmoores.web.json;
 
 import java.util.Map;
 
@@ -12,7 +12,7 @@ import com.opengamma.id.ExternalIdBundle;
 /**
  * Custom JSON builder to convert a {@link BondConvention} to JSON and back again.
  */
-public class BondConventionJsonBuilder extends ConventionJsonBuilder<BondConvention> {
+public final class BondConventionJsonBuilder extends ConventionJsonBuilder<BondConvention> {
   /**
    * Static instance.
    */
