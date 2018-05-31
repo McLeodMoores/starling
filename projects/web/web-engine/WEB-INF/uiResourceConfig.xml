@@ -501,6 +501,7 @@
     <!--  convention_forms  -->
     <fragment>/scripts/og/views/convention_forms/og.views.convention_forms.default.js</fragment> <!-- keep this first! -->
     <fragment>/scripts/og/views/convention_forms/og.views.convention_forms.bondconvention.js</fragment>
+    <fragment>/scripts/og/views/convention_forms/og.views.convention_forms.depositconvention.js</fragment>
     <fragment>/scripts/og/views/convention_forms/og.views.convention_forms.fxspotconvention.js</fragment>
     <fragment>/scripts/og/views/convention_forms/og.views.convention_forms.iborindexconvention.js</fragment>
     <fragment>/scripts/og/views/convention_forms/og.views.convention_forms.overnightindexconvention.js</fragment>

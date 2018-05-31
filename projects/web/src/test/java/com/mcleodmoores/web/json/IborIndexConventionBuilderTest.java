@@ -4,6 +4,7 @@
 package com.mcleodmoores.web.json;
 
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertNotEquals;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -40,5 +41,25 @@ public class IborIndexConventionBuilderTest {
     // template convention
     final String conventionJson = IborIndexConventionJsonBuilder.INSTANCE.getTemplate();
     assertEquals(conventionJson, IborIndexConventionJsonBuilder.INSTANCE.toJSON(IborIndexConventionJsonBuilder.INSTANCE.fromJSON(conventionJson)));
+  }
+
+  /**
+   * Tests the copy.
+   */
+  @Test
+  public void testCopy() {
+    final ExternalIdBundle externalIds = ExternalIdBundle.of("TEST", "TEST");
+    final Map<String, String> attributes = new HashMap<>();
+    attributes.put("ATTR1", "VAL1");
+    attributes.put("ATTR2", "VAL2");
+    final IborIndexConvention convention = new IborIndexConvention("IBOR", externalIds,
+        DayCounts.ACT_360, BusinessDayConventions.FOLLOWING, 2, true, Currency.AUD, LocalTime.of(11, 0),
+        "LONDON", ExternalId.of("TEST", "LONDON"), ExternalId.of("TEST", "NY"), "");
+    final IborIndexConvention copy = IborIndexConventionJsonBuilder.INSTANCE.getCopy(convention);
+    copy.addAttribute("ATTR3", "VAL3");
+    assertNotEquals(convention, copy);
+    assertEquals(convention, new IborIndexConvention("IBOR", externalIds,
+        DayCounts.ACT_360, BusinessDayConventions.FOLLOWING, 2, true, Currency.AUD, LocalTime.of(11, 0),
+        "LONDON", ExternalId.of("TEST", "LONDON"), ExternalId.of("TEST", "NY"), ""));
   }
 }

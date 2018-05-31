@@ -10,11 +10,13 @@ import java.util.Map.Entry;
 import org.joda.beans.impl.flexi.FlexiBean;
 
 import com.mcleodmoores.web.json.BondConventionJsonBuilder;
+import com.mcleodmoores.web.json.DepositConventionJsonBuilder;
 import com.mcleodmoores.web.json.FxSpotConventionJsonBuilder;
 import com.mcleodmoores.web.json.IborIndexConventionJsonBuilder;
 import com.mcleodmoores.web.json.OvernightIndexConventionJsonBuilder;
 import com.mcleodmoores.web.json.PriceIndexConventionJsonBuilder;
 import com.opengamma.financial.convention.BondConvention;
+import com.opengamma.financial.convention.DepositConvention;
 import com.opengamma.financial.convention.FXSpotConvention;
 import com.opengamma.financial.convention.IborIndexConvention;
 import com.opengamma.financial.convention.OvernightIndexConvention;
@@ -72,6 +74,7 @@ extends AbstractPerRequestWebResource<WebConventionData> {
 
   private void initializeJsonBuilders() {
     data().getJsonBuilderMap().put(BondConvention.class, BondConventionJsonBuilder.INSTANCE);
+    data().getJsonBuilderMap().put(DepositConvention.class, DepositConventionJsonBuilder.INSTANCE);
     data().getJsonBuilderMap().put(FXSpotConvention.class, FxSpotConventionJsonBuilder.INSTANCE);
     data().getJsonBuilderMap().put(IborIndexConvention.class, IborIndexConventionJsonBuilder.INSTANCE);
     data().getJsonBuilderMap().put(OvernightIndexConvention.class, OvernightIndexConventionJsonBuilder.INSTANCE);

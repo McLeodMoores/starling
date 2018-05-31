@@ -4,6 +4,7 @@
 package com.mcleodmoores.web.json;
 
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertNotEquals;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -36,5 +37,23 @@ public class PriceIndexConventionBuilderTest {
     // template convention
     final String conventionJson = PriceIndexConventionJsonBuilder.INSTANCE.getTemplate();
     assertEquals(conventionJson, PriceIndexConventionJsonBuilder.INSTANCE.toJSON(PriceIndexConventionJsonBuilder.INSTANCE.fromJSON(conventionJson)));
+  }
+
+  /**
+   * Tests the copy.
+   */
+  @Test
+  public void testCopy() {
+    final ExternalIdBundle externalIds = ExternalIdBundle.of("TEST", "TEST");
+    final Map<String, String> attributes = new HashMap<>();
+    attributes.put("ATTR1", "VAL1");
+    attributes.put("ATTR2", "VAL2");
+    final PriceIndexConvention convention = new PriceIndexConvention("O/N", externalIds,
+        Currency.AUD, ExternalId.of("TEST", "LONDON"));
+    final PriceIndexConvention copy = PriceIndexConventionJsonBuilder.INSTANCE.getCopy(convention);
+    copy.addAttribute("ATTR3", "VAL3");
+    assertNotEquals(convention, copy);
+    assertEquals(convention, new PriceIndexConvention("O/N", externalIds,
+        Currency.AUD, ExternalId.of("TEST", "LONDON")));
   }
 }

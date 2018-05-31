@@ -4,6 +4,7 @@
 package com.mcleodmoores.web.json;
 
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertNotEquals;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -33,5 +34,21 @@ public class FxSpotConventionBuilderTest {
     // template convention
     final String conventionJson = FxSpotConventionJsonBuilder.INSTANCE.getTemplate();
     assertEquals(conventionJson, FxSpotConventionJsonBuilder.INSTANCE.toJSON(FxSpotConventionJsonBuilder.INSTANCE.fromJSON(conventionJson)));
+  }
+
+  /**
+   * Tests the copy.
+   */
+  @Test
+  public void testCopy() {
+    final ExternalIdBundle externalIds = ExternalIdBundle.of("TEST", "TEST");
+    final Map<String, String> attributes = new HashMap<>();
+    attributes.put("ATTR1", "VAL1");
+    attributes.put("ATTR2", "VAL2");
+    final FXSpotConvention convention = new FXSpotConvention("GBP/USD", externalIds, 2, true);
+    final FXSpotConvention copy = FxSpotConventionJsonBuilder.INSTANCE.getCopy(convention);
+    copy.addAttribute("ATTR3", "VAL3");
+    assertNotEquals(convention, copy);
+    assertEquals(convention, new FXSpotConvention("GBP/USD", externalIds, 2, true));
   }
 }
