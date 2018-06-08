@@ -22,7 +22,7 @@ import com.opengamma.util.money.Currency;
 /**
  * Unit tests for {@link DepositConventionJsonBuilder}.
  */
-public class DepositConventionBuilderTest {
+public class DepositConventionJsonBuilderTest {
 
   /**
    * Tests a round trip.

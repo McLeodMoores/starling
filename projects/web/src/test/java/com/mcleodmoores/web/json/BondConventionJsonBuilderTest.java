@@ -18,7 +18,7 @@ import com.opengamma.id.ExternalIdBundle;
 /**
  * Unit tests for {@link BondConventionJsonBuilder}.
  */
-public class BondConventionBuilderTest {
+public class BondConventionJsonBuilderTest {
 
   /**
    * Tests a round trip.

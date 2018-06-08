@@ -19,7 +19,7 @@ import com.opengamma.util.money.Currency;
 /**
  * Unit tests for {@link PriceIndexConventionJsonBuilder}.
  */
-public class PriceIndexConventionBuilderTest {
+public class PriceIndexConventionJsonBuilderTest {
 
   /**
    * Tests a round trip.

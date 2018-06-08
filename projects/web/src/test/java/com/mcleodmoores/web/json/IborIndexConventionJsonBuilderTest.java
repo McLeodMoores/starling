@@ -22,7 +22,7 @@ import com.opengamma.util.money.Currency;
 /**
  * Unit tests for {@link IborIndexConventionJsonBuilder}.
  */
-public class IborIndexConventionBuilderTest {
+public class IborIndexConventionJsonBuilderTest {
 
   /**
    * Tests a round trip.

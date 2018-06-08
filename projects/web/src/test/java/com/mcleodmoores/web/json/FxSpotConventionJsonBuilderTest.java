@@ -17,7 +17,7 @@ import com.opengamma.id.ExternalIdBundle;
 /**
  * Unit tests for {@link FxSpotConventionJsonBuilder}.
  */
-public class FxSpotConventionBuilderTest {
+public class FxSpotConventionJsonBuilderTest {
 
   /**
    * Tests a round trip.

@@ -6,7 +6,7 @@ package com.opengamma.core.convention;
 /**
  * A list of convention groups.
  */
-public class ConventionGroups {
+public final class ConventionGroups {
 
   /**
    * Group representing index conventions e.g. overnight index, price index.
@@ -14,7 +14,13 @@ public class ConventionGroups {
   public static final String INDEX = "Index";
 
   /**
-   * Group representing fixed income conventions e.g. a fixed swap leg convention
+   * Group representing conventions for swap legs. These are not complete conventions
+   * but are combined to produce a full convention.
+   */
+  public static final String SWAP_LEG_CONVENTION = "Swap Leg";
+
+  /**
+   * Group representing fixed income conventions e.g. a swap convention
    * for a currency.
    */
   public static final String FIXED_INCOME = "Fixed Income";
@@ -34,4 +40,6 @@ public class ConventionGroups {
    */
   public static final String MISC = "Miscellaneous";
 
+  private ConventionGroups() {
+  }
 }

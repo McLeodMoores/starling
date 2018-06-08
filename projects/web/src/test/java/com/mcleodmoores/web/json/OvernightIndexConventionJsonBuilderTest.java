@@ -20,7 +20,7 @@ import com.opengamma.util.money.Currency;
 /**
  * Unit tests for {@link OvernightIndexConventionJsonBuilder}.
  */
-public class OvernightIndexConventionBuilderTest {
+public class OvernightIndexConventionJsonBuilderTest {
 
   /**
    * Tests a round trip.
