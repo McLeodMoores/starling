@@ -79,7 +79,8 @@ public class BillSecurity implements InstrumentDerivative {
   @Deprecated
   public BillSecurity(final Currency currency, final double settlementTime, final double endTime, final double notional, final YieldConvention yieldConvention,
       final double accrualFactor, final String issuer, final String creditCurveName, final String discountingCurveName) {
-    this(currency, settlementTime, endTime, notional, yieldConvention, accrualFactor, new LegalEntity(null, issuer, null, null, null), creditCurveName, discountingCurveName);
+    this(currency, settlementTime, endTime, notional, yieldConvention, accrualFactor,
+        new LegalEntity(null, issuer, null, null, null), creditCurveName, discountingCurveName);
   }
 
   /**
@@ -143,7 +144,8 @@ public class BillSecurity implements InstrumentDerivative {
    * @param accrualFactor The accrual factor in the bill day count between settlement and maturity.
    * @param issuer The bill issuer name.
    */
-  public BillSecurity(final Currency currency, final double settlementTime, final double endTime, final double notional, final YieldConvention yieldConvention, final double accrualFactor,
+  public BillSecurity(final Currency currency, final double settlementTime, final double endTime, final double notional,
+      final YieldConvention yieldConvention, final double accrualFactor,
       final LegalEntity issuer) {
     ArgumentChecker.notNull(currency, "Currency");
     ArgumentChecker.notNull(yieldConvention, "Yield convention");
@@ -240,7 +242,7 @@ public class BillSecurity implements InstrumentDerivative {
   /**
    * Gets the name of the curve used for settlement amount discounting.
    * @return The name.
-   * @deprecated Curve names should no longer be set in {@link InstrumentDefinition}s
+   * @deprecated Curve names should no longer be set in {@link InstrumentDerivative}s
    */
   @Deprecated
   public String getDiscountingCurveName() {
@@ -286,17 +288,17 @@ public class BillSecurity implements InstrumentDerivative {
     int result = 1;
     long temp;
     temp = Double.doubleToLongBits(_accrualFactor);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     result = prime * result + (_creditCurveName == null ? 0 : _creditCurveName.hashCode());
     result = prime * result + _currency.hashCode();
     result = prime * result + (_discountingCurveName == null ? 0 : _discountingCurveName.hashCode());
     temp = Double.doubleToLongBits(_endTime);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     result = prime * result + _issuerName.hashCode();
     temp = Double.doubleToLongBits(_notional);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_settlementTime);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     result = prime * result + _yieldConvention.hashCode();
     return result;
   }
