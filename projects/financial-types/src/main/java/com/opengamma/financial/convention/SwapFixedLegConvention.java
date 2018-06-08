@@ -32,7 +32,7 @@ import com.opengamma.util.time.Tenor;
 /**
  * Convention for a fixed swap leg.
  */
-@ConventionMetaData(description = "Fixed swap leg", group = ConventionGroups.FIXED_INCOME)
+@ConventionMetaData(description = "Fixed swap leg", group = ConventionGroups.SWAP_LEG_CONVENTION)
 @BeanDefinition
 public class SwapFixedLegConvention extends FinancialConvention {
 

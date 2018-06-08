@@ -29,7 +29,7 @@ import com.opengamma.util.time.Tenor;
 /**
  * Conventions for the CMS leg of a swap.
  */
-@ConventionMetaData(description = "Constant maturity swap leg", group = ConventionGroups.FIXED_INCOME)
+@ConventionMetaData(description = "Constant maturity swap leg", group = ConventionGroups.SWAP_LEG_CONVENTION)
 @BeanDefinition
 public class CMSLegConvention extends FinancialConvention {
 
