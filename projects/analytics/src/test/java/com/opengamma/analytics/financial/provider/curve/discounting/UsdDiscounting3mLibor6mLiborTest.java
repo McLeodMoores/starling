@@ -103,7 +103,7 @@ public class UsdDiscounting3mLibor6mLiborTest {
   private static final double TOLERANCE_ROOT = 1.0E-12;
   private static final int STEP_MAX = 100;
 
-  private static final CalendarAdapter NYC = new CalendarAdapter(WeekendWorkingDayCalendar.SATURDAY_SUNDAY);;
+  private static final CalendarAdapter NYC = new CalendarAdapter(WeekendWorkingDayCalendar.SATURDAY_SUNDAY);
   private static final FXMatrix FX_MATRIX = new FXMatrix(Currency.USD);
 
   private static final double NOTIONAL = 1.0;
@@ -467,10 +467,6 @@ public class UsdDiscounting3mLibor6mLiborTest {
   @BeforeSuite
   static void initClass() {
     for (int loopblock = 0; loopblock < NB_BLOCKS; loopblock++) {
-      if (loopblock == 5) {
-        int i = 0;
-        i = i + 1;
-      }
       CURVES_PAR_SPREAD_MQ_WITHOUT_TODAY_BLOCK.add(makeCurvesFromDefinitions(DEFINITIONS_UNITS[loopblock], GENERATORS_UNITS[loopblock], NAMES_UNITS[loopblock], KNOWN_DATA, PSMQC, PSMQCSC, false));
     }
   }
@@ -478,6 +474,10 @@ public class UsdDiscounting3mLibor6mLiborTest {
   @Test
   public void curveConstruction() {
     for (int loopblock = 0; loopblock < NB_BLOCKS; loopblock++) {
+      if (loopblock == 3) {
+        int i = 0;
+        i = i + 1;
+      }
       curveConstructionTest(DEFINITIONS_UNITS[loopblock], CURVES_PAR_SPREAD_MQ_WITHOUT_TODAY_BLOCK.get(loopblock).getFirst(), false, loopblock);
     }
   }

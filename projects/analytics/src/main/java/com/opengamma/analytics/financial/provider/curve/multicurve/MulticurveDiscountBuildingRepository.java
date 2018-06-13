@@ -109,14 +109,9 @@ public class MulticurveDiscountBuildingRepository {
     final Function1D<DoubleMatrix1D, DoubleMatrix1D> curveCalculator = new MulticurveDiscountFinderFunction(calculator, data);
     final Function1D<DoubleMatrix1D, DoubleMatrix2D> jacobianCalculator = new MulticurveDiscountFinderJacobian(
         new ParameterSensitivityMulticurveUnderlyingMatrixCalculator(sensitivityCalculator), data);
-    try {
     final double[] parameters = _rootFinder.getRoot(curveCalculator, jacobianCalculator, new DoubleMatrix1D(initGuess)).getData();
     final MulticurveProviderDiscount newCurves = data.getGeneratorMarket().evaluate(new DoubleMatrix1D(parameters));
     return newCurves;
-    } catch (final Exception e) {
-      _rootFinder.getRoot(curveCalculator, jacobianCalculator, new DoubleMatrix1D(initGuess)).getData();
-      throw e;
-    }
   }
 
   /**
