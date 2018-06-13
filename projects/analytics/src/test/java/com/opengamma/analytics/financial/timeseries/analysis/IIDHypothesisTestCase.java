@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.timeseries.analysis;
@@ -8,14 +8,14 @@ package com.opengamma.analytics.financial.timeseries.analysis;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import cern.jet.random.engine.MersenneTwister;
-import cern.jet.random.engine.MersenneTwister64;
-
 import com.opengamma.analytics.math.statistics.distribution.NormalDistribution;
 import com.opengamma.analytics.math.statistics.distribution.ProbabilityDistribution;
 import com.opengamma.timeseries.DoubleTimeSeries;
 import com.opengamma.timeseries.precise.instant.ImmutableInstantDoubleTimeSeries;
 import com.opengamma.util.test.TestGroup;
+
+import cern.jet.random.engine.MersenneTwister;
+import cern.jet.random.engine.MersenneTwister64;
 
 /**
  * Abstract test.
@@ -43,7 +43,7 @@ public abstract class IIDHypothesisTestCase {
     INCREASING = ImmutableInstantDoubleTimeSeries.of(dates, increasing);
   }
 
-  public void assertNullTS(final IIDHypothesis h) {
+  static void assertNullTS(final IIDHypothesis h) {
     try {
       h.evaluate((DoubleTimeSeries<Long>) null);
       Assert.fail();
@@ -52,7 +52,7 @@ public abstract class IIDHypothesisTestCase {
     }
   }
 
-  public void assertEmptyTS(final IIDHypothesis h) {
+  static void assertEmptyTS(final IIDHypothesis h) {
     try {
       h.evaluate(ImmutableInstantDoubleTimeSeries.EMPTY_SERIES);
       Assert.fail();

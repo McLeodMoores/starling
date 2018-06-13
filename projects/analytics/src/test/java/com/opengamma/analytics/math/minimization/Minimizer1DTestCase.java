@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math.minimization;
@@ -34,7 +34,7 @@ public abstract class Minimizer1DTestCase {
     }
   };
 
-  public void assertInputs(final ScalarMinimizer minimizer) {
+  static void assertInputs(final ScalarMinimizer minimizer) {
     try {
       minimizer.minimize(null, 0.0, 2., 3.);
       Assert.fail();
@@ -43,7 +43,7 @@ public abstract class Minimizer1DTestCase {
     }
   }
 
-  public void assertMinimizer(final ScalarMinimizer minimizer) {
+  static void assertMinimizer(final ScalarMinimizer minimizer) {
     double result = minimizer.minimize(QUADRATIC, 0.0, -10., 10.);
     assertEquals(result, -3.5, EPS);
     result = minimizer.minimize(QUINTIC, 0.0, 0.5, 2.);

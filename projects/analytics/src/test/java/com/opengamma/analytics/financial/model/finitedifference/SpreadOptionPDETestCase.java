@@ -146,7 +146,7 @@ public class SpreadOptionPDETestCase {
     DATA = new ConvectionDiffusion2DPDEDataBundle(A, B, C, D, E, F, FunctionalDoublesSurface.from(payoff));
   }
 
-  public void testAgaintBSPrice(final ConvectionDiffusionPDESolver2D solver, final int timeSteps, final int spotASteps, final int spotBSteps) {
+  static void testAgaintBSPrice(final ConvectionDiffusionPDESolver2D solver, final int timeSteps, final int spotASteps, final int spotBSteps) {
 
     final double[][] res = solver.solve(DATA, timeSteps, spotASteps, spotBSteps, T, A_LOWER, A_UPPER, B_LOWER, B_UPPER);
 

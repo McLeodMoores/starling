@@ -24,11 +24,11 @@ public abstract class CapletStrippingAbsoluteStrikeTest extends CapletStrippingS
 
   protected abstract CapletStrippingAbsoluteStrike getStripper(final List<CapFloor> caps);
 
-  public void testVolStripping(final boolean print) {
+  void testVolStripping(final boolean print) {
     testVolStripping(1e-7, print); // Tolerance of 0.001bps - only really applicable of root finding methods
   }
 
-  public void testVolStripping(final double volTol, final boolean print) {
+  void testVolStripping(final double volTol, final boolean print) {
 
     if (print) {
       System.out.println("CapletStrippingAbsoluteStrikeTest " + this.getClass());
