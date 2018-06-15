@@ -5,20 +5,20 @@
  */
 package com.opengamma.analytics.financial.provider.sensitivity.multicurve;
 
-import java.util.LinkedHashMap;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang.ArrayUtils;
 
+import com.google.common.primitives.Ints;
 import com.opengamma.analytics.financial.interestrate.InstrumentDerivativeVisitor;
 import com.opengamma.analytics.financial.provider.description.interestrate.MulticurveProviderInterface;
 import com.opengamma.analytics.math.matrix.DoubleMatrix1D;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.tuple.DoublesPair;
-
-import it.unimi.dsi.fastutil.ints.IntArrayList;
 
 /**
  * For an instrument, computes the sensitivity of a value (often the present value or a par spread) to the parameters used in the curve.
@@ -38,241 +38,131 @@ public class ParameterSensitivityMulticurveUnderlyingMatrixCalculator extends Pa
   /**
    * Computes the sensitivity with respect to the parameters from the point sensitivities to the continuously compounded rate.
    * @param sensitivity The point sensitivity.
-   * @param multicurves The multi-curve provider. Not null.
+   * @param data The multi-curve provider. Not null.
    * @param curveNames The set of curves for which the sensitivity will be computed. Not null.
    * @return The sensitivity (as a ParameterSensitivity). The order of the sensitivity is by curve as provided by the sensicurveNamesSet.
    */
   @Override
-  public DoubleMatrix1D pointToParameterSensitivity(final MulticurveSensitivity sensitivity, final MulticurveProviderInterface multicurves, final Set<String> sensicurveNamesSet) {
-    // TODO: The first part depends only of the multicurves and curvesSet, not the sensitivity. Should it be refactored and done only once?
-    final Set<String> multicurveNamesSet = multicurves.getAllNames();
-    // Implementation note: Check sensicurve are in multicurve
-    ArgumentChecker.isTrue(multicurveNamesSet.containsAll(sensicurveNamesSet), "curve in the names set not in the multi-curve provider");
-    final int nbMultiCurve = multicurveNamesSet.size();
-    // Populate the name names and numbers for the curves in the multicurve
-    int loopname = 0;
-    final LinkedHashMap<String, Integer> multicurveNum = new LinkedHashMap<>();
-    for (final String name : multicurveNamesSet) { // loop over all curves in multicurves (by name)
-      multicurveNum.put(name, loopname++);
+  public DoubleMatrix1D pointToParameterSensitivity(final MulticurveSensitivity sensitivity, final MulticurveProviderInterface data, final Set<String> curveNames) {
+    final Set<String> allCurveNames = data.getAllNames();
+    ArgumentChecker.isTrue(allCurveNames.containsAll(curveNames), "curve in the names set not in the multi-curve provider");
+    final int nCurves = allCurveNames.size();
+    int i = 0;
+    final Map<String, Integer> curveReferenceIndices = new HashMap<>();
+    final Map<String, List<String>> underlyingCurveNames = new HashMap<>();
+    final int[] nParameters = new int[nCurves];
+    final int[] nParametersWithoutUnderlyingCurve = new int[nCurves];
+    boolean hasUnderlyingCurves = false;
+    for (final String name : allCurveNames) {
+      curveReferenceIndices.put(name, i);
+      nParameters[i] = data.getNumberOfParameters(name);
+      final List<String> underlyingNames = data.getUnderlyingCurvesNames(name);
+      underlyingCurveNames.put(name, underlyingNames);
+      if (underlyingNames != null && !underlyingNames.isEmpty()) {
+        hasUnderlyingCurves = true;
+      }
+      nParametersWithoutUnderlyingCurve[i] = nParameters[i];
+      i++;
     }
-    final int[] nbNewParameters = new int[nbMultiCurve];
-    final int[] nbParameters = new int[nbMultiCurve];
-    // Implementation note: nbNewParameters - number of new parameters in the curve, parameters not from an underlying curve which is another curve of the bundle.
-    loopname = 0;
-    for (final String name : multicurveNamesSet) { // loop over all curves in multicurves (by name)
-      nbParameters[loopname] = multicurves.getNumberOfParameters(name);
-      nbNewParameters[loopname] = nbParameters[loopname];
-      loopname++;
+    final double[][] sensitivities = getSensitivities(sensitivity, data, allCurveNames, nCurves, curveReferenceIndices, nParameters);
+    if (!hasUnderlyingCurves) {
+      return convertToMatrix(curveNames, curveReferenceIndices, sensitivities);
     }
-    loopname = 0;
-    for (final String name : multicurveNamesSet) { // loop over all curves in multicurves (by name)
-      final List<String> underlyingCurveNames = multicurves.getUnderlyingCurvesNames(name);
-      for (final String u : underlyingCurveNames) {
-        final Integer i = multicurveNum.get(u);
-        if (i != null) {
-          nbNewParameters[loopname] -= nbNewParameters[i]; // Only one level: a curve used as an underlying can not have an underlying itself.
+    final int[][] underlyingCurveReferenceIndices = new int[nCurves][];
+    final int[] startIndices = new int[nCurves];
+    final int[][] startUnderlyingIndices = new int[nCurves][];
+    i = 0;
+    for (final String name : allCurveNames) {
+      final List<String> underlyingNames = underlyingCurveNames.get(name);
+      final List<Integer> indexOtherMulticurveList = new ArrayList<>();
+      for (final String u : underlyingNames) {
+        final Integer index = curveReferenceIndices.get(u);
+        if (index != null) {
+          //TODO relies on ordering (underlying curves first) and doesn't allow an underlying curve with underlyings to be used e.g. spread on spread
+          nParametersWithoutUnderlyingCurve[i] -= nParametersWithoutUnderlyingCurve[index];
+          indexOtherMulticurveList.add(index);
         }
       }
-      loopname++;
+      underlyingCurveReferenceIndices[i++] = Ints.toArray(indexOtherMulticurveList);
     }
-    // Implementation note: nbNewParamSensiCurve
-    final int[][] indexOtherMulticurve = new int[nbMultiCurve][];
-    // Implementation note: indexOtherMultiCurve - for each curve in the multi-curve, the index of the underlying curves in the same set
-    final int[] startOwnParameter = new int[nbMultiCurve];
-    // Implementation note: The start index of the parameters of the own (new) parameters.
-    final int[][] startUnderlyingParameter = new int[nbMultiCurve][];
-    // Implementation note: The start index of the parameters of the underlying curves
-    loopname = 0;
-    for (final String name : multicurveNamesSet) { // loop over all curves in multi-curve (by name)
-      final List<String> underlyingCurveNames = multicurves.getUnderlyingCurvesNames(name);
-      final IntArrayList indexOtherMulticurveList = new IntArrayList();
-      for (final String u : underlyingCurveNames) {
-        final Integer i = multicurveNum.get(u);
-        if (i != null) {
-          indexOtherMulticurveList.add(i);
+    for (final String name : allCurveNames) { // loop over all curves (by name)
+      int startIndex = 0;
+      final int num = curveReferenceIndices.get(name);
+      final List<Integer> startUnderlyingParamList = new ArrayList<>();
+      final List<String> underlyingNames = underlyingCurveNames.get(name);
+      for (final String u : underlyingNames) {
+        final Integer index = curveReferenceIndices.get(u);
+        if (index != null) {
+          startUnderlyingParamList.add(startIndex);
+          startIndex += nParametersWithoutUnderlyingCurve[index];
         }
       }
-      indexOtherMulticurve[loopname] = indexOtherMulticurveList.toIntArray();
-      loopname++;
+      startIndices[num] = startIndex;
+      startUnderlyingIndices[num] = Ints.toArray(startUnderlyingParamList);
     }
-    for (final String name : multicurveNamesSet) { // loop over all curves (by name)
-      int loopstart = 0;
-      final int num = multicurveNum.get(name);
-      final IntArrayList startUnderlyingParamList = new IntArrayList();
-      final List<String> underlyingCurveNames = multicurves.getUnderlyingCurvesNames(name);
-      for (final String u : underlyingCurveNames) {
-        final Integer i = multicurveNum.get(u);
-        if (i != null) {
-          startUnderlyingParamList.add(loopstart);
-          loopstart += nbNewParameters[i]; // Implementation note: Rely on underlying curves being first and then the new parameters
-        }
-      }
-      startOwnParameter[num] = loopstart;
-      startUnderlyingParameter[num] = startUnderlyingParamList.toIntArray();
-    }
-    // Implementation note: Compute the "dirty" sensitivity, i.e. the sensitivity to all the parameters in each curve. The underlying are taken into account in the "clean" step.
-    final double[][] sensiDirty = new double[nbMultiCurve][];
-    final Map<String, List<DoublesPair>> sensitivityDsc = sensitivity.getYieldDiscountingSensitivities();
-    final Map<String, List<ForwardSensitivity>> sensitivityFwd = sensitivity.getForwardSensitivities();
-    for (final String name : multicurveNamesSet) { // loop over all curves (by name)
-      final int num = multicurveNum.get(name);
-      sensiDirty[num] = new double[nbParameters[num]];
-      final double[] sDsc1Name = multicurves.parameterSensitivity(name, sensitivityDsc.get(name));
-      final double[] sFwd1Name = multicurves.parameterForwardSensitivity(name, sensitivityFwd.get(name));
-      for (int loopp = 0; loopp < nbParameters[num]; loopp++) {
-        sensiDirty[num][loopp] = sDsc1Name[loopp] + sFwd1Name[loopp];
-      }
-    }
-    // Implementation note: "clean" the sensitivity, i.e. add the parts on the same curves together.
-    final double[][] sensiClean = new double[nbMultiCurve][];
-    for (int loopc = 0; loopc < nbMultiCurve; loopc++) {
-      sensiClean[loopc] = new double[nbNewParameters[loopc]];
-    }
-    for (final String name : multicurveNamesSet) { // loop over all curves (by name)
-      final int num = multicurveNum.get(name);
-      // Direct sensitivity
-      for (int loopi = 0; loopi < nbNewParameters[num]; loopi++) {
-        sensiClean[num][loopi] += sensiDirty[num][startOwnParameter[num] + loopi];
-      }
-      // Underlying (indirect) sensitivity
-      for (int loopu = 0; loopu < startUnderlyingParameter[num].length; loopu++) {
-        for (int loopi = 0; loopi < nbNewParameters[indexOtherMulticurve[num][loopu]]; loopi++) {
-          sensiClean[indexOtherMulticurve[num][loopu]][loopi] += sensiDirty[num][startUnderlyingParameter[num][loopu] + loopi];
-        }
-      }
-    }
+    final double[][] combinedSensitivities = combineWithUnderlyingSensitivities(sensitivities, allCurveNames, nCurves, curveReferenceIndices,
+        nParametersWithoutUnderlyingCurve, underlyingCurveReferenceIndices, startIndices, startUnderlyingIndices);
+    return convertToMatrix(curveNames, curveReferenceIndices, combinedSensitivities);
+   }
+
+  private static DoubleMatrix1D convertToMatrix(final Set<String> curvesToFit, final Map<String, Integer> referenceIndices, final double[][] sensitivities) {
     double[] result = new double[0];
-    for (final String name : sensicurveNamesSet) {
-      final int num = multicurveNum.get(name);
-      result = ArrayUtils.addAll(result, sensiClean[num]);
+    for (final String name : curvesToFit) {
+      final int num = referenceIndices.get(name);
+      result = ArrayUtils.addAll(result, sensitivities[num]);
     }
     return new DoubleMatrix1D(result);
   }
 
-  /*@Override
-  public DoubleMatrix1D pointToParameterSensitivity(final MulticurveSensitivity sensitivity, final MulticurveProviderInterface multicurves, final Set<String> curveNames) {
-    // TODO: The first part depends only of the multicurves and curvesSet, not the sensitivity. Should it be refactored and done only once?
-    final Set<String> allCurveNames = multicurves.getAllNames();
-    // Implementation note: Check sensicurve are in multicurve
-    ArgumentChecker.isTrue(allCurveNames.containsAll(curveNames), "curve in the names set not in the multi-curve provider");
-    final int nCurves = allCurveNames.size();
-    final int[] curveParametersCount = new int[nCurves];
-    // Populate the curve names and numbers for the curves in the multicurve
-    int ii = 0;
-    // store the index of a curve in the list of names
-    // store the total number of curve parameters
-    boolean hasUnderlyingCurves = false;
-    final Map<String, Pair<List<String>, Integer>> nameReference = new HashMap<>();
-    for (final String name : allCurveNames) {
-      if (multicurves.getUnderlyingCurvesNames(name).size() > 0) {
-        hasUnderlyingCurves = true;
-      }
-      nameReference.put(name, Pairs.of(multicurves.getUnderlyingCurvesNames(name), ii));
-      curveParametersCount[ii] = multicurves.getNumberOfParameters(name);
-      ii++;
-    }
-    if (!hasUnderlyingCurves) {
-      ii = 0;
-      final double[][] sensitivities = new double[nCurves][];
-      final Map<String, List<DoublesPair>> sensitivityDsc = sensitivity.getYieldDiscountingSensitivities();
-      final Map<String, List<ForwardSensitivity>> sensitivityFwd = sensitivity.getForwardSensitivities();
-      for (final String curveNumber : allCurveNames) {
-        final int num = nameReference.get(curveNumber).getSecond();
-        sensitivities[num] = new double[curveParametersCount[num]];
-        final double[] discountingSensitivities = multicurves.parameterSensitivity(curveNumber, sensitivityDsc.get(curveNumber));
-        final double[] forwardSensitivities = multicurves.parameterForwardSensitivity(curveNumber, sensitivityFwd.get(curveNumber));
-        for (int i = 0; i < curveParametersCount[num]; i++) {
-          sensitivities[num][i] = discountingSensitivities[i] + forwardSensitivities[i];
-        }
-      }
-      double[] result = new double[0];
-      for (final String name : curveNames) {
-        // removes parameters for curves that aren't being fitted
-        final int num = nameReference.get(name).getSecond();
-        result = ArrayUtils.addAll(result, sensitivities[num]);
-      }
-      return new DoubleMatrix1D(result);
-    }
-    ii = 0;
-    // store the total number of unique parameters (i.e. subtract the number of parameters in any underlying curves)
-    // store the indices of any underlying curves
-    // store the start index for each curve
-    // store the start index of each underlying curve
-    final int[] uniqueCurveParametersCount = new int[nCurves];
-    final int[][] underlyingCurveReferences = new int[nCurves][];
-    final int[] curveStartIndices = new int[nCurves];
-    final int[][] underlyingCurveStartIndices = new int[nCurves][];
-    for (final String name : allCurveNames) {
-      int curveStartIndex = 0;
-      final int reference = nameReference.get(name).getSecond();
-      final List<String> underlyingCurveNames = nameReference.get(name).getFirst();
-      final int nUnderlying = underlyingCurveNames.size();
-      final int[] underlyingCurveReference = new int[nUnderlying];
-      final int[] underlyingStartIndex = new int[nUnderlying];
-      int uniqueParameterCount = curveParametersCount[ii];
-      int j = 0;
-      for (final String underlyingCurveName : underlyingCurveNames) {
-        System.out.println(underlyingCurveName + "\t\t\t\t" + nameReference + "\t\t\t\t" + allCurveNames);
-        final Integer underlyingReference = nameReference.get(underlyingCurveName).getSecond();
-        if (underlyingReference != null) {
-          curveStartIndex += curveParametersCount[underlyingReference];
-          uniqueParameterCount -= curveParametersCount[underlyingReference];
-          underlyingCurveReference[j] = underlyingReference;
-          underlyingStartIndex[j] = curveStartIndex;
-          j++;
-        }
-      }
-      uniqueCurveParametersCount[ii] = uniqueParameterCount;
-      underlyingCurveReferences[ii] = underlyingCurveReference;
-      final IntArrayList startUnderlyingParamList = new IntArrayList();
-      for (final String u : underlyingCurveNames) {
-        final Integer underlyingReference = nameReference.get(u).getSecond();
-        if (underlyingReference != null) {
-          startUnderlyingParamList.add(curveStartIndex);
-          curveStartIndex += uniqueCurveParametersCount[underlyingReference]; // Implementation note: Rely on underlying curves being first and then the new parameters
-        }
-      }
-      curveStartIndices[reference] = curveStartIndex;
-      underlyingCurveStartIndices[reference] = startUnderlyingParamList.toIntArray();
-      ii++;
-    }
-    // Implementation note: Compute the "dirty" sensitivity, i.e. the sensitivity to all the parameters in each curve. The underlying are taken into account in the "clean" step.
-    final double[][] dirtySensitivities = new double[nCurves][];
-    final Map<String, List<DoublesPair>> sensitivityDsc = sensitivity.getYieldDiscountingSensitivities();
-    final Map<String, List<ForwardSensitivity>> sensitivityFwd = sensitivity.getForwardSensitivities();
-    for (final String name : allCurveNames) { // loop over all curves (by name)
-      final int num = nameReference.get(name).getSecond();
-      dirtySensitivities[num] = new double[curveParametersCount[num]];
-      final double[] sDsc1Name = multicurves.parameterSensitivity(name, sensitivityDsc.get(name));
-      final double[] sFwd1Name = multicurves.parameterForwardSensitivity(name, sensitivityFwd.get(name));
-      for (int i = 0; i < curveParametersCount[num]; i++) {
-        dirtySensitivities[num][i] = sDsc1Name[i] + sFwd1Name[i];
+  /**
+   * Calculates the sensitivities to all parameters in each curve and adds the discounting and forward sensitivities.
+   */
+  private static double[][] getSensitivities(final MulticurveSensitivity sensitivity, final MulticurveProviderInterface data, final Set<String> curveNames,
+      final int nCurves, final Map<String, Integer> curveReferenceIndices, final int[] numberOfParameters) {
+    final double[][] result = new double[nCurves][];
+    final Map<String, List<DoublesPair>> discountingSensitivities = sensitivity.getYieldDiscountingSensitivities();
+    final Map<String, List<ForwardSensitivity>> forwardSensitivities = sensitivity.getForwardSensitivities();
+    for (final String name : curveNames) {
+      final int referenceIndex = curveReferenceIndices.get(name);
+      final int nParams = numberOfParameters[referenceIndex];
+      result[referenceIndex] = new double[nParams];
+      final double[] discounting = data.parameterSensitivity(name, discountingSensitivities.get(name));
+      final double[] forward = data.parameterForwardSensitivity(name, forwardSensitivities.get(name));
+      for (int i = 0; i < nParams; i++) {
+        result[referenceIndex][i] = discounting[i] + forward[i];
       }
     }
-    // Implementation note: "clean" the sensitivity, i.e. add the parts on the same curves together.
-    final double[][] cleanSensitivities = new double[nCurves][];
+    return result;
+  }
+
+  /**
+   * Add sensitivities on the same curves together. This takes into account sensitivities on underlying curves.
+   */
+  private static double[][] combineWithUnderlyingSensitivities(final double[][] sensitivities, final Set<String> curveNames,
+      final int nCurves, final Map<String, Integer> curveReferenceIndices, final int[] nNewParameters, final int[][] underlyingCurveReferenceIndices,
+      final int[] curveStartIndices, final int[][] underlyingCurveStartIndices) {
+    final double[][] result = new double[nCurves][];
+    // initialise arrays first because the reference index can be different to the start index
     for (int i = 0; i < nCurves; i++) {
-      cleanSensitivities[i] = new double[curveParametersCount[i]];
+      result[i] = new double[nNewParameters[i]];
     }
-    for (final String name : allCurveNames) { // loop over all curves (by name)
-      final int num = nameReference.get(name).getSecond();
+    for (final String name : curveNames) { // loop over all curves (by name)
+      final int referenceIndex = curveReferenceIndices.get(name);
+      final int newParametersForCurve = nNewParameters[referenceIndex];
       // Direct sensitivity
-      for (int i = 0; i < curveParametersCount[num]; i++) {
-        cleanSensitivities[num][i] += dirtySensitivities[num][curveStartIndices[num] + i];
+      for (int i = 0; i < newParametersForCurve; i++) {
+        final int startIndex = curveStartIndices[referenceIndex];
+        result[referenceIndex][i] += sensitivities[referenceIndex][startIndex + i];
       }
       // Underlying (indirect) sensitivity
-      for (int i = 0; i < underlyingCurveStartIndices[num].length; i++) {
-        for (int j = 0; j < curveParametersCount[underlyingCurveReferences[num][i]]; j++) {
-          cleanSensitivities[underlyingCurveReferences[num][i]][j] += dirtySensitivities[num][underlyingCurveStartIndices[num][i] + j];
+      final int[] underlyingStartIndices = underlyingCurveStartIndices[referenceIndex];
+      for (int i = 0; i < underlyingStartIndices.length; i++) {
+        final int underlyingReferenceIndex = underlyingCurveReferenceIndices[referenceIndex][i];
+        for (int j = 0; j < nNewParameters[underlyingReferenceIndex]; j++) {
+          result[underlyingReferenceIndex][j] += sensitivities[referenceIndex][underlyingStartIndices[i] + j];
         }
       }
     }
-    double[] result = new double[0];
-    for (final String name : curveNames) {
-      final int num = nameReference.get(name).getSecond();
-      result = ArrayUtils.addAll(result, cleanSensitivities[num]);
-    }
-    return new DoubleMatrix1D(result);
+    return result;
   }
-*/
 }
