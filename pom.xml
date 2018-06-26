@@ -9,7 +9,7 @@
     <groupId>com.mcleodmoores.starling.platform</groupId>
     <artifactId>corporate-parent</artifactId>
     <version>1.1.0-SNAPSHOT</version>
-    <relativePath></relativePath>
+    <relativePath/>
   </parent>  
   <groupId>com.mcleodmoores.starling.platform</groupId>
   <artifactId>platform</artifactId>
@@ -275,7 +275,7 @@
       <dependency>
         <groupId>commons-collections</groupId>
         <artifactId>commons-collections</artifactId>
-        <version>3.2.1</version>
+        <version>3.2.2</version>
       </dependency>
       <dependency>
         <groupId>commons-beanutils</groupId>
@@ -441,7 +441,7 @@
       <dependency>
         <groupId>org.apache.httpcomponents</groupId>
         <artifactId>httpclient</artifactId>
-        <version>4.2.5</version>
+        <version>4.5.2</version>
         <exclusions>
           <exclusion>
             <groupId>commons-logging</groupId>
@@ -512,7 +512,7 @@
       <dependency>
         <groupId>org.apache.shiro</groupId>
         <artifactId>shiro-web</artifactId>
-        <version>1.2.3</version>
+        <version>1.4.0</version>
       </dependency>
       <dependency>
         <groupId>org.apache.shiro</groupId>
@@ -540,12 +540,12 @@
       <dependency>
         <groupId>ch.qos.logback</groupId>
         <artifactId>logback-core</artifactId>
-        <version>1.0.13</version>
+        <version>1.2.0</version>
       </dependency>
       <dependency>
         <groupId>ch.qos.logback</groupId>
         <artifactId>logback-classic</artifactId>
-        <version>1.0.13</version>
+        <version>1.2.0</version>
       </dependency>
       <dependency>
         <groupId>com.codahale.metrics</groupId>
@@ -827,13 +827,13 @@
       <dependency>
         <groupId>org.springframework.amqp</groupId>
         <artifactId>spring-amqp</artifactId>
-        <version>1.1.1.RELEASE</version>
+        <version>1.5.7.RELEASE</version>
         <optional>true</optional>
       </dependency>
       <dependency>
         <groupId>org.springframework.amqp</groupId>
         <artifactId>spring-rabbit</artifactId>
-        <version>1.1.1.RELEASE</version>
+        <version>1.5.7.RELEASE</version>
         <optional>true</optional>
       </dependency>
       <dependency>
@@ -1200,7 +1200,7 @@
                 </goals>
                 <configuration>
                   <target>
-                    <ant antfile="${basedir}/pom-ant.xml" target="dist-src" />
+                    <ant antfile="${basedir}/pom-ant.xml" target="dist-src"/>
                   </target>
                 </configuration>
               </execution>
@@ -1290,7 +1290,7 @@
     <doctitle><![CDATA[<h1>OpenGamma Platform API</h1>]]></doctitle>
     <header><![CDATA[<script type="text/x-mathjax-config">MathJax.Hub.Config({ tex2jax: { inlineMath: [ ['$','$'], ["\\\\(","\\\\)"] ],processEscapes: true} });</script><script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>]]></header>
     <bottom><![CDATA[<i>Copyright 2009-Present by OpenGamma Inc. and individual contributors</i><br/><i>${javadoc.footer.license}</i><br/><i>Additional documentation can be found at <a href="http://docs.opengamma.com">docs.opengamma.com</a>.</i><script type="text/javascript">var _gaq = _gaq || [];_gaq.push(['_setAccount', 'UA-12092825-5']);_gaq.push(['_trackPageview']);(function() {var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true; ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js'; var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s); })(); </script>]]></bottom>
-    <javadoc.footer.license></javadoc.footer.license>
+    <javadoc.footer.license/>
     <!-- Properties for buildnumber-maven-plugin -->
     <maven.buildNumber.getRevisionOnlyOnce>true</maven.buildNumber.getRevisionOnlyOnce>
     <!-- Version properties -->
@@ -1303,7 +1303,7 @@
     <joda.beans.prefix>_</joda.beans.prefix>
     <fudge-java.version>0.3.9.20-MM</fudge-java.version>
     <fudge-proto.version>0.3.9.7</fudge-proto.version>
-    <og.spring.version>3.2.3.RELEASE</og.spring.version>
+    <og.spring.version>3.2.15.RELEASE</og.spring.version>
     <jetty.version>8.1.11.v20130520</jetty.version>
     <jersey.version>1.17.1</jersey.version>
     <!-- Testing properties -->
