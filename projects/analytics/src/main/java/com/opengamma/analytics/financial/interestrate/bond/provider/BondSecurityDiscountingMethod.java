@@ -203,7 +203,7 @@ public final class BondSecurityDiscountingMethod {
         return (nominal + bond.getCoupon().getNthPayment(0).getAmount()) / (1.0 + bond.getFactorToNextCoupon() * yield / bond.getCouponPerYear()) / nominal;
       }
       if (yieldConvention.equals(FRANCE_COMPOUND_METHOD)) {
-        return (nominal + bond.getCoupon().getNthPayment(0).getAmount()) / nominal * Math.pow(1.0 + yield / bond.getCouponPerYear(), -bond.getFactorToNextCoupon());
+        return (nominal + bond.getCoupon().getNthPayment(0).getAmount()) * Math.pow(1.0 + yield / bond.getCouponPerYear(), -bond.getFactorToNextCoupon()) / nominal;
       }
     }
     if (yieldConvention.equals(US_STREET) || yieldConvention.equals(UK_BUMP_DMO_METHOD) || yieldConvention.equals(GERMAN_BOND)
