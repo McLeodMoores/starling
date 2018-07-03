@@ -16,7 +16,7 @@ import com.opengamma.util.ArgumentChecker;
 /**
  * Factory for {@link Tenor} named instances.
  */
-//TODO it should be possible to easily add a currency and have it stored somewhere
+//TODO it should be possible to easily add a tenor and have it stored somewhere
 public final class TenorFactory extends AbstractNamedInstanceFactory<Tenor> {
 
   /**
