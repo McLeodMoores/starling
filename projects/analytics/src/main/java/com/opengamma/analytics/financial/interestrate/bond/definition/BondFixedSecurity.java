@@ -2,6 +2,10 @@
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
  *
  * Please see distribution for license.
+ *
+ * Modified by McLeod Moores Software Limited.
+ *
+ * Copyright (C) 2018 - present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.analytics.financial.interestrate.bond.definition;
 
@@ -150,6 +154,14 @@ public class BondFixedSecurity extends BondSecurity<PaymentFixed, CouponFixed> {
     return _factorToNextCoupon;
   }
 
+  /**
+   * Gets the number of coupon payments remaining.
+   * @return  the number of coupon payments
+   */
+  public int getNumberOfCoupons() {
+    return getCoupon().getNumberOfPayments();
+  }
+
   @Override
   public <S, T> T accept(final InstrumentDerivativeVisitor<S, T> visitor, final S data) {
     ArgumentChecker.notNull(visitor, "visitor");
@@ -175,10 +187,10 @@ public class BondFixedSecurity extends BondSecurity<PaymentFixed, CouponFixed> {
     int result = super.hashCode();
     long temp;
     temp = Double.doubleToLongBits(_accruedInterest);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     result = prime * result + _couponPerYear;
     temp = Double.doubleToLongBits(_factorToNextCoupon);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     result = prime * result + _yieldConvention.hashCode();
     return result;
   }
