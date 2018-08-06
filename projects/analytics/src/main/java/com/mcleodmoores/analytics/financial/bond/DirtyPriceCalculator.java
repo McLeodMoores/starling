@@ -6,9 +6,10 @@ package com.mcleodmoores.analytics.financial.bond;
 import com.opengamma.analytics.financial.interestrate.bond.definition.BondFixedSecurity;
 
 /**
- *
+ * Calculates the dirty price of a bond (i.e. the price of a bond plus the value of any accrued
+ * interest) from the quoted yield of a bond, which depends on the yield convention type.
  */
-public class DirtyPriceCalculator implements YieldConventionTypeVisitor<Double, Double> {
+public class DirtyPriceCalculator implements DataYieldConventionTypeVisitor<Double, Double> {
 
   @Override
   public Double visitUsStreet(final BondFixedSecurity bond, final Double yield) {

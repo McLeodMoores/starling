@@ -171,7 +171,7 @@ public class BondFixedSecurityDefinitionTest {
 
   @SuppressWarnings("deprecation")
   @Test
-  public void toDerivativeUSTDeprecated() {
+  public void h() {
     final BondFixedSecurity bondConverted = BOND_SECURITY_DEFINITION.toDerivative(REFERENCE_DATE_1, CURVES_NAME);
     AnnuityPaymentFixedDefinition nominalDefinition = (AnnuityPaymentFixedDefinition) BOND_SECURITY_DEFINITION.getNominal();
     AnnuityCouponFixedDefinition couponDefinition = BOND_SECURITY_DEFINITION.getCoupons();
@@ -191,13 +191,13 @@ public class BondFixedSecurityDefinitionTest {
         .getAccrualEndDate(), couponDefinition.getNthPayment(0).getAccrualEndDate(), RATE, COUPON_PER_YEAR);
     final double factorToNextCoupon = (factorPeriod - factorSpot) / factorPeriod;
     final BondFixedSecurity bondExpected = new BondFixedSecurity(nominal, coupon, spotTime1, accruedInterest, factorToNextCoupon, STREET_CONVENTION, COUPON_PER_YEAR,
-        REPO_CURVE_NAME, "");
+        REPO_CURVE_NAME, ISSUER_NAME);
     assertEquals("Bond Fixed Security Definition to derivative", bondConverted.getFactorToNextCoupon(), bondExpected.getFactorToNextCoupon(), 1.0E-10);
     assertEquals("Bond Fixed Security Definition to derivative", bondConverted.getAccruedInterest(), bondExpected.getAccruedInterest(), 1.0E-10);
     assertEquals("Bond Fixed Security Definition to derivative", bondConverted.getYieldConvention(), bondExpected.getYieldConvention());
-    assertTrue("Bond Fixed Security Definition to derivative", bondConverted.equals(bondExpected));
+    assertEquals("Bond Fixed Security Definition to derivative", bondConverted, bondExpected);
     final BondFixedSecurity bondConvertedDate = BOND_SECURITY_DEFINITION.toDerivative(REFERENCE_DATE_1, spotDate1, CURVES_NAME);
-    assertTrue("Bond Fixed Security Definition to derivative", bondConverted.equals(bondConvertedDate));
+    assertEquals("Bond Fixed Security Definition to derivative", bondConverted, bondConvertedDate);
   }
 
   @Test
@@ -221,13 +221,13 @@ public class BondFixedSecurityDefinitionTest {
         .getAccrualEndDate(), couponDefinition.getNthPayment(0).getAccrualEndDate(), RATE, COUPON_PER_YEAR);
     final double factorToNextCoupon = (factorPeriod - factorSpot) / factorPeriod;
     final BondFixedSecurity bondExpected = new BondFixedSecurity(nominal, coupon, spotTime1, accruedInterest, factorToNextCoupon, STREET_CONVENTION, COUPON_PER_YEAR,
-        "");
+        ISSUER_NAME);
     assertEquals("Bond Fixed Security Definition to derivative", bondConverted.getFactorToNextCoupon(), bondExpected.getFactorToNextCoupon(), 1.0E-10);
     assertEquals("Bond Fixed Security Definition to derivative", bondConverted.getAccruedInterest(), bondExpected.getAccruedInterest(), 1.0E-10);
     assertEquals("Bond Fixed Security Definition to derivative", bondConverted.getYieldConvention(), bondExpected.getYieldConvention());
-    assertTrue("Bond Fixed Security Definition to derivative", bondConverted.equals(bondExpected));
+    assertEquals("Bond Fixed Security Definition to derivative", bondConverted, bondExpected);
     final BondFixedSecurity bondConvertedDate = BOND_SECURITY_DEFINITION.toDerivative(REFERENCE_DATE_1, spotDate1);
-    assertTrue("Bond Fixed Security Definition to derivative", bondConverted.equals(bondConvertedDate));
+    assertEquals("Bond Fixed Security Definition to derivative", bondConverted, bondConvertedDate);
   }
 
   // UKT 5 09/07/14 - ISIN-GB0031829509
