@@ -18,6 +18,15 @@
 <listAttribute key="org.testng.eclipse.PACKAGE_TEST_LIST">
 <listEntry value="com.mcleodmoores.analytics.util"/>
 <listEntry value="com.mcleodmoores.analytics.financial.interestrate.payments.derivative"/>
+<listEntry value="com.mcleodmoores.analytics.financial.annuity"/>
+<listEntry value="com.mcleodmoores.analytics.financial.bond"/>
+<listEntry value="com.mcleodmoores.analytics.financial.convention"/>
+<listEntry value="com.mcleodmoores.analytics.financial.curve"/>
+<listEntry value="com.mcleodmoores.analytics.financial.data"/>
+<listEntry value="com.mcleodmoores.analytics.finanical.index"/>
+<listEntry value="com.mcleodmoores.analytics.financial.instruments"/>
+<listEntry value="com.mcleodmoores.analytics.financial.interestrate"/>
+<listEntry value="com.mcleodmoores.analytics.financial.surface"/>
 <listEntry value="com.mcleodmoores.analytics.math.statistics.descriptive"/>
 <listEntry value="com.opengamma.analytics.date"/>
 <listEntry value="com.opengamma.analytics.financial.calculator"/>
