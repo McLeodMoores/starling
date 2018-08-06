@@ -3,8 +3,6 @@
  */
 package com.mcleodmoores.analytics.financial.bond;
 
-import com.opengamma.analytics.financial.interestrate.bond.definition.BondFixedSecurity;
-
 /**
  * A visitor-style interface for bond yield conventions that allows different calculations
  * to be performed for different bond yield convention types.
@@ -20,7 +18,7 @@ public interface YieldConventionTypeVisitor<RESULT_TYPE> {
    * @param security  the bond, not null
    * @return  the result
    */
-  RESULT_TYPE visitUsStreet(BondFixedSecurity security);
+  RESULT_TYPE visitUsStreet(FixedCouponBondSecurity security);
 
   /**
    * A method for bonds that have a UK debt management office yield convention.
@@ -28,7 +26,7 @@ public interface YieldConventionTypeVisitor<RESULT_TYPE> {
    * @param security  the bond, not null
    * @return  the result
    */
-  RESULT_TYPE visitUkDmo(BondFixedSecurity security);
+  RESULT_TYPE visitUkDmo(FixedCouponBondSecurity security);
 
   /**
    * A method for bonds that have a French compounding yield convention.
@@ -36,7 +34,7 @@ public interface YieldConventionTypeVisitor<RESULT_TYPE> {
    * @param security  the bond, not null
    * @return  the result
    */
-  RESULT_TYPE visitFranceCompound(BondFixedSecurity security);
+  RESULT_TYPE visitFranceCompound(FixedCouponBondSecurity security);
 
   /**
    * A method for bonds that have an Italian Treasury yield convention.
@@ -44,5 +42,5 @@ public interface YieldConventionTypeVisitor<RESULT_TYPE> {
    * @param security  the bond, not null
    * @return  the result
    */
-  RESULT_TYPE visitItalyTreasury(BondFixedSecurity security);
+  RESULT_TYPE visitItalyTreasury(FixedCouponBondSecurity security);
 }

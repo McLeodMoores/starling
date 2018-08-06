@@ -3,7 +3,7 @@
  */
 package com.mcleodmoores.analytics.financial.bond;
 
-import com.opengamma.analytics.financial.interestrate.bond.definition.BondFixedSecurity;
+import com.opengamma.util.ArgumentChecker;
 
 /**
  * A set of bond yield convention types that dispatch from the bond security to an implementation
@@ -19,13 +19,15 @@ public enum BondConventionType implements YieldConventionType, DataYieldConventi
   US_STREET {
 
     @Override
-    public <DATA_TYPE, RESULT_TYPE> RESULT_TYPE accept(final DataYieldConventionTypeVisitor<DATA_TYPE, RESULT_TYPE> visitor, final BondFixedSecurity bond,
+    public <DATA_TYPE, RESULT_TYPE> RESULT_TYPE accept(final DataYieldConventionTypeVisitor<DATA_TYPE, RESULT_TYPE> visitor, final FixedCouponBondSecurity bond,
         final DATA_TYPE data) {
+      ArgumentChecker.notNull(visitor, "visitor");
       return visitor.visitUsStreet(bond, data);
     }
 
     @Override
-    public <RESULT_TYPE> RESULT_TYPE accept(final YieldConventionTypeVisitor<RESULT_TYPE> visitor, final BondFixedSecurity bond) {
+    public <RESULT_TYPE> RESULT_TYPE accept(final YieldConventionTypeVisitor<RESULT_TYPE> visitor, final FixedCouponBondSecurity bond) {
+      ArgumentChecker.notNull(visitor, "visitor");
       return visitor.visitUsStreet(bond);
     }
   },
@@ -33,13 +35,15 @@ public enum BondConventionType implements YieldConventionType, DataYieldConventi
   UK_BUMP_DMO {
 
     @Override
-    public <DATA_TYPE, RESULT_TYPE> RESULT_TYPE accept(final DataYieldConventionTypeVisitor<DATA_TYPE, RESULT_TYPE> visitor, final BondFixedSecurity bond,
+    public <DATA_TYPE, RESULT_TYPE> RESULT_TYPE accept(final DataYieldConventionTypeVisitor<DATA_TYPE, RESULT_TYPE> visitor, final FixedCouponBondSecurity bond,
         final DATA_TYPE data) {
+      ArgumentChecker.notNull(visitor, "visitor");
       return visitor.visitUkDmo(bond, data);
     }
 
     @Override
-    public <RESULT_TYPE> RESULT_TYPE accept(final YieldConventionTypeVisitor<RESULT_TYPE> visitor, final BondFixedSecurity bond) {
+    public <RESULT_TYPE> RESULT_TYPE accept(final YieldConventionTypeVisitor<RESULT_TYPE> visitor, final FixedCouponBondSecurity bond) {
+      ArgumentChecker.notNull(visitor, "visitor");
       return visitor.visitUkDmo(bond);
     }
   },
@@ -47,13 +51,15 @@ public enum BondConventionType implements YieldConventionType, DataYieldConventi
   FRANCE_COMPOUND {
 
     @Override
-    public <DATA_TYPE, RESULT_TYPE> RESULT_TYPE accept(final DataYieldConventionTypeVisitor<DATA_TYPE, RESULT_TYPE> visitor, final BondFixedSecurity bond,
+    public <DATA_TYPE, RESULT_TYPE> RESULT_TYPE accept(final DataYieldConventionTypeVisitor<DATA_TYPE, RESULT_TYPE> visitor, final FixedCouponBondSecurity bond,
         final DATA_TYPE data) {
+      ArgumentChecker.notNull(visitor, "visitor");
       return visitor.visitFranceCompound(bond, data);
     }
 
     @Override
-    public <RESULT_TYPE> RESULT_TYPE accept(final YieldConventionTypeVisitor<RESULT_TYPE> visitor, final BondFixedSecurity bond) {
+    public <RESULT_TYPE> RESULT_TYPE accept(final YieldConventionTypeVisitor<RESULT_TYPE> visitor, final FixedCouponBondSecurity bond) {
+      ArgumentChecker.notNull(visitor, "visitor");
       return visitor.visitFranceCompound(bond);
     }
   },
@@ -61,13 +67,15 @@ public enum BondConventionType implements YieldConventionType, DataYieldConventi
   ITALIAN_TREASURY {
 
     @Override
-    public <DATA_TYPE, RESULT_TYPE> RESULT_TYPE accept(final DataYieldConventionTypeVisitor<DATA_TYPE, RESULT_TYPE> visitor, final BondFixedSecurity bond,
+    public <DATA_TYPE, RESULT_TYPE> RESULT_TYPE accept(final DataYieldConventionTypeVisitor<DATA_TYPE, RESULT_TYPE> visitor, final FixedCouponBondSecurity bond,
         final DATA_TYPE data) {
+      ArgumentChecker.notNull(visitor, "visitor");
       return visitor.visitItalyTreasury(bond, data);
     }
 
     @Override
-    public <RESULT_TYPE> RESULT_TYPE accept(final YieldConventionTypeVisitor<RESULT_TYPE> visitor, final BondFixedSecurity bond) {
+    public <RESULT_TYPE> RESULT_TYPE accept(final YieldConventionTypeVisitor<RESULT_TYPE> visitor, final FixedCouponBondSecurity bond) {
+      ArgumentChecker.notNull(visitor, "visitor");
       return visitor.visitItalyTreasury(bond);
     }
   };

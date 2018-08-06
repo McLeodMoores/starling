@@ -3,8 +3,6 @@
  */
 package com.mcleodmoores.analytics.financial.bond;
 
-import com.opengamma.analytics.financial.interestrate.bond.definition.BondFixedSecurity;
-
 /**
  * An interface for yield convention types e.g. US street or JGB yield.
  */
@@ -19,5 +17,5 @@ public interface YieldConventionType {
    * @param bond  the bond security, not null
    * @return  the result
    */
-  <RESULT_TYPE> RESULT_TYPE accept(YieldConventionTypeVisitor<RESULT_TYPE> visitor, BondFixedSecurity bond);
+  <RESULT_TYPE> RESULT_TYPE accept(YieldConventionTypeVisitor<RESULT_TYPE> visitor, FixedCouponBondSecurity bond);
 }

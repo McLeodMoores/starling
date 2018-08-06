@@ -16,7 +16,6 @@ import org.apache.commons.lang.ObjectUtils;
 import com.mcleodmoores.analytics.financial.annuity.PaymentComparator;
 import com.mcleodmoores.analytics.financial.instruments.BondSecurityVisitor;
 import com.mcleodmoores.analytics.financial.instruments.DataBondSecurityVisitor;
-import com.mcleodmoores.analytics.financial.instruments.Instrument;
 import com.opengamma.analytics.financial.interestrate.annuity.derivative.AnnuityCouponFixed;
 import com.opengamma.analytics.financial.interestrate.annuity.derivative.AnnuityPaymentFixed;
 import com.opengamma.analytics.financial.interestrate.payments.derivative.CouponFixed;
@@ -27,7 +26,7 @@ import com.opengamma.util.ArgumentChecker;
 /**
  * Describes a fixed coupon bond issue. The description can include variable notionals and coupons.
  */
-public class FixedCouponBondSecurity implements Instrument {
+public class FixedCouponBondSecurity implements BondInstrument {
 
   /**
    * Creates a fixed coupon bond builder.
@@ -240,6 +239,16 @@ public class FixedCouponBondSecurity implements Instrument {
   @Override
   public <DATA_TYPE, RESULT_TYPE> RESULT_TYPE accept(final DataBondSecurityVisitor<DATA_TYPE, RESULT_TYPE> visitor, final DATA_TYPE data) {
     return visitor.visitFixedCouponBond(this, data);
+  }
+
+  @Override
+  public <RESULT_TYPE> RESULT_TYPE accept(final YieldConventionTypeVisitor<RESULT_TYPE> visitor) {
+    return _yieldConvention.accept(visitor, this);
+  }
+
+  @Override
+  public <DATA_TYPE, RESULT_TYPE> RESULT_TYPE accept(final DataYieldConventionTypeVisitor<DATA_TYPE, RESULT_TYPE> visitor, final DATA_TYPE data) {
+    return _yieldConvention.accept(visitor, this, data);
   }
 
   /**
