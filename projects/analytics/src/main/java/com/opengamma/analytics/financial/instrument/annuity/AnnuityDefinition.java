@@ -133,7 +133,7 @@ public class AnnuityDefinition<P extends PaymentDefinition> implements Instrumen
 
   @Override
   public String toString() {
-    final StringBuffer result = new StringBuffer("Annuity:");
+    final StringBuilder result = new StringBuilder("Annuity:");
     for (final P payment : _payments) {
       result.append(payment.toString());
       result.append(" ");
@@ -180,9 +180,9 @@ public class AnnuityDefinition<P extends PaymentDefinition> implements Instrumen
   public Annuity<? extends Payment> toDerivative(final ZonedDateTime date, final String... yieldCurveNames) {
     ArgumentChecker.notNull(date, "date");
     final List<Payment> resultList = new ArrayList<>();
-    for (int loopcoupon = 0; loopcoupon < _payments.length; loopcoupon++) {
-      if (!date.isAfter(_payments[loopcoupon].getPaymentDate())) {
-        resultList.add(_payments[loopcoupon].toDerivative(date, yieldCurveNames));
+    for (final P _payment : _payments) {
+      if (!date.isAfter(_payment.getPaymentDate())) {
+        resultList.add(_payment.toDerivative(date, yieldCurveNames));
       }
     }
     return new Annuity<>(resultList.toArray(new Payment[resultList.size()]));
@@ -217,9 +217,9 @@ public class AnnuityDefinition<P extends PaymentDefinition> implements Instrumen
   public Annuity<? extends Payment> toDerivative(final ZonedDateTime date) {
     ArgumentChecker.notNull(date, "date");
     final List<Payment> resultList = new ArrayList<>();
-    for (int loopcoupon = 0; loopcoupon < _payments.length; loopcoupon++) {
-      if (!date.isAfter(_payments[loopcoupon].getPaymentDate())) {
-        resultList.add(_payments[loopcoupon].toDerivative(date));
+    for (final P _payment : _payments) {
+      if (!date.isAfter(_payment.getPaymentDate())) {
+        resultList.add(_payment.toDerivative(date));
       }
     }
     return new Annuity<>(resultList.toArray(new Payment[resultList.size()]));

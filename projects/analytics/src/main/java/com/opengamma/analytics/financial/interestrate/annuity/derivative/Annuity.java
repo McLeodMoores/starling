@@ -45,10 +45,10 @@ public class Annuity<P extends Payment> implements InstrumentDerivative {
     double amount = payments[0].getReferenceAmount();
     for (int loopcpn = 1; loopcpn < payments.length; loopcpn++) {
       ArgumentChecker.isTrue(currency0.equals(payments[loopcpn].getCurrency()), "currency not the same for all payments");
-      amount = (amount == 0) ? payments[loopcpn].getReferenceAmount() : amount;
+      amount = amount == 0 ? payments[loopcpn].getReferenceAmount() : amount;
     }
     _payments = payments;
-    _isPayer = (amount < 0);
+    _isPayer = amount < 0;
   }
 
   /**
@@ -165,7 +165,7 @@ public class Annuity<P extends Payment> implements InstrumentDerivative {
 
   @Override
   public String toString() {
-    final StringBuffer result = new StringBuffer("Annuity:");
+    final StringBuilder result = new StringBuilder("Annuity:");
     for (final P payment : _payments) {
       result.append(payment.toString());
       result.append("\n");

@@ -9,8 +9,6 @@
  */
 package com.opengamma.analytics.financial.interestrate.bond.definition;
 
-import org.apache.commons.lang.ObjectUtils;
-
 import com.opengamma.analytics.financial.interestrate.InstrumentDerivativeVisitor;
 import com.opengamma.analytics.financial.interestrate.annuity.derivative.AnnuityCouponFixed;
 import com.opengamma.analytics.financial.interestrate.annuity.derivative.AnnuityPaymentFixed;
@@ -56,9 +54,11 @@ public class BondFixedSecurity extends BondSecurity<PaymentFixed, CouponFixed> {
    * @deprecated Use the constructor that does not take curve names
    */
   @Deprecated
-  public BondFixedSecurity(final AnnuityPaymentFixed nominal, final AnnuityCouponFixed coupon, final double settlementTime, final double accruedInterest, final double factorToNextCoupon,
+  public BondFixedSecurity(final AnnuityPaymentFixed nominal, final AnnuityCouponFixed coupon, final double settlementTime,
+      final double accruedInterest, final double factorToNextCoupon,
       final YieldConvention yieldConvention, final int couponPerYear, final String repoCurveName, final String issuer) {
-    this(nominal, coupon, settlementTime, accruedInterest, factorToNextCoupon, yieldConvention, couponPerYear, repoCurveName, new LegalEntity(null, issuer, null, null, null));
+    this(nominal, coupon, settlementTime, accruedInterest, factorToNextCoupon, yieldConvention, couponPerYear, repoCurveName,
+        new LegalEntity(null, issuer, null, null, null));
   }
 
   /**
@@ -75,7 +75,8 @@ public class BondFixedSecurity extends BondSecurity<PaymentFixed, CouponFixed> {
    * @deprecated Use the constructor that does not take curve names
    */
   @Deprecated
-  public BondFixedSecurity(final AnnuityPaymentFixed nominal, final AnnuityCouponFixed coupon, final double settlementTime, final double accruedInterest, final double factorToNextCoupon,
+  public BondFixedSecurity(final AnnuityPaymentFixed nominal, final AnnuityCouponFixed coupon, final double settlementTime,
+      final double accruedInterest, final double factorToNextCoupon,
       final YieldConvention yieldConvention, final int couponPerYear, final String repoCurveName, final LegalEntity issuer) {
     super(nominal, coupon, settlementTime, repoCurveName, issuer);
     ArgumentChecker.notNull(yieldConvention, "Yield convention");
@@ -96,7 +97,8 @@ public class BondFixedSecurity extends BondSecurity<PaymentFixed, CouponFixed> {
    * @param couponPerYear Number of coupon per year.
    * @param issuer The bond issuer name.
    */
-  public BondFixedSecurity(final AnnuityPaymentFixed nominal, final AnnuityCouponFixed coupon, final double settlementTime, final double accruedInterest, final double factorToNextCoupon,
+  public BondFixedSecurity(final AnnuityPaymentFixed nominal, final AnnuityCouponFixed coupon, final double settlementTime,
+      final double accruedInterest, final double factorToNextCoupon,
       final YieldConvention yieldConvention, final int couponPerYear, final String issuer) {
     this(nominal, coupon, settlementTime, accruedInterest, factorToNextCoupon, yieldConvention, couponPerYear, new LegalEntity(null, issuer, null, null, null));
   }
@@ -112,7 +114,8 @@ public class BondFixedSecurity extends BondSecurity<PaymentFixed, CouponFixed> {
    * @param couponPerYear Number of coupon per year.
    * @param issuer The bond issuer name.
    */
-  public BondFixedSecurity(final AnnuityPaymentFixed nominal, final AnnuityCouponFixed coupon, final double settlementTime, final double accruedInterest, final double factorToNextCoupon,
+  public BondFixedSecurity(final AnnuityPaymentFixed nominal, final AnnuityCouponFixed coupon, final double settlementTime,
+      final double accruedInterest, final double factorToNextCoupon,
       final YieldConvention yieldConvention, final int couponPerYear, final LegalEntity issuer) {
     super(nominal, coupon, settlementTime, issuer);
     ArgumentChecker.notNull(yieldConvention, "Yield convention");
@@ -177,7 +180,8 @@ public class BondFixedSecurity extends BondSecurity<PaymentFixed, CouponFixed> {
   @Override
   public String toString() {
     String result = super.toString();
-    result += "\nFixed coupon bond: " + _yieldConvention.toString() + ", accrued=" + _accruedInterest + ", coupon=" + _couponPerYear + ", factor=" + _factorToNextCoupon;
+    result += "\nFixed coupon bond: " + _yieldConvention.toString() + ", accrued=" + _accruedInterest
+        + ", coupon=" + _couponPerYear + ", factor=" + _factorToNextCoupon;
     return result;
   }
 
@@ -191,7 +195,7 @@ public class BondFixedSecurity extends BondSecurity<PaymentFixed, CouponFixed> {
     result = prime * result + _couponPerYear;
     temp = Double.doubleToLongBits(_factorToNextCoupon);
     result = prime * result + (int) (temp ^ temp >>> 32);
-    result = prime * result + _yieldConvention.hashCode();
+    result = prime * result + (_yieldConvention == null ? 0 : _yieldConvention.hashCode());
     return result;
   }
 
@@ -203,7 +207,7 @@ public class BondFixedSecurity extends BondSecurity<PaymentFixed, CouponFixed> {
     if (!super.equals(obj)) {
       return false;
     }
-    if (getClass() != obj.getClass()) {
+    if (!(obj instanceof BondFixedSecurity)) {
       return false;
     }
     final BondFixedSecurity other = (BondFixedSecurity) obj;
@@ -216,7 +220,11 @@ public class BondFixedSecurity extends BondSecurity<PaymentFixed, CouponFixed> {
     if (Double.doubleToLongBits(_factorToNextCoupon) != Double.doubleToLongBits(other._factorToNextCoupon)) {
       return false;
     }
-    if (!ObjectUtils.equals(_yieldConvention, other._yieldConvention)) {
+    if (_yieldConvention == null) {
+      if (other._yieldConvention != null) {
+        return false;
+      }
+    } else if (!_yieldConvention.equals(other._yieldConvention)) {
       return false;
     }
     return true;

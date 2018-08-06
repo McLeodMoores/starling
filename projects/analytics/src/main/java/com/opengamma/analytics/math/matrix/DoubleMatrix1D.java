@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math.matrix;
@@ -44,7 +44,7 @@ public class DoubleMatrix1D implements Matrix<Double> {
    * @param n number of elements
    * @param value value of elements
    */
-  public DoubleMatrix1D(final int n, double value) {
+  public DoubleMatrix1D(final int n, final double value) {
     _elements = n;
     _data = new double[_elements];
     Arrays.fill(_data, value);
@@ -113,10 +113,10 @@ public class DoubleMatrix1D implements Matrix<Double> {
 
   @Override
   public String toString() {
-    final StringBuffer sb = new StringBuffer();
+    final StringBuilder sb = new StringBuilder();
     final int n = _data.length;
     sb.append(" (");
-    for (int i = 0; i < (n - 1); i++) {
+    for (int i = 0; i < n - 1; i++) {
       sb.append(_data[i] + ", ");
     }
     sb.append(_data[n - 1] + ") ");

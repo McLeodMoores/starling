@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.finitedifference.applications;
@@ -24,7 +24,7 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.tuple.DoublesPair;
 
 /**
- * 
+ *
  */
 public class PDEUtilityTools {
   private static final DoubleQuadraticInterpolator1D INTERPOLATOR_1D = new DoubleQuadraticInterpolator1D();
@@ -237,20 +237,20 @@ public class PDEUtilityTools {
     Validate.isTrue(xSteps > 0, "need xSteps > 0");
     Validate.isTrue(ySteps > 0, "need ySteps > 0");
 
-    final StringBuffer result = new StringBuffer(name);
+    final StringBuilder result = new StringBuilder(name);
     result.append("\n");
     for (int i = 0; i <= ySteps; i++) {
-      final double y = yMin + ((yMax - yMin) * i) / ySteps;
+      final double y = yMin + (yMax - yMin) * i / ySteps;
       result.append("\t");
       result.append(y);
     }
     result.append("\n");
 
     for (int j = 0; j <= xSteps; j++) {
-      final double t = xMin + ((xMax - xMin) * j) / xSteps;
+      final double t = xMin + (xMax - xMin) * j / xSteps;
       result.append(t);
       for (int i = 0; i <= ySteps; i++) {
-        final double k = yMin + ((yMax - yMin) * i) / ySteps;
+        final double k = yMin + (yMax - yMin) * i / ySteps;
         result.append("\t");
         result.append(surface.getZValue(t, k));
       }
@@ -314,7 +314,7 @@ public class PDEUtilityTools {
     Validate.isTrue(x.length > 0, "The x-array was empty");
     Validate.isTrue(y.length > 0, "The y-array was empty");
 
-    final StringBuffer result = new StringBuffer(name);
+    final StringBuilder result = new StringBuilder(name);
     result.append("\n");
     for (final double element : y) {
       result.append("\t");
@@ -348,16 +348,16 @@ public class PDEUtilityTools {
 
     System.out.println(name);
     for (int i = 0; i <= ySteps; i++) {
-      final double k = kMin + ((kMax - kMin) * i) / ySteps;
+      final double k = kMin + (kMax - kMin) * i / ySteps;
       System.out.print("\t" + k);
     }
     System.out.print("\n");
 
     for (int j = 0; j <= xSteps; j++) {
-      final double t = tMin + ((tMax - tMin) * j) / xSteps;
+      final double t = tMin + (tMax - tMin) * j / xSteps;
       System.out.print(t);
       for (int i = 0; i <= ySteps; i++) {
-        final double k = kMin + ((kMax - kMin) * i) / ySteps;
+        final double k = kMin + (kMax - kMin) * i / ySteps;
         final DoublesPair tk = DoublesPair.of(t, k);
 
         System.out.print("\t" + GRID_INTERPOLATOR2D.interpolate(dataBundle, tk));

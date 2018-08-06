@@ -2,12 +2,15 @@
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
  *
  * Please see distribution for license.
+ *
+ * Modified by McLeod Moores Software Limited.
+ *
+ * Copyright (C) 2018 - present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.analytics.financial.interestrate.bond.definition;
 
 import org.apache.commons.lang.ObjectUtils;
 
-import com.opengamma.analytics.financial.instrument.InstrumentDefinition;
 import com.opengamma.analytics.financial.interestrate.InstrumentDerivative;
 import com.opengamma.analytics.financial.interestrate.annuity.derivative.Annuity;
 import com.opengamma.analytics.financial.interestrate.payments.derivative.Coupon;
@@ -19,43 +22,29 @@ import com.opengamma.util.tuple.Pair;
 import com.opengamma.util.tuple.Pairs;
 
 /**
- * Describes a generic single currency bond issue.
- * @param <N> The notional type (usually FixedPayment or CouponInflationZeroCoupon).
- * @param <C> The coupon type.
+ * Describes a generic single currency bond issue. This base class contains a schedule of notional amounts,
+ * which may vary, a schedule of coupon payments, information about the issuer, and the settlement time.
+ * The coupons can be any time (e.g. fixed, referenced to an index).
+ *
+ * @param <N>  the notional type
+ * @param <C>  the coupon type
  */
 public abstract class BondSecurity<N extends Payment, C extends Coupon> implements InstrumentDerivative {
-  /**
-   * The nominal payments. For bullet bond, it is restricted to a single payment.
-   */
   private final Annuity<N> _nominal;
-  /**
-   * The bond coupons. The coupons notional should be in line with the bond nominal. The discounting curve should be the same for the nominal and the coupons.
-   */
   private final Annuity<C> _coupon;
-  /**
-   * The time (in years) to settlement date. Used for dirty/clean price computation.
-   */
   private final double _settlementTime;
-  /**
-   * The bond issuer name.
-   */
-  private final String _issuerName;
-  /**
-   * The bond issuer.
-   */
   private final LegalEntity _issuer;
-  /**
-   * The name of the curve used for settlement amount discounting.
-   */
   private final String _discountingCurveName;
 
   /**
-   * Bond constructor from the bond nominal and coupon.
-   * @param nominal The notional payments.
-   * @param coupon The bond coupons.
-   * @param settlementTime The time (in years) to settlement date.
-   * @param discountingCurveName The name of the curve used for settlement amount discounting.
-   * @param issuer The bond issuer name.
+   * Constructs a generic bond with a legal entity that contains only issuer name information. This constructor
+   * hard-codes a bond curve name and should not be used.
+   *
+   * @param nominal  the notional payments, not null
+   * @param coupon  the bond coupons, not null
+   * @param settlementTime  the time (in years) to settlement date, not negative
+   * @param discountingCurveName  the name of the curve used for settlement amount discounting
+   * @param issuer  the bond issuer name, not null
    * @deprecated Use the constructor that does not take a curve name
    */
   @Deprecated
@@ -64,61 +53,61 @@ public abstract class BondSecurity<N extends Payment, C extends Coupon> implemen
   }
 
   /**
-   * Bond constructor from the bond nominal and coupon.
-   * @param nominal The notional payments.
-   * @param coupon The bond coupons.
-   * @param settlementTime The time (in years) to settlement date.
-   * @param discountingCurveName The name of the curve used for settlement amount discounting.
-   * @param issuer The bond issuer name.
+   * Constructs a generic bond. This constructor hard-codes a bond curve name and should not be used.
+   *
+   * @param nominal  the notional payments, not null
+   * @param coupon  the bond coupons, not null
+   * @param settlementTime  the time (in years) to settlement date, not negative
+   * @param discountingCurveName  the name of the curve used for settlement amount discounting
+   * @param issuer  the bond issuer name, not null
    * @deprecated Use the constructor that does not take a curve name
    */
   @Deprecated
-  public BondSecurity(final Annuity<N> nominal, final Annuity<C> coupon, final double settlementTime, final String discountingCurveName, final LegalEntity issuer) {
-    ArgumentChecker.notNull(nominal, "Nominal");
-    ArgumentChecker.notNull(coupon, "Coupon");
-    ArgumentChecker.notNull(discountingCurveName, "Repo curve name");
-    ArgumentChecker.notNull(issuer, "Issuer");
-    _nominal = nominal;
-    _coupon = coupon;
-    _settlementTime = settlementTime;
-    _discountingCurveName = discountingCurveName;
-    _issuer = issuer;
-    _issuerName = issuer.getShortName();
+  public BondSecurity(final Annuity<N> nominal, final Annuity<C> coupon, final double settlementTime, final String discountingCurveName,
+      final LegalEntity issuer) {
+    _nominal = ArgumentChecker.notNull(nominal, "nominal");
+    _coupon = ArgumentChecker.notNull(coupon, "coupon");
+    ArgumentChecker.isTrue(nominal.getCurrency().equals(coupon.getCurrency()),
+        "The nominal currency {} and coupon currency {} were different", nominal.getCurrency(), coupon.getCurrency());
+    _discountingCurveName = ArgumentChecker.notNull(discountingCurveName, "discountingCurveName");
+    _issuer = ArgumentChecker.notNull(issuer, "issuer");
+    _settlementTime = ArgumentChecker.notNegative(settlementTime, "settlementTime");
   }
 
   /**
-   * Bond constructor from the bond nominal and coupon.
-   * @param nominal The notional payments.
-   * @param coupon The bond coupons.
-   * @param settlementTime The time (in years) to settlement date.
-   * @param issuer The bond issuer name.
+   * Constructs a generic bond with a legal entity that contains only issuer name information.
+   *
+   * @param nominal  the notional payments, not null
+   * @param coupon  the bond coupons, not null
+   * @param settlementTime  the time (in years) to settlement date, not negative
+   * @param issuer  the bond issuer name, not null
    */
   public BondSecurity(final Annuity<N> nominal, final Annuity<C> coupon, final double settlementTime, final String issuer) {
     this(nominal, coupon, settlementTime, new LegalEntity(null, issuer, null, null, null));
   }
 
   /**
-   * Bond constructor from the bond nominal and coupon.
-   * @param nominal The notional payments.
-   * @param coupon The bond coupons.
-   * @param settlementTime The time (in years) to settlement date.
-   * @param issuer The bond issuer.
+   * Constructs a generic bond.
+   *
+   * @param nominal  the notional payments, not null
+   * @param coupon  the bond coupons, not null
+   * @param settlementTime  the time (in years) to settlement date, not negative
+   * @param issuer  the bond issuer, not null
    */
   public BondSecurity(final Annuity<N> nominal, final Annuity<C> coupon, final double settlementTime, final LegalEntity issuer) {
-    ArgumentChecker.notNull(nominal, "Nominal");
-    ArgumentChecker.notNull(coupon, "Coupon");
-    ArgumentChecker.notNull(issuer, "Issuer");
-    _nominal = nominal;
-    _coupon = coupon;
+    _nominal = ArgumentChecker.notNull(nominal, "nominal");
+    _coupon = ArgumentChecker.notNull(coupon, "coupon");
+    ArgumentChecker.isTrue(nominal.getCurrency().equals(coupon.getCurrency()),
+        "The nominal currency {} and coupon currency {} were different", nominal.getCurrency(), coupon.getCurrency());
+    _issuer = ArgumentChecker.notNull(issuer, "issuer");
     _settlementTime = settlementTime;
     _discountingCurveName = null;
-    _issuerName = issuer.getShortName();
-    _issuer = issuer;
   }
 
   /**
    * Gets the nominal payments.
-   * @return The nominal payments.
+   *
+   * @return  the nominal payments
    */
   public Annuity<N> getNominal() {
     return _nominal;
@@ -126,7 +115,8 @@ public abstract class BondSecurity<N extends Payment, C extends Coupon> implemen
 
   /**
    * Gets the coupons.
-   * @return The coupons.
+   *
+   * @return  the coupons
    */
   public Annuity<C> getCoupon() {
     return _coupon;
@@ -134,15 +124,17 @@ public abstract class BondSecurity<N extends Payment, C extends Coupon> implemen
 
   /**
    * Gets the settlement time.
-   * @return The settlement time.
+   *
+   * @return  the settlement time
    */
   public double getSettlementTime() {
     return _settlementTime;
   }
 
   /**
-   * Gets the bond currency.
-   * @return The bond currency.
+   * Gets the currency of the payments.
+   *
+   * @return  the currency of the payments
    */
   public Currency getCurrency() {
     return _nominal.getCurrency();
@@ -150,8 +142,9 @@ public abstract class BondSecurity<N extends Payment, C extends Coupon> implemen
 
   /**
    * Gets the name of the curve used for settlement amount discounting.
-   * @return The curve name.
-   * @deprecated Curve names should no longer be set in {@link InstrumentDefinition}s
+   *
+   * @return  the curve name
+   * @deprecated Curve names should no longer be set in {@link com.opengamma.analytics.financial.instrument.InstrumentDefinition}s
    */
   @Deprecated
   public String getRepoCurveName() {
@@ -163,15 +156,17 @@ public abstract class BondSecurity<N extends Payment, C extends Coupon> implemen
 
   /**
    * Gets the issuer name.
-   * @return The issuer name.
+   *
+   * @return  the issuer name
    */
   public String getIssuer() {
-    return _issuerName;
+    return _issuer.getShortName();
   }
 
   /**
-   * Gets the issuer.
-   * @return The issuer
+   * Gets information about the issuer.
+   *
+   * @return  the issuer
    */
   public LegalEntity getIssuerEntity() {
     return _issuer;
@@ -179,18 +174,20 @@ public abstract class BondSecurity<N extends Payment, C extends Coupon> implemen
 
   /**
    * Gets the bond issuer name and currency.
-   * @return The name/currency.
+   *
+   * @return  the name and currency.
    * @deprecated This information is no longer used in the curve providers.
    */
   @Deprecated
   public Pair<String, Currency> getIssuerCcy() {
-    return Pairs.of(_issuerName, _nominal.getCurrency());
+    return Pairs.of(getIssuer(), _nominal.getCurrency());
   }
 
   /**
    * Gets the name of the curve used for discounting.
-   * @return The curve name.
-   * @deprecated Curve names should no longer be set in {@link InstrumentDefinition}s
+   *
+   * @return  the curve name
+   * @deprecated Curve names should no longer be set in {@link com.opengamma.analytics.financial.instrument.InstrumentDefinition}s
    */
   @Deprecated
   public String getDiscountingCurveName() {
@@ -205,17 +202,20 @@ public abstract class BondSecurity<N extends Payment, C extends Coupon> implemen
     return result;
   }
 
-  //REVIEW emcleod 17-08-2013 why is the settlement time and issuer not used?
   @Override
   public int hashCode() {
     final int prime = 31;
     int result = 1;
-    result = prime * result + _coupon.hashCode();
-    result = prime * result + _nominal.hashCode();
+    result = prime * result + (_coupon == null ? 0 : _coupon.hashCode());
+    result = prime * result + (_discountingCurveName == null ? 0 : _discountingCurveName.hashCode());
+    result = prime * result + (_issuer == null ? 0 : _issuer.hashCode());
+    result = prime * result + (_nominal == null ? 0 : _nominal.hashCode());
+    long temp;
+    temp = Double.doubleToLongBits(_settlementTime);
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 
-  //REVIEW emcleod 17-08-2013 why is the settlement time and issuer not used?
   @Override
   public boolean equals(final Object obj) {
     if (this == obj) {
@@ -224,14 +224,23 @@ public abstract class BondSecurity<N extends Payment, C extends Coupon> implemen
     if (obj == null) {
       return false;
     }
-    if (getClass() != obj.getClass()) {
+    if (!(obj instanceof BondSecurity)) {
       return false;
     }
     final BondSecurity<?, ?> other = (BondSecurity<?, ?>) obj;
+    if (Double.doubleToLongBits(_settlementTime) != Double.doubleToLongBits(other._settlementTime)) {
+      return false;
+    }
     if (!ObjectUtils.equals(_coupon, other._coupon)) {
       return false;
     }
     if (!ObjectUtils.equals(_nominal, other._nominal)) {
+      return false;
+    }
+    if (!ObjectUtils.equals(_issuer, other._issuer)) {
+      return false;
+    }
+    if (!ObjectUtils.equals(_discountingCurveName, other._discountingCurveName)) {
       return false;
     }
     return true;

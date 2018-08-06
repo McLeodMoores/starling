@@ -226,14 +226,12 @@ public class DoubleMatrix2D implements Matrix<Double> {
 
   @Override
   public String toString() {
-    final StringBuffer sb = new StringBuffer();
+    final StringBuilder sb = new StringBuilder();
     for (final double[] d : _data) {
-      //  sb.append("(");
       for (int i = 0; i < d.length - 1; i++) {
         sb.append(d[i] + "\t");
       }
       sb.append(d[d.length - 1] + "\n");
-      //  sb.append(d[d.length - 1] + ")\n");
     }
     return sb.toString();
   }
