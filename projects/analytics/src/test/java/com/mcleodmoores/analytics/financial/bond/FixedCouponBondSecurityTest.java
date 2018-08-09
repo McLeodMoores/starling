@@ -507,6 +507,7 @@ public class FixedCouponBondSecurityTest {
     assertEquals(bond.getNominalPayments(), new AnnuityPaymentFixed(new PaymentFixed[] {PAYMENT_1}));
     assertEquals(bond.getSettlementTime(), 0.04, EPS);
     assertEquals(bond.getYieldConventionType(), BondConventionType.ITALIAN_TREASURY);
+    assertEquals(bond.getNumberOfCoupons(), 1);
   }
 
   /**

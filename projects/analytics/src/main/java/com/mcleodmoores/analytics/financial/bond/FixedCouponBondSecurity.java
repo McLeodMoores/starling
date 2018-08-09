@@ -270,6 +270,15 @@ public class FixedCouponBondSecurity implements BondInstrument {
   }
 
   /**
+   * Gets the number of coupons.
+   *
+   * @return  the coupons
+   */
+  public int getNumberOfCoupons() {
+    return _coupons.getNumberOfPayments();
+  }
+
+  /**
    * Gets the legal entity.
    *
    * @return the legal entity
