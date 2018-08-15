@@ -18,8 +18,8 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.orm.hibernate3.HibernateCallback;
-import org.springframework.orm.hibernate3.HibernateTemplate;
+import org.springframework.orm.hibernate5.HibernateCallback;
+import org.springframework.orm.hibernate5.HibernateTemplate;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionException;
 import org.springframework.transaction.TransactionStatus;
@@ -81,7 +81,7 @@ public class DbConnector implements Connector {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param name the configuration name, not null
    * @param dialect the database dialect, not null
    * @param dataSource the data source, not null
@@ -90,8 +90,8 @@ public class DbConnector implements Connector {
    * @param transactionTemplate the transaction template, not null
    */
   public DbConnector(
-      String name, DbDialect dialect, DataSource dataSource,
-      NamedParameterJdbcTemplate jdbcTemplate, HibernateTemplate hibernateTemplate, TransactionTemplate transactionTemplate) {
+      final String name, final DbDialect dialect, final DataSource dataSource,
+      final NamedParameterJdbcTemplate jdbcTemplate, final HibernateTemplate hibernateTemplate, final TransactionTemplate transactionTemplate) {
     ArgumentChecker.notNull(name, "name");
     ArgumentChecker.notNull(dialect, "dialect");
     ArgumentChecker.notNull(dataSource, "dataSource");
@@ -109,7 +109,7 @@ public class DbConnector implements Connector {
   //-------------------------------------------------------------------------
   /**
    * Gets the display name of the connector.
-   * 
+   *
    * @return a name usable for display, not null
    */
   @Override
@@ -119,7 +119,7 @@ public class DbConnector implements Connector {
 
   /**
    * Gets the type of the connector, which is {@code DbConnector}.
-   * 
+   *
    * @return the connector type, not null
    */
   @Override
@@ -130,7 +130,7 @@ public class DbConnector implements Connector {
   //-------------------------------------------------------------------------
   /**
    * Gets the data source.
-   * 
+   *
    * @return the data source, not null
    */
   public DataSource getDataSource() {
@@ -139,7 +139,7 @@ public class DbConnector implements Connector {
 
   /**
    * Gets the database dialect.
-   * 
+   *
    * @return the database dialect, not null
    */
   public DbDialect getDialect() {
@@ -150,7 +150,7 @@ public class DbConnector implements Connector {
    * Gets the JDBC operations.
    * <p>
    * This is used for simple calls that do no use named parameters.
-   * 
+   *
    * @return the JDBC template, not null
    */
   public JdbcOperations getJdbcOperations() {
@@ -161,7 +161,7 @@ public class DbConnector implements Connector {
    * Gets the JDBC template.
    * <p>
    * This is used for named parameters.
-   * 
+   *
    * @return the JDBC template, not null
    */
   public NamedParameterJdbcTemplate getJdbcTemplate() {
@@ -173,7 +173,7 @@ public class DbConnector implements Connector {
    * Gets the Hibernate session factory.
    * <p>
    * This is shared between all users of this object and must not be further configured.
-   * 
+   *
    * @return the Hibernate session factory, may be null
    */
   public SessionFactory getHibernateSessionFactory() {
@@ -187,7 +187,7 @@ public class DbConnector implements Connector {
    * Gets the shared Hibernate template.
    * <p>
    * This is shared between all users of this object and must not be further configured.
-   * 
+   *
    * @return the Hibernate template, null if the session factory is null
    */
   public HibernateTemplate getHibernateTemplate() {
@@ -196,7 +196,7 @@ public class DbConnector implements Connector {
 
   /**
    * Gets the simple Hibernate transaction template.
-   * 
+   *
    * @return the Hibernate transaction template, not null
    */
   public HibernateTransactionTemplate getHibernateTransactionTemplate() {
@@ -205,11 +205,11 @@ public class DbConnector implements Connector {
 
   /**
    * Gets the retrying Hibernate transaction template.
-   * 
+   *
    * @param retries how many maximum retires should be tried
    * @return the retrying Hibernate transaction template, not null
    */
-  public HibernateTransactionTemplateRetrying getHibernateTransactionTemplateRetrying(int retries) {
+  public HibernateTransactionTemplateRetrying getHibernateTransactionTemplateRetrying(final int retries) {
     return new HibernateTransactionTemplateRetrying(retries);
   }
 
@@ -218,7 +218,7 @@ public class DbConnector implements Connector {
    * Gets the transaction manager.
    * <p>
    * This is shared between all users of this object and must not be further configured.
-   * 
+   *
    * @return the transaction manager, may be null
    */
   public PlatformTransactionManager getTransactionManager() {
@@ -229,7 +229,7 @@ public class DbConnector implements Connector {
    * Gets the transaction template.
    * <p>
    * This is shared between all users of this object and must not be further configured.
-   * 
+   *
    * @return the transaction template, may be null
    */
   public TransactionTemplate getTransactionTemplate() {
@@ -239,18 +239,18 @@ public class DbConnector implements Connector {
   /**
    * Gets the retrying transaction template.
    * <p>
-   * 
+   *
    * @param retries how many maximum retires should be tried
    * @return the retrying transaction template
    */
-  public TransactionTemplateRetrying getTransactionTemplateRetrying(int retries) {
+  public TransactionTemplateRetrying getTransactionTemplateRetrying(final int retries) {
     return new TransactionTemplateRetrying(retries);
   }
 
   //-------------------------------------------------------------------------
   /**
    * Gets the current instant based on a cached database clock.
-   * 
+   *
    * @return the current instant, may be null
    */
   public Instant now() {
@@ -259,7 +259,7 @@ public class DbConnector implements Connector {
 
   /**
    * Gets the current instant using the database clock.
-   * 
+   *
    * @return the current database instant, may be null
    */
   Timestamp nowDb() {
@@ -270,7 +270,7 @@ public class DbConnector implements Connector {
    * Returns a time-source based on the current database clock.
    * <p>
    * This can be used to obtain the current instant by calling {@link Instant#now(Clock)}.
-   * 
+   *
    * @return the database time-source, may be null
    */
   public Clock timeSource() {
@@ -289,7 +289,7 @@ public class DbConnector implements Connector {
   //-------------------------------------------------------------------------
   /**
    * Returns a description of this object suitable for debugging.
-   * 
+   *
    * @return the description, not null
    */
   @Override
@@ -305,30 +305,30 @@ public class DbConnector implements Connector {
     private final int _retries;
     private final TransactionTemplate _transactionTemplate;
 
-    TransactionTemplateRetrying(int retries) {
+    TransactionTemplateRetrying(final int retries) {
       _retries = retries;
       _transactionTemplate = getTransactionTemplate();
     }
 
     /**
      * Executes the template, which will retry the code in the event of failure.
-     * 
+     *
      * @param <T> the type of the result
      * @param action the underlying Spring-based template containing the action to perform, not null
      * @return the result of the underlying template
      * @throws TransactionException if an error occurs
      */
-    public <T> T execute(TransactionCallback<T> action) throws TransactionException {
+    public <T> T execute(final TransactionCallback<T> action) throws TransactionException {
       // retry to handle concurrent conflicting inserts into unique content tables
       for (int retry = 0; true; retry++) {
         try {
           return _transactionTemplate.execute(action);
-        } catch (DataIntegrityViolationException ex) {
+        } catch (final DataIntegrityViolationException ex) {
           if (retry == _retries) {
             throw ex;
           }
           s_logger.warn("Execution failure on attempt " + retry + " of " + _retries, ex);
-        } catch (DataAccessException ex) {
+        } catch (final DataAccessException ex) {
           throw fixSQLExceptionCause(ex);
         }
       }
@@ -350,7 +350,7 @@ public class DbConnector implements Connector {
 
     /**
      * Executes the underlying template in a transaction.
-     * 
+     *
      * @param <T> the type of the result
      * @param action the underlying Hibernate template containing the action to perform, not null
      * @return the result of the underlying template
@@ -360,11 +360,11 @@ public class DbConnector implements Connector {
       try {
         return _transactionTemplate.execute(new TransactionCallback<T>() {
           @Override
-          public T doInTransaction(TransactionStatus status) {
+          public T doInTransaction(final TransactionStatus status) {
             return _hibernateTemplate.execute(action);
           }
         });
-      } catch (DataAccessException ex) {
+      } catch (final DataAccessException ex) {
         throw fixSQLExceptionCause(ex);
       }
     }
@@ -379,16 +379,16 @@ public class DbConnector implements Connector {
     private final TransactionTemplate _transactionTemplate;
     private final HibernateTemplate _hibernateTemplate;
 
-    HibernateTransactionTemplateRetrying(int retries) {
+    HibernateTransactionTemplateRetrying(final int retries) {
       _retries = retries;
       _transactionTemplate = getTransactionTemplate();
       _hibernateTemplate = getHibernateTemplate();
-      _hibernateTemplate.setAllowCreate(false);
+      //      _hibernateTemplate.setAllowCreate(false);
     }
 
     /**
      * Executes the template, which will retry the code in the event of failure.
-     * 
+     *
      * @param <T> the type of the result
      * @param action the underlying Hibernate template containing the action to perform, not null
      * @return the result of the underlying template
@@ -400,15 +400,15 @@ public class DbConnector implements Connector {
         try {
           return _transactionTemplate.execute(new TransactionCallback<T>() {
             @Override
-            public T doInTransaction(TransactionStatus status) {
+            public T doInTransaction(final TransactionStatus status) {
               return _hibernateTemplate.execute(action);
             }
           });
-        } catch (DataIntegrityViolationException ex) {
+        } catch (final DataIntegrityViolationException ex) {
           if (retry == _retries) {
             throw ex;
           }
-        } catch (DataAccessException ex) {
+        } catch (final DataAccessException ex) {
           throw fixSQLExceptionCause(ex);
         }
       }
