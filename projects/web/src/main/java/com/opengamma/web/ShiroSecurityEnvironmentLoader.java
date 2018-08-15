@@ -14,6 +14,7 @@ import org.apache.shiro.UnavailableSecurityManagerException;
 import org.apache.shiro.config.Ini;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.util.CollectionUtils;
+import org.apache.shiro.web.config.IniFilterChainResolverFactory;
 import org.apache.shiro.web.config.WebIniSecurityManagerFactory;
 import org.apache.shiro.web.env.EnvironmentLoaderListener;
 import org.apache.shiro.web.env.IniWebEnvironment;
@@ -30,10 +31,10 @@ import com.opengamma.util.auth.AuthUtils;
 public final class ShiroSecurityEnvironmentLoader extends EnvironmentLoaderListener {
 
   @Override
-  protected WebEnvironment createEnvironment(ServletContext servletContext) {
-    ShiroWebEnvironment environment = new ShiroWebEnvironment();
+  protected WebEnvironment createEnvironment(final ServletContext servletContext) {
+    final ShiroWebEnvironment environment = new ShiroWebEnvironment();
     environment.setServletContext(servletContext);
-    String configLocations = StringUtils.trimToNull(servletContext.getInitParameter(CONFIG_LOCATIONS_PARAM));
+    final String configLocations = StringUtils.trimToNull(servletContext.getInitParameter(CONFIG_LOCATIONS_PARAM));
     if (configLocations != null) {
       environment.setConfigLocations(configLocations);
     }
@@ -48,17 +49,18 @@ public final class ShiroSecurityEnvironmentLoader extends EnvironmentLoaderListe
   private final class ShiroWebEnvironment extends IniWebEnvironment {
     @Override
     protected WebSecurityManager createWebSecurityManager() {
-      ShiroFactory factory = new ShiroFactory();
-      Ini ini = getIni();
+      final ShiroFactory factory = new ShiroFactory();
+      final Ini ini = getIni();
       if (AuthUtils.isPermissive()) {
         ini.addSection("main").put("shiro.enabled", "false");
       }
       factory.setIni(ini);
-      WebSecurityManager wsm = (WebSecurityManager) factory.getInstance();
-      Map<String, ?> beans = factory.getBeans();
+      final WebSecurityManager wsm = (WebSecurityManager) factory.getInstance();
+      final Map<String, ?> beans = factory.getBeans();
       if (!CollectionUtils.isEmpty(beans)) {
         this.objects.putAll(beans);
       }
+      this.objects.put(FILTER_CHAIN_RESOLVER_NAME, new IniFilterChainResolverFactory());
       return wsm;
     }
   }
@@ -71,13 +73,13 @@ public final class ShiroSecurityEnvironmentLoader extends EnvironmentLoaderListe
     @Override
     protected SecurityManager createDefaultInstance() {
       try {
-        SecurityManager sm = AuthUtils.getSecurityManager();
+        final SecurityManager sm = AuthUtils.getSecurityManager();
         if (sm instanceof WebSecurityManager) {
           return sm;
         }
         return super.createDefaultInstance();
-        
-      } catch (UnavailableSecurityManagerException ex) {
+
+      } catch (final UnavailableSecurityManagerException ex) {
         return super.createDefaultInstance();
       }
     }
