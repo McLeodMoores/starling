@@ -1,9 +1,12 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
+ *
+ * Modified by McLeod Moores Software Limited.
+ *
+ * Copyright (C) 2018 - present McLeod Moores Software Limited.  All rights reserved.
  */
-
 package com.opengamma.integration.copier.sheet.reader;
 
 import java.io.IOException;
@@ -12,51 +15,55 @@ import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
 
-import au.com.bytecode.opencsv.CSVReader;
-
 import com.opengamma.OpenGammaRuntimeException;
 import com.opengamma.util.ArgumentChecker;
+
+import au.com.bytecode.opencsv.CSVReader;
 
 /**
  * A class to facilitate importing portfolio data from comma-separated value files
  */
 public class CsvSheetReader extends SheetReader {
 
-  private CSVReader _csvReader;
-    
-  public CsvSheetReader(String filename) {
-    
+  private final CSVReader _csvReader;
+
+  /**
+   * @param filename  the portfolio data file, not null or empty
+   */
+  public CsvSheetReader(final String filename) {
     ArgumentChecker.notEmpty(filename, "filename");
 
     // Open file
-    InputStream fileInputStream = openFile(filename);
-    
+    final InputStream fileInputStream = openFile(filename);
+
     // Set up CSV reader
     _csvReader = new CSVReader(new InputStreamReader(fileInputStream));
-    
+
     // Set columns
     setColumns(readHeaderRow());
   }
-   
-  public CsvSheetReader(InputStream inputStream) {
-    
+
+  /**
+   * @param inputStream  a portfolio data file stream, not null
+   */
+  public CsvSheetReader(final InputStream inputStream) {
     ArgumentChecker.notNull(inputStream, "inputStream");
 
     // Set up CSV reader
     _csvReader = new CSVReader(new InputStreamReader(inputStream));
-    
+
     // Set columns
     setColumns(readHeaderRow());
   }
 
   @Override
   public Map<String, String> loadNextRow() {
-    
+
     // Read in next row
     String[] rawRow;
     try {
       rawRow = _csvReader.readNext();
-    } catch (IOException ex) {
+    } catch (final IOException ex) {
       throw new OpenGammaRuntimeException("Error reading CSV file data row: " + ex.getMessage());
     }
 
@@ -64,9 +71,9 @@ public class CsvSheetReader extends SheetReader {
     if (rawRow == null) {
       return null;
     }
-    
+
     // Map read-in row onto expected columns
-    Map<String, String> result = new HashMap<String, String>();
+    final Map<String, String> result = new HashMap<>();
     for (int i = 0; i < getColumns().length; i++) {
       if (i >= rawRow.length) {
         break;
@@ -84,16 +91,16 @@ public class CsvSheetReader extends SheetReader {
     String[] rawRow;
     try {
       rawRow = _csvReader.readNext();
-    } catch (IOException ex) {
+    } catch (final IOException ex) {
       throw new OpenGammaRuntimeException("Error reading CSV file header row: " + ex.getMessage());
     }
-    
+
     // Normalise read-in headers (to lower case) and set as columns
-    String[] columns = new String[rawRow.length];
+    final String[] columns = new String[rawRow.length];
     for (int i = 0; i < rawRow.length; i++) {
       columns[i] = rawRow[i].trim().toLowerCase();
     }
-    
+
     return columns;
   }
 
@@ -101,8 +108,8 @@ public class CsvSheetReader extends SheetReader {
   public void close() {
     try {
       _csvReader.close();
-    } catch (IOException ex) {
-      
+    } catch (final IOException ex) {
+
     }
   }
 }
