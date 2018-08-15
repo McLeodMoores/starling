@@ -13,13 +13,9 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.Collections;
 
-import org.testng.annotations.AfterTest;
-import org.testng.annotations.BeforeTest;
-
 import com.google.common.base.Preconditions;
 import com.google.common.base.Throwables;
 import com.opengamma.financial.tool.ToolContext;
-import com.opengamma.util.test.TestGroup;
 
 /**
  *
@@ -62,12 +58,12 @@ public abstract class AbstractRegressionTest {
 
   protected abstract AbstractRegressionTestToolContextManager createToolContextManager(File regressionRoot, String toolContextPropertiesFile, String regressionPropertiesFile);
 
-  @BeforeTest(groups = TestGroup.UNIT)
+  //@BeforeTest(groups = TestGroup.UNIT)
   public void initContext() {
     _contextManager.init();
   }
 
-  @AfterTest(groups = TestGroup.UNIT)
+  //@AfterTest(groups = TestGroup.UNIT)
   public void closeContext() {
     _contextManager.close();
   }
@@ -136,8 +132,8 @@ public abstract class AbstractRegressionTest {
 
   private CalculationDifference evaluateDifferences(final GoldenCopy original, final CalculationResults thisRun) {
     final CalculationDifference result = CalculationDifference.generatorWithDelta(getAcceptableDelta()).
-                                                        compareValueProperties(compareValueProperties()).
-                                                        between(original.getCalculationResults(), thisRun);
+        compareValueProperties(compareValueProperties()).
+        between(original.getCalculationResults(), thisRun);
 
     System.out.println("Total results in golden copy: " + original.getCalculationResults().getValues().size());
     System.out.println("Total results in test run: " + thisRun.getValues().size());

@@ -1,11 +1,10 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.masterdb.security.hibernate;
 
-import java.sql.SQLException;
 import java.util.Date;
 import java.util.Locale;
 import java.util.concurrent.ConcurrentHashMap;
@@ -15,8 +14,8 @@ import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.orm.hibernate3.HibernateCallback;
-import org.springframework.orm.hibernate3.HibernateTemplate;
+import org.springframework.orm.hibernate5.HibernateCallback;
+import org.springframework.orm.hibernate5.HibernateTemplate;
 
 import com.google.common.base.Objects;
 import com.opengamma.OpenGammaRuntimeException;
@@ -113,7 +112,7 @@ public class HibernateSecurityMasterDetailProvider implements SecurityMasterDeta
       s_logger.error(beanOperation.getBeanClass() + " is already registered in BEAN_OPERATIONS_BY_SECURITY");
       throw new OpenGammaRuntimeException(beanOperation.getBeanClass() + " is already registered in BEAN_OPERATIONS_BY_SECURITY");
     }
-    BEAN_OPERATIONS_BY_TYPE.put(beanOperation.getSecurityType(), beanOperation);  
+    BEAN_OPERATIONS_BY_TYPE.put(beanOperation.getSecurityType(), beanOperation);
   }
 
 
@@ -163,14 +162,14 @@ public class HibernateSecurityMasterDetailProvider implements SecurityMasterDeta
     return (SecurityBeanOperation<T, SecurityBean>) beanOperation;
   }
 
-//  @SuppressWarnings("unchecked")
-//  private static <T extends SecurityBean> SecurityBeanOperation<Security, T> getBeanOperation(final T bean) {
-//    final SecurityBeanOperation<?, ?> beanOperation = getBeanOperation(BEAN_OPERATIONS_BY_BEAN, bean.getClass());
-//    if (beanOperation == null) {
-//      throw new OpenGammaRuntimeException("can't find BeanOperation for " + bean);
-//    }
-//    return (SecurityBeanOperation<Security, T>) beanOperation;
-//  }
+  //  @SuppressWarnings("unchecked")
+  //  private static <T extends SecurityBean> SecurityBeanOperation<Security, T> getBeanOperation(final T bean) {
+  //    final SecurityBeanOperation<?, ?> beanOperation = getBeanOperation(BEAN_OPERATIONS_BY_BEAN, bean.getClass());
+  //    if (beanOperation == null) {
+  //      throw new OpenGammaRuntimeException("can't find BeanOperation for " + bean);
+  //    }
+  //    return (SecurityBeanOperation<Security, T>) beanOperation;
+  //  }
 
   @SuppressWarnings("unchecked")
   private static <T extends SecurityBean> SecurityBeanOperation<Security, T> getBeanOperation(final String type) {
@@ -241,7 +240,7 @@ public class HibernateSecurityMasterDetailProvider implements SecurityMasterDeta
 
   //-------------------------------------------------------------------------
   @Override
-  public void init(DbSecurityMaster master) {
+  public void init(final DbSecurityMaster master) {
     _dbConnector = master.getDbConnector();
   }
 
@@ -286,9 +285,9 @@ public class HibernateSecurityMasterDetailProvider implements SecurityMasterDeta
     return getHibernateTemplate().execute(new HibernateCallback<ManageableSecurity>() {
       @SuppressWarnings({"unchecked", "rawtypes" })
       @Override
-      public ManageableSecurity doInHibernate(Session session) throws HibernateException, SQLException {
+      public ManageableSecurity doInHibernate(final Session session) throws HibernateException {
         final SecurityBeanOperation beanOperation = getBeanOperation(base.getSecurityType());
-        HibernateSecurityMasterDao secMasterSession = getHibernateSecurityMasterSession(session);
+        final HibernateSecurityMasterDao secMasterSession = getHibernateSecurityMasterSession(session);
         SecurityBean security = secMasterSession.getSecurityBean(base, beanOperation);
         if (security == null) {
           s_logger.warn("no detail found for security {}", base.getUniqueId());
@@ -321,7 +320,7 @@ public class HibernateSecurityMasterDetailProvider implements SecurityMasterDeta
     getHibernateTemplate().execute(new HibernateCallback<Object>() {
       @SuppressWarnings({"unchecked", "rawtypes" })
       @Override
-      public Object doInHibernate(final Session session) throws HibernateException, SQLException {
+      public Object doInHibernate(final Session session) throws HibernateException {
         final HibernateSecurityMasterDao secMasterSession = getHibernateSecurityMasterSession(session);
         final SecurityBeanOperation beanOperation = getBeanOperation(security);
         final Date now = new Date();
@@ -334,9 +333,9 @@ public class HibernateSecurityMasterDetailProvider implements SecurityMasterDeta
   }
 
   @Override
-  public void extendSearch(SecuritySearchRequest request, DbMapSqlParameterSource args) {
+  public void extendSearch(final SecuritySearchRequest request, final DbMapSqlParameterSource args) {
     if (request instanceof BondSecuritySearchRequest) {
-      BondSecuritySearchRequest bondRequest = (BondSecuritySearchRequest) request;
+      final BondSecuritySearchRequest bondRequest = (BondSecuritySearchRequest) request;
       if (bondRequest.getIssuerName() != null || bondRequest.getIssuerType() != null) {
         args.addValue("sql_search_bond_join", Boolean.TRUE);
       }
