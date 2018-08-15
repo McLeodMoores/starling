@@ -13,12 +13,12 @@ import java.util.Set;
 import javax.sql.DataSource;
 
 import org.hibernate.SessionFactory;
-import org.hibernate.cfg.Environment;
+import org.hibernate.cfg.AvailableSettings;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
-import org.springframework.orm.hibernate3.HibernateTemplate;
-import org.springframework.orm.hibernate3.HibernateTransactionManager;
-import org.springframework.orm.hibernate3.LocalSessionFactoryBean;
+import org.springframework.orm.hibernate5.HibernateTemplate;
+import org.springframework.orm.hibernate5.HibernateTransactionManager;
+import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.support.AbstractPlatformTransactionManager;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
@@ -75,7 +75,7 @@ public class DbConnectorFactoryBean extends SingletonFactoryBean<DbConnector> {
    */
   private boolean _hibernateShowSql;
   /**
-   * Set to true if you want to use Hibernate thread-bound auto-create sessions 
+   * Set to true if you want to use Hibernate thread-bound auto-create sessions
    */
   private boolean _allowHibernateThreadBoundSession;
   /**
@@ -113,10 +113,10 @@ public class DbConnectorFactoryBean extends SingletonFactoryBean<DbConnector> {
    * Creates an instance based on an existing source.
    * <p>
    * This copies the name, dialect, data source, session factory and transaction manager.
-   * 
+   *
    * @param base  the base source to copy, not null
    */
-  public DbConnectorFactoryBean(DbConnector base) {
+  public DbConnectorFactoryBean(final DbConnector base) {
     setName(base.getName());
     setDialect(base.getDialect());
     setDataSource(base.getDataSource());
@@ -129,7 +129,7 @@ public class DbConnectorFactoryBean extends SingletonFactoryBean<DbConnector> {
     return _name;
   }
 
-  public void setName(String name) {
+  public void setName(final String name) {
     _name = name;
   }
 
@@ -137,7 +137,7 @@ public class DbConnectorFactoryBean extends SingletonFactoryBean<DbConnector> {
     return _dataSource;
   }
 
-  public void setDataSource(DataSource dataSource) {
+  public void setDataSource(final DataSource dataSource) {
     _dataSource = dataSource;
   }
 
@@ -145,7 +145,7 @@ public class DbConnectorFactoryBean extends SingletonFactoryBean<DbConnector> {
     return _databaseDialectClass;
   }
 
-  public void setDialectName(String databaseDialectClass) {
+  public void setDialectName(final String databaseDialectClass) {
     _databaseDialectClass = databaseDialectClass;
   }
 
@@ -153,7 +153,7 @@ public class DbConnectorFactoryBean extends SingletonFactoryBean<DbConnector> {
     return _databaseDialect;
   }
 
-  public void setDialect(DbDialect dialect) {
+  public void setDialect(final DbDialect dialect) {
     _databaseDialect = dialect;
   }
 
@@ -161,7 +161,7 @@ public class DbConnectorFactoryBean extends SingletonFactoryBean<DbConnector> {
     return _hibernateFactoryBean;
   }
 
-  public void setHibernateFactoryBean(LocalSessionFactoryBean hibernateFactoryBean) {
+  public void setHibernateFactoryBean(final LocalSessionFactoryBean hibernateFactoryBean) {
     _hibernateFactoryBean = hibernateFactoryBean;
   }
 
@@ -169,7 +169,7 @@ public class DbConnectorFactoryBean extends SingletonFactoryBean<DbConnector> {
     return _mappingConfigurations;
   }
 
-  public void setHibernateMappingFiles(HibernateMappingFiles[] mappingConfigurations) {
+  public void setHibernateMappingFiles(final HibernateMappingFiles[] mappingConfigurations) {
     _mappingConfigurations = mappingConfigurations;
   }
 
@@ -177,7 +177,7 @@ public class DbConnectorFactoryBean extends SingletonFactoryBean<DbConnector> {
     return _mappingResources;
   }
 
-  public void setHibernateMappingResources(String[] mappingResources) {
+  public void setHibernateMappingResources(final String[] mappingResources) {
     _mappingResources = mappingResources;
   }
 
@@ -185,7 +185,7 @@ public class DbConnectorFactoryBean extends SingletonFactoryBean<DbConnector> {
     return _hibernateShowSql;
   }
 
-  public void setHibernateShowSql(boolean hibernateShowSql) {
+  public void setHibernateShowSql(final boolean hibernateShowSql) {
     _hibernateShowSql = hibernateShowSql;
   }
 
@@ -193,7 +193,7 @@ public class DbConnectorFactoryBean extends SingletonFactoryBean<DbConnector> {
     return _allowHibernateThreadBoundSession;
   }
 
-  public void setAllowHibernateThreadBoundSession(boolean allowHibernateThreadBoundSession) {
+  public void setAllowHibernateThreadBoundSession(final boolean allowHibernateThreadBoundSession) {
     _allowHibernateThreadBoundSession = allowHibernateThreadBoundSession;
   }
 
@@ -201,7 +201,7 @@ public class DbConnectorFactoryBean extends SingletonFactoryBean<DbConnector> {
     return _hibernateSessionFactory;
   }
 
-  public void setHibernateSessionFactory(SessionFactory sessionFactory) {
+  public void setHibernateSessionFactory(final SessionFactory sessionFactory) {
     _hibernateSessionFactory = sessionFactory;
   }
 
@@ -209,7 +209,7 @@ public class DbConnectorFactoryBean extends SingletonFactoryBean<DbConnector> {
     return _transactionIsolationLevelName;
   }
 
-  public void setTransactionIsolationLevelName(String transactionIsolationLevelName) {
+  public void setTransactionIsolationLevelName(final String transactionIsolationLevelName) {
     _transactionIsolationLevelName = transactionIsolationLevelName;
   }
 
@@ -217,7 +217,7 @@ public class DbConnectorFactoryBean extends SingletonFactoryBean<DbConnector> {
     return _transactionPropagationBehaviorName;
   }
 
-  public void setTransactionPropagationBehaviorName(String transactionPropagationBehaviorName) {
+  public void setTransactionPropagationBehaviorName(final String transactionPropagationBehaviorName) {
     _transactionPropagationBehaviorName = transactionPropagationBehaviorName;
   }
 
@@ -225,7 +225,7 @@ public class DbConnectorFactoryBean extends SingletonFactoryBean<DbConnector> {
     return _transactionTimeoutSecs;
   }
 
-  public void setTransactionTimeout(int transactionTimeoutSecs) {
+  public void setTransactionTimeout(final int transactionTimeoutSecs) {
     _transactionTimeoutSecs = transactionTimeoutSecs;
   }
 
@@ -233,7 +233,7 @@ public class DbConnectorFactoryBean extends SingletonFactoryBean<DbConnector> {
     return _transactionManager;
   }
 
-  public void setTransactionManager(PlatformTransactionManager transactionManager) {
+  public void setTransactionManager(final PlatformTransactionManager transactionManager) {
     _transactionManager = transactionManager;
   }
 
@@ -242,17 +242,17 @@ public class DbConnectorFactoryBean extends SingletonFactoryBean<DbConnector> {
   public DbConnector createObject() {
     ArgumentChecker.notNull(getName(), "name");
     ArgumentChecker.notNull(getDataSource(), "dataSource");
-    DbDialect dialect = createDialect();
-    NamedParameterJdbcTemplate jdbcTemplate = createNamedParameterJdbcTemplate();
-    SessionFactory hbFactory = createSessionFactory(dialect);
-    HibernateTemplate hbTemplate = createHibernateTemplate(hbFactory);
-    TransactionTemplate transTemplate = createTransactionTemplate(hbFactory);
+    final DbDialect dialect = createDialect();
+    final NamedParameterJdbcTemplate jdbcTemplate = createNamedParameterJdbcTemplate();
+    final SessionFactory hbFactory = createSessionFactory(dialect);
+    final HibernateTemplate hbTemplate = createHibernateTemplate(hbFactory);
+    final TransactionTemplate transTemplate = createTransactionTemplate(hbFactory);
     return new DbConnector(getName(), dialect, getDataSource(), jdbcTemplate, hbTemplate, transTemplate);
   }
 
   /**
    * Creates the database dialect, using the dialect object, then the string.
-   * 
+   *
    * @return the dialect, not null
    */
   protected DbDialect createDialect() {
@@ -265,7 +265,7 @@ public class DbConnectorFactoryBean extends SingletonFactoryBean<DbConnector> {
       }
       try {
         dialect = (DbDialect) getClass().getClassLoader().loadClass(dialectStr).newInstance();
-      } catch (Exception ex) {
+      } catch (final Exception ex) {
         throw new RuntimeException(ex);
       }
     }
@@ -274,7 +274,7 @@ public class DbConnectorFactoryBean extends SingletonFactoryBean<DbConnector> {
 
   /**
    * Creates the JDBC template, using the data source.
-   * 
+   *
    * @return the JDBC template, not null
    */
   protected NamedParameterJdbcTemplate createNamedParameterJdbcTemplate() {
@@ -284,38 +284,38 @@ public class DbConnectorFactoryBean extends SingletonFactoryBean<DbConnector> {
   //-------------------------------------------------------------------------
   /**
    * Creates the Hibernate session factory.
-   * 
+   *
    * @param dialect  the dialect instance, not null
    * @return the session factory, may be null
    */
-  protected SessionFactory createSessionFactory(DbDialect dialect) {
-    SessionFactory result = getHibernateSessionFactory();
+  protected SessionFactory createSessionFactory(final DbDialect dialect) {
+    final SessionFactory result = getHibernateSessionFactory();
     if (result != null) {
       return result;
     }
     LocalSessionFactoryBean factory = getHibernateFactoryBean();
     if (factory == null) {
-      String[] files = createHibernateFiles();
+      final String[] files = createHibernateFiles();
       if (files.length == 0) {
         return null; // Hibernate not required
       }
       factory = new LocalSessionFactoryBean();
       factory.setMappingResources(files);
       factory.setDataSource(getDataSource());
-      Properties props = new Properties();
+      final Properties props = new Properties();
       props.setProperty("hibernate.dialect", dialect.getHibernateDialect().getClass().getName());
       props.setProperty("hibernate.show_sql", String.valueOf(isHibernateShowSql()));
       props.setProperty("hibernate.connection.release_mode", "on_close");
       if (isAllowHibernateThreadBoundSession()) {
-        props.setProperty(Environment.CURRENT_SESSION_CONTEXT_CLASS, "thread");
-        props.setProperty(Environment.TRANSACTION_STRATEGY, "org.hibernate.transaction.JDBCTransactionFactory");
+        props.setProperty(AvailableSettings.CURRENT_SESSION_CONTEXT_CLASS, "thread");
+        props.setProperty(AvailableSettings.TRANSACTION_COORDINATOR_STRATEGY, "org.hibernate.resource.transaction.backend.jdbc.internal.JdbcResourceLocalTransactionCoordinatorImpl");
       }
       factory.setHibernateProperties(props);
-      factory.setLobHandler(dialect.getLobHandler());
+      //factory.setLobHandler(dialect.getLobHandler());
     }
     try {
       factory.afterPropertiesSet();
-    } catch (Exception ex) {
+    } catch (final Exception ex) {
       throw new RuntimeException(ex);
     }
     return factory.getObject();
@@ -323,37 +323,37 @@ public class DbConnectorFactoryBean extends SingletonFactoryBean<DbConnector> {
 
   /**
    * Creates the complete list of Hibernate configuration files.
-   * 
+   *
    * @return the set of Hibernate files, not null
    */
   protected String[] createHibernateFiles() {
-    String[] nameArray = getHibernateMappingResources();
-    HibernateMappingFiles[] filesArray = getHibernateMappingFiles();
+    final String[] nameArray = getHibernateMappingResources();
+    final HibernateMappingFiles[] filesArray = getHibernateMappingFiles();
     if (nameArray == null && filesArray == null) {
       return new String[0];
     }
-    Set<String> config = new HashSet<String>();
+    final Set<String> config = new HashSet<String>();
     if (nameArray != null) {
       config.addAll(Arrays.asList(nameArray));
     }
     if (filesArray != null) {
-      for (HibernateMappingFiles files : filesArray) {
-        for (Class<?> cls : files.getHibernateMappingFiles()) {
-          String hbm = cls.getName().replace('.', '/') + ".hbm.xml";
+      for (final HibernateMappingFiles files : filesArray) {
+        for (final Class<?> cls : files.getHibernateMappingFiles()) {
+          final String hbm = cls.getName().replace('.', '/') + ".hbm.xml";
           config.add(hbm);
         }
       }
     }
-    return (String[]) config.toArray(new String[config.size()]);
+    return config.toArray(new String[config.size()]);
   }
 
   /**
    * Creates the Hibernate template, using the session factory.
-   * 
+   *
    * @param sessionFactory  the Hibernate session factory, may be null
    * @return the Hibernate template, not null
    */
-  protected HibernateTemplate createHibernateTemplate(SessionFactory sessionFactory) {
+  protected HibernateTemplate createHibernateTemplate(final SessionFactory sessionFactory) {
     if (sessionFactory != null) {
       return new HibernateTemplate(sessionFactory);
     }
@@ -363,23 +363,23 @@ public class DbConnectorFactoryBean extends SingletonFactoryBean<DbConnector> {
   //-------------------------------------------------------------------------
   /**
    * Creates the transaction template.
-   * 
+   *
    * @param sessionFactory  the Hibernate session factory, may be null
    * @return the transaction template, not null
    */
-  protected TransactionTemplate createTransactionTemplate(SessionFactory sessionFactory) {
-    DefaultTransactionDefinition transDefn = createTransactionDefinition();
-    PlatformTransactionManager transMgr = createTransactionManager(sessionFactory);
+  protected TransactionTemplate createTransactionTemplate(final SessionFactory sessionFactory) {
+    final DefaultTransactionDefinition transDefn = createTransactionDefinition();
+    final PlatformTransactionManager transMgr = createTransactionManager(sessionFactory);
     return new TransactionTemplate(transMgr, transDefn);
   }
 
   /**
    * Creates the transaction definition.
-   * 
+   *
    * @return the transaction definition, not null
    */
   protected DefaultTransactionDefinition createTransactionDefinition() {
-    DefaultTransactionDefinition transDefn = new DefaultTransactionDefinition();
+    final DefaultTransactionDefinition transDefn = new DefaultTransactionDefinition();
     transDefn.setName(getName());
     if (getTransactionIsolationLevelName() != null) {
       transDefn.setIsolationLevelName(getTransactionIsolationLevelName());
@@ -395,11 +395,11 @@ public class DbConnectorFactoryBean extends SingletonFactoryBean<DbConnector> {
 
   /**
    * Creates the transaction manager.
-   * 
+   *
    * @param sessionFactory  the Hibernate session factory, may be null
    * @return the transaction manager, not null
    */
-  protected PlatformTransactionManager createTransactionManager(SessionFactory sessionFactory) {
+  protected PlatformTransactionManager createTransactionManager(final SessionFactory sessionFactory) {
     PlatformTransactionManager transMgr = getTransactionManager();
     if (transMgr == null) {
       AbstractPlatformTransactionManager newTransMgr;
