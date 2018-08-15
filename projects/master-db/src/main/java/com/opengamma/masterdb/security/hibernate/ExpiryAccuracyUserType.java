@@ -11,8 +11,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import org.apache.commons.lang.ObjectUtils;
-import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
+import org.hibernate.engine.spi.SharedSessionContractImplementor;
+import org.hibernate.type.StandardBasicTypes;
 import org.hibernate.usertype.UserType;
 
 import com.opengamma.util.time.ExpiryAccuracy;
@@ -22,34 +23,32 @@ import com.opengamma.util.time.ExpiryAccuracy;
  */
 public class ExpiryAccuracyUserType implements UserType {
 
-  // TODO: should this be in the same package as Expiry?
-
   @Override
-  public Object assemble(Serializable arg0, Object arg1) throws HibernateException {
+  public Object assemble(final Serializable arg0, final Object arg1) throws HibernateException {
     return arg0;
   }
 
   @Override
-  public Object deepCopy(Object arg0) throws HibernateException {
+  public Object deepCopy(final Object arg0) throws HibernateException {
     return arg0;
   }
 
   @Override
-  public Serializable disassemble(Object arg0) throws HibernateException {
+  public Serializable disassemble(final Object arg0) throws HibernateException {
     return (Serializable) arg0;
   }
 
   @Override
-  public boolean equals(Object x, Object y) throws HibernateException {
+  public boolean equals(final Object x, final Object y) throws HibernateException {
     // Check for either being null for database null semantics which ObjectUtils won't give us
-    if ((x == null) || (y == null)) {
+    if (x == null || y == null) {
       return false;
     }
     return ObjectUtils.equals(x, y);
   }
 
   @Override
-  public int hashCode(Object arg0) throws HibernateException {
+  public int hashCode(final Object arg0) throws HibernateException {
     return arg0.hashCode();
   }
 
@@ -59,8 +58,9 @@ public class ExpiryAccuracyUserType implements UserType {
   }
 
   @Override
-  public Object nullSafeGet(ResultSet resultSet, String[] columnNames, Object owner) throws HibernateException, SQLException {
-    Integer databaseValue = resultSet.getInt(columnNames[0]);
+  public Object nullSafeGet(final ResultSet resultSet, final String[] columnNames, final SharedSessionContractImplementor session,
+      final Object owner) throws HibernateException, SQLException {
+    final Integer databaseValue = resultSet.getInt(columnNames[0]);
     if (resultSet.wasNull()) {
       return null;
     }
@@ -80,11 +80,11 @@ public class ExpiryAccuracyUserType implements UserType {
     }
   }
 
-  @SuppressWarnings("deprecation")
   @Override
-  public void nullSafeSet(PreparedStatement stmt, Object value, int index) throws HibernateException, SQLException {
+  public void nullSafeSet(final PreparedStatement stmt, final Object value, final int index,
+      final SharedSessionContractImplementor session) throws HibernateException, SQLException {
     if (value == null) {
-      stmt.setNull(index, Hibernate.INTEGER.sqlType());
+      stmt.setNull(index, StandardBasicTypes.INTEGER.sqlType());
     } else {
       switch ((ExpiryAccuracy) value) {
         case MIN_HOUR_DAY_MONTH_YEAR:
@@ -107,7 +107,7 @@ public class ExpiryAccuracyUserType implements UserType {
   }
 
   @Override
-  public Object replace(Object original, Object target, Object owner) throws HibernateException {
+  public Object replace(final Object original, final Object target, final Object owner) throws HibernateException {
     return original;
   }
 
@@ -116,9 +116,9 @@ public class ExpiryAccuracyUserType implements UserType {
     return ExpiryAccuracy.class;
   }
 
-  @SuppressWarnings("deprecation")
   @Override
   public int[] sqlTypes() {
-    return new int[] {Hibernate.INTEGER.sqlType()};
+    return new int[] {StandardBasicTypes.INTEGER.sqlType()};
   }
+
 }
