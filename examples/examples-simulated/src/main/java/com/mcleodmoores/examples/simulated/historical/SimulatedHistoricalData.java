@@ -98,7 +98,7 @@ public class SimulatedHistoricalData {
   }
 
   public static double wiggleValue(final Random random, final double value, final double centre) {
-    return (9 * value + centre) / 10 + random.nextGaussian() * (value * SCALING_FACTOR);
+    return Math.round(100 * (9 * value + centre) / 10 + random.nextGaussian() * (value * SCALING_FACTOR)) / 100.;
   }
 
 }

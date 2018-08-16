@@ -5,6 +5,9 @@
  */
 package com.mcleodmoores.examples.simulated.convention;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.threeten.bp.LocalTime;
 
 import com.opengamma.analytics.math.interpolation.factory.LinearInterpolator1dAdapter;
@@ -43,6 +46,9 @@ public class ExampleJpConventions extends ConventionMasterInitializer {
 
   @Override
   public void init(final ConventionMaster master) {
+    final Map<String, String> temp = new HashMap<>();
+    temp.put("attr1", "val1");
+    temp.put("attr2", "val2");
     // Deposit
     final DepositConvention deposit = new DepositConvention("JPY Deposit", ExternalIdBundle.of("CONVENTION", "JPY Deposit"),
         DayCounts.ACT_365, BusinessDayConventions.MODIFIED_FOLLOWING, 2, false, Currency.JPY, JP);
@@ -53,6 +59,7 @@ public class ExampleJpConventions extends ConventionMasterInitializer {
         ExternalSchemes.syntheticSecurityId("JPYLIBORP3M"), ExternalSchemes.syntheticSecurityId("JPYLIBORP6M"), ExternalId.of("CONVENTION", "JPY LIBOR"));
     final IborIndexConvention ibor = new IborIndexConvention("JPY LIBOR", iborIds, DayCounts.ACT_365, BusinessDayConventions.FOLLOWING, 0, false, Currency.JPY,
         LocalTime.of(11, 0), "US", JP, JP, "");
+    ibor.setAttributes(temp);
     // Overnight
     final OvernightIndexConvention overnight =
         new OvernightIndexConvention("TONAR", ExternalIdBundle.of(ExternalId.of("CONVENTION", "TONAR"), ExternalSchemes.syntheticSecurityId("TONAR")),

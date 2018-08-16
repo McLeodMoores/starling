@@ -22,6 +22,8 @@ import org.joda.beans.impl.direct.DirectBeanBuilder;
 import org.joda.beans.impl.direct.DirectMetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 
+import com.opengamma.core.convention.ConventionGroups;
+import com.opengamma.core.convention.ConventionMetaData;
 import com.opengamma.core.convention.ConventionType;
 import com.opengamma.id.ExternalId;
 import com.opengamma.id.ExternalIdBundle;
@@ -30,6 +32,7 @@ import com.opengamma.util.ArgumentChecker;
 /**
  * Convention for FX spot.
  */
+@ConventionMetaData(description = "FX spot", group = ConventionGroups.FX)
 @BeanDefinition
 public class FXSpotConvention extends FinancialConvention {
 
@@ -92,7 +95,7 @@ public class FXSpotConvention extends FinancialConvention {
    * @param name  the convention name, not null
    * @param externalIdBundle  the external identifiers for this convention, not null
    * @param settlementDays  the number of settlement days
-   * @param useIntermediateUsHolidays  true if US holidays between the maturity date and settlement date should be 
+   * @param useIntermediateUsHolidays  true if US holidays between the maturity date and settlement date should be
    * considered when calculating the settlement date
    */
   public FXSpotConvention(final String name, final ExternalIdBundle externalIdBundle, final int settlementDays,
@@ -112,9 +115,9 @@ public class FXSpotConvention extends FinancialConvention {
   private static void checkConsistentSettlement(final ExternalId settlementRegion, final Boolean useIntermediateUsHolidays) {
     if (settlementRegion != null && useIntermediateUsHolidays != null) {
       throw new IllegalStateException("Cannot set settlement region and the useIntermediateUsHolidays field");
-    } 
+    }
   }
-  
+
   /**
    * Sets the settlement region.
    * @deprecated  both regions and US holidays should be considered when calculating
@@ -135,7 +138,7 @@ public class FXSpotConvention extends FinancialConvention {
     checkConsistentSettlement(getSettlementRegion(), useIntermediateUsHolidays);
     this._useIntermediateUsHolidays = useIntermediateUsHolidays;
   }
-  
+
   //-------------------------------------------------------------------------
   /**
    * Gets the type identifying this convention.

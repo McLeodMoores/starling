@@ -125,9 +125,9 @@ public class ZeroCouponInflationNodeConverter extends CurveNodeVisitorAdapter<In
     final ZonedDateTime paymentDate = ScheduleCalculator.getAdjustedDate(settlementDate, tenor, businessDayConvention, calendar, endOfMonth).toLocalDate().atStartOfDay(zone);
     final CouponFixedCompoundingDefinition fixedCoupon = CouponFixedCompoundingDefinition.from(currency, settlementDate, paymentDate, notional, tenor.getYears(),
         rate);
-    final HistoricalTimeSeries ts = _timeSeries.get(MarketDataRequirementNames.MARKET_VALUE, priceIndexConvention.getPriceIndexId());
+    final HistoricalTimeSeries ts = _timeSeries.get(MarketDataRequirementNames.MARKET_VALUE, priceIndexConvention.getExternalIdBundle());
     if (ts == null) {
-      throw new OpenGammaRuntimeException("Could not get price index time series with id " + priceIndexConvention.getPriceIndexId());
+      throw new OpenGammaRuntimeException("Could not get price index time series with id " + priceIndexConvention.getExternalIdBundle());
     }
     final int conventionalMonthLag = inflationLegConvention.getMonthLag();
     final int monthLag = inflationLegConvention.getMonthLag();

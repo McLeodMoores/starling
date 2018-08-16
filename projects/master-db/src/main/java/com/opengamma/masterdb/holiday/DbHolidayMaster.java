@@ -9,6 +9,7 @@
  */
 package com.opengamma.masterdb.holiday;
 
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
@@ -84,7 +85,7 @@ public class DbHolidayMaster extends AbstractDocumentDbMaster<HolidayDocument> i
   /**
    * SQL order by.
    */
-  protected static final EnumMap<HolidaySearchSortOrder, String> ORDER_BY_MAP = new EnumMap<HolidaySearchSortOrder, String>(HolidaySearchSortOrder.class);
+  protected static final EnumMap<HolidaySearchSortOrder, String> ORDER_BY_MAP = new EnumMap<>(HolidaySearchSortOrder.class);
   static {
     ORDER_BY_MAP.put(HolidaySearchSortOrder.OBJECT_ID_ASC, "oid ASC");
     ORDER_BY_MAP.put(HolidaySearchSortOrder.OBJECT_ID_DESC, "oid DESC");
@@ -224,7 +225,7 @@ public class DbHolidayMaster extends AbstractDocumentDbMaster<HolidayDocument> i
    * @return the SQL search and count, not null
    */
   protected String sqlSelectIdKeys(final ExternalIdSearch bundle, final String type) {
-    final List<String> list = new ArrayList<String>();
+    final List<String> list = new ArrayList<>();
     for (int i = 0; i < bundle.size(); i++) {
       list.add("(" + type + "_scheme = :" + type + "_scheme" + i + " AND " + type + "_value = :" + type + "_value" + i + ") ");
     }
@@ -324,7 +325,7 @@ public class DbHolidayMaster extends AbstractDocumentDbMaster<HolidayDocument> i
             holiday instanceof WeekendTypeProvider ? ((WeekendTypeProvider) holiday).getWeekendType().name() : null,
             Types.VARCHAR);
       // the arguments for inserting into the date table
-      final List<DbMapSqlParameterSource> dateList = new ArrayList<DbMapSqlParameterSource>();
+      final List<DbMapSqlParameterSource> dateList = new ArrayList<>();
       for (final LocalDate date : holiday.getHolidayDates()) {
         final DbMapSqlParameterSource dateArgs = createParameterSource()
           .addValue("doc_id", docId)
@@ -351,7 +352,7 @@ public class DbHolidayMaster extends AbstractDocumentDbMaster<HolidayDocument> i
   protected final class HolidayDocumentExtractor implements ResultSetExtractor<List<HolidayDocument>> {
     private long _lastDocId = -1;
     private ManageableHoliday _holiday;
-    private final List<HolidayDocument> _documents = new ArrayList<HolidayDocument>();
+    private final List<HolidayDocument> _documents = new ArrayList<>();
 
     @Override
     public List<HolidayDocument> extractData(final ResultSet rs) throws SQLException, DataAccessException {
@@ -361,8 +362,12 @@ public class DbHolidayMaster extends AbstractDocumentDbMaster<HolidayDocument> i
           _lastDocId = docId;
           buildHoliday(rs, docId);
         }
-        final LocalDate holDate = DbDateUtils.fromSqlDate(rs.getDate("HOL_DATE"));
-        _holiday.getHolidayDates().add(holDate);
+        // allow an empty set of holidays
+        final Date sqlDate = rs.getDate("HOL_DATE");
+        if (sqlDate != null) {
+          final LocalDate holDate = DbDateUtils.fromSqlDate(rs.getDate("HOL_DATE"));
+          _holiday.getHolidayDates().add(holDate);
+        }
       }
       return _documents;
     }

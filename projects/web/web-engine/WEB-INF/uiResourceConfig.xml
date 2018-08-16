@@ -56,6 +56,7 @@
     <fragment>/styles/common/classes/og.common.classes.OG-list.css</fragment>
     <fragment>/styles/common/classes/og.common.classes.OG-link.css</fragment>
     <fragment>/styles/common/classes/og.common.classes.OG-link-add.css</fragment>
+    <fragment>/styles/common/classes/og.common.classes.OG-link-remove.css</fragment>
     <fragment>/styles/common/classes/og.common.classes.OG-link-action.css</fragment>
     <fragment>/styles/common/classes/og.common.classes.OG-link-small.css</fragment>
     <fragment>/styles/common/classes/og.common.classes.OG-link-cancel.css</fragment>
@@ -126,10 +127,12 @@
     <fragment>/styles/common/details/og.common.OG-details.OG-timeseries.css</fragment>
     <fragment>/styles/common/details/og.common.OG-details.OG-holiday.css</fragment>
     <fragment>/styles/common/details/og.common.OG-details.OG-config.css</fragment>
+    <fragment>/styles/common/details/og.common.OG-details.OG-convention.css</fragment>
   </bundle>
   <bundle id="common.forms.css">
     <fragment>/styles/common/forms/og.common.forms.OG-grid-box.css</fragment>
     <fragment>/styles/views/forms/configs/og.views.forms.configs.css</fragment>
+    <fragment>/styles/views/forms/conventions/og.views.forms.conventions.css</fragment>
     <fragment>/styles/common/forms/og.common.forms.OG-form.og-id-cur.css</fragment>
     <fragment>/styles/common/forms/og.common.forms.OG-form.og-results-model-def.css</fragment>
     <fragment>/styles/common/forms/og.common.forms.OG-form.og-ex-params.css</fragment>
@@ -142,10 +145,11 @@
     <fragment>/styles/common/forms/og.common.forms.OG-form.og-yc-strips.css</fragment>
     <fragment>/styles/common/forms/og.common.forms.OG-form.og-vol-surf-def.css</fragment>
     <fragment>/styles/common/forms/og.common.forms.OG-form.og-csb.css</fragment>
+    <fragment>/styles/common/forms/og.common.forms.OG-form.og-external-ids.css</fragment>
   </bundle>
   <bundle id="views.css">
     <fragment>/styles/views/analytics/og.views.OG-analytics.css</fragment>
-    <fragment>/styles/views/forms/configs/og.views.forms.configs.OG-form-column-sets.css</fragment>
+    <!-- fragment>/styles/views/forms/configs/og.views.forms.configs.OG-form-column-sets.css</fragment-->
     <fragment>/styles/views/forms/og.views.forms.OG-add-trades.css</fragment>
   </bundle>
   <bundle id="libs.css">
@@ -312,6 +316,7 @@
     <fragment>/scripts/og/api/og.api.rest.user.js</fragment>
     <fragment>/scripts/og/api/og.api.rest.compressor.js</fragment>
     <fragment>/scripts/og/api/og.api.rest.configs.js</fragment>
+    <fragment>/scripts/og/api/og.api.rest.conventions.js</fragment>
     <fragment>/scripts/og/api/og.api.rest.exchanges.js</fragment>
     <fragment>/scripts/og/api/og.api.rest.handshake.js</fragment>
     <fragment>/scripts/og/api/og.api.rest.holidays.js</fragment>
@@ -493,6 +498,21 @@
     <fragment>/scripts/og/views/config_forms/og.views.config_forms.volatilitysurfacespecification.js</fragment>
     <fragment>/scripts/og/views/config_forms/og.views.config_forms.yieldcurvedefinition.js</fragment>
     <!-- /config forms -->
+    <!--  convention_forms  -->
+    <fragment>/scripts/og/views/convention_forms/og.views.convention_forms.default.js</fragment> <!-- keep this first! -->
+    <fragment>/scripts/og/views/convention_forms/og.views.convention_forms.bondconvention.js</fragment>
+    <fragment>/scripts/og/views/convention_forms/og.views.convention_forms.depositconvention.js</fragment>
+    <fragment>/scripts/og/views/convention_forms/og.views.convention_forms.fxspotconvention.js</fragment>
+    <fragment>/scripts/og/views/convention_forms/og.views.convention_forms.iborindexconvention.js</fragment>
+    <fragment>/scripts/og/views/convention_forms/og.views.convention_forms.overnightindexconvention.js</fragment>
+    <fragment>/scripts/og/views/convention_forms/og.views.convention_forms.priceindexconvention.js</fragment>
+    <fragment>/scripts/og/views/convention_forms/og.views.convention_forms.attributes.js</fragment> 
+    <fragment>/scripts/og/views/convention_forms/og.views.convention_forms.externalidbundle.js</fragment> 
+    <!-- /convention forms -->
+    <!--  data_forms forms -->
+    <fragment>/scripts/og/views/data_forms/og.views.data_forms.toolbar.new_holiday.js</fragment>
+    <fragment>/scripts/og/views/data_forms/og.views.data_forms.toolbar.upload_holiday.js</fragment>
+    <!-- /data_forms forms -->
     <fragment>/scripts/og/views/extras/og.views.extras.portfolios_sync.js</fragment>
     <fragment>/scripts/og/views/og.views.legalentities.js</fragment>
     <fragment>/scripts/og/views/og.views.portfolios.js</fragment>
@@ -503,6 +523,7 @@
     <fragment>/scripts/og/views/og.views.holidays.js</fragment>
     <fragment>/scripts/og/views/og.views.regions.js</fragment>
     <fragment>/scripts/og/views/og.views.configs.js</fragment>
+    <fragment>/scripts/og/views/og.views.conventions.js</fragment>
     <bundle idref="blotter.js" />
   </bundle>
   <bundle id="env.js">

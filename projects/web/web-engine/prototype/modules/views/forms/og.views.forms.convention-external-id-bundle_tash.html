@@ -1,0 +1,32 @@
+<section class="og-external-id-bundle" id="{{id}}">
+  <div class="og-js-external-id-bundle">
+    <table class="OG-table">
+      <col style="width: 30%"/>
+      <col style="width: 50%"/>
+      <col style="width: 20%"/>
+      <thead>
+        <tr>
+          <th colspan="3"><span><em>External Identifiers</em></span></th>
+        </tr>
+        <tr>
+          <th><div><em>Scheme</em></div></th>
+          <th><div><em>Value</em></div></th>
+          <th></th>
+      </thead>
+      <tbody class="og-add-eid-table">
+        {{#each data}}
+          <tr class="og-js-eid-row">
+            <td class="id_key">{{{key}}}</td>
+            <td class="id_val">{{{value}}}</td>
+            <td><a class="OG-link-remove og-js-rem-eid" href="#">remove</a></td>
+          </tr>
+        {{/each}}
+        <tr class="og-js-add-eid-row">
+          <td><input type="text" class="id_key" placeholder="scheme"></td>
+          <td><input type="text" class="id_val" placeholder="value"></td>
+          <td><a class="OG-link-add og-js-add-eid" href="#">add</a></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>

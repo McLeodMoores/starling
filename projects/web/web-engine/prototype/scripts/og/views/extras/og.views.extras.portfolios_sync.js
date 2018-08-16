@@ -34,7 +34,6 @@ $.register_module({
                                 }, false)
                             },
                             handlers: [{type: 'form:submit', handler: function (result) {
-                                // console.log(result);
                             }}]
                         });
                         form.dom();

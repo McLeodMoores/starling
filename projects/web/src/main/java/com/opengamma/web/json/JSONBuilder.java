@@ -30,7 +30,7 @@ public interface JSONBuilder<T>  {
   String toJSON(T object);
   
   /**
-   * Get the json template for object builts by builder
+   * Get the json template for object built by builder
    * 
    * @return the template, not null;
    */

@@ -67,7 +67,7 @@ public class SmoothSurfaceTest {
     fit(NOISY_DATA, basisFunction, true, NODE_POS);
   }
 
-  void fit(final List<Pair<double[], Double>> data, final Function1D<Double, Double> basisFunction, final boolean isNormalized, final List<double[]> nodePos) {
+  private void fit(final List<Pair<double[], Double>> data, final Function1D<Double, Double> basisFunction, final boolean isNormalized, final List<double[]> nodePos) {
     final Function1D<DoubleMatrix1D, Double> fom = new Function1D<DoubleMatrix1D, Double>() {
 
       @SuppressWarnings("synthetic-access")

@@ -1,0 +1,24 @@
+<div id="{{container}}" class='og-js-external-id OG-clearFix {{classes}}'>
+  <div>Identifiers:</div>
+  <ul id="{{widget}}" class="og-awesome-list">
+    <li id="{{row_existing_scheme}}" class="og-js-existing-scheme og-js-row">
+	    <div class="og-del og-js-rem"></div>
+	    <div class="og-js-existing-scheme">
+	      <select class="og-js-scheme" name="id.{{idx}}.scheme">
+	        <option value="CONVENTION">CONVENTION</option>
+	        <option value="OG_SYNTHETIC_TICKER">OG_SYNTHETIC_TICKER</option>
+	        <option value="Other">Other</option>      
+	      </select>
+	      <input type="text" class="og-js-value" placeholder="id value" name="id.{{idx}}.value"/>
+	    </div>
+    </li>
+    <li id="{{row_new_scheme}}" class="og-js-new-scheme og-js-row">
+      <div class="og-del og-js-rem"></div>
+      <div class="og-js-new_scheme">
+        <input type="text" class="og-js-scheme" placeholder="id scheme" name="id.{{idx}}.scheme"/>
+        <input type="text" class="og-js-value" placeholder="id value" name="id.{{idx}}.value"/>
+      </div>
+    </li>    
+  </ul>
+  <div><span class="og-new-link og-js-add">add identifier</span></div>
+</div> 

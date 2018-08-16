@@ -303,8 +303,7 @@ $.register_module({
                     'columns': [
                         {id: 'type', toolTip: 'type', name: null, field: 'type', width: 100},
                         {id: 'name', field: 'name', width: 300, cssClass: 'og-link', toolTip: 'name',
-                            name: '<input type="text" placeholder="Name" '
-                                + 'class="og-js-name-filter" style="width: 280px;">'}
+                            name: '<input type="text" placeholder="Name" class="og-js-name-filter" style="width: 280px;">'}
                     ]
                 },
                 toolbar: {

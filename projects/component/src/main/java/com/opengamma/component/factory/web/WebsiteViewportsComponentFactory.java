@@ -54,6 +54,7 @@ import com.opengamma.financial.security.lookup.SecurityAttributeMapper;
 import com.opengamma.livedata.UserPrincipal;
 import com.opengamma.master.config.ConfigMaster;
 import com.opengamma.master.config.impl.MasterConfigSource;
+import com.opengamma.master.convention.ConventionMaster;
 import com.opengamma.master.historicaltimeseries.HistoricalTimeSeriesMaster;
 import com.opengamma.master.legalentity.LegalEntityMaster;
 import com.opengamma.master.marketdatasnapshot.MarketDataSnapshotMaster;
@@ -148,6 +149,11 @@ public class WebsiteViewportsComponentFactory extends AbstractComponentFactory {
   @PropertyDefinition(validate = "notNull")
   private LegalEntityMaster _legalEntityMaster;
   /**
+   * The convention master.
+   */
+  @PropertyDefinition
+  private ConventionMaster _conventionMaster;
+  /**
    * The user master.
    */
   @PropertyDefinition(validate = "notNull")
@@ -204,7 +210,7 @@ public class WebsiteViewportsComponentFactory extends AbstractComponentFactory {
   private LiveMarketDataProviderFactory _liveMarketDataProviderFactory;
   /**
    * For looking up market data provider specifications by name. Either this or liveMarketDataProviderFactory must be set.
-   * 
+   *
    * @deprecated use liveMarketDataProviderFactory
    */
   @PropertyDefinition
@@ -220,26 +226,26 @@ public class WebsiteViewportsComponentFactory extends AbstractComponentFactory {
 
   //-------------------------------------------------------------------------
   @Override
-  public void init(ComponentRepository repo, LinkedHashMap<String, String> configuration) {
+  public void init(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) {
     final LongPollingConnectionManager longPolling = buildLongPolling();
-    ChangeManager changeMgr = buildChangeManager();
-    MasterChangeManager masterChangeMgr = buildMasterChangeManager();
+    final ChangeManager changeMgr = buildChangeManager();
+    final MasterChangeManager masterChangeMgr = buildMasterChangeManager();
     final ConnectionManagerImpl connectionMgr = new ConnectionManagerImpl(changeMgr, masterChangeMgr, longPolling);
-    AggregatorNamesResource aggregatorsResource = new AggregatorNamesResource(getPortfolioAggregationFunctions().getMappedFunctions().keySet());
-    MarketDataSnapshotListResource snapshotResource = new MarketDataSnapshotListResource(getMarketDataSnapshotMaster());
-    MasterConfigSource configSource = new MasterConfigSource(getConfigMaster());
-    AggregatedViewDefinitionManager aggregatedViewDefManager = new AggregatedViewDefinitionManager(getPositionSource(), getSecuritySource(), getCombinedConfigSource(),
+    final AggregatorNamesResource aggregatorsResource = new AggregatorNamesResource(getPortfolioAggregationFunctions().getMappedFunctions().keySet());
+    final MarketDataSnapshotListResource snapshotResource = new MarketDataSnapshotListResource(getMarketDataSnapshotMaster());
+    final MasterConfigSource configSource = new MasterConfigSource(getConfigMaster());
+    final AggregatedViewDefinitionManager aggregatedViewDefManager = new AggregatedViewDefinitionManager(getPositionSource(), getSecuritySource(), getCombinedConfigSource(),
         getUserConfigMaster(), getUserPortfolioMaster(), getUserPositionMaster(), getPortfolioAggregationFunctions().getMappedFunctions());
-    CurrencyPairsSource currencyPairsSource = new ConfigDBCurrencyPairsSource(configSource);
+    final CurrencyPairsSource currencyPairsSource = new ConfigDBCurrencyPairsSource(configSource);
     // TODO should be able to configure the currency pairs
-    CurrencyPairs currencyPairs = currencyPairsSource.getCurrencyPairs(CurrencyPairs.DEFAULT_CURRENCY_PAIRS);
-    SecurityAttributeMapper blotterColumnMapper = DefaultSecurityAttributeMappings.create(currencyPairs);
-    AnalyticsViewManager analyticsViewManager = new AnalyticsViewManager(getViewProcessor(), getParallelViewRecompilation(), aggregatedViewDefManager, getComputationTargetResolver(),
+    final CurrencyPairs currencyPairs = currencyPairsSource.getCurrencyPairs(CurrencyPairs.DEFAULT_CURRENCY_PAIRS);
+    final SecurityAttributeMapper blotterColumnMapper = DefaultSecurityAttributeMappings.create(currencyPairs);
+    final AnalyticsViewManager analyticsViewManager = new AnalyticsViewManager(getViewProcessor(), getParallelViewRecompilation(), aggregatedViewDefManager, getComputationTargetResolver(),
         getFunctionRepository(), getMarketDataSpecificationRepository(), blotterColumnMapper, getPositionSource(), getCombinedConfigSource(), getSecuritySource(), getSecurityMaster(),
         getPositionMaster());
-    ResultsFormatter resultsFormatter = new ResultsFormatter(_suppressCurrencyDisplay ? SUPPRESS_CURRENCY : DISPLAY_CURRENCY);
-    GridColumnsJsonWriter columnWriter = new GridColumnsJsonWriter(resultsFormatter);
-    ViewportResultsJsonCsvWriter viewportResultsWriter = new ViewportResultsJsonCsvWriter(resultsFormatter);
+    final ResultsFormatter resultsFormatter = new ResultsFormatter(_suppressCurrencyDisplay ? SUPPRESS_CURRENCY : DISPLAY_CURRENCY);
+    final GridColumnsJsonWriter columnWriter = new GridColumnsJsonWriter(resultsFormatter);
+    final ViewportResultsJsonCsvWriter viewportResultsWriter = new ViewportResultsJsonCsvWriter(resultsFormatter);
 
     repo.getRestComponents().publishResource(aggregatorsResource);
     repo.getRestComponents().publishResource(snapshotResource);
@@ -266,7 +272,7 @@ public class WebsiteViewportsComponentFactory extends AbstractComponentFactory {
     // these items need to be available to the servlet, but aren't important enough to be published components
     repo.registerServletContextAware(new ServletContextAware() {
       @Override
-      public void setServletContext(ServletContext servletContext) {
+      public void setServletContext(final ServletContext servletContext) {
         WebPushServletContextUtils.setConnectionManager(servletContext, connectionMgr);
         WebPushServletContextUtils.setLongPollingConnectionManager(servletContext, longPolling);
       }
@@ -289,7 +295,7 @@ public class WebsiteViewportsComponentFactory extends AbstractComponentFactory {
   }
 
   protected ChangeManager buildChangeManager() {
-    List<ChangeProvider> providers = Lists.newArrayList();
+    final List<ChangeProvider> providers = Lists.newArrayList();
     providers.add(getPositionMaster());
     providers.add(getPortfolioMaster());
     providers.add(getSecurityMaster());
@@ -300,14 +306,18 @@ public class WebsiteViewportsComponentFactory extends AbstractComponentFactory {
   }
 
   protected MasterChangeManager buildMasterChangeManager() {
-    Map<MasterType, ChangeProvider> providers = Maps.newHashMap();
+    final Map<MasterType, ChangeProvider> providers = Maps.newHashMap();
     providers.put(MasterType.POSITION, getPositionMaster());
     providers.put(MasterType.PORTFOLIO, getPortfolioMaster());
     providers.put(MasterType.SECURITY, getSecurityMaster());
     providers.put(MasterType.TIME_SERIES, getHistoricalTimeSeriesMaster());
     providers.put(MasterType.CONFIG, getConfigMaster());
     providers.put(MasterType.ORGANIZATION, getLegalEntityMaster());
+    providers.put(MasterType.LEGAL_ENTITY, getLegalEntityMaster());
     providers.put(MasterType.MARKET_DATA_SNAPSHOT, getMarketDataSnapshotMaster());
+    if (getConventionMaster() != null) {
+      providers.put(MasterType.CONVENTION, getConventionMaster());
+    }
     return new MasterChangeManager(providers);
   }
 
@@ -587,6 +597,31 @@ public class WebsiteViewportsComponentFactory extends AbstractComponentFactory {
    */
   public final Property<LegalEntityMaster> legalEntityMaster() {
     return metaBean().legalEntityMaster().createProperty(this);
+  }
+
+  //-----------------------------------------------------------------------
+  /**
+   * Gets the convention master.
+   * @return the value of the property
+   */
+  public ConventionMaster getConventionMaster() {
+    return _conventionMaster;
+  }
+
+  /**
+   * Sets the convention master.
+   * @param conventionMaster  the new value of the property
+   */
+  public void setConventionMaster(ConventionMaster conventionMaster) {
+    this._conventionMaster = conventionMaster;
+  }
+
+  /**
+   * Gets the the {@code conventionMaster} property.
+   * @return the property, not null
+   */
+  public final Property<ConventionMaster> conventionMaster() {
+    return metaBean().conventionMaster().createProperty(this);
   }
 
   //-----------------------------------------------------------------------
@@ -961,6 +996,7 @@ public class WebsiteViewportsComponentFactory extends AbstractComponentFactory {
           JodaBeanUtils.equal(getFunctions(), other.getFunctions()) &&
           JodaBeanUtils.equal(getHistoricalTimeSeriesMaster(), other.getHistoricalTimeSeriesMaster()) &&
           JodaBeanUtils.equal(getLegalEntityMaster(), other.getLegalEntityMaster()) &&
+          JodaBeanUtils.equal(getConventionMaster(), other.getConventionMaster()) &&
           JodaBeanUtils.equal(getUserPositionMaster(), other.getUserPositionMaster()) &&
           JodaBeanUtils.equal(getUserPortfolioMaster(), other.getUserPortfolioMaster()) &&
           JodaBeanUtils.equal(getUserConfigMaster(), other.getUserConfigMaster()) &&
@@ -992,6 +1028,7 @@ public class WebsiteViewportsComponentFactory extends AbstractComponentFactory {
     hash = hash * 31 + JodaBeanUtils.hashCode(getFunctions());
     hash = hash * 31 + JodaBeanUtils.hashCode(getHistoricalTimeSeriesMaster());
     hash = hash * 31 + JodaBeanUtils.hashCode(getLegalEntityMaster());
+    hash = hash * 31 + JodaBeanUtils.hashCode(getConventionMaster());
     hash = hash * 31 + JodaBeanUtils.hashCode(getUserPositionMaster());
     hash = hash * 31 + JodaBeanUtils.hashCode(getUserPortfolioMaster());
     hash = hash * 31 + JodaBeanUtils.hashCode(getUserConfigMaster());
@@ -1010,7 +1047,7 @@ public class WebsiteViewportsComponentFactory extends AbstractComponentFactory {
 
   @Override
   public String toString() {
-    StringBuilder buf = new StringBuilder(768);
+    StringBuilder buf = new StringBuilder(800);
     buf.append("WebsiteViewportsComponentFactory{");
     int len = buf.length();
     toString(buf);
@@ -1034,6 +1071,7 @@ public class WebsiteViewportsComponentFactory extends AbstractComponentFactory {
     buf.append("functions").append('=').append(JodaBeanUtils.toString(getFunctions())).append(',').append(' ');
     buf.append("historicalTimeSeriesMaster").append('=').append(JodaBeanUtils.toString(getHistoricalTimeSeriesMaster())).append(',').append(' ');
     buf.append("legalEntityMaster").append('=').append(JodaBeanUtils.toString(getLegalEntityMaster())).append(',').append(' ');
+    buf.append("conventionMaster").append('=').append(JodaBeanUtils.toString(getConventionMaster())).append(',').append(' ');
     buf.append("userPositionMaster").append('=').append(JodaBeanUtils.toString(getUserPositionMaster())).append(',').append(' ');
     buf.append("userPortfolioMaster").append('=').append(JodaBeanUtils.toString(getUserPortfolioMaster())).append(',').append(' ');
     buf.append("userConfigMaster").append('=').append(JodaBeanUtils.toString(getUserConfigMaster())).append(',').append(' ');
@@ -1109,6 +1147,11 @@ public class WebsiteViewportsComponentFactory extends AbstractComponentFactory {
      */
     private final MetaProperty<LegalEntityMaster> _legalEntityMaster = DirectMetaProperty.ofReadWrite(
         this, "legalEntityMaster", WebsiteViewportsComponentFactory.class, LegalEntityMaster.class);
+    /**
+     * The meta-property for the {@code conventionMaster} property.
+     */
+    private final MetaProperty<ConventionMaster> _conventionMaster = DirectMetaProperty.ofReadWrite(
+        this, "conventionMaster", WebsiteViewportsComponentFactory.class, ConventionMaster.class);
     /**
      * The meta-property for the {@code userPositionMaster} property.
      */
@@ -1189,6 +1232,7 @@ public class WebsiteViewportsComponentFactory extends AbstractComponentFactory {
         "functions",
         "historicalTimeSeriesMaster",
         "legalEntityMaster",
+        "conventionMaster",
         "userPositionMaster",
         "userPortfolioMaster",
         "userConfigMaster",
@@ -1232,6 +1276,8 @@ public class WebsiteViewportsComponentFactory extends AbstractComponentFactory {
           return _historicalTimeSeriesMaster;
         case -1944474242:  // legalEntityMaster
           return _legalEntityMaster;
+        case 41113907:  // conventionMaster
+          return _conventionMaster;
         case 1808868758:  // userPositionMaster
           return _userPositionMaster;
         case 686514815:  // userPortfolioMaster
@@ -1356,6 +1402,14 @@ public class WebsiteViewportsComponentFactory extends AbstractComponentFactory {
      */
     public final MetaProperty<LegalEntityMaster> legalEntityMaster() {
       return _legalEntityMaster;
+    }
+
+    /**
+     * The meta-property for the {@code conventionMaster} property.
+     * @return the meta-property, not null
+     */
+    public final MetaProperty<ConventionMaster> conventionMaster() {
+      return _conventionMaster;
     }
 
     /**
@@ -1488,6 +1542,8 @@ public class WebsiteViewportsComponentFactory extends AbstractComponentFactory {
           return ((WebsiteViewportsComponentFactory) bean).getHistoricalTimeSeriesMaster();
         case -1944474242:  // legalEntityMaster
           return ((WebsiteViewportsComponentFactory) bean).getLegalEntityMaster();
+        case 41113907:  // conventionMaster
+          return ((WebsiteViewportsComponentFactory) bean).getConventionMaster();
         case 1808868758:  // userPositionMaster
           return ((WebsiteViewportsComponentFactory) bean).getUserPositionMaster();
         case 686514815:  // userPortfolioMaster
@@ -1550,6 +1606,9 @@ public class WebsiteViewportsComponentFactory extends AbstractComponentFactory {
           return;
         case -1944474242:  // legalEntityMaster
           ((WebsiteViewportsComponentFactory) bean).setLegalEntityMaster((LegalEntityMaster) newValue);
+          return;
+        case 41113907:  // conventionMaster
+          ((WebsiteViewportsComponentFactory) bean).setConventionMaster((ConventionMaster) newValue);
           return;
         case 1808868758:  // userPositionMaster
           ((WebsiteViewportsComponentFactory) bean).setUserPositionMaster((PositionMaster) newValue);

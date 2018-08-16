@@ -10,7 +10,12 @@
       </div>
     </li>
     <li>
-        <a href="admin.ftl#/configs/" class="og-menu-button og-datas">Data</a>
+      <a href="admin.ftl#/conventions/" class="og-menu-button og-conventions">Conventions</a>
+      <div class="og-convention og-menu og-active OG-shadow">
+      </div> 
+    </li>
+    <li>
+        <a href="admin.ftl#" class="og-menu-button og-datas">Data</a>
         <div class="og-data og-menu og-active OG-shadow">
             <table>
                 <tr>
@@ -41,12 +46,6 @@
                 </tr>
             </table>
         </div>
-    </li>
-    <li>
-      <a href="https://www.surveymonkey.com/s/opengamma-community-survey"
-          target="_blank" class="og-analytics-feedback">
-        <span class="OG-icon og-icon-speech"></span>Feedback
-      </a>
     </li>
   </ul>
   <#if userSecurity.enabled && userSecurity.userName?has_content>

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2015-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2015 -present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.component.factory.web;
 
@@ -68,6 +68,7 @@ import com.opengamma.web.convention.WebConventionsResource;
 import com.opengamma.web.exchange.WebExchangesResource;
 import com.opengamma.web.function.WebFunctionsResource;
 import com.opengamma.web.historicaltimeseries.WebAllHistoricalTimeSeriesResource;
+import com.opengamma.web.holiday.HolidayLoaderResource;
 import com.opengamma.web.holiday.WebHolidaysResource;
 import com.opengamma.web.legalentity.WebLegalEntitiesResource;
 import com.opengamma.web.portfolio.MinimalWebPortfoliosResource;
@@ -258,7 +259,7 @@ public class MinimalWebsiteBasicsComponentFactory extends AbstractComponentFacto
   }
 
   protected void initBasics(final ComponentRepository repo, final Set<Class<?>> publishedTypes) {
-    if (AuthUtils.isPermissive() == false) {
+    if (!AuthUtils.isPermissive()) {
       ArgumentChecker.notNull(getUserMaster(), "UserMaster");
       ArgumentChecker.notNull(getPasswordService(), "PasswordService");
       repo.getRestComponents().publishResource(new WebLoginResource());
@@ -321,6 +322,9 @@ public class MinimalWebsiteBasicsComponentFactory extends AbstractComponentFacto
     //        Optional.fromNullable(getLiveMarketDataProviderFactory()), configSource, getComputationTargetResolver(), getViewProcessor(),
     //        getHistoricalTimeSeriesSource()));
     resourceParameters.put(WebFunctionsResource.class, params(getFunctionConfigurationSource()));
+    if (getHolidayMaster() != null) {
+      resourceParameters.put(HolidayLoaderResource.class, params(getHolidayMaster()));
+    }
     return resourceParameters;
   }
 

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.web.config;
@@ -47,7 +47,7 @@ public final class ConfigTypesProvider {
   //-------------------------------------------------------------------------
   /**
    * Gets the singleton instance.
-   * 
+   *
    * @return the provider, not null
    */
   public static ConfigTypesProvider getInstance() {
@@ -60,12 +60,12 @@ public final class ConfigTypesProvider {
    */
   private ConfigTypesProvider() {
     _configGroupMap = new TreeMap<>();
-    Map<String, Class<?>> result = Maps.newHashMap();
-    ImmutableSortedMap.Builder<String, String> descriptions = ImmutableSortedMap.naturalOrder();
-    AnnotationReflector reflector = AnnotationReflector.getDefaultReflector();
-    Set<Class<?>> configClasses = reflector.getReflector().getTypesAnnotatedWith(Config.class);
-    for (Class<?> configClass : configClasses) {
-      Config configValueAnnotation = configClass.getAnnotation(Config.class);
+    final Map<String, Class<?>> result = Maps.newHashMap();
+    final ImmutableSortedMap.Builder<String, String> descriptions = ImmutableSortedMap.naturalOrder();
+    final AnnotationReflector reflector = AnnotationReflector.getDefaultReflector();
+    final Set<Class<?>> configClasses = reflector.getReflector().getTypesAnnotatedWith(Config.class);
+    for (final Class<?> configClass : configClasses) {
+      final Config configValueAnnotation = configClass.getAnnotation(Config.class);
       if (configValueAnnotation != null) {
         // extract config type
         Class<?> configType = configValueAnnotation.searchType();
@@ -73,14 +73,14 @@ public final class ConfigTypesProvider {
           configType = configClass;
         }
         // extract grouping
-        String group = configValueAnnotation.group();
+        final String group = configValueAnnotation.group();
         // extract description
         String description = configValueAnnotation.description();
         if (description.length() == 0) {
           description = configType.getSimpleName();
         }
         // store
-        Class<?> old = result.put(configType.getSimpleName(), configType);
+        final Class<?> old = result.put(configType.getSimpleName(), configType);
         if (old != null) {
           s_logger.warn("Two classes exist with the same name: " + configType.getSimpleName());
         }
@@ -88,7 +88,7 @@ public final class ConfigTypesProvider {
         if (_configGroupMap.containsKey(group)) {
           _configGroupMap.get(group).put(configType.getSimpleName(), description);
         } else {
-          Map<String, String> value = new TreeMap<>();
+          final Map<String, String> value = new TreeMap<>();
           value.put(configType.getSimpleName(), description);
           _configGroupMap.put(group, value);
         }
@@ -97,13 +97,12 @@ public final class ConfigTypesProvider {
     }
     _configTypeMap = ImmutableSortedMap.copyOf(result);
     _configDescriptionMap = descriptions.build();
-
   }
 
   //-------------------------------------------------------------------------
   /**
    * Gets the set of config keys.
-   * 
+   *
    * @return the types, not null
    */
   public ImmutableSortedSet<String> getConfigTypes() {
@@ -112,7 +111,7 @@ public final class ConfigTypesProvider {
 
   /**
    * Gets the map of config types by short key.
-   * 
+   *
    * @return the map, not null
    */
   public ImmutableSortedMap<String, Class<?>> getConfigTypeMap() {
@@ -121,7 +120,7 @@ public final class ConfigTypesProvider {
 
   /**
    * Gets the map of config descriptions by short key.
-   * 
+   *
    * @return the map, not null
    */
   public ImmutableSortedMap<String, String> getDescriptionMap() {
@@ -139,17 +138,17 @@ public final class ConfigTypesProvider {
 
   /**
    * Gets the description for a type.
-   * 
+   *
    * @param type  the type, not null
    * @return the description, not null
    */
-  public String getDescription(Class<?> type) {
-    String key = HashBiMap.create(_configTypeMap).inverse().get(type);
+  public String getDescription(final Class<?> type) {
+    final String key = HashBiMap.create(_configTypeMap).inverse().get(type);
     String description = null;
     if (key != null) {
       description = _configDescriptionMap.get(key);
     }
-    return (description != null ? description : type.getSimpleName());
+    return description != null ? description : type.getSimpleName();
   }
 
 }

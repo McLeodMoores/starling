@@ -128,7 +128,7 @@ public class CholeskyDecompositionOpenGammaTest {
     // Performance note: Cholesky decomposition: 4-Nov-11: On Mac Pro 3.2 GHz Quad-Core Intel Xeon: 205 ms for 10000 decomposition 5x5.
   }
 
-  void checkEquals(final DoubleMatrix2D x, final DoubleMatrix2D y) {
+  private static void checkEquals(final DoubleMatrix2D x, final DoubleMatrix2D y) {
     final int n = x.getNumberOfRows();
     final int m = x.getNumberOfColumns();
     assertEquals(n, y.getNumberOfRows());

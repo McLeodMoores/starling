@@ -35,7 +35,7 @@ public interface ConventionSource
    * <p>
    * This retrieves the object stored using the unique identifier.
    * If not found, an exception is thrown.
-   * 
+   *
    * @param <T>  the type of the convention to get
    * @param uniqueId  the unique identifier to search for, not null
    * @param type  the type of the convention to get, not null
@@ -51,9 +51,9 @@ public interface ConventionSource
    * <p>
    * This retrieves the object stored using the object identifier at the instant
    * specified by the version-correction. If not found, an exception is thrown.
-   * In combination, the object identifier and version-correction are equivalent to 
+   * In combination, the object identifier and version-correction are equivalent to
    * a unique identifier.
-   * 
+   *
    * @param <T>  the type of the convention to get
    * @param objectId  the object identifier to search for, not null
    * @param type  the type of the convention to get, not null
@@ -76,7 +76,7 @@ public interface ConventionSource
    * However, since each identifier is not completely unique, multiple may match.
    * To further complicate matters, some identifiers are more unique than others.
    * The best-match mechanism is implementation specific.
-   * 
+   *
    * @param bundle  the external identifier bundle to search for, not null
    * @param versionCorrection  the version-correction, not null
    * @return the matched object, not null
@@ -98,7 +98,7 @@ public interface ConventionSource
    * However, since each identifier is not completely unique, multiple may match.
    * To further complicate matters, some identifiers are more unique than others.
    * The best-match mechanism is implementation specific.
-   * 
+   *
    * @param <T>  the type of the convention to get
    * @param bundle  the external identifier bundle to search for, not null
    * @param versionCorrection  the version-correction, not null
@@ -124,7 +124,7 @@ public interface ConventionSource
    * However, since each identifier is not completely unique, multiple may match.
    * To further complicate matters, some identifiers are more unique than others.
    * The best-match mechanism is implementation specific.
-   * 
+   *
    * @param externalId  the external identifier to search for, not null
    * @return the matched object, not null
    * @throws IllegalArgumentException if the identifier is invalid
@@ -144,7 +144,7 @@ public interface ConventionSource
    * However, since each identifier is not completely unique, multiple may match.
    * To further complicate matters, some identifiers are more unique than others.
    * The best-match mechanism is implementation specific.
-   * 
+   *
    * @param <T>  the type of the convention to get
    * @param externalId  the external identifier to search for, not null
    * @param type  the type of the convention to get, not null
@@ -166,7 +166,7 @@ public interface ConventionSource
    * However, since each identifier is not completely unique, multiple may match.
    * To further complicate matters, some identifiers are more unique than others.
    * The best-match mechanism is implementation specific.
-   * 
+   *
    * @param bundle  the external identifier bundle to search for, not null
    * @return the matched object, not null
    * @throws IllegalArgumentException if the identifier is invalid
@@ -187,7 +187,7 @@ public interface ConventionSource
    * However, since each identifier is not completely unique, multiple may match.
    * To further complicate matters, some identifiers are more unique than others.
    * The best-match mechanism is implementation specific.
-   * 
+   *
    * @param <T>  the type of the convention to get
    * @param bundle  the external identifier bundle to search for, not null
    * @param type  the type of the convention to get, not null
@@ -207,7 +207,7 @@ public interface ConventionSource
    * The default behavior in standard implementations should be to return any
    * element with <strong>any</strong> external identifier that matches <strong>any</strong>
    * identifier in the bundle. While specific implementations may modify this behavior,
-   * this should be explicitly documented to avoid confusion. 
+   * this should be explicitly documented to avoid confusion.
    *
    * @param bundle  the external identifier bundle to search for, not null
    * @return all objects matching the bundle, empty if no matches, not null

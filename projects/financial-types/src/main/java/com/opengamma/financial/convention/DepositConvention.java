@@ -18,6 +18,8 @@ import org.joda.beans.impl.direct.DirectBeanBuilder;
 import org.joda.beans.impl.direct.DirectMetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 
+import com.opengamma.core.convention.ConventionGroups;
+import com.opengamma.core.convention.ConventionMetaData;
 import com.opengamma.core.convention.ConventionType;
 import com.opengamma.financial.convention.businessday.BusinessDayConvention;
 import com.opengamma.financial.convention.daycount.DayCount;
@@ -29,6 +31,7 @@ import com.opengamma.util.money.Currency;
 /**
  * Convention for deposit rates.
  */
+@ConventionMetaData(description = "Cash deposit", group = ConventionGroups.FIXED_INCOME)
 @BeanDefinition
 public class DepositConvention extends FinancialConvention {
 
@@ -80,7 +83,7 @@ public class DepositConvention extends FinancialConvention {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param name  the name of the convention, not null
    * @param externalIdBundle  the external identifiers for this convention, not null
    * @param dayCount  the day-count, not null
@@ -106,7 +109,7 @@ public class DepositConvention extends FinancialConvention {
   //-------------------------------------------------------------------------
   /**
    * Gets the type identifying this convention.
-   * 
+   *
    * @return the {@link #TYPE} constant, not null
    */
   @Override

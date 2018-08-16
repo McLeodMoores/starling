@@ -19,6 +19,8 @@ import org.joda.beans.impl.direct.DirectMetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 import org.threeten.bp.LocalTime;
 
+import com.opengamma.core.convention.ConventionGroups;
+import com.opengamma.core.convention.ConventionMetaData;
 import com.opengamma.core.convention.ConventionType;
 import com.opengamma.id.ExternalId;
 import com.opengamma.id.ExternalIdBundle;
@@ -27,6 +29,7 @@ import com.opengamma.util.ArgumentChecker;
 /**
  * Convention for a swap index.
  */
+@ConventionMetaData(description = "Swap", group = ConventionGroups.INDEX)
 @BeanDefinition
 public class SwapIndexConvention extends FinancialConvention {
 
@@ -58,7 +61,7 @@ public class SwapIndexConvention extends FinancialConvention {
 
   /**
    * Creates an instance.
-   * 
+   *
    * @param name  the convention name, not null
    * @param externalIdBundle  the external identifiers for this convention, not null
    * @param fixingTime  the fixing time, not null
@@ -75,7 +78,7 @@ public class SwapIndexConvention extends FinancialConvention {
   //-------------------------------------------------------------------------
   /**
    * Gets the type identifying this convention.
-   * 
+   *
    * @return the {@link #TYPE} constant, not null
    */
   @Override

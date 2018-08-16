@@ -466,10 +466,6 @@ public class UsdDiscounting3mLibor6mLiborTest {
   @BeforeSuite
   static void initClass() {
     for (int loopblock = 0; loopblock < NB_BLOCKS; loopblock++) {
-      if (loopblock == 5) {
-        int i = 0;
-        i = i + 1;
-      }
       CURVES_PAR_SPREAD_MQ_WITHOUT_TODAY_BLOCK.add(makeCurvesFromDefinitions(DEFINITIONS_UNITS[loopblock], GENERATORS_UNITS[loopblock], NAMES_UNITS[loopblock], KNOWN_DATA, PSMQC, PSMQCSC, false));
     }
   }

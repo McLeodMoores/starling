@@ -33,7 +33,7 @@ $.register_module({
                                     {name: 'CUSIP', value: 'CUSIP'},
                                     {name: 'ISIN', value: 'ISIN'},
                                     {name: 'RIC', value: 'RIC'},
-                                    {name: 'SEDOL', value: 'CSEDOL1'}
+                                    {name: 'SEDOL', value: 'SEDOL1'}
                                 ]
                             },
                             {type: 'input', name: 'Data provider', id: 'provider'},

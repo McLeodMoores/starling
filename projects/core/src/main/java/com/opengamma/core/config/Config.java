@@ -11,7 +11,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Annotation for classes that represents a configuration item intended to be stored in a {@link ConfigMaster}.
+ * Annotation for classes that represents a configuration item intended to be stored in a <code>ConfigMaster</code>.
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ ElementType.TYPE })

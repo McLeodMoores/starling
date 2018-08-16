@@ -180,7 +180,7 @@ public class ConvectionDiffusionPDESolverTestCase {
   /**
    * Tests that the solver can solve Black-Scholes equation on a uniform grid
    */
-  void testBlackScholesEquationUniformGrid(final ConvectionDiffusionPDESolver solver, final int timeNodes, final int spotNodes, final double lowerMoneyness, final double upperMoneyness,
+  static void testBlackScholesEquationUniformGrid(final ConvectionDiffusionPDESolver solver, final int timeNodes, final int spotNodes, final double lowerMoneyness, final double upperMoneyness,
       final double volTol, final double priceTol, final double deltaTol, final double gammaTol, final boolean print) {
     final PDEGrid1D grid = new PDEGrid1D(timeNodes, spotNodes, T, LOWER.getLevel(), UPPER.getLevel());
     final PDE1DDataBundle<ConvectionDiffusionPDE1DCoefficients> data = new PDE1DDataBundle<ConvectionDiffusionPDE1DCoefficients>(DATA, PAYOFF, LOWER, UPPER, grid);
@@ -188,7 +188,7 @@ public class ConvectionDiffusionPDESolverTestCase {
     testBlackScholesEquation(res, lowerMoneyness, upperMoneyness, volTol, priceTol, deltaTol, gammaTol, print);
   }
 
-  void testBlackScholesEquationNonuniformGrid(final ConvectionDiffusionPDESolver solver, final int timeSteps, final int spotSteps, final double lowerMoneyness, final double upperMoneyness,
+  static void testBlackScholesEquationNonuniformGrid(final ConvectionDiffusionPDESolver solver, final int timeSteps, final int spotSteps, final double lowerMoneyness, final double upperMoneyness,
       final double volTol, final double priceTol, final double deltaTol, final double gammaTol, final boolean print) {
 
     final MeshingFunction timeMesh = new ExponentialMeshing(0, T, timeSteps + 1, 0);
@@ -201,7 +201,7 @@ public class ConvectionDiffusionPDESolverTestCase {
     testBlackScholesEquation(res, lowerMoneyness, upperMoneyness, volTol, priceTol, deltaTol, gammaTol, print);
   }
 
-  private void testBlackScholesEquation(final PDEResults1D res, final double lowerMoneyness, final double upperMoneyness, final double volTol, final double priceTol, final double deltaTol,
+  static void testBlackScholesEquation(final PDEResults1D res, final double lowerMoneyness, final double upperMoneyness, final double volTol, final double priceTol, final double deltaTol,
       final double gammaTol, final boolean print) {
 
     final double df = YIELD_CURVE.getDiscountFactor(T);
@@ -270,7 +270,7 @@ public class ConvectionDiffusionPDESolverTestCase {
   // }
   // }
 
-  void testTimeExtrapolation(final ConvectionDiffusionPDESolver solver, final int timeSteps, final int spotSteps, final double lowerMoneyness, final double upperMoneyness, final double volTol,
+  static void testTimeExtrapolation(final ConvectionDiffusionPDESolver solver, final int timeSteps, final int spotSteps, final double lowerMoneyness, final double upperMoneyness, final double volTol,
       final double priceTol, final double deltaTol, final double gammaTol, final boolean print) {
     final PDEGrid1D grid1 = new PDEGrid1D(timeSteps + 1, spotSteps + 1, T, LOWER.getLevel(), UPPER.getLevel());
     final PDEGrid1D grid2 = new PDEGrid1D(2 * timeSteps + 1, spotSteps + 1, T, LOWER.getLevel(), UPPER.getLevel());
@@ -322,7 +322,7 @@ public class ConvectionDiffusionPDESolverTestCase {
   /**
    * Tests that the solver can solve the form of Black_scholes equation when the log of spot is the space variable
    */
-  void testLogTransformedBlackScholesEquation(final ConvectionDiffusionPDESolver solver, final int timeNodes, final int spotNodes, final double lowerMoneyness, final double upperMoneyness,
+  static void testLogTransformedBlackScholesEquation(final ConvectionDiffusionPDESolver solver, final int timeNodes, final int spotNodes, final double lowerMoneyness, final double upperMoneyness,
       final double volTol, final double priceTol, final double deltaTol, final double gammaTol, final boolean print) {
     final PDEGrid1D grid = new PDEGrid1D(timeNodes + 1, spotNodes + 1, T, LN_LOWER.getLevel(), LN_UPPER.getLevel());
     final PDE1DDataBundle<ConvectionDiffusionPDE1DCoefficients> db =
@@ -411,7 +411,7 @@ public class ConvectionDiffusionPDESolverTestCase {
     }
   }
 
-  void testAmericanPrice(final ConvectionDiffusionPDESolver solver, final int timeSteps, final int priceSteps, final double lowerMoneyness, final double upperMoneyness, final boolean print) {
+  static void testAmericanPrice(final ConvectionDiffusionPDESolver solver, final int timeSteps, final int priceSteps, final double lowerMoneyness, final double upperMoneyness, final boolean print) {
 
     final AmericanVanillaOptionDefinition option = new AmericanVanillaOptionDefinition(FORWARD, new Expiry(DateUtils.getDateOffsetWithYearFraction(DATE, T)), false);
     final BjerksundStenslandModel model = new BjerksundStenslandModel();

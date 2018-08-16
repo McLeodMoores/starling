@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2014 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.convention;
@@ -18,6 +18,8 @@ import org.joda.beans.impl.direct.DirectBeanBuilder;
 import org.joda.beans.impl.direct.DirectMetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 
+import com.opengamma.core.convention.ConventionGroups;
+import com.opengamma.core.convention.ConventionMetaData;
 import com.opengamma.core.convention.ConventionType;
 import com.opengamma.financial.convention.businessday.BusinessDayConvention;
 import com.opengamma.id.ExternalIdBundle;
@@ -26,6 +28,7 @@ import com.opengamma.util.ArgumentChecker;
 /**
  * Conventions for bonds.
  */
+@ConventionMetaData(description = "Bond", group = ConventionGroups.BOND)
 @BeanDefinition
 public class BondConvention extends FinancialConvention {
 

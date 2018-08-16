@@ -120,7 +120,7 @@ public class MixedLogNormalVolatilityModelTest {
     volatilityAdjointTest(LARGE_SYSTEM);
   }
 
-  void volatilityAdjointTest(final MixedLogNormalModelData data) {
+  private static void volatilityAdjointTest(final MixedLogNormalModelData data) {
     final double strike = 0.8 * FORWARD;
     final EuropeanVanillaOption option = new EuropeanVanillaOption(strike, T, true);
     final Function1D<MixedLogNormalModelData, double[]> modelAdjointFunc = VOL_FUNC.getVolatilityAdjointFunction(option, FORWARD);

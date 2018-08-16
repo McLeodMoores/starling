@@ -162,7 +162,7 @@ public class HestonPDETestCase {
     DATA = new ConvectionDiffusion2DPDEDataBundle(A, B, C, D, E, F, FunctionalDoublesSurface.from(payoff));
   }
 
-  void testCallPrice(final ConvectionDiffusionPDESolver2D solver, final int timeSteps, final int spotSteps, final int volSqrSteps, final boolean print) {
+  static void testCallPrice(final ConvectionDiffusionPDESolver2D solver, final int timeSteps, final int spotSteps, final int volSqrSteps, final boolean print) {
 
     final double deltaX = (F_UPPER.getLevel() - F_LOWER.getLevel()) / spotSteps;
     final double deltaY = (V_UPPER.getLevel() - V_LOWER.getLevel()) / volSqrSteps;
