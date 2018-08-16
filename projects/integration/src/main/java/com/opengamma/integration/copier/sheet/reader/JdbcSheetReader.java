@@ -2,8 +2,11 @@
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
  *
  * Please see distribution for license.
+ *
+ * Modified by McLeod Moores Software Limited.
+ *
+ * Copyright (C) 2018 - present McLeod Moores Software Limited.  All rights reserved.
  */
-
 package com.opengamma.integration.copier.sheet.reader;
 
 import java.sql.ResultSet;
@@ -16,8 +19,6 @@ import java.util.Map;
 
 import javax.sql.DataSource;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.ResultSetExtractor;
@@ -25,47 +26,56 @@ import org.springframework.jdbc.core.ResultSetExtractor;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * A class to facilitate importing portfolio data from a JDBC query result
+ * A class to facilitate importing portfolio data from a JDBC query result.
  */
 public class JdbcSheetReader extends SheetReader {
-
-  private DataSource _dataSource;
   private JdbcTemplate _jdbcTemplate;
-  private ResultSet _resultSet;
-  private String[] _row;
   private List<Map<String, String>> _results;
   private Iterator<Map<String, String>> _iterator;
-  private static final Logger s_logger = LoggerFactory.getLogger(JdbcSheetReader.class);
 
-  public JdbcSheetReader(DataSource dataSource, String query) {
+  /**
+   * @param dataSource  a data source, not null
+   * @param query  the query, not null
+   */
+  public JdbcSheetReader(final DataSource dataSource, final String query) {
     init(new JdbcTemplate(dataSource), query);
   }
 
-  public JdbcSheetReader(JdbcTemplate jdbcTemplate, String query) {
+  /**
+   * @param jdbcTemplate  a template, not null
+   * @param query  the query, not null
+   */
+  public JdbcSheetReader(final JdbcTemplate jdbcTemplate, final String query) {
     init(jdbcTemplate, query);
   }
 
-  protected void init(JdbcTemplate jdbcTemplate, String query) {
+  /**
+   * Checks that the template and query are not null.
+   *
+   * @param jdbcTemplate  a template, not null
+   * @param query  the query, not null
+   */
+  protected void init(final JdbcTemplate jdbcTemplate, final String query) {
     ArgumentChecker.notNull(jdbcTemplate, "jdbcTemplate");
     ArgumentChecker.notEmpty(query, "query");
 
     _jdbcTemplate = jdbcTemplate;
 
-    ResultSetExtractor<List<Map<String, String>>> extractor = new ResultSetExtractor<List<Map<String, String>>>() {
+    final ResultSetExtractor<List<Map<String, String>>> extractor = new ResultSetExtractor<List<Map<String, String>>>() {
       @Override
-      public List<Map<String, String>> extractData(ResultSet rs) throws SQLException, DataAccessException {
-        String[] columns = new String[rs.getMetaData().getColumnCount()];
+      public List<Map<String, String>> extractData(final ResultSet rs) throws SQLException, DataAccessException {
+        final String[] columns = new String[rs.getMetaData().getColumnCount()];
         for (int i = 0; i < rs.getMetaData().getColumnCount(); i++) {
           columns[i] = rs.getMetaData().getColumnName(i + 1);
         }
         setColumns(columns);
-        List<Map<String, String>> entries = new ArrayList<Map<String, String>>();
+        final List<Map<String, String>> entries = new ArrayList<>();
         while (rs.next()) {
-          String[] rawRow = new String[rs.getMetaData().getColumnCount()];
+          final String[] rawRow = new String[rs.getMetaData().getColumnCount()];
           for (int i = 0; i < rs.getMetaData().getColumnCount(); i++) {
             rawRow[i] = rs.getString(i + 1);
           }
-          Map<String, String> result = new HashMap<String, String>();
+          final Map<String, String> result = new HashMap<>();
           // Map read-in row onto expected columns
           for (int i = 0; i < getColumns().length; i++) {
             if (i >= rawRow.length) {
@@ -92,9 +102,8 @@ public class JdbcSheetReader extends SheetReader {
   public Map<String, String> loadNextRow() {
     if (_iterator.hasNext()) {
       return _iterator.next();
-    } else {
-      return null;
     }
+    return null;
   }
 
   @Override
