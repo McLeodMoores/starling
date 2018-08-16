@@ -14,8 +14,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.lang.ObjectUtils;
-import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
+import org.hibernate.engine.spi.SharedSessionContractImplementor;
+import org.hibernate.type.StandardBasicTypes;
 import org.hibernate.usertype.UserType;
 
 import com.opengamma.OpenGammaRuntimeException;
@@ -25,15 +26,15 @@ import com.opengamma.OpenGammaRuntimeException;
  * @param <E> the enum type
  */
 public abstract class EnumUserType<E extends Enum<E>> implements UserType {
-  
+
   private final Class<E> _clazz;
   private final Map<String, E> _stringToEnum;
   private final Map<E, String> _enumToString;
-  
+
   protected EnumUserType(final Class<E> clazz, final E[] values) {
     _clazz = clazz;
-    _stringToEnum = new HashMap<String, E>();
-    _enumToString = new EnumMap<E, String>(clazz);
+    _stringToEnum = new HashMap<>();
+    _enumToString = new EnumMap<>(clazz);
     for (final E value : values) {
       final String string = enumToStringNoCache(value);
       _stringToEnum.put(string, value);
@@ -42,31 +43,31 @@ public abstract class EnumUserType<E extends Enum<E>> implements UserType {
   }
 
   @Override
-  public Object assemble(Serializable arg0, Object arg1) throws HibernateException {
+  public Object assemble(final Serializable arg0, final Object arg1) throws HibernateException {
     return arg0;
   }
 
   @Override
-  public Object deepCopy(Object arg0) throws HibernateException {
+  public Object deepCopy(final Object arg0) throws HibernateException {
     return arg0;
   }
 
   @Override
-  public Serializable disassemble(Object arg0) throws HibernateException {
+  public Serializable disassemble(final Object arg0) throws HibernateException {
     return (Serializable) arg0;
   }
 
   @Override
-  public boolean equals(Object x, Object y) throws HibernateException {
+  public boolean equals(final Object x, final Object y) throws HibernateException {
     // Check for either being null for database null semantics which ObjectUtils won't give us
-    if ((x == null) || (y == null)) {
+    if (x == null || y == null) {
       return false;
     }
     return ObjectUtils.equals(x, y);
   }
 
   @Override
-  public int hashCode(Object arg0) throws HibernateException {
+  public int hashCode(final Object arg0) throws HibernateException {
     return arg0.hashCode();
   }
 
@@ -74,9 +75,9 @@ public abstract class EnumUserType<E extends Enum<E>> implements UserType {
   public boolean isMutable() {
     return false;
   }
-  
-  protected abstract String enumToStringNoCache(E value); 
-  
+
+  protected abstract String enumToStringNoCache(E value);
+
   protected E stringToEnum(final String string) {
     final E value = _stringToEnum.get(string);
     if (value == null) {
@@ -86,34 +87,32 @@ public abstract class EnumUserType<E extends Enum<E>> implements UserType {
   }
 
   @Override
-  public Object nullSafeGet(ResultSet resultSet, String[] columnNames, Object owner) throws HibernateException, SQLException {
-    String databaseValue = resultSet.getString(columnNames[0]);
+  public Object nullSafeGet(final ResultSet resultSet, final String[] columnNames, final SharedSessionContractImplementor session,
+      final Object owner) throws HibernateException, SQLException {
+    final String databaseValue = resultSet.getString(columnNames[0]);
     if (resultSet.wasNull()) {
       return null;
     }
     return stringToEnum(databaseValue);
   }
-  
+
   protected String enumToString(final E value) {
     return _enumToString.get(value);
   }
 
-  @SuppressWarnings({ "unchecked", "deprecation" })
+  @SuppressWarnings({ "unchecked" })
   @Override
-  public void nullSafeSet(PreparedStatement stmt, Object value, int index) throws HibernateException, SQLException {
+  public void nullSafeSet(final PreparedStatement stmt, final Object value, final int index,
+      final SharedSessionContractImplementor session) throws HibernateException, SQLException {
     if (value == null) {
-      // NOTE kirk 2010-06-11 -- This has to remain deprecated due to a bug in Hibernate 3.5.2
-      // where they deprecated the constants there (e.g. Hibernate.STRING) but didn't put in
-      // the StringType.INSTNANCE you're supposed to use instead.
-      // When we upgrade to a new hibernate which doesn't have this bug, we need to change.
-      stmt.setNull(index, Hibernate.STRING.sqlType());
+      stmt.setNull(index, StandardBasicTypes.STRING.sqlType());
     } else {
       stmt.setString(index, enumToString((E) value));
     }
   }
 
   @Override
-  public Object replace(Object original, Object target, Object owner) throws HibernateException {
+  public Object replace(final Object original, final Object target, final Object owner) throws HibernateException {
     return original;
   }
 
@@ -122,10 +121,8 @@ public abstract class EnumUserType<E extends Enum<E>> implements UserType {
     return _clazz;
   }
 
-  @SuppressWarnings("deprecation")
   @Override
   public int[] sqlTypes() {
-    // NOTE kirk 2010-06-11 -- See note above in nullSafeSet.
-    return new int[] {Hibernate.STRING.sqlType()};
+    return new int[] {StandardBasicTypes.STRING.sqlType()};
   }
 }
