@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.component.factory.infrastructure;
@@ -14,7 +14,7 @@ import java.util.Set;
 import javax.sql.DataSource;
 
 import org.hibernate.SessionFactory;
-import org.hibernate.cfg.Environment;
+import org.hibernate.cfg.AvailableSettings;
 import org.joda.beans.Bean;
 import org.joda.beans.BeanBuilder;
 import org.joda.beans.BeanDefinition;
@@ -27,9 +27,9 @@ import org.joda.beans.impl.direct.DirectMetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
-import org.springframework.orm.hibernate3.HibernateTemplate;
-import org.springframework.orm.hibernate3.HibernateTransactionManager;
-import org.springframework.orm.hibernate3.LocalSessionFactoryBean;
+import org.springframework.orm.hibernate5.HibernateTemplate;
+import org.springframework.orm.hibernate5.HibernateTransactionManager;
+import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.support.AbstractPlatformTransactionManager;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
@@ -56,7 +56,7 @@ public class DbConnectorComponentFactory extends AbstractAliasedComponentFactory
   @PropertyDefinition(validate = "notNull")
   private DataSource _dataSource;
   /**
-   * The name of the connector, defaults to the classifier. 
+   * The name of the connector, defaults to the classifier.
    */
   @PropertyDefinition
   private String _name;
@@ -98,7 +98,7 @@ public class DbConnectorComponentFactory extends AbstractAliasedComponentFactory
 
   //-------------------------------------------------------------------------
   @Override
-  public void init(ComponentRepository repo, LinkedHashMap<String, String> configuration) throws Exception {
+  public void init(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) throws Exception {
     if (getName() == null) {
       setName(getClassifier());
     }
@@ -107,41 +107,41 @@ public class DbConnectorComponentFactory extends AbstractAliasedComponentFactory
 
   /**
    * Creates and registers the database connector.
-   * 
+   *
    * @param repo  the component repository, not null
    * @return the connector, not null
    */
-  protected DbConnector initDbConnector(ComponentRepository repo) {
-    DbConnector dbConnector = createDbConnector(repo);
+  protected DbConnector initDbConnector(final ComponentRepository repo) {
+    final DbConnector dbConnector = createDbConnector(repo);
     registerComponentAndAliases(repo, DbConnector.class, dbConnector);
     return dbConnector;
   }
 
   /**
    * Creates the database connector, without registering it.
-   * 
+   *
    * @param repo  the component repository, only used to register secondary items like lifecycle, not null
    * @return the connector, not null
    */
-  protected DbConnector createDbConnector(ComponentRepository repo) {
-    DbDialect dialect = createDialect(repo);
-    NamedParameterJdbcTemplate jdbcTemplate = new NamedParameterJdbcTemplate(getDataSource());
-    SessionFactory hibernateSessionFactory = createHibernateSessionFactory(repo, dialect);
-    HibernateTemplate hibernateTemplate = createHibernateTemplate(repo, hibernateSessionFactory);
-    TransactionTemplate transactionTemplate = createTransactionTemplate(repo, hibernateSessionFactory);
+  protected DbConnector createDbConnector(final ComponentRepository repo) {
+    final DbDialect dialect = createDialect(repo);
+    final NamedParameterJdbcTemplate jdbcTemplate = new NamedParameterJdbcTemplate(getDataSource());
+    final SessionFactory hibernateSessionFactory = createHibernateSessionFactory(repo, dialect);
+    final HibernateTemplate hibernateTemplate = createHibernateTemplate(repo, hibernateSessionFactory);
+    final TransactionTemplate transactionTemplate = createTransactionTemplate(repo, hibernateSessionFactory);
     return new DbConnector(getName(), dialect, getDataSource(), jdbcTemplate, hibernateTemplate, transactionTemplate);
   }
 
   /**
    * Creates the database dialect.
-   * 
+   *
    * @param repo  the component repository, only used to register secondary items like lifecycle, not null
    * @return the dialect, not null
    */
-  protected DbDialect createDialect(ComponentRepository repo) {
+  protected DbDialect createDialect(final ComponentRepository repo) {
     try {
       return (DbDialect) getClass().getClassLoader().loadClass(getDialect()).newInstance();
-    } catch (Exception ex) {
+    } catch (final Exception ex) {
       throw new OpenGammaRuntimeException("Unable to create database dialect from class: " + getDialect(), ex);
     }
   }
@@ -149,31 +149,31 @@ public class DbConnectorComponentFactory extends AbstractAliasedComponentFactory
   //-------------------------------------------------------------------------
   /**
    * Creates the Hibernate session factory.
-   * 
+   *
    * @param repo  the component repository, only used to register secondary items like lifecycle, not null
    * @param dialect  the dialect instance, not null
    * @return the session factory, may be null
    */
-  protected SessionFactory createHibernateSessionFactory(ComponentRepository repo, DbDialect dialect) {
+  protected SessionFactory createHibernateSessionFactory(final ComponentRepository repo, final DbDialect dialect) {
     if (getHibernateMappingFiles() == null) {
       return null; // Hibernate not required
     }
-    LocalSessionFactoryBean factory = new LocalSessionFactoryBean();
+    final LocalSessionFactoryBean factory = new LocalSessionFactoryBean();
     factory.setMappingResources(getHibernateMappingResources(repo));
     factory.setDataSource(getDataSource());
-    Properties props = new Properties();
+    final Properties props = new Properties();
     props.setProperty("hibernate.dialect", dialect.getHibernateDialect().getClass().getName());
     props.setProperty("hibernate.show_sql", String.valueOf(isHibernateShowSql()));
     props.setProperty("hibernate.connection.release_mode", "on_close");
     if (isAllowHibernateThreadBoundSession()) {
-      props.setProperty(Environment.CURRENT_SESSION_CONTEXT_CLASS, "thread");
-      props.setProperty(Environment.TRANSACTION_STRATEGY, "org.hibernate.transaction.JDBCTransactionFactory");
+      props.setProperty(AvailableSettings.CURRENT_SESSION_CONTEXT_CLASS, "thread");
+      props.setProperty(AvailableSettings.TRANSACTION_COORDINATOR_STRATEGY, "org.hibernate.resource.transaction.backend.jdbc.internal.JdbcResourceLocalTransactionCoordinatorImpl");
     }
     factory.setHibernateProperties(props);
-    factory.setLobHandler(dialect.getLobHandler());
+    //factory.setLobHandler(dialect.getLobHandler());
     try {
       factory.afterPropertiesSet();
-    } catch (Exception ex) {
+    } catch (final Exception ex) {
       throw new RuntimeException(ex);
     }
     return factory.getObject();
@@ -181,42 +181,42 @@ public class DbConnectorComponentFactory extends AbstractAliasedComponentFactory
 
   /**
    * Creates the complete list of Hibernate configuration files.
-   * 
+   *
    * @param repo  the component repository, only used to register secondary items like lifecycle, not null
    * @return the set of Hibernate files, not null
    */
-  protected String[] getHibernateMappingResources(ComponentRepository repo) {
-    String hibernateMappingFilesClassName = getHibernateMappingFiles();
+  protected String[] getHibernateMappingResources(final ComponentRepository repo) {
+    final String hibernateMappingFilesClassName = getHibernateMappingFiles();
     Class<?> hibernateMappingFilesClass;
     try {
       hibernateMappingFilesClass = getClass().getClassLoader().loadClass(hibernateMappingFilesClassName);
-    } catch (ClassNotFoundException ex) {
+    } catch (final ClassNotFoundException ex) {
       throw new OpenGammaRuntimeException("Could not find Hibernate mapping files implementation: " + hibernateMappingFilesClassName, ex);
     }
     HibernateMappingFiles hibernateMappingFiles;
     try {
       hibernateMappingFiles = (HibernateMappingFiles) hibernateMappingFilesClass.newInstance();
-    } catch (InstantiationException ex) {
+    } catch (final InstantiationException ex) {
       throw new OpenGammaRuntimeException("Could not instantiate Hibernate mapping files implementation: " + hibernateMappingFilesClassName, ex);
-    } catch (IllegalAccessException ex) {
+    } catch (final IllegalAccessException ex) {
       throw new OpenGammaRuntimeException("Could not access Hibernate mapping files implementation: " + hibernateMappingFilesClassName, ex);
     }
-    Set<String> config = new HashSet<String>();
-    for (Class<?> cls : hibernateMappingFiles.getHibernateMappingFiles()) {
-      String hbm = cls.getName().replace('.', '/') + ".hbm.xml";
+    final Set<String> config = new HashSet<String>();
+    for (final Class<?> cls : hibernateMappingFiles.getHibernateMappingFiles()) {
+      final String hbm = cls.getName().replace('.', '/') + ".hbm.xml";
       config.add(hbm);
     }
-    return (String[]) config.toArray(new String[config.size()]);
+    return config.toArray(new String[config.size()]);
   }
 
   /**
    * Creates the Hibernate template, using the session factory.
-   * 
+   *
    * @param repo  the component repository, only used to register secondary items like lifecycle, not null
    * @param sessionFactory  the Hibernate session factory, may be null
    * @return the Hibernate template, not null
    */
-  protected HibernateTemplate createHibernateTemplate(ComponentRepository repo, SessionFactory sessionFactory) {
+  protected HibernateTemplate createHibernateTemplate(final ComponentRepository repo, final SessionFactory sessionFactory) {
     if (sessionFactory == null) {
       return null;
     }
@@ -227,13 +227,13 @@ public class DbConnectorComponentFactory extends AbstractAliasedComponentFactory
    * Creates the transaction template.
    * <p>
    * This is Hibernate aware if Hibernate is available.
-   * 
+   *
    * @param repo  the component repository, only used to register secondary items like lifecycle, not null
    * @param hibernateSessionFactory  the session factory, not null
    * @return the template, not null
    */
-  protected TransactionTemplate createTransactionTemplate(ComponentRepository repo, SessionFactory hibernateSessionFactory) {
-    DefaultTransactionDefinition transactionDef = new DefaultTransactionDefinition();
+  protected TransactionTemplate createTransactionTemplate(final ComponentRepository repo, final SessionFactory hibernateSessionFactory) {
+    final DefaultTransactionDefinition transactionDef = new DefaultTransactionDefinition();
     transactionDef.setName(getName());
     if (getTransactionIsolationLevel() != null) {
       transactionDef.setIsolationLevelName(getTransactionIsolationLevel());
@@ -251,12 +251,12 @@ public class DbConnectorComponentFactory extends AbstractAliasedComponentFactory
    * Creates the transaction manager.
    * <p>
    * This is Hibernate aware if Hibernate is available.
-   * 
+   *
    * @param repo  the component repository, only used to register secondary items like lifecycle, not null
    * @param hibernateSessionFactory  the Hibernate session factory, may be null
    * @return the transaction manager, not null
    */
-  protected PlatformTransactionManager createTransactionManager(ComponentRepository repo, SessionFactory hibernateSessionFactory) {
+  protected PlatformTransactionManager createTransactionManager(final ComponentRepository repo, final SessionFactory hibernateSessionFactory) {
     AbstractPlatformTransactionManager newTransMgr;
     if (hibernateSessionFactory == null) {
       newTransMgr = new DataSourceTransactionManager(getDataSource());
