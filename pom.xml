@@ -823,11 +823,7 @@
       <dependency>
         <groupId>org.springframework.amqp</groupId>
         <artifactId>spring-rabbit</artifactId>
-<<<<<<< HEAD
-        <version>1.7.7.RELEASE</version>
-=======
         <version>2.0.2.RELEASE</version>
->>>>>>> mcleodmoores
         <optional>true</optional>
       </dependency>
       <dependency>
