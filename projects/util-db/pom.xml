@@ -40,10 +40,6 @@
       <groupId>org.springframework</groupId>
       <artifactId>spring-orm</artifactId>
     </dependency>
-    <!--dependency>
-      <groupId>org.hibernate</groupId>
-      <artifactId>hibernate-core</artifactId>
-    </dependency-->
     <dependency>
       <groupId>org.hibernate</groupId>
       <artifactId>hibernate-ehcache</artifactId>
@@ -64,12 +60,6 @@
       <artifactId>derby</artifactId>
       <optional>true</optional>
     </dependency>
-    <!--dependency>
-      <groupId>com.starling.external.microsoft</groupId>
-      <artifactId>sqljdbc4</artifactId>
-      <version>
-      <optional>true</optional>
-    </dependency-->
     <dependency>
       <groupId>org.testng</groupId>
       <artifactId>testng</artifactId>
