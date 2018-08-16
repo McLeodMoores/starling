@@ -27,7 +27,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
-import org.springframework.orm.hibernate3.HibernateCallback;
+import org.springframework.orm.hibernate5.HibernateCallback;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallback;
 
@@ -102,7 +102,7 @@ public class DbBatchMaster extends AbstractDbMaster implements BatchMasterWriter
     final Long id = extractOid(uniqueId);
     return getHibernateTransactionTemplate().execute(new HibernateCallback<RiskRun>() {
       @Override
-      public RiskRun doInHibernate(final Session session) throws HibernateException, SQLException {
+      public RiskRun doInHibernate(final Session session) throws HibernateException {
         final RiskRun run = _dbBatchWriter.getRiskRunById(id);
         if (run != null) {
           return run;
@@ -125,10 +125,10 @@ public class DbBatchMaster extends AbstractDbMaster implements BatchMasterWriter
 
         List<MarketData> results = Collections.emptyList();
         if (!pagingRequest.equals(PagingRequest.NONE)) {
-          results = getHibernateTemplate().findByCriteria(
-            criteria,
-            pagingRequest.getFirstItem(),
-            pagingRequest.getPagingSize());
+          results = (List<MarketData>) getHibernateTemplate().findByCriteria(
+              criteria,
+              pagingRequest.getFirstItem(),
+              pagingRequest.getPagingSize());
         }
         //
         Paging paging;
@@ -139,7 +139,7 @@ public class DbBatchMaster extends AbstractDbMaster implements BatchMasterWriter
           final Long totalCount = (Long) getHibernateTemplate().findByCriteria(criteria).get(0);
           paging = Paging.of(pagingRequest, totalCount.intValue());
         }
-        //     
+        //
         return Pairs.of(results, paging);
       }
     });
@@ -175,10 +175,10 @@ public class DbBatchMaster extends AbstractDbMaster implements BatchMasterWriter
         //
         List<MarketDataValue> results = Collections.emptyList();
         if (!pagingRequest.equals(PagingRequest.NONE)) {
-          results = getHibernateTemplate().findByCriteria(
-            criteria,
-            pagingRequest.getFirstItem(),
-            pagingRequest.getPagingSize());
+          results = (List<MarketDataValue>) getHibernateTemplate().findByCriteria(
+              criteria,
+              pagingRequest.getFirstItem(),
+              pagingRequest.getPagingSize());
         }
         //
         Paging paging;
@@ -212,33 +212,33 @@ public class DbBatchMaster extends AbstractDbMaster implements BatchMasterWriter
   @SuppressWarnings("unchecked")
   public Pair<List<RiskRun>, Paging> searchRiskRun(final BatchRunSearchRequest request) {
     s_logger.info("Searching BatchDocuments: ", request);
-    
+
     final DetachedCriteria criteria = DetachedCriteria.forClass(RiskRun.class);
-    
+
     if (request.getValuationTime() != null) {
       criteria.add(
-        Restrictions.eq("valuationTime", request.getValuationTime()));
+          Restrictions.eq("valuationTime", request.getValuationTime()));
     }
     if (request.getVersionCorrection() != null) {
       criteria.add(
-        Restrictions.eq("versionCorrection", request.getVersionCorrection()));
+          Restrictions.eq("versionCorrection", request.getVersionCorrection()));
     }
-    
+
     if (request.getMarketDataUid() != null) {
       criteria.createCriteria("marketData")
-        .add(Restrictions.eq("baseUidScheme", request.getMarketDataUid().getScheme()))
-        .add(Restrictions.eq("baseUidValue", request.getMarketDataUid().getValue()))
-        .add(eqOrIsNull("baseUidVersion", request.getMarketDataUid().getVersion()));
+      .add(Restrictions.eq("baseUidScheme", request.getMarketDataUid().getScheme()))
+      .add(Restrictions.eq("baseUidValue", request.getMarketDataUid().getValue()))
+      .add(eqOrIsNull("baseUidVersion", request.getMarketDataUid().getVersion()));
       //.addOrder(Order.asc("baseUid"));
     }
-    
+
     if (request.getViewDefinitionUid() != null) {
       criteria.add(Restrictions.eq("viewDefinitionUidScheme", request.getViewDefinitionUid().getScheme()))
-        .add(Restrictions.eq("viewDefinitionUidValue", request.getViewDefinitionUid().getValue()))
-        .add(eqOrIsNull("viewDefinitionUidVersion", request.getViewDefinitionUid().getVersion()));
+      .add(Restrictions.eq("viewDefinitionUidValue", request.getViewDefinitionUid().getValue()))
+      .add(eqOrIsNull("viewDefinitionUidVersion", request.getViewDefinitionUid().getVersion()));
       //.addOrder(Order.asc("viewDefinitionUid"));
     }
-    
+
     return getTransactionTemplateRetrying(getMaxRetries()).execute(new TransactionCallback<Pair<List<RiskRun>, Paging>>() {
       @Override
       public Pair<List<RiskRun>, Paging> doInTransaction(final TransactionStatus status) {
@@ -249,10 +249,10 @@ public class DbBatchMaster extends AbstractDbMaster implements BatchMasterWriter
         if (!pagingRequest.equals(PagingRequest.NONE)) {
           if (pagingRequest.equals(PagingRequest.ALL)) {
             criteria.addOrder(Order.asc("valuationTime"));
-            results = getHibernateTemplate().findByCriteria(
-              criteria,
-              pagingRequest.getFirstItem(),
-              pagingRequest.getPagingSize());
+            results = (List<RiskRun>) getHibernateTemplate().findByCriteria(
+                criteria,
+                pagingRequest.getFirstItem(),
+                pagingRequest.getPagingSize());
             //
             paging = Paging.of(pagingRequest, results);
           } else {
@@ -263,10 +263,10 @@ public class DbBatchMaster extends AbstractDbMaster implements BatchMasterWriter
             criteria.setProjection(null);
             criteria.setResultTransformer(Criteria.ROOT_ENTITY);
             criteria.addOrder(Order.asc("valuationTime"));
-            results = getHibernateTemplate().findByCriteria(
-              criteria,
-              pagingRequest.getFirstItem(),
-              pagingRequest.getPagingSize());
+            results = (List<RiskRun>) getHibernateTemplate().findByCriteria(
+                criteria,
+                pagingRequest.getFirstItem(),
+                pagingRequest.getPagingSize());
           }
         } else {
           paging = Paging.of(PagingRequest.NONE, 0);
@@ -290,9 +290,9 @@ public class DbBatchMaster extends AbstractDbMaster implements BatchMasterWriter
 
   @Override
   public RiskRun startRiskRun(final ViewCycleMetadata cycleMetadata,
-                              final Map<String, String> batchParameters,
-                              final RunCreationMode runCreationMode,
-                              final SnapshotMode snapshotMode) {
+      final Map<String, String> batchParameters,
+      final RunCreationMode runCreationMode,
+      final SnapshotMode snapshotMode) {
     return getTransactionTemplateRetrying(getMaxRetries()).execute(new TransactionCallback<RiskRun>() {
       @Override
       public RiskRun doInTransaction(final TransactionStatus status) {
@@ -323,9 +323,9 @@ public class DbBatchMaster extends AbstractDbMaster implements BatchMasterWriter
    * @return values with its paging descriptor
    */
   protected <D> Pair<List<D>, Paging> searchWithPaging(
-    final PagingRequest pagingRequest, final String[] sql, final DbMapSqlParameterSource args,
-    final ResultSetExtractor<List<D>> extractor) {
-    
+      final PagingRequest pagingRequest, final String[] sql, final DbMapSqlParameterSource args,
+      final ResultSetExtractor<List<D>> extractor) {
+
     return getTransactionTemplateRetrying(getMaxRetries()).execute(new TransactionCallback<Pair<List<D>, Paging>>() {
       @Override
       public Pair<List<D>, Paging> doInTransaction(final TransactionStatus status) {
@@ -353,7 +353,7 @@ public class DbBatchMaster extends AbstractDbMaster implements BatchMasterWriter
   @Override
   public Pair<List<ViewResultEntry>, Paging> getBatchValues(final ObjectId batchId, final PagingRequest pagingRequest) {
     s_logger.info("Getting Batch values: ", pagingRequest);
-    
+
     final Long runId = extractOid(batchId);
     final DbMapSqlParameterSource args = createParameterSource();
     args.addValue("run_id", runId);
@@ -361,7 +361,7 @@ public class DbBatchMaster extends AbstractDbMaster implements BatchMasterWriter
       args.addValue("paging_offset", pagingRequest.getFirstItem());
       args.addValue("paging_fetch", pagingRequest.getPagingSize());
     }
-    
+
     final String[] sql = {getElSqlBundle().getSql("GetBatchValues", args), getElSqlBundle().getSql("BatchValuesCount", args)};
     return searchWithPaging(pagingRequest, sql, args, new BatchValuesExtractor());
   }
@@ -414,16 +414,16 @@ public class DbBatchMaster extends AbstractDbMaster implements BatchMasterWriter
     }
 
     private ViewResultEntry buildBatchValue(final ResultSet rs) throws SQLException {
-//      final long id = rs.getLong("ID");
-//      final long calculationConfigurationId = rs.getLong("calculation_configuration_id");
-//      final long valueSpecificationId = rs.getLong("value_specification_id");
-//      final long functionUniqueId = rs.getLong("function_unique_id");
-//      final long computationTargetId = rs.getLong("computation_target_id");
-//      final long runId = rs.getLong("run_id");
+      //      final long id = rs.getLong("ID");
+      //      final long calculationConfigurationId = rs.getLong("calculation_configuration_id");
+      //      final long valueSpecificationId = rs.getLong("value_specification_id");
+      //      final long functionUniqueId = rs.getLong("function_unique_id");
+      //      final long computationTargetId = rs.getLong("computation_target_id");
+      //      final long runId = rs.getLong("run_id");
       final double value = rs.getDouble("value");
       final String valueName = rs.getString("name");
-//      final Timestamp evalInstant = rs.getTimestamp("eval_instant");
-//      final long computeNodeId = rs.getLong("compute_node_id");
+      //      final Timestamp evalInstant = rs.getTimestamp("eval_instant");
+      //      final long computeNodeId = rs.getLong("compute_node_id");
       final ComputationTargetType computationTargetType = ComputationTargetType.parse(rs.getString("target_type"));
       final String valueRequirementsSyntheticForm = rs.getString("synthetic_form");
       final String targetTypeIdScheme = rs.getString("target_type_id_scheme");
