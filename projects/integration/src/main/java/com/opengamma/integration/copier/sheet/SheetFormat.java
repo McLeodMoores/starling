@@ -1,7 +1,11 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
+ *
+ * Modified by McLeod Moores Software Limited.
+ *
+ * Copyright (C) 2018 - present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.opengamma.integration.copier.sheet;
 
@@ -11,7 +15,7 @@ package com.opengamma.integration.copier.sheet;
 public enum SheetFormat {
 
   /** CSV sheet */
-  CSV, 
+  CSV,
 
   /** XLS sheet */
   XLS,
@@ -27,12 +31,18 @@ public enum SheetFormat {
 
   /** Unknown sheet */
   UNKNOWN;
- 
-  public static SheetFormat of(String filename) {
+
+  /**
+   * Returns the sheet format from the file extension.
+   *
+   * @param filename  the file name
+   * @return  the sheet format
+   */
+  public static SheetFormat of(final String filename) {
     if (filename.lastIndexOf('.') < 0) {
       return SheetFormat.UNKNOWN;
     }
-    String extension = filename.substring(filename.lastIndexOf('.')).toLowerCase().trim();
+    final String extension = filename.substring(filename.lastIndexOf('.')).toLowerCase().trim();
     if (extension.equals(".csv")) {
       return SheetFormat.CSV;
     } else if (extension.equals(".xls")) {
