@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.integration.timeseries.snapshot;
@@ -22,7 +22,7 @@ import org.joda.beans.impl.direct.DirectMetaProperty;
 import org.joda.beans.impl.direct.DirectMetaPropertyMap;
 import org.quartz.Scheduler;
 import org.quartz.Trigger;
-import org.springframework.scheduling.quartz.CronTriggerBean;
+import org.springframework.scheduling.quartz.CronTriggerFactoryBean;
 
 import com.google.common.collect.Maps;
 import com.opengamma.component.ComponentInfo;
@@ -36,16 +36,16 @@ import com.opengamma.util.redis.RedisConnector;
  */
 @BeanDefinition
 public class CronTriggerComponentFactory extends AbstractComponentFactory {
-    
+
   /**
    * The classifier that the factory should publish under.
    */
   @PropertyDefinition(validate = "notNull")
   private String _classifier;
-  
+
   @PropertyDefinition(validate = "notNull")
   private String _jobName;
-  
+
   @PropertyDefinition
   private String _jobGroup;
 
@@ -54,42 +54,42 @@ public class CronTriggerComponentFactory extends AbstractComponentFactory {
 
   @PropertyDefinition(validate = "notNull")
   private String _cronExpression;
-  
+
   @PropertyDefinition
   private String _schemeBlackList;
-  
+
   @PropertyDefinition
   private String _dataFieldBlackList;
-  
+
   @PropertyDefinition
   private String _dataSource;
-  
+
   @PropertyDefinition
   private String _normalizationRuleSetId;
-  
+
   @PropertyDefinition(validate = "notNull")
   private String _observationTime;
-  
+
   @PropertyDefinition
   private String _globalPrefix;
-  
+
   @PropertyDefinition
   private HistoricalTimeSeriesMaster _htsMaster;
-  
+
   @PropertyDefinition
   private RedisConnector _redisConnector;
-  
+
   @PropertyDefinition
   private String _baseDir;
-  
+
   @PropertyDefinition(validate = "notNull")
   private Scheduler _scheduler;
 
   @Override
-  public void init(ComponentRepository repo, LinkedHashMap<String, String> configuration) throws Exception {
-    
-    ComponentInfo info = new ComponentInfo(Trigger.class, getClassifier());
-    
+  public void init(final ComponentRepository repo, final LinkedHashMap<String, String> configuration) throws Exception {
+
+    final ComponentInfo info = new ComponentInfo(Trigger.class, getClassifier());
+
     final Map<String, Object> jobDataAsMap = Maps.newHashMap();
     jobDataAsMap.put("observationTime", getObservationTime());
     if (getDataSource() != null) {
@@ -116,25 +116,25 @@ public class CronTriggerComponentFactory extends AbstractComponentFactory {
     if (getBaseDir() != null) {
       jobDataAsMap.put("baseDir", getBaseDir());
     }
-        
-    CronTriggerBean cronTriggerBean = new CronTriggerBean();
+
+    final CronTriggerFactoryBean cronTriggerBean = new CronTriggerFactoryBean();
     cronTriggerBean.setBeanName(getName());
     cronTriggerBean.setCronExpression(getCronExpression());
     cronTriggerBean.setJobDataAsMap(jobDataAsMap);
-    cronTriggerBean.setJobName(getJobName());
+    cronTriggerBean.setName(getJobName());
     if (getJobGroup() != null) {
-      cronTriggerBean.setJobGroup(getJobGroup());
+      cronTriggerBean.setGroup(getJobGroup());
     }
     cronTriggerBean.afterPropertiesSet();
-    
+
     repo.registerComponent(info, cronTriggerBean);
-    
-    Scheduler scheduler = getScheduler();
-    scheduler.scheduleJob(cronTriggerBean);
+
+    final Scheduler scheduler = getScheduler();
+    scheduler.scheduleJob(cronTriggerBean.getObject());
   }
-  
-  private BlackList createBlackList(String blackList, String name) {
-    DefaultBlackList result = new DefaultBlackList();
+
+  private BlackList createBlackList(final String blackList, final String name) {
+    final DefaultBlackList result = new DefaultBlackList();
     result.setName(name);
     result.setBlackList(Arrays.asList(StringUtils.split(blackList.toUpperCase())));
     return result;
