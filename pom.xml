@@ -31,12 +31,12 @@
     <repository>
       <id>releases</id>
       <name>McLeod Moores public maven repository</name>
-      <url>http://maven.mcleodmoores.com:8081/content/repositories/releases</url>
+      <url>http://maven.mcleodmoores.com/artifactory/releases</url>
     </repository>
     <repository>
       <id>snapshots</id>
       <name>McLeod Moores public maven snapshot repository</name>
-      <url>http://maven.mcleodmoores.com:8081/content/repositories/snapshots</url>
+      <url>http://maven.mcleodmoores.com/artifactory/snapshots</url>
       <snapshots>
         <enabled>true</enabled>
       </snapshots>
@@ -45,8 +45,8 @@
   <pluginRepositories>
     <pluginRepository>
       <id>releases</id>
-      <name>McLeodm Moores public maven repository</name>
-      <url>http://maven.mcleodmoores.com:8081/content/repositories/releases</url>
+      <name>McLeod Moores public maven repository</name>
+      <url>http://maven.mcleodmoores.com/artifactory/releases</url>
       <releases>
         <enabled>true</enabled>
       </releases>
@@ -56,8 +56,8 @@
     </pluginRepository>
     <pluginRepository>
       <id>snapshots</id>
-      <name>McLeodm Moores public maven snapshot repository</name>
-      <url>http://maven.mcleodmoores.com:8081/content/repositories/snapshots</url>
+      <name>McLeod Moores public maven snapshot repository</name>
+      <url>http://maven.mcleodmoores.com/artifactory/snapshots</url>
       <releases>
         <enabled>false</enabled>
       </releases>
@@ -1052,11 +1052,6 @@
       <name>McLeod Moores public maven snapshot repository</name>
       <url>http://maven.mcleodmoores.com:8081/content/repositories/snapshots</url>
     </snapshotRepository>
-    <site>
-      <id>og-public-site</id>
-      <name>OpenGamma public site</name>
-      <url>http://developers.opengamma.com/og-platform</url>
-    </site>
   </distributionManagement>
 
   <!-- ==================================================================== -->
@@ -1276,15 +1271,15 @@
   <!-- ==================================================================== -->
   <properties>
     <!-- Properties for maven-javadoc-plugin -->
-    <windowtitle>OpenGamma Platform API</windowtitle>
-    <doctitle><![CDATA[<h1>OpenGamma Platform API</h1>]]></doctitle>
+    <windowtitle>Starling Platform API</windowtitle>
+    <doctitle><![CDATA[<h1>Starling Platform API</h1>]]></doctitle>
     <header><![CDATA[<script type="text/x-mathjax-config">MathJax.Hub.Config({ tex2jax: { inlineMath: [ ['$','$'], ["\\\\(","\\\\)"] ],processEscapes: true} });</script><script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>]]></header>
     <bottom><![CDATA[<i>Copyright 2009-Present by OpenGamma Inc. and individual contributors</i><br/><i>${javadoc.footer.license}</i><br/><i>Additional documentation can be found at <a href="http://docs.opengamma.com">docs.opengamma.com</a>.</i><script type="text/javascript">var _gaq = _gaq || [];_gaq.push(['_setAccount', 'UA-12092825-5']);_gaq.push(['_trackPageview']);(function() {var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true; ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js'; var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s); })(); </script>]]></bottom>
     <javadoc.footer.license/>
     <!-- Properties for buildnumber-maven-plugin -->
     <maven.buildNumber.getRevisionOnlyOnce>true</maven.buildNumber.getRevisionOnlyOnce>
     <!-- Version properties -->
-    <maven-checkstyle-plugin.version>2.12</maven-checkstyle-plugin.version>
+    <maven-checkstyle-plugin.version>3.0.0</maven-checkstyle-plugin.version>
     <maven-surefire-plugin.version>2.17</maven-surefire-plugin.version>
     <maven-surefire-report-plugin.version>2.17</maven-surefire-report-plugin.version>
     <jacoco-maven-plugin.version>0.7.0.201403182114</jacoco-maven-plugin.version>
