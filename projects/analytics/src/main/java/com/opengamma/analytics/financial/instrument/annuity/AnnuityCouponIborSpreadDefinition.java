@@ -27,6 +27,7 @@ import com.opengamma.util.ArgumentChecker;
 /**
  * A wrapper class for an AnnuityDefinition containing CouponIborSpreadDefinition.
  */
+@SuppressWarnings("deprecation")
 public class AnnuityCouponIborSpreadDefinition extends AnnuityCouponDefinition<CouponIborSpreadDefinition> {
 
   /**
@@ -60,7 +61,8 @@ public class AnnuityCouponIborSpreadDefinition extends AnnuityCouponDefinition<C
    * @param calendar The holiday calendar for the ibor leg.
    * @return The Ibor annuity.
    */
-  public static AnnuityCouponIborSpreadDefinition from(final ZonedDateTime settlementDate, final Period tenor, final double notional, final IborIndex index, final double spread,
+  public static AnnuityCouponIborSpreadDefinition from(final ZonedDateTime settlementDate, final Period tenor,
+      final double notional, final IborIndex index, final double spread,
       final boolean isPayer, final Calendar calendar) {
     ArgumentChecker.notNull(settlementDate, "settlement date");
     ArgumentChecker.notNull(index, "index");
@@ -88,8 +90,10 @@ public class AnnuityCouponIborSpreadDefinition extends AnnuityCouponDefinition<C
    * @param calendar The holiday calendar for the ibor leg.
    * @return The Ibor annuity.
    */
-  public static AnnuityCouponIborSpreadDefinition from(final ZonedDateTime settlementDate, final ZonedDateTime maturityDate, final Period paymentPeriod, final double notional, final IborIndex index,
-      final boolean isPayer, final BusinessDayConvention businessDayConvention, final boolean endOfMonth, final DayCount dayCount, final double spread, final Calendar calendar) {
+  public static AnnuityCouponIborSpreadDefinition from(final ZonedDateTime settlementDate, final ZonedDateTime maturityDate,
+      final Period paymentPeriod, final double notional, final IborIndex index,
+      final boolean isPayer, final BusinessDayConvention businessDayConvention, final boolean endOfMonth,
+      final DayCount dayCount, final double spread, final Calendar calendar) {
     ArgumentChecker.notNull(settlementDate, "settlement date");
     ArgumentChecker.notNull(maturityDate, "maturity date");
     ArgumentChecker.notNull(paymentPeriod, "payment period");
@@ -98,7 +102,8 @@ public class AnnuityCouponIborSpreadDefinition extends AnnuityCouponDefinition<C
     ArgumentChecker.notNull(dayCount, "Day count convention");
     ArgumentChecker.isTrue(notional > 0, "notional <= 0");
     final double sign = isPayer ? -1.0 : 1.0;
-    final ZonedDateTime[] paymentDates = ScheduleCalculator.getAdjustedDateSchedule(settlementDate, maturityDate, paymentPeriod, true, false, businessDayConvention, calendar, endOfMonth);
+    final ZonedDateTime[] paymentDates = ScheduleCalculator.getAdjustedDateSchedule(settlementDate, maturityDate, paymentPeriod,
+        true, false, businessDayConvention, calendar, endOfMonth);
     final CouponIborSpreadDefinition[] coupons = new CouponIborSpreadDefinition[paymentDates.length];
     ZonedDateTime fixingDate = ScheduleCalculator.getAdjustedDate(settlementDate, -index.getSpotLag(), calendar);
     coupons[0] = new CouponIborSpreadDefinition(index.getCurrency(), paymentDates[0], settlementDate, paymentDates[0],
@@ -127,8 +132,10 @@ public class AnnuityCouponIborSpreadDefinition extends AnnuityCouponDefinition<C
    * @param stub The stub type.
    * @return The Ibor annuity.
    */
-  public static AnnuityCouponIborSpreadDefinition from(final ZonedDateTime settlementDate, final ZonedDateTime maturityDate, final Period paymentPeriod, final double notional, final double spread,
-      final IborIndex index, final boolean isPayer, final BusinessDayConvention businessDayConvention, final boolean endOfMonth, final DayCount dayCount, final Calendar calendar,
+  public static AnnuityCouponIborSpreadDefinition from(final ZonedDateTime settlementDate, final ZonedDateTime maturityDate, final Period paymentPeriod,
+      final double notional, final double spread,
+      final IborIndex index, final boolean isPayer, final BusinessDayConvention businessDayConvention, final boolean endOfMonth,
+      final DayCount dayCount, final Calendar calendar,
       final StubType stub) {
     ArgumentChecker.notNull(settlementDate, "settlement date");
     ArgumentChecker.notNull(maturityDate, "maturity date");
@@ -165,7 +172,8 @@ public class AnnuityCouponIborSpreadDefinition extends AnnuityCouponDefinition<C
    * @param calendar The holiday calendar for the ibor leg.
    * @return The Ibor annuity.
    */
-  public static AnnuityCouponIborSpreadDefinition from(final ZonedDateTime settlementDate, final ZonedDateTime maturityDate, final double notional, final IborIndex index, final double spread,
+  public static AnnuityCouponIborSpreadDefinition from(final ZonedDateTime settlementDate, final ZonedDateTime maturityDate,
+      final double notional, final IborIndex index, final double spread,
       final boolean isPayer, final Calendar calendar) {
     ArgumentChecker.notNull(settlementDate, "settlement date");
     ArgumentChecker.notNull(index, "index");
@@ -179,7 +187,7 @@ public class AnnuityCouponIborSpreadDefinition extends AnnuityCouponDefinition<C
   }
 
   /**
-   * Creates an annuity with zero spread from an {@link AnnuityCouponIborDefinition}
+   * Creates an annuity with zero spread from an {@link AnnuityCouponIborDefinition}.
    * @param iborAnnuity The annuity, not null
    * @return An ibor annuity with spread
    */
@@ -193,7 +201,7 @@ public class AnnuityCouponIborSpreadDefinition extends AnnuityCouponDefinition<C
   }
 
   /**
-   * Returns the underlying ibor index
+   * Returns the underlying ibor index.
    * @return The underlying ibor index
    */
   public IborIndex getIborIndex() {

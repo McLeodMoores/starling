@@ -10,6 +10,8 @@ import com.opengamma.analytics.financial.forex.method.ForexOptionVanillaBlackTer
 import com.opengamma.analytics.financial.interestrate.YieldCurveBundle;
 import com.opengamma.util.money.MultipleCurrencyAmount;
 
+// CSOFF
+
 /**
  * Calculator of the currency exposure for Forex derivatives in the Black (Garman-Kohlhagen) world. A term structure of implied volatility is provided.
  * To compute the currency exposure, the Black volatility is kept constant; the volatility is not recomputed for spot and forward changes.

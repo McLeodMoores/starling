@@ -1,13 +1,14 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.credit.bumpers;
 
+// CSOFF
 /**
  * Class containing utilities for bumping recovery rates by user defined methods and amounts
- *@deprecated this will be deleted 
+ *@deprecated this will be deleted
  */
 @Deprecated
 public class RecoveryRateBumpers {

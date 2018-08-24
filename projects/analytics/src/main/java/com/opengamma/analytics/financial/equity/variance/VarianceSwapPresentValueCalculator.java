@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.equity.variance;
@@ -16,14 +16,11 @@ import com.opengamma.util.ArgumentChecker;
  */
 public class VarianceSwapPresentValueCalculator extends InstrumentDerivativeVisitorAdapter<StaticReplicationDataBundle, Double> {
 
-  private static final VarianceSwapPresentValueCalculator s_instance = new VarianceSwapPresentValueCalculator();
+  private static final VarianceSwapPresentValueCalculator INSTANCE = new VarianceSwapPresentValueCalculator();
   private static final VarianceSwapStaticReplication PRICER = new VarianceSwapStaticReplication();
 
   public static VarianceSwapPresentValueCalculator getInstance() {
-    return s_instance;
-  }
-
-  public VarianceSwapPresentValueCalculator() {
+    return INSTANCE;
   }
 
   @Override

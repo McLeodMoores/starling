@@ -13,7 +13,7 @@ import com.opengamma.financial.convention.calendar.Calendar;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * 
+ *
  */
 public class ForwardCommodityPhysicalSettleDefinition extends CouponCommodityPhysicalSettleDefinition {
 
@@ -31,14 +31,14 @@ public class ForwardCommodityPhysicalSettleDefinition extends CouponCommodityPhy
    * @param notional notional
    * @param settlementDate The settlement date, not null
    * @param calendar The holiday calendar, not null
-   * @param noticeFirstDate  The notice first date, can be null 
-   * @param noticeLastDate  The notice last date, can be null 
+   * @param noticeFirstDate  The notice first date, can be null
+   * @param noticeLastDate  The notice last date, can be null
    * @param firstDeliveryDate The first delivery date, not null for physical contract
    * @param lastDeliveryDate The last delivery date, not null for physical contract
    */
-  public ForwardCommodityPhysicalSettleDefinition(final double rate, final double paymentYearFraction, final CommodityUnderlying underlying, final String unitName, final double notional,
-      final ZonedDateTime settlementDate, final Calendar calendar, final ZonedDateTime noticeFirstDate, final ZonedDateTime noticeLastDate, final ZonedDateTime firstDeliveryDate,
-      final ZonedDateTime lastDeliveryDate) {
+  public ForwardCommodityPhysicalSettleDefinition(final double rate, final double paymentYearFraction, final CommodityUnderlying underlying,
+      final String unitName, final double notional, final ZonedDateTime settlementDate, final Calendar calendar, final ZonedDateTime noticeFirstDate,
+      final ZonedDateTime noticeLastDate, final ZonedDateTime firstDeliveryDate, final ZonedDateTime lastDeliveryDate) {
     super(paymentYearFraction, underlying, unitName, notional, settlementDate, calendar, noticeFirstDate, noticeLastDate, firstDeliveryDate, lastDeliveryDate);
     _rate = rate;
   }
@@ -71,7 +71,7 @@ public class ForwardCommodityPhysicalSettleDefinition extends CouponCommodityPhy
     int result = super.hashCode();
     long temp;
     temp = Double.doubleToLongBits(_rate);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 

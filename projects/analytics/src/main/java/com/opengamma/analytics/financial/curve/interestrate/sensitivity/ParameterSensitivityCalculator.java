@@ -26,7 +26,7 @@ import com.opengamma.analytics.math.matrix.DoubleMatrix1D;
 public class ParameterSensitivityCalculator extends AbstractParameterSensitivityCalculator {
 
   /**
-   * Constructor
+   * Constructor.
    * @param curveSensitivityCalculator The curve sensitivity calculator.
    */
   public ParameterSensitivityCalculator(final InstrumentDerivativeVisitor<YieldCurveBundle, InterestRateCurveSensitivity> curveSensitivityCalculator) {
@@ -42,7 +42,8 @@ public class ParameterSensitivityCalculator extends AbstractParameterSensitivity
    * @return The sensitivity (as a DoubleMatrix1D).
    */
   @Override
-  public DoubleMatrix1D pointToParameterSensitivity(final InterestRateCurveSensitivity sensitivity, final Set<String> fixedCurves, final YieldCurveBundle bundle) {
+  public DoubleMatrix1D pointToParameterSensitivity(final InterestRateCurveSensitivity sensitivity, final Set<String> fixedCurves,
+      final YieldCurveBundle bundle) {
     final List<Double> result = new ArrayList<>();
     for (final String curveName : bundle.getAllNames()) {
       if (!fixedCurves.contains(curveName)) {

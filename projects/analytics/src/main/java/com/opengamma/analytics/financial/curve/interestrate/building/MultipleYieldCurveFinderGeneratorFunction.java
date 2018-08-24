@@ -35,7 +35,8 @@ public class MultipleYieldCurveFinderGeneratorFunction extends Function1D<Double
    * @param calculator The instrument value calculator.
    * @param data The data required for curve building.
    */
-  public MultipleYieldCurveFinderGeneratorFunction(final InstrumentDerivativeVisitor<YieldCurveBundle, Double> calculator, final MultipleYieldCurveFinderGeneratorDataBundle data) {
+  public MultipleYieldCurveFinderGeneratorFunction(final InstrumentDerivativeVisitor<YieldCurveBundle, Double> calculator,
+      final MultipleYieldCurveFinderGeneratorDataBundle data) {
     ArgumentChecker.notNull(calculator, "Calculator");
     ArgumentChecker.notNull(data, "Data");
     _calculator = calculator;

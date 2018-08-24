@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.equity.variance.pricing;
@@ -19,7 +19,7 @@ import com.opengamma.util.ArgumentChecker;
  * Converts an volatility surface where the prices (and so the implied volatilities) include information about dividends to a pure implied volatility
  * surface, where the effect of dividends has been removed.
  */
-public class EquityVolatilityToPureVolatilitySurfaceConverter {
+public final class EquityVolatilityToPureVolatilitySurfaceConverter {
 
   /**
    * @param spot The spot, greater than zero
@@ -41,7 +41,8 @@ public class EquityVolatilityToPureVolatilitySurfaceConverter {
     ArgumentChecker.isTrue(strikes.length == nExp, "number of strike strips ({}) not equal to number of expiries({})", strikes.length, nExp);
     ArgumentChecker.isTrue(otmPrices.length == nExp, "number of price strips ({}) not equal to number of expiries({})", strikes.length, nExp);
     for (int i = 0; i < nExp; i++) {
-      ArgumentChecker.isTrue(strikes[i].length == otmPrices[i].length, "number of prices and strikes in strip #{} (expiry = {}) do not match. {} prices and {} strikes",
+      ArgumentChecker.isTrue(strikes[i].length == otmPrices[i].length,
+          "number of prices and strikes in strip #{} (expiry = {}) do not match. {} prices and {} strikes",
           i, expiries[i], otmPrices[i].length, strikes[i].length);
     }
 
@@ -62,7 +63,8 @@ public class EquityVolatilityToPureVolatilitySurfaceConverter {
         final boolean isCall = strikes[i][j] >= f;
         final double temp = strikes[i][j] - d;
         ArgumentChecker.isTrue(temp >= 0,
-            "strike of {} at expiry {} is less than the discounted value of future cash dividends {}. Either remove this option or change the dividend assumption",
+            "strike of {} at expiry {} is less than the discounted value of future cash dividends {}. Either remove this "
+            + "option or change the dividend assumption",
             strikes[i][j], t, d);
         x[i][j] = temp / (f - d);
         final double purePrice = otmPrices[i][j] / p / (f - d);
@@ -70,9 +72,13 @@ public class EquityVolatilityToPureVolatilitySurfaceConverter {
       }
     }
 
-    //fit an implied volatility surface to the pure implied vols (as the forward is 1.0, the BlackVolatilitySurfaceMoneyness is numerically identical to the PureImpliedVolatilitySurface
+    //fit an implied volatility surface to the pure implied vols (as the forward is 1.0,
+    //the BlackVolatilitySurfaceMoneyness is numerically identical to the PureImpliedVolatilitySurface
     final SmileSurfaceDataBundle data = new StandardSmileSurfaceDataBundle(new ForwardCurve(1.0), expiries, x, vols);
     final BlackVolatilitySurfaceMoneyness surf = surfaceInterpolator.getVolatilitySurface(data);
     return new PureImpliedVolatilitySurface(surf.getSurface()); //TODO have a direct fitter for PureImpliedVolatilitySurface
+  }
+
+  private EquityVolatilityToPureVolatilitySurfaceConverter() {
   }
 }

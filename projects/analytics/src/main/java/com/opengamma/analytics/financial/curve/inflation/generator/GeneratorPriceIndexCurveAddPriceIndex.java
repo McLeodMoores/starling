@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.curve.inflation.generator;
@@ -14,8 +14,8 @@ import com.opengamma.analytics.financial.provider.description.inflation.Inflatio
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Store the details and generate the required curve. The curve is the sum (or difference) of two (or more) curves 
- * (operation on the price index): an existing curve referenced by its name and a new curve. 
+ * Store the details and generate the required curve. The curve is the sum (or difference) of two (or more) curves
+ * (operation on the price index): an existing curve referenced by its name and a new curve.
  * The generated curve is a PriceIndexCurveAddPriceIndexSpreadCurve.
  */
 public class GeneratorPriceIndexCurveAddPriceIndex extends GeneratorPriceIndexCurve {
@@ -38,7 +38,7 @@ public class GeneratorPriceIndexCurveAddPriceIndex extends GeneratorPriceIndexCu
    * @param generators The array of constructors for the component curves.
    * @param substract If true, the rate of all curves, except the first one, will be subtracted from the first one. If false, all the rates are added.
    */
-  public GeneratorPriceIndexCurveAddPriceIndex(GeneratorPriceIndexCurve[] generators, boolean substract) {
+  public GeneratorPriceIndexCurveAddPriceIndex(final GeneratorPriceIndexCurve[] generators, final boolean substract) {
     ArgumentChecker.notNull(generators, "Generators");
     _generators = generators;
     _nbGenerators = generators.length;
@@ -55,13 +55,13 @@ public class GeneratorPriceIndexCurveAddPriceIndex extends GeneratorPriceIndexCu
   }
 
   @Override
-  public PriceIndexCurve generateCurve(String name, double[] x) {
+  public PriceIndexCurve generateCurve(final String name, final double[] x) {
     ArgumentChecker.notNull(name, "Name");
     ArgumentChecker.isTrue(x.length == getNumberOfParameter(), "Incorrect number of parameters");
-    PriceIndexCurve[] underlyingCurves = new PriceIndexCurve[_nbGenerators];
+    final PriceIndexCurve[] underlyingCurves = new PriceIndexCurve[_nbGenerators];
     int index = 0;
     for (int loopgen = 0; loopgen < _nbGenerators; loopgen++) {
-      double[] paramCurve = Arrays.copyOfRange(x, index, index + _generators[loopgen].getNumberOfParameter());
+      final double[] paramCurve = Arrays.copyOfRange(x, index, index + _generators[loopgen].getNumberOfParameter());
       index += _generators[loopgen].getNumberOfParameter();
       underlyingCurves[loopgen] = _generators[loopgen].generateCurve(name + "-" + loopgen, paramCurve);
     }
@@ -69,7 +69,7 @@ public class GeneratorPriceIndexCurveAddPriceIndex extends GeneratorPriceIndexCu
   }
 
   @Override
-  public PriceIndexCurve generateCurve(String name, InflationProviderInterface inflation, double[] parameters) {
+  public PriceIndexCurve generateCurve(final String name, final InflationProviderInterface inflation, final double[] parameters) {
     return generateCurve(name, parameters);
   }
 
@@ -82,20 +82,20 @@ public class GeneratorPriceIndexCurveAddPriceIndex extends GeneratorPriceIndexCu
    * @return The final generator.
    */
   @Override
-  public GeneratorPriceIndexCurve finalGenerator(Object data) {
+  public GeneratorPriceIndexCurve finalGenerator(final Object data) {
     ArgumentChecker.isTrue(data instanceof InstrumentDerivative[], "data should be an array of InstrumentDerivative");
-    InstrumentDerivative[] instruments = (InstrumentDerivative[]) data;
-    GeneratorPriceIndexCurve[] finalGenerator = new GeneratorPriceIndexCurve[_nbGenerators];
+    final InstrumentDerivative[] instruments = (InstrumentDerivative[]) data;
+    final GeneratorPriceIndexCurve[] finalGenerator = new GeneratorPriceIndexCurve[_nbGenerators];
     int nbDataUsed = 0;
     int nbParam = 0;
     for (int loopgen = 0; loopgen < _nbGenerators - 1; loopgen++) {
       nbParam = _generators[loopgen].getNumberOfParameter();
-      InstrumentDerivative[] instrumentsLoop = new InstrumentDerivative[nbParam];
+      final InstrumentDerivative[] instrumentsLoop = new InstrumentDerivative[nbParam];
       System.arraycopy(instruments, nbDataUsed, instrumentsLoop, 0, nbParam);
       finalGenerator[loopgen] = _generators[loopgen].finalGenerator(instrumentsLoop);
       nbDataUsed += nbParam;
     }
-    InstrumentDerivative[] instrumentsLast = new InstrumentDerivative[instruments.length - nbDataUsed + 1];
+    final InstrumentDerivative[] instrumentsLast = new InstrumentDerivative[instruments.length - nbDataUsed + 1];
     instrumentsLast[0] = instruments[nbDataUsed - 1];
     // Implementation note: The anchor is the previous instrument.
     System.arraycopy(instruments, nbDataUsed, instrumentsLast, 1, instruments.length - nbDataUsed);
@@ -104,13 +104,13 @@ public class GeneratorPriceIndexCurveAddPriceIndex extends GeneratorPriceIndexCu
   }
 
   @Override
-  public double[] initialGuess(double[] rates) {
-    double[] guess = new double[rates.length];
+  public double[] initialGuess(final double[] rates) {
+    final double[] guess = new double[rates.length];
     int nbDataUsed = 0;
     int nbParam = 0;
     for (int loopgen = 0; loopgen < _nbGenerators; loopgen++) {
       nbParam = _generators[loopgen].getNumberOfParameter();
-      double[] tmp = new double[nbParam];
+      final double[] tmp = new double[nbParam];
       System.arraycopy(rates, nbDataUsed, tmp, 0, nbParam);
       System.arraycopy(_generators[loopgen].initialGuess(tmp), 0, guess, nbDataUsed, nbParam);
       nbDataUsed += nbParam;

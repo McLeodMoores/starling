@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.credit;
@@ -24,8 +24,9 @@ import com.opengamma.analytics.financial.credit.creditdefaultswap.definition.sta
 import com.opengamma.analytics.financial.credit.creditdefaultswap.definition.standard.StandardSovereignCreditDefaultSwapDefinition;
 import com.opengamma.analytics.financial.credit.creditdefaultswap.definition.standard.StandardVanillaCreditDefaultSwapDefinition;
 
+// CSOFF
 /**
- * 
+ *
  */
 public abstract class CreditInstrumentDefinitionVisitorAdapter<DATA_TYPE, RESULT_TYPE> implements CreditInstrumentDefinitionVisitor<DATA_TYPE, RESULT_TYPE> {
 

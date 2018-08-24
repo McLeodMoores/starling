@@ -50,7 +50,8 @@ public abstract class CommodityFutureDefinition<T extends InstrumentDerivative> 
   /**
    * Constructor for futures with delivery dates (i.e. physical settlement)
    *
-   * @param expiryDate  the time and the day that a particular delivery month of a futures contract stops trading, as well as the final settlement price for that contract
+   * @param expiryDate  the time and the day that a particular delivery month of a futures contract stops trading,
+   * as well as the final settlement price for that contract
    * @param underlying  identifier of the underlying commodity
    * @param unitAmount  size of a unit
    * @param firstDeliveryDate  date of first delivery - PHYSICAL settlement
@@ -95,7 +96,8 @@ public abstract class CommodityFutureDefinition<T extends InstrumentDerivative> 
   /**
    * Constructor for futures without delivery dates (e.g. cash settlement)
    *
-   * @param expiryDate  the time and the day that a particular delivery month of a futures contract stops trading, as well as the final settlement price for that contract
+   * @param expiryDate  the time and the day that a particular delivery month of a futures contract stops trading,
+   * as well as the final settlement price for that contract
    * @param underlying  identifier of the underlying commodity
    * @param unitAmount  size of a unit
    * @param amount  number of units
@@ -104,8 +106,8 @@ public abstract class CommodityFutureDefinition<T extends InstrumentDerivative> 
    * @param currency currency
    * @param settlementDate settlement date
    */
-  public CommodityFutureDefinition(final ZonedDateTime expiryDate, final ExternalId underlying, final double unitAmount, final double amount, final String unitName,
-      final double referencePrice, final Currency currency, final ZonedDateTime settlementDate) {
+  public CommodityFutureDefinition(final ZonedDateTime expiryDate, final ExternalId underlying, final double unitAmount,
+      final double amount, final String unitName, final double referencePrice, final Currency currency, final ZonedDateTime settlementDate) {
     this(expiryDate, underlying, unitAmount, null, null, amount, unitName, SettlementType.CASH, referencePrice, currency, settlementDate);
   }
 
@@ -215,11 +217,11 @@ public abstract class CommodityFutureDefinition<T extends InstrumentDerivative> 
     result = prime * result + _settlementDate.hashCode();
     long temp;
     temp = Double.doubleToLongBits(_amount);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_unitAmount);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_referencePrice);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 

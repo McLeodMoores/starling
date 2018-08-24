@@ -46,7 +46,7 @@ import com.opengamma.util.CalculationMode;
  */
 public class ExponentialWeightedMovingAverageHistoricalVolatilityCalculator extends HistoricalVolatilityCalculator {
   /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(ExponentialWeightedMovingAverageHistoricalVolatilityCalculator.class);
+  private static final Logger INSTANCE = LoggerFactory.getLogger(ExponentialWeightedMovingAverageHistoricalVolatilityCalculator.class);
   /** The return calculator */
   private final TimeSeriesReturnCalculator _returnCalculator;
   /** Lambda, the volatility weighting parameter */
@@ -55,8 +55,9 @@ public class ExponentialWeightedMovingAverageHistoricalVolatilityCalculator exte
   private final double _lambdaM1;
 
   /**
-   * Although the return calculator can be any {@link TimeSeriesReturnCalculator}, to obtain correct results a {@link ContinuouslyCompoundedTimeSeriesReturnCalculator} should be
-   * used. The calculation mode is set to be the default (strict). Although the weight parameter can take any positive value, for most use the range should be $\lambda < 1$;
+   * Although the return calculator can be any {@link TimeSeriesReturnCalculator}, to obtain correct results a
+   * {@link ContinuouslyCompoundedTimeSeriesReturnCalculator} should be used. The calculation mode is set to be
+   * the default (strict). Although the weight parameter can take any positive value, for most use the range should be $\lambda < 1$;
    * if a value higher outside of this range is used then greater weight will be placed on older return values.
    * @param lambda The weight parameter, not negative
    * @param returnCalculator The return calculator, not null
@@ -66,20 +67,23 @@ public class ExponentialWeightedMovingAverageHistoricalVolatilityCalculator exte
   }
 
   /**
-   * Although the return calculator can be any {@link TimeSeriesReturnCalculator}, to obtain correct results a {@link ContinuouslyCompoundedTimeSeriesReturnCalculator} should be
-   * used. Although the weight parameter can take any positive value, for most use the range should be $\lambda < 1$; if a value higher outside of this range is used then
+   * Although the return calculator can be any {@link TimeSeriesReturnCalculator}, to obtain correct results
+   * a {@link ContinuouslyCompoundedTimeSeriesReturnCalculator} should be
+   * used. Although the weight parameter can take any positive value, for most use the range should be
+   * $\lambda < 1$; if a value higher outside of this range is used then
    * greater weight will be placed on older return values.
    * @param lambda The weight parameter, not negative
    * @param returnCalculator The return calculator, not null
    * @param mode The calculation mode, not null
    */
-  public ExponentialWeightedMovingAverageHistoricalVolatilityCalculator(final double lambda, final TimeSeriesReturnCalculator returnCalculator, final CalculationMode mode) {
+  public ExponentialWeightedMovingAverageHistoricalVolatilityCalculator(final double lambda, final TimeSeriesReturnCalculator returnCalculator,
+      final CalculationMode mode) {
     super(mode);
     ArgumentChecker.notNull(returnCalculator, "return calculator");
     ArgumentChecker.notNull(mode, "calculation mode");
     ArgumentChecker.notNegative(lambda, "lambda");
     if (lambda > 1) {
-      s_logger.warn("Weight for EWMA series is greater than one: this is probably not what was intended");
+      INSTANCE.warn("Weight for EWMA series is greater than one: this is probably not what was intended");
     }
     _lambda = lambda;
     _lambdaM1 = 1 - lambda;
@@ -87,10 +91,10 @@ public class ExponentialWeightedMovingAverageHistoricalVolatilityCalculator exte
   }
 
   /**
+   * Throws an exception if x is null, empty or if the first element of the array is null; if the number of values in
+   * the time series is less than three; if the dates in the different time series do not coincide.
    * @param x The array of price time series. The first time series should be the price; any other arrays are assumed to be a timeseries of dividend payments.
    * @return The exponential weighted historical volatility
-   * @throws IllegalArgumentException If x is null, empty or if the first element of the array is null; if the number of values in the time series is less than three; if the
-   * dates in the different time series do not coincide
    */
   @Override
   public Double evaluate(final LocalDateDoubleTimeSeries... x) {
@@ -112,8 +116,8 @@ public class ExponentialWeightedMovingAverageHistoricalVolatilityCalculator exte
     int result = super.hashCode();
     long temp;
     temp = Double.doubleToLongBits(_lambda);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
-    result = prime * result + ((_returnCalculator == null) ? 0 : _returnCalculator.hashCode());
+    result = prime * result + (int) (temp ^ temp >>> 32);
+    result = prime * result + (_returnCalculator == null ? 0 : _returnCalculator.hashCode());
     return result;
   }
 

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.equity.future.derivative;
@@ -14,7 +14,7 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
 
 /**
- * 
+ *
  */
 public abstract class CashSettledFuture implements InstrumentDerivative {
   private final double _timeToExpiry;
@@ -24,7 +24,7 @@ public abstract class CashSettledFuture implements InstrumentDerivative {
   private final Currency _currency;
 
   /**
-   * 
+   *
    * @param timeToExpiry    time (in years as a double) until the date-time at which the reference index is fixed
    * @param timeToSettlement  time (in years as a double) until the date-time at which the contract is settled
    * @param strike         Set strike price at trade time. Note that we may handle margin by resetting this at the end of each trading day
@@ -45,7 +45,7 @@ public abstract class CashSettledFuture implements InstrumentDerivative {
   }
 
   /**
-   * Gets the date when the reference rate is set
+   * Gets the date when the reference rate is set.
    * @return the fixing date (in years as a double)
    */
   public double getTimeToExpiry() {
@@ -53,7 +53,7 @@ public abstract class CashSettledFuture implements InstrumentDerivative {
   }
 
   /**
-   * Gets the date when payments are made
+   * Gets the date when payments are made.
    * @return the delivery date (in years as a double)
    */
   public double getTimeToSettlement() {
@@ -77,7 +77,7 @@ public abstract class CashSettledFuture implements InstrumentDerivative {
   public double getReferencePrice() {
     return _referencePrice;
   }
-  
+
   /**
    * Gets the point value.
    * @return the point value

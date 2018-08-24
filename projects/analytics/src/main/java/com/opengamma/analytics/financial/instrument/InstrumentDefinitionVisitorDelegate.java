@@ -99,8 +99,8 @@ import com.opengamma.analytics.financial.instrument.payment.CouponFixedAccruedCo
 import com.opengamma.analytics.financial.instrument.payment.CouponFixedCompoundingDefinition;
 import com.opengamma.analytics.financial.instrument.payment.CouponFixedDefinition;
 import com.opengamma.analytics.financial.instrument.payment.CouponIborAverageFixingDatesCompoundingDefinition;
-import com.opengamma.analytics.financial.instrument.payment.CouponIborAverageFixingDatesDefinition;
 import com.opengamma.analytics.financial.instrument.payment.CouponIborAverageFixingDatesCompoundingFlatSpreadDefinition;
+import com.opengamma.analytics.financial.instrument.payment.CouponIborAverageFixingDatesDefinition;
 import com.opengamma.analytics.financial.instrument.payment.CouponIborAverageIndexDefinition;
 import com.opengamma.analytics.financial.instrument.payment.CouponIborCompoundingDefinition;
 import com.opengamma.analytics.financial.instrument.payment.CouponIborCompoundingFlatSpreadDefinition;
@@ -138,10 +138,11 @@ import com.opengamma.analytics.financial.instrument.volatilityswap.VolatilitySwa
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Delegates functionality to the visitor provided in the constructor
+ * Delegates functionality to the visitor provided in the constructor.
  * @param <DATA_TYPE> The type of the data
  * @param <RESULT_TYPE> The type of the results
  */
+@SuppressWarnings("deprecation")
 public class InstrumentDefinitionVisitorDelegate<DATA_TYPE, RESULT_TYPE> implements InstrumentDefinitionVisitor<DATA_TYPE, RESULT_TYPE> {
   /** The delegate visitor */
   private final InstrumentDefinitionVisitor<DATA_TYPE, RESULT_TYPE> _delegate;
@@ -415,7 +416,8 @@ public class InstrumentDefinitionVisitorDelegate<DATA_TYPE, RESULT_TYPE> impleme
   }
 
   @Override
-  public RESULT_TYPE visitInterestRateFutureOptionPremiumSecurityDefinition(final InterestRateFutureOptionPremiumSecurityDefinition future, final DATA_TYPE data) {
+  public RESULT_TYPE visitInterestRateFutureOptionPremiumSecurityDefinition(final InterestRateFutureOptionPremiumSecurityDefinition future,
+      final DATA_TYPE data) {
     return _delegate.visitInterestRateFutureOptionPremiumSecurityDefinition(future, data);
   }
 
@@ -425,7 +427,8 @@ public class InstrumentDefinitionVisitorDelegate<DATA_TYPE, RESULT_TYPE> impleme
   }
 
   @Override
-  public RESULT_TYPE visitInterestRateFutureOptionPremiumTransactionDefinition(final InterestRateFutureOptionPremiumTransactionDefinition future, final DATA_TYPE data) {
+  public RESULT_TYPE visitInterestRateFutureOptionPremiumTransactionDefinition(final InterestRateFutureOptionPremiumTransactionDefinition future,
+      final DATA_TYPE data) {
     return _delegate.visitInterestRateFutureOptionPremiumTransactionDefinition(future, data);
   }
 
@@ -435,7 +438,8 @@ public class InstrumentDefinitionVisitorDelegate<DATA_TYPE, RESULT_TYPE> impleme
   }
 
   @Override
-  public RESULT_TYPE visitInterestRateFutureOptionMarginSecurityDefinition(final InterestRateFutureOptionMarginSecurityDefinition future, final DATA_TYPE data) {
+  public RESULT_TYPE visitInterestRateFutureOptionMarginSecurityDefinition(final InterestRateFutureOptionMarginSecurityDefinition future,
+      final DATA_TYPE data) {
     return _delegate.visitInterestRateFutureOptionMarginSecurityDefinition(future, data);
   }
 
@@ -445,7 +449,8 @@ public class InstrumentDefinitionVisitorDelegate<DATA_TYPE, RESULT_TYPE> impleme
   }
 
   @Override
-  public RESULT_TYPE visitInterestRateFutureOptionMarginTransactionDefinition(final InterestRateFutureOptionMarginTransactionDefinition future, final DATA_TYPE data) {
+  public RESULT_TYPE visitInterestRateFutureOptionMarginTransactionDefinition(final InterestRateFutureOptionMarginTransactionDefinition future,
+      final DATA_TYPE data) {
     return _delegate.visitInterestRateFutureOptionMarginTransactionDefinition(future, data);
   }
 
@@ -667,7 +672,8 @@ public class InstrumentDefinitionVisitorDelegate<DATA_TYPE, RESULT_TYPE> impleme
   }
 
   @Override
-  public RESULT_TYPE visitCouponArithmeticAverageONSpreadSimplifiedDefinition(final CouponONArithmeticAverageSpreadSimplifiedDefinition payment, final DATA_TYPE data) {
+  public RESULT_TYPE visitCouponArithmeticAverageONSpreadSimplifiedDefinition(final CouponONArithmeticAverageSpreadSimplifiedDefinition payment,
+      final DATA_TYPE data) {
     return _delegate.visitCouponArithmeticAverageONSpreadSimplifiedDefinition(payment, data);
   }
 
@@ -707,32 +713,33 @@ public class InstrumentDefinitionVisitorDelegate<DATA_TYPE, RESULT_TYPE> impleme
   }
 
   @Override
-  public RESULT_TYPE visitCouponIborAverageFixingDatesDefinition(CouponIborAverageFixingDatesDefinition payment, DATA_TYPE data) {
+  public RESULT_TYPE visitCouponIborAverageFixingDatesDefinition(final CouponIborAverageFixingDatesDefinition payment, final DATA_TYPE data) {
     return _delegate.visitCouponIborAverageFixingDatesDefinition(payment, data);
   }
 
   @Override
-  public RESULT_TYPE visitCouponIborAverageFixingDatesDefinition(CouponIborAverageFixingDatesDefinition payment) {
+  public RESULT_TYPE visitCouponIborAverageFixingDatesDefinition(final CouponIborAverageFixingDatesDefinition payment) {
     return _delegate.visitCouponIborAverageFixingDatesDefinition(payment);
   }
 
   @Override
-  public RESULT_TYPE visitCouponIborAverageCompoundingDefinition(CouponIborAverageFixingDatesCompoundingDefinition payment, DATA_TYPE data) {
+  public RESULT_TYPE visitCouponIborAverageCompoundingDefinition(final CouponIborAverageFixingDatesCompoundingDefinition payment, final DATA_TYPE data) {
     return _delegate.visitCouponIborAverageCompoundingDefinition(payment, data);
   }
 
   @Override
-  public RESULT_TYPE visitCouponIborAverageCompoundingDefinition(CouponIborAverageFixingDatesCompoundingDefinition payment) {
+  public RESULT_TYPE visitCouponIborAverageCompoundingDefinition(final CouponIborAverageFixingDatesCompoundingDefinition payment) {
     return _delegate.visitCouponIborAverageCompoundingDefinition(payment);
   }
 
   @Override
-  public RESULT_TYPE visitCouponIborAverageFlatCompoundingSpreadDefinition(CouponIborAverageFixingDatesCompoundingFlatSpreadDefinition payment, DATA_TYPE data) {
+  public RESULT_TYPE visitCouponIborAverageFlatCompoundingSpreadDefinition(final CouponIborAverageFixingDatesCompoundingFlatSpreadDefinition payment,
+      final DATA_TYPE data) {
     return _delegate.visitCouponIborAverageFlatCompoundingSpreadDefinition(payment, data);
   }
 
   @Override
-  public RESULT_TYPE visitCouponIborAverageFlatCompoundingSpreadDefinition(CouponIborAverageFixingDatesCompoundingFlatSpreadDefinition payment) {
+  public RESULT_TYPE visitCouponIborAverageFlatCompoundingSpreadDefinition(final CouponIborAverageFixingDatesCompoundingFlatSpreadDefinition payment) {
     return _delegate.visitCouponIborAverageFlatCompoundingSpreadDefinition(payment);
   }
 
@@ -889,7 +896,8 @@ public class InstrumentDefinitionVisitorDelegate<DATA_TYPE, RESULT_TYPE> impleme
   }
 
   @Override
-  public RESULT_TYPE visitCouponInflationZeroCouponInterpolationGearing(final CouponInflationZeroCouponInterpolationGearingDefinition coupon, final DATA_TYPE data) {
+  public RESULT_TYPE visitCouponInflationZeroCouponInterpolationGearing(final CouponInflationZeroCouponInterpolationGearingDefinition coupon,
+      final DATA_TYPE data) {
     return _delegate.visitCouponInflationZeroCouponInterpolationGearing(coupon, data);
   }
 
@@ -909,7 +917,8 @@ public class InstrumentDefinitionVisitorDelegate<DATA_TYPE, RESULT_TYPE> impleme
   }
 
   @Override
-  public RESULT_TYPE visitCouponInflationYearOnYearInterpolationDefinition(final CouponInflationYearOnYearInterpolationDefinition coupon, final DATA_TYPE data) {
+  public RESULT_TYPE visitCouponInflationYearOnYearInterpolationDefinition(final CouponInflationYearOnYearInterpolationDefinition coupon,
+      final DATA_TYPE data) {
     return _delegate.visitCouponInflationYearOnYearInterpolationDefinition(coupon, data);
   }
 
@@ -929,7 +938,8 @@ public class InstrumentDefinitionVisitorDelegate<DATA_TYPE, RESULT_TYPE> impleme
   }
 
   @Override
-  public RESULT_TYPE visitCouponInflationYearOnYearInterpolationWithMargin(final CouponInflationYearOnYearInterpolationWithMarginDefinition coupon, final DATA_TYPE data) {
+  public RESULT_TYPE visitCouponInflationYearOnYearInterpolationWithMargin(final CouponInflationYearOnYearInterpolationWithMarginDefinition coupon,
+      final DATA_TYPE data) {
     return _delegate.visitCouponInflationYearOnYearInterpolationWithMargin(coupon, data);
   }
 
@@ -939,7 +949,8 @@ public class InstrumentDefinitionVisitorDelegate<DATA_TYPE, RESULT_TYPE> impleme
   }
 
   @Override
-  public RESULT_TYPE visitCapFloorInflationZeroCouponInterpolationDefinition(final CapFloorInflationZeroCouponInterpolationDefinition coupon, final DATA_TYPE data) {
+  public RESULT_TYPE visitCapFloorInflationZeroCouponInterpolationDefinition(final CapFloorInflationZeroCouponInterpolationDefinition coupon,
+      final DATA_TYPE data) {
     return _delegate.visitCapFloorInflationZeroCouponInterpolationDefinition(coupon, data);
   }
 
@@ -959,7 +970,8 @@ public class InstrumentDefinitionVisitorDelegate<DATA_TYPE, RESULT_TYPE> impleme
   }
 
   @Override
-  public RESULT_TYPE visitCapFloorInflationYearOnYearInterpolationDefinition(final CapFloorInflationYearOnYearInterpolationDefinition coupon, final DATA_TYPE data) {
+  public RESULT_TYPE visitCapFloorInflationYearOnYearInterpolationDefinition(final CapFloorInflationYearOnYearInterpolationDefinition coupon,
+      final DATA_TYPE data) {
     return _delegate.visitCapFloorInflationYearOnYearInterpolationDefinition(coupon, data);
   }
 

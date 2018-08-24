@@ -55,7 +55,9 @@ public final class ProjectedPayCashFlowVisitor extends InstrumentDerivativeVisit
       return Collections.emptyList();
     }
     final YieldAndDiscountCurve forwardCurve = data.getCurve(coupon.getForwardCurveName());
-    final double forward = (forwardCurve.getDiscountFactor(coupon.getFixingPeriodStartTime()) / forwardCurve.getDiscountFactor(coupon.getFixingPeriodEndTime()) - 1) / coupon.getFixingAccrualFactor();
+    final double forward =
+        (forwardCurve.getDiscountFactor(coupon.getFixingPeriodStartTime()) / forwardCurve.getDiscountFactor(coupon.getFixingPeriodEndTime()) - 1)
+        / coupon.getFixingAccrualFactor();
     final double amount = -coupon.getNotional() * coupon.getPaymentYearFraction() * forward;
     return Collections.singletonList(MultipleCurrencyAmount.of(CurrencyAmount.of(coupon.getCurrency(), amount)));
   }
@@ -76,7 +78,9 @@ public final class ProjectedPayCashFlowVisitor extends InstrumentDerivativeVisit
       return Collections.emptyList();
     }
     final YieldAndDiscountCurve forwardCurve = data.getCurve(coupon.getForwardCurveName());
-    final double forward = (forwardCurve.getDiscountFactor(coupon.getFixingPeriodStartTime()) / forwardCurve.getDiscountFactor(coupon.getFixingPeriodEndTime()) - 1) / coupon.getFixingAccrualFactor();
+    final double forward =
+        (forwardCurve.getDiscountFactor(coupon.getFixingPeriodStartTime()) / forwardCurve.getDiscountFactor(coupon.getFixingPeriodEndTime()) - 1)
+        / coupon.getFixingAccrualFactor();
     final double amount = -(coupon.getNotional() * coupon.getPaymentYearFraction() * forward + coupon.getSpreadAmount());
     return Collections.singletonList(MultipleCurrencyAmount.of(CurrencyAmount.of(coupon.getCurrency(), amount)));
   }
@@ -97,7 +101,9 @@ public final class ProjectedPayCashFlowVisitor extends InstrumentDerivativeVisit
       return Collections.emptyList();
     }
     final YieldAndDiscountCurve forwardCurve = data.getCurve(coupon.getForwardCurveName());
-    final double forward = (forwardCurve.getDiscountFactor(coupon.getFixingPeriodStartTime()) / forwardCurve.getDiscountFactor(coupon.getFixingPeriodEndTime()) - 1) / coupon.getFixingAccrualFactor();
+    final double forward =
+        (forwardCurve.getDiscountFactor(coupon.getFixingPeriodStartTime()) / forwardCurve.getDiscountFactor(coupon.getFixingPeriodEndTime()) - 1)
+        / coupon.getFixingAccrualFactor();
     final double amount = -(coupon.getNotional() * coupon.getPaymentYearFraction() * (coupon.getFactor() * forward) + coupon.getSpreadAmount());
     return Collections.singletonList(MultipleCurrencyAmount.of(CurrencyAmount.of(coupon.getCurrency(), amount)));
   }
@@ -117,7 +123,8 @@ public final class ProjectedPayCashFlowVisitor extends InstrumentDerivativeVisit
       return Collections.emptyList();
     }
     final YieldAndDiscountCurve forwardCurve = data.getCurve(fra.getForwardCurveName());
-    final double forward = (forwardCurve.getDiscountFactor(fra.getFixingPeriodStartTime()) / forwardCurve.getDiscountFactor(fra.getFixingPeriodEndTime()) - 1) / fra.getFixingYearFraction();
+    final double forward = (forwardCurve.getDiscountFactor(fra.getFixingPeriodStartTime()) / forwardCurve.getDiscountFactor(fra.getFixingPeriodEndTime()) - 1)
+        / fra.getFixingYearFraction();
     final double amount = -fra.getPaymentYearFraction() * fra.getNotional() * forward / (1 + fra.getPaymentYearFraction() * forward);
     return Collections.singletonList(MultipleCurrencyAmount.of(CurrencyAmount.of(fra.getCurrency(), amount)));
   }

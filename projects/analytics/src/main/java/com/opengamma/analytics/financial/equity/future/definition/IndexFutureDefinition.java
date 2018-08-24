@@ -91,7 +91,7 @@ public class IndexFutureDefinition implements InstrumentDefinitionWithData<Index
   public double getStrikePrice() {
     return getReferencePrice();
   }
-  
+
   /**
    * Gets the _currency.
    * @return the _currency
@@ -107,7 +107,7 @@ public class IndexFutureDefinition implements InstrumentDefinitionWithData<Index
   public double getUnitAmount() {
     return _unitAmount;
   }
-  
+
   /**
    * Gets the underlying.
    * @return the underlying
@@ -115,7 +115,7 @@ public class IndexFutureDefinition implements InstrumentDefinitionWithData<Index
   public ExternalId getUnderlying() {
     return _underlying;
   }
-  
+
   /**
    * Gets the settlementType.
    * @return CASH
@@ -133,9 +133,9 @@ public class IndexFutureDefinition implements InstrumentDefinitionWithData<Index
     result = prime * result + _settlementDate.hashCode();
     long temp;
     temp = Double.doubleToLongBits(_referencePrice);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_unitAmount);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 
@@ -182,22 +182,22 @@ public class IndexFutureDefinition implements InstrumentDefinitionWithData<Index
   }
 
   @Override
-  public IndexFuture toDerivative(ZonedDateTime date, String... yieldCurveNames) {
+  public IndexFuture toDerivative(final ZonedDateTime date, final String... yieldCurveNames) {
     return toDerivative(date, getReferencePrice());
   }
 
   @Override
-  public IndexFuture toDerivative(ZonedDateTime date, Double referencePrice, String... yieldCurveNames) {
+  public IndexFuture toDerivative(final ZonedDateTime date, final Double referencePrice, final String... yieldCurveNames) {
     return toDerivative(date, referencePrice);
   }
 
   @Override
-  public IndexFuture toDerivative(ZonedDateTime date) {
+  public IndexFuture toDerivative(final ZonedDateTime date) {
     return toDerivative(date, getReferencePrice());
   }
 
   @Override
-  public IndexFuture toDerivative(ZonedDateTime date, Double referencePrice) {
+  public IndexFuture toDerivative(final ZonedDateTime date, final Double referencePrice) {
     ArgumentChecker.notNull(date, "date");
     final double timeToFixing = TimeCalculator.getTimeBetween(date, getExpiryDate());
     final double timeToDelivery = TimeCalculator.getTimeBetween(date, getSettlementDate());

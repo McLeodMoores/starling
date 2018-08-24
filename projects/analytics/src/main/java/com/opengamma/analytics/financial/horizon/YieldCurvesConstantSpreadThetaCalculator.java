@@ -16,7 +16,7 @@ import com.opengamma.analytics.financial.provider.calculator.generic.TodayPaymen
 import com.opengamma.analytics.util.time.TimeCalculator;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.MultipleCurrencyAmount;
-
+//CSOFF
 /**
  * Calculates the change in value of a FX option when the yield curves have been
  * shifted forward in time without slide.

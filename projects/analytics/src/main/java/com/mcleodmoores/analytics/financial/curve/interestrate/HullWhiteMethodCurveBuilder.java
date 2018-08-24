@@ -63,7 +63,8 @@ public class HullWhiteMethodCurveBuilder extends CurveBuilder<HullWhiteOneFactor
       final Map<String, Map<Pair<GeneratorInstrument, GeneratorAttribute>, Double>> nodes,
       final Map<String, List<InstrumentDefinition<?>>> newNodes,
       final Map<String, ? extends CurveTypeSetUpInterface<HullWhiteOneFactorProviderDiscount>> curveGenerators,
-          final HullWhiteOneFactorProviderDiscount knownData, final CurveBuildingBlockBundle knownBundle, final Map<Index, ZonedDateTimeDoubleTimeSeries> fixingTs) {
+          final HullWhiteOneFactorProviderDiscount knownData, final CurveBuildingBlockBundle knownBundle,
+          final Map<Index, ZonedDateTimeDoubleTimeSeries> fixingTs) {
     super(curveNames, discountingCurves, iborCurves, overnightCurves, nodes, newNodes, curveGenerators, knownData, knownBundle, fixingTs);
     _curveBuildingRepository = new HullWhiteProviderDiscountBuildingRepository(_absoluteTolerance, _relativeTolerance, _maxSteps);
   }
@@ -92,11 +93,11 @@ public class HullWhiteMethodCurveBuilder extends CurveBuilder<HullWhiteOneFactor
       convertedOvernightCurves.put(entry.getKey(), converted);
     }
     if (knownBundle != null) {
-      return _curveBuildingRepository.makeCurvesFromDerivatives(curveBundles, knownData, knownBundle, discountingCurves, convertedIborCurves, convertedOvernightCurves,
-          CALCULATOR, SENSITIVITY_CALCULATOR);
+      return _curveBuildingRepository.makeCurvesFromDerivatives(curveBundles, knownData, knownBundle, discountingCurves,
+          convertedIborCurves, convertedOvernightCurves, CALCULATOR, SENSITIVITY_CALCULATOR);
     }
-    return _curveBuildingRepository.makeCurvesFromDerivatives(curveBundles, knownData, discountingCurves, convertedIborCurves, convertedOvernightCurves, CALCULATOR,
-        SENSITIVITY_CALCULATOR);
+    return _curveBuildingRepository.makeCurvesFromDerivatives(curveBundles, knownData, discountingCurves, convertedIborCurves,
+        convertedOvernightCurves, CALCULATOR, SENSITIVITY_CALCULATOR);
   }
 
   @Override
@@ -110,7 +111,8 @@ public class HullWhiteMethodCurveBuilder extends CurveBuilder<HullWhiteOneFactor
           final HullWhiteOneFactorProviderDiscount knownData,
           final CurveBuildingBlockBundle knownBundle,
           final Map<Index, ZonedDateTimeDoubleTimeSeries> fixingTs) {
-    return new HullWhiteMethodCurveBuilder(curveNames, discountingCurves, iborCurves, overnightCurves, newNodesForCurve, new HashMap<String, List<InstrumentDefinition<?>>>(),
+    return new HullWhiteMethodCurveBuilder(curveNames, discountingCurves, iborCurves, overnightCurves, newNodesForCurve,
+        new HashMap<String, List<InstrumentDefinition<?>>>(),
         curveGenerators, knownData, knownBundle, fixingTs);
   }
 

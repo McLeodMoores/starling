@@ -16,7 +16,8 @@ import com.opengamma.util.ArgumentChecker;
 
 /**
  * Class describing a non-deliverable foreign exchange European option. The option exercise date is the underlying NDF fixing date.
- * When the option is a call, the option holder has the right to enter into the Forex NDF; when the option is a put, the option holder has the right to enter into a NDF
+ * When the option is a call, the option holder has the right to enter into the Forex NDF; when the option is a put,
+ * the option holder has the right to enter into a NDF
  * transaction equal to the underlying but with opposite signs. The settlement is done in the second currency of the NDF.
  * A Call on a Forex on KRW / USD at strike 1124.00 is thus the right to receive 1.00 USD and pay 1124.00 KRW and cash settle the difference in USD.
  * A put on a Forex on KRW / USD at strike 1124.00 is thus the right to pay 1.00 USD and receive 1124.00 KRW and cash settle the difference in USD.
@@ -41,7 +42,8 @@ public class ForexNonDeliverableOptionDefinition implements InstrumentDefinition
   /**
    * Constructor from the details.
    * @param forex The underlying Forex transaction.
-   * @param isCall The call (true) / put (false) flag. When the option is a call, the option holder has the right to enter into the Forex NDF; when the option is a put,
+   * @param isCall The call (true) / put (false) flag. When the option is a call, the option holder has the right to enter
+   * into the Forex NDF; when the option is a put,
    * the option holder has the right to enter into a NDF transaction equal to the underlying but with opposite signs.
    * @param isLong The long (true) / short (false) flag.
    */

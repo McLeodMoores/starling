@@ -63,7 +63,8 @@ public final class ForwardCommodityPhysicalSettleSecurityForwardMethod {
    * @param multicurve The commodity multi-curve provider.
    * @return The present value sensitivity.
    */
-  public MultipleCurrencyCommoditySensitivity presentValueCurveSensitivity(final ForwardCommodityPhysicalSettle forward, final CommodityProviderInterface multicurve) {
+  public MultipleCurrencyCommoditySensitivity presentValueCurveSensitivity(final ForwardCommodityPhysicalSettle forward,
+      final CommodityProviderInterface multicurve) {
     ArgumentChecker.notNull(forward, "Coupon");
     ArgumentChecker.notNull(multicurve, "Curves");
     final double fwd = multicurve.getForwardValue(forward.getUnderlying(), forward.getSettlementTime());
@@ -83,7 +84,15 @@ public final class ForwardCommodityPhysicalSettleSecurityForwardMethod {
     return MultipleCurrencyCommoditySensitivity.of(forward.getCurrency(), CommoditySensitivity.of(mapDsc, mapFwd));
   }
 
-  public MultipleCurrencyCommoditySensitivity presentValueSecondOrderCurveSensitivity(final ForwardCommodityPhysicalSettle forward, final CommodityProviderInterface multicurve) {
+  /**
+   * Calculates the second-order sensitivity of a physically-settled forward to the forward curve.
+   *
+   * @param forward  the forward
+   * @param multicurve  the curves
+   * @return  the sensitivities
+   */
+  public MultipleCurrencyCommoditySensitivity presentValueSecondOrderCurveSensitivity(final ForwardCommodityPhysicalSettle forward,
+      final CommodityProviderInterface multicurve) {
     ArgumentChecker.notNull(forward, "Coupon");
     ArgumentChecker.notNull(multicurve, "Curves");
     final double fwd = multicurve.getForwardValue(forward.getUnderlying(), forward.getSettlementTime());

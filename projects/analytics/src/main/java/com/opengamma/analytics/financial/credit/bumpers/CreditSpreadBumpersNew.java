@@ -1,13 +1,14 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.credit.bumpers;
 
+// CSOFF
 /**
  * Class containing utilities for bumping credit spread term structures by user defined methods and amounts
- *@deprecated this will be deleted 
+ *@deprecated this will be deleted
  */
 @Deprecated
 public class CreditSpreadBumpersNew {
@@ -62,7 +63,7 @@ public class CreditSpreadBumpersNew {
         return bumpedCreditSpreads;
       case MULTIPLICATIVE_BUCKETED:
       case MULTIPLICATIVE:
-        bumpedCreditSpreads[spreadTenorToBump] *= (1 + spreadBump);
+        bumpedCreditSpreads[spreadTenorToBump] *= 1 + spreadBump;
         return bumpedCreditSpreads;
       default:
         throw new IllegalArgumentException("Cannot handle bump type " + spreadBumpType);

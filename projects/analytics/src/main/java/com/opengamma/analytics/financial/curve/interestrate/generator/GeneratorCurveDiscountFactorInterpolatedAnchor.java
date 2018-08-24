@@ -34,7 +34,8 @@ public class GeneratorCurveDiscountFactorInterpolatedAnchor extends GeneratorYDC
    * @param nodeTimeCalculator Calculator of the node associated to instruments.
    * @param interpolator The interpolator used for the curve.
    */
-  public GeneratorCurveDiscountFactorInterpolatedAnchor(final InstrumentDerivativeVisitorAdapter<Object, Double> nodeTimeCalculator, final Interpolator1D interpolator) {
+  public GeneratorCurveDiscountFactorInterpolatedAnchor(final InstrumentDerivativeVisitorAdapter<Object, Double> nodeTimeCalculator,
+      final Interpolator1D interpolator) {
     _nodeTimeCalculator = nodeTimeCalculator;
     _interpolator = interpolator;
   }

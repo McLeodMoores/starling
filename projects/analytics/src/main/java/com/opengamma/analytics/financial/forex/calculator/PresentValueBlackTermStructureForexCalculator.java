@@ -11,6 +11,7 @@ import com.opengamma.analytics.financial.forex.method.ForexOptionVanillaBlackTer
 import com.opengamma.analytics.financial.interestrate.YieldCurveBundle;
 import com.opengamma.util.money.MultipleCurrencyAmount;
 
+// CSOFF
 /**
  * Calculator of the present value for Forex derivatives in the Black (Garman-Kohlhagen) world.
  * The volatilities are given by a term-structure of implied vol.

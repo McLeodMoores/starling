@@ -5,11 +5,10 @@
  */
 package com.opengamma.analytics.financial.commodity.multicurvecommodity.provider;
 
-import org.apache.commons.lang.Validate;
-
 import com.opengamma.analytics.financial.commodity.multicurvecommodity.derivative.CommodityFutureTransaction;
 import com.opengamma.analytics.financial.provider.sensitivity.commodity.CommoditySensitivity;
 import com.opengamma.analytics.financial.provider.sensitivity.commodity.MultipleCurrencyCommoditySensitivity;
+import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.MultipleCurrencyAmount;
 
 /**
@@ -34,8 +33,9 @@ public abstract class CommodityFutureTransactionMethod {
    * @param priceSensitivity The sensitivity of the futures price.
    * @return The present value rate sensitivity.
    */
-  public MultipleCurrencyCommoditySensitivity presentValueCurveSensitivity(final CommodityFutureTransaction future, final CommoditySensitivity priceSensitivity) {
-    Validate.notNull(future, "Future");
+  public MultipleCurrencyCommoditySensitivity presentValueCurveSensitivity(final CommodityFutureTransaction future,
+      final CommoditySensitivity priceSensitivity) {
+    ArgumentChecker.notNull(future, "Future");
     return MultipleCurrencyCommoditySensitivity.of(future.getCurrency(), priceSensitivity.multipliedBy(future.getQuantity() * future.getUnitAmount()));
   }
 }

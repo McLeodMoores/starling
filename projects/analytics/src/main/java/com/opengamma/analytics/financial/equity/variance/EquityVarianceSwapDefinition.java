@@ -40,8 +40,9 @@ public class EquityVarianceSwapDefinition extends VarianceSwapDefinition {
    * @param volNotional Trade pays the difference between realized and strike variance multiplied by 0.5 * volNotional / volStrike
    * @param correctForDividends Whether to correct for dividends when pricing
    */
-  public EquityVarianceSwapDefinition(final ZonedDateTime obsStartDate, final ZonedDateTime obsEndDate, final ZonedDateTime settlementDate, final PeriodFrequency obsFreq, final Currency currency,
-      final Calendar calendar, final double annualizationFactor, final double volStrike, final double volNotional, final boolean correctForDividends) {
+  public EquityVarianceSwapDefinition(final ZonedDateTime obsStartDate, final ZonedDateTime obsEndDate, final ZonedDateTime settlementDate,
+      final PeriodFrequency obsFreq, final Currency currency, final Calendar calendar, final double annualizationFactor,
+      final double volStrike, final double volNotional, final boolean correctForDividends) {
     super(obsStartDate, obsEndDate, settlementDate, obsFreq, currency, calendar, annualizationFactor, volStrike, volNotional);
     _correctForDividends = correctForDividends;
   }
@@ -60,9 +61,9 @@ public class EquityVarianceSwapDefinition extends VarianceSwapDefinition {
    * @param correctForDividends Whether to correct for dividends in pricing
    * @return The contract definition
    */
-  public static EquityVarianceSwapDefinition fromVegaParams(final ZonedDateTime obsStartDate, final ZonedDateTime obsEndDate, final ZonedDateTime settlementDate,
-      final PeriodFrequency obsFreq, final Currency currency, final Calendar calendar, final double annualizationFactor, final double volStrike, final double volNotional,
-      final boolean correctForDividends) {
+  public static EquityVarianceSwapDefinition fromVegaParams(final ZonedDateTime obsStartDate, final ZonedDateTime obsEndDate,
+      final ZonedDateTime settlementDate, final PeriodFrequency obsFreq, final Currency currency, final Calendar calendar,
+      final double annualizationFactor, final double volStrike, final double volNotional, final boolean correctForDividends) {
     return new EquityVarianceSwapDefinition(obsStartDate, obsEndDate, settlementDate, obsFreq, currency, calendar, annualizationFactor, volStrike, volNotional,
         correctForDividends);
   }
@@ -81,9 +82,9 @@ public class EquityVarianceSwapDefinition extends VarianceSwapDefinition {
    * @param correctForDividends Whether to correct for dividends in pricing
    * @return The contract definition
    */
-  public static EquityVarianceSwapDefinition fromVarianceParams(final ZonedDateTime obsStartDate, final ZonedDateTime obsEndDate, final ZonedDateTime settlementDate,
-      final PeriodFrequency obsFreq, final Currency currency, final Calendar calendar, final double annualizationFactor, final double varStrike, final double varNotional,
-      final boolean correctForDividends) {
+  public static EquityVarianceSwapDefinition fromVarianceParams(final ZonedDateTime obsStartDate, final ZonedDateTime obsEndDate,
+      final ZonedDateTime settlementDate, final PeriodFrequency obsFreq, final Currency currency, final Calendar calendar,
+      final double annualizationFactor, final double varStrike, final double varNotional, final boolean correctForDividends) {
     ArgumentChecker.notNegative(varStrike, "variance strike");
     final double volStrike = Math.sqrt(varStrike);
     final double volNotional = 2 * varNotional * volStrike;
@@ -116,9 +117,11 @@ public class EquityVarianceSwapDefinition extends VarianceSwapDefinition {
    * @return VarianceSwap derivative as of date
    */
   @Override
-  public EquityVarianceSwap toDerivative(final ZonedDateTime valueDate, final DoubleTimeSeries<LocalDate> underlyingTimeSeries, final String... yieldCurveNames) {
+  public EquityVarianceSwap toDerivative(final ZonedDateTime valueDate, final DoubleTimeSeries<LocalDate> underlyingTimeSeries,
+      final String... yieldCurveNames) {
     ArgumentChecker.notNull(valueDate, "date");
-    ArgumentChecker.notNull(underlyingTimeSeries, "A TimeSeries of observations must be provided. If observations have not begun, please pass an empty series.");
+    ArgumentChecker.notNull(underlyingTimeSeries,
+        "A TimeSeries of observations must be provided. If observations have not begun, please pass an empty series.");
     final double timeToObsStart = TimeCalculator.getTimeBetween(valueDate, getObsStartDate());
     final double timeToObsEnd = TimeCalculator.getTimeBetween(valueDate, getObsEndDate());
     final double timeToSettlement = TimeCalculator.getTimeBetween(valueDate, getSettlementDate());
@@ -130,7 +133,8 @@ public class EquityVarianceSwapDefinition extends VarianceSwapDefinition {
     }
     final double[] observations = realizedTS.valuesArrayFast();
     final double[] observationWeights = {}; // TODO Case 2011-06-29 Calendar Add functionality for non-trivial weighting of observations
-    final int nGoodBusinessDays = InstrumentDefinitionUtils.countExpectedGoodDays(getObsStartDate().toLocalDate(), valueDate.toLocalDate(), getCalendar(), getObsFreq());
+    final int nGoodBusinessDays =
+        InstrumentDefinitionUtils.countExpectedGoodDays(getObsStartDate().toLocalDate(), valueDate.toLocalDate(), getCalendar(), getObsFreq());
     final int nObsDisrupted = nGoodBusinessDays - observations.length;
     ArgumentChecker.isTrue(nObsDisrupted >= 0, "Have more observations {} than good business days {}", observations.length, nGoodBusinessDays);
     return new EquityVarianceSwap(timeToObsStart, timeToObsEnd, timeToSettlement, getVarStrike(), getVarNotional(), getCurrency(),
@@ -155,7 +159,8 @@ public class EquityVarianceSwapDefinition extends VarianceSwapDefinition {
   @Override
   public EquityVarianceSwap toDerivative(final ZonedDateTime valueDate, final DoubleTimeSeries<LocalDate> underlyingTimeSeries) {
     ArgumentChecker.notNull(valueDate, "date");
-    ArgumentChecker.notNull(underlyingTimeSeries, "A TimeSeries of observations must be provided. If observations have not begun, please pass an empty series.");
+    ArgumentChecker.notNull(underlyingTimeSeries,
+        "A TimeSeries of observations must be provided. If observations have not begun, please pass an empty series.");
     final double timeToObsStart = TimeCalculator.getTimeBetween(valueDate, getObsStartDate());
     final double timeToObsEnd = TimeCalculator.getTimeBetween(valueDate, getObsEndDate());
     final double timeToSettlement = TimeCalculator.getTimeBetween(valueDate, getSettlementDate());
@@ -167,7 +172,8 @@ public class EquityVarianceSwapDefinition extends VarianceSwapDefinition {
     }
     final double[] observations = realizedTS.valuesArrayFast();
     final double[] observationWeights = {}; // TODO Case 2011-06-29 Calendar Add functionality for non-trivial weighting of observations
-    final int nGoodBusinessDays = InstrumentDefinitionUtils.countExpectedGoodDays(getObsStartDate().toLocalDate(), valueDate.toLocalDate(), getCalendar(), getObsFreq());
+    final int nGoodBusinessDays =
+        InstrumentDefinitionUtils.countExpectedGoodDays(getObsStartDate().toLocalDate(), valueDate.toLocalDate(), getCalendar(), getObsFreq());
     final int nObsDisrupted = nGoodBusinessDays - observations.length;
     ArgumentChecker.isTrue(nObsDisrupted >= 0, "Have more observations {} than good business days {}", observations.length, nGoodBusinessDays);
     return new EquityVarianceSwap(timeToObsStart, timeToObsEnd, timeToSettlement, getVarStrike(), getVarNotional(), getCurrency(),

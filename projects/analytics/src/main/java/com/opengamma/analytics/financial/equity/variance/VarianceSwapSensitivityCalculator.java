@@ -21,7 +21,7 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.tuple.DoublesPair;
 
 /**
- * This Calculator provides price sensitivities for the VarianceSwap derivative to changes in
+ * This Calculator provides price sensitivities for the VarianceSwap derivative to changes in market values.
  * Interest rates,<p>
  * Equity European Option Volatility,<p>
  * Spot VarianceSwap contracts,<p>
@@ -46,7 +46,8 @@ public final class VarianceSwapSensitivityCalculator extends EquityDerivativeSen
    * Also known as PVBP and DV01, though note scaling - this returns per UNIT change in rate (100%). calcPV01 returns per basis point change in rates.  <p>
    * <p>
    * Rates enter the pricing of a VarianceSwap in two places: in the discounting and forward projection.<p>
-   * The presentValue has been structured such that the form of the PV = Z(t,T) * FwdPrice(t,T) with Z a zero coupon bond, and t and T the valuation and settlement times respectively.
+   * The presentValue has been structured such that the form of the PV = Z(t,T) * FwdPrice(t,T) with Z a zero coupon bond,
+   * and t and T the valuation and settlement times respectively.
    * The form of our discounting rates is such that Z(t,T) = exp[- R(t,T) * (T-t)], hence  dZ/dR = -(T-t)*Z(t,T) and d(PV)/dR = PV * dZ/dR
    * The forward's dependence on the discounting rate is similar to the zero coupon bonds, but of opposite sign, dF/dR = (T-t)*F(t,T)
    * @param swap the VarianceSwap
@@ -75,7 +76,8 @@ public final class VarianceSwapSensitivityCalculator extends EquityDerivativeSen
    * Also know as PVBP and DV01, though note this return per UNIT change in rate. calcPV01 returns per basis point change in rates.  <p>
    * <p>
    * Rates enter the pricing of a VarianceSwap in two places: in the discounting and forward projection.<p>
-   * The presentValue has been structured such that the form of the PV = Z(t,T) * FwdPrice(t,T) with Z a zero coupon bond, and t and T the valuation and settlement times respectively.
+   * The presentValue has been structured such that the form of the PV = Z(t,T) * FwdPrice(t,T)
+   * with Z a zero coupon bond, and t and T the valuation and settlement times respectively.
    * The form of our discounting rates is such that Z(t,T) = exp[- R(t,T) * (T-t)], hence  dZ/dR = (t-T)*Z(t,T) and d(PV)/dR = PV * dZ/dR
    * The forward's dependence on the discounting rate is similar to the zero coupon bonds, but of opposite sign, dF/dR = (T-t)*F(t,T)
    * @param swap the VarianceSwap
@@ -101,10 +103,12 @@ public final class VarianceSwapSensitivityCalculator extends EquityDerivativeSen
   /**
    * This calculates the sensitivity of the present value (PV) to the continuously-compounded discount rates at the knot points of the funding curve. <p>
    * The return format is a DoubleMatrix1D (i.e. a vector) with length equal to the total number of knots in the curve <p>
-   * The change of a curve due to the movement of a single knot is interpolator-dependent, so an instrument can have sensitivity to knots at times beyond its maturity
+   * The change of a curve due to the movement of a single knot is interpolator-dependent, so an instrument can
+   * have sensitivity to knots at times beyond its maturity
    * @param swap the VarianceSwap
    * @param market the EquityOptionDataBundle
-   * @return A DoubleMatrix1D containing bucketed delta in order and length of market.getDiscountCurve(). Currency amount per unit amount change in discount rate
+   * @return A DoubleMatrix1D containing bucketed delta in order and length of market.getDiscountCurve().
+   * Currency amount per unit amount change in discount rate
    */
   public DoubleMatrix1D calcDeltaBucketed(final VarianceSwap swap, final StaticReplicationDataBundle market) {
     ArgumentChecker.notNull(swap, "null VarianceSwap");

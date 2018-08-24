@@ -58,8 +58,8 @@ public class DiscountingMethodCurveBuilder extends CurveBuilder<MulticurveProvid
 
   @Override
   Pair<MulticurveProviderDiscount, CurveBuildingBlockBundle> buildCurves(final MultiCurveBundle[] curveBundles, final MulticurveProviderDiscount knownData,
-      final CurveBuildingBlockBundle knownBundle, final LinkedHashMap<String, Currency> discountingCurves, final LinkedHashMap<String, IborTypeIndex[]> iborCurves,
-      final LinkedHashMap<String, OvernightIndex[]> overnightCurves) {
+      final CurveBuildingBlockBundle knownBundle, final LinkedHashMap<String, Currency> discountingCurves,
+      final LinkedHashMap<String, IborTypeIndex[]> iborCurves, final LinkedHashMap<String, OvernightIndex[]> overnightCurves) {
     final LinkedHashMap<String, IborIndex[]> convertedIborCurves = new LinkedHashMap<>();
     for (final Map.Entry<String, IborTypeIndex[]> entry : iborCurves.entrySet()) {
       final IborIndex[] converted = new IborIndex[entry.getValue().length];
@@ -79,11 +79,11 @@ public class DiscountingMethodCurveBuilder extends CurveBuilder<MulticurveProvid
       convertedOvernightCurves.put(entry.getKey(), converted);
     }
     if (knownBundle != null) {
-      return _curveBuildingRepository.makeCurvesFromDerivatives(curveBundles, knownData, knownBundle, discountingCurves, convertedIborCurves, convertedOvernightCurves, CALCULATOR,
-          SENSITIVITY_CALCULATOR);
+      return _curveBuildingRepository.makeCurvesFromDerivatives(curveBundles, knownData, knownBundle, discountingCurves,
+          convertedIborCurves, convertedOvernightCurves, CALCULATOR, SENSITIVITY_CALCULATOR);
     }
-    return _curveBuildingRepository.makeCurvesFromDerivatives(curveBundles, knownData, discountingCurves, convertedIborCurves, convertedOvernightCurves, CALCULATOR,
-        SENSITIVITY_CALCULATOR);
+    return _curveBuildingRepository.makeCurvesFromDerivatives(curveBundles, knownData, discountingCurves, convertedIborCurves,
+        convertedOvernightCurves, CALCULATOR, SENSITIVITY_CALCULATOR);
   }
 
   @Override
@@ -97,8 +97,8 @@ public class DiscountingMethodCurveBuilder extends CurveBuilder<MulticurveProvid
           final MulticurveProviderDiscount knownData,
           final CurveBuildingBlockBundle knownBundle,
           final Map<Index, ZonedDateTimeDoubleTimeSeries> fixingTs) {
-    return new DiscountingMethodCurveBuilder(curveNames, discountingCurves, iborCurves, overnightCurves, newNodesForCurve, new HashMap<String, List<InstrumentDefinition<?>>>(),
-        curveGenerators, knownData, knownBundle, fixingTs);
+    return new DiscountingMethodCurveBuilder(curveNames, discountingCurves, iborCurves, overnightCurves, newNodesForCurve,
+        new HashMap<String, List<InstrumentDefinition<?>>>(), curveGenerators, knownData, knownBundle, fixingTs);
   }
 
 }

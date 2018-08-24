@@ -24,7 +24,7 @@ public abstract class CommodityFutureSecurityDefinition<T extends InstrumentDeri
 
   /**
    * Future last trading date. Corresponds to the expiry date. Usually define using the delivery and some rules.
-   * For cash-settle futures the fixing use generally the fixing of an index the day after the last trading date.  
+   * For cash-settle futures the fixing use generally the fixing of an index the day after the last trading date.
    */
   private final ZonedDateTime _lastTradingDate;
   /**
@@ -32,13 +32,13 @@ public abstract class CommodityFutureSecurityDefinition<T extends InstrumentDeri
    */
   private final CommodityUnderlying _underlying;
 
-  /** 
+  /**
    * Description of unit size (for example : a barrel)
    */
   private final String _unitName;
 
-  /** 
-   * Size of a unit 
+  /**
+   * Size of a unit
    */
   private final double _unitAmount;
 
@@ -55,25 +55,25 @@ public abstract class CommodityFutureSecurityDefinition<T extends InstrumentDeri
    */
   private final ZonedDateTime _noticeLastDate;
 
-  /** 
+  /**
    * Date of first delivery -  for PHYSICAL settlement only
-   * The first delivery date is the first business day of this month.  
+   * The first delivery date is the first business day of this month.
    */
   private final ZonedDateTime _firstDeliveryDate;
 
-  /** 
+  /**
    * Date of last delivery - for PHYSICAL settlement only
-   * The delivery is done during a month, the first delivery date is the first business day of this month. 
+   * The delivery is done during a month, the first delivery date is the first business day of this month.
    */
   private final ZonedDateTime _lastDeliveryDate;
 
-  /** 
+  /**
    * Settlement type - PHYSICAL or CASH
    * Some future are physical but with the option to settle it with cash, in this case the settlement type is  PHYSICAL.
    */
   private final SettlementType _settlementType;
 
-  /** 
+  /**
    * Settlement date. Usually one day after the last trading date.
    */
   private final ZonedDateTime _settlementDate;
@@ -93,8 +93,8 @@ public abstract class CommodityFutureSecurityDefinition<T extends InstrumentDeri
    * @param underlying The commodity underlying, not null
    * @param unitName name of the unit of the commodity delivered, not null
    * @param unitAmount The size of a unit, not null
-   * @param noticeFirstDate  The notice first date, can be null 
-   * @param noticeLastDate  The notice last date, can be null 
+   * @param noticeFirstDate  The notice first date, can be null
+   * @param noticeLastDate  The notice last date, can be null
    * @param firstDeliveryDate The first delivery date, not null for physical contract
    * @param lastDeliveryDate The last delivery date, not null for physical contract
    * @param settlementType The settlement type, CASH or PHYSICAL
@@ -102,8 +102,9 @@ public abstract class CommodityFutureSecurityDefinition<T extends InstrumentDeri
    * @param name The name of the future, not null
    * @param calendar The holiday calendar, not null
    */
-  public CommodityFutureSecurityDefinition(final ZonedDateTime lastTradingDate, final CommodityUnderlying underlying, final String unitName, final double unitAmount,
-      final ZonedDateTime noticeFirstDate, final ZonedDateTime noticeLastDate, final ZonedDateTime firstDeliveryDate, final ZonedDateTime lastDeliveryDate,
+  public CommodityFutureSecurityDefinition(final ZonedDateTime lastTradingDate, final CommodityUnderlying underlying,
+      final String unitName, final double unitAmount, final ZonedDateTime noticeFirstDate, final ZonedDateTime noticeLastDate,
+      final ZonedDateTime firstDeliveryDate, final ZonedDateTime lastDeliveryDate,
       final SettlementType settlementType, final ZonedDateTime settlementDate, final String name, final Calendar calendar) {
     ArgumentChecker.notNull(lastTradingDate, "Last trading date");
     ArgumentChecker.notNull(underlying, "underlying");
@@ -236,19 +237,19 @@ public abstract class CommodityFutureSecurityDefinition<T extends InstrumentDeri
   public int hashCode() {
     final int prime = 31;
     int result = 1;
-    result = prime * result + ((_firstDeliveryDate == null) ? 0 : _firstDeliveryDate.hashCode());
-    result = prime * result + ((_lastDeliveryDate == null) ? 0 : _lastDeliveryDate.hashCode());
-    result = prime * result + ((_lastTradingDate == null) ? 0 : _lastTradingDate.hashCode());
-    result = prime * result + ((_name == null) ? 0 : _name.hashCode());
-    result = prime * result + ((_noticeFirstDate == null) ? 0 : _noticeFirstDate.hashCode());
-    result = prime * result + ((_noticeLastDate == null) ? 0 : _noticeLastDate.hashCode());
-    result = prime * result + ((_settlementDate == null) ? 0 : _settlementDate.hashCode());
-    result = prime * result + ((_settlementType == null) ? 0 : _settlementType.hashCode());
-    result = prime * result + ((_underlying == null) ? 0 : _underlying.hashCode());
+    result = prime * result + (_firstDeliveryDate == null ? 0 : _firstDeliveryDate.hashCode());
+    result = prime * result + (_lastDeliveryDate == null ? 0 : _lastDeliveryDate.hashCode());
+    result = prime * result + (_lastTradingDate == null ? 0 : _lastTradingDate.hashCode());
+    result = prime * result + (_name == null ? 0 : _name.hashCode());
+    result = prime * result + (_noticeFirstDate == null ? 0 : _noticeFirstDate.hashCode());
+    result = prime * result + (_noticeLastDate == null ? 0 : _noticeLastDate.hashCode());
+    result = prime * result + (_settlementDate == null ? 0 : _settlementDate.hashCode());
+    result = prime * result + (_settlementType == null ? 0 : _settlementType.hashCode());
+    result = prime * result + (_underlying == null ? 0 : _underlying.hashCode());
     long temp;
     temp = Double.doubleToLongBits(_unitAmount);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
-    result = prime * result + ((_unitName == null) ? 0 : _unitName.hashCode());
+    result = prime * result + (int) (temp ^ temp >>> 32);
+    result = prime * result + (_unitName == null ? 0 : _unitName.hashCode());
     return result;
   }
 

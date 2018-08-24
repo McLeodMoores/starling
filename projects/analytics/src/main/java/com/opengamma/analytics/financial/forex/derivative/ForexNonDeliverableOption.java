@@ -15,10 +15,13 @@ import com.opengamma.util.money.Currency;
 
 /**
  * Class describing a non-deliverable foreign exchange European option. The option exercise date is the underlying NDF fixing date.
- * When the option is a call, the option holder has the right to enter into the Forex NDF; when the option is a put, the option holder has the right to enter into a NDF 
+ * When the option is a call, the option holder has the right to enter into the Forex NDF; when the option is a put,
+ * the option holder has the right to enter into a NDF
  * transaction equal to the underlying but with opposite signs. The settlement is done in the second currency of the NDF.
- * A Call on a Forex on KRW / USD at strike 1124.00 is thus the right to receive 1.00 USD and pay 1124.00 KRW and cash settle the difference in USD at the fixing rate. 
- * A put on a Forex on KRW / USD at strike 1124.00 is thus the right to pay 1.00 USD and receive 1124.00 KRW and cash settle the difference in USD at the fixing rate.
+ * A Call on a Forex on KRW / USD at strike 1124.00 is thus the right to receive 1.00 USD and pay 1124.00 KRW and
+ * cash settle the difference in USD at the fixing rate.
+ * A put on a Forex on KRW / USD at strike 1124.00 is thus the right to pay 1.00 USD and receive 1124.00 KRW and
+ * cash settle the difference in USD at the fixing rate.
  * There is not a full put/call parity in NDO as the two currencies do not have a fully symmetric role.
  */
 public class ForexNonDeliverableOption implements InstrumentDerivative {

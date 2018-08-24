@@ -39,7 +39,8 @@ public class GeneratorCurveDiscountFactorInterpolatedNumber extends GeneratorYDC
    * @param numberNode The number of node in the interpolated curve.
    * @param interpolator The interpolator used for the curve.
    */
-  public GeneratorCurveDiscountFactorInterpolatedNumber(final InstrumentDerivativeVisitorAdapter<Object, Double> nodeTimeCalculator, final int numberNode, final Interpolator1D interpolator) {
+  public GeneratorCurveDiscountFactorInterpolatedNumber(final InstrumentDerivativeVisitorAdapter<Object, Double> nodeTimeCalculator,
+      final int numberNode, final Interpolator1D interpolator) {
     _nodeTimeCalculator = nodeTimeCalculator;
     _interpolator = interpolator;
     _numberNode = numberNode;

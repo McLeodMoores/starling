@@ -20,12 +20,14 @@ import com.opengamma.util.money.Currency;
  * @deprecated {@link YieldCurveBundle} is deprecated
  */
 @Deprecated
-public class PresentValueCurveSensitivityConvertedCurveCurrencyCalculator extends InstrumentDerivativeVisitorSameMethodAdapter<YieldCurveBundle, InterestRateCurveSensitivity> {
+public class PresentValueCurveSensitivityConvertedCurveCurrencyCalculator
+extends InstrumentDerivativeVisitorSameMethodAdapter<YieldCurveBundle, InterestRateCurveSensitivity> {
 
   /**
    * The method unique instance.
    */
-  private static final PresentValueCurveSensitivityConvertedCurveCurrencyCalculator INSTANCE = new PresentValueCurveSensitivityConvertedCurveCurrencyCalculator();
+  private static final PresentValueCurveSensitivityConvertedCurveCurrencyCalculator INSTANCE =
+      new PresentValueCurveSensitivityConvertedCurveCurrencyCalculator();
 
   /**
    * Return the unique instance of the class.
@@ -51,7 +53,8 @@ public class PresentValueCurveSensitivityConvertedCurveCurrencyCalculator extend
    * Constructor.
    * @param pvcsc The present value curve sensitivity calculator (not converted). Not null.
    */
-  public PresentValueCurveSensitivityConvertedCurveCurrencyCalculator(final InstrumentDerivativeVisitorAdapter<YieldCurveBundle, MultipleCurrencyInterestRateCurveSensitivity> pvcsc) {
+  public PresentValueCurveSensitivityConvertedCurveCurrencyCalculator(
+      final InstrumentDerivativeVisitorAdapter<YieldCurveBundle, MultipleCurrencyInterestRateCurveSensitivity> pvcsc) {
     ArgumentChecker.notNull(pvcsc, "present value curve sensitivity calculator");
     _pvcsCalculator = pvcsc;
   }

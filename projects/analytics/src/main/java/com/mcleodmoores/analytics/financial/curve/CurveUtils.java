@@ -41,30 +41,35 @@ import com.opengamma.timeseries.precise.zdt.ZonedDateTimeDoubleTimeSeries;
 /**
  *
  */
-public class CurveUtils {
+public final class CurveUtils {
 
   public static final InstrumentDefinitionVisitor<Void, Double> RATES_INITIALIZATION = new InitialGuessForRates();
   public static final InstrumentDefinitionVisitor<Void, Double> INFLATION_INITIALIZATION = new InitialGuessForInflation();
-  public static final InstrumentDefinitionVisitor<Map<Index, ZonedDateTimeDoubleTimeSeries>, ZonedDateTimeDoubleTimeSeries[]> FIXING_TIME_SERIES_PROVIDER = new FixingTimeSeriesProvider();
+  public static final InstrumentDefinitionVisitor<Map<Index, ZonedDateTimeDoubleTimeSeries>, ZonedDateTimeDoubleTimeSeries[]>
+    FIXING_TIME_SERIES_PROVIDER = new FixingTimeSeriesProvider();
 
-  protected static class FixingTimeSeriesProvider extends InstrumentDefinitionVisitorSameValueAdapter<Map<Index, ZonedDateTimeDoubleTimeSeries>, ZonedDateTimeDoubleTimeSeries[]> {
+  protected static class FixingTimeSeriesProvider extends
+    InstrumentDefinitionVisitorSameValueAdapter<Map<Index, ZonedDateTimeDoubleTimeSeries>, ZonedDateTimeDoubleTimeSeries[]> {
 
     protected FixingTimeSeriesProvider() {
       super(new ZonedDateTimeDoubleTimeSeries[] {ImmutableZonedDateTimeDoubleTimeSeries.ofEmptyUTC()});
     }
 
     @Override
-    public ZonedDateTimeDoubleTimeSeries[] visitSwapFixedIborDefinition(final SwapFixedIborDefinition swap, final Map<Index, ZonedDateTimeDoubleTimeSeries> data) {
+    public ZonedDateTimeDoubleTimeSeries[] visitSwapFixedIborDefinition(final SwapFixedIborDefinition swap,
+        final Map<Index, ZonedDateTimeDoubleTimeSeries> data) {
       return swap.getIborLeg().accept(this, data);
     }
 
     @Override
-    public ZonedDateTimeDoubleTimeSeries[] visitSwapIborIborDefinition(final SwapIborIborDefinition swap, final Map<Index, ZonedDateTimeDoubleTimeSeries> data) {
+    public ZonedDateTimeDoubleTimeSeries[] visitSwapIborIborDefinition(final SwapIborIborDefinition swap,
+        final Map<Index, ZonedDateTimeDoubleTimeSeries> data) {
       return visitSwapDefinition(swap, data);
     }
 
     @Override
-    public ZonedDateTimeDoubleTimeSeries[] visitSwapXCcyIborIborDefinition(final SwapXCcyIborIborDefinition swap, final Map<Index, ZonedDateTimeDoubleTimeSeries> data) {
+    public ZonedDateTimeDoubleTimeSeries[] visitSwapXCcyIborIborDefinition(final SwapXCcyIborIborDefinition swap,
+        final Map<Index, ZonedDateTimeDoubleTimeSeries> data) {
       final ZonedDateTimeDoubleTimeSeries[] firstLegTs = swap.getFirstLeg().accept(this, data);
       final ZonedDateTimeDoubleTimeSeries[] secondLegTs = swap.getSecondLeg().accept(this, data);
       final ZonedDateTimeDoubleTimeSeries[] result = new ZonedDateTimeDoubleTimeSeries[firstLegTs.length + secondLegTs.length];
@@ -85,7 +90,8 @@ public class CurveUtils {
     }
 
     @Override
-    public ZonedDateTimeDoubleTimeSeries[] visitAnnuityDefinition(final AnnuityDefinition<? extends PaymentDefinition> annuity, final Map<Index, ZonedDateTimeDoubleTimeSeries> data) {
+    public ZonedDateTimeDoubleTimeSeries[] visitAnnuityDefinition(final AnnuityDefinition<? extends PaymentDefinition> annuity,
+        final Map<Index, ZonedDateTimeDoubleTimeSeries> data) {
       // overly cautious, as no annuities with different coupon types are used in the tests
       // linked hash-set used to preserve order
       final Set<ZonedDateTimeDoubleTimeSeries> tss = new LinkedHashSet<>();
@@ -120,7 +126,8 @@ public class CurveUtils {
     }
 
     @Override
-    public ZonedDateTimeDoubleTimeSeries[] visitCouponIborSpreadDefinition(final CouponIborSpreadDefinition coupon, final Map<Index, ZonedDateTimeDoubleTimeSeries> data) {
+    public ZonedDateTimeDoubleTimeSeries[] visitCouponIborSpreadDefinition(final CouponIborSpreadDefinition coupon,
+        final Map<Index, ZonedDateTimeDoubleTimeSeries> data) {
       final ZonedDateTimeDoubleTimeSeries ts = data.get(coupon.getIndex());
       if (ts == null) {
         throw new IllegalStateException("Could not get fixing series for " + coupon.getIndex());
@@ -129,7 +136,8 @@ public class CurveUtils {
     }
 
     @Override
-    public ZonedDateTimeDoubleTimeSeries[] visitForwardRateAgreementDefinition(final ForwardRateAgreementDefinition fra, final Map<Index, ZonedDateTimeDoubleTimeSeries> data) {
+    public ZonedDateTimeDoubleTimeSeries[] visitForwardRateAgreementDefinition(final ForwardRateAgreementDefinition fra,
+        final Map<Index, ZonedDateTimeDoubleTimeSeries> data) {
       final ZonedDateTimeDoubleTimeSeries ts = data.get(fra.getIndex());
       if (ts == null) {
         throw new IllegalStateException("Could not get fixing series for " + fra.getIndex());
@@ -218,7 +226,8 @@ public class CurveUtils {
 
   }
 
-  public static InstrumentDerivative convert(final InstrumentDefinition<?> instrument, final Map<Index, ZonedDateTimeDoubleTimeSeries> fixingTs, final ZonedDateTime valuationDate) {
+  public static InstrumentDerivative convert(final InstrumentDefinition<?> instrument, final Map<Index, ZonedDateTimeDoubleTimeSeries> fixingTs,
+      final ZonedDateTime valuationDate) {
     final InstrumentDerivative ird;
     if (instrument instanceof InstrumentDefinitionWithData) {
       final ZonedDateTimeDoubleTimeSeries[] ts = instrument.accept(FIXING_TIME_SERIES_PROVIDER, fixingTs);
@@ -242,7 +251,8 @@ public class CurveUtils {
     return ird;
   }
 
-  public static InstrumentDerivative[][] convert(final InstrumentDefinition<?>[][] definitions, final Map<Index, ZonedDateTimeDoubleTimeSeries> fixingTs, final ZonedDateTime valuationDate) {
+  public static InstrumentDerivative[][] convert(final InstrumentDefinition<?>[][] definitions, final Map<Index, ZonedDateTimeDoubleTimeSeries> fixingTs,
+      final ZonedDateTime valuationDate) {
     final InstrumentDerivative[][] instruments = new InstrumentDerivative[definitions.length][];
     for (int i = 0; i < definitions.length; i++) {
       instruments[i] = new InstrumentDerivative[definitions[i].length];
@@ -254,11 +264,15 @@ public class CurveUtils {
     return instruments;
   }
 
-  public static InstrumentDerivative[] convert(final InstrumentDefinition<?>[] definitions, final Map<Index, ZonedDateTimeDoubleTimeSeries> fixingTs, final ZonedDateTime valuationDate) {
+  public static InstrumentDerivative[] convert(final InstrumentDefinition<?>[] definitions, final Map<Index, ZonedDateTimeDoubleTimeSeries> fixingTs,
+      final ZonedDateTime valuationDate) {
     final InstrumentDerivative[] instruments = new InstrumentDerivative[definitions.length];
     for (int i = 0; i < definitions.length; i++) {
       instruments[i] = convert(definitions[i], fixingTs, valuationDate);
     }
     return instruments;
+  }
+
+  private CurveUtils() {
   }
 }

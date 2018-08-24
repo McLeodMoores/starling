@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.equity.variance.pricing;
@@ -61,7 +61,7 @@ public class VarianceSwapStaticReplication {
   }
 
   /**
-   * Calculates the present value of a variance swap using static replication
+   * Calculates the present value of a variance swap using static replication.
    * @param deriv The variance swap, not null
    * @param market Bundle containing market data, not null
    * @return The present value
@@ -85,7 +85,8 @@ public class VarianceSwapStaticReplication {
     double nObsActual = 0;
 
     if (deriv.getTimeToObsStart() <= 0) {
-      ArgumentChecker.isTrue(deriv.getObservations().length > 0, "presentValue requested after first observation date, yet no observations have been provided.");
+      ArgumentChecker.isTrue(deriv.getObservations().length > 0,
+          "presentValue requested after first observation date, yet no observations have been provided.");
       nObsActual = deriv.getObservations().length - 1; // From observation start until valuation
     }
 
@@ -98,9 +99,9 @@ public class VarianceSwapStaticReplication {
   }
 
   /**
-   * Computes the fair value strike of a spot starting VarianceSwap parameterised in 'variance' terms,
+   * Computes the fair value strike of a spot starting VarianceSwap parameterised in 'variance' terms.
    * It is quoted as an annual variance value, hence 1/T * integral(0,T) {sigmaSquared dt} <p>
-   * 
+   *
    * @param deriv VarianceSwap derivative to be priced
    * @param market EquityOptionDataBundle containing volatility surface, forward underlying, and funding curve
    * @return presentValue of the *remaining* variance in the swap.
@@ -139,9 +140,9 @@ public class VarianceSwapStaticReplication {
   }
 
   /**
-   * Computes the fair value strike of a spot starting VarianceSwap parameterized in 'variance' terms,
+   * Computes the fair value strike of a spot starting VarianceSwap parameterized in 'variance' terms.
    * It is quoted as an annual variance value, hence 1/T * integral(0,T) {sigmaSquared dt} <p>
-   * 
+   *
    * @param expiry Time from spot until last observation
    * @param market EquityOptionDataBundle containing volatility surface, forward underlying, and funding curve
    * @return presentValue of the *remaining* variance in the swap.
@@ -158,7 +159,7 @@ public class VarianceSwapStaticReplication {
   /**
    * Computes the fair value strike of a spot starting VarianceSwap parameterised in vol/vega terms.
    * This is an estimate of annual Lognormal (Black) volatility
-   * 
+   *
    * @param deriv VarianceSwap derivative to be priced
    * @param market EquityOptionDataBundle containing volatility surface, forward underlying, and funding curve
    * @return presentValue of the *remaining* variance in the swap.
@@ -169,8 +170,8 @@ public class VarianceSwapStaticReplication {
   }
 
   /**
-   * This is just a wrapper around ExpectedVarianceCalculator which uses a visitor pattern to farm out the calculation to the correct method of ExpectedVarianceCalculator
-   * depending on the type of BlackVolatilitySurface 
+   * This is just a wrapper around ExpectedVarianceCalculator which uses a visitor pattern to farm out the calculation
+   * to the correct method of ExpectedVarianceCalculator depending on the type of BlackVolatilitySurface
    */
   private class VarianceCalculator implements BlackVolatilitySurfaceVisitor<DoublesPair, Double> {
     /** The time to expiry */
@@ -178,7 +179,7 @@ public class VarianceSwapStaticReplication {
     /** The forward */
     private final double _f;
 
-    public VarianceCalculator(final double forward, final double expiry) {
+    VarianceCalculator(final double forward, final double expiry) {
       _f = forward;
       _t = expiry;
     }

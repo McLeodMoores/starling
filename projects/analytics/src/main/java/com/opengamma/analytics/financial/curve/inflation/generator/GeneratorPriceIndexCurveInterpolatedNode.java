@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.curve.inflation.generator;
@@ -31,10 +31,10 @@ public class GeneratorPriceIndexCurveInterpolatedNode extends GeneratorPriceInde
 
   /**
    * Constructor.
-   * @param nodePoints The node points (X) used to define the interpolated curve. 
+   * @param nodePoints The node points (X) used to define the interpolated curve.
    * @param interpolator The interpolator.
    */
-  public GeneratorPriceIndexCurveInterpolatedNode(double[] nodePoints, Interpolator1D interpolator) {
+  public GeneratorPriceIndexCurveInterpolatedNode(final double[] nodePoints, final Interpolator1D interpolator) {
     ArgumentChecker.notNull(nodePoints, "Node points");
     ArgumentChecker.notNull(interpolator, "Interpolator");
     _nodePoints = nodePoints;
@@ -48,13 +48,13 @@ public class GeneratorPriceIndexCurveInterpolatedNode extends GeneratorPriceInde
   }
 
   @Override
-  public PriceIndexCurve generateCurve(String name, double[] parameters) {
+  public PriceIndexCurve generateCurve(final String name, final double[] parameters) {
     ArgumentChecker.isTrue(parameters.length == _nbPoints, "Incorrect dimension for the price indices");
     return new PriceIndexCurve(new InterpolatedDoublesCurve(_nodePoints, parameters, _interpolator, true, name));
   }
 
   @Override
-  public PriceIndexCurve generateCurve(String name, InflationProviderInterface inflation, double[] parameters) {
+  public PriceIndexCurve generateCurve(final String name, final InflationProviderInterface inflation, final double[] parameters) {
     return generateCurve(name, parameters);
   }
 

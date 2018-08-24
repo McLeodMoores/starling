@@ -47,7 +47,8 @@ public class ForexOptionDigital implements InstrumentDerivative {
    * @param expirationTime The expiration date (and time) of the option.
    * @param isCall The call (true) / put (false) flag.
    * @param isLong The long (true) / short (false) flag.
-   * @param payDomestic The flag indicating which currency is paid. If true, the domestic currency amount is paid, if false, the foreign currency amount is paid.
+   * @param payDomestic The flag indicating which currency is paid.
+   * If true, the domestic currency amount is paid, if false, the foreign currency amount is paid.
    */
   public ForexOptionDigital(final Forex underlyingForex, final double expirationTime, final boolean isCall, final boolean isLong, final boolean payDomestic) {
     ArgumentChecker.notNull(underlyingForex, "Option FX underlying");
@@ -142,7 +143,7 @@ public class ForexOptionDigital implements InstrumentDerivative {
     int result = 1;
     long temp;
     temp = Double.doubleToLongBits(_expirationTime);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     result = prime * result + (_isCall ? 1231 : 1237);
     result = prime * result + (_isLong ? 1231 : 1237);
     result = prime * result + _underlyingForex.hashCode();

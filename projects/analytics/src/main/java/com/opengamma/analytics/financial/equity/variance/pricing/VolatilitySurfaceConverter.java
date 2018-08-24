@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.equity.variance.pricing;
@@ -15,9 +15,9 @@ import com.opengamma.analytics.math.surface.FunctionalDoublesSurface;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Class containing utility methods for pure volatility surfaces
+ * Class containing utility methods for pure volatility surfaces.
  */
-public class VolatilitySurfaceConverter {
+public final class VolatilitySurfaceConverter {
 
   /**
    * Converts a Black volatility surface (parameterised by strike) to a pure implied volatility surface.
@@ -25,7 +25,8 @@ public class VolatilitySurfaceConverter {
    * @param divCurves Bundle containing a discounting curve, forward curve and dividends data, not null
    * @return A pure implied surface
    */
-  public static PureImpliedVolatilitySurface convertImpliedVolSurface(final BlackVolatilitySurfaceStrike volSurface, final EquityDividendsCurvesBundle divCurves) {
+  public static PureImpliedVolatilitySurface convertImpliedVolSurface(final BlackVolatilitySurfaceStrike volSurface,
+      final EquityDividendsCurvesBundle divCurves) {
     ArgumentChecker.notNull(volSurface, "volatility surface");
     ArgumentChecker.notNull(divCurves, "curves and dividend data");
     final Function<Double, Double> impVol = new Function<Double, Double>() {
@@ -56,7 +57,8 @@ public class VolatilitySurfaceConverter {
    * @param divCurves Bundle containing a discounting curve, forward curve and dividends data, not null
    * @return A Black volatility surface parameterised by strike
    */
-  public static BlackVolatilitySurfaceStrike convertImpliedVolSurface(final PureImpliedVolatilitySurface pureVolSurface, final EquityDividendsCurvesBundle divCurves) {
+  public static BlackVolatilitySurfaceStrike convertImpliedVolSurface(final PureImpliedVolatilitySurface pureVolSurface,
+      final EquityDividendsCurvesBundle divCurves) {
     ArgumentChecker.notNull(pureVolSurface, "pure volatility surface");
     ArgumentChecker.notNull(divCurves, "curves and dividend data");
     final Function<Double, Double> impVol = new Function<Double, Double>() {
@@ -112,7 +114,8 @@ public class VolatilitySurfaceConverter {
    * @param divCurves Bundle containing a discounting curve, forward curve and dividends data, not null
    * @return A local volatility surface
    */
-  public static LocalVolatilitySurfaceStrike convertLocalVolSurface(final PureLocalVolatilitySurface pureVolSurface, final EquityDividendsCurvesBundle divCurves) {
+  public static LocalVolatilitySurfaceStrike convertLocalVolSurface(final PureLocalVolatilitySurface pureVolSurface,
+      final EquityDividendsCurvesBundle divCurves) {
     ArgumentChecker.notNull(pureVolSurface, "volatility surface");
     ArgumentChecker.notNull(divCurves, "curves and dividend data");
     final Function<Double, Double> localVol = new Function<Double, Double>() {
@@ -132,4 +135,6 @@ public class VolatilitySurfaceConverter {
     return new LocalVolatilitySurfaceStrike(FunctionalDoublesSurface.from(localVol));
   }
 
+  private VolatilitySurfaceConverter() {
+  }
 }

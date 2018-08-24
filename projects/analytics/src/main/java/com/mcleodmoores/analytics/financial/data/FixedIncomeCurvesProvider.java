@@ -36,7 +36,7 @@ import com.opengamma.util.money.Currency;
  *
  */
 @BeanDefinition
-public class FixedIncomeCurvesProvider implements FxDataProvider, DiscountingCurveProvider, IndexCurveProvider, ImmutableBean {
+public final class FixedIncomeCurvesProvider implements FxDataProvider, DiscountingCurveProvider, IndexCurveProvider, ImmutableBean {
   @PropertyDefinition(get = "manual")
   private final Map<UniqueIdentifiable, YieldAndDiscountCurve> _discountingCurves;
   @PropertyDefinition(get = "manual")
@@ -244,26 +244,18 @@ public class FixedIncomeCurvesProvider implements FxDataProvider, DiscountingCur
   public String toString() {
     StringBuilder buf = new StringBuilder(128);
     buf.append("FixedIncomeCurvesProvider{");
-    int len = buf.length();
-    toString(buf);
-    if (buf.length() > len) {
-      buf.setLength(buf.length() - 2);
-    }
+    buf.append("discountingCurves").append('=').append(getDiscountingCurves()).append(',').append(' ');
+    buf.append("indexCurves").append('=').append(getIndexCurves()).append(',').append(' ');
+    buf.append("fxMatrix").append('=').append(JodaBeanUtils.toString(getFxMatrix()));
     buf.append('}');
     return buf.toString();
-  }
-
-  protected void toString(StringBuilder buf) {
-    buf.append("discountingCurves").append('=').append(JodaBeanUtils.toString(getDiscountingCurves())).append(',').append(' ');
-    buf.append("indexCurves").append('=').append(JodaBeanUtils.toString(getIndexCurves())).append(',').append(' ');
-    buf.append("fxMatrix").append('=').append(JodaBeanUtils.toString(getFxMatrix())).append(',').append(' ');
   }
 
   //-----------------------------------------------------------------------
   /**
    * The meta-bean for {@code FixedIncomeCurvesProvider}.
    */
-  public static class Meta extends DirectMetaBean {
+  public static final class Meta extends DirectMetaBean {
     /**
      * The singleton instance of the meta-bean.
      */
@@ -298,7 +290,7 @@ public class FixedIncomeCurvesProvider implements FxDataProvider, DiscountingCur
     /**
      * Restricted constructor.
      */
-    protected Meta() {
+    private Meta() {
     }
 
     @Override
@@ -334,7 +326,7 @@ public class FixedIncomeCurvesProvider implements FxDataProvider, DiscountingCur
      * The meta-property for the {@code discountingCurves} property.
      * @return the meta-property, not null
      */
-    public final MetaProperty<Map<UniqueIdentifiable, YieldAndDiscountCurve>> discountingCurves() {
+    public MetaProperty<Map<UniqueIdentifiable, YieldAndDiscountCurve>> discountingCurves() {
       return _discountingCurves;
     }
 
@@ -342,7 +334,7 @@ public class FixedIncomeCurvesProvider implements FxDataProvider, DiscountingCur
      * The meta-property for the {@code indexCurves} property.
      * @return the meta-property, not null
      */
-    public final MetaProperty<Map<Index, YieldAndDiscountCurve>> indexCurves() {
+    public MetaProperty<Map<Index, YieldAndDiscountCurve>> indexCurves() {
       return _indexCurves;
     }
 
@@ -350,7 +342,7 @@ public class FixedIncomeCurvesProvider implements FxDataProvider, DiscountingCur
      * The meta-property for the {@code fxMatrix} property.
      * @return the meta-property, not null
      */
-    public final MetaProperty<FXMatrix> fxMatrix() {
+    public MetaProperty<FXMatrix> fxMatrix() {
       return _fxMatrix;
     }
 
@@ -383,7 +375,7 @@ public class FixedIncomeCurvesProvider implements FxDataProvider, DiscountingCur
   /**
    * The bean-builder for {@code FixedIncomeCurvesProvider}.
    */
-  public static class Builder extends DirectFieldsBeanBuilder<FixedIncomeCurvesProvider> {
+  public static final class Builder extends DirectFieldsBeanBuilder<FixedIncomeCurvesProvider> {
 
     private Map<UniqueIdentifiable, YieldAndDiscountCurve> _discountingCurves;
     private Map<Index, YieldAndDiscountCurve> _indexCurves;
@@ -392,14 +384,14 @@ public class FixedIncomeCurvesProvider implements FxDataProvider, DiscountingCur
     /**
      * Restricted constructor.
      */
-    protected Builder() {
+    private Builder() {
     }
 
     /**
      * Restricted copy constructor.
      * @param beanToCopy  the bean to copy from, not null
      */
-    protected Builder(FixedIncomeCurvesProvider beanToCopy) {
+    private Builder(FixedIncomeCurvesProvider beanToCopy) {
       this._discountingCurves = (beanToCopy.getDiscountingCurves() != null ? ImmutableMap.copyOf(beanToCopy.getDiscountingCurves()) : null);
       this._indexCurves = (beanToCopy.getIndexCurves() != null ? ImmutableMap.copyOf(beanToCopy.getIndexCurves()) : null);
       this._fxMatrix = beanToCopy.getFxMatrix();
@@ -507,19 +499,11 @@ public class FixedIncomeCurvesProvider implements FxDataProvider, DiscountingCur
     public String toString() {
       StringBuilder buf = new StringBuilder(128);
       buf.append("FixedIncomeCurvesProvider.Builder{");
-      int len = buf.length();
-      toString(buf);
-      if (buf.length() > len) {
-        buf.setLength(buf.length() - 2);
-      }
-      buf.append('}');
-      return buf.toString();
-    }
-
-    protected void toString(StringBuilder buf) {
       buf.append("discountingCurves").append('=').append(JodaBeanUtils.toString(_discountingCurves)).append(',').append(' ');
       buf.append("indexCurves").append('=').append(JodaBeanUtils.toString(_indexCurves)).append(',').append(' ');
-      buf.append("fxMatrix").append('=').append(JodaBeanUtils.toString(_fxMatrix)).append(',').append(' ');
+      buf.append("fxMatrix").append('=').append(JodaBeanUtils.toString(_fxMatrix));
+      buf.append('}');
+      return buf.toString();
     }
 
   }

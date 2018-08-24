@@ -15,7 +15,8 @@ import com.opengamma.util.ArgumentChecker;
 
 /**
  * Store the details and generate the required curve. The curve is interpolated on the discount factor.
- * One extra node with value zero is added at the mid point between the first and second point. This extra anchor is required when two translation invariant curves descriptions
+ * One extra node with value zero is added at the mid point between the first and second point.
+ * This extra anchor is required when two translation invariant curves descriptions
  * are added in a spread curve (two translations would create a singular system).
  */
 @SuppressWarnings("deprecation")

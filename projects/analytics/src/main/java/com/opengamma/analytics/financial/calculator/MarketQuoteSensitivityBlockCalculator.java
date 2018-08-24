@@ -54,14 +54,16 @@ public final class MarketQuoteSensitivityBlockCalculator {
    * @param units The curve building units data.
    * @return The market quote sensitivity.
    */
-  public MultipleCurrencyParameterSensitivity fromParameterSensitivity(final MultipleCurrencyParameterSensitivity parameterSensitivity, final CurveBuildingBlockBundle units) {
+  public MultipleCurrencyParameterSensitivity fromParameterSensitivity(final MultipleCurrencyParameterSensitivity parameterSensitivity,
+      final CurveBuildingBlockBundle units) {
     ArgumentChecker.notNull(parameterSensitivity, "Sensitivity");
     ArgumentChecker.notNull(units, "Units");
     MultipleCurrencyParameterSensitivity result = new MultipleCurrencyParameterSensitivity();
     for (final Pair<String, Currency> nameCcy : parameterSensitivity.getAllNamesCurrency()) {
       final LinkedHashMap<Pair<String, Currency>, DoubleMatrix1D> oneCurveSensiMap = new LinkedHashMap<>();
       final Pair<CurveBuildingBlock, DoubleMatrix2D> unitPair = units.getBlock(nameCcy.getFirst());
-      final double[] oneCurveSensiArray = ((DoubleMatrix1D) MATRIX_ALGEBRA.multiply(parameterSensitivity.getSensitivity(nameCcy), unitPair.getSecond())).getData();
+      final double[] oneCurveSensiArray =
+          ((DoubleMatrix1D) MATRIX_ALGEBRA.multiply(parameterSensitivity.getSensitivity(nameCcy), unitPair.getSecond())).getData();
       for (final String name2 : unitPair.getFirst().getAllNames()) {
         final int nbParameters = unitPair.getFirst().getNbParameters(name2);
         final int start = unitPair.getFirst().getStart(name2);
@@ -86,8 +88,8 @@ public final class MarketQuoteSensitivityBlockCalculator {
    * @deprecated {@link YieldCurveBundle} is deprecated
    */
   @Deprecated
-  public MultipleCurrencyParameterSensitivity fromInstrument(final InstrumentDerivative instrument, final Set<String> fixedCurves, final YieldCurveBundle bundle,
-      final CurveBuildingBlockBundle units) {
+  public MultipleCurrencyParameterSensitivity fromInstrument(final InstrumentDerivative instrument, final Set<String> fixedCurves,
+      final YieldCurveBundle bundle, final CurveBuildingBlockBundle units) {
     final MultipleCurrencyParameterSensitivity parameterSensitivity = _parameterSensitivityCalculator.calculateSensitivity(instrument, fixedCurves, bundle);
     return fromParameterSensitivity(parameterSensitivity, units);
   }

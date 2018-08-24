@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.equity.variance.pricing;
@@ -20,8 +20,9 @@ import com.opengamma.analytics.math.statistics.distribution.ProbabilityDistribut
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Calculate the expected annualised variance where the underlying is a diffusion (i.e. no jumps) using static replication of a log-payoff. This implicitly assumes continuous
- * monitoring of the realised variance, while in practice the daily squared returns are used (the difference is normally negligible). 
+ * Calculate the expected annualised variance where the underlying is a diffusion (i.e. no jumps) using static replication of a log-payoff.
+ * This implicitly assumes continuous monitoring of the realised variance, while in practice the daily squared returns are used
+ * (the difference is normally negligible).
  * <p>
  * Situations where the underlying contains jumps (other than equity dividend payments) are not currently handled.
  */
@@ -53,7 +54,7 @@ public class ExpectedVarianceStaticReplicationCalculator {
   }
 
   /**
-   * Constructor taking a value for the tolerance and using the default integrator (Runge-Kutta)
+   * Constructor taking a value for the tolerance and using the default integrator (Runge-Kutta).
    * @param tol The tolerance, must be greater than 1e-15 and less than 1e-1
    */
   public ExpectedVarianceStaticReplicationCalculator(final double tol) {
@@ -63,7 +64,7 @@ public class ExpectedVarianceStaticReplicationCalculator {
   }
 
   /**
-   * Constructor taking an integrator and setting a value for the tolerance (1e-9)
+   * Constructor taking an integrator and setting a value for the tolerance (1e-9).
    * @param integrator1d The integrator, not null
    */
   public ExpectedVarianceStaticReplicationCalculator(final Integrator1D<Double, Double> integrator1d) {
@@ -73,7 +74,7 @@ public class ExpectedVarianceStaticReplicationCalculator {
   }
 
   /**
-   * Constructor taking an integrator and tolerance
+   * Constructor taking an integrator and tolerance.
    * @param integrator1d The integrator, not null
    * @param tol The tolerance, must be greater than 1e-15 and less than 1e-1
    */
@@ -85,13 +86,15 @@ public class ExpectedVarianceStaticReplicationCalculator {
   }
 
   /**
-   * Calculate the expected annualised variance using static replication of a log payoff, where the underlying is a diffusion (i.e. no jumps) and the Black volatility
-   * surface is parameterised by strike.
+   * Calculate the expected annualised variance using static replication of a log payoff, where the underlying is a diffusion
+   * (i.e. no jumps) and the Black volatility surface is parameterised by strike.
    * <p>
-   * Note: the Black volatility surface must be fitted externally and be well defined for strikes down to zero ({@link ShiftedLogNormalTailExtrapolation} can be useful for this)
+   * Note: the Black volatility surface must be fitted externally and be well defined for strikes down to zero
+   * ({@link ShiftedLogNormalTailExtrapolation} can be useful for this)
    * @param forward The forward value of the underlying at expiry, must be greater than 0
    * @param expiry The expiry - expected variance is calculated from now (time zero) to expiry, must be greater than 0
-   * @param surface A BlackVolatilitySurfaceStrike which is usually fitted from market option prices (on the same underlying as the variance is measured), not null
+   * @param surface A BlackVolatilitySurfaceStrike which is usually fitted from market option prices
+   * (on the same underlying as the variance is measured), not null
    * @return The annualised expected variance
    */
   public double getAnnualizedVariance(final double forward, final double expiry, final BlackVolatilitySurfaceStrike surface) {
@@ -126,12 +129,14 @@ public class ExpectedVarianceStaticReplicationCalculator {
   }
 
   /**
-   * Calculate the expected annualised variance using static replication of a log payoff, where the underlying is a diffusion (i.e. no jumps) and the Black volatility
-   * surface is parameterised by moneyness.
+   * Calculate the expected annualised variance using static replication of a log payoff, where the underlying is a
+   * diffusion (i.e. no jumps) and the Black volatility surface is parameterised by moneyness.
    * <p>
-   * Note: the Black volatility surface must be fitted externally and be well defined for strikes down to zero ({@link ShiftedLogNormalTailExtrapolation} can be useful for this)
+   * Note: the Black volatility surface must be fitted externally and be well defined for strikes down to zero
+   * ({@link ShiftedLogNormalTailExtrapolation} can be useful for this)
    * @param expiry The expiry - expected variance is calculated from now (time zero) to expiry, must be greater than zero
-   * @param surface A BlackVolatilitySurfaceMoneyness which is usually fitted from market option prices (on the same underlying as the variance is measured), not null
+   * @param surface A BlackVolatilitySurfaceMoneyness which is usually fitted from market option prices
+   * (on the same underlying as the variance is measured), not null
    * @return The annualised expected variance
    */
   public double getAnnualizedVariance(final double expiry, final BlackVolatilitySurfaceMoneyness surface) {
@@ -142,12 +147,14 @@ public class ExpectedVarianceStaticReplicationCalculator {
   }
 
   /**
-   * Calculate the expected annualised variance using static replication of a log payoff, where the underlying is a diffusion (i.e. no jumps) and the Black volatility
-   * surface is parameterised by log-moneyness.
+   * Calculate the expected annualised variance using static replication of a log payoff, where the underlying
+   * is a diffusion (i.e. no jumps) and the Black volatility surface is parameterised by log-moneyness.
    * <p>
-   * Note: the Black volatility surface must be fitted externally and be well defined for strikes down to zero ({@link ShiftedLogNormalTailExtrapolation} can be useful for this)
+   * Note: the Black volatility surface must be fitted externally and be well defined for strikes down to zero
+   * ({@link ShiftedLogNormalTailExtrapolation} can be useful for this)
    * @param expiry The expiry - expected variance is calculated from now (time zero) to expiry, must be greater than zero
-   * @param surface A BlackVolatilitySurfaceLogMoneyness which is usually fitted from market option prices (on the same underlying as the variance is measured), not null
+   * @param surface A BlackVolatilitySurfaceLogMoneyness which is usually fitted from market option prices
+   * (on the same underlying as the variance is measured), not null
    * @return The annualised expected variance
    */
   public double getAnnualizedVariance(final double expiry, final BlackVolatilitySurfaceLogMoneyness surface) {
@@ -192,13 +199,14 @@ public class ExpectedVarianceStaticReplicationCalculator {
   }
 
   /**
-   * Calculate the expected annualised variance using static replication of a log payoff, where the underlying is a diffusion (i.e. no jumps) and the Black volatility
-   * surface is parameterised by delta.
+   * Calculate the expected annualised variance using static replication of a log payoff, where the underlying
+   * is a diffusion (i.e. no jumps) and the Black volatility surface is parameterised by delta.
    * <p>
    * Note: the Black volatility surface must be fitted externally and be well defined across the full range of delta (i.e. 0 to 1)
    * @param forward The forward value of the underlying at expiry, must be greater than zero
    * @param expiry The expiry - expected variance is calculated from now (time zero) to expiry, must be greater than zero
-   * @param surface A BlackVolatilitySurfaceDelta which is usually fitted from market option prices (on the same underlying as the variance is measured), not null
+   * @param surface A BlackVolatilitySurfaceDelta which is usually fitted from market option prices
+   * (on the same underlying as the variance is measured), not null
    * @return The annualised expected variance
    */
   public double getAnnualizedVariance(final double forward, final double expiry, final BlackVolatilitySurfaceDelta surface) {
@@ -319,7 +327,7 @@ public class ExpectedVarianceStaticReplicationCalculator {
         final boolean isCall = strike >= forward;
         final double vol = surface.getVolatility(expiry, strike);
         final double otmPrice = BlackFormulaRepository.price(forward, strike, expiry, vol, isCall);
-        final double res = (isCall ? otmPrice / strike : otmPrice / 2 / strike);
+        final double res = isCall ? otmPrice / strike : otmPrice / 2 / strike;
         return res;
       }
     };

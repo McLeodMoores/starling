@@ -39,7 +39,8 @@ public class GeneratorCurveYieldPeriodicInterpolated extends GeneratorYDCurve {
    * @param compoundingPeriodsPerYear The number of composition periods per year for the storage curve (1 for annual, 2 for semi-annual, etc.).
    * @param interpolator The interpolator used for the curve.
    */
-  public GeneratorCurveYieldPeriodicInterpolated(final InstrumentDerivativeVisitor<Object, Double> nodeTimeCalculator, final int compoundingPeriodsPerYear, final Interpolator1D interpolator) {
+  public GeneratorCurveYieldPeriodicInterpolated(final InstrumentDerivativeVisitor<Object, Double> nodeTimeCalculator,
+      final int compoundingPeriodsPerYear, final Interpolator1D interpolator) {
     _nodeTimeCalculator = nodeTimeCalculator;
     _interpolator = interpolator;
     _compoundingPeriodsPerYear = compoundingPeriodsPerYear;

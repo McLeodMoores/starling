@@ -113,7 +113,8 @@ public final class ForexOptionVanillaBlackSmileMethod {
   }
 
   /**
-   * Computes the currency exposure of the vanilla option with the Black function and a volatility from a volatility surface. The exposure is computed in both option currencies.
+   * Computes the currency exposure of the vanilla option with the Black function and a volatility from a volatility surface.
+   * The exposure is computed in both option currencies.
    * @param option  the Forex option, not null
    * @param marketData  the curve and smile data, not null
    * @return  the currency exposure
@@ -135,16 +136,19 @@ public final class ForexOptionVanillaBlackSmileMethod {
     final double deltaSpot = priceAdjoint[1] * dfForeign / dfDomestic;
     MultipleCurrencyAmount currencyExposure = MultipleCurrencyAmount.of(option.getUnderlyingForex().getCurrency1(),
         deltaSpot * Math.abs(option.getUnderlyingForex().getPaymentCurrency1().getAmount()) * sign);
-    currencyExposure = currencyExposure.plus(option.getUnderlyingForex().getCurrency2(), -deltaSpot * Math.abs(option.getUnderlyingForex().getPaymentCurrency1().getAmount()) * spot * sign
+    currencyExposure = currencyExposure.plus(option.getUnderlyingForex().getCurrency2(),
+        -deltaSpot * Math.abs(option.getUnderlyingForex().getPaymentCurrency1().getAmount()) * spot * sign
         + price);
     return currencyExposure;
   }
 
   /**
-   * Computes the relative delta of the Forex option. The relative delta is the amount in the foreign currency equivalent to the option up to the first order divided by the option notional.
+   * Computes the relative delta of the Forex option. The relative delta is the amount in the foreign currency equivalent to
+   * the option up to the first order divided by the option notional.
    * @param option  the Forex option, not null
    * @param marketData  the curve and smile data, not null
-   * @param directQuote  true if the gamma should be computed with respect to the direct quote (1 foreign = x domestic) or the reverse quote (1 domestic = x foreign)
+   * @param directQuote  true if the gamma should be computed with respect to the direct quote (1 foreign = x domestic)
+   * or the reverse quote (1 domestic = x foreign)
    * @return  the relative delta
    */
   public double deltaRelative(final ForexOptionVanilla option, final BlackForexSmileProviderInterface marketData, final boolean directQuote) {
@@ -158,7 +162,8 @@ public final class ForexOptionVanillaBlackSmileMethod {
     final double forward = spot * dfForeign / dfDomestic;
     final double volatility = marketData.getVolatility(option.getCurrency1(), option.getCurrency2(), option.getTimeToExpiry(), option.getStrike(), forward);
     final double sign = option.isLong() ? 1.0 : -1.0;
-    final double deltaDirect = BlackFormulaRepository.delta(forward, option.getStrike(), option.getTimeToExpiry(), volatility, option.isCall()) * dfForeign * sign;
+    final double deltaDirect =
+        BlackFormulaRepository.delta(forward, option.getStrike(), option.getTimeToExpiry(), volatility, option.isCall()) * dfForeign * sign;
     if (directQuote) {
       return deltaDirect;
     }
@@ -172,7 +177,8 @@ public final class ForexOptionVanillaBlackSmileMethod {
    * The reason to multiply by the spot rate is to be able to compute the change of value for a relative increase of e of the spot rate (from X to X(1+e)).
    * @param option  the Forex option, not null
    * @param marketData  the curve and smile data, not null
-   * @param directQuote  true if the gamma should be computed with respect to the direct quote (1 foreign = x domestic) or the reverse quote (1 domestic = x foreign)
+   * @param directQuote  true if the gamma should be computed with respect to the direct quote (1 foreign = x domestic)
+   * or the reverse quote (1 domestic = x foreign)
    * @return  the relative delta multiplied by the spot
    */
   public double deltaRelativeSpot(final ForexOptionVanilla option, final BlackForexSmileProviderInterface marketData, final boolean directQuote) {
@@ -186,7 +192,8 @@ public final class ForexOptionVanillaBlackSmileMethod {
     final double forward = spot * dfForeign / dfDomestic;
     final double volatility = marketData.getVolatility(option.getCurrency1(), option.getCurrency2(), option.getTimeToExpiry(), option.getStrike(), forward);
     final double sign = option.isLong() ? 1.0 : -1.0;
-    final double deltaDirect = BlackFormulaRepository.delta(forward, option.getStrike(), option.getTimeToExpiry(), volatility, option.isCall()) * dfForeign * sign;
+    final double deltaDirect =
+        BlackFormulaRepository.delta(forward, option.getStrike(), option.getTimeToExpiry(), volatility, option.isCall()) * dfForeign * sign;
     if (directQuote) {
       return deltaDirect * spot;
     }
@@ -232,7 +239,8 @@ public final class ForexOptionVanillaBlackSmileMethod {
    * The relative gamma is the second order derivative of the pv divided by the option notional.
    * @param option  the Forex option, not null
    * @param marketData  the curve and smile data, not null
-   * @param directQuote  true if the gamma should be computed with respect to the direct quote (1 foreign = x domestic) or the reverse quote (1 domestic = x foreign)
+   * @param directQuote  true if the gamma should be computed with respect to the direct quote (1 foreign = x domestic)
+   * or the reverse quote (1 domestic = x foreign)
    * @return  the relative gamma
    */
   public double gammaRelative(final ForexOptionVanilla option, final BlackForexSmileProviderInterface marketData, final boolean directQuote) {
@@ -246,11 +254,13 @@ public final class ForexOptionVanillaBlackSmileMethod {
     final double forward = spot * dfForeign / dfDomestic;
     final double volatility = marketData.getVolatility(option.getCurrency1(), option.getCurrency2(), option.getTimeToExpiry(), option.getStrike(), forward);
     final double sign = option.isLong() ? 1.0 : -1.0;
-    final double gammaDirect = BlackFormulaRepository.gamma(forward, option.getStrike(), option.getTimeToExpiry(), volatility) * (dfForeign * dfForeign) / dfDomestic * sign;
+    final double gammaDirect =
+        BlackFormulaRepository.gamma(forward, option.getStrike(), option.getTimeToExpiry(), volatility) * (dfForeign * dfForeign) / dfDomestic * sign;
     if (directQuote) {
       return gammaDirect;
     }
-    final double deltaDirect = BlackFormulaRepository.delta(forward, option.getStrike(), option.getTimeToExpiry(), volatility, option.isCall()) * dfForeign * sign;
+    final double deltaDirect =
+        BlackFormulaRepository.delta(forward, option.getStrike(), option.getTimeToExpiry(), volatility, option.isCall()) * dfForeign * sign;
     final double gamma = (gammaDirect * spot + 2 * deltaDirect) * spot * spot * spot;
     return gamma;
   }
@@ -261,7 +271,8 @@ public final class ForexOptionVanillaBlackSmileMethod {
    * The reason to multiply by the spot rate is to be able to compute the change of delta for a relative increase of e of the spot rate (from X to X(1+e)).
    * @param option  the Forex option, not null
    * @param marketData  the curve and smile data, not null
-   * @param directQuote  true if the gamma should be computed with respect to the direct quote (1 foreign = x domestic) or the reverse quote (1 domestic = x foreign)
+   * @param directQuote  true if the gamma should be computed with respect to the direct quote (1 foreign = x domestic)
+   * or the reverse quote (1 domestic = x foreign)
    * @return  the relative gamma multiplied by the spot
    */
   public double gammaRelativeSpot(final ForexOptionVanilla option, final BlackForexSmileProviderInterface marketData, final boolean directQuote) {
@@ -275,11 +286,13 @@ public final class ForexOptionVanillaBlackSmileMethod {
     final double forward = spot * dfForeign / dfDomestic;
     final double volatility = marketData.getVolatility(option.getCurrency1(), option.getCurrency2(), option.getTimeToExpiry(), option.getStrike(), forward);
     final double sign = option.isLong() ? 1.0 : -1.0;
-    final double gammaDirect = BlackFormulaRepository.gamma(forward, option.getStrike(), option.getTimeToExpiry(), volatility) * (dfForeign * dfForeign) / dfDomestic * sign;
+    final double gammaDirect =
+        BlackFormulaRepository.gamma(forward, option.getStrike(), option.getTimeToExpiry(), volatility) * (dfForeign * dfForeign) / dfDomestic * sign;
     if (directQuote) {
       return gammaDirect * spot;
     }
-    final double deltaDirect = BlackFormulaRepository.delta(forward, option.getStrike(), option.getTimeToExpiry(), volatility, option.isCall()) * dfForeign * sign;
+    final double deltaDirect =
+        BlackFormulaRepository.delta(forward, option.getStrike(), option.getTimeToExpiry(), volatility, option.isCall()) * dfForeign * sign;
     final double gamma = (gammaDirect * spot + 2 * deltaDirect) * spot * spot;
     return gamma;
   }
@@ -288,14 +301,16 @@ public final class ForexOptionVanillaBlackSmileMethod {
    * Computes the gamma of the Forex option. The gamma is the second order derivative of the option present value to the spot fx rate.
    * @param option  the Forex option, not null
    * @param marketData  the curve and smile data, not null
-   * @param directQuote true if the gamma should be computed with respect to the direct quote (1 foreign = x domestic) or the reverse quote (1 domestic = x foreign)
+   * @param directQuote true if the gamma should be computed with respect to the direct quote (1 foreign = x domestic)
+   * or the reverse quote (1 domestic = x foreign)
    * @return  the gamma
    */
   public CurrencyAmount gamma(final ForexOptionVanilla option, final BlackForexSmileProviderInterface marketData, final boolean directQuote) {
     ArgumentChecker.notNull(option, "option");
     ArgumentChecker.notNull(marketData, "marketData");
     final double gammaRelative = gammaRelative(option, marketData, directQuote);
-    return CurrencyAmount.of(option.getUnderlyingForex().getCurrency2(), gammaRelative * Math.abs(option.getUnderlyingForex().getPaymentCurrency1().getAmount()));
+    return CurrencyAmount.of(option.getUnderlyingForex().getCurrency2(),
+        gammaRelative * Math.abs(option.getUnderlyingForex().getPaymentCurrency1().getAmount()));
   }
 
   /**
@@ -336,7 +351,8 @@ public final class ForexOptionVanillaBlackSmileMethod {
    * The reason to multiply by the spot rate is to be able to compute the change of delta for a relative increase of e of the spot rate (from X to X(1+e)).
    * @param option  the Forex option, not null
    * @param marketData  the curve and smile data, not null
-   * @param directQuote  true if the gamma should be computed with respect to the direct quote (1 foreign = x domestic) or the reverse quote (1 domestic = x foreign)
+   * @param directQuote  true if the gamma should be computed with respect to the direct quote (1 foreign = x domestic)
+   * or the reverse quote (1 domestic = x foreign)
    * @return  the gamma multiplied by the spot
    */
   public CurrencyAmount gammaSpot(final ForexOptionVanilla option, final BlackForexSmileProviderInterface marketData, final boolean directQuote) {
@@ -344,7 +360,8 @@ public final class ForexOptionVanillaBlackSmileMethod {
     ArgumentChecker.notNull(marketData, "marketData");
     ArgumentChecker.isTrue(marketData.checkCurrencies(option.getCurrency1(), option.getCurrency2()), "Option currencies not compatible with smile data");
     final double gammaRelativeSpot = gammaRelativeSpot(option, marketData, directQuote);
-    return CurrencyAmount.of(option.getUnderlyingForex().getCurrency2(), gammaRelativeSpot * Math.abs(option.getUnderlyingForex().getPaymentCurrency1().getAmount()));
+    return CurrencyAmount.of(option.getUnderlyingForex().getCurrency2(),
+        gammaRelativeSpot * Math.abs(option.getUnderlyingForex().getPaymentCurrency1().getAmount()));
   }
 
   /**
@@ -409,7 +426,7 @@ public final class ForexOptionVanillaBlackSmileMethod {
   }
 
   /**
-   * Computes the Vanna (2nd order cross-sensitivity of the option present value to the spot fx and implied vol),
+   * Computes the Vanna (2nd order cross-sensitivity of the option present value to the spot fx and implied vol).
    *
    * $\frac{\partial^2 (PV)}{\partial FX \partial \sigma}$
    * @param option  the Forex option, not null
@@ -435,7 +452,7 @@ public final class ForexOptionVanillaBlackSmileMethod {
   }
 
   /**
-   * Computes the Vomma (aka Volga) (2nd order sensitivity of the option present value to the implied vol)
+   * Computes the Vomma (aka Volga) (2nd order sensitivity of the option present value to the implied vol).
    * @param option  the Forex option, not null
    * @param marketData  the curve and smile data, not null
    * @return  the volga in the domesti currency
@@ -457,7 +474,7 @@ public final class ForexOptionVanillaBlackSmileMethod {
   }
 
   /**
-   * Computes the vega (1st order sensitivity of the option present value to the implied vol)
+   * Computes the vega (1st order sensitivity of the option present value to the implied vol).
    * @param option  the Forex option, not null
    * @param marketData  the curve and smile data, not null
    * @return  the vega in the domestic currency
@@ -489,13 +506,15 @@ public final class ForexOptionVanillaBlackSmileMethod {
   }
 
   /**
-   * Computes the curve sensitivity of the option present value. The sensitivity of the volatility on the forward (and on the curves) is not taken into account. It is the curve
+   * Computes the curve sensitivity of the option present value. The sensitivity of the volatility on the forward
+   * (and on the curves) is not taken into account. It is the curve
    * sensitivity in the Black model where the volatility is suppose to be constant for curve and forward changes.
    * @param option  the Forex option, not null
    * @param marketData  the curve and smile data, not null
    * @return  the curve sensitivities
    */
-  public MultipleCurrencyMulticurveSensitivity presentValueCurveSensitivity(final ForexOptionVanilla option, final BlackForexSmileProviderInterface marketData) {
+  public MultipleCurrencyMulticurveSensitivity presentValueCurveSensitivity(final ForexOptionVanilla option,
+      final BlackForexSmileProviderInterface marketData) {
     ArgumentChecker.notNull(option, "option");
     ArgumentChecker.notNull(marketData, "marketData");
     ArgumentChecker.isTrue(marketData.checkCurrencies(option.getCurrency1(), option.getCurrency2()), "Option currencies not compatible with smile data");
@@ -536,7 +555,8 @@ public final class ForexOptionVanillaBlackSmileMethod {
    * @param marketData  the curve and smile data, not null
    * @return  the volatility sensitivity. The sensitivity figures are, like the present value, in the domestic currency (currency 2).
    */
-  public PresentValueForexBlackVolatilitySensitivity presentValueBlackVolatilitySensitivity(final ForexOptionVanilla option, final BlackForexSmileProviderInterface marketData) {
+  public PresentValueForexBlackVolatilitySensitivity presentValueBlackVolatilitySensitivity(final ForexOptionVanilla option,
+      final BlackForexSmileProviderInterface marketData) {
     ArgumentChecker.notNull(option, "option");
     ArgumentChecker.notNull(marketData, "marketData");
     ArgumentChecker.isTrue(marketData.checkCurrencies(option.getCurrency1(), option.getCurrency2()), "Option currencies not compatible with smile data");
@@ -550,18 +570,21 @@ public final class ForexOptionVanillaBlackSmileMethod {
     final double volatility = marketData.getVolatility(option.getCurrency1(), option.getCurrency2(), option.getTimeToExpiry(), option.getStrike(), forward);
     final BlackFunctionData dataBlack = new BlackFunctionData(forward, dfDomestic, volatility);
     final double[] priceAdjoint = BLACK_FUNCTION.getPriceAdjoint(option, dataBlack);
-    final double volatilitySensitivityValue = priceAdjoint[2] * Math.abs(option.getUnderlyingForex().getPaymentCurrency1().getAmount()) * (option.isLong() ? 1.0 : -1.0);
+    final double volatilitySensitivityValue =
+        priceAdjoint[2] * Math.abs(option.getUnderlyingForex().getPaymentCurrency1().getAmount()) * (option.isLong() ? 1.0 : -1.0);
     final DoublesPair point = DoublesPair.of(option.getTimeToExpiry(),
         option.getCurrency1().equals(marketData.getCurrencyPair().getFirst()) ? option.getStrike() : 1.0 / option.getStrike());
     // Implementation note: The strike should be in the same currency order as the input data.
     final SurfaceValue result = SurfaceValue.from(point, volatilitySensitivityValue);
-    final PresentValueForexBlackVolatilitySensitivity sensi = new PresentValueForexBlackVolatilitySensitivity(option.getUnderlyingForex().getCurrency1(), option.getUnderlyingForex()
+    final PresentValueForexBlackVolatilitySensitivity sensi =
+        new PresentValueForexBlackVolatilitySensitivity(option.getUnderlyingForex().getCurrency1(), option.getUnderlyingForex()
         .getCurrency2(), result);
     return sensi;
   }
 
   /**
-   * Computes the volatility sensitivity with respect to input data for a vanilla option with the Black function and a volatility from a volatility surface. The sensitivity
+   * Computes the volatility sensitivity with respect to input data for a vanilla option with the Black function and a volatility
+   * from a volatility surface. The sensitivity
    * is computed with respect to each node in the volatility surface.
    * @param option  the Forex option, not null
    * @param marketData  the curve and smile data, not null
@@ -589,8 +612,9 @@ public final class ForexOptionVanillaBlackSmileMethod {
         vega[i][j] = nodeWeight[i][j] * pointSensitivity.getVega().getMap().get(point);
       }
     }
-    return new PresentValueForexBlackVolatilityNodeSensitivityDataBundle(option.getUnderlyingForex().getCurrency1(), option.getUnderlyingForex().getCurrency2(), new DoubleMatrix1D(
-        volatilityModel.getTimeToExpiration()), new DoubleMatrix1D(volatilityModel.getDeltaFull()), new DoubleMatrix2D(vega));
+    return new PresentValueForexBlackVolatilityNodeSensitivityDataBundle(option.getUnderlyingForex().getCurrency1(),
+        option.getUnderlyingForex().getCurrency2(), new DoubleMatrix1D(volatilityModel.getTimeToExpiration()),
+        new DoubleMatrix1D(volatilityModel.getDeltaFull()), new DoubleMatrix2D(vega));
   }
 
 }

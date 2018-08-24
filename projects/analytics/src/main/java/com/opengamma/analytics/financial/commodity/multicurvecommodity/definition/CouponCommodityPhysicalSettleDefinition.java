@@ -18,7 +18,7 @@ import com.opengamma.timeseries.DoubleTimeSeries;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * 
+ *
  */
 public class CouponCommodityPhysicalSettleDefinition extends CouponCommodityDefinition {
 
@@ -35,15 +35,15 @@ public class CouponCommodityPhysicalSettleDefinition extends CouponCommodityDefi
    */
   private final ZonedDateTime _noticeLastDate;
 
-  /** 
+  /**
    * Date of first delivery -  for PHYSICAL settlement only
-   * The first delivery date is the first business day of this month.  
+   * The first delivery date is the first business day of this month.
    */
   private final ZonedDateTime _firstDeliveryDate;
 
-  /** 
+  /**
    * Date of last delivery - for PHYSICAL settlement only
-   * The delivery is done during a month, the first delivery date is the first business day of this month. 
+   * The delivery is done during a month, the first delivery date is the first business day of this month.
    */
   private final ZonedDateTime _lastDeliveryDate;
 
@@ -55,14 +55,14 @@ public class CouponCommodityPhysicalSettleDefinition extends CouponCommodityDefi
    * @param notional notional
    * @param settlementDate The settlement date, not null
    * @param calendar The holiday calendar, not null
-   * @param noticeFirstDate  The notice first date, can be null 
-   * @param noticeLastDate  The notice last date, can be null 
+   * @param noticeFirstDate  The notice first date, can be null
+   * @param noticeLastDate  The notice last date, can be null
    * @param firstDeliveryDate The first delivery date, not null for physical contract
    * @param lastDeliveryDate The last delivery date, not null for physical contract
    */
-  public CouponCommodityPhysicalSettleDefinition(final double paymentYearFraction, final CommodityUnderlying underlying, final String unitName, final double notional,
-      final ZonedDateTime settlementDate, final Calendar calendar, final ZonedDateTime noticeFirstDate, final ZonedDateTime noticeLastDate, final ZonedDateTime firstDeliveryDate,
-      final ZonedDateTime lastDeliveryDate) {
+  public CouponCommodityPhysicalSettleDefinition(final double paymentYearFraction, final CommodityUnderlying underlying, final String unitName,
+      final double notional, final ZonedDateTime settlementDate, final Calendar calendar, final ZonedDateTime noticeFirstDate,
+      final ZonedDateTime noticeLastDate, final ZonedDateTime firstDeliveryDate, final ZonedDateTime lastDeliveryDate) {
     super(paymentYearFraction, underlying, unitName, notional, settlementDate, calendar);
     _noticeFirstDate = noticeFirstDate;
     _noticeLastDate = noticeLastDate;
@@ -121,7 +121,8 @@ public class CouponCommodityPhysicalSettleDefinition extends CouponCommodityDefi
     final double noticeLastTime = TimeCalculator.getTimeBetween(date, _noticeLastDate);
     final double firstDeliveryTime = TimeCalculator.getTimeBetween(date, _firstDeliveryDate);
     final double lastDeliveryTime = TimeCalculator.getTimeBetween(date, _lastDeliveryDate);
-    return new CouponCommodityPhysicalSettle(getPaymentYearFractione(), getUnderlying(), getUnitName(), getNotional(), settlementTime, getCalendar(), noticeFirstTime, noticeLastTime,
+    return new CouponCommodityPhysicalSettle(getPaymentYearFractione(), getUnderlying(), getUnitName(), getNotional(),
+        settlementTime, getCalendar(), noticeFirstTime, noticeLastTime,
         firstDeliveryTime, lastDeliveryTime);
   }
 
@@ -148,10 +149,10 @@ public class CouponCommodityPhysicalSettleDefinition extends CouponCommodityDefi
   public int hashCode() {
     final int prime = 31;
     int result = super.hashCode();
-    result = prime * result + ((_firstDeliveryDate == null) ? 0 : _firstDeliveryDate.hashCode());
-    result = prime * result + ((_lastDeliveryDate == null) ? 0 : _lastDeliveryDate.hashCode());
-    result = prime * result + ((_noticeFirstDate == null) ? 0 : _noticeFirstDate.hashCode());
-    result = prime * result + ((_noticeLastDate == null) ? 0 : _noticeLastDate.hashCode());
+    result = prime * result + (_firstDeliveryDate == null ? 0 : _firstDeliveryDate.hashCode());
+    result = prime * result + (_lastDeliveryDate == null ? 0 : _lastDeliveryDate.hashCode());
+    result = prime * result + (_noticeFirstDate == null ? 0 : _noticeFirstDate.hashCode());
+    result = prime * result + (_noticeLastDate == null ? 0 : _noticeLastDate.hashCode());
     return result;
   }
 

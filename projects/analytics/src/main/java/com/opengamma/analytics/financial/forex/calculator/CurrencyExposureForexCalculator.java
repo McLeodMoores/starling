@@ -15,6 +15,7 @@ import com.opengamma.analytics.financial.interestrate.InstrumentDerivativeVisito
 import com.opengamma.analytics.financial.interestrate.YieldCurveBundle;
 import com.opengamma.util.money.MultipleCurrencyAmount;
 
+// CSOFF
 /**
  * Calculator of the currency exposure for Forex derivatives.
  * @deprecated Curve builders that use and populate {@link YieldCurveBundle}s are deprecated.

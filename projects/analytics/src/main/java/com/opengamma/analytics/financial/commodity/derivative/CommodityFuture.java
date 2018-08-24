@@ -58,8 +58,9 @@ public abstract class CommodityFuture implements InstrumentDerivative {
    * @param referencePrice reference price
    * @param currency the currency
    */
-  public CommodityFuture(final double expiry, final ExternalId underlying, final double unitAmount, final ZonedDateTime firstDeliveryDate, final ZonedDateTime lastDeliveryDate,
-      final double amount, final String unitName, final SettlementType settlementType, final double settlement, final double referencePrice, final Currency currency) {
+  public CommodityFuture(final double expiry, final ExternalId underlying, final double unitAmount, final ZonedDateTime firstDeliveryDate,
+      final ZonedDateTime lastDeliveryDate, final double amount, final String unitName, final SettlementType settlementType,
+      final double settlement, final double referencePrice, final Currency currency) {
     ArgumentChecker.isTrue(expiry >= 0, "time to expiry must be positive");
 
     _expiry = expiry;
@@ -120,7 +121,8 @@ public abstract class CommodityFuture implements InstrumentDerivative {
    * @return the amount
    */
   public double getAmount() {
-    return _amount; // FIXME Resolve confusion about _amount and _unitAmount - What is _amount? Speak to Casey. Also need to look at Converters (Security > Definition > Derivative)
+    // FIXME Resolve confusion about _amount and _unitAmount - What is _amount? Also need to look at Converters (Security > Definition > Derivative)
+    return _amount;
   }
 
   /**
@@ -179,20 +181,20 @@ public abstract class CommodityFuture implements InstrumentDerivative {
     result = prime * result + _currency.hashCode();
     long temp;
     temp = Double.doubleToLongBits(_expiry);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_amount);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_unitAmount);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_settlement);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_referencePrice);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }

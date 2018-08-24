@@ -24,9 +24,11 @@ import com.opengamma.util.money.Currency;
 import com.opengamma.util.money.CurrencyAmount;
 import com.opengamma.util.money.MultipleCurrencyAmount;
 
+//CSOFF
 /**
  *
  */
+@Deprecated
 public class SwapConstantSpreadHorizonCalculator implements HorizonCalculatorDeprecated<SwapDefinition, YieldCurveBundle, ZonedDateTimeDoubleTimeSeries[]> {
   /** Rolls down a yield curve */
   private static final ConstantSpreadYieldCurveBundleRolldownFunction CURVE_ROLLDOWN = ConstantSpreadYieldCurveBundleRolldownFunction.getInstance();

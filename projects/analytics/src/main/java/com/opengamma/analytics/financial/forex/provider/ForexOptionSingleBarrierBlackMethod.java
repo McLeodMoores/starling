@@ -75,7 +75,8 @@ public final class ForexOptionSingleBarrierBlackMethod {
   public MultipleCurrencyAmount presentValue(final ForexOptionSingleBarrier optionForex, final BlackForexSmileProviderInterface smileMulticurves) {
     ArgumentChecker.notNull(optionForex, "Forex option");
     ArgumentChecker.notNull(smileMulticurves, "Smile");
-    ArgumentChecker.isTrue(smileMulticurves.checkCurrencies(optionForex.getCurrency1(), optionForex.getCurrency2()), "Option currencies not compatible with smile data");
+    ArgumentChecker.isTrue(smileMulticurves.checkCurrencies(optionForex.getCurrency1(), optionForex.getCurrency2()),
+        "Option currencies not compatible with smile data");
     final MulticurveProviderInterface multicurves = smileMulticurves.getMulticurveProvider();
     final double payTime = optionForex.getUnderlyingOption().getUnderlyingForex().getPaymentTime();
     final double dfDomestic = multicurves.getDiscountFactor(optionForex.getCurrency2(), payTime);
@@ -87,9 +88,10 @@ public final class ForexOptionSingleBarrierBlackMethod {
     final double foreignAmount = optionForex.getUnderlyingOption().getUnderlyingForex().getPaymentCurrency1().getAmount();
     final double rebateByForeignUnit = optionForex.getRebate() / Math.abs(foreignAmount);
     final double sign = optionForex.getUnderlyingOption().isLong() ? 1.0 : -1.0;
-    final double volatility = smileMulticurves.getVolatility(optionForex.getCurrency1(), optionForex.getCurrency2(), optionForex.getUnderlyingOption().getTimeToExpiry(), optionForex
-        .getUnderlyingOption().getStrike(), forward);
-    double price = BARRIER_FUNCTION.getPrice(optionForex.getUnderlyingOption(), optionForex.getBarrier(), rebateByForeignUnit, spot, rateDomestic - rateForeign, rateDomestic, volatility);
+    final double volatility = smileMulticurves.getVolatility(optionForex.getCurrency1(), optionForex.getCurrency2(),
+        optionForex.getUnderlyingOption().getTimeToExpiry(), optionForex.getUnderlyingOption().getStrike(), forward);
+    double price = BARRIER_FUNCTION.getPrice(optionForex.getUnderlyingOption(), optionForex.getBarrier(),
+        rebateByForeignUnit, spot, rateDomestic - rateForeign, rateDomestic, volatility);
     price *= Math.abs(foreignAmount) * sign;
     final CurrencyAmount priceCurrency = CurrencyAmount.of(optionForex.getUnderlyingOption().getUnderlyingForex().getCurrency2(), price);
     return MultipleCurrencyAmount.of(priceCurrency);
@@ -105,7 +107,8 @@ public final class ForexOptionSingleBarrierBlackMethod {
   public MultipleCurrencyAmount currencyExposure(final ForexOptionSingleBarrier optionForex, final BlackForexSmileProviderInterface smileMulticurves) {
     ArgumentChecker.notNull(optionForex, "Forex option");
     ArgumentChecker.notNull(smileMulticurves, "Smile");
-    ArgumentChecker.isTrue(smileMulticurves.checkCurrencies(optionForex.getCurrency1(), optionForex.getCurrency2()), "Option currencies not compatible with smile data");
+    ArgumentChecker.isTrue(smileMulticurves.checkCurrencies(optionForex.getCurrency1(), optionForex.getCurrency2()),
+        "Option currencies not compatible with smile data");
     final MulticurveProviderInterface multicurves = smileMulticurves.getMulticurveProvider();
     final double payTime = optionForex.getUnderlyingOption().getUnderlyingForex().getPaymentTime();
     final double dfDomestic = multicurves.getDiscountFactor(optionForex.getCurrency2(), payTime);
@@ -117,10 +120,11 @@ public final class ForexOptionSingleBarrierBlackMethod {
     final double foreignAmount = optionForex.getUnderlyingOption().getUnderlyingForex().getPaymentCurrency1().getAmount();
     final double rebateByForeignUnit = optionForex.getRebate() / Math.abs(foreignAmount);
     final double sign = optionForex.getUnderlyingOption().isLong() ? 1.0 : -1.0;
-    final double volatility = smileMulticurves.getVolatility(optionForex.getCurrency1(), optionForex.getCurrency2(), optionForex.getUnderlyingOption().getTimeToExpiry(), optionForex
-        .getUnderlyingOption().getStrike(), forward);
+    final double volatility = smileMulticurves.getVolatility(optionForex.getCurrency1(), optionForex.getCurrency2(),
+        optionForex.getUnderlyingOption().getTimeToExpiry(), optionForex.getUnderlyingOption().getStrike(), forward);
     final double[] priceDerivatives = new double[5];
-    double price = BARRIER_FUNCTION.getPriceAdjoint(optionForex.getUnderlyingOption(), optionForex.getBarrier(), rebateByForeignUnit, spot, rateDomestic - rateForeign, rateDomestic, volatility,
+    double price = BARRIER_FUNCTION.getPriceAdjoint(optionForex.getUnderlyingOption(), optionForex.getBarrier(),
+        rebateByForeignUnit, spot, rateDomestic - rateForeign, rateDomestic, volatility,
         priceDerivatives);
     price *= Math.abs(foreignAmount) * sign;
     final double deltaSpot = priceDerivatives[0];
@@ -134,16 +138,19 @@ public final class ForexOptionSingleBarrierBlackMethod {
   }
 
   /**
-   * Computes the curve sensitivity of the option present value. The sensitivity of the volatility on the forward (and on the curves) is not taken into account. It is the curve
+   * Computes the curve sensitivity of the option present value. The sensitivity of the volatility on the forward
+   * (and on the curves) is not taken into account. It is the curve
    * sensitivity in the Black model where the volatility is suppose to be constant for curve and forward changes.
    * @param optionForex The Forex option.
    * @param smileMulticurves The curve and smile data.
    * @return The curve sensitivity.
    */
-  public MultipleCurrencyMulticurveSensitivity presentValueCurveSensitivity(final ForexOptionSingleBarrier optionForex, final BlackForexSmileProviderInterface smileMulticurves) {
+  public MultipleCurrencyMulticurveSensitivity presentValueCurveSensitivity(final ForexOptionSingleBarrier optionForex,
+      final BlackForexSmileProviderInterface smileMulticurves) {
     ArgumentChecker.notNull(optionForex, "Forex option");
     ArgumentChecker.notNull(smileMulticurves, "Smile");
-    ArgumentChecker.isTrue(smileMulticurves.checkCurrencies(optionForex.getCurrency1(), optionForex.getCurrency2()), "Option currencies not compatible with smile data");
+    ArgumentChecker.isTrue(smileMulticurves.checkCurrencies(optionForex.getCurrency1(), optionForex.getCurrency2()),
+        "Option currencies not compatible with smile data");
     final MulticurveProviderInterface multicurves = smileMulticurves.getMulticurveProvider();
     final double payTime = optionForex.getUnderlyingOption().getUnderlyingForex().getPaymentTime();
     final double dfDomestic = multicurves.getDiscountFactor(optionForex.getCurrency2(), payTime);
@@ -156,12 +163,13 @@ public final class ForexOptionSingleBarrierBlackMethod {
     final double foreignAmount = optionForex.getUnderlyingOption().getUnderlyingForex().getPaymentCurrency1().getAmount();
     final double rebateByForeignUnit = optionForex.getRebate() / Math.abs(foreignAmount);
     final double sign = optionForex.getUnderlyingOption().isLong() ? 1.0 : -1.0;
-    final double volatility = smileMulticurves.getVolatility(optionForex.getCurrency1(), optionForex.getCurrency2(), optionForex.getUnderlyingOption().getTimeToExpiry(), optionForex
-        .getUnderlyingOption().getStrike(), forward);
+    final double volatility = smileMulticurves.getVolatility(optionForex.getCurrency1(), optionForex.getCurrency2(),
+        optionForex.getUnderlyingOption().getTimeToExpiry(), optionForex.getUnderlyingOption().getStrike(), forward);
     // The Barrier pricing method parameterizes as a function of rate (r=rateDomestic), and costOfCarry (b=rateDomestic-rateForeign)
     // We wish to compute derivatives wrt rateDomestic and rateForeign, not the costOfCarry parameter.
     final double[] priceDerivatives = new double[5];
-    BARRIER_FUNCTION.getPriceAdjoint(optionForex.getUnderlyingOption(), optionForex.getBarrier(), rebateByForeignUnit, spot, rateDomestic - rateForeign, rateDomestic, volatility, priceDerivatives);
+    BARRIER_FUNCTION.getPriceAdjoint(optionForex.getUnderlyingOption(), optionForex.getBarrier(), rebateByForeignUnit, spot,
+        rateDomestic - rateForeign, rateDomestic, volatility, priceDerivatives);
     // Backward sweep
     final double priceBar = 1.0;
     final double rCostOfCarryBar = priceDerivatives[3] * Math.abs(foreignAmount) * sign * priceBar;
@@ -185,10 +193,12 @@ public final class ForexOptionSingleBarrierBlackMethod {
    * @param smileMulticurves The curve and smile data.
    * @return The curve sensitivity.
    */
-  public PresentValueForexBlackVolatilitySensitivity presentValueBlackVolatilitySensitivity(final ForexOptionSingleBarrier optionForex, final BlackForexSmileProviderInterface smileMulticurves) {
+  public PresentValueForexBlackVolatilitySensitivity presentValueBlackVolatilitySensitivity(final ForexOptionSingleBarrier optionForex,
+      final BlackForexSmileProviderInterface smileMulticurves) {
     ArgumentChecker.notNull(optionForex, "Forex option");
     ArgumentChecker.notNull(smileMulticurves, "Smile");
-    ArgumentChecker.isTrue(smileMulticurves.checkCurrencies(optionForex.getCurrency1(), optionForex.getCurrency2()), "Option currencies not compatible with smile data");
+    ArgumentChecker.isTrue(smileMulticurves.checkCurrencies(optionForex.getCurrency1(), optionForex.getCurrency2()),
+        "Option currencies not compatible with smile data");
     final MulticurveProviderInterface multicurves = smileMulticurves.getMulticurveProvider();
     final double payTime = optionForex.getUnderlyingOption().getUnderlyingForex().getPaymentTime();
     final double dfDomestic = multicurves.getDiscountFactor(optionForex.getCurrency2(), payTime);
@@ -200,20 +210,23 @@ public final class ForexOptionSingleBarrierBlackMethod {
     final double foreignAmount = optionForex.getUnderlyingOption().getUnderlyingForex().getPaymentCurrency1().getAmount();
     final double rebateByForeignUnit = optionForex.getRebate() / Math.abs(foreignAmount);
     final double sign = optionForex.getUnderlyingOption().isLong() ? 1.0 : -1.0;
-    final double volatility = smileMulticurves.getVolatility(optionForex.getCurrency1(), optionForex.getCurrency2(), optionForex.getUnderlyingOption().getTimeToExpiry(), optionForex
-        .getUnderlyingOption().getStrike(), forward);
+    final double volatility = smileMulticurves.getVolatility(optionForex.getCurrency1(), optionForex.getCurrency2(),
+        optionForex.getUnderlyingOption().getTimeToExpiry(), optionForex.getUnderlyingOption().getStrike(), forward);
     final double[] priceDerivatives = new double[5];
-    BARRIER_FUNCTION.getPriceAdjoint(optionForex.getUnderlyingOption(), optionForex.getBarrier(), rebateByForeignUnit, spot, rateDomestic - rateForeign, rateDomestic, volatility, priceDerivatives);
+    BARRIER_FUNCTION.getPriceAdjoint(optionForex.getUnderlyingOption(), optionForex.getBarrier(), rebateByForeignUnit, spot,
+        rateDomestic - rateForeign, rateDomestic, volatility, priceDerivatives);
     final double volatilitySensitivityValue = priceDerivatives[4] * Math.abs(foreignAmount) * sign;
     final DoublesPair point = DoublesPair.of(optionForex.getUnderlyingOption().getTimeToExpiry(), optionForex.getUnderlyingOption().getStrike());
     final SurfaceValue result = SurfaceValue.from(point, volatilitySensitivityValue);
-    final PresentValueForexBlackVolatilitySensitivity sensi = new PresentValueForexBlackVolatilitySensitivity(optionForex.getUnderlyingOption().getUnderlyingForex().getCurrency1(), optionForex
+    final PresentValueForexBlackVolatilitySensitivity sensi =
+        new PresentValueForexBlackVolatilitySensitivity(optionForex.getUnderlyingOption().getUnderlyingForex().getCurrency1(), optionForex
         .getUnderlyingOption().getUnderlyingForex().getCurrency2(), result);
     return sensi;
   }
 
   /**
-   * Computes the volatility sensitivity with respect to input data for a vanilla option with the Black function and a volatility from a volatility surface. The sensitivity
+   * Computes the volatility sensitivity with respect to input data for a vanilla option with the Black function and a
+   * volatility from a volatility surface. The sensitivity
    * is computed with respect to each node in the volatility surface.
    * @param optionForex The Forex option.
    * @param smileMulticurves The curve and smile data.
@@ -223,15 +236,19 @@ public final class ForexOptionSingleBarrierBlackMethod {
       final BlackForexSmileProviderInterface smileMulticurves) {
     ArgumentChecker.notNull(optionForex, "Forex option");
     ArgumentChecker.notNull(smileMulticurves, "Smile");
-    ArgumentChecker.isTrue(smileMulticurves.checkCurrencies(optionForex.getCurrency1(), optionForex.getCurrency2()), "Option currencies not compatible with smile data");
+    ArgumentChecker.isTrue(smileMulticurves.checkCurrencies(optionForex.getCurrency1(), optionForex.getCurrency2()),
+        "Option currencies not compatible with smile data");
     final MulticurveProviderInterface multicurves = smileMulticurves.getMulticurveProvider();
     final PresentValueForexBlackVolatilitySensitivity pointSensitivity = presentValueBlackVolatilitySensitivity(optionForex, smileMulticurves);
     final SmileDeltaTermStructureParametersStrikeInterpolation volatilityModel = smileMulticurves.getVolatility();
-    final double df = multicurves.getDiscountFactor(optionForex.getUnderlyingOption().getUnderlyingForex().getCurrency2(), optionForex.getUnderlyingOption().getUnderlyingForex().getPaymentTime());
+    final double df = multicurves.getDiscountFactor(optionForex.getUnderlyingOption().getUnderlyingForex().getCurrency2(),
+        optionForex.getUnderlyingOption().getUnderlyingForex().getPaymentTime());
     final double spot = multicurves.getFxRate(optionForex.getCurrency1(), optionForex.getCurrency2());
     final double forward = spot
-        * multicurves.getDiscountFactor(optionForex.getUnderlyingOption().getUnderlyingForex().getCurrency1(), optionForex.getUnderlyingOption().getUnderlyingForex().getPaymentTime()) / df;
-    final VolatilityAndBucketedSensitivities volAndSensitivities = volatilityModel.getVolatilityAndSensitivities(optionForex.getUnderlyingOption().getTimeToExpiry(), optionForex.getUnderlyingOption()
+        * multicurves.getDiscountFactor(optionForex.getUnderlyingOption().getUnderlyingForex().getCurrency1(),
+            optionForex.getUnderlyingOption().getUnderlyingForex().getPaymentTime()) / df;
+    final VolatilityAndBucketedSensitivities volAndSensitivities =
+        volatilityModel.getVolatilityAndSensitivities(optionForex.getUnderlyingOption().getTimeToExpiry(), optionForex.getUnderlyingOption()
         .getStrike(), forward);
     final double[][] nodeWeight = volAndSensitivities.getBucketedSensitivities();
     final DoublesPair point = DoublesPair.of(optionForex.getUnderlyingOption().getTimeToExpiry(), optionForex.getUnderlyingOption().getStrike());
@@ -241,12 +258,15 @@ public final class ForexOptionSingleBarrierBlackMethod {
         vega[i][j] = nodeWeight[i][j] * pointSensitivity.getVega().getMap().get(point);
       }
     }
-    return new PresentValueForexBlackVolatilityNodeSensitivityDataBundle(optionForex.getUnderlyingOption().getUnderlyingForex().getCurrency1(), optionForex.getUnderlyingOption().getUnderlyingForex()
-        .getCurrency2(), new DoubleMatrix1D(volatilityModel.getTimeToExpiration()), new DoubleMatrix1D(volatilityModel.getDeltaFull()), new DoubleMatrix2D(vega));
+    return new PresentValueForexBlackVolatilityNodeSensitivityDataBundle(optionForex.getUnderlyingOption().getUnderlyingForex().getCurrency1(),
+        optionForex.getUnderlyingOption().getUnderlyingForex()
+        .getCurrency2(), new DoubleMatrix1D(volatilityModel.getTimeToExpiration()),
+        new DoubleMatrix1D(volatilityModel.getDeltaFull()), new DoubleMatrix2D(vega));
   }
 
   /**
-   * Computes the 2nd order spot fx sensitivity of the option present value by centered finite difference <p>
+   * Computes the 2nd order spot fx sensitivity of the option present value by centered finite difference.
+   *  <p>
    * This gamma is be computed with respect to the direct quote (1 foreign = x domestic)
    * @param optionForex A single barrier Forex option.
    * @param smileMulticurves The curve and smile data.
@@ -256,7 +276,8 @@ public final class ForexOptionSingleBarrierBlackMethod {
   public CurrencyAmount gammaFd(final ForexOptionSingleBarrier optionForex, final BlackForexSmileProviderInterface smileMulticurves, final double relShift) {
     ArgumentChecker.notNull(optionForex, "Forex option");
     ArgumentChecker.notNull(smileMulticurves, "Smile");
-    ArgumentChecker.isTrue(smileMulticurves.checkCurrencies(optionForex.getCurrency1(), optionForex.getCurrency2()), "Option currencies not compatible with smile data");
+    ArgumentChecker.isTrue(smileMulticurves.checkCurrencies(optionForex.getCurrency1(), optionForex.getCurrency2()),
+        "Option currencies not compatible with smile data");
     final MulticurveProviderInterface multicurves = smileMulticurves.getMulticurveProvider();
     // repackage for calls to BARRIER_FUNCTION
     final double payTime = optionForex.getUnderlyingOption().getUnderlyingForex().getPaymentTime();
@@ -269,15 +290,18 @@ public final class ForexOptionSingleBarrierBlackMethod {
     final double foreignAmount = optionForex.getUnderlyingOption().getUnderlyingForex().getPaymentCurrency1().getAmount();
     final double rebateByForeignUnit = optionForex.getRebate() / Math.abs(foreignAmount);
     final double sign = optionForex.getUnderlyingOption().isLong() ? 1.0 : -1.0;
-    final double vol = smileMulticurves.getVolatility(optionForex.getCurrency1(), optionForex.getCurrency2(), optionForex.getUnderlyingOption().getTimeToExpiry(), optionForex.getUnderlyingOption()
+    final double vol = smileMulticurves.getVolatility(optionForex.getCurrency1(), optionForex.getCurrency2(),
+        optionForex.getUnderlyingOption().getTimeToExpiry(), optionForex.getUnderlyingOption()
         .getStrike(), forward);
     // Bump and compute vega
     final double spotUp = (1.0 + relShift) * spot;
     final double spotDown = (1.0 - relShift) * spot;
     final double[] adjointUp = new double[5];
     final double[] adjointDown = new double[5];
-    BARRIER_FUNCTION.getPriceAdjoint(optionForex.getUnderlyingOption(), optionForex.getBarrier(), rebateByForeignUnit, spotUp, rateDomestic - rateForeign, rateDomestic, vol, adjointUp);
-    BARRIER_FUNCTION.getPriceAdjoint(optionForex.getUnderlyingOption(), optionForex.getBarrier(), rebateByForeignUnit, spotDown, rateDomestic - rateForeign, rateDomestic, vol, adjointDown);
+    BARRIER_FUNCTION.getPriceAdjoint(optionForex.getUnderlyingOption(), optionForex.getBarrier(), rebateByForeignUnit,
+        spotUp, rateDomestic - rateForeign, rateDomestic, vol, adjointUp);
+    BARRIER_FUNCTION.getPriceAdjoint(optionForex.getUnderlyingOption(), optionForex.getBarrier(), rebateByForeignUnit,
+        spotDown, rateDomestic - rateForeign, rateDomestic, vol, adjointDown);
     final double deltaUp = adjointUp[0] * Math.abs(foreignAmount) * sign;
     final double deltaDown = adjointDown[0] * Math.abs(foreignAmount) * sign;
 
@@ -288,7 +312,7 @@ public final class ForexOptionSingleBarrierBlackMethod {
   }
 
   /**
-   * Computes the 2nd order spot fx sensitivity of the option present value by centered finite difference and a relative shift of 10 basis points
+   * Computes the 2nd order spot fx sensitivity of the option present value by centered finite difference and a relative shift of 10 basis points.
    * @param optionForex A single barrier Forex option.
    * @param smileMulticurves The curve and smile data.
    * @return Gamma
@@ -298,7 +322,7 @@ public final class ForexOptionSingleBarrierBlackMethod {
   }
 
   /**
-   * Computes the 2nd order volatility sensitivity of the option present value by centered finite difference
+   * Computes the 2nd order volatility sensitivity of the option present value by centered finite difference.
    * @param optionForex A single barrier Forex option.
    * @param smileMulticurves The curve and smile data.
    * @param relShift The shift to the black volatility expressed relative to the input vol level
@@ -307,7 +331,8 @@ public final class ForexOptionSingleBarrierBlackMethod {
   public CurrencyAmount vommaFd(final ForexOptionSingleBarrier optionForex, final BlackForexSmileProviderInterface smileMulticurves, final double relShift) {
     ArgumentChecker.notNull(optionForex, "Forex option");
     ArgumentChecker.notNull(smileMulticurves, "Smile");
-    ArgumentChecker.isTrue(smileMulticurves.checkCurrencies(optionForex.getCurrency1(), optionForex.getCurrency2()), "Option currencies not compatible with smile data");
+    ArgumentChecker.isTrue(smileMulticurves.checkCurrencies(optionForex.getCurrency1(), optionForex.getCurrency2()),
+        "Option currencies not compatible with smile data");
     final MulticurveProviderInterface multicurves = smileMulticurves.getMulticurveProvider();
     // repackage for calls to BARRIER_FUNCTION
     final double payTime = optionForex.getUnderlyingOption().getUnderlyingForex().getPaymentTime();
@@ -320,15 +345,18 @@ public final class ForexOptionSingleBarrierBlackMethod {
     final double foreignAmount = optionForex.getUnderlyingOption().getUnderlyingForex().getPaymentCurrency1().getAmount();
     final double rebateByForeignUnit = optionForex.getRebate() / Math.abs(foreignAmount);
     final double sign = optionForex.getUnderlyingOption().isLong() ? 1.0 : -1.0;
-    final double vol = smileMulticurves.getVolatility(optionForex.getCurrency1(), optionForex.getCurrency2(), optionForex.getUnderlyingOption().getTimeToExpiry(), optionForex.getUnderlyingOption()
+    final double vol = smileMulticurves.getVolatility(optionForex.getCurrency1(), optionForex.getCurrency2(),
+        optionForex.getUnderlyingOption().getTimeToExpiry(), optionForex.getUnderlyingOption()
         .getStrike(), forward);
     // Bump and compute vega
     final double volUp = (1.0 + relShift) * vol;
     final double volDown = (1.0 - relShift) * vol;
     final double[] adjointUp = new double[5];
     final double[] adjointDown = new double[5];
-    BARRIER_FUNCTION.getPriceAdjoint(optionForex.getUnderlyingOption(), optionForex.getBarrier(), rebateByForeignUnit, spot, rateDomestic - rateForeign, rateDomestic, volUp, adjointUp);
-    BARRIER_FUNCTION.getPriceAdjoint(optionForex.getUnderlyingOption(), optionForex.getBarrier(), rebateByForeignUnit, spot, rateDomestic - rateForeign, rateDomestic, volDown, adjointDown);
+    BARRIER_FUNCTION.getPriceAdjoint(optionForex.getUnderlyingOption(), optionForex.getBarrier(), rebateByForeignUnit,
+        spot, rateDomestic - rateForeign, rateDomestic, volUp, adjointUp);
+    BARRIER_FUNCTION.getPriceAdjoint(optionForex.getUnderlyingOption(), optionForex.getBarrier(), rebateByForeignUnit,
+        spot, rateDomestic - rateForeign, rateDomestic, volDown, adjointDown);
     final double vegaUp = adjointUp[4] * Math.abs(foreignAmount) * sign;
     final double vegaDown = adjointDown[4] * Math.abs(foreignAmount) * sign;
 
@@ -338,7 +366,7 @@ public final class ForexOptionSingleBarrierBlackMethod {
   }
 
   /**
-   * Computes the 2nd order volatility sensitivity of the option present value by centered finite difference and a default relative shift of 1 basis point
+   * Computes the 2nd order volatility sensitivity of the option present value by centered finite difference and a default relative shift of 1 basis point.
    * @param optionForex A single barrier Forex option.
    * @param smileMulticurves The curve and smile data.
    * @return Vomma as a SurfaceValue
@@ -348,7 +376,7 @@ public final class ForexOptionSingleBarrierBlackMethod {
   }
 
   /**
-   * Computes the 2nd order cross sensitivity (to spot and vol) by centered finite difference of the price
+   * Computes the 2nd order cross sensitivity (to spot and vol) by centered finite difference of the price.
    * @param optionForex A single barrier Forex option.
    * @param smileMulticurves The curve and smile data.
    * @param relShift The shift to the black volatility expressed relative to the input vol level
@@ -359,7 +387,7 @@ public final class ForexOptionSingleBarrierBlackMethod {
   }
 
   /**
-   * Computes the 2nd order volatility sensitivity of the option present value by centered finite difference and a relative shift of 10 basis points
+   * Computes the 2nd order volatility sensitivity of the option present value by centered finite difference and a relative shift of 10 basis points.
    * @param optionForex A single barrier Forex option.
    * @param smileMulticurves The curve and smile data.
    * @return Vomma as a SurfaceValue
@@ -369,16 +397,18 @@ public final class ForexOptionSingleBarrierBlackMethod {
   }
 
   /**
-   * Computes the 2nd order cross sensitivity (to spot and vol) by centered finite difference of the vega
+   * Computes the 2nd order cross sensitivity (to spot and vol) by centered finite difference of the vega.
    * @param optionForex A single barrier Forex option.
    * @param smileMulticurves The curve and smile data.
    * @param relShift The shift to the black volatility expressed relative to the input vol level
    * @return Vomma as a SurfaceValue
    */
-  public CurrencyAmount dVegaDSpotFD(final ForexOptionSingleBarrier optionForex, final BlackForexSmileProviderInterface smileMulticurves, final double relShift) {
+  public CurrencyAmount dVegaDSpotFD(final ForexOptionSingleBarrier optionForex, final BlackForexSmileProviderInterface smileMulticurves,
+      final double relShift) {
     ArgumentChecker.notNull(optionForex, "Forex option");
     ArgumentChecker.notNull(smileMulticurves, "Smile");
-    ArgumentChecker.isTrue(smileMulticurves.checkCurrencies(optionForex.getCurrency1(), optionForex.getCurrency2()), "Option currencies not compatible with smile data");
+    ArgumentChecker.isTrue(smileMulticurves.checkCurrencies(optionForex.getCurrency1(), optionForex.getCurrency2()),
+        "Option currencies not compatible with smile data");
     final MulticurveProviderInterface multicurves = smileMulticurves.getMulticurveProvider();
     // repackage for calls to BARRIER_FUNCTION
     final double payTime = optionForex.getUnderlyingOption().getUnderlyingForex().getPaymentTime();
@@ -391,15 +421,17 @@ public final class ForexOptionSingleBarrierBlackMethod {
     final double foreignAmount = optionForex.getUnderlyingOption().getUnderlyingForex().getPaymentCurrency1().getAmount();
     final double rebateByForeignUnit = optionForex.getRebate() / Math.abs(foreignAmount);
     final double sign = optionForex.getUnderlyingOption().isLong() ? 1.0 : -1.0;
-    final double vol = smileMulticurves.getVolatility(optionForex.getCurrency1(), optionForex.getCurrency2(), optionForex.getUnderlyingOption().getTimeToExpiry(), optionForex.getUnderlyingOption()
-        .getStrike(), forward);
+    final double vol = smileMulticurves.getVolatility(optionForex.getCurrency1(), optionForex.getCurrency2(),
+        optionForex.getUnderlyingOption().getTimeToExpiry(), optionForex.getUnderlyingOption().getStrike(), forward);
     // Bump *spot* and compute vega
     final double spotUp = (1.0 + relShift) * spot;
     final double spotDown = (1.0 - relShift) * spot;
     final double[] adjointUp = new double[5];
     final double[] adjointDown = new double[5];
-    BARRIER_FUNCTION.getPriceAdjoint(optionForex.getUnderlyingOption(), optionForex.getBarrier(), rebateByForeignUnit, spotUp, rateDomestic - rateForeign, rateDomestic, vol, adjointUp);
-    BARRIER_FUNCTION.getPriceAdjoint(optionForex.getUnderlyingOption(), optionForex.getBarrier(), rebateByForeignUnit, spotDown, rateDomestic - rateForeign, rateDomestic, vol, adjointDown);
+    BARRIER_FUNCTION.getPriceAdjoint(optionForex.getUnderlyingOption(), optionForex.getBarrier(), rebateByForeignUnit,
+        spotUp, rateDomestic - rateForeign, rateDomestic, vol, adjointUp);
+    BARRIER_FUNCTION.getPriceAdjoint(optionForex.getUnderlyingOption(), optionForex.getBarrier(), rebateByForeignUnit,
+        spotDown, rateDomestic - rateForeign, rateDomestic, vol, adjointDown);
     final double vegaUp = adjointUp[4] * Math.abs(foreignAmount) * sign;
     final double vegaDown = adjointDown[4] * Math.abs(foreignAmount) * sign;
 
@@ -409,16 +441,18 @@ public final class ForexOptionSingleBarrierBlackMethod {
   }
 
   /**
-   * Computes the 2nd order cross sensitivity (to spot and vol) by centered finite difference of the delta
+   * Computes the 2nd order cross sensitivity (to spot and vol) by centered finite difference of the delta.
    * @param optionForex A single barrier Forex option.
    * @param smileMulticurves The curve and smile data.
    * @param relShift The shift to the black volatility expressed relative to the input vol level
    * @return Vomma as a SurfaceValue
    */
-  public CurrencyAmount dDeltaDVolFD(final ForexOptionSingleBarrier optionForex, final BlackForexSmileProviderInterface smileMulticurves, final double relShift) {
+  public CurrencyAmount dDeltaDVolFD(final ForexOptionSingleBarrier optionForex, final BlackForexSmileProviderInterface smileMulticurves,
+      final double relShift) {
     ArgumentChecker.notNull(optionForex, "Forex option");
     ArgumentChecker.notNull(smileMulticurves, "Smile");
-    ArgumentChecker.isTrue(smileMulticurves.checkCurrencies(optionForex.getCurrency1(), optionForex.getCurrency2()), "Option currencies not compatible with smile data");
+    ArgumentChecker.isTrue(smileMulticurves.checkCurrencies(optionForex.getCurrency1(), optionForex.getCurrency2()),
+        "Option currencies not compatible with smile data");
     final MulticurveProviderInterface multicurves = smileMulticurves.getMulticurveProvider();
     // repackage for calls to BARRIER_FUNCTION
     final double payTime = optionForex.getUnderlyingOption().getUnderlyingForex().getPaymentTime();
@@ -431,15 +465,18 @@ public final class ForexOptionSingleBarrierBlackMethod {
     final double foreignAmount = optionForex.getUnderlyingOption().getUnderlyingForex().getPaymentCurrency1().getAmount();
     final double rebateByForeignUnit = optionForex.getRebate() / Math.abs(foreignAmount);
     final double sign = optionForex.getUnderlyingOption().isLong() ? 1.0 : -1.0;
-    final double vol = smileMulticurves.getVolatility(optionForex.getCurrency1(), optionForex.getCurrency2(), optionForex.getUnderlyingOption().getTimeToExpiry(), optionForex.getUnderlyingOption()
+    final double vol = smileMulticurves.getVolatility(optionForex.getCurrency1(), optionForex.getCurrency2(),
+        optionForex.getUnderlyingOption().getTimeToExpiry(), optionForex.getUnderlyingOption()
         .getStrike(), forward);
     // Bump *vol* and compute delta
     final double volUp = (1.0 + relShift) * vol;
     final double volDown = (1.0 - relShift) * vol;
     final double[] adjointUp = new double[5];
     final double[] adjointDown = new double[5];
-    BARRIER_FUNCTION.getPriceAdjoint(optionForex.getUnderlyingOption(), optionForex.getBarrier(), rebateByForeignUnit, spot, rateDomestic - rateForeign, rateDomestic, volUp, adjointUp);
-    BARRIER_FUNCTION.getPriceAdjoint(optionForex.getUnderlyingOption(), optionForex.getBarrier(), rebateByForeignUnit, spot, rateDomestic - rateForeign, rateDomestic, volDown, adjointDown);
+    BARRIER_FUNCTION.getPriceAdjoint(optionForex.getUnderlyingOption(), optionForex.getBarrier(), rebateByForeignUnit,
+        spot, rateDomestic - rateForeign, rateDomestic, volUp, adjointUp);
+    BARRIER_FUNCTION.getPriceAdjoint(optionForex.getUnderlyingOption(), optionForex.getBarrier(), rebateByForeignUnit,
+        spot, rateDomestic - rateForeign, rateDomestic, volDown, adjointDown);
     final double deltaUp = adjointUp[0] * Math.abs(foreignAmount) * sign;
     final double deltaDown = adjointDown[0] * Math.abs(foreignAmount) * sign;
 
@@ -449,16 +486,18 @@ public final class ForexOptionSingleBarrierBlackMethod {
   }
 
   /**
-   * Computes the 2nd order cross sensitivity (to spot and vol) by centered finite difference of the price
+   * Computes the 2nd order cross sensitivity (to spot and vol) by centered finite difference of the price.
    * @param optionForex A single barrier Forex option.
    * @param smileMulticurves The curve and smile data.
    * @param relShift The shift to the black volatility expressed relative to the input vol level
    * @return Vomma as a SurfaceValue
    */
-  public CurrencyAmount d2PriceDSpotDVolFD(final ForexOptionSingleBarrier optionForex, final BlackForexSmileProviderInterface smileMulticurves, final double relShift) {
+  public CurrencyAmount d2PriceDSpotDVolFD(final ForexOptionSingleBarrier optionForex, final BlackForexSmileProviderInterface smileMulticurves,
+      final double relShift) {
     ArgumentChecker.notNull(optionForex, "Forex option");
     ArgumentChecker.notNull(smileMulticurves, "Smile");
-    ArgumentChecker.isTrue(smileMulticurves.checkCurrencies(optionForex.getCurrency1(), optionForex.getCurrency2()), "Option currencies not compatible with smile data");
+    ArgumentChecker.isTrue(smileMulticurves.checkCurrencies(optionForex.getCurrency1(), optionForex.getCurrency2()),
+        "Option currencies not compatible with smile data");
     final MulticurveProviderInterface multicurves = smileMulticurves.getMulticurveProvider();
     // repackage for calls to BARRIER_FUNCTION
     final double payTime = optionForex.getUnderlyingOption().getUnderlyingForex().getPaymentTime();
@@ -472,17 +511,21 @@ public final class ForexOptionSingleBarrierBlackMethod {
     final double foreignAmount = optionForex.getUnderlyingOption().getUnderlyingForex().getPaymentCurrency1().getAmount();
     final double rebateByForeignUnit = optionForex.getRebate() / Math.abs(foreignAmount);
     final double sign = optionForex.getUnderlyingOption().isLong() ? 1.0 : -1.0;
-    final double vol = smileMulticurves.getVolatility(optionForex.getCurrency1(), optionForex.getCurrency2(), optionForex.getUnderlyingOption().getTimeToExpiry(), optionForex.getUnderlyingOption()
-        .getStrike(), forward);
+    final double vol = smileMulticurves.getVolatility(optionForex.getCurrency1(), optionForex.getCurrency2(),
+        optionForex.getUnderlyingOption().getTimeToExpiry(), optionForex.getUnderlyingOption().getStrike(), forward);
     // Bump spot *and* vol and compute *price*
     final double volUp = (1.0 + relShift) * vol;
     final double volDown = (1.0 - relShift) * vol;
     final double spotUp = (1.0 + relShift) * spot;
     final double spotDown = (1.0 - relShift) * spot;
-    final double pxUpUp = BARRIER_FUNCTION.getPrice(optionForex.getUnderlyingOption(), optionForex.getBarrier(), rebateByForeignUnit, spotUp, costOfCarry, rateDomestic, volUp);
-    final double pxDownDown = BARRIER_FUNCTION.getPrice(optionForex.getUnderlyingOption(), optionForex.getBarrier(), rebateByForeignUnit, spotDown, costOfCarry, rateDomestic, volDown);
-    final double pxUpDown = BARRIER_FUNCTION.getPrice(optionForex.getUnderlyingOption(), optionForex.getBarrier(), rebateByForeignUnit, spotUp, costOfCarry, rateDomestic, volDown);
-    final double pxDownUp = BARRIER_FUNCTION.getPrice(optionForex.getUnderlyingOption(), optionForex.getBarrier(), rebateByForeignUnit, spotDown, costOfCarry, rateDomestic, volUp);
+    final double pxUpUp = BARRIER_FUNCTION.getPrice(optionForex.getUnderlyingOption(), optionForex.getBarrier(),
+        rebateByForeignUnit, spotUp, costOfCarry, rateDomestic, volUp);
+    final double pxDownDown = BARRIER_FUNCTION.getPrice(optionForex.getUnderlyingOption(), optionForex.getBarrier(),
+        rebateByForeignUnit, spotDown, costOfCarry, rateDomestic, volDown);
+    final double pxUpDown = BARRIER_FUNCTION.getPrice(optionForex.getUnderlyingOption(), optionForex.getBarrier(),
+        rebateByForeignUnit, spotUp, costOfCarry, rateDomestic, volDown);
+    final double pxDownUp = BARRIER_FUNCTION.getPrice(optionForex.getUnderlyingOption(), optionForex.getBarrier(),
+        rebateByForeignUnit, spotDown, costOfCarry, rateDomestic, volUp);
 
     final double vanna = (pxUpUp - pxUpDown - pxDownUp + pxDownDown) / (2 * relShift * spot) / (2 * relShift * vol) * Math.abs(foreignAmount) * sign;
     final Currency ccy = optionForex.getUnderlyingOption().getUnderlyingForex().getCurrency2();
@@ -490,16 +533,18 @@ public final class ForexOptionSingleBarrierBlackMethod {
   }
 
   /**
-   * Computes the 2nd order cross sensitivity (to spot and vol) by centered finite difference of the price
+   * Computes the 2nd order cross sensitivity (to spot and vol) by centered finite difference of the price.
    * @param optionForex A single barrier Forex option.
    * @param smileMulticurves The curve and smile data.
    * @param relShift The shift to the black volatility expressed relative to the input vol level
    * @return Vomma as a SurfaceValue
    */
-  public CurrencyAmount d2PriceDSpotDVolFdAlt(final ForexOptionSingleBarrier optionForex, final BlackForexSmileProviderInterface smileMulticurves, final double relShift) {
+  public CurrencyAmount d2PriceDSpotDVolFdAlt(final ForexOptionSingleBarrier optionForex, final BlackForexSmileProviderInterface smileMulticurves,
+      final double relShift) {
     ArgumentChecker.notNull(optionForex, "Forex option");
     ArgumentChecker.notNull(smileMulticurves, "Smile");
-    ArgumentChecker.isTrue(smileMulticurves.checkCurrencies(optionForex.getCurrency1(), optionForex.getCurrency2()), "Option currencies not compatible with smile data");
+    ArgumentChecker.isTrue(smileMulticurves.checkCurrencies(optionForex.getCurrency1(), optionForex.getCurrency2()),
+        "Option currencies not compatible with smile data");
     final MulticurveProviderInterface multicurves = smileMulticurves.getMulticurveProvider();
     // repackage for calls to BARRIER_FUNCTION
     final double payTime = optionForex.getUnderlyingOption().getUnderlyingForex().getPaymentTime();
@@ -513,26 +558,34 @@ public final class ForexOptionSingleBarrierBlackMethod {
     final double foreignAmount = optionForex.getUnderlyingOption().getUnderlyingForex().getPaymentCurrency1().getAmount();
     final double rebateByForeignUnit = optionForex.getRebate() / Math.abs(foreignAmount);
     final double sign = optionForex.getUnderlyingOption().isLong() ? 1.0 : -1.0;
-    final double vol = smileMulticurves.getVolatility(optionForex.getCurrency1(), optionForex.getCurrency2(), optionForex.getUnderlyingOption().getTimeToExpiry(), optionForex.getUnderlyingOption()
-        .getStrike(), forward);
+    final double vol = smileMulticurves.getVolatility(optionForex.getCurrency1(), optionForex.getCurrency2(),
+        optionForex.getUnderlyingOption().getTimeToExpiry(), optionForex.getUnderlyingOption().getStrike(), forward);
     // Bump spot *and* vol and compute *price*
     final double volUp = (1.0 + relShift) * vol;
     final double volDown = (1.0 - relShift) * vol;
     final double spotUp = (1.0 + relShift) * spot;
     final double spotDown = (1.0 - relShift) * spot;
 
-    final double pxBase = BARRIER_FUNCTION.getPrice(optionForex.getUnderlyingOption(), optionForex.getBarrier(), rebateByForeignUnit, spot, costOfCarry, rateDomestic, vol);
+    final double pxBase = BARRIER_FUNCTION.getPrice(optionForex.getUnderlyingOption(), optionForex.getBarrier(),
+        rebateByForeignUnit, spot, costOfCarry, rateDomestic, vol);
 
-    final double pxUpUp = BARRIER_FUNCTION.getPrice(optionForex.getUnderlyingOption(), optionForex.getBarrier(), rebateByForeignUnit, spotUp, costOfCarry, rateDomestic, volUp);
-    final double pxDownDown = BARRIER_FUNCTION.getPrice(optionForex.getUnderlyingOption(), optionForex.getBarrier(), rebateByForeignUnit, spotDown, costOfCarry, rateDomestic, volDown);
+    final double pxUpUp = BARRIER_FUNCTION.getPrice(optionForex.getUnderlyingOption(), optionForex.getBarrier(),
+        rebateByForeignUnit, spotUp, costOfCarry, rateDomestic, volUp);
+    final double pxDownDown = BARRIER_FUNCTION.getPrice(optionForex.getUnderlyingOption(), optionForex.getBarrier(),
+        rebateByForeignUnit, spotDown, costOfCarry, rateDomestic, volDown);
 
-    final double pxVolUp = BARRIER_FUNCTION.getPrice(optionForex.getUnderlyingOption(), optionForex.getBarrier(), rebateByForeignUnit, spot, costOfCarry, rateDomestic, volUp);
-    final double pxVolDown = BARRIER_FUNCTION.getPrice(optionForex.getUnderlyingOption(), optionForex.getBarrier(), rebateByForeignUnit, spot, costOfCarry, rateDomestic, volDown);
+    final double pxVolUp = BARRIER_FUNCTION.getPrice(optionForex.getUnderlyingOption(), optionForex.getBarrier(),
+        rebateByForeignUnit, spot, costOfCarry, rateDomestic, volUp);
+    final double pxVolDown = BARRIER_FUNCTION.getPrice(optionForex.getUnderlyingOption(), optionForex.getBarrier(),
+        rebateByForeignUnit, spot, costOfCarry, rateDomestic, volDown);
 
-    final double pxSpotUp = BARRIER_FUNCTION.getPrice(optionForex.getUnderlyingOption(), optionForex.getBarrier(), rebateByForeignUnit, spotUp, costOfCarry, rateDomestic, vol);
-    final double pxSpotDown = BARRIER_FUNCTION.getPrice(optionForex.getUnderlyingOption(), optionForex.getBarrier(), rebateByForeignUnit, spotDown, costOfCarry, rateDomestic, vol);
+    final double pxSpotUp = BARRIER_FUNCTION.getPrice(optionForex.getUnderlyingOption(), optionForex.getBarrier(),
+        rebateByForeignUnit, spotUp, costOfCarry, rateDomestic, vol);
+    final double pxSpotDown = BARRIER_FUNCTION.getPrice(optionForex.getUnderlyingOption(), optionForex.getBarrier(),
+        rebateByForeignUnit, spotDown, costOfCarry, rateDomestic, vol);
 
-    final double vanna = (pxUpUp - pxVolUp - pxSpotUp + 2 * pxBase + pxDownDown - pxVolDown - pxSpotDown) / (2 * relShift * spot * relShift * vol) * Math.abs(foreignAmount) * sign;
+    final double vanna = (pxUpUp - pxVolUp - pxSpotUp + 2 * pxBase + pxDownDown - pxVolDown - pxSpotDown)
+        / (2 * relShift * spot * relShift * vol) * Math.abs(foreignAmount) * sign;
     final Currency ccy = optionForex.getUnderlyingOption().getUnderlyingForex().getCurrency2();
     return CurrencyAmount.of(ccy, vanna);
   }

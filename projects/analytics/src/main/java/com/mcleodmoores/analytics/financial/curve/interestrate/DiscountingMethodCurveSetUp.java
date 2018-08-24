@@ -68,11 +68,12 @@ public class DiscountingMethodCurveSetUp implements CurveSetUpInterface<Multicur
     _knownBundle = setup._knownBundle;
   }
 
-  protected DiscountingMethodCurveSetUp(final List<String[]> curveNames, final LinkedHashMap<String, Currency> discountingCurves, final LinkedHashMap<String, IborTypeIndex[]> iborCurves,
+  protected DiscountingMethodCurveSetUp(final List<String[]> curveNames, final LinkedHashMap<String, Currency> discountingCurves,
+      final LinkedHashMap<String, IborTypeIndex[]> iborCurves,
       final LinkedHashMap<String, OvernightIndex[]> overnightCurves, final Map<String, Map<Pair<GeneratorInstrument, GeneratorAttribute>, Double>> nodes,
       final Map<String, List<InstrumentDefinition<?>>> newNodes,
-      final Map<Index, ZonedDateTimeDoubleTimeSeries> fixingTs, final Map<String, DiscountingMethodCurveTypeSetUp> curveTypes,  final MulticurveProviderDiscount knownData,
-      final CurveBuildingBlockBundle knownBundle) {
+      final Map<Index, ZonedDateTimeDoubleTimeSeries> fixingTs, final Map<String, DiscountingMethodCurveTypeSetUp> curveTypes,
+      final MulticurveProviderDiscount knownData, final CurveBuildingBlockBundle knownBundle) {
     _curveNames = new ArrayList<>(curveNames);
     _discountingCurves = new LinkedHashMap<>(discountingCurves);
     _iborCurves = new LinkedHashMap<>(iborCurves);
@@ -137,7 +138,8 @@ public class DiscountingMethodCurveSetUp implements CurveSetUpInterface<Multicur
 
 
   @Override
-  public DiscountingMethodCurveSetUp withNode(final String curveName, final GeneratorInstrument instrumentGenerator, final GeneratorAttribute attributeGenerator, final double marketData) {
+  public DiscountingMethodCurveSetUp withNode(final String curveName, final GeneratorInstrument instrumentGenerator,
+      final GeneratorAttribute attributeGenerator, final double marketData) {
     Map<Pair<GeneratorInstrument, GeneratorAttribute>, Double> nodesForCurve = _nodes.get(curveName);
     if (nodesForCurve == null) {
       nodesForCurve = new LinkedHashMap<>();

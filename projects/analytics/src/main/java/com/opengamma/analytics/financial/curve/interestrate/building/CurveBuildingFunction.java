@@ -70,7 +70,8 @@ public class CurveBuildingFunction {
     _toleranceAbs = toleranceAbs;
     _toleranceRel = toleranceRel;
     _stepMaximum = stepMaximum;
-    _rootFinder = new BroydenVectorRootFinder(_toleranceAbs, _toleranceRel, _stepMaximum, DecompositionFactory.getDecomposition(DecompositionFactory.SV_COLT_NAME));
+    _rootFinder = new BroydenVectorRootFinder(_toleranceAbs, _toleranceRel, _stepMaximum,
+        DecompositionFactory.getDecomposition(DecompositionFactory.SV_COLT_NAME));
     // TODO: make the root finder flexible.
   }
 
@@ -80,16 +81,19 @@ public class CurveBuildingFunction {
    * @param initGuess The initial parameters guess.
    * @param curveGenerators The map of curve names to curve generators used to build the unit.
    * @param knownData The known data (fx rates, other curves, model parameters, ...)
-   * @param calculator The calculator of the value on which the calibration is done (usually ParSpreadMarketQuoteCalculator (recommended) or converted present value).
+   * @param calculator The calculator of the value on which the calibration is done (usually ParSpreadMarketQuoteCalculator
+   * (recommended) or converted present value).
    * @param sensitivityCalculator The parameter sensitivity calculator.
    * @return The new curves and the calibrated parameters.
    */
-  public Pair<YieldCurveBundle, Double[]> makeUnit(final InstrumentDerivative[] instruments, final double[] initGuess, final LinkedHashMap<String, GeneratorYDCurve> curveGenerators,
-      final YieldCurveBundle knownData,
-      final InstrumentDerivativeVisitor<YieldCurveBundle, Double> calculator, final InstrumentDerivativeVisitor<YieldCurveBundle, InterestRateCurveSensitivity> sensitivityCalculator) {
+  public Pair<YieldCurveBundle, Double[]> makeUnit(final InstrumentDerivative[] instruments, final double[] initGuess,
+      final LinkedHashMap<String, GeneratorYDCurve> curveGenerators,
+      final YieldCurveBundle knownData, final InstrumentDerivativeVisitor<YieldCurveBundle, Double> calculator,
+      final InstrumentDerivativeVisitor<YieldCurveBundle, InterestRateCurveSensitivity> sensitivityCalculator) {
     final MultipleYieldCurveFinderGeneratorDataBundle data = new MultipleYieldCurveFinderGeneratorDataBundle(instruments, knownData, curveGenerators);
     final Function1D<DoubleMatrix1D, DoubleMatrix1D> curveCalculator = new MultipleYieldCurveFinderGeneratorFunction(calculator, data);
-    final Function1D<DoubleMatrix1D, DoubleMatrix2D> jacobianCalculator = new MultipleYieldCurveFinderGeneratorJacobian(new ParameterUnderlyingSensitivityCalculator(sensitivityCalculator), data);
+    final Function1D<DoubleMatrix1D, DoubleMatrix2D> jacobianCalculator =
+        new MultipleYieldCurveFinderGeneratorJacobian(new ParameterUnderlyingSensitivityCalculator(sensitivityCalculator), data);
     final double[] parameters = _rootFinder.getRoot(curveCalculator, jacobianCalculator, new DoubleMatrix1D(initGuess)).getData();
     final YieldCurveBundle newCurves = data.getBuildingFunction().evaluate(new DoubleMatrix1D(parameters));
     return Pairs.of(newCurves, ArrayUtils.toObject(parameters));
@@ -103,16 +107,18 @@ public class CurveBuildingFunction {
    * @param nbParameters The number of parameters for each curve in the unit.
    * @param parameters The parameters used to build each curve in the block.
    * @param knownData The known data (FX rates, other curves, model parameters, ...) for the block calibration.
-   * @param sensitivityCalculator The parameter sensitivity calculator for the value on which the calibration is done (usually ParSpreadMarketQuoteCalculator (recommended) or converted present value).
+   * @param sensitivityCalculator The parameter sensitivity calculator for the value on which the calibration is done
+   * (usually ParSpreadMarketQuoteCalculator (recommended) or converted present value).
    * @return The part of the inverse Jacobian matrix associated to each curve.
    * The Jacobian matrix is the transition matrix between the curve parameters and the par spread.
    * TODO: Currently only for the ParSpreadMarketQuoteCalculator.
    */
-  public DoubleMatrix2D[] makeCurveMatrix(final InstrumentDerivative[] instruments, final LinkedHashMap<String, GeneratorYDCurve> curveGenerators, final int startBlock, final int[] nbParameters,
-      final Double[] parameters,
-      final YieldCurveBundle knownData, final InstrumentDerivativeVisitor<YieldCurveBundle, InterestRateCurveSensitivity> sensitivityCalculator) {
+  public DoubleMatrix2D[] makeCurveMatrix(final InstrumentDerivative[] instruments, final LinkedHashMap<String, GeneratorYDCurve> curveGenerators,
+      final int startBlock, final int[] nbParameters, final Double[] parameters, final YieldCurveBundle knownData,
+      final InstrumentDerivativeVisitor<YieldCurveBundle, InterestRateCurveSensitivity> sensitivityCalculator) {
     final MultipleYieldCurveFinderGeneratorDataBundle data = new MultipleYieldCurveFinderGeneratorDataBundle(instruments, knownData, curveGenerators);
-    final Function1D<DoubleMatrix1D, DoubleMatrix2D> jacobianCalculator = new MultipleYieldCurveFinderGeneratorJacobian(new ParameterUnderlyingSensitivityCalculator(sensitivityCalculator), data);
+    final Function1D<DoubleMatrix1D, DoubleMatrix2D> jacobianCalculator =
+        new MultipleYieldCurveFinderGeneratorJacobian(new ParameterUnderlyingSensitivityCalculator(sensitivityCalculator), data);
     final DoubleMatrix2D jacobian = jacobianCalculator.evaluate(new DoubleMatrix1D(parameters));
     final DoubleMatrix2D inverseJacobian = MATRIX_ALGEBRA.getInverse(jacobian);
     final double[][] matrixTotal = inverseJacobian.getData();
@@ -134,15 +140,17 @@ public class CurveBuildingFunction {
    * @param instruments The instruments used for the block calibration.
    * @param curveGenerators The curve generators (final version). As an array of arrays, representing the units and the curves within the units.
    * @param curveNames The names of the different curves. As an array of arrays, representing the units and the curves within the units.
-   * @param parametersGuess The initial guess for the parameters. As an array of arrays, representing the units and the parameters for one unit (all the curves of the unit concatenated).
+   * @param parametersGuess The initial guess for the parameters. As an array of arrays, representing the units and the parameters
+   * for one unit (all the curves of the unit concatenated).
    * @param knownData The known data (fx rates, other curves, model parameters, ...)
-   * @param calculator The calculator of the value on which the calibration is done (usually ParSpreadMarketQuoteCalculator (recommended) or converted present value).
+   * @param calculator The calculator of the value on which the calibration is done (usually ParSpreadMarketQuoteCalculator
+   * (recommended) or converted present value).
    * @param sensitivityCalculator The parameter sensitivity calculator.
    * @return A pair with the calibrated yield curve bundle (including the known data) and the CurveBuildingBlckBundle with the relevant inverse Jacobian Matrix.
    */
-  public Pair<YieldCurveBundle, CurveBuildingBlockBundle> makeCurvesFromDerivatives(final InstrumentDerivative[][][] instruments, final GeneratorYDCurve[][] curveGenerators,
-      final String[][] curveNames,
-      final double[][] parametersGuess, final YieldCurveBundle knownData, final InstrumentDerivativeVisitor<YieldCurveBundle, Double> calculator,
+  public Pair<YieldCurveBundle, CurveBuildingBlockBundle> makeCurvesFromDerivatives(final InstrumentDerivative[][][] instruments,
+      final GeneratorYDCurve[][] curveGenerators, final String[][] curveNames, final double[][] parametersGuess,
+      final YieldCurveBundle knownData, final InstrumentDerivativeVisitor<YieldCurveBundle, Double> calculator,
       final InstrumentDerivativeVisitor<YieldCurveBundle, InterestRateCurveSensitivity> sensitivityCalculator) {
     final int nbUnits = curveGenerators.length;
     final YieldCurveBundle knownSoFarData = knownData.copy();
@@ -175,10 +183,11 @@ public class CurveBuildingFunction {
         generatorsSoFar.put(curveNames[loopunit][loopcurve], tmp);
         unitMap.put(curveNames[loopunit][loopcurve], Pairs.of(startUnit + startCurve[loopcurve], nbIns[loopcurve]));
       }
-      final Pair<YieldCurveBundle, Double[]> unitCal = makeUnit(instrumentsUnit, parametersGuess[loopunit], gen, knownSoFarData, calculator, sensitivityCalculator);
+      final Pair<YieldCurveBundle, Double[]> unitCal =
+          makeUnit(instrumentsUnit, parametersGuess[loopunit], gen, knownSoFarData, calculator, sensitivityCalculator);
       parametersSoFar.addAll(Arrays.asList(unitCal.getSecond()));
-      final DoubleMatrix2D[] mat = makeCurveMatrix(instrumentsSoFarArray, generatorsSoFar, startUnit, nbIns, parametersSoFar.toArray(new Double[parametersSoFar.size()]),
-          knownData, sensitivityCalculator);
+      final DoubleMatrix2D[] mat = makeCurveMatrix(instrumentsSoFarArray, generatorsSoFar, startUnit, nbIns,
+          parametersSoFar.toArray(new Double[parametersSoFar.size()]), knownData, sensitivityCalculator);
       for (int loopcurve = 0; loopcurve < curveGenerators[loopunit].length; loopcurve++) {
         unitBundleSoFar.put(curveNames[loopunit][loopcurve], Pairs.of(new CurveBuildingBlock(unitMap), mat[loopcurve]));
       }

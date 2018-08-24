@@ -18,9 +18,11 @@ import com.opengamma.util.money.Currency;
 import com.opengamma.util.money.CurrencyAmount;
 import com.opengamma.util.money.MultipleCurrencyAmount;
 
+//CSOFF
 /**
  *
  */
+@Deprecated
 public class MarginedIRFutureOptionConstantSpreadHorizonCalculator implements HorizonCalculatorDeprecated<InterestRateFutureOptionMarginTransactionDefinition, YieldCurveWithBlackCubeBundle, Double> {
   /** Rolls down interest rate future option data (curves and surface) */
   private static final ConstantSpreadInterestRateFutureOptionBlackDataRolldown IR_FUTURE_OPTION_ROLLDOWN = ConstantSpreadInterestRateFutureOptionBlackDataRolldown.getInstance();

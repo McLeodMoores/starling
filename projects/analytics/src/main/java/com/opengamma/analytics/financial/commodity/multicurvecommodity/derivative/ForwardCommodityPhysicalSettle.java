@@ -11,7 +11,7 @@ import com.opengamma.financial.convention.calendar.Calendar;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * 
+ *
  */
 public class ForwardCommodityPhysicalSettle extends CouponCommodityPhysicalSettle {
 
@@ -32,11 +32,11 @@ public class ForwardCommodityPhysicalSettle extends CouponCommodityPhysicalSettl
    * @param noticeFirstTime The first notice time.
    * @param noticeLastTime The last notice time.
    * @param firstDeliveryTime The first delivery time
-   * @param lastDeliveryTime The last  delivery time 
+   * @param lastDeliveryTime The last  delivery time
    */
-  public ForwardCommodityPhysicalSettle(final double rate, final double paymentYearFraction, final CommodityUnderlying underlying, final String unitName, final double notional,
-      final double settlementTime,
-      final Calendar calendar, final double noticeFirstTime, final double noticeLastTime, final double firstDeliveryTime, final double lastDeliveryTime) {
+  public ForwardCommodityPhysicalSettle(final double rate, final double paymentYearFraction, final CommodityUnderlying underlying,
+      final String unitName, final double notional, final double settlementTime, final Calendar calendar, final double noticeFirstTime,
+      final double noticeLastTime, final double firstDeliveryTime, final double lastDeliveryTime) {
     super(paymentYearFraction, underlying, unitName, notional, settlementTime, calendar, noticeFirstTime, noticeLastTime, firstDeliveryTime, lastDeliveryTime);
     _rate = rate;
   }
@@ -77,7 +77,7 @@ public class ForwardCommodityPhysicalSettle extends CouponCommodityPhysicalSettl
     int result = super.hashCode();
     long temp;
     temp = Double.doubleToLongBits(_rate);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 

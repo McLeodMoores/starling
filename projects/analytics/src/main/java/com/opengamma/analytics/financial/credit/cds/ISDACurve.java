@@ -18,18 +18,19 @@ import com.opengamma.analytics.math.interpolation.CombinedInterpolatorExtrapolat
 
 /**
  * A curve that behaves according to the ISDA standard for CDS pricing.
- * 
+ *
  * This curve is intended for use with {@link ISDAApproxCDSPricingMethod} in order
  * to produce numbers that match the ISDA standard pricing model for CDS. It
  * may be useful in other situations where ISDA standard discount factors
  * are assumed.
- * 
+ *
  * @author Martin Traverse, Niels Stchedroff (Riskcare)
 * @deprecated Use classes from isdastandardmodel
  */
 @Deprecated
 public class ISDACurve {
-  private static final CombinedInterpolatorExtrapolator INTERPOLATOR = CombinedInterpolatorExtrapolatorFactory.getInterpolator(ISDA_INTERPOLATOR, FLAT_EXTRAPOLATOR, ISDA_EXTRAPOLATOR);
+  private static final CombinedInterpolatorExtrapolator INTERPOLATOR =
+      CombinedInterpolatorExtrapolatorFactory.getInterpolator(ISDA_INTERPOLATOR, FLAT_EXTRAPOLATOR, ISDA_EXTRAPOLATOR);
 
   private final String _name;
 

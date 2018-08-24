@@ -15,7 +15,7 @@ public interface RolldownFunction<T> {
 
   /**
    * @param data The market data, not null
-   * @param time The amount of time in <b>years<b> that should be rolled forward.
+   * @param time The amount of time in <b>years</b> that should be rolled forward.
    * @return Market data that has been rolled down.
    */
   T rollDown(T data, double time);

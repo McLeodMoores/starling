@@ -88,7 +88,7 @@ public class EquityIndexOptionDefinition implements InstrumentDefinition<EquityI
   }
 
   /**
-   * Is the option a call
+   * Is the option a call.
    * @return true if the option is a call
    */
   public boolean isCall() {
@@ -200,11 +200,11 @@ public class EquityIndexOptionDefinition implements InstrumentDefinition<EquityI
     result = prime * result + (_isCall ? 1231 : 1237);
     long temp;
     temp = Double.doubleToLongBits(_pointValue);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     result = prime * result + _settlementDate.hashCode();
     result = prime * result + _settlementType.hashCode();
     temp = Double.doubleToLongBits(_strike);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 

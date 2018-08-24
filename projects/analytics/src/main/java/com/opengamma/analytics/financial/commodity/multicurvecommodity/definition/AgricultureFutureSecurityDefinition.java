@@ -16,7 +16,7 @@ import com.opengamma.financial.convention.calendar.Calendar;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * 
+ *
  */
 public class AgricultureFutureSecurityDefinition extends CommodityFutureSecurityDefinition<AgricultureFutureSecurity> {
 
@@ -26,8 +26,8 @@ public class AgricultureFutureSecurityDefinition extends CommodityFutureSecurity
    * @param underlying The commodity underlying, not null
    * @param unitName name of the unit of the commodity delivered, not null
    * @param unitAmount The size of a unit, not null
-   * @param noticeFirstDate  The notice first date, can be null 
-   * @param noticeLastDate  The notice last date, can be null 
+   * @param noticeFirstDate  The notice first date, can be null
+   * @param noticeLastDate  The notice last date, can be null
    * @param firstDeliveryDate The first delivery date, not null for physical contract
    * @param lastDeliveryDate The last delivery date, not null for physical contract
    * @param settlementType The settlement type, CASH or PHYSICAL
@@ -35,11 +35,12 @@ public class AgricultureFutureSecurityDefinition extends CommodityFutureSecurity
    * @param name The name of the future, not null
    * @param calendar The holiday calendar, not null
    */
-  public AgricultureFutureSecurityDefinition(final ZonedDateTime lastTradingDate, final CommodityUnderlying underlying, final String unitName, final double unitAmount,
-      final ZonedDateTime noticeFirstDate,
-      final ZonedDateTime noticeLastDate, final ZonedDateTime firstDeliveryDate, final ZonedDateTime lastDeliveryDate, final SettlementType settlementType, final ZonedDateTime settlementDate,
+  public AgricultureFutureSecurityDefinition(final ZonedDateTime lastTradingDate, final CommodityUnderlying underlying, final String unitName,
+      final double unitAmount, final ZonedDateTime noticeFirstDate, final ZonedDateTime noticeLastDate, final ZonedDateTime firstDeliveryDate,
+      final ZonedDateTime lastDeliveryDate, final SettlementType settlementType, final ZonedDateTime settlementDate,
       final String name, final Calendar calendar) {
-    super(lastTradingDate, underlying, unitName, unitAmount, noticeFirstDate, noticeLastDate, firstDeliveryDate, lastDeliveryDate, settlementType, settlementDate, name, calendar);
+    super(lastTradingDate, underlying, unitName, unitAmount, noticeFirstDate, noticeLastDate, firstDeliveryDate, lastDeliveryDate,
+        settlementType, settlementDate, name, calendar);
   }
 
   @Override
@@ -66,8 +67,8 @@ public class AgricultureFutureSecurityDefinition extends CommodityFutureSecurity
       firstDeliveryTime = TimeCalculator.getTimeBetween(date, getFirstDeliveryDate());
       lastDeliveryTime = TimeCalculator.getTimeBetween(date, getLastDeliveryDate());
     }
-    return new AgricultureFutureSecurity(lastTradingTime, getUnderlying(), getUnitName(), getUnitAmount(), noticeFirstTime, noticeLastTime, firstDeliveryTime, lastDeliveryTime, getSettlementType(),
-        settlementTime, getName(), getCalendar());
+    return new AgricultureFutureSecurity(lastTradingTime, getUnderlying(), getUnitName(), getUnitAmount(), noticeFirstTime, noticeLastTime,
+        firstDeliveryTime, lastDeliveryTime, getSettlementType(), settlementTime, getName(), getCalendar());
   }
 
   @Override

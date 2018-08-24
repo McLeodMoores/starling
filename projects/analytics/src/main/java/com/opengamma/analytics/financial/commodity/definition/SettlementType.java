@@ -6,7 +6,7 @@
 package com.opengamma.analytics.financial.commodity.definition;
 
 /**
- * Settlement types for {@code CommodityFutureDefinition}
+ * Settlement types for {@code CommodityFutureDefinition}.
  */
 public enum SettlementType {
   /**

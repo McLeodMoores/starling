@@ -72,7 +72,8 @@ public final class ForexOptionDigitalBlackSmileMethod {
   public MultipleCurrencyAmount presentValue(final ForexOptionDigital optionForex, final BlackForexSmileProviderInterface smileMulticurves) {
     ArgumentChecker.notNull(optionForex, "Forex option");
     ArgumentChecker.notNull(smileMulticurves, "Smile");
-    ArgumentChecker.isTrue(smileMulticurves.checkCurrencies(optionForex.getCurrency1(), optionForex.getCurrency2()), "Option currencies not compatible with smile data");
+    ArgumentChecker.isTrue(smileMulticurves.checkCurrencies(optionForex.getCurrency1(), optionForex.getCurrency2()),
+        "Option currencies not compatible with smile data");
     final MulticurveProviderInterface multicurves = smileMulticurves.getMulticurveProvider();
     final double expiry = optionForex.getExpirationTime();
     final Currency domesticCcy;
@@ -110,7 +111,8 @@ public final class ForexOptionDigitalBlackSmileMethod {
   }
 
   /**
-   * Computes the currency exposure of the digital option with the Black function and a volatility from a volatility surface. The exposure is computed in both option currencies.
+   * Computes the currency exposure of the digital option with the Black function and a volatility from a volatility surface.
+   * The exposure is computed in both option currencies.
    * @param optionForex The Forex option.
    * @param smileMulticurves The curve and smile data.
    * @return The currency exposure
@@ -118,7 +120,8 @@ public final class ForexOptionDigitalBlackSmileMethod {
   public MultipleCurrencyAmount currencyExposure(final ForexOptionDigital optionForex, final BlackForexSmileProviderInterface smileMulticurves) {
     ArgumentChecker.notNull(optionForex, "Forex option");
     ArgumentChecker.notNull(smileMulticurves, "Smile");
-    ArgumentChecker.isTrue(smileMulticurves.checkCurrencies(optionForex.getCurrency1(), optionForex.getCurrency2()), "Option currencies not compatible with smile data");
+    ArgumentChecker.isTrue(smileMulticurves.checkCurrencies(optionForex.getCurrency1(), optionForex.getCurrency2()),
+        "Option currencies not compatible with smile data");
     final MulticurveProviderInterface multicurves = smileMulticurves.getMulticurveProvider();
     final double expiry = optionForex.getExpirationTime();
     final Currency domesticCcy;
@@ -161,16 +164,19 @@ public final class ForexOptionDigitalBlackSmileMethod {
   }
 
   /**
-   * Computes the curve sensitivity of the option present value. The sensitivity of the volatility on the forward (and on the curves) is not taken into account. It is the curve
+   * Computes the curve sensitivity of the option present value. The sensitivity of the volatility on the forward
+   * (and on the curves) is not taken into account. It is the curve
    * sensitivity in the Black model where the volatility is suppose to be constant for curve and forward changes.
    * @param optionForex The Forex option.
    * @param smileMulticurves The curve and smile data.
    * @return The curve sensitivity.
    */
-  public MultipleCurrencyMulticurveSensitivity presentValueCurveSensitivity(final ForexOptionDigital optionForex, final BlackForexSmileProviderInterface smileMulticurves) {
+  public MultipleCurrencyMulticurveSensitivity presentValueCurveSensitivity(final ForexOptionDigital optionForex,
+      final BlackForexSmileProviderInterface smileMulticurves) {
     ArgumentChecker.notNull(optionForex, "Forex option");
     ArgumentChecker.notNull(smileMulticurves, "Smile");
-    ArgumentChecker.isTrue(smileMulticurves.checkCurrencies(optionForex.getCurrency1(), optionForex.getCurrency2()), "Option currencies not compatible with smile data");
+    ArgumentChecker.isTrue(smileMulticurves.checkCurrencies(optionForex.getCurrency1(), optionForex.getCurrency2()),
+        "Option currencies not compatible with smile data");
     final MulticurveProviderInterface multicurves = smileMulticurves.getMulticurveProvider();
     final double payTime = optionForex.getUnderlyingForex().getPaymentTime();
     final double expiry = optionForex.getExpirationTime();
@@ -228,10 +234,12 @@ public final class ForexOptionDigitalBlackSmileMethod {
    * @param smileMulticurves The curve and smile data.
    * @return The volatility sensitivity. The sensitivity figures are, like the present value, in the domestic currency (currency 2).
    */
-  public PresentValueForexBlackVolatilitySensitivity presentValueBlackVolatilitySensitivity(final ForexOptionDigital optionForex, final BlackForexSmileProviderInterface smileMulticurves) {
+  public PresentValueForexBlackVolatilitySensitivity presentValueBlackVolatilitySensitivity(final ForexOptionDigital optionForex,
+      final BlackForexSmileProviderInterface smileMulticurves) {
     ArgumentChecker.notNull(optionForex, "Forex option");
     ArgumentChecker.notNull(smileMulticurves, "Smile");
-    ArgumentChecker.isTrue(smileMulticurves.checkCurrencies(optionForex.getCurrency1(), optionForex.getCurrency2()), "Option currencies not compatible with smile data");
+    ArgumentChecker.isTrue(smileMulticurves.checkCurrencies(optionForex.getCurrency1(), optionForex.getCurrency2()),
+        "Option currencies not compatible with smile data");
     final MulticurveProviderInterface multicurves = smileMulticurves.getMulticurveProvider();
     final double payTime = optionForex.getUnderlyingForex().getPaymentTime();
     final double expiry = optionForex.getExpirationTime();
@@ -266,7 +274,8 @@ public final class ForexOptionDigitalBlackSmileMethod {
     final double dMBar = amount * dfDomestic * NORMAL.getPDF(omega * dM) * (optionForex.isLong() ? 1.0 : -1.0) * omega * pvBar;
     final double sigmaRootTBar = (-Math.log(forward / strike) / (sigmaRootT * sigmaRootT) - 0.5) * dMBar;
     final double volatilityBar = Math.sqrt(expiry) * sigmaRootTBar;
-    final DoublesPair point = DoublesPair.of(optionForex.getExpirationTime(), foreignCcy.equals(smileMulticurves.getCurrencyPair().getFirst()) ? strike : 1.0 / strike);
+    final DoublesPair point = DoublesPair.of(optionForex.getExpirationTime(),
+        foreignCcy.equals(smileMulticurves.getCurrencyPair().getFirst()) ? strike : 1.0 / strike);
     // Implementation note: The strike should be in the same currency order as the input data.
     final SurfaceValue result = SurfaceValue.from(point, volatilityBar);
     final PresentValueForexBlackVolatilitySensitivity sensi = new PresentValueForexBlackVolatilitySensitivity(foreignCcy, domesticCcy, result);
@@ -274,7 +283,8 @@ public final class ForexOptionDigitalBlackSmileMethod {
   }
 
   /**
-   * Computes the volatility sensitivity with respect to input data for a digital option with the Black function and a volatility from a volatility surface. The sensitivity
+   * Computes the volatility sensitivity with respect to input data for a digital option with the Black function and a
+   * volatility from a volatility surface. The sensitivity
    * is computed with respect to each node in the volatility surface.
    * @param optionForex The Forex option.
    * @param smileMulticurves The curve and smile data.
@@ -284,7 +294,8 @@ public final class ForexOptionDigitalBlackSmileMethod {
       final BlackForexSmileProviderInterface smileMulticurves) {
     ArgumentChecker.notNull(optionForex, "Forex option");
     ArgumentChecker.notNull(smileMulticurves, "Smile");
-    ArgumentChecker.isTrue(smileMulticurves.checkCurrencies(optionForex.getCurrency1(), optionForex.getCurrency2()), "Option currencies not compatible with smile data");
+    ArgumentChecker.isTrue(smileMulticurves.checkCurrencies(optionForex.getCurrency1(), optionForex.getCurrency2()),
+        "Option currencies not compatible with smile data");
     final MulticurveProviderInterface multicurves = smileMulticurves.getMulticurveProvider();
     final PresentValueForexBlackVolatilitySensitivity pointSensitivity = presentValueBlackVolatilitySensitivity(optionForex, smileMulticurves); // In dom ccy
     final SmileDeltaTermStructureParametersStrikeInterpolation volatilityModel = smileMulticurves.getVolatility();
@@ -307,17 +318,20 @@ public final class ForexOptionDigitalBlackSmileMethod {
     final double dfForeign = multicurves.getDiscountFactor(foreignCcy, payTime);
     final double spot = multicurves.getFxRate(foreignCcy, domesticCcy);
     final double forward = spot * dfForeign / dfDomestic;
-    final VolatilityAndBucketedSensitivities volAndSensitivities = smileMulticurves.getVolatilityAndSensitivities(foreignCcy, domesticCcy, expiry, strike, forward);
+    final VolatilityAndBucketedSensitivities volAndSensitivities =
+        smileMulticurves.getVolatilityAndSensitivities(foreignCcy, domesticCcy, expiry, strike, forward);
     final double[][] nodeWeight = volAndSensitivities.getBucketedSensitivities();
-    final DoublesPair point = DoublesPair.of(optionForex.getExpirationTime(), foreignCcy.equals(smileMulticurves.getCurrencyPair().getFirst()) ? strike : 1.0 / strike);
+    final DoublesPair point = DoublesPair.of(optionForex.getExpirationTime(),
+        foreignCcy.equals(smileMulticurves.getCurrencyPair().getFirst()) ? strike : 1.0 / strike);
     final double[][] vega = new double[volatilityModel.getNumberExpiration()][volatilityModel.getNumberStrike()];
     for (int i = 0; i < volatilityModel.getNumberExpiration(); i++) {
       for (int j = 0; j < volatilityModel.getNumberStrike(); j++) {
         vega[i][j] = nodeWeight[i][j] * pointSensitivity.getVega().getMap().get(point);
       }
     }
-    return new PresentValueForexBlackVolatilityNodeSensitivityDataBundle(optionForex.getUnderlyingForex().getCurrency1(), optionForex.getUnderlyingForex().getCurrency2(), new DoubleMatrix1D(
-        volatilityModel.getTimeToExpiration()), new DoubleMatrix1D(volatilityModel.getDeltaFull()), new DoubleMatrix2D(vega));
+    return new PresentValueForexBlackVolatilityNodeSensitivityDataBundle(optionForex.getUnderlyingForex().getCurrency1(),
+        optionForex.getUnderlyingForex().getCurrency2(), new DoubleMatrix1D(volatilityModel.getTimeToExpiration()),
+        new DoubleMatrix1D(volatilityModel.getDeltaFull()), new DoubleMatrix2D(vega));
   }
 
 }

@@ -68,10 +68,14 @@ public class HullWhiteMethodCurveSetUp implements CurveSetUpInterface<HullWhiteO
     _knownBundle = setup._knownBundle;
   }
 
-  protected HullWhiteMethodCurveSetUp(final List<String[]> curveNames, final LinkedHashMap<String, Currency> discountingCurves, final LinkedHashMap<String, IborTypeIndex[]> iborCurves,
-      final LinkedHashMap<String, OvernightIndex[]> overnightCurves, final Map<String, Map<Pair<GeneratorInstrument, GeneratorAttribute>, Double>> nodes,
+  protected HullWhiteMethodCurveSetUp(final List<String[]> curveNames, final LinkedHashMap<String, Currency> discountingCurves,
+      final LinkedHashMap<String, IborTypeIndex[]> iborCurves,
+      final LinkedHashMap<String, OvernightIndex[]> overnightCurves,
+      final Map<String, Map<Pair<GeneratorInstrument, GeneratorAttribute>, Double>> nodes,
       final Map<String, List<InstrumentDefinition<?>>> newNodes,
-      final Map<Index, ZonedDateTimeDoubleTimeSeries> fixingTs, final Map<String, HullWhiteMethodCurveTypeSetUp> curveTypes,  final HullWhiteOneFactorProviderDiscount knownData,
+      final Map<Index, ZonedDateTimeDoubleTimeSeries> fixingTs,
+      final Map<String, HullWhiteMethodCurveTypeSetUp> curveTypes,
+      final HullWhiteOneFactorProviderDiscount knownData,
       final CurveBuildingBlockBundle knownBundle) {
     _curveNames = new ArrayList<>(curveNames);
     _discountingCurves = new LinkedHashMap<>(discountingCurves);
@@ -137,7 +141,8 @@ public class HullWhiteMethodCurveSetUp implements CurveSetUpInterface<HullWhiteO
 
 
   @Override
-  public HullWhiteMethodCurveSetUp withNode(final String curveName, final GeneratorInstrument instrumentGenerator, final GeneratorAttribute attributeGenerator, final double marketData) {
+  public HullWhiteMethodCurveSetUp withNode(final String curveName, final GeneratorInstrument instrumentGenerator,
+      final GeneratorAttribute attributeGenerator, final double marketData) {
     Map<Pair<GeneratorInstrument, GeneratorAttribute>, Double> nodesForCurve = _nodes.get(curveName);
     if (nodesForCurve == null) {
       nodesForCurve = new LinkedHashMap<>();

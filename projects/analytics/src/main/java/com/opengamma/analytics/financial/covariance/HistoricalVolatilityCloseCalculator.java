@@ -33,14 +33,14 @@ import com.opengamma.util.CalculationMode;
  */
 public class HistoricalVolatilityCloseCalculator extends HistoricalVolatilityCalculator {
   /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(HistoricalVolatilityCloseCalculator.class);
+  private static final Logger INSTANCE = LoggerFactory.getLogger(HistoricalVolatilityCloseCalculator.class);
   /** The return calculator */
   private final TimeSeriesReturnCalculator _returnCalculator;
 
   /**
    * Creates a historical volatility calculator with the given return
    * calculation method and default values for the calculation mode and
-   * allowable percentage of bad data points
+   * allowable percentage of bad data points.
    * @param returnCalculator The return calculator, not null
    */
   public HistoricalVolatilityCloseCalculator(final TimeSeriesReturnCalculator returnCalculator) {
@@ -52,7 +52,7 @@ public class HistoricalVolatilityCloseCalculator extends HistoricalVolatilityCal
   /**
    * Creates a historical volatility calculator with the given return
    * calculation method and calculation mode and the default value for the
-   * allowable percentage of bad data points
+   * allowable percentage of bad data points.
    * @param returnCalculator The return calculator, not null
    * @param mode The calculation mode, not null
    */
@@ -65,7 +65,7 @@ public class HistoricalVolatilityCloseCalculator extends HistoricalVolatilityCal
   /**
    * Creates a historical volatility calculator with the given return
    * calculation method, calculation mode and allowable percentage of bad data
-   * points
+   * points.
    * @param returnCalculator The return calculator
    * @param mode The calculation mode
    * @param percentBadDataPoints The maximum allowable percentage of bad data points
@@ -80,15 +80,16 @@ public class HistoricalVolatilityCloseCalculator extends HistoricalVolatilityCal
   /**
    * If more than one price time series is provided, the first element of the
    * array is used.
+   * Throws an exception: if the array is null or empty; if the first element of the array is null; if the price series does not
+   * contain at least two data points
    * @param x The array of price time series
    * @return The historical close volatility
-   * @throws IllegalArgumentException If the array is null or empty; if the first element of the array is null; if the price series does not contain at least two data points
    */
   @Override
   public Double evaluate(final LocalDateDoubleTimeSeries... x) {
     testTimeSeries(x, 2);
     if (x.length > 1) {
-      s_logger.info("Time series array contained more than one series; only using the first one");
+      INSTANCE.info("Time series array contained more than one series; only using the first one");
     }
     testTimeSeries(x, 2);
     final DoubleTimeSeries<?> returnTS = _returnCalculator.evaluate(x);
@@ -109,7 +110,7 @@ public class HistoricalVolatilityCloseCalculator extends HistoricalVolatilityCal
   public int hashCode() {
     final int prime = 31;
     int result = super.hashCode();
-    result = prime * result + ((_returnCalculator == null) ? 0 : _returnCalculator.hashCode());
+    result = prime * result + (_returnCalculator == null ? 0 : _returnCalculator.hashCode());
     return result;
   }
 

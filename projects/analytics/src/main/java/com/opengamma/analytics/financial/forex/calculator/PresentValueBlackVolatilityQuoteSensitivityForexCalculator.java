@@ -11,6 +11,7 @@ import com.opengamma.analytics.financial.interestrate.InstrumentDerivativeVisito
 import com.opengamma.analytics.financial.interestrate.YieldCurveBundle;
 import com.opengamma.analytics.financial.model.option.definition.SmileDeltaTermStructureDataBundle;
 
+// CSOFF
 /**
  * @deprecated Curve builders that use and populate {@link YieldCurveBundle}s are deprecated.
  */

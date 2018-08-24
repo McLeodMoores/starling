@@ -18,7 +18,6 @@ import com.opengamma.timeseries.precise.zdt.ImmutableZonedDateTimeDoubleTimeSeri
 import com.opengamma.timeseries.precise.zdt.ZonedDateTimeDoubleTimeSeries;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.MultipleCurrencyAmount;
-
 /**
  * Calculates the difference in the present value of an equity total return swap between two dates without
  * rate slide i.e. assumes that the market moves in such a way that the discount factors or rates for the
@@ -26,7 +25,8 @@ import com.opengamma.util.money.MultipleCurrencyAmount;
  * <p>
  * Only the funding leg is considered in this calculation.
  */
-public final class EqyTrsConstantSpreadHorizonCalculator extends HorizonCalculator<EquityTotalReturnSwapDefinition, MulticurveProviderInterface, ZonedDateTimeDoubleTimeSeries> {
+public final class EqyTrsConstantSpreadHorizonCalculator
+extends HorizonCalculator<EquityTotalReturnSwapDefinition, MulticurveProviderInterface, ZonedDateTimeDoubleTimeSeries> {
   /** Rolls down a yield curve provider */
   private static final CurveProviderConstantSpreadRolldownFunction CURVE_ROLLDOWN = CurveProviderConstantSpreadRolldownFunction.getInstance();
   /** The present value calculator */

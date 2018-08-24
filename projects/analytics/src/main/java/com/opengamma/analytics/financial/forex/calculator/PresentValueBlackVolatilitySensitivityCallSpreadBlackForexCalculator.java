@@ -11,6 +11,8 @@ import com.opengamma.analytics.financial.forex.method.PresentValueForexBlackVola
 import com.opengamma.analytics.financial.interestrate.InstrumentDerivativeVisitorAdapter;
 import com.opengamma.analytics.financial.interestrate.YieldCurveBundle;
 
+// CSOFF
+
 /**
  * Calculator of the volatility sensitivity for Forex digital options using vanilla call spread with Black formula for underlying vanilla.
  * @deprecated Curve builders that use and populate {@link YieldCurveBundle}s are deprecated.

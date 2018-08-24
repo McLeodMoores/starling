@@ -15,11 +15,12 @@ import com.opengamma.analytics.financial.instrument.InstrumentDefinitionVisitor;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * 
+ *
  */
 public class EnergyFutureTransactionDefinition extends CommodityFutureTransactionDefinition<EnergyFutureTransaction> {
 
-  public EnergyFutureTransactionDefinition(final CommodityFutureSecurityDefinition<?> underlying, final ZonedDateTime transactionDate, final double transactionPrice, final int quantity) {
+  public EnergyFutureTransactionDefinition(final CommodityFutureSecurityDefinition<?> underlying, final ZonedDateTime transactionDate,
+      final double transactionPrice, final int quantity) {
     super(underlying, transactionDate, transactionPrice, quantity);
   }
 
@@ -54,7 +55,8 @@ public class EnergyFutureTransactionDefinition extends CommodityFutureTransactio
 
   @Override
   public EnergyFutureTransaction toDerivative(final ZonedDateTime date) {
-    throw new UnsupportedOperationException("The method toDerivative of " + this.getClass().getSimpleName() + " does not support the two argument method (without margin price data).");
+    throw new UnsupportedOperationException("The method toDerivative of " + this.getClass().getSimpleName()
+        + " does not support the two argument method (without margin price data).");
   }
 
   @Override

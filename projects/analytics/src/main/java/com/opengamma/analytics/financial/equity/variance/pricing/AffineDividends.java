@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.equity.variance.pricing;
@@ -10,8 +10,8 @@ import java.util.Arrays;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * Dividend payment (per share) at time $\tau_i$ of the form $\alpha_i + \beta_iS_{\tau_{i^-}}$  where $S_{\tau_{i^-}}$ is the stock price immediately before the
- * dividend payment.
+ * Dividend payment (per share) at time $\tau_i$ of the form $\alpha_i + \beta_iS_{\tau_{i^-}}$  where $S_{\tau_{i^-}}$ is
+ * the stock price immediately before the dividend payment.
  */
 public class AffineDividends {
   /** The times */
@@ -47,11 +47,13 @@ public class AffineDividends {
     if (_n > 0) {
       ArgumentChecker.isTrue(tau[0] >= 0.0, "first dividend at negative time. Please remove from list");
       ArgumentChecker.isTrue(alpha[0] >= 0.0, "first cash dividend is negative.");
-      ArgumentChecker.isTrue(beta[0] >= 0.0 && beta[0] < 1.0, "Proportional dividend must be between 0.0 (inclusive) and 1.0 (exclusive). Value is {}", beta[0]);
+      ArgumentChecker.isTrue(beta[0] >= 0.0 && beta[0] < 1.0,
+          "Proportional dividend must be between 0.0 (inclusive) and 1.0 (exclusive). Value is {}", beta[0]);
       for (int i = 1; i < _n; i++) {
         ArgumentChecker.isTrue(tau[i] > tau[i - 1], "Dividends not increasing. {}th dividend is {}, and {}th is {}", i, tau[i], i - 1, tau[i - 1]);
         ArgumentChecker.isTrue(alpha[i] >= 0.0, "Cash dividend is negative. alpha[{}] = {}", i, alpha[i]);
-        ArgumentChecker.isTrue(beta[i] >= 0.0 && beta[i] < 1.0, "Proportional dividend must be between 0.0 (inclusive) and 1.0 (exclusive). beta[{}] = {}", i, beta[i]);
+        ArgumentChecker.isTrue(beta[i] >= 0.0 && beta[i] < 1.0,
+            "Proportional dividend must be between 0.0 (inclusive) and 1.0 (exclusive). beta[{}] = {}", i, beta[i]);
       }
     }
     _tau = tau;
@@ -60,7 +62,7 @@ public class AffineDividends {
   }
 
   /**
-   * Gets the dividend times
+   * Gets the dividend times.
    * @return the tau
    */
   public double[] getTau() {
@@ -87,7 +89,7 @@ public class AffineDividends {
   }
 
   /**
-   * Gets the dividend times
+   * Gets the dividend times.
    * @param index the index of the dividend
    * @return the tau
    */
@@ -122,7 +124,7 @@ public class AffineDividends {
   }
 
   /**
-   * Change one of the dividend times
+   * Change one of the dividend times.
    * @param value The new value of the dividend time, tau
    * @param index The index of the new dividend time
    * @return A new AffineDividends with the changed tau
@@ -136,7 +138,7 @@ public class AffineDividends {
   }
 
   /**
-   * Change one of the alpha values
+   * Change one of the alpha values.
    * @param value The new value of alpha
    * @param index The index of the new alpha
    * @return A new AffineDividends with the changed alpha
@@ -150,7 +152,7 @@ public class AffineDividends {
   }
 
   /**
-   * Change one of the beta values
+   * Change one of the beta values.
    * @param value The new value of beta
    * @param index The index of the new beta
    * @return A new AffineDividends with the changed beta

@@ -38,7 +38,8 @@ public abstract class AbstractParameterSensitivityBlockCalculator {
    * The constructor from a curve sensitivity calculator.
    * @param curveSensitivityCalculator The calculator.
    */
-  public AbstractParameterSensitivityBlockCalculator(final InstrumentDerivativeVisitor<YieldCurveBundle, MultipleCurrencyInterestRateCurveSensitivity> curveSensitivityCalculator) {
+  public AbstractParameterSensitivityBlockCalculator(
+      final InstrumentDerivativeVisitor<YieldCurveBundle, MultipleCurrencyInterestRateCurveSensitivity> curveSensitivityCalculator) {
     ArgumentChecker.notNull(curveSensitivityCalculator, "Sensitivity calculator");
     _curveSensitivityCalculator = curveSensitivityCalculator;
   }
@@ -52,7 +53,8 @@ public abstract class AbstractParameterSensitivityBlockCalculator {
    * The sensitivity with respect to the curves in the fixedCurves list will not be part of the output total sensitivity. Not null.
    * @return The sensitivity (as a DoubleMatrix1D).
    */
-  public MultipleCurrencyParameterSensitivity calculateSensitivity(final InstrumentDerivative instrument, final Set<String> fixedCurves, final YieldCurveBundle bundle) {
+  public MultipleCurrencyParameterSensitivity calculateSensitivity(final InstrumentDerivative instrument, final Set<String> fixedCurves,
+      final YieldCurveBundle bundle) {
     ArgumentChecker.notNull(instrument, "null InterestRateDerivative");
     ArgumentChecker.notNull(fixedCurves, "null set of fixed curves.");
     ArgumentChecker.notNull(bundle, "null bundle");
@@ -68,8 +70,8 @@ public abstract class AbstractParameterSensitivityBlockCalculator {
    * @param bundle The curve bundle with all the curves with respect to which the sensitivity should be computed. Not null.
    * @return The sensitivity (as a DoubleMatrix1D).
    */
-  public abstract MultipleCurrencyParameterSensitivity pointToParameterSensitivity(final MultipleCurrencyInterestRateCurveSensitivity sensitivity, final Set<String> fixedCurves,
-      final YieldCurveBundle bundle);
+  public abstract MultipleCurrencyParameterSensitivity pointToParameterSensitivity(MultipleCurrencyInterestRateCurveSensitivity sensitivity,
+      Set<String> fixedCurves, YieldCurveBundle bundle);
 
   /**
    * Computes the sensitivity with respect to the parameters from the point sensitivities to only one curve.

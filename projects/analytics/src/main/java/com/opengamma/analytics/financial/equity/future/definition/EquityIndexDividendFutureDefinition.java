@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.equity.future.definition;
@@ -26,7 +26,8 @@ public class EquityIndexDividendFutureDefinition extends EquityFutureDefinition 
    * @param currency The currency
    * @param unitValue The unit value
    */
-  public EquityIndexDividendFutureDefinition(final ZonedDateTime expiryDate, final ZonedDateTime settlementDate, final double strikePrice, final Currency currency, final double unitValue) {
+  public EquityIndexDividendFutureDefinition(final ZonedDateTime expiryDate, final ZonedDateTime settlementDate, final double strikePrice,
+      final Currency currency, final double unitValue) {
     super(expiryDate, settlementDate, strikePrice, currency, unitValue);
   }
 

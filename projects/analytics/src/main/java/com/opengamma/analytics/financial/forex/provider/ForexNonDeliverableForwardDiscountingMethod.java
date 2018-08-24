@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.forex.provider;
@@ -45,7 +45,8 @@ public final class ForexNonDeliverableForwardDiscountingMethod {
 
   /**
    * Computes the present value of the non-deliverable forward. The present value is in currency2 and equal to P*N*(1-X/F) where
-   * <i>P</i> is the currency2 discount factor for the payment date, <i>N</i> is the notional, <i>X</i> is NDF rate and <i>F</i> the estimated forward exchange rate at the payment date.
+   * <i>P</i> is the currency2 discount factor for the payment date, <i>N</i> is the notional, <i>X</i> is NDF rate and
+   * <i>F</i> the estimated forward exchange rate at the payment date.
    * @param ndf The non-deliverable forward.
    * @param multicurves The multi-curves provider.
    * @return The present value.
@@ -62,7 +63,8 @@ public final class ForexNonDeliverableForwardDiscountingMethod {
 
   /**
    * Computes the currency exposure of the non-deliverable forward. The currency exposure is P_2 * N in currency2 and -P_1 * N * X in currency1
-   * where <i>P_2</i> is the currency2 discount factor for the payment date, <i>N</i> is the notional, <i>P_1</i> is the currency1 discount factor for the payment date
+   * where <i>P_2</i> is the currency2 discount factor for the payment date, <i>N</i> is the notional, <i>P_1</i> is the currency1
+   * discount factor for the payment date
    * and <i>X</i> is NDF rate.
    * @param ndf The non-deliverable forward.
    * @param multicurves The multi-curves provider.
@@ -99,7 +101,8 @@ public final class ForexNonDeliverableForwardDiscountingMethod {
    * @param multicurves The multi-curves provider.
    * @return The present value currency exposure.
    */
-  public MultipleCurrencyMulticurveSensitivity presentValueCurveSensitivity(final ForexNonDeliverableForward ndf, final MulticurveProviderInterface multicurves) {
+  public MultipleCurrencyMulticurveSensitivity presentValueCurveSensitivity(final ForexNonDeliverableForward ndf,
+      final MulticurveProviderInterface multicurves) {
     ArgumentChecker.notNull(ndf, "Non deliverable forward");
     ArgumentChecker.notNull(multicurves, "Multi-curves provider");
     final double df2 = multicurves.getDiscountFactor(ndf.getCurrency2(), ndf.getPaymentTime());

@@ -36,7 +36,8 @@ public class MultipleYieldCurveFinderGeneratorJacobian extends Function1D<Double
    * @param parameterSensitivityCalculator The instrument parameter sensitivity calculator.
    * @param data The data required for curve building.
    */
-  public MultipleYieldCurveFinderGeneratorJacobian(final AbstractParameterSensitivityCalculator parameterSensitivityCalculator, final MultipleYieldCurveFinderGeneratorDataBundle data) {
+  public MultipleYieldCurveFinderGeneratorJacobian(final AbstractParameterSensitivityCalculator parameterSensitivityCalculator,
+      final MultipleYieldCurveFinderGeneratorDataBundle data) {
     _parameterSensitivityCalculator = parameterSensitivityCalculator;
     _data = data;
   }

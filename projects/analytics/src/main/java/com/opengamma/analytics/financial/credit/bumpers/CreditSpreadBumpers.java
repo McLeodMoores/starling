@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.credit.bumpers;
@@ -9,9 +9,10 @@ import java.util.Arrays;
 
 import com.opengamma.OpenGammaRuntimeException;
 
+// CSOFF
 /**
  * Class containing utilities for bumping credit spread term structures by user defined methods and amounts
- *@deprecated this will be deleted 
+ *@deprecated this will be deleted
  */
 @Deprecated
 public class CreditSpreadBumpers {
@@ -58,7 +59,7 @@ public class CreditSpreadBumpers {
     if (spreadBumpType == SpreadBumpType.ADDITIVE_BUCKETED || spreadBumpType == SpreadBumpType.ADDITIVE) {
       bumpedCreditSpreads[spreadTenorToBump] += spreadBump;
     } else if (spreadBumpType == SpreadBumpType.MULTIPLICATIVE_BUCKETED || spreadBumpType == SpreadBumpType.MULTIPLICATIVE) {
-      bumpedCreditSpreads[spreadTenorToBump] *= (1 + spreadBump);
+      bumpedCreditSpreads[spreadTenorToBump] *= 1 + spreadBump;
     } else {
       throw new OpenGammaRuntimeException("Unsupported spread bump type " + spreadBumpType);
     }

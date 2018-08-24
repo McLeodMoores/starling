@@ -5,9 +5,6 @@
  */
 package com.opengamma.analytics.financial.curve.interestrate.sensitivity;
 
-import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
-import it.unimi.dsi.fastutil.ints.IntArrayList;
-
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -25,6 +22,9 @@ import com.opengamma.util.money.Currency;
 import com.opengamma.util.tuple.Pair;
 import com.opengamma.util.tuple.Pairs;
 
+import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
+import it.unimi.dsi.fastutil.ints.IntArrayList;
+
 /**
  * For an instrument, computes the sensitivity of a present value to the parameters used in the curve.
  * The meaning of "parameters" will depend of the way the curve is stored (interpolated yield, function parameters, etc.).
@@ -35,10 +35,11 @@ import com.opengamma.util.tuple.Pairs;
 public class ParameterUnderlyingSensitivityBlockCalculator extends AbstractParameterSensitivityBlockCalculator {
 
   /**
-   * Constructor
+   * Constructor.
    * @param curveSensitivityCalculator The curve sensitivity calculator.
    */
-  public ParameterUnderlyingSensitivityBlockCalculator(final InstrumentDerivativeVisitor<YieldCurveBundle, MultipleCurrencyInterestRateCurveSensitivity> curveSensitivityCalculator) {
+  public ParameterUnderlyingSensitivityBlockCalculator(final InstrumentDerivativeVisitor<YieldCurveBundle,
+      MultipleCurrencyInterestRateCurveSensitivity> curveSensitivityCalculator) {
     super(curveSensitivityCalculator);
   }
 
@@ -51,7 +52,8 @@ public class ParameterUnderlyingSensitivityBlockCalculator extends AbstractParam
    * @return The sensitivity.
    */
   @Override
-  public MultipleCurrencyParameterSensitivity pointToParameterSensitivity(final MultipleCurrencyInterestRateCurveSensitivity sensitivity, final Set<String> fixedCurves,
+  public MultipleCurrencyParameterSensitivity pointToParameterSensitivity(final MultipleCurrencyInterestRateCurveSensitivity sensitivity,
+      final Set<String> fixedCurves,
       final YieldCurveBundle bundle) {
     ArgumentChecker.notNull(sensitivity, "Sensitivity");
     ArgumentChecker.notNull(fixedCurves, "Fixed Curves");
@@ -63,7 +65,8 @@ public class ParameterUnderlyingSensitivityBlockCalculator extends AbstractParam
     return result;
   }
 
-  public MultipleCurrencyParameterSensitivity pointToParameterSensitivity(final Currency ccy, final InterestRateCurveSensitivity sensitivity, final Set<String> fixedCurves,
+  public MultipleCurrencyParameterSensitivity pointToParameterSensitivity(final Currency ccy, final InterestRateCurveSensitivity sensitivity,
+      final Set<String> fixedCurves,
       final YieldCurveBundle bundle) {
     final Set<String> curveNamesSet = bundle.getAllNames();
     final int nbCurve = curveNamesSet.size();
@@ -75,7 +78,8 @@ public class ParameterUnderlyingSensitivityBlockCalculator extends AbstractParam
       curveNum.put(name, loopname++);
     }
     final int[] nbNewParameters = new int[nbCurve];
-    // Implementation note: nbNewParameters - number of new parameters in the curve, parameters not from an underlying curve which is another curve of the bundle.
+    // Implementation note: nbNewParameters - number of new parameters in the curve, parameters not from an underlying curve which is
+    // another curve of the bundle.
     final int[][] indexOther = new int[nbCurve][];
     // Implementation note: indexOther - the index of the underlying curves, if any.
     loopname = 0;
@@ -106,7 +110,8 @@ public class ParameterUnderlyingSensitivityBlockCalculator extends AbstractParam
     final int[][] indexOtherSensiCurve = new int[nbSensitivityCurve][];
     // Implementation note: indexOtherSensiCurve -
     // int[] startCleanParameter = new int[nbSensitivityCurve];
-    // Implementation note: startCleanParameter - for each curve for which the sensitivity should be computed, the index in the total sensitivity vector at which that curve start.
+    // Implementation note: startCleanParameter - for each curve for which the sensitivity should be computed,
+    // the index in the total sensitivity vector at which that curve start.
     final int[][] startDirtyParameter = new int[nbSensitivityCurve][];
     // Implementation note: startDirtyParameter - for each curve for which the sensitivity should be computed, the indexes of the underlying curves.
     //int nbCleanParameters = 0;

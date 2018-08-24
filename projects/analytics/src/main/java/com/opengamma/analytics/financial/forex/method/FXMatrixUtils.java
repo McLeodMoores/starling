@@ -48,7 +48,7 @@ public class FXMatrixUtils {
     // Implementation note: New matrix with the same element as matrix1
     final FXMatrix result = new FXMatrix(matrix1);
     // Implementation note: adding the missing currencies from matrix2 one by one.
-    for (Currency loopccy : set2) {
+    for (final Currency loopccy : set2) {
       if (!set1.contains(loopccy)) {
         result.addCurrency(loopccy, ccyCommon, matrix2.getFxRate(loopccy, ccyCommon));
       }
@@ -57,12 +57,13 @@ public class FXMatrixUtils {
   }
 
   /**
-   * Compares two FX Matrix within a given tolerance. The comparison is done only on one secondary diagonal. 
+   * Compares two FX Matrix within a given tolerance. The comparison is done only on one secondary diagonal.
    * Other rates will also be correct if the input matrices are coherent
    * @param matrix1 The first matrix.
    * @param matrix2 The second matrix.
    * @param tolerance The tolerance.
-   * @return The comparison result. Will be true if for each element in the diagonal tested, the two matrix have a difference in exchange rate lower thatn the tolerance.
+   * @return The comparison result. Will be true if for each element in the diagonal tested, the two matrix have a difference
+   * in exchange rate lower than the tolerance.
    */
   public static boolean compare(final FXMatrix matrix1, final FXMatrix matrix2, final double tolerance) {
     // Implementation note: Compare currency set

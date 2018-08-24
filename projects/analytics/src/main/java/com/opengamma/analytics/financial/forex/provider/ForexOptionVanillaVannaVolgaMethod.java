@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.forex.provider;
@@ -68,7 +68,8 @@ public final class ForexOptionVanillaVannaVolgaMethod {
   public MultipleCurrencyAmount presentValue(final ForexOptionVanilla optionForex, final BlackForexVannaVolgaProviderInterface smileMulticurves) {
     Validate.notNull(optionForex, "Forex option");
     Validate.notNull(smileMulticurves, "Smile");
-    Validate.isTrue(smileMulticurves.checkCurrencies(optionForex.getCurrency1(), optionForex.getCurrency2()), "Option currencies not compatible with smile data");
+    Validate.isTrue(smileMulticurves.checkCurrencies(optionForex.getCurrency1(), optionForex.getCurrency2()),
+        "Option currencies not compatible with smile data");
     final MulticurveProviderInterface multicurves = smileMulticurves.getMulticurveProvider();
     final double dfDomestic = multicurves.getDiscountFactor(optionForex.getCurrency2(), optionForex.getUnderlyingForex().getPaymentTime());
     final double dfForeign = multicurves.getDiscountFactor(optionForex.getCurrency1(), optionForex.getUnderlyingForex().getPaymentTime());
@@ -99,7 +100,8 @@ public final class ForexOptionVanillaVannaVolgaMethod {
   }
 
   /**
-   * Computes the currency exposure of the vanilla option with the Black function and a volatility from a volatility surface. The exposure is computed in both option currencies.
+   * Computes the currency exposure of the vanilla option with the Black function and a volatility from a volatility surface.
+   * The exposure is computed in both option currencies.
    * @param optionForex The Forex option.
    * @param smileMulticurves The curve and smile data.
    * @return The currency exposure
@@ -107,7 +109,8 @@ public final class ForexOptionVanillaVannaVolgaMethod {
   public MultipleCurrencyAmount currencyExposure(final ForexOptionVanilla optionForex, final BlackForexVannaVolgaProviderInterface smileMulticurves) {
     Validate.notNull(optionForex, "Forex option");
     Validate.notNull(smileMulticurves, "Smile");
-    Validate.isTrue(smileMulticurves.checkCurrencies(optionForex.getCurrency1(), optionForex.getCurrency2()), "Option currencies not compatible with smile data");
+    Validate.isTrue(smileMulticurves.checkCurrencies(optionForex.getCurrency1(), optionForex.getCurrency2()),
+        "Option currencies not compatible with smile data");
     final MulticurveProviderInterface multicurves = smileMulticurves.getMulticurveProvider();
     final double dfDomestic = multicurves.getDiscountFactor(optionForex.getCurrency2(), optionForex.getUnderlyingForex().getPaymentTime());
     final double dfForeign = multicurves.getDiscountFactor(optionForex.getCurrency1(), optionForex.getUnderlyingForex().getPaymentTime());
@@ -138,12 +141,14 @@ public final class ForexOptionVanillaVannaVolgaMethod {
       deltaSpot += x[loopvv] * (priceVVsmile[loopvv][1] - priceVVATM[loopvv][1]);
     }
     deltaSpot *= dfForeign / dfDomestic;
-    final double sign = (optionForex.isLong() ? 1.0 : -1.0);
+    final double sign = optionForex.isLong() ? 1.0 : -1.0;
     final CurrencyAmount[] currencyExposure = new CurrencyAmount[2];
     // Implementation note: foreign currency (currency 1) exposure = Delta_spot * amount1.
-    currencyExposure[0] = CurrencyAmount.of(optionForex.getUnderlyingForex().getCurrency1(), deltaSpot * Math.abs(optionForex.getUnderlyingForex().getPaymentCurrency1().getAmount()) * sign);
+    currencyExposure[0] = CurrencyAmount.of(optionForex.getUnderlyingForex().getCurrency1(),
+        deltaSpot * Math.abs(optionForex.getUnderlyingForex().getPaymentCurrency1().getAmount()) * sign);
     // Implementation note: domestic currency (currency 2) exposure = -Delta_spot * amount1 * spot+PV
-    currencyExposure[1] = CurrencyAmount.of(optionForex.getUnderlyingForex().getCurrency2(), -deltaSpot * Math.abs(optionForex.getUnderlyingForex().getPaymentCurrency1().getAmount()) * spot * sign
+    currencyExposure[1] = CurrencyAmount.of(optionForex.getUnderlyingForex().getCurrency2(),
+        -deltaSpot * Math.abs(optionForex.getUnderlyingForex().getPaymentCurrency1().getAmount()) * spot * sign
         + price);
     return MultipleCurrencyAmount.of(currencyExposure);
   }
@@ -154,10 +159,12 @@ public final class ForexOptionVanillaVannaVolgaMethod {
    * @param smileMulticurves The curve and smile data.
    * @return The volatility sensitivity. The sensitivity figures are, like the present value, in the domestic currency (currency 2).
    */
-  public PresentValueForexBlackVolatilitySensitivity presentValueBlackVolatilitySensitivity(final ForexOptionVanilla optionForex, final BlackForexVannaVolgaProviderInterface smileMulticurves) {
+  public PresentValueForexBlackVolatilitySensitivity presentValueBlackVolatilitySensitivity(final ForexOptionVanilla optionForex,
+      final BlackForexVannaVolgaProviderInterface smileMulticurves) {
     Validate.notNull(optionForex, "Forex option");
     Validate.notNull(smileMulticurves, "Smile");
-    Validate.isTrue(smileMulticurves.checkCurrencies(optionForex.getCurrency1(), optionForex.getCurrency2()), "Option currencies not compatible with smile data");
+    Validate.isTrue(smileMulticurves.checkCurrencies(optionForex.getCurrency1(), optionForex.getCurrency2()),
+        "Option currencies not compatible with smile data");
     final MulticurveProviderInterface multicurves = smileMulticurves.getMulticurveProvider();
     final double dfDomestic = multicurves.getDiscountFactor(optionForex.getCurrency2(), optionForex.getUnderlyingForex().getPaymentTime());
     final double dfForeign = multicurves.getDiscountFactor(optionForex.getCurrency1(), optionForex.getUnderlyingForex().getPaymentTime());
@@ -193,24 +200,29 @@ public final class ForexOptionVanillaVannaVolgaMethod {
     final SurfaceValue result = new SurfaceValue();
     for (int loopvv = 0; loopvv < 3; loopvv++) {
       final DoublesPair point = DoublesPair.of(optionForex.getTimeToExpiry(), strikesVV[loopvv]);
-      result.add(point, vegaReference[loopvv] * Math.abs(optionForex.getUnderlyingForex().getPaymentCurrency1().getAmount()) * (optionForex.isLong() ? 1.0 : -1.0));
+      result.add(point,
+          vegaReference[loopvv] * Math.abs(optionForex.getUnderlyingForex().getPaymentCurrency1().getAmount()) * (optionForex.isLong() ? 1.0 : -1.0));
     }
-    final PresentValueForexBlackVolatilitySensitivity sensi = new PresentValueForexBlackVolatilitySensitivity(optionForex.getUnderlyingForex().getCurrency1(), optionForex.getUnderlyingForex()
+    final PresentValueForexBlackVolatilitySensitivity sensi =
+        new PresentValueForexBlackVolatilitySensitivity(optionForex.getUnderlyingForex().getCurrency1(), optionForex.getUnderlyingForex()
         .getCurrency2(), result);
     // TODO: Review when the currency order is not in the standard order.
     return sensi;
   }
 
   /**
-   * Computes the curve sensitivity of the option present value. The sensitivity of the volatility and the weights on the forward (and on the curves) is not taken into account.
+   * Computes the curve sensitivity of the option present value. The sensitivity of the volatility and the weights on the
+   * forward (and on the curves) is not taken into account.
    * @param optionForex The Forex option.
    * @param smileMulticurves The curve and smile data.
    * @return The curve sensitivity.
    */
-  public MultipleCurrencyMulticurveSensitivity presentValueCurveSensitivity(final ForexOptionVanilla optionForex, final BlackForexVannaVolgaProviderInterface smileMulticurves) {
+  public MultipleCurrencyMulticurveSensitivity presentValueCurveSensitivity(final ForexOptionVanilla optionForex,
+      final BlackForexVannaVolgaProviderInterface smileMulticurves) {
     Validate.notNull(optionForex, "Forex option");
     Validate.notNull(smileMulticurves, "Smile");
-    Validate.isTrue(smileMulticurves.checkCurrencies(optionForex.getCurrency1(), optionForex.getCurrency2()), "Option currencies not compatible with smile data");
+    Validate.isTrue(smileMulticurves.checkCurrencies(optionForex.getCurrency1(), optionForex.getCurrency2()),
+        "Option currencies not compatible with smile data");
     final MulticurveProviderInterface multicurves = smileMulticurves.getMulticurveProvider();
     final SmileDeltaParameters smileAtTime = smileMulticurves.getSmile(optionForex.getCurrency1(), optionForex.getCurrency2(), optionForex.getTimeToExpiry());
     final double payTime = optionForex.getUnderlyingForex().getPaymentTime();
@@ -282,7 +294,8 @@ public final class ForexOptionVanillaVannaVolgaMethod {
    * @param volatilitiesReference The volatilities at the reference strikes.
    * @return The weights.
    */
-  public double[] vannaVolgaWeights(final ForexOptionVanilla optionForex, final double forward, final double dfDomestic, final double[] strikesReference, final double[] volatilitiesReference) {
+  public double[] vannaVolgaWeights(final ForexOptionVanilla optionForex, final double forward, final double dfDomestic,
+      final double[] strikesReference, final double[] volatilitiesReference) {
     return vannaVolgaWeights(optionForex, forward, dfDomestic, strikesReference, volatilitiesReference, new double[3]);
   }
 
@@ -294,10 +307,12 @@ public final class ForexOptionVanillaVannaVolgaMethod {
    * @param dfDomestic The discounting factor to the payment date in the domestic currency.
    * @param strikesReference The reference strikes used for the vanna-volga method.
    * @param volatilitiesReference The volatilities at the reference strikes.
-   * @param vega The vega using the base volatility at the reference points (index 0 and 2) and at the strike (index 1). The array is changed with the method call.
+   * @param vega The vega using the base volatility at the reference points (index 0 and 2) and at the strike (index 1).
+   * The array is changed with the method call.
    * @return The weights.
    */
-  public double[] vannaVolgaWeights(final ForexOptionVanilla optionForex, final double forward, final double dfDomestic, final double[] strikesReference, final double[] volatilitiesReference,
+  public double[] vannaVolgaWeights(final ForexOptionVanilla optionForex, final double forward, final double dfDomestic,
+      final double[] strikesReference, final double[] volatilitiesReference,
       final double[] vega) {
     final double strike = optionForex.getStrike();
     final double volATM = volatilitiesReference[1]; // The reference volatility is the "middle" one, which is often ATM.

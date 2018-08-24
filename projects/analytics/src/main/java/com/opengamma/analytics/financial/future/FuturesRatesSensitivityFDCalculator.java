@@ -28,7 +28,8 @@ public final class FuturesRatesSensitivityFDCalculator extends InstrumentDerivat
   private static final SettlementTimeCalculator SETTLEMENT_TIME = SettlementTimeCalculator.getInstance();
   private final InstrumentDerivativeVisitor<SimpleFutureDataBundle, Double> _presentValueCalculator;
 
-  public static FuturesRatesSensitivityFDCalculator getInstance(final InstrumentDerivativeVisitor<SimpleFutureDataBundle, Double> presentValueCalculator) {
+  public static FuturesRatesSensitivityFDCalculator getInstance(
+      final InstrumentDerivativeVisitor<SimpleFutureDataBundle, Double> presentValueCalculator) {
     return new FuturesRatesSensitivityFDCalculator(presentValueCalculator);
   }
 
@@ -40,16 +41,19 @@ public final class FuturesRatesSensitivityFDCalculator extends InstrumentDerivat
   /**
    * This calculates the sensitivity of the present value (PV) to the continuously-compounded discount rates at the knot points of the funding curve. <p>
    * The return format is a DoubleMatrix1D (i.e. a vector) with length equal to the total number of knots in the curve <p>
-   * The change of a curve due to the movement of a single knot is interpolator-dependent, so an instrument can have sensitivity to knots at times beyond its maturity
+   * The change of a curve due to the movement of a single knot is interpolator-dependent, so an instrument can have sensitivity to knots at
+   * times beyond its maturity
    * @param future the derivative, not null
    * @param dataBundle the data bundle, not null
-   * @return A DoubleMatrix1D containing bucketed delta in order and length of market.getDiscountCurve(). Currency amount per unit amount change in discount rate
+   * @return A DoubleMatrix1D containing bucketed delta in order and length of market.getDiscountCurve().
+   * Currency amount per unit amount change in discount rate
    */
   @Override
   public DoubleMatrix1D visit(final InstrumentDerivative future, final SimpleFutureDataBundle dataBundle) {
     ArgumentChecker.notNull(future, "future");
     ArgumentChecker.notNull(dataBundle, "data bundle");
-    ArgumentChecker.isTrue(dataBundle.getFundingCurve() instanceof YieldCurve, "Calculator expects a YieldCurve, have {}", dataBundle.getFundingCurve().getClass());
+    ArgumentChecker.isTrue(dataBundle.getFundingCurve() instanceof YieldCurve, "Calculator expects a YieldCurve, have {}",
+        dataBundle.getFundingCurve().getClass());
     final YieldCurve discCrv = (YieldCurve) dataBundle.getFundingCurve();
     final double settlement = future.accept(SETTLEMENT_TIME);
     SimpleFutureDataBundle bumpedMarket = new SimpleFutureDataBundle(discCrv.withSingleShift(settlement, SHIFT), dataBundle.getMarketPrice(),

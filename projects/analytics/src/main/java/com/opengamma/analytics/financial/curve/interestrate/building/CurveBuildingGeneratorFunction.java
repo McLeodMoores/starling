@@ -35,7 +35,7 @@ public class CurveBuildingGeneratorFunction extends YieldCurveBundleBuildingFunc
   private final YieldCurveBundle _knownData;
 
   /**
-   * Constructor
+   * Constructor.
    * @param curveGenerators The curve constructor. The order is important.
    */
   public CurveBuildingGeneratorFunction(final LinkedHashMap<String, GeneratorYDCurve> curveGenerators) {
@@ -45,7 +45,7 @@ public class CurveBuildingGeneratorFunction extends YieldCurveBundleBuildingFunc
   }
 
   /**
-   * Constructor
+   * Constructor.
    * @param curveGenerators The curve constructor. The order is important.
    * @param knownData The yield curve bundle with known data (curves).
    */

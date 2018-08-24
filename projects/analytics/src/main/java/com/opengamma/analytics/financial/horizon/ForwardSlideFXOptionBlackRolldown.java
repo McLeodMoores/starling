@@ -11,6 +11,7 @@ import com.opengamma.analytics.financial.model.volatility.surface.SmileDeltaTerm
 import com.opengamma.util.money.Currency;
 import com.opengamma.util.tuple.Pair;
 
+//CSOFF
 /**
  * Calculates the change in value of a FX option when the curves and (Black) surface have been
  * shifted forward in time.

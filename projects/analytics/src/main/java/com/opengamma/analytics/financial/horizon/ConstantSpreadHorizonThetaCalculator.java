@@ -41,6 +41,7 @@ import com.opengamma.util.money.Currency;
 import com.opengamma.util.money.CurrencyAmount;
 import com.opengamma.util.money.MultipleCurrencyAmount;
 
+// CSOFF
 /**
  * Computes the difference in present value between one day and the next, without volatility or rate slide.
  * That is, the market moves in such a way that the discount rates or implied volatility requested

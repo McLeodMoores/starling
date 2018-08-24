@@ -19,7 +19,8 @@ import com.opengamma.util.money.Currency;
  * @deprecated {@link YieldCurveBundle} is deprecated
  */
 @Deprecated
-public class PresentValueCurveSensitivityConvertedCalculator extends InstrumentDerivativeVisitorSameMethodAdapter<YieldCurveBundle, InterestRateCurveSensitivity> {
+public class PresentValueCurveSensitivityConvertedCalculator
+extends InstrumentDerivativeVisitorSameMethodAdapter<YieldCurveBundle, InterestRateCurveSensitivity> {
 
   /**
    * The currency in which the present value should be converted.

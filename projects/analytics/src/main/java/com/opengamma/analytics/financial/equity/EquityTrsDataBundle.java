@@ -56,7 +56,7 @@ public class EquityTrsDataBundle implements ParameterProviderInterface {
     result = prime * result + _curves.hashCode();
     long temp;
     temp = Double.doubleToLongBits(_spotEquity);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 
@@ -93,12 +93,12 @@ public class EquityTrsDataBundle implements ParameterProviderInterface {
   }
 
   @Override
-  public double[] parameterSensitivity(String name, List<DoublesPair> pointSensitivity) {
+  public double[] parameterSensitivity(final String name, final List<DoublesPair> pointSensitivity) {
     return _curves.parameterSensitivity(name, pointSensitivity);
   }
 
   @Override
-  public double[] parameterForwardSensitivity(String name, List<ForwardSensitivity> pointSensitivity) {
+  public double[] parameterForwardSensitivity(final String name, final List<ForwardSensitivity> pointSensitivity) {
     return _curves.parameterForwardSensitivity(name, pointSensitivity);
   }
 

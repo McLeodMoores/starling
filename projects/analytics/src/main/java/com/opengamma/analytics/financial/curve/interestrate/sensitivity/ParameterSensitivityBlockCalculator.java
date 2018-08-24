@@ -29,10 +29,11 @@ import com.opengamma.util.tuple.Pairs;
 public class ParameterSensitivityBlockCalculator extends AbstractParameterSensitivityBlockCalculator {
 
   /**
-   * Constructor
+   * Constructor.
    * @param curveSensitivityCalculator The curve sensitivity calculator.
    */
-  public ParameterSensitivityBlockCalculator(final InstrumentDerivativeVisitor<YieldCurveBundle, MultipleCurrencyInterestRateCurveSensitivity> curveSensitivityCalculator) {
+  public ParameterSensitivityBlockCalculator(final InstrumentDerivativeVisitor<YieldCurveBundle,
+      MultipleCurrencyInterestRateCurveSensitivity> curveSensitivityCalculator) {
     super(curveSensitivityCalculator);
   }
 
@@ -45,8 +46,8 @@ public class ParameterSensitivityBlockCalculator extends AbstractParameterSensit
    * @return The sensitivity.
    */
   @Override
-  public MultipleCurrencyParameterSensitivity pointToParameterSensitivity(final MultipleCurrencyInterestRateCurveSensitivity sensitivity, final Set<String> fixedCurves,
-      final YieldCurveBundle bundle) {
+  public MultipleCurrencyParameterSensitivity pointToParameterSensitivity(final MultipleCurrencyInterestRateCurveSensitivity sensitivity,
+      final Set<String> fixedCurves, final YieldCurveBundle bundle) {
     ArgumentChecker.notNull(sensitivity, "Sensitivity");
     ArgumentChecker.notNull(fixedCurves, "Fixed Curves");
     ArgumentChecker.notNull(bundle, "Curve bundle");

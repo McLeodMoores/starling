@@ -18,36 +18,37 @@ import com.opengamma.timeseries.precise.zdt.ZonedDateTimeDoubleTimeSeries;
 public interface BondCurveSetUpInterface<T extends ParameterProviderInterface> extends CurveSetUpInterface<T> {
 
   @Override
-  public BondCurveSetUpInterface<T> building(final String... curveNames);
+  BondCurveSetUpInterface<T> building(String... curveNames);
 
   @Override
-  public BondCurveSetUpInterface<T> buildingFirst(final String... curveNames);
+  BondCurveSetUpInterface<T> buildingFirst(String... curveNames);
 
   @Override
-  public BondCurveSetUpInterface<T> thenBuilding(final String... curveNames);
+  BondCurveSetUpInterface<T> thenBuilding(String... curveNames);
 
   @Override
-  public CurveTypeSetUpInterface<T> using(final String curveName);
+  CurveTypeSetUpInterface<T> using(String curveName);
 
   @Override
-  public BondCurveSetUpInterface<T> withNode(final String curveName, final GeneratorInstrument instrumentGenerator, final GeneratorAttribute attributeGenerator, final double marketData);
+  BondCurveSetUpInterface<T> withNode(String curveName, GeneratorInstrument instrumentGenerator,
+      GeneratorAttribute attributeGenerator, double marketData);
 
   //TODO add a withNode that takes definitions
 
   @Override
-  public CurveBuilder<T> getBuilder();
+  CurveBuilder<T> getBuilder();
 
   //TODO rename this
   @Override
-  public BondCurveSetUpInterface<T> withKnownData(final T knownData);
+  BondCurveSetUpInterface<T> withKnownData(T knownData);
 
   //TODO rename this
   @Override
-  public BondCurveSetUpInterface<T> withKnownBundle(final CurveBuildingBlockBundle knownBundle);
+  BondCurveSetUpInterface<T> withKnownBundle(CurveBuildingBlockBundle knownBundle);
 
   @Override
-  public BondCurveSetUpInterface<T> withFixingTs(final Map<Index, ZonedDateTimeDoubleTimeSeries> fixingTs);
+  BondCurveSetUpInterface<T> withFixingTs(Map<Index, ZonedDateTimeDoubleTimeSeries> fixingTs);
 
   @Override
-  public BondCurveSetUpInterface<T> copy();
+  BondCurveSetUpInterface<T> copy();
 }

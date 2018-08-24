@@ -10,6 +10,7 @@ import com.opengamma.analytics.financial.model.option.definition.YieldCurveWithB
 import com.opengamma.analytics.financial.model.option.parameters.BlackFlatSwaptionParameters;
 import com.opengamma.analytics.math.surface.Surface;
 
+//CSOFF
 /**
  * Calculates the change in value of a swaption when the curves and (Black) surface have been
  * shifted forward in time without slide.

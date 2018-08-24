@@ -72,9 +72,11 @@ public class ForexOptionDigitalDefinition implements InstrumentDefinition<Instru
    * @param expirationDate The expiration date (and time) of the option.
    * @param isCall The call (true) / put (false) flag.
    * @param isLong The long (true) / short (false) flag.
-   * @param payDomestic The flag indicating which currency is paid. If true, the domestic currency amount is paid, if false, the foreign currency amount is paid.
+   * @param payDomestic The flag indicating which currency is paid.
+   * If true, the domestic currency amount is paid, if false, the foreign currency amount is paid.
    */
-  public ForexOptionDigitalDefinition(final ForexDefinition forex, final ZonedDateTime expirationDate, final boolean isCall, final boolean isLong, final boolean payDomestic) {
+  public ForexOptionDigitalDefinition(final ForexDefinition forex, final ZonedDateTime expirationDate, final boolean isCall,
+      final boolean isLong, final boolean payDomestic) {
     ArgumentChecker.notNull(forex, "Underlying forex");
     ArgumentChecker.notNull(expirationDate, "Expiration date");
     ArgumentChecker.isTrue(!expirationDate.isAfter(forex.getExchangeDate()), "Expiration should be before payment.");

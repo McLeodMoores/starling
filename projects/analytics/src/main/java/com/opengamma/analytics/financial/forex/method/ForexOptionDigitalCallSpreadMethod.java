@@ -4,7 +4,7 @@
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.forex.method;
-
+// CSOFF
 import com.opengamma.analytics.financial.forex.derivative.Forex;
 import com.opengamma.analytics.financial.forex.derivative.ForexOptionDigital;
 import com.opengamma.analytics.financial.forex.derivative.ForexOptionVanilla;
@@ -138,7 +138,7 @@ public class ForexOptionDigitalCallSpreadMethod implements ForexPricingMethod {
       final Forex forexP = new Forex(optionDigital.getUnderlyingForex().getPaymentCurrency1().withAmount(amount),
           optionDigital.getUnderlyingForex().getPaymentCurrency2().withAmount(-strikeRelP * amount));
       callSpread[0] = new ForexOptionVanilla(forexM, optionDigital.getExpirationTime(), optionDigital.isCall(),
-          (optionDigital.isLong() == optionDigital.isCall()));
+          optionDigital.isLong() == optionDigital.isCall());
       callSpread[1] = new ForexOptionVanilla(forexP, optionDigital.getExpirationTime(), optionDigital.isCall(),
           !(optionDigital.isLong() == optionDigital.isCall()));
     } else {
@@ -153,7 +153,7 @@ public class ForexOptionDigitalCallSpreadMethod implements ForexPricingMethod {
       callSpread[0] = new ForexOptionVanilla(forexM, optionDigital.getExpirationTime(), !optionDigital.isCall(),
           !(optionDigital.isLong() == optionDigital.isCall()));
       callSpread[1] = new ForexOptionVanilla(forexP, optionDigital.getExpirationTime(), !optionDigital.isCall(),
-          (optionDigital.isLong() == optionDigital.isCall()));
+          optionDigital.isLong() == optionDigital.isCall());
     }
     return callSpread;
   }

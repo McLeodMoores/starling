@@ -39,7 +39,8 @@ public class GeneratorCurveYieldInterpolatedNumber extends GeneratorYDCurve {
    * @param numberNode The number of node in the interpolated curve.
    * @param interpolator The interpolator used for the curve.
    */
-  public GeneratorCurveYieldInterpolatedNumber(final InstrumentDerivativeVisitorAdapter<Object, Double> nodeTimeCalculator, final int numberNode, final Interpolator1D interpolator) {
+  public GeneratorCurveYieldInterpolatedNumber(final InstrumentDerivativeVisitorAdapter<Object, Double> nodeTimeCalculator, final int numberNode,
+      final Interpolator1D interpolator) {
     _nodeTimeCalculator = nodeTimeCalculator;
     _interpolator = interpolator;
     _numberNode = numberNode;

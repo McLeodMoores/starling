@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.equity;
@@ -26,7 +26,7 @@ public final class EqyOptPDEPresentValueCalculator extends InstrumentDerivativeV
   private static final BlackScholesMertonPDEPricer MODEL = new BlackScholesMertonPDEPricer();
 
   /**
-   * Gets the static instance
+   * Gets the static instance.
    * @return The static instance
    */
   public static EqyOptPDEPresentValueCalculator getInstance() {

@@ -12,14 +12,15 @@ import com.opengamma.financial.convention.calendar.Calendar;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * 
+ *
  */
 public class AgricultureFutureSecurity extends CommodityFutureSecurity {
 
-  public AgricultureFutureSecurity(final double lastTradingTime, final CommodityUnderlying underlying, final String unitName, final double unitAmount, final double noticeFirstTime,
-      final double noticeLastTime, final double firstDeliveryTime,
+  public AgricultureFutureSecurity(final double lastTradingTime, final CommodityUnderlying underlying, final String unitName,
+      final double unitAmount, final double noticeFirstTime, final double noticeLastTime, final double firstDeliveryTime,
       final double lastDeliveryTime, final SettlementType settlementType, final double settlementTime, final String name, final Calendar calendar) {
-    super(lastTradingTime, underlying, unitName, unitAmount, noticeFirstTime, noticeLastTime, firstDeliveryTime, lastDeliveryTime, settlementType, settlementTime, name, calendar);
+    super(lastTradingTime, underlying, unitName, unitAmount, noticeFirstTime, noticeLastTime, firstDeliveryTime, lastDeliveryTime, settlementType,
+        settlementTime, name, calendar);
   }
 
   @Override

@@ -42,7 +42,8 @@ public abstract class CommodityFutureTransactionDefinition<T extends InstrumentD
    * @param transactionPrice The price at which the transaction was done.
    * @param quantity The quantity/number of contract.
    */
-  public CommodityFutureTransactionDefinition(final CommodityFutureSecurityDefinition<?> underlying, final ZonedDateTime transactionDate, final double transactionPrice, final int quantity) {
+  public CommodityFutureTransactionDefinition(final CommodityFutureSecurityDefinition<?> underlying, final ZonedDateTime transactionDate,
+      final double transactionPrice, final int quantity) {
     _underlying = underlying;
     _transactionDate = transactionDate;
     _transactionPrice = transactionPrice;
@@ -105,7 +106,7 @@ public abstract class CommodityFutureTransactionDefinition<T extends InstrumentD
     return _quantity;
   }
 
-  public abstract CommodityFutureTransactionDefinition<?> withNewTransactionPrice(final double transactionPrice);
+  public abstract CommodityFutureTransactionDefinition<?> withNewTransactionPrice(double transactionPrice);
 
   /* (non-Javadoc)
    * @see java.lang.Object#hashCode()
@@ -115,11 +116,11 @@ public abstract class CommodityFutureTransactionDefinition<T extends InstrumentD
     final int prime = 31;
     int result = 1;
     result = prime * result + _quantity;
-    result = prime * result + ((_transactionDate == null) ? 0 : _transactionDate.hashCode());
+    result = prime * result + (_transactionDate == null ? 0 : _transactionDate.hashCode());
     long temp;
     temp = Double.doubleToLongBits(_transactionPrice);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
-    result = prime * result + ((_underlying == null) ? 0 : _underlying.hashCode());
+    result = prime * result + (int) (temp ^ temp >>> 32);
+    result = prime * result + (_underlying == null ? 0 : _underlying.hashCode());
     return result;
   }
 

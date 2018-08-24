@@ -146,7 +146,8 @@ public final class ForexNonDeliverableOptionBlackSmileMethod {
     // Implementation note: foreign currency (currency 1) exposure = Delta_spot * amount1.
     currencyExposure[0] = CurrencyAmount.of(option.getCurrency1(), deltaSpot * Math.abs(option.getUnderlyingNDF().getNotionalCurrency1()) * sign);
     // Implementation note: domestic currency (currency 2) exposure = -Delta_spot * amount1 * spot+PV
-    currencyExposure[1] = CurrencyAmount.of(option.getCurrency2(), -deltaSpot * Math.abs(option.getUnderlyingNDF().getNotionalCurrency1()) * spot * sign + price);
+    currencyExposure[1] = CurrencyAmount.of(option.getCurrency2(),
+        -deltaSpot * Math.abs(option.getUnderlyingNDF().getNotionalCurrency1()) * spot * sign + price);
     return MultipleCurrencyAmount.of(currencyExposure);
   }
 
@@ -202,10 +203,12 @@ public final class ForexNonDeliverableOptionBlackSmileMethod {
   }
 
   /**
-   * Computes the relative delta of the Forex option. The relative delta is the amount in the foreign currency equivalent to the option up to the first order divided by the option notional.
+   * Computes the relative delta of the Forex option. The relative delta is the amount in the foreign currency
+   * equivalent to the option up to the first order divided by the option notional.
    * @param option  the Forex option, not null
    * @param marketData  the curve and smile data, not null
-   * @param directQuote  true if the gamma should be computed with respect to the direct quote (1 foreign = x domestic) or the reverse quote (1 domestic = x foreign)
+   * @param directQuote  true if the gamma should be computed with respect to the direct quote (1 foreign = x domestic)
+   * or the reverse quote (1 domestic = x foreign)
    * @return  the relative delta
    */
   public double relativeDelta(final ForexNonDeliverableOption option, final BlackForexSmileProviderInterface marketData, final boolean directQuote) {
@@ -274,7 +277,8 @@ public final class ForexNonDeliverableOptionBlackSmileMethod {
    * @param marketData  the curve and smile data, not null
    * @return  the curve sensitivities
    */
-  public MultipleCurrencyMulticurveSensitivity presentValueCurveSensitivity(final ForexNonDeliverableOption option, final BlackForexSmileProviderInterface marketData) {
+  public MultipleCurrencyMulticurveSensitivity presentValueCurveSensitivity(final ForexNonDeliverableOption option,
+      final BlackForexSmileProviderInterface marketData) {
     ArgumentChecker.notNull(option, "option");
     ArgumentChecker.notNull(marketData, "marketData");
     final MulticurveProviderInterface curves = marketData.getMulticurveProvider();
@@ -311,12 +315,14 @@ public final class ForexNonDeliverableOptionBlackSmileMethod {
   }
 
   /**
-   * Computes the present value volatility sensitivity (sensitivity to one volatility point) of Forex non-deliverable option with the Black function and a volatility surface.
+   * Computes the present value volatility sensitivity (sensitivity to one volatility point) of Forex non-deliverable
+   * option with the Black function and a volatility surface.
    * @param option  the Forex option, not null
    * @param marketData  the curve and smile data, not null
    * @return the vega
    */
-  public PresentValueForexBlackVolatilitySensitivity presentValueBlackVolatilitySensitivity(final ForexNonDeliverableOption option, final BlackForexSmileProviderInterface marketData) {
+  public PresentValueForexBlackVolatilitySensitivity presentValueBlackVolatilitySensitivity(final ForexNonDeliverableOption option,
+      final BlackForexSmileProviderInterface marketData) {
     ArgumentChecker.notNull(option, "option");
     ArgumentChecker.notNull(marketData, "marketData");
     final MulticurveProviderInterface curves = marketData.getMulticurveProvider();
@@ -334,14 +340,17 @@ public final class ForexNonDeliverableOptionBlackSmileMethod {
     final double[] priceAdjoint = BLACK_FUNCTION.getPriceAdjoint(vanillaOption, dataBlack);
     // Backward sweep
     final double volatilitySensitivityValue = priceAdjoint[2] * Math.abs(option.getUnderlyingNDF().getNotionalCurrency1()) * (option.isLong() ? 1.0 : -1.0);
-    final DoublesPair point = DoublesPair.of(option.getExpiryTime(), option.getCurrency1().equals(marketData.getCurrencyPair().getFirst()) ? strike : 1.0 / strike);
+    final DoublesPair point = DoublesPair.of(option.getExpiryTime(),
+        option.getCurrency1().equals(marketData.getCurrencyPair().getFirst()) ? strike : 1.0 / strike);
     final SurfaceValue result = SurfaceValue.from(point, volatilitySensitivityValue);
-    final PresentValueForexBlackVolatilitySensitivity sensi = new PresentValueForexBlackVolatilitySensitivity(option.getCurrency1(), option.getCurrency2(), result);
+    final PresentValueForexBlackVolatilitySensitivity sensi =
+        new PresentValueForexBlackVolatilitySensitivity(option.getCurrency1(), option.getCurrency2(), result);
     return sensi;
   }
 
   /**
-   * Computes the present value volatility sensitivity (sensitivity to each point of the volatility input grid) of Forex non-deliverable option with the Black function and a volatility surface.
+   * Computes the present value volatility sensitivity (sensitivity to each point of the volatility input grid) of
+   * Forex non-deliverable option with the Black function and a volatility surface.
    * @param option  the Forex option, not null
    * @param marketData  the curve and smile data, not null
    * @return  the bucketed vega
@@ -360,7 +369,8 @@ public final class ForexNonDeliverableOptionBlackSmileMethod {
     final double dfNonDelivery = curves.getDiscountFactor(option.getCurrency1(), paymentTime);
     final double spot = curves.getFxRate(option.getCurrency1(), option.getCurrency2());
     final double forward = spot * dfNonDelivery / dfDelivery;
-    final VolatilityAndBucketedSensitivities volAndSensitivities = marketData.getVolatilityAndSensitivities(option.getCurrency1(), option.getCurrency2(), expiryTime, strike, forward);
+    final VolatilityAndBucketedSensitivities volAndSensitivities =
+        marketData.getVolatilityAndSensitivities(option.getCurrency1(), option.getCurrency2(), expiryTime, strike, forward);
     final double[][] nodeWeight = volAndSensitivities.getBucketedSensitivities();
     final DoublesPair point = DoublesPair.of(expiryTime, option.getCurrency1().equals(marketData.getCurrencyPair().getFirst()) ? strike : 1.0 / strike);
     final double[][] vega = new double[volatilityModel.getNumberExpiration()][volatilityModel.getNumberStrike()];
@@ -369,7 +379,8 @@ public final class ForexNonDeliverableOptionBlackSmileMethod {
         vega[i][j] = nodeWeight[i][j] * pointSensitivity.getVega().getMap().get(point);
       }
     }
-    return new PresentValueForexBlackVolatilityNodeSensitivityDataBundle(option.getCurrency1(), option.getCurrency2(), new DoubleMatrix1D(volatilityModel.getTimeToExpiration()),
+    return new PresentValueForexBlackVolatilityNodeSensitivityDataBundle(option.getCurrency1(), option.getCurrency2(),
+        new DoubleMatrix1D(volatilityModel.getTimeToExpiration()),
         new DoubleMatrix1D(volatilityModel.getDeltaFull()), new DoubleMatrix2D(vega));
   }
 

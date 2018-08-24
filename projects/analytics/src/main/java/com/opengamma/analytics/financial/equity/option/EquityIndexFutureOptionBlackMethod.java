@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.equity.option;
@@ -100,7 +100,7 @@ public final class EquityIndexFutureOptionBlackMethod {
     final double securityPrice = presentValue(derivative, marketData);
     return securityPrice - derivative.getPointValue() * derivative.getReferencePrice();
   }
-  
+
   /**
    * Computes the sensitivity of the present value wrt the discounting rate assuming one is hedging with the Forward, F. <p>
    * In this case, the arguments d1,d2 in the cumulative normal calls have no rates dependence.
@@ -115,7 +115,7 @@ public final class EquityIndexFutureOptionBlackMethod {
     final double pv = presentValue(derivative, marketData) / derivative.getPointValue();
     return -ttm * pv;
   }
-  
+
   /**
    * Computes the sensitivity of the present value wrt the discounting rate assuming one is hedging with the Spot underlying, S. <p>
    * This differs from rhoBlack in which one forms a hedging portfolio with a discount bond and the Forward, F.
@@ -139,7 +139,8 @@ public final class EquityIndexFutureOptionBlackMethod {
   /**
    * @param derivative An EquityIndexFutureOption, the OG-Analytics form of the derivative
    * @param marketData A StaticReplicationDataBundle, containing a BlackVolatilitySurface, forward equity and funding curves
-   * @return The forward delta wrt the forward underlying, ie the sensitivity of the undiscounted price to the forward value of the underlying, d(PV/Z)/d(fwdUnderlying)
+   * @return The forward delta wrt the forward underlying, ie the sensitivity of the undiscounted price to the forward value of the underlying,
+   * d(PV/Z)/d(fwdUnderlying)
    */
   public double forwardDelta(final EquityIndexFutureOption derivative, final StaticReplicationDataBundle marketData) {
     ArgumentChecker.notNull(derivative, "derivative was null. Expecting EquityIndexFutureOption");
@@ -280,7 +281,7 @@ public final class EquityIndexFutureOptionBlackMethod {
   }
 
   /**
-   * Synonym for Vomma
+   * Synonym for Vomma.
    * @param derivative An EquityIndexFutureOption, the OG-Analytics form of the derivative
    * @param marketData A StaticReplicationDataBundle, containing a BlackVolatilitySurface, forward equity and funding curves
    * @return The spot Volga, ie the 2nd order sensitivity of the spot price to the implied vol,

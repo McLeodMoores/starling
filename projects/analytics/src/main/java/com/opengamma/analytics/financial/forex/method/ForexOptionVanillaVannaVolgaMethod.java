@@ -24,7 +24,7 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.CurrencyAmount;
 import com.opengamma.util.money.MultipleCurrencyAmount;
 import com.opengamma.util.tuple.DoublesPair;
-
+// CSOFF
 /**
  * Pricing method for vanilla Forex option transactions with Vanna-Volga method.
  * <p>Reference: The vanna-volga method for implied volatilities (2007), A. Castagna and F. Mercurio, Risk, 106-111, January 2007.
@@ -143,7 +143,7 @@ public final class ForexOptionVanillaVannaVolgaMethod implements ForexPricingMet
       deltaSpot += x[loopvv] * (priceVVsmile[loopvv][1] - priceVVATM[loopvv][1]);
     }
     deltaSpot *= dfForeign / dfDomestic;
-    final double sign = (optionForex.isLong() ? 1.0 : -1.0);
+    final double sign = optionForex.isLong() ? 1.0 : -1.0;
     final CurrencyAmount[] currencyExposure = new CurrencyAmount[2];
     // Implementation note: foreign currency (currency 1) exposure = Delta_spot * amount1.
     currencyExposure[0] = CurrencyAmount.of(optionForex.getUnderlyingForex().getCurrency1(), deltaSpot * Math.abs(optionForex.getUnderlyingForex().getPaymentCurrency1().getAmount()) * sign);

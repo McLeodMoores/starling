@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2014-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2014 - present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.mcleodmoores.date;
 
@@ -14,6 +14,7 @@ import com.opengamma.util.ArgumentChecker;
  * An adapter for {@link WorkingDayCalendar}s that converts them into {@link Calendar}s. This class
  * should be used when backwards compatibility is required.
  */
+@SuppressWarnings("deprecation")
 public class CalendarAdapter implements Calendar {
   /** The underlying working day calendar */
   private final WorkingDayCalendar _calendar;

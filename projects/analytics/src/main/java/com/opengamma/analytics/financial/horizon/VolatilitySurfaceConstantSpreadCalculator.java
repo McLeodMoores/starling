@@ -18,6 +18,7 @@ import com.opengamma.analytics.util.time.TimeCalculator;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.MultipleCurrencyAmount;
 
+//CSOFF
 /**
  * Calculates the change in value of a FX option when the (Black) surface has been
  * shifted forward in time without slide.

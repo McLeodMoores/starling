@@ -18,6 +18,8 @@ import com.opengamma.analytics.financial.interestrate.YieldCurveBundle;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.tuple.DoublesPair;
 
+// CSOFF
+
 /**
  * Returns the change in present value of an instrument due to a parallel move of the yield curve, scaled so that the move is 1bp.
  * This calculator is Forex instrument-specific, and assumes that the list of sensitivities are in the currency appropriate for

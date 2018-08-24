@@ -24,10 +24,11 @@ import com.opengamma.util.ArgumentChecker;
 public class HistoricalCovarianceCalculator extends CovarianceCalculator {
 
   /**
-   * Given two price time series, calculates their covariance
+   * Given two price time series, calculates their covariance.
+   *
+   * Throws an exception if the time series array is null; if the length of the time series array is not two; if the dates of the time series do not coincide.
    * @param ts An array of price time series
    * @return The covariance of the price series
-   * @throws IllegalArgumentException If the time series array is null; if the length of the time series array is not two; if the dates of the time series do not coincide.
    */
   @Override
   public Double evaluate(final DoubleTimeSeries<?>... ts) {

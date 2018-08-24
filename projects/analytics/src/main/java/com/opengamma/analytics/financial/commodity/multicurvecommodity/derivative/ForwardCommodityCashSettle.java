@@ -11,7 +11,7 @@ import com.opengamma.financial.convention.calendar.Calendar;
 import com.opengamma.util.ArgumentChecker;
 
 /**
- * 
+ *
  */
 public class ForwardCommodityCashSettle extends CouponCommodityCashSettle {
 
@@ -30,8 +30,8 @@ public class ForwardCommodityCashSettle extends CouponCommodityCashSettle {
    * @param settlementTime The settlement time, , positive
    * @param calendar The holiday calendar, not null
    */
-  public ForwardCommodityCashSettle(final double rate, final double paymentYearFraction, final CommodityUnderlying underlying, final String unitName, final double notional,
-      final double settlementTime, final Calendar calendar) {
+  public ForwardCommodityCashSettle(final double rate, final double paymentYearFraction, final CommodityUnderlying underlying,
+      final String unitName, final double notional, final double settlementTime, final Calendar calendar) {
     super(paymentYearFraction, underlying, unitName, notional, settlementTime, calendar);
     _rate = rate;
   }
@@ -72,7 +72,7 @@ public class ForwardCommodityCashSettle extends CouponCommodityCashSettle {
     int result = super.hashCode();
     long temp;
     temp = Double.doubleToLongBits(_rate);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 

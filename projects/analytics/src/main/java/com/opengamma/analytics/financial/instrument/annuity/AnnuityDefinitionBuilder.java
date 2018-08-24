@@ -67,7 +67,8 @@ public class AnnuityDefinitionBuilder {
    * @return The fixed annuity.
    */
   public static AnnuityCouponFixedDefinition couponFixed(final Currency currency, final ZonedDateTime settlementDate, final ZonedDateTime maturityDate,
-      final Period paymentPeriod, final Calendar calendar, final DayCount dayCount, final BusinessDayConvention businessDay, final boolean isEOM, final double notional,
+      final Period paymentPeriod, final Calendar calendar, final DayCount dayCount, final BusinessDayConvention businessDay,
+      final boolean isEOM, final double notional,
       final double fixedRate, final boolean isPayer, final StubType stub, final int paymentLag) {
     ArgumentChecker.notNull(currency, "currency");
     ArgumentChecker.notNull(settlementDate, "settlement date");
@@ -83,18 +84,21 @@ public class AnnuityDefinitionBuilder {
     final CouponFixedDefinition[] coupons = new CouponFixedDefinition[adjustedEndAccrualDates.length];
     //First coupon uses settlement date
     //TODO: only initial stub supported
-    double accrualFactor = getDayCountFraction(paymentPeriod, calendar, dayCount, stub, StubType.NONE, settlementDate, adjustedEndAccrualDates[0], true, adjustedEndAccrualDates.length == 1);
+    double accrualFactor = getDayCountFraction(paymentPeriod, calendar, dayCount, stub, StubType.NONE, settlementDate,
+        adjustedEndAccrualDates[0], true, adjustedEndAccrualDates.length == 1);
     coupons[0] = new CouponFixedDefinition(currency, paymentDates[0], settlementDate, adjustedEndAccrualDates[0], accrualFactor, sign * notional, fixedRate);
     for (int loopcpn = 1; loopcpn < adjustedEndAccrualDates.length; loopcpn++) {
-      boolean isMaturity = (adjustedEndAccrualDates.length - 1 == loopcpn);
-      accrualFactor = getDayCountFraction(paymentPeriod, calendar, dayCount, stub, StubType.NONE, adjustedEndAccrualDates[loopcpn - 1], adjustedEndAccrualDates[loopcpn], false, isMaturity);
-      coupons[loopcpn] = new CouponFixedDefinition(currency, paymentDates[loopcpn], adjustedEndAccrualDates[loopcpn - 1], adjustedEndAccrualDates[loopcpn], accrualFactor, sign * notional, fixedRate);
+      final boolean isMaturity = adjustedEndAccrualDates.length - 1 == loopcpn;
+      accrualFactor = getDayCountFraction(paymentPeriod, calendar, dayCount, stub, StubType.NONE,
+          adjustedEndAccrualDates[loopcpn - 1], adjustedEndAccrualDates[loopcpn], false, isMaturity);
+      coupons[loopcpn] = new CouponFixedDefinition(currency, paymentDates[loopcpn],
+          adjustedEndAccrualDates[loopcpn - 1], adjustedEndAccrualDates[loopcpn], accrualFactor, sign * notional, fixedRate);
     }
     return new AnnuityCouponFixedDefinition(coupons, calendar);
   }
 
   /**
-   * Get daycount fraction (handles some specific daycount complexities)
+   * Get daycount fraction (handles some specific daycount complexities).
    *
    * @param paymentPeriod the payment period (used in some ICMA daycounts)
    * @param calendar the calendar
@@ -107,7 +111,8 @@ public class AnnuityDefinitionBuilder {
    * @param isMaturity is this the last coupon (needed for 30E/360 ISDA)
    * @return the accrual factor
    */
-  public static double getDayCountFraction(Period paymentPeriod, Calendar calendar, DayCount dayCount, StubType startStub, StubType endStub, ZonedDateTime from, ZonedDateTime to, boolean isFirstCoupon, boolean isMaturity) {
+  public static double getDayCountFraction(final Period paymentPeriod, final Calendar calendar, final DayCount dayCount, final StubType startStub,
+      final StubType endStub, final ZonedDateTime from, final ZonedDateTime to, final boolean isFirstCoupon, final boolean isMaturity) {
     // only pass in stub if at first or last period.
     StubType stub = null;
     if (isFirstCoupon) {
@@ -119,13 +124,13 @@ public class AnnuityDefinitionBuilder {
       stub = StubType.NONE;
     }
     double accrualFactor;
-    if ((dayCount instanceof ActualActualICMA)) {
+    if (dayCount instanceof ActualActualICMA) {
       accrualFactor = ((ActualActualICMA) dayCount).getAccruedInterest(from, to, to, 1.0d, couponPerYear(paymentPeriod), stub);
     } else {
-      if ((dayCount instanceof ActualActualICMANormal)) {
+      if (dayCount instanceof ActualActualICMANormal) {
         accrualFactor = ((ActualActualICMANormal) dayCount).getAccruedInterest(from, to, to, 1.0d, couponPerYear(paymentPeriod), stub);
       } else {
-        if ((dayCount instanceof ThirtyEThreeSixtyISDA)) {
+        if (dayCount instanceof ThirtyEThreeSixtyISDA) {
           accrualFactor = ((ThirtyEThreeSixtyISDA) dayCount).getDayCountFraction(from, to, isMaturity);
         } else {
           accrualFactor = dayCount.getDayCountFraction(from, to, calendar);
@@ -154,7 +159,8 @@ public class AnnuityDefinitionBuilder {
    * @return The fixed annuity.
    */
   public static AnnuityCouponFixedDefinition couponFixed(final Currency currency, final ZonedDateTime settlementDate, final ZonedDateTime maturityDate,
-      final Period paymentPeriod, final Calendar calendar, final DayCount dayCount, final BusinessDayConvention businessDay, final boolean isEOM, final double notional,
+      final Period paymentPeriod, final Calendar calendar, final DayCount dayCount, final BusinessDayConvention businessDay,
+      final boolean isEOM, final double notional,
       final double fixedRate, final boolean isPayer, final StubType stub, final int paymentLag, final RollDateAdjuster adjuster) {
     ArgumentChecker.notNull(currency, "currency");
     ArgumentChecker.notNull(settlementDate, "settlement date");
@@ -197,7 +203,8 @@ public class AnnuityDefinitionBuilder {
    * @return The fixed annuity.
    */
   public static AnnuityCouponFixedDefinition couponFixed(final Currency currency, final ZonedDateTime settlementDate, final ZonedDateTime maturityDate,
-      final Period paymentPeriod, final Calendar calendar, final DayCount dayCount, final BusinessDayConvention businessDay, final boolean isEOM, final NotionalProvider notional,
+      final Period paymentPeriod, final Calendar calendar, final DayCount dayCount, final BusinessDayConvention businessDay,
+      final boolean isEOM, final NotionalProvider notional,
       final double fixedRate, final boolean isPayer, final StubType stub, final int paymentLag, final RollDateAdjuster adjuster) {
     ArgumentChecker.notNull(currency, "currency");
     ArgumentChecker.notNull(settlementDate, "settlement date");
@@ -223,7 +230,8 @@ public class AnnuityDefinitionBuilder {
   }
 
   /**
-   * Create an fixed coupon leg based on a roll date convention. The coupons are in line with the roll dates of the adjuster (see payment period for more details).
+   * Create an fixed coupon leg based on a roll date convention. The coupons are in line with the roll dates of the adjuster
+   * (see payment period for more details).
    * @param currency The leg currency
    * @param startDate The start/reference date of the computation.
    * @param startNumberRollDate The number of roll dates to the effective date of the swap.
@@ -231,7 +239,8 @@ public class AnnuityDefinitionBuilder {
    * @param adjuster The date adjuster, e.g. IMM quarterly dates.
    * @param paymentPeriod The payment period. The payment period is used in the following way: the ratio "n" of number of month in the payment period
    * and of the "MonthsToAdjust" of the "adjuster" is computed. The ratio is computed with the long division. The payment dates are the adjuster n-th dates.
-   * Examples: If the payment period is P6M and the period in the adjuster is P3M, n is 2. If the payment period is P3M and the period in the adjuster is P3M, n is 1.
+   * Examples: If the payment period is P6M and the period in the adjuster is P3M, n is 2. If the payment period is P3M and the period in the
+   * adjuster is P3M, n is 1.
    * If the payment period is P1M and the period in the adjuster is P3M, n is 1.
    * @param notional The swap notional.
    * @param rate The fixed rate.
@@ -242,7 +251,8 @@ public class AnnuityDefinitionBuilder {
    * @param paymentLag The payment lag.
    * @return The fixed coupons annuity.
    */
-  public static AnnuityDefinition<CouponFixedDefinition> couponFixedRollDate(final Currency currency, final ZonedDateTime startDate, final int startNumberRollDate,
+  public static AnnuityDefinition<CouponFixedDefinition> couponFixedRollDate(final Currency currency, final ZonedDateTime startDate,
+      final int startNumberRollDate,
       final int endNumberRollDate, final RollDateAdjuster adjuster, final Period paymentPeriod, final double notional, final double rate, final boolean isPayer,
       final DayCount dayCount, final Calendar calendar, final StubType stub, final int paymentLag) {
     final long rollMonths = adjuster.getMonthsToAdjust();
@@ -256,7 +266,8 @@ public class AnnuityDefinitionBuilder {
     for (int loopcpn = 0; loopcpn < nbCpn; loopcpn++) {
       final ZonedDateTime paymentDate = ScheduleCalculator.getAdjustedDate(legDates.get(loopcpn + 1), paymentLag, calendar);
       final double accrualFactor = dayCount.getDayCountFraction(legDates.get(loopcpn), legDates.get(loopcpn + 1));
-      coupons[loopcpn] = new CouponFixedDefinition(currency, paymentDate, legDates.get(loopcpn), legDates.get(loopcpn + 1), accrualFactor, notional * sign, rate);
+      coupons[loopcpn] =
+          new CouponFixedDefinition(currency, paymentDate, legDates.get(loopcpn), legDates.get(loopcpn + 1), accrualFactor, notional * sign, rate);
     }
     return new AnnuityDefinition<>(coupons, calendar);
   }
@@ -285,11 +296,11 @@ public class AnnuityDefinitionBuilder {
       final double fixedRate, final boolean isPayer, final StubType stub, final int paymentLag, final boolean notionalStart, final boolean notionalEnd) {
     final AnnuityDefinition<CouponFixedDefinition> annuityNoNotional = couponFixed(currency, settlementDate, maturityDate, paymentPeriod, calendar, dayCount, businessDay,
         isEOM, notional, fixedRate, isPayer, stub, paymentLag);
-    final double sign = (isPayer) ? -1.0 : 1.0;
+    final double sign = isPayer ? -1.0 : 1.0;
     final int nbPay = annuityNoNotional.getNumberOfPayments();
     int nbNotional = 0;
-    nbNotional = (notionalStart ? nbNotional + 1 : nbNotional);
-    nbNotional = (notionalEnd ? nbNotional + 1 : nbNotional);
+    nbNotional = notionalStart ? nbNotional + 1 : nbNotional;
+    nbNotional = notionalEnd ? nbNotional + 1 : nbNotional;
     final CouponFixedDefinition[] annuityWithNotional = new CouponFixedDefinition[nbPay + nbNotional];
     int loopnot = 0;
     if (notionalStart) {
@@ -534,11 +545,11 @@ public class AnnuityDefinitionBuilder {
     ArgumentChecker.notNull(index, "index");
     final AnnuityDefinition<CouponIborDefinition> annuityNoNotional = couponIbor(settlementDate, maturityDate, index.getTenor(), notional, index,
         isPayer, dayCountAnnuity, bdcAnnuity, eomAnnuity, calendar, stub, paymentLag);
-    final double sign = (isPayer) ? -1.0 : 1.0;
+    final double sign = isPayer ? -1.0 : 1.0;
     final int nbPay = annuityNoNotional.getNumberOfPayments();
     int nbNotional = 0;
-    nbNotional = (notionalStart ? nbNotional + 1 : nbNotional);
-    nbNotional = (notionalEnd ? nbNotional + 1 : nbNotional);
+    nbNotional = notionalStart ? nbNotional + 1 : nbNotional;
+    nbNotional = notionalEnd ? nbNotional + 1 : nbNotional;
     final CouponDefinition[] annuityWithNotional = new CouponDefinition[nbPay + nbNotional];
     int loopnot = 0;
     if (notionalStart) {
@@ -816,11 +827,11 @@ public class AnnuityDefinitionBuilder {
     ArgumentChecker.notNull(index, "index");
     final AnnuityDefinition<CouponIborSpreadDefinition> annuityNoNotional = couponIborSpread(settlementDate, maturityDate, paymentPeriod, notional, spread, index,
         isPayer, dayCountAnnuity, bdcAnnuity, eomAnnuity, calendar, stub, paymentLag);
-    final double sign = (isPayer) ? -1.0 : 1.0;
+    final double sign = isPayer ? -1.0 : 1.0;
     final int nbPay = annuityNoNotional.getNumberOfPayments();
     int nbNotional = 0;
-    nbNotional = (notionalStart ? nbNotional + 1 : nbNotional);
-    nbNotional = (notionalEnd ? nbNotional + 1 : nbNotional);
+    nbNotional = notionalStart ? nbNotional + 1 : nbNotional;
+    nbNotional = notionalEnd ? nbNotional + 1 : nbNotional;
     final CouponDefinition[] annuityWithNotional = new CouponDefinition[nbPay + nbNotional];
     int loopnot = 0;
     if (notionalStart) {
@@ -1407,7 +1418,7 @@ public class AnnuityDefinitionBuilder {
    * @param period The period.
    * @return The number of coupons per year.
    */
-  private static long couponPerYear(Period period) {
+  private static long couponPerYear(final Period period) {
     return 12 / period.toTotalMonths();
   }
 

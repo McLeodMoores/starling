@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2014-Present McLeod Moores Software Limited.  All rights reserved.
+ * Copyright (C) 2014 - present McLeod Moores Software Limited.  All rights reserved.
  */
 package com.mcleodmoores.date;
 
@@ -19,6 +19,7 @@ import com.opengamma.util.ArgumentChecker;
  */
 public class WorkingDayCalendarAdapter implements WorkingDayCalendar {
   /** The underlying calendar */
+  @SuppressWarnings("deprecation")
   private final Calendar _calendar;
   /** The first weekend day */
   private final DayOfWeek _weekendDay1;

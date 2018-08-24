@@ -22,14 +22,16 @@ import com.opengamma.util.tuple.DoublesPair;
 /**
  * This calculates the sensitivity of the present value (PV) to the continuously-compounded interest rates at the knot points of the funding curve. <p>
  * The return format is a DoubleMatrix1D (i.e. a vector) with length equal to the total number of knots in the curve <p>
- * The change of a curve due to the movement of a single knot is interpolator-dependent, so an instrument can have sensitivity to knots at times beyond its maturity
+ * The change of a curve due to the movement of a single knot is interpolator-dependent, so an instrument can have sensitivity
+ * to knots at times beyond its maturity
  */
 @SuppressWarnings("deprecation")
 public final class FuturesRatesSensitivityCalculator extends InstrumentDerivativeVisitorSameMethodAdapter<SimpleFutureDataBundle, DoubleMatrix1D> {
   private static final SettlementTimeCalculator SETTLEMENT_TIME = SettlementTimeCalculator.getInstance();
   private final InstrumentDerivativeVisitor<SimpleFutureDataBundle, Double> _presentValueCalculator;
 
-  public static InstrumentDerivativeVisitor<SimpleFutureDataBundle, DoubleMatrix1D> getInstance(final InstrumentDerivativeVisitor<SimpleFutureDataBundle, Double> presentValueCalculator) {
+  public static InstrumentDerivativeVisitor<SimpleFutureDataBundle, DoubleMatrix1D>
+  getInstance(final InstrumentDerivativeVisitor<SimpleFutureDataBundle, Double> presentValueCalculator) {
     return new FuturesRatesSensitivityCalculator(presentValueCalculator);
   }
 
@@ -47,7 +49,8 @@ public final class FuturesRatesSensitivityCalculator extends InstrumentDerivativ
   public DoubleMatrix1D visit(final InstrumentDerivative future, final SimpleFutureDataBundle dataBundle) {
     ArgumentChecker.notNull(future, "future");
     ArgumentChecker.notNull(dataBundle, "data bundle");
-    ArgumentChecker.isTrue(dataBundle.getFundingCurve() instanceof YieldCurve, "Calculator expects a YieldCurve, have {}", dataBundle.getFundingCurve().getClass());
+    ArgumentChecker.isTrue(dataBundle.getFundingCurve() instanceof YieldCurve, "Calculator expects a YieldCurve, have {}",
+        dataBundle.getFundingCurve().getClass());
     final YieldCurve discCrv = (YieldCurve) dataBundle.getFundingCurve();
     final double settlement = future.accept(SETTLEMENT_TIME);
     final double rhoSettle = -1 * settlement * future.accept(_presentValueCalculator, dataBundle);

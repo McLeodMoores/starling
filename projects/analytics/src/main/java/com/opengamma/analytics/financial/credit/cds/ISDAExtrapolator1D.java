@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.credit.cds;
@@ -12,8 +12,8 @@ import com.opengamma.analytics.math.interpolation.data.ArrayInterpolator1DDataBu
 import com.opengamma.analytics.math.interpolation.data.Interpolator1DDataBundle;
 
 /**
- * Curve extrapolation as defined by ISDA
- * 
+ * Curve extrapolation as defined by ISDA.
+ *
  * @author Martin Traverse, Niels Stchedroff (Riskcare)
  * @deprecated Use classes from isdastandardmodel
  */

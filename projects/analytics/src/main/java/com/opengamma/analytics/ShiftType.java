@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics;
@@ -25,7 +25,7 @@ public enum ShiftType {
   /**
    * @param name The name
    */
-  private ShiftType(final String name) {
+  ShiftType(final String name) {
     _name = name;
   }
 

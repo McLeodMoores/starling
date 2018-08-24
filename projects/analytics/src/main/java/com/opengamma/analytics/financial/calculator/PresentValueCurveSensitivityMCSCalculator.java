@@ -43,19 +43,20 @@ import com.opengamma.analytics.financial.interestrate.swap.derivative.SwapFixedC
  * @deprecated This class uses deprecated pricing methods.
  */
 @Deprecated
-public class PresentValueCurveSensitivityMCSCalculator extends InstrumentDerivativeVisitorAdapter<YieldCurveBundle, MultipleCurrencyInterestRateCurveSensitivity> {
+public class PresentValueCurveSensitivityMCSCalculator extends
+InstrumentDerivativeVisitorAdapter<YieldCurveBundle, MultipleCurrencyInterestRateCurveSensitivity> {
 
   /**
    * The unique instance of the calculator.
    */
-  private static final PresentValueCurveSensitivityMCSCalculator s_instance = new PresentValueCurveSensitivityMCSCalculator();
+  private static final PresentValueCurveSensitivityMCSCalculator INSTANCE = new PresentValueCurveSensitivityMCSCalculator();
 
   /**
    * Gets the calculator instance.
    * @return The calculator.
    */
   public static PresentValueCurveSensitivityMCSCalculator getInstance() {
-    return s_instance;
+    return INSTANCE;
   }
 
   /**
@@ -79,7 +80,8 @@ public class PresentValueCurveSensitivityMCSCalculator extends InstrumentDerivat
   /** Discounting for FRAs */
   private static final ForwardRateAgreementDiscountingMethod METHOD_FRA = ForwardRateAgreementDiscountingMethod.getInstance();
   /** Discounting for interest rate future transactions */
-  private static final InterestRateFutureTransactionDiscountingMethod METHOD_IR_FUTURES_TRANSACTION = InterestRateFutureTransactionDiscountingMethod.getInstance();
+  private static final InterestRateFutureTransactionDiscountingMethod METHOD_IR_FUTURES_TRANSACTION =
+      InterestRateFutureTransactionDiscountingMethod.getInstance();
   /** Discounting for interest rate future securities */
   private static final InterestRateFutureSecurityDiscountingMethod METHOD_IR_FUTURES_SECURITY = InterestRateFutureSecurityDiscountingMethod.getInstance();
   /** Discounting for FX spot and forwards */
@@ -129,7 +131,8 @@ public class PresentValueCurveSensitivityMCSCalculator extends InstrumentDerivat
   // -----     Futures     ------
 
   @Override
-  public MultipleCurrencyInterestRateCurveSensitivity visitInterestRateFutureTransaction(final InterestRateFutureTransaction future, final YieldCurveBundle curves) {
+  public MultipleCurrencyInterestRateCurveSensitivity visitInterestRateFutureTransaction(final InterestRateFutureTransaction future,
+      final YieldCurveBundle curves) {
     return MultipleCurrencyInterestRateCurveSensitivity.of(future.getCurrency(), METHOD_IR_FUTURES_TRANSACTION.presentValueCurveSensitivity(future, curves));
   }
 
@@ -181,7 +184,8 @@ public class PresentValueCurveSensitivityMCSCalculator extends InstrumentDerivat
   }
 
   @Override
-  public MultipleCurrencyInterestRateCurveSensitivity visitForexNonDeliverableForward(final ForexNonDeliverableForward derivative, final YieldCurveBundle data) {
+  public MultipleCurrencyInterestRateCurveSensitivity visitForexNonDeliverableForward(final ForexNonDeliverableForward derivative,
+      final YieldCurveBundle data) {
     return METHOD_NDF.presentValueCurveSensitivity(derivative, data);
   }
 

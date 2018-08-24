@@ -10,7 +10,7 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
 
 /**
- * 
+ *
  */
 public abstract class CommodityFutureTransaction implements InstrumentDerivative {
 
@@ -19,7 +19,8 @@ public abstract class CommodityFutureTransaction implements InstrumentDerivative
    */
   private final CommodityFutureSecurity _underlying;
   /**
-   * The reference price is used to express present value with respect to some level, for example, the transaction price on the transaction date or the last close price afterward.
+   * The reference price is used to express present value with respect to some level, for example, the transaction price on the
+   * transaction date or the last close price afterward.
    * The price is in relative number and not in percent. A standard price will be 0.985 and not 98.5.
    */
   private final double _referencePrice;
@@ -83,8 +84,8 @@ public abstract class CommodityFutureTransaction implements InstrumentDerivative
     result = prime * result + _quantity;
     long temp;
     temp = Double.doubleToLongBits(_referencePrice);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
-    result = prime * result + ((_underlying == null) ? 0 : _underlying.hashCode());
+    result = prime * result + (int) (temp ^ temp >>> 32);
+    result = prime * result + (_underlying == null ? 0 : _underlying.hashCode());
     return result;
   }
 

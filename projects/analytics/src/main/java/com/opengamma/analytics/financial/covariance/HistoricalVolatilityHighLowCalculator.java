@@ -33,12 +33,13 @@ import com.opengamma.util.CalculationMode;
  */
 public class HistoricalVolatilityHighLowCalculator extends HistoricalVolatilityCalculator {
   /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(HistoricalVolatilityHighLowCalculator.class);
+  private static final Logger INSTANCE = LoggerFactory.getLogger(HistoricalVolatilityHighLowCalculator.class);
   /** The relative return series calculator */
   private final RelativeTimeSeriesReturnCalculator _returnCalculator;
 
   /**
-   * Creates a historical volatility calculator with the given relative return calculation method and default values for the calculation mode and allowable percentage of bad data points
+   * Creates a historical volatility calculator with the given relative return calculation method and default values
+   * for the calculation mode and allowable percentage of bad data points.
    * @param returnCalculator The return calculator, not null
    */
   public HistoricalVolatilityHighLowCalculator(final RelativeTimeSeriesReturnCalculator returnCalculator) {
@@ -48,7 +49,8 @@ public class HistoricalVolatilityHighLowCalculator extends HistoricalVolatilityC
   }
 
   /**
-   * Creates a historical volatility calculator with the given relative return calculation method and calculation mode and the default value for the allowable percentage of bad data points
+   * Creates a historical volatility calculator with the given relative return calculation method and calculation mode
+   * and the default value for the allowable percentage of bad data points.
    * @param returnCalculator The return calculator, not null
    * @param mode The calculation mode, not null
    */
@@ -59,12 +61,14 @@ public class HistoricalVolatilityHighLowCalculator extends HistoricalVolatilityC
   }
 
   /**
-   * Creates a historical volatility calculator with the given relative return calculation method, calculation mode and allowable percentage of bad data points
+   * Creates a historical volatility calculator with the given relative return calculation method, calculation mode and allowable percentage
+   * of bad data points.
    * @param returnCalculator The return calculator, not null
    * @param mode The calculation mode, not null
    * @param percentBadDataPoints The maximum allowable percentage of bad data points
    */
-  public HistoricalVolatilityHighLowCalculator(final RelativeTimeSeriesReturnCalculator returnCalculator, final CalculationMode mode, final double percentBadDataPoints) {
+  public HistoricalVolatilityHighLowCalculator(final RelativeTimeSeriesReturnCalculator returnCalculator, final CalculationMode mode,
+      final double percentBadDataPoints) {
     super(mode, percentBadDataPoints);
     ArgumentChecker.notNull(returnCalculator, "return calculator");
     _returnCalculator = returnCalculator;
@@ -75,8 +79,8 @@ public class HistoricalVolatilityHighLowCalculator extends HistoricalVolatilityC
    * @param x The array of price time series
    * @return The historical close volatility
    * @throws IllegalArgumentException If the array is null or empty; if the first element of the array is null; if the array does not contain two time series;
-   * if the high and low time series do not satisfy the requirements (see {@link HistoricalVolatilityCalculator#testHighLow}); if the price series does not contain at
-   * least two data points
+   * if the high and low time series do not satisfy the requirements (see {@link HistoricalVolatilityCalculator#testHighLow});
+   * if the price series does not contain at least two data points
    */
   @Override
   public Double evaluate(final LocalDateDoubleTimeSeries... x) {
@@ -85,7 +89,7 @@ public class HistoricalVolatilityHighLowCalculator extends HistoricalVolatilityC
       throw new IllegalArgumentException("Need high and low time series to calculate high-low volatility");
     }
     if (x.length > 2) {
-      s_logger.info("Time series array contained more than two series; only using the first two");
+      INSTANCE.info("Time series array contained more than two series; only using the first two");
     }
     final LocalDateDoubleTimeSeries high = x[0];
     final LocalDateDoubleTimeSeries low = x[1];
@@ -104,7 +108,7 @@ public class HistoricalVolatilityHighLowCalculator extends HistoricalVolatilityC
   public int hashCode() {
     final int prime = 31;
     int result = super.hashCode();
-    result = prime * result + ((_returnCalculator == null) ? 0 : _returnCalculator.hashCode());
+    result = prime * result + (_returnCalculator == null ? 0 : _returnCalculator.hashCode());
     return result;
   }
 

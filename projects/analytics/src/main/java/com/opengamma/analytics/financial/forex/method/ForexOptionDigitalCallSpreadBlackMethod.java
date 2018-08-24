@@ -21,6 +21,7 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.CurrencyAmount;
 import com.opengamma.util.tuple.DoublesPair;
 
+// CSOFF
 /**
  * Pricing method for digital Forex option transactions as a call or put spread option with the underlying vanilla price by a Black formula with implied volatility.
  * @deprecated Use {@link ForexOptionDigitalCallSpreadBlackSmileMethod}

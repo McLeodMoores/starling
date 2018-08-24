@@ -34,6 +34,7 @@ import com.opengamma.util.time.Tenor;
  *  <li> The underlying index - this is used to generate the floating leg.
  * </ul>
  */
+@SuppressWarnings("deprecation")
 public class VanillaFixedIborSwapConvention implements CurveDataConvention<SwapFixedIborDefinition> {
 
   /**
@@ -157,7 +158,6 @@ public class VanillaFixedIborSwapConvention implements CurveDataConvention<SwapF
     _fixedLegDayCount = fixedLegDayCount;
   }
 
-  @SuppressWarnings("deprecation")
   @Override
   public SwapFixedIborDefinition toCurveInstrument(final ZonedDateTime date, final Tenor startTenor, final Tenor endTenor, final double notional,
       final double fixedRate) {

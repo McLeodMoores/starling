@@ -44,7 +44,8 @@ public class MultipleYieldCurveFinderGeneratorDataBundle {
    * @param knownData The bundle with the already build data.
    * @param curveGenerators The map of String/Curve generators.
    */
-  public MultipleYieldCurveFinderGeneratorDataBundle(final InstrumentDerivative[] instruments, final YieldCurveBundle knownData, final LinkedHashMap<String, GeneratorYDCurve> curveGenerators) {
+  public MultipleYieldCurveFinderGeneratorDataBundle(final InstrumentDerivative[] instruments, final YieldCurveBundle knownData,
+      final LinkedHashMap<String, GeneratorYDCurve> curveGenerators) {
     ArgumentChecker.notNull(instruments, "Instruments");
     ArgumentChecker.notNull(knownData, "Known data");
     ArgumentChecker.notNull(curveGenerators, "Curve generators");

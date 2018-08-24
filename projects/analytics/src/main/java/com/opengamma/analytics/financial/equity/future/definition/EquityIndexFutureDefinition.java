@@ -22,7 +22,8 @@ public class EquityIndexFutureDefinition extends IndexFutureDefinition {
   /**
    * Constructor for Equity Index Futures, always cash-settled.
    *
-   * @param expiryDate  the time and the day that a particular delivery month of a futures contract stops trading, as well as the final settlement price for that contract
+   * @param expiryDate  the time and the day that a particular delivery month of a futures contract stops trading,
+   * as well as the final settlement price for that contract
    * @param settlementDate settlement date
    * @param strikePrice reference price
    * @param currency currency

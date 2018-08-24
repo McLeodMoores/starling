@@ -18,6 +18,7 @@ import com.opengamma.util.ArgumentChecker;
 /**
  * A wrapper class for a AnnuityDefinition containing CMS cap/floor Definition.
  */
+@SuppressWarnings("deprecation")
 public class AnnuityCapFloorCMSDefinition extends AnnuityDefinition<CapFloorCMSDefinition> {
 
   /**
@@ -31,7 +32,8 @@ public class AnnuityCapFloorCMSDefinition extends AnnuityDefinition<CapFloorCMSD
 
   /**
    * CMS cap/floor (or leg of CMS caplet/floorlet) constructor from standard description. The cap/floor are fixing in advance and payment in arrears.
-   * The CMS fixing is done at a standard lag before the coupon start. The date are computed from the settlement date (stub last) with a short stub is necessary.
+   * The CMS fixing is done at a standard lag before the coupon start. The date are computed from the settlement date (stub last) with a
+   * short stub is necessary.
    * @param settlementDate The settlement date.
    * @param maturityDate The annuity maturity date.
    * @param notional The notional.
@@ -44,7 +46,8 @@ public class AnnuityCapFloorCMSDefinition extends AnnuityDefinition<CapFloorCMSD
    * @param calendar The holiday calendar for the ibor index.
    * @return The CMS coupon leg.
    */
-  public static AnnuityCapFloorCMSDefinition from(final ZonedDateTime settlementDate, final ZonedDateTime maturityDate, final double notional, final IndexSwap index, final Period paymentPeriod,
+  public static AnnuityCapFloorCMSDefinition from(final ZonedDateTime settlementDate, final ZonedDateTime maturityDate,
+      final double notional, final IndexSwap index, final Period paymentPeriod,
       final DayCount dayCount, final boolean isPayer, final double strike, final boolean isCap, final Calendar calendar) {
     ArgumentChecker.notNull(settlementDate, "settlement date");
     ArgumentChecker.notNull(maturityDate, "maturity date");
@@ -52,10 +55,12 @@ public class AnnuityCapFloorCMSDefinition extends AnnuityDefinition<CapFloorCMSD
     ArgumentChecker.isTrue(notional > 0, "notional <= 0");
     ArgumentChecker.notNull(paymentPeriod, "Payment period");
     final ZonedDateTime[] paymentDatesUnadjusted = ScheduleCalculator.getUnadjustedDateSchedule(settlementDate, maturityDate, paymentPeriod, true, false);
-    final ZonedDateTime[] paymentDates = ScheduleCalculator.getAdjustedDateSchedule(paymentDatesUnadjusted, index.getIborIndex().getBusinessDayConvention(), calendar, false);
+    final ZonedDateTime[] paymentDates = ScheduleCalculator.getAdjustedDateSchedule(paymentDatesUnadjusted,
+        index.getIborIndex().getBusinessDayConvention(), calendar, false);
     final double sign = isPayer ? -1.0 : 1.0;
     final CapFloorCMSDefinition[] coupons = new CapFloorCMSDefinition[paymentDates.length];
-    coupons[0] = CapFloorCMSDefinition.from(paymentDates[0], settlementDate, paymentDates[0], dayCount.getDayCountFraction(settlementDate, paymentDates[0], calendar),
+    coupons[0] = CapFloorCMSDefinition.from(paymentDates[0], settlementDate, paymentDates[0],
+        dayCount.getDayCountFraction(settlementDate, paymentDates[0], calendar),
         sign * notional, index, strike, isCap, calendar);
     for (int loopcpn = 1; loopcpn < paymentDates.length; loopcpn++) {
       coupons[loopcpn] = CapFloorCMSDefinition.from(paymentDates[loopcpn], paymentDates[loopcpn - 1], paymentDates[loopcpn],

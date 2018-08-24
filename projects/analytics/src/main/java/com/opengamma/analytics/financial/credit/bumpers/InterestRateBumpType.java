@@ -1,10 +1,11 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.credit.bumpers;
 
+// CSOFF
 /**
  * Enumerate the types of interest rate bumps that can be applied to a term structure of interest rates
  */

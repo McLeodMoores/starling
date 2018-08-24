@@ -24,8 +24,8 @@ public class CouponCommodityCashSettle extends CouponCommodity {
    * @param settlementTime The settlement time, , positive
    * @param calendar The holiday calendar, not null
    */
-  public CouponCommodityCashSettle(final double paymentYearFraction, final CommodityUnderlying underlying, final String unitName, final double notional, final double settlementTime,
-      final Calendar calendar) {
+  public CouponCommodityCashSettle(final double paymentYearFraction, final CommodityUnderlying underlying, final String unitName,
+      final double notional, final double settlementTime, final Calendar calendar) {
     super(paymentYearFraction, underlying, unitName, notional, settlementTime, calendar);
 
   }

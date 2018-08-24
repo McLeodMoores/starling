@@ -21,8 +21,6 @@ import com.opengamma.analytics.financial.interestrate.InstrumentDerivativeVisito
 import com.opengamma.analytics.financial.interestrate.annuity.derivative.Annuity;
 import com.opengamma.analytics.financial.interestrate.annuity.derivative.AnnuityCouponFixed;
 import com.opengamma.analytics.financial.interestrate.payments.derivative.Payment;
-import com.opengamma.analytics.financial.interestrate.payments.provider.CouponFixedDiscountingMethod;
-import com.opengamma.analytics.financial.interestrate.payments.provider.PaymentFixedDiscountingMethod;
 import com.opengamma.analytics.financial.interestrate.swap.derivative.Swap;
 import com.opengamma.analytics.financial.interestrate.swap.derivative.SwapFixedCoupon;
 import com.opengamma.analytics.financial.interestrate.swap.derivative.SwapMultileg;
@@ -33,7 +31,8 @@ import com.opengamma.util.ArgumentChecker;
 /**
  * Calculator of the present value curve sensitivity as a MultipleCurrencyCommoditySensitivity.
  */
-public final class PresentValueCommodityCurveSensitivityDiscountingCalculator extends InstrumentDerivativeVisitorAdapter<CommodityProviderInterface, MultipleCurrencyCommoditySensitivity> {
+public final class PresentValueCommodityCurveSensitivityDiscountingCalculator
+extends InstrumentDerivativeVisitorAdapter<CommodityProviderInterface, MultipleCurrencyCommoditySensitivity> {
 
   /**
    * The unique instance of the calculator.
@@ -54,41 +53,44 @@ public final class PresentValueCommodityCurveSensitivityDiscountingCalculator ex
   private PresentValueCommodityCurveSensitivityDiscountingCalculator() {
   }
 
-  private static final CommodityFutureTransactionForwardMethod METHOD_COMMODITY_FUTURE = CommodityFutureTransactionForwardMethod.getInstance();
-  private static final CouponCommodityCashSettleSecurityForwardMethod METHOD_COUPON_COMMODITY_CASH_COUPON = CouponCommodityCashSettleSecurityForwardMethod.getInstance();
-  private static final CouponCommodityPhysicalSettleSecurityForwardMethod METHOD_COUPON_COMMODITY_PHYSICAL_COUPON = CouponCommodityPhysicalSettleSecurityForwardMethod.getInstance();
-  private static final ForwardCommodityCashSettleSecurityForwardMethod METHOD_FWD_COMMODITY_CASH_COUPON = ForwardCommodityCashSettleSecurityForwardMethod.getInstance();
-  private static final ForwardCommodityPhysicalSettleSecurityForwardMethod METHOD_FWD_COMMODITY_PHYSICAL_COUPON = ForwardCommodityPhysicalSettleSecurityForwardMethod.getInstance();
-
-  private static final PaymentFixedDiscountingMethod METHOD_PAY_FIXED = PaymentFixedDiscountingMethod.getInstance();
-  private static final CouponFixedDiscountingMethod METHOD_CPN_FIXED = CouponFixedDiscountingMethod.getInstance();
-
-  //-----     Payment/Coupon     ------
+  private static final CommodityFutureTransactionForwardMethod METHOD_COMMODITY_FUTURE =
+      CommodityFutureTransactionForwardMethod.getInstance();
+  private static final CouponCommodityCashSettleSecurityForwardMethod METHOD_COUPON_COMMODITY_CASH_COUPON =
+      CouponCommodityCashSettleSecurityForwardMethod.getInstance();
+  private static final CouponCommodityPhysicalSettleSecurityForwardMethod METHOD_COUPON_COMMODITY_PHYSICAL_COUPON =
+      CouponCommodityPhysicalSettleSecurityForwardMethod.getInstance();
+  private static final ForwardCommodityCashSettleSecurityForwardMethod METHOD_FWD_COMMODITY_CASH_COUPON =
+      ForwardCommodityCashSettleSecurityForwardMethod.getInstance();
+  private static final ForwardCommodityPhysicalSettleSecurityForwardMethod METHOD_FWD_COMMODITY_PHYSICAL_COUPON =
+      ForwardCommodityPhysicalSettleSecurityForwardMethod.getInstance();
 
   @Override
-  public MultipleCurrencyCommoditySensitivity visitCouponCommodityCashSettle(final CouponCommodityCashSettle payment, final CommodityProviderInterface multicurve) {
+  public MultipleCurrencyCommoditySensitivity visitCouponCommodityCashSettle(final CouponCommodityCashSettle payment,
+      final CommodityProviderInterface multicurve) {
     return METHOD_COUPON_COMMODITY_CASH_COUPON.presentValueCurveSensitivity(payment, multicurve);
   }
 
   @Override
-  public MultipleCurrencyCommoditySensitivity visitCouponCommodityPhysicalSettle(final CouponCommodityPhysicalSettle payment, final CommodityProviderInterface multicurve) {
+  public MultipleCurrencyCommoditySensitivity visitCouponCommodityPhysicalSettle(final CouponCommodityPhysicalSettle payment,
+      final CommodityProviderInterface multicurve) {
     return METHOD_COUPON_COMMODITY_PHYSICAL_COUPON.presentValueCurveSensitivity(payment, multicurve);
   }
 
   @Override
-  public MultipleCurrencyCommoditySensitivity visitForwardCommodityCashSettle(final ForwardCommodityCashSettle payment, final CommodityProviderInterface multicurve) {
+  public MultipleCurrencyCommoditySensitivity visitForwardCommodityCashSettle(final ForwardCommodityCashSettle payment,
+      final CommodityProviderInterface multicurve) {
     return METHOD_FWD_COMMODITY_CASH_COUPON.presentValueCurveSensitivity(payment, multicurve);
   }
 
   @Override
-  public MultipleCurrencyCommoditySensitivity visitForwardCommodityPhysicalSettle(final ForwardCommodityPhysicalSettle payment, final CommodityProviderInterface multicurve) {
+  public MultipleCurrencyCommoditySensitivity visitForwardCommodityPhysicalSettle(final ForwardCommodityPhysicalSettle payment,
+      final CommodityProviderInterface multicurve) {
     return METHOD_FWD_COMMODITY_PHYSICAL_COUPON.presentValueCurveSensitivity(payment, multicurve);
   }
 
-  //-----     Annuity     ------
-
   @Override
-  public MultipleCurrencyCommoditySensitivity visitGenericAnnuity(final Annuity<? extends Payment> annuity, final CommodityProviderInterface multicurve) {
+  public MultipleCurrencyCommoditySensitivity visitGenericAnnuity(final Annuity<? extends Payment> annuity,
+      final CommodityProviderInterface multicurve) {
     ArgumentChecker.notNull(annuity, "Annuity");
     ArgumentChecker.notNull(multicurve, "multicurve");
     MultipleCurrencyCommoditySensitivity pv = annuity.getNthPayment(0).accept(this, multicurve);
@@ -99,26 +101,28 @@ public final class PresentValueCommodityCurveSensitivityDiscountingCalculator ex
   }
 
   @Override
-  public MultipleCurrencyCommoditySensitivity visitFixedCouponAnnuity(final AnnuityCouponFixed annuity, final CommodityProviderInterface multicurve) {
+  public MultipleCurrencyCommoditySensitivity visitFixedCouponAnnuity(final AnnuityCouponFixed annuity,
+      final CommodityProviderInterface multicurve) {
     return visitGenericAnnuity(annuity, multicurve);
   }
 
-  // -----     Swap     ------
-
   @Override
-  public MultipleCurrencyCommoditySensitivity visitSwap(final Swap<?, ?> swap, final CommodityProviderInterface multicurve) {
+  public MultipleCurrencyCommoditySensitivity visitSwap(final Swap<?, ?> swap,
+      final CommodityProviderInterface multicurve) {
     final MultipleCurrencyCommoditySensitivity pv1 = swap.getFirstLeg().accept(this, multicurve);
     final MultipleCurrencyCommoditySensitivity pv2 = swap.getSecondLeg().accept(this, multicurve);
     return pv1.plus(pv2);
   }
 
   @Override
-  public MultipleCurrencyCommoditySensitivity visitFixedCouponSwap(final SwapFixedCoupon<?> swap, final CommodityProviderInterface multicurves) {
+  public MultipleCurrencyCommoditySensitivity visitFixedCouponSwap(final SwapFixedCoupon<?> swap,
+      final CommodityProviderInterface multicurves) {
     return visitSwap(swap, multicurves);
   }
 
   @Override
-  public MultipleCurrencyCommoditySensitivity visitSwapMultileg(final SwapMultileg swap, final CommodityProviderInterface multicurve) {
+  public MultipleCurrencyCommoditySensitivity visitSwapMultileg(final SwapMultileg swap,
+      final CommodityProviderInterface multicurve) {
     final int nbLegs = swap.getLegs().length;
     MultipleCurrencyCommoditySensitivity pv = swap.getLegs()[0].accept(this, multicurve);
     for (int loopleg = 1; loopleg < nbLegs; loopleg++) {
@@ -127,20 +131,21 @@ public final class PresentValueCommodityCurveSensitivityDiscountingCalculator ex
     return pv;
   }
 
-  // -----     Futures     ------
-
   @Override
-  public MultipleCurrencyCommoditySensitivity visitAgricultureFutureTransaction(final AgricultureFutureTransaction futures, final CommodityProviderInterface multicurves) {
+  public MultipleCurrencyCommoditySensitivity visitAgricultureFutureTransaction(final AgricultureFutureTransaction futures,
+      final CommodityProviderInterface multicurves) {
     return METHOD_COMMODITY_FUTURE.presentValueCurveSensitivity(futures, multicurves);
   }
 
   @Override
-  public MultipleCurrencyCommoditySensitivity visitEnergyFutureTransaction(final EnergyFutureTransaction futures, final CommodityProviderInterface multicurves) {
+  public MultipleCurrencyCommoditySensitivity visitEnergyFutureTransaction(final EnergyFutureTransaction futures,
+      final CommodityProviderInterface multicurves) {
     return METHOD_COMMODITY_FUTURE.presentValueCurveSensitivity(futures, multicurves);
   }
 
   @Override
-  public MultipleCurrencyCommoditySensitivity visitMetalFutureTransaction(final MetalFutureTransaction futures, final CommodityProviderInterface multicurves) {
+  public MultipleCurrencyCommoditySensitivity visitMetalFutureTransaction(final MetalFutureTransaction futures,
+      final CommodityProviderInterface multicurves) {
     return METHOD_COMMODITY_FUTURE.presentValueCurveSensitivity(futures, multicurves);
   }
 

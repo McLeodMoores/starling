@@ -5,8 +5,6 @@
  */
 package com.opengamma.analytics.financial.calculator;
 
-import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
-
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -20,6 +18,8 @@ import com.opengamma.analytics.math.matrix.DoubleMatrix2D;
 import com.opengamma.analytics.math.matrix.MatrixAlgebra;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.tuple.DoublesPair;
+
+import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
 
 /**
  * Calculator of the sensitivity to the market quotes of instruments used to build the curves.
@@ -65,7 +65,8 @@ public final class MarketQuoteSensitivityCalculator {
    * @deprecated {@link YieldCurveBundle} is deprecated
    */
   @Deprecated
-  public DoubleMatrix1D fromInstrumentInverseJacobian(final InstrumentDerivative instrument, final Set<String> fixedCurves, final YieldCurveBundle bundle, final DoubleMatrix2D inverseJacobian) {
+  public DoubleMatrix1D fromInstrumentInverseJacobian(final InstrumentDerivative instrument, final Set<String> fixedCurves,
+      final YieldCurveBundle bundle, final DoubleMatrix2D inverseJacobian) {
     final DoubleMatrix1D parameterSensitivity = _parameterSensitivityCalculator.calculateSensitivity(instrument, fixedCurves, bundle);
     return fromParameterSensitivityInverseJacobian(parameterSensitivity, inverseJacobian);
   }
@@ -80,11 +81,12 @@ public final class MarketQuoteSensitivityCalculator {
    * @deprecated {@link YieldCurveBundle} is deprecated
    */
   @Deprecated
-  public DoubleMatrix1D calculateFromPresentValue(final Map<String, List<DoublesPair>> curveSensitivities, final YieldCurveBundle curves, final DoubleMatrix1D couponSensitivity,
-      final DoubleMatrix2D jacobian) {
+  public DoubleMatrix1D calculateFromPresentValue(final Map<String, List<DoublesPair>> curveSensitivities, final YieldCurveBundle curves,
+      final DoubleMatrix1D couponSensitivity, final DoubleMatrix2D jacobian) {
     final DoubleArrayList resultList = new DoubleArrayList();
     for (final String curveName : curves.getAllNames()) {
-      final List<Double> pointToParameterSensitivity = _parameterSensitivityCalculator.pointToParameterSensitivity(curveSensitivities.get(curveName), curves.getCurve(curveName));
+      final List<Double> pointToParameterSensitivity =
+          _parameterSensitivityCalculator.pointToParameterSensitivity(curveSensitivities.get(curveName), curves.getCurve(curveName));
       final DoubleMatrix1D nodeSensitivity = new DoubleMatrix1D(pointToParameterSensitivity.toArray(new Double[pointToParameterSensitivity.size()]));
       final int n = nodeSensitivity.getNumberOfElements();
       final DoubleMatrix2D inverseJacobian = MATRIX_ALGEBRA.getInverse(jacobian);
@@ -108,10 +110,12 @@ public final class MarketQuoteSensitivityCalculator {
    * @deprecated {@link YieldCurveBundle} is deprecated
    */
   @Deprecated
-  public DoubleMatrix1D calculateFromParRate(final Map<String, List<DoublesPair>> curveSensitivities, final YieldCurveBundle interpolatedCurves, final DoubleMatrix2D jacobian) {
+  public DoubleMatrix1D calculateFromParRate(final Map<String, List<DoublesPair>> curveSensitivities, final YieldCurveBundle interpolatedCurves,
+      final DoubleMatrix2D jacobian) {
     final DoubleArrayList resultList = new DoubleArrayList();
     for (final String curveName : interpolatedCurves.getAllNames()) {
-      final List<Double> pointToParameterSensitivity = _parameterSensitivityCalculator.pointToParameterSensitivity(curveSensitivities.get(curveName), interpolatedCurves.getCurve(curveName));
+      final List<Double> pointToParameterSensitivity =
+          _parameterSensitivityCalculator.pointToParameterSensitivity(curveSensitivities.get(curveName), interpolatedCurves.getCurve(curveName));
       final DoubleMatrix1D nodeSensitivity = new DoubleMatrix1D(pointToParameterSensitivity.toArray(new Double[pointToParameterSensitivity.size()]));
       final int n = nodeSensitivity.getNumberOfElements();
       final DoubleMatrix2D inverseJacobian = MATRIX_ALGEBRA.getInverse(jacobian);
@@ -153,10 +157,12 @@ public final class MarketQuoteSensitivityCalculator {
    * @deprecated {@link YieldCurveBundle} is deprecated
    */
   @Deprecated
-  public DoubleMatrix1D calculateFromSimpleInterpolatedCurve(final Map<String, List<DoublesPair>> curveSensitivities, final YieldCurveBundle interpolatedCurves) {
+  public DoubleMatrix1D calculateFromSimpleInterpolatedCurve(final Map<String, List<DoublesPair>> curveSensitivities,
+      final YieldCurveBundle interpolatedCurves) {
     final DoubleArrayList resultList = new DoubleArrayList();
     for (final String curveName : interpolatedCurves.getAllNames()) {
-      final List<Double> pointToParameterSensitivity = _parameterSensitivityCalculator.pointToParameterSensitivity(curveSensitivities.get(curveName), interpolatedCurves.getCurve(curveName));
+      final List<Double> pointToParameterSensitivity =
+          _parameterSensitivityCalculator.pointToParameterSensitivity(curveSensitivities.get(curveName), interpolatedCurves.getCurve(curveName));
       final DoubleMatrix1D nodeSensitivity = new DoubleMatrix1D(pointToParameterSensitivity.toArray(new Double[pointToParameterSensitivity.size()]));
       final int n = nodeSensitivity.getNumberOfElements();
       for (int i = 0; i < n; i++) {

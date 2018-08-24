@@ -1,14 +1,11 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.equity.variance.pricing;
 
 import java.util.Arrays;
-
-import cern.jet.random.engine.MersenneTwister64;
-import cern.jet.random.engine.RandomEngine;
 
 import com.opengamma.analytics.financial.model.interestrate.curve.YieldAndDiscountCurve;
 import com.opengamma.analytics.financial.model.volatility.local.PureLocalVolatilitySurface;
@@ -16,9 +13,12 @@ import com.opengamma.analytics.math.FunctionUtils;
 import com.opengamma.analytics.math.statistics.distribution.NormalDistribution;
 import com.opengamma.util.ArgumentChecker;
 
+import cern.jet.random.engine.MersenneTwister64;
+import cern.jet.random.engine.RandomEngine;
+
 /**
  * Monte Carlo calculator to price a variance swap in the presence of discrete dividends. <p>
- * <b>Note</b> this is primarily to test other numerical methods 
+ * <b>Note</b> this is primarily to test other numerical methods
  */
 public class VarianceSwapPureMonteCarloCalculator {
   /** The number of simulation variables */
@@ -46,7 +46,7 @@ public class VarianceSwapPureMonteCarloCalculator {
   }
 
   /**
-   * @param seed The seed 
+   * @param seed The seed
    * @param useAntithetics true if antithetic variables are to be used
    * @param calculateVariance true if the variance of the result is to be calculated
    */
@@ -107,7 +107,7 @@ public class VarianceSwapPureMonteCarloCalculator {
     /** The dividends */
     private final double[] _d;
 
-    public MonteCarloPath(final AffineDividends dividends, final double expiry, final double spot,
+    MonteCarloPath(final AffineDividends dividends, final double expiry, final double spot,
         final YieldAndDiscountCurve discountCurve, final PureLocalVolatilitySurface localVol) {
 
       _dividends = dividends;
@@ -119,7 +119,7 @@ public class VarianceSwapPureMonteCarloCalculator {
 
       _dt = 1.0 / DAYS_PER_YEAR;
       _rootDt = Math.sqrt(_dt);
-      _nSteps = (int) Math.ceil((expiry * DAYS_PER_YEAR)); //Effectively move expiry to end of day
+      _nSteps = (int) Math.ceil(expiry * DAYS_PER_YEAR); //Effectively move expiry to end of day
       _f = new double[_nSteps];
       _d = new double[_nSteps];
       final double[] logP = new double[_nSteps + 1];
@@ -135,26 +135,27 @@ public class VarianceSwapPureMonteCarloCalculator {
       int totalSteps = 0;
       final int[] steps = new int[nDivs + 1];
 
-      if (nDivs == 0 || dividends.getTau(0) > expiry) { //no dividends or first dividend after option expiry 
-        steps[0] = (int) (Math.ceil(expiry * DAYS_PER_YEAR));
+      if (nDivs == 0 || dividends.getTau(0) > expiry) { //no dividends or first dividend after option expiry
+        steps[0] = (int) Math.ceil(expiry * DAYS_PER_YEAR);
         totalSteps = steps[0];
       } else {
-        steps[0] = (int) (Math.ceil(dividends.getTau(0) * DAYS_PER_YEAR)) - 1; //Effectively move dividend payment to end of day, and take steps up to the end of the day before
+        // Effectively move dividend payment to end of day, and take steps up to the end of the day before
+        steps[0] =  (int) Math.ceil(dividends.getTau(0) * DAYS_PER_YEAR) - 1;
         totalSteps += steps[0] + 1;
         nDivsBeforeExpiry++;
         for (int i = 1; i < nDivs; i++) {
-          if (dividends.getTau(i) > expiry) { //if dividend after expiry, step steps up to expiry and not not consider anymore dividends 
-            steps[i] = ((int) Math.ceil(expiry * DAYS_PER_YEAR)) - totalSteps;
+          if (dividends.getTau(i) > expiry) { //if dividend after expiry, step steps up to expiry and not not consider anymore dividends
+            steps[i] = (int) Math.ceil(expiry * DAYS_PER_YEAR) - totalSteps;
             totalSteps += steps[i];
             break;
           }
-          steps[i] = ((int) Math.ceil(dividends.getTau(i) * DAYS_PER_YEAR)) - totalSteps - 1;
+          steps[i] = (int) Math.ceil(dividends.getTau(i) * DAYS_PER_YEAR) - totalSteps - 1;
           totalSteps += steps[i] + 1;
           nDivsBeforeExpiry++;
         }
 
         if (dividends.getTau(nDivs - 1) < expiry) {
-          steps[nDivs] = ((int) Math.ceil(expiry * DAYS_PER_YEAR)) - totalSteps;
+          steps[nDivs] = (int) Math.ceil(expiry * DAYS_PER_YEAR) - totalSteps;
           totalSteps += steps[nDivs];
         }
       }
@@ -162,7 +163,7 @@ public class VarianceSwapPureMonteCarloCalculator {
       //check
       ArgumentChecker.isTrue(totalSteps == _nSteps, "got the steps wrong");
 
-      //only care about the dividends that occur before expiry 
+      //only care about the dividends that occur before expiry
       _steps = Arrays.copyOfRange(steps, 0, nDivsBeforeExpiry + 1);
       _nDivs = nDivsBeforeExpiry;
 
@@ -213,8 +214,8 @@ public class VarianceSwapPureMonteCarloCalculator {
     }
 
     /**
-     * 
-     * @param z Set of iid standard normal random variables 
+     *
+     * @param z Set of iid standard normal random variables
      * @return The final value of spot and the realized variance with and without dividends correction
      */
     public double[] runPath(final double[] z) {
@@ -229,7 +230,7 @@ public class VarianceSwapPureMonteCarloCalculator {
       double rv2 = 0.0; //Accumulator of realised variance (without correction made for dividends)
       double t = 0.0; //current time
       double vol; //value of (pure) local vol at start of step
-      double ret; //The daily return 
+      double ret; //The daily return
 
       int tSteps = 0;
       for (int k = 0; k < _nDivs; k++) {
@@ -237,7 +238,7 @@ public class VarianceSwapPureMonteCarloCalculator {
         //simulate the continuous path between dividends
         for (int i = 0; i < steps; i++) {
           vol = _localVol.getVolatility(t, xOld);
-          //this Euler step is exact if the volatility is constant 
+          //this Euler step is exact if the volatility is constant
           x = xOld * Math.exp(-vol * vol / 2 * _dt + vol * _rootDt * z[tSteps]);
           s = (_f[tSteps] - _d[tSteps]) * x + _d[tSteps];
           sTot = sTotOld * s / sOld;
@@ -257,7 +258,7 @@ public class VarianceSwapPureMonteCarloCalculator {
         vol = _localVol.getVolatility(t, xOld);
         x = xOld * Math.exp(-vol * vol / 2 * _dt + vol * _rootDt * z[tSteps]);
         s = (_f[tSteps] - _d[tSteps]) * x + _d[tSteps];
-        final double sm = (s + _dividends.getAlpha(k)) / (1 - _dividends.getBeta(k)); //the stock price immediately before the dividend payment 
+        final double sm = (s + _dividends.getAlpha(k)) / (1 - _dividends.getBeta(k)); //the stock price immediately before the dividend payment
         sTot = sTotOld * sm / sOld;
         rv1 += FunctionUtils.square(Math.log(sm / sOld));
         rv2 += FunctionUtils.square(Math.log(s / sOld));
@@ -268,7 +269,7 @@ public class VarianceSwapPureMonteCarloCalculator {
         tSteps++;
       }
 
-      //simulate the remaining continuous path from the last dividend to the expiry 
+      //simulate the remaining continuous path from the last dividend to the expiry
       final int steps = _steps[_nDivs];
       //simulate the continuous path between dividends
       for (int i = 0; i < steps; i++) {
@@ -289,7 +290,7 @@ public class VarianceSwapPureMonteCarloCalculator {
       //correct for mean and bias
       rv1 -= FunctionUtils.square(Math.log(sTot / _spot)) / _nSteps;
       rv2 -= FunctionUtils.square(Math.log(s / _spot)) / _nSteps;
-      final double biasCorr = ((double) DAYS_PER_YEAR) / (_nSteps - 1);
+      final double biasCorr = (double) DAYS_PER_YEAR / (_nSteps - 1);
       rv1 *= biasCorr;
       rv2 *= biasCorr;
 

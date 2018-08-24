@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.equity.variance.pricing;
@@ -22,13 +22,14 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.CompareUtils;
 
 /**
- * This is a model where the SDE for the forward are $\frac{df}{f+\alpha}=\sigma_{\alpha} dW$, that is, the forward, $f$, plus some displacement, $\alpha$, follow a geometric 
- * Brownian motion (GBM). European options can be priced using the Black formula with forward $f \rightarrow f +\alpha$ and strike $k \rightarrow k + \alpha$ <p>
+ * This is a model where the SDE for the forward are $\frac{df}{f+\alpha}=\sigma_{\alpha} dW$, that is, the forward, $f$,
+ * plus some displacement, $\alpha$, follow a geometric  Brownian motion (GBM). European options can be priced using the
+ * Black formula with forward $f \rightarrow f +\alpha$ and strike $k \rightarrow k + \alpha$ <p>
  * <b> This should not be confused with Shifted Log-Normal</b> (see {@link ShiftedLogNormalTailExtrapolation})
  */
 public class DisplacedDiffusionModel {
   /** A logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(DisplacedDiffusionModel.class);
+  private static final Logger INSTANCE = LoggerFactory.getLogger(DisplacedDiffusionModel.class);
   //TODO none of these next fields should be stored in this class
   /** The forward */
   private double _forward;
@@ -53,7 +54,7 @@ public class DisplacedDiffusionModel {
   private static final ParameterLimitsTransform TRANSFORM = new SingleRangeLimitTransform(0, LimitType.GREATER_THAN);
 
   /**
-   * Build a shifted lognormal volatility model directly from model inputs
+   * Build a shifted lognormal volatility model directly from model inputs.
    * @param forward absolute level of the forward
    * @param expiry expiry in years
    * @param lognormalVol annual lognormal (black) vol
@@ -92,7 +93,7 @@ public class DisplacedDiffusionModel {
   }
 
   /**
-   * Fit a Shifted Lognormal Volatility to two target points at one expiry
+   * Fit a Shifted Lognormal Volatility to two target points at one expiry.
    * @param forward absolute level of the forward
    * @param expiry expiry in years
    * @param targetStrike1 absolute level of the first target strike
@@ -106,7 +107,7 @@ public class DisplacedDiffusionModel {
   }
 
   /**
-   * Fit a Shifted Lognormal Volatility to two target points at one expiry
+   * Fit a Shifted Lognormal Volatility to two target points at one expiry.
    * @param forward absolute level of the forward
    * @param expiry expiry in years
    * @param targetStrike1 absolute level of the first target strike
@@ -115,8 +116,8 @@ public class DisplacedDiffusionModel {
    * @param targetVol2 lognormal vol at the second target strike
    * @return a displaced diffusion model
    */
-  public DisplacedDiffusionModel from(final double forward, final double expiry, final double targetStrike1, final double targetVol1, final double targetStrike2,
-      final double targetVol2) {
+  public DisplacedDiffusionModel from(final double forward, final double expiry, final double targetStrike1, final double targetVol1,
+      final double targetStrike2, final double targetVol2) {
     return new DisplacedDiffusionModel(forward, expiry, targetStrike1, targetVol1, targetStrike2, targetVol2, DEF_GUESS_VOL, DEF_GUESS_SHIFT, DEF_SOLVER);
   }
 
@@ -158,9 +159,10 @@ public class DisplacedDiffusionModel {
       try {
         volShiftParams = solver.getRoot(priceDiffs, new DoubleMatrix1D(new double[] {TRANSFORM.transform(volTarget2), 0.0 }));
       } catch (final Exception e2) {
-        s_logger.error("Failed to find roots to fit a Shifted Lognormal Distribution to your targets. Increase maxSteps, change guess, or change secondTarget.");
-        s_logger.error("K1 = " + strikeTarget1 + ",vol1 = " + volTarget1 + ",price1 = " + target1Price);
-        s_logger.error("K2 = " + strikeTarget2 + ",vol2 = " + volTarget2 + ",price2 = " + target2Price);
+        INSTANCE.error("Failed to find roots to fit a Shifted Lognormal Distribution to your targets. "
+            + "Increase maxSteps, change guess, or change secondTarget.");
+        INSTANCE.error("K1 = " + strikeTarget1 + ",vol1 = " + volTarget1 + ",price1 = " + target1Price);
+        INSTANCE.error("K2 = " + strikeTarget2 + ",vol2 = " + volTarget2 + ",price2 = " + target2Price);
         throw new OpenGammaRuntimeException(e.getMessage());
       }
     }
@@ -245,13 +247,13 @@ public class DisplacedDiffusionModel {
     int result = 1;
     long temp;
     temp = Double.doubleToLongBits(_expiry);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_forward);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_shift);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     temp = Double.doubleToLongBits(_vol);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     return result;
   }
 

@@ -25,7 +25,8 @@ public class SwapFixedCommodityPhysicalSettleDefinition extends SwapDefinition {
   * @param fixedLeg The fixed leg.
   * @param commodityLeg The commodity physical settle leg.
   */
-  public SwapFixedCommodityPhysicalSettleDefinition(final AnnuityCouponFixedDefinition fixedLeg, final AnnuityDefinition<? extends PaymentDefinition> commodityLeg) {
+  public SwapFixedCommodityPhysicalSettleDefinition(final AnnuityCouponFixedDefinition fixedLeg,
+      final AnnuityDefinition<? extends PaymentDefinition> commodityLeg) {
     super(fixedLeg, commodityLeg);
     ArgumentChecker.isTrue(fixedLeg.getCurrency().equals(commodityLeg.getCurrency()), "legs should have the same currency");
   }
@@ -35,7 +36,8 @@ public class SwapFixedCommodityPhysicalSettleDefinition extends SwapDefinition {
    * @param fixedLeg The fixed leg.
    * @param commodityLeg The commodity physical settle leg.
    */
-  public SwapFixedCommodityPhysicalSettleDefinition(final AnnuityCouponFixedDefinition fixedLeg, final AnnuityCouponCommodityPhysicalSettleDefinition commodityLeg) {
+  public SwapFixedCommodityPhysicalSettleDefinition(final AnnuityCouponFixedDefinition fixedLeg,
+      final AnnuityCouponCommodityPhysicalSettleDefinition commodityLeg) {
     super(fixedLeg, commodityLeg);
     ArgumentChecker.isTrue(fixedLeg.getCurrency().equals(commodityLeg.getCurrency()), "legs should have the same currency");
   }

@@ -90,7 +90,8 @@ public abstract class CurveBuilder<T extends ParameterProviderInterface> {
           final double[] curveInitialGuess = new double[nNodes];
           for (int k = 0; k < nNodes; k++) {
             final Map.Entry<Pair<GeneratorInstrument, GeneratorAttribute>, Double> info = nodesIterator.next();
-            final InstrumentDefinition<?> definition = info.getKey().getFirst().generateInstrument(valuationDate, info.getValue(), 1, info.getKey().getSecond());
+            final InstrumentDefinition<?> definition =
+                info.getKey().getFirst().generateInstrument(valuationDate, info.getValue(), 1, info.getKey().getSecond());
             instruments[k] = CurveUtils.convert(definition, _fixingTs, valuationDate);
             curveInitialGuess[k] = definition.accept(CurveUtils.RATES_INITIALIZATION);
           }
@@ -141,7 +142,9 @@ public abstract class CurveBuilder<T extends ParameterProviderInterface> {
   }
 
   abstract Pair<T, CurveBuildingBlockBundle> buildCurves(MultiCurveBundle[] curveBundles, T knownData, CurveBuildingBlockBundle knownBundle,
-      LinkedHashMap<String, Currency> discountingCurves, LinkedHashMap<String, IborTypeIndex[]> iborCurves, LinkedHashMap<String, OvernightIndex[]> overnightCurves);
+      LinkedHashMap<String, Currency> discountingCurves,
+      LinkedHashMap<String, IborTypeIndex[]> iborCurves,
+      LinkedHashMap<String, OvernightIndex[]> overnightCurves);
 
   public Map<String, InstrumentDefinition<?>[]> getDefinitionsForCurves(final ZonedDateTime valuationDate) {
     _cached.clear();
@@ -163,7 +166,8 @@ public abstract class CurveBuilder<T extends ParameterProviderInterface> {
     return definitionsForCurves;
   }
 
-  public CurveBuilder<T> replaceMarketQuote(final String curveName, final GeneratorInstrument instrumentGenerator, final GeneratorAttribute attributeGenerator, final double marketQuote) {
+  public CurveBuilder<T> replaceMarketQuote(final String curveName, final GeneratorInstrument instrumentGenerator,
+      final GeneratorAttribute attributeGenerator, final double marketQuote) {
     final Map<Pair<GeneratorInstrument, GeneratorAttribute>, Double> nodesForCurve = _nodes.get(curveName);
     if (nodesForCurve == null) {
       throw new IllegalStateException();
@@ -175,7 +179,8 @@ public abstract class CurveBuilder<T extends ParameterProviderInterface> {
     }
     final Map<String, Map<Pair<GeneratorInstrument, GeneratorAttribute>, Double>> newNodesForCurve = new HashMap<>(_nodes);
     newNodesForCurve.put(curveName, nodesWithReplacedPoint);
-    return replaceMarketQuote(_curveNames, _discountingCurves, _iborCurves, _overnightCurves, newNodesForCurve, _curveGenerators, _knownData, _knownBundle, _fixingTs);
+    return replaceMarketQuote(_curveNames, _discountingCurves, _iborCurves, _overnightCurves, newNodesForCurve, _curveGenerators,
+        _knownData, _knownBundle, _fixingTs);
   }
 
   abstract CurveBuilder<T> replaceMarketQuote(List<String[]> curveNames, LinkedHashMap<String, Currency> discountingCurves,

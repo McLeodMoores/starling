@@ -18,28 +18,29 @@ import com.opengamma.timeseries.precise.zdt.ZonedDateTimeDoubleTimeSeries;
  */
 public interface CurveSetUpInterface<T extends ParameterProviderInterface> {
 
-  CurveSetUpInterface<T> building(final String... curveNames);
+  CurveSetUpInterface<T> building(String... curveNames);
 
-  CurveSetUpInterface<T> buildingFirst(final String... curveNames);
+  CurveSetUpInterface<T> buildingFirst(String... curveNames);
 
-  CurveSetUpInterface<T> thenBuilding(final String... curveNames);
+  CurveSetUpInterface<T> thenBuilding(String... curveNames);
 
-  CurveTypeSetUpInterface<T> using(final String curveName);
+  CurveTypeSetUpInterface<T> using(String curveName);
 
-  CurveSetUpInterface<T> withNode(final String curveName, final GeneratorInstrument instrumentGenerator, final GeneratorAttribute attributeGenerator, final double marketData);
+  CurveSetUpInterface<T> withNode(String curveName, GeneratorInstrument instrumentGenerator, GeneratorAttribute attributeGenerator,
+      double marketData);
 
   //TODO don't need market data here
-  CurveSetUpInterface<T> withNode(final String curveName, InstrumentDefinition<?> definition);
+  CurveSetUpInterface<T> withNode(String curveName, InstrumentDefinition<?> definition);
 
   CurveBuilder<T> getBuilder();
 
   //TODO rename this
-  CurveSetUpInterface<T> withKnownData(final T knownData);
+  CurveSetUpInterface<T> withKnownData(T knownData);
 
   //TODO rename this
-  CurveSetUpInterface<T> withKnownBundle(final CurveBuildingBlockBundle knownBundle);
+  CurveSetUpInterface<T> withKnownBundle(CurveBuildingBlockBundle knownBundle);
 
-  CurveSetUpInterface<T> withFixingTs(final Map<Index, ZonedDateTimeDoubleTimeSeries> fixingTs);
+  CurveSetUpInterface<T> withFixingTs(Map<Index, ZonedDateTimeDoubleTimeSeries> fixingTs);
 
   CurveSetUpInterface<T> copy();
 

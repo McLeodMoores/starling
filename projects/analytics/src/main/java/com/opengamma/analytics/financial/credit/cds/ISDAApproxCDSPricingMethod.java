@@ -17,6 +17,7 @@ import com.opengamma.analytics.financial.instrument.cds.ISDACDSPremiumDefinition
 import com.opengamma.analytics.math.function.Function1D;
 import com.opengamma.financial.convention.calendar.Calendar;
 
+// CSOFF
 /**
  * A pricing algorithm that approximates the ISDA standard model.
  *
@@ -273,8 +274,8 @@ public class ISDAApproxCDSPricingMethod {
    * @param stepinDiscountFactor Associated discount factor for the step-in time
    * @return Accrual-on-default portion of PV for the accrual period
    */
-  private double valueFeeLegAccrualOnDefault(final double amount, final Timeline timeline, final ISDACurve hazardRateCurve, final int startIndex, final int endIndex, final double stepinTime,
-      final double stepinDiscountFactor) {
+  private double valueFeeLegAccrualOnDefault(final double amount, final Timeline timeline, final ISDACurve hazardRateCurve, final int startIndex,
+      final int endIndex, final double stepinTime, final double stepinDiscountFactor) {
 
     final double[] timePoints = timeline.getTimePoints();
     final double[] discountFactors = timeline.getDiscountFactors();
@@ -308,8 +309,8 @@ public class ISDAApproxCDSPricingMethod {
       lambda = Math.log(survival0 / survival1) / dt;
       fwdRate = Math.log(discount0 / discount1) / dt;
       lambdaFwdRate = lambda + fwdRate + 1.0e-50;
-      valueForTimeStep = lambda * accrualRate * survival0 * discount0 *
-          (((t0 + 1.0 / lambdaFwdRate) / lambdaFwdRate) - ((t1 + 1.0 / lambdaFwdRate) / lambdaFwdRate) * survival1 / survival0 * discount1 / discount0);
+      valueForTimeStep = lambda * accrualRate * survival0 * discount0
+          * ((t0 + 1.0 / lambdaFwdRate) / lambdaFwdRate - (t1 + 1.0 / lambdaFwdRate) / lambdaFwdRate * survival1 / survival0 * discount1 / discount0);
 
       value += valueForTimeStep;
 
@@ -376,7 +377,7 @@ public class ISDAApproxCDSPricingMethod {
 
       lambda = Math.log(survival0 / survival1) / dt;
       fwdRate = Math.log(discount0 / discount1) / dt;
-      valueForTimeStep = ((loss * lambda) / (lambda + fwdRate)) * (1.0 - Math.exp(-(lambda + fwdRate) * dt)) * survival0 * discount0;
+      valueForTimeStep = loss * lambda / (lambda + fwdRate) * (1.0 - Math.exp(-(lambda + fwdRate) * dt)) * survival0 * discount0;
 
       value += valueForTimeStep;
     }
@@ -427,7 +428,7 @@ public class ISDAApproxCDSPricingMethod {
   private Timeline buildTimeline(final ISDACDSDerivative cds, final ISDACurve discountCurve, final ISDACurve hazardRateCurve, final double startTime, final double endTime,
       final boolean includeSchedule) {
 
-    final NavigableSet<Double> allTimePoints = new TreeSet<Double>();
+    final NavigableSet<Double> allTimePoints = new TreeSet<>();
 
     final double[] discountCurveTimePoints = discountCurve.getTimePoints();
     for (final double discountCurveTimePoint : discountCurveTimePoints) {

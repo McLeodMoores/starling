@@ -38,6 +38,7 @@ import com.opengamma.util.time.Tenor;
  *  <li> The underlying index.
  * </ul>
  */
+@SuppressWarnings("deprecation")
 public class VanillaOisConvention implements CurveDataConvention<SwapFixedONDefinition> {
 
   /**

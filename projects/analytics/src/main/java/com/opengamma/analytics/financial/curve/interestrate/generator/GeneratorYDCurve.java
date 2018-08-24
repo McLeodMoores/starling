@@ -22,10 +22,11 @@ public abstract class GeneratorYDCurve extends GeneratorCurve {
    * @param parameters The parameters.
    * @return The curve.
    */
-  abstract YieldAndDiscountCurve generateCurve(final String name, final double[] parameters);
+  abstract YieldAndDiscountCurve generateCurve(String name, double[] parameters);
 
   /**
-   * Generate a curve using the parameters of a vector and an existing bundle. The existing bundle will be required if the generated curve depends on previous curves.
+   * Generate a curve using the parameters of a vector and an existing bundle. The existing bundle will be required
+   * if the generated curve depends on previous curves.
    * @param name The curve name.
    * @param bundle The bundle of existing curves.
    * @param parameters The parameters.
@@ -33,19 +34,21 @@ public abstract class GeneratorYDCurve extends GeneratorCurve {
    * @deprecated Curve builders that use and populate {@link YieldCurveBundle}s are deprecated.
    */
   @Deprecated
-  public abstract YieldAndDiscountCurve generateCurve(final String name, final YieldCurveBundle bundle, final double[] parameters);
+  public abstract YieldAndDiscountCurve generateCurve(String name, YieldCurveBundle bundle, double[] parameters);
 
   /**
-   * Generate a curve using the parameters of a vector and an existing bundle. The existing bundle will be required if the generated curve depends on previous curves.
+   * Generate a curve using the parameters of a vector and an existing bundle. The existing bundle will be required if the
+   * generated curve depends on previous curves.
    * @param name The curve name.
    * @param multicurves The multi-curves provider.
    * @param parameters The parameters.
    * @return The curve.
    */
-  public abstract YieldAndDiscountCurve generateCurve(final String name, final MulticurveProviderInterface multicurves, final double[] parameters);
+  public abstract YieldAndDiscountCurve generateCurve(String name, MulticurveProviderInterface multicurves, double[] parameters);
 
   /**
-   * Generate a curve using the parameters of a vector and an existing bundle. The existing bundle will be required if the generated curve depends on previous curves.
+   * Generate a curve using the parameters of a vector and an existing bundle. The existing bundle will be required if the
+   * generated curve depends on previous curves.
    * @param name The curve name.
    * @param hwMulticurves The Hull-White one-factor with multi-curves provider.
    * @param parameters The parameters.

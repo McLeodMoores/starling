@@ -11,7 +11,7 @@ import com.opengamma.analytics.financial.model.volatility.surface.SmileDeltaTerm
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
 import com.opengamma.util.tuple.Pair;
-
+// CSOFF
 /**
  * @deprecated {@link SmileDeltaTermStructureDataBundle} is deprecated
  */
@@ -24,10 +24,10 @@ public class FXVolatilityUtils {
     ArgumentChecker.notNull(data, "data");
     final Pair<Currency, Currency> currencyPair = data.getCurrencyPair();
     final SmileDeltaTermStructureParametersStrikeInterpolation smile = data.getVolatilityModel();
-    if ((ccy1 == currencyPair.getFirst()) && (ccy2 == currencyPair.getSecond())) {
+    if (ccy1 == currencyPair.getFirst() && ccy2 == currencyPair.getSecond()) {
       return smile.getVolatility(time, strike, forward);
     }
-    if ((ccy2 == currencyPair.getFirst()) && (ccy1 == currencyPair.getSecond())) {
+    if (ccy2 == currencyPair.getFirst() && ccy1 == currencyPair.getSecond()) {
       return smile.getVolatility(time, 1.0 / strike, 1.0 / forward);
     }
     throw new IllegalArgumentException("Currencies not compatible with smile data; asked for " + ccy1 + " and " + ccy2 + ", have " + data.getCurrencyMap().values());
@@ -40,10 +40,10 @@ public class FXVolatilityUtils {
     ArgumentChecker.notNull(data, "data");
     final Pair<Currency, Currency> currencyPair = data.getCurrencyPair();
     final SmileDeltaTermStructureParametersStrikeInterpolation smile = data.getVolatilityModel();
-    if ((ccy1 == currencyPair.getFirst()) && (ccy2 == currencyPair.getSecond())) {
+    if (ccy1 == currencyPair.getFirst() && ccy2 == currencyPair.getSecond()) {
       return smile.getVolatilityAndSensitivities(time, strike, forward);
     }
-    if ((ccy2 == currencyPair.getFirst()) && (ccy1 == currencyPair.getSecond())) {
+    if (ccy2 == currencyPair.getFirst() && ccy1 == currencyPair.getSecond()) {
       return smile.getVolatilityAndSensitivities(time, 1.0 / strike, 1.0 / forward);
     }
     throw new IllegalArgumentException("Currencies not compatible with smile data; asked for " + ccy1 + " and " + ccy2 + ", have " + data.getCurrencyMap().values());

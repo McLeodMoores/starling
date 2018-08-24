@@ -22,7 +22,7 @@ public interface ForexPricingMethod {
    * @param curves The yield curves.
    * @return The present value.
    */
-  MultipleCurrencyAmount presentValue(final InstrumentDerivative instrument, final YieldCurveBundle curves);
+  MultipleCurrencyAmount presentValue(InstrumentDerivative instrument, YieldCurveBundle curves);
 
   /**
    * Computes the currency exposure of the instrument.

@@ -20,6 +20,7 @@ import com.opengamma.util.money.Currency;
 import com.opengamma.util.money.MultipleCurrencyAmount;
 import com.opengamma.util.tuple.DoublesPair;
 
+// CSOFF
 /**
  * Pricing method for Forex non-deliverable forward transactions by discounting.
  * @deprecated {@link YieldCurveBundle} is deprecated.

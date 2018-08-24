@@ -18,7 +18,8 @@ import com.opengamma.util.money.Currency;
 
 /**
  * Class describing a foreign exchange non-deliverable forward transaction.
- * The transaction is XXX/YYY where YYY is the currency for the cash-settlement. A NDF KRW/USD with USD cash settlement is stored with KRW as currency1 and USD as currency2.
+ * The transaction is XXX/YYY where YYY is the currency for the cash-settlement.
+ * A NDF KRW/USD with USD cash settlement is stored with KRW as currency1 and USD as currency2.
  */
 // TODO: Review: Should the transaction be stored as KRW/USD or USD/KRW?
 // REVIEW: should we have a "fixing process" like we have for CouponIbor?
@@ -161,10 +162,10 @@ public class ForexNonDeliverableForwardDefinition implements InstrumentDefinitio
     result = prime * result + _currency2.hashCode();
     long temp;
     temp = Double.doubleToLongBits(_exchangeRate);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     result = prime * result + _fixingDate.hashCode();
     temp = Double.doubleToLongBits(_notional);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
+    result = prime * result + (int) (temp ^ temp >>> 32);
     result = prime * result + _paymentDate.hashCode();
     return result;
   }

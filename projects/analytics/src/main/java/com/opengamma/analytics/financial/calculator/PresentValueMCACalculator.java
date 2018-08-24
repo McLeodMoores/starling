@@ -55,14 +55,14 @@ public class PresentValueMCACalculator extends InstrumentDerivativeVisitorAdapte
   /**
    * The unique instance of the calculator.
    */
-  private static final PresentValueMCACalculator s_instance = new PresentValueMCACalculator();
+  private static final PresentValueMCACalculator INSTANCE = new PresentValueMCACalculator();
 
   /**
    * Gets the calculator instance.
    * @return The calculator.
    */
   public static PresentValueMCACalculator getInstance() {
-    return s_instance;
+    return INSTANCE;
   }
 
   /**
@@ -90,7 +90,8 @@ public class PresentValueMCACalculator extends InstrumentDerivativeVisitorAdapte
   /** Discounting for FRAs */
   private static final ForwardRateAgreementDiscountingMethod METHOD_FRA = ForwardRateAgreementDiscountingMethod.getInstance();
   /** Discounting for interest rate future transactions */
-  private static final InterestRateFutureTransactionDiscountingMethod METHOD_IR_FUTURES_TRANSACTION = InterestRateFutureTransactionDiscountingMethod.getInstance();
+  private static final InterestRateFutureTransactionDiscountingMethod METHOD_IR_FUTURES_TRANSACTION =
+      InterestRateFutureTransactionDiscountingMethod.getInstance();
   /** Discounting for interest rate future securities */
   private static final InterestRateFutureSecurityDiscountingMethod METHOD_IR_FUTURES_SECURITY = InterestRateFutureSecurityDiscountingMethod.getInstance();
   /** Discounting for FX spot and forwards */
