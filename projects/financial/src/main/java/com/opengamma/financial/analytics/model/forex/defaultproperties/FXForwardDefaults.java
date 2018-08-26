@@ -32,7 +32,7 @@ import com.opengamma.util.tuple.Pairs;
  */
 public class FXForwardDefaults extends DefaultPropertyFunction {
   
-  private static final Logger s_logger = LoggerFactory.getLogger(FXForwardDefaults.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(FXForwardDefaults.class);
   private static final String[] VALUE_REQUIREMENTS = new String[] {
     ValueRequirementNames.FX_PRESENT_VALUE,
     ValueRequirementNames.FX_CURRENCY_EXPOSURE,
@@ -81,11 +81,11 @@ public class FXForwardDefaults extends DefaultPropertyFunction {
     final String payCurrency = security.accept(ForexVisitors.getPayCurrencyVisitor()).getCode();
     final String receiveCurrency = security.accept(ForexVisitors.getReceiveCurrencyVisitor()).getCode();
     if (!_currencyCurveConfigAndDiscountingCurveNames.containsKey(payCurrency)) {
-      s_logger.error("Could not get config for pay currency " + payCurrency + "; should never happen");
+      LOGGER.error("Could not get config for pay currency " + payCurrency + "; should never happen");
       return null;
     }
     if (!_currencyCurveConfigAndDiscountingCurveNames.containsKey(receiveCurrency)) {
-      s_logger.error("Could not get config for receive currency " + receiveCurrency + "; should never happen");
+      LOGGER.error("Could not get config for receive currency " + receiveCurrency + "; should never happen");
       return null;
     }
     final Pair<String, String> payPair = _currencyCurveConfigAndDiscountingCurveNames.get(payCurrency);

@@ -42,7 +42,7 @@ import com.opengamma.util.PublicSPI;
 @PublicSPI
 public abstract class AbstractMasterPositionSource implements PositionSource {
   
-  private static final Logger s_logger = LoggerFactory.getLogger(AbstractMasterPositionSource.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(AbstractMasterPositionSource.class);
   
   private final PortfolioMaster _portfolioMaster;
   
@@ -150,7 +150,7 @@ public abstract class AbstractMasterPositionSource implements PositionSource {
         if (foundPosition != null) {
           sourceNode.addPosition(foundPosition);
         } else {
-          s_logger.warn("Position {} not found for portfolio node {}", positionId, nodeId);
+          LOGGER.warn("Position {} not found for portfolio node {}", positionId, nodeId);
         }
       }
     }

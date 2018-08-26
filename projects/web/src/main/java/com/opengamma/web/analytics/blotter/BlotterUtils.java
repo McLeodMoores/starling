@@ -83,7 +83,7 @@ import com.opengamma.util.time.Expiry;
 
   // TODO this should be configurable, should be able to add from client projects
   /** All the securities and related types supported by the blotter. */
-  private static final Set<MetaBean> s_metaBeans = Sets.<MetaBean>newHashSet(
+  private static final Set<MetaBean> META_BEANS = Sets.<MetaBean>newHashSet(
       FXForwardSecurity.meta(),
       SwapSecurity.meta(),
       SwaptionSecurity.meta(),
@@ -115,9 +115,9 @@ import com.opengamma.util.time.Expiry;
       CashSecurity.meta());
 
   /** Meta bean factory for looking up meta beans by type name. */
-  private static final MetaBeanFactory s_metaBeanFactory = new MapMetaBeanFactory(s_metaBeans);
+  private static final MetaBeanFactory META_BEAN_FACTORY = new MapMetaBeanFactory(META_BEANS);
   /** Formatter for decimal numbers, DecimalFormat isn't thread safe. */
-  private static final ThreadLocal<DecimalFormat> s_decimalFormat = new ThreadLocal<DecimalFormat>() {
+  private static final ThreadLocal<DecimalFormat> DECIMAL_FORMAT = new ThreadLocal<DecimalFormat>() {
     @Override
     protected DecimalFormat initialValue() {
       DecimalFormat decimalFormat = new DecimalFormat("#,###.#####");
@@ -132,16 +132,16 @@ import com.opengamma.util.time.Expiry;
    * out because it is always empty for trades and securities entered via the blotter but isn't nullable. Therefore
    * it has to be explicitly set to an empty bundle after the client data is processed but before the object is built.
    */
-  private static final BeanTraverser s_beanBuildingTraverser = new BeanTraverser(
+  private static final BeanTraverser BEAN_BUILDING_TRAVERSER = new BeanTraverser(
       new PropertyFilter(FinancialSecurity.meta().externalIdBundle()),
       new PropertyFilter(ManageableSecurity.meta().securityType()));
 
   /** For converting between strings values used by the UI and real objects. */
-  private static final StringConvert s_stringConvert;
+  private static final StringConvert STRING_CONVERT;
   /** For converting property values when creating trades and securities from JSON. */
-  private static final Converters s_beanBuildingConverters;
+  private static final Converters BEAN_BUILDING_CONVERTERS;
   /** For converting property values when creating JSON objects from trades and securities. */
-  private static final Converters s_jsonBuildingConverters;
+  private static final Converters JSON_BUILDING_CONVERTERS;
 
   static {
     StringToRegionIdConverter stringToRegionIdConverter = new StringToRegionIdConverter();
@@ -169,25 +169,25 @@ import com.opengamma.util.time.Expiry;
             FRASecurity.meta().regionId(), regionIdToStringConverter,
             SwapLeg.meta().regionId(), regionIdToStringConverter);
 
-    s_stringConvert = new StringConvert();
-    s_stringConvert.register(BigDecimal.class, new BigDecimalConverter());
-    s_stringConvert.register(Double.class, new DoubleConverter());
-    s_stringConvert.register(Double.TYPE, new DoubleConverter());
-    s_stringConvert.register(ExternalIdBundle.class, new JodaBeanConverters.ExternalIdBundleConverter());
-    s_stringConvert.register(Expiry.class, new ExpiryConverter());
-    s_stringConvert.register(MonitoringType.class, new EnumConverter<MonitoringType>());
-    s_stringConvert.register(BarrierType.class, new EnumConverter<BarrierType>());
-    s_stringConvert.register(BarrierDirection.class, new EnumConverter<BarrierDirection>());
-    s_stringConvert.register(SamplingFrequency.class, new EnumConverter<SamplingFrequency>());
-    s_stringConvert.register(LongShort.class, new EnumConverter<LongShort>());
-    s_stringConvert.register(OptionType.class, new EnumConverter<OptionType>());
-    s_stringConvert.register(ZonedDateTime.class, new ZonedDateTimeConverter());
-    s_stringConvert.register(OffsetTime.class, new OffsetTimeConverter());
-    s_stringConvert.register(DebtSeniority.class, new EnumConverter<DebtSeniority>());
-    s_stringConvert.register(StubType.class, new EnumConverter<StubType>());
+    STRING_CONVERT = new StringConvert();
+    STRING_CONVERT.register(BigDecimal.class, new BigDecimalConverter());
+    STRING_CONVERT.register(Double.class, new DoubleConverter());
+    STRING_CONVERT.register(Double.TYPE, new DoubleConverter());
+    STRING_CONVERT.register(ExternalIdBundle.class, new JodaBeanConverters.ExternalIdBundleConverter());
+    STRING_CONVERT.register(Expiry.class, new ExpiryConverter());
+    STRING_CONVERT.register(MonitoringType.class, new EnumConverter<MonitoringType>());
+    STRING_CONVERT.register(BarrierType.class, new EnumConverter<BarrierType>());
+    STRING_CONVERT.register(BarrierDirection.class, new EnumConverter<BarrierDirection>());
+    STRING_CONVERT.register(SamplingFrequency.class, new EnumConverter<SamplingFrequency>());
+    STRING_CONVERT.register(LongShort.class, new EnumConverter<LongShort>());
+    STRING_CONVERT.register(OptionType.class, new EnumConverter<OptionType>());
+    STRING_CONVERT.register(ZonedDateTime.class, new ZonedDateTimeConverter());
+    STRING_CONVERT.register(OffsetTime.class, new OffsetTimeConverter());
+    STRING_CONVERT.register(DebtSeniority.class, new EnumConverter<DebtSeniority>());
+    STRING_CONVERT.register(StubType.class, new EnumConverter<StubType>());
 
-    s_jsonBuildingConverters = new Converters(jsonRegionConverters, s_stringConvert);
-    s_beanBuildingConverters = new Converters(beanRegionConverters, s_stringConvert);
+    JSON_BUILDING_CONVERTERS = new Converters(jsonRegionConverters, STRING_CONVERT);
+    BEAN_BUILDING_CONVERTERS = new Converters(beanRegionConverters, STRING_CONVERT);
   }
 
   /**
@@ -195,7 +195,7 @@ import com.opengamma.util.time.Expiry;
    * The property value is hard-coded to {@code FINANCIAL_REGION~GB} for FX forwards so its value is of no interest
    * to the client and it can't be updated.
    */
-  private static final PropertyFilter s_fxRegionFilter =
+  private static final PropertyFilter FX_REGION_FILTER =
       new PropertyFilter(FXForwardSecurity.meta().regionId(), NonDeliverableFXForwardSecurity.meta().regionId());
 
   /**
@@ -203,33 +203,33 @@ import com.opengamma.util.time.Expiry;
    * structure. OTC security details are passed to the blotter back end which generates the ID so this
    * info is irrelevant to the client.
    */
-  private static final BeanVisitorDecorator s_externalIdBundleFilter = new PropertyNameFilter("externalIdBundle");
+  private static final BeanVisitorDecorator EXTERNAL_ID_BUNDLE_FILTER = new PropertyNameFilter("externalIdBundle");
 
   /**
    * Filters out the underlying ID field of {@link SwaptionSecurity} when building the HTML showing the security
    * structure. The back end creates the underlying security and fills this field in so it's of no interest
    * to the client.
    */
-  private static final PropertyFilter s_swaptionUnderlyingFilter = new PropertyFilter(SwaptionSecurity.meta().underlyingId());
+  private static final PropertyFilter SWAPTION_UNDERLYING_FILTER = new PropertyFilter(SwaptionSecurity.meta().underlyingId());
 
   /**
    * Filters out the underlying ID field of {@link CreditDefaultSwapOptionSecurity} when building the HTML showing the security
    * structure. The back end creates the underlying security and fills this field in so it's of no interest
    * to the client.
    */
-  private static final PropertyFilter s_cdsOptionUnderlyingFilter = new PropertyFilter(CreditDefaultSwapOptionSecurity.meta().underlyingId());
+  private static final PropertyFilter CDS_OPTION_UNDERLYING_FILTER = new PropertyFilter(CreditDefaultSwapOptionSecurity.meta().underlyingId());
 
   /**
    * Filters out the {@code securityType} field for all securities when building the HTML showing the security
    * structure. This value is read-only in each security type and is of no interest to the client.
    */
-  private static final PropertyFilter s_securityTypeFilter = new PropertyFilter(ManageableSecurity.meta().securityType());
+  private static final PropertyFilter SECURITY_TYPE_FILTER = new PropertyFilter(ManageableSecurity.meta().securityType());
 
   /**
    * @return A thread-local formatter instance set to parse numbers into BigDecimals.
    */
   /* package */ static DecimalFormat getDecimalFormat() {
-    return s_decimalFormat.get();
+    return DECIMAL_FORMAT.get();
   }
 
   /* package */ static FinancialSecurity buildSecurity(BeanDataSource data) {
@@ -238,14 +238,14 @@ import com.opengamma.util.time.Expiry;
 
   @SuppressWarnings("unchecked")
   /* package */ static FinancialSecurity buildSecurity(BeanDataSource data, ExternalIdBundle idBundle) {
-    BeanVisitor<BeanBuilder<FinancialSecurity>> visitor = new BeanBuildingVisitor<>(data, s_metaBeanFactory,
-                                                                                    s_beanBuildingConverters);
-    MetaBean metaBean = s_metaBeanFactory.beanFor(data);
+    BeanVisitor<BeanBuilder<FinancialSecurity>> visitor = new BeanBuildingVisitor<>(data, META_BEAN_FACTORY,
+                                                                                    BEAN_BUILDING_CONVERTERS);
+    MetaBean metaBean = META_BEAN_FACTORY.beanFor(data);
     // TODO check it's a FinancialSecurity metaBean
     if (!(metaBean instanceof FinancialSecurity.Meta)) {
       throw new IllegalArgumentException("MetaBean " + metaBean + " isn't for a FinancialSecurity");
     }
-    BeanBuilder<FinancialSecurity> builder = (BeanBuilder<FinancialSecurity>) s_beanBuildingTraverser.traverse(metaBean, visitor);
+    BeanBuilder<FinancialSecurity> builder = (BeanBuilder<FinancialSecurity>) BEAN_BUILDING_TRAVERSER.traverse(metaBean, visitor);
     // externalIdBundle needs to be specified or building fails because it's not nullable
     builder.set(FinancialSecurity.meta().externalIdBundle(), idBundle);
     return builder.build();
@@ -253,28 +253,28 @@ import com.opengamma.util.time.Expiry;
 
   // TODO move to BlotterUtils
   /* package */ static StringConvert getStringConvert() {
-    return s_stringConvert;
+    return STRING_CONVERT;
   }
 
   /* package */ static Converters getJsonBuildingConverters() {
-    return s_jsonBuildingConverters;
+    return JSON_BUILDING_CONVERTERS;
   }
 
   /* package */ static Converters getBeanBuildingConverters() {
-    return s_beanBuildingConverters;
+    return BEAN_BUILDING_CONVERTERS;
   }
 
   /* package */ static Set<MetaBean> getMetaBeans() {
-    return s_metaBeans;
+    return META_BEANS;
   }
 
   /* package */ static BeanTraverser structureBuildingTraverser() {
-    return new BeanTraverser(s_externalIdBundleFilter, s_securityTypeFilter, s_swaptionUnderlyingFilter, s_cdsOptionUnderlyingFilter, s_fxRegionFilter);
+    return new BeanTraverser(EXTERNAL_ID_BUNDLE_FILTER, SECURITY_TYPE_FILTER, SWAPTION_UNDERLYING_FILTER, CDS_OPTION_UNDERLYING_FILTER, FX_REGION_FILTER);
   }
 
   /* package */
   static BeanTraverser securityJsonBuildingTraverser() {
-    return new BeanTraverser(s_securityTypeFilter, s_fxRegionFilter);
+    return new BeanTraverser(SECURITY_TYPE_FILTER, FX_REGION_FILTER);
   }
 }
 

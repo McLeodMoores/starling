@@ -30,8 +30,8 @@ import com.opengamma.util.monitor.OperationTimer;
  */
 public class RedisLKVFileReader {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(RedisLKVFileReader.class);
-  private static final FudgeContext s_fudgeContext = OpenGammaFudgeContext.getInstance();  
+  private static final Logger LOGGER = LoggerFactory.getLogger(RedisLKVFileReader.class);
+  private static final FudgeContext FUDGE_CONTEXT = OpenGammaFudgeContext.getInstance();  
   
   private final File _inputFile;
   private final Map<String, Boolean> _dataFieldBlackList = Maps.newHashMap();
@@ -60,7 +60,7 @@ public class RedisLKVFileReader {
   }
 
   public Map<ExternalId, Map<String, Double>> getLastKnownValues() {
-    OperationTimer timer = new OperationTimer(s_logger, "Reading LKV from disk");
+    OperationTimer timer = new OperationTimer(LOGGER, "Reading LKV from disk");
     FileInputStream fis = null;
     try {
       fis = new FileInputStream(getInputFile());
@@ -68,7 +68,7 @@ public class RedisLKVFileReader {
       throw new OpenGammaRuntimeException("Error opening file " + getInputFile().getAbsolutePath(), ex);
     }
     Map<ExternalId, Map<String, Double>> ticks = Maps.newHashMap();
-    FudgeMsgReader reader = s_fudgeContext.createMessageReader(fis);
+    FudgeMsgReader reader = FUDGE_CONTEXT.createMessageReader(fis);
     try {
       while (reader.hasNext()) {
         FudgeMsg message = reader.nextMessage();

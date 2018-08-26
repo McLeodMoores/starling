@@ -32,7 +32,7 @@ import com.opengamma.util.mongo.MongoConnector;
 public class MongoDBReferenceDataCache {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(MongoDBReferenceDataCache.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(MongoDBReferenceDataCache.class);
   /**
    * Mongo field name.
    */
@@ -106,9 +106,9 @@ public class MongoDBReferenceDataCache {
     FudgeMsg fieldData = securityResult.getFieldValues();
     
     if (securityDes != null && fieldData != null) {
-      s_logger.info("Persisting fields for \"{}\": {}", securityDes, securityResult.getFieldValues());
+      LOGGER.info("Persisting fields for \"{}\": {}", securityDes, securityResult.getFieldValues());
       DBObject mongoDBObject = createMongoDBForResult(deserializer, securityResult);
-      s_logger.debug("dbObject={}", mongoDBObject);
+      LOGGER.debug("dbObject={}", mongoDBObject);
       BasicDBObject query = new BasicDBObject();
       query.put(SECURITY_DES_KEY_NAME, securityDes);
       _mongoCollection.update(query, mongoDBObject, true, false);
@@ -140,13 +140,13 @@ public class MongoDBReferenceDataCache {
     DBCursor cursor = _mongoCollection.find(query);
     while (cursor.hasNext()) {
       DBObject dbObject = cursor.next();
-      s_logger.debug("dbObject={}", dbObject);
+      LOGGER.debug("dbObject={}", dbObject);
       
       String securityDes = (String) dbObject.get(SECURITY_DES_KEY_NAME);
-      s_logger.debug("Have security data for des {} in MongoDB", securityDes);
+      LOGGER.debug("Have security data for des {} in MongoDB", securityDes);
       ReferenceData perSecResult = parseDBObject(serializer, securityDes, dbObject);
       if (result.put(securityDes, perSecResult) != null) {
-        s_logger.warn("{}/{} Querying on des {} gave more than one document", 
+        LOGGER.warn("{}/{} Querying on des {} gave more than one document", 
             new Object[] {_mongoConnector.getName(), _mongoCollection.getName(), securityDes });
       }
     }

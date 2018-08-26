@@ -56,7 +56,7 @@ import com.opengamma.util.time.Tenor;
  * Class to validate third generation curve configurations
  */
 public class CurveValidator {
-  private static final Logger s_logger = LoggerFactory.getLogger(CurveValidator.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(CurveValidator.class);
   private final ConfigMaster _configMaster;
   private final ConfigSource _configSource;
   private ConfigValidationUtils _configValidationUtils;
@@ -108,7 +108,7 @@ public class CurveValidator {
       try {
         validateExposureFunctionsConfigurations(curveConstructionConfigNames, _exposureConfigNodes);
       } catch (final Exception e) {
-        s_logger.error("Error while searching config master", e);
+        LOGGER.error("Error while searching config master", e);
         final ValidationNode validationNode = new ValidationNode();
         validationNode.setType(ExposureFunctions.class);
         validationNode.setName("Config query error");
@@ -116,7 +116,7 @@ public class CurveValidator {
         validationNode.getErrors().add(e.getMessage());
       }
     } catch (final Exception e) {
-      s_logger.error("Error while searching config master", e);
+      LOGGER.error("Error while searching config master", e);
       final ValidationNode validationNode = new ValidationNode();
       validationNode.setType(CurveConstructionConfiguration.class);
       validationNode.setName("Config query error");

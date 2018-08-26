@@ -22,7 +22,7 @@ public final class BlockingOperation extends Error {
 
   }
 
-  private static final ThreadLocal<TLS> s_tls = new ThreadLocal<TLS>() {
+  private static final ThreadLocal<TLS> TLS = new ThreadLocal<TLS>() {
     @Override
     protected TLS initialValue() {
       return new TLS();
@@ -37,8 +37,8 @@ public final class BlockingOperation extends Error {
    * will ensure they will stay off after the corresponding call to {@code on}.
    */
   public static void off() {
-    assert s_tls.get()._offCount >= 0;
-    s_tls.get()._offCount++;
+    assert TLS.get()._offCount >= 0;
+    TLS.get()._offCount++;
   }
 
   /**
@@ -46,8 +46,8 @@ public final class BlockingOperation extends Error {
    * will remain off.
    */
   public static void on() {
-    assert s_tls.get()._offCount > 0;
-    s_tls.get()._offCount--;
+    assert TLS.get()._offCount > 0;
+    TLS.get()._offCount--;
   }
 
   /**
@@ -65,7 +65,7 @@ public final class BlockingOperation extends Error {
    * @return true if operations must block, false if they may throw an exception instead.
    */
   public static boolean isOn() {
-    return s_tls.get()._offCount == 0;
+    return TLS.get()._offCount == 0;
   }
 
   /**
@@ -74,7 +74,7 @@ public final class BlockingOperation extends Error {
    * @return true if operations may throw an exception, false if they must block
    */
   public static boolean isOff() {
-    return s_tls.get()._offCount != 0;
+    return TLS.get()._offCount != 0;
   }
 
   public static BlockingOperation block() {

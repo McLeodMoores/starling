@@ -49,7 +49,7 @@ public class DbTool {
   /**
    * During installation, INFO level messages will be reported to the user as progress.
    */
-  private static final Logger s_logger = LoggerFactory.getLogger(DbTool.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(DbTool.class);
 
   static {
     StartupUtils.init();
@@ -82,7 +82,7 @@ public class DbTool {
    * for each DBTest test case. This is clearly a hack.
    * All strings will be lower case
    */
-  private static final Collection<String> s_tablesThatShouldNotBeCleared = new HashSet<String>();
+  private static final Collection<String> TABLES_THAT_SHOULD_NOT_BE_CLEARED = new HashSet<String>();
 
   /**
    * Creates an instance.
@@ -347,7 +347,7 @@ public class DbTool {
   }
 
   public void clearTables(final String catalog, final String schema) {
-    _dialect.clearTables(catalog, schema, s_tablesThatShouldNotBeCleared);
+    _dialect.clearTables(catalog, schema, TABLES_THAT_SHOULD_NOT_BE_CLEARED);
   }
 
   public String describeDatabase() {
@@ -445,7 +445,7 @@ public class DbTool {
       }
 
       final String tableName = filteredCreateTableSqls.get(2);
-      s_tablesThatShouldNotBeCleared.add(tableName.toLowerCase());
+      TABLES_THAT_SHOULD_NOT_BE_CLEARED.add(tableName.toLowerCase());
 
       doNotClearIndex = sql.indexOf(doNotClear, doNotClearIndex + doNotClear.length());
     }
@@ -474,8 +474,8 @@ public class DbTool {
     if (createScript == null) {
       throw new OpenGammaRuntimeException("Missing create script for V" + migrateFromVersion + ", database " + dbVendorName + ", schema group " + schemaGroupMetadata.getSchemaGroupName());
     }
-    s_logger.debug("Creating {} DB version {}", schemaGroupMetadata.getSchemaGroupName(), migrateFromVersion);
-    s_logger.debug("Executing create script {}", createScript.getName());
+    LOGGER.debug("Creating {} DB version {}", schemaGroupMetadata.getSchemaGroupName(), migrateFromVersion);
+    LOGGER.debug("Executing create script {}", createScript.getName());
     executeSQLScript(catalog, schema, createScript);
     if (callback != null) {
       callback.tablesCreatedOrUpgraded(migrateFromVersion, schemaGroupMetadata);
@@ -486,8 +486,8 @@ public class DbTool {
       if (migrateScript == null) {
         throw new OpenGammaRuntimeException("The " + v + " migrate script is missing for " + dbVendorName + " and schema group " + schemaGroupMetadata.getSchemaGroupName());
       }
-      s_logger.debug("Migrating DB from version {} to {}", v, v + 1);
-      s_logger.debug("Executing migrate script {}", migrateScript.getName());
+      LOGGER.debug("Migrating DB from version {} to {}", v, v + 1);
+      LOGGER.debug("Executing migrate script {}", migrateScript.getName());
       executeSQLScript(catalog, schema, migrateScript);
       if (callback != null) {
         callback.tablesCreatedOrUpgraded(v + 1, schemaGroupMetadata);
@@ -516,25 +516,25 @@ public class DbTool {
     }
 
     if (_clear) {
-      s_logger.info("Clearing database tables at {}", getJdbcUrl());
+      LOGGER.info("Clearing database tables at {}", getJdbcUrl());
       initialize();
       clearTables(_catalog, _schema);
     }
 
     if (_drop) {
-      s_logger.info("Dropping existing database schema at {}", getJdbcUrl());
+      LOGGER.info("Dropping existing database schema at {}", getJdbcUrl());
       initialize();
       dropSchema(_catalog, _schema);
     }
 
     if (_create) {
-      s_logger.info("Creating new database schema at {}", getJdbcUrl());
+      LOGGER.info("Creating new database schema at {}", getJdbcUrl());
       initialize();
       createSchema(_catalog, _schema);
     }
 
     if (_createTables) {
-      s_logger.info("Creating database tables at {}", getJdbcUrl());
+      LOGGER.info("Creating database tables at {}", getJdbcUrl());
       initialize();
       createTables(_catalog, null, null);
       shutdown(_catalog);
@@ -543,7 +543,7 @@ public class DbTool {
     if (_createTestDb) {
       // used to try to use _testPropertiesDir here, but value was always ignored
       for (final String dbType : initDatabaseTypes(_testDbType)) {
-        s_logger.debug("Creating " + dbType + " test database...");
+        LOGGER.debug("Creating " + dbType + " test database...");
 
         final String dbUrl = DbTest.getDbHost(dbType);
         final String user = DbTest.getDbUsername(dbType);
@@ -560,7 +560,7 @@ public class DbTool {
         shutdown(getTestCatalog());
       }
     }
-    s_logger.info("OpenGamma database created at {}", getJdbcUrl());
+    LOGGER.info("OpenGamma database created at {}", getJdbcUrl());
   }
 
   /**
@@ -637,7 +637,7 @@ public class DbTool {
     try {
       tool.execute();
     } catch (final RuntimeException ex) {
-      s_logger.error(ex.getMessage());
+      LOGGER.error(ex.getMessage());
       usage(options);
       System.exit(-1);
     }

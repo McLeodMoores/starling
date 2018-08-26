@@ -40,7 +40,7 @@ import com.opengamma.timeseries.date.localdate.LocalDateToIntConverter;
 
 /* package */class HistoricalViewEvaluationResultBuilder {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(HistoricalViewEvaluationResultBuilder.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(HistoricalViewEvaluationResultBuilder.class);
 
   // TODO: If the duration of the time series is high, or there are simply a large quantity then we could modify these builders to
   // write directly to the time series database instead (or batch up the points in internal arrays) and the result bundle will be
@@ -118,7 +118,7 @@ import com.opengamma.timeseries.date.localdate.LocalDateToIntConverter;
         for (final ValueRequirement requirement : requirements) {
           final TimeSeriesBuilder builder = _results.get(requirement);
           if (builder == null) {
-            s_logger.warn("View produced value {} for unrequested requirement {}", specification, requirement);
+            LOGGER.warn("View produced value {} for unrequested requirement {}", specification, requirement);
           } else {
             final TimeSeriesBuilder newBuilder = builder.addPoint(date, value);
             if (newBuilder != builder) {
@@ -127,7 +127,7 @@ import com.opengamma.timeseries.date.localdate.LocalDateToIntConverter;
           }
         }
       } else {
-        s_logger.warn("View produced unrequested value {}", specification);
+        LOGGER.warn("View produced unrequested value {}", specification);
       }
     }
 
@@ -172,7 +172,7 @@ import com.opengamma.timeseries.date.localdate.LocalDateToIntConverter;
       if (data != null) {
         data._builder.addPoint(date, value);
       } else {
-        s_logger.warn("View produced unrequested market data {}", specification);
+        LOGGER.warn("View produced unrequested market data {}", specification);
       }
     }
 

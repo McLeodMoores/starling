@@ -58,7 +58,7 @@ import com.opengamma.util.money.Currency;
  *
  */
 public class ExternallyProvidedSensitivitiesYieldCurveNodeSensitivitiesFunction extends AbstractFunction.NonCompiledInvoker {
-  private static final Logger s_logger = LoggerFactory.getLogger(ExternallyProvidedSensitivitiesYieldCurveNodeSensitivitiesFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ExternallyProvidedSensitivitiesYieldCurveNodeSensitivitiesFunction.class);
   /**
    * The value name calculated by this function.
    */
@@ -101,7 +101,7 @@ public class ExternallyProvidedSensitivitiesYieldCurveNodeSensitivitiesFunction 
     final Set<ValueSpecification> results = Sets.newHashSetWithExpectedSize(2);
     final ComputationTargetSpecification targetSpec = target.toSpecification();
     results.add(new ValueSpecification(YCNS_REQUIREMENT, targetSpec, properties.get()));
-    s_logger.debug("getResults(1) = " + results);
+    LOGGER.debug("getResults(1) = " + results);
     return results;
   }
 
@@ -110,12 +110,12 @@ public class ExternallyProvidedSensitivitiesYieldCurveNodeSensitivitiesFunction 
     final Set<String> curves = desiredValue.getConstraints().getValues(ValuePropertyNames.CURVE);
     final Set<String> curveCalcConfigs = desiredValue.getConstraints().getValues(ValuePropertyNames.CURVE_CALCULATION_CONFIG);
     if ((curves == null) || (curves.size() != 1)) {
-      s_logger.warn("no curve specified");
+      LOGGER.warn("no curve specified");
       // Can't support an unbound request; an injection function must be used (or declare all as optional and use [PLAT-1771])
       return null;
     }
     if ((curveCalcConfigs == null) || (curveCalcConfigs.size() != 1)) {
-      s_logger.warn("no curve config specified");
+      LOGGER.warn("no curve config specified");
       return null;
     }
     final String curve = curves.iterator().next();
@@ -147,7 +147,7 @@ public class ExternallyProvidedSensitivitiesYieldCurveNodeSensitivitiesFunction 
         results.add(new ValueSpecification(YCNS_REQUIREMENT, targetSpec, properties.get()));
       }
     }
-    s_logger.debug("getResults(2) returning " + results);
+    LOGGER.debug("getResults(2) returning " + results);
     return results;
   }
 
@@ -194,7 +194,7 @@ public class ExternallyProvidedSensitivitiesYieldCurveNodeSensitivitiesFunction 
     final ComputationTargetSpecification targetSpec = target.toSpecification();
     final ValueSpecification resultSpec = new ValueSpecification(YCNS_REQUIREMENT, targetSpec, properties.get());
     final Set<ComputedValue> results = YieldCurveNodeSensitivitiesHelper.getInstrumentLabelledSensitivitiesForCurve(curveName, bundle, sensitivitiesForCurves, curveSpec, resultSpec);
-    //s_logger.debug("execute, returning " + results);
+    //LOGGER.debug("execute, returning " + results);
     return results;
   }
 
@@ -213,7 +213,7 @@ public class ExternallyProvidedSensitivitiesYieldCurveNodeSensitivitiesFunction 
           final Double value = mhts.getTimeSeries().getLatestValue();
           entries[i] = -value; //* (qty.doubleValue() ); // we invert here because OpenGamma uses -1bp shift rather than +1.  DV01 function will invert back.
         } else {
-          s_logger.warn("Value was null when getting required input data " + swapExternalSensitivitiesData.getExposureExternalId());
+          LOGGER.warn("Value was null when getting required input data " + swapExternalSensitivitiesData.getExposureExternalId());
           entries[i] = 0d;
         }
       } else {
@@ -232,7 +232,7 @@ public class ExternallyProvidedSensitivitiesYieldCurveNodeSensitivitiesFunction 
           final Double value = mhts.getTimeSeries().getLatestValue();
           entries[i] -= value; //* (qty.doubleValue() ); // we invert here because OpenGamma uses -1bp shift rather than +1.  DV01 function will invert back.
         } else {
-          s_logger.warn("Value was null when getting required input data " + bondExternalSensitivitiesData.getExposureExternalId());
+          LOGGER.warn("Value was null when getting required input data " + bondExternalSensitivitiesData.getExposureExternalId());
         }
       }
       i++;

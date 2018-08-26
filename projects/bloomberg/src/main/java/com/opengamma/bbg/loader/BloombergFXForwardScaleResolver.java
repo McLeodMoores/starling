@@ -32,12 +32,12 @@ import com.opengamma.util.ArgumentChecker;
  * 
  */
 public class BloombergFXForwardScaleResolver {
-  private static final Logger s_logger = LoggerFactory.getLogger(BloombergFXForwardScaleResolver.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(BloombergFXForwardScaleResolver.class);
   private static final Set<String> BBG_FIELD = Collections.singleton(BloombergConstants.BBG_FIELD_FWD_SCALE);
   private final ReferenceDataProvider _referenceDataProvider;
   private final boolean _useTickerSubscriptions;
   
-  private static final ImmutableSet<ExternalScheme> s_tickerSchemes = ImmutableSet.of(ExternalSchemes.BLOOMBERG_TICKER, ExternalSchemes.BLOOMBERG_TICKER_WEAK);
+  private static final ImmutableSet<ExternalScheme> TICKER_SCHEMES = ImmutableSet.of(ExternalSchemes.BLOOMBERG_TICKER, ExternalSchemes.BLOOMBERG_TICKER_WEAK);
 
   /**
    * Creates a BloombergSecurityTypeResolver
@@ -49,7 +49,7 @@ public class BloombergFXForwardScaleResolver {
     ArgumentChecker.notNull(referenceDataProvider, "referenceDataProvider");
     ArgumentChecker.notNull(bbgScheme, "bbgScheme");
     _referenceDataProvider = referenceDataProvider;
-    _useTickerSubscriptions = s_tickerSchemes.contains(bbgScheme);
+    _useTickerSubscriptions = TICKER_SCHEMES.contains(bbgScheme);
   }
 
   public Map<ExternalIdBundle, Integer> getBloombergFXForwardScale(final Collection<ExternalIdBundle> identifiers) {
@@ -70,7 +70,7 @@ public class BloombergFXForwardScaleResolver {
             fwdScale = Integer.parseInt(bbgFwdScale);
             result.put(identifierBundle, fwdScale);
           } catch (NumberFormatException e) {
-            s_logger.warn("Could not parse FWD_SCALE with value {}", bbgFwdScale);
+            LOGGER.warn("Could not parse FWD_SCALE with value {}", bbgFwdScale);
           }
         }
       }
@@ -84,7 +84,7 @@ public class BloombergFXForwardScaleResolver {
       BiMap<String, ExternalIdBundle> result = HashBiMap.create();
       for (ExternalIdBundle bundle : identifiers) {
         for (ExternalId id : bundle) {
-          if (s_tickerSchemes.contains(id.getScheme())) {
+          if (TICKER_SCHEMES.contains(id.getScheme())) {
             result.put(id.getValue(), bundle);
             break;
           }

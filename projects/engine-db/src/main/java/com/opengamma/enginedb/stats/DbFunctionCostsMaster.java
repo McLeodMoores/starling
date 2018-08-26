@@ -34,7 +34,7 @@ import com.opengamma.util.db.DbMapSqlParameterSource;
 public class DbFunctionCostsMaster implements FunctionCostsMaster {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(DbFunctionCostsMaster.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(DbFunctionCostsMaster.class);
 
   /**
    * External SQL bundle.
@@ -56,7 +56,7 @@ public class DbFunctionCostsMaster implements FunctionCostsMaster {
    */
   public DbFunctionCostsMaster(final DbConnector dbConnector) {
     ArgumentChecker.notNull(dbConnector, "dbConnector");
-    s_logger.debug("installed DbConnector: {}", dbConnector);
+    LOGGER.debug("installed DbConnector: {}", dbConnector);
     _dbConnector = dbConnector;
     _externalSqlBundle = ElSqlBundle.of(dbConnector.getDialect().getElSqlConfig(), DbFunctionCostsMaster.class);
   }
@@ -107,7 +107,7 @@ public class DbFunctionCostsMaster implements FunctionCostsMaster {
    */
   public void setClock(final Clock timeSource) {
     ArgumentChecker.notNull(timeSource, "timeSource");
-    s_logger.debug("installed Clock: {}", timeSource);
+    LOGGER.debug("installed Clock: {}", timeSource);
     _timeSource = timeSource;
   }
 
@@ -123,7 +123,7 @@ public class DbFunctionCostsMaster implements FunctionCostsMaster {
   //-------------------------------------------------------------------------
   @Override
   public FunctionCostsDocument load(final String configuration, final String functionId, Instant versionAsOf) {
-    s_logger.debug("load: {} {}", configuration, functionId);
+    LOGGER.debug("load: {} {}", configuration, functionId);
     if (versionAsOf == null) {
       versionAsOf = Instant.now(getClock());
     }

@@ -59,7 +59,7 @@ import com.opengamma.util.tuple.Pairs;
  */
 public class AvailablePortfolioOutputs extends AvailableOutputsImpl {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(AvailablePortfolioOutputs.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(AvailablePortfolioOutputs.class);
 
   private final String _anyValue;
 
@@ -189,9 +189,9 @@ public class AvailablePortfolioOutputs extends AvailableOutputsImpl {
           }
         }
         if (subset) {
-          //s_logger.debug("Cache hit on {}", requirement);
-          //s_logger.debug("Cached parent = {}", entry.getKey());
-          //s_logger.debug("Active parent = {}", visited);
+          //LOGGER.debug("Cache hit on {}", requirement);
+          //LOGGER.debug("Cached parent = {}", entry.getKey());
+          //LOGGER.debug("Active parent = {}", visited);
           return entry.getSecond();
         }
       }
@@ -199,7 +199,7 @@ public class AvailablePortfolioOutputs extends AvailableOutputsImpl {
     }
 
     private void setCachedResult(final Set<ValueRequirement> visited, final ValueRequirement requirement, final Set<ValueSpecification> results) {
-      s_logger.debug("Caching result for {} on {}", requirement, visited);
+      LOGGER.debug("Caching result for {} on {}", requirement, visited);
       List<Pair<List<ValueRequirement>, Set<ValueSpecification>>> entries = _resolutionCache.get(requirement);
       if (entries == null) {
         entries = new LinkedList<Pair<List<ValueRequirement>, Set<ValueSpecification>>>();
@@ -214,10 +214,10 @@ public class AvailablePortfolioOutputs extends AvailableOutputsImpl {
       Set<ValueSpecification> allResults = getCachedResult(visitedRequirements, requirement);
       if (allResults != null) {
         if (allResults.isEmpty()) {
-          s_logger.debug("Cache failure hit on {}", requirement);
+          LOGGER.debug("Cache failure hit on {}", requirement);
           return null;
         } else {
-          s_logger.debug("Cache result hit on {}", requirement);
+          LOGGER.debug("Cache result hit on {}", requirement);
           return allResults;
         }
       }
@@ -233,9 +233,9 @@ public class AvailablePortfolioOutputs extends AvailableOutputsImpl {
               }
             }
           } catch (final Throwable t) {
-            s_logger.error("Error applying {} to {}", function, target);
+            LOGGER.error("Error applying {} to {}", function, target);
             t.printStackTrace();
-            s_logger.info("Exception thrown", t);
+            LOGGER.info("Exception thrown", t);
           }
         }
         _resultsCache.put(target, functionResults);
@@ -250,7 +250,7 @@ public class AvailablePortfolioOutputs extends AvailableOutputsImpl {
           if (isSatisfied(requirement, result)) {
             final FunctionExclusionGroup group = (_functionExclusionGroups == null) ? null : _functionExclusionGroups.getExclusionGroup(function.getFunctionDefinition());
             if ((group == null) || visitedFunctions.add(group)) {
-              s_logger.debug("Resolving {} to satisfy {}", result, requirement);
+              LOGGER.debug("Resolving {} to satisfy {}", result, requirement);
               final Set<ValueSpecification> resolved = resultWithSatisfiedRequirements(visitedRequirements, visitedFunctions, function, target, requirement, result.compose(requirement));
               if (resolved != null) {
                 if (allResults == null) {
@@ -324,12 +324,12 @@ public class AvailablePortfolioOutputs extends AvailableOutputsImpl {
       try {
         requirements = function.getRequirements(_context, target, requiredOutputValue);
         if (requirements == null) {
-          s_logger.debug("Unsatisfiable requirement {} for {}", requiredOutputValue, function);
+          LOGGER.debug("Unsatisfiable requirement {} for {}", requiredOutputValue, function);
           return null;
         }
       } catch (final Throwable t) {
-        s_logger.error("Error applying {} to {}", function, target);
-        s_logger.info("Exception thrown", t);
+        LOGGER.error("Error applying {} to {}", function, target);
+        LOGGER.info("Exception thrown", t);
         return null;
       }
       if (requirements.isEmpty()) {
@@ -347,29 +347,29 @@ public class AvailablePortfolioOutputs extends AvailableOutputsImpl {
           final ComputationTargetSpecification targetSpec = targetRef.getSpecification();
           final UniqueIdentifiable requirementTarget = _targetCache.get(targetSpec.getUniqueId());
           if (isAvailable(targetSpec, requirementTarget, requirement)) {
-            s_logger.debug("Requirement {} can be satisfied by market data", requirement);
+            LOGGER.debug("Requirement {} can be satisfied by market data", requirement);
             inputs.put(new SingleItem<ValueSpecification>(satisfyingSpecification(requirement, targetSpec, MarketDataSourcingFunction.UNIQUE_ID)), requirement);
           } else {
             if (requirementTarget != null) {
-              s_logger.debug("Resolving {} for function {}", requirement, function);
+              LOGGER.debug("Resolving {} for function {}", requirement, function);
               final Set<ValueSpecification> satisfied = satisfyRequirement(visitedRequirements, visitedFunctions,
                   ComputationTargetResolverUtils.createResolvedTarget(targetSpec, requirementTarget), requirement);
               if (satisfied == null) {
-                s_logger.debug("Can't satisfy {} for function {}", requirement, function);
+                LOGGER.debug("Can't satisfy {} for function {}", requirement, function);
                 if (!function.canHandleMissingRequirements()) {
                   return null;
                 }
               } else {
-                s_logger.debug("Resolved {} to {}", requirement, satisfied);
+                LOGGER.debug("Resolved {} to {}", requirement, satisfied);
                 inputs.put(satisfied.iterator(), requirement);
               }
             } else {
-              s_logger.debug("No target cached for {}, assuming ok", targetSpec);
+              LOGGER.debug("No target cached for {}, assuming ok", targetSpec);
               inputs.put(new SingleItem<ValueSpecification>(satisfyingSpecification(requirement, targetSpec, "UncachedTarget")), requirement);
             }
           }
         } else {
-          s_logger.debug("Externally referenced entity {}, assuming ok", targetRef);
+          LOGGER.debug("Externally referenced entity {}, assuming ok", targetRef);
           final ExternalId eid = targetRef.getRequirement().getIdentifiers().iterator().next();
           final UniqueId uid = UniqueId.of(eid.getScheme().getName(), eid.getValue());
           inputs.put(new SingleItem<ValueSpecification>(satisfyingSpecification(requirement, new ComputationTargetSpecification(targetRef.getType(), uid), "ExternalEntity")), requirement);
@@ -398,14 +398,14 @@ public class AvailablePortfolioOutputs extends AvailableOutputsImpl {
               }
             }
           } catch (final Throwable t) {
-            s_logger.error("Error applying {} to {}", function, target);
-            s_logger.info("Exception thrown", t);
+            LOGGER.error("Error applying {} to {}", function, target);
+            LOGGER.info("Exception thrown", t);
           }
           inputSet.clear();
         }
       } while (true);
       if (outputs.isEmpty()) {
-        s_logger.debug("Provisional result {} not in results after late resolution", resolvedOutputValue);
+        LOGGER.debug("Provisional result {} not in results after late resolution", resolvedOutputValue);
         return null;
       } else {
         return outputs;
@@ -420,7 +420,7 @@ public class AvailablePortfolioOutputs extends AvailableOutputsImpl {
         // Anonymous node in the portfolio means it cannot be referenced so no results can be produced on it.
         // Being presented with a portfolio like this almost certainly implies a temporary portfolio for which
         // node-level results are not required.
-        s_logger.debug("Ignoring portfolio node with no unique ID: {}", portfolioNode);
+        LOGGER.debug("Ignoring portfolio node with no unique ID: {}", portfolioNode);
         return;
       }
       final ComputationTarget target = new ComputationTarget(ComputationTargetType.PORTFOLIO_NODE, portfolioNode);
@@ -447,12 +447,12 @@ public class AvailablePortfolioOutputs extends AvailableOutputsImpl {
               final Set<ValueSpecification> resolved = resultWithSatisfiedRequirements(visitedRequirements, visitedFunctions, function, target, new ValueRequirement(result.getValueName(),
                   result.getTargetSpecification()), result);
               if (resolved != null) {
-                s_logger.info("Resolved {} on {}", result.getValueName(), portfolioNode);
+                LOGGER.info("Resolved {} on {}", result.getValueName(), portfolioNode);
                 for (final ValueSpecification resolvedItem : resolved) {
                   portfolioNodeOutput(resolvedItem.getValueName(), resolvedItem.getProperties());
                 }
               } else {
-                s_logger.info("Did not resolve {} on {}", result.getValueName(), portfolioNode);
+                LOGGER.info("Did not resolve {} on {}", result.getValueName(), portfolioNode);
               }
               if ((_watch != null) && _watch.equals(result.getValueName())) {
                 System.out.println();
@@ -460,12 +460,12 @@ public class AvailablePortfolioOutputs extends AvailableOutputsImpl {
             }
           }
         } catch (final Throwable t) {
-          s_logger.error("Error applying {} to {}", function, target);
-          s_logger.info("Exception thrown", t);
+          LOGGER.error("Error applying {} to {}", function, target);
+          LOGGER.info("Exception thrown", t);
         }
-        if (s_logger.isDebugEnabled()) {
+        if (LOGGER.isDebugEnabled()) {
           _work++;
-          s_logger.debug("Completed {} steps of {}", _work, _totalWork);
+          LOGGER.debug("Completed {} steps of {}", _work, _totalWork);
         }
       }
     }
@@ -496,12 +496,12 @@ public class AvailablePortfolioOutputs extends AvailableOutputsImpl {
               final Set<ValueSpecification> resolved = resultWithSatisfiedRequirements(visitedRequirements, visitedFunctions, function, target, new ValueRequirement(result.getValueName(),
                   result.getTargetSpecification()), result);
               if (resolved != null) {
-                s_logger.info("Resolved {} on {}", result.getValueName(), position);
+                LOGGER.info("Resolved {} on {}", result.getValueName(), position);
                 for (final ValueSpecification resolvedItem : resolved) {
                   positionOutput(resolvedItem.getValueName(), position.getSecurity().getSecurityType(), resolvedItem.getProperties());
                 }
               } else {
-                s_logger.info("Did not resolve {} on {}", result.getValueName(), position);
+                LOGGER.info("Did not resolve {} on {}", result.getValueName(), position);
               }
               if ((_watch != null) && _watch.equals(result.getValueName())) {
                 System.out.println();
@@ -509,12 +509,12 @@ public class AvailablePortfolioOutputs extends AvailableOutputsImpl {
             }
           }
         } catch (final Throwable t) {
-          s_logger.error("Error applying {} to {}", function, target);
-          s_logger.info("Exception thrown", t);
+          LOGGER.error("Error applying {} to {}", function, target);
+          LOGGER.info("Exception thrown", t);
         }
-        if (s_logger.isDebugEnabled()) {
+        if (LOGGER.isDebugEnabled()) {
           _work++;
-          s_logger.debug("Completed {} steps of {}", _work, _totalWork);
+          LOGGER.debug("Completed {} steps of {}", _work, _totalWork);
         }
       }
     }

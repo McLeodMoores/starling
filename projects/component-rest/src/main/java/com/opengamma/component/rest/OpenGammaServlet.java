@@ -35,7 +35,7 @@ public class OpenGammaServlet extends ServletContainer {
   /** Serialization version. */
   private static final long serialVersionUID = 1L;
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(OpenGammaServlet.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(OpenGammaServlet.class);
 
   public OpenGammaServlet() {
     super();
@@ -74,7 +74,7 @@ public class OpenGammaServlet extends ServletContainer {
       wa.initiate(rc);
       
     } catch (RuntimeException ex) {
-      s_logger.error("Exception occurred during intialization", ex);
+      LOGGER.error("Exception occurred during intialization", ex);
       throw ex;
     }
   }

@@ -31,25 +31,25 @@ import com.opengamma.util.money.MultipleCurrencyAmount;
 public final class EqualityChecker {
 
   // TODO static method to populate these from the outside
-  private static final Map<Class<?>, TypeHandler<?>> s_handlers = new ClassMap<>();
-  private static final Map<MetaProperty<?>, Comparator<?>> s_propertyComparators = Maps.newHashMap();
-  private static final ObjectArrayHandler s_objectArrayHandler = new ObjectArrayHandler();
+  private static final Map<Class<?>, TypeHandler<?>> HANDLERS = new ClassMap<>();
+  private static final Map<MetaProperty<?>, Comparator<?>> PROPERTY_COMPARATORS = Maps.newHashMap();
+  private static final ObjectArrayHandler OBJECT_ARRAY_HANDLER = new ObjectArrayHandler();
 
   static {
-    s_handlers.put(Double.class, new DoubleHandler());
-    s_handlers.put(double[].class, new PrimitiveDoubleArrayHandler());
-    s_handlers.put(Double[].class, new DoubleArrayHandler());
-    s_handlers.put(Object[].class, s_objectArrayHandler);
-    s_handlers.put(List.class, new ListHandler());
-    s_handlers.put(YieldCurve.class, new YieldCurveHandler());
-    s_handlers.put(LabelledMatrix1D.class, new LabelledMatrix1DHandler());
-    s_handlers.put(MultipleCurrencyAmount.class, new MultipleCurrencyAmountHandler());
-    s_handlers.put(Bean.class, new BeanHandler());
-    s_handlers.put(InvokedSerializedForm.class, new InvokedSerializedFormHandler());
-    s_handlers.put(VolatilitySurfaceData.class, new VolatilitySurfaceDataHandler());
-    s_handlers.put(Map.class, new MapHandler());
+    HANDLERS.put(Double.class, new DoubleHandler());
+    HANDLERS.put(double[].class, new PrimitiveDoubleArrayHandler());
+    HANDLERS.put(Double[].class, new DoubleArrayHandler());
+    HANDLERS.put(Object[].class, OBJECT_ARRAY_HANDLER);
+    HANDLERS.put(List.class, new ListHandler());
+    HANDLERS.put(YieldCurve.class, new YieldCurveHandler());
+    HANDLERS.put(LabelledMatrix1D.class, new LabelledMatrix1DHandler());
+    HANDLERS.put(MultipleCurrencyAmount.class, new MultipleCurrencyAmountHandler());
+    HANDLERS.put(Bean.class, new BeanHandler());
+    HANDLERS.put(InvokedSerializedForm.class, new InvokedSerializedFormHandler());
+    HANDLERS.put(VolatilitySurfaceData.class, new VolatilitySurfaceDataHandler());
+    HANDLERS.put(Map.class, new MapHandler());
 
-    s_propertyComparators.put(Curve.meta().name(), new AlwaysEqualComparator());
+    PROPERTY_COMPARATORS.put(Curve.meta().name(), new AlwaysEqualComparator());
   }
 
   private EqualityChecker() {
@@ -79,13 +79,13 @@ public final class EqualityChecker {
     Object value1 = WriteReplaceHelper.writeReplace(o1);
     Object value2 = WriteReplaceHelper.writeReplace(o2);
     @SuppressWarnings("unchecked")
-    TypeHandler<Object> handler = (TypeHandler<Object>) s_handlers.get(value1.getClass());
+    TypeHandler<Object> handler = (TypeHandler<Object>) HANDLERS.get(value1.getClass());
     if (handler != null) {
       return handler.equals(value1, value2, delta);
     } else {
       // ClassMap doesn't handle subtyping and arrays, this uses the Object[] handler for non-primitive arrays
       if (value1.getClass().isArray() && Object[].class.isAssignableFrom(value1.getClass())) {
-        return s_objectArrayHandler.equals((Object[]) value1, (Object[]) value2, delta);
+        return OBJECT_ARRAY_HANDLER.equals((Object[]) value1, (Object[]) value2, delta);
       } else {
         return Objects.equals(value1, value2);
       }
@@ -224,7 +224,7 @@ public final class EqualityChecker {
         Object value1 = property.get(bean1);
         Object value2 = property.get(bean2);
         @SuppressWarnings("unchecked")
-        Comparator<Object> comparator = (Comparator<Object>) s_propertyComparators.get(property);
+        Comparator<Object> comparator = (Comparator<Object>) PROPERTY_COMPARATORS.get(property);
         if (comparator == null) {
           if (!EqualityChecker.equals(value1, value2, delta)) {
             return false;

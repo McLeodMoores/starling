@@ -145,17 +145,17 @@ public class InflationBuildingCurveWithDiscountAndSeasonalityTestUS {
     }
   }
   public static final ZonedDateTime NOW_MINUS_3MONTH = DateUtils.getUTCDate(2012, 6, 28);
-  public static final ZonedDateTime[] seasonalityDate = ScheduleCalculator.getUnadjustedDateSchedule(NOW.withDayOfMonth(1), NOW.withDayOfMonth(1).plusYears(30), Period.ofMonths(1), true, false);
-  public static final double[] seasonalStep = new double[seasonalityDate.length];
+  public static final ZonedDateTime[] SEASONALITY_DATE = ScheduleCalculator.getUnadjustedDateSchedule(NOW.withDayOfMonth(1), NOW.withDayOfMonth(1).plusYears(30), Period.ofMonths(1), true, false);
+  public static final double[] SEASONAL_STEP = new double[SEASONALITY_DATE.length];
   static {
-    for (int loopins = 0; loopins < seasonalityDate.length; loopins++) {
-      seasonalStep[loopins] = TimeCalculator.getTimeBetween(NOW, seasonalityDate[loopins]);
+    for (int loopins = 0; loopins < SEASONALITY_DATE.length; loopins++) {
+      SEASONAL_STEP[loopins] = TimeCalculator.getTimeBetween(NOW, SEASONALITY_DATE[loopins]);
     }
   }
 
-  public static final double[] seasonalFactors = {1.005, 1.001, 1.01, .999, .998, .9997, 1.004, 1.006, .994, .993, .9991 };
+  public static final double[] SEASONAL_FACTORS = {1.005, 1.001, 1.01, .999, .998, .9997, 1.004, 1.006, .994, .993, .9991 };
   /*public static final double[] seasonalFactors = {1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0 };*/
-  final static SeasonalCurve SEASONAL_CURVE = new SeasonalCurve(seasonalStep, seasonalFactors, false);
+  final static SeasonalCurve SEASONAL_CURVE = new SeasonalCurve(SEASONAL_STEP, SEASONAL_FACTORS, false);
   /** Standard USD discounting curve instrument definitions */
   private static final InstrumentDefinition<?>[] DEFINITIONS_DSC_USD;
 

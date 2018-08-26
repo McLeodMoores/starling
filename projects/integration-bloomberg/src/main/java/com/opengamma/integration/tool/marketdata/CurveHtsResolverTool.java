@@ -51,7 +51,7 @@ import com.opengamma.util.money.Currency;
 public class CurveHtsResolverTool extends AbstractTool<IntegrationToolContext> {
 
   /** Logger. */
-  private static Logger s_logger = LoggerFactory.getLogger(CurveHtsResolverTool.class);
+  private static Logger LOGGER = LoggerFactory.getLogger(CurveHtsResolverTool.class);
 
   /** Portfolio name option flag */
   private static final String CURVE_NAME_OPT = "n";
@@ -127,10 +127,10 @@ public class CurveHtsResolverTool extends AbstractTool<IntegrationToolContext> {
           if (realIdConvention != null) {
             externalInitialRateId.add(realIdConvention.getIdentifiers().getExternalId(ExternalSchemes.BLOOMBERG_TICKER));
           } else {
-            s_logger.error("No convention for {}", initialRate.toString());
+            LOGGER.error("No convention for {}", initialRate.toString());
           }
         } else {
-          s_logger.warn("No convention for {} product", product);
+          LOGGER.warn("No convention for {} product", product);
         }
       }
     }
@@ -181,24 +181,24 @@ public class CurveHtsResolverTool extends AbstractTool<IntegrationToolContext> {
   private Set<ExternalId> getCurveRequiredExternalIds(final ConfigSource configSource, final Collection<String> names, final List<LocalDate> dates) {
     final Set<ExternalId> externalIds = newHashSet();
     for (final String name : names) {
-      s_logger.info("Processing curve " + name);
+      LOGGER.info("Processing curve " + name);
       final YieldCurveDefinition curveDefinition = configSource.getSingle(YieldCurveDefinition.class, name, VersionCorrection.LATEST);
       if (curveDefinition != null) {
         final InterpolatedYieldCurveSpecificationBuilder builder = new ConfigDBInterpolatedYieldCurveSpecificationBuilder(configSource);
         for (final LocalDate date : dates) {
-          s_logger.info("Processing curve date " + date);
+          LOGGER.info("Processing curve date " + date);
           try {
             final InterpolatedYieldCurveSpecification curveSpec = builder.buildCurve(date, curveDefinition, VersionCorrection.LATEST);
             for (final FixedIncomeStripWithIdentifier strip : curveSpec.getStrips()) {
-              s_logger.info("Processing strip " + strip.getSecurity());
+              LOGGER.info("Processing strip " + strip.getSecurity());
               externalIds.add(strip.getSecurity());
             }
           } catch (final Throwable t) {
-            s_logger.warn("Unable to build curve " + t.getMessage());
+            LOGGER.warn("Unable to build curve " + t.getMessage());
           }
         }
       } else {
-        s_logger.warn("No curve definition with '{}' name", name);
+        LOGGER.warn("No curve definition with '{}' name", name);
       }
     }
     return externalIds;
@@ -211,7 +211,7 @@ public class CurveHtsResolverTool extends AbstractTool<IntegrationToolContext> {
     for (final Set<ExternalId> externalIds : externalIdSets) {
       if (externalIds.size() > 0) {
         for (final String dataField : dataFields) {
-          s_logger.info("Loading time series (field: " + dataField + ", provider: " + dataProvider + ") with external IDs " + externalIds);
+          LOGGER.info("Loading time series (field: " + dataField + ", provider: " + dataProvider + ") with external IDs " + externalIds);
           if (write) {
             loader.loadTimeSeries(externalIds, dataProvider, dataField, LocalDate.now().minusYears(1), null);
           }

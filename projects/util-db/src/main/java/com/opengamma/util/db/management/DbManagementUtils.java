@@ -16,14 +16,14 @@ import com.opengamma.util.ArgumentChecker;
  */
 public final class DbManagementUtils {
 
-  private static final Map<String, DbManagement> s_jdbcVendorMap = new ConcurrentHashMap<String, DbManagement>();
+  private static final Map<String, DbManagement> JDBS_VENDOR_MAP = new ConcurrentHashMap<String, DbManagement>();
   
   static {
-    s_jdbcVendorMap.put("postgresql", PostgresDbManagement.getInstance());
-    s_jdbcVendorMap.put("derby", DerbyDbManagement.getInstance());
-    s_jdbcVendorMap.put("hsqldb", HSQLDbManagement.getInstance());
-    s_jdbcVendorMap.put("sqlserver", SqlServer2008DbManagement.getInstance());
-    s_jdbcVendorMap.put("oracle", Oracle11gDbManagement.getInstance());
+    JDBS_VENDOR_MAP.put("postgresql", PostgresDbManagement.getInstance());
+    JDBS_VENDOR_MAP.put("derby", DerbyDbManagement.getInstance());
+    JDBS_VENDOR_MAP.put("hsqldb", HSQLDbManagement.getInstance());
+    JDBS_VENDOR_MAP.put("sqlserver", SqlServer2008DbManagement.getInstance());
+    JDBS_VENDOR_MAP.put("oracle", Oracle11gDbManagement.getInstance());
   }
   
   /**
@@ -46,7 +46,7 @@ public final class DbManagementUtils {
       throw new OpenGammaRuntimeException("Expected JDBC database URL, found '" + jdbcUrl + "'");
     }
     String jdbcVendorName = dbUrlParts[1];
-    DbManagement dbManagement = s_jdbcVendorMap.get(jdbcVendorName);
+    DbManagement dbManagement = JDBS_VENDOR_MAP.get(jdbcVendorName);
     if (dbManagement == null) {
       throw new IllegalArgumentException("Unsupported JDBC vendor name '" + jdbcVendorName + "'");
     }

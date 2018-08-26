@@ -49,7 +49,7 @@ import com.opengamma.util.tuple.DoublesPair;
  *
  */
 public class FXDigitalCallSpreadBlackPV01Function extends FXDigitalCallSpreadBlackSingleValuedFunction {
-  private static final Logger s_logger = LoggerFactory.getLogger(FXDigitalCallSpreadBlackPV01Function.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(FXDigitalCallSpreadBlackPV01Function.class);
   private static final PV01ForexCalculator CALCULATOR = PV01ForexCalculator.getInstance();
 
   private ConfigDBCurveCalculationConfigSource _curveCalculationConfigSource;
@@ -93,19 +93,19 @@ public class FXDigitalCallSpreadBlackPV01Function extends FXDigitalCallSpreadBla
     final ValueProperties constraints = desiredValue.getConstraints();
     final Set<String> curveNames = constraints.getValues(ValuePropertyNames.CURVE);
     if (curveNames == null || curveNames.size() != 1) {
-      s_logger.error("Did not specify a curve name for requirement {}", desiredValue);
+      LOGGER.error("Did not specify a curve name for requirement {}", desiredValue);
       return null;
     }
     final Set<String> currencies = constraints.getValues(ValuePropertyNames.CURVE_CURRENCY);
     if (currencies == null || currencies.size() != 1) {
-      s_logger.error("Did not specify a curve currency for requirement {}", desiredValue);
+      LOGGER.error("Did not specify a curve currency for requirement {}", desiredValue);
       return null;
     }
     final String callCurveName = Iterables.getOnlyElement(constraints.getValues(CALL_CURVE));
     final String putCurveName = Iterables.getOnlyElement(constraints.getValues(PUT_CURVE));
     final String curveName = Iterables.getOnlyElement(curveNames);
     if (!(curveName.equals(putCurveName) || curveName.equals(callCurveName))) {
-      s_logger.info("Curve name {} did not match either put curve name {} or call curve name {}", new Object[] {curveName, putCurveName, callCurveName });
+      LOGGER.info("Curve name {} did not match either put curve name {} or call curve name {}", new Object[] {curveName, putCurveName, callCurveName });
       return null;
     }
     final String callCurveCalculationConfigName = Iterables.getOnlyElement(constraints.getValues(CALL_CURVE_CALC_CONFIG));
@@ -130,7 +130,7 @@ public class FXDigitalCallSpreadBlackPV01Function extends FXDigitalCallSpreadBla
     }
     final MultiCurveCalculationConfig resultCurveCalculationConfig = _curveCalculationConfigSource.getConfig(resultCurveConfigName);
     if (resultCurveCalculationConfig == null) {
-      s_logger.error("Could not find curve calculation configuration named " + resultCurveConfigName + " for currency " + resultCurrency);
+      LOGGER.error("Could not find curve calculation configuration named " + resultCurveConfigName + " for currency " + resultCurrency);
       return null;
     }
     requirements.add(getCurveSensitivitiesRequirement(putCurveName, putCurveCalculationConfigName, callCurveName, callCurveCalculationConfigName, surfaceName, interpolatorName,
@@ -176,7 +176,7 @@ public class FXDigitalCallSpreadBlackPV01Function extends FXDigitalCallSpreadBla
     final Currency callCurrency = security.accept(ForexVisitors.getCallCurrencyVisitor());
     final CurrencyPair baseQuotePair = baseQuotePairs.getCurrencyPair(putCurrency, callCurrency);
     if (baseQuotePair == null) {
-      s_logger.error("Could not get base/quote pair for currency pair (" + putCurrency + ", " + callCurrency + ")");
+      LOGGER.error("Could not get base/quote pair for currency pair (" + putCurrency + ", " + callCurrency + ")");
       return null;
     }
     final ValueSpecification resultSpec = new ValueSpecification(getValueRequirementName(), target.toSpecification(), getResultProperties(target, putCurveName, putCurveCalculationConfig,

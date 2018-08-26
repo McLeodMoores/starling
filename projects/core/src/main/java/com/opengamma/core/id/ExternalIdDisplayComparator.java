@@ -22,20 +22,20 @@ public class ExternalIdDisplayComparator implements Comparator<ExternalId> {
   /**
    * The map of scores.
    */
-  static final Map<ExternalScheme, Integer> s_scoreMap = Maps.newHashMap();
+  static final Map<ExternalScheme, Integer> SCORE_MAP = Maps.newHashMap();
   static {
-    s_scoreMap.put(ExternalSchemes.BLOOMBERG_TCM, 20); // beacuse if there's both ticker and tcm, you want to see tcm.
-    s_scoreMap.put(ExternalSchemes.BLOOMBERG_TICKER, 19);
-    s_scoreMap.put(ExternalSchemes.RIC, 17);
-    s_scoreMap.put(ExternalSchemes.BLOOMBERG_TICKER_WEAK, 16);
-    s_scoreMap.put(ExternalSchemes.ACTIVFEED_TICKER, 15);
-    s_scoreMap.put(ExternalSchemes.SURF, 14);
-    s_scoreMap.put(ExternalSchemes.ISIN, 13);
-    s_scoreMap.put(ExternalSchemes.CUSIP, 12);
-    s_scoreMap.put(ExternalSchemes.SEDOL1, 11);
-    s_scoreMap.put(ExternalSchemes.OG_SYNTHETIC_TICKER, 10);
-    s_scoreMap.put(ExternalSchemes.BLOOMBERG_BUID, 5);
-    s_scoreMap.put(ExternalSchemes.BLOOMBERG_BUID_WEAK, 4);
+    SCORE_MAP.put(ExternalSchemes.BLOOMBERG_TCM, 20); // beacuse if there's both ticker and tcm, you want to see tcm.
+    SCORE_MAP.put(ExternalSchemes.BLOOMBERG_TICKER, 19);
+    SCORE_MAP.put(ExternalSchemes.RIC, 17);
+    SCORE_MAP.put(ExternalSchemes.BLOOMBERG_TICKER_WEAK, 16);
+    SCORE_MAP.put(ExternalSchemes.ACTIVFEED_TICKER, 15);
+    SCORE_MAP.put(ExternalSchemes.SURF, 14);
+    SCORE_MAP.put(ExternalSchemes.ISIN, 13);
+    SCORE_MAP.put(ExternalSchemes.CUSIP, 12);
+    SCORE_MAP.put(ExternalSchemes.SEDOL1, 11);
+    SCORE_MAP.put(ExternalSchemes.OG_SYNTHETIC_TICKER, 10);
+    SCORE_MAP.put(ExternalSchemes.BLOOMBERG_BUID, 5);
+    SCORE_MAP.put(ExternalSchemes.BLOOMBERG_BUID_WEAK, 4);
   }
 
   /**
@@ -47,7 +47,7 @@ public class ExternalIdDisplayComparator implements Comparator<ExternalId> {
    * Uses hard-coded default information about scores.
    */
   public ExternalIdDisplayComparator() {
-    _scoreMap = s_scoreMap;
+    _scoreMap = SCORE_MAP;
   }
 
   /**

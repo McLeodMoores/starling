@@ -44,14 +44,14 @@ import com.opengamma.util.ArgumentChecker;
 @Path("marketdatasnapshots")
 public class MarketDataSnapshotListResource {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(MarketDataSnapshotListResource.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(MarketDataSnapshotListResource.class);
 
   static final String BASIS_VIEW_NAME = "basisViewName";
   static final String SNAPSHOTS = "snapshots";
   static final String ID = "id";
   static final String NAME = "name";
 
-  private static final Pattern s_guidPattern =
+  private static final Pattern GUID_PATTERN =
       Pattern.compile("(\\{?([0-9a-fA-F]){8}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){12}\\}?)");
 
   private final MarketDataSnapshotMaster _snapshotMaster;
@@ -74,15 +74,15 @@ public class MarketDataSnapshotListResource {
     for (MarketDataSnapshotDocument doc : MarketDataSnapshotSearchIterator.iterable(_snapshotMaster, snapshotSearchRequest)) {
       ManageableMarketDataSnapshot snapshot = doc.getSnapshot();
       if (snapshot.getUniqueId() == null) {
-        s_logger.warn("Ignoring snapshot with null unique identifier {}", snapshot.getName());
+        LOGGER.warn("Ignoring snapshot with null unique identifier {}", snapshot.getName());
         continue;
       }
       if (StringUtils.isBlank(snapshot.getName())) {
-        s_logger.warn("Ignoring snapshot {} with no name", snapshot.getUniqueId());
+        LOGGER.warn("Ignoring snapshot {} with no name", snapshot.getUniqueId());
         continue;
       }
-      if (s_guidPattern.matcher(snapshot.getName()).find()) {
-        s_logger.debug("Ignoring snapshot which appears to have an auto-generated name: {}", snapshot.getName());
+      if (GUID_PATTERN.matcher(snapshot.getName()).find()) {
+        LOGGER.debug("Ignoring snapshot which appears to have an auto-generated name: {}", snapshot.getName());
         continue;
       }
       String basisViewName = snapshot.getBasisViewName() != null ? snapshot.getBasisViewName() : "unknown";

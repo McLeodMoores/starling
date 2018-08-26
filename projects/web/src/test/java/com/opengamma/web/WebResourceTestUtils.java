@@ -47,7 +47,7 @@ import com.opengamma.util.time.ExpiryAccuracy;
  */
 public final class WebResourceTestUtils {
   
-  public static final ContainerFactory s_sortedJSONObjectFactory = new ContainerFactory() {
+  public static final ContainerFactory SORTED_JSON_OBJECT_FACTORY = new ContainerFactory() {
     
     @SuppressWarnings("rawtypes")
     @Override
@@ -165,8 +165,8 @@ public final class WebResourceTestUtils {
   public static void assertJSONObjectEquals(final JSONObject expectedJson, final JSONObject actualJson) throws Exception {
     assertNotNull(expectedJson);
     assertNotNull(actualJson);
-    String expectedSorted = JSONValue.toJSONString(new JSONParser().parse(expectedJson.toString(), s_sortedJSONObjectFactory));
-    String actualSorted = JSONValue.toJSONString(new JSONParser().parse(actualJson.toString(), s_sortedJSONObjectFactory));
+    String expectedSorted = JSONValue.toJSONString(new JSONParser().parse(expectedJson.toString(), SORTED_JSON_OBJECT_FACTORY));
+    String actualSorted = JSONValue.toJSONString(new JSONParser().parse(actualJson.toString(), SORTED_JSON_OBJECT_FACTORY));
     assertEquals(expectedSorted, actualSorted);
   }
 

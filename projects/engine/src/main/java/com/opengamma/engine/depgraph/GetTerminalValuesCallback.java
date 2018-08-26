@@ -51,7 +51,7 @@ import com.opengamma.util.tuple.Pairs;
  */
 /* package */class GetTerminalValuesCallback implements ResolvedValueCallback {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(GetTerminalValuesCallback.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(GetTerminalValuesCallback.class);
 
   private static final int MAX_DATA_PER_DIGEST = 4;
 
@@ -317,7 +317,7 @@ import com.opengamma.util.tuple.Pairs;
 
   @Override
   public void failed(final GraphBuildingContext context, final ValueRequirement value, final ResolutionFailure failure) {
-    s_logger.info("Couldn't resolve {}", value);
+    LOGGER.info("Couldn't resolve {}", value);
     if (failure != null) {
       final ResolutionFailure failureImpl = failure.checkFailure(value);
       if (_failureListener != null) {
@@ -325,7 +325,7 @@ import com.opengamma.util.tuple.Pairs;
       }
       context.exception(new UnsatisfiableDependencyGraphException(failureImpl));
     } else {
-      s_logger.warn("No failure state for {}", value);
+      LOGGER.warn("No failure state for {}", value);
       context.exception(new UnsatisfiableDependencyGraphException(value));
     }
   }
@@ -408,12 +408,12 @@ import com.opengamma.util.tuple.Pairs;
               // A and B merged into A
               _b[j--] = _b[--bLength];
               _nodeInfo._collapse.add(Pairs.of(b, a));
-              s_logger.debug("Merging {} into {}", b, a);
+              LOGGER.debug("Merging {} into {}", b, a);
             } else if (collapsed.equals(b)) {
               // A and B merged into B
               _a[i--] = _a[--aLength];
               _nodeInfo._collapse.add(Pairs.of(a, b));
-              s_logger.debug("Merging {} into {}", a, b);
+              LOGGER.debug("Merging {} into {}", a, b);
               break;
             } else {
               // A and B merged into new target
@@ -422,8 +422,8 @@ import com.opengamma.util.tuple.Pairs;
               // Note the new target will go into its own evaluation group when this is actioned; it will then be compared against the other targets
               _nodeInfo._collapse.add(Pairs.of(a, collapsed));
               _nodeInfo._collapse.add(Pairs.of(b, collapsed));
-              if (s_logger.isDebugEnabled()) {
-                s_logger.debug("Merging {} and {} into new node {}", new Object[] {a, b, collapsed });
+              if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("Merging {} and {} into new node {}", new Object[] {a, b, collapsed });
               }
               break;
             }
@@ -466,7 +466,7 @@ import com.opengamma.util.tuple.Pairs;
     // Action anything already found asynchronously
     Pair<ComputationTargetSpecification, ComputationTargetSpecification> collapse = nodeInfo._collapse.poll();
     while (collapse != null) {
-      s_logger.debug("Found collapse targets {}", collapse);
+      LOGGER.debug("Found collapse targets {}", collapse);
       nodeInfo._target2collapseGroup.remove(collapse.getFirst());
       final Set<DependencyNode> originalNodes = nodeInfo._target2nodes.remove(collapse.getFirst());
       final Set<DependencyNode> newNodes = getOrCreateNodes(function, collapse.getSecond());
@@ -494,19 +494,19 @@ import com.opengamma.util.tuple.Pairs;
       }
       final Map<ValueSpecification, ValueSpecification> replacementOutputs = new HashMap<ValueSpecification, ValueSpecification>();
       for (DependencyNode originalNode : originalNodes) {
-        s_logger.debug("Applying collapse of {} into {}", originalNode, collapse.getSecond());
+        LOGGER.debug("Applying collapse of {} into {}", originalNode, collapse.getSecond());
         int count = originalNode.getInputCount();
         for (int i = 0; i < count; i++) {
           final ValueSpecification input = originalNode.getInputValue(i);
-          s_logger.trace("Removing use of {} by {}", input, originalNode);
+          LOGGER.trace("Removing use of {} by {}", input, originalNode);
           newInputs.put(input, _spec2Node.get(input));
           final Set<DependencyNode> usage = _spec2Usage.get(input);
           if (usage == null) {
-            s_logger.error("Internal error: Input {} of {} not marked as in use", input, originalNode);
+            LOGGER.error("Internal error: Input {} of {} not marked as in use", input, originalNode);
           }
           usage.remove(originalNode);
           if (usage.isEmpty()) {
-            s_logger.trace("Removing last use of {}", input);
+            LOGGER.trace("Removing last use of {}", input);
             _spec2Usage.remove(input);
           }
         }
@@ -549,18 +549,18 @@ import com.opengamma.util.tuple.Pairs;
           // Note: This happens because entries get written into the nodeInfo as soon as a target is requested. The target might not result in any
           // nodes being created because of an earlier substitution. This is a simple solution - an alternative and possible faster method is to not
           // create the target2collapseGroup entry until a node is created. The alternative is harder to implement though! 
-          s_logger.debug("Found transient key {}", target2collapseGroup);
+          LOGGER.debug("Found transient key {}", target2collapseGroup);
           final Collection<ComputationTargetSpecification> targetSpecs = nodeInfo._collapseGroup2targets.get(target2collapseGroup.getValue());
           if (targetSpecs.size() == 1) {
             if (targetSpecs.contains(target2collapseGroup.getKey())) {
               nodeInfo._collapseGroup2targets.remove(target2collapseGroup.getValue());
               collapseGroups--;
             } else {
-              s_logger.error("Assertion error - transient singleton key {} not in reverse lookup table", target2collapseGroup.getKey());
+              LOGGER.error("Assertion error - transient singleton key {} not in reverse lookup table", target2collapseGroup.getKey());
             }
           } else {
             if (!targetSpecs.remove(target2collapseGroup.getKey())) {
-              s_logger.error("Assertion error - transient key {} not in reverse lookup table", target2collapseGroup.getKey());
+              LOGGER.error("Assertion error - transient key {} not in reverse lookup table", target2collapseGroup.getKey());
             }
           }
           itrTarget2CollapseGroup.remove();
@@ -615,7 +615,7 @@ import com.opengamma.util.tuple.Pairs;
         DependencyNode inputNode;
         inputNode = _spec2Node.get(input);
         if (inputNode != null) {
-          s_logger.debug("Found node {} for input {}", inputNode, input);
+          LOGGER.debug("Found node {} for input {}", inputNode, input);
           if (input.getTargetSpecification().equals(inputNode.getTarget())) {
             inputValues[i] = input;
           } else {
@@ -626,13 +626,13 @@ import com.opengamma.util.tuple.Pairs;
           }
           inputNodes[i++] = inputNode;
         } else {
-          s_logger.debug("Finding node production for {}", input);
+          LOGGER.debug("Finding node production for {}", input);
           final ResolvedValue inputValue = _resolvedBuffer.get(input);
           if (inputValue != null) {
             if (downstreamCopy == null) {
               downstreamCopy = new HashSet<ValueSpecification>(downstream);
               downstreamCopy.add(resolvedValue.getValueSpecification());
-              s_logger.debug("Downstream = {}", downstreamCopy);
+              LOGGER.debug("Downstream = {}", downstreamCopy);
             }
             inputNode = getOrCreateNode(inputValue, downstreamCopy);
             if (inputNode != null) {
@@ -640,7 +640,7 @@ import com.opengamma.util.tuple.Pairs;
                 final ValueSpecification reducedInput = inputNode.getOutputValue(j);
                 if (reducedInput.getValueName() == input.getValueName()) {
                   if (input.getProperties().isSatisfiedBy(reducedInput.getProperties())) {
-                    s_logger.debug("Reducing {} to {}", input, reducedInput);
+                    LOGGER.debug("Reducing {} to {}", input, reducedInput);
                     input = reducedInput;
                     break;
                   }
@@ -649,16 +649,16 @@ import com.opengamma.util.tuple.Pairs;
               inputValues[i] = input;
               inputNodes[i++] = inputNode;
             } else {
-              s_logger.warn("No node production for {}", inputValue);
+              LOGGER.warn("No node production for {}", inputValue);
               return null;
             }
           } else {
             final ValueSpecification collapsed = _collapseChain.get(input);
             if (collapsed == null) {
-              s_logger.warn("No registered production for {}", input);
+              LOGGER.warn("No registered production for {}", input);
               return null;
             }
-            s_logger.debug("{} already collapsed into {}", input, collapsed);
+            LOGGER.debug("{} already collapsed into {}", input, collapsed);
             input = collapsed;
             if (primaryInputs.contains(input)) {
               // The collapsed value is already in the input set, skip
@@ -697,7 +697,7 @@ import com.opengamma.util.tuple.Pairs;
         outputValues = Arrays.copyOf(outputValues, i);
       }
       final DependencyNode node = DependencyNodeImpl.of(resolvedValue.getFunction(), resolvedValue.getValueSpecification().getTargetSpecification(), outputValues, inputValues, inputNodes);
-      s_logger.debug("Adding {} to graph set", node);
+      LOGGER.debug("Adding {} to graph set", node);
       for (i = 0; i < inputCount; i++) {
         final ValueSpecification input = inputValues[i];
         Set<DependencyNode> usage = _spec2Usage.get(input);
@@ -826,7 +826,7 @@ import com.opengamma.util.tuple.Pairs;
       if (INTRINSICS.contains(node.getFunction().getFunctionId())) {
         continue;
       }
-      s_logger.debug("Considering {} for {}", node, resolvedValue);
+      LOGGER.debug("Considering {} for {}", node, resolvedValue);
       // Update the output values for the node with the union. The input values will be dealt with by the caller.
       Map<ValueSpecification, ValueSpecification> replacementOutputs = null;
       List<ValueSpecification> additionalOutputs = null;
@@ -867,7 +867,7 @@ import com.opengamma.util.tuple.Pairs;
         // previously producing and should be able to produce once its got any extra inputs it needs.
         if (_spec2Node.containsKey(output)) {
           // Another node already produces this; if this was the primary output we'd have found it in getOrCreateNode before this was called
-          s_logger.debug("Discarding output {} - already produced elsewhere in the graph", output);
+          LOGGER.debug("Discarding output {} - already produced elsewhere in the graph", output);
           // TODO: Would it be better to do this check at the start of the loop?
         } else {
           if (additionalOutputs == null) {
@@ -932,14 +932,14 @@ import com.opengamma.util.tuple.Pairs;
   }
 
   private DependencyNode getOrCreateNode(final ResolvedValue resolvedValue, final Set<ValueSpecification> downstream) {
-    s_logger.debug("Resolved {}", resolvedValue.getValueSpecification());
+    LOGGER.debug("Resolved {}", resolvedValue.getValueSpecification());
     if (downstream.contains(resolvedValue.getValueSpecification())) {
-      s_logger.debug("Already have downstream production of {} in {}", resolvedValue.getValueSpecification(), downstream);
+      LOGGER.debug("Already have downstream production of {} in {}", resolvedValue.getValueSpecification(), downstream);
       return null;
     }
     final DependencyNode existingNode = _spec2Node.get(resolvedValue.getValueSpecification());
     if (existingNode != null) {
-      s_logger.debug("Existing production of {} found in graph set", resolvedValue);
+      LOGGER.debug("Existing production of {} found in graph set", resolvedValue);
       return existingNode;
     }
     final Set<DependencyNode> nodes = getOrCreateNodes(resolvedValue.getFunction(), resolvedValue.getValueSpecification().getTargetSpecification());
@@ -953,7 +953,7 @@ import com.opengamma.util.tuple.Pairs;
    */
   @Override
   public void resolved(final GraphBuildingContext context, final ValueRequirement valueRequirement, final ResolvedValue resolvedValue, final ResolutionPump pump) {
-    s_logger.info("Resolved {} to {}", valueRequirement, resolvedValue.getValueSpecification());
+    LOGGER.info("Resolved {} to {}", valueRequirement, resolvedValue.getValueSpecification());
     if (pump != null) {
       context.close(pump);
     }
@@ -978,7 +978,7 @@ import com.opengamma.util.tuple.Pairs;
             }
             requirements.add(resolved.getFirst());
           } else {
-            s_logger.error("Resolved {} to {} but couldn't create one or more dependency node", resolved.getFirst(), resolved.getSecond().getValueSpecification());
+            LOGGER.error("Resolved {} to {} but couldn't create one or more dependency node", resolved.getFirst(), resolved.getSecond().getValueSpecification());
           }
           resolved = _resolvedQueue.poll();
         }
@@ -1109,11 +1109,11 @@ import com.opengamma.util.tuple.Pairs;
   }
 
   public void reportStateSize() {
-    if (!s_logger.isInfoEnabled()) {
+    if (!LOGGER.isInfoEnabled()) {
       return;
     }
-    s_logger.info("Graph = {} nodes for {} terminal outputs", _spec2Node.size(), _resolvedValues.size());
-    s_logger.info("Resolved buffer = {}, resolved queue = {}", _resolvedBuffer.size(), _resolvedQueue.size());
+    LOGGER.info("Graph = {} nodes for {} terminal outputs", _spec2Node.size(), _resolvedValues.size());
+    LOGGER.info("Resolved buffer = {}, resolved queue = {}", _resolvedBuffer.size(), _resolvedQueue.size());
   }
 
 }

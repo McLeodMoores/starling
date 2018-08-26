@@ -17,7 +17,7 @@ import com.opengamma.util.tuple.Triple;
 
 /* package */final class ExistingResolutionsStep extends FunctionApplicationStep implements ResolvedValueCallback {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(ExistingResolutionsStep.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ExistingResolutionsStep.class);
 
   private ResolutionPump _pump;
 
@@ -38,7 +38,7 @@ import com.opengamma.util.tuple.Triple;
 
   @Override
   public void failed(final GraphBuildingContext context, final ValueRequirement value, final ResolutionFailure failure) {
-    s_logger.debug("Failed to resolve {} from {}", value, this);
+    LOGGER.debug("Failed to resolve {} from {}", value, this);
     // Don't store the failures from trying the existing ones; they might be for different value requirements that we've just piggy-backed onto
     // All existing resolutions have been completed, so now try the actual application
     setRunnableTaskState(new FunctionApplicationStep(getTask(), getIterationBase(), getResolved(), getResolvedOutput()), context);
@@ -46,7 +46,7 @@ import com.opengamma.util.tuple.Triple;
 
   @Override
   public void resolved(final GraphBuildingContext context, final ValueRequirement valueRequirement, final ResolvedValue value, final ResolutionPump pump) {
-    s_logger.debug("Resolved {} from {}", value, this);
+    LOGGER.debug("Resolved {} from {}", value, this);
     if (pump != null) {
       synchronized (this) {
         _pump = pump;
@@ -86,7 +86,7 @@ import com.opengamma.util.tuple.Triple;
       return;
     }
     if (pump != ResolutionPump.Dummy.INSTANCE) {
-      s_logger.debug("Pumping underlying delegate");
+      LOGGER.debug("Pumping underlying delegate");
       context.pump(pump);
     } else {
       // All existing resolutions have been completed, so now try the actual application

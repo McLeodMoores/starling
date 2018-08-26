@@ -65,7 +65,7 @@ import com.opengamma.util.tuple.Pairs;
 @Test(groups = TestGroup.UNIT)
 public class PlanExecutorTest {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(PlanExecutorTest.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(PlanExecutorTest.class);
 
   private ViewProcessContext createViewProcessContext(final JobDispatcher jobDispatcher) {
     final ViewProcessContext context = Mockito.mock(ViewProcessContext.class);
@@ -124,7 +124,7 @@ public class PlanExecutorTest {
 
     @Override
     public Cancelable dispatchJob(final CalculationJob job, final JobResultReceiver receiver) {
-      s_logger.debug("Dispatching {}", job);
+      LOGGER.debug("Dispatching {}", job);
       _jobs.add(Pairs.of(job, receiver));
       if (job.getTail() != null) {
         for (CalculationJob tail : job.getTail()) {
@@ -135,7 +135,7 @@ public class PlanExecutorTest {
     }
 
     protected void notify(final CalculationJob job, final JobResultReceiver receiver) {
-      s_logger.debug("Notifying {}", job);
+      LOGGER.debug("Notifying {}", job);
       final CalculationJobResult result = createJobResult(job);
       _results.add(Pairs.of(job, result));
       receiver.resultReceived(result);
@@ -145,10 +145,10 @@ public class PlanExecutorTest {
       do {
         Pair<CalculationJob, JobResultReceiver> job = _jobs.poll();
         if (job == null) {
-          s_logger.debug("No more jobs");
+          LOGGER.debug("No more jobs");
           return;
         }
-        s_logger.debug("Completing {}", job.getFirst());
+        LOGGER.debug("Completing {}", job.getFirst());
         notify(job.getFirst(), job.getSecond());
       } while (true);
     }

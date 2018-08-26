@@ -40,7 +40,7 @@ import com.opengamma.util.tuple.Pair;
  */
 public abstract class ViewDefinitionAmbiguityTest {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(ViewDefinitionAmbiguityTest.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ViewDefinitionAmbiguityTest.class);
 
   protected MarketDataAvailabilityProvider createMarketDataAvailabilityProvider() {
     return new OptimisticMarketDataAvailabilityFilter().withProvider(new DefaultMarketDataAvailabilityProvider());
@@ -91,12 +91,12 @@ public abstract class ViewDefinitionAmbiguityTest {
     } else if (resolution.isResolved()) {
       unresolved(resolution.getRequirement());
     } else {
-      s_logger.debug("Resolved {} to {}", resolution.getRequirement(), resolution);
+      LOGGER.debug("Resolved {} to {}", resolution.getRequirement(), resolution);
     }
   }
 
   protected void unresolved(final ValueRequirement requirement) {
-    s_logger.debug("Couldn't resolve {}", requirement);
+    LOGGER.debug("Couldn't resolve {}", requirement);
   }
 
   protected void check(final PoolExecutor.Service<FullRequirementResolution> executor, final RequirementAmbiguityChecker checker, final ValueRequirement requirement) {
@@ -159,20 +159,20 @@ public abstract class ViewDefinitionAmbiguityTest {
 
         @Override
         public void failure(final Throwable error) {
-          s_logger.error("Internal failure", error);
+          LOGGER.error("Internal failure", error);
         }
 
       });
       final AmbiguityCheckerContext context = createAmbiguityCheckerContext();
       long tStart = System.nanoTime();
       for (ViewCalculationConfiguration calcConfig : view.getAllCalculationConfigurations()) {
-        s_logger.info("Testing {}.{}", view.getName(), calcConfig.getName());
+        LOGGER.info("Testing {}.{}", view.getName(), calcConfig.getName());
         final SimpleRequirementAmbiguityChecker checker = new SimpleRequirementAmbiguityChecker(context, Instant.now(), VersionCorrection.LATEST, calcConfig);
         final Set<Pair<String, ValueProperties>> aggregate = new HashSet<Pair<String, ValueProperties>>();
         checkRequirements(service, checker, calcConfig.getPortfolioRequirementsBySecurityType(), checker.getCompilationContext().getPortfolio().getRootNode(), aggregate);
       }
       service.join();
-      s_logger.info("View {} tested in {}s", view.getName(), (double) (System.nanoTime() - tStart) / 1e9);
+      LOGGER.info("View {} tested in {}s", view.getName(), (double) (System.nanoTime() - tStart) / 1e9);
     } finally {
       executor.asService().shutdown();
     }

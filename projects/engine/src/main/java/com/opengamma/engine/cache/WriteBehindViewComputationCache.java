@@ -35,7 +35,7 @@ import com.opengamma.util.tuple.Pairs;
  */
 public class WriteBehindViewComputationCache implements DeferredViewComputationCache {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(WriteBehindViewComputationCache.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(WriteBehindViewComputationCache.class);
 
   private static final class Entry {
 
@@ -238,7 +238,7 @@ public class WriteBehindViewComputationCache implements DeferredViewComputationC
       int count = 0;
       try {
         do {
-          s_logger.info("Write-behind thread running for {}", getUnderlying());
+          LOGGER.info("Write-behind thread running for {}", getUnderlying());
           do {
             if ((_pendingSharedValues != null) && !_pendingSharedValues.isEmpty()) {
               values = drain(_pendingSharedValues);
@@ -272,9 +272,9 @@ public class WriteBehindViewComputationCache implements DeferredViewComputationC
           _valueWriterActive.set(VALUE_WRITER_IDLE);
         } while ((((_pendingSharedValues != null) && !_pendingSharedValues.isEmpty()) || ((_pendingPrivateValues != null) && !_pendingPrivateValues.isEmpty())) &&
             _valueWriterActive.compareAndSet(VALUE_WRITER_IDLE, VALUE_WRITER_RUNNING));
-        s_logger.info("Write-behind thread terminated after {} operations", count);
+        LOGGER.info("Write-behind thread terminated after {} operations", count);
       } catch (final RuntimeException e) {
-        s_logger.warn("Write-behind thread failed after {} operations: {}", count, e.getMessage());
+        LOGGER.warn("Write-behind thread failed after {} operations: {}", count, e.getMessage());
         _valueWriterFault = e;
         _valueWriterActive.set(VALUE_WRITER_FAILED);
         if (values != null) {
@@ -405,7 +405,7 @@ public class WriteBehindViewComputationCache implements DeferredViewComputationC
           }
         }
         size = cacheMisses.size();
-        s_logger.debug("{} pending cache hit(s), {} miss(es)", result.size(), size);
+        LOGGER.debug("{} pending cache hit(s), {} miss(es)", result.size(), size);
         if (size == 1) {
           final ValueSpecification specification2 = cacheMisses.get(0);
           final Object value = getUnderlying().getValue(specification2);
@@ -452,7 +452,7 @@ public class WriteBehindViewComputationCache implements DeferredViewComputationC
           }
         }
         size = cacheMisses.size();
-        s_logger.debug("{} pending cache hit(s), {} miss(es)", result.size(), size);
+        LOGGER.debug("{} pending cache hit(s), {} miss(es)", result.size(), size);
         if (size == 1) {
           final ValueSpecification specification2 = cacheMisses.get(0);
           final Object value = getUnderlying().getValue(specification2, filter);
@@ -640,26 +640,26 @@ public class WriteBehindViewComputationCache implements DeferredViewComputationC
     switch (_valueWriterActive.get()) {
       case VALUE_WRITER_IDLE:
         // Writer is not running, so we must be done
-        s_logger.debug("Writer is idle");
+        LOGGER.debug("Writer is idle");
         return;
       case VALUE_WRITER_FAILED:
-        s_logger.error("Writer already failed at flush: {}", _valueWriterFault.getMessage());
+        LOGGER.error("Writer already failed at flush: {}", _valueWriterFault.getMessage());
         throw _valueWriterFault;
     }
     final PendingLock write = _pendingWrites.remove(Thread.currentThread());
     if ((write == null) || write.isZero()) {
       // Haven't written anything (null) or have written everything asked for (zero)
-      s_logger.debug("Writer flushed");
+      LOGGER.debug("Writer flushed");
       return;
     }
     // Block until the writes from this thread have finished or failed
-    s_logger.debug("Deferring to asynchronous thread");
+    LOGGER.debug("Deferring to asynchronous thread");
     final AsynchronousOperation<Void> async = AsynchronousOperation.create(Void.class);
     if (write.setCallback(async.getCallback())) {
       // TODO: How far from completion are we? Will it be worth the asynchronous exception overhead or just block?
       async.getResult();
     } else {
-      s_logger.error("Writer already failed at flush: {}", _valueWriterFault.getMessage());
+      LOGGER.error("Writer already failed at flush: {}", _valueWriterFault.getMessage());
       throw _valueWriterFault;
     }
   }

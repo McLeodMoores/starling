@@ -65,7 +65,7 @@ import com.opengamma.util.money.Currency;
  */
 @Deprecated
 public abstract class InterestRateFutureOptionBlackCurveSpecificFunction extends AbstractFunction.NonCompiledInvoker {
-  private static final Logger s_logger = LoggerFactory.getLogger(InterestRateFutureOptionBlackCurveSpecificFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(InterestRateFutureOptionBlackCurveSpecificFunction.class);
   private final String _valueRequirementName;
   private FixedIncomeConverterDataProvider _dataConverter;
   private ConfigDBCurveCalculationConfigSource _curveCalculationConfigSource;
@@ -175,17 +175,17 @@ public abstract class InterestRateFutureOptionBlackCurveSpecificFunction extends
     }
     final MultiCurveCalculationConfig curveCalculationConfig = _curveCalculationConfigSource.getConfig(curveCalculationConfigName);
     if (curveCalculationConfig == null) {
-      s_logger.info("Could not find curve calculation configuration named " + curveCalculationConfigName);
+      LOGGER.info("Could not find curve calculation configuration named " + curveCalculationConfigName);
       return null;
     }
     final Currency currency = FinancialSecurityUtils.getCurrency(target.getTrade().getSecurity());
     if (!ComputationTargetSpecification.of(currency).equals(curveCalculationConfig.getTarget())) {
-      s_logger.info("Security currency and curve calculation config id were not equal; have {} and {}", currency, curveCalculationConfig.getTarget());
+      LOGGER.info("Security currency and curve calculation config id were not equal; have {} and {}", currency, curveCalculationConfig.getTarget());
       return null;
     }
     final String[] curveNames = curveCalculationConfig.getYieldCurveNames();
     if (Arrays.binarySearch(curveNames, curve) < 0) {
-      s_logger.info("Curve named {} is not available in curve calculation configuration called {}", curve, curveCalculationConfigName);
+      LOGGER.info("Curve named {} is not available in curve calculation configuration called {}", curve, curveCalculationConfigName);
       return null;
     }
     surfaceName = surfaceName + "_" + IRFutureOptionFunctionHelper.getFutureOptionPrefix(target);

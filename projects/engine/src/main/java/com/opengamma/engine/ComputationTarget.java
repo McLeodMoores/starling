@@ -122,7 +122,7 @@ public class ComputationTarget implements Serializable {
     return _specification.getUniqueId();
   }
 
-  private static final ComputationTargetTypeVisitor<ComputationTarget, ComputationTargetSpecification> s_getLeafSpecification =
+  private static final ComputationTargetTypeVisitor<ComputationTarget, ComputationTargetSpecification> GET_LEAF_SPECIFICATION =
       new ComputationTargetTypeVisitor<ComputationTarget, ComputationTargetSpecification>() {
 
         @Override
@@ -163,7 +163,7 @@ public class ComputationTarget implements Serializable {
    * @return the specification of the leaf object, never null
    */
   public ComputationTargetSpecification getLeafSpecification() {
-    return _specification.getType().accept(s_getLeafSpecification, this);
+    return _specification.getType().accept(GET_LEAF_SPECIFICATION, this);
   }
 
   /**
@@ -258,7 +258,7 @@ public class ComputationTarget implements Serializable {
     }
   }
 
-  private static final ComputationTargetTypeMap<Function1<ComputationTarget, String>> s_getName = createGetName();
+  private static final ComputationTargetTypeMap<Function1<ComputationTarget, String>> GET_NAME = createGetName();
 
   private static ComputationTargetTypeMap<Function1<ComputationTarget, String>> createGetName() {
     final ComputationTargetTypeMap<Function1<ComputationTarget, String>> getName = new ComputationTargetTypeMap<Function1<ComputationTarget, String>>();
@@ -313,7 +313,7 @@ public class ComputationTarget implements Serializable {
    * @return the name of the computation target, null if a primitive and no identifier is available
    */
   public String getName() {
-    final Function1<ComputationTarget, String> getName = s_getName.get(getType());
+    final Function1<ComputationTarget, String> getName = GET_NAME.get(getType());
     if (getName != null) {
       return getNameImpl(getName.execute(this));
     } else {

@@ -35,7 +35,7 @@ import com.opengamma.web.AbstractWebResource;
 public class WebValueRequirementNamesResource extends AbstractWebResource {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(WebValueRequirementNamesResource.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(WebValueRequirementNamesResource.class);
 
   /**
    * Configuration key.
@@ -57,7 +57,7 @@ public class WebValueRequirementNamesResource extends AbstractWebResource {
       try {
         list.add((String) field.get(null));
       } catch (Exception ex) {
-        s_logger.warn("Could not read in value requirement names: " + ex.getMessage());
+        LOGGER.warn("Could not read in value requirement names: " + ex.getMessage());
       }
     }
     Collections.sort(list, String.CASE_INSENSITIVE_ORDER);
@@ -80,7 +80,7 @@ public class WebValueRequirementNamesResource extends AbstractWebResource {
           }
         }
       } catch (Exception ex) {
-        s_logger.info("Could not read in value requirement names: " + ex.getMessage());
+        LOGGER.info("Could not read in value requirement names: " + ex.getMessage());
       }
     }
     Collections.sort(list, String.CASE_INSENSITIVE_ORDER);
@@ -100,7 +100,7 @@ public class WebValueRequirementNamesResource extends AbstractWebResource {
           .endObject()
           .toString();
     } catch (JSONException ex) {
-      s_logger.warn("error creating json document for valueRequirementNames");
+      LOGGER.warn("error creating json document for valueRequirementNames");
     }
     return result;
   }

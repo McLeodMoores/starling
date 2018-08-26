@@ -40,7 +40,7 @@ import com.opengamma.util.async.ResultListener;
  */
 public class MissingInputsFunction extends AbstractFunction implements CompiledFunctionDefinition, FunctionInvoker {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(MissingInputsFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(MissingInputsFunction.class);
 
   /**
    * Value of the {@link ValuePropertyNames#AGGREGATION} property when one or more of the inputs may be missing.
@@ -139,10 +139,10 @@ public class MissingInputsFunction extends AbstractFunction implements CompiledF
   public CompiledFunctionDefinition compile(final FunctionCompilationContext context, final Instant atInstant) {
     final CompiledFunctionDefinition underlying = getUnderlyingDefinition().compile(context, atInstant);
     if (underlying == getUnderlyingCompiled()) {
-      s_logger.debug("Compiling underlying on {} gives self", this);
+      LOGGER.debug("Compiling underlying on {} gives self", this);
       return this;
     } else {
-      s_logger.debug("Creating delegate for compiled underlying on {}", this);
+      LOGGER.debug("Creating delegate for compiled underlying on {}", this);
       return create(underlying);
     }
   }
@@ -178,7 +178,7 @@ public class MissingInputsFunction extends AbstractFunction implements CompiledF
   public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target) {
     final Set<ValueSpecification> underlyingResults = getUnderlyingCompiled().getResults(context, target);
     if (underlyingResults == null) {
-      s_logger.debug("Underlying returned null for target {}", target);
+      LOGGER.debug("Underlying returned null for target {}", target);
       return null;
     }
     final Set<ValueSpecification> results = Sets.newHashSetWithExpectedSize(underlyingResults.size());
@@ -197,7 +197,7 @@ public class MissingInputsFunction extends AbstractFunction implements CompiledF
         results.add(new ValueSpecification(underlyingResult.getValueName(), underlyingResult.getTargetSpecification(), properties.get()));
       }
     }
-    s_logger.debug("Returning results {}", results);
+    LOGGER.debug("Returning results {}", results);
     return results;
   }
 
@@ -242,7 +242,7 @@ public class MissingInputsFunction extends AbstractFunction implements CompiledF
       }
     }
     final Set<ValueRequirement> requirements = getUnderlyingCompiled().getRequirements(context, target, desiredValue);
-    s_logger.debug("Returning requirements {} for {}", requirements, desiredValue);
+    LOGGER.debug("Returning requirements {} for {}", requirements, desiredValue);
     return requirements;
   }
 
@@ -255,7 +255,7 @@ public class MissingInputsFunction extends AbstractFunction implements CompiledF
   public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
     final Set<ValueSpecification> underlyingResults = getUnderlyingCompiled().getResults(context, target, inputs);
     if (underlyingResults == null) {
-      s_logger.debug("Underlying returned null inputs {}", inputs);
+      LOGGER.debug("Underlying returned null inputs {}", inputs);
       return null;
     }
     final String full = getAggregationStyleFull();
@@ -294,7 +294,7 @@ public class MissingInputsFunction extends AbstractFunction implements CompiledF
         }
       }
     }
-    s_logger.debug("Returning results {} for {}", results, inputs);
+    LOGGER.debug("Returning results {} for {}", results, inputs);
     return results;
   }
 

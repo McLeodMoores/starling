@@ -23,7 +23,7 @@ import com.sleepycat.je.Environment;
  * A component which wraps a single BerkeleyDB Database.
  */
 public abstract class AbstractBerkeleyDBComponent implements Lifecycle {
-  private static final Logger s_logger = LoggerFactory.getLogger(AbstractBerkeleyDBComponent.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(AbstractBerkeleyDBComponent.class);
   // Injected inputs:
   private final Environment _dbEnvironment;
   private final String _databaseName;
@@ -78,7 +78,7 @@ public abstract class AbstractBerkeleyDBComponent implements Lifecycle {
 
   @Override
   public void start() {
-    s_logger.info("Starting, and opening Database.");
+    LOGGER.info("Starting, and opening Database.");
     DatabaseConfig dbConfig = getDatabaseConfig();
     Database database = getDbEnvironment().openDatabase(null, getDatabaseName(), dbConfig);
     setDatabase(database);
@@ -94,7 +94,7 @@ public abstract class AbstractBerkeleyDBComponent implements Lifecycle {
 
   @Override
   public void stop() {
-    s_logger.info("Shutting down Database.");
+    LOGGER.info("Shutting down Database.");
     if (getDatabase() != null) {
       getDatabase().close();
     }

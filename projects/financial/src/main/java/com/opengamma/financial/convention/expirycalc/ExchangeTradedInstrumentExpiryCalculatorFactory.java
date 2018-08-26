@@ -14,16 +14,16 @@ import com.google.common.collect.HashBiMap;
 public class ExchangeTradedInstrumentExpiryCalculatorFactory {
 
   /** Map containing the instances */
-  private static final BiMap<String, ExchangeTradedInstrumentExpiryCalculator> s_instances = HashBiMap.create();
+  private static final BiMap<String, ExchangeTradedInstrumentExpiryCalculator> INSTANCES = HashBiMap.create();
 
   //TODO this should be moved out so that calculators can be added more easily (as for the daycount factory)
   static {
-    s_instances.put(BondFutureOptionExpiryCalculator.NAME, BondFutureOptionExpiryCalculator.getInstance());
-    s_instances.put(IMMFutureAndFutureOptionQuarterlyExpiryCalculator.NAME, IMMFutureAndFutureOptionQuarterlyExpiryCalculator.getInstance());
-    s_instances.put(IMMFutureAndFutureOptionMonthlyExpiryCalculator.NAME, IMMFutureAndFutureOptionMonthlyExpiryCalculator.getInstance());
-    s_instances.put(SoybeanFutureExpiryCalculator.NAME, SoybeanFutureExpiryCalculator.getInstance());
-    s_instances.put(SoybeanFutureOptionExpiryCalculator.NAME, SoybeanFutureOptionExpiryCalculator.getInstance());
-    s_instances.put(FedFundFutureAndFutureOptionMonthlyExpiryCalculator.NAME, FedFundFutureAndFutureOptionMonthlyExpiryCalculator.getInstance());
+    INSTANCES.put(BondFutureOptionExpiryCalculator.NAME, BondFutureOptionExpiryCalculator.getInstance());
+    INSTANCES.put(IMMFutureAndFutureOptionQuarterlyExpiryCalculator.NAME, IMMFutureAndFutureOptionQuarterlyExpiryCalculator.getInstance());
+    INSTANCES.put(IMMFutureAndFutureOptionMonthlyExpiryCalculator.NAME, IMMFutureAndFutureOptionMonthlyExpiryCalculator.getInstance());
+    INSTANCES.put(SoybeanFutureExpiryCalculator.NAME, SoybeanFutureExpiryCalculator.getInstance());
+    INSTANCES.put(SoybeanFutureOptionExpiryCalculator.NAME, SoybeanFutureOptionExpiryCalculator.getInstance());
+    INSTANCES.put(FedFundFutureAndFutureOptionMonthlyExpiryCalculator.NAME, FedFundFutureAndFutureOptionMonthlyExpiryCalculator.getInstance());
   }
 
   /**
@@ -34,7 +34,7 @@ public class ExchangeTradedInstrumentExpiryCalculatorFactory {
    * @throws IllegalArgumentException if the calculator was not found in the map
    */
   public static ExchangeTradedInstrumentExpiryCalculator getCalculator(final String name) {
-    final ExchangeTradedInstrumentExpiryCalculator calculator = s_instances.get(name);
+    final ExchangeTradedInstrumentExpiryCalculator calculator = INSTANCES.get(name);
     if (calculator != null) {
       return calculator;
     }

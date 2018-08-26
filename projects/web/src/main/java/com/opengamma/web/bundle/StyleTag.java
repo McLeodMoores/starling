@@ -16,7 +16,7 @@ import com.opengamma.util.ArgumentChecker;
 public class StyleTag {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(StyleTag.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(StyleTag.class);
 
   /**
    * The request data.
@@ -47,7 +47,7 @@ public class StyleTag {
     ArgumentChecker.notNull(media, "media");
     Bundle bundle = _data.getBundleManager().getBundle(bundleId);
     if (bundle == null) {
-      s_logger.warn("{} not available ", bundleId);
+      LOGGER.warn("{} not available ", bundleId);
       return "";
     }
     DeployMode mode = _data.getMode();
@@ -57,7 +57,7 @@ public class StyleTag {
       case PROD:
         return inline ? printProdInline(bundle, media) : printProdLinked(bundle, media);
       default:
-        s_logger.warn("Unknown deployment mode type: " + mode);
+        LOGGER.warn("Unknown deployment mode type: " + mode);
         return null;
     }
   }

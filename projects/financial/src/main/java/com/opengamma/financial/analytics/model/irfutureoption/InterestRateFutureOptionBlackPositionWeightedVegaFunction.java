@@ -40,7 +40,7 @@ public class InterestRateFutureOptionBlackPositionWeightedVegaFunction extends I
   /** The base number of days to use */
   private static int s_baseDays = 90; // TODO - Should be property available to the user
   /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(InterestRateFutureOptionBlackPositionWeightedVegaFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(InterestRateFutureOptionBlackPositionWeightedVegaFunction.class);
 
   /**
    * Sets the value requirement name to {@link ValueRequirementNames#POSITION_WEIGHTED_VEGA}
@@ -74,7 +74,7 @@ public class InterestRateFutureOptionBlackPositionWeightedVegaFunction extends I
         if (inputVal != null) {
           vega = (Double) inputVal;
         } else {
-          s_logger.error("Did not satisfy requirement," + ValueRequirementNames.POSITION_VEGA + ", for security" + target.getTrade().getSecurity().toString());
+          LOGGER.error("Did not satisfy requirement," + ValueRequirementNames.POSITION_VEGA + ", for security" + target.getTrade().getSecurity().toString());
         }
       }
     }

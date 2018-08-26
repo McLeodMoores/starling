@@ -46,7 +46,7 @@ public class CurrencyConversionFunction extends AbstractFunction.NonCompiledInvo
   
   private static final String CONVERSION_METHOD_VALUE = "Single";
 
-  private static final Logger s_logger = LoggerFactory.getLogger(CurrencyConversionFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(CurrencyConversionFunction.class);
 
   private static final ComputationTargetType TYPE = ComputationTargetType.PORTFOLIO_NODE.or(ComputationTargetType.POSITION).or(ComputationTargetType.SECURITY).or(ComputationTargetType.TRADE);
 
@@ -127,7 +127,7 @@ public class CurrencyConversionFunction extends AbstractFunction.NonCompiledInvo
     } else if (value instanceof DoubleLabelledMatrix1D) {
       return convertDoubleLabelledMatrix1D((DoubleLabelledMatrix1D) value, conversionRate);
     } else {
-      s_logger.error("Can't convert object with type {} to {}", inputValue.getValue().getClass(), desiredValue);
+      LOGGER.error("Can't convert object with type {} to {}", inputValue.getValue().getClass(), desiredValue);
       return null;
     }
   }
@@ -157,7 +157,7 @@ public class CurrencyConversionFunction extends AbstractFunction.NonCompiledInvo
       // Don't think this should happen
       return Collections.singleton(inputValue);
     } else {
-      s_logger.debug("Converting from {} to {}", inputCurrency, outputCurrency);
+      LOGGER.debug("Converting from {} to {}", inputCurrency, outputCurrency);
       final Object converted = convertValue(inputValue, desiredValue, exchangeRate);
       if (converted != null) {
         return Collections.singleton(new ComputedValue(new ValueSpecification(desiredValue.getValueName(), target.toSpecification(), desiredValue.getConstraints()), converted));
@@ -171,20 +171,20 @@ public class CurrencyConversionFunction extends AbstractFunction.NonCompiledInvo
   public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
     final Set<String> possibleCurrencies = desiredValue.getConstraints().getValues(ValuePropertyNames.CURRENCY);
     if (possibleCurrencies == null) {
-      s_logger.debug("Must specify a currency constraint; use DefaultCurrencyFunction instead");
+      LOGGER.debug("Must specify a currency constraint; use DefaultCurrencyFunction instead");
       return null;
     } else if (possibleCurrencies.isEmpty()) {
       if (isAllowViewDefaultCurrency()) {
         // The original function may not have delivered a result because it had heterogeneous input currencies, so try forcing the view default
         final String defaultCurrencyISO = DefaultCurrencyFunction.getViewDefaultCurrencyISO(context);
         if (defaultCurrencyISO == null) {
-          s_logger.debug("No default currency from the view to inject");
+          LOGGER.debug("No default currency from the view to inject");
           return null;
         }
-        s_logger.debug("Injecting view default currency {}", defaultCurrencyISO);
+        LOGGER.debug("Injecting view default currency {}", defaultCurrencyISO);
         return Collections.singleton(getInputValueRequirement(target.toSpecification(), desiredValue, defaultCurrencyISO));
       } else {
-        s_logger.debug("Cannot satisfy a wildcard currency constraint");
+        LOGGER.debug("Cannot satisfy a wildcard currency constraint");
         return null;
       }
     } else {
@@ -241,7 +241,7 @@ public class CurrencyConversionFunction extends AbstractFunction.NonCompiledInvo
   @Override
   public Set<ValueRequirement> getAdditionalRequirements(final FunctionCompilationContext context, final ComputationTarget target, final Set<ValueSpecification> inputs,
       final Set<ValueSpecification> outputs) {
-    s_logger.debug("FX requirements for {} -> {}", inputs, outputs);
+    LOGGER.debug("FX requirements for {} -> {}", inputs, outputs);
     final String inputCurrency = getCurrency(inputs);
     if (inputCurrency == null) {
       return null;

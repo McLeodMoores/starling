@@ -33,7 +33,7 @@ import com.opengamma.util.ArgumentChecker;
  * the actual underlying client that will be chosen is non-deterministic.
  */
 public class DelegatingLiveDataClient implements LiveDataClient {
-  private static final Logger s_logger = LoggerFactory.getLogger(DelegatingLiveDataClient.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(DelegatingLiveDataClient.class);
   private final Map<String, LiveDataClient> _underlyingClients = new ConcurrentSkipListMap<String, LiveDataClient>();
   private LiveDataClient _defaultClient;
   
@@ -53,7 +53,7 @@ public class DelegatingLiveDataClient implements LiveDataClient {
     for (ExternalId id : idBundle.getExternalIds()) {
       LiveDataClient underlying = _underlyingClients.get(id.getScheme().getName());
       if (underlying != null) {
-        s_logger.debug("Delegating {} to {}", specification, underlying);
+        LOGGER.debug("Delegating {} to {}", specification, underlying);
         return underlying;
       }
     }

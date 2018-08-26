@@ -46,7 +46,7 @@ import com.opengamma.util.async.AsynchronousExecution;
  */
 public class CurveConfigurationHistoricalTimeSeriesFunction extends AbstractFunction.NonCompiledInvoker {
   /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(CurveConfigurationHistoricalTimeSeriesFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(CurveConfigurationHistoricalTimeSeriesFunction.class);
 
   private ConfigDBCurveConstructionConfigurationSource _curveConstructionConfigurationSource;
 

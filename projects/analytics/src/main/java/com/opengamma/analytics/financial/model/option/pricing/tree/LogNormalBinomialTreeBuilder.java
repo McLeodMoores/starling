@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.option.pricing.tree;
@@ -16,66 +16,66 @@ import com.opengamma.util.tuple.DoublesPair;
 
 /**
  * Builds a binomial tree where the nodes are set to locally match a log-normal process. The process that the tree is emulating is of the form  df/f = mu(f,t)dt + sigma(f,t)dw.
- * From a node at (f,t) the two daughter nodes f+ and f- (at time t + dt) are set such that p*(1-p)*(ln(f+/f-))^2 = dt*sigma(f,t)^2, where p is the probability of reaching f+ from f. 
+ * From a node at (f,t) the two daughter nodes f+ and f- (at time t + dt) are set such that p*(1-p)*(ln(f+/f-))^2 = dt*sigma(f,t)^2, where p is the probability of reaching f+ from f.
  * The forwarding condition is p*f+ + (1-p)*f- = f*exp(mu(f,t)*dt). This is adapted from the paper Derman and Kani, The Volatility Smile and Its Implied Tree
- * @param <T> A GeneralLogNormalOptionDataBundle or anything that extends it 
+ * @param <T> A GeneralLogNormalOptionDataBundle or anything that extends it
  */
 public class LogNormalBinomialTreeBuilder<T extends GeneralLogNormalOptionDataBundle> extends BinomialTreeBuilder<T> {
 
   private static final double EPS = 1e-8;
-  private static final RealSingleRootFinder s_root = new BrentSingleRootFinder();
-  private static BracketRoot s_bracketRoot = new BracketRoot();
+  private static final RealSingleRootFinder ROOT = new BrentSingleRootFinder();
+  private static final BracketRoot BRACKET_ROOT = new BracketRoot();
 
   @Override
-  protected double[] getForwards(double[] spots, T data, double t, double dt) {
-    int n = spots.length;
-    double[] forwards = new double[n];
+  protected double[] getForwards(final double[] spots, final T data, final double t, final double dt) {
+    final int n = spots.length;
+    final double[] forwards = new double[n];
     for (int i = 0; i < n; i++) {
-      double drift = data.getLocalDrift(spots[i], t);
+      final double drift = data.getLocalDrift(spots[i], t);
       forwards[i] = spots[i] * Math.exp(drift * dt);
     }
     return forwards;
   }
 
   @Override
-  protected DoublesPair getCentralNodePair(double dt, double sigma, double forward, double centreLevel) {
+  protected DoublesPair getCentralNodePair(final double dt, final double sigma, final double forward, final double centreLevel) {
 
-    Function1D<Double, Double> func = new CentreNode(dt, sigma, forward, centreLevel);
-    double[] limits = s_bracketRoot.getBracketedPoints(func, forward, forward * Math.exp(sigma * Math.sqrt(dt)));
+    final Function1D<Double, Double> func = new CentreNode(dt, sigma, forward, centreLevel);
+    final double[] limits = BRACKET_ROOT.getBracketedPoints(func, forward, forward * Math.exp(sigma * Math.sqrt(dt)));
 
-    double upper = s_root.getRoot(func, limits[0], limits[1]);
-    double lower = centreLevel * centreLevel / upper;
+    final double upper = ROOT.getRoot(func, limits[0], limits[1]);
+    final double lower = centreLevel * centreLevel / upper;
     return DoublesPair.of(lower, upper);
   }
 
   @Override
-  protected double getNextHigherNode(double dt, double sigma, double forward, double lowerNode) {
-    Function1D<Double, Double> func = new UpperNodes(dt, sigma, forward, lowerNode);
-    double fTry = forward * Math.exp(sigma * Math.sqrt(dt));
+  protected double getNextHigherNode(final double dt, final double sigma, final double forward, final double lowerNode) {
+    final Function1D<Double, Double> func = new UpperNodes(dt, sigma, forward, lowerNode);
+    final double fTry = forward * Math.exp(sigma * Math.sqrt(dt));
     //ensure we do not get p = 1 and thus a divide by zero
-    double[] limits = s_bracketRoot.getBracketedPoints(func, (forward - lowerNode) / 0.6 + lowerNode, (forward - lowerNode) / 0.4 + lowerNode, forward * (1 + EPS), 10 * fTry);
-    return s_root.getRoot(func, limits[0], limits[1]);
+    final double[] limits = BRACKET_ROOT.getBracketedPoints(func, (forward - lowerNode) / 0.6 + lowerNode, (forward - lowerNode) / 0.4 + lowerNode, forward * (1 + EPS), 10 * fTry);
+    return ROOT.getRoot(func, limits[0], limits[1]);
   }
 
   @Override
-  protected double getNextLowerNode(double dt, double sigma, double forward, double higherNode) {
+  protected double getNextLowerNode(final double dt, final double sigma, final double forward, final double higherNode) {
     if (forward == 0.0) {
       return 0.0;
     }
-    Function1D<Double, Double> func = new LowerNodes(dt, sigma, forward, higherNode);
-    double[] limits = s_bracketRoot.getBracketedPoints(func, forward * Math.exp(-sigma * Math.sqrt(dt)), forward);
-    return s_root.getRoot(func, limits[0], limits[1]);
+    final Function1D<Double, Double> func = new LowerNodes(dt, sigma, forward, higherNode);
+    final double[] limits = BRACKET_ROOT.getBracketedPoints(func, forward * Math.exp(-sigma * Math.sqrt(dt)), forward);
+    return ROOT.getRoot(func, limits[0], limits[1]);
   }
 
   /**
-   * The root of this function gives the next node above the currently know one 
+   * The root of this function gives the next node above the currently know one
    */
   private class UpperNodes extends Function1D<Double, Double> {
 
-    private double _rootdt;
-    private double _sigma;
-    private double _f;
-    private double _s;
+    private final double _rootdt;
+    private final double _sigma;
+    private final double _f;
+    private final double _s;
 
     public UpperNodes(final double dt, final double sigma, final double forward, final double s) {
       _rootdt = Math.sqrt(dt);
@@ -85,20 +85,20 @@ public class LogNormalBinomialTreeBuilder<T extends GeneralLogNormalOptionDataBu
     }
 
     @Override
-    public Double evaluate(Double x) {
-      double p = (_f - _s) / (x - _s);
+    public Double evaluate(final Double x) {
+      final double p = (_f - _s) / (x - _s);
 
-      double res = _s * Math.exp(_rootdt * _sigma / Math.sqrt(p * (1 - p))) - x;
+      final double res = _s * Math.exp(_rootdt * _sigma / Math.sqrt(p * (1 - p))) - x;
       return res;
     }
   }
 
   private class LowerNodes extends Function1D<Double, Double> {
 
-    private double _rootdt;
-    private double _sigma;
-    private double _f;
-    private double _s;
+    private final double _rootdt;
+    private final double _sigma;
+    private final double _f;
+    private final double _s;
 
     public LowerNodes(final double dt, final double sigma, final double forward, final double s) {
       _rootdt = Math.sqrt(dt);
@@ -108,19 +108,19 @@ public class LogNormalBinomialTreeBuilder<T extends GeneralLogNormalOptionDataBu
     }
 
     @Override
-    public Double evaluate(Double x) {
-      double p = (_f - x) / (_s - x);
-      double res = _s * Math.exp(-_rootdt * _sigma / Math.sqrt(p * (1 - p))) - x;
+    public Double evaluate(final Double x) {
+      final double p = (_f - x) / (_s - x);
+      final double res = _s * Math.exp(-_rootdt * _sigma / Math.sqrt(p * (1 - p))) - x;
       return res;
     }
   }
 
   private class CentreNode extends Function1D<Double, Double> {
 
-    private double _rootdt;
-    private double _sigma;
-    private double _f;
-    private double _spot;
+    private final double _rootdt;
+    private final double _sigma;
+    private final double _f;
+    private final double _spot;
 
     public CentreNode(final double dt, final double sigma, final double forward, final double spot) {
       _rootdt = Math.sqrt(dt);
@@ -130,7 +130,7 @@ public class LogNormalBinomialTreeBuilder<T extends GeneralLogNormalOptionDataBu
     }
 
     @Override
-    public Double evaluate(Double x) {
+    public Double evaluate(final Double x) {
       double p;
       if (_f == _spot) {
         p = _f / (x + _f);
@@ -138,7 +138,7 @@ public class LogNormalBinomialTreeBuilder<T extends GeneralLogNormalOptionDataBu
         Validate.isTrue(x != _spot, "invalide x");
         p = (x * _f - _spot * _spot) / (x * x - _spot * _spot);
       }
-      double res = _spot * _spot * Math.exp(_rootdt * _sigma / Math.sqrt(p * (1 - p))) - x * x;
+      final double res = _spot * _spot * Math.exp(_rootdt * _sigma / Math.sqrt(p * (1 - p))) - x * x;
       return res;
     }
   }

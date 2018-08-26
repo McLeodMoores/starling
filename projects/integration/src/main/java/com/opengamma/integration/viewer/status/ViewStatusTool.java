@@ -32,7 +32,7 @@ import com.opengamma.scripts.Scriptable;
 public class ViewStatusTool extends AbstractTool<ToolContext> {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(ViewStatusTool.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ViewStatusTool.class);
 
   //-------------------------------------------------------------------------
   /**
@@ -71,7 +71,7 @@ public class ViewStatusTool extends AbstractTool<ToolContext> {
     String statusResult = resultProducer.statusResult(resultAggregator, option.getFormat(), option.getAggregateType());
     try {
       File outputFile = option.getOutputFile();
-      s_logger.debug("Writing status report into : {}", outputFile.getPath());
+      LOGGER.debug("Writing status report into : {}", outputFile.getPath());
       FileUtils.writeStringToFile(outputFile, statusResult);
     } catch (IOException ex) {
       throw new OpenGammaRuntimeException("Error writing view-status report to " + option.getOutputFile().toString(), ex);
@@ -104,7 +104,7 @@ public class ViewStatusTool extends AbstractTool<ToolContext> {
     
     Options viewStatusOptions = ViewStatusOption.createOptions();
     for (Option option : (Collection<Option>) viewStatusOptions.getOptions()) {
-      s_logger.debug("adding {} to tool options", option);
+      LOGGER.debug("adding {} to tool options", option);
       toolOptions.addOption(option);
     }
     return toolOptions;

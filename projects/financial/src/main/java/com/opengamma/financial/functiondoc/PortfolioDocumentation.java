@@ -38,7 +38,7 @@ import com.opengamma.util.NamedThreadPoolFactory;
  */
 public class PortfolioDocumentation extends AbstractDocumentation {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(PortfolioDocumentation.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(PortfolioDocumentation.class);
 
   private final PortfolioMaster _portfolioMaster;
   private final PositionSource _positionSource;
@@ -77,7 +77,7 @@ public class PortfolioDocumentation extends AbstractDocumentation {
   }
 
   protected Collection<UniqueId> getPortfolios() {
-    s_logger.debug("Querying portfolios available");
+    LOGGER.debug("Querying portfolios available");
     final PortfolioSearchRequest request = new PortfolioSearchRequest();
     request.setDepth(0);
     request.setIncludePositions(false);
@@ -86,7 +86,7 @@ public class PortfolioDocumentation extends AbstractDocumentation {
     for (PortfolioDocument document : PortfolioSearchIterator.iterable(_portfolioMaster, request)) {
       result.add(document.getUniqueId());
     }
-    s_logger.info("Found {} portfolios", result.size());
+    LOGGER.info("Found {} portfolios", result.size());
     return result;
   }
 
@@ -100,8 +100,8 @@ public class PortfolioDocumentation extends AbstractDocumentation {
         final long t2 = System.nanoTime();
         final Portfolio resolvedPortfolio = PortfolioCompiler.resolvePortfolio(rawPortfolio, getExecutorService(), getSecuritySource());
         final long t3 = System.nanoTime();
-        s_logger.debug("Got portfolio {} in {}ms", portfolioId, (double) (t2 - t1) / 1e6);
-        s_logger.debug("Resolved portfolio {} in {}ms", portfolioId, (double) (t3 - t2) / 1e6);
+        LOGGER.debug("Got portfolio {} in {}ms", portfolioId, (double) (t2 - t1) / 1e6);
+        LOGGER.debug("Resolved portfolio {} in {}ms", portfolioId, (double) (t3 - t2) / 1e6);
         getExecutorService().execute(new Runnable() {
           @Override
           public void run() {
@@ -112,11 +112,11 @@ public class PortfolioDocumentation extends AbstractDocumentation {
           break;
         }
       } catch (OpenGammaRuntimeException e) {
-        s_logger.debug("Couldn't resolve {} - {}", portfolioId, e);
+        LOGGER.debug("Couldn't resolve {} - {}", portfolioId, e);
       }
     }
     try {
-      s_logger.info("Waiting for portfolio analysis");
+      LOGGER.info("Waiting for portfolio analysis");
       getExecutorService().shutdown();
       getExecutorService().awaitTermination(30, TimeUnit.MINUTES);
     } catch (InterruptedException e) {

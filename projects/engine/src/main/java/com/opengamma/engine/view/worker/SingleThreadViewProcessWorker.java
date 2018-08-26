@@ -120,9 +120,9 @@ public class SingleThreadViewProcessWorker implements ViewProcessWorker, MarketD
    */
   private static final long DEFAULT_MARKET_DATA_TIMEOUT_MILLIS = 300000;
 
-  private static final Logger s_logger = LoggerFactory.getLogger(SingleThreadViewProcessWorker.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(SingleThreadViewProcessWorker.class);
 
-  private static final ExecutorService s_executor = NamedThreadPoolFactory.newCachedThreadPool("Worker");
+  private static final ExecutorService EXECUTOR = NamedThreadPoolFactory.newCachedThreadPool("Worker");
 
   /**
    * Wrapper that allows a thread to be "borrowed" from an executor service.
@@ -273,7 +273,7 @@ public class SingleThreadViewProcessWorker implements ViewProcessWorker, MarketD
   /**
    * Keep track of the number of market data managers created as we need to ensure they each have a unique name (for JMX registration).
    */
-  private static final ConcurrentMap<String, AtomicInteger> s_mdmCount = new ConcurrentHashMap<String, AtomicInteger>();
+  private static final ConcurrentMap<String, AtomicInteger> MDM_COUNT = new ConcurrentHashMap<String, AtomicInteger>();
 
   /**
    * Timer to track delta cycle execution time.
@@ -330,14 +330,14 @@ public class SingleThreadViewProcessWorker implements ViewProcessWorker, MarketD
     _thread = new BorrowedThread(context.toString(), _job);
     _deltaCycleTimer = OpenGammaMetricRegistry.getSummaryInstance().timer("SingleThreadViewProcessWorker.cycle.delta");
     _fullCycleTimer = OpenGammaMetricRegistry.getSummaryInstance().timer("SingleThreadViewProcessWorker.cycle.full");
-    s_executor.submit(_thread);
+    EXECUTOR.submit(_thread);
   }
 
   private MarketDataManager createMarketDataManager(ViewProcessWorkerContext context) {
     String processId = context.getProcessContext().getProcessId().getValue();
-    AtomicInteger currentEntry = s_mdmCount.putIfAbsent(processId, new AtomicInteger());
+    AtomicInteger currentEntry = MDM_COUNT.putIfAbsent(processId, new AtomicInteger());
     if (currentEntry == null) {
-      currentEntry = s_mdmCount.get(processId);
+      currentEntry = MDM_COUNT.get(processId);
     }
     int newCount = currentEntry.incrementAndGet();
     // TODO - the hardcoded main should really be derived from a view process name if one were available
@@ -446,27 +446,27 @@ public class SingleThreadViewProcessWorker implements ViewProcessWorker, MarketD
       try {
         cycleType = waitForNextCycle();
       } catch (final InterruptedException e) {
-        s_logger.debug("Interrupted during wait");
+        LOGGER.debug("Interrupted during wait");
         return;
       }
       ViewCycleExecutionOptions executionOptions = null;
       try {
         if (!getExecutionOptions().getExecutionSequence().isEmpty()) {
           executionOptions = getExecutionOptions().getExecutionSequence().poll(getExecutionOptions().getDefaultExecutionOptions());
-          s_logger.debug("Next cycle execution options: {}", executionOptions);
+          LOGGER.debug("Next cycle execution options: {}", executionOptions);
         }
         if (executionOptions == null) {
-          s_logger.info("No more view cycle execution options");
+          LOGGER.info("No more view cycle execution options");
           jobCompleted();
           return;
         }
       } catch (final Exception e) {
-        s_logger.error("Error obtaining next view cycle execution options from sequence for " + getWorkerContext(), e);
+        LOGGER.error("Error obtaining next view cycle execution options from sequence for " + getWorkerContext(), e);
         return;
       }
 
       if (executionOptions.getMarketDataSpecifications().isEmpty()) {
-        s_logger.error("No market data specifications for cycle");
+        LOGGER.error("No market data specifications for cycle");
         cycleExecutionFailed(executionOptions, new OpenGammaRuntimeException("No market data specifications for cycle"));
         return;
       }
@@ -477,7 +477,7 @@ public class SingleThreadViewProcessWorker implements ViewProcessWorker, MarketD
         snapshotManager = _marketDataManager.createSnapshotManagerForCycle(getViewDefinition().getMarketDataUser(), executionOptions.getMarketDataSpecifications());
         _executionCacheKey = ViewExecutionCacheKey.of(getViewDefinition(), _marketDataManager.getAvailabilityProvider(), _marketDataSelectionGraphManipulator);
       } catch (final Exception e) {
-        s_logger.error("Error with market data provider", e);
+        LOGGER.error("Error with market data provider", e);
         cycleExecutionFailed(executionOptions, new OpenGammaRuntimeException("Error with market data provider", e));
         return;
       }
@@ -496,7 +496,7 @@ public class SingleThreadViewProcessWorker implements ViewProcessWorker, MarketD
           }
         }
       } catch (final Exception e) {
-        s_logger.error("Error obtaining compilation valuation time", e);
+        LOGGER.error("Error obtaining compilation valuation time", e);
         cycleExecutionFailed(executionOptions, new OpenGammaRuntimeException("Error obtaining compilation valuation time", e));
         return;
       }
@@ -513,7 +513,7 @@ public class SingleThreadViewProcessWorker implements ViewProcessWorker, MarketD
           } else {
             compiledViewDefinition = getCompiledViewDefinition(compilationValuationTime, versionCorrection);
             if (compiledViewDefinition == null) {
-              s_logger.info("Job terminated during view compilation");
+              LOGGER.info("Job terminated during view compilation");
               return;
             }
             if ((previous == null) || !previous.getCompilationIdentifier().equals(compiledViewDefinition.getCompilationIdentifier())) {
@@ -541,7 +541,7 @@ public class SingleThreadViewProcessWorker implements ViewProcessWorker, MarketD
         } catch (final Exception e) {
           final String message = MessageFormat.format("Error obtaining compiled view definition {0} for time {1} at version-correction {2}", getViewDefinition().getUniqueId(),
               compilationValuationTime, versionCorrection);
-          s_logger.error(message);
+          LOGGER.error(message);
           cycleExecutionFailed(executionOptions, new OpenGammaRuntimeException(message, e));
           return;
         }
@@ -562,7 +562,7 @@ public class SingleThreadViewProcessWorker implements ViewProcessWorker, MarketD
             executionOptions = executionOptions.copy().setValuationTime(snapshotManager.getSnapshotTime()).create();
           }
         } catch (final Exception e) {
-          s_logger.error("Error initializing snapshot {}", snapshotManager);
+          LOGGER.error("Error initializing snapshot {}", snapshotManager);
           cycleExecutionFailed(executionOptions, new OpenGammaRuntimeException("Error initializing snapshot " + snapshotManager, e));
         }
 
@@ -571,7 +571,7 @@ public class SingleThreadViewProcessWorker implements ViewProcessWorker, MarketD
           try {
             cycleReference = createCycle(executionOptions, compiledViewDefinition, versionCorrection);
           } catch (final Exception e) {
-            s_logger.error("Error creating next view cycle for " + getWorkerContext(), e);
+            LOGGER.error("Error creating next view cycle for " + getWorkerContext(), e);
             return;
           }
           try {
@@ -600,11 +600,11 @@ public class SingleThreadViewProcessWorker implements ViewProcessWorker, MarketD
               executeViewCycle(cycleType, cycleReference, marketDataSnapshot);
             } catch (final InterruptedException e) {
               // Execution interrupted - don't propagate as failure
-              s_logger.info("View cycle execution interrupted for {}", getWorkerContext());
+              LOGGER.info("View cycle execution interrupted for {}", getWorkerContext());
               return;
             } catch (final Exception e) {
               // Execution failed; might be a result of shutdown
-              s_logger.error("View cycle execution failed for " + getWorkerContext(), e);
+              LOGGER.error("View cycle execution failed for " + getWorkerContext(), e);
               cycleExecutionFailed(executionOptions, e);
               return;
             }
@@ -664,7 +664,7 @@ public class SingleThreadViewProcessWorker implements ViewProcessWorker, MarketD
     try {
       getWorkerContext().cycleCompleted(cycle);
     } catch (final Exception e) {
-      s_logger.error("Error notifying " + getWorkerContext() + " of view cycle completion", e);
+      LOGGER.error("Error notifying " + getWorkerContext() + " of view cycle completion", e);
     }
   }
 
@@ -672,7 +672,7 @@ public class SingleThreadViewProcessWorker implements ViewProcessWorker, MarketD
     try {
       getWorkerContext().cycleStarted(cycleMetadata);
     } catch (final Exception e) {
-      s_logger.error("Error notifying " + getWorkerContext() + " of view cycle starting", e);
+      LOGGER.error("Error notifying " + getWorkerContext() + " of view cycle starting", e);
     }
   }
 
@@ -680,7 +680,7 @@ public class SingleThreadViewProcessWorker implements ViewProcessWorker, MarketD
     try {
       getWorkerContext().cycleFragmentCompleted(result, getViewDefinition());
     } catch (final Exception e) {
-      s_logger.error("Error notifying " + getWorkerContext() + " of cycle fragment completion", e);
+      LOGGER.error("Error notifying " + getWorkerContext() + " of cycle fragment completion", e);
     }
   }
 
@@ -688,7 +688,7 @@ public class SingleThreadViewProcessWorker implements ViewProcessWorker, MarketD
     try {
       getWorkerContext().cycleExecutionFailed(executionOptions, exception);
     } catch (final Exception vpe) {
-      s_logger.error("Error notifying " + getWorkerContext() + " of the cycle execution error", vpe);
+      LOGGER.error("Error notifying " + getWorkerContext() + " of the cycle execution error", vpe);
     }
   }
 
@@ -696,7 +696,7 @@ public class SingleThreadViewProcessWorker implements ViewProcessWorker, MarketD
     try {
       getWorkerContext().viewDefinitionCompiled(_marketDataManager.getMarketDataProvider(), compiledViewDefinition);
     } catch (final Exception vpe) {
-      s_logger.error("Error notifying " + getWorkerContext() + " of view definition compilation", vpe);
+      LOGGER.error("Error notifying " + getWorkerContext() + " of view definition compilation", vpe);
     }
   }
 
@@ -704,7 +704,7 @@ public class SingleThreadViewProcessWorker implements ViewProcessWorker, MarketD
     try {
       getWorkerContext().viewDefinitionCompilationFailed(compilationTime, e);
     } catch (final Exception vpe) {
-      s_logger.error("Error notifying " + getWorkerContext() + " of the view definition compilation failure", vpe);
+      LOGGER.error("Error notifying " + getWorkerContext() + " of the view definition compilation failure", vpe);
     }
   }
 
@@ -728,9 +728,9 @@ public class SingleThreadViewProcessWorker implements ViewProcessWorker, MarketD
           try {
             getMasterCycleTrigger().cycleTriggered(currentTimeNanos, cycleType);
           } catch (final Exception e) {
-            s_logger.error("Error notifying trigger of intention to execute cycle", e);
+            LOGGER.error("Error notifying trigger of intention to execute cycle", e);
           }
-          s_logger.debug("Eligible for {} cycle", cycleType);
+          LOGGER.debug("Eligible for {} cycle", cycleType);
           if (_masterCycleTriggerChanges != null) {
             // TODO: If we wish to support execution option changes mid-execution, we will need to add/remove any relevant triggers here
             // Currently only the run-as-fast-as-possible trigger becomes valid for the second cycle if we've also got wait-for-initial-trigger
@@ -742,11 +742,11 @@ public class SingleThreadViewProcessWorker implements ViewProcessWorker, MarketD
         // Going to sleep (or doing some useful work)
         final long wakeUpTime = triggerResult.getNextStateChangeNanos();
         if (_cycleRequested) {
-          s_logger.debug("Waiting to become eligible to perform the next computation cycle");
+          LOGGER.debug("Waiting to become eligible to perform the next computation cycle");
           // No amount of market data can make us eligible for a computation cycle any sooner.
           _wakeOnCycleRequest = false;
         } else {
-          s_logger.debug("Waiting until forced to perform the next computation cycle");
+          LOGGER.debug("Waiting until forced to perform the next computation cycle");
           _wakeOnCycleRequest = cycleEligibility == ViewCycleEligibility.ELIGIBLE;
         }
         if ((_targetResolverChanges == null) || (_latestCompiledViewDefinition == null) || !_targetResolverChanges.hasChecksPending()) {
@@ -754,7 +754,7 @@ public class SingleThreadViewProcessWorker implements ViewProcessWorker, MarketD
           sleepTime = Math.max(0, sleepTime);
           sleepTime /= NANOS_PER_MILLISECOND;
           sleepTime += 1; // Could have been rounded down during division so ensure only woken after state change
-          s_logger.debug("Sleeping for {} ms", sleepTime);
+          LOGGER.debug("Sleeping for {} ms", sleepTime);
           try {
             // This could wait until end of time. In this case, only marketDataChanged() or triggerCycle() will wake it up
             wait(sleepTime);
@@ -762,14 +762,14 @@ public class SingleThreadViewProcessWorker implements ViewProcessWorker, MarketD
             // We support interruption as a signal that we have been terminated. If we're interrupted without having been
             // terminated, we'll just return to this method and go back to sleep.
             Thread.interrupted();
-            s_logger.info("Interrupted while delaying. Continuing operation.");
+            LOGGER.info("Interrupted while delaying. Continuing operation.");
             throw e;
           }
           continue;
         }
       }
       // There are checks pending on the target resolver; do these instead of sleeping
-      s_logger.debug("Checking resolutions while waiting for next cycle");
+      LOGGER.debug("Checking resolutions while waiting for next cycle");
       CompiledViewDefinitionWithGraphs viewDefinition = _latestCompiledViewDefinition;
       int max = 64; // arbitrary choice - bigger means more efficient if master is remote, but might miss the expected wake up time
       final Map<ComputationTargetReference, UniqueId> checks = Maps.newHashMapWithExpectedSize(max);
@@ -783,7 +783,7 @@ public class SingleThreadViewProcessWorker implements ViewProcessWorker, MarketD
         }
       }
       if (checks.isEmpty()) {
-        s_logger.debug("No resolutions to check");
+        LOGGER.debug("No resolutions to check");
         _targetResolverChanges.clearChecksPending();
       } else {
         final Instant now = now();
@@ -799,16 +799,16 @@ public class SingleThreadViewProcessWorker implements ViewProcessWorker, MarketD
             final UniqueId oldId = check.getValue();
             if (oldId.equals(resolution.getUniqueId())) {
               // Target resolves the same
-              s_logger.trace("No change resolving {}", check.getKey());
+              LOGGER.trace("No change resolving {}", check.getKey());
               continue;
             }
           }
           // Target has a new resolution, or no longer resolves - mark it and request a new cycle
-          s_logger.debug("New resolution of {} to {}", check.getKey(), resolution);
+          LOGGER.debug("New resolution of {} to {}", check.getKey(), resolution);
           _targetResolverChanges.setChanged(check.getValue().getObjectId());
           _forceTriggerCycle = true;
         }
-        s_logger.info("{} resolutions checked in {}ms during cycle wait state", checks.size(), (double) t / 1e6);
+        LOGGER.info("{} resolutions checked in {}ms during cycle wait state", checks.size(), (double) t / 1e6);
       }
     }
   }
@@ -817,16 +817,16 @@ public class SingleThreadViewProcessWorker implements ViewProcessWorker, MarketD
       throws Exception {
     SingleComputationCycle deltaCycle;
     if (cycleType == ViewCycleType.FULL) {
-      s_logger.info("Performing full computation");
+      LOGGER.info("Performing full computation");
       deltaCycle = null;
     } else {
       deltaCycle = _previousCycleReference.get();
       if ((deltaCycle != null) && (deltaCycle.getState() != ViewCycleState.EXECUTED)) {
         // Can only do a delta cycle if the previous was valid
-        s_logger.info("Performing full computation; no previous cycle");
+        LOGGER.info("Performing full computation; no previous cycle");
         deltaCycle = null;
       } else {
-        s_logger.info("Performing delta computation");
+        LOGGER.info("Performing delta computation");
       }
     }
     boolean continueExecution = cycleReference.get().preExecute(deltaCycle, marketDataSnapshot, _suppressExecutionOnNoMarketData);
@@ -838,14 +838,14 @@ public class SingleThreadViewProcessWorker implements ViewProcessWorker, MarketD
         // In reality this means that the job has been terminated, and it will end as soon as we return from this method.
         // In case the thread has been interrupted without terminating the job, we tidy everything up as if the
         // interrupted cycle never happened so that deltas will be calculated from the previous cycle.
-        s_logger.info("Interrupted while executing a computation cycle. No results will be output from this cycle.");
+        LOGGER.info("Interrupted while executing a computation cycle. No results will be output from this cycle.");
         throw e;
       } catch (final Exception e) {
-        s_logger.error("Error while executing view cycle", e);
+        LOGGER.error("Error while executing view cycle", e);
         throw e;
       }
     } else {
-      s_logger.debug("Skipping graph execution");
+      LOGGER.debug("Skipping graph execution");
     }
     cycleReference.get().postExecute();
     final long durationNanos = cycleReference.get().getDuration().toNanos();
@@ -855,15 +855,15 @@ public class SingleThreadViewProcessWorker implements ViewProcessWorker, MarketD
     }
     _totalTimeNanos += durationNanos;
     _cycleCount += 1;
-    s_logger.info("Last latency was {} ms, Average latency is {} ms", durationNanos / NANOS_PER_MILLISECOND, (_totalTimeNanos / _cycleCount) / NANOS_PER_MILLISECOND);
+    LOGGER.info("Last latency was {} ms, Average latency is {} ms", durationNanos / NANOS_PER_MILLISECOND, (_totalTimeNanos / _cycleCount) / NANOS_PER_MILLISECOND);
   }
 
   private void jobCompleted() {
-    s_logger.info("Computation job completed for {}", getWorkerContext());
+    LOGGER.info("Computation job completed for {}", getWorkerContext());
     try {
       getWorkerContext().workerCompleted();
     } catch (final Exception e) {
-      s_logger.error("Error notifying " + getWorkerContext() + " of computation job completion", e);
+      LOGGER.error("Error notifying " + getWorkerContext() + " of computation job completion", e);
     }
     getJob().terminate();
   }
@@ -1132,8 +1132,8 @@ public class SingleThreadViewProcessWorker implements ViewProcessWorker, MarketD
    */
   private void mapAndUnmapNodes(final Map<String, PartiallyCompiledGraph> previousGraphs, final CompiledViewDefinitionWithGraphs compiledViewDefinition, final Map<UniqueId, UniqueId> map,
       final Set<UniqueId> unmap) {
-    if (s_logger.isDebugEnabled()) {
-      s_logger.debug("Mapping {} portfolio nodes to new structure, unmapping {} targets", (map != null) ? map.size() : 0, unmap.size());
+    if (LOGGER.isDebugEnabled()) {
+      LOGGER.debug("Mapping {} portfolio nodes to new structure, unmapping {} targets", (map != null) ? map.size() : 0, unmap.size());
     }
     // For anything not mapped, remove the terminal outputs from the graph
     for (Map.Entry<String, PartiallyCompiledGraph> previousGraphEntry : previousGraphs.entrySet()) {
@@ -1202,17 +1202,17 @@ public class SingleThreadViewProcessWorker implements ViewProcessWorker, MarketD
         final ObjectId oid = previousResolution.getValue().getObjectId();
         if (_targetResolverChanges.isChanged(oid)) {
           // A change was seen on this target
-          s_logger.debug("Change observed on {}", oid);
+          LOGGER.debug("Change observed on {}", oid);
           toCheck.add(previousResolution.getKey());
         }
         allObjectIds.add(oid);
       }
       _targetResolverChanges.watchOnly(allObjectIds);
       if (toCheck.isEmpty()) {
-        s_logger.debug("No resolutions (from {}) to check", previousResolutions.size());
+        LOGGER.debug("No resolutions (from {}) to check", previousResolutions.size());
         return null;
       } else {
-        s_logger.debug("Checking {} of {} resolutions for changed objects", toCheck.size(), previousResolutions.size());
+        LOGGER.debug("Checking {} of {} resolutions for changed objects", toCheck.size(), previousResolutions.size());
       }
     }
     PoolExecutor previousInstance = PoolExecutor.setInstance(getProcessContext().getFunctionCompilationService().getExecutorService());
@@ -1225,17 +1225,17 @@ public class SingleThreadViewProcessWorker implements ViewProcessWorker, MarketD
       final ComputationTargetSpecification resolved = specifications.get(target.getKey());
       if ((resolved != null) && target.getValue().equals(resolved.getUniqueId())) {
         // No change
-        s_logger.trace("No change resolving {}", target);
+        LOGGER.trace("No change resolving {}", target);
       } else if (toCheck.contains(target.getKey())) {
         // Identifier no longer resolved, or resolved differently
-        s_logger.info("New resolution of {} to {}", target, resolved);
+        LOGGER.info("New resolution of {} to {}", target, resolved);
         if (invalidIdentifiers == null) {
           invalidIdentifiers = new HashMap<>();
         }
         invalidIdentifiers.put(target.getValue(), resolved);
       }
     }
-    s_logger.info("{} resolutions checked in {}ms", toCheck.size(), t / 1e6);
+    LOGGER.info("{} resolutions checked in {}ms", toCheck.size(), t / 1e6);
     return invalidIdentifiers;
   }
 
@@ -1313,7 +1313,7 @@ public class SingleThreadViewProcessWorker implements ViewProcessWorker, MarketD
         oldRoots.clear();
         oldRoots.addAll(newRoots);
       } else {
-        s_logger.info("Discarded total dependency graph for {}", entry.getKey());
+        LOGGER.info("Discarded total dependency graph for {}", entry.getKey());
         itr.remove();
       }
     }
@@ -1458,7 +1458,7 @@ public class SingleThreadViewProcessWorker implements ViewProcessWorker, MarketD
             broadLock = true;
           }
         } else {
-          s_logger.debug("Full graph rebuild requested");
+          LOGGER.debug("Full graph rebuild requested");
         }
         if (compilationServices == null) {
           // TODO: The relationship between ViewProcessContext, ViewCompilationContext, ViewCompilationServices and ViewDefinitionCompiler is starting to feel a bit cumbersome. It might
@@ -1467,11 +1467,11 @@ public class SingleThreadViewProcessWorker implements ViewProcessWorker, MarketD
           compilationServices = getProcessContext().asCompilationServices(_marketDataManager.getAvailabilityProvider());
         }
         if (previousGraphs != null) {
-          s_logger.info("Performing incremental graph compilation");
+          LOGGER.info("Performing incremental graph compilation");
           _compilationTask = ViewDefinitionCompiler.incrementalCompileTask(getViewDefinition(), compilationServices, valuationTime, versionCorrection, previousGraphs, previousResolutions,
               changedPositions, unchangedNodes);
         } else {
-          s_logger.info("Performing full graph compilation");
+          LOGGER.info("Performing full graph compilation");
           _compilationTask = ViewDefinitionCompiler.fullCompileTask(getViewDefinition(), compilationServices, valuationTime, versionCorrection);
         }
         try {
@@ -1485,16 +1485,16 @@ public class SingleThreadViewProcessWorker implements ViewProcessWorker, MarketD
             return null;
           }
         } catch (IllegalCompilationStateException e) {
-          s_logger.warn("Detected late change to compilation state; repeating compilation in {}", this);
-          s_logger.debug("Caught exception", e);
+          LOGGER.warn("Detected late change to compilation state; repeating compilation in {}", this);
+          LOGGER.debug("Caught exception", e);
           final ObjectId oid = e.getInvalidIdentifier();
           if ((oid != null) && (_targetResolverChanges != null)) {
             // Try again with this identifier invalidated
-            s_logger.info("Invalidating {} and retrying", oid);
+            LOGGER.info("Invalidating {} and retrying", oid);
             _targetResolverChanges.setChanged(oid);
           } else {
             // Nothing to invalidate - force a full rebuild
-            s_logger.error("Nothing to invalidate following illegal compilation state, forcing a full rebuild");
+            LOGGER.error("Nothing to invalidate following illegal compilation state, forcing a full rebuild");
             _forceGraphRebuild.set(true);
           }
           continue;
@@ -1509,7 +1509,7 @@ public class SingleThreadViewProcessWorker implements ViewProcessWorker, MarketD
         viewDefinitionCompilationFailed(valuationTime, new OpenGammaRuntimeException(message, e));
         throw new OpenGammaRuntimeException(message, e);
       } else {
-        s_logger.debug("Caught exception during termination", e);
+        LOGGER.debug("Caught exception during termination", e);
         return null;
       }
     } finally {
@@ -1538,7 +1538,7 @@ public class SingleThreadViewProcessWorker implements ViewProcessWorker, MarketD
   private CompiledViewDefinitionWithGraphs initialiseMarketDataManipulation(final CompiledViewDefinitionWithGraphs compiledViewDefinition,
       final ComputationTargetResolver.AtVersionCorrection resolver) {
     if (_marketDataSelectionGraphManipulator.hasManipulationsDefined()) {
-      s_logger.info("Initialising market data manipulation");
+      LOGGER.info("Initialising market data manipulation");
       final Map<String, DependencyGraph> newGraphsByConfig = new HashMap<>();
       final Map<String, Map<DistinctMarketDataSelector, Set<ValueSpecification>>> selectionsByConfig = new HashMap<>();
       final Map<String, Map<DistinctMarketDataSelector, FunctionParameters>> functionParamsByConfig = new HashMap<>();
@@ -1566,10 +1566,10 @@ public class SingleThreadViewProcessWorker implements ViewProcessWorker, MarketD
         }
       }
       if (!selectionsByConfig.isEmpty()) {
-        s_logger.info("Adding in market data manipulation selections: [{}] and preset function parameters: [{}]", selectionsByConfig, functionParamsByConfig);
+        LOGGER.info("Adding in market data manipulation selections: [{}] and preset function parameters: [{}]", selectionsByConfig, functionParamsByConfig);
         return compiledViewDefinition.withMarketDataManipulationSelections(newGraphsByConfig, selectionsByConfig, functionParamsByConfig);
       } else {
-        s_logger.info("No market data manipulation selectors matched - no manipulation to be done");
+        LOGGER.info("No market data manipulation selectors matched - no manipulation to be done");
       }
     }
     return compiledViewDefinition;
@@ -1720,7 +1720,7 @@ public class SingleThreadViewProcessWorker implements ViewProcessWorker, MarketD
 
   @Override
   public synchronized boolean triggerCycle() {
-    s_logger.debug("Cycle triggered manually");
+    LOGGER.debug("Cycle triggered manually");
     _forceTriggerCycle = true;
     notifyAll();
     return true;
@@ -1743,14 +1743,14 @@ public class SingleThreadViewProcessWorker implements ViewProcessWorker, MarketD
 
   @Override
   public void updateViewDefinition(final ViewDefinition viewDefinition) {
-    s_logger.debug("Received new view definition {} for next cycle", viewDefinition.getUniqueId());
+    LOGGER.debug("Received new view definition {} for next cycle", viewDefinition.getUniqueId());
     _newViewDefinition.getAndSet(viewDefinition);
   }
 
   @Override
   public void terminate() {
     getJob().terminate();
-    s_logger.debug("Interrupting calculation job thread");
+    LOGGER.debug("Interrupting calculation job thread");
     getThread().interrupt();
   }
 
@@ -1776,7 +1776,7 @@ public class SingleThreadViewProcessWorker implements ViewProcessWorker, MarketD
   @Override
   @Deprecated
   public void forceGraphRebuild() {
-    s_logger.debug("Requesting graph rebuild on next cycle");
+    LOGGER.debug("Requesting graph rebuild on next cycle");
     _forceGraphRebuild.set(true);
   }
 }

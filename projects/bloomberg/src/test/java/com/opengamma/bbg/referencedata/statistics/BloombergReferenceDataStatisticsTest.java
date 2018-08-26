@@ -24,10 +24,10 @@ public class BloombergReferenceDataStatisticsTest {
 
   @Test(groups = TestGroup.UNIT)
   public void singleTest() {
-    MapBloombergReferenceDataStatistics stats = new MapBloombergReferenceDataStatistics();
+    final MapBloombergReferenceDataStatistics stats = new MapBloombergReferenceDataStatistics();
     stats.recordStatistics(Collections.singleton("1"), Collections.singleton("A"));
     assertEquals(1, stats.getTotalGetsCount());
-    Snapshot snap1 = stats.getSnapshot();
+    final Snapshot snap1 = stats.getSnapshot();
     assertEquals(1, snap1.getLookupsByField().size());
     assertEquals(1, snap1.getLookupsBySecurity().size());
     assertEquals(1, snap1.getTotalLookups());
@@ -36,7 +36,7 @@ public class BloombergReferenceDataStatisticsTest {
 
     stats.recordStatistics(Collections.singleton("1"), Collections.singleton("A"));
     assertEquals(2, stats.getTotalGetsCount());
-    Snapshot snap2 = stats.getSnapshot();
+    final Snapshot snap2 = stats.getSnapshot();
     assertEquals(1, snap2.getLookupsByField().size());
     assertEquals(1, snap2.getLookupsBySecurity().size());
 
@@ -47,10 +47,10 @@ public class BloombergReferenceDataStatisticsTest {
 
   @Test(groups = TestGroup.UNIT)
   public void multiTest() {
-    MapBloombergReferenceDataStatistics stats = new MapBloombergReferenceDataStatistics();
+    final MapBloombergReferenceDataStatistics stats = new MapBloombergReferenceDataStatistics();
     stats.recordStatistics(Collections.singleton("1"), Collections.singleton("A"));
     assertEquals(1, stats.getTotalGetsCount());
-    Snapshot snap1 = stats.getSnapshot();
+    final Snapshot snap1 = stats.getSnapshot();
     assertEquals(1, snap1.getLookupsByField().size());
     assertEquals(1, snap1.getLookupsBySecurity().size());
     assertEquals(1, snap1.getTotalLookups());
@@ -59,7 +59,7 @@ public class BloombergReferenceDataStatisticsTest {
 
     stats.recordStatistics(Sets.newHashSet("1", "2"), Collections.singleton("B"));
     assertEquals(3, stats.getTotalGetsCount());
-    Snapshot snap2 = stats.getSnapshot();
+    final Snapshot snap2 = stats.getSnapshot();
     assertEquals(2, snap2.getLookupsByField().size());
     assertEquals(2, snap2.getLookupsBySecurity().size());
 
@@ -109,50 +109,50 @@ public class BloombergReferenceDataStatisticsTest {
 
   @Test(enabled = false)
   public void fastTest() throws InterruptedException {
-    MapBloombergReferenceDataStatistics stats = getBigStats();
+    final MapBloombergReferenceDataStatistics stats = getBigStats();
 
     for (int i = 0; i < 10; i++) {
-      long start = System.currentTimeMillis();
-      int repeats = 20;
+      final long start = System.currentTimeMillis();
+      final int repeats = 20;
       for (int n = 0; n < repeats; n++) {
         stats.getSnapshot();
       }
-      long elapsed = System.currentTimeMillis() - start;
+      final long elapsed = System.currentTimeMillis() - start;
       assertTrue(elapsed < repeats * 1000);
     }
   }
 
-  private <T> void assertSmall(Supplier<T> factory, long maxSize, String name) throws InterruptedException {
+  private <T> void assertSmall(final Supplier<T> factory, final long maxSize, final String name) throws InterruptedException {
     assertSmallAndFast(factory, maxSize, null, name);
   }
 
-  private <T> void assertSmallAndFast(Supplier<T> factory, Long maxSize, Long maxTime, String name) throws InterruptedException {
-    int blocks = 3;
-    int blockSize = 10;
-    
-    List<T> list = new ArrayList<T>(blocks * blockSize);        
-    long baseline = getUsedMemory();
+  private <T> void assertSmallAndFast(final Supplier<T> factory, final Long maxSize, final Long maxTime, final String name) throws InterruptedException {
+    final int blocks = 3;
+    final int blockSize = 10;
+
+    final List<T> list = new ArrayList<>(blocks * blockSize);
+    final long baseline = getUsedMemory();
     for (int i = 0; i < blocks; i++) {
-      long start = System.currentTimeMillis();
+      final long start = System.currentTimeMillis();
       for (int n=0;n<blockSize;n++) {
-        list.add(factory.get());  
+        list.add(factory.get());
       }
-      long elapsed = System.currentTimeMillis() - start;
-      long used = getUsedMemory() - baseline;
-      long usedPerUnit = used / ((i + 1) * blockSize);
-      long elapsedPerUnit = elapsed / blockSize;
+      final long elapsed = System.currentTimeMillis() - start;
+      final long used = getUsedMemory() - baseline;
+      final long usedPerUnit = used / ((i + 1) * blockSize);
+      final long elapsedPerUnit = elapsed / blockSize;
       System.out.println("Used ~" + usedPerUnit + "bytes and " + elapsedPerUnit + "ms per "+name);
       if (maxSize != null)
       {
-        assertLessThan((long) maxSize, usedPerUnit);
+        assertLessThan(maxSize, usedPerUnit);
       }
       if (maxTime != null) {
-        assertLessThan((long) maxTime, elapsedPerUnit);
+        assertLessThan(maxTime, elapsedPerUnit);
       }
     }
   }
 
-  private void assertLessThan(long expected, long actual) {
+  private void assertLessThan(final long expected, final long actual) {
     if (actual > expected) {
       throw new AssertionError(actual+" > "+expected);
     }
@@ -165,27 +165,27 @@ public class BloombergReferenceDataStatisticsTest {
   }
 
   private MapBloombergReferenceDataStatistics getBigStats() {
-    MapBloombergReferenceDataStatistics stats = new MapBloombergReferenceDataStatistics();
+    final MapBloombergReferenceDataStatistics stats = new MapBloombergReferenceDataStatistics();
     return incrementBigStats(stats);
   }
 
-  private static final Set<String> securities = getInts(100000);
-  private static final Set<String> fields = getInts(100);
+  private static final Set<String> SECURITIES = getInts(100000);
+  private static final Set<String> FIELDS = getInts(100);
 
-  private MapBloombergReferenceDataStatistics incrementBigStats(MapBloombergReferenceDataStatistics stats) {
-    stats.recordStatistics(securities, fields);
+  private MapBloombergReferenceDataStatistics incrementBigStats(final MapBloombergReferenceDataStatistics stats) {
+    stats.recordStatistics(SECURITIES, FIELDS);
     return stats;
   }
 
-  private static Set<String> getInts(int count) {
-    HashSet<String> ret = new HashSet<String>(count);
+  private static Set<String> getInts(final int count) {
+    final HashSet<String> ret = new HashSet<>(count);
     for (int n = 0; n < count; n++) {
       ret.add(Integer.toString(n));
     }
     return ret;
   }
 
-  private <TValue> void assertPairEquals(Pair<? extends Number, TValue> expected, Pair<? extends Number, TValue> actual) {
+  private <TValue> void assertPairEquals(final Pair<? extends Number, TValue> expected, final Pair<? extends Number, TValue> actual) {
     assertEquals(expected.getFirst().longValue(), actual.getFirst().longValue());
     assertEquals(expected.getSecond(), actual.getSecond());
   }

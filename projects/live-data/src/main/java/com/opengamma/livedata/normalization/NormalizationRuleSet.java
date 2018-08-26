@@ -25,7 +25,7 @@ import com.opengamma.util.fudgemsg.OpenGammaFudgeContext;
  */
 public class NormalizationRuleSet {
   
-  private static final Logger s_logger = LoggerFactory.getLogger(NormalizationRuleSet.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(NormalizationRuleSet.class);
   
   private final String _id;
   private final String _jmsTopicSuffix;
@@ -75,11 +75,11 @@ public class NormalizationRuleSet {
       normalizedMsg = rule.apply(normalizedMsg, securityUniqueId, fieldHistory);
       if (normalizedMsg == null) {
         // One of the rules rejected the message entirely.
-        s_logger.debug("Rule {} in rule set {} rejected message {}", new Object[] {rule, getId(), normalizedMsg});
+        LOGGER.debug("Rule {} in rule set {} rejected message {}", new Object[] {rule, getId(), normalizedMsg});
         break;
       }
     }
-    s_logger.debug("Applying rule set {} to message {} produced normalized message {}", new Object[] {getId(), msg, normalizedMsg});
+    LOGGER.debug("Applying rule set {} to message {} produced normalized message {}", new Object[] {getId(), msg, normalizedMsg});
     return normalizedMsg;
   }
   

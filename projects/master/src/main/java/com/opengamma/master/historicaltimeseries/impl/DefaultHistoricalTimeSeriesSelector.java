@@ -25,7 +25,7 @@ public class DefaultHistoricalTimeSeriesSelector implements HistoricalTimeSeries
   /**
    * Logger.
    */
-  private static final Logger s_logger = LoggerFactory.getLogger(DefaultHistoricalTimeSeriesSelector.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(DefaultHistoricalTimeSeriesSelector.class);
 
   /**
    * The source of configuration.
@@ -52,7 +52,7 @@ public class DefaultHistoricalTimeSeriesSelector implements HistoricalTimeSeries
         // Pick best using rules from configuration
         HistoricalTimeSeriesRating rating = _configSource.getLatestByName(HistoricalTimeSeriesRating.class, selectionKey);
         if (rating == null) {
-          s_logger.warn("Resolver failed to find configuration: {}", selectionKey);
+          LOGGER.warn("Resolver failed to find configuration: {}", selectionKey);
           return null;
         }
         return bestMatch(candidates, rating);
@@ -68,12 +68,12 @@ public class DefaultHistoricalTimeSeriesSelector implements HistoricalTimeSeries
    * @return the best match, null if no match
    */
   private ManageableHistoricalTimeSeriesInfo bestMatch(Collection<ManageableHistoricalTimeSeriesInfo> matches, HistoricalTimeSeriesRating rating) {
-    s_logger.debug("Find best match using rules: {}", rating);
+    LOGGER.debug("Find best match using rules: {}", rating);
     int currentScore = Integer.MIN_VALUE;
     ManageableHistoricalTimeSeriesInfo bestMatch = null;
     for (ManageableHistoricalTimeSeriesInfo match : matches) {
       int score = rating.rate(match);
-      s_logger.debug("Score: {} for info: {}", score, match);
+      LOGGER.debug("Score: {} for info: {}", score, match);
       if (score > currentScore) {
         currentScore = score;
         bestMatch = match;

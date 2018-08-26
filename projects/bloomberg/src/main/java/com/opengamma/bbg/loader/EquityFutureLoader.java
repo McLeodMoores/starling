@@ -46,7 +46,7 @@ import com.opengamma.util.time.Expiry;
 public class EquityFutureLoader extends SecurityLoader {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(EquityFutureLoader.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(EquityFutureLoader.class);
 
   /** The fields to load from Bloomberg */
   private static final Set<String> BLOOMBERG_EQUITY_FUTURE_FIELDS = Collections.unmodifiableSet(Sets.newHashSet(
@@ -75,7 +75,7 @@ public class EquityFutureLoader extends SecurityLoader {
    * @param referenceDataProvider  the provider, not null
    */
   public EquityFutureLoader(ReferenceDataProvider referenceDataProvider) {
-    super(s_logger, referenceDataProvider, SecurityType.EQUITY_FUTURE);
+    super(LOGGER, referenceDataProvider, SecurityType.EQUITY_FUTURE);
   }
 
   //-------------------------------------------------------------------------
@@ -93,27 +93,27 @@ public class EquityFutureLoader extends SecurityLoader {
     String unitAmount = fieldData.getString(FIELD_FUT_VAL_PT);
 
     if (!isValidField(bbgUnique)) {
-      s_logger.warn("bbgUnique is null, cannot construct EquityFutureSecurity");
+      LOGGER.warn("bbgUnique is null, cannot construct EquityFutureSecurity");
       return null;
     }
     if (!isValidField(expiryDate)) {
-      s_logger.warn("expiry date is null, cannot construct EquityFutureSecurity");
+      LOGGER.warn("expiry date is null, cannot construct EquityFutureSecurity");
       return null;
     }
     if (!isValidField(futureTradingHours)) {
-      s_logger.warn("futures trading hours is null, cannot construct EquityFutureSecurity");
+      LOGGER.warn("futures trading hours is null, cannot construct EquityFutureSecurity");
       return null;
     }
     if (!isValidField(micExchangeCode)) {
-      s_logger.warn("settlement exchange is null, cannot construct EquityFutureSecurity");
+      LOGGER.warn("settlement exchange is null, cannot construct EquityFutureSecurity");
       return null;
     }
     if (!isValidField(currencyStr)) {
-      s_logger.info("currency is null, cannot construct EquityFutureSecurity");
+      LOGGER.info("currency is null, cannot construct EquityFutureSecurity");
       return null;
     }
     if (!isValidField(category)) {
-      s_logger.info("category is null, cannot construct EquityFutureSecurity");
+      LOGGER.info("category is null, cannot construct EquityFutureSecurity");
       return null;
     }
     ExternalId underlying = null;
@@ -129,7 +129,7 @@ public class EquityFutureLoader extends SecurityLoader {
     }
 
     // FIXME: Case - treatment of Settlement Date
-    s_logger.warn("Creating EquityFutureSecurity - settlementDate set equal to expiryDate. Missing lag.");
+    LOGGER.warn("Creating EquityFutureSecurity - settlementDate set equal to expiryDate. Missing lag.");
     ZonedDateTime settlementDate = expiry.getExpiry();
 
     EquityFutureSecurity security = new EquityFutureSecurity(expiry, micExchangeCode, micExchangeCode, currency, Double.valueOf(unitAmount), settlementDate, underlying, category);

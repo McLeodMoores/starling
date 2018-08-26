@@ -67,7 +67,7 @@ public class CogdaClientConnection implements FudgeConnectionStateListener, Fudg
    */
   public static final String SNAPSHOT = "snapshot";
 
-  private static final Logger s_logger = LoggerFactory.getLogger(CogdaClientConnection.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(CogdaClientConnection.class);
   private final FudgeContext _fudgeContext;
   private final CogdaLiveDataServer _server;
   private final FudgeMessageSender _messageSender;
@@ -145,7 +145,7 @@ public class CogdaClientConnection implements FudgeConnectionStateListener, Fudg
 
   @Override
   public void connectionReset(FudgeConnection connection) {
-    s_logger.warn("Connection Reset");
+    LOGGER.warn("Connection Reset");
   }
 
   @Override
@@ -153,8 +153,8 @@ public class CogdaClientConnection implements FudgeConnectionStateListener, Fudg
     // TODO kirk 2012-08-15 -- Fix this so that failed connections result in
     // torn down client connections.
     // Cause may be null.
-    s_logger.warn("Connection failed \"{}\"", (cause != null) ? cause.getMessage() : "no cause");
-    s_logger.info("Connection failed", cause);
+    LOGGER.warn("Connection failed \"{}\"", (cause != null) ? cause.getMessage() : "no cause");
+    LOGGER.info("Connection failed", cause);
     getServer().removeClient(this);
   }
   
@@ -248,7 +248,7 @@ public class CogdaClientConnection implements FudgeConnectionStateListener, Fudg
       if (lkvStore != null) {
         fields = lkvStore.getFields();
       } else {
-        s_logger.warn("Valid live data {} lacks fields in LKV store", request);
+        LOGGER.warn("Valid live data {} lacks fields in LKV store", request);
         fields = fudgeContext.newMessage();
       }
       
@@ -281,7 +281,7 @@ public class CogdaClientConnection implements FudgeConnectionStateListener, Fudg
       if (lkvStore != null) {
         fields = lkvStore.getFields();
       } else {
-        s_logger.warn("Valid live data {} lacks fields in LKV store", request);
+        LOGGER.warn("Valid live data {} lacks fields in LKV store", request);
         fields = fudgeContext.newMessage();
       }
       
@@ -352,7 +352,7 @@ public class CogdaClientConnection implements FudgeConnectionStateListener, Fudg
     try {
       getMessageSender().send(msg);
     } catch (Exception e) {
-      s_logger.info("Exception thrown; assuming socket closed and tearing down client.");
+      LOGGER.info("Exception thrown; assuming socket closed and tearing down client.");
       // Note that the actual connection state will be handled by the FudgeConnectionStateListener callback.
     }
   }

@@ -26,7 +26,7 @@ import com.opengamma.engine.value.ValueSpecification;
 public class ListedEquityOptionBjerksundStenslandPresentValueFunction extends ListedEquityOptionBjerksundStenslandFunction {
 
   /** The Bjerksund-Stensland present value calculator */
-  private static final EqyOptBjerksundStenslandPresentValueCalculator s_calculator = EqyOptBjerksundStenslandPresentValueCalculator.getInstance();
+  private static final EqyOptBjerksundStenslandPresentValueCalculator CALCULATOR = EqyOptBjerksundStenslandPresentValueCalculator.getInstance();
 
   /** Default constructor */
   public ListedEquityOptionBjerksundStenslandPresentValueFunction() {
@@ -37,7 +37,7 @@ public class ListedEquityOptionBjerksundStenslandPresentValueFunction extends Li
   protected Set<ComputedValue> computeValues(final InstrumentDerivative derivative, final StaticReplicationDataBundle market, final FunctionInputs inputs,
       final Set<ValueRequirement> desiredValues, final ComputationTargetSpecification targetSpec, final ValueProperties resultProperties) {
     final ValueSpecification resultSpec = new ValueSpecification(getValueRequirementNames()[0], targetSpec, resultProperties);
-    final double pv = derivative.accept(s_calculator, market);
+    final double pv = derivative.accept(CALCULATOR, market);
     return Collections.singleton(new ComputedValue(resultSpec, pv));
   }
 

@@ -20,7 +20,7 @@ import com.opengamma.util.ArgumentChecker;
  * An implementation of {@link InputStreamFactory} that opens a {@link File}.
  */
 public class FileInputStreamFactory implements InputStreamFactory {
-  private static final Logger s_logger = LoggerFactory.getLogger(FileInputStreamFactory.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(FileInputStreamFactory.class);
   private final File _inputFile;
   private String _description;
   
@@ -37,7 +37,7 @@ public class FileInputStreamFactory implements InputStreamFactory {
 
   @Override
   public InputStream openConnection() {
-    s_logger.info("Opening connection to {}", _inputFile.getAbsolutePath());
+    LOGGER.info("Opening connection to {}", _inputFile.getAbsolutePath());
     try {
       return new FileInputStream(_inputFile);
     } catch (FileNotFoundException ex) {

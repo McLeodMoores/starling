@@ -66,7 +66,7 @@ import com.opengamma.util.tuple.DoublesPair;
  */
 @Deprecated
 public class FXForwardYCNSFunction extends FXForwardSingleValuedFunction {
-  private static final Logger s_logger = LoggerFactory.getLogger(FXForwardYCNSFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(FXForwardYCNSFunction.class);
   private static final MarketQuoteSensitivityCalculator CALCULATOR = new MarketQuoteSensitivityCalculator(new ParameterSensitivityCalculator(
       PresentValueCurveSensitivityIRSCalculator.getInstance()));
 
@@ -125,12 +125,12 @@ public class FXForwardYCNSFunction extends FXForwardSingleValuedFunction {
     final ValueProperties constraints = desiredValue.getConstraints();
     final Set<String> curveNames = constraints.getValues(ValuePropertyNames.CURVE);
     if (curveNames == null || curveNames.size() != 1) {
-      s_logger.error("Did not specify a curve name for requirement {}", desiredValue);
+      LOGGER.error("Did not specify a curve name for requirement {}", desiredValue);
       return null;
     }
     final Set<String> currencies = constraints.getValues(ValuePropertyNames.CURVE_CURRENCY);
     if (currencies == null || currencies.size() != 1) {
-      s_logger.error("Did not specify a curve currency for requirement {}", desiredValue);
+      LOGGER.error("Did not specify a curve currency for requirement {}", desiredValue);
       return null;
     }
     final String payCurveName = Iterables.getOnlyElement(constraints.getValues(PAY_CURVE));
@@ -144,7 +144,7 @@ public class FXForwardYCNSFunction extends FXForwardSingleValuedFunction {
     final Currency receiveCurrency = security.accept(ForexVisitors.getReceiveCurrencyVisitor());
     final String resultCurrency, resultCurveName, resultCurveConfigName;
     if (!(curveName.equals(payCurveName) || curveName.equals(receiveCurveName))) {
-      s_logger.info("Curve name {} did not match either pay curve name {} or receive curve name {}", new Object[] {curveName, payCurveName, receiveCurveName });
+      LOGGER.info("Curve name {} did not match either pay curve name {} or receive curve name {}", new Object[] {curveName, payCurveName, receiveCurveName });
       return null;
     }
     if (currency.equals(payCurrency.getCode())) {
@@ -160,7 +160,7 @@ public class FXForwardYCNSFunction extends FXForwardSingleValuedFunction {
     }
     final MultiCurveCalculationConfig resultCurveCalculationConfig = _curveCalculationConfigSource.getConfig(resultCurveConfigName);
     if (resultCurveCalculationConfig == null) {
-      s_logger.error("Could not find curve calculation configuration named " + resultCurveConfigName + " for currency " + resultCurrency);
+      LOGGER.error("Could not find curve calculation configuration named " + resultCurveConfigName + " for currency " + resultCurrency);
       return null;
     }
     final String resultCurveCalculationMethod = resultCurveCalculationConfig.getCalculationMethod();
@@ -223,7 +223,7 @@ public class FXForwardYCNSFunction extends FXForwardSingleValuedFunction {
     }
     final CurrencyPair baseQuotePair = baseQuotePairs.getCurrencyPair(payCurrency, receiveCurrency);
     if (baseQuotePair == null) {
-      s_logger.error("Could not get base/quote pair for currency pair (" + payCurrency + ", " + receiveCurrency + ")");
+      LOGGER.error("Could not get base/quote pair for currency pair (" + payCurrency + ", " + receiveCurrency + ")");
       return null;
     }
     final ValueSpecification resultSpec = new ValueSpecification(getValueRequirementName(), target.toSpecification(), getResultProperties(payCurveName, receiveCurveName,

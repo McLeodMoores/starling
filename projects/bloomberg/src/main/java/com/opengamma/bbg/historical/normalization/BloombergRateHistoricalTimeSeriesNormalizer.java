@@ -24,7 +24,7 @@ import com.opengamma.timeseries.date.localdate.LocalDateDoubleTimeSeries;
 public class BloombergRateHistoricalTimeSeriesNormalizer implements HistoricalTimeSeriesAdjuster {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(BloombergRateHistoricalTimeSeriesNormalizer.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(BloombergRateHistoricalTimeSeriesNormalizer.class);
 
   private final BloombergRateClassifier _classifier;
   
@@ -39,12 +39,12 @@ public class BloombergRateHistoricalTimeSeriesNormalizer implements HistoricalTi
   protected Integer getNormalizationFactor(final ExternalIdBundle securityIdBundle) {
     String buid = securityIdBundle.getValue(ExternalSchemes.BLOOMBERG_BUID);
     if (buid == null) {
-      s_logger.warn("Unable to classify security for Bloomberg time-series normalization as no BUID found in bundle: {}. The time-series will be unnormalized.", securityIdBundle);
+      LOGGER.warn("Unable to classify security for Bloomberg time-series normalization as no BUID found in bundle: {}. The time-series will be unnormalized.", securityIdBundle);
       return null;
     }
     Integer normalizationFactor = getClassifier().getNormalizationFactor(buid);
     if (normalizationFactor == null) {
-      s_logger.warn("Unable to classify security for Bloomberg time-series normalization: {}. The time-series will be unnormalized.", securityIdBundle);
+      LOGGER.warn("Unable to classify security for Bloomberg time-series normalization: {}. The time-series will be unnormalized.", securityIdBundle);
       return null;
     }
     if (normalizationFactor == 1) {

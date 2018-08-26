@@ -51,7 +51,7 @@ import com.opengamma.util.ArgumentChecker;
 public class CSVPositionSource implements PositionSource {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(CSVPositionSource.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(CSVPositionSource.class);
 
   /**
    * The base file directory.
@@ -239,7 +239,7 @@ public class CSVPositionSource implements PositionSource {
         positionId = UniqueId.of(portfolioId.getScheme(), Integer.toString(++curIndex));
       }
     }
-    s_logger.info("{} parsed stream with {} positions", portfolioId, portfolio.getRootNode().getPositions().size());
+    LOGGER.info("{} parsed stream with {} positions", portfolioId, portfolio.getRootNode().getPositions().size());
     return portfolio;
   }
 
@@ -264,7 +264,7 @@ public class CSVPositionSource implements PositionSource {
       securityIdentifiers.add(id);
     }
     ExternalIdBundle securityKey = ExternalIdBundle.of(securityIdentifiers);
-    s_logger.debug("Loaded position: {} in {}", quantity, securityKey);
+    LOGGER.debug("Loaded position: {} in {}", quantity, securityKey);
     
     return new SimplePosition(positionId, quantity, securityKey);
   }

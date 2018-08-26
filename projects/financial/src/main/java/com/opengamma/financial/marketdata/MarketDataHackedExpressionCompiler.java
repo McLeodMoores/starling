@@ -35,7 +35,7 @@ import com.opengamma.util.ArgumentChecker;
 @Deprecated
 public class MarketDataHackedExpressionCompiler implements OverrideOperationCompiler {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(MarketDataHackedExpressionCompiler.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(MarketDataHackedExpressionCompiler.class);
 
   private final SecuritySource _securitySource;
 
@@ -79,7 +79,7 @@ public class MarketDataHackedExpressionCompiler implements OverrideOperationComp
       } else if (value instanceof MissingInput) {
         return value;
       } else {
-        s_logger.warn("Can't shift market data {} - not a number", value);
+        LOGGER.warn("Can't shift market data {} - not a number", value);
       }
       return value;
     }

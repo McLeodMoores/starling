@@ -64,7 +64,7 @@ import com.opengamma.util.metric.OpenGammaMetricRegistry;
 @BeanDefinition
 public class LiveMarketDataProviderFactoryComponentFactory extends AbstractComponentFactory {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(LiveMarketDataProviderFactoryComponentFactory.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(LiveMarketDataProviderFactoryComponentFactory.class);
   
   /**
    * The classifier under which to publish.
@@ -164,7 +164,7 @@ public class LiveMarketDataProviderFactoryComponentFactory extends AbstractCompo
     LiveDataMetaData metaData = provider.metaData();
     URI jmsUri = metaData.getJmsBrokerUri();
     if (metaData.getServerType() != LiveDataServerTypes.STANDARD || jmsUri == null) {
-      s_logger.warn("Unsupported live data server type " + metaData.getServerType() + " for " + metaData.getDescription() + " live data provider. This provider will not be available.");
+      LOGGER.warn("Unsupported live data server type " + metaData.getServerType() + " for " + metaData.getDescription() + " live data provider. This provider will not be available.");
       return null;
     }
     if (!jmsConnector.getClientBrokerUri().equals(jmsUri)) {
@@ -209,7 +209,7 @@ public class LiveMarketDataProviderFactoryComponentFactory extends AbstractCompo
   protected MarketDataAvailabilityFilter createMarketDataAvailabilityFilter(LiveDataMetaDataProvider metaDataProvider) {
     List<ExternalScheme> supportedSchemes = metaDataProvider.metaData().getSupportedSchemes();
     if (supportedSchemes == null || supportedSchemes.isEmpty()) {
-      s_logger.warn("No supported external identifier schemes declared for " + metaDataProvider.metaData().getDescription() + " live data provider. This provider will not be available.");
+      LOGGER.warn("No supported external identifier schemes declared for " + metaDataProvider.metaData().getDescription() + " live data provider. This provider will not be available.");
       return null;
     }
     final Set<ExternalScheme> acceptableSchemes = ImmutableSet.copyOf(supportedSchemes);

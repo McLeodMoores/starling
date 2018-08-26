@@ -36,7 +36,7 @@ public final class CalculatedValue implements ImmutableBean {
   private static final Pattern FUNCTION_PATTERN = Pattern.compile("\\d+ \\((.*)\\)");
   // TODO static method to register property names to remove (change set impl to something thread safe)
   // ugh. see AbstractTradeOrDailyPositionPnLFunction
-  private static final Set<String> s_removedPropertyNames = Sets.newHashSet("CostOfCarryTimeSeries");
+  private static final Set<String> REMOVED_PROPERTY_NAMES = Sets.newHashSet("CostOfCarryTimeSeries");
 
   /** The calculated value. */
   @PropertyDefinition(validate = "notNull")
@@ -72,7 +72,7 @@ public final class CalculatedValue implements ImmutableBean {
 
   private static ValueProperties removeProperties(ValueProperties properties) {
     ValueProperties filteredProps = properties;
-    for (String propertyName : s_removedPropertyNames) {
+    for (String propertyName : REMOVED_PROPERTY_NAMES) {
       filteredProps = filteredProps.withoutAny(propertyName);
     }
     return filteredProps;

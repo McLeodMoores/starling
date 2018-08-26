@@ -28,7 +28,7 @@ import com.opengamma.util.tuple.Pairs;
  */
 public final class YieldCurveFunction {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(YieldCurveFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(YieldCurveFunction.class);
 
   /**
    * Identifies the name of the forward curve used for a value. A value dependent on just one
@@ -76,28 +76,28 @@ public final class YieldCurveFunction {
 
   // TODO: these should be somewhere else
   public static String getPropertyValue(final String propertyName, final FunctionCompilationContext context, final ValueRequirement requirement) {
-    s_logger.debug("propertyName={} requirement={}", propertyName, requirement);
+    LOGGER.debug("propertyName={} requirement={}", propertyName, requirement);
     final Set<String> curveNames = requirement.getConstraints().getValues(propertyName);
     final Set<String> defaultCurves;
     switch ((curveNames != null) ? curveNames.size() : 0) {
       case 0:
         // Handles both the wildcard case and the unspecified case
-        s_logger.debug("wildcard or unspecified requirement");
+        LOGGER.debug("wildcard or unspecified requirement");
         defaultCurves = context.getViewCalculationConfiguration().getDefaultProperties().getValues(propertyName);
         if (defaultCurves == null) {
-          s_logger.info("No default {} defined", propertyName);
+          LOGGER.info("No default {} defined", propertyName);
           throw new IllegalStateException("No default " + propertyName + " defined");
         } else if (defaultCurves.size() != 1) {
-          s_logger.info("Invalid default {} - {}", propertyName, defaultCurves);
+          LOGGER.info("Invalid default {} - {}", propertyName, defaultCurves);
           throw new IllegalStateException("Invalid default " + propertyName + " - " + defaultCurves);
         } else {
           final String value = defaultCurves.iterator().next();
-          s_logger.info("Default {} is {}", propertyName, value);
+          LOGGER.info("Default {} is {}", propertyName, value);
           return value;
         }
       case 1:
         final String value = curveNames.iterator().next();
-        s_logger.info("Value for {} is {}", propertyName, value);
+        LOGGER.info("Value for {} is {}", propertyName, value);
         return value;
       default:
         defaultCurves = context.getViewCalculationConfiguration().getDefaultProperties().getValues(propertyName);
@@ -107,16 +107,16 @@ public final class YieldCurveFunction {
             if (foundCurve == null) {
               foundCurve = curveName;
             } else {
-              s_logger.info("Default {} contains more than one of {}", propertyName, curveNames);
+              LOGGER.info("Default {} contains more than one of {}", propertyName, curveNames);
               throw new IllegalStateException("Both " + curveName + " and " + foundCurve + " declared as default " + propertyName);
             }
           }
         }
         if (foundCurve != null) {
-          s_logger.info("Default {} is {}", propertyName, foundCurve);
+          LOGGER.info("Default {} is {}", propertyName, foundCurve);
           return foundCurve;
         } else {
-          s_logger.info("None of {} declared as defaults for {}", curveNames, propertyName);
+          LOGGER.info("None of {} declared as defaults for {}", curveNames, propertyName);
           throw new IllegalStateException("Can't select " + propertyName + " from " + curveNames + " - none declared as default");
         }
     }
@@ -280,14 +280,14 @@ public final class YieldCurveFunction {
       if (ValueRequirementNames.YIELD_CURVE.equals(input.getKey().getValueName())) {
         final String curveName = input.getKey().getProperty(ValuePropertyNames.CURVE);
         if (curveName.equals(input.getValue().getConstraint(PROPERTY_FORWARD_CURVE))) {
-          s_logger.debug("Using {} from advisory forward", curveName);
+          LOGGER.debug("Using {} from advisory forward", curveName);
           forwardCurveName = curveName;
         } else if (curveName.equals(input.getValue().getConstraint(PROPERTY_FUNDING_CURVE))) {
-          s_logger.debug("Using {} from advisory funding", curveName);
+          LOGGER.debug("Using {} from advisory funding", curveName);
           fundingCurveName = curveName;
         } else {
           if ((forwardCurveName == null) && (fundingCurveName == null)) {
-            s_logger.debug("Using {} for both curve names", curveName);
+            LOGGER.debug("Using {} for both curve names", curveName);
             forwardCurveName = curveName;
             fundingCurveName = curveName;
           } else {

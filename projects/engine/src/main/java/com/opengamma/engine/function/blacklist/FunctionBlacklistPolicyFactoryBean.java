@@ -20,10 +20,10 @@ import com.opengamma.util.SingletonFactoryBean;
  */
 public class FunctionBlacklistPolicyFactoryBean extends SingletonFactoryBean<FunctionBlacklistPolicy> {
 
-  private static final AtomicInteger s_nextName = new AtomicInteger(1);
+  private static final AtomicInteger NEXT_NAME = new AtomicInteger(1);
 
   private UniqueId _uniqueId;
-  private String _name = Integer.toString(s_nextName.getAndIncrement());
+  private String _name = Integer.toString(NEXT_NAME.getAndIncrement());
   private int _defaultEntryActivationPeriod = 3600;
   private int _wildcard;
   private int _function;

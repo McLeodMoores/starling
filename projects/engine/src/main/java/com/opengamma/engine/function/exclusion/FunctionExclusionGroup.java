@@ -14,7 +14,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class FunctionExclusionGroup {
 
-  private static final AtomicInteger s_nextId = new AtomicInteger();
+  private static final AtomicInteger NEXT_ID = new AtomicInteger();
 
   private final Object _key;
   private final String _displayName;
@@ -43,7 +43,7 @@ public class FunctionExclusionGroup {
    * Creates a new exclusion group.
    */
   public FunctionExclusionGroup() {
-    this("ExclusionGroup" + s_nextId.getAndIncrement());
+    this("ExclusionGroup" + NEXT_ID.getAndIncrement());
   }
 
   protected String getDisplayName() {

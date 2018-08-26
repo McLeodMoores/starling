@@ -62,7 +62,7 @@ public class BloombergHistoricalTimeSeriesLoader extends AbstractHistoricalTimeS
   // note that there is relatively little Bloomberg specific code here
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(BloombergHistoricalTimeSeriesLoader.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(BloombergHistoricalTimeSeriesLoader.class);
   /**
    * No time-series before this date.
    */
@@ -202,11 +202,11 @@ public class BloombergHistoricalTimeSeriesLoader extends AbstractHistoricalTimeS
       } else {
         System.out.printf("Loading %d ts:  dataField: %s dataProvider: %s startDate: %s endDate: %s\n", identifiersSize, dataField, dataProvider, startDate, endDate);
       }
-      OperationTimer timer = new OperationTimer(s_logger, " loading " + identifiersSize + " timeseries from Bloomberg");
+      OperationTimer timer = new OperationTimer(LOGGER, " loading " + identifiersSize + " timeseries from Bloomberg");
       final HistoricalTimeSeriesProviderGetResult tsResult = provideTimeSeries(bundle2WithDates.keySet(), dataField, dataProvider, startDate, endDate);
       timer.finished();
       
-      timer = new OperationTimer(s_logger, " storing " + identifiersSize + " timeseries from Bloomberg");
+      timer = new OperationTimer(LOGGER, " storing " + identifiersSize + " timeseries from Bloomberg");
       storeTimeSeries(tsResult, dataField, dataProvider, withDates2ExternalId, bundle2WithDates, result);
       timer.finished();
     }
@@ -224,7 +224,7 @@ public class BloombergHistoricalTimeSeriesLoader extends AbstractHistoricalTimeS
    */
   protected HistoricalTimeSeriesProviderGetResult provideTimeSeries(
       Set<ExternalIdBundle> externalIds, String dataField, String dataProvider, LocalDate startDate, LocalDate endDate) {
-    s_logger.debug("Loading time series {} ({}-{}) {}: {}", new Object[] {dataField, startDate, endDate, dataProvider, externalIds });
+    LOGGER.debug("Loading time series {} ({}-{}) {}: {}", new Object[] {dataField, startDate, endDate, dataProvider, externalIds });
     LocalDateRange dateRange = LocalDateRange.of(startDate, endDate, true);
 
     HistoricalTimeSeriesProviderGetRequest request = HistoricalTimeSeriesProviderGetRequest.createGetBulk(externalIds,
@@ -317,7 +317,7 @@ public class BloombergHistoricalTimeSeriesLoader extends AbstractHistoricalTimeS
         }
         
       } else {
-        s_logger.warn("Empty historical data returned for {}", identifers);
+        LOGGER.warn("Empty historical data returned for {}", identifers);
       }
     }
   }

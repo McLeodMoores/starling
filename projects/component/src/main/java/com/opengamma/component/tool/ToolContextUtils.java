@@ -42,7 +42,7 @@ import com.opengamma.util.jms.JmsConnectorFactoryBean;
 public final class ToolContextUtils {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(ToolContextUtils.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ToolContextUtils.class);
 
   /**
    * The default classifier chain for selecting components from a server
@@ -123,7 +123,7 @@ public final class ToolContextUtils {
         try {
           ComponentInfo componentInfo = getComponentInfo(componentServer, classifierChain, metaProperty.propertyType());
           if (componentInfo == null) {
-            s_logger.debug("Unable to populate tool context '" + metaProperty.name() +
+            LOGGER.debug("Unable to populate tool context '" + metaProperty.name() +
                 "', no appropriate component found on the server");
             continue;
           }
@@ -142,16 +142,16 @@ public final class ToolContextUtils {
           } else {
             String clazzName = componentInfo.getAttribute(ComponentInfoAttributes.REMOTE_CLIENT_JAVA);
             if (clazzName == null) {
-              s_logger.warn("Unable to populate tool context '" + metaProperty.name() +
+              LOGGER.warn("Unable to populate tool context '" + metaProperty.name() +
                   "', no remote access class found");
               continue;
             }
             Class<?> clazz = Class.forName(clazzName);
             metaProperty.set(toolContext, clazz.getConstructor(URI.class).newInstance(componentInfo.getUri()));
-            s_logger.info("Populated tool context '" + metaProperty.name() + "' with " + metaProperty.get(toolContext));
+            LOGGER.info("Populated tool context '" + metaProperty.name() + "' with " + metaProperty.get(toolContext));
           }
         } catch (Throwable ex) {
-          s_logger.warn("Unable to populate tool context '" + metaProperty.name() + "': " + ex.getMessage());
+          LOGGER.warn("Unable to populate tool context '" + metaProperty.name() + "': " + ex.getMessage());
         }
       }
     }
@@ -183,7 +183,7 @@ public final class ToolContextUtils {
       return null;
     }
     if (infos.size() > 1) {
-      s_logger.warn("Multiple remote components match: " + type.getSimpleName() + "::" + infos.keySet());
+      LOGGER.warn("Multiple remote components match: " + type.getSimpleName() + "::" + infos.keySet());
       return null;
     }
     return infos.values().iterator().next();

@@ -28,7 +28,7 @@ public final class AuthUtils {
   /**
    * The singleton permission resolver.
    */
-  private static final ShiroPermissionResolver s_permissionResolver = new ShiroPermissionResolver();
+  private static final ShiroPermissionResolver PERMISSION_RESOLVER = new ShiroPermissionResolver();
 
   // always setup a security manager
   static {
@@ -54,7 +54,7 @@ public final class AuthUtils {
    * @return the singleton {@code PermissionResolver}, not null
    */
   public static ShiroPermissionResolver getPermissionResolver() {
-    return s_permissionResolver;
+    return PERMISSION_RESOLVER;
   }
 
   //-------------------------------------------------------------------------

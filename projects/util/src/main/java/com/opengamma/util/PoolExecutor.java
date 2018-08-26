@@ -30,7 +30,7 @@ import org.springframework.context.Lifecycle;
  */
 public class PoolExecutor implements Executor, Lifecycle {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(PoolExecutor.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(PoolExecutor.class);
 
   /**
    * Callback interface for receiving results of a pooled execution.
@@ -54,7 +54,7 @@ public class PoolExecutor implements Executor, Lifecycle {
     private boolean _joining;
 
     protected Service(final CompletionListener<T> listener) {
-      s_logger.info("Created thread pool service {}", this);
+      LOGGER.info("Created thread pool service {}", this);
       _listener = listener;
     }
 
@@ -70,19 +70,19 @@ public class PoolExecutor implements Executor, Lifecycle {
 
     protected void postResult(final T result) {
       if ((_listener != null) && !_shutdown) {
-        s_logger.debug("Result available from {} - {} remaining", this, _pending);
+        LOGGER.debug("Result available from {} - {} remaining", this, _pending);
         _listener.success(result);
       } else {
-        s_logger.debug("Discarding result from {} - {} remaining", this, _pending);
+        LOGGER.debug("Discarding result from {} - {} remaining", this, _pending);
       }
     }
 
     protected void postException(final Throwable error) {
       if ((_listener != null) && !_shutdown) {
-        s_logger.debug("Error available from {} - {} remaining", this, _pending);
+        LOGGER.debug("Error available from {} - {} remaining", this, _pending);
         _listener.failure(error);
       } else {
-        s_logger.debug("Discarding result from {} - {} remaining", this, _pending);
+        LOGGER.debug("Discarding result from {} - {} remaining", this, _pending);
       }
     }
 
@@ -115,7 +115,7 @@ public class PoolExecutor implements Executor, Lifecycle {
      * Discards any outstanding jobs. This will return immediately; to wait for jobs to be discarded or completed, call {@link #join} afterwards.
      */
     public synchronized void shutdown() {
-      s_logger.info("Shutting down {}", this);
+      LOGGER.info("Shutting down {}", this);
       if (_shutdown) {
         return;
       }
@@ -129,7 +129,7 @@ public class PoolExecutor implements Executor, Lifecycle {
         if (entry instanceof Execute) {
           final Execute<?> execute = (Execute<?>) entry;
           if ((execute._service == this) && execute.markExecuted()) {
-            s_logger.debug("Discarding {}", execute);
+            LOGGER.debug("Discarding {}", execute);
             _pending.decrementAndGet();
             itrQueue.remove();
           }
@@ -141,7 +141,7 @@ public class PoolExecutor implements Executor, Lifecycle {
      * Waits for all submitted jobs to complete. This thread may execute one or more of the submitted jobs.
      */
     public void join() throws InterruptedException {
-      s_logger.info("Joining");
+      LOGGER.info("Joining");
       Execute<?> inline = null;
       try {
         Iterator<Runnable> itrQueue = null;
@@ -150,7 +150,7 @@ public class PoolExecutor implements Executor, Lifecycle {
             _joining = true;
             try {
               if (_pending.get() == 0) {
-                s_logger.info("No pending tasks");
+                LOGGER.info("No pending tasks");
                 _shutdown = true;
                 return;
               } else {
@@ -162,7 +162,7 @@ public class PoolExecutor implements Executor, Lifecycle {
                   if (entry instanceof Execute) {
                     final Execute<?> execute = (Execute<?>) entry;
                     if ((execute._service == this) && execute.markExecuted()) {
-                      s_logger.debug("Inline execution of {}", execute);
+                      LOGGER.debug("Inline execution of {}", execute);
                       itrQueue.remove();
                       inline = execute;
                       break;
@@ -170,7 +170,7 @@ public class PoolExecutor implements Executor, Lifecycle {
                   }
                 }
                 if (inline == null) {
-                  s_logger.info("No inline executions available, waiting for {} remaining tasks", _pending);
+                  LOGGER.info("No inline executions available, waiting for {} remaining tasks", _pending);
                   wait();
                 }
               }
@@ -230,7 +230,7 @@ public class PoolExecutor implements Executor, Lifecycle {
 
     protected void runImpl() {
       try {
-        s_logger.debug("Executing {}", this);
+        LOGGER.debug("Executing {}", this);
         _service.postResult(callImpl());
       } catch (Throwable t) {
         _service.postException(t);
@@ -247,7 +247,7 @@ public class PoolExecutor implements Executor, Lifecycle {
       if (markExecuted()) {
         runImpl();
       } else {
-        s_logger.debug("Already executed or cancelled {}", this);
+        LOGGER.debug("Already executed or cancelled {}", this);
       }
     }
 
@@ -305,7 +305,7 @@ public class PoolExecutor implements Executor, Lifecycle {
 
   }
 
-  private static final ThreadLocal<Reference<PoolExecutor>> s_instance = new ThreadLocal<Reference<PoolExecutor>>();
+  private static final ThreadLocal<Reference<PoolExecutor>> INSTANCE = new ThreadLocal<Reference<PoolExecutor>>();
   private final Reference<PoolExecutor> _me = new WeakReference<PoolExecutor>(this);
   private final BlockingQueue<Runnable> _queue = new LinkedBlockingQueue<Runnable>();
   private final ThreadPoolExecutor _underlying;
@@ -321,7 +321,7 @@ public class PoolExecutor implements Executor, Lifecycle {
 
     @Override
     public void run() {
-      s_instance.set(_owner);
+      INSTANCE.set(_owner);
       super.run();
     }
 
@@ -394,11 +394,11 @@ public class PoolExecutor implements Executor, Lifecycle {
    * @return the previously registered instance, or null for none
    */
   public static PoolExecutor setInstance(final PoolExecutor instance) {
-    Reference<PoolExecutor> previous = s_instance.get();
+    Reference<PoolExecutor> previous = INSTANCE.get();
     if (instance != null) {
-      s_instance.set(instance._me);
+      INSTANCE.set(instance._me);
     } else {
-      s_instance.set(null);
+      INSTANCE.set(null);
     }
     if (previous != null) {
       return previous.get();
@@ -413,7 +413,7 @@ public class PoolExecutor implements Executor, Lifecycle {
    * @return the registered instance, or null for none
    */
   public static PoolExecutor instance() {
-    Reference<PoolExecutor> executor = s_instance.get();
+    Reference<PoolExecutor> executor = INSTANCE.get();
     if (executor != null) {
       return executor.get();
     } else {
@@ -430,7 +430,7 @@ public class PoolExecutor implements Executor, Lifecycle {
    */
   @Override
   public void execute(final Runnable command) {
-    s_logger.debug("Submitting {}", command);
+    LOGGER.debug("Submitting {}", command);
     if (_underlying != null) {
       _underlying.execute(command);
     } else {

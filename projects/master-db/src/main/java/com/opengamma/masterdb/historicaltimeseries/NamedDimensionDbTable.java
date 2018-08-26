@@ -28,7 +28,7 @@ import com.opengamma.util.db.DbMapSqlParameterSource;
 public class NamedDimensionDbTable {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(NamedDimensionDbTable.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(NamedDimensionDbTable.class);
 
   /**
    * The database connector.
@@ -206,7 +206,7 @@ public class NamedDimensionDbTable {
     final long id = nextId();
     args.addValue("dim_id", id);
     getDbConnector().getJdbcTemplate().update(sqlInsert(), args);
-    s_logger.debug("Inserted new value into {} : {} = {}", new Object[] {getTableName(), id, name});
+    LOGGER.debug("Inserted new value into {} : {} = {}", new Object[] {getTableName(), id, name});
     return id;
   }
 

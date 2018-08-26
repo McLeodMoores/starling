@@ -49,7 +49,7 @@ import com.opengamma.util.tuple.Pairs;
  */
 /* package */final class PortfolioCompilerTraversalCallback extends AbstractPortfolioNodeTraversalCallback {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(PortfolioCompilerTraversalCallback.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(PortfolioCompilerTraversalCallback.class);
 
   private static final class NodeData {
 
@@ -137,7 +137,7 @@ import com.opengamma.util.tuple.Pairs;
     if ((_alreadyAdded == null) || !_alreadyAdded.contains(valueRequirement)) {
       _builder.addTarget(valueRequirement);
     } else {
-      s_logger.debug("Suppressing {} from the incremental requirement set", valueRequirement);
+      LOGGER.debug("Suppressing {} from the incremental requirement set", valueRequirement);
     }
   }
 

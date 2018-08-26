@@ -40,13 +40,13 @@ import com.opengamma.financial.convention.frequency.Frequency;
 import com.opengamma.financial.convention.frequency.SimpleFrequency;
 import com.opengamma.util.money.Currency;
 
-
+// CSOFF
 /**
  * Test harness to run through the official ISDA test grids
  */
 public class ISDATestGridHarness {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(ISDATestGridHarness.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ISDATestGridHarness.class);
 
   private static final double cleanPercentageErrorLimit = 1E-8;
   private static final double dirtyAbsoluteErrorLimit = 1E-5; // One thousandth of a cent
@@ -190,12 +190,12 @@ public class ISDATestGridHarness {
 
   		  if (stagedCurve == null) {
   		    ++gridsMissingData;
-  		    s_logger.debug("Skipping test grid: " + batch.getKey() + " " + fileName + " (missing IR curve)");
+  		    LOGGER.debug("Skipping test grid: " + batch.getKey() + " " + fileName + " (missing IR curve)");
   		    continue;
   		  }
 
   		  // Run the grid
-  		  s_logger.debug("Running test grid: " + batch.getKey() + " " + fileName);
+  		  LOGGER.debug("Running test grid: " + batch.getKey() + " " + fileName);
   		  discountCurve = buildCurve(stagedCurve, "IR_CURVE");
   		  result = runTestGrid(testGrid, discountCurve, fileName);
 
@@ -224,49 +224,49 @@ public class ISDATestGridHarness {
 	  final double failureRate = (double)caseFailures / (double)cases;
 	  final double marginalRate = (double)(caseFailures + casesMarginal) / (double)cases;
 
-	  s_logger.info(" --- ISDA Test Grid run complete --- ");
-	  s_logger.info("Failure rate: " + (failureRate * 100.0) + "%");
-	  s_logger.info("Marginal rate: " + (marginalRate * 100.0) + "%");
-	  s_logger.info("Largest dirty absolute error: " + maxAbsoluteError);
-	  s_logger.info("Largest dirty relative error: " + maxRelativeError);
-	  s_logger.info("Largest clean percentage error: " + maxCleanPercentageError);
-	  s_logger.info("Total test grids executed: " + grids);
-	  s_logger.info("Total test grids failed: " + gridFailures);
-	  s_logger.info("Total test grids marginal: " + gridsMarginal);
-	  s_logger.info("Total test grids with missing data: " + gridsMissingData);
-	  s_logger.info("Total test cases executed: " + cases);
-	  s_logger.info("Total test cases failed: " + caseFailures);
-	  s_logger.info("Total test cases marginal: " + casesMarginal);
-	  s_logger.info("Total execution time: " + totalTime + "s");
+	  LOGGER.info(" --- ISDA Test Grid run complete --- ");
+	  LOGGER.info("Failure rate: " + failureRate * 100.0 + "%");
+	  LOGGER.info("Marginal rate: " + marginalRate * 100.0 + "%");
+	  LOGGER.info("Largest dirty absolute error: " + maxAbsoluteError);
+	  LOGGER.info("Largest dirty relative error: " + maxRelativeError);
+	  LOGGER.info("Largest clean percentage error: " + maxCleanPercentageError);
+	  LOGGER.info("Total test grids executed: " + grids);
+	  LOGGER.info("Total test grids failed: " + gridFailures);
+	  LOGGER.info("Total test grids marginal: " + gridsMarginal);
+	  LOGGER.info("Total test grids with missing data: " + gridsMissingData);
+	  LOGGER.info("Total test cases executed: " + cases);
+	  LOGGER.info("Total test cases failed: " + caseFailures);
+	  LOGGER.info("Total test cases marginal: " + casesMarginal);
+	  LOGGER.info("Total execution time: " + totalTime + "s");
 
 	  if (!failedGrids.isEmpty()) {
-	    s_logger.info("Failed grids:");
+	    LOGGER.info("Failed grids:");
 	  }
 
 	  for (final String failedGrid : failedGrids) {
-	    s_logger.info(failedGrid);
+	    LOGGER.info(failedGrid);
 	  }
 
 	  if (!marginalGrids.isEmpty()) {
-	    s_logger.info("Marginal grids:");
+	    LOGGER.info("Marginal grids:");
 	  }
 
 	  for (final String marginalGrid : marginalGrids) {
-	    s_logger.info(marginalGrid);
+	    LOGGER.info(marginalGrid);
 	  }
 
-	  s_logger.info( " --- ISDA Test Grid run complete --- ");
+	  LOGGER.info( " --- ISDA Test Grid run complete --- ");
 
 	  // Break the test run if sanity limits are exceeded
-	  Assert.assertTrue(failureRate <= SANITY_FAILURE_LIMIT, "Sanity limit exceeded: " + (failureRate * 100.0) + "% of test cases failed (largest acceptable value is " + (SANITY_FAILURE_LIMIT * 100.0) + "%)");
-	  Assert.assertTrue(marginalRate <= SANITY_MARGINAL_LIMIT, "Sanity limit exceeded: " + (marginalRate * 100.0) + "% of test cases marginal (largest acceptable value is " + (SANITY_MARGINAL_LIMIT * 100.0) + "%)");
+	  Assert.assertTrue(failureRate <= SANITY_FAILURE_LIMIT, "Sanity limit exceeded: " + failureRate * 100.0 + "% of test cases failed (largest acceptable value is " + SANITY_FAILURE_LIMIT * 100.0 + "%)");
+	  Assert.assertTrue(marginalRate <= SANITY_MARGINAL_LIMIT, "Sanity limit exceeded: " + marginalRate * 100.0 + "% of test cases marginal (largest acceptable value is " + SANITY_MARGINAL_LIMIT * 100.0 + "%)");
 	  Assert.assertTrue(maxRelativeError <= SANITY_RELATIVE_ERROR_LIMIT, "Sanity limit exceeded: Maximum relative error is too high (largest acceptable value is " + SANITY_RELATIVE_ERROR_LIMIT + ")");
   }
 
   public TestGridResult runTestGrid(final ISDATestGrid testGrid, final ISDACurve discountCurve, final String testGridFileName) throws Exception {
 
     if (lowResTest.equals(testGridFileName)) {
-      s_logger.debug("This is a low resolution test file, using low resolution error limits");
+      LOGGER.debug("This is a low resolution test file, using low resolution error limits");
     }
 
     final double absoluteErrorLimit = lowResTest.equals(testGridFileName) ? lowResAbsoluteErrorLimit : dirtyAbsoluteErrorLimit;
@@ -294,7 +294,7 @@ public class ISDATestGridHarness {
         if (considerRelativeErrorForFailures && result.dirtyRelativeError <= dirtyRelativeErrorConsideration && result.cleanPercentageError <= percentageErrorLimit) {
 
           ++marginalCases;
-          s_logger.debug("Test case marginal: " + testGridFileName + " row " + (i+2) + ": "
+          LOGGER.debug("Test case marginal: " + testGridFileName + " row " + (i+2) + ": "
             + "dirty = " + result.dirty + " (exepcted = " + result.dirtyExpected + "), "
             + "clean = " + result.clean + " (expected = " + result.cleanExpected + "), "
             + "absolute error = " + result.dirtyAbsoluteError + ", relative error = " + result.dirtyRelativeError + ", percentage error = " + result.cleanPercentageError);
@@ -302,7 +302,7 @@ public class ISDATestGridHarness {
         } else {
 
           ++failures;
-          s_logger.debug("Test case exceeds bounds: " + testGridFileName + " row " + (i+2) + ": "
+          LOGGER.debug("Test case exceeds bounds: " + testGridFileName + " row " + (i+2) + ": "
             + "dirty = " + result.dirty + " (exepcted = " + result.dirtyExpected + "), "
             + "clean = " + result.clean + " (expected = " + result.cleanExpected + "), "
             + "absolute error = " + result.dirtyAbsoluteError + ", relative error = " + result.dirtyRelativeError + ", percentage error = " + result.cleanPercentageError);
@@ -318,9 +318,9 @@ public class ISDATestGridHarness {
 
     final ZonedDateTime stop = ZonedDateTime.now();
     final Duration elapsedTime = Duration.between(start, stop);
-    final double seconds = elapsedTime.getSeconds() + (elapsedTime.getNano() / 1000000) / 1000.0;
+    final double seconds = elapsedTime.getSeconds() + elapsedTime.getNano() / 1000000 / 1000.0;
 
-    s_logger.debug( "Executed " + i + " test cases in " + seconds + "s with " + failures + " failure(s)"
+    LOGGER.debug( "Executed " + i + " test cases in " + seconds + "s with " + failures + " failure(s)"
       + (considerRelativeErrorForFailures ? " and " + marginalCases + " marginal case(s)" : "")
       + ", largest dirty absolute error was " + maxAbsoluteError
       + ", largest dirty relative error was " + maxRelativeError
@@ -379,7 +379,7 @@ public class ISDATestGridHarness {
     final double dirtyAbsoluteError = Math.abs(notional * dirtyPrice - dirtyExpected);
     final double dirtyRelativeError = Math.abs(dirtyAbsoluteError / dirtyExpected);
 
-    final double cleanPercentage = 100.0 - (cleanPrice * 100.0);
+    final double cleanPercentage = 100.0 - cleanPrice * 100.0;
     final double cleanExpected = testCase.getCleanPrice();
     final double cleanPercentageError = Math.abs(cleanPercentage - cleanExpected);
 
@@ -396,8 +396,8 @@ public class ISDATestGridHarness {
     final double offset = dayCount.getDayCountFraction(effectiveDate, baseDate);
 
     final int nPoints = curveData.getPoints().size();
-    final double times[] = new double[nPoints];
-    final double rates[] = new double[nPoints];
+    final double[] times = new double[nPoints];
+    final double[] rates = new double[nPoints];
 
     LocalDate date;
     Double rate;
@@ -405,7 +405,7 @@ public class ISDATestGridHarness {
 
     for (final ISDAStagedCurve.Point dataPoint : curveData.getPoints()) {
       date = LocalDate.parse(dataPoint.getDate(), formatter);
-      rate = (new PeriodicInterestRate(Double.valueOf(dataPoint.getRate()),1)).toContinuous().getRate();
+      rate = new PeriodicInterestRate(Double.valueOf(dataPoint.getRate()), 1).toContinuous().getRate();
       times[i] = dayCount.getDayCountFraction(baseDate, date);
       rates[i++] = rate;
     }

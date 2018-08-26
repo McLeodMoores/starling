@@ -38,7 +38,7 @@ import com.opengamma.financial.analytics.greeks.AvailablePositionGreeks;
  */
 public class OptionGreekToPositionGreekConverterFunction extends AbstractFunction.NonCompiledInvoker {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(OptionGreekToPositionGreekConverterFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(OptionGreekToPositionGreekConverterFunction.class);
   private final Function1D<GreekDataBundle, Map<PositionGreek, Double>> _converter = new GreekToPositionGreekConverter();
   //TODO pass in required greek rather than using the entire set
   @Override
@@ -50,7 +50,7 @@ public class OptionGreekToPositionGreekConverterFunction extends AbstractFunctio
     for (final String valueName : AvailableGreeks.getAllGreekNames()) {
       greekResult = inputs.getValue(valueName);
       if (greekResult == null) {
-        s_logger.warn("Could not get value for " + valueName);
+        LOGGER.warn("Could not get value for " + valueName);
       }
       if (!(greekResult instanceof Double)) {
         throw new IllegalArgumentException("Can only handle Double greeks.");

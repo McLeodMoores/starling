@@ -53,7 +53,7 @@ import com.opengamma.util.JodaBeanSerialization;
  */
 @BeanDefinition
 public class MultiFileConventionSaver extends DirectBean {
-  private static final Logger s_logger = LoggerFactory.getLogger(MultiFileConventionSaver.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(MultiFileConventionSaver.class);
   private static final boolean PRETTY = true;
   @PropertyDefinition
   private File _zipFileName;
@@ -79,7 +79,7 @@ public class MultiFileConventionSaver extends DirectBean {
   }
   
   protected void outputFilesForConventionType(ConventionType conventionType, ZipOutputStream out) throws IOException {
-    s_logger.info("Outputting files for {}", conventionType);
+    LOGGER.info("Outputting files for {}", conventionType);
     ConventionSearchRequest searchRequest = new ConventionSearchRequest();
     searchRequest.setConventionType(conventionType);
     ConventionSearchResult searchResult = getConventionMaster().search(searchRequest);
@@ -93,7 +93,7 @@ public class MultiFileConventionSaver extends DirectBean {
       ManageableConvention convention = document.getConvention();
       String fileName = escapeFileName(convention.getName());
       if (!convention.getName().equals(document.getName())) {
-        s_logger.warn("Convention document {} contains convention with differing name {}", document.getName(), convention.getName());
+        LOGGER.warn("Convention document {} contains convention with differing name {}", document.getName(), convention.getName());
       }
       if (fileNames.contains(fileName)) {
         int count = 1;
@@ -101,7 +101,7 @@ public class MultiFileConventionSaver extends DirectBean {
         do {
           duplicateFileName = fileName + " (" + count + ")";
         } while (fileNames.contains(duplicateFileName));
-        s_logger.warn("Found duplicate convention {}, exporting as {}", fileName, duplicateFileName);
+        LOGGER.warn("Found duplicate convention {}, exporting as {}", fileName, duplicateFileName);
         fileName = duplicateFileName;
       }
       fileNames.add(fileName);

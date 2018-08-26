@@ -20,9 +20,9 @@ import com.opengamma.engine.ComputationTargetResolver;
  */
 public class TargetResolverObject implements Serializable {
 
-  private static final AtomicInteger s_nextIdentifier = new AtomicInteger();
-  private static final ConcurrentMap<ComputationTargetResolver.AtVersionCorrection, Integer> s_resolver2identifier = new MapMaker().weakKeys().makeMap();
-  private static final ConcurrentMap<Integer, ComputationTargetResolver.AtVersionCorrection> s_identifier2resolver = new MapMaker().weakValues().makeMap();
+  private static final AtomicInteger NEXT_IDENTIFIER = new AtomicInteger();
+  private static final ConcurrentMap<ComputationTargetResolver.AtVersionCorrection, Integer> RESOLVER_TO_IDENTIFIER = new MapMaker().weakKeys().makeMap();
+  private static final ConcurrentMap<Integer, ComputationTargetResolver.AtVersionCorrection> IDENTIFIER_TO_RESOLVER = new MapMaker().weakValues().makeMap();
 
   private transient ComputationTargetResolver.AtVersionCorrection _targetResolver;
 
@@ -35,13 +35,13 @@ public class TargetResolverObject implements Serializable {
   }
 
   private void writeObject(final ObjectOutputStream out) throws IOException {
-    Integer id = s_resolver2identifier.get(getTargetResolver());
+    Integer id = RESOLVER_TO_IDENTIFIER.get(getTargetResolver());
     if (id == null) {
-      id = s_nextIdentifier.getAndIncrement();
-      s_identifier2resolver.put(id, getTargetResolver());
-      final Integer existing = s_resolver2identifier.putIfAbsent(getTargetResolver(), id);
+      id = NEXT_IDENTIFIER.getAndIncrement();
+      IDENTIFIER_TO_RESOLVER.put(id, getTargetResolver());
+      final Integer existing = RESOLVER_TO_IDENTIFIER.putIfAbsent(getTargetResolver(), id);
       if (existing != null) {
-        s_identifier2resolver.remove(id);
+        IDENTIFIER_TO_RESOLVER.remove(id);
         id = existing;
       }
     }
@@ -50,7 +50,7 @@ public class TargetResolverObject implements Serializable {
 
   private void readObject(final ObjectInputStream in) throws IOException {
     final int targetResolver = in.readInt();
-    _targetResolver = s_identifier2resolver.get(targetResolver);
+    _targetResolver = IDENTIFIER_TO_RESOLVER.get(targetResolver);
     assert _targetResolver != null;
   }
 

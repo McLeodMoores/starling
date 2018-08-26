@@ -24,7 +24,7 @@ import com.opengamma.util.time.Tenor;
  */
 public class FRASecurityGenerator extends SecurityGenerator<FRASecurity> {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(FRASecurityGenerator.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(FRASecurityGenerator.class);
   
   protected String createName(final Currency currency, final double amount, final double rate, final ZonedDateTime maturity) {
     final StringBuilder sb = new StringBuilder();
@@ -57,7 +57,7 @@ public class FRASecurityGenerator extends SecurityGenerator<FRASecurity> {
         return null;
       }
     } catch (Exception ex) {
-      s_logger.warn("Unable to obtain underlying id for " + currency + " " + start.toLocalDate() + " " + tenor, ex);
+      LOGGER.warn("Unable to obtain underlying id for " + currency + " " + start.toLocalDate() + " " + tenor, ex);
       return null;
     }
     

@@ -37,7 +37,7 @@ import com.opengamma.util.OpenGammaClock;
 public class Scenario {
 
   /** For parsing valuation time. */
-  private static final DateTimeFormatter s_dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+  private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
   /** Manipulators keyed by the selectors for the items they apply to. */
   private final ListMultimap<DistinctMarketDataSelector, StructureManipulator<?>> _manipulations = ArrayListMultimap.create();
@@ -130,7 +130,7 @@ public class Scenario {
    */
   public Scenario valuationTime(String valuationTime) {
     try {
-      LocalDateTime localTime = LocalDateTime.parse(valuationTime, s_dateFormatter);
+      LocalDateTime localTime = LocalDateTime.parse(valuationTime, DATE_FORMATTER);
       _valuationTime = ZonedDateTime.of(localTime, OpenGammaClock.getZone()).toInstant();
     } catch (DateTimeParseException e) {
       throw new IllegalArgumentException("Valuation time isn't in a valid format. Expected format " +

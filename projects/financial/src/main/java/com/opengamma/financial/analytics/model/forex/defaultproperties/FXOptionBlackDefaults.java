@@ -35,7 +35,7 @@ import com.opengamma.util.tuple.Pairs;
  */
 @Deprecated
 public class FXOptionBlackDefaults extends DefaultPropertyFunction {
-  private static final Logger s_logger = LoggerFactory.getLogger(FXOptionBlackDefaults.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(FXOptionBlackDefaults.class);
   private static final String[] VALUE_REQUIREMENTS = new String[] {
     ValueRequirementNames.PRESENT_VALUE,
     ValueRequirementNames.FX_PRESENT_VALUE,
@@ -136,11 +136,11 @@ public class FXOptionBlackDefaults extends DefaultPropertyFunction {
     final String putCurrency = security.accept(ForexVisitors.getPutCurrencyVisitor()).getCode();
     final String callCurrency = security.accept(ForexVisitors.getCallCurrencyVisitor()).getCode();
     if (!_propertyValuesByCurrency.containsKey(putCurrency)) {
-      s_logger.error("Could not get config for put currency " + putCurrency + "; should never happen");
+      LOGGER.error("Could not get config for put currency " + putCurrency + "; should never happen");
       return null;
     }
     if (!_propertyValuesByCurrency.containsKey(callCurrency)) {
-      s_logger.error("Could not get config for call currency " + callCurrency + "; should never happen");
+      LOGGER.error("Could not get config for call currency " + callCurrency + "; should never happen");
       return null;
     }
     final String putCurveConfig, callCurveConfig, putCurve, callCurve;

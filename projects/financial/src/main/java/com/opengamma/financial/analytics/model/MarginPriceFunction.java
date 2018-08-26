@@ -56,9 +56,9 @@ import com.opengamma.util.async.AsynchronousExecution;
 public class MarginPriceFunction extends AbstractFunction {
   //TODO move from this package
   /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(MarginPriceFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(MarginPriceFunction.class);
   /** The margin price calculator */
-  private static final MarginPriceVisitor s_priceVisitor = MarginPriceVisitor.getInstance();
+  private static final MarginPriceVisitor PRICE_VISITOR = MarginPriceVisitor.getInstance();
 
   @Override
   public CompiledFunctionDefinition compile(final FunctionCompilationContext context, final Instant atInstant) {
@@ -91,7 +91,7 @@ public class MarginPriceFunction extends AbstractFunction {
         }
         final HistoricalTimeSeriesBundle timeSeries = HistoricalTimeSeriesFunctionUtils.getHistoricalTimeSeriesInputs(executionContext, inputs);
         final InstrumentDerivative derivative = definitionConverter.convert(security, definition, now, timeSeries);
-        final Double price = derivative.accept(s_priceVisitor);
+        final Double price = derivative.accept(PRICE_VISITOR);
         final ValueSpecification spec = new ValueSpecification(MARGIN_PRICE, target.toSpecification(), desiredValue.getConstraints().copy().get());
         return Collections.singleton(new ComputedValue(spec, price));
       }
@@ -129,7 +129,7 @@ public class MarginPriceFunction extends AbstractFunction {
           }
           return tsRequirements;
         } catch (final Exception e) {
-          s_logger.error(e.getMessage());
+          LOGGER.error(e.getMessage());
           return null;
         }
       }

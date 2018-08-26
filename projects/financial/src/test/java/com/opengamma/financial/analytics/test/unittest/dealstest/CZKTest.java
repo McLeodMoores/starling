@@ -1,3 +1,8 @@
+/**
+ * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
+ *
+ * Please see distribution for license.
+ */
 package com.opengamma.financial.analytics.test.unittest.dealstest;
 
 import java.util.HashMap;
@@ -22,21 +27,21 @@ import com.opengamma.util.money.Currency;
 import com.opengamma.util.test.TestGroup;
 
 /**
- * Unit tests for CZK deals
+ * Unit tests for CZK deals.
  */
 @Test(groups = TestGroup.UNIT)
 public class CZKTest {
-  private static final Logger s_logger = LoggerFactory.getLogger(CZKTest.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(CZKTest.class);
   private static final String CURRENCY = "CZK";
 
   private static final String ON_NAME = "CZK_PRIBOR_6M_ERS";
   private static final String THREE_MONTH_NAME = "CZK_PRIBOR_6M_ERS";
   private static final String SIX_MONTH_NAME = "CZK_PRIBOR_6M_ERS";
-  final static String discountingCurvename = "Discounting";
-  final static String forward3MCurveName = "Forward 3M";
-  final static String forward6MCurveName = "Forward 6M";
+  private static final String DISCOUNTING_CURVE_NAME = "Discounting";
+  private static final String FORWARD_3M_CURVE_NAME = "Forward 3M";
+  private static final String FORWARD_6M_CURVE_NAME = "Forward 6M";
 
-  final static Currency ccy = Currency.CZK;
+  private static final Currency CCY = Currency.CZK;
 
   private static final String PAY_CURRENCY = "LEG1_CCY";
 
@@ -45,13 +50,13 @@ public class CZKTest {
   public void test() throws Exception {
 
     // Build the clean list of swap
-    IRSwapTradeParser tradeParser = new IRSwapTradeParser();
-    Resource resource = ResourceUtils.createResource("classpath:com/opengamma/financial/analytics/test/Trades14Oct.csv");
-    List<IRSwapSecurity> trades = tradeParser.parseCSVFile(resource.getURL());
-    List<IRSwapSecurity> tradesClean = Lists.newArrayList();
-    for (IRSwapSecurity irSwapSecurity : trades) {
+    final IRSwapTradeParser tradeParser = new IRSwapTradeParser();
+    final Resource resource = ResourceUtils.createResource("classpath:com/opengamma/financial/analytics/test/Trades14Oct.csv");
+    final List<IRSwapSecurity> trades = tradeParser.parseCSVFile(resource.getURL());
+    final List<IRSwapSecurity> tradesClean = Lists.newArrayList();
+    for (final IRSwapSecurity irSwapSecurity : trades) {
 
-      String currency = irSwapSecurity.getRawInput().getString(PAY_CURRENCY);
+      final String currency = irSwapSecurity.getRawInput().getString(PAY_CURRENCY);
       if (currency.equals(CURRENCY)) {
         tradesClean.add(irSwapSecurity);
       }
@@ -59,33 +64,33 @@ public class CZKTest {
     }
     // Build the curve bundle
     final HashMap<String, Currency> ccyMap = new HashMap<>();
-    ccyMap.put(discountingCurvename, ccy);
-    ccyMap.put(forward3MCurveName, ccy);
-    ccyMap.put(forward6MCurveName, ccy);
-    final FXMatrix fx = new FXMatrix(ccy);
+    ccyMap.put(DISCOUNTING_CURVE_NAME, CCY);
+    ccyMap.put(FORWARD_3M_CURVE_NAME, CCY);
+    ccyMap.put(FORWARD_6M_CURVE_NAME, CCY);
+    final FXMatrix fx = new FXMatrix(CCY);
     final YieldCurveBundle curvesClean = new YieldCurveBundle(fx, ccyMap);
 
-    IRCurveParser curveParser = new IRCurveParser();
-    Resource resourceCurve = ResourceUtils.createResource("classpath:com/opengamma/financial/analytics/test/Base_Curves_20131014_Clean.csv");
-    List<InterpolatedDoublesCurve> curves = curveParser.parseCSVFile(resourceCurve.getURL());
+    final IRCurveParser curveParser = new IRCurveParser();
+    final Resource resourceCurve = ResourceUtils.createResource("classpath:com/opengamma/financial/analytics/test/Base_Curves_20131014_Clean.csv");
+    final List<InterpolatedDoublesCurve> curves = curveParser.parseCSVFile(resourceCurve.getURL());
 
-    for (InterpolatedDoublesCurve interpolatedDoublesCurve : curves) {
+    for (final InterpolatedDoublesCurve interpolatedDoublesCurve : curves) {
 
-      String name = interpolatedDoublesCurve.getName();
+      final String name = interpolatedDoublesCurve.getName();
       if (name.equals(ON_NAME)) {
-        curvesClean.setCurve(discountingCurvename, DiscountCurve.from(interpolatedDoublesCurve));
+        curvesClean.setCurve(DISCOUNTING_CURVE_NAME, DiscountCurve.from(interpolatedDoublesCurve));
       }
       if (name.equals(THREE_MONTH_NAME)) {
-        curvesClean.setCurve(forward3MCurveName, DiscountCurve.from(interpolatedDoublesCurve));
+        curvesClean.setCurve(FORWARD_3M_CURVE_NAME, DiscountCurve.from(interpolatedDoublesCurve));
       }
       if (name.equals(SIX_MONTH_NAME)) {
-        curvesClean.setCurve(forward6MCurveName, DiscountCurve.from(interpolatedDoublesCurve));
+        curvesClean.setCurve(FORWARD_6M_CURVE_NAME, DiscountCurve.from(interpolatedDoublesCurve));
       }
     }
 
-    // Convert the swap security into a swap definition 
+    // Convert the swap security into a swap definition
     //TODO
-    s_logger.warn("Got {} trades", trades.size());
+    LOGGER.warn("Got {} trades", trades.size());
   }
 
 }

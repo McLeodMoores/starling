@@ -52,7 +52,7 @@ import com.opengamma.util.ArgumentChecker;
 public class BloombergReferenceDataProvider extends AbstractReferenceDataProvider implements Lifecycle {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(BloombergReferenceDataProvider.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(BloombergReferenceDataProvider.class);
 
   /**
    * Implementation class.
@@ -133,7 +133,7 @@ public class BloombergReferenceDataProvider extends AbstractReferenceDataProvide
     //-------------------------------------------------------------------------
     @Override
     protected Logger getLogger() {
-      return s_logger;
+      return LOGGER;
     }
 
     //-------------------------------------------------------------------------

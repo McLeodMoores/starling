@@ -50,7 +50,7 @@ import com.opengamma.util.time.Tenor;
  *
  */
 public class ISDACreditSpreadCurveFunction extends AbstractFunction {
-  private static final Logger s_logger = LoggerFactory.getLogger(ISDACreditSpreadCurveFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ISDACreditSpreadCurveFunction.class);
 
   private CurveDefinitionSource _curveDefinitionSource;
   private CurveSpecificationBuilder _curveSpecificationBuilder;
@@ -92,7 +92,7 @@ public class ISDACreditSpreadCurveFunction extends AbstractFunction {
             tenors.add(strip.getCurveNode().getResolvedMaturity());
             marketSpreads.add((Double) marketSpreadObject);
           } else {
-            s_logger.warn("Could not get spread data for {}, defaulting", strip.getIdentifier());
+            LOGGER.warn("Could not get spread data for {}, defaulting", strip.getIdentifier());
             tenors.add(strip.getCurveNode().getResolvedMaturity());
             throw new OpenGammaRuntimeException("Couldn't get spreads for " + strip.getIdentifier());
           }
@@ -137,7 +137,7 @@ public class ISDACreditSpreadCurveFunction extends AbstractFunction {
           }
           return requirements;
         } catch (final Exception e) {
-          s_logger.error(e.getMessage());
+          LOGGER.error(e.getMessage());
           //TODO backwards compatibility - remove when upstream functions select the correct prefix
           curveName = Iterables.getOnlyElement(curveNames);
           try {
@@ -149,7 +149,7 @@ public class ISDACreditSpreadCurveFunction extends AbstractFunction {
             }
             return requirements;
           } catch (final Exception e1) {
-            s_logger.error(e1.getMessage());
+            LOGGER.error(e1.getMessage());
             return null;
           }
         }

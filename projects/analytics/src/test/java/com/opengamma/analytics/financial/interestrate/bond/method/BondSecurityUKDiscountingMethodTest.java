@@ -90,12 +90,12 @@ public class BondSecurityUKDiscountingMethodTest {
   private static final BondFixedSecurity BOND_FIXED_SECURITY_G = BOND_FIXED_SECURITY_DEFINITION_G.toDerivative(REFERENCE_DATE_3, CURVES_NAME);
   private static final ZonedDateTime SPOT_3 = ScheduleCalculator.getAdjustedDate(REFERENCE_DATE_3, SETTLEMENT_DAYS_G, LON);
   private static final double REFERENCE_TIME_3 = ACT_ACT.getDayCountFraction(REFERENCE_DATE_3, SPOT_3);
-  private final static YieldFromCurvesCalculator YFCC = YieldFromCurvesCalculator.getInstance();
-  private final static ModifiedDurationFromCurvesCalculator MDFC = ModifiedDurationFromCurvesCalculator.getInstance();
+  private static final YieldFromCurvesCalculator YFCC = YieldFromCurvesCalculator.getInstance();
+  private static final ModifiedDurationFromCurvesCalculator MDFC = ModifiedDurationFromCurvesCalculator.getInstance();
   private static final ModifiedDurationFromYieldCalculator MDFY = ModifiedDurationFromYieldCalculator.getInstance();
   private static final ModifiedDurationFromCleanPriceCalculator MDFP = ModifiedDurationFromCleanPriceCalculator.getInstance();
-  private static final MacaulayDurationFromCurvesCalculator McDFC = MacaulayDurationFromCurvesCalculator.getInstance();
-  private static final MacaulayDurationFromYieldCalculator McDFY = MacaulayDurationFromYieldCalculator.getInstance();
+  private static final MacaulayDurationFromCurvesCalculator MCDFC = MacaulayDurationFromCurvesCalculator.getInstance();
+  private static final MacaulayDurationFromYieldCalculator MCDFY = MacaulayDurationFromYieldCalculator.getInstance();
   private static final DirtyPriceFromYieldCalculator DPFY = DirtyPriceFromYieldCalculator.getInstance();
   private static final DirtyPriceFromCurvesCalculator DPFC = DirtyPriceFromCurvesCalculator.getInstance();
   private static final ConvexityFromCurvesCalculator CFC = ConvexityFromCurvesCalculator.getInstance();
@@ -120,7 +120,7 @@ public class BondSecurityUKDiscountingMethodTest {
     final double df = CURVES.getCurve(REPO_CURVE_NAME).getDiscountFactor(REFERENCE_TIME_3);
     final double dirty = METHOD.dirtyPriceFromCurves(BOND_FIXED_SECURITY_G, CURVES);
     assertEquals("Fixed coupon bond security: dirty price from curves", pv / df / BOND_FIXED_SECURITY_G.getCoupon().getNthPayment(0).getNotional(), dirty);
-    assertTrue("Fixed coupon bond security: dirty price is relative price", (0.50 < dirty) & (dirty < 2.0));
+    assertTrue("Fixed coupon bond security: dirty price is relative price", 0.50 < dirty & dirty < 2.0);
   }
 
   @Test
@@ -234,10 +234,10 @@ public class BondSecurityUKDiscountingMethodTest {
   @Test
   public void macaulayDurationMethodVsCalculator() {
     double method = METHOD.macaulayDurationFromCurves(BOND_FIXED_SECURITY_G2, CURVES);
-    double calculator = BOND_FIXED_SECURITY_G2.accept(McDFC, CURVES);
+    double calculator = BOND_FIXED_SECURITY_G2.accept(MCDFC, CURVES);
     assertEquals("bond Security: discounting method - macaulay duration", method, calculator, 1e-9);
     method = METHOD.macaulayDurationFromYield(BOND_FIXED_SECURITY_G2, 0.05);
-    calculator = BOND_FIXED_SECURITY_G2.accept(McDFY, 0.05);
+    calculator = BOND_FIXED_SECURITY_G2.accept(MCDFY, 0.05);
     assertEquals("bond Security: discounting method - macaulay duration", method, calculator, 1e-9);
   }
 

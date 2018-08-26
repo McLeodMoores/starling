@@ -30,12 +30,12 @@ import com.opengamma.master.security.SecurityDescription;
  */
 public final class SecurityTypesDescriptionProvider {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(SecurityTypesDescriptionProvider.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(SecurityTypesDescriptionProvider.class);
 
   /**
    * Singleton instance.
    */
-  private static final SecurityTypesDescriptionProvider s_instance = new SecurityTypesDescriptionProvider();
+  private static final SecurityTypesDescriptionProvider INSTANCE = new SecurityTypesDescriptionProvider();
 
   /**
    * Map of security type to description.
@@ -49,7 +49,7 @@ public final class SecurityTypesDescriptionProvider {
    * @return the provider, not null
    */
   public static SecurityTypesDescriptionProvider getInstance() {
-    return s_instance;
+    return INSTANCE;
   }
 
   //-------------------------------------------------------------------------
@@ -71,7 +71,7 @@ public final class SecurityTypesDescriptionProvider {
             ManageableSecurity bareSecurity = (ManageableSecurity) metaBean.builder().build();
             type = bareSecurity.getSecurityType();
           } else {
-            s_logger.warn("{} anotated with {}, but not subtype of {}", securityClass, SecurityDescription.class, ManageableSecurity.class);
+            LOGGER.warn("{} anotated with {}, but not subtype of {}", securityClass, SecurityDescription.class, ManageableSecurity.class);
           }
         }
         // extract description

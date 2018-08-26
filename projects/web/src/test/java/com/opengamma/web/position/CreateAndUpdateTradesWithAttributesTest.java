@@ -40,7 +40,7 @@ public class CreateAndUpdateTradesWithAttributesTest extends AbstractWebPosition
   private static final String COUNTER_PARTY = "BACS";
   private static final double TRADE_PREMIUM = 40.0;
   
-  private static final Pattern s_urlPattern = Pattern.compile("^(/positions/)(MemPos~[0-9]+)$");
+  private static final Pattern URL_PATTERN = Pattern.compile("^(/positions/)(MemPos~[0-9]+)$");
   
   private Map<String, String> _dealAttributes;
   private Map<String, String> _userAttributes;
@@ -77,7 +77,7 @@ public class CreateAndUpdateTradesWithAttributesTest extends AbstractWebPosition
     assertNotNull(response);
     assertEquals(201, response.getStatus());
     String actualURL = getActualURL(response);
-    Matcher matcher = s_urlPattern.matcher(actualURL);
+    Matcher matcher = URL_PATTERN.matcher(actualURL);
     assertTrue(matcher.matches());
     String positionId = matcher.group(2);
     assertTradeWithAttributes(UniqueId.parse(positionId));
@@ -111,7 +111,7 @@ public class CreateAndUpdateTradesWithAttributesTest extends AbstractWebPosition
     assertNotNull(response);
     assertEquals(201, response.getStatus());
     String actualURL = getActualURL(response);
-    Matcher matcher = s_urlPattern.matcher(actualURL);
+    Matcher matcher = URL_PATTERN.matcher(actualURL);
     assertTrue(matcher.matches());
     String positionId = matcher.group(2);
     assertTradeWithEmptyDealAttributes(UniqueId.parse(positionId));
@@ -135,7 +135,7 @@ public class CreateAndUpdateTradesWithAttributesTest extends AbstractWebPosition
     assertNotNull(response);
     assertEquals(201, response.getStatus());
     String actualURL = getActualURL(response);
-    Matcher matcher = s_urlPattern.matcher(actualURL);
+    Matcher matcher = URL_PATTERN.matcher(actualURL);
     assertTrue(matcher.matches());
     String positionId = matcher.group(2);
     assertTradeWithEmptyDealAttributes(UniqueId.parse(positionId));
@@ -169,7 +169,7 @@ public class CreateAndUpdateTradesWithAttributesTest extends AbstractWebPosition
     assertNotNull(response);
     assertEquals(201, response.getStatus());
     String actualURL = getActualURL(response);
-    Matcher matcher = s_urlPattern.matcher(actualURL);
+    Matcher matcher = URL_PATTERN.matcher(actualURL);
     assertTrue(matcher.matches());
     String positionId = matcher.group(2);
     assertTradeWithEmptyUserAttributes(UniqueId.parse(positionId));
@@ -193,7 +193,7 @@ public class CreateAndUpdateTradesWithAttributesTest extends AbstractWebPosition
     assertNotNull(response);
     assertEquals(201, response.getStatus());
     String actualURL = getActualURL(response);
-    Matcher matcher = s_urlPattern.matcher(actualURL);
+    Matcher matcher = URL_PATTERN.matcher(actualURL);
     assertTrue(matcher.matches());
     String positionId = matcher.group(2);
     assertTradeWithEmptyUserAttributes(UniqueId.parse(positionId));
@@ -238,7 +238,7 @@ public class CreateAndUpdateTradesWithAttributesTest extends AbstractWebPosition
     assertNotNull(response);
     assertEquals(201, response.getStatus());
     String actualURL = getActualURL(response);
-    Matcher matcher = s_urlPattern.matcher(actualURL);
+    Matcher matcher = URL_PATTERN.matcher(actualURL);
     assertTrue(matcher.matches());
     String positionId = matcher.group(2);
     
@@ -263,7 +263,7 @@ public class CreateAndUpdateTradesWithAttributesTest extends AbstractWebPosition
     assertNotNull(response);
     assertEquals(201, response.getStatus());
     String actualURL = getActualURL(response);
-    Matcher matcher = s_urlPattern.matcher(actualURL);
+    Matcher matcher = URL_PATTERN.matcher(actualURL);
     assertTrue(matcher.matches());
     String positionId = matcher.group(2);
     

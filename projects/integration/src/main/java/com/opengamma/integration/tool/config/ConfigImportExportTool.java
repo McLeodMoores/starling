@@ -37,7 +37,7 @@ import com.opengamma.scripts.Scriptable;
 public class ConfigImportExportTool extends AbstractTool<ToolContext> {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(ConfigImportExportTool.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ConfigImportExportTool.class);
 
   //-------------------------------------------------------------------------
   /**
@@ -75,42 +75,42 @@ public class ConfigImportExportTool extends AbstractTool<ToolContext> {
         for (String fileName : fileList) {
           File file = new File(fileName);
           if (!file.exists()) {
-            s_logger.error("Could not find file:" + fileName);
+            LOGGER.error("Could not find file:" + fileName);
             problems = true;
           }
           if (!file.canRead()) {
-            s_logger.error("Not able to read file (permissions?):" + fileName);
+            LOGGER.error("Not able to read file (permissions?):" + fileName);
             problems = true;
           }
         }
         if (problems) {
-          s_logger.error("Problems with one or more files, aborting.");
+          LOGGER.error("Problems with one or more files, aborting.");
           System.exit(1);
         }
         try {
           for (String fileName : fileList) {
             if (verbose) {
-              s_logger.info("Processing " + fileName);
+              LOGGER.info("Processing " + fileName);
             }
             FileInputStream inputStream = new FileInputStream(fileName);
             configLoader.loadConfig(inputStream);
           }
         } catch (IOException ioe) {
           if (verbose) {
-            s_logger.error("An I/O error occurred while processing a file (run with -v to see stack trace)");
+            LOGGER.error("An I/O error occurred while processing a file (run with -v to see stack trace)");
           } else {
-            s_logger.error("An I/O error occurred while processing a file", ioe);
+            LOGGER.error("An I/O error occurred while processing a file", ioe);
           }
         }
       } else {
         if (verbose) {
-          s_logger.info("No file name given, assuming STDIN");
+          LOGGER.info("No file name given, assuming STDIN");
         }
         configLoader.loadConfig(System.in);
       }
     } else if (commandLine.hasOption("save")) {
       if (verbose) {
-        s_logger.info("Save option active");
+        LOGGER.info("Save option active");
       }
       checkForInvalidOption("do-not-persist");
       List<String> types = getTypes();
@@ -120,7 +120,7 @@ public class ConfigImportExportTool extends AbstractTool<ToolContext> {
         try {
           outputStream = new PrintStream(new FileOutputStream(fileList.get(0)));
         } catch (FileNotFoundException ex) {
-          s_logger.error("Couldn't find file " + fileList.get(0));
+          LOGGER.error("Couldn't find file " + fileList.get(0));
           System.exit(1);
           return;
         }

@@ -68,13 +68,13 @@ import com.opengamma.web.analytics.push.ConnectionManager;
 @Path("views")
 public class WebUiResource {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(WebUiResource.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(WebUiResource.class);
   private static final DateTimeFormatter CSV_TIME_FORMAT = DateTimeFormatter.ofPattern("yyyy_MM_dd_HH_mm_ss");
 
   /** For generating IDs for the views. */
-  private static final AtomicLong s_nextViewId = new AtomicLong(0);
+  private static final AtomicLong NEXT_VIEW_ID = new AtomicLong(0);
   /** For generating IDs for the viewports and dependency graphs. */
-  private static final AtomicInteger s_nextId = new AtomicInteger(0);
+  private static final AtomicInteger NEXT_ID = new AtomicInteger(0);
 
   /** For creating and retrieving views. */
   private final AnalyticsViewManager _viewManager;
@@ -112,7 +112,7 @@ public class WebUiResource {
                                                                parseInstant(portfolioCorrectionTime));
     final ViewRequest viewRequest = _viewManager.createViewRequest(UniqueId.parse(viewDefinitionId), aggregators, marketDataSpecs,
                                               parseInstant(valuationTime), versionCorrection, blotterColumns);
-    final String viewId = Long.toString(s_nextViewId.getAndIncrement());
+    final String viewId = Long.toString(NEXT_VIEW_ID.getAndIncrement());
     final URI portfolioGridUri = uriInfo.getAbsolutePathBuilder()
         .path(viewId)
         .path("portfolio")
@@ -172,7 +172,7 @@ public class WebUiResource {
           }
           break;
         default:
-          s_logger.warn("client {} requesting for invalid view client state change to {}", viewId, state);
+          LOGGER.warn("client {} requesting for invalid view client state change to {}", viewId, state);
           response = Response.status(Response.Status.BAD_REQUEST).build();
           break;
       }
@@ -215,7 +215,7 @@ public class WebUiResource {
                                  @FormParam("format") final TypeFormatter.Format format,
                                  @FormParam("enableLogging") final Boolean enableLogging) {
     final ViewportDefinition viewportDefinition = ViewportDefinition.create(version, rows, columns, cells, format, enableLogging);
-    final int viewportId = s_nextId.getAndIncrement();
+    final int viewportId = NEXT_ID.getAndIncrement();
     final String viewportIdStr = Integer.toString(viewportId);
     final UriBuilder viewportUriBuilder = uriInfo.getAbsolutePathBuilder().path(viewportIdStr);
     final String callbackId = viewportUriBuilder.build().getPath();
@@ -278,7 +278,7 @@ public class WebUiResource {
                                       @FormParam("col") final Integer col,
                                       @FormParam("colset") final String calcConfigName,
                                       @FormParam("req") final ValueRequirementFormParam valueRequirementParam) {
-    final int graphId = s_nextId.getAndIncrement();
+    final int graphId = NEXT_ID.getAndIncrement();
     final String graphIdStr = Integer.toString(graphId);
     final URI graphUri = uriInfo.getAbsolutePathBuilder().path(graphIdStr).build();
     final String callbackId = graphUri.getPath();
@@ -326,7 +326,7 @@ public class WebUiResource {
                                                 @FormParam("format") final TypeFormatter.Format format,
                                                 @FormParam("enableLogging") final Boolean enableLogging) {
     final ViewportDefinition viewportDefinition = ViewportDefinition.create(version, rows, columns, cells, format, enableLogging);
-    final int viewportId = s_nextId.getAndIncrement();
+    final int viewportId = NEXT_ID.getAndIncrement();
     final String viewportIdStr = Integer.toString(viewportId);
     final UriBuilder viewportUriBuilder = uriInfo.getAbsolutePathBuilder().path(viewportIdStr);
     final String callbackId = viewportUriBuilder.build().getPath();

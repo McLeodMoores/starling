@@ -32,7 +32,7 @@ public class EHCachingDistributionSpecificationResolver
   extends AbstractResolver<LiveDataSpecification, DistributionSpecification> 
   implements DistributionSpecificationResolver {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(EHCachingDistributionSpecificationResolver.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(EHCachingDistributionSpecificationResolver.class);
 
   /**
    * Cache key prefix.
@@ -100,7 +100,7 @@ public class EHCachingDistributionSpecificationResolver
       Map<LiveDataSpecification, DistributionSpecification> underlyingResult = _underlying.resolve(notFound);
 
       if (underlyingResult.size() != notFound.size()) {
-        s_logger.error("Did not receive results for all missing items - requested: {}, got back: {}", notFound.size(), underlyingResult.size());
+        LOGGER.error("Did not receive results for all missing items - requested: {}, got back: {}", notFound.size(), underlyingResult.size());
       }
 
 

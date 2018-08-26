@@ -37,7 +37,7 @@ import com.opengamma.id.ExternalIdBundle;
  */
 @FudgeBuilderFor(ManageableUnstructuredMarketDataSnapshot.class)
 public class ManageableUnstructuredMarketDataSnapshotBuilder implements FudgeBuilder<ManageableUnstructuredMarketDataSnapshot> {
-  private static final Logger s_logger = LoggerFactory.getLogger(ManageableUnstructuredMarketDataSnapshot.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ManageableUnstructuredMarketDataSnapshot.class);
   
   /** Field name. */
   public static final String IDENTIFIERS_FIELD_NAME = "identifiers";
@@ -76,7 +76,7 @@ public class ManageableUnstructuredMarketDataSnapshotBuilder implements FudgeBui
       final FudgeMsg innerValue = (FudgeMsg) fudgeField.getValue();
       ExternalIdBundle identifiers;
       if (innerValue.hasField(VALUE_SPEC_NAME)) {
-        s_logger.warn("Massively old version of snapshot deserializer being used, trying to convert...");
+        LOGGER.warn("Massively old version of snapshot deserializer being used, trying to convert...");
         FudgeMsg valueSpec = (FudgeMsg) innerValue.getValue(VALUE_SPEC_NAME);
         if (innerValue.hasField(UNIQUE_ID_NAME)) {
           identifiers = ExternalId.parse(valueSpec.getString(UNIQUE_ID_NAME)).toBundle();          

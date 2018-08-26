@@ -45,7 +45,7 @@ import com.opengamma.util.async.AsynchronousExecution;
  * 
  */
 public abstract class VolatilitySurfaceHistoricalTimeSeriesFunction extends AbstractFunction.NonCompiledInvoker {
-  private static final Logger s_logger = LoggerFactory.getLogger(VolatilitySurfaceHistoricalTimeSeriesFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(VolatilitySurfaceHistoricalTimeSeriesFunction.class);
 
   private ConfigDBVolatilitySurfaceDefinitionSource _volatilitySurfaceDefinitionSource;
   private ConfigDBVolatilitySurfaceSpecificationSource _volatilitySurfaceSpecificationSource;
@@ -96,7 +96,7 @@ public abstract class VolatilitySurfaceHistoricalTimeSeriesFunction extends Abst
         if (timeSeries != null) {
           bundle.add(dataField, identifier, timeSeries);
         } else {
-          s_logger.warn("Could not get time series for {}", identifier);
+          LOGGER.warn("Could not get time series for {}", identifier);
         }
       }
     }

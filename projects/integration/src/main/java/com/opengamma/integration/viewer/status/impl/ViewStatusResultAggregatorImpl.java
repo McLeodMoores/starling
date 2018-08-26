@@ -41,7 +41,7 @@ import com.opengamma.util.ArgumentChecker;
  */
 public class ViewStatusResultAggregatorImpl implements ViewStatusResultAggregator {
   
-  private static final Logger s_logger = LoggerFactory.getLogger(ViewStatusResultAggregatorImpl.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ViewStatusResultAggregatorImpl.class);
   
   /**
    * Header for Security Type
@@ -183,7 +183,7 @@ public class ViewStatusResultAggregatorImpl implements ViewStatusResultAggregato
       beanBuilder.set(colTypeItr.next().getMetaProperty(), keyItr.next());
     }
     ViewStatusKeyBean result = beanBuilder.build();
-    s_logger.debug("{} built from properties: {} and types: {}", result, keyValues, columnTypes);
+    LOGGER.debug("{} built from properties: {} and types: {}", result, keyValues, columnTypes);
     return result;
   }
 

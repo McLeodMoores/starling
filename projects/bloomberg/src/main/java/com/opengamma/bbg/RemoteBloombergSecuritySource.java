@@ -45,7 +45,7 @@ public class RemoteBloombergSecuritySource extends AbstractSecuritySource implem
   // TODO: Needs better javadoc to explain why class is needed
 
   /** Logger. */
-  private static Logger s_logger = LoggerFactory.getLogger(RemoteBloombergSecuritySource.class);
+  private static Logger LOGGER = LoggerFactory.getLogger(RemoteBloombergSecuritySource.class);
   /**
    * The request sender.
    */
@@ -100,7 +100,7 @@ public class RemoteBloombergSecuritySource extends AbstractSecuritySource implem
   public Collection<Security> get(ExternalIdBundle secKey) {
     ArgumentChecker.notNull(secKey, "security key");
     RemoteSecurityMasterReceiver receiver = new RemoteSecurityMasterReceiver();
-    s_logger.debug("sending getSecurities for {} to remote securityMaster", secKey);
+    LOGGER.debug("sending getSecurities for {} to remote securityMaster", secKey);
     SecurityMasterRequestMessage requestMessage = new SecurityMasterRequestMessage();
     requestMessage.setMessageType(MessageType.GET_SECURITIES_BY_KEY);
     requestMessage.setSecKey(secKey);
@@ -110,7 +110,7 @@ public class RemoteBloombergSecuritySource extends AbstractSecuritySource implem
       receiver.getLatch().await();
     } catch (InterruptedException e) {
       Thread.currentThread().interrupt();
-      s_logger.info("InterruptedException, request cannot be serviced right now");
+      LOGGER.info("InterruptedException, request cannot be serviced right now");
       throw new OpenGammaRuntimeException("Unable to getSecurities because of InterruptedException", e);
     }
     byte[] data = receiver.getMessage();
@@ -127,7 +127,7 @@ public class RemoteBloombergSecuritySource extends AbstractSecuritySource implem
   public Security getSingle(ExternalIdBundle secKey) {
     ArgumentChecker.notNull(secKey, "security key");
     RemoteSecurityMasterReceiver receiver = new RemoteSecurityMasterReceiver();
-    s_logger.debug("sending getSecurity for {} to remote securityMaster", secKey);
+    LOGGER.debug("sending getSecurity for {} to remote securityMaster", secKey);
     SecurityMasterRequestMessage requestMessage = new SecurityMasterRequestMessage();
     requestMessage.setMessageType(MessageType.GET_SECURITY_BY_KEY);
     requestMessage.setSecKey(secKey);
@@ -137,7 +137,7 @@ public class RemoteBloombergSecuritySource extends AbstractSecuritySource implem
       receiver.getLatch().await();
     } catch (InterruptedException e) {
       Thread.currentThread().interrupt();
-      s_logger.info("InterruptedException, request cannot be serviced right now");
+      LOGGER.info("InterruptedException, request cannot be serviced right now");
       throw new OpenGammaRuntimeException("Unable to getSecurity because of InterruptedException", e);
     }
     byte[] data = receiver.getMessage();
@@ -154,7 +154,7 @@ public class RemoteBloombergSecuritySource extends AbstractSecuritySource implem
   public Security get(UniqueId uid) {
     ArgumentChecker.notNull(uid, "unique identifier");
     RemoteSecurityMasterReceiver receiver = new RemoteSecurityMasterReceiver();
-    s_logger.debug("sending getSecurity for {} to remote securityMaster", uid);
+    LOGGER.debug("sending getSecurity for {} to remote securityMaster", uid);
     SecurityMasterRequestMessage requestMessage = new SecurityMasterRequestMessage();
     requestMessage.setMessageType(MessageType.GET_SECURITY_BY_IDENTITY);
     requestMessage.setUniqueId(uid);
@@ -164,7 +164,7 @@ public class RemoteBloombergSecuritySource extends AbstractSecuritySource implem
       receiver.getLatch().await();
     } catch (InterruptedException e) {
       Thread.currentThread().interrupt();
-      s_logger.info("InterruptedException, request cannot be serviced right now");
+      LOGGER.info("InterruptedException, request cannot be serviced right now");
       throw new OpenGammaRuntimeException("Unable to getSecurity because of InterruptedException", e);
     }
     byte[] data = receiver.getMessage();
@@ -188,7 +188,7 @@ public class RemoteBloombergSecuritySource extends AbstractSecuritySource implem
   public Set<String> getOptionChain(ExternalId identifier) {
     ArgumentChecker.notNull(identifier, "identifier");
     RemoteSecurityMasterReceiver receiver = new RemoteSecurityMasterReceiver();
-    s_logger.debug("sending getSecurity for {} to remote securityMaster", identifier);
+    LOGGER.debug("sending getSecurity for {} to remote securityMaster", identifier);
     SecurityMasterRequestMessage requestMessage = new SecurityMasterRequestMessage();
     requestMessage.setMessageType(MessageType.GET_OPTION_CHAIN);
     requestMessage.setSecKey(ExternalIdBundle.of(identifier));
@@ -198,7 +198,7 @@ public class RemoteBloombergSecuritySource extends AbstractSecuritySource implem
       receiver.getLatch().await();
     } catch (InterruptedException e) {
       Thread.currentThread().interrupt();
-      s_logger.info("InterruptedException, request cannot be serviced right now");
+      LOGGER.info("InterruptedException, request cannot be serviced right now");
       throw new OpenGammaRuntimeException("Unable to getOptionChain because of InterruptedException", e);
     }
     byte[] data = receiver.getMessage();
@@ -210,7 +210,7 @@ public class RemoteBloombergSecuritySource extends AbstractSecuritySource implem
   //  public Collection<Security> getAllBondsOfIssuerType(String issuerType) {
   //    ArgumentChecker.notNull(issuerType, "issuer type");
   //    RemoteSecurityMasterReceiver receiver = new RemoteSecurityMasterReceiver();
-  //    s_logger.debug("sending getAllBondsOfIssuerType for {} to remote securityMaster", issuerType);
+  //    LOGGER.debug("sending getAllBondsOfIssuerType for {} to remote securityMaster", issuerType);
   //    SecurityMasterRequestMessage requestMessage = new SecurityMasterRequestMessage();
   //    requestMessage.setMessageType(MessageType.GET_SECURITIES_BY_BOND_ISSUER_TYPE);
   //    requestMessage.setBondIssuerType(issuerType);
@@ -220,7 +220,7 @@ public class RemoteBloombergSecuritySource extends AbstractSecuritySource implem
   //      receiver.getLatch().await();
   //    } catch (InterruptedException e) {
   //      Thread.currentThread().interrupt();
-  //      s_logger.info("InterruptedException, request cannot be serviced right now");
+  //      LOGGER.info("InterruptedException, request cannot be serviced right now");
   //      throw new OpenGammaRuntimeException("Unable to getSecurities because of InterruptedException", e);
   //    }
   //    byte[] data = receiver.getMessage();

@@ -20,7 +20,7 @@ import com.opengamma.util.db.script.DbScript;
  */
 public class DbCreateOperation extends AbstractDbScriptOperation<DbToolContext> {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(DbCreateOperation.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(DbCreateOperation.class);
   
   private final boolean _dropCatalog;
   
@@ -46,12 +46,12 @@ public class DbCreateOperation extends AbstractDbScriptOperation<DbToolContext> 
     try (SqlScriptWriter writer = createSqlScriptWriter()) {
       Set<String> schemaNames = getDbToolContext().getSchemaNames() != null ? getDbToolContext().getSchemaNames() : getAllSchemaNames();
       for (String schema : schemaNames) {
-        s_logger.info("Processing schema " + schema);
+        LOGGER.info("Processing schema " + schema);
         DbScript script = getCreationScript(schema);
-        s_logger.debug("Using script: " + script);
+        LOGGER.debug("Using script: " + script);
         writer.write(schema, script);
       }
-      s_logger.info("Scripts processed successfully");
+      LOGGER.info("Scripts processed successfully");
     } catch (IOException e) {
       throw new OpenGammaRuntimeException("Error processing creation scripts", e);
     }
@@ -61,20 +61,20 @@ public class DbCreateOperation extends AbstractDbScriptOperation<DbToolContext> 
     contextNotNull(getDbToolContext().catalog());
     
     if (!isWrite()) {
-      s_logger.info("Would erase the contents of " + getDbToolContext().getCatalog() + " but skipping in read-only mode");
+      LOGGER.info("Would erase the contents of " + getDbToolContext().getCatalog() + " but skipping in read-only mode");
       return;
     }
         
-    if (s_logger.isInfoEnabled()) {
+    if (LOGGER.isInfoEnabled()) {
       // Give the user a chance to kill the script
-      s_logger.info("About to erase the contents of " + getDbToolContext().getCatalog() + "...");
+      LOGGER.info("About to erase the contents of " + getDbToolContext().getCatalog() + "...");
       try {
         Thread.sleep(3000);
       } catch (InterruptedException e) {
       }
     }
     
-    s_logger.info("Dropping contents of catalog " + getDbToolContext().getCatalog());
+    LOGGER.info("Dropping contents of catalog " + getDbToolContext().getCatalog());
     getDbToolContext().getDbManagement().dropSchema(getDbToolContext().getCatalog(), null);
   }
 

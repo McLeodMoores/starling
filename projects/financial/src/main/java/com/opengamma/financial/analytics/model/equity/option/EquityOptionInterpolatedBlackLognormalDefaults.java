@@ -32,7 +32,7 @@ import com.opengamma.util.ArgumentChecker;
  */
 public abstract class EquityOptionInterpolatedBlackLognormalDefaults extends DefaultPropertyFunction {
   /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(EquityOptionInterpolatedBlackLognormalDefaults.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(EquityOptionInterpolatedBlackLognormalDefaults.class);
   /** Map of id name to discounting curve configuration */
   private final Map<String, Set<String>> _idToDiscountingCurveConfig;
   /** Map of id name to discounting curve name */
@@ -49,7 +49,7 @@ public abstract class EquityOptionInterpolatedBlackLognormalDefaults extends Def
   private final PriorityClass _priority;
 
   /** The value requirement names for which these defaults apply */
-  private static final String[] s_valueNames = new String[] {
+  private static final String[] VALUE_NAMES = new String[] {
     ValueRequirementNames.PRESENT_VALUE,
     ValueRequirementNames.VEGA_QUOTE_MATRIX,
     ValueRequirementNames.VALUE_VEGA,
@@ -124,7 +124,7 @@ public abstract class EquityOptionInterpolatedBlackLognormalDefaults extends Def
 
   @Override
   protected void getDefaults(final PropertyDefaults defaults) {
-    for (final String valueName : s_valueNames) {
+    for (final String valueName : VALUE_NAMES) {
       defaults.addValuePropertyName(valueName, EquityOptionFunction.PROPERTY_DISCOUNTING_CURVE_CONFIG);
       defaults.addValuePropertyName(valueName, EquityOptionFunction.PROPERTY_DISCOUNTING_CURVE_NAME);
       defaults.addValuePropertyName(valueName, ForwardCurveValuePropertyNames.PROPERTY_FORWARD_CURVE_NAME);
@@ -164,7 +164,7 @@ public abstract class EquityOptionInterpolatedBlackLognormalDefaults extends Def
       case BlackVolatilitySurfacePropertyNamesAndValues.PROPERTY_SMILE_INTERPOLATOR:
         return _idToSurfaceInterpolatorName.get(id);
       default:
-        s_logger.error("Cannot get a default value for {}", propertyName);
+        LOGGER.error("Cannot get a default value for {}", propertyName);
         return null;
     }
   }

@@ -40,7 +40,7 @@ import com.opengamma.util.db.management.jmx.DatabaseMBean;
 public class DataSourceComponentFactory extends AbstractAliasedComponentFactory {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(DataSourceComponentFactory.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(DataSourceComponentFactory.class);
 
   /**
    * The fully-qualified class name of the database driver.
@@ -146,8 +146,8 @@ public class DataSourceComponentFactory extends AbstractAliasedComponentFactory 
     try {
       repo.registerMBean(mbeanLocal.mbean(), new ObjectName("com.opengamma", mbeanName));
     } catch (MalformedObjectNameException ex) {
-      s_logger.error("Couldn't register MBEAN for {}: {}", this, ex.getMessage());
-      s_logger.warn("Caught exception", ex);
+      LOGGER.error("Couldn't register MBEAN for {}: {}", this, ex.getMessage());
+      LOGGER.warn("Caught exception", ex);
     }
   }
 

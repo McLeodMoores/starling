@@ -63,7 +63,7 @@ import com.opengamma.util.money.UnorderedCurrencyPair;
  */
 public class FXForwardYieldCurveNodePnLFunction extends AbstractFunction {
   /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(FXForwardYieldCurveNodePnLFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(FXForwardYieldCurveNodePnLFunction.class);
   /** Temporary property used to set the result currency */
   private static final String RESULT_CURRENCY = "ResultCurrency";
   private ConfigDBCurveCalculationConfigSource _curveCalculationConfigSource;
@@ -282,7 +282,7 @@ public class FXForwardYieldCurveNodePnLFunction extends AbstractFunction {
       }
       TenorLabelledLocalDateDoubleTimeSeriesMatrix1D pnlSeriesVector;
       if (resultCurrencies == null || resultCurrencies.size() != 1) {
-        s_logger.warn("No Currency property - returns result in base currency");
+        LOGGER.warn("No Currency property - returns result in base currency");
         pnlSeriesVector = getPnLVector(returnSeries, sensitivities);
       } else {
         final String resultCurrency = Iterables.getOnlyElement(resultCurrencies);

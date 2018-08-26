@@ -60,7 +60,7 @@ public class CapFloorInflationZeroCouponMonthlyDefinitionTest {
       ACCRUAL_END_DATE, 1.0, NOTIONAL, PRICE_INDEX, LAST_KNOWN_FIXING_DATE, MONTH_LAG, MONTH_LAG, MATURITY, REFERENCE_START_DATE, REFERENCE_END_DATE, STRIKE, IS_CAP);
   private static final DayCount ACT_ACT = DayCounts.ACT_ACT_ISDA;
 
-  private static final DoubleTimeSeries<ZonedDateTime> priceIndexTS = ImmutableZonedDateTimeDoubleTimeSeries.ofUTC(
+  private static final DoubleTimeSeries<ZonedDateTime> PRICE_INDEX_TS = ImmutableZonedDateTimeDoubleTimeSeries.ofUTC(
       new ZonedDateTime[] {DateUtils.getUTCDate(2008, 5, 31), DateUtils.getUTCDate(2018, 5, 31), DateUtils.getUTCDate(2018, 6, 30) }, new double[] {108.23, 128.23, 128.43 });
 
   @Test(expectedExceptions = IllegalArgumentException.class)
@@ -195,7 +195,7 @@ public class CapFloorInflationZeroCouponMonthlyDefinitionTest {
   @Test
   public void toDerivativesNoData() {
     final ZonedDateTime pricingDate = DateUtils.getUTCDate(2011, 7, 29);
-    final Coupon zeroCouponConverted = ZERO_COUPON_CAP_DEFINITION.toDerivative(pricingDate, priceIndexTS);
+    final Coupon zeroCouponConverted = ZERO_COUPON_CAP_DEFINITION.toDerivative(pricingDate, PRICE_INDEX_TS);
     //lastKnownFixingTime could be negatif so we don't use the dayfraction
     final double lastKnownFixingTime = TimeCalculator.getTimeBetween(pricingDate, LAST_KNOWN_FIXING_DATE);
     final double paymentTime = ACT_ACT.getDayCountFraction(pricingDate, PAYMENT_DATE);

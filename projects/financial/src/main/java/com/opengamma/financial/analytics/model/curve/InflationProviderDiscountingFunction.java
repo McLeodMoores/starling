@@ -104,7 +104,7 @@ import com.opengamma.util.tuple.Pairs;
 public class InflationProviderDiscountingFunction extends
     MultiCurveFunction<InflationProviderInterface, InflationDiscountBuildingRepository, GeneratorPriceIndexCurve, InflationSensitivity> {
   /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(InflationProviderDiscountingFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(InflationProviderDiscountingFunction.class);
   /** The calculator */
   private static final ParSpreadInflationMarketQuoteDiscountingCalculator PSIMQC = ParSpreadInflationMarketQuoteDiscountingCalculator.getInstance();
   /** The sensitivity calculator */
@@ -369,7 +369,7 @@ public class InflationProviderDiscountingFunction extends
             .get();
         final PriceIndexCurve curve = provider.getCurve(curveName);
         if (curve == null) {
-          s_logger.error("Could not get curve called {} from configuration {}", curveName, getCurveConstructionConfigurationName());
+          LOGGER.error("Could not get curve called {} from configuration {}", curveName, getCurveConstructionConfigurationName());
         } else {
           final ValueSpecification curveSpec = new ValueSpecification(PRICE_INDEX_CURVE, ComputationTargetSpecification.NULL, curveProperties);
           result.add(new ComputedValue(curveSpec, curve));

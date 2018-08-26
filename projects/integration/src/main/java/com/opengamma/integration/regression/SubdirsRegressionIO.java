@@ -27,7 +27,7 @@ import com.opengamma.OpenGammaRuntimeException;
  */
 public class SubdirsRegressionIO extends RegressionIO {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(SubdirsRegressionIO.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(SubdirsRegressionIO.class);
 
   /**
    * Creates a new instance. If the supplied directory does not exist, it will be created.
@@ -50,12 +50,12 @@ public class SubdirsRegressionIO extends RegressionIO {
       if (createIfAbsent) {
         boolean success = dir.mkdirs();
         if (success) {
-          s_logger.debug("Created directory {}", dir);
+          LOGGER.debug("Created directory {}", dir);
         } else {
           throw new OpenGammaRuntimeException("Failed to create directory " + dir);
         }
       } else {
-        s_logger.debug("Directory {} does not exist", dir);
+        LOGGER.debug("Directory {} does not exist", dir);
       }
     }
   }
@@ -95,10 +95,10 @@ public class SubdirsRegressionIO extends RegressionIO {
   public List<String> enumObjects(final String type) throws IOException {
     final File subDir = getTypeFolder(type, false);
     if (!subDir.exists()) {
-      s_logger.info("Directory {} doesn't exist", subDir);
+      LOGGER.info("Directory {} doesn't exist", subDir);
       return Collections.<String>emptyList();
     }
-    s_logger.info("Scanning {}", subDir.getAbsolutePath());
+    LOGGER.info("Scanning {}", subDir.getAbsolutePath());
     final File[] files = subDir.listFiles();
     if (files == null) {
       throw new OpenGammaRuntimeException("No files found in " + subDir);
@@ -113,7 +113,7 @@ public class SubdirsRegressionIO extends RegressionIO {
         }
       }
     }
-    s_logger.debug("Found {} objects", identifiers.size());
+    LOGGER.debug("Found {} objects", identifiers.size());
     return identifiers;
   }
   

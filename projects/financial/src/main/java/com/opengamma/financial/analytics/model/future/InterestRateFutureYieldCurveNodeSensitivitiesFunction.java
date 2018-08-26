@@ -75,7 +75,7 @@ import com.opengamma.util.money.Currency;
  */
 @Deprecated
 public class InterestRateFutureYieldCurveNodeSensitivitiesFunction extends AbstractFunction.NonCompiledInvoker {
-  private static final Logger s_logger = LoggerFactory.getLogger(InterestRateFutureYieldCurveNodeSensitivitiesFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(InterestRateFutureYieldCurveNodeSensitivitiesFunction.class);
   private static final PresentValueNodeSensitivityCalculator NSC = PresentValueNodeSensitivityCalculator.getDefaultInstance();
   private static final InstrumentSensitivityCalculator CALCULATOR = InstrumentSensitivityCalculator.getInstance();
   private static final String VALUE_REQUIREMENT = ValueRequirementNames.YIELD_CURVE_NODE_SENSITIVITIES;
@@ -194,13 +194,13 @@ public class InterestRateFutureYieldCurveNodeSensitivitiesFunction extends Abstr
     }
     final Set<String> curves = constraints.getValues(ValuePropertyNames.CURVE);
     if (curves == null || curves.size() != 1) {
-      s_logger.error("Must specify a single curve name; have {}", curves);
+      LOGGER.error("Must specify a single curve name; have {}", curves);
       return null;
     }
     final String curveCalculationConfigName = curveCalculationConfigNames.iterator().next();
     final MultiCurveCalculationConfig curveCalculationConfig = _curveCalculationConfigSource.getConfig(curveCalculationConfigName);
     if (curveCalculationConfig == null) {
-      s_logger.error("Could not find curve calculation configuration named " + curveCalculationConfigName);
+      LOGGER.error("Could not find curve calculation configuration named " + curveCalculationConfigName);
       return null;
     }
     if (!ComputationTargetSpecification.of(currency).equals(curveCalculationConfig.getTarget())) {
@@ -216,7 +216,7 @@ public class InterestRateFutureYieldCurveNodeSensitivitiesFunction extends Abstr
       }
     }
     if (!found) {
-      s_logger.info("Curve named {} is not available in curve calculation configuration called {}", curve, curveCalculationConfigName);
+      LOGGER.info("Curve named {} is not available in curve calculation configuration called {}", curve, curveCalculationConfigName);
       return null;
     }
     final String curveCalculationMethod = curveCalculationConfig.getCalculationMethod();
@@ -231,7 +231,7 @@ public class InterestRateFutureYieldCurveNodeSensitivitiesFunction extends Abstr
     }
     final Set<ValueRequirement> timeSeriesRequirements = _dataConverter.getConversionTimeSeriesRequirements(security, _converter.convert(trade));
     if (timeSeriesRequirements == null) {
-      s_logger.error("Could not get time series for conversion of security {}", security);
+      LOGGER.error("Could not get time series for conversion of security {}", security);
       return null;
     }
     requirements.addAll(timeSeriesRequirements);

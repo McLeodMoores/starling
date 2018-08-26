@@ -46,7 +46,7 @@ public class PositionGreeksFunction extends AbstractFunction.NonCompiledInvoker 
   /** The input requirement name */
   private final String _securityReqName;
   /** */
-  private static final PositionGreekContractMultiplier s_contractMultiplier = PositionGreekContractMultiplier.getInstance();
+  private static final PositionGreekContractMultiplier CONTRACT_MULTIPLIER = PositionGreekContractMultiplier.getInstance();
 
   /**
    * @param positionReqName The output requirement name, not null
@@ -79,7 +79,7 @@ public class PositionGreeksFunction extends AbstractFunction.NonCompiledInvoker 
 
     // 2a. Scale to mathematical Greek by point value for a single contract (unit Notional)
     final FinancialSecurity security = (FinancialSecurity) target.getPositionOrTrade().getSecurity();
-    final Double contractGreekValue = secGreekValue * security.accept(s_contractMultiplier);
+    final Double contractGreekValue = secGreekValue * security.accept(CONTRACT_MULTIPLIER);
     // 2b. Scale by the position quantity
     final Double posGreekValue = contractGreekValue * target.getPositionOrTrade().getQuantity().doubleValue();
 

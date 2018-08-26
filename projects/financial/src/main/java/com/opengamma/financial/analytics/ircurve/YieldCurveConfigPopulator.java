@@ -19,7 +19,7 @@ import com.opengamma.util.money.Currency;
  * Populates the yield curve configuration.
  */
 public class YieldCurveConfigPopulator {
-  private static final Logger s_logger = LoggerFactory.getLogger(YieldCurveConfigPopulator.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(YieldCurveConfigPopulator.class);
 
   public YieldCurveConfigPopulator(final ConfigMaster cfgMaster) {
     this(cfgMaster, false);
@@ -46,12 +46,12 @@ public class YieldCurveConfigPopulator {
   }
 
   private static void dumpDefinition(final YieldCurveDefinition curveDefinition) {
-    s_logger.debug("Curve Definition");
-    s_logger.debug("  Name:" + curveDefinition.getName());
-    s_logger.debug("  Currency:" + curveDefinition.getCurrency());
-    s_logger.debug("  Strips:");
+    LOGGER.debug("Curve Definition");
+    LOGGER.debug("  Name:" + curveDefinition.getName());
+    LOGGER.debug("  Currency:" + curveDefinition.getCurrency());
+    LOGGER.debug("  Strips:");
     for (final FixedIncomeStrip strip : curveDefinition.getStrips()) {
-      s_logger.debug("    " + strip);
+      LOGGER.debug("    " + strip);
     }
   }
 

@@ -32,7 +32,7 @@ public class PortfolioTemplateCreationTool {
   private static final String LOGBACK_OPTION = "l";
 
   /** The list of security types - needs to be updated whenever a new sec type is added to the system */
-  private static final String[] s_securityTypes = {
+  private static final String[] SECURITY_TYPES = {
     "CorporateBond", "GovernmentBond", "MunicipalBond",
     "CapFloorCMSSpread", "CapFloor",
     "Cash",
@@ -88,7 +88,7 @@ public class PortfolioTemplateCreationTool {
     }
 
     String[] securityTypes = getCommandLine().getOptionValues(SECURITY_TYPE_OPT)[0].equals("all")
-        ? s_securityTypes
+        ? SECURITY_TYPES
         : getCommandLine().getOptionValues(SECURITY_TYPE_OPT);
 
     // Create portfolio writers to write header rows
@@ -104,7 +104,7 @@ public class PortfolioTemplateCreationTool {
     Options options = new Options();
 
     String securityTypes = "";
-    for (String s : s_securityTypes) {
+    for (String s : SECURITY_TYPES) {
       securityTypes += " " + s;
     }
     Option assetClassOption = new Option(

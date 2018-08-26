@@ -24,17 +24,17 @@ import com.opengamma.master.security.ManageableSecurityFudgeBuilder;
 
 /* package */final class SecurityInfo extends AbstractInfo<Security> {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(SecurityInfo.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(SecurityInfo.class);
 
   private final Map<Object, Object> _info = new HashMap<Object, Object>();
 
   public SecurityInfo(final ComparisonContext context, final Security security) {
     super(security);
-    s_logger.debug("Extracting core information from {}", security);
+    LOGGER.debug("Extracting core information from {}", security);
     final FudgeSerializer serializer = context.getFudgeSerializer();
     serializer.reset();
     final FudgeMsg rawMsg = serializer.objectToFudgeMsg(security);
-    s_logger.debug("Raw message = {}", rawMsg);
+    LOGGER.debug("Raw message = {}", rawMsg);
     final Iterator<FudgeField> itr = rawMsg.iterator();
     while (itr.hasNext()) {
       final FudgeField field = itr.next();
@@ -43,7 +43,7 @@ import com.opengamma.master.security.ManageableSecurityFudgeBuilder;
       }
       addFieldToMap(field, _info);
     }
-    s_logger.debug("Info = {}", _info);
+    LOGGER.debug("Info = {}", _info);
   }
 
   @SuppressWarnings({"unchecked", "rawtypes" })

@@ -27,7 +27,7 @@ import com.opengamma.util.ArgumentChecker;
 public final class BloombergDomainIdentifierResolver {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(BloombergDomainIdentifierResolver.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(BloombergDomainIdentifierResolver.class);
   /**
    * Prefixes used by Bloomberg.
    */
@@ -64,7 +64,7 @@ public final class BloombergDomainIdentifierResolver {
       String id  = externalId.getValue();
       return prefix != null ? prefix + id : id;
     }
-    s_logger.warn("Unknown ExternalScheme {}", externalId);
+    LOGGER.warn("Unknown ExternalScheme {}", externalId);
     return externalId.getValue();
   }
 
@@ -108,7 +108,7 @@ public final class BloombergDomainIdentifierResolver {
       }
       return buf.toString();
     }
-    s_logger.warn("Unknown ExternalScheme {}", externalId);
+    LOGGER.warn("Unknown ExternalScheme {}", externalId);
     return externalId.getValue();
   }
 

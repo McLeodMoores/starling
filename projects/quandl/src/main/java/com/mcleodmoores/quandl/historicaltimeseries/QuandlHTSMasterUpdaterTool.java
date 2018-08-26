@@ -43,7 +43,7 @@ import com.opengamma.util.time.DateUtils;
 public class QuandlHTSMasterUpdaterTool extends AbstractTool<ToolContext> {
 
   /** Logger. */
-  private static Logger s_logger = LoggerFactory.getLogger(QuandlHTSMasterUpdaterTool.class);
+  private static Logger LOGGER = LoggerFactory.getLogger(QuandlHTSMasterUpdaterTool.class);
 
   /** Command line option. */
   private static final String RELOAD_OPTION = "reload";
@@ -69,7 +69,7 @@ public class QuandlHTSMasterUpdaterTool extends AbstractTool<ToolContext> {
    * @param args the command line arguments
    */
   public static void main(final String[] args) { // CSIGNORE
-    s_logger.info("Updating time-series data from Quandl");
+    LOGGER.info("Updating time-series data from Quandl");
     GUIFeedback feedback = null;
     try {
       feedback = new GUIFeedback("Updating time series database from Quandl");
@@ -84,7 +84,7 @@ public class QuandlHTSMasterUpdaterTool extends AbstractTool<ToolContext> {
 
     } catch (final Exception ex) {
       GUIFeedback.shout(ex.getClass().getSimpleName() + " - " + ex.getMessage());
-      s_logger.error("Caught exception", ex);
+      LOGGER.error("Caught exception", ex);
       ex.printStackTrace();
     } finally {
       if (feedback != null) {

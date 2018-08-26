@@ -34,7 +34,7 @@ import com.opengamma.engine.view.impl.ViewProcessContext;
  */
 public class SequencePartitioningViewProcessWorker implements ViewProcessWorker, ViewProcessWorkerContext {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(SequencePartitioningViewProcessWorker.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(SequencePartitioningViewProcessWorker.class);
 
   private final ViewProcessWorkerFactory _delegate;
   private final ViewProcessWorkerContext _context;
@@ -117,11 +117,11 @@ public class SequencePartitioningViewProcessWorker implements ViewProcessWorker,
       }
     }
     if (partition.isEmpty()) {
-      s_logger.info("No more cycles to execute");
+      LOGGER.info("No more cycles to execute");
     } else {
       final int firstCycle = _spawnedCycleCount;
       _spawnedCycleCount += partition.size();
-      s_logger.info("Spawning worker {} for {} cycles {} - {}", new Object[] {++_spawnedWorkerCount, getWorkerContext(), firstCycle, _spawnedCycleCount });
+      LOGGER.info("Spawning worker {} for {} cycles {} - {}", new Object[] {++_spawnedWorkerCount, getWorkerContext(), firstCycle, _spawnedCycleCount });
       ViewProcessWorker delegate = getDelegate().createWorker(this, getExecutionOptions(new ArbitraryViewCycleExecutionSequence(partition)), getViewDefinition());
       _workers.add(delegate);
       _spawnedWorkers++;
@@ -133,7 +133,7 @@ public class SequencePartitioningViewProcessWorker implements ViewProcessWorker,
   @Override
   public synchronized boolean triggerCycle() {
     if (_trigger == 0) {
-      s_logger.debug("Ignoring triggerCycle on run-as-fast-as-possible sequence");
+      LOGGER.debug("Ignoring triggerCycle on run-as-fast-as-possible sequence");
       return false;
     }
     while (_trigger > 0) {
@@ -145,14 +145,14 @@ public class SequencePartitioningViewProcessWorker implements ViewProcessWorker,
 
   @Override
   public boolean requestCycle() {
-    s_logger.debug("Ignoring requestCycle on run-as-fast-as-possible sequence");
+    LOGGER.debug("Ignoring requestCycle on run-as-fast-as-possible sequence");
     return false;
   }
 
   @Override
   public void updateViewDefinition(ViewDefinition viewDefinition) {
     // This is not a good state of affairs as the caller has little or no control or knowledge over the sequence we're working on
-    s_logger.warn("View definition updated on run-as-fast-as-possible sequence");
+    LOGGER.warn("View definition updated on run-as-fast-as-possible sequence");
     _viewDefinition = viewDefinition;
     Collection<ViewProcessWorker> delegates;
     synchronized (this) {
@@ -230,13 +230,13 @@ public class SequencePartitioningViewProcessWorker implements ViewProcessWorker,
       synchronized (this) {
         ViewProcessWorker worker2 = _workers.poll();
         if (worker2 == worker) {
-          s_logger.debug("Removing completed worker from head of queue");
+          LOGGER.debug("Removing completed worker from head of queue");
           worker = worker2;
         } else if (worker2 == null) {
-          s_logger.debug("Completed worker already removed from queue");
+          LOGGER.debug("Completed worker already removed from queue");
           break;
         } else {
-          s_logger.debug("Concurrent worker queue access");
+          LOGGER.debug("Concurrent worker queue access");
           _workers.add(worker2);
           worker = _workers.peek();
         }
@@ -265,43 +265,43 @@ public class SequencePartitioningViewProcessWorker implements ViewProcessWorker,
 
   @Override
   public void viewDefinitionCompiled(ViewExecutionDataProvider dataProvider, CompiledViewDefinitionWithGraphs compiled) {
-    s_logger.debug("View definition compiled");
+    LOGGER.debug("View definition compiled");
     getWorkerContext().viewDefinitionCompiled(dataProvider, compiled);
   }
 
   @Override
   public void viewDefinitionCompilationFailed(Instant compilationTime, Exception exception) {
-    s_logger.debug("View definition compilation failed");
+    LOGGER.debug("View definition compilation failed");
     getWorkerContext().viewDefinitionCompilationFailed(compilationTime, exception);
   }
 
   @Override
   public void cycleStarted(ViewCycleMetadata cycleMetadata) {
-    s_logger.debug("Cycle started");
+    LOGGER.debug("Cycle started");
     getWorkerContext().cycleStarted(cycleMetadata);
   }
 
   @Override
   public void cycleFragmentCompleted(ViewComputationResultModel result, ViewDefinition viewDefinition) {
-    s_logger.debug("Cycle fragment completed");
+    LOGGER.debug("Cycle fragment completed");
     getWorkerContext().cycleFragmentCompleted(result, viewDefinition);
   }
 
   @Override
   public void cycleCompleted(ViewCycle cycle) {
-    s_logger.debug("Cycle completed");
+    LOGGER.debug("Cycle completed");
     getWorkerContext().cycleCompleted(cycle);
   }
 
   @Override
   public void cycleExecutionFailed(ViewCycleExecutionOptions options, Exception exception) {
-    s_logger.debug("Cycle execution failed");
+    LOGGER.debug("Cycle execution failed");
     getWorkerContext().cycleExecutionFailed(options, exception);
   }
 
   @Override
   public void workerCompleted() {
-    s_logger.debug("Worker completed");
+    LOGGER.debug("Worker completed");
     final boolean finished;
     synchronized (this) {
       finished = (--_spawnedWorkers) == 0;

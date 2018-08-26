@@ -32,7 +32,7 @@ import com.sleepycat.je.Environment;
  */
 @Test(groups = TestGroup.INTEGRATION)
 public class BerkeleyDBValueSpecificationIdentifierBinaryDataStoreTest {
-  private static final Logger s_logger = LoggerFactory.getLogger(BerkeleyDBValueSpecificationIdentifierBinaryDataStoreTest.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(BerkeleyDBValueSpecificationIdentifierBinaryDataStoreTest.class);
 
   private static Set<File> s_dbDirsToDelete = new HashSet<File>();
   
@@ -48,10 +48,10 @@ public class BerkeleyDBValueSpecificationIdentifierBinaryDataStoreTest {
   public static void deleteDbDirs() {
     for (File f : s_dbDirsToDelete) {
       try {
-        s_logger.info("Deleting temp directory {}", f);
+        LOGGER.info("Deleting temp directory {}", f);
         FileUtils.deleteDirectory(f);
       } catch (IOException ioe) {
-        s_logger.warn("Unable to recursively delete directory {}", f);
+        LOGGER.warn("Unable to recursively delete directory {}", f);
         // Just swallow it.
       }
     }
@@ -70,7 +70,7 @@ public class BerkeleyDBValueSpecificationIdentifierBinaryDataStoreTest {
     BerkeleyDBBinaryDataStore dataStore = new BerkeleyDBBinaryDataStore(dbEnvironment, "putPerformanceTest");
     dataStore.start();
     
-    OperationTimer timer = new OperationTimer(s_logger, "Writing {} entries", numEntries);
+    OperationTimer timer = new OperationTimer(LOGGER, "Writing {} entries", numEntries);
     
     int randRange = maxEntrySize - minEntrySize;
     for (int i = 0; i < numEntries; i++) {
@@ -85,7 +85,7 @@ public class BerkeleyDBValueSpecificationIdentifierBinaryDataStoreTest {
     double msPerPut = ((double) numMillis) / ((double) numEntries);
     double putsPerSecond = 1000.0 / msPerPut;
     
-    s_logger.info("for {} entries, {} ms/put, {} puts/sec", new Object[] {numEntries, msPerPut, putsPerSecond});
+    LOGGER.info("for {} entries, {} ms/put, {} puts/sec", new Object[] {numEntries, msPerPut, putsPerSecond});
     
     dataStore.delete();
     dataStore.stop();
@@ -114,7 +114,7 @@ public class BerkeleyDBValueSpecificationIdentifierBinaryDataStoreTest {
       dataStore.put(i, bytes);
     }
     
-    OperationTimer timer = new OperationTimer(s_logger, "Loading {} entries", numGets);
+    OperationTimer timer = new OperationTimer(LOGGER, "Loading {} entries", numGets);
     for (int j = 0; j < numCycles; j++) {
       for (int i = 0; i < numEntries; i++) {
         byte[] data = dataStore.get(i);
@@ -129,7 +129,7 @@ public class BerkeleyDBValueSpecificationIdentifierBinaryDataStoreTest {
     double msPerGet = ((double) numMillis) / ((double) numGets);
     double getsPerSecond = 1000.0 / msPerGet;
     
-    s_logger.info("for {} gets, {} ms/get, {} gets/sec", new Object[] {numGets, msPerGet, getsPerSecond});
+    LOGGER.info("for {} gets, {} ms/get, {} gets/sec", new Object[] {numGets, msPerGet, getsPerSecond});
     
     dataStore.delete();
     dataStore.stop();
@@ -154,7 +154,7 @@ public class BerkeleyDBValueSpecificationIdentifierBinaryDataStoreTest {
     Thread tPut = new Thread(new Runnable() {
       @Override
       public void run() {
-        OperationTimer timer = new OperationTimer(s_logger, "Putting {} entries", numEntries);
+        OperationTimer timer = new OperationTimer(LOGGER, "Putting {} entries", numEntries);
         for (int i = 0; i < numEntries; i++) {
           random.nextBytes(bytes);
           dataStore.put(i, bytes);
@@ -165,7 +165,7 @@ public class BerkeleyDBValueSpecificationIdentifierBinaryDataStoreTest {
         double msPerPut = ((double) numMillis) / ((double) numGets);
         double putsPerSecond = 1000.0 / msPerPut;
         
-        s_logger.info("for {} puts, {} ms/put, {} puts/sec", new Object[] {numEntries, msPerPut, putsPerSecond});
+        LOGGER.info("for {} puts, {} ms/put, {} puts/sec", new Object[] {numEntries, msPerPut, putsPerSecond});
       }
       
     }, "Putter");
@@ -173,7 +173,7 @@ public class BerkeleyDBValueSpecificationIdentifierBinaryDataStoreTest {
     class GetRunner implements Runnable {
       @Override
       public void run() {
-        OperationTimer timer = new OperationTimer(s_logger, "Getting {} entries", numGets);
+        OperationTimer timer = new OperationTimer(LOGGER, "Getting {} entries", numGets);
         for (int i = 0; i < numGets; i++) {
           int maxIdentifier = (int) currentMaxIdentifier.get();
           long actualIdentifier = random.nextInt(maxIdentifier);
@@ -184,7 +184,7 @@ public class BerkeleyDBValueSpecificationIdentifierBinaryDataStoreTest {
         double msPerGet = ((double) numMillis) / ((double) numGets);
         double getsPerSecond = 1000.0 / msPerGet;
         
-        s_logger.info("for {} gets, {} ms/get, {} gets/sec", new Object[] {numGets, msPerGet, getsPerSecond});
+        LOGGER.info("for {} gets, {} ms/get, {} gets/sec", new Object[] {numGets, msPerGet, getsPerSecond});
       }
     };
     Thread tGet1 = new Thread(new GetRunner(), "getter-1");

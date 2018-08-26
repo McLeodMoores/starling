@@ -64,12 +64,12 @@ import com.opengamma.util.paging.PagingRequest;
 /*package*/class DbConfigWorker extends AbstractDocumentDbMaster<ConfigDocument> {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(DbConfigWorker.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(DbConfigWorker.class);
 
   /**
    * The Fudge context.
    */
-  protected static final FudgeContext s_fudgeContext = OpenGammaFudgeContext.getInstance();
+  protected static final FudgeContext FUDGE_CONTEXT = OpenGammaFudgeContext.getInstance();
 
   // -----------------------------------------------------------------
   // TIMERS FOR METRICS GATHERING
@@ -172,9 +172,9 @@ import com.opengamma.util.paging.PagingRequest;
 
   private byte[] serializeToFudge(final Object configObj) {
     // serialize the configuration value
-    FudgeSerializer serializer = new FudgeSerializer(s_fudgeContext);
+    FudgeSerializer serializer = new FudgeSerializer(FUDGE_CONTEXT);
     MutableFudgeMsg objectToFudgeMsg = serializer.objectToFudgeMsg(configObj);
-    return s_fudgeContext.toByteArray(objectToFudgeMsg);
+    return FUDGE_CONTEXT.toByteArray(objectToFudgeMsg);
   }
 
   //-------------------------------------------------------------------------
@@ -191,7 +191,7 @@ import com.opengamma.util.paging.PagingRequest;
           try {
             result.getConfigTypes().add(ClassUtils.loadClass(configType));
           } catch (ClassNotFoundException ex) {
-            s_logger.warn("Unable to load class", ex);
+            LOGGER.warn("Unable to load class", ex);
           }
         }
       }
@@ -207,7 +207,7 @@ import com.opengamma.util.paging.PagingRequest;
     ArgumentChecker.notNull(request.getType(), "request.type");
     ArgumentChecker.notNull(request.getPagingRequest(), "request.pagingRequest");
     ArgumentChecker.notNull(request.getVersionCorrection(), "request.versionCorrection");
-    s_logger.debug("search {}", request);
+    LOGGER.debug("search {}", request);
 
     Timer.Context context = _searchTimer.time();
     try {
@@ -280,7 +280,7 @@ import com.opengamma.util.paging.PagingRequest;
     //ArgumentChecker.notNull(request.getType(), "request.type");
     ArgumentChecker.notNull(request.getObjectId(), "request.objectId");
     checkScheme(request.getObjectId());
-    s_logger.debug("history {}", request);
+    LOGGER.debug("history {}", request);
 
     ConfigHistoryResult<T> result = new ConfigHistoryResult<T>();
     ConfigDocumentExtractor extractor = new ConfigDocumentExtractor();
@@ -346,15 +346,15 @@ import com.opengamma.util.paging.PagingRequest;
       try {
         reifiedType = ClassUtils.loadClass(configType);
       } catch (ClassNotFoundException ex) {
-        s_logger.warn("ConfigType: {} class can not be found for docOid: {}", configType, docOid);
+        LOGGER.warn("ConfigType: {} class can not be found for docOid: {}", configType, docOid);
         return;
       }
 
-      FudgeObjectReader objReader = s_fudgeContext.createObjectReader(new ByteArrayInputStream(bytes));
+      FudgeObjectReader objReader = FUDGE_CONTEXT.createObjectReader(new ByteArrayInputStream(bytes));
       FudgeMsg fudgeMsg = objReader.getMessageReader().nextMessage();
       try {
 
-        FudgeDeserializer deserializer = new FudgeDeserializer(s_fudgeContext);
+        FudgeDeserializer deserializer = new FudgeDeserializer(FUDGE_CONTEXT);
         Object configObj = deserializer.fudgeMsgToObject(reifiedType, fudgeMsg);
         ConfigItem<?> item = ConfigItem.of(configObj);
         item.setName(name);
@@ -370,7 +370,7 @@ import com.opengamma.util.paging.PagingRequest;
         _documents.add(doc);
 
       } catch (Exception ex) {
-        s_logger.warn("Bad fudge message in database, unable to deserialise docOid:" + docOid + " " + fudgeMsg +
+        LOGGER.warn("Bad fudge message in database, unable to deserialise docOid:" + docOid + " " + fudgeMsg +
             " to " + configType, ex);
       }
     }

@@ -32,7 +32,7 @@ import com.opengamma.util.tuple.Pairs;
  *
  */
 public class SwaptionBlackYieldCurveNodePnLDefaults extends DefaultPropertyFunction {
-  private static final Logger s_logger = LoggerFactory.getLogger(SwaptionBlackYieldCurveNodePnLDefaults.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(SwaptionBlackYieldCurveNodePnLDefaults.class);
   private final String _samplingPeriod;
   private final String _scheduleCalculator;
   private final String _samplingFunction;
@@ -90,7 +90,7 @@ public class SwaptionBlackYieldCurveNodePnLDefaults extends DefaultPropertyFunct
     }
     final String currencyName = FinancialSecurityUtils.getCurrency(target.getPosition().getSecurity()).getCode();
     if (!_currencyCurveConfigAndSurfaceNames.containsKey(currencyName)) {
-      s_logger.error("Could not config and surface names for currency " + currencyName + "; should never happen");
+      LOGGER.error("Could not config and surface names for currency " + currencyName + "; should never happen");
       return null;
     }
     final Pair<String, String> pair = _currencyCurveConfigAndSurfaceNames.get(currencyName);

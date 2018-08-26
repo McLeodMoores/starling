@@ -34,7 +34,7 @@ import com.opengamma.engine.value.ValueSpecification;
  */
 @FudgeBuilderFor(DependencyGraphBuildTrace.class)
 public class DependencyGraphBuildTraceFudgeBuilder implements FudgeBuilder<DependencyGraphBuildTrace> {
-  private static final Logger s_logger = LoggerFactory.getLogger(DependencyGraphBuildTraceFudgeBuilder.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(DependencyGraphBuildTraceFudgeBuilder.class);
   
   @Override
   public MutableFudgeMsg buildMessage(FudgeSerializer serializer, DependencyGraphBuildTrace object) {
@@ -72,12 +72,12 @@ public class DependencyGraphBuildTraceFudgeBuilder implements FudgeBuilder<Depen
         throwable = new ThrowableWithClass(exceptionMessage, Class.forName(clazzName));
       } catch (ClassNotFoundException ex) {
         throwable = new ThrowableWithClass(exceptionMessage, null);
-        s_logger.error("Exception class not found, setting exception class to null");
+        LOGGER.error("Exception class not found, setting exception class to null");
       }
       if (subMessage.hasField("repeat")) {
         Integer repeat = subMessage.getInt("repeat");
         if (repeat == null) {
-          s_logger.error("repeat field was present, but not integer");
+          LOGGER.error("repeat field was present, but not integer");
         }
         exceptionsWithCounts.put(throwable, repeat);
       } else {
@@ -90,7 +90,7 @@ public class DependencyGraphBuildTraceFudgeBuilder implements FudgeBuilder<Depen
       FudgeMsg subMessage = (FudgeMsg) field.getValue();
       ResolutionFailure failure = deserializer.fudgeMsgToObject(ResolutionFailure.class, subMessage);
       if (failure == null) {
-        s_logger.error("Couldn't deserialize failure " + subMessage.toString());
+        LOGGER.error("Couldn't deserialize failure " + subMessage.toString());
       }
       failures.add(failure);
     }
@@ -100,7 +100,7 @@ public class DependencyGraphBuildTraceFudgeBuilder implements FudgeBuilder<Depen
     List<FudgeField> keys = mappingMsg.getAllByOrdinal(1); // keys
     List<FudgeField> values = mappingMsg.getAllByOrdinal(2); // values
     if (keys.size() != values.size()) {
-      s_logger.error("keys and values list in map don't have the same number of elements: message = {}", message);
+      LOGGER.error("keys and values list in map don't have the same number of elements: message = {}", message);
       throw new OpenGammaRuntimeException("keys and values list in map don't have the same number of elements");
     }
     for (int i = 0; i < keys.size(); i++) { // better to use iterators?
@@ -109,7 +109,7 @@ public class DependencyGraphBuildTraceFudgeBuilder implements FudgeBuilder<Depen
       FudgeField specField = values.get(i);
       ValueSpecification valueSpec = deserializer.fieldValueToObject(ValueSpecification.class, specField);
       if (valueReq == null || valueSpec == null) {
-        s_logger.error("valueReq or valueSpec was null during deserialize: message = {}", message);
+        LOGGER.error("valueReq or valueSpec was null during deserialize: message = {}", message);
         throw new OpenGammaRuntimeException("valueReq or valueSpec was null during deserialize");
       }
       mappings.put(valueReq, valueSpec);

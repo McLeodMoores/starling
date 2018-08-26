@@ -21,7 +21,7 @@ import com.opengamma.util.ArgumentChecker;
     description = "CogdaLiveDataServer attributes and operations that can be managed via JMX"
     )
 public class CogdaLiveDataServerMBean {
-  private static final Logger s_logger = LoggerFactory.getLogger(CogdaLiveDataServerMBean.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(CogdaLiveDataServerMBean.class);
   private final CogdaLiveDataServer _server; 
   
   public CogdaLiveDataServerMBean(CogdaLiveDataServer server) {
@@ -42,7 +42,7 @@ public class CogdaLiveDataServerMBean {
     try {
       return getServer().getPortNumber();
     } catch (RuntimeException e) {
-      s_logger.error("getPortNumber() failed", e);
+      LOGGER.error("getPortNumber() failed", e);
       throw new RuntimeException(e.getMessage());
     }
   }
@@ -52,7 +52,7 @@ public class CogdaLiveDataServerMBean {
     try {
       return getServer().isRunning();
     } catch (RuntimeException e) {
-      s_logger.error("isRunning() failed", e);
+      LOGGER.error("isRunning() failed", e);
       throw new RuntimeException(e.getMessage());
     }
   }
@@ -62,7 +62,7 @@ public class CogdaLiveDataServerMBean {
     try {
       return getServer().getNumClients();
     } catch (RuntimeException e) {
-      s_logger.error("getNumClients() failed", e);
+      LOGGER.error("getNumClients() failed", e);
       throw new RuntimeException(e.getMessage());
     }
   }
@@ -72,7 +72,7 @@ public class CogdaLiveDataServerMBean {
     try {
       return getServer().getActiveUsers();
     } catch (RuntimeException e) {
-      s_logger.error("getActiveUsers() failed", e);
+      LOGGER.error("getActiveUsers() failed", e);
       throw new RuntimeException(e.getMessage());
     }
   }

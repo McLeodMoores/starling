@@ -26,7 +26,7 @@ import com.opengamma.master.config.ConfigSearchResult;
  */
 public final class RegressionUtils {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(RegressionUtils.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(RegressionUtils.class);
 
   /** Name of the ID mappings in the config database. */
   public static final String ID_MAPPINGS = "Regression test ID mappings";
@@ -73,7 +73,7 @@ public final class RegressionUtils {
     try {
       final String className = EmptyDatabaseCreator.class.getName();
       final File workingDir = new File(workingDirName);
-      s_logger.info("Launching EmptyDatabaseCreator process. workingDir={}, logbackConfig={}, className={}, " + "configFile={}, classpath={}", workingDir, logbackConfig, className,
+      LOGGER.info("Launching EmptyDatabaseCreator process. workingDir={}, logbackConfig={}, className={}, " + "configFile={}, classpath={}", workingDir, logbackConfig, className,
           configFile, classpath);
       process = new ProcessBuilder("java", logbackConfig, "-cp", classpath, className, configFile).directory(workingDir).redirectOutput(ProcessBuilder.Redirect.INHERIT)
           .redirectError(ProcessBuilder.Redirect.INHERIT).start();

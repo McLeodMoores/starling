@@ -31,7 +31,7 @@ import com.opengamma.util.ArgumentChecker;
  * The algorithm is modified such that model constraints are satisfied in every iteration step of fitting.
  */
 public class MixedBivariateLogNormalCorrelationFinder {
-  private static final Logger s_logger = LoggerFactory.getLogger(MixedBivariateLogNormalCorrelationFinder.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(MixedBivariateLogNormalCorrelationFinder.class);
   private static final int ITRMAX = 10000;
   private static final double EPS_1 = 1.E-14;
   private static final double EPS_2 = 1.E-14;
@@ -286,7 +286,7 @@ public class MixedBivariateLogNormalCorrelationFinder {
       }
 
       if (k == ITRMAX) {
-        s_logger.error("Too many iterations");
+        LOGGER.error("Too many iterations");
         _finalSqu = 0.5 * getVecNormSq(exactFunctionValue(_rhosGuess, dataStrs, dataVols, time, wghts, sigsX, sigsY, rpfsX, rpfsY, forwardZ));
       }
     }

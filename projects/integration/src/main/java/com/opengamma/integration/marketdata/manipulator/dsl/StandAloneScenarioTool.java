@@ -35,7 +35,7 @@ import com.opengamma.scripts.Scriptable;
 @Scriptable
 public class StandAloneScenarioTool {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(StandAloneScenarioTool.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(StandAloneScenarioTool.class);
 
   private static final Options OPTIONS = createOptions();
 
@@ -72,7 +72,7 @@ public class StandAloneScenarioTool {
       results = StandAloneScenarioRunner.runScenarioScript(scriptFile);
     } catch (Exception e) {
       if (verbose) {
-        s_logger.warn("Failed to run scenario script", e);
+        LOGGER.warn("Failed to run scenario script", e);
       } else {
         System.err.println("Failed to run scenario script. " + e.getMessage());
       }

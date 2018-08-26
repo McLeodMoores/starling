@@ -37,7 +37,7 @@ import com.rabbitmq.client.Channel;
  */
 public class AmqpByteArrayRequestSender extends AbstractAmqpByteArraySender implements ByteArrayRequestSender, MessageListener, Lifecycle {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(AmqpByteArrayRequestSender.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(AmqpByteArrayRequestSender.class);
 
   private final String _replyToQueue;
   private final AtomicLong _correlationIdGenerator = new AtomicLong();
@@ -115,7 +115,7 @@ public class AmqpByteArrayRequestSender extends AbstractAmqpByteArraySender impl
   //-------------------------------------------------------------------------
   @Override
   public void sendRequest(final byte[] request, final ByteArrayMessageReceiver responseReceiver) {
-    s_logger.debug("Dispatching request of size {} to exchange {}, routing key = {}", 
+    LOGGER.debug("Dispatching request of size {} to exchange {}, routing key = {}", 
         new Object[] {request.length, getExchange(), getRoutingKey()});
     
     getAmqpTemplate().send(getExchange(), getRoutingKey(), createMessage(request, responseReceiver));
@@ -148,7 +148,7 @@ public class AmqpByteArrayRequestSender extends AbstractAmqpByteArraySender impl
       public void run() {
         ByteArrayMessageReceiver receiver = _correlationId2MessageReceiver.remove(correlationId);
         if (receiver != null) {
-          s_logger.error("Timeout reached while waiting for a response to send to {}", responseReceiver);
+          LOGGER.error("Timeout reached while waiting for a response to send to {}", responseReceiver);
         }
       }
     }, _timeout, TimeUnit.MILLISECONDS);
@@ -177,7 +177,7 @@ public class AmqpByteArrayRequestSender extends AbstractAmqpByteArraySender impl
   public void onMessage(Message message) {
     byte[] correlationIdBytes = message.getMessageProperties().getCorrelationId();
     if (correlationIdBytes == null) {
-      s_logger.error("Got reply with no correlation ID: {} ", message);
+      LOGGER.error("Got reply with no correlation ID: {} ", message);
       return;
     }
     
@@ -186,7 +186,7 @@ public class AmqpByteArrayRequestSender extends AbstractAmqpByteArraySender impl
     if (receiver != null) {
       receiver.messageReceived(message.getBody());      
     } else {
-      s_logger.warn("No receiver for message: {}", message);      
+      LOGGER.warn("No receiver for message: {}", message);      
     }
   }
 

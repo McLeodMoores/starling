@@ -23,7 +23,7 @@ import com.opengamma.id.UniqueIdentifiable;
  */
 /* package */final class ComputationTargetIdentifierRemapVisitor implements ComputationTargetReferenceVisitor<ComputationTargetReference> {
 
-  private static final ComputationTargetTypeVisitor<Void, ComputationTargetType> s_getLeafType = new ComputationTargetTypeVisitor<Void, ComputationTargetType>() {
+  private static final ComputationTargetTypeVisitor<Void, ComputationTargetType> GET_LEAF_TYPE = new ComputationTargetTypeVisitor<Void, ComputationTargetType>() {
 
     @Override
     public ComputationTargetType visitMultipleComputationTargetTypes(final Set<ComputationTargetType> types, final Void data) {
@@ -58,7 +58,7 @@ import com.opengamma.id.UniqueIdentifiable;
     if (parent != null) {
       final ComputationTargetReference rewriteParent = parent.accept(this);
       if (rewriteParent != null) {
-        return rewriteParent.containing(requirement.getType().accept(s_getLeafType, null), requirement.getIdentifiers());
+        return rewriteParent.containing(requirement.getType().accept(GET_LEAF_TYPE, null), requirement.getIdentifiers());
       }
     }
     return null;
@@ -71,9 +71,9 @@ import com.opengamma.id.UniqueIdentifiable;
       final ComputationTargetReference rewriteParent = parent.accept(this);
       if (rewriteParent != null) {
         if (rewriteSelf != null) {
-          return rewriteParent.containing(specification.getType().accept(s_getLeafType, null), rewriteSelf);
+          return rewriteParent.containing(specification.getType().accept(GET_LEAF_TYPE, null), rewriteSelf);
         } else {
-          return rewriteParent.containing(specification.getType().accept(s_getLeafType, null), specification.getUniqueId());
+          return rewriteParent.containing(specification.getType().accept(GET_LEAF_TYPE, null), specification.getUniqueId());
         }
       }
     }

@@ -26,8 +26,8 @@ import com.google.common.collect.Sets;
  */
 public final class Profiler {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(Profiler.class);
-  private static final Collection<Profiler> s_profilers = Sets.newSetFromMap(new MapMaker().weakKeys().<Profiler, Boolean>makeMap());
+  private static final Logger LOGGER = LoggerFactory.getLogger(Profiler.class);
+  private static final Collection<Profiler> PROFILERS = Sets.newSetFromMap(new MapMaker().weakKeys().<Profiler, Boolean>makeMap());
   private static volatile boolean s_enabled;
   private static volatile int s_reset;
 
@@ -119,7 +119,7 @@ public final class Profiler {
 
   public static synchronized Profiler create(final String name) {
     final Profiler profiler = new Profiler(name);
-    s_profilers.add(profiler);
+    PROFILERS.add(profiler);
     return profiler;
   }
 
@@ -150,7 +150,7 @@ public final class Profiler {
 
   private static synchronized void printProfilers() {
     final Map<String, Object[]> report = new HashMap<String, Object[]>();
-    for (Profiler profiler : s_profilers) {
+    for (Profiler profiler : PROFILERS) {
       profiler.snapshot();
       final Object[] arg = new Object[] {profiler._name, profiler._snapshotOperations, profiler._snapshotTime, (double) profiler._snapshotTime / (double) profiler._snapshotOperations };
       insertNoClash(report, arg, profiler._name.lastIndexOf('.'));
@@ -174,9 +174,9 @@ public final class Profiler {
     for (String key : keys) {
       final Object[] values = report.get(key);
       values[0] = key;
-      s_logger.info("{} - {} in {}ms ({} ms/op)", values);
+      LOGGER.info("{} - {} in {}ms ({} ms/op)", values);
     }
-    s_logger.debug("{} active profiler instances", s_profilers.size());
+    LOGGER.debug("{} active profiler instances", PROFILERS.size());
   }
 
   public static void enable(final long period) {
@@ -185,7 +185,7 @@ public final class Profiler {
 
   public static synchronized void enable(final long period, final int resetPeriod) {
     if (isEnabled()) {
-      s_logger.warn("Already enabled");
+      LOGGER.warn("Already enabled");
       return;
     }
     s_enabled = true;

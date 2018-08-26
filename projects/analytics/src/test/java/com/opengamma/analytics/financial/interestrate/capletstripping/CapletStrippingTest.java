@@ -66,20 +66,20 @@ public class CapletStrippingTest {
   private static final boolean IS_EOM = true;
   private static final IborIndex INDEX = new IborIndex(CUR, TENOR, SETTLEMENT_DAYS, DAY_COUNT_INDEX, BUSINESS_DAY, IS_EOM, "Ibor");
 
-  private static Function1D<Double, Double> ALPHA = new Function1D<Double, Double>() {
+  private static final Function1D<Double, Double> ALPHA = new Function1D<Double, Double>() {
 
-    private static final double a = -0.01;
-    private static final double b = 0.05;
-    private static final double c = 0.3;
-    private static final double d = 0.04;
+    private static final double A = -0.01;
+    private static final double B = 0.05;
+    private static final double C = 0.3;
+    private static final double D = 0.04;
 
     @Override
     public Double evaluate(final Double t) {
-      return (a + t * b) * Math.exp(-c * t) + d;
+      return (A + t * B) * Math.exp(-C * t) + D;
     }
   };
 
-  private static Function1D<Double, Double> BETA = new Function1D<Double, Double>() {
+  private static final Function1D<Double, Double> BETA = new Function1D<Double, Double>() {
 
     @Override
     public Double evaluate(final Double t) {
@@ -87,55 +87,55 @@ public class CapletStrippingTest {
     }
   };
 
-  private static Function1D<Double, Double> RHO = new Function1D<Double, Double>() {
+  private static final Function1D<Double, Double> RHO = new Function1D<Double, Double>() {
 
-    private static final double a = -0.7;
-    private static final double b = 0.0;
-    private static final double c = 0.1;
-    private static final double d = 0.0;
+    private static final double A = -0.7;
+    private static final double B = 0.0;
+    private static final double C = 0.1;
+    private static final double D = 0.0;
 
     @Override
     public Double evaluate(final Double t) {
-      return (a + t * b) * Math.exp(-c * t) + d;
+      return (A + t * B) * Math.exp(-C * t) + D;
     }
   };
 
-  private static Function1D<Double, Double> NU = new Function1D<Double, Double>() {
+  private static final Function1D<Double, Double> NU = new Function1D<Double, Double>() {
 
-    private static final double a = 0.8;
-    private static final double b = 0.0;
-    private static final double c = 0.1;
-    private static final double d = 0.4;
+    private static final double A = 0.8;
+    private static final double B = 0.0;
+    private static final double C = 0.1;
+    private static final double D = 0.4;
 
     @Override
     public Double evaluate(final Double t) {
-      return (a + t * b) * Math.exp(-c * t) + d;
+      return (A + t * B) * Math.exp(-C * t) + D;
     }
   };
 
   protected static final Function1D<Double, Double> DISCOUNT_CURVE = new Function1D<Double, Double>() {
 
-    private static final double a = -0.0375;
-    private static final double b = 0.0021;
-    private static final double c = 0.2;
-    private static final double d = 0.04;
+    private static final double A = -0.0375;
+    private static final double B = 0.0021;
+    private static final double C = 0.2;
+    private static final double D = 0.04;
 
     @Override
     public Double evaluate(final Double x) {
-      return (a + b * x) * Math.exp(-c * x) + d;
+      return (A + B * x) * Math.exp(-C * x) + D;
     }
   };
 
   protected static final Function1D<Double, Double> SPREAD_CURVE = new Function1D<Double, Double>() {
 
-    private static final double a = 0.005;
-    private static final double b = 0.002;
-    private static final double c = 0.3;
-    private static final double d = 0.001;
+    private static final double A = 0.005;
+    private static final double B = 0.002;
+    private static final double C = 0.3;
+    private static final double D = 0.001;
 
     @Override
     public Double evaluate(final Double x) {
-      return (a + b * x) * Math.exp(-c * x) + d;
+      return (A + B * x) * Math.exp(-C * x) + D;
     }
   };
 

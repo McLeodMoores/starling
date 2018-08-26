@@ -52,7 +52,7 @@ import com.opengamma.util.fudgemsg.OpenGammaFudgeContext;
 public class BloombergLiveDataServer extends AbstractBloombergLiveDataServer {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(BloombergLiveDataServer.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(BloombergLiveDataServer.class);
   /** Interval between attempts to reconnect to Bloomberg. */
   private static final long RECONNECT_PERIOD = 30000;
 
@@ -129,7 +129,7 @@ public class BloombergLiveDataServer extends AbstractBloombergLiveDataServer {
       _eventDispatcherThread.join(10000L);
     } catch (InterruptedException e) {
       Thread.interrupted();
-      s_logger.warn("Interrupted while waiting for event dispatcher thread to terminate", e);
+      LOGGER.warn("Interrupted while waiting for event dispatcher thread to terminate", e);
     }
     _eventDispatcher = null;
     _eventDispatcherThread = null;
@@ -223,7 +223,7 @@ public class BloombergLiveDataServer extends AbstractBloombergLiveDataServer {
     int afterSubscriptionCount = requested + getActiveSubscriptionIds().size();
     if (afterSubscriptionCount > getSubscriptionLimit()) {
       String message = "Rejecting subscription request, would result in limit of " + getSubscriptionLimit() + " being exceeded " + afterSubscriptionCount;
-      s_logger.warn(message);
+      LOGGER.warn(message);
       _lastLimitRejection = new RejectedDueToSubscriptionLimitEvent(getSubscriptionLimit(), requested, afterSubscriptionCount);
       throw new OpenGammaRuntimeException(message);
     }
@@ -296,17 +296,17 @@ public class BloombergLiveDataServer extends AbstractBloombergLiveDataServer {
       synchronized (BloombergLiveDataServer.this) {
         if (getConnectionStatus() == ConnectionStatus.NOT_CONNECTED) {
           try {
-            s_logger.info("Connecting to Bloomberg");
+            LOGGER.info("Connecting to Bloomberg");
             connect();
             startExpirationManager();
             reestablishSubscriptions();
             MarketDataAvailabilityNotification notification = new MarketDataAvailabilityNotification(ImmutableSet.of(ExternalSchemes.BLOOMBERG_BUID, ExternalSchemes.BLOOMBERG_BUID_WEAK,
                 ExternalSchemes.BLOOMBERG_TCM, ExternalSchemes.BLOOMBERG_TICKER, ExternalSchemes.BLOOMBERG_TICKER_WEAK));
             FudgeSerializer serializer = new FudgeSerializer(OpenGammaFudgeContext.getInstance());
-            s_logger.info("Sending notification that Bloomberg is available: {}", notification);
+            LOGGER.info("Sending notification that Bloomberg is available: {}", notification);
             _availabilityNotificationSender.send(notification.toFudgeMsg(serializer));
           } catch (Exception e) {
-            s_logger.warn("Failed to connect to Bloomberg", e);
+            LOGGER.warn("Failed to connect to Bloomberg", e);
           }
         }
       }
@@ -362,10 +362,10 @@ public class BloombergLiveDataServer extends AbstractBloombergLiveDataServer {
           liveDataReceived(bbgUniqueId, eventAsFudgeMsg);
           continue;
         }
-        s_logger.info("Got event {} {} {}", event.eventType(), bbgUniqueId, msg.asElement());
+        LOGGER.info("Got event {} {} {}", event.eventType(), bbgUniqueId, msg.asElement());
 
         if (event.eventType() == Event.EventType.SESSION_STATUS) {
-          s_logger.info("SESSION_STATUS event received: {}", msg.messageType());
+          LOGGER.info("SESSION_STATUS event received: {}", msg.messageType());
           if (msg.messageType().toString().equals("SessionTerminated")) {
             disconnect();
             terminate();

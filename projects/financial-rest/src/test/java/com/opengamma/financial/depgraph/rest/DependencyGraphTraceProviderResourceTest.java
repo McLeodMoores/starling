@@ -46,7 +46,7 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT)
 public class DependencyGraphTraceProviderResourceTest {
 
-  private static final String s_testUrl = "http://testurl.com/";
+  private static final String TEST_URL = "http://testurl.com/";
 
   private DependencyGraphTraceProviderResource _resource;
   private FudgeContext _fudgeContext;
@@ -61,7 +61,7 @@ public class DependencyGraphTraceProviderResourceTest {
     _sampleResult = DependencyGraphBuildTrace.of(null, null, null, null);
     _resource = new DependencyGraphTraceProviderResource(_provider, _fudgeContext);
     try {
-      _baseUri = new URI(s_testUrl);
+      _baseUri = new URI(TEST_URL);
     } catch (URISyntaxException ex) {
       Throwables.propagate(ex);
     }
@@ -202,7 +202,7 @@ public class DependencyGraphTraceProviderResourceTest {
     String testStr = "test";
     URI uriCalculationConfigurationName = DependencyGraphTraceProviderUris.uriCalculationConfigurationName(_baseUri, testStr);
     String url = decode(uriCalculationConfigurationName);
-    assertEquals(s_testUrl + "calculationConfigurationName/" + testStr, url);
+    assertEquals(TEST_URL + "calculationConfigurationName/" + testStr, url);
   }
 
   @Test
@@ -212,8 +212,8 @@ public class DependencyGraphTraceProviderResourceTest {
     ValueProperties parsed = ValueProperties.parse(defaultPropertiesStr1);
     URI uri = DependencyGraphTraceProviderUris.uriDefaultProperties(_baseUri, parsed);
     String url = decode(uri);
-    assertTrue(url.equals(s_testUrl + "defaultProperties/" + defaultPropertiesStr1) ||
-        url.equals(s_testUrl + "defaultProperties/" + defaultPropertiesStr2));
+    assertTrue(url.equals(TEST_URL + "defaultProperties/" + defaultPropertiesStr1) ||
+        url.equals(TEST_URL + "defaultProperties/" + defaultPropertiesStr2));
   }
 
   @Test
@@ -222,14 +222,14 @@ public class DependencyGraphTraceProviderResourceTest {
     MarketDataSpecification marketData = MarketData.user(UniqueId.parse(snapshotId));
     URI uri = DependencyGraphTraceProviderUris.uriMarketData(_baseUri, Lists.newArrayList(marketData));
     String url = decode(uri);
-    assertEquals(s_testUrl + "marketDataSnapshot/" + snapshotId, url);
+    assertEquals(TEST_URL + "marketDataSnapshot/" + snapshotId, url);
   }
   @Test
   public void uriMarketDataLiveDefault() throws UnsupportedEncodingException {
     MarketDataSpecification marketData = MarketData.live();
     URI uri = DependencyGraphTraceProviderUris.uriMarketData(_baseUri, Lists.newArrayList(marketData));
     String url = decode(uri);
-    assertEquals(s_testUrl + "marketDataLiveDefault", url);
+    assertEquals(TEST_URL + "marketDataLiveDefault", url);
   }
 
   @Test
@@ -237,7 +237,7 @@ public class DependencyGraphTraceProviderResourceTest {
     MarketDataSpecification marketData = MarketData.live("BB");
     URI uri = DependencyGraphTraceProviderUris.uriMarketData(_baseUri, Lists.newArrayList(marketData));
     String url = decode(uri);
-    assertEquals(s_testUrl + "marketDataLive/BB", url);
+    assertEquals(TEST_URL + "marketDataLive/BB", url);
   }
   @Test
   public void uriMarketDataHistorical() throws UnsupportedEncodingException {
@@ -245,7 +245,7 @@ public class DependencyGraphTraceProviderResourceTest {
     MarketDataSpecification marketData = MarketData.historical(now, "ts");
     URI uri = DependencyGraphTraceProviderUris.uriMarketData(_baseUri, Lists.newArrayList(marketData));
     String url = decode(uri);
-    assertEquals(s_testUrl + "marketDataHistorical/" + now + "/ts", url);
+    assertEquals(TEST_URL + "marketDataHistorical/" + now + "/ts", url);
   }
   @Test
   public void uriResolutionTime() throws UnsupportedEncodingException {
@@ -253,7 +253,7 @@ public class DependencyGraphTraceProviderResourceTest {
     VersionCorrection rt = VersionCorrection.parse(rtStr);
     URI uri = DependencyGraphTraceProviderUris.uriResolutionTime(_baseUri, rt);
     String url = decode(uri);
-    assertEquals(s_testUrl + "resolutionTime/" + rtStr, url);
+    assertEquals(TEST_URL + "resolutionTime/" + rtStr, url);
   }
 
   @Test
@@ -262,7 +262,7 @@ public class DependencyGraphTraceProviderResourceTest {
     Instant instant = Instant.parse(instantStr);
     URI uri = DependencyGraphTraceProviderUris.uriValuationTime(_baseUri, instant);
     String url = decode(uri);
-    assertEquals(s_testUrl + "valuationTime/" + instantStr, url);
+    assertEquals(TEST_URL + "valuationTime/" + instantStr, url);
   }
 
   @Test
@@ -273,7 +273,7 @@ public class DependencyGraphTraceProviderResourceTest {
     ExternalId id = ExternalId.parse(idStr);
     URI uri = DependencyGraphTraceProviderUris.uriValueRequirementByExternalId(_baseUri, valueName, targetType, id);
     String url = decode(uri);
-    assertEquals(s_testUrl + "requirement/" + valueName + "/" + targetType + "/" + idStr, url);
+    assertEquals(TEST_URL + "requirement/" + valueName + "/" + targetType + "/" + idStr, url);
   }
 
   @Test
@@ -284,7 +284,7 @@ public class DependencyGraphTraceProviderResourceTest {
     UniqueId id = UniqueId.parse(idStr);
     URI uri = DependencyGraphTraceProviderUris.uriValueRequirementByUniqueId(_baseUri, valueName, targetType, id);
     String url = decode(uri);
-    assertEquals(s_testUrl + "value/" + valueName + "/" + targetType + "/" + idStr, url);
+    assertEquals(TEST_URL + "value/" + valueName + "/" + targetType + "/" + idStr, url);
   }
 
   private String decode(URI uriDefaultProperties) throws UnsupportedEncodingException {

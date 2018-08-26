@@ -41,7 +41,7 @@ import com.opengamma.util.ArgumentChecker;
 public class CalendarLoaderTool extends AbstractTool<ToolContext> {
 
   /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(CalendarLoaderTool.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(CalendarLoaderTool.class);
   /** Determines whether this tool persists the calendar to the holiday master */
   private static final String DO_NOT_PERSIST = "do-not-persist";
 
@@ -104,7 +104,7 @@ public class CalendarLoaderTool extends AbstractTool<ToolContext> {
         try {
           reader.close();
         } catch (IOException e) {
-          s_logger.error("Failed to close reader ", e);
+          LOGGER.error("Failed to close reader ", e);
         }
       }
     }

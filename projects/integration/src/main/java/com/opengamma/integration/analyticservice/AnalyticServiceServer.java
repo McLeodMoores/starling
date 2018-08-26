@@ -49,7 +49,7 @@ import com.opengamma.util.ArgumentChecker;
 public class AnalyticServiceServer implements TradeListener, Lifecycle {
     
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(AnalyticServiceServer.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(AnalyticServiceServer.class);
   
   private final ViewProcessor _viewProcessor;
   private final PositionMaster _positionMaster;
@@ -140,7 +140,7 @@ public class AnalyticServiceServer implements TradeListener, Lifecycle {
 
   @Override
   public void tradeReceived(Trade trade) {
-    s_logger.debug("Trade {} received", trade);
+    LOGGER.debug("Trade {} received", trade);
     if (trade != null) {
       _tradeUpdaterExecutor.submit(new TradeUpdaterTask(trade));
     }
@@ -184,7 +184,7 @@ public class AnalyticServiceServer implements TradeListener, Lifecycle {
   private void setUpViewClient() {
     _updateLock.lock();
     try {
-      s_logger.debug("creating a view client to obtain view result");
+      LOGGER.debug("creating a view client to obtain view result");
       _viewClient = _viewProcessor.createViewClient(getUser());
       _viewClient.setResultMode(ViewResultMode.FULL_ONLY);
       _viewClient.setResultListener(new AbstractViewResultListener() {
@@ -203,7 +203,7 @@ public class AnalyticServiceServer implements TradeListener, Lifecycle {
         
       });
       _viewClient.attachToViewProcess(_viewId, _viewExecutionOptions, _usePrivateProcess);
-      s_logger.debug("view client attached ready to serve results");
+      LOGGER.debug("view client attached ready to serve results");
     } finally {
       _updateLock.unlock();
     }
@@ -277,7 +277,7 @@ public class AnalyticServiceServer implements TradeListener, Lifecycle {
     public void run() {   
       
       PortfolioDocument portfolioDocument = getPortfolioMaster().get(_portfolioId, VersionCorrection.LATEST);
-      s_logger.debug("Updating portfolio {} with {}", portfolioDocument.getUniqueId(), _trade);
+      LOGGER.debug("Updating portfolio {} with {}", portfolioDocument.getUniqueId(), _trade);
       ManageablePortfolio portfolio = portfolioDocument.getPortfolio();
       ManageablePortfolioNode root = portfolio.getRootNode();
 
@@ -296,7 +296,7 @@ public class AnalyticServiceServer implements TradeListener, Lifecycle {
       root.addPosition(addedPosition.getUniqueId());
 
       PortfolioDocument currentPortfolio = getPortfolioMaster().update(new PortfolioDocument(portfolio));
-      s_logger.info("Portfolio ID {} updated", currentPortfolio.getUniqueId());
+      LOGGER.info("Portfolio ID {} updated", currentPortfolio.getUniqueId());
 
       restartViewCalculation();
     }
@@ -305,11 +305,11 @@ public class AnalyticServiceServer implements TradeListener, Lifecycle {
   private void restartViewCalculation() {
     _updateLock.lock();
     try {
-      s_logger.debug("kick starting computation");
+      LOGGER.debug("kick starting computation");
       if (_viewClient != null) {
         _viewClient.detachFromViewProcess();
         _viewClient.attachToViewProcess(_viewId, _viewExecutionOptions, _usePrivateProcess);
-        s_logger.debug("view client shut down");
+        LOGGER.debug("view client shut down");
       }
     } finally {
       _updateLock.unlock();

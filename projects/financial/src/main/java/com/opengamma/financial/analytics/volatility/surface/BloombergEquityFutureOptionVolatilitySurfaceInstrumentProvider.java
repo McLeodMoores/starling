@@ -27,7 +27,7 @@ import com.opengamma.util.ArgumentChecker;
  */
 public class BloombergEquityFutureOptionVolatilitySurfaceInstrumentProvider extends BloombergFutureOptionVolatilitySurfaceInstrumentProvider {
   /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(BloombergEquityFutureOptionVolatilitySurfaceInstrumentProvider.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(BloombergEquityFutureOptionVolatilitySurfaceInstrumentProvider.class);
   /** The date-time formatter */
   private static final DateTimeFormatter FORMAT = DateTimeFormatter.ofPattern("MM/dd/yy");
   /** The expiry rules */
@@ -122,7 +122,7 @@ public class BloombergEquityFutureOptionVolatilitySurfaceInstrumentProvider exte
     final String prefix = getFutureOptionPrefix();
     ExchangeTradedInstrumentExpiryCalculator expiryRule = EXPIRY_RULES.get(prefix);
     if (expiryRule == null) {
-      s_logger.info("No expiry rule has been setup for " + prefix + ". Using Default of 3rd Friday.");
+      LOGGER.info("No expiry rule has been setup for " + prefix + ". Using Default of 3rd Friday.");
       expiryRule = EXPIRY_RULES.get("DEFAULT");
     }
     return expiryRule;

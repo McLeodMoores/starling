@@ -35,12 +35,12 @@ public class IllegalArgumentExceptionMapper
 
   @Override
   protected void logHtmlException(IllegalArgumentException exception, String htmlPage) {
-    s_logger.error("RESTful website exception caught", exception);
+    LOGGER.error("RESTful website exception caught", exception);
   }
 
   @Override
   protected void logRestfulError(IllegalArgumentException exception) {
-    s_logger.error("RESTful web-service exception caught and tunnelled to client:", exception);
+    LOGGER.error("RESTful web-service exception caught and tunnelled to client:", exception);
   }
 
 }

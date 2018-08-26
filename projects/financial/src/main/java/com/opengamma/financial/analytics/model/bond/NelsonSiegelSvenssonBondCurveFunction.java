@@ -61,7 +61,7 @@ public class NelsonSiegelSvenssonBondCurveFunction extends AbstractFunction {
   public static final String PROPERTY_CURVE_CALCULATION_TYPE = "Nelson_Siegel_Svennson_Bond_Curve";
   /** Name of the property*/
   public static final String PROPERTY_PREFIX = "Nelson-Siegel-Svennson";
-  private static final Logger s_logger = LoggerFactory.getLogger(NelsonSiegelSvenssonBondCurveFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(NelsonSiegelSvenssonBondCurveFunction.class);
   private static final NonLinearLeastSquare MINIMISER = new NonLinearLeastSquare();
   private static final LastTimeCalculator LAST_DATE = LastTimeCalculator.getInstance();
   private static final NelsonSiegelSvennsonBondCurveModel MODEL = new NelsonSiegelSvennsonBondCurveModel();
@@ -114,7 +114,7 @@ public class NelsonSiegelSvenssonBondCurveFunction extends AbstractFunction {
             if (bond.getLastTradeDate().getExpiry().isBefore(now)) {
               iter.remove();
             }
-            s_logger.info(bond.getLastTradeDate().toString());
+            LOGGER.info(bond.getLastTradeDate().toString());
           } else {
             throw new OpenGammaRuntimeException("non-bond security " + sec + " returned by getAllBondsOfIssuerType()");
           }
@@ -127,7 +127,7 @@ public class NelsonSiegelSvenssonBondCurveFunction extends AbstractFunction {
           final GovernmentBondSecurity bondSec = (GovernmentBondSecurity) security;
           final Object ytmObject = inputs.getValue(new ValueRequirement(ValueRequirementNames.YTM, ComputationTargetType.SECURITY, security.getUniqueId()));
           if (ytmObject == null) {
-            s_logger.warn("Could not get YTM for " + security.getUniqueId());
+            LOGGER.warn("Could not get YTM for " + security.getUniqueId());
             continue;
           }
           if (!(ytmObject instanceof Double)) {
@@ -173,7 +173,7 @@ public class NelsonSiegelSvenssonBondCurveFunction extends AbstractFunction {
               if (bond.getLastTradeDate().getExpiry().toInstant().isBefore(atInstant)) {
                 iter.remove();
               }
-              s_logger.info(bond.getLastTradeDate().toString());
+              LOGGER.info(bond.getLastTradeDate().toString());
             } else {
               throw new OpenGammaRuntimeException("non-bond security " + sec + " returned by getAllBondsOfIssuerType()");
             }

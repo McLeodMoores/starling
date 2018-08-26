@@ -64,7 +64,7 @@ public class ViewRegressionTestTool {
   private static final String RESULT_OUT = "resultout";
   private static final String RESULT_IN = "resultin";
 
-  private static final Logger s_logger = LoggerFactory.getLogger(ViewRegressionTestTool.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ViewRegressionTestTool.class);
 
   /**
    * Main method to run the tool.
@@ -176,7 +176,7 @@ public class ViewRegressionTestTool {
               CalculationResults testViewResult = entry.getValue();
               CalculationResults exemplarResult = exemplarResults.get(entry.getKey());
               if (exemplarResult == null) {
-                s_logger.warn("No exemplar result for {}", entry.getKey());
+                LOGGER.warn("No exemplar result for {}", entry.getKey());
                 continue;
               }
               calculationDifferences.add(CalculationDifference.between(exemplarResult, testViewResult, DELTA));

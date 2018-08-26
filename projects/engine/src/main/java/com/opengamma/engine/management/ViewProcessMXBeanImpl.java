@@ -39,7 +39,7 @@ import net.sf.ehcache.CacheException;
  */
 public class ViewProcessMXBeanImpl implements ViewProcessMXBean {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(ViewProcessMXBeanImpl.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ViewProcessMXBeanImpl.class);
   /**
    * The backing view process instance
    */

@@ -24,7 +24,7 @@ import com.opengamma.financial.analytics.model.volatility.surface.black.BlackVol
  * 
  */
 public abstract class EquityDupireLocalVolatilitySurfaceFunction extends DupireLocalVolatilitySurfaceFunction {
-  private static final Logger s_logger = LoggerFactory.getLogger(EquityDupireLocalVolatilitySurfaceFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(EquityDupireLocalVolatilitySurfaceFunction.class);
 
   @Override
   public boolean canApplyTo(final FunctionCompilationContext context, final ComputationTarget target) {

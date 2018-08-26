@@ -26,7 +26,7 @@ import com.opengamma.util.PoolExecutor.CompletionListener;
  */
 public class ParallelQuerySplittingPositionMaster extends QuerySplittingPositionMaster {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(ParallelQuerySplittingPositionMaster.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ParallelQuerySplittingPositionMaster.class);
 
   public ParallelQuerySplittingPositionMaster(final PositionMaster underlying) {
     super(underlying);
@@ -51,20 +51,20 @@ public class ParallelQuerySplittingPositionMaster extends QuerySplittingPosition
 
       @Override
       public void failure(final Throwable error) {
-        s_logger.error("Caught exception", error);
+        LOGGER.error("Caught exception", error);
       }
 
     });
-    s_logger.debug("Issuing {} parallel queries", requests.size());
+    LOGGER.debug("Issuing {} parallel queries", requests.size());
     long t = System.nanoTime();
     for (final PositionSearchRequest request : requests) {
       service.execute(new Callable<PositionSearchResult>() {
         @Override
         public PositionSearchResult call() throws Exception {
-          s_logger.debug("Requesting {} positions", request.getPositionObjectIds().size());
+          LOGGER.debug("Requesting {} positions", request.getPositionObjectIds().size());
           long t = System.nanoTime();
           final PositionSearchResult result = getUnderlying().search(request);
-          s_logger.info("{} positions queried in {}ms", request.getPositionObjectIds().size(), (double) (System.nanoTime() - t) / 1e6);
+          LOGGER.info("{} positions queried in {}ms", request.getPositionObjectIds().size(), (double) (System.nanoTime() - t) / 1e6);
           return result;
         }
       });
@@ -74,7 +74,7 @@ public class ParallelQuerySplittingPositionMaster extends QuerySplittingPosition
     } catch (InterruptedException e) {
       throw new OpenGammaRuntimeException("Interrupted", e);
     }
-    s_logger.info("Finished queries for {} position in {}ms", mergedResult.getDocuments().size(), (double) (System.nanoTime() - t) / 1e6);
+    LOGGER.info("Finished queries for {} position in {}ms", mergedResult.getDocuments().size(), (double) (System.nanoTime() - t) / 1e6);
     return mergedResult;
   }
 

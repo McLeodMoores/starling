@@ -41,7 +41,7 @@ import com.opengamma.util.time.Tenor;
  */
 public class ResultConverterCache {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(ResultConverterCache.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ResultConverterCache.class);
 
   private final DoubleConverter _doubleConverter;
   private final ResultConverter<Object> _genericConverter;
@@ -95,7 +95,7 @@ public class ResultConverterCache {
     if (converter == null) {
       converter = getConverterForType(valueType);
       _valueNameConverterCache.put(valueName, converter);
-      s_logger.info("'{}' {}", valueName, valueType.getName());
+      LOGGER.info("'{}' {}", valueName, valueType.getName());
     }
     return converter;
   }

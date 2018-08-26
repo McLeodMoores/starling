@@ -48,14 +48,14 @@ import com.opengamma.util.tuple.Triple;
 @Test(groups = TestGroup.UNIT_DB)
 public class DbMarketDataSnapshotMasterTest extends AbstractDbTest {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(DbMarketDataSnapshotMasterTest.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(DbMarketDataSnapshotMasterTest.class);
 
   private DbMarketDataSnapshotMaster _snpMaster;
 
   @Factory(dataProvider = "databases", dataProviderClass = DbTest.class)
   public DbMarketDataSnapshotMasterTest(final String databaseType, final String databaseVersion) {
     super(databaseType, databaseVersion);
-    s_logger.info("running testcases for {}", databaseType);
+    LOGGER.info("running testcases for {}", databaseType);
   }
 
   //-------------------------------------------------------------------------

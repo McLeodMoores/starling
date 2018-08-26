@@ -44,13 +44,13 @@ import com.opengamma.util.ehcache.EHCacheUtils;
  */
 public class EHCacheViewExecutionCache implements ViewExecutionCache {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(EHCacheViewExecutionCache.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(EHCacheViewExecutionCache.class);
 
   private static final String COMPILED_VIEW_DEFINITIONS = "compiledViewDefinitions";
 
-  private static final Map<Serializable, EHCacheViewExecutionCache> s_instance2identifier = new MapMaker().weakValues().makeMap();
+  private static final Map<Serializable, EHCacheViewExecutionCache> INSTANCE_TO_IDENTIFIER = new MapMaker().weakValues().makeMap();
 
-  private static final AtomicInteger s_nextIdentifier = new AtomicInteger(0);
+  private static final AtomicInteger NEXT_IDENTIFIER = new AtomicInteger(0);
 
   private final Serializable _identifier;
 
@@ -71,12 +71,12 @@ public class EHCacheViewExecutionCache implements ViewExecutionCache {
   public EHCacheViewExecutionCache(final CacheManager cacheManager, final ComputationTargetResolver targetResolver) {
     ArgumentChecker.notNull(cacheManager, "cacheManager");
     ArgumentChecker.notNull(targetResolver, "targetResolver");
-    _identifier = s_nextIdentifier.getAndIncrement();
+    _identifier = NEXT_IDENTIFIER.getAndIncrement();
     _cacheManager = cacheManager;
     _targetResolver = targetResolver;
     EHCacheUtils.addCache(_cacheManager, COMPILED_VIEW_DEFINITIONS);
     _compiledViewDefinitions = EHCacheUtils.getCacheFromManager(_cacheManager, COMPILED_VIEW_DEFINITIONS);
-    s_instance2identifier.put(_identifier, this);
+    INSTANCE_TO_IDENTIFIER.put(_identifier, this);
   }
 
   /**
@@ -114,7 +114,7 @@ public class EHCacheViewExecutionCache implements ViewExecutionCache {
   }
 
   protected static EHCacheViewExecutionCache instance(final Serializable identifier) {
-    return s_instance2identifier.get(identifier);
+    return INSTANCE_TO_IDENTIFIER.get(identifier);
   }
 
   public ComputationTargetResolver getTargetResolver() {
@@ -191,19 +191,19 @@ public class EHCacheViewExecutionCache implements ViewExecutionCache {
   public CompiledViewDefinitionWithGraphs getCompiledViewDefinitionWithGraphs(ViewExecutionCacheKey key) {
     CompiledViewDefinitionWithGraphs graphs = _compiledViewDefinitionsFrontCache.get(key);
     if (graphs != null) {
-      s_logger.debug("Front cache hit CompiledViewDefinitionWithGraphs for {}", key);
+      LOGGER.debug("Front cache hit CompiledViewDefinitionWithGraphs for {}", key);
       return graphs;
     }
     final Element element = _compiledViewDefinitions.get(key);
     if (element != null) {
-      s_logger.debug("EHCache hit CompiledViewDefinitionWithGraphs for {}", key);
+      LOGGER.debug("EHCache hit CompiledViewDefinitionWithGraphs for {}", key);
       graphs = ((CompiledViewDefinitionWithGraphsHolder) element.getObjectValue()).get();
       final CompiledViewDefinitionWithGraphs existing = _compiledViewDefinitionsFrontCache.putIfAbsent(key, graphs);
       if (existing != null) {
         graphs = existing;
       }
     } else {
-      s_logger.debug("EHCache miss CompiledViewDefinitionWithGraphs for {}", key);
+      LOGGER.debug("EHCache miss CompiledViewDefinitionWithGraphs for {}", key);
     }
     return graphs;
   }
@@ -216,14 +216,14 @@ public class EHCacheViewExecutionCache implements ViewExecutionCache {
         return;
       }
     }
-    s_logger.info("Storing CompiledViewDefinitionWithGraphs for {}", key);
+    LOGGER.info("Storing CompiledViewDefinitionWithGraphs for {}", key);
     _compiledViewDefinitions.put(new Element(key, new CompiledViewDefinitionWithGraphsHolder(viewDefinition)));
   }
 
   @Override
   public void clear() {
     _compiledViewDefinitionsFrontCache.clear();
-    s_logger.info("Clearing all CompiledViewDefinitionWithGraphs");
+    LOGGER.info("Clearing all CompiledViewDefinitionWithGraphs");
     _compiledViewDefinitions.removeAll();
   }
 

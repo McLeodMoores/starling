@@ -26,7 +26,7 @@ public class FXOneLookBarrierOptionBlackDefaultPropertiesFunction extends Defaul
   private final String _callSpreadFullWidth;
   private final String _barrierOverhedge;
 
-  private static final String[] s_valueNames = new String[] {
+  private static final String[] VALUE_NAMES = new String[] {
     ValueRequirementNames.PRESENT_VALUE,
     ValueRequirementNames.VALUE_DELTA,
     ValueRequirementNames.VALUE_GAMMA,
@@ -47,7 +47,7 @@ public class FXOneLookBarrierOptionBlackDefaultPropertiesFunction extends Defaul
 
   @Override
   protected void getDefaults(PropertyDefaults defaults) {
-    for (final String valueName : s_valueNames) {
+    for (final String valueName : VALUE_NAMES) {
       defaults.addValuePropertyName(valueName, ValuePropertyNames.BINARY_OVERHEDGE);
       defaults.addValuePropertyName(valueName, ValuePropertyNames.BINARY_SMOOTHING_FULLWIDTH);
     }

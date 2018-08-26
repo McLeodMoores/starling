@@ -75,7 +75,7 @@ import com.opengamma.util.fudgemsg.OpenGammaFudgeContext;
  * by default, all instances will attempt to update the Redis instance, which is not ideal.
  */
 public class RedisCachingSecuritySource extends AbstractSecuritySource implements SecuritySource {
-  private static final Logger s_logger = LoggerFactory.getLogger(RedisCachingSecuritySource.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(RedisCachingSecuritySource.class);
   private final SecuritySource _underlying;
   private final JedisPool _jedisPool;
   private final String _redisPrefix;
@@ -174,11 +174,11 @@ public class RedisCachingSecuritySource extends AbstractSecuritySource implement
   public Security get(UniqueId uniqueId) {
     Security security = getFromRedis(uniqueId);
     if (security == null) {
-      s_logger.warn("Unable to satisfy {} using Redis", uniqueId);
+      LOGGER.warn("Unable to satisfy {} using Redis", uniqueId);
       security = getUnderlying().get(uniqueId);
       processResult(security);
     } else {
-      s_logger.warn("Satisfied {} using Redis", uniqueId);
+      LOGGER.warn("Satisfied {} using Redis", uniqueId);
     }
     return security;
   }
@@ -215,7 +215,7 @@ public class RedisCachingSecuritySource extends AbstractSecuritySource implement
           // and likely to never work in its current form.
           security = SecurityFudgeUtil.convertFromFudge(getFudgeContext(), null, data);
         } catch (Exception e) {
-          s_logger.error("Unserializable data in Redis for uniqueId " + uniqueId + ". Clearing redis.", e);
+          LOGGER.error("Unserializable data in Redis for uniqueId " + uniqueId + ". Clearing redis.", e);
           try {
             _lock.writeLock().lock();
             jedis.del(redisKey);
@@ -262,11 +262,11 @@ public class RedisCachingSecuritySource extends AbstractSecuritySource implement
         if (jedis.exists(redisKey)) {
           // Already in the cache. Nothing to do here.
           // This may happen if it is being processed as a part of a collection getter.
-          //s_logger.warn("Not storing {} as already in Redis", security.getUniqueId());
+          //LOGGER.warn("Not storing {} as already in Redis", security.getUniqueId());
           return;
         }
         
-        s_logger.warn("Storing security type {} id {} bundle {} to Redis",
+        LOGGER.warn("Storing security type {} id {} bundle {} to Redis",
             new Object[] {security.getSecurityType(), security.getUniqueId(), security.getExternalIdBundle()});
         byte[] fudgeData = SecurityFudgeUtil.convertToFudge(getFudgeContext(), security);
         _lock.writeLock().lock();

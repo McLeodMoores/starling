@@ -48,7 +48,7 @@ public class PiecewiseSABRFitterRootFinder {
   private static final double DEFAULT_BETA = 0.9;
   private static final WeightingFunction DEFAULT_WEIGHTING_FUNCTION = WeightingFunctionFactory.SINE_WEIGHTING_FUNCTION;
 
-  private static final Logger s_logger = LoggerFactory.getLogger(PiecewiseSABRFitterRootFinder.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(PiecewiseSABRFitterRootFinder.class);
   private static final VolatilityFunctionProvider<SABRFormulaData> MODEL = new SABRHaganVolatilityFunction();
   private final WeightingFunction _weightingFunction;
   private final double _defaultBeta;
@@ -92,7 +92,7 @@ public class PiecewiseSABRFitterRootFinder {
     if (averageVol2 / averageVol < 0.01) {
       start = new DoubleMatrix1D(averageVol, 1.0, 0.0, 0.0);
       if (!_globalBetaSearch && _defaultBeta != 1.0) {
-        s_logger.warn("Smile almost flat. Cannot use beta = ", +_defaultBeta + " so ignored");
+        LOGGER.warn("Smile almost flat. Cannot use beta = ", +_defaultBeta + " so ignored");
       }
     } else {
       final double approxAlpha = averageVol * Math.pow(forward, 1 - _defaultBeta);
@@ -114,7 +114,7 @@ public class PiecewiseSABRFitterRootFinder {
 
     if (n == 3) {
       if (gRes.getChiSq() / n > 1.0) {
-        s_logger.warn("chi^2 on SABR fit to ", +n + " points is " + gRes.getChiSq());
+        LOGGER.warn("chi^2 on SABR fit to ", +n + " points is " + gRes.getChiSq());
       }
       modelParams[0] = new SABRFormulaData(gRes.getModelParameters().getData());
     } else {

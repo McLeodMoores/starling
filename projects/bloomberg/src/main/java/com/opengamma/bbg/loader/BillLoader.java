@@ -67,7 +67,7 @@ import com.opengamma.util.time.ExpiryAccuracy;
 public class BillLoader extends SecurityLoader {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(BillLoader.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(BillLoader.class);
   /**
    * The fields to load from Bloomberg.
    */
@@ -106,12 +106,12 @@ public class BillLoader extends SecurityLoader {
    * @param referenceDataProvider  the provider, not null
    */
   public BillLoader(final ReferenceDataProvider referenceDataProvider) {
-    super(s_logger, referenceDataProvider, SecurityType.BILL);
+    super(LOGGER, referenceDataProvider, SecurityType.BILL);
   }
 
   private String validateAndGetStringField(final FudgeMsg fieldData, final String fieldName) {
     if (!isValidField(fieldData.getString(fieldName))) {
-      s_logger.warn(fieldName + " is null, cannot construct bill security");
+      LOGGER.warn(fieldName + " is null, cannot construct bill security");
       throw new OpenGammaRuntimeException(fieldName + " is null, cannot construct bill security");
     }
     return fieldData.getString(fieldName);
@@ -126,7 +126,7 @@ public class BillLoader extends SecurityLoader {
 
   private Double validateAndGetDoubleField(final FudgeMsg fieldData, final String fieldName) {
     if (!isValidField(fieldData.getString(fieldName))) {
-      s_logger.warn(fieldName + " is null, cannot construct bill security");
+      LOGGER.warn(fieldName + " is null, cannot construct bill security");
       throw new OpenGammaRuntimeException(fieldName + " is null, cannot construct bill security");
     }
     return fieldData.getDouble(fieldName);
@@ -134,7 +134,7 @@ public class BillLoader extends SecurityLoader {
 
   private Integer validateAndGetIntegerField(final FudgeMsg fieldData, final String fieldName) {
     if (!isValidField(fieldData.getString(fieldName))) {
-      s_logger.warn(fieldName + " is null, cannot construct bill security");
+      LOGGER.warn(fieldName + " is null, cannot construct bill security");
       throw new OpenGammaRuntimeException(fieldName + " is null, cannot construct bill security");
     }
     return fieldData.getInt(fieldName);
@@ -223,7 +223,7 @@ public class BillLoader extends SecurityLoader {
       parseIdentifiers(fieldData, billSecurity);
       return billSecurity;
     } catch (final OpenGammaRuntimeException ogre) {
-      s_logger.error("Error loading bill {}: {}",
+      LOGGER.error("Error loading bill {}: {}",
           fieldData.getValue(FIELD_ID_ISIN), ogre.getMessage());
       return null;
     }
@@ -266,7 +266,7 @@ public class BillLoader extends SecurityLoader {
       try {
         identifiers.add(ExternalSchemes.bloombergTCMSecurityId(ticker, coupon, maturity, marketSector));
       } catch (final Exception e) {
-        s_logger.warn("Couldn't add Bloomberg TCM to bill", e);
+        LOGGER.warn("Couldn't add Bloomberg TCM to bill", e);
       }
     }
     security.setExternalIdBundle(ExternalIdBundle.of(identifiers));

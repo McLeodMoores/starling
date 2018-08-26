@@ -25,14 +25,14 @@ import com.opengamma.util.ArgumentChecker;
  */
 public class BarrierOptionDistanceDefaults extends DefaultPropertyFunction {
   /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(BarrierOptionDistanceDefaults.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(BarrierOptionDistanceDefaults.class);
   /** Default value for barrier output */
   private final String _barrierOutput;
 
   /**
    * Value requirement names for which these properties apply
    */
-  private static final String[] s_valueNames = new String[] {
+  private static final String[] VALUE_NAMES = new String[] {
     ValueRequirementNames.BARRIER_DISTANCE
   };
 
@@ -51,7 +51,7 @@ public class BarrierOptionDistanceDefaults extends DefaultPropertyFunction {
 
   @Override
   protected void getDefaults(final PropertyDefaults defaults) {
-    for (final String valueName : s_valueNames) {
+    for (final String valueName : VALUE_NAMES) {
       defaults.addValuePropertyName(valueName, ValuePropertyNames.BARRIER_DISTANCE_OUTPUT_FORMAT);
     }
   }
@@ -61,7 +61,7 @@ public class BarrierOptionDistanceDefaults extends DefaultPropertyFunction {
     if (ValuePropertyNames.BARRIER_DISTANCE_OUTPUT_FORMAT.equals(propertyName)) {
       return Collections.singleton(_barrierOutput);
     }
-    s_logger.error("Could not get default value for {}", propertyName);
+    LOGGER.error("Could not get default value for {}", propertyName);
     return null;
   }
 

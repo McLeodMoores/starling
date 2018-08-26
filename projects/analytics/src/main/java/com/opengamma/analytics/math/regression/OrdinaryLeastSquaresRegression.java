@@ -20,13 +20,13 @@ import cern.colt.matrix.linalg.Algebra;
  * 
  */
 public class OrdinaryLeastSquaresRegression extends LeastSquaresRegression {
-  private static final Logger s_logger = LoggerFactory.getLogger(OrdinaryLeastSquaresRegression.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(OrdinaryLeastSquaresRegression.class);
   private final Algebra _algebra = new Algebra();
 
   @Override
   public LeastSquaresRegressionResult regress(final double[][] x, final double[][] weights, final double[] y, final boolean useIntercept) {
     if (weights != null) {
-      s_logger.info("Weights were provided for OLS regression: they will be ignored");
+      LOGGER.info("Weights were provided for OLS regression: they will be ignored");
     }
     return regress(x, y, useIntercept);
   }

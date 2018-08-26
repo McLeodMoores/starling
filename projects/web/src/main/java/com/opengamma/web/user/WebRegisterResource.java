@@ -40,7 +40,7 @@ import com.opengamma.web.AbstractSingletonWebResource;
 public class WebRegisterResource extends AbstractSingletonWebResource {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(WebRegisterResource.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(WebRegisterResource.class);
   /**
    * The ftl file.
    */
@@ -104,7 +104,7 @@ public class WebRegisterResource extends AbstractSingletonWebResource {
       return Response.seeOther(WebLoginResource.uri(uriInfo)).build();
       
     } catch (UserFormException ex) {
-      ex.logUnexpected(s_logger);
+      ex.logUnexpected(LOGGER);
       FlexiBean out = createRootData(uriInfo);
       out.put("username", userName);
       out.put("email", email);

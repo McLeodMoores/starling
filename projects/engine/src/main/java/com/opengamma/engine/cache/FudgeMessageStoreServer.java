@@ -51,7 +51,7 @@ import com.opengamma.util.NamedThreadPoolFactory;
  */
 public class FudgeMessageStoreServer implements FudgeConnectionReceiver, ReleaseCachesCallback, MissingValueLoader, FudgeConnectionStateListener {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(FudgeMessageStoreServer.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(FudgeMessageStoreServer.class);
 
   private static class ValueSearch {
 
@@ -87,7 +87,7 @@ public class FudgeMessageStoreServer implements FudgeConnectionReceiver, Release
 
   }
 
-  private static final ExecutorService s_executorService = NamedThreadPoolFactory.newCachedThreadPool("FudgeMessageStoreBroadcast", true);
+  private static final ExecutorService EXECUTOR_SERVICE = NamedThreadPoolFactory.newCachedThreadPool("FudgeMessageStoreBroadcast", true);
   private final DefaultViewComputationCacheSource _underlying;
   private final Map<FudgeConnection, Object> _connections = new ConcurrentHashMap<FudgeConnection, Object>();
   private final Map<ViewComputationCacheKey, ValueSearch> _searching = new HashMap<ViewComputationCacheKey, ValueSearch>();
@@ -120,7 +120,7 @@ public class FudgeMessageStoreServer implements FudgeConnectionReceiver, Release
     FudgeSerializer.addClassHeader(msg, message.getClass(), CacheMessage.class);
     for (Map.Entry<FudgeConnection, Object> connectionEntry : getConnections().entrySet()) {
       final FudgeConnection connection = connectionEntry.getKey();
-      s_executorService.execute(new Runnable() {
+      EXECUTOR_SERVICE.execute(new Runnable() {
         @Override
         public void run() {
           connection.getFudgeMessageSender().send(msg);
@@ -131,7 +131,7 @@ public class FudgeMessageStoreServer implements FudgeConnectionReceiver, Release
 
   @Override
   public void onReleaseCaches(final UniqueId viewCycleId) {
-    s_logger.debug("onReleaseCaches - {}", viewCycleId);
+    LOGGER.debug("onReleaseCaches - {}", viewCycleId);
     broadcast(new ReleaseCacheMessage(viewCycleId));
   }
 
@@ -150,7 +150,7 @@ public class FudgeMessageStoreServer implements FudgeConnectionReceiver, Release
 
   @Override
   public FudgeMsg findMissingValue(final ViewComputationCacheKey cacheKey, final long identifier) {
-    s_logger.debug("findMissing value {}", identifier);
+    LOGGER.debug("findMissing value {}", identifier);
     broadcast(new FindMessage(cacheKey.getViewCycleId(), cacheKey.getCalculationConfigurationName(), Collections.singleton(identifier)));
     // We're in the callback so we know the cache must exist
     final FudgeMessageStore store = getUnderlying().findCache(cacheKey).getSharedDataStore();
@@ -158,20 +158,20 @@ public class FudgeMessageStoreServer implements FudgeConnectionReceiver, Release
     if (data == null) {
       final ValueSearch search = getOrCreateValueSearch(cacheKey);
       try {
-        s_logger.debug("Waiting for missing value {} to appear", identifier);
+        LOGGER.debug("Waiting for missing value {} to appear", identifier);
         if (!search.waitFor(identifier, getFindValueTimeout())) {
-          s_logger.warn("{}ms timeout exceeded waiting for value ID {}", getFindValueTimeout(), identifier);
+          LOGGER.warn("{}ms timeout exceeded waiting for value ID {}", getFindValueTimeout(), identifier);
           // don't try to avoid the store.get call as data may yet arrive
         }
       } catch (InterruptedException e) {
-        s_logger.warn("Thread interrupted waiting for missing value response");
+        LOGGER.warn("Thread interrupted waiting for missing value response");
         // don't try to avoid the store.get call as data may yet arrive
       }
       data = store.get(identifier);
       releaseValueSearch(cacheKey, search);
     }
     if (data != null) {
-      s_logger.debug("Value for {} found and transferred to shared data store", identifier);
+      LOGGER.debug("Value for {} found and transferred to shared data store", identifier);
     }
     return data;
   }
@@ -179,7 +179,7 @@ public class FudgeMessageStoreServer implements FudgeConnectionReceiver, Release
   @Override
   public Map<Long, FudgeMsg> findMissingValues(final ViewComputationCacheKey cache,
       final Collection<Long> identifiers) {
-    s_logger.debug("findMissing values {}", identifiers);
+    LOGGER.debug("findMissing values {}", identifiers);
     broadcast(new FindMessage(cache.getViewCycleId(), cache.getCalculationConfigurationName(), identifiers));
     final ValueSearch search = getOrCreateValueSearch(cache);
     // We're in the callback so we know the cache must exist
@@ -195,18 +195,18 @@ public class FudgeMessageStoreServer implements FudgeConnectionReceiver, Release
         final Long identifier = identifierArray[0];
         FudgeMsg data = store.get(identifier);
         if (data != null) {
-          s_logger.debug("Value for {} found and transferred to shared data store", identifier);
+          LOGGER.debug("Value for {} found and transferred to shared data store", identifier);
           map.put(identifier, data);
           identifierArray[0] = identifierArray[--identifierCount];
           continue;
         }
-        s_logger.debug("Waiting for missing value ID {} to appear (of {} remaining values)", identifier, identifierCount);
+        LOGGER.debug("Waiting for missing value ID {} to appear (of {} remaining values)", identifier, identifierCount);
         if (!search.waitFor(identifier, getFindValueTimeout())) {
-          s_logger.warn("{}ms timeout exceeded waiting for value ID {}", getFindValueTimeout(), identifier);
+          LOGGER.warn("{}ms timeout exceeded waiting for value ID {}", getFindValueTimeout(), identifier);
           for (int i = 0; i < identifierCount; i++) {
             data = store.get(identifierArray[i]);
             if (data != null) {
-              s_logger.debug("Value for {} found and transferred to shared data store", identifierArray[i]);
+              LOGGER.debug("Value for {} found and transferred to shared data store", identifierArray[i]);
               map.put(identifierArray[i], data);
             }
           }
@@ -214,7 +214,7 @@ public class FudgeMessageStoreServer implements FudgeConnectionReceiver, Release
         }
       }
     } catch (InterruptedException e) {
-      s_logger.warn("Thread interrupted waiting for missing value response - {} outstanding", identifierCount);
+      LOGGER.warn("Thread interrupted waiting for missing value response - {} outstanding", identifierCount);
     }
     releaseValueSearch(cache, search);
     return map;
@@ -255,7 +255,7 @@ public class FudgeMessageStoreServer implements FudgeConnectionReceiver, Release
 
     @Override
     protected <T extends CacheMessage> T visitUnexpectedMessage(final CacheMessage message) {
-      s_logger.warn("Unexpected message {}", message);
+      LOGGER.warn("Unexpected message {}", message);
       return null;
     }
 
@@ -276,7 +276,7 @@ public class FudgeMessageStoreServer implements FudgeConnectionReceiver, Release
       final DefaultViewComputationCache cache = getUnderlying().findCache(request.getViewCycleId(), request.getCalculationConfigurationName());
       if (cache == null) {
         // Can happen if a node runs slowly, the job is retried elsewhere and the cycle completed while the original node is still generating traffic
-        s_logger.warn("Get request on invalid cache - {}", request);
+        LOGGER.warn("Get request on invalid cache - {}", request);
         response = Collections.singleton(FudgeContext.EMPTY_MESSAGE);
       } else {
         final FudgeMessageStore store = cache.getSharedDataStore();
@@ -367,7 +367,7 @@ public class FudgeMessageStoreServer implements FudgeConnectionReceiver, Release
 
   @Override
   public void connectionReceived(final FudgeContext fudgeContext, final FudgeMsgEnvelope message, final FudgeConnection connection) {
-    s_logger.info("New connection from {}", connection);
+    LOGGER.info("New connection from {}", connection);
     connection.setConnectionStateListener(this);
     final MessageHandler handler = onNewConnection(connection);
     handler.messageReceived(fudgeContext, message);
@@ -376,7 +376,7 @@ public class FudgeMessageStoreServer implements FudgeConnectionReceiver, Release
 
   @Override
   public void connectionFailed(final FudgeConnection connection, final Exception cause) {
-    s_logger.info("Dropped connection from {}", connection);
+    LOGGER.info("Dropped connection from {}", connection);
     onDroppedConnection(connection);
   }
 

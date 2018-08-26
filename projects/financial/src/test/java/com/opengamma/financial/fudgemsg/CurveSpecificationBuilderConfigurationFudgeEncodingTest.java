@@ -21,24 +21,24 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT)
 public class CurveSpecificationBuilderConfigurationFudgeEncodingTest extends FinancialTestBase {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(CurveSpecificationBuilderConfigurationFudgeEncodingTest.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(CurveSpecificationBuilderConfigurationFudgeEncodingTest.class);
 
   @Test
   public void testCycle() {
     CurveSpecificationBuilderConfiguration configuration = TestYieldCurveDefinitionAndSpecificationProvider.buildOldTestCurveConfiguration();
     CurveSpecificationBuilderConfiguration cycleObject = cycleObject(CurveSpecificationBuilderConfiguration.class, configuration);
-    s_logger.info(configuration.toString());
-    s_logger.info(cycleObject.toString());
+    LOGGER.info(configuration.toString());
+    LOGGER.info(cycleObject.toString());
     assertEquals(configuration, cycleObject(CurveSpecificationBuilderConfiguration.class, configuration));
     configuration = TestYieldCurveDefinitionAndSpecificationProvider.buildTestUSDCurveConfiguration();
     cycleObject = cycleObject(CurveSpecificationBuilderConfiguration.class, configuration);
-    s_logger.info(configuration.toString());
-    s_logger.info(cycleObject.toString());
+    LOGGER.info(configuration.toString());
+    LOGGER.info(cycleObject.toString());
     assertEquals(configuration, cycleObject(CurveSpecificationBuilderConfiguration.class, configuration));
     configuration = TestYieldCurveDefinitionAndSpecificationProvider.buildTestEURCurveConfiguration();
     cycleObject = cycleObject(CurveSpecificationBuilderConfiguration.class, configuration);
-    s_logger.info(configuration.toString());
-    s_logger.info(cycleObject.toString());
+    LOGGER.info(configuration.toString());
+    LOGGER.info(cycleObject.toString());
     assertEquals(configuration, cycleObject(CurveSpecificationBuilderConfiguration.class, configuration));
   }
 

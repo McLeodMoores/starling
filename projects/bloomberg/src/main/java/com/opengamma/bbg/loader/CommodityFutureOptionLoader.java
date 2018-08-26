@@ -60,7 +60,7 @@ import com.opengamma.util.time.Expiry;
 public class CommodityFutureOptionLoader extends SecurityLoader {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(CommodityFutureOptionLoader.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(CommodityFutureOptionLoader.class);
   /**
    * The fields to load from Bloomberg.
    */
@@ -94,14 +94,14 @@ public class CommodityFutureOptionLoader extends SecurityLoader {
       BBG_FOODSTUFF,
       BBG_LIVESTOCK);
 
-  private static final ExchangeDataProvider s_exchangeData = DefaultExchangeDataProvider.getInstance();
+  private static final ExchangeDataProvider EXCHANGE_DATA = DefaultExchangeDataProvider.getInstance();
 
   /**
    * Creates an instance.
    * @param referenceDataProvider  the provider, not null
    */
   public CommodityFutureOptionLoader(ReferenceDataProvider referenceDataProvider) {
-    super(s_logger, referenceDataProvider, SecurityType.COMMODITY_FUTURE_OPTION);
+    super(LOGGER, referenceDataProvider, SecurityType.COMMODITY_FUTURE_OPTION);
   }
 
   //-------------------------------------------------------------------------
@@ -122,39 +122,39 @@ public class CommodityFutureOptionLoader extends SecurityLoader {
     String secDes = fieldData.getString(FIELD_PARSEKYABLE_DES);
 
     if (!BloombergDataUtils.isValidField(bbgUniqueID)) {
-      s_logger.warn("bloomberg UniqueID is missing, cannot construct irFutureOption security");
+      LOGGER.warn("bloomberg UniqueID is missing, cannot construct irFutureOption security");
       return null;
     }
     if (!BloombergDataUtils.isValidField(rootTicker)) {
-      s_logger.warn("option root ticker is missing, cannot construct irFutureOption security");
+      LOGGER.warn("option root ticker is missing, cannot construct irFutureOption security");
       return null;
     }
     if (!BloombergDataUtils.isValidField(underlyingUniqueID)) {
-      s_logger.warn("bloomberg UniqueID for Underlying Security is missing, cannot construct irFutureOption security");
+      LOGGER.warn("bloomberg UniqueID for Underlying Security is missing, cannot construct irFutureOption security");
       return null;
     }
     if (!BloombergDataUtils.isValidField(putOrCall)) {
-      s_logger.warn("option type is missing, cannot construct irFutureOption security");
+      LOGGER.warn("option type is missing, cannot construct irFutureOption security");
       return null;
     }
     if (!BloombergDataUtils.isValidField(exchangeCode)) {
-      s_logger.warn("exchange is missing, cannot construct irFutureOption security");
+      LOGGER.warn("exchange is missing, cannot construct irFutureOption security");
       return null;
     }
     if (!BloombergDataUtils.isValidField(expiryDate)) {
-      s_logger.warn("option expiry date is missing, cannot construct irFutureOption security");
+      LOGGER.warn("option expiry date is missing, cannot construct irFutureOption security");
       return null;
     }
     if (!BloombergDataUtils.isValidField(underlingTicker)) {
-      s_logger.warn("option underlying ticker is missing, cannot construct irFutureOption security");
+      LOGGER.warn("option underlying ticker is missing, cannot construct irFutureOption security");
       return null;
     }
     if (!BloombergDataUtils.isValidField(currency)) {
-      s_logger.warn("option currency is missing, cannot construct irFutureOption security");
+      LOGGER.warn("option currency is missing, cannot construct irFutureOption security");
       return null;
     }
     if (!BloombergDataUtils.isValidField(optionExerciseType)) {
-      s_logger.warn("option exercise type is missing, cannot construct irFutureOption security");
+      LOGGER.warn("option exercise type is missing, cannot construct irFutureOption security");
       return null;
     }
     OptionType optionType = getOptionType(putOrCall);
@@ -180,7 +180,7 @@ public class CommodityFutureOptionLoader extends SecurityLoader {
 
     // currently we will pick up the unified bbg exchange code - we try to map to MIC via the description
     if (exchangeDescription != null) {
-      final String exchangeMIC = s_exchangeData.getExchangeFromDescription(exchangeCode).getMic();
+      final String exchangeMIC = EXCHANGE_DATA.getExchangeFromDescription(exchangeCode).getMic();
       if (exchangeMIC != null) {
         exchangeCode = exchangeMIC;
       }

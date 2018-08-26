@@ -65,7 +65,7 @@ import com.opengamma.util.money.Currency;
 @Deprecated
 public abstract class SwaptionBasicBlackCurveSpecificFunction extends AbstractFunction.NonCompiledInvoker {
   /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(SwaptionBasicBlackCurveSpecificFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(SwaptionBasicBlackCurveSpecificFunction.class);
   /** The value requirement that can be produced */
   private final String _valueRequirementName;
   /** Converter from {@link SwaptionSecurity} to an analytics object */
@@ -146,7 +146,7 @@ public abstract class SwaptionBasicBlackCurveSpecificFunction extends AbstractFu
     final ValueProperties constraints = desiredValue.getConstraints();
     final Set<String> curveNames = constraints.getValues(ValuePropertyNames.CURVE);
     if (curveNames == null || curveNames.size() != 1) {
-      s_logger.error("Did not specify a curve name for requirement {}", desiredValue);
+      LOGGER.error("Did not specify a curve name for requirement {}", desiredValue);
       return null;
     }
     final String curveName = Iterables.getOnlyElement(curveNames);
@@ -157,16 +157,16 @@ public abstract class SwaptionBasicBlackCurveSpecificFunction extends AbstractFu
     final String curveCalculationConfigName = curveCalculationConfigNames.iterator().next();
     final MultiCurveCalculationConfig curveCalculationConfig = _curveCalculationConfigSource.getConfig(curveCalculationConfigName);
     if (curveCalculationConfig == null) {
-      s_logger.error("Could not find curve calculation configuration named " + curveCalculationConfigName);
+      LOGGER.error("Could not find curve calculation configuration named " + curveCalculationConfigName);
       return null;
     }
     final Currency currency = FinancialSecurityUtils.getCurrency(target.getSecurity());
     if (!ComputationTargetSpecification.of(currency).equals(curveCalculationConfig.getTarget())) {
-      s_logger.error("Security currency and curve calculation config id were not equal; have {} and {}", currency, curveCalculationConfig.getTarget());
+      LOGGER.error("Security currency and curve calculation config id were not equal; have {} and {}", currency, curveCalculationConfig.getTarget());
     }
     final String[] configCurveNames = curveCalculationConfig.getYieldCurveNames();
     if (Arrays.binarySearch(configCurveNames, curveName) < 0) {
-      s_logger.error("Curve named {} is not available in curve calculation configuration called {}", curveName, curveCalculationConfigName);
+      LOGGER.error("Curve named {} is not available in curve calculation configuration called {}", curveName, curveCalculationConfigName);
       return null;
     }
     final Set<ValueRequirement> requirements = new HashSet<>();

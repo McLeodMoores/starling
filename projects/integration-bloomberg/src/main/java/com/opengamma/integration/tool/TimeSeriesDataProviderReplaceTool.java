@@ -39,7 +39,7 @@ import com.opengamma.timeseries.date.localdate.LocalDateDoubleTimeSeries;
 public class TimeSeriesDataProviderReplaceTool extends AbstractTool<IntegrationToolContext> {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(TimeSeriesDataProviderReplaceTool.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(TimeSeriesDataProviderReplaceTool.class);
 
   private static final String REPLACE_WITH_PROVIDER_OPTION = "replaceWith";
   private static final String FIND_PROVIDER_OPTION = "find";
@@ -73,7 +73,7 @@ public class TimeSeriesDataProviderReplaceTool extends AbstractTool<IntegrationT
       final ExternalId ticker = bundle.getExternalId(ExternalSchemes.BLOOMBERG_TICKER);
       final String dataField = infoDoc.getInfo().getDataField();
       if (buid != null) {
-        s_logger.info("replacing {} {}", buid, ticker);
+        LOGGER.info("replacing {} {}", buid, ticker);
         try {
           final LocalDateDoubleTimeSeries hts = htsProvider.getHistoricalTimeSeries(ExternalIdBundle.of(buid),
               BLOOMBERG_DATA_SOURCE_NAME, replaceWithProvider, dataField);
@@ -81,11 +81,11 @@ public class TimeSeriesDataProviderReplaceTool extends AbstractTool<IntegrationT
             final Map<ExternalId, UniqueId> addedTS = loader.loadTimeSeries(Sets.newHashSet(buid), replaceWithProvider, dataField, null, null);
             if (addedTS.get(buid) != null) {
               htsMaster.remove(infoDoc.getUniqueId());
-              s_logger.info("removed TS with buid={}, ticker={}, dataProvider={}, dataField={}", new Object[] {buid, ticker, findProvider, dataField});
+              LOGGER.info("removed TS with buid={}, ticker={}, dataProvider={}, dataField={}", new Object[] {buid, ticker, findProvider, dataField});
             }
           }
         } catch (final Exception ex) {
-          s_logger.warn("Error trying to load TS for " + buid, ex);
+          LOGGER.warn("Error trying to load TS for " + buid, ex);
         }
       }
     }

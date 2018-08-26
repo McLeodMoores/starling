@@ -33,7 +33,7 @@ public abstract class AbstractEHCachingMasterTest<M extends AbstractChangeProvid
 
   protected static final String ID_SCHEME = "Test";
 
-  protected static final Instant now = Instant.now();
+  protected static final Instant NOW = Instant.now();
 
   // Document A (100, 200, 300)
   protected static final ObjectId A_OID = ObjectId.of(ID_SCHEME, "A");

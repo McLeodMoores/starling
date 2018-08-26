@@ -22,16 +22,16 @@ import com.opengamma.util.ArgumentChecker;
  */
 public final class ValueVegaCalculator implements ValueGreekCalculator {
   /** Static instance */
-  private static final ValueVegaCalculator s_instance = new ValueVegaCalculator();
+  private static final ValueVegaCalculator INSTANCE = new ValueVegaCalculator();
   /** Calculates the multiplier for converting vega to value vega */
-  private static final MultiplierCalculator s_multiplierCalculator = new MultiplierCalculator();
+  private static final MultiplierCalculator MULTIPLIER_CALCULATOR = new MultiplierCalculator();
 
   /**
    * Gets an instance of this calculator
    * @return The (singleton) instance
    */
   public static ValueVegaCalculator getInstance() {
-    return s_instance;
+    return INSTANCE;
   }
 
   /**
@@ -44,7 +44,7 @@ public final class ValueVegaCalculator implements ValueGreekCalculator {
   public double valueGreek(final InstrumentDerivative derivative, final StaticReplicationDataBundle market, final double vega) {
     ArgumentChecker.notNull(derivative, "derivative");
     ArgumentChecker.notNull(market, "market");
-    return vega * derivative.accept(s_multiplierCalculator, market);
+    return vega * derivative.accept(MULTIPLIER_CALCULATOR, market);
   }
 
   /**

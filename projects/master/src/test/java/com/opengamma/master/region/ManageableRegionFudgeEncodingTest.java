@@ -27,8 +27,8 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT)
 public class ManageableRegionFudgeEncodingTest {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(ManageableRegionFudgeEncodingTest.class);
-  private static final FudgeContext s_fudgeContext = OpenGammaFudgeContext.getInstance();
+  private static final Logger LOGGER = LoggerFactory.getLogger(ManageableRegionFudgeEncodingTest.class);
+  private static final FudgeContext FUDGE_CONTEXT = OpenGammaFudgeContext.getInstance();
 
   public void test() {
     ManageableRegion obj = new ManageableRegion();
@@ -44,18 +44,18 @@ public class ManageableRegionFudgeEncodingTest {
   }
 
   private void testFudgeMessage(final ManageableRegion obj) {
-    final FudgeSerializer serializer = new FudgeSerializer(s_fudgeContext);
+    final FudgeSerializer serializer = new FudgeSerializer(FUDGE_CONTEXT);
     FudgeMsg msg = serializer.objectToFudgeMsg(obj);
-    s_logger.debug("ManageableRegion {}", obj);
-    s_logger.debug("Encoded to {}", msg);
-    final byte[] bytes = s_fudgeContext.toByteArray(msg);
-    msg = s_fudgeContext.deserialize(bytes).getMessage();
-    s_logger.debug("Serialised to {}", msg);
-    final ManageableRegion decoded = s_fudgeContext.fromFudgeMsg(ManageableRegion.class, msg);
-    s_logger.debug("Decoded to {}", decoded);
+    LOGGER.debug("ManageableRegion {}", obj);
+    LOGGER.debug("Encoded to {}", msg);
+    final byte[] bytes = FUDGE_CONTEXT.toByteArray(msg);
+    msg = FUDGE_CONTEXT.deserialize(bytes).getMessage();
+    LOGGER.debug("Serialised to {}", msg);
+    final ManageableRegion decoded = FUDGE_CONTEXT.fromFudgeMsg(ManageableRegion.class, msg);
+    LOGGER.debug("Decoded to {}", decoded);
     if (!obj.equals(decoded)) {
-      s_logger.warn("Expected {}", obj);
-      s_logger.warn("Received {}", decoded);
+      LOGGER.warn("Expected {}", obj);
+      LOGGER.warn("Received {}", decoded);
       fail();
     }
   }

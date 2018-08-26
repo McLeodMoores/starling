@@ -51,7 +51,7 @@ import com.opengamma.util.time.Expiry;
 public class JsonJodaRoundTripTest {
 
   // TODO move to BlotterUtils?
-  private static final BeanVisitorDecorator s_propertyFilter = new PropertyFilter(ManageableSecurity.meta().securityType());
+  private static final BeanVisitorDecorator PROPERTY_FILTER = new PropertyFilter(ManageableSecurity.meta().securityType());
 
   /**
    * Simple security
@@ -65,7 +65,7 @@ public class JsonJodaRoundTripTest {
 
     JsonDataSink sink = new JsonDataSink(BlotterUtils.getJsonBuildingConverters());
     BeanVisitor<JSONObject> writingVisitor = new BuildingBeanVisitor<>(fxForward, sink);
-    BeanTraverser traverser = new BeanTraverser(s_propertyFilter);
+    BeanTraverser traverser = new BeanTraverser(PROPERTY_FILTER);
     JSONObject json = (JSONObject) traverser.traverse(FXForwardSecurity.meta(), writingVisitor);
     assertNotNull(json);
 //    System.out.println(json);
@@ -109,7 +109,7 @@ public class JsonJodaRoundTripTest {
     security.setName("Test swap");
 
     JsonDataSink sink = new JsonDataSink(BlotterUtils.getJsonBuildingConverters());
-    BeanTraverser traverser = new BeanTraverser(s_propertyFilter);
+    BeanTraverser traverser = new BeanTraverser(PROPERTY_FILTER);
     BeanVisitor<JSONObject> writingVisitor = new BuildingBeanVisitor<>(security, sink);
     JSONObject json = (JSONObject) traverser.traverse(SwapSecurity.meta(), writingVisitor);
     assertNotNull(json);
@@ -148,7 +148,7 @@ public class JsonJodaRoundTripTest {
 
     // TODO this isn't converting ExternalIdBundle properly
     JsonDataSink sink = new JsonDataSink(BlotterUtils.getJsonBuildingConverters());
-    BeanTraverser traverser = new BeanTraverser(s_propertyFilter);
+    BeanTraverser traverser = new BeanTraverser(PROPERTY_FILTER);
     BeanVisitor<JSONObject> writingVisitor = new BuildingBeanVisitor<>(security, sink);
     JSONObject json = (JSONObject) traverser.traverse(BondFutureSecurity.meta(), writingVisitor);
     assertNotNull(json);

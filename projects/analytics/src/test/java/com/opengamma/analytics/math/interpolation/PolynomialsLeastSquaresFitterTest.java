@@ -27,7 +27,7 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT)
 public class PolynomialsLeastSquaresFitterTest {
   private static final double EPS = 1e-14;
-  private static final Random randObj = new Random();
+  private static final Random RAND_OBJ = new Random();
 
   private final Function1D<double[], Double> _meanCal = new MeanCalculator();
   private final Function1D<double[], Double> _stdCal = new SampleStandardDeviationCalculator();
@@ -730,7 +730,7 @@ public class PolynomialsLeastSquaresFitterTest {
     final PolynomialsLeastSquaresFitter regObj = new PolynomialsLeastSquaresFitter();
 
     // final double[] coeff = new double[] {5. * (randObj.nextDouble() + .5), 5. * (randObj.nextDouble() - .5), 5. * (randObj.nextDouble() - 5.), 5. * (randObj.nextDouble() - .5) };
-    final double[] coeff = new double[] {-(randObj.nextDouble() + 1.), (randObj.nextDouble() + 1.), -(randObj.nextDouble() + 1.), (randObj.nextDouble() + 1.) };
+    final double[] coeff = new double[] {-(RAND_OBJ.nextDouble() + 1.), (RAND_OBJ.nextDouble() + 1.), -(RAND_OBJ.nextDouble() + 1.), (RAND_OBJ.nextDouble() + 1.) };
     final DoubleFunction1D func = new RealPolynomialFunction1D(coeff);
 
     final int degree = coeff.length - 1;
@@ -959,8 +959,8 @@ public class PolynomialsLeastSquaresFitterTest {
     double[] yValues = new double[nPts];
 
     for (int i = 0; i < nPts; ++i) {
-      xValues[i] = 10. * (randObj.nextDouble() - .5);
-      yValues[i] = 10. * (randObj.nextDouble() - .5);
+      xValues[i] = 10. * (RAND_OBJ.nextDouble() - .5);
+      yValues[i] = 10. * (RAND_OBJ.nextDouble() - .5);
       System.out.println(xValues[i] + "\t" + yValues[i]);
     }
 

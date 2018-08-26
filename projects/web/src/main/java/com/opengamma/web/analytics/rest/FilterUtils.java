@@ -60,7 +60,7 @@ import com.sun.jersey.spi.container.ContainerRequest;
     Principal userPrincipal = httpContext.getRequest().getUserPrincipal();
     if (userPrincipal == null) {
       // TODO reinstate this if / when we have user logins
-      /*s_logger.debug("No user principal, not subscribing, url: {}", url);
+      /*LOGGER.debug("No user principal, not subscribing, url: {}", url);
      return response;*/
       return null;
     } else {

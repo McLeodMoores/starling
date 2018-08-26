@@ -22,7 +22,7 @@ import com.opengamma.analytics.financial.interestrate.swap.derivative.SwapFixedC
 import com.opengamma.analytics.financial.model.interestrate.curve.YieldAndDiscountCurve;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.money.Currency;
-
+//CSOFF
 /**
  * Compute the cash flow equivalent of simple instruments (in single or multi-curve framework).
  * The cash-flow equivalent have at most one payment by time and the times are sorted in ascending order.

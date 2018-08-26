@@ -28,24 +28,24 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT)
 public class ExpiryTest {
 
-  private static final FudgeContext s_fudgeContext = new FudgeContext();
+  private static final FudgeContext FUDGE_CONTEXT = new FudgeContext();
 
   static {
-    s_fudgeContext.getTypeDictionary().addType(ExpiryFudgeBuilder.SECONDARY_TYPE_INSTANCE);
-    s_fudgeContext.getObjectDictionary().addBuilder(Expiry.class, new ExpiryFudgeBuilder());
+    FUDGE_CONTEXT.getTypeDictionary().addType(ExpiryFudgeBuilder.SECONDARY_TYPE_INSTANCE);
+    FUDGE_CONTEXT.getObjectDictionary().addBuilder(Expiry.class, new ExpiryFudgeBuilder());
   }
 
   private static FudgeMsg cycleMessage(final FudgeMsg message) {
-    final byte[] encoded = s_fudgeContext.toByteArray(message);
-    return s_fudgeContext.deserialize(encoded).getMessage();
+    final byte[] encoded = FUDGE_CONTEXT.toByteArray(message);
+    return FUDGE_CONTEXT.deserialize(encoded).getMessage();
   }
 
   private static void testExpiry(final Expiry expiry) {
-    final FudgeSerializer serializer = new FudgeSerializer(s_fudgeContext);
+    final FudgeSerializer serializer = new FudgeSerializer(FUDGE_CONTEXT);
     final MutableFudgeMsg messageIn = serializer.newMessage();
     serializer.addToMessage(messageIn, "test", null, expiry);
     final FudgeMsg messageOut = cycleMessage(messageIn);
-    final FudgeDeserializer dsrContext = new FudgeDeserializer(s_fudgeContext);
+    final FudgeDeserializer dsrContext = new FudgeDeserializer(FUDGE_CONTEXT);
     final Expiry result = dsrContext.fieldValueToObject(Expiry.class, messageOut.getByName("test"));
     assertEquals(expiry, result);
     assertEquals(expiry.getExpiry().getZone(), result.getExpiry().getZone());

@@ -57,7 +57,7 @@ import com.opengamma.util.money.MultipleCurrencyAmount;
 @Deprecated
 public class FXForwardConstantSpreadThetaFunction extends FXForwardMultiValuedFunction {
   /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(FXForwardConstantSpreadThetaFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(FXForwardConstantSpreadThetaFunction.class);
 
   /**
    * Sets the value requirement name to {@link ValueRequirementNames#VALUE_THETA}
@@ -190,7 +190,7 @@ public class FXForwardConstantSpreadThetaFunction extends FXForwardMultiValuedFu
     final Currency receiveCurrency = security.accept(ForexVisitors.getReceiveCurrencyVisitor());
     final CurrencyPair baseQuotePair = baseQuotePairs.getCurrencyPair(payCurrency, receiveCurrency);
     if (baseQuotePair == null) {
-      s_logger.error("Could not get base/quote pair for currency pair (" + payCurrency + ", " + receiveCurrency + ")");
+      LOGGER.error("Could not get base/quote pair for currency pair (" + payCurrency + ", " + receiveCurrency + ")");
       return null;
     }
     final ValueSpecification resultSpec = new ValueSpecification(getValueRequirementName(), target.toSpecification(), getResultProperties(target,

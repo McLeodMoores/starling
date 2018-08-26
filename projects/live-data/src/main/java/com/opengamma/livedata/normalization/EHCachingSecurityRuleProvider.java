@@ -21,7 +21,7 @@ import com.opengamma.util.ehcache.EHCacheUtils;
  */
 public class EHCachingSecurityRuleProvider implements SecurityRuleProvider {
   
-  private static final Logger s_logger = LoggerFactory.getLogger(EHCachingSecurityRuleProvider.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(EHCachingSecurityRuleProvider.class);
   
   private final SecurityRuleProvider _underlying;
   private final Cache _cache;
@@ -47,12 +47,12 @@ public class EHCachingSecurityRuleProvider implements SecurityRuleProvider {
   public NormalizationRule getRule(String securityUniqueId) {
     Element e = _cache.get(securityUniqueId);
     if (e != null) {
-      s_logger.debug("Obtained normalization rule for security " + securityUniqueId + " from cache");
+      LOGGER.debug("Obtained normalization rule for security " + securityUniqueId + " from cache");
       return (NormalizationRule) e.getObjectValue();
     }
     try {
       NormalizationRule rule = _underlying.getRule(securityUniqueId);
-      s_logger.debug("Obtained normalization rule for security {} from underlying provider", securityUniqueId);
+      LOGGER.debug("Obtained normalization rule for security {} from underlying provider", securityUniqueId);
       e = new Element(securityUniqueId, rule);
       _cache.put(e);
       return rule;
@@ -60,7 +60,7 @@ public class EHCachingSecurityRuleProvider implements SecurityRuleProvider {
       // Don't attempt to cache exceptions as:
       //   a) they will cause the subscription to fail so the cache will be of little use
       //   b) if the error can be fixed at runtime then the user may try again and expect success
-      s_logger.warn("Error obtaining normalization rule for security " + securityUniqueId, ex);
+      LOGGER.warn("Error obtaining normalization rule for security " + securityUniqueId, ex);
       throw new OpenGammaRuntimeException("Error obtaining normalization rule for security " + securityUniqueId, ex);
     }
   }

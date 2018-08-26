@@ -49,14 +49,14 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT)
 public class InMemoryLKVLiveMarketDataProviderTest {
 
-  private static final String _marketDataRequirement = MarketDataRequirementNames.MARKET_VALUE;
+  private static final String MARKET_DATA_REQUIREMENT = MarketDataRequirementNames.MARKET_VALUE;
 
   protected ExternalId getTicker(final String ticker) {
     return ExternalId.of("Foo", ticker);
   }
 
   protected ValueRequirement constructRequirement(final String ticker) {
-    return new ValueRequirement(_marketDataRequirement, ComputationTargetType.PRIMITIVE, getTicker(ticker));
+    return new ValueRequirement(MARKET_DATA_REQUIREMENT, ComputationTargetType.PRIMITIVE, getTicker(ticker));
   }
 
   protected ComputationTargetSpecification constructTargetSpec(final String ticker) {
@@ -64,7 +64,7 @@ public class InMemoryLKVLiveMarketDataProviderTest {
   }
 
   protected ValueSpecification constructSpecification(final String ticker) {
-    return new ValueSpecification(_marketDataRequirement, constructTargetSpec(ticker), ValueProperties.with(ValuePropertyNames.FUNCTION, "MarketData").get());
+    return new ValueSpecification(MARKET_DATA_REQUIREMENT, constructTargetSpec(ticker), ValueProperties.with(ValuePropertyNames.FUNCTION, "MarketData").get());
   }
 
   @Test
@@ -113,11 +113,11 @@ public class InMemoryLKVLiveMarketDataProviderTest {
       assertEquals(3, liveDataClient.getSubscriptionRequests().size());
       
       final MutableFudgeMsg msg1 = new FudgeContext().newMessage();
-      msg1.add(_marketDataRequirement, 52.07);
+      msg1.add(MARKET_DATA_REQUIREMENT, 52.07);
       final MutableFudgeMsg msg3a = new FudgeContext().newMessage();
-      msg3a.add(_marketDataRequirement, 52.16);
+      msg3a.add(MARKET_DATA_REQUIREMENT, 52.16);
       final MutableFudgeMsg msg3b = new FudgeContext().newMessage();
-      msg3b.add(_marketDataRequirement, 52.17);
+      msg3b.add(MARKET_DATA_REQUIREMENT, 52.17);
       liveDataClient.marketDataReceived(test1test2FullyQualifiedSpecification, msg1);
       liveDataClient.marketDataReceived(test3FullyQualifiedSpecification, msg3a);
       liveDataClient.marketDataReceived(test3FullyQualifiedSpecification, msg3b);
@@ -212,7 +212,7 @@ public class InMemoryLKVLiveMarketDataProviderTest {
       assertEquals(2, liveDataClient.getSubscriptionRequests().size());
       
       final MutableFudgeMsg msg1 = new FudgeContext().newMessage();
-      msg1.add(_marketDataRequirement, 52.07);
+      msg1.add(MARKET_DATA_REQUIREMENT, 52.07);
       liveDataClient.marketDataReceived(test1test2FullyQualifiedSpecification, msg1);
       final MarketDataSnapshot snapshot = provider.snapshot(null);
       snapshot.init(Collections.<ValueSpecification>emptySet(), 0, TimeUnit.MILLISECONDS);

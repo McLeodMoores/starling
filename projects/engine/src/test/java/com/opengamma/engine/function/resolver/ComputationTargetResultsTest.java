@@ -54,7 +54,7 @@ import com.opengamma.util.test.TestLifecycle;
 @Test(groups = TestGroup.UNIT)
 public class ComputationTargetResultsTest {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(ComputationTargetResultsTest.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ComputationTargetResultsTest.class);
 
   private final Position POSITION = new SimplePosition(UniqueId.of("PosUID", "0"), BigDecimal.ONE, ExternalId.of("Sec", "0"));
   private final Security SECURITY = new SimpleSecurity(UniqueId.of("SecUID", "0"), ExternalId.of("Sec", "0").toBundle(), "TEST", "Foo");
@@ -187,7 +187,7 @@ public class ComputationTargetResultsTest {
       final ComputationTargetResults ctr = createComputationTargetResults(emptyFunctionRepo());
       final ComputationTarget target = new ComputationTarget(ComputationTargetType.POSITION, POSITION);
       final Collection<ValueSpecification> values = ctr.getMaximalResults(target);
-      s_logger.debug("testMaximalResults_emptyRepo = {}", values);
+      LOGGER.debug("testMaximalResults_emptyRepo = {}", values);
       assertTrue(values.isEmpty());
     } finally {
       TestLifecycle.end();
@@ -208,7 +208,7 @@ public class ComputationTargetResultsTest {
       final ComputationTargetResults ctr = createComputationTargetResults(basicFunctionRepo());
       final ComputationTarget target = new ComputationTarget(ComputationTargetType.POSITION, POSITION);
       final Collection<ValueSpecification> values = ctr.getMaximalResults(target);
-      s_logger.debug("testMaximalResults_basicRepo = {}", values);
+      LOGGER.debug("testMaximalResults_basicRepo = {}", values);
       final Set<String> results = getResults(values);
       assertEquals(results, ImmutableSet.of("A3", "A2", "A1", "B3", "B2", "B1", "C3", "D3", "D2", "E3", "F3", "G3", "G2", "G1", "H3", "H2", "H1", "I3", "J3", "J2", "K3", "L3"));
     } finally {
@@ -222,7 +222,7 @@ public class ComputationTargetResultsTest {
       final ComputationTargetResults ctr = createComputationTargetResults(emptyFunctionRepo());
       final ComputationTarget target = new ComputationTarget(ComputationTargetType.POSITION, POSITION);
       final Collection<ValueSpecification> values = ctr.getPartialResults(target);
-      s_logger.debug("testPartialResults_emptyRepo = {}", values);
+      LOGGER.debug("testPartialResults_emptyRepo = {}", values);
       assertTrue(values.isEmpty());
     } finally {
       TestLifecycle.end();
@@ -235,7 +235,7 @@ public class ComputationTargetResultsTest {
       final ComputationTargetResults ctr = createComputationTargetResults(basicFunctionRepo());
       final ComputationTarget target = new ComputationTarget(ComputationTargetType.POSITION, POSITION);
       final Collection<ValueSpecification> values = ctr.getPartialResults(target);
-      s_logger.debug("testPartialResults_basicRepo = {}", values);
+      LOGGER.debug("testPartialResults_basicRepo = {}", values);
       final Set<String> results = getResults(values);
       assertEquals(results, ImmutableSet.of("B1", "D2", "E3", "F3", "H3", "H2", "H1", "J3", "J2", "K3", "L3"));
     } finally {

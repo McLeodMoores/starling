@@ -40,7 +40,7 @@ import com.opengamma.util.tuple.Pairs;
 public abstract class AbstractEHCachingSource<V extends UniqueIdentifiable, S extends Source<V>> extends AbstractSource<V> implements Source<V>, ChangeProvider {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(AbstractEHCachingSource.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(AbstractEHCachingSource.class);
 
   /** The oid cache key. */
   private final String _oidCacheName = getClass().getName() + "-oid-cache";
@@ -119,7 +119,7 @@ public abstract class AbstractEHCachingSource<V extends UniqueIdentifiable, S ex
         final Element e = _uidCache.get(uid);
         if (e != null) {
           result = (V) e.getObjectValue();
-          s_logger.debug("retrieved object: {} from uid-cache", result);
+          LOGGER.debug("retrieved object: {} from uid-cache", result);
           V existing = _frontCacheByUID.putIfAbsent(uid, result);
           if (existing != null) {
             result = existing;
@@ -149,7 +149,7 @@ public abstract class AbstractEHCachingSource<V extends UniqueIdentifiable, S ex
             @SuppressWarnings("unchecked")
             V objectValue = (V) e.getObjectValue();
             result = objectValue;
-            s_logger.debug("retrieved object: {} from uid-cache", result);
+            LOGGER.debug("retrieved object: {} from uid-cache", result);
             V existing = _frontCacheByUID.putIfAbsent(uid, result);
             if (existing != null) {
               result = existing;

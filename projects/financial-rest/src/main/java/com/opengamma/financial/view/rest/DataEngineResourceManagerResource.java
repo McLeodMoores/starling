@@ -40,7 +40,7 @@ import com.opengamma.util.rest.AbstractDataResource;
  */
 public abstract class DataEngineResourceManagerResource<T extends UniqueIdentifiable> extends AbstractDataResource {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(DataEngineResourceManagerResource.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(DataEngineResourceManagerResource.class);
   
   private final URI _baseUri;
   private final EngineResourceManager<? extends T> _manager;
@@ -102,7 +102,7 @@ public abstract class DataEngineResourceManagerResource<T extends UniqueIdentifi
       DataEngineResourceReferenceResource<T> referenceResource = entry.getValue();
       if (referenceResource.getLastHeartbeat().isBefore(oldestHeartbeatTime)) {
         // Notifies the manager which removes it from the map
-        s_logger.warn("Releasing reference {} which has not received a heartbeat since {}, which exceeds the oldest allowed heartbeat of {}", 
+        LOGGER.warn("Releasing reference {} which has not received a heartbeat since {}, which exceeds the oldest allowed heartbeat of {}", 
             new Object[] {entry.getKey(), referenceResource.getLastHeartbeat(), oldestHeartbeatTime});
         referenceResource.release();
       }

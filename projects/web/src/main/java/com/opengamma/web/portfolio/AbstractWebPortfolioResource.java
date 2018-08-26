@@ -44,7 +44,7 @@ public abstract class AbstractWebPortfolioResource
   protected static final String JSON_DIR = "portfolios/json/";
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(AbstractWebPortfolioResource.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(AbstractWebPortfolioResource.class);
 
   /**
    * The security link resolver.
@@ -107,7 +107,7 @@ public abstract class AbstractWebPortfolioResource
       try {
         _securityLinkResolver.resolveSecurities(securityLinks);
       } catch (OpenGammaRuntimeException ex) {
-        s_logger.warn("Problem resolving securities in a position", ex);
+        LOGGER.warn("Problem resolving securities in a position", ex);
       }
     }
   }

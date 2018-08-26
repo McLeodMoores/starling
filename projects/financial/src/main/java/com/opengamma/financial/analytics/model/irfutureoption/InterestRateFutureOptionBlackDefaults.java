@@ -26,7 +26,7 @@ import com.opengamma.financial.security.option.IRFutureOptionSecurity;
 import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.tuple.Pair;
 import com.opengamma.util.tuple.Pairs;
-
+//CSOFF
 /**
  * Adds {@link ValuePropertyNames#SURFACE} and {@link ValuePropertyNames#CURVE_CALCULATION_CONFIG} to the available
  * {@link ValueRequirement}'s produced by {@link InterestRateFutureOptionBlackFunction}. The properties apply
@@ -36,7 +36,7 @@ import com.opengamma.util.tuple.Pairs;
 @Deprecated
 public class InterestRateFutureOptionBlackDefaults extends DefaultPropertyFunction {
   /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(InterestRateFutureOptionBlackDefaults.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(InterestRateFutureOptionBlackDefaults.class);
   /** The value requirement names for which these defaults apply */
   private static final String[] s_valueRequirements = new String[] {
     ValueRequirementNames.PNL,
@@ -110,7 +110,7 @@ public class InterestRateFutureOptionBlackDefaults extends DefaultPropertyFuncti
   protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue, final String propertyName) {
     final String currencyName = FinancialSecurityUtils.getCurrency(target.getTrade().getSecurity()).getCode();
     if (!_currencyCurveConfigAndSurfaceNames.containsKey(currencyName)) {
-      s_logger.error("Could not config and surface names for currency " + currencyName + "; should never happen");
+      LOGGER.error("Could not config and surface names for currency " + currencyName + "; should never happen");
       return null;
     }
     final Pair<String, String> pair = _currencyCurveConfigAndSurfaceNames.get(currencyName);
@@ -150,7 +150,7 @@ public class InterestRateFutureOptionBlackDefaults extends DefaultPropertyFuncti
    * @return The logger
    */
   public static Logger getsLogger() {
-    return s_logger;
+    return LOGGER;
   }
 
   /**

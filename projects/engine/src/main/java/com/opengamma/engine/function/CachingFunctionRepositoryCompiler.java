@@ -30,9 +30,9 @@ import com.opengamma.util.tuple.Pairs;
  */
 public class CachingFunctionRepositoryCompiler implements FunctionRepositoryCompiler {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(CachingFunctionRepositoryCompiler.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(CachingFunctionRepositoryCompiler.class);
 
-  private static final Comparator<Pair<FunctionRepository, Instant>> s_comparator = new Comparator<Pair<FunctionRepository, Instant>>() {
+  private static final Comparator<Pair<FunctionRepository, Instant>> COMPARATOR = new Comparator<Pair<FunctionRepository, Instant>>() {
     @Override
     public int compare(final Pair<FunctionRepository, Instant> o1, final Pair<FunctionRepository, Instant> o2) {
       if (o1 == o2) {
@@ -55,7 +55,7 @@ public class CachingFunctionRepositoryCompiler implements FunctionRepositoryComp
     }
   };
   private final TreeMap<Pair<FunctionRepository, Instant>, InMemoryCompiledFunctionRepository> _compilationCache = new TreeMap<Pair<FunctionRepository, Instant>, InMemoryCompiledFunctionRepository>(
-      s_comparator);
+      COMPARATOR);
   private final Queue<Pair<FunctionRepository, Instant>> _activeEntries = new ArrayDeque<Pair<FunctionRepository, Instant>>();
   private int _cacheSize = 16;
   private long _functionInitId;
@@ -134,7 +134,7 @@ public class CachingFunctionRepositoryCompiler implements FunctionRepositoryComp
       @Override
       public void failure(final Throwable error) {
         // Don't propagate the error outwards; it just won't be in the compiled repository
-        s_logger.debug("Error compiling function definition", error);
+        LOGGER.debug("Error compiling function definition", error);
         failures.incrementAndGet();
       }
 
@@ -147,10 +147,10 @@ public class CachingFunctionRepositoryCompiler implements FunctionRepositoryComp
         @Override
         public CompiledFunctionDefinition call() throws Exception {
           try {
-            s_logger.debug("Compiling {}", function);
+            LOGGER.debug("Compiling {}", function);
             return function.compile(context, atInstant);
           } catch (final Exception e) {
-            s_logger.warn("Compiling {} threw {}", function.getShortName(), e);
+            LOGGER.warn("Compiling {} threw {}", function.getShortName(), e);
             throw e;
           }
         }
@@ -164,7 +164,7 @@ public class CachingFunctionRepositoryCompiler implements FunctionRepositoryComp
       throw new OpenGammaRuntimeException("Interrupted while compiling function definitions.", e);
     }
     if (failures.get() != 0) {
-      s_logger.error("Encountered {} errors while compiling repository", failures);
+      LOGGER.error("Encountered {} errors while compiling repository", failures);
     }
     return compiled;
   }
@@ -238,7 +238,7 @@ public class CachingFunctionRepositoryCompiler implements FunctionRepositoryComp
         synchronized (ref) {
           repository = ref[0];
           while (repository == null) {
-            s_logger.info("Waiting for concurrent call to compile {}", atInstant);
+            LOGGER.info("Waiting for concurrent call to compile {}", atInstant);
             ref.wait();
             repository = ref[0];
           }
@@ -248,7 +248,7 @@ public class CachingFunctionRepositoryCompiler implements FunctionRepositoryComp
     });
     if (existing != null) {
       try {
-        s_logger.info("Using concurrent call to compile {}", atInstant);
+        LOGGER.info("Using concurrent call to compile {}", atInstant);
         return existing.call();
       } catch (final Exception e) {
         throw new OpenGammaRuntimeException("Exception from concurrent call", e);

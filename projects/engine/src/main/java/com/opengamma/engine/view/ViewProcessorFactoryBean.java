@@ -40,7 +40,7 @@ import com.opengamma.util.SingletonFactoryBean;
  */
 public class ViewProcessorFactoryBean extends SingletonFactoryBean<ViewProcessor> {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(ViewProcessorFactoryBean.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ViewProcessorFactoryBean.class);
 
   private String _name;
   private ConfigSource _configSource;
@@ -194,7 +194,7 @@ public class ViewProcessorFactoryBean extends SingletonFactoryBean<ViewProcessor
 
   //-------------------------------------------------------------------------
   protected void checkInjectedInputs() {
-    s_logger.debug("Checking injected inputs.");
+    LOGGER.debug("Checking injected inputs.");
     ArgumentChecker.notNullInjected(_name, "id");
     ArgumentChecker.notNullInjected(getFunctionCompilationService(), "functionCompilationService");
     if (getFunctionResolver() == null) {

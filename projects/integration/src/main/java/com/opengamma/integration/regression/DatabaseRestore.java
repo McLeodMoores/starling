@@ -72,7 +72,7 @@ public class DatabaseRestore {
   /** Attribute name holding a position's original unique ID from the source database. */
   public static final String REGRESSION_ID = "regressionId";
 
-  private static final Logger s_logger = LoggerFactory.getLogger(DatabaseRestore.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(DatabaseRestore.class);
 
   private final RegressionIO _io;
   private final SecurityMaster _securityMaster;
@@ -173,7 +173,7 @@ public class DatabaseRestore {
       loadOrganizations();
       loadConventions();
       _io.endRead();
-      s_logger.info("Successfully restored database");
+      LOGGER.info("Successfully restored database");
     } catch (IOException e) {
       throw new OpenGammaRuntimeException("Failed to restore database", e);
     }
@@ -204,7 +204,7 @@ public class DatabaseRestore {
         newObjectId = securityIdMappings.get(securityObjectId);
         position.getSecurityLink().setObjectId(newObjectId);
         if (newObjectId == null) {
-          s_logger.warn("No security found with ID {} for position {}", securityObjectId, position);
+          LOGGER.warn("No security found with ID {} for position {}", securityObjectId, position);
         }
       }
       for (ManageableTrade trade : position.getTrades()) {
@@ -235,7 +235,7 @@ public class DatabaseRestore {
       portfolio.setUniqueId(null);
       replacePositionIds(portfolio.getRootNode(), positionIdMappings);
       UniqueId newId = _portfolioMaster.add(new PortfolioDocument(portfolio)).getUniqueId();
-      s_logger.debug("Saved portfolio {} with ID {}, old ID {}", portfolio.getName(), newId, oldId);
+      LOGGER.debug("Saved portfolio {} with ID {}, old ID {}", portfolio.getName(), newId, oldId);
       idMappings.put(oldId.getObjectId(), newId.getObjectId());
     }
     return idMappings;
@@ -254,7 +254,7 @@ public class DatabaseRestore {
         UniqueId oldId = config.getUniqueId();
         config.setUniqueId(null);
         UniqueId newId = _configMaster.add(new ConfigDocument(config)).getUniqueId();
-        s_logger.debug("Saved config of type {} with ID {}", configValue.getClass().getSimpleName(), newId);
+        LOGGER.debug("Saved config of type {} with ID {}", configValue.getClass().getSimpleName(), newId);
         idMappings.put(oldId.getObjectId(), newId.getObjectId());
       }
     }
@@ -267,7 +267,7 @@ public class DatabaseRestore {
           newPortfolioId = portfolioIdMappings.get(oldPortfolioId).atLatestVersion();
         } else {
           newPortfolioId = null;
-          s_logger.warn("No mapping found for view def portfolio ID {}", oldPortfolioId);
+          LOGGER.warn("No mapping found for view def portfolio ID {}", oldPortfolioId);
         }
       } else {
         newPortfolioId = null;
@@ -278,7 +278,7 @@ public class DatabaseRestore {
         calcConfig.setScenarioParametersId(getNewId(calcConfig.getScenarioParametersId(), idMappings));
       }
       UniqueId newId = _configMaster.add(new ConfigDocument(ConfigItem.of(newViewDef))).getUniqueId();
-      s_logger.debug("Saved view definition with ID {}", newId);
+      LOGGER.debug("Saved view definition with ID {}", newId);
     }
   }
 
@@ -357,7 +357,7 @@ public class DatabaseRestore {
       if (newPositionId != null) {
         positionsIds.add(newPositionId);
       } else {
-        s_logger.warn("No position ID mapping for {}", oldPositionId);
+        LOGGER.warn("No position ID mapping for {}", oldPositionId);
       }
     }
     node.setPositionIds(positionsIds);
@@ -378,7 +378,7 @@ public class DatabaseRestore {
         return ObjectUtils.compare(id1, id2);
       }
     });
-    s_logger.info("Read {} {}", objects.size(), type);
+    LOGGER.info("Read {} {}", objects.size(), type);
     return objects;
   }
 

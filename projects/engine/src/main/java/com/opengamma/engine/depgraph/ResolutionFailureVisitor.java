@@ -22,7 +22,7 @@ import com.opengamma.engine.value.ValueSpecification;
  */
 public abstract class ResolutionFailureVisitor<T> implements ResolutionFailureListener {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(ResolutionFailureVisitor.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ResolutionFailureVisitor.class);
   
   
   @Override
@@ -37,80 +37,80 @@ public abstract class ResolutionFailureVisitor<T> implements ResolutionFailureLi
 
     @Override
     protected Void visitCouldNotResolve(final ValueRequirement valueRequirement) {
-      s_logger.info("Could not resolve {}", valueRequirement);
+      LOGGER.info("Could not resolve {}", valueRequirement);
       return super.visitCouldNotResolve(valueRequirement);
     }
 
     @Override
     protected Void visitNoFunctions(final ValueRequirement valueRequirement) {
-      s_logger.info("No functions available for {}", valueRequirement);
+      LOGGER.info("No functions available for {}", valueRequirement);
       return super.visitNoFunctions(valueRequirement);
     }
 
     @Override
     protected Void visitRecursiveRequirement(final ValueRequirement valueRequirement) {
-      s_logger.info("Recursive requirement on {} for function(s) producing it", valueRequirement);
+      LOGGER.info("Recursive requirement on {} for function(s) producing it", valueRequirement);
       return super.visitRecursiveRequirement(valueRequirement);
     }
 
     @Override
     protected Void visitUnsatisfied(final ValueRequirement valueRequirement) {
-      s_logger.info("Unsatisfied requirement {}", valueRequirement);
+      LOGGER.info("Unsatisfied requirement {}", valueRequirement);
       return super.visitUnsatisfied(valueRequirement);
     }
 
     @Override
     protected Void visitMarketDataMissing(final ValueRequirement valueRequirement) {
-      s_logger.info("Market data missing to satisfy requirement {}", valueRequirement);
+      LOGGER.info("Market data missing to satisfy requirement {}", valueRequirement);
       return super.visitMarketDataMissing(valueRequirement);
     }
 
     @Override
     protected Void visitSuccessfulFunction(final ValueRequirement valueRequirement, final String function, final ValueSpecification desiredOutput,
         final Map<ValueSpecification, ValueRequirement> satisfied) {
-      s_logger.info("Applied {} for {}", function, valueRequirement);
+      LOGGER.info("Applied {} for {}", function, valueRequirement);
       return super.visitSuccessfulFunction(valueRequirement, function, desiredOutput, satisfied);
     }
 
     @Override
     protected Void visitFailedFunction(final ValueRequirement valueRequirement, final String function, final ValueSpecification desiredOutput,
         final Map<ValueSpecification, ValueRequirement> satisfied, final Set<ResolutionFailure> unsatisfied) {
-      s_logger.info("Couldn't satisfy {} to produce {}", unsatisfied, desiredOutput);
-      s_logger.info("Caused by:");
+      LOGGER.info("Couldn't satisfy {} to produce {}", unsatisfied, desiredOutput);
+      LOGGER.info("Caused by:");
       return super.visitFailedFunction(valueRequirement, function, desiredOutput, satisfied, unsatisfied);
     }
 
     @Override
     protected Void visitGetAdditionalRequirementsFailed(final ValueRequirement valueRequirement, final String function, final ValueSpecification desiredOutput,
         final Map<ValueSpecification, ValueRequirement> requirements) {
-      s_logger.info("getAdditionalRequirements method failed on {} with inputs {}", function, requirements);
+      LOGGER.info("getAdditionalRequirements method failed on {} with inputs {}", function, requirements);
       return super.visitGetAdditionalRequirementsFailed(valueRequirement, function, desiredOutput, requirements);
     }
 
     @Override
     protected Void visitGetResultsFailed(final ValueRequirement valueRequirement, final String function, final ValueSpecification desiredOutput,
         final Map<ValueSpecification, ValueRequirement> requirements) {
-      s_logger.info("getResults method failed on {} with inputs {}", function, requirements);
+      LOGGER.info("getResults method failed on {} with inputs {}", function, requirements);
       return super.visitGetResultsFailed(valueRequirement, function, desiredOutput, requirements);
     }
 
     @Override
     protected Void visitGetRequirementsFailed(final ValueRequirement valueRequirement, final String function, final ValueSpecification desiredOutput) {
-      s_logger.info("getRequirements method failed on {} for {}", function, desiredOutput);
+      LOGGER.info("getRequirements method failed on {} for {}", function, desiredOutput);
       return super.visitGetRequirementsFailed(valueRequirement, function, desiredOutput);
     }
 
     @Override
     protected Void visitLateResolutionFailure(final ValueRequirement valueRequirement, final String function, final ValueSpecification desiredOutput,
         final Map<ValueSpecification, ValueRequirement> requirements) {
-      s_logger.info("Provisional result {} not in function output after late resolution", desiredOutput);
+      LOGGER.info("Provisional result {} not in function output after late resolution", desiredOutput);
       return super.visitLateResolutionFailure(valueRequirement, function, desiredOutput, requirements);
     }
 
     @Override
     protected Void visitBlacklistSuppressed(final ValueRequirement valueRequirement, final String function, final ValueSpecification desiredOutput,
         final Map<ValueSpecification, ValueRequirement> requirements) {
-      s_logger.info("Function blacklist prevented resolution of {}", valueRequirement);
+      LOGGER.info("Function blacklist prevented resolution of {}", valueRequirement);
       return super.visitBlacklistSuppressed(valueRequirement, function, desiredOutput, requirements);
     }
 

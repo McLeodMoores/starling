@@ -29,7 +29,7 @@ import com.opengamma.scripts.Scriptable;
 public class MarketDataSnapshotImportTool extends AbstractTool<ToolContext> {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(MarketDataSnapshotImportTool.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(MarketDataSnapshotImportTool.class);
 
   /** File name option flag */
   private static final String FILE_NAME_OPTION = "f";
@@ -76,7 +76,7 @@ public class MarketDataSnapshotImportTool extends AbstractTool<ToolContext> {
   private static SnapshotWriter constructSnapshotWriter() {
     MarketDataSnapshotMaster marketDataSnapshotMaster = s_context.getMarketDataSnapshotMaster();
     if (marketDataSnapshotMaster == null) {
-      s_logger.warn("No market data snapshot masters found at {}", s_context);
+      LOGGER.warn("No market data snapshot masters found at {}", s_context);
 
     }
     return new MasterSnapshotWriter(marketDataSnapshotMaster);

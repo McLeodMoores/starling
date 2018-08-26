@@ -27,7 +27,7 @@ import com.opengamma.master.config.ConfigMasterUtils;
  */
 public class CurrencyPairsConfigDocumentLoader {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(CurrencyPairsConfigDocumentLoader.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(CurrencyPairsConfigDocumentLoader.class);
   
   private final ConfigMaster _configMaster;
   private final String _dataFilePath;
@@ -74,7 +74,7 @@ public class CurrencyPairsConfigDocumentLoader {
   private Set<CurrencyPair> loadPairs() {
     BufferedReader reader = null;
     try {
-      s_logger.debug("Loading currency pairs from " + _dataFilePath);
+      LOGGER.debug("Loading currency pairs from " + _dataFilePath);
       reader = new BufferedReader(new FileReader(_dataFilePath));
       return readPairs(reader);
     } catch (IOException e) {
@@ -84,7 +84,7 @@ public class CurrencyPairsConfigDocumentLoader {
         try {
           reader.close();
         } catch (IOException e) {
-          s_logger.warn("Failed to close reader", e);
+          LOGGER.warn("Failed to close reader", e);
         }
       }
     }
@@ -104,12 +104,12 @@ public class CurrencyPairsConfigDocumentLoader {
       try {
         CurrencyPair pair = CurrencyPair.parse(pairStr.trim());
         if (pairs.add(pair)) {
-          s_logger.debug("Added currency pair " + pair.getName());
+          LOGGER.debug("Added currency pair " + pair.getName());
         } else {
-          s_logger.debug("Not adding duplicate currency pair " + pair.getName());
+          LOGGER.debug("Not adding duplicate currency pair " + pair.getName());
         }
       } catch (IllegalArgumentException e) {
-        s_logger.warn("Unable to create currency pair from " + pairStr, e);
+        LOGGER.warn("Unable to create currency pair from " + pairStr, e);
       }
     }
     return pairs;

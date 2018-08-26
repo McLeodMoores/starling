@@ -26,7 +26,7 @@ import com.opengamma.web.analytics.formatting.TypeFormatter;
  */
 public class RectangularViewportDefinition extends ViewportDefinition {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(RectangularViewportDefinition.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(RectangularViewportDefinition.class);
 
   /** Indices of rows in the viewport, not empty, sorted in ascending order. */
   private final List<Integer> _rows;
@@ -103,13 +103,13 @@ public class RectangularViewportDefinition extends ViewportDefinition {
         // TODO this gives false positives when expanding the viewport down by resizing the window
         // top row in both viewports is the same because there's no scrolling but new rows are being added without
         // any nodes being expanded
-        s_logger.debug("return #1");
+        LOGGER.debug("return #1");
         return Pairs.of(_rows.get(i - 1), true);
       }
       if (i >= newRows.size()) {
         // TODO this gives false positives scrolling slowly up to the top into the buffer zone
         // top row in both viewports is the same because of the extra hidden rows
-        s_logger.debug("return #2");
+        LOGGER.debug("return #2");
         return Pairs.of(newRows.get(i - 1), false);
       }
       // if this object's row index is greater then the node has collapsed
@@ -121,10 +121,10 @@ public class RectangularViewportDefinition extends ViewportDefinition {
         continue;
       }
       if (newRow < oldRow) {
-        s_logger.debug("return #3");
+        LOGGER.debug("return #3");
         return Pairs.of(newRows.get(i - 1), true);
       } else if (oldRow < newRow) {
-        s_logger.debug("return #4");
+        LOGGER.debug("return #4");
         return Pairs.of(_rows.get(i - 1), false);
       }
     }

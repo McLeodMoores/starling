@@ -28,12 +28,12 @@ public abstract class AbstractRegressionTest {
   private static final String FILE_WRITE_MODE_PROPERTY = "Regression.writeReportToFile";
   private static final String CONSOLE_WRITE_MODE_PROPERTY = "Regression.writeReportToConsole";
 
-  private static final double s_defaultAcceptableDelta = 0.0000001;
+  private static final double DEFAULT_ACCEPTABLE_DELTA = 0.0000001;
 
   private final AbstractRegressionTestToolContextManager _contextManager;
   private final GoldenCopyPersistenceHelper _goldenCopyPersistenceHelper;
 
-  private static final String s_defaultRegressionToolContext = "classpath:regression/regression-toolcontext.properties";
+  private static final String DEFAULT_REGRESSION_TOOL_CONTEXT = "classpath:regression/regression-toolcontext.properties";
 
   /**
    * Initializes the test. A valid tool context properties file is required - this cut down context is used to
@@ -53,7 +53,7 @@ public abstract class AbstractRegressionTest {
   }
 
   public AbstractRegressionTest(final File regressionRoot, final String regressionPropertiesFile) {
-    this(regressionRoot, s_defaultRegressionToolContext, regressionPropertiesFile);
+    this(regressionRoot, DEFAULT_REGRESSION_TOOL_CONTEXT, regressionPropertiesFile);
   }
 
   protected abstract AbstractRegressionTestToolContextManager createToolContextManager(File regressionRoot, String toolContextPropertiesFile, String regressionPropertiesFile);
@@ -160,7 +160,7 @@ public abstract class AbstractRegressionTest {
    * @return a double
    */
   protected double getAcceptableDelta() {
-    return s_defaultAcceptableDelta;
+    return DEFAULT_ACCEPTABLE_DELTA;
   }
 
   /**

@@ -39,7 +39,7 @@ import com.opengamma.OpenGammaRuntimeException;
 public final class ZipUtils {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(ZipUtils.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ZipUtils.class);
 
   /**
    * Restricted constructor
@@ -58,7 +58,7 @@ public final class ZipUtils {
     ArgumentChecker.notNull(archive, "archive");
     ArgumentChecker.notNull(outputDir, "outputDir");
 
-    s_logger.debug("Unzipping file:{} to {}", archive, outputDir);
+    LOGGER.debug("Unzipping file:{} to {}", archive, outputDir);
     try {
       FileUtils.forceMkdir(outputDir);
       unzipArchive(new ZipFile(archive), outputDir);

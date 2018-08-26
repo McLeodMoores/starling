@@ -38,12 +38,12 @@ import com.opengamma.util.test.TestGroup;
 public class ModifyExchangeDbExchangeMasterWorkerReplaceAllVersionsTest extends AbstractDbExchangeMasterWorkerTest {
   // superclass sets up dummy database
 
-  private static final Logger s_logger = LoggerFactory.getLogger(ModifyExchangeDbExchangeMasterWorkerReplaceAllVersionsTest.class);  
+  private static final Logger LOGGER = LoggerFactory.getLogger(ModifyExchangeDbExchangeMasterWorkerReplaceAllVersionsTest.class);  
 
   @Factory(dataProvider = "databases", dataProviderClass = DbTest.class)
   public ModifyExchangeDbExchangeMasterWorkerReplaceAllVersionsTest(String databaseType, String databaseVersion) {
     super(databaseType, databaseVersion, false);
-    s_logger.info("running testcases for {}", databaseType);
+    LOGGER.info("running testcases for {}", databaseType);
   }
   
 

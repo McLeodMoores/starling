@@ -95,7 +95,7 @@ public class RemoteEngineContextsComponentFactory extends AbstractComponentFacto
 
   // TODO: Update the Spring based configuration for remote calc nodes to use this
 
-  private static final Logger s_logger = LoggerFactory.getLogger(RemoteEngineContextsComponentFactory.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(RemoteEngineContextsComponentFactory.class);
   private static final String CONTEXT_CONFIGURATION_NAME = "remoteConfiguration";
   private static final String CONTEXT_CONFIGURATION_URI_NAME = "remoteConfigurationUri";
 
@@ -383,7 +383,7 @@ public class RemoteEngineContextsComponentFactory extends AbstractComponentFacto
    */
   protected Pair<UriEndPointDescriptionProvider.Validater, FudgeMsg> fetchConfiguration() {
     final FudgeRestClient client = FudgeRestClient.create();
-    s_logger.info("Fetching remote configuration for {} from {}", getClassifier(), getConfiguration());
+    LOGGER.info("Fetching remote configuration for {} from {}", getClassifier(), getConfiguration());
     final FudgeMsg remoteConfiguration = client.accessFudge(getConfiguration()).get(FudgeMsg.class);
     final UriEndPointDescriptionProvider.Validater validator = UriEndPointDescriptionProvider.validater(Executors.newCachedThreadPool(), getConfiguration());
     return Pairs.of(validator, remoteConfiguration);
@@ -399,7 +399,7 @@ public class RemoteEngineContextsComponentFactory extends AbstractComponentFacto
   protected URI fetchURI(final Pair<UriEndPointDescriptionProvider.Validater, FudgeMsg> remoteConfiguration, final String label) {
     final FudgeMsg configuration = remoteConfiguration.getSecond().getMessage(label);
     if (configuration == null) {
-      s_logger.warn("{} not defined in remote configuration {}", label, getConfiguration());
+      LOGGER.warn("{} not defined in remote configuration {}", label, getConfiguration());
       return null;
     }
     return remoteConfiguration.getFirst().getAccessibleURI(configuration);
@@ -427,7 +427,7 @@ public class RemoteEngineContextsComponentFactory extends AbstractComponentFacto
     // Always set the template so that it's null validation can take place
     property.set(template, component);
     if (component != null) {
-      s_logger.debug("Registered {}::{}", property.propertyType().getSimpleName(), getRemoteClassifier());
+      LOGGER.debug("Registered {}::{}", property.propertyType().getSimpleName(), getRemoteClassifier());
       repo.registerComponent((Class<Object>) property.propertyType(), getRemoteClassifier(), component);
     }
   }
@@ -445,7 +445,7 @@ public class RemoteEngineContextsComponentFactory extends AbstractComponentFacto
       final Pair<UriEndPointDescriptionProvider.Validater, FudgeMsg> remoteConfiguration, final AbstractComponentFactory template) throws Exception {
     final Object existingComponent = repo.findInstance(property.propertyType(), getRemoteClassifier());
     if (existingComponent != null) {
-      s_logger.debug("Got cached {}::{}", property.propertyType().getSimpleName(), getRemoteClassifier());
+      LOGGER.debug("Got cached {}::{}", property.propertyType().getSimpleName(), getRemoteClassifier());
       property.set(template, existingComponent);
       return;
     }
@@ -518,7 +518,7 @@ public class RemoteEngineContextsComponentFactory extends AbstractComponentFacto
         remoteComponent(repo, property, template, createVolatilityCubeDefinitionSource(fetchURI(remoteConfiguration, "volatilityCubeDefinitionSource")));
         break;
       default:
-        s_logger.warn("Can't handle {} on {}", property.name(), template);
+        LOGGER.warn("Can't handle {} on {}", property.name(), template);
         if ((localConfiguration != null) && !"true".equals(localConfiguration.remove("ignore" + StringUtils.capitalize(property.name())))) {
           if (isStrict()) {
             throw new UnsupportedOperationException("Strict mode set and can't handle template field " + property + " on " + template);

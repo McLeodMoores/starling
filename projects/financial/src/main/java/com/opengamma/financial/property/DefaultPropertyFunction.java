@@ -37,7 +37,7 @@ import com.opengamma.financial.analytics.OpenGammaFunctionExclusions;
  */
 public abstract class DefaultPropertyFunction extends AbstractFunction.NonCompiledInvoker implements OpenGammaFunctionExclusions {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(DefaultPropertyFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(DefaultPropertyFunction.class);
 
   /**
    * The priority class of {@link DefaultPropertyFunction} instances, allowing them to be ordered relative to each other.
@@ -160,7 +160,7 @@ public abstract class DefaultPropertyFunction extends AbstractFunction.NonCompil
       for (final ValueSpecification result : resultsProvider.getPartialResults(getTarget())) {
         final Set<String> properties = result.getProperties().getProperties();
         if ((properties != null) && properties.contains(propertyName)) {
-          s_logger.debug("Found {} defined on {}", propertyName, result);
+          LOGGER.debug("Found {} defined on {}", propertyName, result);
           addValuePropertyName(result.getValueName(), propertyName);
         }
       }
@@ -191,12 +191,12 @@ public abstract class DefaultPropertyFunction extends AbstractFunction.NonCompil
     defaults = new PropertyDefaults(context, target);
     getDefaults(defaults);
     if (defaults.getValueName2PropertyNames().isEmpty()) {
-      s_logger.debug("No default properties for {}", target);
+      LOGGER.debug("No default properties for {}", target);
       return null;
     } else {
-      s_logger.debug("Found {} value(s) with default properties for {}", defaults.getValueName2PropertyNames().size(), target);
+      LOGGER.debug("Found {} value(s) with default properties for {}", defaults.getValueName2PropertyNames().size(), target);
       if (!defaults.isTargetUsed()) {
-        s_logger.info("Caching target agnostic default values for {}", getClass());
+        LOGGER.info("Caching target agnostic default values for {}", getClass());
         defaults = new PropertyDefaults(defaults);
         _defaults = defaults;
       }
@@ -266,34 +266,34 @@ public abstract class DefaultPropertyFunction extends AbstractFunction.NonCompil
     for (final String propertyName : defaults.getValueName2PropertyNames().get(desiredValue.getValueName())) {
       final Set<String> existingValues = desiredValue.getConstraints().getValues(propertyName);
       if (isPermitWithout() || (existingValues == null) || desiredValue.getConstraints().isOptional(propertyName)) {
-        s_logger.debug("Matched default property {} for {}", propertyName, desiredValue);
+        LOGGER.debug("Matched default property {} for {}", propertyName, desiredValue);
         final Set<String> defaultValues = getDefaultValue(context, target, desiredValue, propertyName);
         if (defaultValues != null) {
           if (defaultValues.isEmpty()) {
             if (existingValues == null) {
-              s_logger.debug("Default ANY");
+              LOGGER.debug("Default ANY");
               constraints.withAny(propertyName);
               matched = true;
             } else {
-              s_logger.debug("Default ANY but already had constraint {}", existingValues);
+              LOGGER.debug("Default ANY but already had constraint {}", existingValues);
             }
           } else {
             if (existingValues == null) {
-              s_logger.debug("Default {}", defaultValues);
+              LOGGER.debug("Default {}", defaultValues);
               constraints.with(propertyName, defaultValues);
               matched = true;
             } else {
               if (existingValues.isEmpty()) {
-                s_logger.debug("Default {} better than ANY", defaultValues);
+                LOGGER.debug("Default {} better than ANY", defaultValues);
                 constraints.withoutAny(propertyName).with(propertyName, defaultValues);
                 matched = true;
               } else {
                 // REVIEW 2013-11-06 Andrew -- This can be quite inefficient; the isEmpty will create iterators on the underlyings, as will then the with operation if the intersection is non-empty
                 final Set<String> intersect = Sets.intersection(existingValues, defaultValues);
                 if (intersect.isEmpty()) {
-                  s_logger.debug("Default {} incompatible with {}", defaultValues, existingValues);
+                  LOGGER.debug("Default {} incompatible with {}", defaultValues, existingValues);
                 } else {
-                  s_logger.debug("Default {} reduced to {}", defaultValues, intersect);
+                  LOGGER.debug("Default {} reduced to {}", defaultValues, intersect);
                   constraints.withoutAny(propertyName).with(propertyName, intersect);
                   matched = true;
                 }
@@ -301,21 +301,21 @@ public abstract class DefaultPropertyFunction extends AbstractFunction.NonCompil
             }
           }
         } else {
-          s_logger.debug("No default values");
+          LOGGER.debug("No default values");
         }
       } else {
         // If we don't permit constraint absence, and there is a mandatory requirement; that requires something deeper
         // down in the graph to make a decision.
-        s_logger.debug("Does not match on property {} for {}", propertyName, desiredValue);
+        LOGGER.debug("Does not match on property {} for {}", propertyName, desiredValue);
       }
     }
     if (!matched || !verifyConstraints(constraints)) {
       // No default values were found
-      s_logger.debug("No matched values");
+      LOGGER.debug("No matched values");
       return null;
     }
     final ValueRequirement reduction = new ValueRequirement(desiredValue.getValueName(), target.toSpecification(), constraints.get());
-    s_logger.debug("Reduced to {}", reduction);
+    LOGGER.debug("Reduced to {}", reduction);
     return Collections.singleton(reduction);
   }
 
@@ -324,7 +324,7 @@ public abstract class DefaultPropertyFunction extends AbstractFunction.NonCompil
     final PropertyDefaults defaults = getDefaults(context, target);
     if (defaults == null) {
       // If canApplyTo is overloaded, we can't assert that getDefaults produces something non-empty
-      s_logger.debug("No defaults for {}", target);
+      LOGGER.debug("No defaults for {}", target);
       return null;
     }
     final ComputationTargetSpecification targetSpec = target.toSpecification();
@@ -339,7 +339,7 @@ public abstract class DefaultPropertyFunction extends AbstractFunction.NonCompil
         }
       }
     }
-    s_logger.debug("Produced results {} for {}", result, target);
+    LOGGER.debug("Produced results {} for {}", result, target);
     return result;
   }
 

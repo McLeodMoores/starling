@@ -23,7 +23,7 @@ public class InMemoryInvalidFieldCachingReferenceDataProvider extends AbstractIn
   /**
    * The in memory cache.
    */
-  private static final ConcurrentMap<String, Set<String>> s_cache = new ConcurrentHashMap<String, Set<String>>();
+  private static final ConcurrentMap<String, Set<String>> CACHE = new ConcurrentHashMap<String, Set<String>>();
 
   /**
    * Creates an instance.
@@ -37,14 +37,14 @@ public class InMemoryInvalidFieldCachingReferenceDataProvider extends AbstractIn
   //-------------------------------------------------------------------------
   @Override
   protected void saveInvalidFields(String identifier, Set<String> invalidFields) {
-    s_cache.put(identifier, invalidFields);
+    CACHE.put(identifier, invalidFields);
   }
 
   @Override
   protected Map<String, Set<String>> loadInvalidFields(Set<String> identifiers) {
     Map<String, Set<String>> result = Maps.newHashMap();
     for (String identifier : identifiers) {
-      Set<String> invalidFields = s_cache.get(identifier);
+      Set<String> invalidFields = CACHE.get(identifier);
       result.put(identifier, invalidFields);
     }
     return result;

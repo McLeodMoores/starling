@@ -28,7 +28,7 @@ import com.opengamma.id.UniqueId;
  * A {@link MarketDataSnapshot} for live data.
  */
 public class LiveMarketDataSnapshot extends AbstractMarketDataSnapshot {
-  private static final Logger s_logger = LoggerFactory.getLogger(LiveMarketDataSnapshot.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(LiveMarketDataSnapshot.class);
 
   private final InMemoryLKVMarketDataSnapshot _underlyingSnapshot;
   private final LiveMarketDataProvider _liveMarketDataProvider;
@@ -96,12 +96,12 @@ public class LiveMarketDataSnapshot extends AbstractMarketDataSnapshot {
         if (!unavailable.isEmpty()) {
           try {
             if (!awaitingValuesLatch.await(timeout, unit)) {
-              s_logger.warn(MessageFormat.format(
+              LOGGER.warn(MessageFormat.format(
                   "Timed out while waiting {0} {1} for required values to become available: {2}", timeout, unit,
                   unavailable));
             }
           } catch (final InterruptedException e) {
-            s_logger.warn(MessageFormat.format(
+            LOGGER.warn(MessageFormat.format(
                 "Interrupted while waiting for required values to become available: {0}", unavailable), e);
           }
         }

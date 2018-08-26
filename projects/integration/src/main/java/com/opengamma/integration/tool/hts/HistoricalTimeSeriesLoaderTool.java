@@ -30,7 +30,7 @@ import com.opengamma.scripts.Scriptable;
  */
 @Scriptable
 public class HistoricalTimeSeriesLoaderTool extends AbstractTool<ToolContext> {
-  private static final Logger s_logger = LoggerFactory.getLogger(HistoricalTimeSeriesLoaderTool.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(HistoricalTimeSeriesLoaderTool.class);
   /** File name option flag */
   public static final String FILE_NAME_OPT = "f";
   /** Time series data source option flag*/
@@ -79,7 +79,7 @@ public class HistoricalTimeSeriesLoaderTool extends AbstractTool<ToolContext> {
               if (getCommandLine().hasOption(TIME_SERIES_IDSCHEME_OPT)) {
                 ids.add(ExternalId.of(getCommandLine().getOptionValue(TIME_SERIES_IDSCHEME_OPT), line.trim()));
               } else {
-                s_logger.error("Time series id {} does not have a scheme, and ID scheme option not set, so cannot be loaded, skipping.", line);
+                LOGGER.error("Time series id {} does not have a scheme, and ID scheme option not set, so cannot be loaded, skipping.", line);
               }
             }
           }
@@ -87,7 +87,7 @@ public class HistoricalTimeSeriesLoaderTool extends AbstractTool<ToolContext> {
           loader.loadTimeSeries(req);
         }
       } else {
-        s_logger.error("File {} does not exist", fileName);
+        LOGGER.error("File {} does not exist", fileName);
       }
     } catch (final Exception e) {
 

@@ -34,7 +34,7 @@ import com.opengamma.util.ArgumentChecker;
  *
  */
 public class EquityFutureOptionBlackLognormalDefaults extends DefaultPropertyFunction {
-  private static final Logger s_logger = LoggerFactory.getLogger(EquityFutureOptionBlackLognormalDefaults.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(EquityFutureOptionBlackLognormalDefaults.class);
   private static final String[] VALUE_REQUIREMENTS = new String[] {
     ValueRequirementNames.PRESENT_VALUE,
     ValueRequirementNames.VALUE_DELTA,
@@ -130,7 +130,7 @@ public class EquityFutureOptionBlackLognormalDefaults extends DefaultPropertyFun
       case BlackVolatilitySurfacePropertyNamesAndValues.PROPERTY_SMILE_INTERPOLATOR:
         return _currencyToInterpolationMethod.get(currency);
       default:
-        s_logger.error("Could not find default value for {} in this function", propertyName);
+        LOGGER.error("Could not find default value for {} in this function", propertyName);
         return null;
     }
   }

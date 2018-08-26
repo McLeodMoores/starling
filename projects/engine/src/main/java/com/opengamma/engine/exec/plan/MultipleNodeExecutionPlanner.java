@@ -45,8 +45,8 @@ import com.opengamma.util.tuple.Pairs;
  */
 public class MultipleNodeExecutionPlanner implements GraphExecutionPlanner {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(MultipleNodeExecutionPlanner.class);
-  private static final GraphExecutionPlanner s_smallJobPlanner = new SingleNodeExecutionPlanner();
+  private static final Logger LOGGER = LoggerFactory.getLogger(MultipleNodeExecutionPlanner.class);
+  private static final GraphExecutionPlanner SMALL_JOB_PLANNER = new SingleNodeExecutionPlanner();
 
   private int _minimumJobItems = 1;
   private int _maximumJobItems = Integer.MAX_VALUE;
@@ -174,7 +174,7 @@ public class MultipleNodeExecutionPlanner implements GraphExecutionPlanner {
 
   private GraphExecutionPlan createSingleNodePlan(final DependencyGraph graph, final ExecutionLogModeSource logModeSource, final long functionInitializationId,
       final Set<ValueSpecification> sharedValues, final Map<ValueSpecification, FunctionParameters> parameters) {
-    return s_smallJobPlanner.createPlan(graph, logModeSource, functionInitializationId, sharedValues, parameters);
+    return SMALL_JOB_PLANNER.createPlan(graph, logModeSource, functionInitializationId, sharedValues, parameters);
   }
 
   private static final class FragmentGatherer {
@@ -503,7 +503,7 @@ public class MultipleNodeExecutionPlanner implements GraphExecutionPlanner {
   @Override
   public GraphExecutionPlan createPlan(final DependencyGraph graph, final ExecutionLogModeSource logModeSource, final long functionInitialisationId,
       final Set<ValueSpecification> sharedValues, final Map<ValueSpecification, FunctionParameters> parameters) {
-    final OperationTimer timer = new OperationTimer(s_logger, "Creating execution plan for {}", graph);
+    final OperationTimer timer = new OperationTimer(LOGGER, "Creating execution plan for {}", graph);
     try {
       if (graph.getSize() <= getMinimumJobItems()) {
         // If the graph is too small, run it as-is

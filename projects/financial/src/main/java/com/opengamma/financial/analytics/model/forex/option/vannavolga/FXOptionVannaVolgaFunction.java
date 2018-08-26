@@ -68,7 +68,7 @@ public abstract class FXOptionVannaVolgaFunction extends AbstractFunction.NonCom
   public static final String PROPERTY_OTM_DELTA = "DeltaOTM";
   /** The name of the calculation method */
   public static final String VANNA_VOLGA_METHOD = "VannaVolgaMethod";
-  private static final Logger s_logger = LoggerFactory.getLogger(FXOptionVannaVolgaFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(FXOptionVannaVolgaFunction.class);
   private final String _valueRequirementName;
 
   public FXOptionVannaVolgaFunction(final String valueRequirementName) {
@@ -120,7 +120,7 @@ public abstract class FXOptionVannaVolgaFunction extends AbstractFunction.NonCom
     }
     final Set<String> surfaceNames = constraints.getValues(ValuePropertyNames.SURFACE);
     if (surfaceNames == null || surfaceNames.size() != 1) {
-      s_logger.error("Need one surface name; have " + surfaceNames);
+      LOGGER.error("Need one surface name; have " + surfaceNames);
     }
     final Set<String> deltas = constraints.getValues(PROPERTY_OTM_DELTA);
     if (deltas == null || deltas.size() != 1) {

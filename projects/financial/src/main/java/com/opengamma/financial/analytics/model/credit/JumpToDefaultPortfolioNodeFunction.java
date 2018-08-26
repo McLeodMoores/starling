@@ -39,7 +39,7 @@ import com.opengamma.util.async.AsynchronousExecution;
  */
 public class JumpToDefaultPortfolioNodeFunction extends AbstractFunction.NonCompiledInvoker {
   /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(JumpToDefaultPortfolioNodeFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(JumpToDefaultPortfolioNodeFunction.class);
 
   @Override
   public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
@@ -59,7 +59,7 @@ public class JumpToDefaultPortfolioNodeFunction extends AbstractFunction.NonComp
         entityNames[i] = Integer.toString(i);
         mcas[i++] = jtd;
       } else {
-        s_logger.error("Jump to default value was not a double");
+        LOGGER.error("Jump to default value was not a double");
       }
     }
     final StringLabelledMatrix1D matrix = new StringLabelledMatrix1D(entityNames, mcas);

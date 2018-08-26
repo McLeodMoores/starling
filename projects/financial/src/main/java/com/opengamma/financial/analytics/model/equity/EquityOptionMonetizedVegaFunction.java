@@ -35,7 +35,7 @@ import com.opengamma.util.async.AsynchronousExecution;
  */
 public class EquityOptionMonetizedVegaFunction extends AbstractFunction.NonCompiledInvoker {
   /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(EquityOptionMonetizedVegaFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(EquityOptionMonetizedVegaFunction.class);
 
   @Override
   public ComputationTargetType getTargetType() {
@@ -53,7 +53,7 @@ public class EquityOptionMonetizedVegaFunction extends AbstractFunction.NonCompi
     final ValueProperties constraints = desiredValue.getConstraints();
     final Set<String> calculationMethod = constraints.getValues(ValuePropertyNames.CALCULATION_METHOD);
     if (calculationMethod == null || calculationMethod.size() != 1) {
-      s_logger.error("Need to have a single calculation method");
+      LOGGER.error("Need to have a single calculation method");
       return null;
     }
     final ValueProperties properties = ValueProperties.builder()

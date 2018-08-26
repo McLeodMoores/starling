@@ -33,7 +33,7 @@ import com.opengamma.util.tuple.Pairs;
  */
 public class EquityForwardPerExchangeDefaults extends DefaultPropertyFunction {
   /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(EquityForwardPerExchangeDefaults.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(EquityForwardPerExchangeDefaults.class);
   /** The value requirements for which these defaults are valid */
   private static final String[] VALUE_REQUIREMENTS = new String[] {
     ValueRequirementNames.FORWARD
@@ -83,7 +83,7 @@ public class EquityForwardPerExchangeDefaults extends DefaultPropertyFunction {
     final EquityVarianceSwapSecurity varianceSwap = (EquityVarianceSwapSecurity) target.getSecurity();
     final String underlyingEquity = EquitySecurityUtils.getIndexOrEquityNameFromUnderlying(varianceSwap);
     if (!_equityCurveConfigAndDiscountingCurveNames.containsKey(underlyingEquity)) {
-      s_logger.error("Could not get config for equity " + underlyingEquity + "; should never happen");
+      LOGGER.error("Could not get config for equity " + underlyingEquity + "; should never happen");
       return null;
     }
     final Pair<String, String> pair = _equityCurveConfigAndDiscountingCurveNames.get(underlyingEquity);

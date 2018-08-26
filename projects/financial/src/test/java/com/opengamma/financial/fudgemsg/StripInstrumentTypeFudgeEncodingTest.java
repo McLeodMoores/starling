@@ -20,17 +20,17 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT)
 public class StripInstrumentTypeFudgeEncodingTest extends FinancialTestBase {
 
-  private static final StripInstrumentType s_ref = StripInstrumentType.FUTURE;
+  private static final StripInstrumentType REF= StripInstrumentType.FUTURE;
 
   @Test
   public void testCycle() {
-    assertEquals(s_ref, cycleObject(StripInstrumentType.class, s_ref));
+    assertEquals(REF, cycleObject(StripInstrumentType.class, REF));
   }
 
   @Test
   public void testFromString() {
-    assertEquals(s_ref, getFudgeContext().getFieldValue(StripInstrumentType.class,
-        UnmodifiableFudgeField.of(FudgeWireType.STRING, s_ref.name())));
+    assertEquals(REF, getFudgeContext().getFieldValue(StripInstrumentType.class,
+        UnmodifiableFudgeField.of(FudgeWireType.STRING, REF.name())));
   }
 
 }

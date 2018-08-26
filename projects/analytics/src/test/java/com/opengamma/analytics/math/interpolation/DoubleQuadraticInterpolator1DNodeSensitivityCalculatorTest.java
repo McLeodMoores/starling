@@ -28,14 +28,14 @@ public class DoubleQuadraticInterpolator1DNodeSensitivityCalculatorTest {
   private static final double EPS = 1e-7;
   private static final Function1D<Double, Double> FUNCTION = new Function1D<Double, Double>() {
 
-    private static final double a = -0.045;
-    private static final double b = 0.03;
-    private static final double c = 0.3;
-    private static final double d = 0.05;
+    private static final double A = -0.045;
+    private static final double B = 0.03;
+    private static final double C = 0.3;
+    private static final double D = 0.05;
 
     @Override
     public Double evaluate(final Double x) {
-      return (a + b * x) * Math.exp(-c * x) + d;
+      return (A + B * x) * Math.exp(-C * x) + D;
     }
 
   };

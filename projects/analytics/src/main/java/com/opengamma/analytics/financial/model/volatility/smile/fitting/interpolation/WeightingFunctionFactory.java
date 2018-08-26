@@ -24,8 +24,8 @@ public final class WeightingFunctionFactory {
   public static final SineWeightingFunction SINE_WEIGHTING_FUNCTION = SineWeightingFunction.getInstance();
   /** Linear weighting function */
   public static final LinearWeightingFunction LINEAR_WEIGHTING_FUNCTION = LinearWeightingFunction.getInstance();
-  private static final Map<String, WeightingFunction> s_staticInstances;
-  private static final Map<Class<?>, String> s_instanceNames;
+  private static final Map<String, WeightingFunction> INSTANCES;
+  private static final Map<Class<?>, String> INSTANCE_NAMES;
 
   static {
     final Map<String, WeightingFunction> staticInstances = new HashMap<>();
@@ -36,15 +36,15 @@ public final class WeightingFunctionFactory {
     instanceNames.put(LinearWeightingFunction.class, LINEAR_WEIGHTING_FUNCTION_NAME);
     staticInstances.put(SINE_WEIGHTING_FUNCTION_NAME, SINE_WEIGHTING_FUNCTION);
     instanceNames.put(SineWeightingFunction.class, SINE_WEIGHTING_FUNCTION_NAME);
-    s_staticInstances = new HashMap<>(staticInstances);
-    s_instanceNames = new HashMap<>(instanceNames);
+    INSTANCES = new HashMap<>(staticInstances);
+    INSTANCE_NAMES = new HashMap<>(instanceNames);
   }
 
   private WeightingFunctionFactory() {
   }
 
   public static WeightingFunction getWeightingFunction(final String weightingFunctionName) {
-    final WeightingFunction function = s_staticInstances.get(weightingFunctionName);
+    final WeightingFunction function = INSTANCES.get(weightingFunctionName);
     if (function != null) {
       return function;
     }
@@ -55,6 +55,6 @@ public final class WeightingFunctionFactory {
     if (function == null) {
       return null;
     }
-    return s_instanceNames.get(function.getClass());
+    return INSTANCE_NAMES.get(function.getClass());
   }
 }

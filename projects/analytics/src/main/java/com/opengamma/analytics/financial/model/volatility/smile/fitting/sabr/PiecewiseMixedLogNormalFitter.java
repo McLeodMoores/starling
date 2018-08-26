@@ -38,7 +38,7 @@ public class PiecewiseMixedLogNormalFitter {
   //      new ParameterLimitsTransform[] {VOL_TRANSFORM, DVOL_TRANSFORM, THETA_TRANSFORM, PHI_TRANSFORM }, new BitSet());
   private static final WeightingFunction DEFAULT_WEIGHTING_FUNCTION = WeightingFunctionFactory.SINE_WEIGHTING_FUNCTION;
 
-  private static final Logger s_logger = LoggerFactory.getLogger(PiecewiseSABRFitterRootFinder.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(PiecewiseSABRFitterRootFinder.class);
   private static final MixedLogNormalVolatilityFunction MODEL = MixedLogNormalVolatilityFunction.getInstance();
   private final WeightingFunction _weightingFunction;
   private final boolean _globalBetaSearch;
@@ -80,7 +80,7 @@ public class PiecewiseMixedLogNormalFitter {
     //    if (averageVol2 / averageVol < 0.01) {
     //      start = new DoubleMatrix1D(averageVol, 1.0, 0.0, 0.0);
     //      if (!_globalBetaSearch && _defaultBeta != 1.0) {
-    //        s_logger.warn("Smile almost flat. Cannot use beta = ", +_defaultBeta + " so ignored");
+    //        LOGGER.warn("Smile almost flat. Cannot use beta = ", +_defaultBeta + " so ignored");
     //      }
     //    } else {
     //      final double approxAlpha = averageVol * Math.pow(forward, 1 - _defaultBeta);
@@ -103,7 +103,7 @@ public class PiecewiseMixedLogNormalFitter {
 
     if (n == 3) {
       if (gRes.getChiSq() / n > 1.0) {
-        s_logger.warn("chi^2 on SABR fit to ", +n + " points is " + gRes.getChiSq());
+        LOGGER.warn("chi^2 on SABR fit to ", +n + " points is " + gRes.getChiSq());
       }
       modelParams[0] = new MixedLogNormalModelData(gRes.getModelParameters().getData());
     } else {
@@ -133,7 +133,7 @@ public class PiecewiseMixedLogNormalFitter {
         final SmileModelFitter<MixedLogNormalModelData> fitter = new MixedLogNormalModelFitter(forward, tStrikes, expiry, tVols, errors, MODEL, 2, true);
         final LeastSquareResultsWithTransform lRes = fitter.solve(start, fixed);
         if (lRes.getChiSq() > 3.0) {
-          s_logger.warn("chi^2 on 3-point SABR fit #" + i + " is " + lRes.getChiSq());
+          LOGGER.warn("chi^2 on 3-point SABR fit #" + i + " is " + lRes.getChiSq());
         }
         modelParams[i] = new MixedLogNormalModelData(lRes.getModelParameters().getData());
 

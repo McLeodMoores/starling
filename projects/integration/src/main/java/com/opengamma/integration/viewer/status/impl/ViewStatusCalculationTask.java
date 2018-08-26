@@ -86,7 +86,7 @@ public class ViewStatusCalculationTask implements Callable<PerViewStatusResult> 
 
     @Override
     public void viewDefinitionCompiled(CompiledViewDefinition compiledViewDefinition, boolean hasMarketDataPermissions) {
-      s_logger.error("View definition compiled");
+      LOGGER.error("View definition compiled");
       CompiledViewCalculationConfiguration compiledCalculationConfiguration = compiledViewDefinition.getCompiledCalculationConfiguration(DEFAULT_CALC_CONFIG);
       Map<ValueSpecification, Set<ValueRequirement>> terminalOutputs = compiledCalculationConfiguration.getTerminalOutputSpecifications();
       for (ValueSpecification valueSpec : terminalOutputs.keySet()) {
@@ -97,7 +97,7 @@ public class ViewStatusCalculationTask implements Callable<PerViewStatusResult> 
           if (currency != null) {
             _statusResult.put(new ViewStatusKeyBean(_securityType, valueSpec.getValueName(), currency, computationTargetType.getName()), ViewStatus.NO_VALUE);
           } else {
-            s_logger.error("Discarding result as NULL return as Currency for id: {} targetType:{}", uniqueId, computationTargetType);
+            LOGGER.error("Discarding result as NULL return as Currency for id: {} targetType:{}", uniqueId, computationTargetType);
           }
         }
       }
@@ -105,7 +105,7 @@ public class ViewStatusCalculationTask implements Callable<PerViewStatusResult> 
 
     @Override
     public void viewDefinitionCompilationFailed(final Instant valuationTime, final Exception exception) {
-      s_logger.debug("View definition {} failed to initialize", _viewDefinition);
+      LOGGER.debug("View definition {} failed to initialize", _viewDefinition);
       try {
         processGraphFailResult(_statusResult);
       } finally {
@@ -114,37 +114,37 @@ public class ViewStatusCalculationTask implements Callable<PerViewStatusResult> 
     }
 
     public void cycleStarted(ViewCycleMetadata cycleInfo) {
-      s_logger.debug("Cycle started");
+      LOGGER.debug("Cycle started");
     }
 
     @Override
     public void cycleExecutionFailed(ViewCycleExecutionOptions executionOptions, Exception exception) {
-      s_logger.debug("Cycle execution failed", exception);
+      LOGGER.debug("Cycle execution failed", exception);
     }
 
     @Override
     public void processCompleted() {
-      s_logger.debug("Process completed");
+      LOGGER.debug("Process completed");
     }
 
     @Override
     public void processTerminated(boolean executionInterrupted) {
-      s_logger.debug("Process terminated");
+      LOGGER.debug("Process terminated");
     }
 
     @Override
     public void clientShutdown(Exception e) {
-      s_logger.debug("Client shutdown");
+      LOGGER.debug("Client shutdown");
     }
 
     @Override
     public void cycleFragmentCompleted(ViewComputationResultModel fullResult, ViewDeltaResultModel deltaResult) {
-      s_logger.debug("cycle fragment completed");
+      LOGGER.debug("cycle fragment completed");
     }
 
     @Override
     public void cycleCompleted(final ViewComputationResultModel fullResult, final ViewDeltaResultModel deltaResult) {
-      s_logger.debug("cycle {} completed", _count.get());
+      LOGGER.debug("cycle {} completed", _count.get());
       if (_count.getAndIncrement() > 5) {
         processStatusResult(fullResult, _statusResult);
         _latch.countDown();
@@ -153,7 +153,7 @@ public class ViewStatusCalculationTask implements Callable<PerViewStatusResult> 
   }
 
   private static final String MIXED_CURRENCY = "MIXED_CURRENCY";
-  private static final Logger s_logger = LoggerFactory.getLogger(ViewStatusCalculationTask.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ViewStatusCalculationTask.class);
   
   private static final String DEFAULT_CALC_CONFIG = "Default";
   
@@ -186,7 +186,7 @@ public class ViewStatusCalculationTask implements Callable<PerViewStatusResult> 
 
   @Override
   public PerViewStatusResult call() throws Exception {
-    s_logger.debug("Start calculating result for security:{} with values{}", _securityType, Sets.newTreeSet(_valueRequirementNames).toString());
+    LOGGER.debug("Start calculating result for security:{} with values{}", _securityType, Sets.newTreeSet(_valueRequirementNames).toString());
     
     final PerViewStatusResult statusResult = new PerViewStatusResult(_securityType);
     //No need to do any work if there are no ValueRequirements to compute
@@ -202,16 +202,16 @@ public class ViewStatusCalculationTask implements Callable<PerViewStatusResult> 
     client.attachToViewProcess(viewDefinition.getUniqueId(), ExecutionOptions.infinite(_marketDataSpecification));
    
     try {
-      s_logger.info("main thread waiting");
+      LOGGER.info("main thread waiting");
       if (!latch.await(30, TimeUnit.SECONDS)) {
-        s_logger.error("Timed out waiting for {}", viewDefinition);
+        LOGGER.error("Timed out waiting for {}", viewDefinition);
       }
     } catch (final InterruptedException ex) {
       throw new OpenGammaRuntimeException("Interrupted while waiting for " + viewDefinition, ex);
     }
     client.detachFromViewProcess();
     removeViewDefinition(viewDefinition);
-    s_logger.debug("PerViewStatusResult for securityType:{} is {}", _securityType, statusResult);
+    LOGGER.debug("PerViewStatusResult for securityType:{} is {}", _securityType, statusResult);
     return statusResult;
   }
 
@@ -226,10 +226,10 @@ public class ViewStatusCalculationTask implements Callable<PerViewStatusResult> 
   }
 
   private void removeViewDefinition(ViewDefinition viewDefinition) {
-    s_logger.debug("Removing ViewDefintion with id: {}", viewDefinition.getUniqueId());
+    LOGGER.debug("Removing ViewDefintion with id: {}", viewDefinition.getUniqueId());
     ConfigMaster configMaster = _toolContext.getConfigMaster();
     configMaster.remove(viewDefinition.getUniqueId().getObjectId());
-    s_logger.debug("ViewDefinition {} removed", viewDefinition.getUniqueId());
+    LOGGER.debug("ViewDefinition {} removed", viewDefinition.getUniqueId());
   }
 
   private ViewDefinition createViewDefinition() {
@@ -283,14 +283,14 @@ public class ViewStatusCalculationTask implements Callable<PerViewStatusResult> 
         for (Map.Entry<Pair<String, ValueProperties>, ComputedValueResult> valueEntry : values.entrySet()) {
           String valueName = valueEntry.getKey().getFirst();
           String currency = getCurrency(targetSpec.getUniqueId(), targetType);
-          s_logger.debug("{} currency returned for id:{} targetType:{}", currency, targetSpec.getUniqueId(), targetType);
+          LOGGER.debug("{} currency returned for id:{} targetType:{}", currency, targetSpec.getUniqueId(), targetType);
           if (currency != null) {
             ComputedValueResult computedValue = valueEntry.getValue();
             if (isGoodValue(computedValue)) {
               statusResult.put(new ViewStatusKeyBean(_securityType, valueName, currency, targetType.getName()), ViewStatus.VALUE);
             }
           } else {
-            s_logger.error("Discarding result as NULL return as Currency for id: {} targetType:{}", targetSpec.getUniqueId(), targetType);
+            LOGGER.error("Discarding result as NULL return as Currency for id: {} targetType:{}", targetSpec.getUniqueId(), targetType);
           }
         }
       }

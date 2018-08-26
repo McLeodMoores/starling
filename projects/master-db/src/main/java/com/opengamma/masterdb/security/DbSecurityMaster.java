@@ -71,7 +71,7 @@ public class DbSecurityMaster
     implements SecurityMaster {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(DbSecurityMaster.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(DbSecurityMaster.class);
 
   /**
    * The default scheme for unique identifiers.
@@ -184,7 +184,7 @@ public class DbSecurityMaster
     ArgumentChecker.notNull(request, "request");
     ArgumentChecker.notNull(request.getPagingRequest(), "request.pagingRequest");
     ArgumentChecker.notNull(request.getVersionCorrection(), "request.versionCorrection");
-    s_logger.debug("search {}", request);
+    LOGGER.debug("search {}", request);
 
     VersionCorrection vc = request.getVersionCorrection();
     if (vc.containsLatest()) {

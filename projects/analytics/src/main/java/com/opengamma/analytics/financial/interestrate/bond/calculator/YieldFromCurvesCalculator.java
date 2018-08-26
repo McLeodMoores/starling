@@ -11,7 +11,7 @@ import com.opengamma.analytics.financial.interestrate.bond.definition.BillSecuri
 import com.opengamma.analytics.financial.interestrate.bond.definition.BondFixedSecurity;
 import com.opengamma.analytics.financial.interestrate.bond.method.BillSecurityDiscountingMethod;
 import com.opengamma.analytics.financial.interestrate.bond.method.BondSecurityDiscountingMethod;
-
+//CSOFF
 /**
  * Calculate bond yield from curves.
  * @deprecated Use {@link com.opengamma.analytics.financial.provider.calculator.issuer.YieldFromCurvesCalculator}

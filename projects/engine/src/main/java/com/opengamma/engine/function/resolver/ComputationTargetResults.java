@@ -41,7 +41,7 @@ import com.opengamma.util.PublicAPI;
 @PublicAPI
 public class ComputationTargetResults implements FunctionCompilationContextAware {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(ComputationTargetResults.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ComputationTargetResults.class);
 
   /**
    * The resolution rules to use, in descending priority order.
@@ -142,7 +142,7 @@ public class ComputationTargetResults implements FunctionCompilationContextAware
         }
       }
     }
-    s_logger.info("Maximal results for {} = {}", target, result);
+    LOGGER.info("Maximal results for {} = {}", target, result);
     return new ArrayList<ValueSpecification>(result);
   }
 
@@ -173,8 +173,8 @@ public class ComputationTargetResults implements FunctionCompilationContextAware
           continue;
         }
       } catch (final Throwable t) {
-        s_logger.warn("Couldn't call getResults on {} - {}", rule, t);
-        s_logger.debug("Caught exception", t);
+        LOGGER.warn("Couldn't call getResults on {} - {}", rule, t);
+        LOGGER.debug("Caught exception", t);
         continue;
       }
       //CSOFF
@@ -191,7 +191,7 @@ public class ComputationTargetResults implements FunctionCompilationContextAware
         }
       }
     }
-    s_logger.info("Maximal results for {} = {}", target, result);
+    LOGGER.info("Maximal results for {} = {}", target, result);
     return new ArrayList<ValueSpecification>(result);
   }
 
@@ -206,18 +206,18 @@ public class ComputationTargetResults implements FunctionCompilationContextAware
   protected ValueSpecification resolvePartialRequirement(final ValueRequirement requirement, final Set<ValueRequirement> visited,
       final Map<ComputationTargetType, ComputationTarget> adjustedTargetCache) {
     if (!visited.add(requirement)) {
-      s_logger.debug("Recursive request for {}", requirement);
+      LOGGER.debug("Recursive request for {}", requirement);
       return null;
     }
     final ComputationTargetSpecification targetSpec = getTargetSpecificationResolver().getTargetSpecification(
         ComputationTargetResolverUtils.simplifyType(requirement.getTargetReference(), getTargetResolver()));
     final ComputationTarget target = getTargetResolver().resolve(targetSpec);
     if (target == null) {
-      s_logger.debug("Couldn't resolve target for {}", requirement);
+      LOGGER.debug("Couldn't resolve target for {}", requirement);
       visited.remove(requirement);
       return null;
     }
-    s_logger.debug("Partially resolving {}", requirement);
+    LOGGER.debug("Partially resolving {}", requirement);
     for (final ResolutionRule rule : getRules()) {
       final CompiledFunctionDefinition function = rule.getParameterizedFunction().getFunction();
       if (!function.getTargetType().isCompatible(target.getType())) {
@@ -231,23 +231,23 @@ public class ComputationTargetResults implements FunctionCompilationContextAware
           continue;
         }
       } catch (final Throwable t) {
-        s_logger.warn("Couldn't call getResult on {} - {}", rule, t);
-        s_logger.debug("Caught exception", t);
+        LOGGER.warn("Couldn't call getResult on {} - {}", rule, t);
+        LOGGER.debug("Caught exception", t);
         continue;
       }
       if (!result.getProperties().getProperties().isEmpty()) {
-        s_logger.debug("Partial resolution of {} to {}", requirement, result);
+        LOGGER.debug("Partial resolution of {} to {}", requirement, result);
         visited.remove(requirement);
         return result;
       }
       final ValueSpecification resolvedResult = resolvePartialSpecification(result, adjustedTarget, function, visited, adjustedTargetCache, requirement.getConstraints());
       if (resolvedResult != null) {
-        s_logger.debug("Partial resolution of {} to {}", requirement, resolvedResult);
+        LOGGER.debug("Partial resolution of {} to {}", requirement, resolvedResult);
         visited.remove(requirement);
         return resolvedResult;
       }
     }
-    s_logger.debug("Couldn't resolve {}", requirement);
+    LOGGER.debug("Couldn't resolve {}", requirement);
     visited.remove(requirement);
     return null;
   }
@@ -272,11 +272,11 @@ public class ComputationTargetResults implements FunctionCompilationContextAware
         return null;
       }
     } catch (final Throwable t) {
-      s_logger.warn("Couldn't call getRequirements on {} - {}", function, t);
-      s_logger.debug("Caught exception", t);
+      LOGGER.warn("Couldn't call getRequirements on {} - {}", function, t);
+      LOGGER.debug("Caught exception", t);
       return null;
     }
-    s_logger.debug("Need partial resolution of {} to continue", reqs);
+    LOGGER.debug("Need partial resolution of {} to continue", reqs);
     final Map<ValueSpecification, ValueRequirement> resolved = Maps.newHashMapWithExpectedSize(reqs.size());
     for (final ValueRequirement req : reqs) {
       // TODO: need to call "simplify type" on requirement
@@ -293,13 +293,13 @@ public class ComputationTargetResults implements FunctionCompilationContextAware
         return null;
       }
     } catch (final Throwable t) {
-      s_logger.warn("Couldn't call getResults on {} - {}", function, t);
-      s_logger.debug("Caught exception", t);
+      LOGGER.warn("Couldn't call getResults on {} - {}", function, t);
+      LOGGER.debug("Caught exception", t);
       return null;
     }
     for (final ValueSpecification lateSpec : lateResults) {
       if (!lateSpec.getProperties().getProperties().isEmpty()) {
-        s_logger.debug("Deep resolution of {} to {}", specification, lateSpec);
+        LOGGER.debug("Deep resolution of {} to {}", specification, lateSpec);
         return lateSpec;
       }
     }

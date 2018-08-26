@@ -53,7 +53,7 @@ import com.opengamma.util.tuple.Pairs;
 public class BloombergIdentifierProvider implements ExternalIdResolver {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(BloombergIdentifierProvider.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(BloombergIdentifierProvider.class);
 
   /**
    * The Bloomberg data.
@@ -96,7 +96,7 @@ public class BloombergIdentifierProvider implements ExternalIdResolver {
       if (bloombergKey != null) {
         bloombergKeys.put(bloombergKey, identifier);
       } else {
-        s_logger.warn("cannot resolve {} to bloomberg identifier", bloombergKey);
+        LOGGER.warn("cannot resolve {} to bloomberg identifier", bloombergKey);
       }
     }
     
@@ -111,7 +111,7 @@ public class BloombergIdentifierProvider implements ExternalIdResolver {
         List<ReferenceDataError> errors = refData.getErrors();
         if (errors != null && errors.size() > 0) {
           for (ReferenceDataError error : errors) {
-            s_logger.warn("Exception looking up {}/{} - {}",
+            LOGGER.warn("Exception looking up {}/{} - {}",
                 new Object[] {securityDes, _bbgFields, error });
           }
           continue;
@@ -121,7 +121,7 @@ public class BloombergIdentifierProvider implements ExternalIdResolver {
       // check same security was returned
       String refSec = refData.getIdentifier();
       if (!securityDes.equals(refSec)) {
-        s_logger.warn("Returned security {} not the same as searched security {}", refSec, securityDes);
+        LOGGER.warn("Returned security {} not the same as searched security {}", refSec, securityDes);
         continue;
       }
       // get field data
@@ -134,7 +134,7 @@ public class BloombergIdentifierProvider implements ExternalIdResolver {
         final String lastTradeStr = fieldData.getString(FIELD_FUT_LAST_TRADE_DT);
         final LocalDate lastTradeDate = parseDate(lastTradeStr);
         if (lastTradeDate.isBefore(firstTradeDate)) {
-          s_logger.warn("Reference data for {} indicates last trade date ({}) before first trade date ({}) - ignoring", new Object[] {securityDes, lastTradeDate, firstTradeDate});
+          LOGGER.warn("Reference data for {} indicates last trade date ({}) before first trade date ({}) - ignoring", new Object[] {securityDes, lastTradeDate, firstTradeDate});
           continue;
         }
       }
@@ -145,7 +145,7 @@ public class BloombergIdentifierProvider implements ExternalIdResolver {
           result.put(bloombergKeys.get(securityDes), bundleWithDates);
         }
       } catch (Exception e) {
-        s_logger.error("Error parsing identifiers for security " + securityDes, e);
+        LOGGER.error("Error parsing identifiers for security " + securityDes, e);
         throw new OpenGammaRuntimeException("Error parsing identifiers for security " + securityDes, e);
       }
     }
@@ -302,7 +302,7 @@ public class BloombergIdentifierProvider implements ExternalIdResolver {
     try {
       return LocalDate.parse(dateStr);
     } catch (DateTimeParseException ex) {
-      s_logger.warn("valid from date not in yyyy-mm-dd format - {}", dateStr);
+      LOGGER.warn("valid from date not in yyyy-mm-dd format - {}", dateStr);
       return null;
     }
   }

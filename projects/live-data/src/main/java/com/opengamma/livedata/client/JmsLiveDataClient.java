@@ -50,7 +50,7 @@ public class JmsLiveDataClient extends DistributedLiveDataClient implements Life
    */
   public static final int DEFAULT_NUM_SESSIONS = 10;
 
-  private static final Logger s_logger = LoggerFactory.getLogger(JmsLiveDataClient.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(JmsLiveDataClient.class);
 
   private final JmsConnector _jmsConnector;
   private volatile Connection _connection;
@@ -127,7 +127,7 @@ public class JmsLiveDataClient extends DistributedLiveDataClient implements Life
   public synchronized void startReceivingTicks(Collection<String> tickDistributionSpecifications) {
     super.startReceivingTicks(tickDistributionSpecifications);
 
-    s_logger.info("Starting listening to tick distribution specifications {}", tickDistributionSpecifications);
+    LOGGER.info("Starting listening to tick distribution specifications {}", tickDistributionSpecifications);
 
     List<List<String>> specsBySessionIndex = new ArrayList<List<String>>(_maxSessions);
 
@@ -251,7 +251,7 @@ public class JmsLiveDataClient extends DistributedLiveDataClient implements Life
   public synchronized void close() {
     try {
       for (Session session : _sessions) {
-        s_logger.info("Shutting down session {}", session);
+        LOGGER.info("Shutting down session {}", session);
         session.close();
       }
       _sessions.clear();

@@ -37,7 +37,7 @@ import com.opengamma.util.tuple.Triple;
  *
  */
 public class BlackVolatilitySurfaceUtils {
-  private static final Logger s_logger = LoggerFactory.getLogger(BlackVolatilitySurfaceUtils.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(BlackVolatilitySurfaceUtils.class);
 
   public static double[] getUniqueExpiries(final VolatilitySurfaceData<Object, Object> volatilitySurface) {
     final double[] expiries = getArrayOfDoubles(volatilitySurface.getXs());
@@ -190,7 +190,7 @@ public class BlackVolatilitySurfaceUtils {
             riskReversalList.add(rr);
             strangleList.add(s);
           } else {
-            s_logger.info("Had a null value for tenor number " + j);
+            LOGGER.info("Had a null value for tenor number " + j);
           }
         }
         riskReversals[i] = riskReversalList.toDoubleArray();

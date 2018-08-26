@@ -33,7 +33,7 @@ import com.opengamma.financial.analytics.model.black.BlackDiscountingPositionGam
 @Deprecated
 public class InterestRateFutureOptionBlackPositionGammaFunction extends InterestRateFutureOptionBlackFunction {
   /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(InterestRateFutureOptionBlackPositionGammaFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(InterestRateFutureOptionBlackPositionGammaFunction.class);
   /** The calculator to compute the gamma value. */
   private static final PresentValueBlackGammaCalculator CALCULATOR = PresentValueBlackGammaCalculator.getInstance();
 
@@ -50,7 +50,7 @@ public class InterestRateFutureOptionBlackPositionGammaFunction extends Interest
     final ValueProperties constraints = desiredValue.getConstraints();
     final Set<String> scale = constraints.getValues(ValuePropertyNames.SCALE);
     if (scale == null || scale.size() != 1) {
-      s_logger.info("Could not find {} requirement. Looking for a default..", ValuePropertyNames.SCALE);
+      LOGGER.info("Could not find {} requirement. Looking for a default..", ValuePropertyNames.SCALE);
       return null;
     }
     // Then get typical requirements

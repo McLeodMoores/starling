@@ -48,7 +48,7 @@ import com.opengamma.util.tuple.Pair;
  */
 @Deprecated
 public class ForexPiecewiseSABRSurfaceFunction extends PiecewiseSABRSurfaceFunction {
-  private static final Logger s_logger = LoggerFactory.getLogger(ForexPiecewiseSABRSurfaceFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ForexPiecewiseSABRSurfaceFunction.class);
 
   @Override
   public ComputationTargetType getTargetType() {
@@ -153,7 +153,7 @@ public class ForexPiecewiseSABRSurfaceFunction extends PiecewiseSABRSurfaceFunct
             riskReversalList.add(rr);
             strangleList.add(s);
           } else {
-            s_logger.info("Had a null value for tenor number " + j);
+            LOGGER.info("Had a null value for tenor number " + j);
           }
         }
         riskReversals[i] = riskReversalList.toDoubleArray();

@@ -38,7 +38,7 @@ import com.opengamma.transport.FudgeRequestReceiver;
  */
 public class IdentifierMapServer extends CacheMessageVisitor implements FudgeRequestReceiver {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(IdentifierMapServer.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(IdentifierMapServer.class);
 
   private final IdentifierMap _underlying;
 
@@ -116,7 +116,7 @@ public class IdentifierMapServer extends CacheMessageVisitor implements FudgeReq
 
   @Override
   protected <T extends CacheMessage> T visitUnexpectedMessage(final CacheMessage message) {
-    s_logger.warn("Unexpected message {}", message);
+    LOGGER.warn("Unexpected message {}", message);
     return null;
   }
 

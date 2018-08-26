@@ -20,7 +20,7 @@ import com.opengamma.util.ArgumentChecker;
  * 
  */
 public class ConstantElasticityOfVarianceBlackEquivalentVolatilitySurfaceModel implements VolatilitySurfaceModel<Map<OptionDefinition, Double>, ConstantElasticityOfVarianceModelDataBundle> {
-  private static final Logger s_logger = LoggerFactory.getLogger(ConstantElasticityOfVarianceBlackEquivalentVolatilitySurfaceModel.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ConstantElasticityOfVarianceBlackEquivalentVolatilitySurfaceModel.class);
 
   @Override
   public VolatilitySurface getSurface(final Map<OptionDefinition, Double> optionData, final ConstantElasticityOfVarianceModelDataBundle data) {
@@ -28,7 +28,7 @@ public class ConstantElasticityOfVarianceBlackEquivalentVolatilitySurfaceModel i
     ArgumentChecker.notEmpty(optionData, "option data");
     Validate.notNull(data, "data");
     if (optionData.size() > 1) {
-      s_logger.warn("Have more than one option: only using the first");
+      LOGGER.warn("Have more than one option: only using the first");
     }
     final OptionDefinition option = optionData.keySet().iterator().next();
     final double k = option.getStrike();

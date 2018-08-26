@@ -19,7 +19,7 @@ import com.opengamma.engine.value.ValueRequirement;
  */
 public class MarketDataMultiplyOperation implements OverrideOperation {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(MarketDataAddOperation.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(MarketDataAddOperation.class);
 
   private final double _amount;
 
@@ -36,7 +36,7 @@ public class MarketDataMultiplyOperation implements OverrideOperation {
     if (value instanceof Number) {
       return ((Number) value).doubleValue() * getAmount();
     } else {
-      s_logger.warn("Can't apply multiply operation to {} for {}", value, valueRequirement);
+      LOGGER.warn("Can't apply multiply operation to {} for {}", value, valueRequirement);
       return value;
     }
   }

@@ -27,7 +27,7 @@ import com.opengamma.util.redis.RedisConnector;
  */
 public class RedisHtsSnapshotJob implements Runnable {
   
-  private static final Logger s_logger = LoggerFactory.getLogger(RedisHtsSnapshotJob.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(RedisHtsSnapshotJob.class);
   
   private HistoricalTimeSeriesMaster _htsMaster;
   private String _dataSource;
@@ -200,7 +200,7 @@ public class RedisHtsSnapshotJob implements Runnable {
       updateTimeSeries(lkvEntry.getKey(), lkvEntry.getValue(), tsCounter);
     }
     long stopTime = System.nanoTime();
-    s_logger.info("{}ms-Writing/Updating {} timeseries", (stopTime - startTime) / 1000000, tsCounter.get());
+    LOGGER.info("{}ms-Writing/Updating {} timeseries", (stopTime - startTime) / 1000000, tsCounter.get());
   }
 
   private void validateState() {
@@ -227,7 +227,7 @@ public class RedisHtsSnapshotJob implements Runnable {
         if ("SURF".equals(dataProvider.toUpperCase())) {
           dataProvider = "TULLETTPREBON";
         }
-        s_logger.debug("updating ts {}:{}/{}/{}/{} with {}:{}", 
+        LOGGER.debug("updating ts {}:{}/{}/{}/{} with {}:{}", 
             new Object[] {externalId, getDataSource(), dataProvider, dataField, getObservationTime(), today, value});
         htsMaster.writeTimeSeriesPoint(makeDescription(externalId, dataField), getDataSource(), dataProvider, 
             dataField, getObservationTime(), ExternalIdBundle.of(externalId), today, value);

@@ -37,7 +37,7 @@ import com.opengamma.util.PublicAPI;
 @PublicAPI
 public class ResolutionRule {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(ResolutionRule.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ResolutionRule.class);
 
   /**
    * The parameterized function.
@@ -173,28 +173,28 @@ public class ResolutionRule {
       ComputationTargetSpecification targetSpec = target.toSpecification();
       for (ValueSpecification result : results) {
         if (!isUidMatch(uid, result.getTargetSpecification().getUniqueId())) {
-          s_logger.warn("Invalid UID for result {} on target {}", result, target);
+          LOGGER.warn("Invalid UID for result {} on target {}", result, target);
           return false;
         }
         ComputationTargetReference a = result.getTargetSpecification().getParent();
         ComputationTargetReference b = targetSpec.getParent();
         while ((a != null) && (b != null)) {
           if (!isUidMatch(a.getSpecification().getUniqueId(), b.getSpecification().getUniqueId())) {
-            s_logger.warn("Parent context mismatch of result {} on target {}", result, target);
+            LOGGER.warn("Parent context mismatch of result {} on target {}", result, target);
             return false;
           }
           a = a.getParent();
           b = b.getParent();
         }
         if ((a != null) || (b != null)) {
-          s_logger.warn("Invalid parent context of result {} on target {}", result, target);
+          LOGGER.warn("Invalid parent context of result {} on target {}", result, target);
           return false;
         }
       }
     } else {
       for (ValueSpecification result : results) {
         if (result.getTargetSpecification().getUniqueId() != null) {
-          s_logger.warn("Invalid result {} on null target {}", result, target);
+          LOGGER.warn("Invalid result {} on null target {}", result, target);
           return false;
         }
       }
@@ -219,7 +219,7 @@ public class ResolutionRule {
     final UniqueId targetId = target.getUniqueId();
     if (targetId != null) {
       for (ValueSpecification resultSpec : resultSpecs) {
-        //s_logger.debug("Considering {} for {}", resultSpec, output);
+        //LOGGER.debug("Considering {} for {}", resultSpec, output);
         if ((valueName == resultSpec.getValueName())
             && isUidMatch(targetId, resultSpec.getTargetSpecification().getUniqueId()) // This is not necessary if functions are well behaved or the "isValidResultsOnTarget" check was used 
             && constraints.isSatisfiedBy(resultSpec.getProperties())) {
@@ -411,7 +411,7 @@ public class ResolutionRule {
 
   };
 
-  private static final ConcurrentMap<ComputationTargetType, ConcurrentMap<ComputationTargetType, ComputationTargetType>> s_adjustCache =
+  private static final ConcurrentMap<ComputationTargetType, ConcurrentMap<ComputationTargetType, ComputationTargetType>> ADJUST_CACHE =
       new ConcurrentHashMap<ComputationTargetType, ConcurrentMap<ComputationTargetType, ComputationTargetType>>();
 
   private static ComputationTargetType adjustTargetType(final ComputationTargetType type, final ComputationTargetType target) {
@@ -419,10 +419,10 @@ public class ResolutionRule {
       // We use NULL to mark failure in the cache, and NULL will never need adjusting
       return target;
     }
-    ConcurrentMap<ComputationTargetType, ComputationTargetType> functionCache = s_adjustCache.get(type);
+    ConcurrentMap<ComputationTargetType, ComputationTargetType> functionCache = ADJUST_CACHE.get(type);
     if (functionCache == null) {
       functionCache = new ConcurrentHashMap<ComputationTargetType, ComputationTargetType>();
-      final ConcurrentMap<ComputationTargetType, ComputationTargetType> existing = s_adjustCache.putIfAbsent(type, functionCache);
+      final ConcurrentMap<ComputationTargetType, ComputationTargetType> existing = ADJUST_CACHE.putIfAbsent(type, functionCache);
       if (existing != null) {
         functionCache = existing;
       }

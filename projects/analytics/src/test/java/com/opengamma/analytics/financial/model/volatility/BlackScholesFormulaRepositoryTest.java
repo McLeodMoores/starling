@@ -36,7 +36,7 @@ public class BlackScholesFormulaRepositoryTest {
   private static final double[] INTEREST_RATES_EX = new double[] {-0.01, -0.005, 0, 0.008, 0.032, 0.062, 0.1, 0., 1.e-12, 1.e12, INF, 1.e-12, -INF };
   private static final double[] COST_OF_CARRY_EX = {0.05, 0., 1.e-12, 1.e12, INF, 1.e-12, -INF };
 
-  private static final double[][][] PrecomputedCallPrice = new double[][][] {
+  private static final double[][][] PRECOMPUTED_CALL_PRICE = new double[][][] {
       { {42.388192240722034, 41.445107405754896, 40.523005041587581, 39.090123476135133, 35.088373580052092, 30.657270312145542, 25.838608802827295 },
       {42.844635277413687, 41.891395149588462, 40.959363435265075, 39.511052365075997, 35.466210966900221, 30.987392849065387, 26.116843198832520 },
       {43.925335617747066, 42.948051244384672, 41.992510239239948, 40.507667401273466, 36.360800126408598, 31.769009632151473, 26.775606685804973 },
@@ -115,7 +115,7 @@ public class BlackScholesFormulaRepositoryTest {
         for (int k = 0; k < nInt; ++k) {
           final double price = BlackScholesFormulaRepository.price(SPOT, STRIKES_INPUT[i], TIME_TO_EXPIRY, VOLS[j], INTEREST_RATES[k], COST_OF_CARRY, true);
           //          System.out.println(SPOT + "\t" + STRIKES_INPUT[i] + "\t" + TIME_TO_EXPIRY + "\t" + VOLS[j] + "\t" + INTEREST_RATES[k] + "\t" + COST_OF_CARRY);
-          assertEquals(PrecomputedCallPrice[i][j][k], price, Math.max(PrecomputedCallPrice[i][j][k] * EPS, EPS));
+          assertEquals(PRECOMPUTED_CALL_PRICE[i][j][k], price, Math.max(PRECOMPUTED_CALL_PRICE[i][j][k] * EPS, EPS));
         }
       }
     }

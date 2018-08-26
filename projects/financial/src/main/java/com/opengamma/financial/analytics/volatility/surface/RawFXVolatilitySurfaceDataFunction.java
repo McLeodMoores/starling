@@ -19,7 +19,7 @@ import com.opengamma.util.money.UnorderedCurrencyPair;
  */
 public class RawFXVolatilitySurfaceDataFunction extends RawVolatilitySurfaceDataFunction {
   /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(RawFXVolatilitySurfaceDataFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(RawFXVolatilitySurfaceDataFunction.class);
 
   /**
    * Default constructor
@@ -49,7 +49,7 @@ public class RawFXVolatilitySurfaceDataFunction extends RawVolatilitySurfaceData
       fullDefinitionName = definitionName + "_" + name;
       definition = definitionSource.getDefinition(fullDefinitionName, InstrumentTypeProperties.FOREX);
       if (definition == null) {
-        s_logger.error("Could not get volatility surface definition named " + fullDefinitionName + " for instrument type " + InstrumentTypeProperties.FOREX);
+        LOGGER.error("Could not get volatility surface definition named " + fullDefinitionName + " for instrument type " + InstrumentTypeProperties.FOREX);
         return null;
       }
     }
@@ -72,7 +72,7 @@ public class RawFXVolatilitySurfaceDataFunction extends RawVolatilitySurfaceData
       fullSpecificationName = specificationName + "_" + name;
       specification = specificationSource.getSpecification(fullSpecificationName, InstrumentTypeProperties.FOREX);
       if (specification == null) {
-        s_logger.error("Could not get volatility surface specification named " + fullSpecificationName + " for instrument type " + InstrumentTypeProperties.FOREX);
+        LOGGER.error("Could not get volatility surface specification named " + fullSpecificationName + " for instrument type " + InstrumentTypeProperties.FOREX);
         return null;
       }
     }

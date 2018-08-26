@@ -10,7 +10,7 @@ import com.opengamma.analytics.financial.interestrate.YieldCurveBundle;
 import com.opengamma.analytics.financial.interestrate.bond.definition.BondFixedSecurity;
 import com.opengamma.analytics.financial.interestrate.bond.method.BondSecurityDiscountingMethod;
 import com.opengamma.util.ArgumentChecker;
-
+//CSOFF
 /**
  * Calculate modified duration from curves.
  * @deprecated Use {@link com.opengamma.analytics.financial.provider.calculator.issuer.ModifiedDurationFromCurvesCalculator}

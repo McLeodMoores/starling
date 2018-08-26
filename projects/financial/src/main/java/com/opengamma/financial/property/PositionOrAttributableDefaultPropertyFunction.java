@@ -25,7 +25,7 @@ import com.opengamma.engine.value.ValueRequirement;
  */
 /* package */abstract class PositionOrAttributableDefaultPropertyFunction extends DefaultPropertyFunction {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(PositionOrAttributableDefaultPropertyFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(PositionOrAttributableDefaultPropertyFunction.class);
 
   private static final String WILDCARD = "*";
   private static final String SEP = ".DEFAULT_";
@@ -48,7 +48,7 @@ import com.opengamma.engine.value.ValueRequirement;
         } else {
           defaults.addValuePropertyName(valueName, propertyName);
         }
-        s_logger.debug("Found default {}[{}]", valueName, propertyName);
+        LOGGER.debug("Found default {}[{}]", valueName, propertyName);
       }
     }
   }
@@ -57,17 +57,17 @@ import com.opengamma.engine.value.ValueRequirement;
   public boolean canApplyTo(final FunctionCompilationContext context, final ComputationTarget target) {
     final Map<String, String> attributes = getAttributes(target);
     if ((attributes == null) || attributes.isEmpty()) {
-      s_logger.debug("No attributes for target {}", target);
+      LOGGER.debug("No attributes for target {}", target);
       return false;
     }
     for (final Map.Entry<String, String> attribute : attributes.entrySet()) {
       final int i = attribute.getKey().indexOf(SEP);
       if (i > 0) {
-        s_logger.debug("Found attribute {} for target {}", attribute.getKey(), target);
+        LOGGER.debug("Found attribute {} for target {}", attribute.getKey(), target);
         return true;
       }
     }
-    s_logger.debug("No matching attributes for target {}", target);
+    LOGGER.debug("No matching attributes for target {}", target);
     return false;
   }
 

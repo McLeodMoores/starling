@@ -60,10 +60,10 @@ public class LabelFormatter {
     return o.toString();
   }
   
-  private static final DateTimeFormatter s_isoLocalDate = DateTimeFormatter.ISO_LOCAL_DATE;
+  private static final DateTimeFormatter ISO_LOCAL_DATE = DateTimeFormatter.ISO_LOCAL_DATE;
   
   private static String formatDate(LocalDate o) {
-    return s_isoLocalDate.format(o);
+    return ISO_LOCAL_DATE.format(o);
   }
 
   private static String formatTenor(Tenor o) {

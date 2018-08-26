@@ -47,7 +47,7 @@ import com.opengamma.util.tuple.IntObjectPair;
 public class EHCachingHistoricalTimeSeriesMaster extends AbstractEHCachingMaster<HistoricalTimeSeriesInfoDocument> implements HistoricalTimeSeriesMaster {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(EHCachingHistoricalTimeSeriesMaster.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(EHCachingHistoricalTimeSeriesMaster.class);
 
   /** The document search cache */
   private EHCachingSearchCache _documentSearchCache;
@@ -137,7 +137,7 @@ public class EHCachingHistoricalTimeSeriesMaster extends AbstractEHCachingMaster
     if (EHCachingSearchCache.TEST_AGAINST_UNDERLYING) {
       HistoricalTimeSeriesInfoSearchResult check = ((HistoricalTimeSeriesMaster) getUnderlying()).search(request);
       if (!result.getPaging().equals(check.getPaging())) {
-        s_logger.error(_documentSearchCache.getCache().getName()
+        LOGGER.error(_documentSearchCache.getCache().getName()
                            + "\n\tCache:\t" + result.getPaging()
                            + "\n\tUnderlying:\t" + check.getPaging());
       }

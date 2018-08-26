@@ -61,7 +61,7 @@ import com.opengamma.util.money.Currency;
 @Deprecated
 public abstract class FXOptionBlackFunction extends AbstractFunction.NonCompiledInvoker {
   /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(FXOptionBlackFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(FXOptionBlackFunction.class);
   /** Property name for the put curve */
   public static final String PUT_CURVE = "PutCurve";
   /** Property name for the call curve */
@@ -245,7 +245,7 @@ public abstract class FXOptionBlackFunction extends AbstractFunction.NonCompiled
     final Currency callCurrency = security.accept(ForexVisitors.getCallCurrencyVisitor());
     final CurrencyPair baseQuotePair = baseQuotePairs.getCurrencyPair(putCurrency, callCurrency);
     if (baseQuotePair == null) {
-      s_logger.error("Could not get base/quote pair for currency pair (" + putCurrency + ", " + callCurrency + ")");
+      LOGGER.error("Could not get base/quote pair for currency pair (" + putCurrency + ", " + callCurrency + ")");
       return null;
     }
     final ValueSpecification resultSpec = new ValueSpecification(getValueRequirementName(), target.toSpecification(), getResultProperties(target,

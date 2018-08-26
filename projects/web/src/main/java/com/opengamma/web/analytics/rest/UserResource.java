@@ -24,7 +24,7 @@ import com.opengamma.util.auth.AuthUtils;
 public class UserResource {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(UserResource.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(UserResource.class);
 
   @GET
   @Path("logout")
@@ -33,9 +33,9 @@ public class UserResource {
       AuthUtils.getSubject().logout();
       hsr.getSession().invalidate();
     } catch (SessionException ex) {
-      s_logger.debug("Ignoring session exception during logout", ex);
+      LOGGER.debug("Ignoring session exception during logout", ex);
     } catch (RuntimeException ex) {
-      s_logger.debug("Ignoring unexpected exception during logout", ex);
+      LOGGER.debug("Ignoring unexpected exception during logout", ex);
     }
     return Response.ok().build();
   }

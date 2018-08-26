@@ -64,7 +64,7 @@ import com.opengamma.util.money.Currency;
  * 
  */
 public class ExternallyProvidedSensitivityPnLFunction extends AbstractFunction.NonCompiledInvoker {
-  private static final Logger s_logger = LoggerFactory.getLogger(ExternallyProvidedSensitivityPnLFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ExternallyProvidedSensitivityPnLFunction.class);
 
   private static final HolidayDateRemovalFunction HOLIDAY_REMOVER = HolidayDateRemovalFunction.getInstance();
   private static final Calendar WEEKEND_CALENDAR = new MondayToFridayCalendar("Weekend");
@@ -174,7 +174,7 @@ public class ExternallyProvidedSensitivityPnLFunction extends AbstractFunction.N
     for (final FactorExposureData factor : factors) {
       final HistoricalTimeSeries dbNodeTimeSeries = timeSeries.get("PX_LAST", factor.getFactorExternalId());
       if (dbNodeTimeSeries == null || dbNodeTimeSeries.getTimeSeries().size() == 0) {
-        //s_logger.warn("Could not identifier / price series pair for " + id + " for " + _resolutionKey + "/PX_LAST");
+        //LOGGER.warn("Could not identifier / price series pair for " + id + " for " + _resolutionKey + "/PX_LAST");
         //throw new OpenGammaRuntimeException("Could not identifier / price series pair for " + id + " for " + _resolutionKey + "/PX_LAST");
         continue;
       }
@@ -188,7 +188,7 @@ public class ExternallyProvidedSensitivityPnLFunction extends AbstractFunction.N
           pnlSeries = pnlSeries.add(nodeTimeSeries.multiply(sensitivity / 100d));
         }
       } else {
-        s_logger.warn("Could not get sensitivity " + factor.getExposureExternalId());
+        LOGGER.warn("Could not get sensitivity " + factor.getExposureExternalId());
       }
     }
     if (pnlSeries == null) {

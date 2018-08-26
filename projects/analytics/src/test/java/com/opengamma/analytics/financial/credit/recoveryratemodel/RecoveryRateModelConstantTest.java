@@ -17,9 +17,9 @@ public class RecoveryRateModelConstantTest {
 
   // ----------------------------------------------------------------------------------------------------------------------------------------
 
-  private final static double recoveryRate = 0.563;
+  private final static double RECOVERY_RATE = 0.563;
 
-  RecoveryRateModelConstant recoveryRateModel = new RecoveryRateModelConstant(recoveryRate);
+  RecoveryRateModelConstant RECOVERY_RATE_MODEL = new RecoveryRateModelConstant(RECOVERY_RATE);
 
   // ----------------------------------------------------------------------------------------------------------------------------------------
 
@@ -28,7 +28,7 @@ public class RecoveryRateModelConstantTest {
 
     System.out.println("Running constant recovery rate model test ...");
 
-    System.out.println(recoveryRateModel.getRecoveryRate());
+    System.out.println(RECOVERY_RATE_MODEL.getRecoveryRate());
 
   }
 

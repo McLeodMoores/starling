@@ -38,7 +38,7 @@ import com.opengamma.util.tuple.ObjectsPair;
  */
 public class ZippedPositionWriter implements PositionWriter {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(ZippedPositionWriter.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ZippedPositionWriter.class);
 
   private static final String DIRECTORY_SEPARATOR = "/";
 
@@ -113,7 +113,7 @@ public class ZippedPositionWriter implements PositionWriter {
       return _currentWriter.writePosition(position, securities);
 
     } else {
-      s_logger.warn("Could not identify a suitable parser for position: " + position.getName());
+      LOGGER.warn("Could not identify a suitable parser for position: " + position.getName());
       return ObjectsPair.of(null, null);
     }
   }
@@ -187,7 +187,7 @@ public class ZippedPositionWriter implements PositionWriter {
 
     String path = getPathString(_currentPath);
     
-    s_logger.info("Flushing CSV buffers for ZIP directory " + path);
+    LOGGER.info("Flushing CSV buffers for ZIP directory " + path);
 
     for (Map.Entry<String, ByteArrayOutputStream> entry : _bufferMap.entrySet()) {
 
@@ -195,7 +195,7 @@ public class ZippedPositionWriter implements PositionWriter {
       _writerMap.get(entry.getKey()).close();
 
       ZipEntry zipEntry = new ZipEntry(path + entry.getKey() + ".csv");
-      s_logger.info("Writing " + zipEntry.getName() + " to ZIP archive");
+      LOGGER.info("Writing " + zipEntry.getName() + " to ZIP archive");
       try {
         _zipFile.putNextEntry(zipEntry);
         entry.getValue().writeTo(_zipFile);
@@ -221,7 +221,7 @@ public class ZippedPositionWriter implements PositionWriter {
     // create writer/output buffer map entry if not there for this security type
     if (_currentWriter == null) {
 
-      s_logger.info("Creating a new row parser for " + className + " securities");
+      LOGGER.info("Creating a new row parser for " + className + " securities");
 
       parser = JodaBeanRowParser.newJodaBeanRowParser(className);
       if (parser == null) {

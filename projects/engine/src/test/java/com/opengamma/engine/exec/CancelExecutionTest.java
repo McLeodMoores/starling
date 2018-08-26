@@ -104,7 +104,7 @@ public class CancelExecutionTest {
   private static final int JOB_SIZE = 100;
   private static final int JOB_FINISH_TIME = (int) Timeout.standardTimeoutMillis();
   private static final int SLEEP_TIME = JOB_FINISH_TIME / 10;
-  private static final Logger s_logger = LoggerFactory.getLogger(CancelExecutionTest.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(CancelExecutionTest.class);
 
   @DataProvider(name = "executors")
   Object[][] data_executors() {
@@ -213,7 +213,7 @@ public class CancelExecutionTest {
    */
   @Test(dataProvider = "executors")
   public void testJobFinish(final DependencyGraphExecutorFactory factory) throws Exception {
-    s_logger.info("testJobFinish");
+    LOGGER.info("testJobFinish");
     final Future<?> job = executeTestJob(factory);
     assertNotNull(job);
     for (int i = 0; i < JOB_FINISH_TIME / SLEEP_TIME; i++) {
@@ -221,7 +221,7 @@ public class CancelExecutionTest {
         job.get(Timeout.standardTimeoutMillis(), TimeUnit.MILLISECONDS);
         assertFalse(job.isCancelled());
         assertTrue(job.isDone());
-        s_logger.info("Job finished in {}", i);
+        LOGGER.info("Job finished in {}", i);
         return;
       }
       sleep();
@@ -234,7 +234,7 @@ public class CancelExecutionTest {
    */
   @Test(dataProvider = "executors")
   public void testJobCancelWithInterrupt(final DependencyGraphExecutorFactory factory) {
-    s_logger.info("testJobCancelWithInterrupt");
+    LOGGER.info("testJobCancelWithInterrupt");
     final Future<?> job = executeTestJob(factory);
     assertNotNull(job);
     job.cancel(true);
@@ -242,7 +242,7 @@ public class CancelExecutionTest {
       if (jobFinished()) {
         assertTrue(job.isCancelled());
         assertTrue(job.isDone());
-        s_logger.info("Job finished in {}", i);
+        LOGGER.info("Job finished in {}", i);
         Assert.fail("Job finished normally despite cancel");
         return;
       }
@@ -255,7 +255,7 @@ public class CancelExecutionTest {
    */
   @Test(dataProvider = "executors")
   public void testJobCancelWithoutInterrupt(final DependencyGraphExecutorFactory factory) {
-    s_logger.info("testJobCancelWithoutInterrupt");
+    LOGGER.info("testJobCancelWithoutInterrupt");
     final Future<?> job = executeTestJob(factory);
     assertNotNull(job);
     job.cancel(false);
@@ -263,7 +263,7 @@ public class CancelExecutionTest {
       if (jobFinished()) {
         assertTrue(job.isCancelled());
         assertTrue(job.isDone());
-        s_logger.info("Job finished in {}", i);
+        LOGGER.info("Job finished in {}", i);
         Assert.fail("Job finished normally despite cancel");
         return;
       }

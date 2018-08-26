@@ -50,7 +50,7 @@ import com.opengamma.util.money.Currency;
  * 
  */
 public class ExternallyProvidedSensitivitiesNonYieldCurveFunction extends AbstractFunction.NonCompiledInvoker {
-  private static final Logger s_logger = LoggerFactory.getLogger(ExternallyProvidedSensitivitiesNonYieldCurveFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ExternallyProvidedSensitivitiesNonYieldCurveFunction.class);
   /**
    * The value name calculated by this function.
    */
@@ -85,14 +85,14 @@ public class ExternallyProvidedSensitivitiesNonYieldCurveFunction extends Abstra
     final ValueProperties.Builder externalProperties = createCurrencyValueProperties(target);
     externalProperties.withAny(ValuePropertyNames.CURRENCY);
     final Set<ValueSpecification> results = Collections.singleton(new ValueSpecification(EXTERNAL_SENSITIVITIES_REQUIREMENT, target.toSpecification(), externalProperties.get()));
-    //s_logger.warn("getResults(1) = " + results);
+    //LOGGER.warn("getResults(1) = " + results);
     return results;
   }
 
   @Override
   public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
     final Set<ValueRequirement> requirements = getSensitivityRequirements(context.getSecuritySource(), (RawSecurity) target.getPosition().getSecurity());
-    //s_logger.warn("getRequirements() returned " + requirements);
+    //LOGGER.warn("getRequirements() returned " + requirements);
     return requirements;
   }
 
@@ -109,7 +109,7 @@ public class ExternallyProvidedSensitivitiesNonYieldCurveFunction extends Abstra
   public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
     final ComputationTargetSpecification targetSpec = target.toSpecification();
     final Set<ValueSpecification> results = Collections.singleton(new ValueSpecification(EXTERNAL_SENSITIVITIES_REQUIREMENT, targetSpec, createCurrencyValueProperties(target).get()));
-    //s_logger.warn("getResults(2) returning " + results);
+    //LOGGER.warn("getResults(2) returning " + results);
     return results;
   }
 
@@ -117,7 +117,7 @@ public class ExternallyProvidedSensitivitiesNonYieldCurveFunction extends Abstra
   public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
     final RawSecurity security = (RawSecurity) target.getPosition().getSecurity();
     final Set<ComputedValue> results = getResultsForExternalRiskFactors(executionContext.getSecuritySource(), inputs, target, security);
-    //s_logger.warn("execute, returning " + results);
+    //LOGGER.warn("execute, returning " + results);
     return results;
   }
 
@@ -135,7 +135,7 @@ public class ExternallyProvidedSensitivitiesNonYieldCurveFunction extends Abstra
           labels.add(factor.getExposureExternalId().getValue());
           values.add((Double) computedValue.getValue());
         } else {
-          s_logger.error("Value was null when getting required input data " + factor.getExposureExternalId());
+          LOGGER.error("Value was null when getting required input data " + factor.getExposureExternalId());
         }
       }
     }

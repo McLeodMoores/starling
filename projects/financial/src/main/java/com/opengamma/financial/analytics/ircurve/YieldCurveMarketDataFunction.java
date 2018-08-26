@@ -39,7 +39,7 @@ import com.opengamma.util.tuple.Triple;
  *
  */
 public class YieldCurveMarketDataFunction extends AbstractFunction {
-  private static final Logger s_logger = LoggerFactory.getLogger(YieldCurveMarketDataFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(YieldCurveMarketDataFunction.class);
   private ValueSpecification _marketDataResult;
   private Set<ValueSpecification> _results;
   private final YieldCurveFunctionHelper _helper;
@@ -129,8 +129,8 @@ public class YieldCurveMarketDataFunction extends AbstractFunction {
       double rate = (Double) value.getValue();
       //TODO this is here because KWCDC Curncy is not normalized
       if (rate > 1.1) {
-        s_logger.error("Normalizing {}, value {}", value.getSpecification(), rate);
-        s_logger.warn("Performing normalization of rate in YieldCurveMarketDataFunction; if this is being used for anything other than KWCDC Curncy check market data normalization");
+        LOGGER.error("Normalizing {}, value {}", value.getSpecification(), rate);
+        LOGGER.warn("Performing normalization of rate in YieldCurveMarketDataFunction; if this is being used for anything other than KWCDC Curncy check market data normalization");
         rate /= 100;
       }
       marketData.setDataPoint(identifiers, rate);
@@ -145,7 +145,7 @@ public class YieldCurveMarketDataFunction extends AbstractFunction {
       final Triple<Instant, Instant, InterpolatedYieldCurveSpecification> compile = _helper.compile(context, atInstant, this);
       return new CompiledImpl(compile.getFirst(), compile.getSecond(), buildRequirements(compile.getThird()));
     } catch (final OpenGammaRuntimeException ogre) {
-      s_logger.error("Function {} calculating {} on {} couldn't compile, rethrowing...",
+      LOGGER.error("Function {} calculating {} on {} couldn't compile, rethrowing...",
                      getShortName(), _helper.getCurveName(), _helper.getCurrency());
       throw ogre;
     }

@@ -24,7 +24,7 @@ import com.opengamma.util.ArgumentChecker;
  *
  */
 public class ISDALegacyVanillaCDSDefaults extends DefaultPropertyFunction {
-  private static final Logger s_logger = LoggerFactory.getLogger(ISDALegacyVanillaCDSDefaults.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ISDALegacyVanillaCDSDefaults.class);
   private static final String[] VALUE_REQUIREMENTS = new String[] {
     ValueRequirementNames.CLEAN_PRICE,
     ValueRequirementNames.DIRTY_PRICE
@@ -49,7 +49,7 @@ public class ISDALegacyVanillaCDSDefaults extends DefaultPropertyFunction {
     if (CreditInstrumentPropertyNamesAndValues.PROPERTY_N_INTEGRATION_POINTS.equals(propertyName)) {
       return Collections.singleton(_nIntegrationPoints);
     }
-    s_logger.warn("Did not have default value for property called {}", propertyName);
+    LOGGER.warn("Did not have default value for property called {}", propertyName);
     return null;
   }
 

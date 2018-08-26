@@ -27,7 +27,7 @@ import com.opengamma.util.tuple.DoublesPair;
  * 
  */
 public class PractitionerBlackScholesVolatilitySurfaceModel implements VolatilitySurfaceModel<Map<OptionDefinition, Double>, StandardOptionDataBundle> {
-  private static final Logger s_logger = LoggerFactory.getLogger(PractitionerBlackScholesVolatilitySurfaceModel.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(PractitionerBlackScholesVolatilitySurfaceModel.class);
   private final VolatilitySurfaceModel<Map<OptionDefinition, Double>, StandardOptionDataBundle> _bsmVolatilityModel = new BlackScholesMertonImpliedVolatilitySurfaceModel();
   private static final int DEGREE = 5;
   private final LeastSquaresRegression _regression;
@@ -73,7 +73,7 @@ public class PractitionerBlackScholesVolatilitySurfaceModel implements Volatilit
         tList.add(t);
         sigmaList.add(sigma);
       } catch (final Exception e) {
-        s_logger.info("Problem getting BSM volatility for " + entry.getKey() + ", not using this option in regression. Error was: ", e);
+        LOGGER.info("Problem getting BSM volatility for " + entry.getKey() + ", not using this option in regression. Error was: ", e);
       }
     }
     return new VolatilitySurface(FunctionalDoublesSurface.from(new MySurfaceFunction(getRegressionResult(kList.toArray(EMPTY_ARRAY), tList.toArray(EMPTY_ARRAY), sigmaList.toArray(EMPTY_ARRAY)))));

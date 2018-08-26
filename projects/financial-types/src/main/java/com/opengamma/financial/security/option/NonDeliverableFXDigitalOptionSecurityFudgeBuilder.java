@@ -26,7 +26,7 @@ import com.opengamma.util.time.ZonedDateTimeFudgeBuilder;
  */
 @FudgeBuilderFor(NonDeliverableFXDigitalOptionSecurity.class)
 public class NonDeliverableFXDigitalOptionSecurityFudgeBuilder extends AbstractFudgeBuilder implements FudgeBuilder<NonDeliverableFXDigitalOptionSecurity> {
-  private static final Logger s_logger = LoggerFactory.getLogger(NonDeliverableFXDigitalOptionSecurityFudgeBuilder.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(NonDeliverableFXDigitalOptionSecurityFudgeBuilder.class);
   /** Field name. */
   public static final String PUT_CURRENCY_FIELD_NAME = "putCurrency";
   /** Field name. */
@@ -80,7 +80,7 @@ public class NonDeliverableFXDigitalOptionSecurityFudgeBuilder extends AbstractF
     if (msg.hasField(PAYMENT_CURRENCY_FIELD_NAME)) {
       object.setPaymentCurrency(msg.getValue(Currency.class, PAYMENT_CURRENCY_FIELD_NAME));
     } else {
-      s_logger.warn("Found old version of FXDigitalOption, setting payment currency to put currency - this should not happen, report to support@opengamma.com");
+      LOGGER.warn("Found old version of FXDigitalOption, setting payment currency to put currency - this should not happen, report to support@opengamma.com");
       object.setPaymentCurrency(object.getPutCurrency());
     }
     object.setPutAmount(msg.getDouble(PUT_AMOUNT_FIELD_NAME));

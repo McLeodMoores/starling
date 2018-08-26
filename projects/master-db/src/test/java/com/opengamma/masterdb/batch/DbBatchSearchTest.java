@@ -32,12 +32,12 @@ import com.opengamma.util.tuple.Pair;
 public class DbBatchSearchTest extends AbstractDbBatchMasterWorkerTest {
   // superclass sets up dummy database
 
-  private static final Logger s_logger = LoggerFactory.getLogger(DbBatchSearchTest.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(DbBatchSearchTest.class);
 
   @Factory(dataProvider = "databases", dataProviderClass = DbTest.class)
   public DbBatchSearchTest(String databaseType, String databaseVersion) {
     super(databaseType, databaseVersion);
-    s_logger.info("running testcases for {}", databaseType);
+    LOGGER.info("running testcases for {}", databaseType);
   }
 
   //-------------------------------------------------------------------------

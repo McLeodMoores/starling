@@ -43,7 +43,7 @@ import com.opengamma.util.ArgumentChecker;
  */
 public class MergingViewProcessListener implements ViewResultListener {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(MergingViewProcessListener.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(MergingViewProcessListener.class);
 
   /**
    * Node in a doubly linked list of calls. This structure allows merged calls to be plucked easily from the list and moved to the end.
@@ -464,8 +464,8 @@ public class MergingViewProcessListener implements ViewResultListener {
       try {
         call.getFunction().apply(getUnderlying());
       } catch (RuntimeException e) {
-        s_logger.error("Error notifying underlying of {}: {}", call.getFunction(), e.getMessage());
-        s_logger.warn("Caught exception", e);
+        LOGGER.error("Error notifying underlying of {}: {}", call.getFunction(), e.getMessage());
+        LOGGER.warn("Caught exception", e);
       }
       call = call._next;
     }

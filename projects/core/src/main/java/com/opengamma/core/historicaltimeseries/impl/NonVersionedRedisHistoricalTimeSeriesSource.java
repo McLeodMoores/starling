@@ -64,7 +64,7 @@ import com.opengamma.util.tuple.Pairs;
  * a log message will be written at {@code WARN} level.
  */
 public class NonVersionedRedisHistoricalTimeSeriesSource implements HistoricalTimeSeriesSource {
-  private static final Logger s_logger = LoggerFactory.getLogger(NonVersionedRedisHistoricalTimeSeriesSource.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(NonVersionedRedisHistoricalTimeSeriesSource.class);
   private final JedisPool _jedisPool;
   private final String _redisPrefix;
   // ChangeManager is only returned to satisfy the interface and allow this source to be used with the engine, no notifications will be sent
@@ -175,7 +175,7 @@ public class NonVersionedRedisHistoricalTimeSeriesSource implements HistoricalTi
       } catch (Throwable e) {
         getJedisPool().returnBrokenResource(jedis);
         if (attempts > 0) {
-          s_logger.warn("Unable to put timeseries with id, will retry: " + redisKey, e);
+          LOGGER.warn("Unable to put timeseries with id, will retry: " + redisKey, e);
           updateTimeSeries(redisKey, timeseries, clear, attempts - 1);
         }
         throw new OpenGammaRuntimeException("Unable to put timeseries with id: " + redisKey, e);
@@ -223,7 +223,7 @@ public class NonVersionedRedisHistoricalTimeSeriesSource implements HistoricalTi
       jedis.flushDB();
       getJedisPool().returnResource(jedis);
     } catch (Exception e) {
-      s_logger.error("Unable to clear database", e);
+      LOGGER.error("Unable to clear database", e);
       getJedisPool().returnBrokenResource(jedis);
       throw new OpenGammaRuntimeException("Unable to clear database", e);
     }
@@ -259,7 +259,7 @@ public class NonVersionedRedisHistoricalTimeSeriesSource implements HistoricalTi
   
   protected UniqueId toUniqueId(ExternalIdBundle identifierBundle) {
     if (identifierBundle.size() != 1) {
-      s_logger.warn("Using NonVersionedRedisHistoricalTimeSeriesSource with bundle {} other than 1. Probable misuse.", identifierBundle);
+      LOGGER.warn("Using NonVersionedRedisHistoricalTimeSeriesSource with bundle {} other than 1. Probable misuse.", identifierBundle);
     }
     ExternalId id = identifierBundle.iterator().next();
     UniqueId uniqueId = UniqueId.of(id.getScheme().getName(), id.getValue());
@@ -276,7 +276,7 @@ public class NonVersionedRedisHistoricalTimeSeriesSource implements HistoricalTi
         exists = jedis.exists(redisHtsDaysKey);
         getJedisPool().returnResource(jedis);
       } catch (Exception e) {
-        s_logger.error("Unable to check for existance", e);
+        LOGGER.error("Unable to check for existance", e);
         getJedisPool().returnBrokenResource(jedis);
         throw new OpenGammaRuntimeException("Unable to check for existance", e);
       }
@@ -334,7 +334,7 @@ public class NonVersionedRedisHistoricalTimeSeriesSource implements HistoricalTi
         }
         getJedisPool().returnResource(jedis);
       } catch (Exception e) {
-        s_logger.error("Unable to load points from redis for " + redisKey, e);
+        LOGGER.error("Unable to load points from redis for " + redisKey, e);
         getJedisPool().returnBrokenResource(jedis);
         throw new OpenGammaRuntimeException("Unable to load points from redis for " + redisKey, e);
       }

@@ -28,7 +28,7 @@ import com.opengamma.util.tuple.Pairs;
  */
 public abstract class UserExpressionParser {
 
-  private static final ThreadLocal<ComputationTargetResolver.AtVersionCorrection> s_resolver = new ThreadLocal<ComputationTargetResolver.AtVersionCorrection>();
+  private static final ThreadLocal<ComputationTargetResolver.AtVersionCorrection> RESOLVER = new ThreadLocal<ComputationTargetResolver.AtVersionCorrection>();
 
   /**
    * Returns the thread's resolver for the current expression evaluation. This allows static items to be registered with the parser but access services allowing deep resolution of referenced entities.
@@ -36,7 +36,7 @@ public abstract class UserExpressionParser {
    * @return the thread's resolver
    */
   public static ComputationTargetResolver.AtVersionCorrection getResolver() {
-    return s_resolver.get();
+    return RESOLVER.get();
   }
 
   /**
@@ -45,7 +45,7 @@ public abstract class UserExpressionParser {
    * @param resolver the thread's resolver
    */
   public static void setResolver(final ComputationTargetResolver.AtVersionCorrection resolver) {
-    s_resolver.set(resolver);
+    RESOLVER.set(resolver);
   }
 
   /**

@@ -26,7 +26,7 @@ import com.opengamma.engine.value.ValueSpecification;
  */
 public class MarketDataInjectorImpl implements MarketDataInjector {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(MarketDataInjectorImpl.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(MarketDataInjectorImpl.class);
 
   /**
    * A snapshot of the state of the injection.
@@ -55,17 +55,17 @@ public class MarketDataInjectorImpl implements MarketDataInjector {
               final Object targetValue = (target != null) ? target.getValue() : null;
               final ValueSpecification resolved = _availability.getAvailability(targetSpec, targetValue, valueByRequirement.getKey());
               if (resolved != null) {
-                s_logger.info("Injecting {} as {}", valueByRequirement, resolved);
+                LOGGER.info("Injecting {} as {}", valueByRequirement, resolved);
                 _valuesBySpecification.put(resolved, valueByRequirement.getValue());
               } else {
-                s_logger.debug("Not injecting {} - no availability from {}", valueByRequirement, _availability);
+                LOGGER.debug("Not injecting {} - no availability from {}", valueByRequirement, _availability);
               }
             } else {
-              s_logger.warn("Couldn't resolve {} for injected value requirement", valueByRequirement.getKey());
+              LOGGER.warn("Couldn't resolve {} for injected value requirement", valueByRequirement.getKey());
             }
           }
         } else {
-          s_logger.warn("Values injected by requirement, but no target resolver");
+          LOGGER.warn("Values injected by requirement, but no target resolver");
         }
       }
     }

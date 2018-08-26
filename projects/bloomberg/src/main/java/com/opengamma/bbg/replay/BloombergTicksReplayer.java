@@ -26,7 +26,7 @@ import com.opengamma.util.TerminatableJob;
 public class BloombergTicksReplayer implements Lifecycle {
 
   /** Logger. */
-  private static Logger s_logger = LoggerFactory.getLogger(BloombergTicksReplayer.class);
+  private static Logger LOGGER = LoggerFactory.getLogger(BloombergTicksReplayer.class);
 
   private static final int DEFAULT_QUEUE_SIZE = 1000;
   private final BloombergTickReceiver _bloombergTickReceiver;
@@ -76,8 +76,8 @@ public class BloombergTicksReplayer implements Lifecycle {
 
   @Override
   public synchronized boolean isRunning() {
-    s_logger.debug("isLoaderRunning {}", isLoaderRunning());
-    s_logger.debug("isPlayerRunning {}", isPlayerRunning());
+    LOGGER.debug("isLoaderRunning {}", isLoaderRunning());
+    LOGGER.debug("isPlayerRunning {}", isPlayerRunning());
     return isLoaderRunning() && isPlayerRunning();
   }
 
@@ -103,7 +103,7 @@ public class BloombergTicksReplayer implements Lifecycle {
       Thread.sleep(5000);
     } catch (InterruptedException e) {
       Thread.interrupted();
-      s_logger.warn("interrupted from sleeping");
+      LOGGER.warn("interrupted from sleeping");
     }
     startPlayer();
   }
@@ -112,7 +112,7 @@ public class BloombergTicksReplayer implements Lifecycle {
    * 
    */
   private void startLoader() {
-    s_logger.info("starting ticksLoader-job");
+    LOGGER.info("starting ticksLoader-job");
     TicksLoaderJob ticksLoaderJob = new TicksLoaderJob(_rootDir, _securities, _ticksQueue, _startTime, _endTime, _infiniteLoop);
     _ticksLoaderJob = ticksLoaderJob;
     Thread thread = new Thread(_ticksLoaderJob, "TicksLoader");
@@ -121,7 +121,7 @@ public class BloombergTicksReplayer implements Lifecycle {
       @Override
       public void uncaughtException(Thread t, Throwable e) {
         _exception = e;
-        s_logger.warn(e.getMessage(), e);
+        LOGGER.warn(e.getMessage(), e);
       }
     });
     thread.start();
@@ -132,7 +132,7 @@ public class BloombergTicksReplayer implements Lifecycle {
    * 
    */
   private void startPlayer() {
-    s_logger.info("starting ticksPlayer-job");
+    LOGGER.info("starting ticksPlayer-job");
     TicksPlayerJob ticksPlayer = new TicksPlayerJob(_ticksQueue, _bloombergTickReceiver, _mode, _ticksLoaderThread);
     _ticksPlayerJob = ticksPlayer;
     Thread thread = new Thread(_ticksPlayerJob, "TicksPlayer");
@@ -141,7 +141,7 @@ public class BloombergTicksReplayer implements Lifecycle {
       @Override
       public void uncaughtException(Thread t, Throwable e) {
         _exception = e;
-        s_logger.warn(e.getMessage(), e);
+        LOGGER.warn(e.getMessage(), e);
       }
     });
     thread.start();
@@ -161,7 +161,7 @@ public class BloombergTicksReplayer implements Lifecycle {
 
   private void stopTerminatableJob(TerminatableJob terminatableJob,
       Thread thread) {
-    s_logger.debug("stopping {}", thread);
+    LOGGER.debug("stopping {}", thread);
     if (thread != null && thread.isAlive()) {
       if (terminatableJob != null) {
         terminatableJob.terminate();
@@ -170,7 +170,7 @@ public class BloombergTicksReplayer implements Lifecycle {
         thread.join(1000); //wait for 1sec
       } catch (InterruptedException e) {
         Thread.interrupted();
-        s_logger.warn("Interrupted waiting for {} thread to finish", thread);
+        LOGGER.warn("Interrupted waiting for {} thread to finish", thread);
       }
     }
     

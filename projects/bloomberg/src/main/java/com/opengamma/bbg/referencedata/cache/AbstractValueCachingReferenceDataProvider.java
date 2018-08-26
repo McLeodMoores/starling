@@ -39,7 +39,7 @@ import com.opengamma.util.fudgemsg.OpenGammaFudgeContext;
 public abstract class AbstractValueCachingReferenceDataProvider extends AbstractReferenceDataProvider {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(AbstractValueCachingReferenceDataProvider.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(AbstractValueCachingReferenceDataProvider.class);
   /**
    * Constant used when field not available.
    */
@@ -148,13 +148,13 @@ public abstract class AbstractValueCachingReferenceDataProvider extends Abstract
       Set<String> requestedFields = entry.getKey();
       assert !requestedIdentifiers.isEmpty();
       if (entry.getKey().isEmpty()) {
-        s_logger.debug("Satisfied entire request for securities {} from cache", requestedIdentifiers);
+        LOGGER.debug("Satisfied entire request for securities {} from cache", requestedIdentifiers);
         for (String securityKey : requestedIdentifiers) {
           result.addReferenceData(cachedResults.get(securityKey));
         }
         continue;
       }
-      s_logger.info("Loading {} fields for {} securities from underlying", entry.getKey().size(), requestedIdentifiers.size());
+      LOGGER.info("Loading {} fields for {} securities from underlying", entry.getKey().size(), requestedIdentifiers.size());
       final ReferenceDataProviderGetRequest underlyingRequest = ReferenceDataProviderGetRequest.createGet(requestedIdentifiers, requestedFields, false);
       ReferenceDataProviderGetResult loadedResult = getUnderlying().getReferenceData(underlyingRequest);
       for (String identifier : requestedIdentifiers) {

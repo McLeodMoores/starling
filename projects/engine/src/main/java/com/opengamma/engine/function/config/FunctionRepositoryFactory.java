@@ -34,7 +34,7 @@ import com.opengamma.util.ReflectionUtils;
  */
 public abstract class FunctionRepositoryFactory implements ChangeProvider {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(FunctionRepositoryFactory.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(FunctionRepositoryFactory.class);
 
   /**
    * The set of functions that are always in a constructed repository regardless of the {@link FunctionConfigurationBundle} document used.
@@ -130,7 +130,7 @@ public abstract class FunctionRepositoryFactory implements ChangeProvider {
         } else if (functionConfig instanceof StaticFunctionConfiguration) {
           addStaticFunctionConfiguration(repository, (StaticFunctionConfiguration) functionConfig);
         } else {
-          s_logger.error("Unhandled function configuration {}, ignoring", functionConfig);
+          LOGGER.error("Unhandled function configuration {}, ignoring", functionConfig);
         }
       }
     }
@@ -152,8 +152,8 @@ public abstract class FunctionRepositoryFactory implements ChangeProvider {
       final AbstractFunction functionDefinition = createParameterizedFunction(definitionClass, functionConfig.getParameter());
       repository.addFunction(functionDefinition);
     } catch (final RuntimeException ex) {
-      s_logger.error("Unable to add function definition {}, ignoring", functionConfig);
-      s_logger.info("Caught exception", ex);
+      LOGGER.error("Unable to add function definition {}, ignoring", functionConfig);
+      LOGGER.info("Caught exception", ex);
     }
   }
 
@@ -209,8 +209,8 @@ public abstract class FunctionRepositoryFactory implements ChangeProvider {
       final AbstractFunction functionDefinition = createStaticFunction(definitionClass);
       repository.addFunction(functionDefinition);
     } catch (final RuntimeException ex) {
-      s_logger.error("Unable to add function definition {}, ignoring", functionConfig);
-      s_logger.info("Caught exception", ex);
+      LOGGER.error("Unable to add function definition {}, ignoring", functionConfig);
+      LOGGER.info("Caught exception", ex);
     }
   }
 

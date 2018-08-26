@@ -28,7 +28,7 @@ import com.opengamma.provider.livedata.LiveDataMetaDataProvider;
  * 
  */
 public class MarketDataDialog extends JDialog {
-  private static final Logger s_logger = LoggerFactory.getLogger(MarketDataDialog.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(MarketDataDialog.class);
   private List<LiveDataMetaDataProvider> _liveDataMetaDataProvider;
   private ConfigMaster _configMaster;
   private MarketDataSnapshotMaster _snapshotMaster;
@@ -138,9 +138,9 @@ public class MarketDataDialog extends JDialog {
         for (int i = 0; i < _components.size(); i++) {
           MarketDataSpecificationRowComponent marketDataSpecificationRowComponent = _components.get(i);
           if (marketDataSpecificationRowComponent == null) {
-            s_logger.error("{} was null", i);
+            LOGGER.error("{} was null", i);
           } else {
-            s_logger.error("{} was {}", i, marketDataSpecificationRowComponent.getCurrentState());
+            LOGGER.error("{} was {}", i, marketDataSpecificationRowComponent.getCurrentState());
           }
         }
       }

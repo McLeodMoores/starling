@@ -36,7 +36,7 @@ import com.opengamma.util.TerminatableJobContainer;
  */
 public class ServerSocketFudgeConnectionReceiver extends AbstractServerSocketProcess {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(ServerSocketFudgeConnectionReceiver.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ServerSocketFudgeConnectionReceiver.class);
 
   private final FudgeConnectionReceiver _underlying;
   private final FudgeContext _fudgeContext;
@@ -76,14 +76,14 @@ public class ServerSocketFudgeConnectionReceiver extends AbstractServerSocketPro
   @Override
   protected void socketOpened(Socket socket) {
     ArgumentChecker.notNull(socket, "socket");
-    s_logger.info("Opened socket to remote side {}", socket.getRemoteSocketAddress());
+    LOGGER.info("Opened socket to remote side {}", socket.getRemoteSocketAddress());
     InputStream is;
     OutputStream os;
     try {
       is = socket.getInputStream();
       os = socket.getOutputStream();
     } catch (IOException e) {
-      s_logger.warn("Unable to open InputStream and OutputStream for socket {}", new Object[] {socket}, e);
+      LOGGER.warn("Unable to open InputStream and OutputStream for socket {}", new Object[] {socket}, e);
       return;
     }
     final ConnectionJob job = new ConnectionJob(socket, is, os);
@@ -287,7 +287,7 @@ public class ServerSocketFudgeConnectionReceiver extends AbstractServerSocketPro
         try {
           getUnderlying().connectionReceived(getFudgeContext(), envelope, _connection);
         } catch (Exception e) {
-          s_logger.warn("Unable to dispatch connection to receiver", e);
+          LOGGER.warn("Unable to dispatch connection to receiver", e);
         }
       }
     }
@@ -296,20 +296,20 @@ public class ServerSocketFudgeConnectionReceiver extends AbstractServerSocketPro
       try {
         receiver.messageReceived(getFudgeContext(), envelope);
       } catch (Exception e) {
-        s_logger.warn("Unable to dispatch message to receiver", e);
+        LOGGER.warn("Unable to dispatch message to receiver", e);
       }
     }
 
     private void terminateWithError(final String errorMessage, final Exception cause) {
       if (cause != null) {
         if (exceptionForcedByClose(cause)) {
-          s_logger.info("Connection terminated");
+          LOGGER.info("Connection terminated");
         } else {
-          s_logger.warn(errorMessage, cause);
+          LOGGER.warn(errorMessage, cause);
           terminate();
         }
       } else {
-        s_logger.info(errorMessage);
+        LOGGER.info(errorMessage);
         terminate();
       }
       final FudgeConnectionStateListener listener = _listener;
@@ -322,10 +322,10 @@ public class ServerSocketFudgeConnectionReceiver extends AbstractServerSocketPro
     public void terminate() {
       if (!_socket.isClosed()) {
         try {
-          s_logger.debug("Closing socket");
+          LOGGER.debug("Closing socket");
           _socket.close();
         } catch (IOException ex) {
-          s_logger.warn("Couldn't close socket to release blocked I/O", ex.getMessage());
+          LOGGER.warn("Couldn't close socket to release blocked I/O", ex.getMessage());
         }
       }
       super.terminate();

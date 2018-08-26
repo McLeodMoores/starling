@@ -30,7 +30,7 @@ import com.opengamma.util.ArgumentChecker;
  */
 public class EquityForwardCurvePerTickerDefaults extends DefaultPropertyFunction {
   /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(EquityForwardCurvePerTickerDefaults.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(EquityForwardCurvePerTickerDefaults.class);
   /** The value requirements for which these defaults apply */
   private static final String[] VALUE_REQUIREMENTS = new String[] {
     ValueRequirementNames.FORWARD_CURVE,
@@ -87,7 +87,7 @@ public class EquityForwardCurvePerTickerDefaults extends DefaultPropertyFunction
       final String propertyName) {
     final String equityId = EquitySecurityUtils.getIndexOrEquityName(((ExternalIdentifiable) target.getValue()).getExternalId());
     if (!_perEquityConfig.containsKey(equityId)) {
-      s_logger.error("Could not get config for equity " + equityId + "; should never happen");
+      LOGGER.error("Could not get config for equity " + equityId + "; should never happen");
       return null;
     }
     final String[] config = _perEquityConfig.get(equityId);

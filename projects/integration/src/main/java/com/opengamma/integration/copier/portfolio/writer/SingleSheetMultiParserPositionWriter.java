@@ -34,7 +34,7 @@ import com.opengamma.util.tuple.ObjectsPair;
  */
 public class SingleSheetMultiParserPositionWriter extends SingleSheetPositionWriter {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(SingleSheetMultiParserPositionWriter.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(SingleSheetMultiParserPositionWriter.class);
   
   private Map<String, RowParser> _parserMap = new HashMap<String, RowParser>();
   
@@ -153,7 +153,7 @@ public class SingleSheetMultiParserPositionWriter extends SingleSheetPositionWri
 
 //      List<ManageableTrade> trades = position.getTrades();
 //      if (trades.size() > 1) {
-//        s_logger.warn("Omitting extra trades: only one trade per position is currently supported");
+//        LOGGER.warn("Omitting extra trades: only one trade per position is currently supported");
 //      }
 //      if (trades.size() > 0) {
 //        _currentRow.putAll(_currentParser.constructRow(trades.get(0)));
@@ -195,7 +195,7 @@ public class SingleSheetMultiParserPositionWriter extends SingleSheetPositionWri
           _currentRow.putAll(_currentParser.constructRow(position.getTrades().get(0)));
         }
         if (position.getTrades().size() > 1) {
-          s_logger.warn("Omitting extra trades: only one trade per position is supported in the current mode");
+          LOGGER.warn("Omitting extra trades: only one trade per position is supported in the current mode");
         }
         if (!_currentRow.isEmpty()) {
           getSheet().writeNextRow(_currentRow);

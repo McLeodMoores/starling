@@ -33,7 +33,7 @@ import com.opengamma.financial.security.option.EquityOptionSecurity;
 //TODO urgently needs a rename
 @Deprecated
 public abstract class StandardOptionDataAnalyticOptionModelFunction extends AnalyticOptionModelFunction {
-  private static final Logger s_logger = LoggerFactory.getLogger(StandardOptionDataAnalyticOptionModelFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(StandardOptionDataAnalyticOptionModelFunction.class);
 
   @SuppressWarnings("unchecked")
   @Override
@@ -41,7 +41,7 @@ public abstract class StandardOptionDataAnalyticOptionModelFunction extends Anal
     final ZonedDateTime now = ZonedDateTime.now(relevantTime);
     final Double spotAsObject = (Double) inputs.getValue(getUnderlyingMarketDataRequirement(option.getUnderlyingId()));
     if (spotAsObject == null) {
-      s_logger.warn("Didn't have market value for {}", option.getUnderlyingId());
+      LOGGER.warn("Didn't have market value for {}", option.getUnderlyingId());
       throw new NullPointerException("No spot value for underlying instrument.");
     }
     final double spot = spotAsObject;

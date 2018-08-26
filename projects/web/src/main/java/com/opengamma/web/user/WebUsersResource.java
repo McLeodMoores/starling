@@ -51,7 +51,7 @@ import com.opengamma.web.WebPaging;
 public class WebUsersResource extends AbstractWebUserResource {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(WebUsersResource.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(WebUsersResource.class);
   /**
    * The ftl file.
    */
@@ -144,7 +144,7 @@ public class WebUsersResource extends AbstractWebUserResource {
       return Response.seeOther(uri).build();
       
     } catch (UserFormException ex) {
-      ex.logUnexpected(s_logger);
+      ex.logUnexpected(LOGGER);
       FlexiBean out = createRootData();
       out.put("username", userName);
       out.put("displayname", displayName);

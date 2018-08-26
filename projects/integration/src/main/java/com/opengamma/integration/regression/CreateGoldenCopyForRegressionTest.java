@@ -33,7 +33,7 @@ import com.opengamma.util.tuple.Pairs;
  */
 public class CreateGoldenCopyForRegressionTest {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(CreateGoldenCopyForRegressionTest.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(CreateGoldenCopyForRegressionTest.class);
 
   private final String _dbDumpDir;
   private final Instant _valuationTime;
@@ -128,7 +128,7 @@ public class CreateGoldenCopyForRegressionTest {
         configRequest.setName(basisViewName);
         ConfigSearchResult<ViewDefinition> configResult = configMaster.search(configRequest);
         if (configResult.getValues().size() > 1) {
-          s_logger.warn("Multiple view definitions found with the same name '{}'", basisViewName);
+          LOGGER.warn("Multiple view definitions found with the same name '{}'", basisViewName);
           continue;
         }
         String viewDefName = configResult.getSingleValue().getName();

@@ -51,7 +51,7 @@ import com.opengamma.timeseries.precise.zdt.ImmutableZonedDateTimeDoubleTimeSeri
 public final class OpenGammaFudgeContext {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(OpenGammaFudgeContext.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(OpenGammaFudgeContext.class);
 
   /**
    * Restricted constructor.
@@ -152,7 +152,7 @@ public final class OpenGammaFudgeContext {
     public Dir createDir(URL url) throws Exception {
       File file = Vfs.getFile(url);
       if (file == null || file.exists() == false) {
-        s_logger.warn("URL could not be resolved to a file: " + url);
+        LOGGER.warn("URL could not be resolved to a file: " + url);
         return new EmptyDir(file);
       } else {
         return new SystemDir(file);
@@ -176,7 +176,7 @@ public final class OpenGammaFudgeContext {
     public Dir createDir(URL url) throws Exception {
       File file = Vfs.getFile(url);
       if (file == null || file.exists() == false) {
-        s_logger.warn("URL could not be resolved to a file: " + url);
+        LOGGER.warn("URL could not be resolved to a file: " + url);
         return new EmptyDir(file);
       } else {
         return new SystemDir(file);

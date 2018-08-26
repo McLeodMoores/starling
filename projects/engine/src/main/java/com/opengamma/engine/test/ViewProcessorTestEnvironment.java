@@ -70,9 +70,9 @@ public class ViewProcessorTestEnvironment {
   public static final String TEST_VIEW_DEFINITION_NAME = "Test View";
   public static final String TEST_CALC_CONFIG_NAME = "Test Calc Config";
 
-  private static final ComputationTargetSpecification s_primitiveTarget = ComputationTargetSpecification.of(UniqueId.of("Scheme", "PrimitiveValue"));
-  private static final ValueRequirement s_primitive1 = new ValueRequirement("Value1", s_primitiveTarget);
-  private static final ValueRequirement s_primitive2 = new ValueRequirement("Value2", s_primitiveTarget);
+  private static final ComputationTargetSpecification PRIMITIVE_TARGET = ComputationTargetSpecification.of(UniqueId.of("Scheme", "PrimitiveValue"));
+  private static final ValueRequirement PRIMITIVE_1 = new ValueRequirement("Value1", PRIMITIVE_TARGET);
+  private static final ValueRequirement PRIMITIVE_2 = new ValueRequirement("Value2", PRIMITIVE_TARGET);
 
   // Settings
   private MarketDataProvider _marketDataProvider;
@@ -346,15 +346,15 @@ public class ViewProcessorTestEnvironment {
   }
 
   public static ComputationTargetSpecification getPrimitiveTarget() {
-    return s_primitiveTarget;
+    return PRIMITIVE_TARGET;
   }
 
   public static ValueRequirement getPrimitive1() {
-    return s_primitive1;
+    return PRIMITIVE_1;
   }
 
   public static ValueRequirement getPrimitive2() {
-    return s_primitive2;
+    return PRIMITIVE_2;
   }
 
   public ViewCalculationResultModel getCalculationResult(final ViewResultModel result) {

@@ -72,7 +72,7 @@ import com.opengamma.util.async.AsynchronousExecution;
 public abstract class ListedEquityOptionFunction extends AbstractFunction.NonCompiledInvoker {
 
   /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(ListedEquityOptionFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ListedEquityOptionFunction.class);
 
   /** Property name for the discounting curve */
   public static final String PROPERTY_DISCOUNTING_CURVE_NAME = "DiscountingCurveName";
@@ -124,7 +124,7 @@ public abstract class ListedEquityOptionFunction extends AbstractFunction.NonCom
     final InstrumentDefinition<?> defn = security.accept(_converter);
     final InstrumentDerivative derivative = defn.toDerivative(now);
     if (derivative.accept(LastTimeCalculator.getInstance()) < 0.0) {
-      s_logger.error("Option has already settled - {}", security.toString());
+      LOGGER.error("Option has already settled - {}", security.toString());
       return null;
     }
 

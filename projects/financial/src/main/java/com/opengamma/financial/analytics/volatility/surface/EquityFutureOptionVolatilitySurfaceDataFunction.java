@@ -5,8 +5,6 @@
  */
 package com.opengamma.financial.analytics.volatility.surface;
 
-import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
-
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -49,14 +47,16 @@ import com.opengamma.util.time.Tenor;
 import com.opengamma.util.tuple.Pair;
 import com.opengamma.util.tuple.Pairs;
 
+import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
+
 /**
  *
  */
 public class EquityFutureOptionVolatilitySurfaceDataFunction extends AbstractFunction.NonCompiledInvoker {
   /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(EquityFutureOptionVolatilitySurfaceDataFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(EquityFutureOptionVolatilitySurfaceDataFunction.class);
   /** The supported schemes */
-  private static final Set<ExternalScheme> s_validSchemes = ImmutableSet.of(ExternalSchemes.BLOOMBERG_TICKER, ExternalSchemes.BLOOMBERG_TICKER_WEAK, ExternalSchemes.ACTIVFEED_TICKER);
+  private static final Set<ExternalScheme> VALID_SCHEMES = ImmutableSet.of(ExternalSchemes.BLOOMBERG_TICKER, ExternalSchemes.BLOOMBERG_TICKER_WEAK, ExternalSchemes.ACTIVFEED_TICKER);
 
   private ConfigDBVolatilitySurfaceSpecificationSource _volatilitySurfaceSpecificationSource;
 
@@ -121,7 +121,7 @@ public class EquityFutureOptionVolatilitySurfaceDataFunction extends AbstractFun
   public boolean canApplyTo(final FunctionCompilationContext context, final ComputationTarget target) {
     if (target.getValue() instanceof ExternalIdentifiable) {
       final ExternalId identifier = ((ExternalIdentifiable) target.getValue()).getExternalId();
-      return s_validSchemes.contains(identifier.getScheme());
+      return VALID_SCHEMES.contains(identifier.getScheme());
     }
     return false;
   }
@@ -146,7 +146,7 @@ public class EquityFutureOptionVolatilitySurfaceDataFunction extends AbstractFun
     }
     final Set<String> surfaceNames = constraints.getValues(ValuePropertyNames.SURFACE);
     if (surfaceNames == null || surfaceNames.size() != 1) {
-      s_logger.error("Function takes only get a single surface. Asked for {}", surfaceNames);
+      LOGGER.error("Function takes only get a single surface. Asked for {}", surfaceNames);
       return null;
     }
     final String givenName = Iterables.getOnlyElement(surfaceNames);
@@ -154,7 +154,7 @@ public class EquityFutureOptionVolatilitySurfaceDataFunction extends AbstractFun
 
     final VolatilitySurfaceSpecification specification = _volatilitySurfaceSpecificationSource.getSpecification(fullName, InstrumentTypeProperties.EQUITY_FUTURE_OPTION);
     if (specification == null) {
-      s_logger.error("Could not get volatility surface specification with name " + fullName);
+      LOGGER.error("Could not get volatility surface specification with name " + fullName);
       return null;
     }
 

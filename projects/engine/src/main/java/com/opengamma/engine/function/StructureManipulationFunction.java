@@ -28,7 +28,7 @@ import com.opengamma.engine.value.ValueSpecification;
  */
 public final class StructureManipulationFunction extends IntrinsicFunction {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(StructureManipulationFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(StructureManipulationFunction.class);
 
   /**
    * Shared instance.
@@ -81,7 +81,7 @@ public final class StructureManipulationFunction extends IntrinsicFunction {
       final Object outputValueObject;
       if ((inputValueObject != null) && (structureManipulator != null) && structureManipulator.getExpectedType().isAssignableFrom(inputValueObject.getClass())) {
         outputValueObject = structureManipulator.execute(inputValueObject, inputValue.getSpecification(), executionContext);
-        s_logger.debug("changed value for target {} from {} to {}", target, inputValueObject, outputValueObject);
+        LOGGER.debug("changed value for target {} from {} to {}", target, inputValueObject, outputValueObject);
       } else {
         outputValueObject = inputValueObject;
       }

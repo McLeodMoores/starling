@@ -19,7 +19,7 @@ import com.opengamma.util.ArgumentChecker;
  * {@link RecordProcessor}.
  */
 public class RecordProcessingJob implements Runnable {
-  private static final Logger s_logger = LoggerFactory.getLogger(RecordProcessingJob.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(RecordProcessingJob.class);
   
   private final BlockingQueue<Object> _queue;
   @SuppressWarnings("rawtypes")
@@ -53,7 +53,7 @@ public class RecordProcessingJob implements Runnable {
       try {
         _recordProcessor.process(record);
       } catch (Exception e) {
-        s_logger.warn("Unable to process record", e);
+        LOGGER.warn("Unable to process record", e);
         // REVIEW kirk 2013-03-19 -- Is this right to just go back to the loop?
       }
     }

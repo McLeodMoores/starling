@@ -20,9 +20,9 @@ import org.slf4j.LoggerFactory;
 public class BuildData {
 
   /** Stamp to be appended to resource urls */
-  private static final String s_stamp;
+  private static final String STAMP;
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(ScriptTag.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ScriptTag.class);
 
   static {
     Properties prop = new Properties();
@@ -35,16 +35,16 @@ public class BuildData {
       result = prop.getProperty("web.build.timestamp");
     } catch (Exception e) {
       result = "default";
-      s_logger.warn("Failed to load build data for resource urls", e);
+      LOGGER.warn("Failed to load build data for resource urls", e);
     } finally {
       IOUtils.closeQuietly(input);
     }
-    s_stamp = result;
+    STAMP = result;
   }
 
   /** @return the stamp of type String */
   
   public static String getBuildStamp() {
-    return s_stamp;
+    return STAMP;
   }
 }

@@ -27,7 +27,7 @@ import com.opengamma.engine.value.ValueSpecification;
  */
 /* package */ class ForwardCurveFormatter extends AbstractFormatter<ForwardCurve> {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(ForwardCurveFormatter.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ForwardCurveFormatter.class);
 
   /* package */ ForwardCurveFormatter() {
     super(ForwardCurve.class);
@@ -58,7 +58,7 @@ import com.opengamma.engine.value.ValueSpecification;
       }
       return data;
     } else {
-      s_logger.warn("Can't format forward curve of type {}", value.getForwardCurve().getClass());
+      LOGGER.warn("Can't format forward curve of type {}", value.getForwardCurve().getClass());
       return null;
     }
   }

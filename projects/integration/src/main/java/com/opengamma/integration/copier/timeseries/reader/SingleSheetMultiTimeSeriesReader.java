@@ -29,7 +29,7 @@ import com.opengamma.timeseries.date.localdate.LocalDateDoubleTimeSeriesBuilder;
  */
 public class SingleSheetMultiTimeSeriesReader implements TimeSeriesReader {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(TimeSeriesLoader.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(TimeSeriesLoader.class);
 //  private static final String ID_SCHEME = "TIME_SERIES_LOADER";
   private static final int BUFFER_SIZE = 32;
 
@@ -111,7 +111,7 @@ public class SingleSheetMultiTimeSeriesReader implements TimeSeriesReader {
           double value = Double.parseDouble(getWithException(rawRow, VALUE));
           tsData.get(ric).put(date, value);
         } catch (Throwable e) {
-          s_logger.warn("Could not parse time series row " + rawRow + "; " + e.toString());
+          LOGGER.warn("Could not parse time series row " + rawRow + "; " + e.toString());
         }
         count++;
       }
@@ -119,7 +119,7 @@ public class SingleSheetMultiTimeSeriesReader implements TimeSeriesReader {
       // Write out the gathered time series points across all time series keys
       for (String key : tsData.keySet()) {
         if (tsData.get(key).size() > 0) {
-          s_logger.info("Writing " + tsData.get(key).size() + " data points to time series " + key);
+          LOGGER.info("Writing " + tsData.get(key).size() + " data points to time series " + key);
           timeSeriesWriter.writeDataPoints(
               ExternalId.of(ExternalScheme.of(_idScheme), key), 
               _dataSource,

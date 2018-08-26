@@ -50,13 +50,13 @@ import com.opengamma.util.ArgumentChecker;
  */
 public class MarketDataSourceCli {
   
-  private static final Logger s_logger = LoggerFactory.getLogger(MarketDataSourceCli.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(MarketDataSourceCli.class);
   
   /** Market data source option */
   private static final String MARKET_DATA_SOURCE_OPTION = "dataSource";
  
-  private static final Pattern s_dsOptionPattern = Pattern.compile("(live|historical|snapshot)(:(.*))?");
-  private static final Pattern s_historicalPattern = Pattern.compile("([^:]+)((:)([0-9]{8}))?");
+  private static final Pattern DS_OPTION_PATTERN = Pattern.compile("(live|historical|snapshot)(:(.*))?");
+  private static final Pattern HISTORICAL_PATTERN = Pattern.compile("([^:]+)((:)([0-9]{8}))?");
   /**
    * Market data source command line option definition
    */
@@ -84,7 +84,7 @@ public class MarketDataSourceCli {
     List<MarketDataSpecification> marketDataSpecs = new ArrayList<>();
     String[] optionValues = commandLine.getOptionValues(MARKET_DATA_SOURCE_OPTION);
     if (optionValues == null) {
-      s_logger.info("Missing {} option from command line", MARKET_DATA_SOURCE_OPTION);
+      LOGGER.info("Missing {} option from command line", MARKET_DATA_SOURCE_OPTION);
       return marketDataSpecs;
     }
     
@@ -93,7 +93,7 @@ public class MarketDataSourceCli {
       if (optionValue == null) {
         throw new OpenGammaRuntimeException("Empty market data source option not allowed");
       }
-      Matcher optionMatcher = s_dsOptionPattern.matcher(optionValue);
+      Matcher optionMatcher = DS_OPTION_PATTERN.matcher(optionValue);
       if (!optionMatcher.matches()) {
         throw new OpenGammaRuntimeException(String.format("Invalid data source option value [%s] in command line option", optionValue));
       }
@@ -112,7 +112,7 @@ public class MarketDataSourceCli {
           if (dataSourceStr == null) {
             marketDataSpecs.add(new LatestHistoricalMarketDataSpecification());
           } else {
-            Matcher historicalMatcher = s_historicalPattern.matcher(optionMatcher.group(3));
+            Matcher historicalMatcher = HISTORICAL_PATTERN.matcher(optionMatcher.group(3));
             if (!historicalMatcher.matches()) {
               throw new OpenGammaRuntimeException(String.format("Invalid historical data source option value [%s] in command line option", optionValue));
             }
@@ -134,7 +134,7 @@ public class MarketDataSourceCli {
           String snapshotName = optionMatcher.group(3);
           UniqueId uniqueId = getSnapshotUniqueId(snapshotName, mktDataSnapshotMaster);
           if (uniqueId == null) {
-            s_logger.warn("Snapshot with name {} can not be found", snapshotName);
+            LOGGER.warn("Snapshot with name {} can not be found", snapshotName);
           } else {
             marketDataSpecs.add(UserMarketDataSpecification.of(uniqueId));
           }

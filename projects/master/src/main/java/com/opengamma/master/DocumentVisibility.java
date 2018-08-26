@@ -34,10 +34,10 @@ public enum DocumentVisibility {
   /**
    * Map for looking up values.
    */
-  private static final Int2ObjectMap<DocumentVisibility> s_reverseMap = new Int2ObjectArrayMap<DocumentVisibility>();
+  private static final Int2ObjectMap<DocumentVisibility> REVERSE_MAP = new Int2ObjectArrayMap<DocumentVisibility>();
   static {
     for (DocumentVisibility value : DocumentVisibility.values()) {
-      s_reverseMap.put(value.getVisibilityLevel(), value);
+      REVERSE_MAP.put(value.getVisibilityLevel(), value);
     }
   }
 
@@ -75,7 +75,7 @@ public enum DocumentVisibility {
    * @throws IllegalArgumentException if the visibility is not found
    */
   public static DocumentVisibility ofLevel(short level) {
-    DocumentVisibility visibility = s_reverseMap.get(level);
+    DocumentVisibility visibility = REVERSE_MAP.get(level);
     if (visibility == null) {
       throw new IllegalArgumentException("No visibility exists with ordinal " + level);
     }

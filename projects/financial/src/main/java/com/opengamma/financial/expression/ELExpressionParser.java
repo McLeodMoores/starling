@@ -29,9 +29,9 @@ import de.odysseus.el.util.SimpleContext;
  */
 public class ELExpressionParser extends UserExpressionParser {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(ELExpressionParser.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ELExpressionParser.class);
 
-  private static final Pattern s_if = Pattern.compile("^\\s*if\\s*\\(");
+  private static final Pattern IF = Pattern.compile("^\\s*if\\s*\\(");
 
   private final ExpressionFactory _factory;
   private final SimpleContext _context;
@@ -159,11 +159,11 @@ public class ELExpressionParser extends UserExpressionParser {
       }
     }
     sb.append('}');
-    s_logger.debug("Evaluating {}", sb);
+    LOGGER.debug("Evaluating {}", sb);
     try {
       return new ELExpression(this, getFactory().createValueExpression(getContext(), sb.toString(), Object.class));
     } catch (ELException e) {
-      s_logger.warn("EL exception = {}", e.getMessage());
+      LOGGER.warn("EL exception = {}", e.getMessage());
       throw new IllegalArgumentException(fragment);
     }
   }
@@ -261,7 +261,7 @@ public class ELExpressionParser extends UserExpressionParser {
   }
 
   private Pair<UserExpression, String> ueParse(final String source) {
-    final Matcher m = s_if.matcher(source);
+    final Matcher m = IF.matcher(source);
     if (m.find()) {
       final int openBracket = m.end() - 1;
       final int closeBracket = findCloseBracket(source, openBracket + 1);

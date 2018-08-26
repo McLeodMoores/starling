@@ -33,7 +33,7 @@ import com.opengamma.util.ArgumentChecker;
 public class BundleParser {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(BundleParser.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(BundleParser.class);
 
   /** The bundle element tag name. */
   private static final String BUNDLE_ELEMENT = "bundle";
@@ -226,7 +226,7 @@ public class BundleParser {
     try {
       builder = builderFactory.newDocumentBuilder();
     } catch (ParserConfigurationException e) {
-      s_logger.warn("Unable to create a DOM parser", e);
+      LOGGER.warn("Unable to create a DOM parser", e);
     }
     return builder;
   }

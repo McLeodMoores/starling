@@ -38,7 +38,7 @@ import com.opengamma.id.VersionCorrection;
  */
 /* package */final class TargetResolutionLogger implements ComputationTargetResolver.AtVersionCorrection {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(TargetResolutionLogger.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(TargetResolutionLogger.class);
 
   private static final class LoggingSpecificationResolver implements ComputationTargetSpecificationResolver.AtVersionCorrection, ComputationTargetReferenceVisitor<ComputationTargetReference>,
       ResolutionLogger {
@@ -54,7 +54,7 @@ import com.opengamma.id.VersionCorrection;
       _expiredResolutions = expiredResolutions;
     }
 
-    private static final ComputationTargetTypeVisitor<Void, ComputationTargetType> s_getLeafType = new ComputationTargetTypeVisitor<Void, ComputationTargetType>() {
+    private static final ComputationTargetTypeVisitor<Void, ComputationTargetType> GET_LEAF_TYPE = new ComputationTargetTypeVisitor<Void, ComputationTargetType>() {
 
       @Override
       public ComputationTargetType visitMultipleComputationTargetTypes(final Set<ComputationTargetType> types, final Void data) {
@@ -103,7 +103,7 @@ import com.opengamma.id.VersionCorrection;
     private ComputationTargetType getLeafType(final ComputationTargetType type) {
       // TODO: Ought to reduce the type to its simplest form. This hasn't been a problem with the views & function repository I've been testing
       // with but might be necessary in the general case as there will be duplicate values in the resolver cache.
-      return type.accept(s_getLeafType, null);
+      return type.accept(GET_LEAF_TYPE, null);
     }
 
     private void log(final ComputationTargetReference reference, final ComputationTargetSpecification resolved) {
@@ -113,7 +113,7 @@ import com.opengamma.id.VersionCorrection;
         if (resolvedId != null) {
           final UniqueId previousId = _resolutions.put(key, resolvedId);
           if ((previousId != null) && !resolvedId.equals(previousId)) {
-            s_logger.info("Direct resolution of {} to {} has expired", key, previousId);
+            LOGGER.info("Direct resolution of {} to {} has expired", key, previousId);
             _expiredResolutions.add(previousId);
           }
         }
@@ -174,7 +174,7 @@ import com.opengamma.id.VersionCorrection;
       if (key != null) {
         final UniqueId previousId = _resolutions.put(key, resolvedId);
         if ((previousId != null) && !resolvedId.equals(previousId)) {
-          s_logger.info("Transitive resolution of {} to {} has expired", previousId);
+          LOGGER.info("Transitive resolution of {} to {} has expired", previousId);
           _expiredResolutions.add(previousId);
         }
       }

@@ -21,7 +21,7 @@ import com.opengamma.util.ArgumentChecker;
  */
 public class DistributedAuditLogger extends AbstractAuditLogger {
   
-  private static final Logger s_logger = LoggerFactory.getLogger(DistributedAuditLogger.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(DistributedAuditLogger.class);
   private final FudgeMessageSender _msgSender;
   private final FudgeContext _fudgeContext;
   
@@ -44,7 +44,7 @@ public class DistributedAuditLogger extends AbstractAuditLogger {
   @Override
   public void log(String user, String originatingSystem, String object, String operation, String description, boolean success) {
     AuditLogEntry auditLogEntry = new AuditLogEntry(user, originatingSystem, object, operation, description, success, new Date());
-    s_logger.info("Sending message: " + auditLogEntry.toString());
+    LOGGER.info("Sending message: " + auditLogEntry.toString());
     FudgeMsg logMessage = auditLogEntry.toFudgeMsg(_fudgeContext);
     _msgSender.send(logMessage);
   }

@@ -30,7 +30,7 @@ import com.opengamma.core.position.Trade;
  */
 public final class DealAttributeEncoder {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(DealAttributeEncoder.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(DealAttributeEncoder.class);
   
   /**
    * Resticted constructor
@@ -57,8 +57,8 @@ public final class DealAttributeEncoder {
           if (metaBean.metaPropertyExists(propertyName)) {
             MetaProperty<?> mp = metaBean.metaProperty(propertyName);
             String value = entry.getValue();
-            if (s_logger.isDebugEnabled()) {
-              s_logger.debug("Setting property {}({}) with value {}", new Object[]{mp, mp.propertyType(), value});
+            if (LOGGER.isDebugEnabled()) {
+              LOGGER.debug("Setting property {}({}) with value {}", new Object[]{mp, mp.propertyType(), value});
             }
             mp.setString(deal, value);
           }

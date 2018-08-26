@@ -133,7 +133,7 @@ public class ComputationTargetTypeMap<V> {
   }
 
   @SuppressWarnings("rawtypes")
-  private static final ComputationTargetTypeVisitor s_get = new ComputationTargetTypeVisitor<ComputationTargetTypeMap<Object>, Object>() {
+  private static final ComputationTargetTypeVisitor GET = new ComputationTargetTypeVisitor<ComputationTargetTypeMap<Object>, Object>() {
 
     @Override
     public Object visitMultipleComputationTargetTypes(final Set<ComputationTargetType> types, final ComputationTargetTypeMap<Object> data) {
@@ -181,7 +181,7 @@ public class ComputationTargetTypeMap<V> {
    */
   @SuppressWarnings("unchecked")
   public V get(final ComputationTargetType key) {
-    return key.accept((ComputationTargetTypeVisitor<ComputationTargetTypeMap<V>, V>) s_get, this);
+    return key.accept((ComputationTargetTypeVisitor<ComputationTargetTypeMap<V>, V>) GET, this);
   }
 
   /**
@@ -201,7 +201,7 @@ public class ComputationTargetTypeMap<V> {
   }
 
   @SuppressWarnings("rawtypes")
-  private static final ComputationTargetTypeVisitor s_getDirect = new ComputationTargetTypeVisitor<ComputationTargetTypeMap<Object>, Object>() {
+  private static final ComputationTargetTypeVisitor GET_DIRECT = new ComputationTargetTypeVisitor<ComputationTargetTypeMap<Object>, Object>() {
 
     @Override
     public Object visitMultipleComputationTargetTypes(final Set<ComputationTargetType> types, final ComputationTargetTypeMap<Object> data) {
@@ -255,7 +255,7 @@ public class ComputationTargetTypeMap<V> {
    */
   @SuppressWarnings("unchecked")
   public V getDirect(final ComputationTargetType key) {
-    return key.accept((ComputationTargetTypeVisitor<ComputationTargetTypeMap<V>, V>) s_getDirect, this);
+    return key.accept((ComputationTargetTypeVisitor<ComputationTargetTypeMap<V>, V>) GET_DIRECT, this);
   }
 
   /**

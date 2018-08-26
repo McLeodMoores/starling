@@ -32,14 +32,14 @@ import com.sun.jersey.api.client.UniformInterfaceException;
 
 /**
  * An abstract class to assist with writing JAX-RS exception mappers.
- * 
+ *
  * @param <T> the mapped exception type
  */
 public abstract class AbstractExceptionMapper<T extends Throwable>
     implements ExceptionMapper<T> {
 
   /** Logger. */
-  protected static final Logger s_logger = LoggerFactory.getLogger(AbstractExceptionMapper.class);
+  protected static final Logger LOGGER = LoggerFactory.getLogger(AbstractExceptionMapper.class);
 
   /**
    * The RESTful request headers.
@@ -60,7 +60,7 @@ public abstract class AbstractExceptionMapper<T extends Throwable>
 
   //-------------------------------------------------------------------------
   @Override
-  public Response toResponse(T exception) {
+  public Response toResponse(final T exception) {
     return createResponse(exception);
   }
 
@@ -68,13 +68,13 @@ public abstract class AbstractExceptionMapper<T extends Throwable>
    * Creates the JAX-RS response for the exception.
    * <p>
    * This is the main method invoked by subclasses.
-   * 
+   *
    * @param exception  the exception being processed, not null
    * @return the response, not null
    */
-  public Response createResponse(T exception) {
+  public Response createResponse(final T exception) {
     if (_headers.getAcceptableMediaTypes().contains(MediaType.TEXT_HTML_TYPE)) {
-      String page = buildHtmlErrorPage(exception);
+      final String page = buildHtmlErrorPage(exception);
       logHtmlException(exception, page);
       return doHtmlResponse(exception, page);
     } else {
@@ -86,50 +86,50 @@ public abstract class AbstractExceptionMapper<T extends Throwable>
   //-------------------------------------------------------------------------
   /**
    * Provides the HTML error page.
-   * 
+   *
    * @param exception  the exception being processed, not null
    * @return the HTML error page, null if none
    */
-  protected String buildHtmlErrorPage(T exception) {
+  protected String buildHtmlErrorPage(final T exception) {
     return null;
   }
 
   /**
    * Creates the HTML error page.
-   * 
+   *
    * @param errorResource  the resource, not null
    * @param data  the substitution data, not null
    * @return the page, null if no page
    */
-  protected String createHtmlErrorPage(String errorResource, Map<String, String> data) {
+  protected String createHtmlErrorPage(final String errorResource, final Map<String, String> data) {
     try (InputStream in = _servletContext.getResourceAsStream("/WEB-INF/pages/errors/" + errorResource)) {
       if (in == null) {
-        s_logger.debug("AbstractExceptionMapper resource not found: /WEB-INF/pages/errors/" + errorResource);
+        LOGGER.debug("AbstractExceptionMapper resource not found: /WEB-INF/pages/errors/" + errorResource);
         return null;
       }
-      List<String> lines = IOUtils.readLines(in, StandardCharsets.UTF_8);
-      for (ListIterator<String> it = lines.listIterator(); it.hasNext(); ) {
-        String line = (String) it.next();
-        for (Entry<String, String> entry : data.entrySet()) {
+      final List<String> lines = IOUtils.readLines(in, StandardCharsets.UTF_8);
+      for (final ListIterator<String> it = lines.listIterator(); it.hasNext();) {
+        String line = it.next();
+        for (final Entry<String, String> entry : data.entrySet()) {
           line = StringUtils.replace(line, "${" + entry.getKey() + "}", entry.getValue());
           it.set(line);
         }
       }
       return Joiner.on('\n').join(lines);
-      
+
     } catch (IOException | RuntimeException ex) {
-      s_logger.debug("AbstractExceptionMapper error", ex);
+      LOGGER.debug("AbstractExceptionMapper error", ex);
       return null;
     }
   }
 
   /**
    * Builds the output message for the exception into the data map.
-   * 
+   *
    * @param exception  the exception being processed, may be null
    * @param data  the substitution data, not null
    */
-  protected void buildOutputMessage(Throwable exception, Map<String, String> data) {
+  protected void buildOutputMessage(final Throwable exception, final Map<String, String> data) {
     // includes HTML tags in locator so exception could be switched off in future
     if (exception == null) {
       data.put("message", "");
@@ -146,7 +146,7 @@ public abstract class AbstractExceptionMapper<T extends Throwable>
         rootCause = exception;
       }
       String message = exception.getMessage();
-      String rootMessage = rootCause.getMessage();
+      final String rootMessage = rootCause.getMessage();
       if (message.contains(rootMessage) == false) {
         message = message + " caused by " + rootMessage;
       }
@@ -159,18 +159,18 @@ public abstract class AbstractExceptionMapper<T extends Throwable>
     }
   }
 
-  private String errorLocator(Throwable exception) {
-    String base = exception.getClass().getSimpleName();
+  private String errorLocator(final Throwable exception) {
+    final String base = exception.getClass().getSimpleName();
     if (exception.getStackTrace().length == 0) {
       return base;
     }
-    StrBuilder buf = new StrBuilder(512);
+    final StrBuilder buf = new StrBuilder(512);
     buf.append(base).append("<br />");
     int count = 0;
     for (int i = 0; i < exception.getStackTrace().length && count < 4; i++) {
-      StackTraceElement ste = exception.getStackTrace()[i];
+      final StackTraceElement ste = exception.getStackTrace()[i];
       if (ste.getClassName().startsWith("sun.") || ste.getClassName().startsWith("javax.") || ste.getClassName().startsWith("com.sun.") ||
-          (ste.getClassName().equals("java.lang.reflect.Method") && ste.getMethodName().equals("invoke"))) {
+          ste.getClassName().equals("java.lang.reflect.Method") && ste.getMethodName().equals("invoke")) {
         continue;
       }
       if (ste.getLineNumber() >= 0) {
@@ -185,7 +185,7 @@ public abstract class AbstractExceptionMapper<T extends Throwable>
 
   /**
    * Returns the HTML response.
-   * 
+   *
    * @param exception  the exception being processed, not null
    * @param htmlPage  the HTML page, may be null
    * @return the response, not null
@@ -194,22 +194,22 @@ public abstract class AbstractExceptionMapper<T extends Throwable>
 
   /**
    * Logs the error in the HTML scenario.
-   * 
+   *
    * @param exception  the exception, not null
    * @param htmlPage  the HTML page, may be null
    */
-  protected void logHtmlException(T exception, String htmlPage) {
+  protected void logHtmlException(final T exception, final String htmlPage) {
     if (htmlPage != null) {
-      s_logger.debug("RESTful website exception caught: " + packStackTrace(exception));
+      LOGGER.debug("RESTful website exception caught: " + packStackTrace(exception));
     } else {
-      s_logger.info("RESTful website exception caught", exception);
+      LOGGER.info("RESTful website exception caught", exception);
     }
   }
 
   //-------------------------------------------------------------------------
   /**
    * Returns the RESTful response.
-   * 
+   *
    * @param exception  the exception being processed, not null
    * @return the response, not null
    */
@@ -217,22 +217,22 @@ public abstract class AbstractExceptionMapper<T extends Throwable>
 
   /**
    * Logs the error in the RESTful scenario.
-   * 
+   *
    * @param exception  the exception, not null
    */
   protected void logRestfulError(final T exception) {
-    s_logger.info("RESTful web-service exception caught and tunnelled to client:", exception);
+    LOGGER.info("RESTful web-service exception caught and tunnelled to client:", exception);
   }
 
   //-------------------------------------------------------------------------
   /**
    * Converts an exception to a short stack trace.
-   * 
+   *
    * @param exception  the exception, not null
    * @return the short stack trace, not null
    */
-  protected String packStackTrace(T exception) {
-    StackTraceElement[] stackTrace = exception.getStackTrace();
+  protected String packStackTrace(final T exception) {
+    final StackTraceElement[] stackTrace = exception.getStackTrace();
     switch (stackTrace.length) {
       case 0:
         return "Unknown";

@@ -25,7 +25,7 @@ import com.opengamma.financial.security.option.BondFutureOptionSecurity;
  */
 public abstract class BondFutureOptionBlackCurveSpecificFunction extends BondFutureOptionBlackFunction {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(BondFutureOptionBlackCurveSpecificFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(BondFutureOptionBlackCurveSpecificFunction.class);
 
   public BondFutureOptionBlackCurveSpecificFunction(final String valueRequirementName) {
     super(valueRequirementName);
@@ -36,7 +36,7 @@ public abstract class BondFutureOptionBlackCurveSpecificFunction extends BondFut
     final ValueProperties constraints = desiredValue.getConstraints();
     final Set<String> curveNames = constraints.getValues(ValuePropertyNames.CURVE);
     if (curveNames == null || curveNames.size() != 1) {
-      s_logger.error("Must specify a curve name");
+      LOGGER.error("Must specify a curve name");
       return null;
     }
     final Set<String> curveCalculationConfigNames = constraints.getValues(ValuePropertyNames.CURVE_CALCULATION_CONFIG);
@@ -46,13 +46,13 @@ public abstract class BondFutureOptionBlackCurveSpecificFunction extends BondFut
     final String curveCalculationConfigName = curveCalculationConfigNames.iterator().next();
     final MultiCurveCalculationConfig curveCalculationConfig = getCurveCalculationConfigSource().getConfig(curveCalculationConfigName);
     if (curveCalculationConfig == null) {
-      s_logger.error("Could not find curve calculation configuration named " + curveCalculationConfigName);
+      LOGGER.error("Could not find curve calculation configuration named " + curveCalculationConfigName);
       return null;
     }
     final String[] yieldCurveNames = curveCalculationConfig.getYieldCurveNames();
     final String curve = curveNames.iterator().next();
     if (Arrays.binarySearch(yieldCurveNames, curve) < 0) {
-      s_logger.error("Curve named {} is not available in curve calculation configuration called {}", curve, curveCalculationConfigName);
+      LOGGER.error("Curve named {} is not available in curve calculation configuration called {}", curve, curveCalculationConfigName);
       return null;
     }
     return super.getRequirements(context, target, desiredValue);

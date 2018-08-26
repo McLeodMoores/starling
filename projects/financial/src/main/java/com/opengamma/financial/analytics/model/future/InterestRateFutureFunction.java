@@ -58,7 +58,7 @@ import com.opengamma.util.money.Currency;
  */
 @Deprecated
 public abstract class InterestRateFutureFunction extends AbstractFunction.NonCompiledInvoker {
-  private static final Logger s_logger = LoggerFactory.getLogger(InterestRateFutureFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(InterestRateFutureFunction.class);
   private InterestRateFutureTradeConverterDeprecated _converter;
   private FixedIncomeConverterDataProvider _dataConverter;
   private ConfigDBCurveCalculationConfigSource _curveConfigSource;
@@ -133,14 +133,14 @@ public abstract class InterestRateFutureFunction extends AbstractFunction.NonCom
     final String curveCalculationConfigName = curveCalculationConfigNames.iterator().next();
     final MultiCurveCalculationConfig curveCalculationConfig = _curveConfigSource.getConfig(curveCalculationConfigName);
     if (curveCalculationConfig == null) {
-      s_logger.error("Could not find curve calculation configuration named " + curveCalculationConfigName);
+      LOGGER.error("Could not find curve calculation configuration named " + curveCalculationConfigName);
       return null;
     }
     final Trade trade = target.getTrade();
     final Security security = trade.getSecurity();
     final Currency currency = FinancialSecurityUtils.getCurrency(security);
     if (!ComputationTargetSpecification.of(currency).equals(curveCalculationConfig.getTarget())) {
-      s_logger.error("Security currency and curve calculation config id were not equal; have {} and {}", currency, curveCalculationConfig.getTarget());
+      LOGGER.error("Security currency and curve calculation config id were not equal; have {} and {}", currency, curveCalculationConfig.getTarget());
     }
     final Set<ValueRequirement> requirements = new HashSet<>();
     requirements.addAll(YieldCurveFunctionUtils.getCurveRequirements(curveCalculationConfig, _curveConfigSource));

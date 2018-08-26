@@ -26,8 +26,8 @@ public final class RealFunctionIntegrator1DFactory {
   /** {@link ExtendedTrapezoidIntegrator1D} */
   public static final ExtendedTrapezoidIntegrator1D EXTENDED_TRAPEZOID_INSTANCE = new ExtendedTrapezoidIntegrator1D();
 
-  private static final Map<String, Integrator1D<Double, Double>> s_staticInstances;
-  private static final Map<Class<?>, String> s_instanceNames;
+  private static final Map<String, Integrator1D<Double, Double>> INSTANCE;
+  private static final Map<Class<?>, String> INSTANCE_NAMES;
 
   static {
     final Map<String, Integrator1D<Double, Double>> staticInstances = new HashMap<>();
@@ -38,8 +38,8 @@ public final class RealFunctionIntegrator1DFactory {
     instanceNames.put(SIMPSON_INSTANCE.getClass(), SIMPSON);
     staticInstances.put(EXTENDED_TRAPEZOID, EXTENDED_TRAPEZOID_INSTANCE);
     instanceNames.put(EXTENDED_TRAPEZOID_INSTANCE.getClass(), EXTENDED_TRAPEZOID);
-    s_staticInstances = new HashMap<>(staticInstances);
-    s_instanceNames = new HashMap<>(instanceNames);
+    INSTANCE = new HashMap<>(staticInstances);
+    INSTANCE_NAMES = new HashMap<>(instanceNames);
   }
 
   private RealFunctionIntegrator1DFactory() {
@@ -52,7 +52,7 @@ public final class RealFunctionIntegrator1DFactory {
    * @throws IllegalArgumentException If the integrator name is null or there is no integrator for that name
    */
   public static Integrator1D<Double, Double> getIntegrator(final String integratorName) {
-    final Integrator1D<Double, Double> integrator = s_staticInstances.get(integratorName);
+    final Integrator1D<Double, Double> integrator = INSTANCE.get(integratorName);
     if (integrator != null) {
       return integrator;
     }
@@ -68,6 +68,6 @@ public final class RealFunctionIntegrator1DFactory {
     if (integrator == null) {
       return null;
     }
-    return s_instanceNames.get(integrator.getClass());
+    return INSTANCE_NAMES.get(integrator.getClass());
   }
 }

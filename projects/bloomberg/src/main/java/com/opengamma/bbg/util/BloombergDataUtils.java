@@ -125,11 +125,11 @@ import com.opengamma.util.tuple.Pairs;
 public final class BloombergDataUtils {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(BloombergDataUtils.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(BloombergDataUtils.class);
 
-  private static final Pattern s_bloombergTickerPattern = buildPattern();
+  private static final Pattern BLOOMBERG_TICKER_PATTERN = buildPattern();
 
-  private static final TemporalAdjuster s_monthlyExpiryAdjuster = new NextMonthlyExpiryAdjuster();
+  private static final TemporalAdjuster MONTHLY_EXPIRY_ADJUSTER = new NextMonthlyExpiryAdjuster();
 
   /**
    * The standard fields required for Bloomberg data, as a list.
@@ -156,19 +156,19 @@ public final class BloombergDataUtils {
   /**
    * Map from RIC to BBG prefixes, for exceptions only
    */
-  private static final Map<String, String> s_ricToBbgPrefixMap;
+  private static final Map<String, String> RIC_TO_BBG_MAP;
   static {
-    s_ricToBbgPrefixMap = new HashMap<String, String>();
-    s_ricToBbgPrefixMap.put("EDD", "FD");
-    s_ricToBbgPrefixMap.put("EDM", "0D");
-    s_ricToBbgPrefixMap.put("EDD", "FD");
-    s_ricToBbgPrefixMap.put("FEI", "ER");
-    s_ricToBbgPrefixMap.put("FME", "0R");
-    s_ricToBbgPrefixMap.put("2FME", "2R");
-    s_ricToBbgPrefixMap.put("FSS", "L ");
-    s_ricToBbgPrefixMap.put("FMS", "0L");
-    s_ricToBbgPrefixMap.put("2FMS", "2L");
-    s_ricToBbgPrefixMap.put("FES", "ES");
+    RIC_TO_BBG_MAP = new HashMap<String, String>();
+    RIC_TO_BBG_MAP.put("EDD", "FD");
+    RIC_TO_BBG_MAP.put("EDM", "0D");
+    RIC_TO_BBG_MAP.put("EDD", "FD");
+    RIC_TO_BBG_MAP.put("FEI", "ER");
+    RIC_TO_BBG_MAP.put("FME", "0R");
+    RIC_TO_BBG_MAP.put("2FME", "2R");
+    RIC_TO_BBG_MAP.put("FSS", "L ");
+    RIC_TO_BBG_MAP.put("FMS", "0L");
+    RIC_TO_BBG_MAP.put("2FMS", "2L");
+    RIC_TO_BBG_MAP.put("FES", "ES");
   }
 
   /**
@@ -179,27 +179,27 @@ public final class BloombergDataUtils {
   /**
    * Map from month to BBG month code
    */
-  private static final BiMap<Month, String> s_monthCode;
+  private static final BiMap<Month, String> MONTH_CODE;
   static {
-    s_monthCode = HashBiMap.create();
-    s_monthCode.put(Month.JANUARY, "F");
-    s_monthCode.put(Month.FEBRUARY, "G");
-    s_monthCode.put(Month.MARCH, "H");
-    s_monthCode.put(Month.APRIL, "J");
-    s_monthCode.put(Month.MAY, "K");
-    s_monthCode.put(Month.JUNE, "M");
-    s_monthCode.put(Month.JULY, "N");
-    s_monthCode.put(Month.AUGUST, "Q");
-    s_monthCode.put(Month.SEPTEMBER, "U");
-    s_monthCode.put(Month.OCTOBER, "V");
-    s_monthCode.put(Month.NOVEMBER, "X");
-    s_monthCode.put(Month.DECEMBER, "Z");
+    MONTH_CODE = HashBiMap.create();
+    MONTH_CODE.put(Month.JANUARY, "F");
+    MONTH_CODE.put(Month.FEBRUARY, "G");
+    MONTH_CODE.put(Month.MARCH, "H");
+    MONTH_CODE.put(Month.APRIL, "J");
+    MONTH_CODE.put(Month.MAY, "K");
+    MONTH_CODE.put(Month.JUNE, "M");
+    MONTH_CODE.put(Month.JULY, "N");
+    MONTH_CODE.put(Month.AUGUST, "Q");
+    MONTH_CODE.put(Month.SEPTEMBER, "U");
+    MONTH_CODE.put(Month.OCTOBER, "V");
+    MONTH_CODE.put(Month.NOVEMBER, "X");
+    MONTH_CODE.put(Month.DECEMBER, "Z");
   }
 
   /**
    * The observation time map.
    */
-  private static final Map<String, String> s_observationTimeMap = ImmutableMap.<String, String>builder()
+  private static final Map<String, String> OBSERVATION_TIME_MAP = ImmutableMap.<String, String>builder()
       .put("CMPL", HistoricalTimeSeriesConstants.LONDON_CLOSE)
       .put("CMPT", HistoricalTimeSeriesConstants.TOKYO_CLOSE)
       .put("CMPN", HistoricalTimeSeriesConstants.NEWYORK_CLOSE)
@@ -342,7 +342,7 @@ public final class BloombergDataUtils {
           fieldData.add(name, value);
         }
       } else {
-        s_logger.warn("Unable to extract value named {} from element {}", name, subElement);
+        LOGGER.warn("Unable to extract value named {} from element {}", name, subElement);
       }
     }
     return fieldData;
@@ -398,7 +398,7 @@ public final class BloombergDataUtils {
       }
       return valueAsList;
     }
-    s_logger.warn("Unhandled Datatype of {}, data {}", datatype, valueElement);
+    LOGGER.warn("Unhandled Datatype of {}, data {}", datatype, valueElement);
     return null;
   }
 
@@ -423,7 +423,7 @@ public final class BloombergDataUtils {
     if (perSecResult.isIdentifierError()) {
       final List<ReferenceDataError> errors = perSecResult.getErrors();
       if (!errors.isEmpty()) {
-        s_logger.warn("Unable to lookup Index {} members because of exceptions {}", indexTicker, errors.toString());
+        LOGGER.warn("Unable to lookup Index {} members because of exceptions {}", indexTicker, errors.toString());
         throw new OpenGammaRuntimeException("Unable to lookup Index members because of exceptions " + errors.toString());
       }
     }
@@ -453,7 +453,7 @@ public final class BloombergDataUtils {
     final Set<ExternalId> result = new TreeSet<ExternalId>();
     final FudgeMsg fieldData = refDataProvider.getReferenceData(Collections.singleton(securityID), Collections.singleton(FIELD_OPT_CHAIN)).get(securityID);
     if (fieldData == null) {
-      s_logger.info("Reference data for security {} cannot be null", securityID);
+      LOGGER.info("Reference data for security {} cannot be null", securityID);
       return null;
     }
     for (final FudgeField field : fieldData.getAllByName(FIELD_OPT_CHAIN)) {
@@ -481,7 +481,7 @@ public final class BloombergDataUtils {
 
     final FudgeMsg fieldData = refDataProvider.getReferenceData(Collections.singleton(securityID), Collections.singleton(FIELD_FUT_CHAIN)).get(securityID);
     if (fieldData == null) {
-      s_logger.info("Reference data for security {} cannot be null", securityID);
+      LOGGER.info("Reference data for security {} cannot be null", securityID);
       return null;
     }
 
@@ -542,7 +542,7 @@ public final class BloombergDataUtils {
         try {
           validFrom = LocalDate.parse(validFromStr);
         } catch (final DateTimeParseException ex) {
-          s_logger.warn("valid from date not in yyyy-mm-dd format - {}", validFromStr);
+          LOGGER.warn("valid from date not in yyyy-mm-dd format - {}", validFromStr);
         }
       }
       LocalDate validTo = null;
@@ -550,7 +550,7 @@ public final class BloombergDataUtils {
         try {
           validTo = LocalDate.parse(validToStr);
         } catch (final DateTimeParseException ex) {
-          s_logger.warn("valid to date not in yyyy-mm-dd format - {}", validToStr);
+          LOGGER.warn("valid to date not in yyyy-mm-dd format - {}", validToStr);
         }
       }
       identifiers.add(ExternalIdWithDates.of(tickerId, validFrom, validTo));
@@ -601,7 +601,7 @@ public final class BloombergDataUtils {
             final ExternalId doubleDigitYearId = ExternalSchemes.bloombergTickerSecurityId(buf.toString());
             identifiers.add(ExternalIdWithDates.of(doubleDigitYearId, identifierWithDates.getValidTo().plusDays(1), null));
           } catch (final NumberFormatException ex2) {
-            s_logger.warn("cannot make out year code for {}", identifier);
+            LOGGER.warn("cannot make out year code for {}", identifier);
           }
         }
       } else {
@@ -662,7 +662,7 @@ public final class BloombergDataUtils {
       try {
         inputReader.close();
       } catch (final IOException ex) {
-        s_logger.warn("cannot close reader ", ex);
+        LOGGER.warn("cannot close reader ", ex);
       }
     }
     return result;
@@ -685,7 +685,7 @@ public final class BloombergDataUtils {
       final ExternalId preferredIdentifier = BloombergDomainIdentifierResolver.resolvePreferredIdentifier(identifierBundle);
       final String bloombergKey = BloombergDomainIdentifierResolver.toBloombergKey(preferredIdentifier);
       if (bloombergKey == null) {
-        s_logger.warn("bundle {} resolves to null bloomberg key", identifierBundle);
+        LOGGER.warn("bundle {} resolves to null bloomberg key", identifierBundle);
         continue;
       }
       //REVIEW simon : is it ok that we discard duplicates here
@@ -733,10 +733,10 @@ public final class BloombergDataUtils {
 
   public static boolean isValidBloombergTicker(final String ticker) {
     ArgumentChecker.notNull(ticker, "ticker");
-    final Matcher matcher = s_bloombergTickerPattern.matcher(ticker);
+    final Matcher matcher = BLOOMBERG_TICKER_PATTERN.matcher(ticker);
     if (matcher.matches()) {
       final String marketSector = matcher.group(3);
-      s_logger.debug("market sector {} extracted from ticker {}", marketSector, ticker);
+      LOGGER.debug("market sector {} extracted from ticker {}", marketSector, ticker);
       return true;
     } else {
       return false;
@@ -774,7 +774,7 @@ public final class BloombergDataUtils {
 
   public static String dateToBbgCode(final LocalDate date) {
     final String y = Integer.toString(date.getYear());
-    return s_monthCode.get(date.getMonth()) + y.charAt(y.length() - 1);
+    return MONTH_CODE.get(date.getMonth()) + y.charAt(y.length() - 1);
   }
 
   public static ExternalId ricToBbgFuture(final String ric) {
@@ -793,15 +793,15 @@ public final class BloombergDataUtils {
     }
     ric = ric.trim().toUpperCase();
     final String front = ric.substring(0, (Character.isDigit(ric.charAt(0)) ? 4 : 3));
-    if (s_ricToBbgPrefixMap.containsKey(front)) {
-      return s_ricToBbgPrefixMap.get(front);
+    if (RIC_TO_BBG_MAP.containsKey(front)) {
+      return RIC_TO_BBG_MAP.get(front);
     } else {
       throw new OpenGammaRuntimeException("Could not map RIC onto BBG code");
     }
   }
 
   public static ExternalId futureBundleToGenericFutureTicker(ExternalIdBundle bundle, ZonedDateTime now, OffsetTime futureExpiryTime, ZoneId futureExpiryTimeZone) {
-    ZonedDateTime nextExpiry = now.toLocalDate().with(s_monthlyExpiryAdjuster).atTime(now.toLocalTime()).atZone(now.getZone());
+    ZonedDateTime nextExpiry = now.toLocalDate().with(MONTHLY_EXPIRY_ADJUSTER).atTime(now.toLocalTime()).atZone(now.getZone());
     ExternalId bbgTicker = bundle.getExternalId(ExternalSchemes.BLOOMBERG_TICKER);
     if (bbgTicker == null) {
       throw new OpenGammaRuntimeException("Could not find a Bloomberg Ticker in the supplied bundle " + bundle.toString());
@@ -824,11 +824,11 @@ public final class BloombergDataUtils {
         } else if ((thisYear % 10) == year) {
           // This code assumes that the code is for this year, so constructs a trial date using the year and month and adjusts it forward to the expiry
           // note we're not taking into account exchange closing time here.
-          final Month month = s_monthCode.inverse().get(monthCode);
+          final Month month = MONTH_CODE.inverse().get(monthCode);
           if (month == null) {
             throw new OpenGammaRuntimeException("Invalid month code " + monthCode);
           }
-          LocalDate nextExpiryIfThisYear = LocalDate.of((((thisYear / 10) * 10) + year), month, 1).with(s_monthlyExpiryAdjuster);
+          LocalDate nextExpiryIfThisYear = LocalDate.of((((thisYear / 10) * 10) + year), month, 1).with(MONTHLY_EXPIRY_ADJUSTER);
           ZonedDateTime nextExpiryDateTimeIfThisYear = nextExpiryIfThisYear.atTime(futureExpiryTime).atZoneSimilarLocal(futureExpiryTimeZone);
           if (now.isAfter(nextExpiryDateTimeIfThisYear)) {
             year = ((thisYear / 10) * 10) + 10 + year;
@@ -842,7 +842,7 @@ public final class BloombergDataUtils {
         // five letter futures code
         typeCode = code.substring(0, 2);
         monthCode = code.substring(2, 3);
-        s_logger.warn("Parsing retired futures code format {}", code);
+        LOGGER.warn("Parsing retired futures code format {}", code);
         year = Integer.parseInt(code.substring(3, 5));
         if (year > 70) { // 58 year time bomb and ticking...
           year += 1900;
@@ -850,13 +850,13 @@ public final class BloombergDataUtils {
           year += 2000;
         }
       } else {
-        s_logger.warn("Unknown futures code format {}", code);
+        LOGGER.warn("Unknown futures code format {}", code);
         return null;
       }
       // phew.
       // now we generate the expiry of the future from the code:
       // Again, note that we're not taking into account exchange trading hours.
-      LocalDate expiryDate = LocalDate.of(year, s_monthCode.inverse().get(monthCode), 1).with(s_monthlyExpiryAdjuster);
+      LocalDate expiryDate = LocalDate.of(year, MONTH_CODE.inverse().get(monthCode), 1).with(MONTHLY_EXPIRY_ADJUSTER);
       ZonedDateTime expiry = expiryDate.atTime(futureExpiryTime).atZoneSimilarLocal(futureExpiryTimeZone);
       int quarters = (int) nextExpiry.until(expiry, MONTHS) / 3;
       int genericFutureNumber = quarters + 1;
@@ -867,7 +867,7 @@ public final class BloombergDataUtils {
       sb.append(marketSector);
       return ExternalId.of(ExternalSchemes.BLOOMBERG_TICKER, sb.toString());
     } catch (final NumberFormatException nfe) {
-      s_logger.error("Could not parse futures code {}", code);
+      LOGGER.error("Could not parse futures code {}", code);
     }
     return null;
   }
@@ -893,7 +893,7 @@ public final class BloombergDataUtils {
     if (dataProvider == null || dataProvider.equalsIgnoreCase(DATA_PROVIDER_UNKNOWN) || dataProvider.equalsIgnoreCase(DEFAULT_DATA_PROVIDER)) {
       dataProvider = DEFAULT_DATA_PROVIDER;
     }
-    return s_observationTimeMap.get(dataProvider);
+    return OBSERVATION_TIME_MAP.get(dataProvider);
 
   }
 
@@ -916,7 +916,7 @@ public final class BloombergDataUtils {
    * @return the future month code, null if not available
    */
   public static String futureMonthCode(final Month month) {
-    return s_monthCode.get(month);
+    return MONTH_CODE.get(month);
   }
 
 }

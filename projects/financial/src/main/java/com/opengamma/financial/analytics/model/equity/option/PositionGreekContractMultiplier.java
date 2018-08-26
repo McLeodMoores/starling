@@ -27,14 +27,14 @@ import com.opengamma.financial.security.option.IRFutureOptionSecurity;
 public final class PositionGreekContractMultiplier extends FinancialSecurityVisitorAdapter<Double> {
 
   /** Static instance */
-  private static final PositionGreekContractMultiplier s_instance = new PositionGreekContractMultiplier();
+  private static final PositionGreekContractMultiplier INSTANCE = new PositionGreekContractMultiplier();
 
   /**
    * Gets an instance of this calculator
    * @return The (singleton) instance
    */
   public static PositionGreekContractMultiplier getInstance() {
-    return s_instance;
+    return INSTANCE;
   }
 
   /**

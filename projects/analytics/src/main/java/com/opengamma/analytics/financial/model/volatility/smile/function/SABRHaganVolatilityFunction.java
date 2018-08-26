@@ -27,7 +27,7 @@ public class SABRHaganVolatilityFunction extends VolatilityFunctionProvider<SABR
   /**
    * Logger.
    */
-  private static final Logger s_logger = LoggerFactory.getLogger(SABRHaganVolatilityFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(SABRHaganVolatilityFunction.class);
 
   private static final double CUTOFF_MONEYNESS = 1e-12; //changed from 1e-6 on 3/3/2012 R white
   private static final double SMALL_Z = 1e-6;
@@ -114,7 +114,7 @@ public class SABRHaganVolatilityFunction extends VolatilityFunctionProvider<SABR
     final double cutoff = forward * CUTOFF_MONEYNESS;
     final double k;
     if (strike < cutoff) {
-      s_logger.info("Given strike of {} is less than cutoff at {}, therefore the strike is taken as {}", new Object[] {strike, cutoff, cutoff});
+      LOGGER.info("Given strike of {} is less than cutoff at {}, therefore the strike is taken as {}", new Object[] {strike, cutoff, cutoff});
       k = cutoff;
     } else {
       k = strike;
@@ -176,7 +176,7 @@ public class SABRHaganVolatilityFunction extends VolatilityFunctionProvider<SABR
     double strike = option.getStrike();
     final double cutoff = forward * CUTOFF_MONEYNESS;
     if (strike < cutoff) {
-      s_logger.info("Given strike of {} is less than cutoff at {}, therefore the strike is taken as {}", new Object[] {strike, cutoff, cutoff});
+      LOGGER.info("Given strike of {} is less than cutoff at {}, therefore the strike is taken as {}", new Object[] {strike, cutoff, cutoff});
       strike = cutoff;
     }
 
@@ -252,7 +252,7 @@ public class SABRHaganVolatilityFunction extends VolatilityFunctionProvider<SABR
     double strike = option.getStrike();
     final double cutoff = forward * CUTOFF_MONEYNESS;
     if (strike < cutoff) {
-      s_logger.info("Given strike of {} is less than cutoff at {}, therefore the strike is taken as {}", new Object[] {strike, cutoff, cutoff});
+      LOGGER.info("Given strike of {} is less than cutoff at {}, therefore the strike is taken as {}", new Object[] {strike, cutoff, cutoff});
       strike = cutoff;
     }
 

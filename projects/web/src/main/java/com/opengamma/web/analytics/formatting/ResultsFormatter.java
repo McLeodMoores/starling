@@ -54,7 +54,7 @@ public class ResultsFormatter {
     }
   };
 
-  private static final Logger s_logger = LoggerFactory.getLogger(ResultsFormatter.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ResultsFormatter.class);
 
   /** For formatting null values. */
   private final TypeFormatter _nullFormatter = new NullFormatter();
@@ -169,7 +169,7 @@ public class ResultsFormatter {
           //      by Fudge depending on the value. e.g. an integer will be encoded as a byte if it is small enough
           //      but will be encoded as an integer if it won't fit into a byte. the fix for this scenario is the same
           //      as #2 above
-          s_logger.warn("Unexpected type for value. Value name: '{}', expected type: {}, actual type: {}, value: {}",
+          LOGGER.warn("Unexpected type for value. Value name: '{}', expected type: {}, actual type: {}, value: {}",
               new Object[]{valueSpec.getValueName(), type.getName(), value.getClass().getName(), value});
         }
       }

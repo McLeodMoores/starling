@@ -19,7 +19,7 @@ import com.opengamma.util.ArgumentChecker;
  * 
  */
 public class JarqueBeraIIDHypothesis extends IIDHypothesis {
-  private static final Logger s_logger = LoggerFactory.getLogger(JarqueBeraIIDHypothesis.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(JarqueBeraIIDHypothesis.class);
   private final DoubleTimeSeriesStatisticsCalculator _skewCalculator = new DoubleTimeSeriesStatisticsCalculator(new SampleSkewnessCalculator());
   private final DoubleTimeSeriesStatisticsCalculator _kurtosisCalculator = new DoubleTimeSeriesStatisticsCalculator(new SampleFisherKurtosisCalculator());
   private final double _criticalValue;
@@ -35,7 +35,7 @@ public class JarqueBeraIIDHypothesis extends IIDHypothesis {
   public boolean testIID(final DoubleTimeSeries<?> ts) {
     Validate.notNull(ts);
     if (ts.size() < 1000) {
-      s_logger.warn("Use of this test is discouraged for time series with fewer than 1000 elements; the result will be inaccurate");
+      LOGGER.warn("Use of this test is discouraged for time series with fewer than 1000 elements; the result will be inaccurate");
     }
     final int n = ts.size();
     final double skew = Math.pow(_skewCalculator.evaluate(ts), 2);

@@ -25,7 +25,7 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT)
 public class ComputedValueTest {
   
-  private static final FudgeContext s_fudgeContext = OpenGammaFudgeContext.getInstance();
+  private static final FudgeContext FUDGE_CONTEXT = OpenGammaFudgeContext.getInstance();
 
   public void test_constructor_Object_Portfolio() {
     ValueSpecification vspec = ValueSpecification.of("DATA", ComputationTargetType.SECURITY, UniqueId.of("Foo", "Bar"), ValueProperties.with(ValuePropertyNames.FUNCTION, "mockFunctionid").get());
@@ -68,11 +68,11 @@ public class ComputedValueTest {
   }
 
   private void cycleComputedValue(final ComputedValue value) {
-    final FudgeMsgEnvelope fme = s_fudgeContext.toFudgeMsg(value);
+    final FudgeMsgEnvelope fme = FUDGE_CONTEXT.toFudgeMsg(value);
     assertNotNull(fme);
     final FudgeMsg msg = fme.getMessage();
     assertNotNull(msg);
-    final ComputedValue cycledValue = s_fudgeContext.fromFudgeMsg(ComputedValue.class, msg);
+    final ComputedValue cycledValue = FUDGE_CONTEXT.fromFudgeMsg(ComputedValue.class, msg);
     assertNotNull(cycledValue);
     assertEquals(value, cycledValue);
   }

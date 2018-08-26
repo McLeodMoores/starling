@@ -19,7 +19,7 @@ import com.opengamma.util.ArgumentChecker;
 public class NegativeValueDoubleTimeSeriesFilter extends TimeSeriesFilter {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(NegativeValueDoubleTimeSeriesFilter.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(NegativeValueDoubleTimeSeriesFilter.class);
   private static final LocalDateDoubleTimeSeries EMPTY_SERIES = ImmutableLocalDateDoubleTimeSeries.EMPTY_SERIES;
 
   /**
@@ -33,7 +33,7 @@ public class NegativeValueDoubleTimeSeriesFilter extends TimeSeriesFilter {
   public FilteredTimeSeries evaluate(final LocalDateDoubleTimeSeries ts) {
     ArgumentChecker.notNull(ts, "ts");
     if (ts.isEmpty()) {
-      s_logger.info("Time series was empty");
+      LOGGER.info("Time series was empty");
       return new FilteredTimeSeries(EMPTY_SERIES, EMPTY_SERIES);
     }
     final int n = ts.size();

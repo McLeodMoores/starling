@@ -34,8 +34,8 @@ import com.opengamma.util.ArgumentChecker;
  */
 public class BundleErrorReportInfo implements Runnable {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(BundleErrorReportInfo.class);
-  private static final String[] s_subdirs = new String[] {"Downloads" };
+  private static final Logger LOGGER = LoggerFactory.getLogger(BundleErrorReportInfo.class);
+  private static final String[] SUBDIRS = new String[] {"Downloads" };
   private static String s_userHome;
 
   protected static void setUserHome(final String userHome) {
@@ -89,7 +89,7 @@ public class BundleErrorReportInfo implements Runnable {
   private String preferredSubFolder(final String path) {
     final File file = new File(path);
     if (file.isDirectory()) {
-      for (String subdir : s_subdirs) {
+      for (String subdir : SUBDIRS) {
         final File sd = new File(file, subdir);
         if (sd.isDirectory()) {
           return path + File.separator + subdir;
@@ -109,7 +109,7 @@ public class BundleErrorReportInfo implements Runnable {
     final LocalDateTime ldt = Instant.now().atZone(ZoneOffset.systemDefault()).toLocalDateTime();
     final String path = String.format("%s%c%s-%04d-%02d-%02d-%02d-%02d-%02d.zip", home, File.separatorChar, "OpenGamma-ErrorReport", ldt.getYear(), ldt.getMonthValue(), ldt.getDayOfMonth(),
         ldt.getHour(), ldt.getMinute(), ldt.getSecond()).toString();
-    s_logger.info("Writing {}", path);
+    LOGGER.info("Writing {}", path);
     try {
       _zip = new ZipOutputStream(new FileOutputStream(path));
     } catch (IOException e) {
@@ -193,7 +193,7 @@ public class BundleErrorReportInfo implements Runnable {
       for (String file : files) {
         final Matcher m = match.matcher(file);
         if (m.matches()) {
-          s_logger.trace("Entry {} matched by path", file);
+          LOGGER.trace("Entry {} matched by path", file);
           final File entry = new File(root, file);
           if (tail != null) {
             if (entry.isDirectory()) {
@@ -201,7 +201,7 @@ public class BundleErrorReportInfo implements Runnable {
             }
           } else {
             if (entry.isFile()) {
-              s_logger.info("Attaching {}", entry);
+              LOGGER.info("Attaching {}", entry);
               attachFile(entry, createUniqueName(file));
               count++;
             }
@@ -221,10 +221,10 @@ public class BundleErrorReportInfo implements Runnable {
   private int attachFiles(String path) {
     if (path.startsWith("%TEMP%")) {
       final String tmpdir = System.getProperty("java.io.tmpdir");
-      s_logger.trace("Substituting " + tmpdir + " for %TEMP%");
+      LOGGER.trace("Substituting " + tmpdir + " for %TEMP%");
       path = tmpdir + path.substring(6);
     }
-    s_logger.debug("Attaching {}", path);
+    LOGGER.debug("Attaching {}", path);
     final int i = path.indexOf(File.separatorChar);
     if (i < 0) {
       throw new IllegalArgumentException("File path '" + path + "' is not a valid absolute path");
@@ -240,19 +240,19 @@ public class BundleErrorReportInfo implements Runnable {
    * @return the number of files written to the ZIP file
    */
   private int writeReport(String report) {
-    s_logger.debug("Writing {}", report);
+    LOGGER.debug("Writing {}", report);
     final int i = report.indexOf('=');
     if (i < 0) {
-      s_logger.warn("Error in configuration - {}", report);
+      LOGGER.warn("Error in configuration - {}", report);
       return 0;
     }
     final String key = report.substring(0, i).trim();
     final String value = report.substring(i + 1).trim();
-    s_logger.trace("Key = \"{}\", Value = \"{}\"", key, value);
+    LOGGER.trace("Key = \"{}\", Value = \"{}\"", key, value);
     if ("AttachFiles".equalsIgnoreCase(key)) {
       return attachFiles(value);
     } else {
-      s_logger.warn("Unrecognised option - {}", key);
+      LOGGER.warn("Unrecognised option - {}", key);
       return 0;
     }
   }
@@ -298,7 +298,7 @@ public class BundleErrorReportInfo implements Runnable {
       (new BundleErrorReportInfo(feedback, args[0])).run();
       return 0;
     } catch (Throwable t) {
-      s_logger.error("Caught exception", t);
+      LOGGER.error("Caught exception", t);
       feedback.shout((t.getMessage() != null) ? t.getMessage() : "Couldn't package error logs");
       return 1;
     }

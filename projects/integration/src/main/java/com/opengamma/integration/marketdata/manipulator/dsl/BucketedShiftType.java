@@ -13,36 +13,36 @@ import java.util.List;
 import com.google.common.collect.ImmutableList;
 
 /**
- * The type of bucketed shift to apply. 
+ * The type of bucketed shift to apply.
  */
 public enum BucketedShiftType implements GroovyAliasable {
   /**
-   * For a zero shift
+   * For a zero shift.
    */
-  ZERO("Zero"), 
+  ZERO("Zero"),
   /**
-   * For a forward shift
+   * For a forward shift.
    */
   FORWARD("Forward");
-  
-  
-  private static final ImmutableList<String> s_aliases;
+
+
+  private static final ImmutableList<String> ALIASES;
   static {
-    List<String> result = newArrayList();
-    for (GroovyAliasable value : values()) {
+    final List<String> result = newArrayList();
+    for (final GroovyAliasable value : values()) {
       result.add(value.getGroovyAlias());
     }
     Collections.sort(result);
-    s_aliases = ImmutableList.copyOf(result);
-    
+    ALIASES = ImmutableList.copyOf(result);
+
   }
-  
+
   private String _groovyAlias;
-  
-  private BucketedShiftType(String groovyAlias) {
+
+  private BucketedShiftType(final String groovyAlias) {
     _groovyAlias = groovyAlias;
   }
-  
+
   /**
    * The alias to use in the groovy script
    * @return the alias
@@ -51,13 +51,13 @@ public enum BucketedShiftType implements GroovyAliasable {
   public String getGroovyAlias() {
     return _groovyAlias;
   }
-  
+
   /**
    * The list of available groovy aliases, sorted.
    * @return list of aliases.
    */
   public static ImmutableList<String> getAliasList() {
-    return s_aliases;
+    return ALIASES;
   }
-  
+
 }

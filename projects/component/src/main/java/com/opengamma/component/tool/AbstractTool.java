@@ -40,7 +40,7 @@ public abstract class AbstractTool<T extends ToolContext> {
   /**
    * Logger.
    */
-  private static final Logger s_logger = LoggerFactory.getLogger(AbstractTool.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(AbstractTool.class);
 
   /**
    * Help command line option.
@@ -241,18 +241,18 @@ public abstract class AbstractTool<T extends ToolContext> {
     ToolContext[] toolContexts = null;
     try {
       ArgumentChecker.notEmpty(configResources, "configResources");
-      s_logger.info("Starting " + getClass().getSimpleName());
+      LOGGER.info("Starting " + getClass().getSimpleName());
       toolContexts = new ToolContext[configResources.length];
       for (int i = 0; i < configResources.length; i++) {
-        s_logger.info("Populating tool context " + (i + 1) + " of " + configResources.length + "...");
+        LOGGER.info("Populating tool context " + (i + 1) + " of " + configResources.length + "...");
         toolContexts[i] = ToolContextUtils.getToolContext(configResources[i], toolContextClass);
       }
-      s_logger.info("Running " + getClass().getSimpleName());
+      LOGGER.info("Running " + getClass().getSimpleName());
       run((T[]) toolContexts);
-      s_logger.info("Finished " + getClass().getSimpleName());
+      LOGGER.info("Finished " + getClass().getSimpleName());
       return true;
     } catch (final Exception ex) {
-      s_logger.error("Caught exception", ex);
+      LOGGER.error("Caught exception", ex);
       ex.printStackTrace();
       return false;
     } finally {
@@ -262,7 +262,7 @@ public abstract class AbstractTool<T extends ToolContext> {
             try {
               toolContext.close();
             } catch (final Exception e) {
-              s_logger.error("Caught exception", e);
+              LOGGER.error("Caught exception", e);
             }
           }
         }

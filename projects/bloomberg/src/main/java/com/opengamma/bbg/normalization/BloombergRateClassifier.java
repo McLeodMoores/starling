@@ -32,7 +32,7 @@ import com.opengamma.util.ehcache.EHCacheUtils;
 public class BloombergRateClassifier {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(BloombergRateClassifier.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(BloombergRateClassifier.class);
 
   private static final String CACHE_KEY = "bbg-classifier-cache";
   
@@ -74,17 +74,17 @@ public class BloombergRateClassifier {
     ArgumentChecker.notNull(buid, "buid");
     Element e = _cache.get(buid);
     if (e != null) {
-      s_logger.debug("Obtained normalization factor for security " + buid + " from cache");
+      LOGGER.debug("Obtained normalization factor for security " + buid + " from cache");
       return (Integer) e.getObjectValue();
     }
     try {
       Integer normalizationFactor = getNormalizationFactorCore(buid);
-      s_logger.debug("Generated normalization factor {} for security {}", normalizationFactor, buid);
+      LOGGER.debug("Generated normalization factor {} for security {}", normalizationFactor, buid);
       e = new Element(buid, normalizationFactor);
       _cache.put(e);
       return normalizationFactor;
     } catch (Exception ex) {
-      s_logger.warn("Error obtaining normalization factor for security " + buid, ex);
+      LOGGER.warn("Error obtaining normalization factor for security " + buid, ex);
       throw new OpenGammaRuntimeException("Error obtaining normalization factor for security " + buid, ex);
     }
   }
@@ -93,7 +93,7 @@ public class BloombergRateClassifier {
     ExternalIdBundle buidBundle = ExternalIdBundle.of(_bbgScheme, buid);
     SecurityType securityType = _securityTypeResolver.getSecurityType(Collections.singleton(buidBundle)).get(buidBundle);
     if (securityType == null) {
-      s_logger.warn("Unable to determine security type for BUID " + buid);
+      LOGGER.warn("Unable to determine security type for BUID " + buid);
       return null;
     }
     switch (securityType) {
@@ -144,7 +144,7 @@ public class BloombergRateClassifier {
       case 4:
         return 10000;
       default:
-        s_logger.warn("Unable to handle forward scale {}", bbgFwdScale);
+        LOGGER.warn("Unable to handle forward scale {}", bbgFwdScale);
         return null;
     }
   }

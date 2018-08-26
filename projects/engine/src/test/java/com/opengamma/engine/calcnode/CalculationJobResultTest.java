@@ -39,7 +39,7 @@ import com.opengamma.util.test.TestGroup;
  */
 @Test(groups = TestGroup.UNIT)
 public class CalculationJobResultTest {
-  private static final FudgeContext s_fudgeContext = OpenGammaFudgeContext.getInstance();
+  private static final FudgeContext FUDGE_CONTEXT = OpenGammaFudgeContext.getInstance();
   
   public void fudge() {
     IdentifierMap identifierMap = new InMemoryIdentifierMap ();
@@ -55,11 +55,11 @@ public class CalculationJobResultTest {
         Lists.newArrayList(item1, item2),
         "localhost");
     AbstractIdentifierMap.convertIdentifiers(identifierMap, result);
-    FudgeSerializer serializationContext = new FudgeSerializer(s_fudgeContext);
+    FudgeSerializer serializationContext = new FudgeSerializer(FUDGE_CONTEXT);
     MutableFudgeMsg inputMsg = serializationContext.objectToFudgeMsg(result);
-    FudgeMsg outputMsg = s_fudgeContext.deserialize(s_fudgeContext.toByteArray(inputMsg)).getMessage();
+    FudgeMsg outputMsg = FUDGE_CONTEXT.deserialize(FUDGE_CONTEXT.toByteArray(inputMsg)).getMessage();
     
-    FudgeDeserializer deserializationContext = new FudgeDeserializer(s_fudgeContext);
+    FudgeDeserializer deserializationContext = new FudgeDeserializer(FUDGE_CONTEXT);
     CalculationJobResult outputJob = deserializationContext.fudgeMsgToObject(CalculationJobResult.class, outputMsg);
     
     assertNotNull(outputJob);

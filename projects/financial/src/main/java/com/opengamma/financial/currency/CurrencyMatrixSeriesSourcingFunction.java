@@ -39,7 +39,7 @@ import com.opengamma.util.tuple.Pairs;
  */
 public class CurrencyMatrixSeriesSourcingFunction extends AbstractCurrencyMatrixSourcingFunction {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(CurrencyMatrixSeriesSourcingFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(CurrencyMatrixSeriesSourcingFunction.class);
 
   // PLAT-2813 Don't need this if we can request HTS requirements directly
   private HistoricalTimeSeriesResolver _htsResolver;
@@ -210,7 +210,7 @@ public class CurrencyMatrixSeriesSourcingFunction extends AbstractCurrencyMatrix
       }
 
     });
-    s_logger.debug("{} to {} = {}", new Object[] {source, target, rate });
+    LOGGER.debug("{} to {} = {}", new Object[] {source, target, rate });
     return rate;
   }
 

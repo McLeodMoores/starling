@@ -40,7 +40,7 @@ import com.opengamma.id.ExternalScheme;
  */
 public class EquityForwardCurveFromFutureCurveFunction extends AbstractFunction.NonCompiledInvoker {
 
-  private static final Set<ExternalScheme> s_validSchemes = ImmutableSet.of(
+  private static final Set<ExternalScheme> VALID_SCHEMES = ImmutableSet.of(
       ExternalSchemes.BLOOMBERG_TICKER,
       ExternalSchemes.BLOOMBERG_TICKER_WEAK,
       ExternalSchemes.BLOOMBERG_BUID,
@@ -87,7 +87,7 @@ public class EquityForwardCurveFromFutureCurveFunction extends AbstractFunction.
   public boolean canApplyTo(final FunctionCompilationContext context, final ComputationTarget target) {
     if (target.getValue() instanceof ExternalIdentifiable) {
       final ExternalId identifier = ((ExternalIdentifiable) target.getValue()).getExternalId();
-      return s_validSchemes.contains(identifier.getScheme());
+      return VALID_SCHEMES.contains(identifier.getScheme());
     }
     return false;
   }

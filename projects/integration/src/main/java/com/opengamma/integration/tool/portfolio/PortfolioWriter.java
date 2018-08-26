@@ -47,7 +47,7 @@ public class PortfolioWriter {
   /**
    * Logger for the class.
    */
-  private static final Logger s_logger = LoggerFactory.getLogger(PortfolioWriter.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(PortfolioWriter.class);
 
   /**
    * Indicates if the data should actually be written to the masters
@@ -169,7 +169,7 @@ public class PortfolioWriter {
           throw new OpenGammaRuntimeException("Error persisting security: " + security);
         }
       }
-      s_logger.info("Successfully processed security: {}", security);
+      LOGGER.info("Successfully processed security: {}", security);
     }
   }
 
@@ -189,7 +189,7 @@ public class PortfolioWriter {
 
     final int size = portfolios.size();
     if (size > 1) {
-      s_logger.warn("More than one portfolio found with name: {} - using first found", portfolioName);
+      LOGGER.warn("More than one portfolio found with name: {} - using first found", portfolioName);
     }
 
     return size == 0 ? null : portfolios.get(0);
@@ -204,8 +204,8 @@ public class PortfolioWriter {
     final PortfolioDocument portfolioDocument = new PortfolioDocument();
     if (!portfolioEqual(portfolio, manageablePortfolio)) {
       if (!_updateIfExists) {
-        s_logger.warn("Persisting a flat portfolio structure, use alternate constructor with updateIfExists flag set to true");
-        s_logger.warn("This mode is retained purely for backwards compatibility.");
+        LOGGER.warn("Persisting a flat portfolio structure, use alternate constructor with updateIfExists flag set to true");
+        LOGGER.warn("This mode is retained purely for backwards compatibility.");
         // legacy mode ignores incoming portfolio structure and creates a flat portfolio.
         portfolioDocument.setPortfolio(createPortfolio(portfolioName, manageablePositions));
       } else {
@@ -217,8 +217,8 @@ public class PortfolioWriter {
 
       if (_write) {
         if (!_updateIfExists) {
-          s_logger.warn("Persisting a new copy of existing portfolio, use alternate constructor with updateIfExists flag set to true");
-          s_logger.warn("This mode is retained purely for backwards compatibility.");
+          LOGGER.warn("Persisting a new copy of existing portfolio, use alternate constructor with updateIfExists flag set to true");
+          LOGGER.warn("This mode is retained purely for backwards compatibility.");
           uid = _portfolioMaster.add(portfolioDocument).getUniqueId();
         } else {
           if (previousId != null) {
@@ -232,9 +232,9 @@ public class PortfolioWriter {
       }
     } else {
       uid = previousId;
-      s_logger.debug("Portfolio structure didn't change, so not updating portfolio structure");
+      LOGGER.debug("Portfolio structure didn't change, so not updating portfolio structure");
     }
-    s_logger.info("Created portfolio with name: {}", portfolioName);
+    LOGGER.info("Created portfolio with name: {}", portfolioName);
     return uid;
   }
 
@@ -316,8 +316,8 @@ public class PortfolioWriter {
 
       if (_write) {
         if (!_updateIfExists) {
-          s_logger.warn("Persisting a new copy of existing position, use alternate constructor with updateIfExists flag set to true");
-          s_logger.warn("This mode is retained purely for backwards compatibility.");
+          LOGGER.warn("Persisting a new copy of existing position, use alternate constructor with updateIfExists flag set to true");
+          LOGGER.warn("This mode is retained purely for backwards compatibility.");
           final PositionDocument addedDoc = _positionMaster.add(new PositionDocument(manageablePosition));
           manageablePortfolioNode.addPosition(addedDoc.getObjectId());
           legacyList.add(addedDoc.getPosition());
@@ -346,14 +346,14 @@ public class PortfolioWriter {
           legacyList.add(addedOrUpdatedDoc.getPosition());
         }
       }
-      s_logger.info("Added/updated position {}", position);
+      LOGGER.info("Added/updated position {}", position);
     }
     if (_updateIfExists) {
       for (final PortfolioNode child : portfolioNode.getChildNodes()) {
         manageablePortfolioNode.addChildNode(persistPositions(child, legacyList));
       }
     } else {
-      s_logger.warn("Not recursing to sub-nodes to preserve legacy behaviour, use alternate constructor with updateIfExists flag set to true");
+      LOGGER.warn("Not recursing to sub-nodes to preserve legacy behaviour, use alternate constructor with updateIfExists flag set to true");
     }
     return manageablePortfolioNode;
   }

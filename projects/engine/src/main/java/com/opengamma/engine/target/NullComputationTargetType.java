@@ -69,7 +69,7 @@ import com.opengamma.id.VersionCorrection;
     sb.append(getName());
   }
 
-  private static final ComputationTargetTypeVisitor<NullComputationTargetType, Boolean> s_equals = new ComputationTargetTypeVisitor<NullComputationTargetType, Boolean>() {
+  private static final ComputationTargetTypeVisitor<NullComputationTargetType, Boolean> EQUALS = new ComputationTargetTypeVisitor<NullComputationTargetType, Boolean>() {
 
     @Override
     public Boolean visitMultipleComputationTargetTypes(final Set<ComputationTargetType> types, final NullComputationTargetType self) {
@@ -99,7 +99,7 @@ import com.opengamma.id.VersionCorrection;
       return true;
     }
     if (o instanceof ComputationTargetType) {
-      return ((ComputationTargetType) o).accept(s_equals, this).booleanValue();
+      return ((ComputationTargetType) o).accept(EQUALS, this).booleanValue();
     } else {
       return false;
     }

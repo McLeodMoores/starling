@@ -36,7 +36,7 @@ import com.opengamma.util.ArgumentChecker;
  *
  */
 public class TaxonomyGatheringFudgeMessageSender implements FudgeMessageSender {
-  private static final Logger s_logger = LoggerFactory.getLogger(TaxonomyGatheringFudgeMessageSender.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(TaxonomyGatheringFudgeMessageSender.class);
   private static final long DEFAULT_PERIOD = 60 * 1000L; 
   private final FudgeMessageSender _underlying;
   private final FudgeContext _fudgeContext;
@@ -94,16 +94,16 @@ public class TaxonomyGatheringFudgeMessageSender implements FudgeMessageSender {
    */
   private void bootstrapTaxonomy() {
     if (!_outputFile.exists()) {
-      s_logger.debug("Existing file doesn't exist, so not bootstrapping.");
+      LOGGER.debug("Existing file doesn't exist, so not bootstrapping.");
       return;
     }
-    s_logger.info("Bootstrapping taxonomy from {}", _outputFile);
+    LOGGER.info("Bootstrapping taxonomy from {}", _outputFile);
     Properties propsFromFile = null;
     try (InputStream underlyingInputStream = new BufferedInputStream(new FileInputStream(_outputFile))) {
       propsFromFile = new Properties();
       propsFromFile.load(underlyingInputStream);
     } catch (IOException ioe) {
-      s_logger.warn("Unable to load existing properties from {}", ioe, new Object[]{_outputFile});
+      LOGGER.warn("Unable to load existing properties from {}", ioe, new Object[]{_outputFile});
     }
     
     int maxOrdinal = 0; 
@@ -198,9 +198,9 @@ public class TaxonomyGatheringFudgeMessageSender implements FudgeMessageSender {
     public void run() {
       final int nextOrdinal = _nextOrdinal.get();
       if (_lastMaxOrdinalWritten.get() >= nextOrdinal) {
-        s_logger.debug("No reason to write taxonomy as no changes since last persist.");
+        LOGGER.debug("No reason to write taxonomy as no changes since last persist.");
       } else {
-        s_logger.info("Writing current taxonomy of {} values to {}", _taxonomyValues.size(), _outputFile);
+        LOGGER.info("Writing current taxonomy of {} values to {}", _taxonomyValues.size(), _outputFile);
         Properties props = new Properties();
         for (Map.Entry<String, Integer> taxonomyEntry : _taxonomyValues.entrySet()) {
           props.setProperty(taxonomyEntry.getValue().toString(), taxonomyEntry.getKey());
@@ -210,7 +210,7 @@ public class TaxonomyGatheringFudgeMessageSender implements FudgeMessageSender {
           fos = new FileOutputStream(_temporaryFile);
           props.store(new BufferedOutputStream(fos), "Automatically generated, written " + new Date());
         } catch (IOException ioe) {
-          s_logger.warn("Unable to write taxonomy to file {}", ioe, new Object[] {_temporaryFile});
+          LOGGER.warn("Unable to write taxonomy to file {}", ioe, new Object[] {_temporaryFile});
         } finally {
           if (fos != null) {
             try {
@@ -222,11 +222,11 @@ public class TaxonomyGatheringFudgeMessageSender implements FudgeMessageSender {
                   ok = _temporaryFile.renameTo(_outputFile);
                 }
                 if (!ok) {
-                  s_logger.warn("Unable to rename temporary file {} to {}", _temporaryFile, _outputFile);
+                  LOGGER.warn("Unable to rename temporary file {} to {}", _temporaryFile, _outputFile);
                 }
               }
             } catch (IOException ioe) {
-              s_logger.warn("Unable to close output file {}", ioe, new Object[] {_temporaryFile});
+              LOGGER.warn("Unable to close output file {}", ioe, new Object[] {_temporaryFile});
             }
           }
         }

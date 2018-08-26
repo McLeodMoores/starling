@@ -34,7 +34,7 @@ import com.opengamma.util.ArgumentChecker;
  * Because sets of weights of X,Y are identical, total number of free parameters of X,Y is 5 * N -3.
  */
 public class MixedBivariateLogNormalFitter {
-  private static final Logger s_logger = LoggerFactory.getLogger(MixedBivariateLogNormalFitter.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(MixedBivariateLogNormalFitter.class);
   private static final int ITRMAX = 10000;
   private static final double EPS_1 = 1.E-14; //EPS_1 and EPS_2 should be chosen by users
   private static final double EPS_2 = 1.E-14; //
@@ -280,7 +280,7 @@ public class MixedBivariateLogNormalFitter {
       }
 
       if (k == ITRMAX) {
-        s_logger.error("Too Many Iterations");
+        LOGGER.error("Too Many Iterations");
         _finalSqu = 0.5 * getVecNormSq(exactFunctionValue(_paramsGuess, dataStrs, dataVols, time, fwdX, fwdY, nNorms, nX));
       }
     }

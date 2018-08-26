@@ -38,7 +38,7 @@ import com.opengamma.util.metric.OpenGammaMetricRegistry;
  */
 @BeanDefinition
 public class CogdaLiveDataServerFactory extends AbstractComponentFactory {
-  private static final Logger s_logger = LoggerFactory.getLogger(CogdaLiveDataServerFactory.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(CogdaLiveDataServerFactory.class);
 
   @PropertyDefinition(validate = "notNull")
   private JmsConnector _listenJmsConnector;
@@ -66,7 +66,7 @@ public class CogdaLiveDataServerFactory extends AbstractComponentFactory {
             getDataRedisPort(),
             getDataRedisPrefix(),
             false,
-            s_logger);
+            LOGGER);
     CogdaLiveDataServer liveDataServer = new CogdaLiveDataServer(lkvStoreProvider);
     if (getListenPort() != null) {
       liveDataServer.setPortNumber(getListenPort());

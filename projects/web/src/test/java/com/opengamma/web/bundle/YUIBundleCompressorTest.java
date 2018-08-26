@@ -26,7 +26,7 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT, enabled = false)
 public class YUIBundleCompressorTest {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(YUIBundleCompressorTest.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(YUIBundleCompressorTest.class);
   private static final String SCRIPTS_JS = "scripts.js";
   private YUIBundleCompressor _compressor;
   private Bundle _bundle;
@@ -62,12 +62,12 @@ public class YUIBundleCompressorTest {
     Fragment fragment = allFragment.get(0);
     String uncompressed = IOUtils.toString(fragment.getUri());
     assertNotNull(uncompressed);
-    s_logger.debug("uncompressed length {}", uncompressed.length());
+    LOGGER.debug("uncompressed length {}", uncompressed.length());
     assertEquals(853389, uncompressed.length());
 
     String compressed = _compressor.compressBundle(_bundle);
     assertNotNull(compressed);
-    s_logger.debug("compressed length {}", compressed.length());
+    LOGGER.debug("compressed length {}", compressed.length());
     assertEquals(492128, compressed.length());
 
   }

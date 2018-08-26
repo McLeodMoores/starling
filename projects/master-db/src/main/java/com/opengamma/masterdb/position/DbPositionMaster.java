@@ -79,7 +79,7 @@ import com.opengamma.util.tuple.Pairs;
 public class DbPositionMaster extends AbstractDocumentDbMaster<PositionDocument> implements PositionMaster {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(DbPositionMaster.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(DbPositionMaster.class);
 
   /**
    * The default scheme for unique identifiers.
@@ -115,7 +115,7 @@ public class DbPositionMaster extends AbstractDocumentDbMaster<PositionDocument>
     ArgumentChecker.notNull(request, "request");
     ArgumentChecker.notNull(request.getPagingRequest(), "request.pagingRequest");
     ArgumentChecker.notNull(request.getVersionCorrection(), "request.versionCorrection");
-    s_logger.debug("search {}", request);
+    LOGGER.debug("search {}", request);
 
     VersionCorrection vc = request.getVersionCorrection();
     if (vc.containsLatest()) {
@@ -387,7 +387,7 @@ public class DbPositionMaster extends AbstractDocumentDbMaster<PositionDocument>
    * @return the trade, null if not found
    */
   protected ManageableTrade getTradeByInstants(final UniqueId uniqueId, final Instant versionAsOf, final Instant correctedTo) {
-    s_logger.debug("getTradeByLatest {}", uniqueId);
+    LOGGER.debug("getTradeByLatest {}", uniqueId);
     final Instant now = now();
     final DbMapSqlParameterSource args = createParameterSource().addValue("trade_oid", extractOid(uniqueId))
         .addTimestamp("version_as_of_instant", Objects.firstNonNull(versionAsOf, now))
@@ -409,7 +409,7 @@ public class DbPositionMaster extends AbstractDocumentDbMaster<PositionDocument>
    * @return the trade, null if not found
    */
   protected ManageableTrade getTradeById(final UniqueId uniqueId) {
-    s_logger.debug("getTradeById {}", uniqueId);
+    LOGGER.debug("getTradeById {}", uniqueId);
     final DbMapSqlParameterSource args = createParameterSource().addValue("trade_id", extractRowId(uniqueId));
     final PositionDocumentExtractor extractor = new PositionDocumentExtractor();
     final NamedParameterJdbcOperations namedJdbc = getDbConnector().getJdbcTemplate();

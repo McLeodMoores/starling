@@ -18,7 +18,7 @@ import com.opengamma.util.ArgumentChecker;
 public class ScriptTag {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(ScriptTag.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ScriptTag.class);
 
   /**
    * The request data.
@@ -47,7 +47,7 @@ public class ScriptTag {
     ArgumentChecker.notNull(bundleId, "bundleId");
     Bundle bundle = _data.getBundleManager().getBundle(bundleId);
     if (bundle == null) {
-      s_logger.warn("{} not available ", bundleId);
+      LOGGER.warn("{} not available ", bundleId);
       return "";
     }
     DeployMode mode = _data.getMode();
@@ -57,7 +57,7 @@ public class ScriptTag {
       case PROD:
         return inline ? printProdInline(bundle) : printProdLinked(bundle);
       default:
-        s_logger.warn("Unknown deployment mode type: " + mode);
+        LOGGER.warn("Unknown deployment mode type: " + mode);
         return null;
     }
   }

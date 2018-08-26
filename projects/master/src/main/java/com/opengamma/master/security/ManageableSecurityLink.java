@@ -48,7 +48,7 @@ public class ManageableSecurityLink extends AbstractLink<Security> implements Se
   /** Serialization version. */
   private static final long serialVersionUID = 1L;
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(ManageableSecurityLink.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ManageableSecurityLink.class);
 
   /**
    * Obtains an instance from a security, locking by strong object identifier
@@ -239,10 +239,10 @@ public class ManageableSecurityLink extends AbstractLink<Security> implements Se
     try {
       return resolve(source);
     } catch (DataNotFoundException ex) {
-      s_logger.warn("Unable to resolve security {}", this);
+      LOGGER.warn("Unable to resolve security {}", this);
       return null;
     } catch (RuntimeException ex) {
-      s_logger.warn("Unable to resolve security {}: {}", this, ex);
+      LOGGER.warn("Unable to resolve security {}: {}", this, ex);
       return null;
     }
   }

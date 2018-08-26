@@ -39,7 +39,7 @@ public final class Currency implements ObjectIdentifiable, UniqueIdentifiable, C
   /**
    * A cache of instances.
    */
-  private static final ConcurrentMap<String, Currency> s_instanceMap = new ConcurrentHashMap<String, Currency>();
+  private static final ConcurrentMap<String, Currency> INSTANCE_MAP = new ConcurrentHashMap<String, Currency>();
   /**
    * The scheme to use in object identifiers.
    */
@@ -153,7 +153,7 @@ public final class Currency implements ObjectIdentifiable, UniqueIdentifiable, C
    * @return an immutable set containing all registered currencies, not null
    */
   public static Set<Currency> getAvailableCurrencies() {
-    return ImmutableSet.copyOf(s_instanceMap.values());
+    return ImmutableSet.copyOf(INSTANCE_MAP.values());
   }
 
   //-----------------------------------------------------------------------
@@ -185,15 +185,15 @@ public final class Currency implements ObjectIdentifiable, UniqueIdentifiable, C
   public static Currency of(String currencyCode) {
     ArgumentChecker.notNull(currencyCode, "currencyCode");
     // check cache before matching
-    Currency previous = s_instanceMap.get(currencyCode);
+    Currency previous = INSTANCE_MAP.get(currencyCode);
     if (previous != null) {
       return previous;
     }
     if (currencyCode.matches("[A-Z][A-Z][A-Z]") == false) {
       throw new IllegalArgumentException("Invalid currency code: " + currencyCode);
     }
-    s_instanceMap.putIfAbsent(currencyCode, new Currency(currencyCode));
-    return s_instanceMap.get(currencyCode);
+    INSTANCE_MAP.putIfAbsent(currencyCode, new Currency(currencyCode));
+    return INSTANCE_MAP.get(currencyCode);
   }
 
   /**

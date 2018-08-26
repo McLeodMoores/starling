@@ -29,7 +29,7 @@ import com.opengamma.util.ArgumentChecker;
  */
 public class OrphanedPositionRemover {
   
-  private static final Logger s_logger = LoggerFactory.getLogger(OrphanedPositionRemover.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(OrphanedPositionRemover.class);
   
   private final PortfolioMaster _portfolioMaster;
   private final PositionMaster _positionMaster;
@@ -48,10 +48,10 @@ public class OrphanedPositionRemover {
   }
   
   private void removePositions(Set<UniqueId> orphanedPositions) {
-    s_logger.info("removing {} orphaned positions", orphanedPositions.size());
+    LOGGER.info("removing {} orphaned positions", orphanedPositions.size());
     for (UniqueId orphanId : orphanedPositions) {
       _positionMaster.remove(orphanId);
-      s_logger.info("removed position {}", orphanId);
+      LOGGER.info("removed position {}", orphanId);
     }
   }
 

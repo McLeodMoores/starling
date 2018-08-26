@@ -40,7 +40,7 @@ import com.opengamma.util.ArgumentChecker;
 @BeanDefinition
 public class BloombergContractID extends DirectBean {
   
-  private static final Logger s_logger = LoggerFactory.getLogger(BloombergContractID.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(BloombergContractID.class);
   
   private static final DateTimeFormatter MONTH_YEAR_FORMATTER = DateTimeFormatter.ofPattern("MM/yyyy");
   
@@ -86,7 +86,7 @@ public class BloombergContractID extends DirectBean {
       futureId = ExternalSchemes.bloombergTickerSecurityId(String.format("%s%s%s %s", 
           getContractCode(), futureMonthCode, yearStr, getMarketSector()).toUpperCase());
     } else {
-      s_logger.warn("Unable to resolve month {} to its future month's code", Month.of(month));
+      LOGGER.warn("Unable to resolve month {} to its future month's code", Month.of(month));
     }
     return futureId;
   }
@@ -107,7 +107,7 @@ public class BloombergContractID extends DirectBean {
       optionId = ExternalSchemes.bloombergTickerSecurityId(String.format("%s%s%s%s %s %s", 
           getContractCode(), monthCode, yearStr, optionType.name().charAt(0), getRoundedPrice(strike, 3), getMarketSector()).toUpperCase());
     } else {
-      s_logger.warn("Unable to resolve month {} to its future month's code", Month.of(month));
+      LOGGER.warn("Unable to resolve month {} to its future month's code", Month.of(month));
     }
     return optionId;
   }

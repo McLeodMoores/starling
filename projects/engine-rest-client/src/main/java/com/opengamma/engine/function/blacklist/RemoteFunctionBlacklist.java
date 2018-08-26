@@ -39,7 +39,7 @@ import com.opengamma.util.tuple.Pairs;
  */
 public class RemoteFunctionBlacklist extends AbstractFunctionBlacklist {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(RemoteFunctionBlacklist.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(RemoteFunctionBlacklist.class);
 
   private final class Listener extends BaseFunctionBlacklistRuleListener implements FudgeMessageReceiver {
 
@@ -176,7 +176,7 @@ public class RemoteFunctionBlacklist extends AbstractFunctionBlacklist {
       try {
         _connection.close();
       } catch (JMSException e) {
-        s_logger.warn("Failed to close JMS connection", e);
+        LOGGER.warn("Failed to close JMS connection", e);
       }
     }
   }

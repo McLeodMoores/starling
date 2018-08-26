@@ -35,7 +35,7 @@ import com.opengamma.util.ArgumentChecker;
 public abstract class ListedEquityOptionDefaults extends DefaultPropertyFunction {
 
   /** The value requirement names for which these defaults apply */
-  private static final String[] s_valueNames = new String[] {
+  private static final String[] VALUE_NAMES = new String[] {
     ValueRequirementNames.PRESENT_VALUE,
     ValueRequirementNames.DELTA,
     ValueRequirementNames.GAMMA,
@@ -63,7 +63,7 @@ public abstract class ListedEquityOptionDefaults extends DefaultPropertyFunction
   /** The priority of this set of defaults */
   private final PriorityClass _priority;
   /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(ListedEquityOptionDefaults.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ListedEquityOptionDefaults.class);
 
   /**
    * Basic constructor for configurations with just a single
@@ -122,7 +122,7 @@ public abstract class ListedEquityOptionDefaults extends DefaultPropertyFunction
   protected abstract String getId(Security security);  
   @Override
   protected void getDefaults(PropertyDefaults defaults) {
-    for (final String valueName : s_valueNames) {
+    for (final String valueName : VALUE_NAMES) {
       defaults.addValuePropertyName(valueName, EquityOptionFunction.PROPERTY_DISCOUNTING_CURVE_CONFIG);
       defaults.addValuePropertyName(valueName, EquityOptionFunction.PROPERTY_DISCOUNTING_CURVE_NAME);
       defaults.addValuePropertyName(valueName, ForwardCurveValuePropertyNames.PROPERTY_FORWARD_CURVE_NAME);
@@ -152,7 +152,7 @@ public abstract class ListedEquityOptionDefaults extends DefaultPropertyFunction
       case ForwardCurveValuePropertyNames.PROPERTY_FORWARD_CURVE_CALCULATION_METHOD:
         return _idToForwardCurveCalculationMethodName.get(id);
       default:
-        s_logger.error("Cannot get a default value for {}", propertyName);
+        LOGGER.error("Cannot get a default value for {}", propertyName);
         return null;
     }
   }

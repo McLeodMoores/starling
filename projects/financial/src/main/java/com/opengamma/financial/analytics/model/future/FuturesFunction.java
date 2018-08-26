@@ -57,7 +57,7 @@ import com.opengamma.util.ArgumentChecker;
 public abstract class FuturesFunction<T> extends AbstractFunction.NonCompiledInvoker {
 
   /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(FuturesFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(FuturesFunction.class);
 
   /** The value requirement name */
   private final String _valueRequirementName;
@@ -204,7 +204,7 @@ public abstract class FuturesFunction<T> extends AbstractFunction.NonCompiledInv
       final ValueRequirement req = new ValueRequirement(MarketDataRequirementNames.MARKET_VALUE, ComputationTargetType.PRIMITIVE, spotAssetId);
       return req;
     } catch (final UnsupportedOperationException e) {
-      s_logger.info(e.getMessage());
+      LOGGER.info(e.getMessage());
       return null;
     }
   }
@@ -217,7 +217,7 @@ public abstract class FuturesFunction<T> extends AbstractFunction.NonCompiledInv
   protected ExternalId getSpotAssetId(final FutureSecurity sec) {
     final ExternalId spotAssetId = FinancialSecurityUtils.getUnderlyingId(sec);
     if (spotAssetId == null) {
-      s_logger.info("Failed to find spot asset id (category = {}) for future with id bundle {}", sec.getContractCategory(), sec.getExternalIdBundle());
+      LOGGER.info("Failed to find spot asset id (category = {}) for future with id bundle {}", sec.getContractCategory(), sec.getExternalIdBundle());
       return null;
     }
     return spotAssetId;
@@ -249,7 +249,7 @@ public abstract class FuturesFunction<T> extends AbstractFunction.NonCompiledInv
     // TODO CASE: Test that you can change field to MARKET_VALUE because of the FieldAdjustment in ActivHistoricalTimeSeriesSourceComponentFactory.createResolver
     final HistoricalTimeSeriesResolutionResult timeSeries = resolver.resolve(security.getExternalIdBundle(), null, null, null, MarketDataRequirementNames.MARKET_VALUE, getResolutionKey());
     if (timeSeries == null) {
-      s_logger.warn("Failed to find time series for: " + idBundle.toString());
+      LOGGER.warn("Failed to find time series for: " + idBundle.toString());
       return null;
     }
     return HistoricalTimeSeriesFunctionUtils.createHTSRequirement(timeSeries, MarketDataRequirementNames.MARKET_VALUE,

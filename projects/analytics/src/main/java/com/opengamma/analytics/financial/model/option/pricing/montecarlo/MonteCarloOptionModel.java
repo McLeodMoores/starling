@@ -27,7 +27,7 @@ import com.opengamma.util.ArgumentChecker;
  * @param <U>
  */
 public abstract class MonteCarloOptionModel<T extends OptionDefinition, U extends StandardOptionDataBundle> implements OptionModel<T, U> {
-  private static final Logger s_logger = LoggerFactory.getLogger(MonteCarloOptionModel.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(MonteCarloOptionModel.class);
   private final int _n;
   private final int _steps;
   private final StochasticProcess<T, U> _process;
@@ -52,7 +52,7 @@ public abstract class MonteCarloOptionModel<T extends OptionDefinition, U extend
     Validate.notEmpty(requiredGreeks, "required greeks");
     if (requiredGreeks.contains(Greek.FAIR_PRICE)) {
       if (requiredGreeks.size() > 1) {
-        s_logger.warn("Can only produce fair price");
+        LOGGER.warn("Can only produce fair price");
       }
     } else {
       throw new IllegalArgumentException("Can only produce fair price");

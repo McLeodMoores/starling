@@ -24,7 +24,7 @@ import com.opengamma.util.ArgumentChecker;
  */
 public class MockUriBuilder extends UriBuilder {
   
-  private static final Pattern s_pathPattern = Pattern.compile("\\{\\w+\\}");
+  private static final Pattern PATH_PATTERN = Pattern.compile("\\{\\w+\\}");
   
   private String _pathFormat = "";
 
@@ -94,7 +94,7 @@ public class MockUriBuilder extends UriBuilder {
   }
 
   private void formathPath(String path) {
-    Matcher matcher = s_pathPattern.matcher(path);
+    Matcher matcher = PATH_PATTERN.matcher(path);
     int start = 0;
     int end = 0;
     StringBuilder buf = new StringBuilder();

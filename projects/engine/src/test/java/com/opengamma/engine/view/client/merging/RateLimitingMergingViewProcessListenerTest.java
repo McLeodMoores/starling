@@ -45,7 +45,7 @@ import com.opengamma.util.tuple.Pairs;
 @Test(groups = TestGroup.INTEGRATION)
 public class RateLimitingMergingViewProcessListenerTest {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(RateLimitingMergingViewProcessListenerTest.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(RateLimitingMergingViewProcessListenerTest.class);
 
   private Instant _nowish;
 
@@ -227,7 +227,7 @@ public class RateLimitingMergingViewProcessListenerTest {
     assertTrue("Expecting results no faster than " + period + " ms, but got a result after " + testListener.getShortestDelay() + " ms",
         testListener.getShortestDelay() >= (period - period / 10));
     assertTrue("Expecting results no slower than " + (period * 2) + " ms, but got a result after " + testListener.getShortestDelay() + " ms", testListener.getShortestDelay() <= (period * 2));
-    s_logger.info("Size = {}", testListener.getQueueSize());
+    LOGGER.info("Size = {}", testListener.getQueueSize());
     testListener.clear();
   }
 

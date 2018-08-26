@@ -52,7 +52,7 @@ import com.opengamma.util.money.Currency;
 public final class EquityLoader extends SecurityLoader {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(EquityLoader.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(EquityLoader.class);
   /**
    * The fields to load from Bloomberg.
    */
@@ -89,7 +89,7 @@ public final class EquityLoader extends SecurityLoader {
    * @param exchangeDataProvider  the exchange data provider, not null
    */
   public EquityLoader(ReferenceDataProvider referenceDataProvider, ExchangeDataProvider exchangeDataProvider) {
-    super(s_logger, referenceDataProvider, SecurityType.EQUITY);
+    super(LOGGER, referenceDataProvider, SecurityType.EQUITY);
     ArgumentChecker.notNull(exchangeDataProvider, "exchangeDataProvider");
     _exchangeDataProvider = exchangeDataProvider;
   }
@@ -165,7 +165,7 @@ public final class EquityLoader extends SecurityLoader {
   }
 
   private void logMissingData(String fieldName, String securityName) {
-    s_logger.warn("Cannot construct equity security " + securityName + " as " + fieldName + " is missing");
+    LOGGER.warn("Cannot construct equity security " + securityName + " as " + fieldName + " is missing");
   }
 
   @Override

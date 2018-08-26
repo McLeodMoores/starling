@@ -25,7 +25,7 @@ import com.opengamma.transport.ByteArrayMessageSender;
 public class JmsByteArrayMessageSender extends AbstractJmsByteArraySender implements ByteArrayMessageSender {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(JmsByteArrayMessageSender.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(JmsByteArrayMessageSender.class);
 
   /**
    * Creates an instance associated with a destination and template.
@@ -40,7 +40,7 @@ public class JmsByteArrayMessageSender extends AbstractJmsByteArraySender implem
   //-------------------------------------------------------------------------
   @Override
   public void send(final byte[] message) {
-    s_logger.debug("Sending message size {} to {}", message.length, getDestinationName());
+    LOGGER.debug("Sending message size {} to {}", message.length, getDestinationName());
     getJmsTemplate().send(getDestinationName(), new MessageCreator() {
       @Override
       public Message createMessage(Session session) throws JMSException {

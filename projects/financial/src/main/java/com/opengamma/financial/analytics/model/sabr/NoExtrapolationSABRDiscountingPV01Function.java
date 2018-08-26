@@ -48,7 +48,7 @@ import com.opengamma.util.tuple.Pair;
  */
 public class NoExtrapolationSABRDiscountingPV01Function extends SABRDiscountingFunction {
   /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(NoExtrapolationSABRDiscountingPV01Function.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(NoExtrapolationSABRDiscountingPV01Function.class);
   /** The PV01 calculator */
   private static final InstrumentDerivativeVisitor<SABRSwaptionProviderInterface, ReferenceAmount<Pair<String, Currency>>> CALCULATOR = new PV01CurveParametersCalculator<>(
       PresentValueCurveSensitivitySABRSwaptionCalculator.getInstance());
@@ -85,7 +85,7 @@ public class NoExtrapolationSABRDiscountingPV01Function extends SABRDiscountingF
           results.add(new ComputedValue(spec, entry.getValue()));
         }
         if (!curveNameFound) {
-          s_logger.info("Could not get sensitivities to " + desiredCurveName + " for " + target.getName());
+          LOGGER.info("Could not get sensitivities to " + desiredCurveName + " for " + target.getName());
           return Collections.emptySet();
         }
         return results;

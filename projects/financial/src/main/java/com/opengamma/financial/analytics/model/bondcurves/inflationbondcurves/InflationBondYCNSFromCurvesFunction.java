@@ -46,7 +46,7 @@ import com.opengamma.util.tuple.Pair;
  */
 public class InflationBondYCNSFromCurvesFunction extends InflationBondFromCurvesFunction<InflationIssuerProviderInterface, MultipleCurrencyInflationSensitivity> {
   /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(InflationBondYCNSFromCurvesFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(InflationBondYCNSFromCurvesFunction.class);
 
   /**
    * Sets the value requirement name to {@link ValueRequirementNames#YIELD_CURVE_NODE_SENSITIVITIES} and
@@ -80,7 +80,7 @@ public class InflationBondYCNSFromCurvesFunction extends InflationBondFromCurves
         return results;
       }
     }
-    s_logger.info("Could not get sensitivities to " + desiredCurveName + " for " + target.getName());
+    LOGGER.info("Could not get sensitivities to " + desiredCurveName + " for " + target.getName());
     return Collections.emptySet();
   }
 

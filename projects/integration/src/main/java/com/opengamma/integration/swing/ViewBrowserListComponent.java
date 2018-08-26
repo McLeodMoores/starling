@@ -36,7 +36,7 @@ public class ViewBrowserListComponent extends JComponent {
 
   private static final long serialVersionUID = 1L;
   
-  private static final Logger s_logger = LoggerFactory.getLogger(ViewBrowserListComponent.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ViewBrowserListComponent.class);
   private ConfigSource _configSource;
   private JList<ViewEntry> _viewList;
   private ViewListModel _viewListModel;
@@ -62,13 +62,13 @@ public class ViewBrowserListComponent extends JComponent {
 
       @Override
       public void keyTyped(KeyEvent e) {
-        s_logger.warn("key code = {}", e.getKeyCode());
+        LOGGER.warn("key code = {}", e.getKeyCode());
         actionPerformed(e);
       }
 
       @Override
       public void keyPressed(KeyEvent e) {
-        s_logger.warn("key pressed = {}", e.getKeyCode());
+        LOGGER.warn("key pressed = {}", e.getKeyCode());
         if (e.getKeyCode() == KeyEvent.VK_DOWN) {
           _viewList.requestFocusInWindow();
         }

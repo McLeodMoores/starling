@@ -25,7 +25,7 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT)
 public class CSVDocumentReaderTest {
   
-  private static final FudgeContext s_fudgeContext = OpenGammaFudgeContext.getInstance();
+  private static final FudgeContext FUDGE_CONTEXT = OpenGammaFudgeContext.getInstance();
   private List<FudgeMsg> _expectedRows;
   CSVDocumentReader _csvDocReader;
   
@@ -34,27 +34,27 @@ public class CSVDocumentReaderTest {
     
     _expectedRows = Lists.newArrayList();
     
-    MutableFudgeMsg row = s_fudgeContext.newMessage();
+    MutableFudgeMsg row = FUDGE_CONTEXT.newMessage();
     row.add("Name", "Kirk");
     row.add("JobTitle", "CEO");
     _expectedRows.add(row);
     
-    row = s_fudgeContext.newMessage();
+    row = FUDGE_CONTEXT.newMessage();
     row.add("Name", "Jim");
     row.add("JobTitle", "CTO");
     _expectedRows.add(row);
     
-    row = s_fudgeContext.newMessage();
+    row = FUDGE_CONTEXT.newMessage();
     row.add("Name", "Elaine");
     row.add("JobTitle", "CQO");
     _expectedRows.add(row);
     
-    row = s_fudgeContext.newMessage();
+    row = FUDGE_CONTEXT.newMessage();
     row.add("Name", "Andrew");
     row.add("JobTitle", "Engineer");
     _expectedRows.add(row);
     
-    row = s_fudgeContext.newMessage();
+    row = FUDGE_CONTEXT.newMessage();
     row.add("Name", "Alan");
     _expectedRows.add(row);
     

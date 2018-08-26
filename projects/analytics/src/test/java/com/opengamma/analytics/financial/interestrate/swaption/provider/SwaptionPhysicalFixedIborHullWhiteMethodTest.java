@@ -13,8 +13,6 @@ import org.testng.annotations.Test;
 import org.threeten.bp.Period;
 import org.threeten.bp.ZonedDateTime;
 
-import cern.jet.random.engine.MersenneTwister;
-
 import com.opengamma.analytics.financial.instrument.index.GeneratorSwapFixedIbor;
 import com.opengamma.analytics.financial.instrument.index.GeneratorSwapFixedIborMaster;
 import com.opengamma.analytics.financial.instrument.index.IborIndex;
@@ -57,6 +55,8 @@ import com.opengamma.util.money.Currency;
 import com.opengamma.util.money.MultipleCurrencyAmount;
 import com.opengamma.util.test.TestGroup;
 import com.opengamma.util.time.DateUtils;
+
+import cern.jet.random.engine.MersenneTwister;
 
 /**
  * Tests related to the pricing of physical delivery swaption in Hull-White one factor model.
@@ -134,8 +134,8 @@ public class SwaptionPhysicalFixedIborHullWhiteMethodTest {
     final double timeToExpiry = SWAPTION_LONG_PAYER.getTimeToExpiry();
     final AnnuityPaymentFixed cfe = CFEC.visitSwap(SWAPTION_LONG_PAYER.getUnderlyingSwap(), MULTICURVES);
     final int numberOfPayments = cfe.getNumberOfPayments();
-    final double alpha[] = new double[numberOfPayments];
-    final double disccf[] = new double[numberOfPayments];
+    final double[] alpha = new double[numberOfPayments];
+    final double[] disccf = new double[numberOfPayments];
     for (int loopcf = 0; loopcf < numberOfPayments; loopcf++) {
       alpha[loopcf] = MODEL.alpha(HW_PARAMETERS, 0.0, timeToExpiry, timeToExpiry, cfe.getNthPayment(loopcf).getPaymentTime());
       disccf[loopcf] = MULTICURVES.getDiscountFactor(EUR, cfe.getNthPayment(loopcf).getPaymentTime()) * cfe.getNthPayment(loopcf).getAmount();

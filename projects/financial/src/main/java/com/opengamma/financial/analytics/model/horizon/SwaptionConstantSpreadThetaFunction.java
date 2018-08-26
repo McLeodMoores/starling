@@ -66,7 +66,7 @@ import com.opengamma.util.money.MultipleCurrencyAmount;
  *
  */
 public class SwaptionConstantSpreadThetaFunction extends AbstractFunction.NonCompiledInvoker {
-  private static final Logger s_logger = LoggerFactory.getLogger(SwaptionConstantSpreadThetaFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(SwaptionConstantSpreadThetaFunction.class);
   private FinancialSecurityVisitor<InstrumentDefinition<?>> _visitor;
   private ConfigDBCurveCalculationConfigSource _curveCalculationConfigSource;
 
@@ -150,12 +150,12 @@ public class SwaptionConstantSpreadThetaFunction extends AbstractFunction.NonCom
     final String curveCalculationConfigName = curveCalculationConfigNames.iterator().next();
     final MultiCurveCalculationConfig curveCalculationConfig = _curveCalculationConfigSource.getConfig(curveCalculationConfigName);
     if (curveCalculationConfig == null) {
-      s_logger.error("Could not find curve calculation configuration named " + curveCalculationConfigName);
+      LOGGER.error("Could not find curve calculation configuration named " + curveCalculationConfigName);
       return null;
     }
     final Currency currency = FinancialSecurityUtils.getCurrency(target.getSecurity());
     if (!ComputationTargetSpecification.of(currency).equals(curveCalculationConfig.getTarget())) {
-      s_logger.error("Security currency and curve calculation config id were not equal; have {} and {}", currency, curveCalculationConfig.getTarget());
+      LOGGER.error("Security currency and curve calculation config id were not equal; have {} and {}", currency, curveCalculationConfig.getTarget());
     }
     final Set<String> surfaceNames = desiredValue.getConstraints().getValues(ValuePropertyNames.SURFACE);
     if (surfaceNames == null || surfaceNames.size() != 1) {

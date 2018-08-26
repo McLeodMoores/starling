@@ -47,7 +47,7 @@ import com.opengamma.util.tuple.Pair;
  */
 public class InflationBondPV01Function extends InflationBondFromCurvesFunction<InflationIssuerProviderInterface, ReferenceAmount<Pair<String, Currency>>> {
   /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(InflationBondPV01Function.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(InflationBondPV01Function.class);
   /** The PV01 calculator */
   private static final InstrumentDerivativeVisitor<InflationIssuerProviderInterface, ReferenceAmount<Pair<String, Currency>>> CALCULATOR =
       new PV01CurveParametersInflationCalculator<>(PresentValueCurveSensitivityIssuerDiscountingInflationCalculator.getInstance());
@@ -85,7 +85,7 @@ public class InflationBondPV01Function extends InflationBondFromCurvesFunction<I
       results.add(new ComputedValue(spec, entry.getValue()));
     }
     if (!curveNameFound) {
-      s_logger.error("Could not get sensitivities to " + desiredCurveName + " for " + target.getName());
+      LOGGER.error("Could not get sensitivities to " + desiredCurveName + " for " + target.getName());
       return Collections.emptySet();
     }
     return results;

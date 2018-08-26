@@ -40,7 +40,7 @@ import com.opengamma.util.tuple.Pairs;
  */
 /* package */final class GraphBuildingContext {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(GraphBuildingContext.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(GraphBuildingContext.class);
 
   private static final int MAX_CALLBACK_DEPTH = 16;
 
@@ -107,7 +107,7 @@ import com.opengamma.util.tuple.Pairs;
    * @param pump underlying operation
    */
   public void pump(final ResolutionPump pump) {
-    s_logger.debug("Pumping {}", pump);
+    LOGGER.debug("Pumping {}", pump);
     if (++_stackDepth > MAX_CALLBACK_DEPTH) {
       submit(new ResolutionPump.Pump(pump));
     } else {
@@ -122,7 +122,7 @@ import com.opengamma.util.tuple.Pairs;
    * @param pump underlying operation
    */
   public void close(final ResolutionPump pump) {
-    s_logger.debug("Closing {}", pump);
+    LOGGER.debug("Closing {}", pump);
     if (++_stackDepth > MAX_CALLBACK_DEPTH) {
       submit(new ResolutionPump.Close(pump));
     } else {
@@ -140,7 +140,7 @@ import com.opengamma.util.tuple.Pairs;
    * @param pump source of the next value
    */
   public void resolved(final ResolvedValueCallback callback, final ValueRequirement valueRequirement, final ResolvedValue resolvedValue, final ResolutionPump pump) {
-    s_logger.debug("Resolved {} to {}", valueRequirement, resolvedValue);
+    LOGGER.debug("Resolved {} to {}", valueRequirement, resolvedValue);
     _stackDepth++;
     // Scheduling failure and resolved callbacks from the run queue is a real headache to debug, so always call them inline
     callback.resolved(this, valueRequirement, resolvedValue, pump);
@@ -155,7 +155,7 @@ import com.opengamma.util.tuple.Pairs;
    * @param failure description of the failure
    */
   public void failed(final ResolvedValueCallback callback, final ValueRequirement valueRequirement, final ResolutionFailure failure) {
-    s_logger.debug("Couldn't resolve {}", valueRequirement);
+    LOGGER.debug("Couldn't resolve {}", valueRequirement);
     _stackDepth++;
     // Scheduling failure and resolved callbacks from the run queue is a real headache to debug, so always call them inline
     callback.failed(this, valueRequirement, failure);
@@ -168,7 +168,7 @@ import com.opengamma.util.tuple.Pairs;
    * @param t exception to store, not null
    */
   public void exception(final Throwable t) {
-    s_logger.debug("Caught exception", t);
+    LOGGER.debug("Caught exception", t);
     if (_exceptions == null) {
       _exceptions = new HashMap<ExceptionWrapper, ExceptionWrapper>();
     }
@@ -177,9 +177,9 @@ import com.opengamma.util.tuple.Pairs;
 
   public ResolvedValueProducer resolveRequirement(final ValueRequirement rawRequirement, final ResolveTask dependent, final Collection<FunctionExclusionGroup> functionExclusion) {
     final ValueRequirement requirement = simplifyType(rawRequirement);
-    s_logger.debug("Resolve requirement {}", requirement);
+    LOGGER.debug("Resolve requirement {}", requirement);
     if ((dependent != null) && dependent.hasParent(requirement)) {
-      s_logger.debug("Can't introduce a ValueRequirement loop");
+      LOGGER.debug("Can't introduce a ValueRequirement loop");
       return null;
     }
     RequirementResolver resolver = null;
@@ -225,7 +225,7 @@ import com.opengamma.util.tuple.Pairs;
       resolver.start(this);
       return resolver;
     } else {
-      s_logger.debug("Using direct resolution {}/{}", requirement, dependent);
+      LOGGER.debug("Using direct resolution {}/{}", requirement, dependent);
       return getOrCreateTaskResolving(requirement, dependent, functionExclusion);
     }
   }
@@ -249,7 +249,7 @@ import com.opengamma.util.tuple.Pairs;
         }
       }
       if (task != null) {
-        s_logger.debug("Using existing task {}", task);
+        LOGGER.debug("Using existing task {}", task);
         newTask.release(this); // Discard local allocation
         return task;
       } else {

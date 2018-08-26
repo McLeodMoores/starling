@@ -59,7 +59,7 @@ import com.opengamma.util.time.Tenor;
 public class DefaultSecurityLoader extends AbstractSecurityLoader {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(DefaultSecurityLoader.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(DefaultSecurityLoader.class);
 
   /**
    * The security master to load into.
@@ -164,7 +164,7 @@ public class DefaultSecurityLoader extends AbstractSecurityLoader {
         missing.put(requestedBundle, null);
       } else {
         if (searchResult.getDocuments().size() > 1) {
-          s_logger.warn("Multiple securities matched bundle {}", requestedBundle);
+          LOGGER.warn("Multiple securities matched bundle {}", requestedBundle);
           // consistent order for duplicates was selected by the sort order
         }
         final ManageableSecurity sec = searchResult.getFirstSecurity();
@@ -304,7 +304,7 @@ public class DefaultSecurityLoader extends AbstractSecurityLoader {
     storeIndexFamilies(existing, toAdd);
   }
 
-  private static final ExternalIdDisplayComparator s_comparator = new ExternalIdDisplayComparator();
+  private static final ExternalIdDisplayComparator COMPARATOR = new ExternalIdDisplayComparator();
 
   private ExternalId preferredExternalId(final ExternalIdBundle bundle) {
     ExternalId preferred = null;
@@ -312,7 +312,7 @@ public class DefaultSecurityLoader extends AbstractSecurityLoader {
       if (preferred == null) {
         preferred = current;
       } else {
-        if (s_comparator.compare(preferred, current) > 0) {
+        if (COMPARATOR.compare(preferred, current) > 0) {
           preferred = current;
         }
       }

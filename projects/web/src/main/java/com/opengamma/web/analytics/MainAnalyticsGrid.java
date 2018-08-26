@@ -39,7 +39,7 @@ import com.opengamma.web.analytics.formatting.TypeFormatter;
  */
 /* package */abstract class MainAnalyticsGrid<T extends MainGridViewport> extends AnalyticsGrid<T> {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(MainAnalyticsGrid.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(MainAnalyticsGrid.class);
 
   /** Type of data in the grid, portfolio or primitives. */
   private final AnalyticsView.GridType _gridType;
@@ -152,7 +152,7 @@ import com.opengamma.web.analytics.formatting.TypeFormatter;
    * @param compiledViewDef Compiled view definition containing the full dependency graph
    */
   private void openDependencyGraph(int graphId, DependencyGraphGrid previousGrid, CompiledViewDefinition compiledViewDef, ValueMappings valueMappings) {
-    s_logger.debug("Creating new version of dependency graph grid {}", previousGrid.getCallbackId());
+    LOGGER.debug("Creating new version of dependency graph grid {}", previousGrid.getCallbackId());
     DependencyGraphGridStructure structure = previousGrid.getGridStructure();
     String calcConfigName = structure.getCalculationConfigurationName();
     DependencyGraphGrid grid = DependencyGraphGrid.create(compiledViewDef, previousGrid.getTargetValueRequirement(), calcConfigName, _cycle, previousGrid.getCallbackId(), _targetResolver,

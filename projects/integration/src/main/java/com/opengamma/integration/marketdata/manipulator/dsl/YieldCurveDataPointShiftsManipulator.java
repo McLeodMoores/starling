@@ -47,7 +47,7 @@ import org.joda.beans.impl.direct.DirectMetaProperty;
 @BeanDefinition
 public final class YieldCurveDataPointShiftsManipulator implements StructureManipulator<YieldCurveData>, ImmutableBean {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(YieldCurveDataPointShiftsManipulator.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(YieldCurveDataPointShiftsManipulator.class);
 
   @PropertyDefinition(validate = "notNull")
   private final ScenarioShiftType _shiftType;
@@ -103,7 +103,7 @@ public final class YieldCurveDataPointShiftsManipulator implements StructureMani
             shiftedStripData = shiftedData;
           }
           data.put(bundle, shiftedStripData);
-          s_logger.debug("Shifting data {}, tenor {} by {} from {} to {}",
+          LOGGER.debug("Shifting data {}, tenor {} by {} from {} to {}",
                          strip.getSecurityIdentifier(), strip.getTenor(), shift.getShift(), originalData, shiftedStripData);
         }
       }

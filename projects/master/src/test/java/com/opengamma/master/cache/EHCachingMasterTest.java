@@ -180,12 +180,12 @@ public class EHCachingMasterTest extends AbstractEHCachingMasterTest<CacheTestMa
                              ZonedDateTime.of(LocalDateTime.of(2010, 1, 1, 12, 0, 0, 0), ZoneOffset.UTC).toInstant())));
     assertEquals(docA200_V2010to, cachingMaster.get(A_OID, VersionCorrection.LATEST));
     assertEquals(docA300_V1999to2010_C2011to, cachingMaster.get(A_OID,
-        VersionCorrection.of(ZonedDateTime.of(LocalDateTime.of(2009, 6, 6, 12, 0, 0, 0), ZoneOffset.UTC).toInstant(), now)));
-    assertEquals(docB500_V2011to, cachingMaster.get(B_OID, VersionCorrection.of(now, now)));
+        VersionCorrection.of(ZonedDateTime.of(LocalDateTime.of(2009, 6, 6, 12, 0, 0, 0), ZoneOffset.UTC).toInstant(), NOW)));
+    assertEquals(docB500_V2011to, cachingMaster.get(B_OID, VersionCorrection.of(NOW, NOW)));
     assertEquals(docB500_V2011to, cachingMaster.get(B_OID, VersionCorrection.LATEST));
     assertEquals(docA200_V2010to, cachingMaster.get(A_OID, VersionCorrection.LATEST));
     assertEquals(docB500_V2011to, cachingMaster.get(B_OID,
-        VersionCorrection.of(ZonedDateTime.of(LocalDateTime.of(2011, 6, 6, 12, 0, 0, 0), ZoneOffset.UTC).toInstant(), now)));
+        VersionCorrection.of(ZonedDateTime.of(LocalDateTime.of(2011, 6, 6, 12, 0, 0, 0), ZoneOffset.UTC).toInstant(), NOW)));
 
     // Assert invocation counts
     verify(mockUnderlyingMaster, times(1)).get(B_OID, VersionCorrection.LATEST);
@@ -194,10 +194,10 @@ public class EHCachingMasterTest extends AbstractEHCachingMasterTest<CacheTestMa
                              ZonedDateTime.of(LocalDateTime.of(2010, 1, 1, 12, 0, 0, 0), ZoneOffset.UTC).toInstant()));
     verify(mockUnderlyingMaster, times(1)).get(A_OID, VersionCorrection.LATEST);
     verify(mockUnderlyingMaster, times(1)).get(A_OID,
-        VersionCorrection.of(ZonedDateTime.of(LocalDateTime.of(2009, 6, 6, 12, 0, 0, 0), ZoneOffset.UTC).toInstant(), now));
-    verify(mockUnderlyingMaster, times(0)).get(B_OID, VersionCorrection.of(now, now));
+        VersionCorrection.of(ZonedDateTime.of(LocalDateTime.of(2009, 6, 6, 12, 0, 0, 0), ZoneOffset.UTC).toInstant(), NOW));
+    verify(mockUnderlyingMaster, times(0)).get(B_OID, VersionCorrection.of(NOW, NOW));
     verify(mockUnderlyingMaster, times(0)).get(B_OID,
-        VersionCorrection.of(ZonedDateTime.of(LocalDateTime.of(2011, 6, 6, 12, 0, 0, 0), ZoneOffset.UTC).toInstant(), now));
+        VersionCorrection.of(ZonedDateTime.of(LocalDateTime.of(2011, 6, 6, 12, 0, 0, 0), ZoneOffset.UTC).toInstant(), NOW));
     verify(mockUnderlyingMaster, times(0)).get(C_OID, VersionCorrection.LATEST);
     verify(mockUnderlyingMaster, times(0)).get(docA100_V1999to2010_Cto2011.getUniqueId());
     verify(mockUnderlyingMaster, times(0)).get(docA200_V2010to.getUniqueId());
@@ -244,7 +244,7 @@ public class EHCachingMasterTest extends AbstractEHCachingMasterTest<CacheTestMa
     // Assert cache contents
     assertEquals(DOC_ADDED, cachingMaster.get(DOC_ADDED.getUniqueId()));
     assertEquals(DOC_ADDED, cachingMaster.get(DOC_ADDED.getObjectId(), VersionCorrection.LATEST));
-    assertEquals(DOC_ADDED, cachingMaster.get(DOC_ADDED.getObjectId(), VersionCorrection.of(now, now)));
+    assertEquals(DOC_ADDED, cachingMaster.get(DOC_ADDED.getObjectId(), VersionCorrection.of(NOW, NOW)));
 
     // Assert invocation counts
     verify(mockUnderlyingMaster, times(1)).add(DOC_TO_ADD);

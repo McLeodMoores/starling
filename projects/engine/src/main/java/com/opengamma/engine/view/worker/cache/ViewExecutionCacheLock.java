@@ -28,7 +28,7 @@ import com.opengamma.util.tuple.Pairs;
 public final class ViewExecutionCacheLock {
 
   // No harm in sharing the canonicalized forms with other instances.
-  private static final WeakInstanceCache<ViewExecutionCacheKey> s_keys = new WeakInstanceCache<ViewExecutionCacheKey>();
+  private static final WeakInstanceCache<ViewExecutionCacheKey> KEYS = new WeakInstanceCache<ViewExecutionCacheKey>();
 
   private static final class Locks {
 
@@ -41,7 +41,7 @@ public final class ViewExecutionCacheLock {
   private final ConcurrentMap<ViewExecutionCacheKey, Locks> _locks = new MapMaker().weakKeys().makeMap();
 
   private Locks getOrCreateLocks(final ViewExecutionCacheKey cacheKey) {
-    final ViewExecutionCacheKey normalized = s_keys.get(cacheKey);
+    final ViewExecutionCacheKey normalized = KEYS.get(cacheKey);
     Locks locks = _locks.get(normalized);
     if (locks == null) {
       locks = new Locks();

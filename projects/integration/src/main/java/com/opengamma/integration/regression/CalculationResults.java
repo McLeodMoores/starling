@@ -62,7 +62,7 @@ import com.opengamma.util.ArgumentChecker;
 @BeanDefinition
 public final class CalculationResults implements ImmutableBean {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(CalculationResults.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(CalculationResults.class);
 
   @PropertyDefinition(validate = "notNull")
   private final Map<CalculationResultKey, CalculatedValue> _values;
@@ -209,7 +209,7 @@ public final class CalculationResults implements ImmutableBean {
                                                properties,
                                                targetSpec.getUniqueId().getObjectId());
       } else {
-        s_logger.warn("Ignoring target with type {}", targetType);
+        LOGGER.warn("Ignoring target with type {}", targetType);
         key = null;
       }
       if (key != null) {

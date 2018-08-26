@@ -42,7 +42,7 @@ import com.opengamma.util.jms.JmsConnector;
 public class JmsChangeManager extends BasicChangeManager implements MessageListener, FudgeMessageReceiver, Lifecycle {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(JmsChangeManager.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(JmsChangeManager.class);
 
   /**
    * The JMS connector, not null
@@ -140,7 +140,7 @@ public class JmsChangeManager extends BasicChangeManager implements MessageListe
   @Override
   protected void handleEntityChanged(final ChangeEvent event) {
     final FudgeMsgEnvelope msg = OpenGammaFudgeContext.getInstance().toFudgeMsg(event);
-    s_logger.debug("Sending change message {}", msg);
+    LOGGER.debug("Sending change message {}", msg);
     final byte[] fudgeMsg = OpenGammaFudgeContext.getInstance().toByteArray(msg.getMessage());
     final JmsByteArrayMessageSender messageSender = new JmsByteArrayMessageSender(getJmsConnector().getTopicName(), getJmsConnector().getJmsTemplateTopic());
     messageSender.send(fudgeMsg);
@@ -153,14 +153,14 @@ public class JmsChangeManager extends BasicChangeManager implements MessageListe
     } catch (Exception e) {
       // NOTE jonathan 2013-06-05 -- it's an error to throw an exception in onMessage and may cause messages to back up
       // in the JMS broker which could affect its stability. Drop the message.
-      s_logger.error("Error processing JMS message", e);
+      LOGGER.error("Error processing JMS message", e);
     }
   }
 
   @Override
   public void messageReceived(FudgeContext fudgeContext, FudgeMsgEnvelope msgEnvelope) {
     final FudgeMsg msg = msgEnvelope.getMessage();
-    s_logger.debug("Received change message {}", msg);
+    LOGGER.debug("Received change message {}", msg);
     final FudgeDeserializer deserializer = new FudgeDeserializer(fudgeContext);
     final ChangeEvent event = deserializer.fudgeMsgToObject(ChangeEvent.class, msg);
     fireEntityChanged(event);

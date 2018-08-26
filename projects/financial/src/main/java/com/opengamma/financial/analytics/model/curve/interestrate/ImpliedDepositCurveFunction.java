@@ -112,7 +112,7 @@ public class ImpliedDepositCurveFunction extends AbstractFunction {
   /** The business day convention used for FX forward dates computation **/
   private static final BusinessDayConvention MOD_FOL = BusinessDayConventions.MODIFIED_FOLLOWING;
   /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(ImpliedDepositCurveFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ImpliedDepositCurveFunction.class);
   /** The curve name */
   private final String _curveCalculationConfig;
 
@@ -158,7 +158,7 @@ public class ImpliedDepositCurveFunction extends AbstractFunction {
     final Map.Entry<String, String[]> entry = Iterables.getOnlyElement(originalConfigurationName.entrySet());
     final String[] originalCurveNames = entry.getValue();
     if (originalCurveNames.length != 1) {
-      s_logger.warn("Found more than one exogenous configuration name; using only the first");
+      LOGGER.warn("Found more than one exogenous configuration name; using only the first");
     }
     final MultiCurveCalculationConfig originalConfiguration = _multiCurveCalculationConfig.get(entry.getKey());
     if (originalConfiguration == null) {
@@ -350,7 +350,7 @@ public class ImpliedDepositCurveFunction extends AbstractFunction {
         return null;
       }
       if (!_originalConfiguration.getTarget().equals(target.toSpecification())) {
-        s_logger.info("Invalid target, was {} - expected {}", target, _originalConfiguration.getTarget());
+        LOGGER.info("Invalid target, was {} - expected {}", target, _originalConfiguration.getTarget());
         return null;
       }
       final ValueProperties properties = ValueProperties.builder().with(CURVE_CALCULATION_METHOD, _originalConfiguration.getCalculationMethod())

@@ -22,23 +22,23 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT)
 public class CurrencyFudgeEncodingTest extends AbstractFudgeBuilderTestCase {
 
-  private static final Currency s_ref = Currency.USD;
+  private static final Currency REF= Currency.USD;
 
   @Test
   public void testCycle() {
-    assertEncodeDecodeCycle(Currency.class, s_ref);
+    assertEncodeDecodeCycle(Currency.class, REF);
   }
 
   @Test
   public void testFromString() {
-    assertEquals(s_ref, getFudgeContext().getFieldValue(Currency.class,
-        UnmodifiableFudgeField.of(FudgeWireType.STRING, s_ref.getCode())));
+    assertEquals(REF, getFudgeContext().getFieldValue(Currency.class,
+        UnmodifiableFudgeField.of(FudgeWireType.STRING, REF.getCode())));
   }
 
   @Test
   public void testFromUniqueId() {
-    assertEquals(s_ref, getFudgeContext().getFieldValue(Currency.class,
-        UnmodifiableFudgeField.of(FudgeWireType.STRING, s_ref.getUniqueId().toString())));
+    assertEquals(REF, getFudgeContext().getFieldValue(Currency.class,
+        UnmodifiableFudgeField.of(FudgeWireType.STRING, REF.getUniqueId().toString())));
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
@@ -56,8 +56,8 @@ public class CurrencyFudgeEncodingTest extends AbstractFudgeBuilderTestCase {
   //-------------------------------------------------------------------------
   @Test
   public void test_toFudgeMsg() {
-    CurrencyFudgeBuilder bld = new CurrencyFudgeBuilder();
-    MutableFudgeMsg msg = bld.buildMessage(getFudgeSerializer(), s_ref);
+    final CurrencyFudgeBuilder bld = new CurrencyFudgeBuilder();
+    final MutableFudgeMsg msg = bld.buildMessage(getFudgeSerializer(), REF);
     assertEquals(ImmutableSet.of(CurrencyFudgeBuilder.CURRENCY_FIELD_NAME), msg.getAllFieldNames());
     assertEquals("USD", msg.getString(CurrencyFudgeBuilder.CURRENCY_FIELD_NAME));
   }
@@ -65,16 +65,16 @@ public class CurrencyFudgeEncodingTest extends AbstractFudgeBuilderTestCase {
   //-------------------------------------------------------------------------
   @Test
   public void test_fromFudgeMsg() {
-    MutableFudgeMsg msg = getFudgeContext().newMessage();
+    final MutableFudgeMsg msg = getFudgeContext().newMessage();
     msg.add(CurrencyFudgeBuilder.CURRENCY_FIELD_NAME, "USD");
-    CurrencyFudgeBuilder bld = new CurrencyFudgeBuilder();
+    final CurrencyFudgeBuilder bld = new CurrencyFudgeBuilder();
     bld.buildObject(getFudgeDeserializer(), msg);
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void test_fromFudgeMsg_badMessage1() {
-    MutableFudgeMsg msg = getFudgeContext().newMessage();
-    CurrencyFudgeBuilder bld = new CurrencyFudgeBuilder();
+    final MutableFudgeMsg msg = getFudgeContext().newMessage();
+    final CurrencyFudgeBuilder bld = new CurrencyFudgeBuilder();
     bld.buildObject(getFudgeDeserializer(), msg);
   }
 

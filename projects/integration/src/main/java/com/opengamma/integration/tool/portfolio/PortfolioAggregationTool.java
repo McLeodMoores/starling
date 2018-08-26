@@ -38,7 +38,7 @@ import com.opengamma.scripts.Scriptable;
 public class PortfolioAggregationTool extends AbstractTool<ToolContext> {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(PortfolioAggregationTool.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(PortfolioAggregationTool.class);
 
   private final Map<String, AggregationFunction<?>> _aggregationFunctions = new HashMap<>();
   private static final String PORTFOLIO_OPT = "p";
@@ -86,7 +86,7 @@ public class PortfolioAggregationTool extends AbstractTool<ToolContext> {
 
   private AggregationFunction<?>[] createAggregationFunctions(final String[] aggregatorNames) {
     if (aggregatorNames == null) {
-      s_logger.error("No aggregators specified");
+      LOGGER.error("No aggregators specified");
       System.exit(1);
       return null; // idiot compiler...
     } else {

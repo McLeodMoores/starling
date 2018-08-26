@@ -37,7 +37,7 @@ public class BloombergRefDataCollectorTest {
 
   private static final String WATCH_LIST_FILE = "watchListTest.txt";
   private static final String FIELD_LIST_FILE = "fieldListTest.txt";
-  private static final FudgeContext s_fudgeContext = OpenGammaFudgeContext.getInstance();
+  private static final FudgeContext FUDGE_CONTEXT = OpenGammaFudgeContext.getInstance();
 
   private BloombergRefDataCollector _refDataCollector;
   private File _outputFile;
@@ -58,7 +58,7 @@ public class BloombergRefDataCollectorTest {
     _outputFile = File.createTempFile(outfileName, null);
     _outputFile.deleteOnExit();
     
-    _refDataCollector = new BloombergRefDataCollector(s_fudgeContext, watchListFile, refDataProvider, fieldListFile, _outputFile);
+    _refDataCollector = new BloombergRefDataCollector(FUDGE_CONTEXT, watchListFile, refDataProvider, fieldListFile, _outputFile);
     _refDataCollector.start();
   }
 
@@ -71,7 +71,7 @@ public class BloombergRefDataCollectorTest {
   //-------------------------------------------------------------------------
   @Test
   public void test() {
-    LoggedReferenceDataProvider loggedRefDataProvider = new LoggedReferenceDataProvider(s_fudgeContext, _outputFile);
+    LoggedReferenceDataProvider loggedRefDataProvider = new LoggedReferenceDataProvider(FUDGE_CONTEXT, _outputFile);
     
     Set<String> securities = Sets.newHashSet("QQQQ US Equity", "/buid/EQ0082335400001000");
     Set<String> fields = Collections.singleton("SECURITY_TYP");

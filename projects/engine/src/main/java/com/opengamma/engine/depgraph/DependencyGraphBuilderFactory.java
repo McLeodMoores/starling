@@ -24,9 +24,9 @@ import com.opengamma.util.MdcAwareThreadPoolExecutor;
  */
 public class DependencyGraphBuilderFactory {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(DependencyGraphBuilderFactory.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(DependencyGraphBuilderFactory.class);
 
-  private static final ThreadPoolExecutor s_executor = new MdcAwareThreadPoolExecutor(new ThreadFactory() {
+  private static final ThreadPoolExecutor EXECUTOR = new MdcAwareThreadPoolExecutor(new ThreadFactory() {
 
     private final AtomicInteger _nextJobThreadId = new AtomicInteger();
 
@@ -35,9 +35,9 @@ public class DependencyGraphBuilderFactory {
       final Thread t = new Thread(r) {
         @Override
         public void run() {
-          s_logger.info("Starting background thread {}", this);
+          LOGGER.info("Starting background thread {}", this);
           super.run();
-          s_logger.info("Finished background thread {}", this);
+          LOGGER.info("Finished background thread {}", this);
         }
       };
       t.setDaemon(true);
@@ -154,13 +154,13 @@ public class DependencyGraphBuilderFactory {
         @Override
         public void run() {
           try {
-            s_logger.debug("Starting job execution");
+            LOGGER.debug("Starting job execution");
             _command.run();
           } finally {
             _command = null;
-            s_logger.debug("Job execution complete");
+            LOGGER.debug("Job execution complete");
             threadExit();
-            s_logger.debug("Thread exit complete");
+            LOGGER.debug("Thread exit complete");
           }
         }
 
@@ -179,24 +179,24 @@ public class DependencyGraphBuilderFactory {
         while (threads < getMaxAdditionalThreads()) {
           final Runnable command = _commands.poll();
           if (command == null) {
-            if (s_logger.isDebugEnabled()) {
-              s_logger.debug("No pending commands to run - {}", threads);
+            if (LOGGER.isDebugEnabled()) {
+              LOGGER.debug("No pending commands to run - {}", threads);
             }
             return;
           }
-          if (s_logger.isDebugEnabled()) {
-            s_logger.debug("Thread capacity available - {}", threads);
+          if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Thread capacity available - {}", threads);
           }
           threads = _threads.incrementAndGet();
           if (threads <= getMaxAdditionalThreads()) {
-            if (s_logger.isDebugEnabled()) {
-              s_logger.debug("Thread capacity {} acquired for execution", threads);
+            if (LOGGER.isDebugEnabled()) {
+              LOGGER.debug("Thread capacity {} acquired for execution", threads);
             }
             executeImpl(command);
             return;
           }
-          if (s_logger.isDebugEnabled()) {
-            s_logger.debug("Too many threads {} - requeuing job", threads);
+          if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Too many threads {} - requeuing job", threads);
           }
           _commands.add(command);
           threads = _threads.decrementAndGet();
@@ -207,15 +207,15 @@ public class DependencyGraphBuilderFactory {
       public void execute(final Runnable command) {
         final int threads = _threads.incrementAndGet();
         if (threads <= getMaxAdditionalThreads()) {
-          if (s_logger.isDebugEnabled()) {
-            s_logger.debug("Direct execution - {} threads", threads);
+          if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Direct execution - {} threads", threads);
           }
           executeImpl(command);
           return;
         }
         // Already started too many jobs
-        if (s_logger.isDebugEnabled()) {
-          s_logger.debug("Too many threads {} - queuing job", threads);
+        if (LOGGER.isDebugEnabled()) {
+          LOGGER.debug("Too many threads {} - queuing job", threads);
         }
         _commands.add(command);
         threadExit();
@@ -224,7 +224,7 @@ public class DependencyGraphBuilderFactory {
   }
 
   protected static Executor getDefaultExecutor() {
-    return s_executor;
+    return EXECUTOR;
   }
 
   protected Executor getExecutor() {

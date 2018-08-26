@@ -25,7 +25,7 @@ import com.opengamma.util.ArgumentChecker;
  */
 public abstract class RowParser {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(RowParser.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(RowParser.class);
   
   /** Standard date-time formatter for the input. */
   protected final DateTimeFormatter _csvDateFormatter;
@@ -159,7 +159,7 @@ public abstract class RowParser {
   public static String getWithException(Map<String, String> fieldValueMap, String fieldName) {
     String result = fieldValueMap.get(fieldName);
     if (result == null) {
-      s_logger.warn("No value for field " + fieldName);
+      LOGGER.warn("No value for field " + fieldName);
       return null;
     }
     return result;

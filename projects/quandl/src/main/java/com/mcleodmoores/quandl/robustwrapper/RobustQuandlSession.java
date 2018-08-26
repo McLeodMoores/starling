@@ -37,7 +37,7 @@ import com.mcleodmoores.quandl.util.Quandl4OpenGammaRuntimeException;
  *
  */
 public class RobustQuandlSession {
-  private static final Logger s_logger = LoggerFactory.getLogger(RobustQuandlSession.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(RobustQuandlSession.class);
   private final QuandlSession _session;
 
   private static final long BACKOFF_PERIOD_MILLIS = 60 * 1000;
@@ -128,16 +128,16 @@ public class RobustQuandlSession {
           count++;
         } catch (final QuandlRuntimeException qre) {
           count++;
-          s_logger.error("Can't process request for {}, giving up and skipping.  Full request is {}", quandlCodeRequest.getQuandlCode(), dataSetRequest);
+          LOGGER.error("Can't process request for {}, giving up and skipping.  Full request is {}", quandlCodeRequest.getQuandlCode(), dataSetRequest);
           if (count > maxRetries) {
-            s_logger.error("Problem getting data from Quandl for {}. Full request is {}", quandlCodeRequest.getQuandlCode(), dataSetRequest);
+            LOGGER.error("Problem getting data from Quandl for {}. Full request is {}", quandlCodeRequest.getQuandlCode(), dataSetRequest);
             break;
           }
           continue;
         }
       } while (tabularResult == null);
       if (count > maxRetries) {
-        s_logger.error("Problem getting data from Quandl for {}. Full request is {}", quandlCodeRequest.getQuandlCode(), dataSetRequest);
+        LOGGER.error("Problem getting data from Quandl for {}. Full request is {}", quandlCodeRequest.getQuandlCode(), dataSetRequest);
         break;
       }
       results.put(quandlCodeRequest, tabularResult);
@@ -231,7 +231,7 @@ public class RobustQuandlSession {
       } catch (final QuandlTooManyRequestsException tooManyReqs) {
         backOff(retries); // note this modifies retries.
       } catch (final QuandlRuntimeException qre) {
-        s_logger.warn("There was an error performing a bulk request, falling back to single requests");
+        LOGGER.warn("There was an error performing a bulk request, falling back to single requests");
         return getMultipleHeaderDefinitionSlow(request);
       }
     } while (bulkMetaData == null);
@@ -251,7 +251,7 @@ public class RobustQuandlSession {
         } catch (final QuandlTooManyRequestsException tooManyReqs) {
           backOff(retries); // note this modifies retries.
         } catch (final QuandlRuntimeException qre) {
-          s_logger.error("There was a problem requesting metadata for {}, skipping", quandlCode);
+          LOGGER.error("There was a problem requesting metadata for {}, skipping", quandlCode);
           break;
         }
       } while (metaData == null || retries < 5);
@@ -262,10 +262,10 @@ public class RobustQuandlSession {
   private static void backOff(Integer retries) {
     try {
       if (retries++ < 5) {
-        s_logger.warn("Quandl indicated too many requests have been made.  Backing off for one minute.");
+        LOGGER.warn("Quandl indicated too many requests have been made.  Backing off for one minute.");
         Thread.sleep(BACKOFF_PERIOD_MILLIS);
       } else {
-        s_logger.warn("Quandl indicated too many requests have been made.  Giving up because tried 5 retries and limit unlikely to be reset until tomorrow.");
+        LOGGER.warn("Quandl indicated too many requests have been made.  Giving up because tried 5 retries and limit unlikely to be reset until tomorrow.");
         throw new Quandl4OpenGammaRuntimeException("Giving up because request limit unlikely to be reset until tomorrow.");
       }
     } catch (final InterruptedException ie) { }

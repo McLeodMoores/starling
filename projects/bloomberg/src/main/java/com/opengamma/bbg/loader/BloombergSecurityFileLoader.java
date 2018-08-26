@@ -68,7 +68,7 @@ import com.opengamma.util.time.Expiry;
 public class BloombergSecurityFileLoader {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(BloombergSecurityFileLoader.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(BloombergSecurityFileLoader.class);
 
   /* package */static final String CONTEXT_CONFIGURATION_PATH = "/com/opengamma/bbg/loader/bloomberg-security-loader-context.xml";
 
@@ -142,9 +142,9 @@ public class BloombergSecurityFileLoader {
    
     //print securities with errors
     if (!errors.isEmpty()) {
-      s_logger.warn("Unable to load the following securities");
+      LOGGER.warn("Unable to load the following securities");
       for (ExternalIdBundle identifierBundle : errors) {
-        s_logger.warn("{}", identifierBundle);
+        LOGGER.warn("{}", identifierBundle);
       }
     }
     
@@ -192,7 +192,7 @@ public class BloombergSecurityFileLoader {
         Expiry expiry = new Expiry(DateUtils.getUTCDate(year, month, day));
 
         if (expiry.getExpiry().toInstant().toEpochMilli() < (System.currentTimeMillis() + (25L * 60L * 60L * 1000L))) {
-          s_logger.info("Option {} in future, so passing on it.", optionTickerStr);
+          LOGGER.info("Option {} in future, so passing on it.", optionTickerStr);
           continue;
         }
 
@@ -258,7 +258,7 @@ public class BloombergSecurityFileLoader {
       try {
         securityLoader.setOptionSize(Integer.parseInt(line.getOptionValue(OPTION)));
       } catch (NumberFormatException ex) {
-        s_logger.warn("{} option size is not an integer", line.getOptionValue(OPTION));
+        LOGGER.warn("{} option size is not an integer", line.getOptionValue(OPTION));
       }
     }
     
@@ -312,7 +312,7 @@ public class BloombergSecurityFileLoader {
         try {
           securities.addAll(FileUtils.readLines(new File(file)));
         } catch (IOException e) {
-          s_logger.warn("Problem reading from input file={}", file);
+          LOGGER.warn("Problem reading from input file={}", file);
           throw new OpenGammaRuntimeException("Problem reading from " + file, e);
         }
       }

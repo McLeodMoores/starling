@@ -74,7 +74,7 @@ import com.opengamma.util.time.Tenor;
 public abstract class StandardVanillaCDSFunction extends AbstractFunction.NonCompiledInvoker {
   private static final BusinessDayConvention FOLLOWING = BusinessDayConventions.FOLLOWING;
   private final String[] _valueRequirements;
-  private static final Logger s_logger = LoggerFactory.getLogger(StandardVanillaCDSFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(StandardVanillaCDSFunction.class);
 
   public StandardVanillaCDSFunction(final String... valueRequirements) {
     ArgumentChecker.notNull(valueRequirements, "value requirements");

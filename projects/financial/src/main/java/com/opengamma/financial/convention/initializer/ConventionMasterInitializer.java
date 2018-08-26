@@ -35,7 +35,7 @@ import com.opengamma.util.ArgumentChecker;
 public abstract class ConventionMasterInitializer {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(ConventionMasterInitializer.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ConventionMasterInitializer.class);
 
   /**
    * Initializes the specified master.
@@ -82,7 +82,7 @@ public abstract class ConventionMasterInitializer {
           break;
         default:
           // these are supposed to be unique by name in the database
-          s_logger.warn("Multiple conventions with the same name in database: " + convention.getName());
+          LOGGER.warn("Multiple conventions with the same name in database: " + convention.getName());
           for (ManageableConvention similar : result.getConventions()) {
             if (JodaBeanUtils.equalIgnoring(convention, similar, ManageableConvention.meta().uniqueId())) {
               return;  // already in database
@@ -96,7 +96,7 @@ public abstract class ConventionMasterInitializer {
 
   protected void addSecurity(SecurityMaster securityMaster, ManageableSecurity security) {
     if (securityMaster == null) {
-      s_logger.warn("Tried to add a security to aid convention lookup but no security master set: " + security.getName());
+      LOGGER.warn("Tried to add a security to aid convention lookup but no security master set: " + security.getName());
       return;
     }
     SecurityMasterUtils.addOrUpdateSecurity(securityMaster, security);

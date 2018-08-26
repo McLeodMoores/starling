@@ -22,14 +22,14 @@ public final class ModifiedDurationFromCleanPriceCalculator extends InstrumentDe
   /**
    * The calculator instance.
    */
-  private static final ModifiedDurationFromCleanPriceCalculator s_instance = new ModifiedDurationFromCleanPriceCalculator();
+  private static final ModifiedDurationFromCleanPriceCalculator INSTANCE = new ModifiedDurationFromCleanPriceCalculator();
 
   /**
    * Return the calculator instance.
    * @return The instance.
    */
   public static ModifiedDurationFromCleanPriceCalculator getInstance() {
-    return s_instance;
+    return INSTANCE;
   }
 
   /**

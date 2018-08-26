@@ -39,15 +39,15 @@ import com.opengamma.util.test.Timeout;
 @Test(groups = TestGroup.INTEGRATION)
 public class JobDispatcherTest {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(JobDispatcherTest.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(JobDispatcherTest.class);
   private static final long TIMEOUT = Timeout.standardTimeoutMillis();
 
   private final ExecutorService _executorService = Executors.newCachedThreadPool();
 
-  private static final AtomicLong s_jobId = new AtomicLong();
+  private static final AtomicLong JOB_ID = new AtomicLong();
 
   protected static CalculationJobSpecification createTestJobSpec() {
-    return new CalculationJobSpecification(UniqueId.of("Test", "ViewCycle"), "default", Instant.now(), s_jobId.incrementAndGet());
+    return new CalculationJobSpecification(UniqueId.of("Test", "ViewCycle"), "default", Instant.now(), JOB_ID.incrementAndGet());
   }
 
   protected static List<CalculationJobItem> createTestJobItems() {
@@ -95,7 +95,7 @@ public class JobDispatcherTest {
 
   @Test
   public void registerInvokerWithJobPending() {
-    s_logger.info("registerInvokerWithJobPending");
+    LOGGER.info("registerInvokerWithJobPending");
     final JobDispatcher jobDispatcher = new JobDispatcher();
     final TestJobResultReceiver result = new TestJobResultReceiver();
     final CalculationJob job = createTestJob();
@@ -111,7 +111,7 @@ public class JobDispatcherTest {
 
   @Test
   public void registerInvokerWithEmptyQueue() {
-    s_logger.info("registerInvokerWithEmptyQueue");
+    LOGGER.info("registerInvokerWithEmptyQueue");
     final JobDispatcher jobDispatcher = new JobDispatcher();
     final TestJobInvoker jobInvoker = new TestJobInvoker("Test");
     jobDispatcher.registerJobInvoker(jobInvoker);
@@ -136,7 +136,7 @@ public class JobDispatcherTest {
 
   @Test
   public void invokeInRoundRobinOrder() {
-    s_logger.info("invokeInRoundRobinOrder");
+    LOGGER.info("invokeInRoundRobinOrder");
     final JobDispatcher jobDispatcher = new JobDispatcher();
     final TestJobInvoker node1 = new TestJobInvoker("1");
     final TestJobInvoker node2 = new TestJobInvoker("2");
@@ -158,7 +158,7 @@ public class JobDispatcherTest {
 
   @Test
   public void saturateInvokers() {
-    s_logger.info("saturateInvokers");
+    LOGGER.info("saturateInvokers");
     final JobDispatcher jobDispatcher = new JobDispatcher();
     final JobInvoker[] jobInvokers = new JobInvoker[3];
     for (int i = 0; i < jobInvokers.length; i++) {
@@ -181,19 +181,19 @@ public class JobDispatcherTest {
                 try {
                   Thread.sleep(rnd.nextInt(50));
                 } catch (InterruptedException e) {
-                  s_logger.warn("invoker {} interrupted", getInvokerId());
+                  LOGGER.warn("invoker {} interrupted", getInvokerId());
                 }
-                s_logger.debug("invoker {} completed job {}", getInvokerId(), job.getSpecification());
+                LOGGER.debug("invoker {} completed job {}", getInvokerId(), job.getSpecification());
                 receiver.jobCompleted(createTestJobResult(job.getSpecification(), 0L, instance.toString()));
                 synchronized (instance) {
                   _busy = false;
                   if (_callback != null) {
-                    s_logger.debug("re-registering invoker {} with dispatcher", getInvokerId());
+                    LOGGER.debug("re-registering invoker {} with dispatcher", getInvokerId());
                     final JobInvokerRegister callback = _callback;
                     _callback = null;
                     callback.registerJobInvoker(instance);
                   } else {
-                    s_logger.debug("invoker {} completed job without notify", getInvokerId());
+                    LOGGER.debug("invoker {} completed job without notify", getInvokerId());
                   }
                 }
               }
@@ -208,11 +208,11 @@ public class JobDispatcherTest {
           synchronized (this) {
             if (_busy) {
               assertNull(_callback);
-              s_logger.debug("invoker {} busy - storing callback", getInvokerId());
+              LOGGER.debug("invoker {} busy - storing callback", getInvokerId());
               _callback = callback;
               return false;
             } else {
-              s_logger.debug("invoker {} ready - immediate callback", getInvokerId());
+              LOGGER.debug("invoker {} ready - immediate callback", getInvokerId());
               return true;
             }
           }
@@ -222,18 +222,18 @@ public class JobDispatcherTest {
     }
     final CalculationJob[] jobs = new CalculationJob[100];
     final TestJobResultReceiver[] resultReceivers = new TestJobResultReceiver[jobs.length];
-    s_logger.debug("Dispatching {} jobs to {} nodes", jobs.length, jobInvokers.length);
+    LOGGER.debug("Dispatching {} jobs to {} nodes", jobs.length, jobInvokers.length);
     for (int i = 0; i < jobs.length; i++) {
       jobDispatcher.dispatchJob(jobs[i] = createTestJob(), resultReceivers[i] = new TestJobResultReceiver());
     }
-    s_logger.debug("Jobs dispatched");
+    LOGGER.debug("Jobs dispatched");
     for (int i = 0; i < jobs.length; i++) {
-      s_logger.debug("Waiting for result {}", i);
+      LOGGER.debug("Waiting for result {}", i);
       final CalculationJobResult result = resultReceivers[i].waitForResult(TIMEOUT * 2);
       assertNotNull(result);
       assertEquals(jobs[i].getSpecification(), result.getSpecification());
     }
-    s_logger.debug("All jobs completed");
+    LOGGER.debug("All jobs completed");
   }
 
   private class FailingJobInvoker extends AbstractJobInvoker {
@@ -249,7 +249,7 @@ public class JobDispatcherTest {
       _executorService.execute(new Runnable() {
         @Override
         public void run() {
-          s_logger.debug("Failing job {}", job.getSpecification());
+          LOGGER.debug("Failing job {}", job.getSpecification());
           _failureCount++;
           receiver.jobFailed(FailingJobInvoker.this, "Fail", null);
         }
@@ -268,7 +268,7 @@ public class JobDispatcherTest {
 
   @Test
   public void testJobRetry_failure() {
-    s_logger.info("testJobRetry_failure");
+    LOGGER.info("testJobRetry_failure");
     final JobDispatcher jobDispatcher = new JobDispatcher();
     final TestJobResultReceiver result = new TestJobResultReceiver();
     final FailingJobInvoker failingInvoker = new FailingJobInvoker();
@@ -283,7 +283,7 @@ public class JobDispatcherTest {
 
   @Test
   public void testJobRetry_success() {
-    s_logger.info("testJobRetry_sucess");
+    LOGGER.info("testJobRetry_sucess");
     final JobDispatcher jobDispatcher = new JobDispatcher();
     final TestJobResultReceiver result = new TestJobResultReceiver();
     final FailingJobInvoker failingInvoker = new FailingJobInvoker();
@@ -360,7 +360,7 @@ public class JobDispatcherTest {
 
   @Test(invocationCount = 5, successPercentage = 19)
   public void testJobTimeoutFailure() {
-    s_logger.info("testJobTimeoutFailure");
+    LOGGER.info("testJobTimeoutFailure");
     final JobDispatcher jobDispatcher = new JobDispatcher();
     try {
       jobDispatcher.setMaxJobExecutionTime(TIMEOUT);
@@ -380,7 +380,7 @@ public class JobDispatcherTest {
 
   @Test(invocationCount = 5, successPercentage = 19)
   public void testJobTimeoutSuccess() {
-    s_logger.info("testJobTimeoutSuccess");
+    LOGGER.info("testJobTimeoutSuccess");
     final JobDispatcher jobDispatcher = new JobDispatcher();
     try {
       jobDispatcher.setMaxJobExecutionTime(3 * TIMEOUT);
@@ -400,7 +400,7 @@ public class JobDispatcherTest {
 
   @Test(invocationCount = 5, successPercentage = 19)
   public void testJobTimeoutQuerySuccess() {
-    s_logger.info("testJobTimeoutQuerySuccess");
+    LOGGER.info("testJobTimeoutQuerySuccess");
     final JobDispatcher jobDispatcher = new JobDispatcher();
     try {
       jobDispatcher.setMaxJobExecutionTime(4 * TIMEOUT);
@@ -423,7 +423,7 @@ public class JobDispatcherTest {
 
   @Test(invocationCount = 5, successPercentage = 19)
   public void testJobTimeoutQueryFailure() {
-    s_logger.info("testJobTimeoutQueryFailure");
+    LOGGER.info("testJobTimeoutQueryFailure");
     final JobDispatcher jobDispatcher = new JobDispatcher();
     try {
       jobDispatcher.setMaxJobExecutionTime(3 * TIMEOUT);
@@ -444,7 +444,7 @@ public class JobDispatcherTest {
 
   @Test(invocationCount = 5, successPercentage = 19)
   public void testJobCancel() {
-    s_logger.info("testJobCancel");
+    LOGGER.info("testJobCancel");
     final JobDispatcher jobDispatcher = new JobDispatcher();
     try {
       jobDispatcher.setMaxJobExecutionTime(2 * TIMEOUT);

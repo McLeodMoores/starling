@@ -27,30 +27,30 @@ public class GeneratorSwapFixedCompoundedONCompoundedTest {
   private static final String BRL_NAME = "BRLCDI";
   private static final DayCount BRL_DAYCOUNT_FIXED = INDEX_CDI.getDayCount();
   private static final BusinessDayConvention BRL_BUSINESS_DAY = BusinessDayConventions.MODIFIED_FOLLOWING;
-  private static final boolean BRl_IS_EOM = true;
+  private static final boolean BRL_IS_EOM = true;
   private static final int BRL_SPOT_LAG = 2;
 
-  private static final GeneratorSwapFixedCompoundedONCompounded USD_GENERATOR_OIS = new GeneratorSwapFixedCompoundedONCompounded(BRL_NAME, INDEX_CDI, BRL_DAYCOUNT_FIXED, BRL_BUSINESS_DAY, BRl_IS_EOM,
+  private static final GeneratorSwapFixedCompoundedONCompounded USD_GENERATOR_OIS = new GeneratorSwapFixedCompoundedONCompounded(BRL_NAME, INDEX_CDI, BRL_DAYCOUNT_FIXED, BRL_BUSINESS_DAY, BRL_IS_EOM,
       BRL_SPOT_LAG, NYC);
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void nullCurrency() {
-    new GeneratorSwapFixedCompoundedONCompounded(null, INDEX_CDI, BRL_DAYCOUNT_FIXED, BRL_BUSINESS_DAY, BRl_IS_EOM, BRL_SPOT_LAG, NYC);
+    new GeneratorSwapFixedCompoundedONCompounded(null, INDEX_CDI, BRL_DAYCOUNT_FIXED, BRL_BUSINESS_DAY, BRL_IS_EOM, BRL_SPOT_LAG, NYC);
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void nullDayCount() {
-    new GeneratorSwapFixedCompoundedONCompounded(BRL_NAME, INDEX_CDI, null, BRL_BUSINESS_DAY, BRl_IS_EOM, BRL_SPOT_LAG, NYC);
+    new GeneratorSwapFixedCompoundedONCompounded(BRL_NAME, INDEX_CDI, null, BRL_BUSINESS_DAY, BRL_IS_EOM, BRL_SPOT_LAG, NYC);
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void nullBusinessDay() {
-    new GeneratorSwapFixedCompoundedONCompounded(BRL_NAME, INDEX_CDI, BRL_DAYCOUNT_FIXED, null, BRl_IS_EOM, BRL_SPOT_LAG, NYC);
+    new GeneratorSwapFixedCompoundedONCompounded(BRL_NAME, INDEX_CDI, BRL_DAYCOUNT_FIXED, null, BRL_IS_EOM, BRL_SPOT_LAG, NYC);
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void nullIndex() {
-    new GeneratorSwapFixedCompoundedONCompounded(BRL_NAME, null, BRL_DAYCOUNT_FIXED, BRL_BUSINESS_DAY, BRl_IS_EOM, BRL_SPOT_LAG, NYC);
+    new GeneratorSwapFixedCompoundedONCompounded(BRL_NAME, null, BRL_DAYCOUNT_FIXED, BRL_BUSINESS_DAY, BRL_IS_EOM, BRL_SPOT_LAG, NYC);
   }
 
   @Test
@@ -61,7 +61,7 @@ public class GeneratorSwapFixedCompoundedONCompoundedTest {
     assertEquals("Generator ON Compounded: getter", BRL_NAME, USD_GENERATOR_OIS.getName());
     assertEquals("Generator ON Compounded: getter", BRL_DAYCOUNT_FIXED, USD_GENERATOR_OIS.getFixedLegDayCount());
     assertEquals("Generator ON Compounded: getter", BRL_BUSINESS_DAY, USD_GENERATOR_OIS.getBusinessDayConvention());
-    assertEquals("Generator ON Compounded: getter", BRl_IS_EOM, USD_GENERATOR_OIS.isEndOfMonth());
+    assertEquals("Generator ON Compounded: getter", BRL_IS_EOM, USD_GENERATOR_OIS.isEndOfMonth());
     assertEquals("Generator ON Compounded: getter", INDEX_CDI, USD_GENERATOR_OIS.getIndex());
     assertEquals("Generator ON Compounded: getter", BRL_SPOT_LAG, USD_GENERATOR_OIS.getSpotLag());
   }
@@ -74,7 +74,7 @@ public class GeneratorSwapFixedCompoundedONCompoundedTest {
     final GeneratorSwapFixedCompoundedONCompounded brlStandard = GeneratorSwapFixedCompoundedONCompoundedMaster.getInstance().getGenerator("BRLCDI", NYC);
     assertEquals("Generator ON Compounded: standard", BRL_NAME, brlStandard.getName());
     assertEquals("Generator ON Compounded: standard", BRL_BUSINESS_DAY, brlStandard.getBusinessDayConvention());
-    assertEquals("Generator ON Compounded: standard", BRl_IS_EOM, brlStandard.isEndOfMonth());
+    assertEquals("Generator ON Compounded: standard", BRL_IS_EOM, brlStandard.isEndOfMonth());
     assertEquals("Generator ON Compounded: standard", INDEX_CDI, brlStandard.getIndex());
 
   }

@@ -38,7 +38,7 @@ import com.opengamma.util.PlatformConfigUtils;
 public class BloombergTimeSeriesIdentifiersUpdater {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(BloombergTimeSeriesIdentifiersUpdater.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(BloombergTimeSeriesIdentifiersUpdater.class);
 
   /**
    * The Spring config file.
@@ -137,7 +137,7 @@ public class BloombergTimeSeriesIdentifiersUpdater {
       ExternalIdBundleWithDates updatedId = entry.getValue();
       if (doc != null && doc.getInfo().getExternalIdBundle().equals(updatedId) == false) {
         doc.getInfo().setExternalIdBundle(updatedId);
-        s_logger.debug("Updated {} with {}", doc.getUniqueId(), updatedId);
+        LOGGER.debug("Updated {} with {}", doc.getUniqueId(), updatedId);
         _htsMaster.update(doc);
       }
     }

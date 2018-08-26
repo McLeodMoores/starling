@@ -20,7 +20,7 @@ import com.opengamma.engine.value.ValueSpecification;
  * a tree table model 
  */
 public class ValueSpecificationToRequirementMapNode implements TreeTableNode {
-  private static final Logger s_logger = LoggerFactory.getLogger(ValueSpecificationToRequirementMapNode.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ValueSpecificationToRequirementMapNode.class);
   private static final Object NAME = "Map of ValueSpec->ValueReq";
   private Map<ValueSpecification, ValueRequirement> _map;
   private String _description;

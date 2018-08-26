@@ -24,7 +24,7 @@ import com.opengamma.engine.calcnode.SimpleCalculationNodeFactory;
  */
 public class SimpleCalculationNodeInvocationContainer<T extends com.opengamma.engine.calcnode.SimpleCalculationNodeInvocationContainer> implements SimpleCalculationNodeInvocationContainerMBean {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(CalculationNodesMBean.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(CalculationNodesMBean.class);
 
   private final T _container;
   private final SimpleCalculationNodeFactory _nodeFactory;
@@ -47,7 +47,7 @@ public class SimpleCalculationNodeInvocationContainer<T extends com.opengamma.en
     try {
       server.registerMBean(this, name);
     } catch (InstanceAlreadyExistsException e) {
-      s_logger.warn("JMX MBean {} already exists - replacing", name);
+      LOGGER.warn("JMX MBean {} already exists - replacing", name);
       server.unregisterMBean(name);
       server.registerMBean(this, name);
     }

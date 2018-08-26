@@ -33,7 +33,7 @@ public class WebLogoutResource extends AbstractWebResource {
   // take control of logout from Shiro for completeness
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(WebLogoutResource.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(WebLogoutResource.class);
 
   /**
    * Creates the resource.
@@ -52,9 +52,9 @@ public class WebLogoutResource extends AbstractWebResource {
       AuthUtils.getSubject().logout();
       hsr.getSession().invalidate();
     } catch (SessionException ex) {
-      s_logger.debug("Ignoring session exception during logout", ex);
+      LOGGER.debug("Ignoring session exception during logout", ex);
     } catch (RuntimeException ex) {
-      s_logger.debug("Ignoring unexpected exception during logout", ex);
+      LOGGER.debug("Ignoring unexpected exception during logout", ex);
     }
     URI uri;
     if (redirectUri != null) {

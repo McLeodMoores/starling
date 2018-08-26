@@ -59,7 +59,7 @@ public abstract class AbstractDbUserMaster<T extends UniqueIdentifiable>
     implements MetricProducer, ConfigurableDbChangeProvidingMaster {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(AbstractDbUserMaster.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(AbstractDbUserMaster.class);
 
   /**
    * The change manager.
@@ -209,7 +209,7 @@ public abstract class AbstractDbUserMaster<T extends UniqueIdentifiable>
   //-------------------------------------------------------------------------
   UniqueId doAdd(final T user) {
     ArgumentChecker.notNull(user, "user");
-    s_logger.debug("add {}", user);
+    LOGGER.debug("add {}", user);
     
     try (Timer.Context context = _addTimer.time()) {
       final Pair<UniqueId, Instant> added = getTransactionTemplateRetrying(getMaxRetries()).execute(new TransactionCallback<Pair<UniqueId, Instant>>() {
@@ -237,7 +237,7 @@ public abstract class AbstractDbUserMaster<T extends UniqueIdentifiable>
     ArgumentChecker.notNull(user.getUniqueId(), "user.uniqueId");
     ArgumentChecker.isTrue(user.getUniqueId().isVersioned(), "UniqueId must be versioned");
     checkScheme(user.getUniqueId());
-    s_logger.debug("update {}", user);
+    LOGGER.debug("update {}", user);
     
     try (Timer.Context context = _updateTimer.time()) {
       final Pair<UniqueId, Instant> updated = getTransactionTemplateRetrying(getMaxRetries()).execute(new TransactionCallback<Pair<UniqueId, Instant>>() {
@@ -273,7 +273,7 @@ public abstract class AbstractDbUserMaster<T extends UniqueIdentifiable>
   //-------------------------------------------------------------------------
   void doRemoveByName(String name) {
     ArgumentChecker.notNull(name, "name");
-    s_logger.debug("removeByName {}", name);
+    LOGGER.debug("removeByName {}", name);
     ObjectId oid = lookupName(name, OnDeleted.RETURN_NULL);
     if (oid == null) {
       return;  // already deleted
@@ -284,7 +284,7 @@ public abstract class AbstractDbUserMaster<T extends UniqueIdentifiable>
   void doRemoveById(final ObjectId objectId) {
     ArgumentChecker.notNull(objectId, "objectId");
     checkScheme(objectId);
-    s_logger.debug("removeById {}", objectId);
+    LOGGER.debug("removeById {}", objectId);
     
     try (Timer.Context context = _removeByIdTimer.time()) {
       if (idExists(objectId)) {

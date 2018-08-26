@@ -47,7 +47,7 @@ import com.opengamma.transport.FudgeConnectionReceiver;
  */
 public class RemoteNodeServer implements FudgeConnectionReceiver {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(RemoteNodeServer.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(RemoteNodeServer.class);
   
   /**
    * Callback interface for supplying a blacklist maintainer to each host invoker.
@@ -373,12 +373,12 @@ public class RemoteNodeServer implements FudgeConnectionReceiver {
 
       @Override
       protected void visitUnexpectedMessage(final RemoteCalcNodeMessage message) {
-        s_logger.warn("Unexpected message {}", message);
+        LOGGER.warn("Unexpected message {}", message);
       }
 
       @Override
       protected void visitReadyMessage(final Ready message) {
-        s_logger.info("Remote node {} connected - {}", message.getHostId(), connection);
+        LOGGER.info("Remote node {} connected - {}", message.getHostId(), connection);
         final RemoteNodeJobInvoker invoker = new RemoteNodeJobInvoker(getExecutorService(), message, connection, getIdentifierMap(), getFunctionCosts(), getBlacklistQuery(message.getHostId()),
             getBlacklistUpdate(message.getHostId()));
         if (_capabilitiesToAdd != null) {

@@ -25,13 +25,13 @@ public final class WriteReplaceHelper {
   /**
    * The cache of previously resolved (and forced accessible) {@code writeReplace} methods.
    */
-  private static final ConcurrentMap<Class<?>, Object> s_writeReplace = new ConcurrentHashMap<Class<?>, Object>();
+  private static final ConcurrentMap<Class<?>, Object> WRITE_REPLACE = new ConcurrentHashMap<Class<?>, Object>();
 
   private WriteReplaceHelper() {
   }
 
   private static Method getWriteReplace(final Class<?> clazz) {
-    Object method = s_writeReplace.get(clazz);
+    Object method = WRITE_REPLACE.get(clazz);
     if (method == null) {
       method = AccessController.doPrivileged(new PrivilegedAction<Method>() {
 
@@ -50,14 +50,14 @@ public final class WriteReplaceHelper {
       });
       if (method == null) {
         if (clazz.isAnonymousClass()) {
-          s_writeReplace.putIfAbsent(clazz, BAD_ANONYMOUS_CLASS);
+          WRITE_REPLACE.putIfAbsent(clazz, BAD_ANONYMOUS_CLASS);
           throw new OpenGammaRuntimeException("No serialization substitution available for anonymous inner class object " + clazz);
         } else {
-          s_writeReplace.putIfAbsent(clazz, NO_WRITE_REPLACE);
+          WRITE_REPLACE.putIfAbsent(clazz, NO_WRITE_REPLACE);
           return null;
         }
       } else {
-        s_writeReplace.putIfAbsent(clazz, method);
+        WRITE_REPLACE.putIfAbsent(clazz, method);
         return (Method) method;
       }
     } else {

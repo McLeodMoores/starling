@@ -31,7 +31,7 @@ import com.opengamma.util.paging.PagingRequest;
 public class SecurityFieldMappingTemplateGenerator extends AbstractTool<ToolContext> {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(SecurityFieldMappingTemplateGenerator.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(SecurityFieldMappingTemplateGenerator.class);
 
   //-------------------------------------------------------------------------
   /**
@@ -51,13 +51,13 @@ public class SecurityFieldMappingTemplateGenerator extends AbstractTool<ToolCont
     SecurityMetaDataRequest metaRequest = new SecurityMetaDataRequest();
     SecurityMetaDataResult metaData = securityMaster.metaData(metaRequest);
     for (String securityType : metaData.getSecurityTypes()) {
-      s_logger.info("Processing security type " + securityType);
+      LOGGER.info("Processing security type " + securityType);
       SecuritySearchRequest searchRequest = new SecuritySearchRequest();
       searchRequest.setName("*");
       searchRequest.setSecurityType(securityType);
       searchRequest.setPagingRequest(PagingRequest.ONE);
       SecuritySearchResult search = securityMaster.search(searchRequest);
-      s_logger.info("Search returned " + search.getPaging().getTotalItems() + " securities");
+      LOGGER.info("Search returned " + search.getPaging().getTotalItems() + " securities");
       dumpSecurityStructure(csvWriter, securityType, search.getFirstSecurity());
     }
     csvWriter.close();
@@ -65,16 +65,16 @@ public class SecurityFieldMappingTemplateGenerator extends AbstractTool<ToolCont
 
   private void dumpSecurityStructure(CSVWriter csvWriter, String securityType, ManageableSecurity firstSecurity) {
     if (firstSecurity == null) {
-      s_logger.error("null security passed to dumpSecurityStructure");
+      LOGGER.error("null security passed to dumpSecurityStructure");
       return;
     }
-    s_logger.info("Processing security " + firstSecurity);
+    LOGGER.info("Processing security " + firstSecurity);
     csvWriter.writeNext(new String[] {securityType });
     csvWriter.writeNext(new String[] {firstSecurity.metaBean().beanName() });
     csvWriter.writeNext(new String[] {"Type", "Name", "Example"});
     Iterable<MetaProperty<?>> metaPropertyIterable = firstSecurity.metaBean().metaPropertyIterable();
     for (MetaProperty<?> metaProperty : metaPropertyIterable) {
-      s_logger.info("Field" + metaProperty.name());
+      LOGGER.info("Field" + metaProperty.name());
       String strValue;
       try {
         strValue = metaProperty.getString(firstSecurity);

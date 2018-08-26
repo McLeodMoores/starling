@@ -55,11 +55,12 @@ import com.opengamma.util.money.Currency;
 import com.opengamma.util.time.DateUtils;
 import com.opengamma.util.time.Tenor;
 
+// CSOFF
 /**
  * Converts specifications into fully resolved security definitions
  */
 public class FixedIncomeStripIdentifierAndMaturityBuilder {
-  private static final Logger s_logger = LoggerFactory.getLogger(FixedIncomeStripIdentifierAndMaturityBuilder.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(FixedIncomeStripIdentifierAndMaturityBuilder.class);
   private static final LocalTime CASH_EXPIRY_TIME = LocalTime.of(11, 00);
 
   private final RegionSource _regionSource;
@@ -719,7 +720,7 @@ public class FixedIncomeStripIdentifierAndMaturityBuilder {
     ExternalId underlyingIdentifier;
     int settlementDays;
     if (underlyingId == null) {
-      s_logger.info("Could not get convention for underlying from {}; trying tenor-based convention", strip);
+      LOGGER.info("Could not get convention for underlying from {}; trying tenor-based convention", strip);
       final ConventionBundle fraConvention = _conventionBundleSource.getConventionBundle(ExternalId.of(InMemoryConventionBundleMaster.SIMPLE_NAME_SCHEME, spec.getCurrency().getCode() + "_" + months
           + "M_FRA"));
       if (fraConvention == null) {
@@ -737,7 +738,7 @@ public class FixedIncomeStripIdentifierAndMaturityBuilder {
     } else {
       ConventionBundle fraConvention = _conventionBundleSource.getConventionBundle(underlyingId);
       if (fraConvention == null || fraConvention.getIdentifiers().size() != 1) {
-        s_logger.info("Could not get unique convention for underlying from {}; trying tenor-based convention", strip);
+        LOGGER.info("Could not get unique convention for underlying from {}; trying tenor-based convention", strip);
         fraConvention = _conventionBundleSource.getConventionBundle(ExternalId.of(InMemoryConventionBundleMaster.SIMPLE_NAME_SCHEME, spec.getCurrency().getCode() + "_" + months
             + "M_FRA"));
         if (fraConvention == null) {
@@ -795,7 +796,7 @@ public class FixedIncomeStripIdentifierAndMaturityBuilder {
     FloatingInterestRateLeg iborLeg;
     final ExternalId underlyingId = getUnderlyingId(spec, strip);
     if (underlyingId == null) {
-      s_logger.info("Could not get convention for underlying from {}; trying tenor-based convention", strip);
+      LOGGER.info("Could not get convention for underlying from {}; trying tenor-based convention", strip);
       final ExternalId id = ExternalId.of(InMemoryConventionBundleMaster.SIMPLE_NAME_SCHEME, spec.getCurrency().getCode() + "_" + months + "M_SWAP");
       ConventionBundle floatingLegConvention = _conventionBundleSource.getConventionBundle(id);
       if (floatingLegConvention == null) {
@@ -816,7 +817,7 @@ public class FixedIncomeStripIdentifierAndMaturityBuilder {
     } else {
       final ConventionBundle underlyingConvention = _conventionBundleSource.getConventionBundle(underlyingId);
       if (underlyingConvention == null || underlyingConvention.getIdentifiers().size() != 1) {
-        s_logger.info("Could not get unique convention for underlying from {}; trying tenor-based convention", strip);
+        LOGGER.info("Could not get unique convention for underlying from {}; trying tenor-based convention", strip);
         ConventionBundle floatingLegConvention = _conventionBundleSource.getConventionBundle(ExternalId.of(InMemoryConventionBundleMaster.SIMPLE_NAME_SCHEME,
             spec.getCurrency().getCode() + "_" + months + "M_SWAP"));
         if (floatingLegConvention == null) {
@@ -891,7 +892,7 @@ public class FixedIncomeStripIdentifierAndMaturityBuilder {
     FloatingInterestRateLeg iborLeg;
     final ExternalId underlyingId = getUnderlyingId(spec, strip);
     if (underlyingId == null) {
-      s_logger.info("Could not get convention for underlying from {}; trying tenor-based convention", strip);
+      LOGGER.info("Could not get convention for underlying from {}; trying tenor-based convention", strip);
       final ExternalId id = ExternalId.of(InMemoryConventionBundleMaster.SIMPLE_NAME_SCHEME, spec.getCurrency().getCode() + "_28D_SWAP");
       final ConventionBundle floatingLegConvention = _conventionBundleSource.getConventionBundle(id);
       if (floatingLegConvention == null) {
@@ -908,7 +909,7 @@ public class FixedIncomeStripIdentifierAndMaturityBuilder {
     } else {
       final ConventionBundle underlyingConvention = _conventionBundleSource.getConventionBundle(underlyingId);
       if (underlyingConvention == null || underlyingConvention.getIdentifiers().size() != 1) {
-        s_logger.info("Could not get unique convention for underlying from {}; trying tenor-based convention", strip);
+        LOGGER.info("Could not get unique convention for underlying from {}; trying tenor-based convention", strip);
         final ConventionBundle floatingLegConvention = _conventionBundleSource.getConventionBundle(ExternalId.of(InMemoryConventionBundleMaster.SIMPLE_NAME_SCHEME,
             spec.getCurrency().getCode() + "_28D_SWAP"));
         if (floatingLegConvention == null) {

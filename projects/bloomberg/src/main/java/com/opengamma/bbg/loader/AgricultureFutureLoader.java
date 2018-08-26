@@ -46,7 +46,7 @@ import com.opengamma.util.time.Expiry;
 public final class AgricultureFutureLoader extends SecurityLoader {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(AgricultureFutureLoader.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(AgricultureFutureLoader.class);
   /**
    * The fields to load from Bloomberg.
    */
@@ -76,7 +76,7 @@ public final class AgricultureFutureLoader extends SecurityLoader {
    * @param referenceDataProvider  the provider, not null
    */
   public  AgricultureFutureLoader(ReferenceDataProvider referenceDataProvider) {
-    super(s_logger, referenceDataProvider, SecurityType.AGRICULTURE_FUTURE);
+    super(LOGGER, referenceDataProvider, SecurityType.AGRICULTURE_FUTURE);
   }
 
   //-------------------------------------------------------------------------
@@ -95,39 +95,39 @@ public final class AgricultureFutureLoader extends SecurityLoader {
 
     // validate params
     if (!isValidField(bbgUnique)) {
-      s_logger.warn("bbgUnique is null, cannot construct agriculture future security");
+      LOGGER.warn("bbgUnique is null, cannot construct agriculture future security");
       return null;
     }
     if (!isValidField(name)) {
-      s_logger.warn("name is null, cannot construct agriculture future security");
+      LOGGER.warn("name is null, cannot construct agriculture future security");
       return null;
     }
     if (!isValidField(expiryDate)) {
-      s_logger.warn("expiry date is null, cannot construct agriculture future security");
+      LOGGER.warn("expiry date is null, cannot construct agriculture future security");
       return null;
     }
     if (!isValidField(futureTradingHours)) {
-      s_logger.warn("futures trading hours is null, cannot construct bond future security");
+      LOGGER.warn("futures trading hours is null, cannot construct bond future security");
       return null;
     }
     if (!isValidField(micExchangeCode)) {
-      s_logger.warn("settlement exchange is null, cannot construct agriculture future security");
+      LOGGER.warn("settlement exchange is null, cannot construct agriculture future security");
       return null;
     }
     if (!isValidField(currencyStr)) {
-      s_logger.info("currency is null, cannot construct agriculture future security");
+      LOGGER.info("currency is null, cannot construct agriculture future security");
       return null;
     }
     if (!isValidField(futureCategory)) {
-      s_logger.info("futureCategory is null, cannot construct agriculture future security");
+      LOGGER.info("futureCategory is null, cannot construct agriculture future security");
       return null;
     }
     if (!isValidField(unitName)) {
-      s_logger.info("unitName is null, cannot construct agriculture future security");
+      LOGGER.info("unitName is null, cannot construct agriculture future security");
       return null;
     }
     if (unitNumber == null) {
-      s_logger.info("unitNumber is null, cannot construct agriculture future security");
+      LOGGER.info("unitNumber is null, cannot construct agriculture future security");
       return null;
     }
     // decode string params

@@ -12,12 +12,12 @@ import com.opengamma.integration.tool.portfolio.xml.v1_0.conversion.PortfolioCon
 
 public class SchemaRegister {
 
-  private static final Map<SchemaVersion, ? extends PortfolioConversion> register = ImmutableMap.of(
+  private static final Map<SchemaVersion, ? extends PortfolioConversion> REGISTER = ImmutableMap.of(
       new SchemaVersion("1.0"), new PortfolioConversionV1_0()
   );
 
   public PortfolioConversion getConverterForSchema(SchemaVersion version) {
-    return register.get(version);
+    return REGISTER.get(version);
   }
 
 }

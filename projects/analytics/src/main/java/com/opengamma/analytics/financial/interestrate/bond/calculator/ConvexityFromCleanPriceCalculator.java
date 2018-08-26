@@ -22,7 +22,7 @@ public final class ConvexityFromCleanPriceCalculator extends InstrumentDerivativ
   /**
    * The calculator instance.
    */
-  private static final ConvexityFromCleanPriceCalculator s_instance = new ConvexityFromCleanPriceCalculator();
+  private static final ConvexityFromCleanPriceCalculator INSTANCE = new ConvexityFromCleanPriceCalculator();
   private static final BondCapitalIndexedSecurityDiscountingMethod METHOD_INFLATION_BOND_SECURITY = BondCapitalIndexedSecurityDiscountingMethod.getInstance();
   /**
    * The fixed coupon bond method.
@@ -34,7 +34,7 @@ public final class ConvexityFromCleanPriceCalculator extends InstrumentDerivativ
    * @return The instance.
    */
   public static ConvexityFromCleanPriceCalculator getInstance() {
-    return s_instance;
+    return INSTANCE;
   }
 
   /**

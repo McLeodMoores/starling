@@ -49,7 +49,6 @@ public class CapFloorZeroCouponInterpolationCalibrationObjectiveTest {
   private static final ZonedDateTime START_DATE = DateUtils.getUTCDate(2011, 9, 7);
   private static final ZonedDateTime SETTLEMENT_DATE = DateUtils.getUTCDate(2011, 9, 9);
   private static final double NOTIONAL = 10000; //100m
-  private static final double[] STRIKES = {-.01, .00, .01, .02, .03, .04 };
   private static final boolean IS_CAP = true;
   private static final InflationIssuerProviderDiscount MARKET = MulticurveProviderDiscountDataSets.createMarket1();
   private static final IndexPrice[] PRICE_INDEXES = MARKET.getPriceIndexes().toArray(new IndexPrice[MARKET.getPriceIndexes().size()]);
@@ -64,15 +63,15 @@ public class CapFloorZeroCouponInterpolationCalibrationObjectiveTest {
 
   private static final ZonedDateTime REFERENCE_DATE = DateUtils.getUTCDate(2011, 9, 7);
 
-  private static final DoubleTimeSeries<ZonedDateTime> priceIndexTS = ImmutableZonedDateTimeDoubleTimeSeries.ofUTC(
+  private static final DoubleTimeSeries<ZonedDateTime> PRICE_INDEX_TS = ImmutableZonedDateTimeDoubleTimeSeries.ofUTC(
       new ZonedDateTime[] {DateUtils.getUTCDate(2011, 6, 30), DateUtils.getUTCDate(2011, 7, 31) }, new double[] {100, 100 });
   private static final CapFloorInflationZeroCouponInterpolationBlackSmileMethod METHOD = CapFloorInflationZeroCouponInterpolationBlackSmileMethod.getInstance();
   double[][] marketPrices = new double[6][30];
 
   // volatility matrix first guess details
   private static double[] expiryTimes1 = new double[30];
-  private static final double[] strikes = {-.01, .00, .01, .02, .03, .04 };
-  private static final double[][] volatilities = { {.01, .01, .01, .01, .01, .01 }, {.01, .01, .01, .01, .01, .01 }, {.01, .01, .01, .01, .01, .01 }, {.01, .01, .01, .01, .01, .01 },
+  private static final double[] STRIKES = {-.01, .00, .01, .02, .03, .04 };
+  private static final double[][] VOLATILITIES = { {.01, .01, .01, .01, .01, .01 }, {.01, .01, .01, .01, .01, .01 }, {.01, .01, .01, .01, .01, .01 }, {.01, .01, .01, .01, .01, .01 },
     {.01, .01, .01, .01, .01, .01 }, {.01, .01, .01, .01, .01, .01 }, {.01, .01, .01, .01, .01, .01 }, {.01, .01, .01, .01, .01, .01 }, {.01, .01, .01, .01, .01, .01 },
     {.01, .01, .01, .01, .01, .01 },
     {.01, .01, .01, .01, .01, .01 }, {.01, .01, .01, .01, .01, .01 }, {.01, .01, .01, .01, .01, .01 }, {.01, .01, .01, .01, .01, .01 },
@@ -81,9 +80,9 @@ public class CapFloorZeroCouponInterpolationCalibrationObjectiveTest {
     {.01, .01, .01, .01, .01, .01 }, {.01, .01, .01, .01, .01, .01 }, {.01, .01, .01, .01, .01, .01 }, {.01, .01, .01, .01, .01, .01 },
     {.01, .01, .01, .01, .01, .01 }, {.01, .01, .01, .01, .01, .01 }, {.01, .01, .01, .01, .01, .01 }, {.01, .01, .01, .01, .01, .01 }, {.01, .01, .01, .01, .01, .01 },
     {.01, .01, .01, .01, .01, .01 } };
-  private static final int[] availabelTenor = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 15, 20, 25, 30 };
-  CapFloorInflationZeroCouponInterpolationDefinition[][] CAP_DEFINITIONS = new CapFloorInflationZeroCouponInterpolationDefinition[6][availabelTenor.length];
-  CapFloorInflationZeroCouponInterpolation[][] CAPS = new CapFloorInflationZeroCouponInterpolation[6][availabelTenor.length];
+  private static final int[] AVAILABLE_TENOR = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 15, 20, 25, 30 };
+  CapFloorInflationZeroCouponInterpolationDefinition[][] CAP_DEFINITIONS = new CapFloorInflationZeroCouponInterpolationDefinition[6][AVAILABLE_TENOR.length];
+  CapFloorInflationZeroCouponInterpolation[][] CAPS = new CapFloorInflationZeroCouponInterpolation[6][AVAILABLE_TENOR.length];
 
   @Test
   /**
@@ -92,12 +91,12 @@ public class CapFloorZeroCouponInterpolationCalibrationObjectiveTest {
   public void calibration() {
     // creation of the basket of the calibration instruments.
     for (int loop1 = 0; loop1 < STRIKES.length; loop1++) {
-      for (int loop2 = 0; loop2 < availabelTenor.length; loop2++) {
-        final Period tenor = Period.ofYears(availabelTenor[loop2]);
+      for (int loop2 = 0; loop2 < AVAILABLE_TENOR.length; loop2++) {
+        final Period tenor = Period.ofYears(AVAILABLE_TENOR[loop2]);
         final ZonedDateTime payementDate = ScheduleCalculator.getAdjustedDate(START_DATE, tenor, BUSINESS_DAY, CALENDAR_EUR);
         CAP_DEFINITIONS[loop1][loop2] = CapFloorInflationZeroCouponInterpolationDefinition.from(SETTLEMENT_DATE, payementDate, NOTIONAL, PRICE_INDEX_EUR, MONTH_LAG, MONTH_LAG,
-            availabelTenor[loop2], LAST_KNOWN_FIXING_DATE, STRIKES[loop1], IS_CAP);
-        CAPS[loop1][loop2] = (CapFloorInflationZeroCouponInterpolation) CAP_DEFINITIONS[loop1][loop2].toDerivative(REFERENCE_DATE, priceIndexTS);
+            AVAILABLE_TENOR[loop2], LAST_KNOWN_FIXING_DATE, STRIKES[loop1], IS_CAP);
+        CAPS[loop1][loop2] = (CapFloorInflationZeroCouponInterpolation) CAP_DEFINITIONS[loop1][loop2].toDerivative(REFERENCE_DATE, PRICE_INDEX_TS);
       }
     }
 
@@ -108,7 +107,7 @@ public class CapFloorZeroCouponInterpolationCalibrationObjectiveTest {
     }
 
     // parameters bundle that we want to calibrate
-    final InflationZeroCouponCapFloorParameters parameters = new InflationZeroCouponCapFloorParameters(expiryTimes1, strikes, volatilities, PRICE_INDEX_EUR);
+    final InflationZeroCouponCapFloorParameters parameters = new InflationZeroCouponCapFloorParameters(expiryTimes1, STRIKES, VOLATILITIES, PRICE_INDEX_EUR);
     // Objective function that we use in the calibration
     final SuccessiveRootFinderInflationZeroCouponCapFloorCalibrationObjective objective = new SuccessiveRootFinderInflationZeroCouponCapFloorCalibrationObjective(parameters, CUR);
     // Calibration engine
@@ -118,7 +117,7 @@ public class CapFloorZeroCouponInterpolationCalibrationObjectiveTest {
     // Creation of the market prices we will use in the calibration.
     //For this example we calculate the market prices using a matrix of volatility, but normally market prices should be linked to bloomberg tickers (for example or another data provider)
     for (int loop1 = 0; loop1 < STRIKES.length; loop1++) {
-      for (int loop2 = 0; loop2 < availabelTenor.length; loop2++) {
+      for (int loop2 = 0; loop2 < AVAILABLE_TENOR.length; loop2++) {
         marketPrices[loop1][loop2] = METHOD.presentValue(CAPS[loop1][loop2], BLACK_INFLATION).getAmount(CUR);
       }
     }
@@ -126,7 +125,7 @@ public class CapFloorZeroCouponInterpolationCalibrationObjectiveTest {
     // we add each instruments to the calibration engine
     // here we are calibration all strikes and maturities (it is possible to calibrate on only few instruments but there is no reason to do so)
     for (int loop1 = 0; loop1 < STRIKES.length; loop1++) {
-      for (int loop2 = 0; loop2 < availabelTenor.length; loop2++) {
+      for (int loop2 = 0; loop2 < AVAILABLE_TENOR.length; loop2++) {
         calibrationEngine.addInstrument(CAPS[loop1][loop2], marketPrices[loop1][loop2]);
       }
     }
@@ -137,7 +136,7 @@ public class CapFloorZeroCouponInterpolationCalibrationObjectiveTest {
     // We tests if we
     final MultipleCurrencyAmount[][] pvCapYearOnYear = new MultipleCurrencyAmount[STRIKES.length][CAPS[0].length];
     for (int loop1 = 0; loop1 < STRIKES.length; loop1++) {
-      for (int loop2 = 0; loop2 < availabelTenor.length; loop2++) {
+      for (int loop2 = 0; loop2 < AVAILABLE_TENOR.length; loop2++) {
         final Interpolator2D interpolator = objective.getInflationCapZeroCouponProvider().getBlackParameters().getVolatilitySurface().getInterpolator();
         final BlackSmileCapInflationZeroCouponParameters CalibratedBlackSmileCapInflationZeroCouponParameters = new BlackSmileCapInflationZeroCouponParameters(
             objective.getInflationCapZeroCouponParameters(), interpolator);
@@ -154,11 +153,11 @@ public class CapFloorZeroCouponInterpolationCalibrationObjectiveTest {
   public void performance() {
     // creation of the basket of the calibration instruments.
     for (int loop1 = 0; loop1 < STRIKES.length; loop1++) {
-      for (int loop2 = 0; loop2 < availabelTenor.length; loop2++) {
-        final Period tenor = Period.ofYears(availabelTenor[loop2]);
+      for (int loop2 = 0; loop2 < AVAILABLE_TENOR.length; loop2++) {
+        final Period tenor = Period.ofYears(AVAILABLE_TENOR[loop2]);
         final ZonedDateTime payementDate = ScheduleCalculator.getAdjustedDate(START_DATE, tenor, BUSINESS_DAY, CALENDAR_EUR);
         CAP_DEFINITIONS[loop1][loop2] = CapFloorInflationZeroCouponInterpolationDefinition.from(SETTLEMENT_DATE, payementDate, NOTIONAL, PRICE_INDEX_EUR, MONTH_LAG, MONTH_LAG,
-            availabelTenor[loop2], LAST_KNOWN_FIXING_DATE, STRIKES[loop1], IS_CAP);
+            AVAILABLE_TENOR[loop2], LAST_KNOWN_FIXING_DATE, STRIKES[loop1], IS_CAP);
         CAPS[loop1][loop2] = CAP_DEFINITIONS[loop1][loop2].toDerivative(REFERENCE_DATE);
       }
     }
@@ -170,7 +169,7 @@ public class CapFloorZeroCouponInterpolationCalibrationObjectiveTest {
     }
 
     // parameters bundle that we want to calibrate
-    final InflationZeroCouponCapFloorParameters parameters = new InflationZeroCouponCapFloorParameters(expiryTimes1, strikes, volatilities, PRICE_INDEX_EUR);
+    final InflationZeroCouponCapFloorParameters parameters = new InflationZeroCouponCapFloorParameters(expiryTimes1, STRIKES, VOLATILITIES, PRICE_INDEX_EUR);
     // Objective function that we use in the calibration
     final SuccessiveRootFinderInflationZeroCouponCapFloorCalibrationObjective objective = new SuccessiveRootFinderInflationZeroCouponCapFloorCalibrationObjective(parameters, CUR);
     // Calibration engine
@@ -180,7 +179,7 @@ public class CapFloorZeroCouponInterpolationCalibrationObjectiveTest {
     // Creation of the market prices we will use in the calibration.
     //For this example we calculate the market prices using a matrix of volatility, but normally market prices should be linked to bloomberg tickers (for example or another data provider)
     for (int loop1 = 0; loop1 < STRIKES.length; loop1++) {
-      for (int loop2 = 0; loop2 < availabelTenor.length; loop2++) {
+      for (int loop2 = 0; loop2 < AVAILABLE_TENOR.length; loop2++) {
         marketPrices[loop1][loop2] = METHOD.presentValue(CAPS[loop1][loop2], BLACK_INFLATION).getAmount(CUR);
       }
     }
@@ -188,7 +187,7 @@ public class CapFloorZeroCouponInterpolationCalibrationObjectiveTest {
     // we add each instruments to the calibration engine
     // here we are calibration all strikes and maturities (it is possible to calibrate on only few instruments but there is no reason to do so)
     for (int loop1 = 0; loop1 < STRIKES.length; loop1++) {
-      for (int loop2 = 0; loop2 < availabelTenor.length; loop2++) {
+      for (int loop2 = 0; loop2 < AVAILABLE_TENOR.length; loop2++) {
         calibrationEngine.addInstrument(CAPS[loop1][loop2], marketPrices[loop1][loop2]);
       }
     }

@@ -46,7 +46,7 @@ import com.opengamma.util.tuple.Pairs;
 public final class SecurityLinkResolver {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(SecurityLinkResolver.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(SecurityLinkResolver.class);
 
   /**
    * The executor service.
@@ -135,7 +135,7 @@ public final class SecurityLinkResolver {
         _securitySource.addToCache(security);
       }
     }
-    s_logger.debug("Submitting {} resolution jobs for {} links", securityLinkMap.size(), securityLinks.size());
+    LOGGER.debug("Submitting {} resolution jobs for {} links", securityLinkMap.size(), securityLinks.size());
     // Submit a job for each "unique" link. The job will serially resolve all "identical" links as they will
     // be in the cache at that point.
     for (Map.Entry<Pair<ObjectId, ExternalIdBundle>, Object> linkEntry : securityLinkMap.entrySet()) {
@@ -153,15 +153,15 @@ public final class SecurityLinkResolver {
         final Future<Pair<ObjectId, ExternalIdBundle>> future = completionService.take();
         final Pair<ObjectId, ExternalIdBundle> key = future.get();
         if (securityLinkMap.remove(key) == null) {
-          s_logger.warn("Completion key {} wasn't in the job map {}", key, securityLinkMap);
+          LOGGER.warn("Completion key {} wasn't in the job map {}", key, securityLinkMap);
           throw new OpenGammaRuntimeException("Internal error resolving securities");
         }
       } catch (InterruptedException ex) {
         Thread.interrupted();
-        s_logger.warn("Interrupted, so didn't finish resolution");
+        LOGGER.warn("Interrupted, so didn't finish resolution");
         break;
       } catch (Exception ex) {
-        s_logger.warn("Unable to resolve security", ex);
+        LOGGER.warn("Unable to resolve security", ex);
         break;
       }
     }
@@ -200,13 +200,13 @@ public final class SecurityLinkResolver {
     if (LinkUtils.isValid(position.getSecurityLink())) {
       links.add(position.getSecurityLink());
     } else {
-      s_logger.warn("Invalid link on position {}", position.getUniqueId());
+      LOGGER.warn("Invalid link on position {}", position.getUniqueId());
     }
     for (Trade trade : position.getTrades()) {
       if (LinkUtils.isValid(trade.getSecurityLink())) {
         links.add(trade.getSecurityLink());
       } else {
-        s_logger.warn("Invalid link on trade {} within position {}", trade.getUniqueId(), position.getUniqueId());
+        LOGGER.warn("Invalid link on trade {} within position {}", trade.getUniqueId(), position.getUniqueId());
       }
     }
     resolveSecurities(links);
@@ -228,13 +228,13 @@ public final class SecurityLinkResolver {
         if (LinkUtils.isValid(position.getSecurityLink())) {
           links.add(position.getSecurityLink());
         } else {
-          s_logger.warn("Invalid link on position {}", position.getUniqueId());
+          LOGGER.warn("Invalid link on position {}", position.getUniqueId());
         }
         for (Trade trade : position.getTrades()) {
           if (LinkUtils.isValid(trade.getSecurityLink())) {
             links.add(trade.getSecurityLink());
           } else {
-            s_logger.warn("Invalid link in trade {} associated with position {}", trade.getUniqueId(), position.getUniqueId());
+            LOGGER.warn("Invalid link in trade {} associated with position {}", trade.getUniqueId(), position.getUniqueId());
           }
         }
       }

@@ -65,7 +65,7 @@ import com.opengamma.financial.analytics.timeseries.HistoricalTimeSeriesBundle;
 @Deprecated
 public abstract class MultiYieldCurveSeriesFunction extends AbstractFunction.NonCompiledInvoker {
   /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(MultiYieldCurveSeriesFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(MultiYieldCurveSeriesFunction.class);
 
   private ConfigDBCurveCalculationConfigSource _curveCalculationConfigSource;
 
@@ -176,14 +176,14 @@ public abstract class MultiYieldCurveSeriesFunction extends AbstractFunction.Non
     final String curveCalculationConfigName = Iterables.getOnlyElement(curveCalculationConfigNames);
     final MultiCurveCalculationConfig curveCalculationConfig = _curveCalculationConfigSource.getConfig(curveCalculationConfigName);
     if (curveCalculationConfig == null) {
-      s_logger.error("Could not find curve calculation configuration named {}", curveCalculationConfigName);
+      LOGGER.error("Could not find curve calculation configuration named {}", curveCalculationConfigName);
       return null;
     }
     if (!curveCalculationConfig.getCalculationMethod().equals(getCalculationMethod())) {
       return null;
     }
     if (!curveCalculationConfig.getTarget().equals(target.toSpecification())) {
-      s_logger.warn("Invalid target for {}, was {} - expected {}", curveCalculationConfigName, target, curveCalculationConfig.getTarget());
+      LOGGER.warn("Invalid target for {}, was {} - expected {}", curveCalculationConfigName, target, curveCalculationConfig.getTarget());
       return null;
     }
     final Set<String> rootFinderAbsoluteTolerance = constraints.getValues(PROPERTY_ROOT_FINDER_ABSOLUTE_TOLERANCE);

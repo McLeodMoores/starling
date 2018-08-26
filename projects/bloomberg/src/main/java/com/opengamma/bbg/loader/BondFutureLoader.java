@@ -52,7 +52,7 @@ import com.opengamma.util.time.Expiry;
 public class BondFutureLoader extends SecurityLoader {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(BondFutureLoader.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(BondFutureLoader.class);
   /**
    * The fields to load from Bloomberg.
    */
@@ -85,7 +85,7 @@ public class BondFutureLoader extends SecurityLoader {
    * @param referenceDataProvider  the provider, not null
    */
   public BondFutureLoader(ReferenceDataProvider referenceDataProvider) {
-    super(s_logger, referenceDataProvider, SecurityType.BOND_FUTURE);
+    super(LOGGER, referenceDataProvider, SecurityType.BOND_FUTURE);
   }
 
   //-------------------------------------------------------------------------
@@ -102,39 +102,39 @@ public class BondFutureLoader extends SecurityLoader {
     String bbgUnique = fieldData.getString(FIELD_ID_BBG_UNIQUE);
     Double unitAmount = fieldData.getDouble(FIELD_FUT_CONT_SIZE);
     if (!fieldData.hasField(FIELD_FUT_CONT_SIZE) || unitAmount == null) {
-      s_logger.warn("FIELD_FUT_VAL_PT does not contain a numeric value (" + fieldData.getString(FIELD_FUT_VAL_PT) + ")");
+      LOGGER.warn("FIELD_FUT_VAL_PT does not contain a numeric value (" + fieldData.getString(FIELD_FUT_VAL_PT) + ")");
       return null;
     }
 
     if (!isValidField(bbgUnique)) {
-      s_logger.warn("bbgUnique is null, cannot construct bond future security");
+      LOGGER.warn("bbgUnique is null, cannot construct bond future security");
       return null;
     }
     if (!isValidField(futureTradingHours)) {
-      s_logger.warn("futures trading hours is null, cannot construct bond future security");
+      LOGGER.warn("futures trading hours is null, cannot construct bond future security");
       return null;
     }
     if (!isValidField(expiryDate)) {
-      s_logger.warn("expiry date is null, cannot construct bond future security");
+      LOGGER.warn("expiry date is null, cannot construct bond future security");
       return null;
     }
     if (!isValidField(micExchangeCode)) {
-      s_logger.warn("settlement exchange is null, cannot construct bond future security");
+      LOGGER.warn("settlement exchange is null, cannot construct bond future security");
       return null;
     }
     if (!isValidField(currencyStr)) {
-      s_logger.warn("currency is null, cannot construct bond future security");
+      LOGGER.warn("currency is null, cannot construct bond future security");
       return null;
     }
     if (!isValidField(category)) {
-      s_logger.warn("category is null, cannot construct bond future security");
+      LOGGER.warn("category is null, cannot construct bond future security");
       return null;
     }
     if (!isValidField(firstDeliveryDateStr)) {
-      s_logger.warn("first delivery date is invalid, cannot construct bond future security");
+      LOGGER.warn("first delivery date is invalid, cannot construct bond future security");
     }
     if (!isValidField(lastDeliveryDateStr)) {
-      s_logger.warn("lastt delivery date is invalid, cannot construct bond future security");
+      LOGGER.warn("lastt delivery date is invalid, cannot construct bond future security");
     }
 
     Expiry expiry = decodeExpiry(expiryDate, futureTradingHours);

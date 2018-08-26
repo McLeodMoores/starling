@@ -70,7 +70,7 @@ public class DbRoleMaster
   private static final String USR_ROLE_EVENT_SEQ = "usr_role_event_seq";
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(DbRoleMaster.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(DbRoleMaster.class);
 
   /**
    * The default scheme for unique identifiers.
@@ -120,7 +120,7 @@ public class DbRoleMaster
   @Override
   public ManageableRole getByName(String roleName) {
     ArgumentChecker.notNull(roleName, "roleName");
-    s_logger.debug("getByName {}", roleName);
+    LOGGER.debug("getByName {}", roleName);
     
     ObjectId oid = lookupName(roleName, OnDeleted.EXCEPTION);
     return doGetById(oid, new RoleExtractor());
@@ -129,7 +129,7 @@ public class DbRoleMaster
   @Override
   public ManageableRole getById(ObjectId objectId) {
     ArgumentChecker.notNull(objectId, "objectId");
-    s_logger.debug("getById {}", objectId);
+    LOGGER.debug("getById {}", objectId);
     checkScheme(objectId);
     
     return doGetById(objectId, new RoleExtractor());
@@ -270,7 +270,7 @@ public class DbRoleMaster
   @Override
   public UniqueId save(ManageableRole role) {
     ArgumentChecker.notNull(role, "role");
-    s_logger.debug("save {}", role.getRoleName());
+    LOGGER.debug("save {}", role.getRoleName());
     if (role.getUniqueId() != null) {
       return update(role);
     } else {
@@ -318,7 +318,7 @@ public class DbRoleMaster
   public RoleSearchResult search(RoleSearchRequest request) {
     ArgumentChecker.notNull(request, "request");
     ArgumentChecker.notNull(request.getPagingRequest(), "request.pagingRequest");
-    s_logger.debug("search {}", request);
+    LOGGER.debug("search {}", request);
     if ((request.getObjectIds() != null && request.getObjectIds().isEmpty())) {
       Paging paging = Paging.of(request.getPagingRequest(), 0);
       return new RoleSearchResult(paging, new ArrayList<ManageableRole>());
@@ -358,11 +358,11 @@ public class DbRoleMaster
       paging = Paging.of(pagingRequest, results);
       results.addAll(namedJdbc.query(sql[0], args, new RoleExtractor()));
     } else {
-      s_logger.debug("executing sql {}", sql[1]);
+      LOGGER.debug("executing sql {}", sql[1]);
       final int count = namedJdbc.queryForObject(sql[1], args, Integer.class);
       paging = Paging.of(pagingRequest, count);
       if (count > 0 && pagingRequest.equals(PagingRequest.NONE) == false) {
-        s_logger.debug("executing sql {}", sql[0]);
+        LOGGER.debug("executing sql {}", sql[0]);
         results.addAll(namedJdbc.query(sql[0], args, new RoleExtractor()));
       }
     }
@@ -373,7 +373,7 @@ public class DbRoleMaster
   @Override
   public RoleEventHistoryResult eventHistory(RoleEventHistoryRequest request) {
     ArgumentChecker.notNull(request, "request");
-    s_logger.debug("eventHistory {}", request);
+    LOGGER.debug("eventHistory {}", request);
     ObjectId objectId = request.getObjectId();
     if (objectId == null) {
       objectId = lookupName(request.getRoleName(), OnDeleted.RETURN_ID);

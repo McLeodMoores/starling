@@ -49,7 +49,7 @@ public class DataBatchRunResourceTest {
   private RiskRun _riskRun;
   private BatchMaster _underlying;
   private DataBatchRunResource _resource;
-  private static final ObjectId _riskRunId = ObjectId.of("Test", "RiskRun");
+  private static final ObjectId RISK_RUN_ID = ObjectId.of("Test", "RiskRun");
 
   @BeforeMethod
   public void setUp() {
@@ -67,8 +67,8 @@ public class DataBatchRunResourceTest {
     );
     
     _underlying = mock(BatchMaster.class);
-    _resource = new DataBatchRunResource(_riskRunId, _underlying);
-    when(_underlying.getRiskRun(_riskRunId)).thenReturn(_riskRun);
+    _resource = new DataBatchRunResource(RISK_RUN_ID, _underlying);
+    when(_underlying.getRiskRun(RISK_RUN_ID)).thenReturn(_riskRun);
   }
 
   //-------------------------------------------------------------------------
@@ -81,10 +81,10 @@ public class DataBatchRunResourceTest {
 
   @Test
   public void testDelete() {
-    doNothing().when(_underlying).deleteRiskRun(_riskRunId.getObjectId());
+    doNothing().when(_underlying).deleteRiskRun(RISK_RUN_ID.getObjectId());
     _resource.deleteBatchRun();
 
-    verify(_underlying).deleteRiskRun(_riskRunId.getObjectId());
+    verify(_underlying).deleteRiskRun(RISK_RUN_ID.getObjectId());
   }
 
   @SuppressWarnings("unchecked")
@@ -96,7 +96,7 @@ public class DataBatchRunResourceTest {
     List<ViewResultEntry> viewResultEntries = newArrayList(mockViewResultEntry);
     Paging paging = Paging.of(pagingRequest, viewResultEntries);
     
-    when(_underlying.getBatchValues(_riskRunId, pagingRequest)).thenReturn(Pairs.of(viewResultEntries, paging));
+    when(_underlying.getBatchValues(RISK_RUN_ID, pagingRequest)).thenReturn(Pairs.of(viewResultEntries, paging));
     Response response = _resource.getBatchValues(pagingRequest);
     
     Object entity = response.getEntity();

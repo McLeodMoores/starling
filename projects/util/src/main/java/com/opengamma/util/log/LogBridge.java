@@ -18,7 +18,7 @@ import com.opengamma.util.ArgumentChecker;
  */
 public final class LogBridge {
 
-  private static final LogBridge s_instance = new LogBridge();
+  private static final LogBridge INSTANCE = new LogBridge();
   
   private final Set<LogEventListener> _listeners = new CopyOnWriteArraySet<LogEventListener>();
 
@@ -35,7 +35,7 @@ public final class LogBridge {
    * @return the bridge instance, not null
    */
   public static LogBridge getInstance() {
-    return s_instance;
+    return INSTANCE;
   }
   
   //-------------------------------------------------------------------------

@@ -46,7 +46,7 @@ import com.opengamma.util.ArgumentChecker;
 @BeanDefinition
 public final class YieldCurveDataBucketedShiftManipulator implements ImmutableBean, StructureManipulator<YieldCurveData> {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(YieldCurveDataBucketedShiftManipulator.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(YieldCurveDataBucketedShiftManipulator.class);
 
   /** Shift type */
   @PropertyDefinition(validate = "notNull")
@@ -106,7 +106,7 @@ public final class YieldCurveDataBucketedShiftManipulator implements ImmutableBe
             shiftedStripData = shiftedData;
           }
           data.put(bundle, shiftedStripData);
-          s_logger.debug("Shifting data {}, tenor {} by {} from {} to {}",
+          LOGGER.debug("Shifting data {}, tenor {} by {} from {} to {}",
                          strip.getSecurityIdentifier(), strip.getTenor(), shift.getShift(), originalData, shiftedStripData);
         }
       }

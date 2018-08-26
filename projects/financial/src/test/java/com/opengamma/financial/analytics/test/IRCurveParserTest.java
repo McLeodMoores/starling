@@ -25,7 +25,7 @@ import com.opengamma.util.test.TestGroup;
 
 @Test(groups = TestGroup.UNIT)
 public class IRCurveParserTest {
- private static final Logger s_logger = LoggerFactory.getLogger(IRSwapTradeParserTest.class);
+ private static final Logger LOGGER = LoggerFactory.getLogger(IRSwapTradeParserTest.class);
   
   public void test() throws Exception {
     IRCurveParser curveParser = new IRCurveParser();
@@ -35,7 +35,7 @@ public class IRCurveParserTest {
       
       
     }
-    s_logger.info("Got {} trades", curves.size());
+    LOGGER.info("Got {} trades", curves.size());
   }
   
   @Test

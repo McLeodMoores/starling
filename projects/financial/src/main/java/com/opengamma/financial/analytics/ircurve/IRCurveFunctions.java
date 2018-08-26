@@ -72,15 +72,15 @@ public class IRCurveFunctions extends AbstractFunctionConfigurationBean {
    */
   public static class Providers extends VersionedFunctionConfigurationBean {
 
-    private static final Class<?>[] s_curveClasses = new Class[] {CurveDefinition.class, InterpolatedCurveDefinition.class, ConstantCurveDefinition.class, SpreadCurveDefinition.class };
-    private static final Set<String> s_monitoredTypes;
+    private static final Class<?>[] CURVE_CLASSES = new Class[] {CurveDefinition.class, InterpolatedCurveDefinition.class, ConstantCurveDefinition.class, SpreadCurveDefinition.class };
+    private static final Set<String> MONITORED_TYPES;
 
     static {
-      s_monitoredTypes = new HashSet<String>();
-      s_monitoredTypes.add(MultiCurveCalculationConfig.class.getName());
-      s_monitoredTypes.add(YieldCurveDefinition.class.getName());
-      for (Class<?> curveClass : s_curveClasses) {
-        s_monitoredTypes.add(curveClass.getName());
+      MONITORED_TYPES = new HashSet<String>();
+      MONITORED_TYPES.add(MultiCurveCalculationConfig.class.getName());
+      MONITORED_TYPES.add(YieldCurveDefinition.class.getName());
+      for (Class<?> curveClass : CURVE_CLASSES) {
+        MONITORED_TYPES.add(curveClass.getName());
       }
     }
 
@@ -145,7 +145,7 @@ public class IRCurveFunctions extends AbstractFunctionConfigurationBean {
       }
 
       // new curves
-      for (final Class<?> klass : s_curveClasses) {
+      for (final Class<?> klass : CURVE_CLASSES) {
         searchRequest.setType(klass);
         searchRequest.setVersionCorrection(getVersionCorrection());
         for (final ConfigDocument configDocument : ConfigSearchIterator.iterable(getConfigMaster(), searchRequest)) {
@@ -156,7 +156,7 @@ public class IRCurveFunctions extends AbstractFunctionConfigurationBean {
     }
 
     public static boolean isMonitoredType(final String type) {
-      return s_monitoredTypes.contains(type);
+      return MONITORED_TYPES.contains(type);
     }
 
   }

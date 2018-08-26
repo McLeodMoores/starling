@@ -45,7 +45,7 @@ import com.opengamma.util.ClassUtils;
  */
 public abstract class LabelledMatrix3DFudgeBuilder<KX, KY, KZ, T extends LabelledMatrix3D<KX, KY, KZ, ?, ?, ?, T>> extends AbstractFudgeBuilder<T> {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(LabelledMatrix3DFudgeBuilder.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(LabelledMatrix3DFudgeBuilder.class);
 
   /** Field name. */
   public static final String X_KEYS_KEY = "X_KEYS";
@@ -92,7 +92,7 @@ public abstract class LabelledMatrix3DFudgeBuilder<KX, KY, KZ, T extends Labelle
 
   @Override
   protected final void buildMessage(final FudgeSerializer serializer, final MutableFudgeMsg message, final T object) {
-    s_logger.debug("Building message from {}", object);
+    LOGGER.debug("Building message from {}", object);
     writeLabels(serializer, message, object.getXLabels(), X_LABELS_KEY, X_LABEL_TYPES_KEY);
     writeXKeys(serializer, message, object.getXKeys());
     writeLabels(serializer, message, object.getYLabels(), Y_LABELS_KEY, Y_LABEL_TYPES_KEY);
@@ -100,7 +100,7 @@ public abstract class LabelledMatrix3DFudgeBuilder<KX, KY, KZ, T extends Labelle
     writeLabels(serializer, message, object.getZLabels(), Z_LABELS_KEY, Z_LABEL_TYPES_KEY);
     writeZKeys(serializer, message, object.getZKeys());
     writeValues(message, object.getValues());
-    s_logger.debug("Built {}", message);
+    LOGGER.debug("Built {}", message);
   }
 
   /**
@@ -232,7 +232,7 @@ public abstract class LabelledMatrix3DFudgeBuilder<KX, KY, KZ, T extends Labelle
 
   @Override
   public final T buildObject(final FudgeDeserializer deserializer, final FudgeMsg message) {
-    s_logger.debug("Building object from {}", message);
+    LOGGER.debug("Building object from {}", message);
     final KX[] xKeys = readXKeys(deserializer, message);
     final Object[] xLabels = readLabels(deserializer, message, X_LABELS_KEY, X_LABEL_TYPES_KEY);
     final KY[] yKeys = readYKeys(deserializer, message);
@@ -241,7 +241,7 @@ public abstract class LabelledMatrix3DFudgeBuilder<KX, KY, KZ, T extends Labelle
     final Object[] zLabels = readLabels(deserializer, message, Z_LABELS_KEY, Z_LABEL_TYPES_KEY);
     final double[][][] values = readValues(message, xKeys.length, yKeys.length, zKeys.length);
     final T result = createMatrix(xKeys, xLabels, yKeys, yLabels, zKeys, zLabels, values);
-    s_logger.debug("Built object {}", result);
+    LOGGER.debug("Built object {}", result);
     return result;
   }
 
@@ -257,7 +257,7 @@ public abstract class LabelledMatrix3DFudgeBuilder<KX, KY, KZ, T extends Labelle
   protected Object[] readLabels(final FudgeDeserializer deserializer, final FudgeMsg message, final String labelsKey, final String labelTypesKey) {
     final FudgeMsg valueMsg = message.getMessage(labelsKey);
     if (valueMsg == null) {
-      s_logger.warn("Message field {} not found in {}", labelsKey, message);
+      LOGGER.warn("Message field {} not found in {}", labelsKey, message);
       throw new IllegalArgumentException("Message is not a LabelledMatrix3D - does not contain a " + labelsKey + " field");
     }
     final Object[] labels = new Object[valueMsg.getNumFields()];
@@ -274,7 +274,7 @@ public abstract class LabelledMatrix3DFudgeBuilder<KX, KY, KZ, T extends Labelle
           try {
             type = ClassUtils.loadClass((String) val);
           } catch (ClassNotFoundException e) {
-            s_logger.warn("Message field {} requires unknown class {}", i, val);
+            LOGGER.warn("Message field {} requires unknown class {}", i, val);
             type = Object.class;
           }
         } else {
@@ -335,7 +335,7 @@ public abstract class LabelledMatrix3DFudgeBuilder<KX, KY, KZ, T extends Labelle
   protected <K> K[] readKeys(final FudgeDeserializer deserializer, final FudgeMsg message, final Class<K> keyClass, final String keysKey) {
     final FudgeMsg submsg = message.getMessage(keysKey);
     if (submsg == null) {
-      s_logger.warn("Message field {} not found in {}", keysKey, message);
+      LOGGER.warn("Message field {} not found in {}", keysKey, message);
       throw new IllegalArgumentException("Message is not a LabelledMatrix3D - does not contain a " + keysKey + " field");
     }
     final K[] keys = (K[]) Array.newInstance(keyClass, submsg.getNumFields());
@@ -349,7 +349,7 @@ public abstract class LabelledMatrix3DFudgeBuilder<KX, KY, KZ, T extends Labelle
   protected Double[] readDoubleKeys(final FudgeMsg message, final String keysKey) {
     final FudgeField field = message.getByName(keysKey);
     if (field == null) {
-      s_logger.warn("Message field {} not found in {}", keysKey, message);
+      LOGGER.warn("Message field {} not found in {}", keysKey, message);
       throw new IllegalArgumentException("Message is not a LabelledMatrix3D - does not contain a " + keysKey + " field");
     }
     final double[] keys = message.getFieldValue(double[].class, field);
@@ -372,12 +372,12 @@ public abstract class LabelledMatrix3DFudgeBuilder<KX, KY, KZ, T extends Labelle
   protected double[][][] readValues(final FudgeMsg message, final int x, final int y, final int z) {
     final FudgeField field = message.getByName(VALUES_KEY);
     if (field == null) {
-      s_logger.warn("Message field {} not found in {}", VALUES_KEY, message);
+      LOGGER.warn("Message field {} not found in {}", VALUES_KEY, message);
       throw new IllegalArgumentException("Message is not a LabelledMatrix3D - does not contain a " + VALUES_KEY + " field");
     }
     final double[] flat = message.getFieldValue(double[].class, field);
     if (flat.length != x * y * z) {
-      s_logger.warn("Invalid values length in {}", message);
+      LOGGER.warn("Invalid values length in {}", message);
       throw new IllegalArgumentException("Expected " + (x * y * z) + " matrix elements, got " + flat.length);
     }
     final double[][][] values = new double[z][y][x];

@@ -52,7 +52,7 @@ import com.opengamma.util.ArgumentChecker;
  */
 /* package */ class ViewRunner {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(ViewRunner.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ViewRunner.class);
 
   private final ConfigMaster _configMaster;
   private final ViewProcessor _viewProcessor;
@@ -124,7 +124,7 @@ import com.opengamma.util.ArgumentChecker;
     ArgumentChecker.notNull(snapshotName, "snapshotName");
     UniqueId snapshotId = getSnapshotId(snapshotName);
     UniqueId viewDefId = getViewDefinitionId(viewName);
-    s_logger.info("Running view {} using snapshot {} at valuation time {}", viewName, snapshotName, valuationTime);
+    LOGGER.info("Running view {} using snapshot {} at valuation time {}", viewName, snapshotName, valuationTime);
     List<MarketDataSpecification> marketDataSpecs =
         Lists.<MarketDataSpecification>newArrayList(UserMarketDataSpecification.of(snapshotId));
     ViewCycleExecutionOptions cycleOptions =

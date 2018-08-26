@@ -28,7 +28,7 @@ import com.opengamma.util.ArgumentChecker;
  */
 public class ConventionInstrumentTimeSeriesLoader {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(ConventionInstrumentTimeSeriesLoader.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ConventionInstrumentTimeSeriesLoader.class);
 
   private final InMemoryConventionBundleMaster _conventionMaster;
   
@@ -98,7 +98,7 @@ public class ConventionInstrumentTimeSeriesLoader {
     for (ConventionBundle convention : conventions) {
       addExternalId(convention.getSwapFloatingLegInitialRate(), externalIds);
     }
-    s_logger.info("Checking {} time-series: {}", externalIds.size(), externalIds);
+    LOGGER.info("Checking {} time-series: {}", externalIds.size(), externalIds);
     for (ExternalId externalId : externalIds) {
       ensureTimeseries(externalId);
     }
@@ -111,17 +111,17 @@ public class ConventionInstrumentTimeSeriesLoader {
     if (externalId.isNotScheme(getIdentifierScheme())) {
       ConventionBundleSearchResult result = getConventionMaster().searchConventionBundle(new ConventionBundleSearchRequest(externalId));
       if (result.getResults().size() == 0) {
-        s_logger.warn("Unable to find mapping from {} to identifier with scheme {}", externalId, getIdentifierScheme());
+        LOGGER.warn("Unable to find mapping from {} to identifier with scheme {}", externalId, getIdentifierScheme());
         return;
       }
       if (result.getResults().size() > 1) {
-        s_logger.warn("Found multiple conventions for {}, with potentially ambiguous mappings to scheme {}", externalId, getIdentifierScheme());
+        LOGGER.warn("Found multiple conventions for {}, with potentially ambiguous mappings to scheme {}", externalId, getIdentifierScheme());
         return;
       }
       ConventionBundleDocument searchResult = Iterables.getOnlyElement(result.getResults());
       externalId = searchResult.getConventionSet().getIdentifiers().getExternalId(getIdentifierScheme());
       if (externalId == null) {
-        s_logger.warn("Convention for {} does not include a mapping to an identifier with scheme {}", externalId, getIdentifierScheme());
+        LOGGER.warn("Convention for {} does not include a mapping to an identifier with scheme {}", externalId, getIdentifierScheme());
         return;
       }
     }
@@ -129,18 +129,18 @@ public class ConventionInstrumentTimeSeriesLoader {
   }
   
   private void ensureTimeseries(ExternalId externalId) {
-    s_logger.info("Checking time-series for {}", externalId);
+    LOGGER.info("Checking time-series for {}", externalId);
     try {
       HistoricalTimeSeries hts = getHistoricalTimeSeriesSource().getHistoricalTimeSeries(ExternalIdBundle.of(externalId), getDataSource(), getDataProvider(), getDataField());
       if (hts == null) {
-        s_logger.info("Adding time-series for {}", externalId);
+        LOGGER.info("Adding time-series for {}", externalId);
         getHistoricalTimeSeriesLoader().loadTimeSeries(ImmutableSet.of(externalId), getDataProvider(), getDataField(), null, null);
       } else if (isUpdateExisting()) {
-        s_logger.info("Updating time-series for {} with identifier {}", externalId, hts.getUniqueId());
+        LOGGER.info("Updating time-series for {} with identifier {}", externalId, hts.getUniqueId());
         getHistoricalTimeSeriesLoader().updateTimeSeries(hts.getUniqueId());
       }
     } catch (Exception e) {
-      s_logger.error("Error with time-series for " + externalId, e);
+      LOGGER.error("Error with time-series for " + externalId, e);
     }
   }
   

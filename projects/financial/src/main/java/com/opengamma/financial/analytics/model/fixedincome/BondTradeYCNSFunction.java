@@ -62,7 +62,7 @@ import com.opengamma.util.money.Currency;
  */
 @Deprecated
 public class BondTradeYCNSFunction extends BondTradeCurveSpecificFunction {
-  private static final Logger s_logger = LoggerFactory.getLogger(BondTradeYCNSFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(BondTradeYCNSFunction.class);
   private static final PresentValueNodeSensitivityCalculator NSC = PresentValueNodeSensitivityCalculator.using(PresentValueCurveSensitivitySABRCalculator.getInstance());
   private static final InstrumentSensitivityCalculator CALCULATOR = InstrumentSensitivityCalculator.getInstance();
 
@@ -163,13 +163,13 @@ public class BondTradeYCNSFunction extends BondTradeCurveSpecificFunction {
     final boolean permissive = OpenGammaCompilationContext.isPermissive(context);
     Set<String> requestedCurveNames = constraints.getValues(ValuePropertyNames.CURVE);
     if (!permissive && (requestedCurveNames == null || requestedCurveNames.isEmpty())) {
-      s_logger.error("Must specify a single curve name; have {}", requestedCurveNames);
+      LOGGER.error("Must specify a single curve name; have {}", requestedCurveNames);
       return null;
     }
     final String curveCalculationConfigName = curveCalculationConfigNames.iterator().next();
     final MultiCurveCalculationConfig curveCalculationConfig = getCurveCalculationConfigSource().getConfig(curveCalculationConfigName);
     if (curveCalculationConfig == null) {
-      s_logger.error("Could not find curve calculation configuration named " + curveCalculationConfigName);
+      LOGGER.error("Could not find curve calculation configuration named " + curveCalculationConfigName);
       return null;
     }
     if (!ComputationTargetSpecification.of(currency).equals(curveCalculationConfig.getTarget())) {
@@ -181,13 +181,13 @@ public class BondTradeYCNSFunction extends BondTradeCurveSpecificFunction {
     } else {
       final Set<String> intersection = YieldCurveFunctionUtils.intersection(requestedCurveNames, availableCurveNames);
       if (intersection.isEmpty()) {
-        s_logger.error("None of the requested curves {} are available in curve calculation configuration called {}", requestedCurveNames, curveCalculationConfigName);
+        LOGGER.error("None of the requested curves {} are available in curve calculation configuration called {}", requestedCurveNames, curveCalculationConfigName);
         return null;
       }
       requestedCurveNames = intersection;
     }
     if (!permissive && (requestedCurveNames.size() != 1)) {
-      s_logger.error("Must specify single curve name constraint, got {}", requestedCurveNames);
+      LOGGER.error("Must specify single curve name constraint, got {}", requestedCurveNames);
       return null;
     }
     final String curve = requestedCurveNames.iterator().next();
@@ -214,7 +214,7 @@ public class BondTradeYCNSFunction extends BondTradeCurveSpecificFunction {
       }
       requirements.addAll(timeSeriesRequirements);
     } catch (final OpenGammaRuntimeException e) {
-      s_logger.error("Could not get time series requirements; error was {}", e.getMessage());
+      LOGGER.error("Could not get time series requirements; error was {}", e.getMessage());
       return null;
     }
     return requirements;

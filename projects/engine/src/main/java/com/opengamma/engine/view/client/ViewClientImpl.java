@@ -55,7 +55,7 @@ import com.opengamma.util.tuple.Pair;
  */
 public class ViewClientImpl implements ViewClient {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(ViewClientImpl.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ViewClientImpl.class);
 
   private final ReentrantLock _clientLock = new ReentrantLock();
 
@@ -195,7 +195,7 @@ public class ViewClientImpl implements ViewClient {
               listener.cycleCompleted(userFullResult, userDeltaResult);
             } else if (!isFirstResult || resultMode != ViewResultMode.DELTA_ONLY) {
               // Would expect this if it's the first result and we're in delta only mode, otherwise log a warning
-              s_logger.warn("Ignored CycleCompleted call with no useful results to propagate");
+              LOGGER.warn("Ignored CycleCompleted call with no useful results to propagate");
             }
           }
         }
@@ -215,7 +215,7 @@ public class ViewClientImpl implements ViewClient {
             } else {
               if ((prevResult != null) || (resultMode != ViewResultMode.DELTA_ONLY)) {
                 // Would expect this if it's the first result and we're in delta only mode, otherwise log a warning
-                s_logger.warn("Ignored CycleFragmentCompleted call with no useful results to propagate");
+                LOGGER.warn("Ignored CycleFragmentCompleted call with no useful results to propagate");
               }
             }
           }
@@ -470,7 +470,7 @@ public class ViewClientImpl implements ViewClient {
     try {
       _completionLatch.await();
     } catch (InterruptedException e) {
-      s_logger.debug("Interrupted while waiting for completion of the view process");
+      LOGGER.debug("Interrupted while waiting for completion of the view process");
       throw e;
     }
   }

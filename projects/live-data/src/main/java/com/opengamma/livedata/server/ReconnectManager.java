@@ -25,7 +25,7 @@ import com.opengamma.util.ArgumentChecker;
 public class ReconnectManager implements Lifecycle {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(ReconnectManager.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ReconnectManager.class);
 
   /**
    * How often connection status should be checked. Milliseconds
@@ -111,7 +111,7 @@ public class ReconnectManager implements Lifecycle {
       try {
         check();
       } catch (RuntimeException e) {
-        s_logger.error("Checking for reconnection failed", e);
+        LOGGER.error("Checking for reconnection failed", e);
       }
     }
   }
@@ -119,21 +119,21 @@ public class ReconnectManager implements Lifecycle {
   // called by the timer task
   private void check() {
     if (_server.getConnectionStatus() == ConnectionStatus.NOT_CONNECTED) {
-      s_logger.warn("Connection to market data API down. Attemping to reconnect to {}.", _server);
+      LOGGER.warn("Connection to market data API down. Attemping to reconnect to {}.", _server);
       
       try {
         _server.connect();
       } catch (RuntimeException e) {
-        s_logger.warn("Could not reconnect", e);
+        LOGGER.warn("Could not reconnect", e);
         return;
       }
       
-      s_logger.info("Reconnection successful. Reestablishing subscriptions.");
+      LOGGER.info("Reconnection successful. Reestablishing subscriptions.");
       _server.reestablishSubscriptions();
-      s_logger.info("Reconnect done.");
+      LOGGER.info("Reconnect done.");
     
     } else {
-      s_logger.debug("Connection up to server {}", _server.getClass().getSimpleName());
+      LOGGER.debug("Connection up to server {}", _server.getClass().getSimpleName());
     }
   }
 

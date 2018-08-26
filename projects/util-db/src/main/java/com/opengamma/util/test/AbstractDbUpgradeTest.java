@@ -31,7 +31,7 @@ import com.opengamma.util.tuple.Triple;
  */
 public abstract class AbstractDbUpgradeTest implements TableCreationCallback {
 
-  private static final Map<String, Map<String, String>> s_targetSchema = Maps.newHashMap();
+  private static final Map<String, Map<String, String>> TARGET_SCHEMA = Maps.newHashMap();
 
   private final List<Triple<String, String, String>> _comparisons = Lists.newLinkedList();
 
@@ -79,7 +79,7 @@ public abstract class AbstractDbUpgradeTest implements TableCreationCallback {
   public void tearDown() {
     // need to clear version cache from here
     // this is messy but necessary
-    AbstractDbTest.s_databaseTypeVersion.clear();
+    AbstractDbTest.DATABASE_TYPE_VERSION.clear();
   }
 
   //-------------------------------------------------------------------------
@@ -107,10 +107,10 @@ public abstract class AbstractDbUpgradeTest implements TableCreationCallback {
 
   //-------------------------------------------------------------------------
   protected Map<String, String> getVersionSchemas() {
-    Map<String, String> versionSchema = s_targetSchema.get(_databaseType);
+    Map<String, String> versionSchema = TARGET_SCHEMA.get(_databaseType);
     if (versionSchema == null) {
       versionSchema = new HashMap<>();
-      s_targetSchema.put(_databaseType, versionSchema);
+      TARGET_SCHEMA.put(_databaseType, versionSchema);
     }
     return versionSchema;
   }

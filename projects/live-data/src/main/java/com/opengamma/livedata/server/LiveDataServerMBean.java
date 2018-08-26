@@ -34,7 +34,7 @@ import com.opengamma.util.ArgumentChecker;
 public class LiveDataServerMBean {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(LiveDataServerMBean.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(LiveDataServerMBean.class);
 
   /**
    * The underlying live data server.
@@ -61,7 +61,7 @@ public class LiveDataServerMBean {
       ExternalScheme uniqueIdDomain = getServer().getUniqueIdDomain();
       return uniqueIdDomain == null ? "<null>" : uniqueIdDomain.toString();
     } catch (RuntimeException e) {
-      s_logger.error("getUniqueIdDomain() failed", e);
+      LOGGER.error("getUniqueIdDomain() failed", e);
       throw new RuntimeException(e.getMessage());
     }
   }
@@ -71,7 +71,7 @@ public class LiveDataServerMBean {
     try {
       return getServer().getConnectionStatus().toString();
     } catch (RuntimeException e) {
-      s_logger.error("getConnectionStatus() failed", e);
+      LOGGER.error("getConnectionStatus() failed", e);
       throw new RuntimeException(e.getMessage());
     }
   }
@@ -81,7 +81,7 @@ public class LiveDataServerMBean {
     try {
       return getServer().getClass().getName();
     } catch (RuntimeException e) {
-      s_logger.error("getServerType() failed", e);
+      LOGGER.error("getServerType() failed", e);
       throw new RuntimeException(e.getMessage());
     }
   }
@@ -91,7 +91,7 @@ public class LiveDataServerMBean {
     try {
       return getServer().getNumActiveSubscriptions();
     } catch (RuntimeException e) {
-      s_logger.error("getNumActiveSubscriptions() failed", e);
+      LOGGER.error("getNumActiveSubscriptions() failed", e);
       throw new RuntimeException(e.getMessage());
     }
   }
@@ -103,7 +103,7 @@ public class LiveDataServerMBean {
     try {
       return getServer().getActiveSubscriptionIds();
     } catch (RuntimeException e) {
-      s_logger.error("getActiveSubscriptionIds() failed", e);
+      LOGGER.error("getActiveSubscriptionIds() failed", e);
       throw new RuntimeException(e.getMessage());
     }
   }
@@ -113,7 +113,7 @@ public class LiveDataServerMBean {
     try {
       return getServer().getActiveDistributionSpecs();
     } catch (RuntimeException e) {
-      s_logger.error("getActiveDistributionSpecs() failed", e);
+      LOGGER.error("getActiveDistributionSpecs() failed", e);
       throw new RuntimeException(e.getMessage());
     }
   }
@@ -123,7 +123,7 @@ public class LiveDataServerMBean {
     try {
       return getServer().getNumMarketDataUpdatesReceived();
     } catch (RuntimeException e) {
-      s_logger.error("getNumLiveDataUpdatesSent() failed", e);
+      LOGGER.error("getNumLiveDataUpdatesSent() failed", e);
       throw new RuntimeException(e.getMessage());
     }
   }
@@ -133,7 +133,7 @@ public class LiveDataServerMBean {
     try {
       return getServer().getNumLiveDataUpdatesSentPerSecondOverLastMinute();
     } catch (RuntimeException e) {
-      s_logger.error("getNumLiveDataUpdatesSentPerSecondOverLastMinute() failed", e);
+      LOGGER.error("getNumLiveDataUpdatesSentPerSecondOverLastMinute() failed", e);
       throw new RuntimeException(e.getMessage());
     }
   }
@@ -151,7 +151,7 @@ public class LiveDataServerMBean {
       }
       return response.getTickDistributionSpecification();
     } catch (RuntimeException e) {
-      s_logger.error("subscribe(" + securityUniqueId + ") failed", e);
+      LOGGER.error("subscribe(" + securityUniqueId + ") failed", e);
       throw new RuntimeException(e.getMessage());
     }
   }
@@ -169,7 +169,7 @@ public class LiveDataServerMBean {
       }
       return response.getTickDistributionSpecification();
     } catch (RuntimeException e) {
-      s_logger.error("subscribe(" + securityUniqueId + ") failed", e);
+      LOGGER.error("subscribe(" + securityUniqueId + ") failed", e);
       throw new RuntimeException(e.getMessage());
     }
   }
@@ -192,7 +192,7 @@ public class LiveDataServerMBean {
         marketDataDistributor.setPersistent(persistent);
       }
     } catch (RuntimeException e) {
-      s_logger.error("Setting all susbcriptions to persistent=" + persistent + " failed", e);
+      LOGGER.error("Setting all susbcriptions to persistent=" + persistent + " failed", e);
       throw new RuntimeException(e.getMessage());
     }
   }
@@ -207,7 +207,7 @@ public class LiveDataServerMBean {
     try {
       return getServer().unsubscribe(securityUniqueId);
     } catch (RuntimeException e) {
-      s_logger.error("unsubscribe(" + securityUniqueId + ") failed", e);
+      LOGGER.error("unsubscribe(" + securityUniqueId + ") failed", e);
       throw new RuntimeException(e.getMessage());
     }
   }
@@ -236,7 +236,7 @@ public class LiveDataServerMBean {
       });
       return Iterators.toArray(results.iterator(), String.class);
     } catch (RuntimeException e) {
-      s_logger.error("getAllSnapshots() failed", e);
+      LOGGER.error("getAllSnapshots() failed", e);
       throw new RuntimeException(e.getMessage());
     }
   }
@@ -251,7 +251,7 @@ public class LiveDataServerMBean {
       }
       return subscription.getLiveDataHistory().getLastKnownValues().toString();
     } catch (RuntimeException e) {
-      s_logger.error("getFieldHistory() failed", e);
+      LOGGER.error("getFieldHistory() failed", e);
       throw new RuntimeException(e.getMessage());
     }
   }
@@ -273,7 +273,7 @@ public class LiveDataServerMBean {
       });
       return Iterators.toArray(results.iterator(), String.class);
     } catch (RuntimeException e) {
-      s_logger.error("getAllFieldHistories() failed", e);
+      LOGGER.error("getAllFieldHistories() failed", e);
       throw new RuntimeException(e.getMessage());
     }
   }

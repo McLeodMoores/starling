@@ -22,7 +22,7 @@ import com.opengamma.util.test.TestGroup;
 public class DbSecurityMasterDetailProviderRandomTest extends AbstractDbSecurityTest implements SecurityTestCaseMethods {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(DbSecurityMasterDetailProviderRandomTest.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(DbSecurityMasterDetailProviderRandomTest.class);
 
   private SecurityMasterTestCase _testCase;
 
@@ -32,7 +32,7 @@ public class DbSecurityMasterDetailProviderRandomTest extends AbstractDbSecurity
   @Factory(dataProvider = "databases", dataProviderClass = DbTest.class)
   public DbSecurityMasterDetailProviderRandomTest(String databaseType, String databaseVersion) {
     super(databaseType, databaseVersion);
-    s_logger.info("running test for database={}", databaseType);
+    LOGGER.info("running test for database={}", databaseType);
   }
 
   //-------------------------------------------------------------------------
@@ -40,7 +40,7 @@ public class DbSecurityMasterDetailProviderRandomTest extends AbstractDbSecurity
   protected void doSetUp() {
     DbSecurityMaster secMaster = new DbSecurityMaster(getDbConnector());
     secMaster.setDetailProvider(new HibernateSecurityMasterDetailProvider());
-    s_logger.debug("SecMaster initialization complete {}", secMaster);
+    LOGGER.debug("SecMaster initialization complete {}", secMaster);
     _testCase = new SecurityMasterTestCase(secMaster);
   }
 

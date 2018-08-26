@@ -43,7 +43,7 @@ import com.opengamma.master.user.UserFormException;
 public class WebUserResource extends AbstractWebUserResource {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(WebUserResource.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(WebUserResource.class);
   /**
    * The ftl file.
    */
@@ -103,7 +103,7 @@ public class WebUserResource extends AbstractWebUserResource {
       return Response.seeOther(uri(data())).build();
       
     } catch (UserFormException ex) {
-      ex.logUnexpected(s_logger);
+      ex.logUnexpected(LOGGER);
       FlexiBean out = createRootData();
       out.put("username", userName);
       out.put("email", email);
@@ -130,7 +130,7 @@ public class WebUserResource extends AbstractWebUserResource {
       return Response.seeOther(uri(data())).build();
       
     } catch (UserFormException ex) {
-      ex.logUnexpected(s_logger);
+      ex.logUnexpected(LOGGER);
       FlexiBean out = createRootData();
       for (UserFormError error : ex.getErrors()) {
         out.put("err_" + error.toLowerCamel(), true);

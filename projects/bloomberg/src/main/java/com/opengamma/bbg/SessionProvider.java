@@ -34,7 +34,7 @@ import com.opengamma.util.OpenGammaClock;
 public class SessionProvider implements Lifecycle, BloombergConnector.AvailabilityListener {
 
   /** The logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(SessionProvider.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(SessionProvider.class);
   /** Default time in ms to wait before retrying after an unsuccessful attempt to connect. */
   private static final long DEFAULT_RETRY_DELAY = 30000;
 
@@ -128,7 +128,7 @@ public class SessionProvider implements Lifecycle, BloombergConnector.Availabili
           throw new ConnectionUnavailableException("No Bloomberg connection is available");
         }
         _lastRetry.set(now);
-        s_logger.info("Bloomberg session being opened...");
+        LOGGER.info("Bloomberg session being opened...");
         Session session = null;
         try {
           try {
@@ -136,8 +136,8 @@ public class SessionProvider implements Lifecycle, BloombergConnector.Availabili
           } catch (OpenGammaRuntimeException e) {
             throw new ConnectionUnavailableException("Failed to open session", e);
           }
-          s_logger.info("Bloomberg session open");
-          s_logger.info("Bloomberg service being opened...");
+          LOGGER.info("Bloomberg session open");
+          LOGGER.info("Bloomberg service being opened...");
 
           for (String serviceName : _serviceNames) {
             try {
@@ -150,7 +150,7 @@ public class SessionProvider implements Lifecycle, BloombergConnector.Availabili
             } catch (Exception ex) {
               throw new ConnectionUnavailableException("Bloomberg service failed to start: " + serviceName, ex);
             }
-            s_logger.info("Bloomberg service open: {}", serviceName);
+            LOGGER.info("Bloomberg service open: {}", serviceName);
           }
           _session = session;
           newSession = session;
@@ -159,11 +159,11 @@ public class SessionProvider implements Lifecycle, BloombergConnector.Availabili
           if (session != null) {
             // If the session was started but the service not opened, then there will be sockets open and threads allocated by
             // the Bloomberg API which need to be killed. Just letting the session fall out of scope doesn't work (PLAT-5309)
-            s_logger.debug("Attempting to stop partially constructed session");
+            LOGGER.debug("Attempting to stop partially constructed session");
             try {
               session.stop();
             } catch (Exception e) {
-              s_logger.error("Error stopping partial session", e);
+              LOGGER.error("Error stopping partial session", e);
             }
           }
         }
@@ -204,11 +204,11 @@ public class SessionProvider implements Lifecycle, BloombergConnector.Availabili
     synchronized (_lock) {
       if (_session != null) {
         try {
-          s_logger.info("Bloomberg session being stopped...");
+          LOGGER.info("Bloomberg session being stopped...");
           _session.stop();
-          s_logger.info("Bloomberg session stopped");
+          LOGGER.info("Bloomberg session stopped");
         } catch (InterruptedException e) {
-          s_logger.warn("Interrupted closing session " + _session, e);
+          LOGGER.warn("Interrupted closing session " + _session, e);
         } finally {
           _session = null;
         }
@@ -268,7 +268,7 @@ public class SessionProvider implements Lifecycle, BloombergConnector.Availabili
         return;
       }
     } while (!_lastRetry.compareAndSet(lastRetry, Instant.EPOCH));
-    s_logger.info("Bloomberg connection available for {}", _serviceNames);
+    LOGGER.info("Bloomberg connection available for {}", _serviceNames);
   }
 
   /**

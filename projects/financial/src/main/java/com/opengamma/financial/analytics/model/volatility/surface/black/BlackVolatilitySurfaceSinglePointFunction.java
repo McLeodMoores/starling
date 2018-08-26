@@ -164,5 +164,5 @@ public class BlackVolatilitySurfaceSinglePointFunction extends AbstractFunction.
     return new ValueRequirement(ValueRequirementNames.FORWARD_CURVE, underlyingSpec, properties);
   }
 
-  private static final Logger s_logger = LoggerFactory.getLogger(BlackVolatilitySurfaceSinglePointFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(BlackVolatilitySurfaceSinglePointFunction.class);
 }

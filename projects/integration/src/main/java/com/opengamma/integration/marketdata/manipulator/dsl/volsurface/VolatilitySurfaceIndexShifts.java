@@ -49,7 +49,7 @@ import com.opengamma.util.ArgumentChecker;
 @BeanDefinition
 public final class VolatilitySurfaceIndexShifts implements StructureManipulator<VolatilitySurface>, ImmutableBean {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(VolatilitySurfaceIndexShifts.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(VolatilitySurfaceIndexShifts.class);
 
   @PropertyDefinition(validate = "notNull")
   private final ScenarioShiftType _shiftType;
@@ -86,7 +86,7 @@ public final class VolatilitySurfaceIndexShifts implements StructureManipulator<
     } else if (!(surface instanceof FunctionalDoublesSurface)) {
       return shiftNonFunctionalSurface(volSurface);
     } else {
-      s_logger.warn("Unable to shift surface of type {}/{}",
+      LOGGER.warn("Unable to shift surface of type {}/{}",
                     volSurface.getClass().getName(),
                     surface.getClass().getName());
       return volSurface;

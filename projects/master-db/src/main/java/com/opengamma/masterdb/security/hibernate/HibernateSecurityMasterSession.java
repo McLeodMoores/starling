@@ -38,7 +38,7 @@ import com.opengamma.util.monitor.OperationTimer;
 public class HibernateSecurityMasterSession implements HibernateSecurityMasterDao {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(HibernateSecurityMasterSession.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(HibernateSecurityMasterSession.class);
 
   /**
    * The Hibernate session.
@@ -536,7 +536,7 @@ public class HibernateSecurityMasterSession implements HibernateSecurityMasterDa
   
   @Override
   public void persistBondIndexComponentBeans(final BondIndexBean bondIndex) {
-    OperationTimer timer = new OperationTimer(s_logger, "persistFutureBundleBeans");
+    OperationTimer timer = new OperationTimer(LOGGER, "persistFutureBundleBeans");
     final List<BondIndexComponentBean> componentBeans = bondIndex.getBondComponents();
     for (BondIndexComponentBean componentBean : componentBeans) { 
       // now bond index has an id, we point the components at it
@@ -584,7 +584,7 @@ public class HibernateSecurityMasterSession implements HibernateSecurityMasterDa
   
   @Override
   public void persistEquityIndexComponentBeans(final EquityIndexBean equityIndex) {
-    OperationTimer timer = new OperationTimer(s_logger, "persistFutureBundleBeans");
+    OperationTimer timer = new OperationTimer(LOGGER, "persistFutureBundleBeans");
     final List<EquityIndexComponentBean> componentBeans = equityIndex.getEquityComponents();
     for (EquityIndexComponentBean componentBean : componentBeans) { 
       // now equity index has an id, we point the components at it
@@ -645,7 +645,7 @@ public class HibernateSecurityMasterSession implements HibernateSecurityMasterDa
   
   @Override
   public void persistFutureBundleBeans(final Date now, final FutureSecurityBean future) {
-    OperationTimer timer = new OperationTimer(s_logger, "persistFutureBundleBeans");
+    OperationTimer timer = new OperationTimer(LOGGER, "persistFutureBundleBeans");
     final Set<FutureBundleBean> beanBasket = future.getBasket();
     final List<FutureBundleBean> dbBasket = getFutureBundleBeans(now, future);
     if (now != null) {

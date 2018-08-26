@@ -39,7 +39,7 @@ import com.sleepycat.je.EnvironmentConfig;
  */
 @Test(groups = TestGroup.INTEGRATION)
 public class BerkeleyDBValueIdentifierMapTest extends AbstractIdentifierMapTest {
-  private static final Logger s_logger = LoggerFactory.getLogger(BerkeleyDBValueIdentifierMapTest.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(BerkeleyDBValueIdentifierMapTest.class);
   private static Set<File> s_dbDirsToDelete = new HashSet<File>();
   private Environment _currDBEnvironment;
 
@@ -63,10 +63,10 @@ public class BerkeleyDBValueIdentifierMapTest extends AbstractIdentifierMapTest 
   public static void deleteDbDirs() {
     for (File f : s_dbDirsToDelete) {
       try {
-        s_logger.info("Deleting temp directory {}", f);
+        LOGGER.info("Deleting temp directory {}", f);
         FileUtils.deleteDirectory(f);
       } catch (IOException ioe) {
-        s_logger.warn("Unable to recursively delete directory {}", f);
+        LOGGER.warn("Unable to recursively delete directory {}", f);
         // Just swallow it.
       }
     }

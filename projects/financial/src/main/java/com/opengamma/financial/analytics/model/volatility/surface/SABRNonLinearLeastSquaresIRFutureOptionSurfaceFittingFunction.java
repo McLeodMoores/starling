@@ -57,7 +57,7 @@ import com.opengamma.util.tuple.ObjectsPair;
  */
 public class SABRNonLinearLeastSquaresIRFutureOptionSurfaceFittingFunction extends AbstractFunction.NonCompiledInvoker {
   /** A logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(SABRNonLinearLeastSquaresIRFutureOptionSurfaceFittingFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(SABRNonLinearLeastSquaresIRFutureOptionSurfaceFittingFunction.class);
   /** Hagan SABR function */
   private static final SABRHaganVolatilityFunction SABR_FUNCTION = new SABRHaganVolatilityFunction();
 
@@ -125,7 +125,7 @@ public class SABRNonLinearLeastSquaresIRFutureOptionSurfaceFittingFunction exten
             dataPointsForStrip.put(ttm.doubleValue(), fittedPointsForStrip);
           }
         } catch (final IllegalArgumentException e) {
-          s_logger.info("Could not get values for forward for x={}", ttm);
+          LOGGER.info("Could not get values for forward for x={}", ttm);
         }
       }
     }
@@ -174,7 +174,7 @@ public class SABRNonLinearLeastSquaresIRFutureOptionSurfaceFittingFunction exten
   public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
     final Set<String> surfaceNames = desiredValue.getConstraints().getValues(ValuePropertyNames.SURFACE);
     if (surfaceNames == null || surfaceNames.size() != 1) {
-      s_logger.error("Need to provide a single surface name; have {}", surfaceNames);
+      LOGGER.error("Need to provide a single surface name; have {}", surfaceNames);
       return null;
     }
     if (!SABRFittingPropertyUtils.ensureNLSSFittingProperties(desiredValue)) {

@@ -50,7 +50,7 @@ import com.opengamma.util.tuple.Pair;
  */
 public class InflationBondZspreadFromCurvesFunction extends InflationBondFromCleanPriceAndCurvesFunction {
   /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(InflationBondZspreadFromCurvesFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(InflationBondZspreadFromCurvesFunction.class);
   /** The z-spread calculator */
   private static final BondCapitalIndexedSecurityDiscountingMethod CALCULATOR = BondCapitalIndexedSecurityDiscountingMethod.getInstance();
   /** The curve construction configuration source */
@@ -155,7 +155,7 @@ public class InflationBondZspreadFromCurvesFunction extends InflationBondFromCle
       }
     }
     if (curveName == null) {
-      s_logger.error("Could not get curve name from inputs; missing yield curve");
+      LOGGER.error("Could not get curve name from inputs; missing yield curve");
       return null;
     }
     final ValueProperties properties = getResultProperties(target)

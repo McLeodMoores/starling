@@ -70,7 +70,7 @@ import com.opengamma.util.money.Currency;
  * Base class for calculating values for a bond future option using Black.
  */
 public abstract class BondFutureOptionBlackFunction extends AbstractFunction.NonCompiledInvoker {
-  private static final Logger s_logger = LoggerFactory.getLogger(BondFutureOptionBlackFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(BondFutureOptionBlackFunction.class);
   private final String _valueRequirementName;
   private BondFutureOptionTradeConverter _converter;
   private FixedIncomeConverterDataProvider _dataConverter;
@@ -182,13 +182,13 @@ public abstract class BondFutureOptionBlackFunction extends AbstractFunction.Non
     final String curveCalculationConfigName = curveCalculationConfigNames.iterator().next();
     final MultiCurveCalculationConfig curveCalculationConfig = _curveCalculationConfigSource.getConfig(curveCalculationConfigName);
     if (curveCalculationConfig == null) {
-      s_logger.error("Could not find curve calculation configuration named " + curveCalculationConfigName);
+      LOGGER.error("Could not find curve calculation configuration named " + curveCalculationConfigName);
       return null;
     }
     final Currency currency = FinancialSecurityUtils.getCurrency(target.getTrade().getSecurity());
     if (!curveCalculationConfig.getTarget().getType().isTargetType(ComputationTargetType.CURRENCY) ||
         !currency.equals(ComputationTargetType.CURRENCY.resolve(curveCalculationConfig.getTarget().getUniqueId()))) {
-      s_logger.error("Security currency and curve calculation config id were not equal; have {} and {}", currency, curveCalculationConfig.getTarget());
+      LOGGER.error("Security currency and curve calculation config id were not equal; have {} and {}", currency, curveCalculationConfig.getTarget());
       return null;
     }
     final Set<ValueRequirement> requirements = new HashSet<ValueRequirement>();
@@ -201,7 +201,7 @@ public abstract class BondFutureOptionBlackFunction extends AbstractFunction.Non
       }
       requirements.addAll(tsRequirements);
     } catch (final Exception e) {
-      s_logger.error(e.getMessage());
+      LOGGER.error(e.getMessage());
       return null;
     }
     final BondFutureOptionSecurity security = (BondFutureOptionSecurity) target.getTrade().getSecurity();

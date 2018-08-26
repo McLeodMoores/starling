@@ -23,7 +23,7 @@ import com.opengamma.util.ArgumentChecker;
  */
 public class AnalyticServiceTradeProducer implements TradeProducer, FudgeMessageReceiver {
   
-  private static final Logger s_logger = LoggerFactory.getLogger(AnalyticServiceTradeProducer.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(AnalyticServiceTradeProducer.class);
   
   private final Set<TradeListener> _tradeListeners = new CopyOnWriteArraySet<TradeListener>();
 
@@ -31,7 +31,7 @@ public class AnalyticServiceTradeProducer implements TradeProducer, FudgeMessage
   public void messageReceived(FudgeContext fudgeContext, FudgeMsgEnvelope msgEnvelope) {
     
     FudgeMsg msg = msgEnvelope.getMessage();
-    s_logger.debug("Message received {}", msg);
+    LOGGER.debug("Message received {}", msg);
     Trade trade = fudgeContext.fromFudgeMsg(Trade.class, msg);
     notifyListeners(trade);
   }

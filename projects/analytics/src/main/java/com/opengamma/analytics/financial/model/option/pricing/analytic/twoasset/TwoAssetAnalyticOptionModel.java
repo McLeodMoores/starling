@@ -24,7 +24,7 @@ import com.opengamma.analytics.math.function.Function1D;
  * @param <U> Type of the two asset data bundle
  */
 public abstract class TwoAssetAnalyticOptionModel<T extends OptionDefinition, U extends StandardTwoAssetOptionDataBundle> implements OptionModel<T, U> {
-  private static final Logger s_logger = LoggerFactory.getLogger(TwoAssetAnalyticOptionModel.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(TwoAssetAnalyticOptionModel.class);
 
   /**
    * 
@@ -52,7 +52,7 @@ public abstract class TwoAssetAnalyticOptionModel<T extends OptionDefinition, U 
     final GreekResultCollection results = new GreekResultCollection();
     for (final Greek greek : requiredGreeks) {
       if (greek != Greek.FAIR_PRICE) {
-        s_logger.warn("Can only calculate price for two-asset options, not calculating " + greek);
+        LOGGER.warn("Can only calculate price for two-asset options, not calculating " + greek);
       } else {
         results.put(greek, pricingFunction.evaluate(data));
       }

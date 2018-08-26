@@ -34,14 +34,14 @@ import com.opengamma.master.historicaltimeseries.ManageableHistoricalTimeSeries;
  */
 public class HistoricalTimeSeriesSecurityFunction extends AbstractFunction.NonCompiledInvoker {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(HistoricalTimeSeriesSecurityFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(HistoricalTimeSeriesSecurityFunction.class);
 
   @Override
   public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs,
       final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
     final ComputedValue htsValue = inputs.getComputedValue(ValueRequirementNames.HISTORICAL_TIME_SERIES);
     if (htsValue == null) {
-      s_logger.warn("Cannot get time series for {}", target);
+      LOGGER.warn("Cannot get time series for {}", target);
     }
     final ManageableHistoricalTimeSeries mhts = (ManageableHistoricalTimeSeries) htsValue.getValue();
     final ValueRequirement desiredValue = desiredValues.iterator().next();

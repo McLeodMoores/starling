@@ -35,7 +35,7 @@ import com.opengamma.util.jms.JmsConnector;
 public abstract class AbstractJmsResultPublisher {
 
   /** Logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(AbstractJmsResultPublisher.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(AbstractJmsResultPublisher.class);
   private static final String SEQUENCE_NUMBER_FIELD_NAME = "#";
 
   private final FudgeContext _fudgeContext;
@@ -82,7 +82,7 @@ public abstract class AbstractJmsResultPublisher {
    * @param result the result, not null
    */
   protected void send(Object result) {
-    s_logger.debug("Result received to forward over JMS: {}", result);
+    LOGGER.debug("Result received to forward over JMS: {}", result);
     MutableFudgeMsg resultMsg;
     synchronized (_fudgeSerializationContext) {
       resultMsg = _fudgeSerializationContext.objectToFudgeMsg(result);
@@ -90,7 +90,7 @@ public abstract class AbstractJmsResultPublisher {
     FudgeSerializer.addClassHeader(resultMsg, result.getClass());
     long sequenceNumber = _sequenceNumber.getAndIncrement();
     resultMsg.add(SEQUENCE_NUMBER_FIELD_NAME, sequenceNumber);
-    s_logger.debug("Sending result as fudge message with sequence number {}: {}", sequenceNumber, resultMsg);
+    LOGGER.debug("Sending result as fudge message with sequence number {}: {}", sequenceNumber, resultMsg);
     byte[] resultMsgByteArray = _fudgeContext.toByteArray(resultMsg);
     _messageQueue.add(resultMsgByteArray);
   }
@@ -127,7 +127,7 @@ public abstract class AbstractJmsResultPublisher {
   }
 
   private void sendStartedSignal() {
-    s_logger.debug("Sending started signal");
+    LOGGER.debug("Sending started signal");
 
     // REVIEW jonathan 2012-02-03 -- until we have more than one control signal, it's sufficient to push through an
     // empty message.
@@ -161,7 +161,7 @@ public abstract class AbstractJmsResultPublisher {
             }
             sendSync(nextMessage);
           } catch (Exception e) {
-            s_logger.error("Failed to send message asynchronously", e);
+            LOGGER.error("Failed to send message asynchronously", e);
           }
         }
       }
@@ -173,7 +173,7 @@ public abstract class AbstractJmsResultPublisher {
   private void sendSync(byte[] buffer) {
     MessageProducer producer = _producer;
     if (producer == null) {
-      s_logger.debug("Result received after publishing stopped");
+      LOGGER.debug("Result received after publishing stopped");
       return;
     }
     try {
@@ -181,14 +181,14 @@ public abstract class AbstractJmsResultPublisher {
       msg.writeBytes(buffer);
       producer.send(msg);
     } catch (Exception e) {
-      s_logger.error("Error while sending result over JMS. This result may never reach the client.", e);
+      LOGGER.error("Error while sending result over JMS. This result may never reach the client.", e);
     }
   }
 
   public void stopPublishingResults() throws JMSException {
     _lock.lock();
     try {
-      s_logger.debug("Removing listener {}", this);
+      LOGGER.debug("Removing listener {}", this);
       stopListener();
       _isShutdown.set(true);
       _messageQueue.add(new byte[0]);

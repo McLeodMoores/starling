@@ -19,7 +19,7 @@ import com.opengamma.id.VersionCorrection;
  */
 public class RawIRFutureOptionVolatilitySurfaceDataFunction extends RawVolatilitySurfaceDataFunction {
   /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(RawIRFutureOptionVolatilitySurfaceDataFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(RawIRFutureOptionVolatilitySurfaceDataFunction.class);
 
   /**
    * Default constructor

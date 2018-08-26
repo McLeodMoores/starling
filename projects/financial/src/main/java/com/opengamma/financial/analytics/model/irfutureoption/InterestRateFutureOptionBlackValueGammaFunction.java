@@ -40,7 +40,7 @@ import com.opengamma.financial.analytics.model.black.BlackDiscountingValueGammaI
 @Deprecated
 public class InterestRateFutureOptionBlackValueGammaFunction extends InterestRateFutureOptionBlackFunction {
   /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(InterestRateFutureOptionBlackValueGammaFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(InterestRateFutureOptionBlackValueGammaFunction.class);
   /** The margin transaction method */
   private static final InterestRateFutureOptionMarginTransactionBlackSurfaceMethod MARGINED_TRANSANCTION_METHOD = InterestRateFutureOptionMarginTransactionBlackSurfaceMethod.getInstance();
   /** The margin security method */
@@ -63,7 +63,7 @@ public class InterestRateFutureOptionBlackValueGammaFunction extends InterestRat
     final ValueProperties constraints = desiredValue.getConstraints();
     final Set<String> scale = constraints.getValues(ValuePropertyNames.SCALE);
     if (scale == null || scale.size() != 1) {
-      s_logger.info("Could not find {} requirement. Looking for a default..", ValuePropertyNames.SCALE);
+      LOGGER.info("Could not find {} requirement. Looking for a default..", ValuePropertyNames.SCALE);
       return null;
     }
     // Then get typical requirements

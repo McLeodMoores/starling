@@ -23,7 +23,7 @@ import com.opengamma.web.analytics.formatting.ResultsFormatter;
  */
 public class GridColumnsJsonWriter {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(GridColumnsJsonWriter.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(GridColumnsJsonWriter.class);
 
   /** For looking up the {@link DataType} for a column. */
   private final ResultsFormatter _formatter;
@@ -43,7 +43,7 @@ public class GridColumnsJsonWriter {
    */
   public String getJson(List<GridColumnGroup> groups) {
     String json = new JSONArray(getJsonStructure(groups)).toString();
-    s_logger.debug("Returning JSON for columns {}", json);
+    LOGGER.debug("Returning JSON for columns {}", json);
     return json;
   }
 

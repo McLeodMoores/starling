@@ -28,7 +28,7 @@ import com.sleepycat.je.OperationStatus;
  */
 public class BerkeleyDBBinaryDataStore extends AbstractBerkeleyDBComponent implements BinaryDataStore {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(BerkeleyDBBinaryDataStore.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(BerkeleyDBBinaryDataStore.class);
 
   private final class Worker extends AbstractBerkeleyDBWorker implements BinaryDataStore {
 
@@ -55,7 +55,7 @@ public class BerkeleyDBBinaryDataStore extends AbstractBerkeleyDBComponent imple
         case SUCCESS:
           return _value.getData();
         default:
-          s_logger.debug("{} - No record available for identifier {} status {}", new Object[] {getDatabaseName(), identifier, opStatus });
+          LOGGER.debug("{} - No record available for identifier {} status {}", new Object[] {getDatabaseName(), identifier, opStatus });
           return null;
       }
     }
@@ -69,7 +69,7 @@ public class BerkeleyDBBinaryDataStore extends AbstractBerkeleyDBComponent imple
         case SUCCESS:
           return;
         default:
-          s_logger.warn("{} - Unable to write to identifier {} status {}", new Object[] {getDatabaseName(), identifier, opStatus });
+          LOGGER.warn("{} - Unable to write to identifier {} status {}", new Object[] {getDatabaseName(), identifier, opStatus });
       }
     }
 
@@ -172,7 +172,7 @@ public class BerkeleyDBBinaryDataStore extends AbstractBerkeleyDBComponent imple
   @Override
   public byte[] get(long identifier) {
     if (!isRunning()) {
-      s_logger.info("Starting on first call as wasn't called as part of lifecycle interface");
+      LOGGER.info("Starting on first call as wasn't called as part of lifecycle interface");
       start();
     }
     return new GetRequest(identifier).run(_requests);
@@ -203,7 +203,7 @@ public class BerkeleyDBBinaryDataStore extends AbstractBerkeleyDBComponent imple
   @Override
   public void put(long identifier, byte[] data) {
     if (!isRunning()) {
-      s_logger.info("Starting on first call as wasn't called as part of lifecycle interface");
+      LOGGER.info("Starting on first call as wasn't called as part of lifecycle interface");
       start();
     }
     ArgumentChecker.notNull(data, "data to store");
@@ -235,7 +235,7 @@ public class BerkeleyDBBinaryDataStore extends AbstractBerkeleyDBComponent imple
   @Override
   public Map<Long, byte[]> get(final Collection<Long> identifiers) {
     if (!isRunning()) {
-      s_logger.info("Starting on first call as wasn't called as part of lifecycle interface");
+      LOGGER.info("Starting on first call as wasn't called as part of lifecycle interface");
       start();
     }
     return new BulkGetRequest(identifiers).run(_requests);
@@ -264,7 +264,7 @@ public class BerkeleyDBBinaryDataStore extends AbstractBerkeleyDBComponent imple
   @Override
   public void put(final Map<Long, byte[]> data) {
     if (!isRunning()) {
-      s_logger.info("Starting on first call as wasn't called as part of lifecycle interface");
+      LOGGER.info("Starting on first call as wasn't called as part of lifecycle interface");
       start();
     }
     new BulkPutRequest(data).run(_requests);

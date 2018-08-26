@@ -37,7 +37,7 @@ public abstract class AbstractDbTool<T extends DbToolContext> {
   /**
    * The logger.
    */
-  private static final Logger s_logger = LoggerFactory.getLogger(AbstractDbTool.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(AbstractDbTool.class);
   
   /**
    * Help command line option.
@@ -131,11 +131,11 @@ public abstract class AbstractDbTool<T extends DbToolContext> {
     T dbToolContext = null;
     try {
       ArgumentChecker.notEmpty(configResource, "configResource");
-      s_logger.info("Starting " + getClass().getSimpleName());
+      LOGGER.info("Starting " + getClass().getSimpleName());
       dbToolContext = initDbToolContext(configResource, dbToolContextClass);
-      s_logger.info("Running " + getClass().getSimpleName());
+      LOGGER.info("Running " + getClass().getSimpleName());
       run(dbToolContext);
-      s_logger.info("Finished " + getClass().getSimpleName());
+      LOGGER.info("Finished " + getClass().getSimpleName());
       return true;
     } catch (Exception ex) {
       ex.printStackTrace();

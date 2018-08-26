@@ -56,7 +56,7 @@ import com.sun.jersey.api.client.ClientResponse;
 public class RemoteViewClient extends AbstractRestfulJmsResultConsumer<ViewResultListener> implements ViewClient {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(RemoteViewClient.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(RemoteViewClient.class);
   /**
    * The view processor.
    */
@@ -425,7 +425,7 @@ public class RemoteViewClient extends AbstractRestfulJmsResultConsumer<ViewResul
       try {
         listenerCall.apply(listener);
       } catch (Exception e) {
-        s_logger.warn("Exception notifying ViewClient listener of call " + listenerCall.getClass().getName(), e);
+        LOGGER.warn("Exception notifying ViewClient listener of call " + listenerCall.getClass().getName(), e);
       }
     }
     listenerCall.apply(_internalResultListener);

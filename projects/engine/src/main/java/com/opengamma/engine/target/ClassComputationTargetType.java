@@ -64,7 +64,7 @@ import com.opengamma.id.UniqueIdentifiable;
     return getTarget().isAssignableFrom(clazz);
   }
 
-  private static final ComputationTargetTypeVisitor<ClassComputationTargetType, Boolean> s_isCompatible = new ComputationTargetTypeVisitor<ClassComputationTargetType, Boolean>() {
+  private static final ComputationTargetTypeVisitor<ClassComputationTargetType, Boolean> IS_COMPATIBLE = new ComputationTargetTypeVisitor<ClassComputationTargetType, Boolean>() {
 
     @Override
     public Boolean visitMultipleComputationTargetTypes(final Set<ComputationTargetType> types, final ClassComputationTargetType self) {
@@ -95,10 +95,10 @@ import com.opengamma.id.UniqueIdentifiable;
 
   @Override
   public boolean isCompatible(final ComputationTargetType type) {
-    return type.accept(s_isCompatible, this);
+    return type.accept(IS_COMPATIBLE, this);
   }
 
-  private static final ComputationTargetTypeVisitor<ClassComputationTargetType, Boolean> s_isTargetType = new ComputationTargetTypeVisitor<ClassComputationTargetType, Boolean>() {
+  private static final ComputationTargetTypeVisitor<ClassComputationTargetType, Boolean> IS_TARGET_TYPE = new ComputationTargetTypeVisitor<ClassComputationTargetType, Boolean>() {
 
     @Override
     public Boolean visitMultipleComputationTargetTypes(final Set<ComputationTargetType> types, final ClassComputationTargetType self) {
@@ -129,7 +129,7 @@ import com.opengamma.id.UniqueIdentifiable;
 
   @Override
   public boolean isTargetType(final ComputationTargetType type) {
-    return type.accept(s_isTargetType, this);
+    return type.accept(IS_TARGET_TYPE, this);
   }
 
   @Override
@@ -157,7 +157,7 @@ import com.opengamma.id.UniqueIdentifiable;
     sb.append(getName());
   }
 
-  private static final ComputationTargetTypeVisitor<ClassComputationTargetType, Boolean> s_equals = new ComputationTargetTypeVisitor<ClassComputationTargetType, Boolean>() {
+  private static final ComputationTargetTypeVisitor<ClassComputationTargetType, Boolean> EQUALS = new ComputationTargetTypeVisitor<ClassComputationTargetType, Boolean>() {
 
     @Override
     public Boolean visitMultipleComputationTargetTypes(final Set<ComputationTargetType> types, final ClassComputationTargetType self) {
@@ -187,7 +187,7 @@ import com.opengamma.id.UniqueIdentifiable;
       return true;
     }
     if (o instanceof ComputationTargetType) {
-      return ((ComputationTargetType) o).accept(s_equals, this).booleanValue();
+      return ((ComputationTargetType) o).accept(EQUALS, this).booleanValue();
     } else {
       return false;
     }

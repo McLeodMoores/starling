@@ -35,12 +35,12 @@ public class ThrowableExceptionMapper
 
   @Override
   protected void logHtmlException(Throwable exception, String htmlPage) {
-    s_logger.error("RESTful website exception caught", exception);
+    LOGGER.error("RESTful website exception caught", exception);
   }
 
   @Override
   protected void logRestfulError(Throwable exception) {
-    s_logger.error("RESTful web-service exception caught and tunnelled to client:", exception);
+    LOGGER.error("RESTful web-service exception caught and tunnelled to client:", exception);
   }
 
 }

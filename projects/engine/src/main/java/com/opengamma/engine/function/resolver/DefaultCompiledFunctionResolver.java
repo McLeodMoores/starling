@@ -54,7 +54,7 @@ import com.opengamma.util.tuple.Triple;
  */
 public class DefaultCompiledFunctionResolver implements CompiledFunctionResolver {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(DefaultCompiledFunctionResolver.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(DefaultCompiledFunctionResolver.class);
 
   /**
    * Comparator to give a fixed ordering of functions at the same priority so that we at least have deterministic behavior between runs.
@@ -280,7 +280,7 @@ public class DefaultCompiledFunctionResolver implements CompiledFunctionResolver
 
   }
 
-  private static final Function2<Iterable<Collection<ResolutionRule>>, Iterable<Collection<ResolutionRule>>, Iterable<Collection<ResolutionRule>>> s_foldRules = new Function2<Iterable<Collection<ResolutionRule>>, Iterable<Collection<ResolutionRule>>, Iterable<Collection<ResolutionRule>>>() {
+  private static final Function2<Iterable<Collection<ResolutionRule>>, Iterable<Collection<ResolutionRule>>, Iterable<Collection<ResolutionRule>>> FOLD_RULES = new Function2<Iterable<Collection<ResolutionRule>>, Iterable<Collection<ResolutionRule>>, Iterable<Collection<ResolutionRule>>>() {
     @Override
     public Iterable<Collection<ResolutionRule>> execute(final Iterable<Collection<ResolutionRule>> a, final Iterable<Collection<ResolutionRule>> b) {
       if (a instanceof ChainedRuleBundle) {
@@ -302,7 +302,7 @@ public class DefaultCompiledFunctionResolver implements CompiledFunctionResolver
   /**
    * The rules by target type. The map values are {@link ChainedRuleBundle} instances during construction, after which return an iterator giving the rules in blocks of descending priority order.
    */
-  private final ComputationTargetTypeMap<Iterable<Collection<ResolutionRule>>> _type2Rules = new ComputationTargetTypeMap<Iterable<Collection<ResolutionRule>>>(s_foldRules);
+  private final ComputationTargetTypeMap<Iterable<Collection<ResolutionRule>>> _type2Rules = new ComputationTargetTypeMap<Iterable<Collection<ResolutionRule>>>(FOLD_RULES);
 
   /**
    * The total number of unique rules.
@@ -346,7 +346,7 @@ public class DefaultCompiledFunctionResolver implements CompiledFunctionResolver
     addRules(resolutionRules);
   }
 
-  private static final Function2<Iterable<Collection<ResolutionRule>>, Iterable<Collection<ResolutionRule>>, Iterable<Collection<ResolutionRule>>> s_combineChainedRuleBundle = new Function2<Iterable<Collection<ResolutionRule>>, Iterable<Collection<ResolutionRule>>, Iterable<Collection<ResolutionRule>>>() {
+  private static final Function2<Iterable<Collection<ResolutionRule>>, Iterable<Collection<ResolutionRule>>, Iterable<Collection<ResolutionRule>>> COMBINE_CHAIN_RULE_BUNDLE = new Function2<Iterable<Collection<ResolutionRule>>, Iterable<Collection<ResolutionRule>>, Iterable<Collection<ResolutionRule>>>() {
     @Override
     public Iterable<Collection<ResolutionRule>> execute(final Iterable<Collection<ResolutionRule>> a, final Iterable<Collection<ResolutionRule>> b) {
       if (!(a instanceof ChainedRuleBundle)) {
@@ -357,7 +357,7 @@ public class DefaultCompiledFunctionResolver implements CompiledFunctionResolver
     }
   };
 
-  private static final ComputationTargetTypeVisitor<DefaultCompiledFunctionResolver, Void> s_createChainedRuleBundle = new ComputationTargetTypeVisitor<DefaultCompiledFunctionResolver, Void>() {
+  private static final ComputationTargetTypeVisitor<DefaultCompiledFunctionResolver, Void> CREATE_CHANGED_RULE_BUNDLE = new ComputationTargetTypeVisitor<DefaultCompiledFunctionResolver, Void>() {
 
     @Override
     public Void visitMultipleComputationTargetTypes(final Set<ComputationTargetType> types, final DefaultCompiledFunctionResolver self) {
@@ -389,7 +389,7 @@ public class DefaultCompiledFunctionResolver implements CompiledFunctionResolver
             insertBundle(superClazz, self);
           }
           insertBundle(clazz.getSuperclass(), self);
-          self._type2Rules.put(type, new SimpleChainedRuleBundle(), s_combineChainedRuleBundle);
+          self._type2Rules.put(type, new SimpleChainedRuleBundle(), COMBINE_CHAIN_RULE_BUNDLE);
         }
       }
     }
@@ -409,7 +409,7 @@ public class DefaultCompiledFunctionResolver implements CompiledFunctionResolver
    */
   public void addRule(ResolutionRule resolutionRule) {
     final ComputationTargetType type = resolutionRule.getParameterizedFunction().getFunction().getTargetType();
-    type.accept(s_createChainedRuleBundle, this);
+    type.accept(CREATE_CHANGED_RULE_BUNDLE, this);
     final Iterable<Collection<ResolutionRule>> rules = _type2Rules.getDirect(type);
     assert rules != null; // s_createChainedRuleBundle should have done this
     final ChainedRuleBundle bundle;
@@ -537,12 +537,12 @@ public class DefaultCompiledFunctionResolver implements CompiledFunctionResolver
             }
           }
         } catch (RuntimeException e) {
-          s_logger.error("Couldn't process rules for {}: {}", target, e.getMessage());
-          s_logger.info("Caught exception", e);
+          LOGGER.error("Couldn't process rules for {}: {}", target, e.getMessage());
+          LOGGER.info("Caught exception", e);
           // Now have an incomplete rule set for the target, possibly even an empty one
         }
       } else {
-        s_logger.warn("No rules for target type {}", target);
+        LOGGER.warn("No rules for target type {}", target);
       }
       // TODO: the array of rules is probably getting duplicated for each similar target (e.g. all swaps probably use the same rules)
       if (resolutions != resolutionRules.length) {

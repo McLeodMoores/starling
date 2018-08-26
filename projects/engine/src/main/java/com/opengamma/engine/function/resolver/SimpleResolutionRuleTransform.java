@@ -27,7 +27,7 @@ import com.opengamma.engine.function.ParameterizedFunction;
 public class SimpleResolutionRuleTransform implements ResolutionRuleTransform {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(SimpleResolutionRuleTransform.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(SimpleResolutionRuleTransform.class);
 
   /**
    * The function transformations.
@@ -86,10 +86,10 @@ public class SimpleResolutionRuleTransform implements ResolutionRuleTransform {
       final String function = rule.getParameterizedFunction().getFunction().getFunctionDefinition().getShortName();
       final Action action = _functionTransformations.get(function);
       if (action == null) {
-        s_logger.debug("Function {} has no transformation rules", function);
+        LOGGER.debug("Function {} has no transformation rules", function);
         result.add(rule);
       } else {
-        s_logger.debug("Applying transformation rules for function {}", function);
+        LOGGER.debug("Applying transformation rules for function {}", function);
         action.apply(rule, result);
       }
     }
@@ -148,7 +148,7 @@ public class SimpleResolutionRuleTransform implements ResolutionRuleTransform {
 
     @Override
     protected void apply(final ResolutionRule originalRule, final Collection<ResolutionRule> output) {
-      s_logger.debug("Discarding {}", originalRule);
+      LOGGER.debug("Discarding {}", originalRule);
     }
 
     @Override
@@ -218,7 +218,7 @@ public class SimpleResolutionRuleTransform implements ResolutionRuleTransform {
         priority += _priorityAdjustment;
       }
       final ResolutionRule replacement = new ResolutionRule(function, computationTargetFilter, priority);
-      s_logger.debug("Publishing {} in place of {}", replacement, originalRule);
+      LOGGER.debug("Publishing {} in place of {}", replacement, originalRule);
       output.add(replacement);
     }
 

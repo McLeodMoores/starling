@@ -185,14 +185,14 @@ public class DefaultComputationTargetSpecificationResolver implements Computatio
 
   }
 
-  private static final Function2<SpecificationResolver, SpecificationResolver, SpecificationResolver> s_fold = new Function2<SpecificationResolver, SpecificationResolver, SpecificationResolver>() {
+  private static final Function2<SpecificationResolver, SpecificationResolver, SpecificationResolver> FOLD = new Function2<SpecificationResolver, SpecificationResolver, SpecificationResolver>() {
     @Override
     public SpecificationResolver execute(final SpecificationResolver a, final SpecificationResolver b) {
       return new FoldedSpecificationResolver(a, b);
     }
   };
 
-  private final ComputationTargetTypeMap<SpecificationResolver> _resolve = new ComputationTargetTypeMap<SpecificationResolver>(s_fold);
+  private final ComputationTargetTypeMap<SpecificationResolver> _resolve = new ComputationTargetTypeMap<SpecificationResolver>(FOLD);
 
   public void addResolver(final ComputationTargetType type, final IdentifierResolver strategy) {
     _resolve.put(type, new SingleSpecificationResolver(type, strategy));

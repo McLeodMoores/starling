@@ -27,7 +27,7 @@ import com.opengamma.util.time.Tenor;
 @SuppressWarnings("rawtypes")
 /* package */ class NodalObjectsCurveFormatter extends AbstractFormatter<NodalObjectsCurve> {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(NodalObjectsCurveFormatter.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(NodalObjectsCurveFormatter.class);
 
   NodalObjectsCurveFormatter() {
     super(NodalObjectsCurve.class);
@@ -52,7 +52,7 @@ import com.opengamma.util.time.Tenor;
       }
       return data;
     } else {
-      s_logger.info("Unable to format curve {}", value);
+      LOGGER.info("Unable to format curve {}", value);
       return null;
     }
   }
@@ -73,7 +73,7 @@ import com.opengamma.util.time.Tenor;
       }
       return detailedData;
     } else {
-      s_logger.info("Unable to format curve {}", value);
+      LOGGER.info("Unable to format curve {}", value);
       return null;
     }
   }

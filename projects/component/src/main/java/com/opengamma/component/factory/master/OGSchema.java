@@ -26,7 +26,7 @@ import com.opengamma.util.db.tool.DbUpgradeOperation;
  */
 public final class OGSchema {
   
-  private static final Logger s_logger = LoggerFactory.getLogger(OGSchema.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(OGSchema.class);
   
   private final DbConnector _dbConnector;
   
@@ -119,7 +119,7 @@ public final class OGSchema {
     
     // REVIEW jonathan 2013-05-14 -- don't look at this :-)
     if (!(getDbConnector().getDataSource() instanceof BoneCPDataSource)) {
-      s_logger.warn("Unable to obtain database management instance. Database objects cannot be inspected or modified, and may be missing or out-of-date.");
+      LOGGER.warn("Unable to obtain database management instance. Database objects cannot be inspected or modified, and may be missing or out-of-date.");
       return; 
     }
     BoneCPDataSource dataSource = (BoneCPDataSource) getDbConnector().getDataSource();
@@ -176,11 +176,11 @@ public final class OGSchema {
     }
     Integer expectedSchemaVersion = DbScriptUtils.getCurrentVersion(schemaName);
     if (expectedSchemaVersion == null) {
-      s_logger.info("Unable to find schema version information for {}. The database schema may differ from the required version.", schemaName);
+      LOGGER.info("Unable to find schema version information for {}. The database schema may differ from the required version.", schemaName);
       return;
     }
     if (expectedSchemaVersion.intValue() == actualSchemaVersion) {
-      s_logger.debug("Verified " + schemaName + " schema version " + actualSchemaVersion);
+      LOGGER.debug("Verified " + schemaName + " schema version " + actualSchemaVersion);
       return;
     }
     String relativeDbAge = expectedSchemaVersion.intValue() < actualSchemaVersion ? "new" : "old";
@@ -189,7 +189,7 @@ public final class OGSchema {
     if (isEnforceSchemaVersion()) {
       throw new OpenGammaRuntimeException(message);
     } else {
-      s_logger.warn(message);
+      LOGGER.warn(message);
     }
   }
 

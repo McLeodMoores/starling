@@ -16,7 +16,7 @@ import com.opengamma.util.ArgumentChecker;
  * Multiplies the value of a {@code Double} field by a security-dependent value.
  */
 public class SecurityRuleApplier implements NormalizationRule {
-  private static final Logger s_logger = LoggerFactory.getLogger(SecurityRuleApplier.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(SecurityRuleApplier.class);
   
   private final SecurityRuleProvider _ruleProvider;
   
@@ -34,14 +34,14 @@ public class SecurityRuleApplier implements NormalizationRule {
         return msg;
       }
     } catch (Exception e) {
-      s_logger.warn("Failed to get normalization rule for security id {} : {}", securityUniqueId, e.getMessage());
+      LOGGER.warn("Failed to get normalization rule for security id {} : {}", securityUniqueId, e.getMessage());
       return null;
     }
     
     try {
       return rule.apply(msg, securityUniqueId, fieldHistory);
     } catch (Exception e) {
-      s_logger.debug("Rule {} rejected message with exception {}", rule.toString(), e.getMessage());
+      LOGGER.debug("Rule {} rejected message with exception {}", rule.toString(), e.getMessage());
       // Interpret an exception as a rejection of the message
       return null;
     }

@@ -39,7 +39,7 @@ import com.opengamma.util.test.TestLifecycle;
 @Test(groups = TestGroup.UNIT)
 public class DepGraphTargetMergingTest extends AbstractDependencyGraphBuilderTest {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(DepGraphTargetMergingTest.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(DepGraphTargetMergingTest.class);
 
   private static final class MergeableFunction extends AbstractFunction.NonCompiled {
 
@@ -141,7 +141,7 @@ public class DepGraphTargetMergingTest extends AbstractDependencyGraphBuilderTes
 
       @Override
       public ComputationTargetSpecification collapse(final CompiledFunctionDefinition function, final ComputationTargetSpecification a, final ComputationTargetSpecification b) {
-        s_logger.debug("Collapse {} on {} + {}", new Object[] {function, a, b });
+        LOGGER.debug("Collapse {} on {} + {}", new Object[] {function, a, b });
         if ((function instanceof MergeableFunction) && (a.getUniqueId().getValue().charAt(0) == b.getUniqueId().getValue().charAt(0))) {
           final Set<String> idSet = new HashSet<String>();
           add(idSet, a);

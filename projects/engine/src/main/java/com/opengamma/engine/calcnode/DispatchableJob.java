@@ -30,7 +30,7 @@ import com.opengamma.util.async.Cancelable;
  */
 /* package */abstract class DispatchableJob implements JobInvocationReceiver {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(DispatchableJob.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(DispatchableJob.class);
 
   protected static final class CancelHandle implements Cancelable {
 
@@ -142,7 +142,7 @@ import com.opengamma.util.async.Cancelable;
   public void jobCompleted(final CalculationJobResult result) {
     final JobResultReceiver resultReceiver = getResultReceiver(result);
     if (resultReceiver == null) {
-      s_logger.warn("Job {} completed on node {} but is not currently pending", this, result.getComputeNodeId());
+      LOGGER.warn("Job {} completed on node {} but is not currently pending", this, result.getComputeNodeId());
       // Note the above warning can happen if we've been retried
       extendTimeout(getDispatcher().getMaxJobExecutionTime(), true);
       return;
@@ -155,10 +155,10 @@ import com.opengamma.util.async.Cancelable;
       // Others are still running, but we can extend the timeout period
       extendTimeout(getDispatcher().getMaxJobExecutionTime(), true);
     }
-    s_logger.info("Job {} completed on node {}", this, result.getComputeNodeId());
+    LOGGER.info("Job {} completed on node {}", this, result.getComputeNodeId());
     resultReceiver.resultReceived(result);
     final long durationNanos = getDurationNanos();
-    s_logger.debug("Reported time = {}ms, non-executing job time = {}ms", (double) result.getDuration() / 1000000d, ((double) durationNanos - (double) result.getDuration()) / 1000000d);
+    LOGGER.debug("Reported time = {}ms, non-executing job time = {}ms", (double) result.getDuration() / 1000000d, ((double) durationNanos - (double) result.getDuration()) / 1000000d);
     if (getDispatcher().getStatisticsGatherer() != null) {
       final int size = result.getResultItems().size();
       getDispatcher().getStatisticsGatherer().jobCompleted(result.getComputeNodeId(), size, result.getDuration(), getDurationNanos());
@@ -169,7 +169,7 @@ import com.opengamma.util.async.Cancelable;
 
   @Override
   public void jobFailed(final JobInvoker jobInvoker, final String computeNodeId, final Exception exception) {
-    s_logger.warn("Job {} failed, {}", this, (exception != null) ? exception.getMessage() : "no exception passed");
+    LOGGER.warn("Job {} failed, {}", this, (exception != null) ? exception.getMessage() : "no exception passed");
     if (_completed.getAndSet(true) == false) {
       cancelTimeout(null);
       DispatchableJob retry = prepareRetryJob(jobInvoker);
@@ -193,7 +193,7 @@ import com.opengamma.util.async.Cancelable;
         getDispatcher().getStatisticsGatherer().jobFailed(computeNodeId, getDurationNanos());
       }
     } else {
-      s_logger.warn("Job {} failed on node {} but we've already completed, aborted or failed", this, computeNodeId);
+      LOGGER.warn("Job {} failed on node {} but we've already completed, aborted or failed", this, computeNodeId);
     }
   }
 
@@ -213,33 +213,33 @@ import com.opengamma.util.async.Cancelable;
     if (_completed.getAndSet(true) == false) {
       cancelTimeout(DispatchableJobTimeout.FINISHED);
       if (exception == null) {
-        s_logger.error("Aborted job {} with {}", this, alternativeError);
+        LOGGER.error("Aborted job {} with {}", this, alternativeError);
         exception = new OpenGammaRuntimeException(alternativeError);
         exception.fillInStackTrace();
       } else {
-        s_logger.error("Aborted job {} with {}", this, exception);
+        LOGGER.error("Aborted job {} with {}", this, exception);
       }
       // REVIEW jonathan 2012-11-01 -- where's the 'real' execution log here?
       MutableExecutionLog executionLog = new MutableExecutionLog(ExecutionLogMode.INDICATORS);
       executionLog.setException(exception);
       fail(getJob(), CalculationJobResultItemBuilder.of(executionLog).toResultItem());
     } else {
-      s_logger.warn("Job {} aborted but we've already completed or aborted from another node", this);
+      LOGGER.warn("Job {} aborted but we've already completed or aborted from another node", this);
     }
   }
 
   protected abstract boolean isAlive(final JobInvoker jobInvoker);
 
   public void timeout(final long timeAccrued, final JobInvoker jobInvoker) {
-    s_logger.debug("Timeout on {}, {}ms accrued", jobInvoker.getInvokerId(), timeAccrued);
+    LOGGER.debug("Timeout on {}, {}ms accrued", jobInvoker.getInvokerId(), timeAccrued);
     final long remaining = getDispatcher().getMaxJobExecutionTime() - timeAccrued;
     if (remaining > 0) {
       if (isAlive(jobInvoker)) {
-        s_logger.debug("Invoker {} reports job {} still alive", jobInvoker.getInvokerId(), this);
+        LOGGER.debug("Invoker {} reports job {} still alive", jobInvoker.getInvokerId(), this);
         extendTimeout(remaining, false);
         return;
       } else {
-        s_logger.warn("Invoker {} reports job {} failure", jobInvoker.getInvokerId(), this);
+        LOGGER.warn("Invoker {} reports job {} failure", jobInvoker.getInvokerId(), this);
         jobFailed(jobInvoker, "node on " + jobInvoker.getInvokerId(), new OpenGammaRuntimeException("Node reported failure at " + timeAccrued + "ms keepalive"));
       }
     } else {
@@ -250,13 +250,13 @@ import com.opengamma.util.async.Cancelable;
   private DispatchableJobTimeout cancelTimeout(final DispatchableJobTimeout flagState) {
     final DispatchableJobTimeout timeout = _timeout.getAndSet(flagState);
     if (timeout == null) {
-      s_logger.debug("Job {} timeout transition null to {}", this, flagState);
+      LOGGER.debug("Job {} timeout transition null to {}", this, flagState);
     } else if (timeout.isActive()) {
-      s_logger.debug("Cancelling timeout for {} on transition to {}", this, flagState);
+      LOGGER.debug("Cancelling timeout for {} on transition to {}", this, flagState);
       timeout.cancel();
       return timeout;
     } else {
-      s_logger.debug("Job {} timeout transition from {} to {}", new Object[] {this, timeout, flagState });
+      LOGGER.debug("Job {} timeout transition from {} to {}", new Object[] {this, timeout, flagState });
     }
     return null;
   }
@@ -264,7 +264,7 @@ import com.opengamma.util.async.Cancelable;
   private void extendTimeout(final long remainingMillis, final boolean resetTimeAccrued) {
     final DispatchableJobTimeout timeout = _timeout.get();
     if ((timeout != null) && timeout.isActive()) {
-      s_logger.debug("Extending timeout on job {}", getJob().getSpecification().getJobId());
+      LOGGER.debug("Extending timeout on job {}", getJob().getSpecification().getJobId());
       timeout.extend(Math.min(remainingMillis, getDispatcher().getMaxJobExecutionTime()), resetTimeAccrued);
     }
   }
@@ -285,18 +285,18 @@ import com.opengamma.util.async.Cancelable;
   protected abstract void cancel(final JobInvoker jobInvoker);
 
   private boolean cancel(boolean mayInterruptIfRunning) {
-    s_logger.info("Cancelling job {}", this);
+    LOGGER.info("Cancelling job {}", this);
     while (_completed.getAndSet(true) != false) {
       Thread.yield();
       final DispatchableJobTimeout timeout = _timeout.get();
       if (timeout.isActive()) {
-        s_logger.debug("Job {} - currently failing, cancelling or aborting", this);
+        LOGGER.debug("Job {} - currently failing, cancelling or aborting", this);
       } else {
         if (timeout == DispatchableJobTimeout.CANCELLED) {
-          s_logger.info("Job {} already cancelled", this);
+          LOGGER.info("Job {} already cancelled", this);
           return true;
         } else {
-          s_logger.info("Job {} - can't cancel: {}", this, timeout);
+          LOGGER.info("Job {} - can't cancel: {}", this, timeout);
           return false;
         }
       }
@@ -321,12 +321,12 @@ import com.opengamma.util.async.Cancelable;
     }
     DispatchableJobTimeout timeout = new DispatchableJobTimeout(this, jobInvoker);
     if (_timeout.compareAndSet(null, timeout)) {
-      s_logger.debug("Timeout set for job {}", this);
+      LOGGER.debug("Timeout set for job {}", this);
     } else {
       timeout.cancel();
-      if (s_logger.isDebugEnabled()) {
+      if (LOGGER.isDebugEnabled()) {
         timeout = _timeout.get();
-        s_logger.debug("Timeout {} for job {}", timeout, this);
+        LOGGER.debug("Timeout {} for job {}", timeout, this);
       }
     }
     return true;

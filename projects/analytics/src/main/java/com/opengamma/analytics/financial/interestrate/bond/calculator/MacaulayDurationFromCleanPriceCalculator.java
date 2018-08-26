@@ -18,14 +18,14 @@ public final class MacaulayDurationFromCleanPriceCalculator extends InstrumentDe
   /**
    * The calculator instance.
    */
-  private static final MacaulayDurationFromCleanPriceCalculator s_instance = new MacaulayDurationFromCleanPriceCalculator();
+  private static final MacaulayDurationFromCleanPriceCalculator INSTANCE = new MacaulayDurationFromCleanPriceCalculator();
 
   /**
    * Return the calculator instance.
    * @return The instance.
    */
   public static MacaulayDurationFromCleanPriceCalculator getInstance() {
-    return s_instance;
+    return INSTANCE;
   }
 
   /**

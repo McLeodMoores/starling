@@ -17,7 +17,7 @@ import com.google.common.base.Supplier;
  */
 /* package */final class BuildFractionEstimate implements Supplier<Double> {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(BuildFractionEstimate.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(BuildFractionEstimate.class);
 
   private final WeakReference<DependencyGraphBuilder> _builder;
   private long _maxRemaining;
@@ -51,7 +51,7 @@ import com.google.common.base.Supplier;
         }
       }
     }
-    s_logger.info("Completed {} of {} scheduled steps", completed, scheduled);
+    LOGGER.info("Completed {} of {} scheduled steps", completed, scheduled);
     builder.reportStateSize();
     // TODO: What can we do based on sampling the counters available and applying knowledge of typical graph shapes? Don't want anything too heavyweight.
     final long remaining = scheduled - completed;

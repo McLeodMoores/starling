@@ -34,7 +34,7 @@ import com.opengamma.id.ExternalScheme;
  */
 public abstract class EquityFutureBlackVolatilitySurfaceFunction extends BlackVolatilitySurfaceFunction {
   /** The supported schemes */
-  private static final Set<ExternalScheme> s_validSchemes = ImmutableSet.of(ExternalSchemes.BLOOMBERG_TICKER, ExternalSchemes.BLOOMBERG_TICKER_WEAK, ExternalSchemes.ACTIVFEED_TICKER);
+  private static final Set<ExternalScheme> VALID_SCHEMES = ImmutableSet.of(ExternalSchemes.BLOOMBERG_TICKER, ExternalSchemes.BLOOMBERG_TICKER_WEAK, ExternalSchemes.ACTIVFEED_TICKER);
 
   /**
    * Spline interpolator function for Black volatility surfaces
@@ -118,7 +118,7 @@ public abstract class EquityFutureBlackVolatilitySurfaceFunction extends BlackVo
   public boolean canApplyTo(final FunctionCompilationContext context, final ComputationTarget target) {
     if (target.getValue() instanceof ExternalIdentifiable) {
       final ExternalId identifier = ((ExternalIdentifiable) target.getValue()).getExternalId();
-      return s_validSchemes.contains(identifier.getScheme());
+      return VALID_SCHEMES.contains(identifier.getScheme());
     }
     return false;
   }

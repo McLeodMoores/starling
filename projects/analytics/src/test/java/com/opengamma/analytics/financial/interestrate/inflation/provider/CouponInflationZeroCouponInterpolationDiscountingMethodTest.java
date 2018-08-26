@@ -62,7 +62,7 @@ public class CouponInflationZeroCouponInterpolationDiscountingMethodTest {
   private static final double TOLERANCE_PV = 1.0E-2;
   private static final double TOLERANCE_PV_DELTA = 1.0E+2;
 
-  private static final DoubleTimeSeries<ZonedDateTime> priceIndexTS = ImmutableZonedDateTimeDoubleTimeSeries.ofUTC(
+  private static final DoubleTimeSeries<ZonedDateTime> PRICE_INDEX_TS = ImmutableZonedDateTimeDoubleTimeSeries.ofUTC(
       new ZonedDateTime[] {DateUtils.getUTCDate(2008, 5, 31), DateUtils.getUTCDate(2008, 6, 30), DateUtils.getUTCDate(2011, 5, 31), DateUtils.getUTCDate(2011, 6, 30),
         DateUtils.getUTCDate(2018, 5, 31), DateUtils.getUTCDate(2018, 6, 30) }, new double[] {108.23, 108.64, 225.964, 225.722,
         128.23, 128.43 });
@@ -70,7 +70,7 @@ public class CouponInflationZeroCouponInterpolationDiscountingMethodTest {
   private static final CouponInflationZeroCouponInterpolationDefinition ZERO_COUPON_1_DEFINITION = CouponInflationZeroCouponInterpolationDefinition.from(START_DATE, PAYMENT_DATE, NOTIONAL,
       PRICE_INDEX_EUR, MONTH_LAG, MONTH_LAG, false);
   private static final ZonedDateTime PRICING_DATE = DateUtils.getUTCDate(2011, 8, 3);
-  private static final CouponInflationZeroCouponInterpolation ZERO_COUPON_1 = (CouponInflationZeroCouponInterpolation) ZERO_COUPON_1_DEFINITION.toDerivative(PRICING_DATE, priceIndexTS);
+  private static final CouponInflationZeroCouponInterpolation ZERO_COUPON_1 = (CouponInflationZeroCouponInterpolation) ZERO_COUPON_1_DEFINITION.toDerivative(PRICING_DATE, PRICE_INDEX_TS);
   private static final CouponInflationZeroCouponInterpolationDiscountingMethod METHOD = new CouponInflationZeroCouponInterpolationDiscountingMethod();
   private static final PresentValueDiscountingInflationCalculator PVIC = PresentValueDiscountingInflationCalculator.getInstance();
   private static final NetAmountInflationCalculator NAIC = NetAmountInflationCalculator.getInstance();
@@ -159,7 +159,7 @@ public class CouponInflationZeroCouponInterpolationDiscountingMethodTest {
     final double indexStart = weightSettle * 225.964 + (1 - weightSettle) * 225.722;
     final CouponInflationZeroCouponInterpolationDefinition zeroCouponUsdDefinition = CouponInflationZeroCouponInterpolationDefinition.from(settleDate, paymentDate, notional, PRICE_INDEX_US,
         MONTH_LAG, MONTH_LAG, false);
-    final CouponInflationZeroCouponInterpolation zeroCouponUsd = (CouponInflationZeroCouponInterpolation) zeroCouponUsdDefinition.toDerivative(PRICING_DATE, priceIndexTS);
+    final CouponInflationZeroCouponInterpolation zeroCouponUsd = (CouponInflationZeroCouponInterpolation) zeroCouponUsdDefinition.toDerivative(PRICING_DATE, PRICE_INDEX_TS);
     final MultipleCurrencyAmount pvInflation = METHOD.presentValue(zeroCouponUsd, marketSeason.getInflationProvider());
     final double df = MARKET.getCurve(zeroCouponUsd.getCurrency()).getDiscountFactor(zeroCouponUsd.getPaymentTime());
     final double indexMonth0 = marketSeason.getCurve(PRICE_INDEX_US).getPriceIndex(zeroCouponUsd.getReferenceEndTime()[0]);

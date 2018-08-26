@@ -168,16 +168,16 @@ public final class ValueRequirement implements Serializable {
     _constraints = constraints;
   }
 
-  private static final ConcurrentHashMap<String, String> s_interned = new ConcurrentHashMap<String, String>();
+  private static final ConcurrentHashMap<String, String> INTERNED = new ConcurrentHashMap<String, String>();
 
   public static String getInterned(final String valueName) {
     //This has been observed to be faster if a large proportion of valueNames are already interned and we have a large number of cores
-    String interned = s_interned.get(valueName);
+    String interned = INTERNED.get(valueName);
     if (interned != null) {
       return interned;
     }
     interned = valueName.intern();
-    s_interned.putIfAbsent(interned, interned); //NOTE: use interned for keys too
+    INTERNED.putIfAbsent(interned, interned); //NOTE: use interned for keys too
     return interned;
   }
 

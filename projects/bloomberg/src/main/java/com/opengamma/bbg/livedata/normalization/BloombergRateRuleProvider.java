@@ -24,7 +24,7 @@ import com.opengamma.livedata.normalization.UnitChange;
 public class BloombergRateRuleProvider implements SecurityRuleProvider {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(BloombergRateRuleProvider.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(BloombergRateRuleProvider.class);
 
   private static final Set<String> FIELDS = Sets.newHashSet(MarketDataRequirementNames.MARKET_VALUE, MarketDataRequirementNames.DIRTY_PRICE_MID);
   private static final NormalizationRule RULE_10 = new UnitChange(FIELDS, 0.1);
@@ -61,7 +61,7 @@ public class BloombergRateRuleProvider implements SecurityRuleProvider {
       if (_failUnknownSecurityType) {
         throw new OpenGammaRuntimeException("Unable to determine security type for " + securityUniqueId);
       } else {
-        s_logger.warn("Unable to determine normalization factor for " + securityUniqueId + ". Its market value will be unnormalized.");
+        LOGGER.warn("Unable to determine normalization factor for " + securityUniqueId + ". Its market value will be unnormalized.");
         return null;
       }
     }

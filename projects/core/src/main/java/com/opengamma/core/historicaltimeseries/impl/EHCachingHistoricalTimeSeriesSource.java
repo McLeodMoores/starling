@@ -47,7 +47,7 @@ import com.opengamma.util.tuple.Pairs;
 public class EHCachingHistoricalTimeSeriesSource implements HistoricalTimeSeriesSource {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(EHCachingHistoricalTimeSeriesSource.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(EHCachingHistoricalTimeSeriesSource.class);
 
   /** The cache prefix. */
   /*package*/static final String CACHE_PREFIX = "HistoricalTimeSeries";
@@ -788,11 +788,11 @@ public class EHCachingHistoricalTimeSeriesSource implements HistoricalTimeSeries
                                                                   dataProvider,
                                                                   dataField);
         if (hts != null) {
-          s_logger.debug("Caching time-series {}", hts);
+          LOGGER.debug("Caching time-series {}", hts);
           _cache.deepInsert(key, hts.getUniqueId().getObjectId(), hts);
           hts = getSubSeries(hts, start, includeStart, end, includeEnd, null);
         } else {
-          s_logger.debug("Caching miss {}", key);
+          LOGGER.debug("Caching miss {}", key);
           _cache.markMissed(key);
         }
         result.put(identifiers, hts);

@@ -26,7 +26,7 @@ import com.opengamma.engine.value.ValueSpecification;
  */
 /* package */abstract class WatchedJob extends DispatchableJob {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(WatchedJob.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(WatchedJob.class);
 
   /**
    * Creates a new watched job for submission to the invokers.
@@ -153,7 +153,7 @@ import com.opengamma.engine.value.ValueSpecification;
    */
   private static DispatchableJob splitJob(final WatchedJob creator, final CalculationJob job) {
     final List<CalculationJobItem> items = job.getJobItems();
-    s_logger.debug("Splitting {} for resubmission ", job);
+    LOGGER.debug("Splitting {} for resubmission ", job);
     final CacheSelectHint hint = job.getCacheSelectHint();
     // Build the head job items
     final int headItemCount = items.size() >> 1;
@@ -231,7 +231,7 @@ import com.opengamma.engine.value.ValueSpecification;
     if (getJob().getJobItems().size() <= 1) {
       // Report the failed job item to the blacklist maintainer
       final CalculationJobItem item = getJob().getJobItems().get(0);
-      s_logger.info("Reporting failure of {} from {} to blacklist maintainer", item, this);
+      LOGGER.info("Reporting failure of {} from {} to blacklist maintainer", item, this);
       getDispatcher().getFunctionBlacklistMaintainer().failedJobItem(item);
       return null;
     } else {

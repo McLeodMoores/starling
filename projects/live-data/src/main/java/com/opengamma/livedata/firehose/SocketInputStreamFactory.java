@@ -22,7 +22,7 @@ import com.opengamma.util.ArgumentChecker;
  * An implementation of {@link InputStreamFactory} that connects to a remote socket. 
  */
 public class SocketInputStreamFactory implements InputStreamFactory {
-  private static final Logger s_logger = LoggerFactory.getLogger(SocketInputStreamFactory.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(SocketInputStreamFactory.class);
   /**
    * Time in ms to wait on initial connect.
    * Set to 5sec to allow the outer loop to work correctly.
@@ -68,15 +68,15 @@ public class SocketInputStreamFactory implements InputStreamFactory {
     try {
       socket.connect(new InetSocketAddress(_host, _port), CONNECT_TIMEOUT);
       InputStream is = socket.getInputStream();
-      s_logger.info("Connected to {}:{}", _host, _port);
+      LOGGER.info("Connected to {}:{}", _host, _port);
       return is;
     } catch (IOException ioe) {
       try {
         socket.close();
       } catch (IOException ioe2) {
-        s_logger.debug("Unable to close socket in case of error. This is almost certainly fine because the socket isn't bound", ioe2);
+        LOGGER.debug("Unable to close socket in case of error. This is almost certainly fine because the socket isn't bound", ioe2);
       }
-      s_logger.warn("Unable to open a connection to " + _host + ":" + _port, ioe);
+      LOGGER.warn("Unable to open a connection to " + _host + ":" + _port, ioe);
       throw new OpenGammaRuntimeException("Unable to open a connection to " + _host + ":" + _port, ioe);
     }
   }

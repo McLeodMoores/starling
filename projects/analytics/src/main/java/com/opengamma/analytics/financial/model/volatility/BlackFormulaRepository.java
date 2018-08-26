@@ -27,7 +27,7 @@ import com.opengamma.util.ArgumentChecker;
  */
 public abstract class BlackFormulaRepository {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(BlackFormulaRepository.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(BlackFormulaRepository.class);
 
   private static final double LARGE = 1.e13;
   private static final ProbabilityDistribution<Double> NORMAL = new NormalDistribution(0, 1);
@@ -54,7 +54,7 @@ public abstract class BlackFormulaRepository {
 
     double sigmaRootT = lognormalVol * Math.sqrt(timeToExpiry);
     if (Double.isNaN(sigmaRootT)) {
-      s_logger.info("lognormalVol * Math.sqrt(timeToExpiry) ambiguous");
+      LOGGER.info("lognormalVol * Math.sqrt(timeToExpiry) ambiguous");
       sigmaRootT = 1.;
     }
     final int sign = isCall ? 1 : -1;
@@ -65,7 +65,7 @@ public abstract class BlackFormulaRepository {
     double d2 = 0.;
 
     if (bFwd && bStr) {
-      s_logger.info("(large value)/(large value) ambiguous");
+      LOGGER.info("(large value)/(large value) ambiguous");
       return isCall ? (forward >= strike ? forward : 0.) : (strike >= forward ? strike : 0.);
     }
     if (sigmaRootT < SMALL) {
@@ -135,7 +135,7 @@ public abstract class BlackFormulaRepository {
 
     double sigmaRootT = lognormalVol * Math.sqrt(timeToExpiry);
     if (Double.isNaN(sigmaRootT)) {
-      s_logger.info("lognormalVol * Math.sqrt(timeToExpiry) ambiguous");
+      LOGGER.info("lognormalVol * Math.sqrt(timeToExpiry) ambiguous");
       sigmaRootT = 1.;
     }
     final int sign = isCall ? 1 : -1;
@@ -152,7 +152,7 @@ public abstract class BlackFormulaRepository {
       if (Math.abs(forward - strike) >= SMALL && !(bFwd && bStr)) {
         return (isCall ? (forward > strike ? 1.0 : 0.0) : (forward > strike ? 0.0 : -1.0));
       }
-      s_logger.info("(log 1.)/0., ambiguous value");
+      LOGGER.info("(log 1.)/0., ambiguous value");
       return isCall ? 0.5 : -0.5;
     }
     if (Math.abs(forward - strike) < SMALL | (bFwd && bStr)) {
@@ -175,7 +175,7 @@ public abstract class BlackFormulaRepository {
 
     double sigmaSqT = lognormalVol * lognormalVol * timeToExpiry;
     if (Double.isNaN(sigmaSqT)) {
-      s_logger.info("lognormalVol * Math.sqrt(timeToExpiry) ambiguous");
+      LOGGER.info("lognormalVol * Math.sqrt(timeToExpiry) ambiguous");
       sigmaSqT = 1.;
     }
 
@@ -200,7 +200,7 @@ public abstract class BlackFormulaRepository {
 
     double sigmaRootT = lognormalVol * Math.sqrt(timeToExpiry);
     if (Double.isNaN(sigmaRootT)) {
-      s_logger.info("lognormalVol * Math.sqrt(timeToExpiry) ambiguous");
+      LOGGER.info("lognormalVol * Math.sqrt(timeToExpiry) ambiguous");
       sigmaRootT = 1.;
     }
     final int sign = isCall ? 1 : -1;
@@ -217,7 +217,7 @@ public abstract class BlackFormulaRepository {
       if (Math.abs(forward - strike) >= SMALL && !(bFwd && bStr)) {
         return (isCall ? (forward > strike ? -1.0 : 0.0) : (forward > strike ? 0.0 : 1.0));
       }
-      s_logger.info("(log 1.)/0., ambiguous value");
+      LOGGER.info("(log 1.)/0., ambiguous value");
       return isCall ? -0.5 : 0.5;
     }
     if (Math.abs(forward - strike) < SMALL | (bFwd && bStr)) {
@@ -250,7 +250,7 @@ public abstract class BlackFormulaRepository {
 
     double sigmaRootT = lognormalVol * Math.sqrt(timeToExpiry);
     if (Double.isNaN(sigmaRootT)) {
-      s_logger.info("lognormalVol * Math.sqrt(timeToExpiry) ambiguous");
+      LOGGER.info("lognormalVol * Math.sqrt(timeToExpiry) ambiguous");
       sigmaRootT = 1.;
     }
     final int sign = isCall ? 1 : -1;
@@ -267,7 +267,7 @@ public abstract class BlackFormulaRepository {
       if (Math.abs(forward - strike) >= SMALL && !(bFwd && bStr)) {
         return (isCall ? (forward > strike ? 1.0 : 0.0) : (forward > strike ? 0.0 : -1.0));
       }
-      s_logger.info("(log 1.)/0., ambiguous");
+      LOGGER.info("(log 1.)/0., ambiguous");
       return isCall ? 0.5 : -0.5;
     }
     if (Math.abs(forward - strike) < SMALL | (bFwd && bStr)) {
@@ -297,7 +297,7 @@ public abstract class BlackFormulaRepository {
 
     double sigmaRootT = lognormalVol * Math.sqrt(timeToExpiry);
     if (Double.isNaN(sigmaRootT)) {
-      s_logger.info("lognormalVol * Math.sqrt(timeToExpiry) ambiguous");
+      LOGGER.info("lognormalVol * Math.sqrt(timeToExpiry) ambiguous");
       sigmaRootT = 1.;
     }
     double d1 = 0.;
@@ -312,7 +312,7 @@ public abstract class BlackFormulaRepository {
       if (Math.abs(forward - strike) >= SMALL && !(bFwd && bStr)) {
         return 0.0;
       }
-      s_logger.info("(log 1.)/0. ambiguous");
+      LOGGER.info("(log 1.)/0. ambiguous");
       return bFwd ? NORMAL.getPDF(0.) : NORMAL.getPDF(0.) / forward / sigmaRootT;
     }
     if (Math.abs(forward - strike) < SMALL | (bFwd && bStr)) {
@@ -342,7 +342,7 @@ public abstract class BlackFormulaRepository {
 
     double sigmaRootT = lognormalVol * Math.sqrt(timeToExpiry);
     if (Double.isNaN(sigmaRootT)) {
-      s_logger.info("lognormalVol * Math.sqrt(timeToExpiry) ambiguous");
+      LOGGER.info("lognormalVol * Math.sqrt(timeToExpiry) ambiguous");
       sigmaRootT = 1.;
     }
     double d2 = 0.;
@@ -357,7 +357,7 @@ public abstract class BlackFormulaRepository {
       if (Math.abs(forward - strike) >= SMALL && !(bFwd && bStr)) {
         return 0.0;
       }
-      s_logger.info("(log 1.)/0. ambiguous");
+      LOGGER.info("(log 1.)/0. ambiguous");
       return bStr ? NORMAL.getPDF(0.) : NORMAL.getPDF(0.) / strike / sigmaRootT;
     }
     if (Math.abs(forward - strike) < SMALL | (bFwd && bStr)) {
@@ -387,7 +387,7 @@ public abstract class BlackFormulaRepository {
 
     double sigmaRootT = lognormalVol * Math.sqrt(timeToExpiry);
     if (Double.isNaN(sigmaRootT)) {
-      s_logger.info("lognormalVol * Math.sqrt(timeToExpiry) ambiguous");
+      LOGGER.info("lognormalVol * Math.sqrt(timeToExpiry) ambiguous");
       sigmaRootT = 1.;
     }
     double d2 = 0.;
@@ -402,7 +402,7 @@ public abstract class BlackFormulaRepository {
       if (Math.abs(forward - strike) >= SMALL && !(bFwd && bStr)) {
         return 0.0;
       }
-      s_logger.info("(log 1.)/0. ambiguous");
+      LOGGER.info("(log 1.)/0. ambiguous");
       return bFwd ? -NORMAL.getPDF(0.) : -NORMAL.getPDF(0.) / forward / sigmaRootT;
     }
     if (Math.abs(forward - strike) < SMALL | (bFwd && bStr)) {
@@ -445,7 +445,7 @@ public abstract class BlackFormulaRepository {
     final double rootT = Math.sqrt(timeToExpiry);
     double sigmaRootT = lognormalVol * rootT;
     if (Double.isNaN(sigmaRootT)) {
-      s_logger.info("lognormalVol * Math.sqrt(timeToExpiry) ambiguous");
+      LOGGER.info("lognormalVol * Math.sqrt(timeToExpiry) ambiguous");
       sigmaRootT = 1.;
     }
     final int sign = isCall ? 1 : -1;
@@ -460,7 +460,7 @@ public abstract class BlackFormulaRepository {
     double priceLike = Double.NaN;
     final double rt = (timeToExpiry < SMALL && Math.abs(interestRate) > LARGE) ? (interestRate > 0. ? 1. : -1.) : interestRate * timeToExpiry;
     if (bFwd && bStr) {
-      s_logger.info("(large value)/(large value) ambiguous");
+      LOGGER.info("(large value)/(large value) ambiguous");
       priceLike = isCall ? (forward >= strike ? forward : 0.) : (strike >= forward ? strike : 0.);
     } else {
       if (sigmaRootT < SMALL) {
@@ -519,7 +519,7 @@ public abstract class BlackFormulaRepository {
     final double rootT = Math.sqrt(timeToExpiry);
     double sigmaRootT = lognormalVol * rootT;
     if (Double.isNaN(sigmaRootT)) {
-      s_logger.info("lognormalVol * Math.sqrt(timeToExpiry) ambiguous");
+      LOGGER.info("lognormalVol * Math.sqrt(timeToExpiry) ambiguous");
       sigmaRootT = 1.;
     }
     final int sign = isCall ? 1 : -1;
@@ -532,7 +532,7 @@ public abstract class BlackFormulaRepository {
     double priceLike = Double.NaN;
     final double rt = (timeToExpiry < SMALL && Math.abs(interestRate) > LARGE) ? (interestRate > 0. ? 1. : -1.) : interestRate * timeToExpiry;
     if (bFwd && bStr) {
-      s_logger.info("(large value)/(large value) ambiguous");
+      LOGGER.info("(large value)/(large value) ambiguous");
       priceLike = isCall ? 0. : (strike >= forward ? strike : 0.);
     } else {
       if (sigmaRootT < SMALL) {
@@ -574,7 +574,7 @@ public abstract class BlackFormulaRepository {
     final double rootT = Math.sqrt(timeToExpiry);
     double sigmaRootT = lognormalVol * rootT;
     if (Double.isNaN(sigmaRootT)) {
-      s_logger.info("lognormalVol * Math.sqrt(timeToExpiry) ambiguous");
+      LOGGER.info("lognormalVol * Math.sqrt(timeToExpiry) ambiguous");
       sigmaRootT = 1.;
     }
 
@@ -590,7 +590,7 @@ public abstract class BlackFormulaRepository {
       if (Math.abs(forward - strike) >= SMALL && !(bFwd && bStr)) {
         return 0.0;
       }
-      s_logger.info("log(1)/0 ambiguous");
+      LOGGER.info("log(1)/0 ambiguous");
       if (rootT < SMALL) {
         return forward < SMALL ? -NORMAL.getPDF(0.) * lognormalVol / 2. : (lognormalVol < SMALL ? -forward * NORMAL.getPDF(0.) / 2. : -forward * NORMAL.getPDF(0.) * lognormalVol / 2. / rootT);
       }
@@ -627,7 +627,7 @@ public abstract class BlackFormulaRepository {
     final double rootT = Math.sqrt(timeToExpiry);
     double sigmaRootT = lognormalVol * rootT;
     if (Double.isNaN(sigmaRootT)) {
-      s_logger.info("lognormalVol * Math.sqrt(timeToExpiry) ambiguous");
+      LOGGER.info("lognormalVol * Math.sqrt(timeToExpiry) ambiguous");
       sigmaRootT = 1.;
     }
     final boolean bFwd = (forward > LARGE);
@@ -642,7 +642,7 @@ public abstract class BlackFormulaRepository {
       if (Math.abs(forward - strike) >= SMALL && !(bFwd && bStr)) {
         return 0.;
       }
-      s_logger.info("log(1)/0 ambiguous");
+      LOGGER.info("log(1)/0 ambiguous");
       return (rootT < SMALL && forward > LARGE) ? NORMAL.getPDF(0.) : forward * rootT * NORMAL.getPDF(0.);
     }
     if (Math.abs(forward - strike) < SMALL | (bFwd && bStr)) {
@@ -680,7 +680,7 @@ public abstract class BlackFormulaRepository {
     final double rootT = Math.sqrt(timeToExpiry);
     double sigmaRootT = lognormalVol * rootT;
     if (Double.isNaN(sigmaRootT)) {
-      s_logger.info("lognormalVol * Math.sqrt(timeToExpiry) ambiguous");
+      LOGGER.info("lognormalVol * Math.sqrt(timeToExpiry) ambiguous");
       sigmaRootT = 1.;
     }
 
@@ -697,7 +697,7 @@ public abstract class BlackFormulaRepository {
       if (Math.abs(forward - strike) >= SMALL && !(bFwd && bStr)) {
         return 0.0;
       }
-      s_logger.info("log(1)/0 ambiguous");
+      LOGGER.info("log(1)/0 ambiguous");
       return lognormalVol < SMALL ? -NORMAL.getPDF(0.) / lognormalVol : NORMAL.getPDF(0.) * rootT;
     }
     if (Math.abs(forward - strike) < SMALL | (bFwd && bStr)) {
@@ -730,7 +730,7 @@ public abstract class BlackFormulaRepository {
     final double rootT = Math.sqrt(timeToExpiry);
     double sigmaRootT = lognormalVol * rootT;
     if (Double.isNaN(sigmaRootT)) {
-      s_logger.info("lognormalVol * Math.sqrt(timeToExpiry) ambiguous");
+      LOGGER.info("lognormalVol * Math.sqrt(timeToExpiry) ambiguous");
       sigmaRootT = 1.;
     }
 
@@ -747,7 +747,7 @@ public abstract class BlackFormulaRepository {
       if (Math.abs(forward - strike) >= SMALL && !(bFwd && bStr)) {
         return 0.0;
       }
-      s_logger.info("log(1)/0 ambiguous");
+      LOGGER.info("log(1)/0 ambiguous");
       return lognormalVol < SMALL ? -NORMAL.getPDF(0.) / lognormalVol : -NORMAL.getPDF(0.) * rootT;
     }
     if (Math.abs(forward - strike) < SMALL | (bFwd && bStr)) {
@@ -780,7 +780,7 @@ public abstract class BlackFormulaRepository {
     final double rootT = Math.sqrt(timeToExpiry);
     double sigmaRootT = lognormalVol * rootT;
     if (Double.isNaN(sigmaRootT)) {
-      s_logger.info("lognormalVol * Math.sqrt(timeToExpiry) ambiguous");
+      LOGGER.info("lognormalVol * Math.sqrt(timeToExpiry) ambiguous");
       sigmaRootT = 1.;
     }
 
@@ -797,7 +797,7 @@ public abstract class BlackFormulaRepository {
       if (Math.abs(forward - strike) >= SMALL && !(bFwd && bStr)) {
         return 0.0;
       }
-      s_logger.info("log(1)/0 ambiguous");
+      LOGGER.info("log(1)/0 ambiguous");
       if (bFwd) {
         return rootT < SMALL ? NORMAL.getPDF(0.) / lognormalVol : forward * NORMAL.getPDF(0.) * rootT / lognormalVol;
       }

@@ -32,7 +32,7 @@ import com.opengamma.util.tuple.Triple;
  */
 public class EquityForwardCurvePerExchangeDefaults extends DefaultPropertyFunction {
   /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(EquityForwardCurvePerExchangeDefaults.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(EquityForwardCurvePerExchangeDefaults.class);
   /** The value requirements for which these defaults apply */
   private static final String[] VALUE_REQUIREMENTS = new String[] {
     ValueRequirementNames.FORWARD_CURVE,
@@ -89,7 +89,7 @@ public class EquityForwardCurvePerExchangeDefaults extends DefaultPropertyFuncti
     final SecuritySource securitySource = OpenGammaCompilationContext.getSecuritySource(context);
     final String exchange = EquitySecurityUtils.getExchange(securitySource, target.getUniqueId());
     if (exchange == null) {
-      s_logger.error("Could not get exchange for {}; should never happen", target.getUniqueId());
+      LOGGER.error("Could not get exchange for {}; should never happen", target.getUniqueId());
       return null;
     }
     final Triple<String, String, String> config = _perExchangeConfig.get(exchange);

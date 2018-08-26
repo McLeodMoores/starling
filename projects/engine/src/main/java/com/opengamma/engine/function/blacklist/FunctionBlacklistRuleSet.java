@@ -25,7 +25,7 @@ import com.opengamma.util.ArgumentChecker;
  */
 public class FunctionBlacklistRuleSet implements Set<FunctionBlacklistRule> {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(FunctionBlacklistRuleSet.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(FunctionBlacklistRuleSet.class);
   private static final int MAX_TTL = 86400;
 
   private final Map<FunctionBlacklistRule, Long> _rules = new ConcurrentHashMap<FunctionBlacklistRule, Long>();
@@ -39,7 +39,7 @@ public class FunctionBlacklistRuleSet implements Set<FunctionBlacklistRule> {
     private Future<?> _future;
 
     public Cleaner(final FunctionBlacklistRuleSet ref, final ScheduledExecutorService executor, final int minimumTTL) {
-      s_logger.debug("Creating cleaner for {} at {}s", ref, minimumTTL);
+      LOGGER.debug("Creating cleaner for {} at {}s", ref, minimumTTL);
       _executor = executor;
       _ref = new WeakReference<FunctionBlacklistRuleSet>(ref);
       _future = executor.scheduleWithFixedDelay(this, minimumTTL, minimumTTL, TimeUnit.SECONDS);
@@ -47,7 +47,7 @@ public class FunctionBlacklistRuleSet implements Set<FunctionBlacklistRule> {
 
     public void reschedule(final int time) {
       // Reference must be valid because this gets called from the referent
-      s_logger.debug("Rescheduling cleanup of {} for {}s", _ref.get(), time);
+      LOGGER.debug("Rescheduling cleanup of {} for {}s", _ref.get(), time);
       _future.cancel(false);
       _future = _executor.scheduleWithFixedDelay(this, time, time, TimeUnit.SECONDS);
     }
@@ -201,7 +201,7 @@ public class FunctionBlacklistRuleSet implements Set<FunctionBlacklistRule> {
   }
 
   protected void clean() {
-    s_logger.debug("Cleaning ruleset {}", this);
+    LOGGER.debug("Cleaning ruleset {}", this);
     final long time = System.nanoTime();
     _minimumTTL = MAX_TTL + 1;
     final Iterator<Map.Entry<FunctionBlacklistRule, Long>> itr = _rules.entrySet().iterator();
@@ -234,7 +234,7 @@ public class FunctionBlacklistRuleSet implements Set<FunctionBlacklistRule> {
    * @param rule the rule that was added to the set
    */
   protected void onAdd(final FunctionBlacklistRule rule) {
-    s_logger.debug("Added rule {}", rule);
+    LOGGER.debug("Added rule {}", rule);
   }
 
   /**
@@ -244,7 +244,7 @@ public class FunctionBlacklistRuleSet implements Set<FunctionBlacklistRule> {
    * @param rule the rule that was removed from the set
    */
   protected void onRemove(final FunctionBlacklistRule rule) {
-    s_logger.debug("Removed rule {}", rule);
+    LOGGER.debug("Removed rule {}", rule);
   }
 
 }

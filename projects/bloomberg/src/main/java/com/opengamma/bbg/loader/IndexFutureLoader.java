@@ -47,7 +47,7 @@ import com.opengamma.util.time.Expiry;
 public class IndexFutureLoader extends SecurityLoader {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(IndexFutureLoader.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(IndexFutureLoader.class);
   /**
    * The fields to load from Bloomberg.
    */
@@ -81,7 +81,7 @@ public class IndexFutureLoader extends SecurityLoader {
    * @param referenceDataProvider  the provider, not null
    */
   public IndexFutureLoader(ReferenceDataProvider referenceDataProvider) {
-    super(s_logger, referenceDataProvider, SecurityType.INDEX_FUTURE);
+    super(LOGGER, referenceDataProvider, SecurityType.INDEX_FUTURE);
   }
 
   //-------------------------------------------------------------------------
@@ -99,23 +99,23 @@ public class IndexFutureLoader extends SecurityLoader {
     String unitAmount = fieldData.getString(FIELD_FUT_VAL_PT);
 
     if (!isValidField(bbgUnique)) {
-      s_logger.warn("bbgUnique is null, cannot construct index future security");
+      LOGGER.warn("bbgUnique is null, cannot construct index future security");
       return null;
     }
     if (!isValidField(expiryDate)) {
-      s_logger.warn("expiry date is null, cannot construct index future security");
+      LOGGER.warn("expiry date is null, cannot construct index future security");
       return null;
     }
     if (!isValidField(futureTradingHours)) {
-      s_logger.warn("futures trading hours is null, cannot construct index future security");
+      LOGGER.warn("futures trading hours is null, cannot construct index future security");
       return null;
     }
     if (!isValidField(micExchangeCode)) {
-      s_logger.warn("settlement exchange is null, cannot construct index future security");
+      LOGGER.warn("settlement exchange is null, cannot construct index future security");
       return null;
     }
     if (!isValidField(currencyStr)) {
-      s_logger.info("currency is null, cannot construct index future security");
+      LOGGER.info("currency is null, cannot construct index future security");
       return null;
     }
     ExternalId underlying = null;

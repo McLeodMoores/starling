@@ -34,7 +34,7 @@ import com.opengamma.util.test.TestLifecycle;
 @Test(groups = TestGroup.UNIT)
 public class DepGraphLateResolutionTest extends AbstractDependencyGraphBuilderTest {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(DepGraphLateResolutionTest.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(DepGraphLateResolutionTest.class);
 
   public void backtrackCleanup() {
     TestLifecycle.begin();
@@ -53,7 +53,7 @@ public class DepGraphLateResolutionTest extends AbstractDependencyGraphBuilderTe
 
         @Override
         public Set<ValueSpecification> getResults(FunctionCompilationContext context, ComputationTarget target, Map<ValueSpecification, ValueRequirement> inputs) {
-          s_logger.debug("fnConv late resolving with inputs {}", inputs);
+          LOGGER.debug("fnConv late resolving with inputs {}", inputs);
           assertEquals(1, inputs.size());
           final ValueSpecification input = inputs.keySet().iterator().next();
           if (!input.getProperties().getValues("TEST").contains("Bar")) {
@@ -107,7 +107,7 @@ public class DepGraphLateResolutionTest extends AbstractDependencyGraphBuilderTe
           assertTrue(inputs.contains(helper.getSpec2Bar()));
           assertEquals(1, outputs.size());
           //final ValueSpecification expected = _result.compose(helper.getRequirement1Bar());
-          //s_logger.debug("Outputs={}, expected={}", outputs, expected);
+          //LOGGER.debug("Outputs={}, expected={}", outputs, expected);
           //assertTrue(outputs.contains(expected));
           return Collections.singleton(helper.getRequirement1Foo());
         }

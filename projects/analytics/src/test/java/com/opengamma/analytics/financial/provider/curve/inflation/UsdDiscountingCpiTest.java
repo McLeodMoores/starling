@@ -108,8 +108,8 @@ public class UsdDiscountingCpiTest {
   private static final GeneratorPriceIndexCurve[][][] GENERATORS_UNITS = new GeneratorPriceIndexCurve[NB_BLOCKS][][];
   private static final String[][][] NAMES_UNITS = new String[NB_BLOCKS][][];
 
-  private static final IssuerProviderDiscount usMulticurveProviderDiscount = MulticurveProviderDiscountDataSets.createIssuerProvider().copy();
-  private static final InflationIssuerProviderDiscount KNOWN_DATA = new InflationIssuerProviderDiscount(usMulticurveProviderDiscount);
+  private static final IssuerProviderDiscount US_MULTICURVE_PROVIDER = MulticurveProviderDiscountDataSets.createIssuerProvider().copy();
+  private static final InflationIssuerProviderDiscount KNOWN_DATA = new InflationIssuerProviderDiscount(US_MULTICURVE_PROVIDER);
 
   private static final LinkedHashMap<String, IndexPrice[]> US_CPI_MAP = new LinkedHashMap<>();
 

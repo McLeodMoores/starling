@@ -26,27 +26,27 @@ import com.opengamma.util.test.TestGroup;
 public class FudgeSecurityEncodingTest extends SecurityTestCase {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(FudgeSecurityEncodingTest.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(FudgeSecurityEncodingTest.class);
 
   /**
    * The Fudge context.
    */
-  private static final FudgeContext s_fudgeContext = OpenGammaFudgeContext.getInstance();
+  private static final FudgeContext FUDGE_CONTEXT = OpenGammaFudgeContext.getInstance();
 
   @Override
   protected <T extends ManageableSecurity> void assertSecurity(Class<T> securityClass, T security) {
-    final FudgeSerializer serializer = new FudgeSerializer(s_fudgeContext);
+    final FudgeSerializer serializer = new FudgeSerializer(FUDGE_CONTEXT);
     FudgeMsg msg = serializer.objectToFudgeMsg(security);
-    s_logger.debug("Security {}", security);
-    s_logger.debug("Encoded to {}", msg);
-    final byte[] bytes = s_fudgeContext.toByteArray(msg);
-    msg = s_fudgeContext.deserialize(bytes).getMessage();
-    s_logger.debug("Serialised to to {}", msg);
-    final Security decoded = s_fudgeContext.fromFudgeMsg(securityClass, msg);
-    s_logger.debug("Decoded to {}", decoded);
+    LOGGER.debug("Security {}", security);
+    LOGGER.debug("Encoded to {}", msg);
+    final byte[] bytes = FUDGE_CONTEXT.toByteArray(msg);
+    msg = FUDGE_CONTEXT.deserialize(bytes).getMessage();
+    LOGGER.debug("Serialised to to {}", msg);
+    final Security decoded = FUDGE_CONTEXT.fromFudgeMsg(securityClass, msg);
+    LOGGER.debug("Decoded to {}", decoded);
     if (!security.equals(decoded)) {
-      s_logger.warn("Expected {}", security);
-      s_logger.warn("Received {}", decoded);
+      LOGGER.warn("Expected {}", security);
+      LOGGER.warn("Received {}", decoded);
       fail();
     }
   }

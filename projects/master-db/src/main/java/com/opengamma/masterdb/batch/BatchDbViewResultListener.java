@@ -31,7 +31,7 @@ import com.opengamma.util.ArgumentChecker;
  */
 public class BatchDbViewResultListener extends AbstractViewResultListener {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(BatchDbViewResultListener.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(BatchDbViewResultListener.class);
   
   private final BatchRunWriter _batchRunWriter;
   private final UserPrincipal _user;
@@ -68,16 +68,16 @@ public class BatchDbViewResultListener extends AbstractViewResultListener {
   @Override
   public void cycleStarted(ViewCycleMetadata cycleMetadata) {
     try {
-      s_logger.info("Starting new risk run for cycle ID {}", cycleMetadata.getViewCycleId());
+      LOGGER.info("Starting new risk run for cycle ID {}", cycleMetadata.getViewCycleId());
       RiskRun riskRun = _batchRunWriter.startRiskRun(cycleMetadata,
                                                      Collections.<String, String>emptyMap(),
                                                      RunCreationMode.CREATE_NEW,
                                                      SnapshotMode.WRITE_THROUGH);
       _riskRuns.put(cycleMetadata.getViewCycleId(), riskRun);
-      s_logger.info("New risk run started with ID {}, cycle ID {}",
+      LOGGER.info("New risk run started with ID {}, cycle ID {}",
                     riskRun.getId(), cycleMetadata.getViewCycleId());
     } catch (Exception e) {
-      s_logger.error("Failed to write start of batch job. No results will be recorded.", e);
+      LOGGER.error("Failed to write start of batch job. No results will be recorded.", e);
     }
   }
 
@@ -86,10 +86,10 @@ public class BatchDbViewResultListener extends AbstractViewResultListener {
     try {
       RiskRun riskRun = getRiskRun(fullResult, deltaResult);
       _batchRunWriter.endRiskRun(riskRun.getObjectId());
-      s_logger.info("Risk run ended, ID {}, cycle ID {}",
+      LOGGER.info("Risk run ended, ID {}, cycle ID {}",
                     riskRun.getId(), getCycleId(fullResult, deltaResult));
     } catch (Exception e) {
-      s_logger.error("Failed to write end of batch job. Job will appear incomplete.", e);
+      LOGGER.error("Failed to write end of batch job. Job will appear incomplete.", e);
     }
   }
 
@@ -97,30 +97,30 @@ public class BatchDbViewResultListener extends AbstractViewResultListener {
   public void cycleFragmentCompleted(ViewComputationResultModel fullFragment, ViewDeltaResultModel deltaFragment) {
     RiskRun riskRun = getRiskRun(fullFragment, deltaFragment);
     if (riskRun == null) {
-      s_logger.warn("Skipping writing batch result fragment due to earlier failure to write start of batch job");
+      LOGGER.warn("Skipping writing batch result fragment due to earlier failure to write start of batch job");
       return;
     }
     try {
       _batchRunWriter.addJobResults(riskRun.getObjectId(), fullFragment);
-      s_logger.info("Added fragment results, ID {}, cycle ID {}",
+      LOGGER.info("Added fragment results, ID {}, cycle ID {}",
                     riskRun.getId(), getCycleId(fullFragment, deltaFragment));
     } catch (Exception e) {
-      s_logger.error("Error writing batch result fragment", e);
+      LOGGER.error("Error writing batch result fragment", e);
     }
   }
 
   @Override
   public void cycleExecutionFailed(ViewCycleExecutionOptions executionOptions, Exception exception) {
-    s_logger.error("Batch cycle execution failed", exception);
+    LOGGER.error("Batch cycle execution failed", exception);
     // TODO there's no way of knowing which cycle has failed, need an extra parameter. PLAT-4173
     /*if (getRiskRun() == null) {
-      s_logger.warn("Skipping writing batch cycle failure due to earlier failure to write start of batch job");
+      LOGGER.warn("Skipping writing batch cycle failure due to earlier failure to write start of batch job");
       return;
     }
     try {
       _batchRunWriter.endRiskRun(getRiskRun().getObjectId());
     } catch (Exception e) {
-      s_logger.error("Error writing batch cycle failure", e);
+      LOGGER.error("Error writing batch cycle failure", e);
     }*/
   }
 }

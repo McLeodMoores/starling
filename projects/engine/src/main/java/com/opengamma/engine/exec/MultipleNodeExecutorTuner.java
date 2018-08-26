@@ -43,7 +43,7 @@ public class MultipleNodeExecutorTuner implements Runnable {
   // should implement the gathering interfaces and make adjustments as statistical data arrives, possibly acting
   // as a pass-through so it can sit on top of other gathering implementations
 
-  private static final Logger s_logger = LoggerFactory.getLogger(MultipleNodeExecutorTuner.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(MultipleNodeExecutorTuner.class);
 
   private final MultipleNodeExecutorFactory _factory;
 
@@ -111,7 +111,7 @@ public class MultipleNodeExecutorTuner implements Runnable {
   @Override
   public void run() {
     if (getJobDispatcher() != null) {
-      s_logger.debug("Processing capabilities");
+      LOGGER.debug("Processing capabilities");
       final Map<String, Collection<Capability>> allCapabilities = getJobDispatcher().getAllCapabilities();
       int nodesPerInvokerCount = 0;
       double nodesPerInvoker = 0;
@@ -125,11 +125,11 @@ public class MultipleNodeExecutorTuner implements Runnable {
         }
       }
       if (nodesPerInvokerCount > 0) {
-        s_logger.debug("Found {} nodes at {} invokers", nodesPerInvoker, nodesPerInvokerCount);
+        LOGGER.debug("Found {} nodes at {} invokers", nodesPerInvoker, nodesPerInvokerCount);
         int maxConcurrency = getFactory().getMaximumConcurrency();
         int newMaxConcurrency = (int) Math.ceil(nodesPerInvoker / (double) nodesPerInvokerCount);
         if (newMaxConcurrency != maxConcurrency) {
-          s_logger.info("Changing maximum concurrency to {}", newMaxConcurrency);
+          LOGGER.info("Changing maximum concurrency to {}", newMaxConcurrency);
           getFactory().setMaximumConcurrency(newMaxConcurrency);
           changed = true;
         }
@@ -139,7 +139,7 @@ public class MultipleNodeExecutorTuner implements Runnable {
       }
     }
     if (getGraphExecutionStatistics() != null) {
-      s_logger.debug("Processing graph execution statistics");
+      LOGGER.debug("Processing graph execution statistics");
       for (TotallingGraphStatisticsGathererProvider.Statistics gatherer : getGraphExecutionStatistics().getViewStatistics()) {
         for (GraphExecutionStatistics statistics : gatherer.getExecutionStatistics()) {
           statistics.decay(getStatisticsDecayRate());
@@ -148,7 +148,7 @@ public class MultipleNodeExecutorTuner implements Runnable {
       getGraphExecutionStatistics().dropStatisticsBefore(Instant.now().minusSeconds(getStatisticsKeepAlive()));
     }
     if (getJobDispatchStatistics() != null) {
-      s_logger.debug("Processing job dispatch statistics");
+      LOGGER.debug("Processing job dispatch statistics");
       for (CalculationNodeStatistics statistics : getJobDispatchStatistics().getNodeStatistics()) {
         statistics.decay(getStatisticsDecayRate());
       }

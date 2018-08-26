@@ -26,7 +26,7 @@ import com.opengamma.util.tuple.DoublesPair;
  * 
  */
 public class BlackScholesMertonImpliedVolatilitySurfaceModel implements VolatilitySurfaceModel<Map<OptionDefinition, Double>, StandardOptionDataBundle> {
-  private static final Logger s_logger = LoggerFactory.getLogger(BlackScholesMertonImpliedVolatilitySurfaceModel.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(BlackScholesMertonImpliedVolatilitySurfaceModel.class);
   private final AnalyticOptionModel<OptionDefinition, StandardOptionDataBundle> _bsm = new BlackScholesMertonModel();
   private SingleRootFinder<StandardOptionDataBundle, Double> _rootFinder;
 
@@ -36,7 +36,7 @@ public class BlackScholesMertonImpliedVolatilitySurfaceModel implements Volatili
     ArgumentChecker.notEmpty(optionPrices, "option prices");
     Validate.notNull(optionDataBundle);
     if (optionPrices.size() > 1) {
-      s_logger.info("Option price map had more than one entry: using the first pair to imply volatility");
+      LOGGER.info("Option price map had more than one entry: using the first pair to imply volatility");
     }
     final Map.Entry<OptionDefinition, Double> entry = optionPrices.entrySet().iterator().next();
     final Double price = entry.getValue();

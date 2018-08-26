@@ -20,7 +20,7 @@ import com.opengamma.util.money.Currency;
  */
 public class DoubleCurrencyLabelledMatrix2D extends LabelledMatrix2D<Double, Currency> {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(DoubleCurrencyLabelledMatrix2D.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(DoubleCurrencyLabelledMatrix2D.class);
   
   public DoubleCurrencyLabelledMatrix2D(final Double[] xKeys, final Currency[] yKeys, final double[][] values) {
     super(xKeys, yKeys, values);
@@ -108,7 +108,7 @@ public class DoubleCurrencyLabelledMatrix2D extends LabelledMatrix2D<Double, Cur
         otherXIdxMapValue = otherX;
         otherX++;
       } else {
-        s_logger.debug("Same key " + xKey + " used for different labels in the two matrices: " + xLabel + " and " + otherXLabel);
+        LOGGER.debug("Same key " + xKey + " used for different labels in the two matrices: " + xLabel + " and " + otherXLabel);
         resultXLabels[resultIdx] = xLabel;
         resultXKeys[resultIdx] = xKey;
         xIdxMapValue = x;

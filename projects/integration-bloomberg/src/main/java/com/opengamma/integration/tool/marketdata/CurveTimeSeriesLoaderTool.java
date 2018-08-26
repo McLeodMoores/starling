@@ -51,7 +51,7 @@ import com.opengamma.scripts.Scriptable;
 @Scriptable
 public final class CurveTimeSeriesLoaderTool extends AbstractTool<IntegrationToolContext> {
   /** Logger. */
-  private static Logger s_logger = LoggerFactory.getLogger(CurveTimeSeriesLoaderTool.class);
+  private static Logger LOGGER = LoggerFactory.getLogger(CurveTimeSeriesLoaderTool.class);
 
   /** Write option flag */
   private static final String WRITE_OPT = "w";
@@ -153,7 +153,7 @@ public final class CurveTimeSeriesLoaderTool extends AbstractTool<IntegrationToo
               externalIds.add(convention);
             }
           } else {
-            s_logger.error("Not handling curve type configuration of class {}, skippings", curveTypeConfiguration.getClass());
+            LOGGER.error("Not handling curve type configuration of class {}, skippings", curveTypeConfiguration.getClass());
           }
         }
       }
@@ -177,7 +177,7 @@ public final class CurveTimeSeriesLoaderTool extends AbstractTool<IntegrationToo
       if (externalId != null) {
         externalIds.add(externalId);
       } else {
-        s_logger.warn("No BLOOMBERG_TICKER for {}, skipping", security);
+        LOGGER.warn("No BLOOMBERG_TICKER for {}, skipping", security);
       }
     }
     return externalIds;
@@ -198,7 +198,7 @@ public final class CurveTimeSeriesLoaderTool extends AbstractTool<IntegrationToo
     for (final Set<ExternalId> externalIds : externalIdSets) {
       if (externalIds.size() > 0) {
         for (final String dataField : dataFields) {
-          s_logger.info("Loading time series (field: " + dataField + ", provider: " + dataProvider + ") with external IDs " + externalIds);
+          LOGGER.info("Loading time series (field: " + dataField + ", provider: " + dataProvider + ") with external IDs " + externalIds);
           if (write) {
             loader.loadTimeSeries(externalIds, dataProvider, dataField, LocalDate.now().minusYears(1), null);
           }

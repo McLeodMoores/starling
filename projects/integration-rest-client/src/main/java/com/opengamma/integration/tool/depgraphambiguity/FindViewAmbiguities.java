@@ -65,7 +65,7 @@ import com.opengamma.util.ClassUtils;
 public class FindViewAmbiguities extends AbstractTool<ToolContext> {
 
   /** Logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(FindViewAmbiguities.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(FindViewAmbiguities.class);
 
   private static final String VIEW_NAME_OPTION = "v";
   private static final String VIEW_NAME_OPTION_LONG = "view";
@@ -150,7 +150,7 @@ public class FindViewAmbiguities extends AbstractTool<ToolContext> {
         } finally {
           executor.shutdown();
         }
-        s_logger.debug("Fetching remote functions from {}", functionsUri);
+        LOGGER.debug("Fetching remote functions from {}", functionsUri);
         final FunctionConfigurationSource functions = new RemoteFunctionConfigurationSource(functionsUri);
         final CompiledFunctionService compiledFunctionService = new CompiledFunctionService(functions, new CachingFunctionRepositoryCompiler(), context);
         compiledFunctionService.initialize();
@@ -189,7 +189,7 @@ public class FindViewAmbiguities extends AbstractTool<ToolContext> {
       resolvedImpl(resolution);
       final int count = _resolutions.incrementAndGet();
       if (count % 100 == 0) {
-        s_logger.info("Checked {} resolutions", count);
+        LOGGER.info("Checked {} resolutions", count);
       }
       if (resolution.isDeeplyAmbiguous() && getCommandLine().hasOption(VERBOSE_OPTION)) {
         synchronized (this) {
@@ -206,7 +206,7 @@ public class FindViewAmbiguities extends AbstractTool<ToolContext> {
     protected synchronized void directAmbiguity(final FullRequirementResolution resolution) {
       final int count = _ambiguities.incrementAndGet();
       if (count % 10 == 0) {
-        s_logger.info("Found {} ambiguities", count);
+        LOGGER.info("Found {} ambiguities", count);
       }
       _out.println(resolution.getRequirement());
       for (final Collection<RequirementResolution> nestedResolutions : resolution.getResolutions()) {
@@ -307,7 +307,7 @@ public class FindViewAmbiguities extends AbstractTool<ToolContext> {
     final String viewName = getCommandLine().getOptionValue(VIEW_NAME_OPTION);
     int count = 0;
     if (viewName != null) {
-      s_logger.info("Testing {}", viewName);
+      LOGGER.info("Testing {}", viewName);
       final ViewDefinition viewDefinition = getToolContext().getConfigSource().getLatestByName(ViewDefinition.class, viewName);
       if (viewDefinition == null) {
         throw new IllegalArgumentException("View definition " + viewName + " not found");
@@ -317,10 +317,10 @@ public class FindViewAmbiguities extends AbstractTool<ToolContext> {
       count++;
     } else {
       final Collection<ConfigItem<ViewDefinition>> viewDefinitions = getToolContext().getConfigSource().getAll(ViewDefinition.class, VersionCorrection.LATEST);
-      s_logger.info("Testing {} view definition(s)", viewDefinitions.size());
+      LOGGER.info("Testing {} view definition(s)", viewDefinitions.size());
       for (final ConfigItem<ViewDefinition> viewDefinitionConfig : viewDefinitions) {
         final ViewDefinition viewDefinition = viewDefinitionConfig.getValue();
-        s_logger.info("Testing {}", viewDefinition.getName());
+        LOGGER.info("Testing {}", viewDefinition.getName());
         out.println("View = " + viewDefinition.getName());
         final int resolutions = _resolutions.get();
         final int ambiguities = _ambiguities.get();
@@ -330,7 +330,7 @@ public class FindViewAmbiguities extends AbstractTool<ToolContext> {
         out.println("Ambiguities = " + (_ambiguities.get() - ambiguities));
       }
     }
-    s_logger.info("{} view(s) tested", count);
+    LOGGER.info("{} view(s) tested", count);
     out.println("Total resolutions = " + _resolutions.get());
     out.println("Total ambiguities = " + _ambiguities.get());
     out.close();

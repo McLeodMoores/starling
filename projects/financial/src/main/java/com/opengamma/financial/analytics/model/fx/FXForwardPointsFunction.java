@@ -106,7 +106,7 @@ import com.opengamma.util.time.Tenor;
  */
 public abstract class FXForwardPointsFunction extends AbstractFunction {
   /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(FXForwardPointsFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(FXForwardPointsFunction.class);
   /** The value requirements */
   private final String[] _valueRequirements;
 
@@ -284,7 +284,7 @@ public abstract class FXForwardPointsFunction extends AbstractFunction {
         requirements.add(currencyPairsRequirement);
         return requirements;
       } catch (final Exception e) {
-        s_logger.error(e.getMessage());
+        LOGGER.error(e.getMessage());
         return null;
       }
     }

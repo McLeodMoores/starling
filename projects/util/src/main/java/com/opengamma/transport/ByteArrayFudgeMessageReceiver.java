@@ -24,7 +24,7 @@ import com.opengamma.util.fudgemsg.OpenGammaFudgeContext;
  * {@link BatchFudgeMessageReceiver}.
  */
 public class ByteArrayFudgeMessageReceiver implements ByteArrayMessageReceiver {
-  private static final Logger s_logger = LoggerFactory.getLogger(ByteArrayFudgeMessageReceiver.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ByteArrayFudgeMessageReceiver.class);
 
   /**
    * The underlying Fudge receiver.
@@ -115,7 +115,7 @@ public class ByteArrayFudgeMessageReceiver implements ByteArrayMessageReceiver {
     } else {
       msgEnvelope = getFudgeContext().deserialize(message);
     }
-    s_logger.debug("Msg of size {} had {} fields", message.length, msgEnvelope.getMessage().getNumFields());
+    LOGGER.debug("Msg of size {} had {} fields", message.length, msgEnvelope.getMessage().getNumFields());
     getUnderlying().messageReceived(getFudgeContext(), msgEnvelope);
   }
 

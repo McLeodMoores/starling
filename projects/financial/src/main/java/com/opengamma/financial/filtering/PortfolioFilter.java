@@ -21,7 +21,7 @@ import com.opengamma.id.UniqueIdSupplier;
  */
 public class PortfolioFilter implements FilteringFunction {
 
-  private static final UniqueIdSupplier s_syntheticIdentifiers = new UniqueIdSupplier("PortfolioFilter");
+  private static final UniqueIdSupplier SYNTHETIC_IDENTIFIERS = new UniqueIdSupplier("PortfolioFilter");
 
   private final FilteringFunction[] _filteringFunctions;
 
@@ -39,7 +39,7 @@ public class PortfolioFilter implements FilteringFunction {
   }
 
   private static UniqueId createSyntheticIdentifier() {
-    return s_syntheticIdentifiers.get();
+    return SYNTHETIC_IDENTIFIERS.get();
   }
 
   private FilteringFunction[] getFilteringFunctions() {

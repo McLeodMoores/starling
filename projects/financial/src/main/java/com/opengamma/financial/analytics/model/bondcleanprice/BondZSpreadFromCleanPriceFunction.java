@@ -49,7 +49,7 @@ import com.opengamma.util.tuple.Pair;
  */
 public class BondZSpreadFromCleanPriceFunction extends BondFromCleanPriceAndCurvesFunction {
   /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(BondZSpreadFromCleanPriceFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(BondZSpreadFromCleanPriceFunction.class);
   /** The z-spread calculator */
   private static final BondSecurityDiscountingMethod CALCULATOR = BondSecurityDiscountingMethod.getInstance();
   /** The curve construction configuration source */
@@ -140,7 +140,7 @@ public class BondZSpreadFromCleanPriceFunction extends BondFromCleanPriceAndCurv
       }
     }
     if (curveName == null) {
-      s_logger.error("Could not get curve name from inputs; missing yield curve");
+      LOGGER.error("Could not get curve name from inputs; missing yield curve");
       return null;
     }
     final ValueProperties properties = getResultProperties(target)

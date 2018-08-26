@@ -26,7 +26,7 @@ import com.opengamma.analytics.math.interpolation.DoubleQuadraticInterpolator1D;
  * 
  */
 public class FFTOptionModel implements OptionModel<EuropeanVanillaOptionDefinition, BlackOptionDataBundle> {
-  private static final Logger s_logger = LoggerFactory.getLogger(FFTOptionModel.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(FFTOptionModel.class);
   private static final int DEFAULT_STRIKES = 256;
   private static final double DEFAULT_MAX_DELTA_MONEYNESS = 0.1;
   private static final double DEFAULT_ALPHA = -0.5;
@@ -66,7 +66,7 @@ public class FFTOptionModel implements OptionModel<EuropeanVanillaOptionDefiniti
       throw new NotImplementedException("Can only calculate fair price at the moment: asked for " + requiredGreeks);
     }
     if (requiredGreeks.size() > 1) {
-      s_logger.warn("Can only calculate fair price - ignoring other greeks");
+      LOGGER.warn("Can only calculate fair price - ignoring other greeks");
     }
     final ZonedDateTime date = dataBundle.getDate();
     final EuropeanVanillaOption option = EuropeanVanillaOption.fromDefinition(definition, date);

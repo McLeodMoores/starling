@@ -65,7 +65,7 @@ import com.opengamma.util.money.Currency;
  */
 @Deprecated
 public abstract class InterestRateFutureCurveSpecificFunction extends AbstractFunction.NonCompiledInvoker {
-  private static final Logger s_logger = LoggerFactory.getLogger(InterestRateFutureCurveSpecificFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(InterestRateFutureCurveSpecificFunction.class);
   private final String _valueRequirement;
   private InterestRateFutureTradeConverterDeprecated _converter;
   private FixedIncomeConverterDataProvider _dataConverter;
@@ -145,7 +145,7 @@ public abstract class InterestRateFutureCurveSpecificFunction extends AbstractFu
     final ValueProperties constraints = desiredValue.getConstraints();
     Set<String> requestedCurveNames = constraints.getValues(ValuePropertyNames.CURVE);
     if (requestedCurveNames == null || requestedCurveNames.size() != 1) {
-      s_logger.error("Must specify a curve against which to calculate the desired value " + _valueRequirement);
+      LOGGER.error("Must specify a curve against which to calculate the desired value " + _valueRequirement);
       return null;
     }
     final Set<String> curveCalculationConfigNames = constraints.getValues(ValuePropertyNames.CURVE_CALCULATION_CONFIG);
@@ -155,13 +155,13 @@ public abstract class InterestRateFutureCurveSpecificFunction extends AbstractFu
     final String curveCalculationConfigName = curveCalculationConfigNames.iterator().next();
     final MultiCurveCalculationConfig curveCalculationConfig = _curveCalculationConfigSource.getConfig(curveCalculationConfigName);
     if (curveCalculationConfig == null) {
-      s_logger.error("Could not find curve calculation configuration named " + curveCalculationConfigName);
+      LOGGER.error("Could not find curve calculation configuration named " + curveCalculationConfigName);
       return null;
     }
     final FinancialSecurity security = (FinancialSecurity) target.getTrade().getSecurity();
     final Currency currency = FinancialSecurityUtils.getCurrency(security);
     if (!ComputationTargetSpecification.of(currency).equals(curveCalculationConfig.getTarget())) {
-      s_logger.error("Security currency and curve calculation config id were not equal; have {} and {}", currency, curveCalculationConfig.getTarget());
+      LOGGER.error("Security currency and curve calculation config id were not equal; have {} and {}", currency, curveCalculationConfig.getTarget());
     }
     final String[] availableCurveNames = curveCalculationConfig.getYieldCurveNames();
     if (requestedCurveNames.isEmpty()) {
@@ -169,7 +169,7 @@ public abstract class InterestRateFutureCurveSpecificFunction extends AbstractFu
     } else {
       final Set<String> intersection = YieldCurveFunctionUtils.intersection(requestedCurveNames, availableCurveNames);
       if (intersection.isEmpty()) {
-        s_logger.debug("None of the requested curves {} are available in curve calculation configuration called {}", requestedCurveNames, curveCalculationConfigName);
+        LOGGER.debug("None of the requested curves {} are available in curve calculation configuration called {}", requestedCurveNames, curveCalculationConfigName);
         return null;
       }
       requestedCurveNames = intersection;
@@ -177,7 +177,7 @@ public abstract class InterestRateFutureCurveSpecificFunction extends AbstractFu
     final String[] applicableCurveNames = FixedIncomeInstrumentCurveExposureHelper.getCurveNamesForSecurity(security, availableCurveNames);
     final Set<String> curveNames = YieldCurveFunctionUtils.intersection(requestedCurveNames, applicableCurveNames);
     if (curveNames.isEmpty()) {
-      s_logger.debug("{} {} security is not sensitive to the curves {}", new Object[] {currency, security.getClass(), curveNames });
+      LOGGER.debug("{} {} security is not sensitive to the curves {}", new Object[] {currency, security.getClass(), curveNames });
       return null;
     }
     final Set<ValueRequirement> requirements = new HashSet<>();

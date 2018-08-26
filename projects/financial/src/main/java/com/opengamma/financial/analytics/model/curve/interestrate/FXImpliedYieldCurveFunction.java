@@ -100,7 +100,7 @@ public class FXImpliedYieldCurveFunction extends AbstractFunction.NonCompiledInv
   /** Property name for the calculation method */
   public static final String FX_IMPLIED = "FXImplied";
   /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(FXImpliedYieldCurveFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(FXImpliedYieldCurveFunction.class);
   /** Calculates the par rate */
   private static final ParRateCalculator PAR_RATE_CALCULATOR = ParRateCalculator.getInstance();
   /** Calculates the sensitivity of the par rate to the curves */
@@ -323,7 +323,7 @@ public class FXImpliedYieldCurveFunction extends AbstractFunction.NonCompiledInv
     }
     final MultiCurveCalculationConfig domesticCurveCalculationConfig = _curveCalculationConfigSource.getConfig(domesticCurveCalculationConfigName);
     if (domesticCurveCalculationConfig == null) {
-      s_logger.error("Could not get domestic curve calculation config called {}", domesticCurveCalculationConfigName);
+      LOGGER.error("Could not get domestic curve calculation config called {}", domesticCurveCalculationConfigName);
       return null;
     }
     if (!domesticCurveCalculationConfig.getCalculationMethod().equals(FX_IMPLIED)) {
@@ -362,31 +362,31 @@ public class FXImpliedYieldCurveFunction extends AbstractFunction.NonCompiledInv
       return null;
     }
     if (domesticCurveCalculationConfig.getExogenousConfigData() == null) {
-      s_logger.error("Need an externally-supplied curve to imply data; tried {}", domesticCurveCalculationConfigName);
+      LOGGER.error("Need an externally-supplied curve to imply data; tried {}", domesticCurveCalculationConfigName);
       return null;
     }
     if (domesticCurveCalculationConfig.getYieldCurveNames().length != 1) {
-      s_logger.error("Can only handle one curve at the moment");
+      LOGGER.error("Can only handle one curve at the moment");
       return null;
     }
     if (!domesticCurveCalculationConfig.getTarget().equals(target.toSpecification())) {
-      s_logger.info("Invalid target, was {} - expected {}", target, domesticCurveCalculationConfig.getTarget());
+      LOGGER.info("Invalid target, was {} - expected {}", target, domesticCurveCalculationConfig.getTarget());
       return null;
     }
     final Map<String, String[]> exogenousConfigs = domesticCurveCalculationConfig.getExogenousConfigData();
     if (exogenousConfigs.size() != 1) {
-      s_logger.error("Can only handle curves with one foreign curve config");
+      LOGGER.error("Can only handle curves with one foreign curve config");
       return null;
     }
     final Map.Entry<String, String[]> foreignCurveConfigNames = exogenousConfigs.entrySet().iterator().next();
     final MultiCurveCalculationConfig foreignConfig = _curveCalculationConfigSource.getConfig(foreignCurveConfigNames.getKey());
     if (foreignConfig == null) {
-      s_logger.error("Foreign config was null; tried {}", foreignCurveConfigNames.getKey());
+      LOGGER.error("Foreign config was null; tried {}", foreignCurveConfigNames.getKey());
       return null;
     }
     final ComputationTargetSpecification foreignCurrencySpec = foreignConfig.getTarget();
     if (!foreignCurrencySpec.getType().isTargetType(ComputationTargetType.CURRENCY)) {
-      s_logger.error("Can only handle curves with currencies as ids at the moment");
+      LOGGER.error("Can only handle curves with currencies as ids at the moment");
       return null;
     }
     final String domesticCurveName = domesticCurveCalculationConfig.getYieldCurveNames()[0];
@@ -396,12 +396,12 @@ public class FXImpliedYieldCurveFunction extends AbstractFunction.NonCompiledInv
     final UnorderedCurrencyPair currencyPair = UnorderedCurrencyPair.of(domesticCurrency, foreignCurrency);
     final FXForwardCurveDefinition definition = _fxForwardCurveDefinitionSource.getDefinition(domesticCurveName, currencyPair.toString());
     if (definition == null) {
-      s_logger.error("Couldn't find FX forward curve definition called " + domesticCurveName + " with target " + currencyPair);
+      LOGGER.error("Couldn't find FX forward curve definition called " + domesticCurveName + " with target " + currencyPair);
       return null;
     }
     final FXForwardCurveSpecification fxForwardCurveSpec = _fxForwardCurveSpecificationSource.getSpecification(domesticCurveName, currencyPair.toString());
     if (fxForwardCurveSpec == null) {
-      s_logger.error("Couldn't find FX forward curve specification called " + domesticCurveName + " with target " + currencyPair);
+      LOGGER.error("Couldn't find FX forward curve specification called " + domesticCurveName + " with target " + currencyPair);
       return null;
     }
     final ValueProperties fxForwardCurveProperties = ValueProperties.builder().with(ValuePropertyNames.CURVE, domesticCurveName).get();

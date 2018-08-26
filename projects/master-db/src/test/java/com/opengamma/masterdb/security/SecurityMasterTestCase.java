@@ -38,7 +38,7 @@ import com.opengamma.master.security.SecuritySearchResult;
  */
 public class SecurityMasterTestCase extends SecurityTestCase {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(SecurityMasterTestCase.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(SecurityMasterTestCase.class);
 
   private final SecurityMaster _secMaster;
 
@@ -65,13 +65,13 @@ public class SecurityMasterTestCase extends SecurityTestCase {
 
   //-------------------------------------------------------------------------
   private UniqueId putSecurity(final ManageableSecurity security) {
-    s_logger.debug("putting security = {}", security);
+    LOGGER.debug("putting security = {}", security);
     SecurityDocument document = new SecurityDocument();
     document.setSecurity(security);
     document = _secMaster.add(document);
     assertNotNull(document);
     final UniqueId uniqueId = document.getUniqueId();
-    s_logger.debug("Security {} stored with identifier {}", security.getClass(), uniqueId);
+    LOGGER.debug("Security {} stored with identifier {}", security.getClass(), uniqueId);
     return uniqueId;
   }
 
@@ -82,12 +82,12 @@ public class SecurityMasterTestCase extends SecurityTestCase {
     document = _secMaster.update(document);
     assertNotNull(document);
     final UniqueId uniqueId = document.getUniqueId();
-    s_logger.debug("Security {} updated; new identifier {}", security.getClass(), uniqueId);
+    LOGGER.debug("Security {} updated; new identifier {}", security.getClass(), uniqueId);
     return uniqueId;
   }
 
   private Security getSecurity(final Iterable<ExternalId> identifiers) {
-    s_logger.debug("Search for security with identifiers {}", identifiers);
+    LOGGER.debug("Search for security with identifiers {}", identifiers);
     final SecuritySearchRequest request = new SecuritySearchRequest();
     request.addExternalIds(identifiers);
     final SecuritySearchResult result = _secMaster.search(request);
@@ -103,7 +103,7 @@ public class SecurityMasterTestCase extends SecurityTestCase {
   }
 
   private Security getSecurity(final UniqueId uniqueId) {
-    s_logger.debug("Search for security with identifier {}", uniqueId);
+    LOGGER.debug("Search for security with identifier {}", uniqueId);
     final SecurityDocument document = _secMaster.get(uniqueId);
     assertNotNull(document);
     final Security security = document.getSecurity();
@@ -136,10 +136,10 @@ public class SecurityMasterTestCase extends SecurityTestCase {
   @Override
   protected <T extends ManageableSecurity> void assertSecurity(final Class<T> securityClass, final T security) {
     normalizeSecurity (security);
-    s_logger.debug("Testing {} instance {}", securityClass, security.hashCode());
+    LOGGER.debug("Testing {} instance {}", securityClass, security.hashCode());
     final UniqueId uniqueId = putSecurity(security);
     assertNotNull(uniqueId);
-    s_logger.debug("UID = {}", uniqueId);
+    LOGGER.debug("UID = {}", uniqueId);
     Security sec;
     // retrieve by unique identifier
     sec = getSecurity(uniqueId);
@@ -169,7 +169,7 @@ public class SecurityMasterTestCase extends SecurityTestCase {
     security.setName(newName);
     final UniqueId newUniqueId = updateSecurity (security);
     assertNotNull(newUniqueId);
-    s_logger.debug("New UID = {}", newUniqueId);
+    LOGGER.debug("New UID = {}", newUniqueId);
     assertEquals(false, uniqueId.equals(newUniqueId));
     // retrieve with original uniqueId - gets original
     sec = getSecurity(uniqueId);

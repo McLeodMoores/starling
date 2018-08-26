@@ -64,7 +64,7 @@ import com.opengamma.util.tuple.DoublesPair;
  */
 @Deprecated
 public class FXOptionBlackYCNSFunction extends FXOptionBlackSingleValuedFunction {
-  private static final Logger s_logger = LoggerFactory.getLogger(FXOptionBlackYCNSFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(FXOptionBlackYCNSFunction.class);
   private static final MarketQuoteSensitivityCalculator CALCULATOR = new MarketQuoteSensitivityCalculator(new ParameterSensitivityCalculator(
       PresentValueCurveSensitivityIRSCalculator.getInstance()));
 
@@ -121,19 +121,19 @@ public class FXOptionBlackYCNSFunction extends FXOptionBlackSingleValuedFunction
     final ValueProperties constraints = desiredValue.getConstraints();
     final Set<String> curveNames = constraints.getValues(ValuePropertyNames.CURVE);
     if (curveNames == null || curveNames.size() != 1) {
-      s_logger.error("Did not specify a curve name for requirement {}", desiredValue);
+      LOGGER.error("Did not specify a curve name for requirement {}", desiredValue);
       return null;
     }
     final Set<String> curveCurrencies = constraints.getValues(ValuePropertyNames.CURVE_CURRENCY);
     if (curveCurrencies == null || curveCurrencies.size() != 1) {
-      s_logger.error("Did not specify a curve currency for requirement {}", desiredValue);
+      LOGGER.error("Did not specify a curve currency for requirement {}", desiredValue);
       return null;
     }
     final String callCurveName = Iterables.getOnlyElement(constraints.getValues(CALL_CURVE));
     final String putCurveName = Iterables.getOnlyElement(constraints.getValues(PUT_CURVE));
     final String curveName = Iterables.getOnlyElement(curveNames);
     if (!(curveName.equals(putCurveName) || curveName.equals(callCurveName))) {
-      s_logger.info("Curve name {} did not match either put curve name {} or call curve name {}", new Object[] {curveName, putCurveName, callCurveName });
+      LOGGER.info("Curve name {} did not match either put curve name {} or call curve name {}", new Object[] {curveName, putCurveName, callCurveName });
       return null;
     }
     final String callCurveCalculationConfigName = Iterables.getOnlyElement(constraints.getValues(CALL_CURVE_CALC_CONFIG));
@@ -160,14 +160,14 @@ public class FXOptionBlackYCNSFunction extends FXOptionBlackSingleValuedFunction
     }
     final MultiCurveCalculationConfig resultCurveCalculationConfig = _curveCalculationConfigSource.getConfig(resultCurveConfigName);
     if (resultCurveCalculationConfig == null) {
-      s_logger.error("Could not find curve calculation configuration named " + resultCurveConfigName + " for currency " + resultCurrency);
+      LOGGER.error("Could not find curve calculation configuration named " + resultCurveConfigName + " for currency " + resultCurrency);
       return null;
     }
     final String resultCurveCalculationMethod = resultCurveCalculationConfig.getCalculationMethod();
     requirements.add(getCurveSensitivitiesRequirement(putCurveName, putCurveCalculationConfigName, callCurveName, callCurveCalculationConfigName, surfaceName, interpolatorName,
         leftExtrapolatorName, rightExtrapolatorName, curveCurrency, target));
     if (resultCurveCalculationMethod.equals(FXImpliedYieldCurveFunction.FX_IMPLIED)) {
-      s_logger.error("Cannot handle curves calculated using the FX implied method");
+      LOGGER.error("Cannot handle curves calculated using the FX implied method");
       return null;
     }
     requirements.add(getCurveSpecRequirement(resultCurrency, resultCurveName));
@@ -220,7 +220,7 @@ public class FXOptionBlackYCNSFunction extends FXOptionBlackSingleValuedFunction
     final Currency callCurrency = security.accept(ForexVisitors.getCallCurrencyVisitor());
     final CurrencyPair baseQuotePair = baseQuotePairs.getCurrencyPair(putCurrency, callCurrency);
     if (baseQuotePair == null) {
-      s_logger.error("Could not get base/quote pair for currency pair (" + putCurrency + ", " + callCurrency + ")");
+      LOGGER.error("Could not get base/quote pair for currency pair (" + putCurrency + ", " + callCurrency + ")");
       return null;
     }
     final ValueSpecification resultSpec = new ValueSpecification(getValueRequirementName(), target.toSpecification(), getResultProperties(target, putCurveName, putCurveCalculationConfig,

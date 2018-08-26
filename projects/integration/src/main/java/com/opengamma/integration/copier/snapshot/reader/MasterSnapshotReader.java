@@ -27,7 +27,7 @@ import com.opengamma.util.ArgumentChecker;
  */
 public class MasterSnapshotReader implements SnapshotReader {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(SnapshotReader.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(SnapshotReader.class);
 
   private MarketDataSnapshotMaster _snapshotMaster;
   private StructuredMarketDataSnapshot _snapshot;

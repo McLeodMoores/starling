@@ -22,6 +22,7 @@ import com.opengamma.util.ArgumentChecker;
 import com.opengamma.util.tuple.Pair;
 import com.opengamma.util.tuple.Pairs;
 
+// CSOFF
 /**
  * Adds {@link ValuePropertyNames#CURVE} to the {@link ValueRequirement}'s produced by {@link InterestRateFutureOptionBlackFunction}
  * that require it, such as {@link ValueRequirementNames#POSITION_RHO}
@@ -67,7 +68,7 @@ public class InterestRateFutureOptionBlackCurveSpecificDefaults extends Interest
     if (ValuePropertyNames.CURVE.equals(propertyName)) {
       final String currencyName = FinancialSecurityUtils.getCurrency(target.getTrade().getSecurity()).getCode();
       if (!_currencyCurveNames.containsKey(currencyName)) {
-        s_logger.error("Could not curve name for currency " + currencyName + "; should never happen");
+        LOGGER.error("Could not curve name for currency " + currencyName + "; should never happen");
         return null;
       }
       final String curveName = _currencyCurveNames.get(currencyName);
@@ -76,5 +77,5 @@ public class InterestRateFutureOptionBlackCurveSpecificDefaults extends Interest
     return super.getDefaultValue(context, target, desiredValue, propertyName);
   }
 
-  private static final Logger s_logger = LoggerFactory.getLogger(InterestRateFutureOptionBlackCurveSpecificDefaults.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(InterestRateFutureOptionBlackCurveSpecificDefaults.class);
 }

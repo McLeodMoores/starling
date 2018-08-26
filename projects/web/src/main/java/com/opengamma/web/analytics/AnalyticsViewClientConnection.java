@@ -49,7 +49,7 @@ import com.opengamma.util.ArgumentChecker;
 @SuppressWarnings("deprecation")
 /* package */ class AnalyticsViewClientConnection {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(AnalyticsViewClientConnection.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(AnalyticsViewClientConnection.class);
 
   private final AnalyticsView _view;
   private final ViewClient _viewClient;
@@ -136,7 +136,7 @@ import com.opengamma.util.ArgumentChecker;
    * Connects to the engine in order to start receiving results. This should only be called once.
    */
   /* package */ void start() {
-    s_logger.debug("Starting client connection");
+    LOGGER.debug("Starting client connection");
     _viewClient.setResultListener(new Listener());
     _viewClient.setViewCycleAccessSupported(true);
     _viewClient.setResultMode(ViewResultMode.FULL_THEN_DELTA);
@@ -183,7 +183,7 @@ import com.opengamma.util.ArgumentChecker;
         try {
           listener.close();
         } catch (Exception e) {
-          s_logger.warn("Failed to close listener " + listener, e);
+          LOGGER.warn("Failed to close listener " + listener, e);
         }
       }
     }
@@ -240,7 +240,7 @@ import com.opengamma.util.ArgumentChecker;
 
     @Override
     public void viewDefinitionCompiled(CompiledViewDefinition compiledViewDefinition, boolean hasMarketDataPermissions) {
-      s_logger.debug("View definition compiled: '{}'", compiledViewDefinition.getViewDefinition().getName());
+      LOGGER.debug("View definition compiled: '{}'", compiledViewDefinition.getViewDefinition().getName());
       // resolve the portfolio, it won't be resolved if the engine is in a different VM from the web components
       // if it's in the same VM then resolution is fairly cheap and doesn't touch the DB
       Portfolio portfolio = compiledViewDefinition.getPortfolio();
@@ -255,13 +255,13 @@ import com.opengamma.util.ArgumentChecker;
 
     @Override
     public void viewDefinitionCompilationFailed(Instant valuationTime, Exception exception) {
-      s_logger.warn("Compilation of the view definition failed", exception);
+      LOGGER.warn("Compilation of the view definition failed", exception);
       viewFailed(exception);
     }
 
     @Override
     public void cycleExecutionFailed(ViewCycleExecutionOptions executionOptions, Exception exception) {
-      s_logger.warn("Execution of the view failed", exception);
+      LOGGER.warn("Execution of the view failed", exception);
       viewFailed(exception);
     }
 

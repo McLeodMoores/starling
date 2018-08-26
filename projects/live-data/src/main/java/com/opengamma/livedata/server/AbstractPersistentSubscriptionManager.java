@@ -46,7 +46,7 @@ import com.opengamma.util.monitor.OperationTimer;
  */
 public abstract class AbstractPersistentSubscriptionManager implements Lifecycle {
 
-  private static final Logger s_logger = LoggerFactory
+  private static final Logger LOGGER = LoggerFactory
       .getLogger(AbstractPersistentSubscriptionManager.class);
 
   /**
@@ -86,7 +86,7 @@ public abstract class AbstractPersistentSubscriptionManager implements Lifecycle
       try {
         save();
       } catch (RuntimeException e) {
-        s_logger.error("Saving persistent subscriptions to storage failed", e);
+        LOGGER.error("Saving persistent subscriptions to storage failed", e);
       }
     }
   }
@@ -114,7 +114,7 @@ public abstract class AbstractPersistentSubscriptionManager implements Lifecycle
 
   private void waitForIdleTimer() {
     final CountDownLatch countDownLatch = new CountDownLatch(1);;
-    s_logger.info("Waiting for timer to be idle");
+    LOGGER.info("Waiting for timer to be idle");
     try {
       _timer.schedule(new TimerTask() {
         @Override
@@ -123,9 +123,9 @@ public abstract class AbstractPersistentSubscriptionManager implements Lifecycle
         }
       }, 0);
       countDownLatch.await();
-      s_logger.info("Timer idle");
+      LOGGER.info("Timer idle");
     } catch (Exception ex) {
-      s_logger.error("Couldn't waiting for timer to be idle", ex);
+      LOGGER.error("Couldn't waiting for timer to be idle", ex);
     }
   }
 
@@ -156,13 +156,13 @@ public abstract class AbstractPersistentSubscriptionManager implements Lifecycle
    * Reads from all sources to our private state
    */
   private synchronized void refreshState() {
-    s_logger.debug("Refreshing persistent subscriptions from storage");
+    LOGGER.debug("Refreshing persistent subscriptions from storage");
 
     clear();
     readFromStorage();
     readFromServer();
     
-    s_logger.info("Refreshed persistent subscriptions from storage. There are currently "
+    LOGGER.info("Refreshed persistent subscriptions from storage. There are currently "
         + _persistentSubscriptions.size() + " persistent subscriptions.");
   }
 
@@ -174,7 +174,7 @@ public abstract class AbstractPersistentSubscriptionManager implements Lifecycle
     Collection<LiveDataSpecification> specs = getSpecs(_persistentSubscriptions);
     Set<LiveDataSpecification> persistentSubscriptionsToMake = new HashSet<LiveDataSpecification>(specs);
     
-    OperationTimer operationTimer = new OperationTimer(s_logger, "Updating server's persistent subscriptions {}", persistentSubscriptionsToMake.size());
+    OperationTimer operationTimer = new OperationTimer(LOGGER, "Updating server's persistent subscriptions {}", persistentSubscriptionsToMake.size());
     
     int partitionSize = 50; //Aim is to make sure we can convert subscriptions quickly enough that nothing expires, and to leave the server responsive, and make retrys not take too long
 
@@ -198,7 +198,7 @@ public abstract class AbstractPersistentSubscriptionManager implements Lifecycle
       }
     }
     operationTimer.finished();
-    s_logger.info("Server updated");
+    LOGGER.info("Server updated");
   }
 
   private void createPersistentSubscription(boolean catchExceptions, LiveDataSpecification sub) {
@@ -209,19 +209,19 @@ public abstract class AbstractPersistentSubscriptionManager implements Lifecycle
     if (specs.isEmpty()) {
       return;
     }
-    s_logger.info("Creating {}", specs);
+    LOGGER.info("Creating {}", specs);
     try {
       Collection<LiveDataSubscriptionResponse> results = _server.subscribe(specs, true);
       for (LiveDataSubscriptionResponse liveDataSubscriptionResponse : results) {
         if (liveDataSubscriptionResponse.getSubscriptionResult() != LiveDataSubscriptionResult.SUCCESS)
         {
-          s_logger.warn("Failed to create persistent subscription {}", liveDataSubscriptionResponse);
+          LOGGER.warn("Failed to create persistent subscription {}", liveDataSubscriptionResponse);
         }
       }
     } catch (RuntimeException e) {
       if (catchExceptions) {
         //This should be rare
-        s_logger.error("Creating a persistent subscription failed for " + specs, e);
+        LOGGER.error("Creating a persistent subscription failed for " + specs, e);
         if (specs.size() > 1) {
           //  NOTE: have to retry here since _all_ of the subs will have failed
           for (LiveDataSpecification spec : specs) {
@@ -243,7 +243,7 @@ public abstract class AbstractPersistentSubscriptionManager implements Lifecycle
   }
 
   public synchronized void save() {
-    s_logger.debug("Dumping persistent subscriptions to storage");
+    LOGGER.debug("Dumping persistent subscriptions to storage");
 
     clear();
     readFromServer();
@@ -251,16 +251,16 @@ public abstract class AbstractPersistentSubscriptionManager implements Lifecycle
     // Only save if changed
     if (_previousSavedState == null || !_previousSavedState.equals(_persistentSubscriptions)) {
    
-      s_logger.info("A change to persistent subscriptions detected, saving "
+      LOGGER.info("A change to persistent subscriptions detected, saving "
           + _persistentSubscriptions.size() + " subscriptions to storage.");
       saveToStorage(_persistentSubscriptions);
       _previousSavedState = new HashSet<PersistentSubscription>(_persistentSubscriptions);
 
     } else {
-      s_logger.debug("No changes to persistent subscriptions detected.");      
+      LOGGER.debug("No changes to persistent subscriptions detected.");      
     }
 
-    s_logger.debug("Dumped persistent subscriptions to storage");
+    LOGGER.debug("Dumped persistent subscriptions to storage");
   }
   
   public synchronized long getApproximateNumberOfPersistentSubscriptions() {

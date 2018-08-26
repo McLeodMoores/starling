@@ -27,7 +27,7 @@ import com.opengamma.util.ArgumentChecker;
  */
 public class CalculationJobResult implements IdentifierEncodedValueSpecifications {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(CalculationJobResult.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(CalculationJobResult.class);
 
   private final CalculationJobSpecification _specification;
 
@@ -53,7 +53,7 @@ public class CalculationJobResult implements IdentifierEncodedValueSpecification
     ArgumentChecker.notNull(resultItems, "resultItems");
     if (durationNanos < 0) {
       // Avoid failing for this, as nanoTime() may not work correctly
-      s_logger.warn("Duration must be non-negative: " + durationNanos);
+      LOGGER.warn("Duration must be non-negative: " + durationNanos);
       durationNanos = 0;
     }
     ArgumentChecker.notNull(nodeId, "Node ID the job was executed on");

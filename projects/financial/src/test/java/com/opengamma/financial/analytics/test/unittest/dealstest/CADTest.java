@@ -27,17 +27,17 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT)
 public class CADTest {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(CADTest.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(CADTest.class);
   private static final String CURRENCY = "CAD";
 
   private static final String ON_NAME = "CAD_BA_3M_ERS";
   private static final String THREE_MONTH_NAME = "CAD_BA_3M_ERS";
   private static final String SIX_MONTH_NAME = "CAD_BA_3M_ERS";
-  final static String discountingCurvename = "Discounting";
-  final static String forward3MCurveName = "Forward 3M";
-  final static String forward6MCurveName = "Forward 6M";
+  final static String DISCOUNTING_CURVE_NAME = "Discounting";
+  final static String FORWARD_3M_CURVE_NAME = "Forward 3M";
+  final static String FORWARD_6M_CURVE_NAME = "Forward 6M";
 
-  final static Currency ccy = Currency.CAD;
+  final static Currency CCY = Currency.CAD;
 
   private static final String PAY_CURRENCY = "LEG1_CCY";
 
@@ -60,10 +60,10 @@ public class CADTest {
 
     // Build the curve bundle
     final HashMap<String, Currency> ccyMap = new HashMap<>();
-    ccyMap.put(discountingCurvename, ccy);
-    ccyMap.put(forward3MCurveName, ccy);
-    ccyMap.put(forward6MCurveName, ccy);
-    final FXMatrix fx = new FXMatrix(ccy);
+    ccyMap.put(DISCOUNTING_CURVE_NAME, CCY);
+    ccyMap.put(FORWARD_3M_CURVE_NAME, CCY);
+    ccyMap.put(FORWARD_6M_CURVE_NAME, CCY);
+    final FXMatrix fx = new FXMatrix(CCY);
     final YieldCurveBundle curvesClean = new YieldCurveBundle(fx, ccyMap);
 
     IRCurveParser curveParser = new IRCurveParser();
@@ -74,19 +74,19 @@ public class CADTest {
 
       String name = interpolatedDoublesCurve.getName();
       if (name.equals(ON_NAME)) {
-        curvesClean.setCurve(discountingCurvename, DiscountCurve.from(interpolatedDoublesCurve));
+        curvesClean.setCurve(DISCOUNTING_CURVE_NAME, DiscountCurve.from(interpolatedDoublesCurve));
       }
       if (name.equals(THREE_MONTH_NAME)) {
-        curvesClean.setCurve(forward3MCurveName, DiscountCurve.from(interpolatedDoublesCurve));
+        curvesClean.setCurve(FORWARD_3M_CURVE_NAME, DiscountCurve.from(interpolatedDoublesCurve));
       }
       if (name.equals(SIX_MONTH_NAME)) {
-        curvesClean.setCurve(forward6MCurveName, DiscountCurve.from(interpolatedDoublesCurve));
+        curvesClean.setCurve(FORWARD_6M_CURVE_NAME, DiscountCurve.from(interpolatedDoublesCurve));
       }
     }
 
     // Convert the swap security into a swap definition 
     //TODO
-    s_logger.warn("Got {} trades", trades.size());
+    LOGGER.warn("Got {} trades", trades.size());
   }
 
 }

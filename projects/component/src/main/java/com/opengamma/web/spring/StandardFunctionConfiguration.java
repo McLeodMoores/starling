@@ -53,7 +53,7 @@ import com.opengamma.web.spring.defaults.GeneralLocalVolatilitySurfaceDefaults;
 @SuppressWarnings("deprecation")
 public abstract class StandardFunctionConfiguration extends AbstractFunctionConfigurationBean {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(StandardFunctionConfiguration.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(StandardFunctionConfiguration.class);
 
   /**
    * Holds one or more values referenced by a hierarchical key.
@@ -349,8 +349,8 @@ public abstract class StandardFunctionConfiguration extends AbstractFunctionConf
         try {
           ((InitializingBean) entry).afterPropertiesSet();
         } catch (final Exception ex) {
-          s_logger.debug("Skipping {}", e.getKey());
-          s_logger.trace("Caught exception", e);
+          LOGGER.debug("Skipping {}", e.getKey());
+          LOGGER.trace("Caught exception", e);
           continue;
         }
       }
@@ -386,8 +386,8 @@ public abstract class StandardFunctionConfiguration extends AbstractFunctionConf
         try {
           ((InitializingBean) entry).afterPropertiesSet();
         } catch (final Exception ex) {
-          s_logger.debug("Skipping {}", e.getKey());
-          s_logger.trace("Caught exception", e);
+          LOGGER.debug("Skipping {}", e.getKey());
+          LOGGER.trace("Caught exception", e);
           continue;
         }
       }
@@ -775,7 +775,7 @@ public abstract class StandardFunctionConfiguration extends AbstractFunctionConf
     try {
       defaults.afterPropertiesSet();
     } catch (final Exception e) {
-      s_logger.warn("Caught exception", e);
+      LOGGER.warn("Caught exception", e);
       return null;
     }
     return defaults.getObject();

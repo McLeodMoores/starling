@@ -41,7 +41,7 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT_DB)
 public abstract class AbstractDbPositionMasterWorkerTest extends AbstractDbTest {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(AbstractDbPositionMasterWorkerTest.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(AbstractDbPositionMasterWorkerTest.class);
 
   protected DbPositionMaster _posMaster;
   protected Instant _version1Instant;
@@ -52,7 +52,7 @@ public abstract class AbstractDbPositionMasterWorkerTest extends AbstractDbTest 
 
   public AbstractDbPositionMasterWorkerTest(final String databaseType, final String databaseVersion, final boolean readOnly) {
     super(databaseType, databaseVersion);
-    s_logger.info("running testcases for {}", databaseType);
+    LOGGER.info("running testcases for {}", databaseType);
   }
 
   //-------------------------------------------------------------------------
@@ -79,8 +79,8 @@ public abstract class AbstractDbPositionMasterWorkerTest extends AbstractDbTest 
     _posMaster.setClock(Clock.fixed(_now.toInstant(), ZoneOffset.UTC));
     _version1Instant = _now.toInstant().minusSeconds(100);
     _version2Instant = _now.toInstant().minusSeconds(50);
-    s_logger.debug("test data now:   {}", _version1Instant);
-    s_logger.debug("test data later: {}", _version2Instant);
+    LOGGER.debug("test data now:   {}", _version1Instant);
+    LOGGER.debug("test data later: {}", _version2Instant);
     final JdbcOperations template = _posMaster.getDbConnector().getJdbcOperations();
     template.update("INSERT INTO pos_position VALUES (?,?,?,?,?, ?,?,?,?)",
         100, 100, toSqlTimestamp(_version1Instant), MAX_SQL_TIMESTAMP, toSqlTimestamp(_version1Instant), MAX_SQL_TIMESTAMP, "A", "100", BigDecimal.valueOf(100.987));

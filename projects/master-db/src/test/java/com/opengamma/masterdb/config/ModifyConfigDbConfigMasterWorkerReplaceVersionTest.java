@@ -41,12 +41,12 @@ import com.opengamma.util.test.TestGroup;
 public class ModifyConfigDbConfigMasterWorkerReplaceVersionTest extends AbstractDbConfigMasterWorkerTest {
   // superclass sets up dummy database
 
-  private static final Logger s_logger = LoggerFactory.getLogger(ModifyConfigDbConfigMasterWorkerReplaceVersionTest.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ModifyConfigDbConfigMasterWorkerReplaceVersionTest.class);
 
   @Factory(dataProvider = "databases", dataProviderClass = DbTest.class)
   public ModifyConfigDbConfigMasterWorkerReplaceVersionTest(String databaseType, String databaseVersion) {
     super(databaseType, databaseVersion, false);
-    s_logger.info("running testcases for {}", databaseType);
+    LOGGER.info("running testcases for {}", databaseType);
   }
 
   @Test

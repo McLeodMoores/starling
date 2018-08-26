@@ -62,13 +62,13 @@ import com.opengamma.util.tuple.Pair;
  */
 public final class DependencyGraphBuilder implements Cancelable {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(DependencyGraphBuilder.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(DependencyGraphBuilder.class);
 
   /** The object id to be given to the next DependencyGraphBuilder to be created */
-  private static final AtomicInteger s_nextObjectId = new AtomicInteger();
+  private static final AtomicInteger NEXT_OBJECT_ID = new AtomicInteger();
 
   /** The job id to be given to the next job to be created */
-  private static final AtomicInteger s_nextJobId = new AtomicInteger();
+  private static final AtomicInteger NEXT_JOB_ID = new AtomicInteger();
 
   /**
    * Disables the multi-threaded graph building. If set, value requirements will be queued as they are added and the graph built by a single thread when {@link #getDependencyGraph} is called. This is
@@ -103,10 +103,10 @@ public final class DependencyGraphBuilder implements Cancelable {
   private static final boolean DEBUG_DUMP_GZIP = System.getProperty("DependencyGraphBuilder.dumpGZIP", "FALSE").equalsIgnoreCase("TRUE");
 
   /** Profiler for monitoring the {@link #abortLoops} operation. */
-  private static final Profiler s_abortLoops = Profiler.create(DependencyGraphBuilder.class, "abortLoops");
+  private static final Profiler ABORT_LOOPS = Profiler.create(DependencyGraphBuilder.class, "abortLoops");
 
   /** The object id of this DependencyGraphBuilder (used in logs) */
-  private final int _objectId = s_nextObjectId.incrementAndGet();
+  private final int _objectId = NEXT_OBJECT_ID.incrementAndGet();
 
   /** The number of active jobs in this instance of DependencyGraphBuilder */
   private final AtomicInteger _activeJobCount = new AtomicInteger();
@@ -330,7 +330,7 @@ public final class DependencyGraphBuilder implements Cancelable {
     _activeResolveTasks.decrementAndGet();
   }
 
-  private static final ComputationTargetTypeVisitor<Void, Boolean> s_isUnionType = new ComputationTargetTypeVisitor<Void, Boolean>() {
+  private static final ComputationTargetTypeVisitor<Void, Boolean> IS_UNION_TYPE = new ComputationTargetTypeVisitor<Void, Boolean>() {
 
     @Override
     public Boolean visitMultipleComputationTargetTypes(final Set<ComputationTargetType> types, final Void unused) {
@@ -357,15 +357,15 @@ public final class DependencyGraphBuilder implements Cancelable {
   protected ComputationTargetSpecification resolveTargetReference(final ComputationTargetReference reference) {
     ComputationTargetSpecification specification = getCompilationContext().getComputationTargetResolver().getSpecificationResolver().getTargetSpecification(reference);
     if (specification == null) {
-      s_logger.warn("Couldn't resolve {}", reference);
+      LOGGER.warn("Couldn't resolve {}", reference);
       return null;
     }
-    if (specification.getType().accept(s_isUnionType, null) == Boolean.TRUE) {
+    if (specification.getType().accept(IS_UNION_TYPE, null) == Boolean.TRUE) {
       final ComputationTarget target = getCompilationContext().getComputationTargetResolver().resolve(specification);
       if (target != null) {
         return target.toSpecification();
       } else {
-        s_logger.warn("Resolved {} to {} but can't resolve target to eliminate union", reference, specification);
+        LOGGER.warn("Resolved {} to {} but can't resolve target to eliminate union", reference, specification);
       }
     }
     return specification;
@@ -567,8 +567,8 @@ public final class DependencyGraphBuilder implements Cancelable {
 
   @SuppressWarnings("unchecked")
   protected void abortLoops() {
-    s_logger.debug("Checking for tasks to abort");
-    s_abortLoops.begin();
+    LOGGER.debug("Checking for tasks to abort");
+    ABORT_LOOPS.begin();
     try {
       final Collection<ResolveTask> toCheck = new ArrayList<ResolveTask>();
       for (final MapEx<ResolveTask, ResolvedValueProducer> tasks : _specifications.values()) {
@@ -592,15 +592,15 @@ public final class DependencyGraphBuilder implements Cancelable {
         cancelled += task.cancelLoopMembers(context, checked);
       }
       getContext().mergeThreadContext(context);
-      if (s_logger.isInfoEnabled()) {
+      if (LOGGER.isInfoEnabled()) {
         if (cancelled > 0) {
-          s_logger.info("Cancelled {} looped task(s)", cancelled);
+          LOGGER.info("Cancelled {} looped task(s)", cancelled);
         } else {
-          s_logger.info("No looped tasks to cancel");
+          LOGGER.info("No looped tasks to cancel");
         }
       }
     } finally {
-      s_abortLoops.end();
+      ABORT_LOOPS.end();
     }
   }
 
@@ -612,7 +612,7 @@ public final class DependencyGraphBuilder implements Cancelable {
    */
   protected final class Job implements Runnable, Cancelable {
 
-    private final int _objectId = s_nextJobId.incrementAndGet();
+    private final int _objectId = NEXT_JOB_ID.incrementAndGet();
     private volatile boolean _poison;
 
     private Job() {
@@ -620,7 +620,7 @@ public final class DependencyGraphBuilder implements Cancelable {
 
     @Override
     public void run() {
-      s_logger.debug("Building job {} started for {}", _objectId, DependencyGraphBuilder.this);
+      LOGGER.debug("Building job {} started for {}", _objectId, DependencyGraphBuilder.this);
       if (_contextCleaner != null) {
         _contextCleaner.start();
       }
@@ -640,23 +640,23 @@ public final class DependencyGraphBuilder implements Cancelable {
             jobsLeftToRun = buildGraph(context);
             completed++;
           } catch (final Throwable t) {
-            s_logger.warn("Graph builder exception", t);
+            LOGGER.warn("Graph builder exception", t);
             _context.exception(t);
             jobsLeftToRun = false;
           }
         } while (!_poison && jobsLeftToRun);
 
-        s_logger.debug("Merging thread context");
+        LOGGER.debug("Merging thread context");
         getContext().mergeThreadContext(context);
 
-        s_logger.debug("Building job stopping");
+        LOGGER.debug("Building job stopping");
         int activeJobs = _activeJobCount.decrementAndGet();
 
         // Watch for late arrivals in the run queue; they might have seen the old value
         // of activeJobs and not started anything.
         while (!_runQueue.isEmpty() && (activeJobs < getMaxAdditionalThreads()) && !_poison) {
           if (_activeJobCount.compareAndSet(activeJobs, activeJobs + 1)) {
-            s_logger.debug("Building job resuming");
+            LOGGER.debug("Building job resuming");
             // Note the log messages may go from "resuming" to stopped if the poison arrives between
             // the check above and the check below. This might look odd, but what the hey - they're
             // only DEBUG level messages.
@@ -684,7 +684,7 @@ public final class DependencyGraphBuilder implements Cancelable {
           // started. We are officially "dead"; another worker thread may become active
         }
       }
-      s_logger.debug("Building job {} stopped after {} operations", _objectId, completed);
+      LOGGER.debug("Building job {} stopped after {} operations", _objectId, completed);
     }
 
     @Override
@@ -807,7 +807,7 @@ public final class DependencyGraphBuilder implements Cancelable {
    */
   protected void startBackgroundBuild() {
     if (_runQueue.isEmpty()) {
-      s_logger.info("No pending runnable tasks for background building");
+      LOGGER.info("No pending runnable tasks for background building");
     } else {
       final Iterator<ContextRunnable> itr = _runQueue.iterator();
       while (itr.hasNext() && startBackgroundConstructionJob()) {
@@ -846,7 +846,7 @@ public final class DependencyGraphBuilder implements Cancelable {
 
   protected boolean isGraphBuilt(final boolean allowBackgroundContinuation) throws InterruptedException {
     if (!isGraphBuilt()) {
-      s_logger.info("Building dependency graph");
+      LOGGER.info("Building dependency graph");
       do {
         final Job job = createConstructionJob();
         _activeJobCount.incrementAndGet();
@@ -866,7 +866,7 @@ public final class DependencyGraphBuilder implements Cancelable {
         }
         if (allowBackgroundContinuation) {
           // Nothing in the queue for us so take a nap. There are background threads running and maybe items on the deferred queue.
-          s_logger.info("Waiting for background threads");
+          LOGGER.info("Waiting for background threads");
           Thread.sleep(100);
         } else {
           return false;
@@ -984,11 +984,11 @@ public final class DependencyGraphBuilder implements Cancelable {
     if (context != null) {
       getContext().mergeThreadContext(context);
     }
-    if (s_logger.isInfoEnabled()) {
+    if (LOGGER.isInfoEnabled()) {
       if (removed > 0) {
-        s_logger.info("Discarded {} production task(s)", removed);
+        LOGGER.info("Discarded {} production task(s)", removed);
       } else {
-        s_logger.info("No production tasks to discard");
+        LOGGER.info("No production tasks to discard");
       }
     }
     return removed > 0;
@@ -996,7 +996,7 @@ public final class DependencyGraphBuilder implements Cancelable {
 
   protected void reportStateSize() {
     _getTerminalValuesCallback.reportStateSize();
-    if (!s_logger.isInfoEnabled()) {
+    if (!LOGGER.isInfoEnabled()) {
       return;
     }
     int count = 0;
@@ -1005,16 +1005,16 @@ public final class DependencyGraphBuilder implements Cancelable {
         count += entries.size();
       }
     }
-    s_logger.info("Requirements cache = {} tasks for {} requirements", count, _requirements.size());
+    LOGGER.info("Requirements cache = {} tasks for {} requirements", count, _requirements.size());
     count = 0;
     for (final MapEx<ResolveTask, ResolvedValueProducer> entries : _specifications.values()) {
       synchronized (entries) {
         count += entries.size();
       }
     }
-    s_logger.info("Specifications cache = {} tasks for {} specifications", count, _specifications.size());
-    s_logger.info("Pending requirements = {}", _pendingRequirements.getValueRequirements().size());
-    s_logger.info("Run queue length = {}, deferred queue length = {}", _runQueue.size(), _deferredQueue.size());
+    LOGGER.info("Specifications cache = {} tasks for {} specifications", count, _specifications.size());
+    LOGGER.info("Pending requirements = {}", _pendingRequirements.getValueRequirements().size());
+    LOGGER.info("Run queue length = {}, deferred queue length = {}", _runQueue.size(), _deferredQueue.size());
   }
 
   protected DependencyGraph createDependencyGraph() {
@@ -1027,7 +1027,7 @@ public final class DependencyGraphBuilder implements Cancelable {
       DependencyGraphImpl.dumpStructureASCII(graph, ps);
       ps.close();
     }
-    s_logger.info("{} built after {} steps", graph, _completedSteps);
+    LOGGER.info("{} built after {} steps", graph, _completedSteps);
     // Help out the GC
     _requirements.clear();
     _specifications.clear();
@@ -1048,7 +1048,7 @@ public final class DependencyGraphBuilder implements Cancelable {
       }
       return new PrintStream(output);
     } catch (final IOException e) {
-      s_logger.error("Can't open debug file", e);
+      LOGGER.error("Can't open debug file", e);
       return System.out;
     }
   }

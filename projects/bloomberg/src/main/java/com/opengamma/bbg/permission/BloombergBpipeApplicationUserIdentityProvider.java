@@ -32,7 +32,7 @@ import com.opengamma.util.ArgumentChecker;
  */
 public class BloombergBpipeApplicationUserIdentityProvider {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(BloombergBpipeApplicationUserIdentityProvider.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(BloombergBpipeApplicationUserIdentityProvider.class);
 
   private static final Name AUTHORIZATION_SUCCESS = Name.getName("AuthorizationSuccess");
 
@@ -59,7 +59,7 @@ public class BloombergBpipeApplicationUserIdentityProvider {
     Session session = _sessionProvider.getSession();
     BloombergConnector bloombergConnector = _sessionProvider.getConnector();
 
-    s_logger.debug("Attempting to authorize application using authentication option: {}", bloombergConnector.getSessionOptions().authenticationOptions());
+    LOGGER.debug("Attempting to authorize application using authentication option: {}", bloombergConnector.getSessionOptions().authenticationOptions());
     try {
       EventQueue tokenEventQueue = new EventQueue();
       session.generateToken(new CorrelationID(), tokenEventQueue);
@@ -84,7 +84,7 @@ public class BloombergBpipeApplicationUserIdentityProvider {
           }
         }
       }
-      s_logger.debug("Token: {} generated for application: {}", token, bloombergConnector.getSessionOptions().authenticationOptions());
+      LOGGER.debug("Token: {} generated for application: {}", token, bloombergConnector.getSessionOptions().authenticationOptions());
 
       Service apiAuthSvc = _sessionProvider.getService(BloombergConstants.AUTH_SVC_NAME);
       Request authRequest = apiAuthSvc.createAuthorizationRequest();
@@ -98,7 +98,7 @@ public class BloombergBpipeApplicationUserIdentityProvider {
       if (event.eventType().equals(Event.EventType.RESPONSE) || event.eventType().equals(Event.EventType.REQUEST_STATUS)) {
         for (Message msg : event) {
           if (msg.messageType().equals(AUTHORIZATION_SUCCESS)) {
-            s_logger.debug("Application authorization SUCCESS");
+            LOGGER.debug("Application authorization SUCCESS");
             return appIdentity;
           }
         }

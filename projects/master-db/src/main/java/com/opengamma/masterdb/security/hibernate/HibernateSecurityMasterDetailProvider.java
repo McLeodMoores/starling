@@ -82,7 +82,7 @@ import com.opengamma.util.db.DbMapSqlParameterSource;
 public class HibernateSecurityMasterDetailProvider implements SecurityMasterDetailProvider {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(HibernateSecurityMasterDetailProvider.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(HibernateSecurityMasterDetailProvider.class);
   private static final ConcurrentMap<Class<?>, SecurityBeanOperation<?, ?>> BEAN_OPERATIONS_BY_SECURITY = new ConcurrentHashMap<Class<?>, SecurityBeanOperation<?, ?>>();
   private static final ConcurrentMap<Class<?>, SecurityBeanOperation<?, ?>> BEAN_OPERATIONS_BY_BEAN = new ConcurrentHashMap<Class<?>, SecurityBeanOperation<?, ?>>();
   private static final ConcurrentMap<String, SecurityBeanOperation<?, ?>> BEAN_OPERATIONS_BY_TYPE = new ConcurrentHashMap<String, SecurityBeanOperation<?, ?>>();
@@ -99,17 +99,17 @@ public class HibernateSecurityMasterDetailProvider implements SecurityMasterDeta
   //-------------------------------------------------------------------------
   private static void loadBeanOperation(final SecurityBeanOperation<?, ?> beanOperation) {
     if (BEAN_OPERATIONS_BY_SECURITY.containsKey(beanOperation.getSecurityClass())) {
-      s_logger.error(beanOperation.getSecurityClass() + " is already registered in BEAN_OPERATIONS_BY_SECURITY");
+      LOGGER.error(beanOperation.getSecurityClass() + " is already registered in BEAN_OPERATIONS_BY_SECURITY");
       throw new OpenGammaRuntimeException(beanOperation.getSecurityClass() + " is already registered in BEAN_OPERATIONS_BY_SECURITY");
     }
     BEAN_OPERATIONS_BY_SECURITY.put(beanOperation.getSecurityClass(), beanOperation);
     if (BEAN_OPERATIONS_BY_BEAN.containsKey(beanOperation.getBeanClass())) {
-      s_logger.error(beanOperation.getBeanClass() + " is already registered in BEAN_OPERATIONS_BY_SECURITY");
+      LOGGER.error(beanOperation.getBeanClass() + " is already registered in BEAN_OPERATIONS_BY_SECURITY");
       throw new OpenGammaRuntimeException(beanOperation.getBeanClass() + " is already registered in BEAN_OPERATIONS_BY_SECURITY");
     }
     BEAN_OPERATIONS_BY_BEAN.put(beanOperation.getBeanClass(), beanOperation);
     if (BEAN_OPERATIONS_BY_TYPE.containsKey(beanOperation.getSecurityType())) {
-      s_logger.error(beanOperation.getBeanClass() + " is already registered in BEAN_OPERATIONS_BY_SECURITY");
+      LOGGER.error(beanOperation.getBeanClass() + " is already registered in BEAN_OPERATIONS_BY_SECURITY");
       throw new OpenGammaRuntimeException(beanOperation.getBeanClass() + " is already registered in BEAN_OPERATIONS_BY_SECURITY");
     }
     BEAN_OPERATIONS_BY_TYPE.put(beanOperation.getSecurityType(), beanOperation);
@@ -131,7 +131,7 @@ public class HibernateSecurityMasterDetailProvider implements SecurityMasterDeta
         BEAN_OPERATIONS_BY_BEAN.containsKey(beanOperation.getBeanClass()) ||
         BEAN_OPERATIONS_BY_TYPE.containsKey(beanOperation.getSecurityType())) {
 
-      s_logger.warn(beanOperation.getBeanClass() + " is already registered");
+      LOGGER.warn(beanOperation.getBeanClass() + " is already registered");
 
     } else {
       loadBeanOperation(beanOperation);
@@ -281,7 +281,7 @@ public class HibernateSecurityMasterDetailProvider implements SecurityMasterDeta
   //-------------------------------------------------------------------------
   @Override
   public ManageableSecurity loadSecurityDetail(final ManageableSecurity base) {
-    s_logger.debug("loading detail for security {}", base.getUniqueId());
+    LOGGER.debug("loading detail for security {}", base.getUniqueId());
     return getHibernateTemplate().execute(new HibernateCallback<ManageableSecurity>() {
       @SuppressWarnings({"unchecked", "rawtypes" })
       @Override
@@ -290,7 +290,7 @@ public class HibernateSecurityMasterDetailProvider implements SecurityMasterDeta
         final HibernateSecurityMasterDao secMasterSession = getHibernateSecurityMasterSession(session);
         SecurityBean security = secMasterSession.getSecurityBean(base, beanOperation);
         if (security == null) {
-          s_logger.warn("no detail found for security {}", base.getUniqueId());
+          LOGGER.warn("no detail found for security {}", base.getUniqueId());
           return base;
         }
         security = beanOperation.resolve(getOperationContext(), secMasterSession, null, security);
@@ -313,7 +313,7 @@ public class HibernateSecurityMasterDetailProvider implements SecurityMasterDeta
 
   @Override
   public void storeSecurityDetail(final ManageableSecurity security) {
-    s_logger.debug("storing detail for security {}", security.getUniqueId());
+    LOGGER.debug("storing detail for security {}", security.getUniqueId());
     if (security.getClass() == ManageableSecurity.class) {
       return;  // no detail to store
     }

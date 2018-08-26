@@ -8,6 +8,7 @@ package com.opengamma.analytics.financial.interestrate;
 import java.util.HashMap;
 import java.util.Map;
 
+// CSOFF
 /**
  * @deprecated The that are used by this factory are deprecated.
  */

@@ -48,7 +48,7 @@ import com.opengamma.util.async.AsynchronousExecution;
  */
 public class CreditSpreadCurveHistoricalTimeSeriesFunction extends AbstractFunction.NonCompiledInvoker {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(CreditSpreadCurveHistoricalTimeSeriesFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(CreditSpreadCurveHistoricalTimeSeriesFunction.class);
 
   private CurveDefinitionSource _curveDefinitionSource;
   private CurveSpecificationBuilder _curveSpecificationBuilder;
@@ -95,7 +95,7 @@ public class CreditSpreadCurveHistoricalTimeSeriesFunction extends AbstractFunct
       if (timeSeries != null) {
         bundle.add(dataField, identifier, timeSeries);
       } else {
-        s_logger.warn("Could not get time series for {}", identifier);
+        LOGGER.warn("Could not get time series for {}", identifier);
       }
     }
     return Collections.singleton(new ComputedValue(new ValueSpecification(ValueRequirementNames.CREDIT_SPREAD_CURVE_HISTORICAL_TIME_SERIES, target.toSpecification(), desiredValue

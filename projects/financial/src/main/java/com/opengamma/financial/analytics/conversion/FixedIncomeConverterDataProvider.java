@@ -98,7 +98,7 @@ import com.opengamma.util.money.Currency;
  */
 public class FixedIncomeConverterDataProvider {
   /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(FixedIncomeConverterDataProvider.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(FixedIncomeConverterDataProvider.class);
   /** The security source */
   private final SecuritySource _securitySource;
 
@@ -1217,7 +1217,7 @@ public class FixedIncomeConverterDataProvider {
       }
       final HistoricalTimeSeries ts = timeSeries.get(MarketDataRequirementNames.MARKET_VALUE, id);
       if (ts == null) {
-        s_logger.info("Could not get time series of underlying index " + id.getExternalIds().toString() + " bundle used was " + id);
+        LOGGER.info("Could not get time series of underlying index " + id.getExternalIds().toString() + " bundle used was " + id);
         return ImmutableZonedDateTimeDoubleTimeSeries.ofEmpty(now.getZone());
       }
       if (ts.getTimeSeries().isEmpty()) {
@@ -1238,7 +1238,7 @@ public class FixedIncomeConverterDataProvider {
       }
       final HistoricalTimeSeries ts = timeSeries.get(MarketDataRequirementNames.MARKET_VALUE, id);
       if (ts == null) {
-        s_logger.info("Could not get time series of underlying index " + id.getExternalIds().toString() + " bundle used was " + id);
+        LOGGER.info("Could not get time series of underlying index " + id.getExternalIds().toString() + " bundle used was " + id);
         return ImmutableZonedDateTimeDoubleTimeSeries.ofEmpty(now.getZone());
       }
       if (ts.getTimeSeries().isEmpty()) {
@@ -1266,7 +1266,7 @@ public class FixedIncomeConverterDataProvider {
       }
       final HistoricalTimeSeries ts = timeSeries.get(MarketDataRequirementNames.MARKET_VALUE, id);
       if (ts == null) {
-        s_logger.info("Could not get time series of underlying index " + id.getExternalIds().toString() + " bundle used was " + id);
+        LOGGER.info("Could not get time series of underlying index " + id.getExternalIds().toString() + " bundle used was " + id);
         return ImmutableZonedDateTimeDoubleTimeSeries.ofEmpty(now.getZone());
       }
       if (ts.getTimeSeries().isEmpty()) {
@@ -1695,7 +1695,7 @@ public class FixedIncomeConverterDataProvider {
   private ExternalIdBundle getIndexIborIdBundle(final ExternalId indexId) {
     final Security sec = _securitySource.getSingle(indexId.toBundle());
     if (sec == null) {
-      s_logger.info("Ibor index security with id {} is null); falling back to ConventionBundleMaster", indexId.toBundle());
+      LOGGER.info("Ibor index security with id {} is null); falling back to ConventionBundleMaster", indexId.toBundle());
       final ConventionBundle convention = _conventionSource.getConventionBundle(indexId);
       if (convention == null) {
         throw new OpenGammaRuntimeException("Could not get convention bundle for " + indexId);

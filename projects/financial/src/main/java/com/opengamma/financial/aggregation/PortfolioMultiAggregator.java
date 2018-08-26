@@ -30,7 +30,7 @@ import com.opengamma.util.ArgumentChecker;
  */
 public class PortfolioMultiAggregator {
   
-  private static final Logger s_logger = LoggerFactory.getLogger(PortfolioMultiAggregator.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(PortfolioMultiAggregator.class);
 
   private final List<List<AggregationFunction<?>>> _aggregationFunctionsList;
 
@@ -64,7 +64,7 @@ public class PortfolioMultiAggregator {
   
   protected void aggregate(SimplePortfolioNode inputNode, List<Position> flattenedPortfolio, Queue<AggregationFunction<?>> functionList) {
     AggregationFunction<?> nextFunction = functionList.remove();
-    s_logger.debug("Aggregating {} positions by {}", flattenedPortfolio, nextFunction);
+    LOGGER.debug("Aggregating {} positions by {}", flattenedPortfolio, nextFunction);
     @SuppressWarnings("unchecked")
     Map<String, List<Position>> buckets = new TreeMap<>((Comparator<? super String>) nextFunction);
     for (Object entry : nextFunction.getRequiredEntries()) {

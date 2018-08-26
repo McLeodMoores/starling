@@ -39,7 +39,7 @@ import com.opengamma.OpenGammaRuntimeException;
 public class ClasspathUtils {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(ClasspathUtils.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ClasspathUtils.class);
   /**
    * The class path.
    */
@@ -138,7 +138,7 @@ public class ClasspathUtils {
     for (String classpathEntry : classpath) {
       File f = new File(classpathEntry);
       if (!f.exists()) {
-        s_logger.debug("Skipping non-existent classpath entry '{}'", classpathEntry);
+        LOGGER.debug("Skipping non-existent classpath entry '{}'", classpathEntry);
         continue;
       }
       try {
@@ -214,11 +214,11 @@ public class ClasspathUtils {
             try (InputStream in = resource.openStream()) {
               properties.load(in);
             } catch (IOException ex) {
-              s_logger.debug(ex.getMessage(), ex);
+              LOGGER.debug(ex.getMessage(), ex);
             }
           }
         } catch (IOException ex2) {
-          s_logger.debug(ex2.getMessage(), ex2);
+          LOGGER.debug(ex2.getMessage(), ex2);
         }
       } else if (_url.toString().endsWith(".jar")) {
         String name = StringUtils.substringAfterLast(_url.toString(), "/");

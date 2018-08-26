@@ -17,7 +17,7 @@ import org.slf4j.LoggerFactory;
  */
 public class DefaultManageableFunctionBlacklist extends AbstractManageableFunctionBlacklist {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(DefaultManageableFunctionBlacklist.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(DefaultManageableFunctionBlacklist.class);
   private static final int DEFAULT_TTL = 3600; // Blacklist for 1-hour
 
   private final FunctionBlacklistRuleSet _rules;
@@ -41,7 +41,7 @@ public class DefaultManageableFunctionBlacklist extends AbstractManageableFuncti
 
       @Override
       protected void onAdd(final FunctionBlacklistRule rule) {
-        s_logger.debug("{} added to {}", rule, DefaultManageableFunctionBlacklist.this);
+        LOGGER.debug("{} added to {}", rule, DefaultManageableFunctionBlacklist.this);
         final boolean direct = beginUpdate();
         try {
           if (direct) {
@@ -63,7 +63,7 @@ public class DefaultManageableFunctionBlacklist extends AbstractManageableFuncti
 
       @Override
       protected void onRemove(final FunctionBlacklistRule rule) {
-        s_logger.debug("{} removed from {}", rule, DefaultManageableFunctionBlacklist.this);
+        LOGGER.debug("{} removed from {}", rule, DefaultManageableFunctionBlacklist.this);
         final boolean direct = beginUpdate();
         try {
           if (direct) {

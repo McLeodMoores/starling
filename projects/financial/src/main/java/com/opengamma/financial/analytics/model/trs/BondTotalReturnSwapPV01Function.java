@@ -52,7 +52,7 @@ import com.opengamma.util.tuple.Pair;
  */
 public class BondTotalReturnSwapPV01Function extends BondTotalReturnSwapFunction {
   /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(BondTotalReturnSwapPV01Function.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(BondTotalReturnSwapPV01Function.class);
   /** The calculator */
   private static final InstrumentDerivativeVisitor<ParameterIssuerProviderInterface, ReferenceAmount<Pair<String, Currency>>> CALCULATOR =
       new PV01CurveParametersCalculator<>(PresentValueCurveSensitivityIssuerCalculator.getInstance());
@@ -135,7 +135,7 @@ public class BondTotalReturnSwapPV01Function extends BondTotalReturnSwapFunction
           }
         }
         if (currencies.isEmpty() || curveNames.isEmpty()) {
-          s_logger.error("Could not get currencies or curve name properties; have not been set in function(s) called {}", functionNames);
+          LOGGER.error("Could not get currencies or curve name properties; have not been set in function(s) called {}", functionNames);
           return null;
         }
         final Set<ValueSpecification> results = new HashSet<>();

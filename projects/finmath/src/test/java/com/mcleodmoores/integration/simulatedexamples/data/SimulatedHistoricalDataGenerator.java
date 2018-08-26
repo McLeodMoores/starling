@@ -31,7 +31,7 @@ import com.opengamma.util.tuple.Pair;
  */
 public class SimulatedHistoricalDataGenerator extends SimulatedHistoricalData {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(SimulatedHistoricalDataGenerator.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(SimulatedHistoricalDataGenerator.class);
 
   /** Master for writing the generated time series data. */
   private final HistoricalTimeSeriesMaster _htsMaster;
@@ -71,7 +71,7 @@ public class SimulatedHistoricalDataGenerator extends SimulatedHistoricalData {
       LocalDateDoubleTimeSeries timeSeries = getHistoricalDataPoints(random, finishValue, _timeSeriesLengthMonths);
       _htsMaster.updateTimeSeriesDataPoints(addedDoc.getInfo().getTimeSeriesObjectId(), timeSeries);
     }
-    s_logger.info(buf.toString());
+    LOGGER.info(buf.toString());
   }
 
   private static ManageableHistoricalTimeSeriesInfo getSimulatedTimeSeriesInfo(String dataField, ExternalId identifier) {

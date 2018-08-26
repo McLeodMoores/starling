@@ -21,17 +21,17 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT)
 public class PeriodFudgeEncodingTest extends AbstractFudgeBuilderTestCase {
 
-  private static final Period s_ref = Period.ofDays(2);
+  private static final Period REF= Period.ofDays(2);
 
   @Test
   public void testCycle() {
-    assertEncodeDecodeCycle(Period.class, s_ref);
+    assertEncodeDecodeCycle(Period.class, REF);
   }
 
   @Test
   public void testFromString() {
-    assertEquals(s_ref, getFudgeContext().getFieldValue(Period.class,
-        UnmodifiableFudgeField.of(FudgeWireType.STRING, s_ref.toString())));
+    assertEquals(REF, getFudgeContext().getFieldValue(Period.class,
+        UnmodifiableFudgeField.of(FudgeWireType.STRING, REF.toString())));
   }
 
 }

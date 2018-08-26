@@ -38,20 +38,20 @@ public class RegionAggregationFunction implements AggregationFunction<String> {
   private boolean _useAttributes;
   private boolean _includeEmptyCategories;
   
-  private static final Logger s_logger = LoggerFactory.getLogger(RegionAggregationFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(RegionAggregationFunction.class);
   private static final String NAME = "Region";
   private static final String OTHER = "Other";
   private static final String NO_REGION = "N/A";
   
-  private static final List<String> s_topLevelRegions = Arrays.asList("Africa", "Asia", "South America", "Europe");
-  private static final List<String> s_specialCountriesRegions = Arrays.asList("United States", "Canada");
-  private static final List<String> s_requiredEntries = Lists.newArrayList();
+  private static final List<String> TOP_LEVEL_REGIONS = Arrays.asList("Africa", "Asia", "South America", "Europe");
+  private static final List<String> SPECIAL_COUNTRIES_REGIONS = Arrays.asList("United States", "Canada");
+  private static final List<String> REQUIRED_ENTRIES = Lists.newArrayList();
   
   static {
-    s_requiredEntries.addAll(s_topLevelRegions);
-    s_requiredEntries.addAll(s_specialCountriesRegions);
-    s_requiredEntries.add(OTHER);
-    s_requiredEntries.add(NO_REGION);
+    REQUIRED_ENTRIES.addAll(TOP_LEVEL_REGIONS);
+    REQUIRED_ENTRIES.addAll(SPECIAL_COUNTRIES_REGIONS);
+    REQUIRED_ENTRIES.add(OTHER);
+    REQUIRED_ENTRIES.add(NO_REGION);
   }
   
   private SecuritySource _secSource;
@@ -88,7 +88,7 @@ public class RegionAggregationFunction implements AggregationFunction<String> {
   public String classifyPosition(Position position) {
     if (_useAttributes) {
       Map<String, String> attributes = position.getAttributes();
-      s_logger.warn("attributes on " + position + " = " + attributes.entrySet());
+      LOGGER.warn("attributes on " + position + " = " + attributes.entrySet());
       if (attributes.containsKey(getName())) {
         return attributes.get(getName());
       } else {
@@ -114,21 +114,21 @@ public class RegionAggregationFunction implements AggregationFunction<String> {
             if (exchangeId != null) {
               Exchange exchange = _exchangeSource.getSingle(exchangeId);
               if (exchange == null) {
-                s_logger.info("No exchange could be found with ID {}", exchangeId);
+                LOGGER.info("No exchange could be found with ID {}", exchangeId);
                 return NO_REGION;
               }
               if (exchange.getRegionIdBundle() == null) {
-                s_logger.info("Exchange " + exchange.getName() + " region bundle was null");
+                LOGGER.info("Exchange " + exchange.getName() + " region bundle was null");
                 return NO_REGION;
               }
               Region highestLevelRegion = _regionSource.getHighestLevelRegion(exchange.getRegionIdBundle());
-              if (s_specialCountriesRegions.contains(highestLevelRegion.getName())) {
+              if (SPECIAL_COUNTRIES_REGIONS.contains(highestLevelRegion.getName())) {
                 return highestLevelRegion.getName();
               } else {
                 Set<UniqueId> parentRegionIds = highestLevelRegion.getParentRegionIds();
-                s_logger.info("got " + highestLevelRegion + ", looking for parent");
+                LOGGER.info("got " + highestLevelRegion + ", looking for parent");
                 String parent = findTopLevelRegion(parentRegionIds);
-                s_logger.info("parent was " + parent);
+                LOGGER.info("parent was " + parent);
                 return parent;
               }
             }
@@ -156,7 +156,7 @@ public class RegionAggregationFunction implements AggregationFunction<String> {
         region = _regionSource.get((UniqueId) parentRegion);
       }
       if (region != null) {
-        if (s_topLevelRegions.contains(region.getName())) {
+        if (TOP_LEVEL_REGIONS.contains(region.getName())) {
           return region.getName();
         }
       }
@@ -173,7 +173,7 @@ public class RegionAggregationFunction implements AggregationFunction<String> {
   @Override
   public Collection<String> getRequiredEntries() {
     if (_includeEmptyCategories) {
-      return s_requiredEntries;
+      return REQUIRED_ENTRIES;
     } else {
       return Collections.emptyList();
     }
@@ -181,7 +181,7 @@ public class RegionAggregationFunction implements AggregationFunction<String> {
 
   @Override
   public int compare(String o1, String o2) {
-    return CompareUtils.compareByList(s_requiredEntries, o1, o2);
+    return CompareUtils.compareByList(REQUIRED_ENTRIES, o1, o2);
   }
 
   @Override

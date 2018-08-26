@@ -46,7 +46,7 @@ public abstract class AbstractEHCachingSourceWithExternalBundle<V extends Unique
     extends AbstractEHCachingSource<V, S>
     implements SourceWithExternalBundle<V> {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(AbstractEHCachingSourceWithExternalBundle.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(AbstractEHCachingSourceWithExternalBundle.class);
 
   private static final String EID_TO_UID_CACHE = "-eid-to-uid";
 
@@ -207,7 +207,7 @@ public abstract class AbstractEHCachingSourceWithExternalBundle<V extends Unique
           try {
             result = get(uid);
           } catch (DataNotFoundException dnfe) {
-            s_logger.warn("Cached {} for {} no longer available", uid, key);
+            LOGGER.warn("Cached {} for {} no longer available", uid, key);
             result = null;
           }
           if (result != null) {
@@ -221,7 +221,7 @@ public abstract class AbstractEHCachingSourceWithExternalBundle<V extends Unique
         try {
           return get(uid);
         } catch (DataNotFoundException dnfe) {
-          s_logger.warn("Cached {} for {} no longer available", uid, key);
+          LOGGER.warn("Cached {} for {} no longer available", uid, key);
           return null;
         }
       }

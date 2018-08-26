@@ -74,7 +74,7 @@ import com.opengamma.util.money.Currency;
  */
 public abstract class IRFutureOptionSABRFunction extends AbstractFunction.NonCompiledInvoker {
   /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(IRFutureOptionSABRFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(IRFutureOptionSABRFunction.class);
   /** The SABR function */
   private static final SABRHaganVolatilityFunction SABR_FUNCTION = new SABRHaganVolatilityFunction();
   /** Converts an {@link InstrumentDefinition} to {@link InstrumentDerivative} */
@@ -171,17 +171,17 @@ public abstract class IRFutureOptionSABRFunction extends AbstractFunction.NonCom
     final ComputationTargetRequirement underlyingTarget = new ComputationTargetRequirement(ComputationTargetType.SECURITY, identifier);
     final ComputationTargetSpecification underlyingSpecification = context.getComputationTargetResolver().getSpecificationResolver().getTargetSpecification(underlyingTarget);
     if (underlyingSpecification == null) {
-      s_logger.error("Loader error: " + security.getName() + " - cannot resolve underlying identifier " + identifier);
+      LOGGER.error("Loader error: " + security.getName() + " - cannot resolve underlying identifier " + identifier);
       return false;
     }
     final ComputationTarget underlying = context.getComputationTargetResolver().resolve(underlyingSpecification);
     if (underlying == null) {
-      s_logger.error("Loader error: " + security.getName() + " - cannot resolve underlying " + underlyingSpecification);
+      LOGGER.error("Loader error: " + security.getName() + " - cannot resolve underlying " + underlyingSpecification);
       return false;
     }
     final Security underlyingSecurity = underlying.getSecurity();
     if (!(underlying.getValue() instanceof InterestRateFutureSecurity)) {
-      s_logger.error("Loader error: " + security.getName() + " - IRateFutureOption has an underlying that is not an IRFuture: " + underlyingSecurity.getName());
+      LOGGER.error("Loader error: " + security.getName() + " - IRateFutureOption has an underlying that is not an IRFuture: " + underlyingSecurity.getName());
       return false;
     }
     return true;
@@ -234,7 +234,7 @@ public abstract class IRFutureOptionSABRFunction extends AbstractFunction.NonCom
     final SecuritySource secSource = context.getSecuritySource();
     final Security secFromIdBundle = secSource.getSingle(security.getExternalIdBundle());
     if (!(secFromIdBundle instanceof IRFutureOptionSecurity)) {
-      //  s_logger.error("Loader error: " + secFromIdBundle.toString() + " has been loaded as an InterestRateFutureOption.");
+      //  LOGGER.error("Loader error: " + secFromIdBundle.toString() + " has been loaded as an InterestRateFutureOption.");
       return null;
     }
      */
@@ -309,12 +309,12 @@ public abstract class IRFutureOptionSABRFunction extends AbstractFunction.NonCom
     final Set<ValueRequirement> requirements = new HashSet<>();
     final MultiCurveCalculationConfig curveCalculationConfig = _curveCalculationConfigSource.getConfig(curveCalculationConfigName);
     if (curveCalculationConfig == null) {
-      s_logger.error("Could not find curve calculation configuration named " + curveCalculationConfigName);
+      LOGGER.error("Could not find curve calculation configuration named " + curveCalculationConfigName);
       return null;
     }
     final Currency currency = FinancialSecurityUtils.getCurrency(trade.getSecurity());
     if (!ComputationTargetSpecification.of(currency).equals(curveCalculationConfig.getTarget())) {
-      s_logger.error("Security currency and curve calculation config id were not equal; have {} and {}", currency, curveCalculationConfig.getTarget());
+      LOGGER.error("Security currency and curve calculation config id were not equal; have {} and {}", currency, curveCalculationConfig.getTarget());
       return null;
     }
     requirements.addAll(YieldCurveFunctionUtils.getCurveRequirements(curveCalculationConfig, _curveCalculationConfigSource));

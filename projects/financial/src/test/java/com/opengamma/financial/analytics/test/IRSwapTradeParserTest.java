@@ -22,7 +22,7 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT)
 public class IRSwapTradeParserTest {
   
-  private static final Logger s_logger = LoggerFactory.getLogger(IRSwapTradeParserTest.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(IRSwapTradeParserTest.class);
   
   public void test() throws Exception {
     IRSwapTradeParser tradeParser = new IRSwapTradeParser();
@@ -32,7 +32,7 @@ public class IRSwapTradeParserTest {
       SwapSecurity swapSecurity = irSwapSecurity.getSwapSecurity();
       Double ersPV = irSwapSecurity.getRawInput().getDouble("ERS PV");
     }
-    s_logger.warn("Got {} trades", trades.size());
+    LOGGER.warn("Got {} trades", trades.size());
   }
 
 }

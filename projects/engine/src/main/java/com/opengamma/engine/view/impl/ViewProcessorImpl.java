@@ -80,7 +80,7 @@ import net.sf.ehcache.util.NamedThreadFactory;
  */
 public class ViewProcessorImpl implements ViewProcessorInternal {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(ViewProcessor.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ViewProcessor.class);
 
   private static final String CLIENT_SCHEME = "ViewClient";
   private static final String PROCESS_SCHEME = "ViewProcess";
@@ -248,7 +248,7 @@ public class ViewProcessorImpl implements ViewProcessorInternal {
       result = attachClientToViewProcessCore(client, listener, process);
       process = null;
     } catch (final RuntimeException e) {
-      s_logger.error("Error attaching client to shared view process", e);
+      LOGGER.error("Error attaching client to shared view process", e);
       throw e;
     } finally {
       try {
@@ -287,7 +287,7 @@ public class ViewProcessorImpl implements ViewProcessorInternal {
       result = attachClientToViewProcessCore(client, listener, process);
       process = null;
     } catch (final RuntimeException e) {
-      s_logger.error("Error attaching client to private view process", e);
+      LOGGER.error("Error attaching client to private view process", e);
       throw e;
     } finally {
       // Roll-back
@@ -319,7 +319,7 @@ public class ViewProcessorImpl implements ViewProcessorInternal {
       return attachClientToViewProcessCore(client, listener, process);
     } catch (final Exception e) {
       // Nothing to roll back
-      s_logger.error("Error attaching client to existing view process", e);
+      LOGGER.error("Error attaching client to existing view process", e);
       throw new OpenGammaRuntimeException("Error attaching client to existing view process", e);
     } finally {
       _processLock.unlock();
@@ -449,7 +449,7 @@ public class ViewProcessorImpl implements ViewProcessorInternal {
             if (dataSource != null && getNamedMarketDataSpecificationRepository() != null) {
               final MarketDataSpecification namedSpec = getNamedMarketDataSpecificationRepository().getSpecification(dataSource);
               if (namedSpec != null && !namedSpec.equals(specification)) {
-                s_logger.info("Replacing live data {} with named spec {}", dataSource, namedSpec);
+                LOGGER.info("Replacing live data {} with named spec {}", dataSource, namedSpec);
                 specifications.set(i, namedSpec);
                 changed = true;
               }
@@ -476,7 +476,7 @@ public class ViewProcessorImpl implements ViewProcessorInternal {
   }
 
   private void shutdownViewProcess(final ViewProcessImpl viewProcess) {
-    s_logger.info("Removing view process {}", viewProcess);
+    LOGGER.info("Removing view process {}", viewProcess);
     _processLock.lock();
     try {
       // Ignored if the process has already terminated (e.g. naturally)
@@ -593,7 +593,7 @@ public class ViewProcessorImpl implements ViewProcessorInternal {
   public void removeViewClient(final UniqueId clientId) {
     ArgumentChecker.notNull(clientId, "clientId");
     checkIdScheme(clientId, CLIENT_SCHEME);
-    s_logger.info("Removing view client {}", clientId);
+    LOGGER.info("Removing view client {}", clientId);
     final ViewClient client = _allClientsById.remove(clientId);
     if (client == null) {
       throw new DataNotFoundException("View client not found: " + clientId);
@@ -671,13 +671,13 @@ public class ViewProcessorImpl implements ViewProcessorInternal {
 
   @Override
   public void start() {
-    final OperationTimer timer = new OperationTimer(s_logger, "Starting on lifecycle call");
+    final OperationTimer timer = new OperationTimer(LOGGER, "Starting on lifecycle call");
     _lifecycleLock.lock();
     try {
       if (_isStarted) {
         return;
       }
-      s_logger.info("Starting on lifecycle call.");
+      LOGGER.info("Starting on lifecycle call.");
       _clientResultTimer = Executors.newScheduledThreadPool(1, new NamedThreadFactory("Shared ViewClient result timer"));
       _viewAutoStartManager.initialize();
       for (Map.Entry<String, AutoStartViewDefinition> entry : _viewAutoStartManager.getAutoStartViews().entrySet()) {
@@ -701,11 +701,11 @@ public class ViewProcessorImpl implements ViewProcessorInternal {
           // Run persistently
           true);
 
-      s_logger.info("Auto-started view: {}", viewName);
+      LOGGER.info("Auto-started view: {}", viewName);
       _viewProcessorEventListenerRegistry.notifyViewAutomaticallyStarted(process.getUniqueId(), viewName);
 
     } catch (RuntimeException e) {
-      s_logger.error("Unable to auto-start view definition with id: {}", viewDefinitionId);
+      LOGGER.error("Unable to auto-start view definition with id: {}", viewDefinitionId);
     }
   }
 
@@ -713,7 +713,7 @@ public class ViewProcessorImpl implements ViewProcessorInternal {
   public Future<Runnable> suspend(final ExecutorService executor) {
     _lifecycleLock.lock();
     try {
-      s_logger.info("Suspending running views.");
+      LOGGER.info("Suspending running views.");
       if (_isSuspended) {
         throw new IllegalStateException("Already suspended");
       }
@@ -737,10 +737,10 @@ public class ViewProcessorImpl implements ViewProcessorInternal {
             try {
               suspend.get(3000, TimeUnit.MILLISECONDS);
             } catch (final TimeoutException t) {
-              s_logger.debug("Timeout waiting for view to suspend", t);
+              LOGGER.debug("Timeout waiting for view to suspend", t);
               suspends.add(suspend);
             } catch (final Throwable t) {
-              s_logger.warn("Couldn't suspend view", t);
+              LOGGER.warn("Couldn't suspend view", t);
             }
           }
         }
@@ -773,12 +773,12 @@ public class ViewProcessorImpl implements ViewProcessorInternal {
       if (!_isStarted) {
         return;
       }
-      s_logger.info("Stopping on lifecycle call - terminating all children");
+      LOGGER.info("Stopping on lifecycle call - terminating all children");
 
       for (final ViewProcessImpl viewProcess : getViewProcesses()) {
         shutdownViewProcess(viewProcess);
       }
-      s_logger.info("All view processes terminated.");
+      LOGGER.info("All view processes terminated.");
 
       for (final ViewClient viewClient : getViewClients()) {
         viewClient.shutdown();

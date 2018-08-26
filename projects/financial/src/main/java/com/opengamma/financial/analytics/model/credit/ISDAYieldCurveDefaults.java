@@ -28,7 +28,7 @@ import com.opengamma.util.money.Currency;
  *
  */
 public class ISDAYieldCurveDefaults extends DefaultPropertyFunction {
-  private static final Logger s_logger = LoggerFactory.getLogger(ISDAYieldCurveDefaults.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ISDAYieldCurveDefaults.class);
   private final PriorityClass _priority;
   private final Map<String, String> _offsetsForCurrency;
 
@@ -61,7 +61,7 @@ public class ISDAYieldCurveDefaults extends DefaultPropertyFunction {
     if (offset != null) {
       return Collections.singleton(offset);
     }
-    s_logger.error("Could not get number of offset days for {}; should never happen", currency);
+    LOGGER.error("Could not get number of offset days for {}; should never happen", currency);
     return null;
   }
 

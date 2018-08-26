@@ -54,7 +54,7 @@ import com.opengamma.util.time.Tenor;
  */
 public class HullWhiteOneFactorParametersFunction extends AbstractFunction {
   /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(HullWhiteOneFactorParametersFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(HullWhiteOneFactorParametersFunction.class);
   /** The default volatility term structure */
   private static final Map<Tenor, Double> VOLATILITY_TERMS = new LinkedHashMap<>();
   static {
@@ -124,13 +124,13 @@ public class HullWhiteOneFactorParametersFunction extends AbstractFunction {
         if (meanReversionObject == null) {
           // TODO Jim - these are hacks that should be removed.
           meanReversionObject = MEAN_REVERSION_DEFAULT;
-          s_logger.info("Using default mean reversion");
+          LOGGER.info("Using default mean reversion");
         }
         Object initialVolatilityObject = inputs.getValue(new ValueRequirement(MarketDataRequirementNames.MARKET_VALUE, ComputationTargetType.PRIMITIVE, parameters.getInitialVolatilityId()));
         if (initialVolatilityObject == null) {
           // TODO Jim - these are hacks that should be removed.
           initialVolatilityObject = INITIAL_VOLATILITY_DEFAULT;
-          s_logger.info("Using default initial volatility");
+          LOGGER.info("Using default initial volatility");
         }
         final Double meanReversion = (Double) meanReversionObject;
         final Double initialVolatility = (Double) initialVolatilityObject;
@@ -147,7 +147,7 @@ public class HullWhiteOneFactorParametersFunction extends AbstractFunction {
             volatilityObject = VOLATILITY_TERMS.get(entry.getKey());
           }
           if (volatilityObject == null) {
-            s_logger.error("Could not get value for " + tenorAppendedId);
+            LOGGER.error("Could not get value for " + tenorAppendedId);
           } else {
             final double t = TimeCalculator.getTimeBetween(now, now.plus(entry.getKey().getPeriod()));
             volatility.add((Double) volatilityObject);

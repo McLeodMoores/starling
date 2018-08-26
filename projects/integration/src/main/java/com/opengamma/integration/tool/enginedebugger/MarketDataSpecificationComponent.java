@@ -58,7 +58,7 @@ public class MarketDataSpecificationComponent extends JPanel {
    */
   private static final long serialVersionUID = 1L;
   
-  private static final Logger s_logger = LoggerFactory.getLogger(MarketDataSpecificationComponent.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(MarketDataSpecificationComponent.class);
   private static final String SNAPSHOT = "Snapshot";
   private static final String HISTORICAL = "Historical";
   private static final String LIVE = "Live";
@@ -205,7 +205,7 @@ public class MarketDataSpecificationComponent extends JPanel {
   }
   
   private void validSpecification(MarketDataSpecification marketDataSpec) {
-    s_logger.warn("valid specification {}", marketDataSpec);
+    LOGGER.warn("valid specification {}", marketDataSpec);
     if (!ObjectUtils.equals(_currentState, marketDataSpec)) {
       _currentState = marketDataSpec;
       fireStateChanged();
@@ -213,7 +213,7 @@ public class MarketDataSpecificationComponent extends JPanel {
   }
   
   private void invalidSpecification() {
-    s_logger.warn("invalid specification");
+    LOGGER.warn("invalid specification");
     _currentState = null;
     fireStateChanged();    
   }
@@ -221,7 +221,7 @@ public class MarketDataSpecificationComponent extends JPanel {
   private ActionListener _radioActionListener = new ActionListener() {
     @Override
     public void actionPerformed(ActionEvent e) {
-      s_logger.warn("radio action triggered");
+      LOGGER.warn("radio action triggered");
       switch (e.getActionCommand()) {
         case LATEST:
           _datePicker.setEnabled(false);
@@ -261,7 +261,7 @@ public class MarketDataSpecificationComponent extends JPanel {
   };
   
   private void liveSelected() {
-    s_logger.warn("live selected");
+    LOGGER.warn("live selected");
     JComboBox<String> source = _dataSourceCombo;
     String item = (String) source.getSelectedItem();
     MarketDataSpecification marketDataSpec = MarketDataSpecificationComponent.this._liveModel.getMarketDataSpec(item);
@@ -276,7 +276,7 @@ public class MarketDataSpecificationComponent extends JPanel {
   };
   
   private void historySelected() {
-    s_logger.warn("history selected");
+    LOGGER.warn("history selected");
     MarketDataSpecificationComponent outer = MarketDataSpecificationComponent.this;
     @SuppressWarnings("unchecked")
     JComboBox<String> source = _dataSourceCombo;
@@ -308,7 +308,7 @@ public class MarketDataSpecificationComponent extends JPanel {
   };
   
   private void snapshotSelected() {
-    s_logger.warn("snapshot selected");
+    LOGGER.warn("snapshot selected");
     JComboBox<String> source = _dataSourceCombo;
     int index = source.getSelectedIndex();
     if (index >= 0) {
@@ -334,7 +334,7 @@ public class MarketDataSpecificationComponent extends JPanel {
   };
   
   private void snapshotVersionSelected() {
-    s_logger.warn("snapshot version selected");
+    LOGGER.warn("snapshot version selected");
     int index = _snapshotVersionCombo.getSelectedIndex();
     if (index >= 0) {
       ObjectId oid = MarketDataSpecificationComponent.this._snapshotModel.getObjectIdAt(index);
@@ -416,7 +416,7 @@ public class MarketDataSpecificationComponent extends JPanel {
   }
   
   protected void fireStateChanged() {
-    s_logger.warn("state changed");
+    LOGGER.warn("state changed");
     for (ChangeListener listener : _listeners) {
       listener.stateChanged(new ChangeEvent(this));
     }

@@ -70,7 +70,7 @@ public final class BloombergBpipePermissionCheckProvider
     implements PermissionCheckProvider, Lifecycle {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(BloombergBpipePermissionCheckProvider.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(BloombergBpipePermissionCheckProvider.class);
 
   private static final Name AUTHORIZATION_SUCCESS = Name.getName("AuthorizationSuccess");
   private static final Name AUTHORIZATION_FAILURE = Name.getName("AuthorizationFailure");
@@ -169,7 +169,7 @@ public final class BloombergBpipePermissionCheckProvider
     } catch (RuntimeException ex) {
       String msg = String.format("Bloomberg authorization failure for user: %s IpAddress: %s",
           request.getUserIdBundle(), request.getNetworkAddress());
-      s_logger.warn(msg, ex);
+      LOGGER.warn(msg, ex);
       return PermissionCheckProviderResult.ofAuthorizationError(
           "Bloomberg authorization error: " + ex.getCause().getClass().getName() + ": " + ex.getMessage());
     }
@@ -182,15 +182,15 @@ public final class BloombergBpipePermissionCheckProvider
     String msg = String.format("Bloomberg authentication failure for user: %s IpAddress: %s",
         request.getUserIdBundle(), request.getNetworkAddress());
     if (ex.getCause() == null) {
-      s_logger.warn(msg, ex);
+      LOGGER.warn(msg, ex);
       return PermissionCheckProviderResult.ofAuthenticationError(
           "Bloomberg authentication error: Unknown cause: " + ex.getMessage());
     } else if (ex.getCause() instanceof UnauthenticatedException) {
-      s_logger.debug(msg);
+      LOGGER.debug(msg);
       return PermissionCheckProviderResult.ofAuthenticationError(
           "Bloomberg authentication failed: " + ex.getCause().getMessage());
     } else {
-      s_logger.warn(msg, ex.getCause());
+      LOGGER.warn(msg, ex.getCause());
       return PermissionCheckProviderResult.ofAuthenticationError(
           "Bloomberg authentication error: " + ex.getCause().getClass().getName() + ": " + ex.getMessage());
     }
@@ -225,7 +225,7 @@ public final class BloombergBpipePermissionCheckProvider
     authRequest.set("ipAddress", userInfo.getIpAddress());
     Identity userIdentity = _session.createIdentity();
 
-    s_logger.debug("Sending {}", authRequest);
+    LOGGER.debug("Sending {}", authRequest);
     EventQueue eventQueue = new EventQueue();
     _session.sendAuthorizationRequest(authRequest, userIdentity, eventQueue, new CorrelationID(userInfo));
     Event event = eventQueue.nextEvent(WAIT_TIME_MS);
@@ -292,7 +292,7 @@ public final class BloombergBpipePermissionCheckProvider
         Element errorinfo = msg.getElement("reason");
         int code = errorinfo.getElementAsInt32("code");
         String reason = errorinfo.getElementAsString("message");
-        s_logger.debug("Authorization revoked for emrsid: {} with code: {} and reason {}",
+        LOGGER.debug("Authorization revoked for emrsid: {} with code: {} and reason {}",
             userCredential.getUserId(), code, reason);
         _userIdentityCache.invalidate(userCredential);
         
@@ -300,7 +300,7 @@ public final class BloombergBpipePermissionCheckProvider
         // the current Identity object will have been updated with new entitlements
         // no need to replace the identity as any caching is internal to Identity
         // if there are client side caches, they should be cleared at this point
-        s_logger.debug("Entitlements updated for emrsid: {}", userCredential.getUserId());
+        LOGGER.debug("Entitlements updated for emrsid: {}", userCredential.getUserId());
       }
     }
   }
@@ -324,7 +324,7 @@ public final class BloombergBpipePermissionCheckProvider
         _session.stop();
       } catch (InterruptedException ex) {
         Thread.interrupted();
-        s_logger.warn("Thread interrupted while trying to shut down bloomberg session");
+        LOGGER.warn("Thread interrupted while trying to shut down bloomberg session");
       }
     }
   }

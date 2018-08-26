@@ -19,7 +19,7 @@ import com.opengamma.util.ArgumentChecker;
 public class SpikeDoubleTimeSeriesFilter extends TimeSeriesFilter {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(SpikeDoubleTimeSeriesFilter.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(SpikeDoubleTimeSeriesFilter.class);
   private static final LocalDateDoubleTimeSeries EMPTY_SERIES = ImmutableLocalDateDoubleTimeSeries.EMPTY_SERIES;
 
   private double _maxPercentageMove;
@@ -31,7 +31,7 @@ public class SpikeDoubleTimeSeriesFilter extends TimeSeriesFilter {
    */
   public SpikeDoubleTimeSeriesFilter(final double maxPercentageMove) {
     if (maxPercentageMove < 0) {
-      s_logger.info("Maximum percentage move must be positive; using absolute value");
+      LOGGER.info("Maximum percentage move must be positive; using absolute value");
     }
     _maxPercentageMove = Math.abs(maxPercentageMove);
   }
@@ -39,7 +39,7 @@ public class SpikeDoubleTimeSeriesFilter extends TimeSeriesFilter {
   //-------------------------------------------------------------------------
   public void setMaxPercentageMove(final double maxPercentageMove) {
     if (maxPercentageMove < 0) {
-      s_logger.info("Maximum percentage move must be positive; using absolute value");
+      LOGGER.info("Maximum percentage move must be positive; using absolute value");
     }
     _maxPercentageMove = Math.abs(maxPercentageMove);
   }
@@ -49,7 +49,7 @@ public class SpikeDoubleTimeSeriesFilter extends TimeSeriesFilter {
   public FilteredTimeSeries evaluate(final LocalDateDoubleTimeSeries ts) {
     ArgumentChecker.notNull(ts, "ts");
     if (ts.isEmpty()) {
-      s_logger.info("Time series was empty");
+      LOGGER.info("Time series was empty");
       return new FilteredTimeSeries(EMPTY_SERIES, EMPTY_SERIES);
     }
     final int n = ts.size();

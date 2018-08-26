@@ -36,7 +36,7 @@ import com.opengamma.util.ArgumentChecker;
  */
 public class BloombergJmsTopicNameResolver extends AbstractResolver<JmsTopicNameResolveRequest, String> implements JmsTopicNameResolver {
   
-  private static final Logger s_logger = LoggerFactory
+  private static final Logger LOGGER = LoggerFactory
   .getLogger(BloombergJmsTopicNameResolver.class);
  
   private final ReferenceDataProvider _referenceDataProvider;
@@ -64,7 +64,7 @@ public class BloombergJmsTopicNameResolver extends AbstractResolver<JmsTopicName
     for (JmsTopicNameResolveRequest request : requests) {
       ExternalId marketDataUniqueId = request.getMarketDataUniqueId();
       if (!marketDataUniqueId.getScheme().equals(ExternalSchemes.BLOOMBERG_BUID)) {
-        s_logger.info("No Bloomberg BUID found, was given: " + marketDataUniqueId);
+        LOGGER.info("No Bloomberg BUID found, was given: " + marketDataUniqueId);
         returnValue.put(request, null);
         continue;
       }
@@ -100,10 +100,10 @@ public class BloombergJmsTopicNameResolver extends AbstractResolver<JmsTopicName
   
   private String getJmsTopicName(JmsTopicNameResolveRequest request, ReferenceData result) {
     if (result == null) {
-      s_logger.info("No reference data available for {}", request);
+      LOGGER.info("No reference data available for {}", request);
       return null;
     } else if (result.isIdentifierError()) {
-      s_logger.info("Failed to retrieve reference data for {}: {}", request, result.getErrors());
+      LOGGER.info("Failed to retrieve reference data for {}: {}", request, result.getErrors());
       return null;
     }
     FudgeMsg resultFields = result.getFieldValues();

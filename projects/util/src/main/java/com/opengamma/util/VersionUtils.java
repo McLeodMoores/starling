@@ -28,7 +28,7 @@ import com.opengamma.util.ClasspathUtils.DependencyInfo;
 public final class VersionUtils {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(VersionUtils.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(VersionUtils.class);
   /** Build name (git hash). */
   private static final Attributes.Name IMPLEMENTATION_BUILD = new Attributes.Name("Implementation-Build");
   /** Build ID (CI server ID). */
@@ -69,7 +69,7 @@ public final class VersionUtils {
       }
       properties.load(stream);
     } catch (IOException e) {
-      s_logger.error("Failed to read properties", e);
+      LOGGER.error("Failed to read properties", e);
       return getLocalBuildVersion();
     }
     
@@ -114,7 +114,7 @@ public final class VersionUtils {
           }
         }
       } catch (Exception ex) {
-        s_logger.warn(ex.getMessage(), ex);
+        LOGGER.warn(ex.getMessage(), ex);
       }
     } else {
       List<DependencyInfo> dependencies = ClasspathUtils.getDependencies();
@@ -149,7 +149,7 @@ public final class VersionUtils {
           }
         }
       } catch (Exception ex) {
-        s_logger.warn(ex.getMessage(), ex);
+        LOGGER.warn(ex.getMessage(), ex);
       }
     }
     return null;
@@ -179,7 +179,7 @@ public final class VersionUtils {
           }
         }
       } catch (Exception ex) {
-        s_logger.warn(ex.getMessage(), ex);
+        LOGGER.warn(ex.getMessage(), ex);
       }
     }
     return null;

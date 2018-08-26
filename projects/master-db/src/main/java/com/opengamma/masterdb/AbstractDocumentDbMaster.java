@@ -62,7 +62,7 @@ public abstract class AbstractDocumentDbMaster<D extends AbstractDocument>
     implements AbstractMaster<D>, MetricProducer, ConfigurableDbChangeProvidingMaster {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(AbstractDocumentDbMaster.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(AbstractDocumentDbMaster.class);
 
   /**
    * The change manager.
@@ -177,7 +177,7 @@ public abstract class AbstractDocumentDbMaster<D extends AbstractDocument>
     ArgumentChecker.notNull(objectId, "oid");
     ArgumentChecker.notNull(versionCorrection, "versionCorrection");
     ArgumentChecker.notNull(extractor, "extractor");
-    s_logger.debug("getByOidInstants {}", objectId);
+    LOGGER.debug("getByOidInstants {}", objectId);
 
     Timer.Context context = _getByOidInstantsTimer.time();
     try {
@@ -222,7 +222,7 @@ public abstract class AbstractDocumentDbMaster<D extends AbstractDocument>
   protected D doGetById(final UniqueId uniqueId, final ResultSetExtractor<List<D>> extractor, final String masterName) {
     ArgumentChecker.notNull(uniqueId, "uniqueId");
     ArgumentChecker.notNull(extractor, "extractor");
-    s_logger.debug("getById {}", uniqueId);
+    LOGGER.debug("getById {}", uniqueId);
 
     Timer.Context context = _getByIdTimer.time();
     try {
@@ -271,7 +271,7 @@ public abstract class AbstractDocumentDbMaster<D extends AbstractDocument>
     ArgumentChecker.notNull(extractor, "extractor");
     ArgumentChecker.notNull(request.getObjectId(), "request.objectId");
     checkScheme(request.getObjectId());
-    s_logger.debug("history {}", request);
+    LOGGER.debug("history {}", request);
     
     Timer.Context context = _historyTimer.time();
     try {
@@ -348,18 +348,18 @@ public abstract class AbstractDocumentDbMaster<D extends AbstractDocument>
   protected <T extends AbstractDocument> void searchWithPaging(
       final PagingRequest pagingRequest, final String[] sql, final DbMapSqlParameterSource args,
       final ResultSetExtractor<List<T>> extractor, final AbstractDocumentsResult<T> result) {
-    s_logger.debug("with args {}", args);
+    LOGGER.debug("with args {}", args);
     
     final NamedParameterJdbcOperations namedJdbc = getJdbcTemplate();
     if (pagingRequest.equals(PagingRequest.ALL)) {
       result.getDocuments().addAll(namedJdbc.query(sql[0], args, extractor));
       result.setPaging(Paging.of(pagingRequest, result.getDocuments()));
     } else {
-      s_logger.debug("executing sql {}", sql[1]);
+      LOGGER.debug("executing sql {}", sql[1]);
       final int count = namedJdbc.queryForObject(sql[1], args, Integer.class);
       result.setPaging(Paging.of(pagingRequest, count));
       if (count > 0 && pagingRequest.equals(PagingRequest.NONE) == false) {
-        s_logger.debug("executing sql {}", sql[0]);
+        LOGGER.debug("executing sql {}", sql[0]);
         result.getDocuments().addAll(namedJdbc.query(sql[0], args, extractor));
       }
     }
@@ -369,7 +369,7 @@ public abstract class AbstractDocumentDbMaster<D extends AbstractDocument>
   @Override
   public D add(final D document) {
     ArgumentChecker.notNull(document, "document");
-    s_logger.debug("add {}", document);
+    LOGGER.debug("add {}", document);
     
     Timer.Context context = _addTimer.time();
     try {
@@ -410,7 +410,7 @@ public abstract class AbstractDocumentDbMaster<D extends AbstractDocument>
     ArgumentChecker.notNull(document, "document");
     ArgumentChecker.notNull(document.getUniqueId(), "document.uniqueId");
     checkScheme(document.getUniqueId());
-    s_logger.debug("update {}", document);
+    LOGGER.debug("update {}", document);
     
     Timer.Context context = _updateTimer.time();
     try {
@@ -460,7 +460,7 @@ public abstract class AbstractDocumentDbMaster<D extends AbstractDocument>
   public void remove(final ObjectIdentifiable objectIdentifiable) {
     ArgumentChecker.notNull(objectIdentifiable, "objectIdentifiable");
     checkScheme(objectIdentifiable);
-    s_logger.debug("remove {}", objectIdentifiable);
+    LOGGER.debug("remove {}", objectIdentifiable);
     
     Timer.Context context = _removeTimer.time();
     try {
@@ -502,7 +502,7 @@ public abstract class AbstractDocumentDbMaster<D extends AbstractDocument>
     ArgumentChecker.notNull(document, "document");
     ArgumentChecker.notNull(document.getUniqueId(), "document.uniqueId");
     checkScheme(document.getUniqueId());
-    s_logger.debug("correct {}", document);
+    LOGGER.debug("correct {}", document);
     
     Timer.Context context = _correctTimer.time();
     try {

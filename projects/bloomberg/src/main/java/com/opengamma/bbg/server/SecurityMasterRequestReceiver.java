@@ -31,7 +31,7 @@ import com.opengamma.util.ArgumentChecker;
 public class SecurityMasterRequestReceiver implements ByteArrayRequestReceiver {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(SecurityMasterRequestReceiver.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(SecurityMasterRequestReceiver.class);
 
   /**
    * The security source.
@@ -81,7 +81,7 @@ public class SecurityMasterRequestReceiver implements ByteArrayRequestReceiver {
     SecurityMasterRequestMessage secMasterRequest = SecurityMasterRequestMessage.fromFudgeMsg(new FudgeDeserializer(_fudgeContext), requestFudgeMsg);
     MessageType messageType = secMasterRequest.getMessageType();
     String secDes = secMasterRequest.getUniqueId() != null ? secMasterRequest.getUniqueId().getValue() : secMasterRequest.getSecKey().toString();
-    s_logger.debug("Received {} request for {} ", new Object[] {secMasterRequest.getMessageType(), secDes });
+    LOGGER.debug("Received {} request for {} ", new Object[] {secMasterRequest.getMessageType(), secDes });
     Security sec = null;
     SecurityMasterResponseMessage responseMessage = new SecurityMasterResponseMessage();
     switch (messageType) {
@@ -98,7 +98,7 @@ public class SecurityMasterRequestReceiver implements ByteArrayRequestReceiver {
         responseMessage.setSecurity(sec);
         break;
       default:
-        s_logger.warn("Unsupported SecurityMasterRequest {}", messageType);
+        LOGGER.warn("Unsupported SecurityMasterRequest {}", messageType);
         throw new OpenGammaRuntimeException("Unsupported SecurityMasterRequest");
     }
     return toByteArray(responseMessage);

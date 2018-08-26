@@ -17,7 +17,7 @@ import com.opengamma.util.CalculationMode;
  *
  */
 public class ContinuouslyCompoundedRelativeTimeSeriesReturnCalculator extends RelativeTimeSeriesReturnCalculator {
-  private static final Logger s_logger = LoggerFactory.getLogger(SimpleNetRelativeTimeSeriesReturnCalculator.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(SimpleNetRelativeTimeSeriesReturnCalculator.class);
   private static final double ZERO = 1e-12;
 
   public ContinuouslyCompoundedRelativeTimeSeriesReturnCalculator(final CalculationMode mode) {
@@ -28,7 +28,7 @@ public class ContinuouslyCompoundedRelativeTimeSeriesReturnCalculator extends Re
   public LocalDateDoubleTimeSeries evaluate(final LocalDateDoubleTimeSeries... x) {
     testInputData(x);
     if (x.length > 2) {
-      s_logger.info("Have more than two time series in array; only using first two");
+      LOGGER.info("Have more than two time series in array; only using first two");
     }
     final LocalDateDoubleTimeSeries ts1 = x[0];
     final LocalDateDoubleTimeSeries ts2 = x[1];

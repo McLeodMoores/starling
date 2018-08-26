@@ -69,14 +69,14 @@ public class CouponInflationZeroCouponMonthlyDiscountingMethodTest {
   private static final ZonedDateTime PRICING_DATE = DateUtils.getUTCDate(2011, 8, 3);
   private static final CouponInflationZeroCouponMonthlyDefinition ZERO_COUPON_NO_DEFINITION = CouponInflationZeroCouponMonthlyDefinition.from(START_DATE, PAYMENT_DATE, NOTIONAL, PRICE_INDEX_EUR,
       MONTH_LAG, MONTH_LAG, false);
-  private static final DoubleTimeSeries<ZonedDateTime> priceIndexTS = ImmutableZonedDateTimeDoubleTimeSeries.ofUTC(
+  private static final DoubleTimeSeries<ZonedDateTime> PRICE_INDEX_TS = ImmutableZonedDateTimeDoubleTimeSeries.ofUTC(
       new ZonedDateTime[] {DateUtils.getUTCDate(2008, 5, 31), DateUtils.getUTCDate(2011, 5, 31), DateUtils.getUTCDate(2018, 5, 31), DateUtils.getUTCDate(2018, 6, 30) }, new double[] {108.23, 115.0,
         128.23, 128.43 });
 
-  private static final CouponInflationZeroCouponMonthly ZERO_COUPON_NO = (CouponInflationZeroCouponMonthly) ZERO_COUPON_NO_DEFINITION.toDerivative(PRICING_DATE, priceIndexTS);
+  private static final CouponInflationZeroCouponMonthly ZERO_COUPON_NO = (CouponInflationZeroCouponMonthly) ZERO_COUPON_NO_DEFINITION.toDerivative(PRICING_DATE, PRICE_INDEX_TS);
   private static final CouponInflationZeroCouponMonthlyDefinition ZERO_COUPON_WITH_DEFINITION = CouponInflationZeroCouponMonthlyDefinition.from(START_DATE, PAYMENT_DATE, NOTIONAL, PRICE_INDEX_EUR,
       MONTH_LAG, MONTH_LAG, true);
-  private static final CouponInflationZeroCouponMonthly ZERO_COUPON_WITH = (CouponInflationZeroCouponMonthly) ZERO_COUPON_WITH_DEFINITION.toDerivative(PRICING_DATE, priceIndexTS);
+  private static final CouponInflationZeroCouponMonthly ZERO_COUPON_WITH = (CouponInflationZeroCouponMonthly) ZERO_COUPON_WITH_DEFINITION.toDerivative(PRICING_DATE, PRICE_INDEX_TS);
 
   private static final double SHIFT_FD = 1.0E-7;
   private static final double TOLERANCE_PV = 1.0E-2;
@@ -96,8 +96,8 @@ public class CouponInflationZeroCouponMonthlyDiscountingMethodTest {
   private static final GeneratorAttributeIR GENERATOR = new GeneratorAttributeIR(Period.ofYears(10));
   private static final SwapFixedInflationZeroCouponDefinition SWAP_DEFINITION = GENERATOR_INFLATION_SWAP.generateInstrument(PRICING_DATE, MARKET_QUOTE, NOTIONAL,
       GENERATOR);
-  private static final InstrumentDerivative SWAP_DERIVATIVE = SWAP_DEFINITION.toDerivative(PRICING_DATE, new ZonedDateTimeDoubleTimeSeries[] {(ZonedDateTimeDoubleTimeSeries) priceIndexTS,
-    (ZonedDateTimeDoubleTimeSeries) priceIndexTS });
+  private static final InstrumentDerivative SWAP_DERIVATIVE = SWAP_DEFINITION.toDerivative(PRICING_DATE, new ZonedDateTimeDoubleTimeSeries[] {(ZonedDateTimeDoubleTimeSeries) PRICE_INDEX_TS,
+    (ZonedDateTimeDoubleTimeSeries) PRICE_INDEX_TS });
 
   /**
    * Tests the present value.

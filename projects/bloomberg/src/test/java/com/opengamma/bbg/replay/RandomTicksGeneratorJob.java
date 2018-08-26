@@ -29,7 +29,7 @@ import com.opengamma.util.fudgemsg.OpenGammaFudgeContext;
 public class RandomTicksGeneratorJob extends TerminatableJob {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(RandomTicksGeneratorJob.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(RandomTicksGeneratorJob.class);
   /**
    * The maximum message size.
    */
@@ -71,13 +71,13 @@ public class RandomTicksGeneratorJob extends TerminatableJob {
 
   @Override
   public void terminate() {
-    s_logger.debug("terminating ticksGeneratorJob");
+    LOGGER.debug("terminating ticksGeneratorJob");
     super.terminate();
   }
 
   @Override
   protected void runOneCycle() {
-    s_logger.debug("queueSize {} ", _writerQueue.size());
+    LOGGER.debug("queueSize {} ", _writerQueue.size());
     for (String security : _securities) {
       int msgSize = _messageSizeGenerator.nextInt(MAX_MESSAGE_SIZE);
       for (int i = 0; i < msgSize; i++) {
@@ -87,11 +87,11 @@ public class RandomTicksGeneratorJob extends TerminatableJob {
           long epochMillis = instant.toEpochMilli();
           msg.add(RECEIVED_TS_KEY, epochMillis);
           msg.add(SECURITY_KEY, security);
-          s_logger.debug("generating {}", msg);
+          LOGGER.debug("generating {}", msg);
           _writerQueue.put(msg);
         } catch (InterruptedException e) {
           Thread.interrupted();
-          s_logger.warn("interrupted exception while putting ticks message on queue");
+          LOGGER.warn("interrupted exception while putting ticks message on queue");
         }
       }
     }

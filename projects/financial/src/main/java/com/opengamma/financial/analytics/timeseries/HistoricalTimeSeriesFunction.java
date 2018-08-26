@@ -44,7 +44,7 @@ import com.opengamma.timeseries.date.localdate.ImmutableLocalDateDoubleTimeSerie
  */
 public class HistoricalTimeSeriesFunction extends AbstractFunction {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(HistoricalTimeSeriesFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(HistoricalTimeSeriesFunction.class);
 
   protected static HistoricalTimeSeries executeImpl(final FunctionExecutionContext executionContext, final HistoricalTimeSeriesSource timeSeriesSource,
       final ComputationTargetSpecification targetSpec, final ValueRequirement desiredValue) {
@@ -154,7 +154,7 @@ public class HistoricalTimeSeriesFunction extends AbstractFunction {
       final ComputationTargetSpecification targetSpec = target.toSpecification();
       Object value = executeImpl(executionContext, timeSeriesSource, targetSpec, desiredValue);
       if (value == null) {
-        s_logger.error("Couldn't get time series {}", desiredValue);
+        LOGGER.error("Couldn't get time series {}", desiredValue);
         value = MissingInput.MISSING_MARKET_DATA;
       }
       return Collections.singleton(new ComputedValue(new ValueSpecification(desiredValue.getValueName(), targetSpec, desiredValue.getConstraints()), value));

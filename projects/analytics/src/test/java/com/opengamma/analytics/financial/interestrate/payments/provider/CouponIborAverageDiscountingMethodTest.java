@@ -1,3 +1,8 @@
+/**
+ * Copyright (C) 2013 - present by OpenGamma Inc. and the OpenGamma group of companies
+ *
+ * Please see distribution for license.
+ */
 package com.opengamma.analytics.financial.interestrate.payments.provider;
 
 import static org.testng.AssertJUnit.assertEquals;
@@ -72,33 +77,33 @@ public class CouponIborAverageDiscountingMethodTest {
 
   private static final double WEIGHT_1 = 17;
   private static final double WEIGHT_2 = -0.06;
-  private static final CouponIborAverageIndexDefinition CPN_IBOR__AVERAGE_DEFINITION = CouponIborAverageIndexDefinition.from(PAYMENT_DATE, ACCRUAL_START_DATE_2, ACCRUAL_END_DATE_2, ACCRUAL_FACTOR_2, NOTIONAL,
+  private static final CouponIborAverageIndexDefinition CPN_IBOR_AVERAGE_DEFINITION = CouponIborAverageIndexDefinition.from(PAYMENT_DATE, ACCRUAL_START_DATE_2, ACCRUAL_END_DATE_2, ACCRUAL_FACTOR_2, NOTIONAL,
       FIXING_DATE, EURIBOR3M, EURIBOR6M, WEIGHT_1, WEIGHT_2, CALENDAR, CALENDAR);
-  private static final CouponIborAverage CPN_IBOR__AVERAGE = (CouponIborAverage) CPN_IBOR__AVERAGE_DEFINITION.toDerivative(REFERENCE_DATE);
-  private static final CouponIborAverageDiscountingMethod METHOD_CPN_IBOR__AVERAGE = CouponIborAverageDiscountingMethod.getInstance();
+  private static final CouponIborAverage CPN_IBOR_AVERAGE = (CouponIborAverage) CPN_IBOR_AVERAGE_DEFINITION.toDerivative(REFERENCE_DATE);
+  private static final CouponIborAverageDiscountingMethod METHOD_CPN_IBOR_AVERAGE = CouponIborAverageDiscountingMethod.getInstance();
 
   private static final double TOLERANCE_PV = 1.0E-2;
   private static final double TOLERANCE_PV_DELTA = 1.0E+2;
 
   @Test
   public void presentValueMarketDiscount() {
-    final MultipleCurrencyAmount pvComputed = METHOD_CPN_IBOR__AVERAGE.presentValue(CPN_IBOR__AVERAGE, MULTICURVES);
-    final double forward1 = MULTICURVES.getSimplyCompoundForwardRate(CPN_IBOR__AVERAGE.getIndex1(), CPN_IBOR__AVERAGE.getFixingPeriodStartTime1(), CPN_IBOR__AVERAGE.getFixingPeriodEndTime1(),
-        CPN_IBOR__AVERAGE.getFixingAccrualFactor1());
-    final double forward2 = MULTICURVES.getSimplyCompoundForwardRate(CPN_IBOR__AVERAGE.getIndex2(), CPN_IBOR__AVERAGE.getFixingPeriodStartTime2(), CPN_IBOR__AVERAGE.getFixingPeriodEndTime2(),
-        CPN_IBOR__AVERAGE.getFixingAccrualFactor2());
+    final MultipleCurrencyAmount pvComputed = METHOD_CPN_IBOR_AVERAGE.presentValue(CPN_IBOR_AVERAGE, MULTICURVES);
+    final double forward1 = MULTICURVES.getSimplyCompoundForwardRate(CPN_IBOR_AVERAGE.getIndex1(), CPN_IBOR_AVERAGE.getFixingPeriodStartTime1(), CPN_IBOR_AVERAGE.getFixingPeriodEndTime1(),
+        CPN_IBOR_AVERAGE.getFixingAccrualFactor1());
+    final double forward2 = MULTICURVES.getSimplyCompoundForwardRate(CPN_IBOR_AVERAGE.getIndex2(), CPN_IBOR_AVERAGE.getFixingPeriodStartTime2(), CPN_IBOR_AVERAGE.getFixingPeriodEndTime2(),
+        CPN_IBOR_AVERAGE.getFixingAccrualFactor2());
 
-    final double df = MULTICURVES.getDiscountFactor(CPN_IBOR__AVERAGE.getCurrency(), CPN_IBOR_1.getPaymentTime());
-    final double pvExpected = CPN_IBOR__AVERAGE.getNotional() * CPN_IBOR__AVERAGE.getPaymentYearFraction() * (WEIGHT_1 * forward1 + WEIGHT_2 * forward2) * df;
+    final double df = MULTICURVES.getDiscountFactor(CPN_IBOR_AVERAGE.getCurrency(), CPN_IBOR_1.getPaymentTime());
+    final double pvExpected = CPN_IBOR_AVERAGE.getNotional() * CPN_IBOR_AVERAGE.getPaymentYearFraction() * (WEIGHT_1 * forward1 + WEIGHT_2 * forward2) * df;
     assertEquals("CouponIborDiscountingMarketMethod: present value", pvExpected, pvComputed.getAmount(EUR), TOLERANCE_PV);
   }
 
   @Test
   public void presentValue() {
-    final MultipleCurrencyAmount pvComputed = METHOD_CPN_IBOR__AVERAGE.presentValue(CPN_IBOR__AVERAGE, MULTICURVES);
+    final MultipleCurrencyAmount pvComputed = METHOD_CPN_IBOR_AVERAGE.presentValue(CPN_IBOR_AVERAGE, MULTICURVES);
     final MultipleCurrencyAmount pvComputed1 = METHOD_CPN_IBOR.presentValue(CPN_IBOR_1, MULTICURVES);
     final MultipleCurrencyAmount pvComputed2 = METHOD_CPN_IBOR.presentValue(CPN_IBOR_2, MULTICURVES);
-    final double pvExpected = CPN_IBOR__AVERAGE.getPaymentYearFraction() *
+    final double pvExpected = CPN_IBOR_AVERAGE.getPaymentYearFraction() *
         (WEIGHT_1 * pvComputed1.getAmount(EUR) / ACCRUAL_FACTOR_1 + WEIGHT_2 * pvComputed2.getAmount(EUR) / ACCRUAL_FACTOR_2);
 
     assertEquals("CouponIborDiscountingMarketMethod: present value", pvExpected, pvComputed.getAmount(EUR), TOLERANCE_PV);
@@ -106,15 +111,15 @@ public class CouponIborAverageDiscountingMethodTest {
 
   @Test
   public void presentValueCurveSensitivity() {
-    final MultipleCurrencyParameterSensitivity pvpsAnnuityExact = PSC.calculateSensitivity(CPN_IBOR__AVERAGE, MULTICURVES, MULTICURVES.getAllNames());
-    final MultipleCurrencyParameterSensitivity pvpsAnnuityFD = PSC_DSC_FD.calculateSensitivity(CPN_IBOR__AVERAGE, MULTICURVES);
+    final MultipleCurrencyParameterSensitivity pvpsAnnuityExact = PSC.calculateSensitivity(CPN_IBOR_AVERAGE, MULTICURVES, MULTICURVES.getAllNames());
+    final MultipleCurrencyParameterSensitivity pvpsAnnuityFD = PSC_DSC_FD.calculateSensitivity(CPN_IBOR_AVERAGE, MULTICURVES);
     AssertSensitivityObjects.assertEquals("CouponIborAverageDiscountingMethod: presentValueCurveSensitivity ", pvpsAnnuityExact, pvpsAnnuityFD, TOLERANCE_PV_DELTA);
   }
 
   @Test
   public void presentValueMarketSensitivityMethodVsCalculator() {
-    final MultipleCurrencyMulticurveSensitivity pvcsMethod = METHOD_CPN_IBOR__AVERAGE.presentValueCurveSensitivity(CPN_IBOR__AVERAGE, MULTICURVES);
-    final MultipleCurrencyMulticurveSensitivity pvcsCalculator = CPN_IBOR__AVERAGE.accept(PVCSDC, MULTICURVES);
+    final MultipleCurrencyMulticurveSensitivity pvcsMethod = METHOD_CPN_IBOR_AVERAGE.presentValueCurveSensitivity(CPN_IBOR_AVERAGE, MULTICURVES);
+    final MultipleCurrencyMulticurveSensitivity pvcsCalculator = CPN_IBOR_AVERAGE.accept(PVCSDC, MULTICURVES);
     AssertSensitivityObjects.assertEquals("CouponFixedDiscountingMarketMethod: presentValueMarketSensitivity", pvcsMethod, pvcsCalculator, TOLERANCE_PV_DELTA);
   }
 }

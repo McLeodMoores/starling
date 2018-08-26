@@ -57,7 +57,7 @@ public class AnalyticsViewManager {
   holds the real IDs. but before delegating it compares the IDs
   */
 
-  private static final Logger s_logger = LoggerFactory.getLogger(AnalyticsViewManager.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(AnalyticsViewManager.class);
 
   private final ViewProcessor _viewProcessor;
   private final ExecutionFlags.ParallelRecompilationMode _parallelViewRecompilation;
@@ -181,7 +181,7 @@ public class AnalyticsViewManager {
     portfolioSupplier = new PortfolioSupplier(portfolioObjectId, versionCorrection, _positionSource, _securitySource, _portfolioResolutionExecutor);
     // TODO something a bit more sophisticated with the executor
     ViewClient viewClient = _viewProcessor.createViewClient(user);
-    s_logger.debug("Client ID {} creating new view with ID {}", clientId, viewId);
+    LOGGER.debug("Client ID {} creating new view with ID {}", clientId, viewId);
     ViewportListener viewportListener = new LoggingViewportListener(viewClient);
     PortfolioEntityExtractor entityExtractor = new PortfolioEntityExtractor(versionCorrection, _securityMaster);
     // TODO add filtering change listener to portfolio master which calls portfolioChanged() on the outer view
@@ -216,10 +216,10 @@ public class AnalyticsViewManager {
   public void deleteView(String viewId) {
     AnalyticsViewClientConnection connection = _viewConnections.remove(viewId);
     if (connection == null) {
-      s_logger.debug("Received request to delete unknown view ID {}", viewId);
+      LOGGER.debug("Received request to delete unknown view ID {}", viewId);
       throw new DataNotFoundException("No view found with ID " + viewId);
     }
-    s_logger.debug("Closing view with ID {}", viewId);
+    LOGGER.debug("Closing view with ID {}", viewId);
     connection.close();
   }
 
@@ -233,7 +233,7 @@ public class AnalyticsViewManager {
   public AnalyticsView getView(String viewId) {
     AnalyticsViewClientConnection connection = _viewConnections.get(viewId);
     if (connection == null) {
-      s_logger.debug("Received request for unknown view ID {}", viewId);
+      LOGGER.debug("Received request for unknown view ID {}", viewId);
       throw new DataNotFoundException("No view found with ID " + viewId);
     }
     return connection.getView();
@@ -249,7 +249,7 @@ public class AnalyticsViewManager {
   public ViewClient getViewCient(String viewId) {
     AnalyticsViewClientConnection connection = _viewConnections.get(viewId);
     if (connection == null) {
-      s_logger.debug("Received request for unknown view ID {}", viewId);
+      LOGGER.debug("Received request for unknown view ID {}", viewId);
       throw new DataNotFoundException("No view found with ID " + viewId);
     }
     return connection.getViewClient();
@@ -270,7 +270,7 @@ public class AnalyticsViewManager {
     public void clientDisconnected() {
       AnalyticsViewClientConnection connection = _viewConnections.remove(_viewId);
       if (connection != null) {
-        s_logger.debug("Client disconnected, closing view with ID {}", _viewId);
+        LOGGER.debug("Client disconnected, closing view with ID {}", _viewId);
         connection.close();
       }
     }

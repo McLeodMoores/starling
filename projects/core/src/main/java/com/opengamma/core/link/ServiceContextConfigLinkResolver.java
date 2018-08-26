@@ -30,7 +30,7 @@ import com.opengamma.service.VersionCorrectionProvider;
   /**
    * Logger for the class.
    */
-  private static final Logger s_logger = LoggerFactory.getLogger(ServiceContextConfigLinkResolver.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ServiceContextConfigLinkResolver.class);
 
   /**
    * Creates the resolver using the default service context.
@@ -120,7 +120,7 @@ import com.opengamma.service.VersionCorrectionProvider;
   private <R> R selectFirst(Class<T> type, String identifier, Iterator<ConfigItem<R>> iterator) {
     R result = iterator.next().getValue();
     if (iterator.hasNext()) {
-      s_logger.warn("Found multiple matching config results for type: {} and name: {} - returning first found",
+      LOGGER.warn("Found multiple matching config results for type: {} and name: {} - returning first found",
                     type.getName(), identifier);
     }
     return result;

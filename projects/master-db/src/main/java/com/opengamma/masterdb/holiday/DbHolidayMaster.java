@@ -75,7 +75,7 @@ import com.opengamma.util.paging.Paging;
 public class DbHolidayMaster extends AbstractDocumentDbMaster<HolidayDocument> implements HolidayMaster {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(DbHolidayMaster.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(DbHolidayMaster.class);
 
   /**
    * The default scheme for unique identifiers.
@@ -135,7 +135,7 @@ public class DbHolidayMaster extends AbstractDocumentDbMaster<HolidayDocument> i
     ArgumentChecker.notNull(request, "request");
     ArgumentChecker.notNull(request.getPagingRequest(), "request.pagingRequest");
     ArgumentChecker.notNull(request.getVersionCorrection(), "request.versionCorrection");
-    s_logger.debug("search {}", request);
+    LOGGER.debug("search {}", request);
 
     final VersionCorrection vc = request.getVersionCorrection().withLatestFixed(now());
     final HolidaySearchResult result = new HolidaySearchResult(vc);

@@ -48,7 +48,7 @@ import com.opengamma.util.jms.JmsConnectorFactoryBean;
 public class BatchJobRunner {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(BatchJobRunner.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(BatchJobRunner.class);
   
   static {
     StartupUtils.init();
@@ -140,7 +140,7 @@ public class BatchJobRunner {
         configProperties.load(fis);
         fis.close();
       } catch (FileNotFoundException e) {
-        s_logger.error("The system cannot find " + configPropertyFile);
+        LOGGER.error("The system cannot find " + configPropertyFile);
         System.exit(-1);
       }
     } else {
@@ -230,12 +230,12 @@ public class BatchJobRunner {
     if (properties != null) {
       optionValue = properties.getProperty(propertyName);
       if (optionValue == null && required) {
-        s_logger.error("Cannot find property " + propertyName + " in " + configPropertysFile);
+        LOGGER.error("Cannot find property " + propertyName + " in " + configPropertysFile);
         System.exit(-1);
       }
     } else {
       if (required) {
-        s_logger.error("Cannot find option " + propertyName + " in command line arguments");
+        LOGGER.error("Cannot find option " + propertyName + " in command line arguments");
         System.exit(-1);
       }
     }

@@ -39,14 +39,14 @@ public enum ScenarioShiftType implements GroovyAliasable {
     }
   };
   
-  private static final ImmutableList<String> s_aliases;
+  private static final ImmutableList<String> ALIASES;
   static {
     List<String> result = newArrayList();
     for (GroovyAliasable value : values()) {
       result.add(value.getGroovyAlias());
     }
     Collections.sort(result);
-    s_aliases = ImmutableList.copyOf(result);
+    ALIASES = ImmutableList.copyOf(result);
     
   }
   
@@ -70,7 +70,7 @@ public enum ScenarioShiftType implements GroovyAliasable {
    * @return list of aliases.
    */
   public static ImmutableList<String> getAliasList() {
-    return s_aliases;
+    return ALIASES;
   }
 
   /**

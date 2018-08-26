@@ -26,7 +26,7 @@ import com.opengamma.util.StartupUtils;
 public abstract class AbstractToolWithoutContext {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(AbstractToolWithoutContext.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(AbstractToolWithoutContext.class);
   /**
    * Default logback file.
    */
@@ -53,7 +53,7 @@ public abstract class AbstractToolWithoutContext {
    * @return true if successful
    */
   public static final boolean init(final String logbackResource) {
-    s_logger.debug("Configuring logging from {}", logbackResource);
+    LOGGER.debug("Configuring logging from {}", logbackResource);
     // Don't reconfigure if already configured from the default property or any existing loggers will break
     // and stop reporting anything.
     return logbackResource.equals(getSystemDefaultLogbackConfiguration()) || LogUtils.configureLogger(logbackResource);
@@ -141,9 +141,9 @@ public abstract class AbstractToolWithoutContext {
    */
   public final boolean run() {
     try {
-      s_logger.info("Running " + getClass().getSimpleName());
+      LOGGER.info("Running " + getClass().getSimpleName());
       doRun();
-      s_logger.info("Finished " + getClass().getSimpleName());
+      LOGGER.info("Finished " + getClass().getSimpleName());
       return true;
     } catch (Exception ex) {
       ex.printStackTrace();

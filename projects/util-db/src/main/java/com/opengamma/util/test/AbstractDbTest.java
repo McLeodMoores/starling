@@ -35,9 +35,9 @@ import com.opengamma.util.tuple.Pairs;
 public abstract class AbstractDbTest implements TableCreationCallback {
 
   /** Cache. */
-  static final Map<String, String> s_databaseTypeVersion = new ConcurrentHashMap<>();
+  static final Map<String, String> DATABASE_TYPE_VERSION = new ConcurrentHashMap<>();
   /** Initialized tools. */
-  private static final ConcurrentMap<Pair<String, Class<?>>, DbConnector> s_connectors = new ConcurrentHashMap<>();
+  private static final ConcurrentMap<Pair<String, Class<?>>, DbConnector> CONNECTORS = new ConcurrentHashMap<>();
 
   static {
     // initialize the clock
@@ -89,9 +89,9 @@ public abstract class AbstractDbTest implements TableCreationCallback {
   @BeforeMethod(alwaysRun = true)
   public final void setUp() throws Exception {
     DbTool dbTool = getDbTool();
-    String prevVersion = s_databaseTypeVersion.get(getDatabaseType());
+    String prevVersion = DATABASE_TYPE_VERSION.get(getDatabaseType());
     if ((prevVersion == null) || !prevVersion.equals(getDatabaseVersion())) {
-      s_databaseTypeVersion.put(getDatabaseType(), getDatabaseVersion());
+      DATABASE_TYPE_VERSION.put(getDatabaseType(), getDatabaseVersion());
 
       String user = dbTool.getUser();
       String password = dbTool.getPassword();
@@ -189,7 +189,7 @@ public abstract class AbstractDbTest implements TableCreationCallback {
    */
   @AfterSuite(groups = {TestGroup.UNIT_DB, TestGroup.INTEGRATION })
   public static final void tearDownSuite() throws Exception {
-    for (DbConnector connector : s_connectors.values()) {
+    for (DbConnector connector : CONNECTORS.values()) {
       ReflectionUtils.close(connector);
     }
   }
@@ -246,7 +246,7 @@ public abstract class AbstractDbTest implements TableCreationCallback {
       synchronized (this) {
         dbTool = _dbTool;
         if (dbTool == null) {
-          DbConnector connector = s_connectors.get(Pairs.of(_databaseType, dbConnectorScope()));
+          DbConnector connector = CONNECTORS.get(Pairs.of(_databaseType, dbConnectorScope()));
           _dbTool = dbTool = DbTest.createDbTool(_databaseType, connector);  // CSIGNORE
         }
       }
@@ -257,10 +257,10 @@ public abstract class AbstractDbTest implements TableCreationCallback {
   private DbConnector initConnector() {
     Class<?> scope = dbConnectorScope();
     Pair<String, Class<?>> key = Pairs.<String, Class<?>>of(_databaseType, scope);
-    DbConnector connector = s_connectors.get(key);
+    DbConnector connector = CONNECTORS.get(key);
     if (connector == null) {
       synchronized (this) {
-        connector = s_connectors.get(key);
+        connector = CONNECTORS.get(key);
         if (connector == null) {
           DbDialect dbDialect = DbDialectUtils.getSupportedDbDialect(getDatabaseType());
           DbConnectorFactoryBean factory = new DbConnectorFactoryBean();
@@ -271,7 +271,7 @@ public abstract class AbstractDbTest implements TableCreationCallback {
           factory.setTransactionPropagationBehaviorName("PROPAGATION_REQUIRED");
           initDbConnectorFactory(factory);
           connector = factory.createObject();
-          s_connectors.put(key, connector);
+          CONNECTORS.put(key, connector);
         }
       }
     }

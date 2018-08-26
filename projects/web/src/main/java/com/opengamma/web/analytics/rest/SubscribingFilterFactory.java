@@ -37,7 +37,7 @@ import com.sun.jersey.spi.container.ResourceFilterFactory;
  */
 public class SubscribingFilterFactory implements ResourceFilterFactory {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(SubscribingFilterFactory.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(SubscribingFilterFactory.class);
 
   /** HTTP context injected by Jersey.  This is a proxy that always points to the context for the current request */
   @Context
@@ -102,13 +102,13 @@ public class SubscribingFilterFactory implements ResourceFilterFactory {
         if (paramName != null) {
           uidParamNames.add(paramName);
         } else {
-          s_logger.warn("@Subscribe annotation found without matching @PathParam on method {}.{}(), no subscription " +
+          LOGGER.warn("@Subscribe annotation found without matching @PathParam on method {}.{}(), no subscription " +
                             "will be created", method.getDeclaringClass().getSimpleName(), method.getName());
         }
       }
     }
     if (!uidParamNames.isEmpty()) {
-      s_logger.debug("Creating subscribing filter for parameters {} on method {}.{}()",
+      LOGGER.debug("Creating subscribing filter for parameters {} on method {}.{}()",
                      new Object[]{uidParamNames, method.getDeclaringClass().getSimpleName(), method.getName()});
       return new EntitySubscriptionFilter(uidParamNames, getUpdateManager(), _httpContext, _servletRequest);
     } else {
@@ -130,7 +130,7 @@ public class SubscribingFilterFactory implements ResourceFilterFactory {
       if (masterTypes.length > 0) {
         return new MasterSubscriptionFilter(getUpdateManager(), Arrays.asList(masterTypes), _httpContext, _servletRequest);
       } else {
-        s_logger.warn("@SubscribeMaster annotation found on {}.{}() with no masters specified",
+        LOGGER.warn("@SubscribeMaster annotation found on {}.{}() with no masters specified",
                       abstractMethod.getMethod().getDeclaringClass().getSimpleName(),
                       abstractMethod.getMethod().getName());
       }

@@ -36,7 +36,7 @@ import com.opengamma.util.jms.JmsConnector;
 public class JmsSender implements MarketDataSender {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(JmsSender.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(JmsSender.class);
 
   /**
    * The JMS connector.
@@ -98,7 +98,7 @@ public class JmsSender implements MarketDataSender {
       _lastSequenceNumber = data.getSequenceNumber(); 
       
       if (_interrupted) {
-        s_logger.debug("{}: Interrupted - not sending message", this);
+        LOGGER.debug("{}: Interrupted - not sending message", this);
         return;
       }
       
@@ -115,7 +115,7 @@ public class JmsSender implements MarketDataSender {
         _lastSequenceNumber, 
         distributionSpec.getFullyQualifiedLiveDataSpecification(), 
         _cumulativeDelta.getLastKnownValues());
-    s_logger.debug("{}: Sending Live Data update {}", this, liveDataValueUpdateBean);
+    LOGGER.debug("{}: Sending Live Data update {}", this, liveDataValueUpdateBean);
     
     FudgeMsg fudgeMsg = LiveDataValueUpdateBeanFudgeBuilder.toFudgeMsg(new FudgeSerializer(_fudgeContext), liveDataValueUpdateBean);
     String destinationName = distributionSpec.getJmsTopic();
@@ -148,7 +148,7 @@ public class JmsSender implements MarketDataSender {
    * Indicates that the transport was interrupted, setting the flag.
    */
   public void transportInterrupted() {
-    s_logger.error("Transport interrupted {}", this);
+    LOGGER.error("Transport interrupted {}", this);
     _interrupted = true;
   }
 
@@ -160,7 +160,7 @@ public class JmsSender implements MarketDataSender {
    * as it calls the notifications so sending will cause deadlock. 
    */
   public void transportResumed() {
-    s_logger.info("Transport resumed {}", this);
+    LOGGER.info("Transport resumed {}", this);
     _interrupted = false;
     // tryAcquire() is used to avoid re-entry to the send method if a sendMarketData is already
     // active as that will hold the semaphore.
@@ -170,7 +170,7 @@ public class JmsSender implements MarketDataSender {
           send();
         }
       } catch (RuntimeException e) {
-        s_logger.error("transportResumed() failed", e);
+        LOGGER.error("transportResumed() failed", e);
       } finally {
         _lock.release();
       }

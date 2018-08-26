@@ -21,7 +21,7 @@ import com.opengamma.util.db.script.DbScript;
  */
 public class DbUpgradeOperation extends AbstractDbScriptOperation<DbToolContext> {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(DbUpgradeOperation.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(DbUpgradeOperation.class);
   
   private boolean _upgradeRequired;
   
@@ -60,18 +60,18 @@ public class DbUpgradeOperation extends AbstractDbScriptOperation<DbToolContext>
       for (String schema : schemaNames) {
         List<DbScript> scripts = getMigrationScripts(schema);
         if (scripts == null) {
-          s_logger.info(schema + " does not support migration");
+          LOGGER.info(schema + " does not support migration");
           continue;
         }
         if (scripts.isEmpty()) {
-          s_logger.info(schema + " already at latest version");
+          LOGGER.info(schema + " already at latest version");
           continue;
         }
         upgradeRequired = true;
-        s_logger.info(schema + " is behind by " + scripts.size() + " versions");
+        LOGGER.info(schema + " is behind by " + scripts.size() + " versions");
         for (int i = 0; i < scripts.size(); i++) {
           DbScript script = scripts.get(i);
-          s_logger.debug("Using schema migration file: " + script);
+          LOGGER.debug("Using schema migration file: " + script);
           writer.write(schema + " - " + (i + 1) + " of " + scripts.size(), script);
         }
       }
@@ -82,7 +82,7 @@ public class DbUpgradeOperation extends AbstractDbScriptOperation<DbToolContext>
       try {
         writer.close();
       } catch (IOException e) {
-        s_logger.error("Error closing SQL script writer", e);
+        LOGGER.error("Error closing SQL script writer", e);
       }
     }
   }

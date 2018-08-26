@@ -17,7 +17,7 @@ import com.opengamma.util.time.Tenor;
  */
 public class TenorField extends JTextField {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(TenorField.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(TenorField.class);
   public TenorField() {
     super();
     //ListDataIntelliHints<Tenor> intelliHints = new ListDataIntelliHints<>(this, getAllTenors());
@@ -32,7 +32,7 @@ public class TenorField extends JTextField {
           tenors.add((Tenor) field.get(field));
         } catch (IllegalArgumentException | IllegalAccessException ex) {
           // TODO Auto-generated catch block
-          s_logger.debug("problem accessing Tenor field {}", field);
+          LOGGER.debug("problem accessing Tenor field {}", field);
         }
       }
     }

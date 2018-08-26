@@ -30,7 +30,7 @@ import com.opengamma.util.test.Timeout;
 @Test(groups = TestGroup.INTEGRATION)
 public class JmsByteArrayTransportTest {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(JmsByteArrayTransportTest.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(JmsByteArrayTransportTest.class);
 
   private static final long TIMEOUT = 10L * Timeout.standardTimeoutMillis();
 
@@ -72,7 +72,7 @@ public class JmsByteArrayTransportTest {
         fail("Did not receive a message in " + (TIMEOUT / 1000) + " seconds.");
       }
     }
-    s_logger.debug ("topicConduit message received {}ms before timeout limit", TIMEOUT - (System.currentTimeMillis () - startTime));
+    LOGGER.debug ("topicConduit message received {}ms before timeout limit", TIMEOUT - (System.currentTimeMillis () - startTime));
     assertEquals(1, collectingReceiver.getMessages().size());
     byte[] receivedBytes = collectingReceiver.getMessages().get(0);
     assertEquals(randomBytes.length, receivedBytes.length);
@@ -129,7 +129,7 @@ public class JmsByteArrayTransportTest {
         fail("Did not receive a response in " + (TIMEOUT / 1000) + " seconds.");
       }
     }
-    s_logger.debug ("requestConduit message received {}ms before timeout limit", TIMEOUT - (System.currentTimeMillis () - startTime));
+    LOGGER.debug ("requestConduit message received {}ms before timeout limit", TIMEOUT - (System.currentTimeMillis () - startTime));
     assertEquals(1, collectingReceiver.getMessages().size());
     byte[] receivedBytes = collectingReceiver.getMessages().get(0);
     assertEquals(responseBytes.length, receivedBytes.length);

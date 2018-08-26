@@ -34,7 +34,7 @@ import com.opengamma.util.tuple.Triple;
 
 /* package */final class GetFunctionsStep extends ResolveTask.State {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(GetFunctionsStep.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(GetFunctionsStep.class);
 
   private static final ParameterizedFunction MARKET_DATA_SOURCING_FUNCTION = createParameterizedFunction(MarketDataSourcingFunction.INSTANCE);
   private static final ParameterizedFunction RELABELLING_FUNCTION = createParameterizedFunction(MarketDataAliasingFunction.INSTANCE);
@@ -47,7 +47,7 @@ import com.opengamma.util.tuple.Triple;
     super(task);
   }
 
-  private static final ComputationTargetReferenceVisitor<Object> s_getTargetValue = new ComputationTargetReferenceVisitor<Object>() {
+  private static final ComputationTargetReferenceVisitor<Object> GET_TARGET_VALUE = new ComputationTargetReferenceVisitor<Object>() {
 
     @Override
     public Object visitComputationTargetRequirement(final ComputationTargetRequirement requirement) {
@@ -115,10 +115,10 @@ import com.opengamma.util.tuple.Triple;
         if (target != null) {
           targetValue = target.getValue();
         } else {
-          targetValue = requirement.getTargetReference().accept(s_getTargetValue);
+          targetValue = requirement.getTargetReference().accept(GET_TARGET_VALUE);
         }
       } else {
-        targetValue = requirement.getTargetReference().accept(s_getTargetValue);
+        targetValue = requirement.getTargetReference().accept(GET_TARGET_VALUE);
       }
       marketDataSpec = context.getMarketDataAvailabilityProvider().getAvailability(targetSpec, targetValue, requirement);
     } catch (final BlockingOperation e) {
@@ -129,7 +129,7 @@ import com.opengamma.util.tuple.Triple;
       BlockingOperation.on();
     }
     if (marketDataSpec != null) {
-      s_logger.info("Found live data for {}", requirement);
+      LOGGER.info("Found live data for {}", requirement);
       marketDataSpec = context.simplifyType(marketDataSpec);
       if (targetSpec == null) {
         // The system resolver did not produce a target that we can monitor, so use the MDAP supplied value
@@ -222,7 +222,7 @@ import com.opengamma.util.tuple.Triple;
       // Leave in current state; will go to finished after being pumped
     } else {
       if (missing) {
-        s_logger.info("Missing market data for {}", requirement);
+        LOGGER.info("Missing market data for {}", requirement);
         storeFailure(context.marketDataMissing(requirement));
         setTaskStateFinished(context);
       } else {
@@ -234,7 +234,7 @@ import com.opengamma.util.tuple.Triple;
             getFunctions(target, context, this);
           }
         } else {
-          s_logger.info("No functions for unresolved target {}", requirement);
+          LOGGER.info("No functions for unresolved target {}", requirement);
           storeFailure(context.couldNotResolve(requirement));
           setTaskStateFinished(context);
         }
@@ -257,10 +257,10 @@ import com.opengamma.util.tuple.Triple;
     final Iterator<Triple<ParameterizedFunction, ValueSpecification, Collection<ValueSpecification>>> itr = context.getFunctionResolver().resolveFunction(requirement.getValueName(), target,
         requirement.getConstraints());
     if (itr.hasNext()) {
-      s_logger.debug("Found functions for {}", requirement);
+      LOGGER.debug("Found functions for {}", requirement);
       state.setRunnableTaskState(new ResolvedFunctionStep(state.getTask(), itr), context);
     } else {
-      s_logger.info("No functions for {}", requirement);
+      LOGGER.info("No functions for {}", requirement);
       state.storeFailure(context.noFunctions(requirement));
       state.setTaskStateFinished(context);
     }

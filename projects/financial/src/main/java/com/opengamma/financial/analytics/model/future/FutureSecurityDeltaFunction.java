@@ -81,12 +81,12 @@ public class FutureSecurityDeltaFunction extends AbstractFunction.NonCompiledInv
       final ValueProperties constraints = desiredValue.getConstraints();
       final Set<String> scale = constraints.getValues(ValuePropertyNames.SCALE);
       if (scale == null || scale.size() != 1) {
-        s_logger.info("Could not find {} requirement. Looking for a default..", ValuePropertyNames.SCALE);
+        LOGGER.info("Could not find {} requirement. Looking for a default..", ValuePropertyNames.SCALE);
         return null;
       }
     }
     return Collections.emptySet();
   }
 
-  private static final Logger s_logger = LoggerFactory.getLogger(FutureSecurityDeltaFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(FutureSecurityDeltaFunction.class);
 }

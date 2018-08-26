@@ -47,7 +47,7 @@ import com.opengamma.util.ArgumentChecker;
  */
 public class Simulation {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(Simulation.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(Simulation.class);
 
   /** The simulation name. */
   private final String _name; // TODO this needs to be passed to the results somehow
@@ -269,15 +269,15 @@ public class Simulation {
       } else if (listener != null) {
         executionOptions = ExecutionOptions.of(sequence, baseOptions, executionFlags);
       } else {
-        s_logger.warn("Not running in batch mode and no listener specified, the results would be ignored. Exiting.");
+        LOGGER.warn("Not running in batch mode and no listener specified, the results would be ignored. Exiting.");
         return;
       }
-      s_logger.info("Attaching to view process, view def ID {}, execution options {}", viewDefId, executionOptions);
+      LOGGER.info("Attaching to view process, view def ID {}, execution options {}", viewDefId, executionOptions);
       viewClient.attachToViewProcess(viewDefId, executionOptions, true);
       try {
         viewClient.waitForCompletion();
       } catch (InterruptedException e) {
-        s_logger.warn("Interrupted waiting for ViewClient to complete", e);
+        LOGGER.warn("Interrupted waiting for ViewClient to complete", e);
       }
     } finally {
       viewClient.shutdown();

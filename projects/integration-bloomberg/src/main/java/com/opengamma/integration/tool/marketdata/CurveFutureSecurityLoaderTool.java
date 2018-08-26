@@ -54,7 +54,7 @@ import com.opengamma.scripts.Scriptable;
 public class CurveFutureSecurityLoaderTool extends AbstractTool<IntegrationToolContext> {
 
   /** Logger. */
-  private static Logger s_logger = LoggerFactory.getLogger(CurveFutureSecurityLoaderTool.class);
+  private static Logger LOGGER = LoggerFactory.getLogger(CurveFutureSecurityLoaderTool.class);
 
   /** Portfolio name option flag */
   private static final String CURVE_NAME_OPT = "n";
@@ -148,17 +148,17 @@ public class CurveFutureSecurityLoaderTool extends AbstractTool<IntegrationToolC
           try {
             final InterpolatedYieldCurveSpecification curveSpec = builder.buildCurve(date, curveDefinition, VersionCorrection.LATEST);
             for (final FixedIncomeStripWithIdentifier strip : curveSpec.getStrips()) {
-              s_logger.info("Processing strip " + strip.getSecurity());
+              LOGGER.info("Processing strip " + strip.getSecurity());
               if (strip.getInstrumentType() == StripInstrumentType.FUTURE) {
                 externalIds.add(strip.getSecurity());
               }
             }
           } catch (final Throwable t) {
-            s_logger.warn("Unable to build curve " + t.getMessage());
+            LOGGER.warn("Unable to build curve " + t.getMessage());
           }
         }
       } else {
-        s_logger.warn("Null curve definition, skipping.");
+        LOGGER.warn("Null curve definition, skipping.");
       }
     }
     return externalIds;

@@ -30,7 +30,7 @@ public class EHCachingFinancialSecuritySource
     implements FinancialSecuritySource {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(EHCachingFinancialSecuritySource.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(EHCachingFinancialSecuritySource.class);
 
   /** The mulitple bonds cache key */
   /* package for testing */static final String MULTI_BONDS_CACHE = "multi-bonds-cache";
@@ -64,7 +64,7 @@ public class EHCachingFinancialSecuritySource
       if (e.getObjectValue() instanceof Collection<?>) {
         result.addAll((Collection<Security>) e.getObjectValue());
       } else {
-        s_logger.warn("returned object {} from bond cache is not a Collection<Security>", e.getObjectValue());
+        LOGGER.warn("returned object {} from bond cache is not a Collection<Security>", e.getObjectValue());
       }
     } else {
       result = getUnderlying().getBondsWithIssuerName(issuerType);

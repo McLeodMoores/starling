@@ -45,7 +45,7 @@ import com.opengamma.util.fudgemsg.OpenGammaFudgeContext;
  */
 @PublicAPI
 public class DistributedLiveDataClient extends AbstractLiveDataClient implements FudgeMessageReceiver {
-  private static final Logger s_logger = LoggerFactory.getLogger(DistributedLiveDataClient.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(DistributedLiveDataClient.class);
   // Injected Inputs:
   private final FudgeContext _fudgeContext;
   private final FudgeRequestSender _subscriptionRequestSender;
@@ -89,7 +89,7 @@ public class DistributedLiveDataClient extends AbstractLiveDataClient implements
 
   @Override
   protected void cancelPublication(LiveDataSpecification fullyQualifiedSpecification) {
-    s_logger.info("Request made to cancel publication of {}", fullyQualifiedSpecification);
+    LOGGER.info("Request made to cancel publication of {}", fullyQualifiedSpecification);
     // TODO kirk 2009-10-28 -- This should handle an unsubscription request. For now,
     // however, we can just make do with allowing the heartbeat to time out.
   }
@@ -185,7 +185,7 @@ public class DistributedLiveDataClient extends AbstractLiveDataClient implements
 
         @Override
         public void failure(final Throwable error) {
-          s_logger.error("Failed to process response message", error);
+          LOGGER.error("Failed to process response message", error);
           for (SubscriptionHandle handle : getSpec2SubHandle().values()) {
             if (handle.getSubscriptionType() != SubscriptionType.SNAPSHOT) {
               subscriptionRequestFailed(handle, new LiveDataSubscriptionResponse(handle.getRequestedSpecification(), LiveDataSubscriptionResult.INTERNAL_ERROR, error.toString(), null, null,
@@ -265,7 +265,7 @@ public class DistributedLiveDataClient extends AbstractLiveDataClient implements
       responses.putAll(getFailedResponses());
 
       int total = responses.size();
-      s_logger.info("{} subscription responses received", total);
+      LOGGER.info("{} subscription responses received", total);
       Map<LiveDataListener, Collection<LiveDataSubscriptionResponse>> batch = new HashMap<>();
       for (Map.Entry<SubscriptionHandle, LiveDataSubscriptionResponse> successEntry : responses.entrySet()) {
         SubscriptionHandle handle = successEntry.getKey();
@@ -320,7 +320,7 @@ public class DistributedLiveDataClient extends AbstractLiveDataClient implements
           @Override
           public void failure(final Throwable error) {
             try {
-              s_logger.error("Failed to process subscription response", error);
+              LOGGER.error("Failed to process subscription response", error);
               // This is unexpected. Fail everything.
               for (LiveDataSubscriptionResponse response : getSuccessResponses().values()) {
                 response.setSubscriptionResult(LiveDataSubscriptionResult.INTERNAL_ERROR);

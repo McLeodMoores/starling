@@ -17,7 +17,7 @@ import com.opengamma.OpenGammaRuntimeException;
  */
 /* package */final class InstanceCount {
 
-  private static final ConcurrentMap<Class<?>, AtomicInteger> s_instanceCount = new ConcurrentHashMap<Class<?>, AtomicInteger>();
+  private static final ConcurrentMap<Class<?>, AtomicInteger> INSTANCE_COUNT = new ConcurrentHashMap<Class<?>, AtomicInteger>();
 
   private final AtomicInteger _count;
 
@@ -31,7 +31,7 @@ import com.opengamma.OpenGammaRuntimeException;
           } catch (InterruptedException e) {
             throw new OpenGammaRuntimeException("interrupted", e);
           }
-          for (Map.Entry<Class<?>, AtomicInteger> instance : s_instanceCount.entrySet()) {
+          for (Map.Entry<Class<?>, AtomicInteger> instance : INSTANCE_COUNT.entrySet()) {
             System.out.println(instance.getKey() + "\t" + instance.getValue());
           }
         } while (true);
@@ -40,10 +40,10 @@ import com.opengamma.OpenGammaRuntimeException;
   }
 
   public InstanceCount(final Object owner) {
-    AtomicInteger count = s_instanceCount.get(owner.getClass());
+    AtomicInteger count = INSTANCE_COUNT.get(owner.getClass());
     if (count == null) {
       count = new AtomicInteger(1);
-      final AtomicInteger existing = s_instanceCount.putIfAbsent(owner.getClass(), count);
+      final AtomicInteger existing = INSTANCE_COUNT.putIfAbsent(owner.getClass(), count);
       if (existing != null) {
         existing.incrementAndGet();
         count = existing;

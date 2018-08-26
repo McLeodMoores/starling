@@ -22,7 +22,7 @@ import com.opengamma.util.map.WeakValueHashMap2;
  */
 public class CachingMarketDataProviderResolver implements MarketDataProviderResolver {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(CachingMarketDataProviderResolver.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(CachingMarketDataProviderResolver.class);
 
   private final MarketDataProviderResolver _underlying;
   private final Map2<UserPrincipal, MarketDataSpecification, MarketDataProvider> _cache = new WeakValueHashMap2<UserPrincipal, MarketDataSpecification, MarketDataProvider>(HashMap2.STRONG_KEYS);
@@ -41,22 +41,22 @@ public class CachingMarketDataProviderResolver implements MarketDataProviderReso
   }
 
   protected MarketDataProvider resolveCached(final UserPrincipal marketDataUser, final MarketDataSpecification snapshotSpec) {
-    s_logger.debug("Looking up {} for {}", snapshotSpec, marketDataUser);
+    LOGGER.debug("Looking up {} for {}", snapshotSpec, marketDataUser);
     return getCache().get(marketDataUser, snapshotSpec);
   }
 
   protected MarketDataProvider resolveUnderlying(final UserPrincipal marketDataUser, final MarketDataSpecification snapshotSpec) {
-    s_logger.debug("Resolving {} for {}", snapshotSpec, marketDataUser);
+    LOGGER.debug("Resolving {} for {}", snapshotSpec, marketDataUser);
     return getUnderlying().resolve(marketDataUser, snapshotSpec);
   }
 
   protected MarketDataProvider updateCache(final UserPrincipal marketDataUser, final MarketDataSpecification snapshotSpec, final MarketDataProvider provider) {
     final MarketDataProvider existing = getCache().putIfAbsent(marketDataUser, snapshotSpec, provider);
     if (existing == null) {
-      s_logger.debug("Stored cache entry of {} for {}", snapshotSpec, marketDataUser);
+      LOGGER.debug("Stored cache entry of {} for {}", snapshotSpec, marketDataUser);
       return provider;
     } else {
-      s_logger.debug("Using existing cached entry of {} for {}", snapshotSpec, marketDataUser);
+      LOGGER.debug("Using existing cached entry of {} for {}", snapshotSpec, marketDataUser);
       return existing;
     }
   }
@@ -67,11 +67,11 @@ public class CachingMarketDataProviderResolver implements MarketDataProviderReso
   public MarketDataProvider resolve(final UserPrincipal marketDataUser, final MarketDataSpecification snapshotSpec) {
     MarketDataProvider provider = resolveCached(marketDataUser, snapshotSpec);
     if (provider != null) {
-      s_logger.info("Already resolved {} for {}", snapshotSpec, marketDataUser);
+      LOGGER.info("Already resolved {} for {}", snapshotSpec, marketDataUser);
       return provider;
     }
     provider = resolveUnderlying(marketDataUser, snapshotSpec);
-    s_logger.info("Resolved {} for {}", snapshotSpec, marketDataUser);
+    LOGGER.info("Resolved {} for {}", snapshotSpec, marketDataUser);
     return updateCache(marketDataUser, snapshotSpec, provider);
   }
 

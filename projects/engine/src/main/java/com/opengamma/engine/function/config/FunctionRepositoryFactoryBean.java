@@ -22,7 +22,7 @@ import com.opengamma.util.SingletonFactoryBean;
 @Deprecated
 public class FunctionRepositoryFactoryBean extends SingletonFactoryBean<FunctionRepository> {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(FunctionRepositoryFactoryBean.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(FunctionRepositoryFactoryBean.class);
 
   private FunctionConfigurationSource _functionConfigurationSource;
 
@@ -46,7 +46,7 @@ public class FunctionRepositoryFactoryBean extends SingletonFactoryBean<Function
 
   @Override
   protected FunctionRepository createObject() {
-    s_logger.error("Deprecated configuration: pass the FunctionConfigurationSource directly - don't use this factory bean");
+    LOGGER.error("Deprecated configuration: pass the FunctionConfigurationSource directly - don't use this factory bean");
     final FunctionConfigurationSource functionConfigurationSource = getRepositoryConfigurationSource();
     final Instant configurationVersion = getConfigurationVersion();
     ArgumentChecker.notNull(functionConfigurationSource, "functionConfigurationSource");

@@ -72,7 +72,7 @@ import com.opengamma.util.money.Currency;
  * Treats Saturday & Sunday as non working days.
  */
 public class NonVersionedRedisHolidaySource implements HolidaySource {
-  private static final Logger s_logger = LoggerFactory.getLogger(NonVersionedRedisHolidaySource.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(NonVersionedRedisHolidaySource.class);
   private static final String EXCHANGE = "EXCHANGE";
   private static final String EXCHANGE_SCHEME = "EXCHANGE_SCHEME";
   private static final String CUSTOM_SCHEME = "CUSTOM_SCHEME";
@@ -228,7 +228,7 @@ public class NonVersionedRedisHolidaySource implements HolidaySource {
         }
         getJedisPool().returnResource(jedis);
       } catch (final Exception e) {
-        s_logger.error("Unable to add holiday " + holiday, e);
+        LOGGER.error("Unable to add holiday " + holiday, e);
         getJedisPool().returnBrokenResource(jedis);
         throw new OpenGammaRuntimeException("Unable to add holiday " + holiday, e);
       }
@@ -265,7 +265,7 @@ public class NonVersionedRedisHolidaySource implements HolidaySource {
         result = loadFromRedis(jedis, uniqueId);
         getJedisPool().returnResource(jedis);
       } catch (final Exception e) {
-        s_logger.error("Unable to load holiday " + uniqueId, e);
+        LOGGER.error("Unable to load holiday " + uniqueId, e);
         getJedisPool().returnBrokenResource(jedis);
         throw new OpenGammaRuntimeException("Unable to load holiday " + uniqueId, e);
       }
@@ -354,7 +354,7 @@ public class NonVersionedRedisHolidaySource implements HolidaySource {
 
         getJedisPool().returnResource(jedis);
       } catch (final Exception e) {
-        s_logger.error("Unable to check if holiday " + dateToCheck + " - " + currency, e);
+        LOGGER.error("Unable to check if holiday " + dateToCheck + " - " + currency, e);
         getJedisPool().returnBrokenResource(jedis);
         throw new OpenGammaRuntimeException("Unable to check if holiday " + dateToCheck + " - " + currency, e);
       }
@@ -400,7 +400,7 @@ public class NonVersionedRedisHolidaySource implements HolidaySource {
 
         getJedisPool().returnResource(jedis);
       } catch (final Exception e) {
-        s_logger.error("Unable to check if holiday " + dateToCheck + " - " + holidayType + " - " + regionOrExchangeIds, e);
+        LOGGER.error("Unable to check if holiday " + dateToCheck + " - " + holidayType + " - " + regionOrExchangeIds, e);
         getJedisPool().returnBrokenResource(jedis);
         throw new OpenGammaRuntimeException("Unable to check if holiday " + dateToCheck + " - " + holidayType + " - " + regionOrExchangeIds, e);
       }
@@ -449,7 +449,7 @@ public class NonVersionedRedisHolidaySource implements HolidaySource {
 
       return ImmutableList.of();
     } catch (final JedisConnectionException e) {
-      s_logger.error("Unable to get holiday - " + holidayType + " - " + regionOrExchangeIds, e);
+      LOGGER.error("Unable to get holiday - " + holidayType + " - " + regionOrExchangeIds, e);
       getJedisPool().returnBrokenResource(jedis);
       // Prevent returning the resource twice when the finally block runs
       jedis = null;
@@ -485,7 +485,7 @@ public class NonVersionedRedisHolidaySource implements HolidaySource {
         return ImmutableList.of();
       }
     } catch (final JedisConnectionException e) {
-      s_logger.error("Unable to get holiday - " + currency, e);
+      LOGGER.error("Unable to get holiday - " + currency, e);
       getJedisPool().returnBrokenResource(jedis);
       // Prevent returning the resource twice when the finally block runs
       jedis = null;

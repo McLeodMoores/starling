@@ -121,7 +121,7 @@ import com.opengamma.util.money.Currency;
 @Deprecated
 public class MultiYieldCurveParRateMethodSeriesFunction extends MultiYieldCurveSeriesFunction {
   /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(MultiYieldCurveParRateMethodSeriesFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(MultiYieldCurveParRateMethodSeriesFunction.class);
   /** Calculates the spread to the par rate of instruments on the curve */
   private static final ParSpreadRateCalculator PAR_SPREAD_RATE_CALCULATOR = ParSpreadRateCalculator.getInstance();
   /** Calculates the sensitivity of the par rate spread to the curve */
@@ -214,7 +214,7 @@ public class MultiYieldCurveParRateMethodSeriesFunction extends MultiYieldCurveS
         }
         if (ycSpec.getStrips().size() != marketDataSnapshot.getDataPointSet().size()) {
           valuationDate = valuationDate.plusDays(1);
-          s_logger.info("Unable to resolve all curve points for " + curveName + " on " + valuationDate + ". Not producing curve for this date.");
+          LOGGER.info("Unable to resolve all curve points for " + curveName + " on " + valuationDate + ". Not producing curve for this date.");
           continue VAL;
         }
         final InterpolatedYieldCurveSpecificationWithSecurities spec = builder.resolveToSecurity(ycSpec, marketDataSnapshot);
@@ -269,7 +269,7 @@ public class MultiYieldCurveParRateMethodSeriesFunction extends MultiYieldCurveS
         interpolators.put(curveName, interpolator);
       }
       if (marketValues.size() != totalStrips) {
-        s_logger.info("Could not get market values for {}", valuationDate);
+        LOGGER.info("Could not get market values for {}", valuationDate);
         valuationDate = valuationDate.plusDays(1);
         continue;
       }
@@ -301,7 +301,7 @@ public class MultiYieldCurveParRateMethodSeriesFunction extends MultiYieldCurveS
         }
         valuationDate = valuationDate.plusDays(1);
       } catch (final Exception e) {
-        s_logger.error("Could not fit curve on {}", valuationDate);
+        LOGGER.error("Could not fit curve on {}", valuationDate);
         valuationDate = valuationDate.plusDays(1);
         continue;
       }

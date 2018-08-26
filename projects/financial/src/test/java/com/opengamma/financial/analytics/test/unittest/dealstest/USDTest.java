@@ -35,7 +35,7 @@ import com.opengamma.util.time.DateUtils;
  */
 @Test(groups = TestGroup.UNIT)
 public class USDTest extends AbstractMockSourcesTest {
-  private static final Logger s_logger = LoggerFactory.getLogger(USDTest.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(USDTest.class);
   private static final String CURRENCY = "USD";
 
   private static final ZonedDateTime TODAY = DateUtils.getUTCDate(2013, 10, 14);
@@ -43,12 +43,12 @@ public class USDTest extends AbstractMockSourcesTest {
   private static final String ONE_MONTH_NAME = "USD_LIBOR_1M_ERS";
   private static final String THREE_MONTH_NAME = "USD_LIBOR_3M_ERS";
   private static final String SIX_MONTH_NAME = "USD_LIBOR_6M_ERS";
-  final static String discountingCurvename = "Discounting";
-  final static String forward1MCurveName = "Forward 1M";
-  final static String forward3MCurveName = "Forward 3M";
-  final static String forward6MCurveName = "Forward 6M";
+  final static String DISCOUNTING_CURVE_NAME = "Discounting";
+  final static String FORWARD_1M_CURVE_NAME = "Forward 1M";
+  final static String FORWARD_3M_CURVE_NAME = "Forward 3M";
+  final static String FORWARD_6M_CURVE_NAME = "Forward 6M";
 
-  final static Currency ccy = Currency.USD;
+  final static Currency CCY = Currency.USD;
 
   private static final String PAY_CURRENCY = "LEG1_CCY";
 
@@ -69,10 +69,10 @@ public class USDTest extends AbstractMockSourcesTest {
     }
     // Build the curve bundle
     final HashMap<String, Currency> ccyMap = new HashMap<>();
-    ccyMap.put(discountingCurvename, ccy);
-    ccyMap.put(forward3MCurveName, ccy);
-    ccyMap.put(forward6MCurveName, ccy);
-    final FXMatrix fx = new FXMatrix(ccy);
+    ccyMap.put(DISCOUNTING_CURVE_NAME, CCY);
+    ccyMap.put(FORWARD_3M_CURVE_NAME, CCY);
+    ccyMap.put(FORWARD_6M_CURVE_NAME, CCY);
+    final FXMatrix fx = new FXMatrix(CCY);
     final YieldCurveBundle curvesClean = new YieldCurveBundle(fx, ccyMap);
 
     IRCurveParser curveParser = new IRCurveParser();
@@ -83,16 +83,16 @@ public class USDTest extends AbstractMockSourcesTest {
 
       String name = interpolatedDoublesCurve.getName();
       if (name.equals(ON_NAME)) {
-        curvesClean.setCurve(discountingCurvename, DiscountCurve.from(interpolatedDoublesCurve));
+        curvesClean.setCurve(DISCOUNTING_CURVE_NAME, DiscountCurve.from(interpolatedDoublesCurve));
       }
       if (name.equals(ONE_MONTH_NAME)) {
-        curvesClean.setCurve(forward1MCurveName, DiscountCurve.from(interpolatedDoublesCurve));
+        curvesClean.setCurve(FORWARD_1M_CURVE_NAME, DiscountCurve.from(interpolatedDoublesCurve));
       }
       if (name.equals(THREE_MONTH_NAME)) {
-        curvesClean.setCurve(forward3MCurveName, DiscountCurve.from(interpolatedDoublesCurve));
+        curvesClean.setCurve(FORWARD_3M_CURVE_NAME, DiscountCurve.from(interpolatedDoublesCurve));
       }
       if (name.equals(SIX_MONTH_NAME)) {
-        curvesClean.setCurve(forward6MCurveName, DiscountCurve.from(interpolatedDoublesCurve));
+        curvesClean.setCurve(FORWARD_6M_CURVE_NAME, DiscountCurve.from(interpolatedDoublesCurve));
       }
     }
 
@@ -148,6 +148,6 @@ public class USDTest extends AbstractMockSourcesTest {
 
     // Check the npv
 
-    s_logger.warn("Got {} trades", trades.size());
+    LOGGER.warn("Got {} trades", trades.size());
   }
 }

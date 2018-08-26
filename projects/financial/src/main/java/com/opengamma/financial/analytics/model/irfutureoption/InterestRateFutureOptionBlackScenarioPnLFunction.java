@@ -28,6 +28,7 @@ import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.financial.analytics.model.equity.ScenarioPnLPropertyNamesAndValues;
 
+// CSOFF
 /**
  * Simple scenario Function returns the difference in PresentValue between defined Scenario and current market conditions.
  * @deprecated The parent class of this function is deprecated
@@ -43,7 +44,7 @@ public class InterestRateFutureOptionBlackScenarioPnLFunction extends InterestRa
   }
 
   /** The Black present value calculator */
-  private static final PresentValueBlackCalculator s_pvCalculator = PresentValueBlackCalculator.getInstance();
+  private static final PresentValueBlackCalculator PV_CALCULATOR = PresentValueBlackCalculator.getInstance();
 
   /** Property to define the price shift */
   private static final String s_priceShift = ScenarioPnLPropertyNamesAndValues.PROPERTY_PRICE_SHIFT;
@@ -54,14 +55,14 @@ public class InterestRateFutureOptionBlackScenarioPnLFunction extends InterestRa
   /** Property to define the volatility shift type */
   private static final String s_volShiftType = ScenarioPnLPropertyNamesAndValues.PROPERTY_VOL_SHIFT_TYPE;
   /** Logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(InterestRateFutureOptionBlackScenarioPnLFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(InterestRateFutureOptionBlackScenarioPnLFunction.class);
 
   @Override
   protected Set<ComputedValue> getResult(final InstrumentDerivative irFutureOption, final YieldCurveWithBlackCubeBundle market,
       final ValueSpecification spec, final Set<ValueRequirement> desiredValues) {
 
     // Compute present value under current market
-    final double pvBase = irFutureOption.accept(s_pvCalculator, market);
+    final double pvBase = irFutureOption.accept(PV_CALCULATOR, market);
 
     // Form market scenario
     final YieldCurveWithBlackCubeBundle marketScen;
@@ -84,8 +85,8 @@ public class InterestRateFutureOptionBlackScenarioPnLFunction extends InterestRa
         if (priceShiftTypeConstraint.equalsIgnoreCase("Additive")) {
           parallelShift = shift;
         } else {
-          if (!(priceShiftTypeConstraint.equalsIgnoreCase("Multiplicative"))) {
-            s_logger.debug("Valid PriceShiftType's: Additive and Multiplicative. Found: " + priceShiftTypeConstraint + " Defaulting to Multiplicative.");
+          if (!priceShiftTypeConstraint.equalsIgnoreCase("Multiplicative")) {
+            LOGGER.debug("Valid PriceShiftType's: Additive and Multiplicative. Found: " + priceShiftTypeConstraint + " Defaulting to Multiplicative.");
           }
           // We (arbitrarily) choose to scale by the rate at the short end
           final double shortRate = curve.getInterestRate(0.0);
@@ -111,7 +112,7 @@ public class InterestRateFutureOptionBlackScenarioPnLFunction extends InterestRa
       } else if (volShiftTypeConstraint.equalsIgnoreCase("Multiplicative")) {
         additiveShift = false;
       } else {
-        s_logger.debug("In ScenarioPnLFunctions, VolShiftType's are Additive and Multiplicative. Found: " + priceShiftTypeConstraint + " Defaulting to Multiplicative.");
+        LOGGER.debug("In ScenarioPnLFunctions, VolShiftType's are Additive and Multiplicative. Found: " + priceShiftTypeConstraint + " Defaulting to Multiplicative.");
         additiveShift = false;
       }
       final Surface<Double, Double, Double> volSurfaceScen = SurfaceShiftFunctionFactory.getShiftedSurface(market.getBlackParameters(), shiftVol, additiveShift);
@@ -119,7 +120,7 @@ public class InterestRateFutureOptionBlackScenarioPnLFunction extends InterestRa
     }
 
     // Compute present value under scenario
-    final double pvScen = irFutureOption.accept(s_pvCalculator, marketScen);
+    final double pvScen = irFutureOption.accept(PV_CALCULATOR, marketScen);
 
     // Return with spec
     return Collections.singleton(new ComputedValue(spec, pvScen - pvBase));
@@ -185,7 +186,7 @@ public class InterestRateFutureOptionBlackScenarioPnLFunction extends InterestRa
   public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target, final Map<ValueSpecification, ValueRequirement> inputs) {
     if (inputs.size() == 1) {
       final ValueSpecification input = inputs.keySet().iterator().next();
-      if ((ValueRequirementNames.PNL).equals(input.getValueName())) {
+      if (ValueRequirementNames.PNL.equals(input.getValueName())) {
         return inputs.keySet();
       }
     }

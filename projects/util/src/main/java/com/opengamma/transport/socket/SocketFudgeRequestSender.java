@@ -24,7 +24,7 @@ import com.opengamma.util.ArgumentChecker;
  * Opens a raw socket with a remote site for RPC-style communications.
  */
 public class SocketFudgeRequestSender extends AbstractSocketProcess implements FudgeRequestSender {
-  private static final Logger s_logger = LoggerFactory.getLogger(SocketFudgeRequestSender.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(SocketFudgeRequestSender.class);
   private final FudgeContext _fudgeContext;
   
   /**
@@ -52,14 +52,14 @@ public class SocketFudgeRequestSender extends AbstractSocketProcess implements F
   @Override
   public void sendRequest(FudgeMsg request, FudgeMessageReceiver responseReceiver) {
     startIfNecessary();
-    s_logger.debug("Dispatching request with {} fields", request.getNumFields());
+    LOGGER.debug("Dispatching request with {} fields", request.getNumFields());
     _writer.write(request);
     final FudgeMsgEnvelope response;
     synchronized (_msgReader) {
       response = _msgReader.nextMessageEnvelope();
     }
     if (response != null) {
-      s_logger.debug("Got response with {} fields", response.getMessage().getNumFields());
+      LOGGER.debug("Got response with {} fields", response.getMessage().getNumFields());
       responseReceiver.messageReceived(getFudgeContext(), response);
     }
   }

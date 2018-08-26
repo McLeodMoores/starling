@@ -48,7 +48,7 @@ import com.opengamma.util.tuple.Pair;
  */
 public class BondAndBondFutureYCNSFunction extends BondAndBondFutureFromCurvesFunction<ParameterIssuerProviderInterface, MultipleCurrencyMulticurveSensitivity> {
   /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(BondAndBondFutureYCNSFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(BondAndBondFutureYCNSFunction.class);
 
   /**
    * Sets the value requirement name to {@link ValueRequirementNames#YIELD_CURVE_NODE_SENSITIVITIES} and
@@ -83,7 +83,7 @@ public class BondAndBondFutureYCNSFunction extends BondAndBondFutureFromCurvesFu
         return results;
       }
     }
-    s_logger.info("Could not get sensitivities to " + desiredCurveName + " for " + target.getName());
+    LOGGER.info("Could not get sensitivities to " + desiredCurveName + " for " + target.getName());
     return Collections.emptySet();
   }
 

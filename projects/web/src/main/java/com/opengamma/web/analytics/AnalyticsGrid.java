@@ -21,7 +21,7 @@ import com.opengamma.util.ArgumentChecker;
  */
 /* package */ abstract class AnalyticsGrid<V extends Viewport> {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(AnalyticsGrid.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(AnalyticsGrid.class);
 
   /** Viewports keyed by ID. */
   private final Map<Integer, V> _viewports;
@@ -94,7 +94,7 @@ import com.opengamma.util.ArgumentChecker;
   /* package */ V getViewport(int viewportId) {
     V viewport = _viewports.get(viewportId);
     if (viewport == null) {
-      s_logger.debug("Received request for non-existent viewport ID {}", viewportId);
+      LOGGER.debug("Received request for non-existent viewport ID {}", viewportId);
       throw new DataNotFoundException("No viewport found with ID " + viewportId);
     }
     return viewport;
@@ -149,7 +149,7 @@ import com.opengamma.util.ArgumentChecker;
   /* package */ void deleteViewport(int viewportId) {
     Viewport viewport = _viewports.remove(viewportId);
     if (viewport == null) {
-      s_logger.debug("Received request to delete non-existent viewport ID {}", viewportId);
+      LOGGER.debug("Received request to delete non-existent viewport ID {}", viewportId);
       throw new DataNotFoundException("No viewport found with ID " + viewportId);
     }
     _viewportListener.viewportDeleted(viewport.getDefinition(), getGridStructure());

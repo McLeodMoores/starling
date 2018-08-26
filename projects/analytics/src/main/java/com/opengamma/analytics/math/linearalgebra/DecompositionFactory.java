@@ -28,20 +28,20 @@ public final class DecompositionFactory {
   public static final Decomposition<?> SV_COLT = new SVDecompositionColt();
   /** {@link SVDecompositionCommons} */
   public static final Decomposition<?> SV_COMMONS = new SVDecompositionCommons();
-  private static final Map<String, Decomposition<?>> s_staticInstances;
-  private static final Map<Class<?>, String> s_instanceNames;
+  private static final Map<String, Decomposition<?>> INSTANCES;
+  private static final Map<Class<?>, String> INSTANCE_NAMES;
 
   static {
-    s_staticInstances = new HashMap<>();
-    s_staticInstances.put(LU_COMMONS_NAME, LU_COMMONS);
-    s_staticInstances.put(QR_COMMONS_NAME, QR_COMMONS);
-    s_staticInstances.put(SV_COLT_NAME, SV_COLT);
-    s_staticInstances.put(SV_COMMONS_NAME, SV_COMMONS);
-    s_instanceNames = new HashMap<>();
-    s_instanceNames.put(LU_COMMONS.getClass(), LU_COMMONS_NAME);
-    s_instanceNames.put(QR_COMMONS.getClass(), QR_COMMONS_NAME);
-    s_instanceNames.put(SV_COLT.getClass(), SV_COLT_NAME);
-    s_instanceNames.put(SV_COMMONS.getClass(), SV_COMMONS_NAME);
+    INSTANCES = new HashMap<>();
+    INSTANCES.put(LU_COMMONS_NAME, LU_COMMONS);
+    INSTANCES.put(QR_COMMONS_NAME, QR_COMMONS);
+    INSTANCES.put(SV_COLT_NAME, SV_COLT);
+    INSTANCES.put(SV_COMMONS_NAME, SV_COMMONS);
+    INSTANCE_NAMES = new HashMap<>();
+    INSTANCE_NAMES.put(LU_COMMONS.getClass(), LU_COMMONS_NAME);
+    INSTANCE_NAMES.put(QR_COMMONS.getClass(), QR_COMMONS_NAME);
+    INSTANCE_NAMES.put(SV_COLT.getClass(), SV_COLT_NAME);
+    INSTANCE_NAMES.put(SV_COMMONS.getClass(), SV_COMMONS_NAME);
   }
 
   private DecompositionFactory() {
@@ -54,7 +54,7 @@ public final class DecompositionFactory {
    * @throws IllegalArgumentException If the decomposition name is null or there is no decomposition method of that name
    */
   public static Decomposition<?> getDecomposition(final String decompositionName) {
-    final Decomposition<?> decomposition = s_staticInstances.get(decompositionName);
+    final Decomposition<?> decomposition = INSTANCES.get(decompositionName);
     if (decomposition != null) {
       return decomposition;
     }
@@ -70,6 +70,6 @@ public final class DecompositionFactory {
     if (decomposition == null) {
       return null;
     }
-    return s_instanceNames.get(decomposition.getClass());
+    return INSTANCE_NAMES.get(decomposition.getClass());
   }
 }

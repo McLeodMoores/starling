@@ -28,14 +28,14 @@ import com.opengamma.util.test.DbTest;
 @Test(enabled = false)
 public class PerformanceTest extends AbstractDbTest {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(PerformanceTest.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(PerformanceTest.class);
 
   private DbHistoricalTimeSeriesMaster _htsMaster;
 
   @Factory(dataProvider = "databases", dataProviderClass = DbTest.class)
   public PerformanceTest(String databaseType, String databaseVersion) {
     super(databaseType, databaseVersion);
-    s_logger.info("running testcases for {}", databaseType);
+    LOGGER.info("running testcases for {}", databaseType);
   }
 
   //-------------------------------------------------------------------------
@@ -68,7 +68,7 @@ public class PerformanceTest extends AbstractDbTest {
       info.setObservationTime("LDN_CLOSE");
       info.setExternalIdBundle(ExternalIdBundleWithDates.of(identifiers));
       HistoricalTimeSeriesInfoDocument doc = new HistoricalTimeSeriesInfoDocument(info);
-      s_logger.debug("adding timeseries {}", doc);
+      LOGGER.debug("adding timeseries {}", doc);
       doc = _htsMaster.add(doc);
       
       LocalDateDoubleTimeSeries randomPoints = RandomTimeSeriesGenerator.makeRandomTimeSeries(1);
@@ -79,14 +79,14 @@ public class PerformanceTest extends AbstractDbTest {
         ImmutableLocalDateDoubleTimeSeries points = ImmutableLocalDateDoubleTimeSeries.of(
             Lists.newArrayList(randomPoints.getTimeAtIndex(j)),
             Lists.newArrayList(randomPoints.getValueAtIndex(j)));
-        s_logger.debug("adding data points {}", points);
+        LOGGER.debug("adding data points {}", points);
         _htsMaster.updateTimeSeriesDataPoints(doc.getInfo().getTimeSeriesObjectId(), points);
       }
     }
     
     long end = System.nanoTime();
     
-    s_logger.info("Creating {} series with {} points each took {} ms",
+    LOGGER.info("Creating {} series with {} points each took {} ms",
         new Object[] { NUM_SERIES, NUM_POINTS, (end - start) / 1E6 }); 
   }
 

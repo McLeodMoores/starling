@@ -32,7 +32,7 @@ public class CachingExecutionPlanner implements GraphExecutionPlanner {
 
   // NOTE: This class has been created for completeness, to preserve the previous behaviours of ExecutionPlanCache, even though those behaviours are unlikely to be correct.
 
-  private static final Logger s_logger = LoggerFactory.getLogger(CachingExecutionPlanner.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(CachingExecutionPlanner.class);
 
   private static final String CACHE_NAME = "executionPlans";
 
@@ -104,7 +104,7 @@ public class CachingExecutionPlanner implements GraphExecutionPlanner {
 
   public synchronized void invalidate() {
     if (_cache != null) {
-      s_logger.info("Clearing execution plan cache of {} items", _cache.getSize());
+      LOGGER.info("Clearing execution plan cache of {} items", _cache.getSize());
       _cache.removeAll();
     }
   }
@@ -115,14 +115,14 @@ public class CachingExecutionPlanner implements GraphExecutionPlanner {
   public GraphExecutionPlan createPlan(final DependencyGraph graph, final ExecutionLogModeSource logModeSource, final long functionInitId, final Set<ValueSpecification> sharedValues,
       final Map<ValueSpecification, FunctionParameters> parameters) {
     // NOTE: The logModeSource is not used as part of the key; this is wrong as the plan contains job items which embed the logging requirements
-    s_logger.debug("Searching for cached execution plan for {}/{}", graph, functionInitId);
+    LOGGER.debug("Searching for cached execution plan for {}/{}", graph, functionInitId);
     CacheKey key = new CacheKey(graph, functionInitId, sharedValues, parameters);
     final Element element = _cache.get(key);
     if (element != null) {
-      s_logger.debug("Cache hit");
+      LOGGER.debug("Cache hit");
       return ((GraphExecutionPlan) element.getObjectValue()).withCalculationConfiguration(graph.getCalculationConfigurationName());
     } else {
-      s_logger.debug("Cache miss");
+      LOGGER.debug("Cache miss");
       final GraphExecutionPlan plan = _underlying.createPlan(graph, logModeSource, functionInitId, sharedValues, parameters);
       if (plan != null) {
         _cache.put(new Element(key, plan));

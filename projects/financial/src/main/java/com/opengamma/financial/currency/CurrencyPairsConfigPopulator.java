@@ -27,7 +27,7 @@ import com.opengamma.master.config.ConfigMasterUtils;
 public class CurrencyPairsConfigPopulator {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(CurrencyPairsConfigPopulator.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(CurrencyPairsConfigPopulator.class);
 
   public static ConfigMaster populateCurrencyPairsConfigMaster(final ConfigMaster cfgMaster) {
     storeCurrencyPairs(cfgMaster, CurrencyPairs.DEFAULT_CURRENCY_PAIRS, createCurrencyPairs());
@@ -45,7 +45,7 @@ public class CurrencyPairsConfigPopulator {
           final CurrencyPair pair = CurrencyPair.parse(pairStr.trim());
           pairs.add(pair);
         } catch (final IllegalArgumentException e) {
-          s_logger.debug/*warn*/("Unable to create currency pair from " + pairStr, e);
+          LOGGER.debug/*warn*/("Unable to create currency pair from " + pairStr, e);
         }
       }
     } catch (final IOException ex) {

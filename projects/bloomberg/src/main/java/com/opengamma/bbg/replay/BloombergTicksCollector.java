@@ -50,9 +50,9 @@ import com.opengamma.util.ArgumentChecker;
 public class BloombergTicksCollector implements Lifecycle {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(BloombergTicksCollector.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(BloombergTicksCollector.class);
 
-  private static final FudgeContext s_fudgeContext = new FudgeContext();
+  private static final FudgeContext FUDGE_CONTEXT = new FudgeContext();
 
   private static final String DEFAULT_TRACK_FILE = "/watchList.txt";
   private static final int DEFAULT_SESSION_SIZE = 4;
@@ -120,7 +120,7 @@ public class BloombergTicksCollector implements Lifecycle {
   private void checkRootDir() {
     File file = new File(_rootDir);
     if (!file.isDirectory()) { 
-      s_logger.warn("{} root directory does not exist", _rootDir);
+      LOGGER.warn("{} root directory does not exist", _rootDir);
       throw new IllegalArgumentException(_rootDir + " is not a directory");
     }
     if (!file.canWrite()) {
@@ -141,9 +141,9 @@ public class BloombergTicksCollector implements Lifecycle {
 
   @Override
   public synchronized void start() {
-    s_logger.info("starting bloombergTickCollector");
+    LOGGER.info("starting bloombergTickCollector");
     if (isRunning()) {
-      s_logger.info("BloombergTickStorage already started");
+      LOGGER.info("BloombergTickStorage already started");
       return;
     }
     
@@ -151,7 +151,7 @@ public class BloombergTicksCollector implements Lifecycle {
     doSnapshot(ticker2Buid);
     
     //setup writer thread
-    BloombergTickWriter tickWriter = new BloombergTickWriter(s_fudgeContext, _allTicksQueue, ticker2Buid, _rootDir, _storageMode);
+    BloombergTickWriter tickWriter = new BloombergTickWriter(FUDGE_CONTEXT, _allTicksQueue, ticker2Buid, _rootDir, _storageMode);
     Thread thread = new Thread(tickWriter, "TicksWriter");
     thread.start();
     _ticksWriterJob = tickWriter;
@@ -189,7 +189,7 @@ public class BloombergTicksCollector implements Lifecycle {
         throw new OpenGammaRuntimeException("Result for " + bloombergKey + " was not found");
       }
       
-      MutableFudgeMsg tickMsg = s_fudgeContext.newMessage();
+      MutableFudgeMsg tickMsg = FUDGE_CONTEXT.newMessage();
       Instant instant = Clock.systemUTC().instant();
       long epochMillis = instant.toEpochMilli();
       tickMsg.add(RECEIVED_TS_KEY, epochMillis);
@@ -209,7 +209,7 @@ public class BloombergTicksCollector implements Lifecycle {
    * @param bloombergKeys
    */
   private void createSubscriptions(Set<String> bloombergKeys) {
-    s_logger.debug("creating subscriptions list for {} securities", bloombergKeys.size());
+    LOGGER.debug("creating subscriptions list for {} securities", bloombergKeys.size());
     for (int i = 0; i < _bbgSessions; i++) {
       _subscriptionsList.add(new SubscriptionList());
     }
@@ -226,7 +226,7 @@ public class BloombergTicksCollector implements Lifecycle {
 
   @Override
   public synchronized void stop() {
-    s_logger.info("Stopping marketdata storage serivce");
+    LOGGER.info("Stopping marketdata storage serivce");
     stopBloombergSession();
     stopTicksWriterThreads();
   }
@@ -235,14 +235,14 @@ public class BloombergTicksCollector implements Lifecycle {
    * 
    */
   public void stopBloombergSession() {
-    s_logger.info("stopping bloomberg session");
+    LOGGER.info("stopping bloomberg session");
     if (_bbgSessionStarted.get()) {
       for (Session session : _sessionList) {
         try {
           session.stop();
         } catch (InterruptedException e) {
           Thread.interrupted();
-          s_logger.warn("Interrupted while waiting for session to stop", e);
+          LOGGER.warn("Interrupted while waiting for session to stop", e);
         }
       }
       _sessionList = null;
@@ -254,21 +254,21 @@ public class BloombergTicksCollector implements Lifecycle {
    * 
    */
   public void stopTicksWriterThreads() {
-    s_logger.info("Stopping ticks writer thread");
+    LOGGER.info("Stopping ticks writer thread");
     if (_ticksWriterThread != null && _ticksWriterThread.isAlive()) {
       if (_ticksWriterJob != null) {
         try {
           _allTicksQueue.put(BloombergTickReplayUtils.getTerminateMessage());
         } catch (InterruptedException e) {
           Thread.interrupted();
-          s_logger.warn("interrupted from waiting to put terminate message on queue");
+          LOGGER.warn("interrupted from waiting to put terminate message on queue");
         }
       }
       try {
         _ticksWriterThread.join();
       } catch (InterruptedException e) {
         Thread.interrupted();
-        s_logger.warn("Interrupted while waiting for ticks writer thread to terminate", e);
+        LOGGER.warn("Interrupted while waiting for ticks writer thread to terminate", e);
       }
     }
     _ticksWriterJob = null;
@@ -281,24 +281,24 @@ public class BloombergTicksCollector implements Lifecycle {
         session.stop();
       }
     }
-    s_logger.info("Connecting to {} ", SessionOptionsUtils.toString(_bloombergConnector.getSessionOptions()));
+    LOGGER.info("Connecting to {} ", SessionOptionsUtils.toString(_bloombergConnector.getSessionOptions()));
     BloombergTickCollectorHandler handler = new BloombergTickCollectorHandler(_allTicksQueue, this);
     for (int i = 0; i < _bbgSessions; i++) {
       Session session = new Session(_bloombergConnector.getSessionOptions(), handler);
       if (!session.start()) {
-        s_logger.info("Failed to start session");
+        LOGGER.info("Failed to start session");
         return false;
       }
       if (!session.openService("//blp/mktdata")) {
-        s_logger.info("Failed to open service //blp/mktdata");
+        LOGGER.info("Failed to open service //blp/mktdata");
         session.stop();
         return false;
       }
       _sessionList.add(session);
     }
-    s_logger.info("Connected successfully\n");
+    LOGGER.info("Connected successfully\n");
     
-    s_logger.info("Subscribing ...");
+    LOGGER.info("Subscribing ...");
     int index = 0;
     for (Session session : _sessionList) {
       session.subscribe(_subscriptionsList.get(index));

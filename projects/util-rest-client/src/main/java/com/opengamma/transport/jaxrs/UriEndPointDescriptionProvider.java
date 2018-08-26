@@ -32,7 +32,7 @@ import com.sun.jersey.api.client.Client;
  */
 public class UriEndPointDescriptionProvider implements EndPointDescriptionProvider {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(UriEndPointDescriptionProvider.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(UriEndPointDescriptionProvider.class);
 
   /**
    * Type of connection. Always {@link #TYPE_VALUE}.
@@ -144,15 +144,15 @@ public class UriEndPointDescriptionProvider implements EndPointDescriptionProvid
         final String uriString = endPoint.getFieldValue(String.class, uriField);
         final URI uri = (_baseURI != null) ? _baseURI.resolve(uriString) : new URI(uriString);
         final int status = getClient().resource(uri).head().getStatus();
-        s_logger.debug("{} returned {}", uri, status);
+        LOGGER.debug("{} returned {}", uri, status);
         switch (status) {
           case 200:
           case 405:
             return uri;
         }
       } catch (final Exception ex) {
-        s_logger.warn("URI {} not accessible", uriField);
-        s_logger.debug("Exception caught", ex);
+        LOGGER.warn("URI {} not accessible", uriField);
+        LOGGER.debug("Exception caught", ex);
       }
       return NULL_URI;
     }
@@ -186,10 +186,10 @@ public class UriEndPointDescriptionProvider implements EndPointDescriptionProvid
         uri = getAccessibleURI(endPoint, uriFields.get(0));
       }
       if (uri == NULL_URI) {
-        s_logger.error("No accessible URIs found in {}", endPoint);
+        LOGGER.error("No accessible URIs found in {}", endPoint);
         return null;
       } else {
-        s_logger.info("Using {}", uri);
+        LOGGER.info("Using {}", uri);
         return uri;
       }
     }

@@ -23,7 +23,7 @@ import com.opengamma.util.ArgumentChecker;
  */
 /* package */ final class ViewportNodeStructure {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(ViewportNodeStructure.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ViewportNodeStructure.class);
 
   private final AnalyticsNode _rootNode;
   private final Map<Integer, List<String>> _rowToPath = Maps.newHashMap();
@@ -55,7 +55,7 @@ import com.opengamma.util.ArgumentChecker;
     path.add(targetLookup.getRow(gridStructureNode.getStartRow()).getName());
     boolean expanded = expandedNodes.contains(path);
     if (expanded) {
-      s_logger.debug("Building expanded node {}", path);
+      LOGGER.debug("Building expanded node {}", path);
     }
     List<AnalyticsNode> viewportStructureChildNodes = Lists.newArrayList();
     for (AnalyticsNode gridStructureChildNode : gridStructureNode.getChildren()) {

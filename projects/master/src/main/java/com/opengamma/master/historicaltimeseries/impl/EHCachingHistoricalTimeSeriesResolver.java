@@ -40,7 +40,7 @@ import com.opengamma.util.tuple.Triple;
  */
 public class EHCachingHistoricalTimeSeriesResolver extends HistoricalTimeSeriesResolverWithBasicChangeManager {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(EHCachingHistoricalTimeSeriesResolver.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(EHCachingHistoricalTimeSeriesResolver.class);
 
   private final class ThreadLocalWorker {
 
@@ -245,11 +245,11 @@ public class EHCachingHistoricalTimeSeriesResolver extends HistoricalTimeSeriesR
       final int cmp = _optimisticFieldMetric1.getAndSet(0);
       if (cmp < -500) {
         boolean opt = !isOptimisticFieldResolution();
-        s_logger.info("Switching to {} field resolution ({})", opt ? "optimistic" : "pessimistic", cmp);
+        LOGGER.info("Switching to {} field resolution ({})", opt ? "optimistic" : "pessimistic", cmp);
         setOptimisticFieldResolution(opt);
       } else {
-        if (s_logger.isDebugEnabled()) {
-          s_logger.debug("Staying with {} field resolution ({})", isOptimisticFieldResolution() ? "optimistic" : "pessimistic", cmp);
+        if (LOGGER.isDebugEnabled()) {
+          LOGGER.debug("Staying with {} field resolution ({})", isOptimisticFieldResolution() ? "optimistic" : "pessimistic", cmp);
         }
       }
     }
@@ -259,12 +259,12 @@ public class EHCachingHistoricalTimeSeriesResolver extends HistoricalTimeSeriesR
     final Triple<String, String, String> key = Triple.of(dataSource, dataProvider, dataField);
     if (_underlying.resolve(null, null, dataSource, dataProvider, dataField, null) != null) {
       // There is something in the database
-      s_logger.debug("Verified {} in database", key);
+      LOGGER.debug("Verified {} in database", key);
       _cache.put(new Element(key, Boolean.TRUE));
       return true;
     } else {
       // There is nothing in the database for this combination
-      s_logger.debug("Verified {} absent from database", key);
+      LOGGER.debug("Verified {} absent from database", key);
       _cache.put(new Element(key, null));
       if (isAutomaticFieldResolutionOptimisation()) {
         updateAutoFieldResolutionOptimisation();
@@ -298,7 +298,7 @@ public class EHCachingHistoricalTimeSeriesResolver extends HistoricalTimeSeriesR
           }
         }
       } else {
-        s_logger.debug("No lookup information for {}", dataField);
+        LOGGER.debug("No lookup information for {}", dataField);
       }
     }
     if (identifierBundle == null) {

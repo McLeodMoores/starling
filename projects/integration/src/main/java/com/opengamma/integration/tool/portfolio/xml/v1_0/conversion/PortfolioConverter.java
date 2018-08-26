@@ -35,7 +35,7 @@ import com.opengamma.master.security.ManageableSecurity;
  */
 public class PortfolioConverter {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(PortfolioConverter.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(PortfolioConverter.class);
 
   /**
    * The portfolio to be converted.
@@ -58,7 +58,7 @@ public class PortfolioConverter {
    * @return the positions, not null
    */
   public Iterable<PortfolioPosition> getPositions() {
-    s_logger.info("Starting to process root portfolio: {}", _portfolio.getName());
+    LOGGER.info("Starting to process root portfolio: {}", _portfolio.getName());
     return processPortfolio(_portfolio, true, null);
   }
 
@@ -82,7 +82,7 @@ public class PortfolioConverter {
    */
   private List<PortfolioPosition> processPortfolio(Portfolio portfolio, boolean isRoot, String[] parentPath) {
 
-    s_logger.info("Processing portfolio: {}", portfolio.getName());
+    LOGGER.info("Processing portfolio: {}", portfolio.getName());
     List<PortfolioPosition> managedPositions = Lists.newArrayList();
 
     // This is needed as we don't want the name of the root portfolio to appear in the path. So for
@@ -98,7 +98,7 @@ public class PortfolioConverter {
 
       IdWrapper positionExternalId = position.getExternalSystemId();
       String positionId = positionExternalId != null ? positionExternalId.toExternalId().toString() : "AUTO-CREATED";
-      s_logger.debug("Extracting position: [{}]", positionId);
+      LOGGER.debug("Extracting position: [{}]", positionId);
 
       List<Trade> trades = position.getTrades();
       BigDecimal tradeTotalQuantity = BigDecimal.ZERO;
@@ -109,7 +109,7 @@ public class PortfolioConverter {
 
       for (Trade trade : nullCheckIterable(trades)) {
 
-        s_logger.debug("Extracting trade: {} for position {}", trade.getExternalSystemId().getExternalId(), positionId);
+        LOGGER.debug("Extracting trade: {} for position {}", trade.getExternalSystemId().getExternalId(), positionId);
         ManageableSecurity[] tradeSecurity = extractSecurityFromTrade(trade, trades.size());
         if (positionSecurity == null) {
 
@@ -162,7 +162,7 @@ public class PortfolioConverter {
   private ManageableSecurity[] extractSecurityFromPosition(ListedSecurityDefinition listedSecurityDefinition) {
 
     if (listedSecurityDefinition != null) {
-      s_logger.debug("Extracting securities for position");
+      LOGGER.debug("Extracting securities for position");
       return listedSecurityDefinition.getSecurityExtractor().extract();
     } else {
       return null;
@@ -177,7 +177,7 @@ public class PortfolioConverter {
                                               "] cannot be aggregated into positions");
     }
 
-    s_logger.debug("Extracting securities for trade: [{}]", trade.getExternalSystemId().toExternalId());
+    LOGGER.debug("Extracting securities for trade: [{}]", trade.getExternalSystemId().toExternalId());
     TradeSecurityExtractor<?> extractor = trade.getSecurityExtractor();
     return extractor.extractSecurities();
   }

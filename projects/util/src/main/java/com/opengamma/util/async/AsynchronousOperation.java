@@ -24,7 +24,7 @@ import com.opengamma.util.NamedThreadPoolFactory;
  */
 public final class AsynchronousOperation<T> {
 
-  private static final ScheduledExecutorService s_timeouts = createTimeoutExecutor();
+  private static final ScheduledExecutorService TIMEOUTS = createTimeoutExecutor();
 
   private final Class<T> _type;
   private AsynchronousResult<T> _result;
@@ -191,7 +191,7 @@ public final class AsynchronousOperation<T> {
   public static Cancelable timeout(final Cancelable cancelation, final int timeoutMillis) {
     ArgumentChecker.notNull(cancelation, "cancelation");
     ArgumentChecker.notNegativeOrZero(timeoutMillis, "timeoutMillis");
-    final ScheduledFuture<?> future = s_timeouts.schedule(new Runnable() {
+    final ScheduledFuture<?> future = TIMEOUTS.schedule(new Runnable() {
       @Override
       public void run() {
         cancelation.cancel(true);

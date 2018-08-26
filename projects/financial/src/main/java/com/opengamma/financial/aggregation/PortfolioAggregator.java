@@ -45,9 +45,9 @@ import com.opengamma.master.position.PositionMaster;
  */
 public final class PortfolioAggregator {
   
-  private static final Logger s_logger = LoggerFactory.getLogger(PortfolioAggregator.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(PortfolioAggregator.class);
 
-  private static final UniqueIdSupplier s_syntheticIdentifiers = new UniqueIdSupplier("PortfolioAggregator");
+  private static final UniqueIdSupplier SYNTHETIC_IDENTIFIERS = new UniqueIdSupplier("PortfolioAggregator");
 
   private final List<AggregationFunction<?>> _aggregationFunctions;
 
@@ -60,7 +60,7 @@ public final class PortfolioAggregator {
   }
 
   private static UniqueId createSyntheticIdentifier() {
-    return s_syntheticIdentifiers.get();
+    return SYNTHETIC_IDENTIFIERS.get();
   }
 
   public Portfolio aggregate(Portfolio inputPortfolio) {
@@ -96,7 +96,7 @@ public final class PortfolioAggregator {
   
   private void aggregate(SimplePortfolioNode inputNode, List<Position> flattenedPortfolio, Queue<AggregationFunction<?>> functionList) {
     AggregationFunction<?> nextFunction = functionList.remove();
-    s_logger.debug("Aggregating {} positions by {}", flattenedPortfolio, nextFunction);
+    LOGGER.debug("Aggregating {} positions by {}", flattenedPortfolio, nextFunction);
     @SuppressWarnings("unchecked")
     Map<String, List<Position>> buckets = new TreeMap<String, List<Position>>((Comparator<? super String>) nextFunction);
     for (Object entry : nextFunction.getRequiredEntries()) {
@@ -154,35 +154,35 @@ public final class PortfolioAggregator {
                                AggregationFunction<?>[] aggregationFunctions, boolean split) {
     PortfolioSearchRequest searchReq = new PortfolioSearchRequest();
     searchReq.setName(portfolioName);
-    s_logger.info("Searching for portfolio " + portfolioName + "...");
+    LOGGER.info("Searching for portfolio " + portfolioName + "...");
     PortfolioSearchResult searchResult = portfolioMaster.search(searchReq);
-    s_logger.info("Done. Got " + searchResult.getDocuments().size() + " results");
+    LOGGER.info("Done. Got " + searchResult.getDocuments().size() + " results");
     ManageablePortfolio manageablePortfolio = searchResult.getFirstPortfolio();
     if (manageablePortfolio == null) {
-      s_logger.error("Portfolio " + portfolioName + " was not found");
+      LOGGER.error("Portfolio " + portfolioName + " was not found");
       System.exit(1);
     }
-    s_logger.info("Reloading portfolio from position source...");
+    LOGGER.info("Reloading portfolio from position source...");
     Portfolio portfolio = positionSource.getPortfolio(manageablePortfolio.getUniqueId(), VersionCorrection.LATEST);
     if (portfolio == null) {
-      s_logger.error("Portfolio " + portfolioName + " was not found from PositionSource");
+      LOGGER.error("Portfolio " + portfolioName + " was not found from PositionSource");
       System.exit(1);
     }
-    s_logger.info("Done.");
+    LOGGER.info("Done.");
     ExecutorService newFixedThreadPool = Executors.newFixedThreadPool(20);
-    s_logger.info("Resolving portfolio positions and securities...");
+    LOGGER.info("Resolving portfolio positions and securities...");
     Portfolio resolvedPortfolio = PortfolioCompiler.resolvePortfolio(portfolio, newFixedThreadPool, secSource);
     if (resolvedPortfolio == null) {
-      s_logger.error("Portfolio " + portfolioName + " was not correctly resolved by PortfolioCompiler");
+      LOGGER.error("Portfolio " + portfolioName + " was not correctly resolved by PortfolioCompiler");
       System.exit(1);
     }
-    s_logger.info("Resolution Complete.");
+    LOGGER.info("Resolution Complete.");
     PortfolioAggregator aggregator = new PortfolioAggregator(aggregationFunctions);
-    s_logger.info("Beginning aggregation");
+    LOGGER.info("Beginning aggregation");
     Portfolio aggregatedPortfolio = aggregator.aggregate(resolvedPortfolio);
-    s_logger.info("Aggregation complete, about to persist...");
+    LOGGER.info("Aggregation complete, about to persist...");
     if (aggregatedPortfolio == null) {
-      s_logger.error("Portfolio " + portfolioName + " was not correctly aggregated by the Portfolio Aggregator");
+      LOGGER.error("Portfolio " + portfolioName + " was not correctly aggregated by the Portfolio Aggregator");
       System.exit(1);
     }
     SavePortfolio savePortfolio = new SavePortfolio(newFixedThreadPool, portfolioMaster, positionMaster);
@@ -193,14 +193,14 @@ public final class PortfolioAggregator {
         root.addChildNode(portfolioNode);
         Portfolio splitPortfolio = new SimplePortfolio(splitPortfolioName, root);
         splitPortfolio.setAttributes(aggregatedPortfolio.getAttributes());
-        s_logger.info("Saving split portfolio " + portfolioName + "...");
+        LOGGER.info("Saving split portfolio " + portfolioName + "...");
         savePortfolio.savePortfolio(splitPortfolio, true);
       }
 
     } else {
       savePortfolio.savePortfolio(aggregatedPortfolio, true); // update matching named portfolio.
     }
-    s_logger.info("Saved.");
+    LOGGER.info("Saved.");
 
     // Shut down thread pool before returning
     newFixedThreadPool.shutdown();

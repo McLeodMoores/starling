@@ -26,7 +26,7 @@ import com.opengamma.util.tuple.Pair;
  */
 public class BloombergEquityIndexFutureOptionVolatilitySurfaceInstrumentProvider implements SurfaceInstrumentProvider<Pair<Integer, Tenor>, Double> {
   /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(BloombergEquityIndexFutureOptionVolatilitySurfaceInstrumentProvider.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(BloombergEquityIndexFutureOptionVolatilitySurfaceInstrumentProvider.class);
   /** The strike formatter */
   private static final DecimalFormat FORMATTER = new DecimalFormat("##.##");
   /** The expiry rules */
@@ -81,7 +81,7 @@ public class BloombergEquityIndexFutureOptionVolatilitySurfaceInstrumentProvider
     ticker.append(prefix);
     FutureOptionExpiries expiryRule = EXPIRY_RULES.get(prefix); // TODO: Review whether we can hoist from loop in RawVolatilitySurfaceDataFunction.buildDataRequirements
     if (expiryRule == null) {
-      s_logger.info("No expiry rule has been setup for " + prefix + ". Using Default of 3rd Friday.");
+      LOGGER.info("No expiry rule has been setup for " + prefix + ". Using Default of 3rd Friday.");
       expiryRule = EXPIRY_RULES.get("DEFAULT");
     }
     final int nthExpiry = nthOfPeriod.getFirst();

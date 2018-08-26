@@ -31,7 +31,7 @@ import org.springframework.context.Lifecycle;
  */
 public final class TestLifecycle {
 
-  private static final ThreadLocal<TestLifecycle> s_instances = new ThreadLocal<TestLifecycle>();
+  private static final ThreadLocal<TestLifecycle> INSTANCES = new ThreadLocal<TestLifecycle>();
 
   private final List<Lifecycle> _toStop = new ArrayList<Lifecycle>();
 
@@ -39,7 +39,7 @@ public final class TestLifecycle {
   }
 
   private static TestLifecycle instance() {
-    final TestLifecycle instance = s_instances.get();
+    final TestLifecycle instance = INSTANCES.get();
     if (instance != null) {
       return instance;
     } else {
@@ -51,10 +51,10 @@ public final class TestLifecycle {
    * Call at the start of a test.
    */
   public static void begin() {
-    if (s_instances.get() != null) {
+    if (INSTANCES.get() != null) {
       throw new IllegalStateException("Current thread already associated with a test instance");
     }
-    s_instances.set(new TestLifecycle());
+    INSTANCES.set(new TestLifecycle());
   }
 
   /**
@@ -62,7 +62,7 @@ public final class TestLifecycle {
    */
   public static void end() {
     final List<Lifecycle> toStop = instance()._toStop;
-    s_instances.set(null);
+    INSTANCES.set(null);
     for (Lifecycle instance : toStop) {
       if (instance.isRunning()) {
         instance.stop();

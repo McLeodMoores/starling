@@ -30,7 +30,7 @@ import com.opengamma.master.portfolio.PortfolioSearchResult;
 //@Scriptable disabled because this tool basically doesn't work properly and leaves orphaned positions.
 public class PortfolioDeleteTool extends AbstractTool<ToolContext> {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(PortfolioDeleteTool.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(PortfolioDeleteTool.class);
 
   /** Delete portfolio names option flag */
   private static final String PORTFOLIO_NAMES_OPT = "n";
@@ -98,10 +98,10 @@ public class PortfolioDeleteTool extends AbstractTool<ToolContext> {
       if (getCommandLine().hasOption(DELETE_PORTFOLIOS_OPT)) {
         if (getCommandLine().hasOption(WRITE_OPT)) {
           getToolContext().getPortfolioMaster().remove(portfolioDocument.getUniqueId());
-          s_logger.warn("Deleted " + portfolioDocument.getPortfolio().getUniqueId() + 
+          LOGGER.warn("Deleted " + portfolioDocument.getPortfolio().getUniqueId() + 
               " (" + portfolioDocument.getPortfolio().getName() + ")");
         } else {
-          s_logger.warn("Matched " + portfolioDocument.getPortfolio().getUniqueId() + 
+          LOGGER.warn("Matched " + portfolioDocument.getPortfolio().getUniqueId() + 
               " (" + portfolioDocument.getPortfolio().getName() + ")");
         }
       }

@@ -22,10 +22,10 @@ import org.threeten.bp.temporal.TemporalAdjusters;
 public class NextMonthlyExpiryAdjuster implements TemporalAdjuster {
 
   /** An adjuster finding the 3rd Wednesday in a month. May be before or after date */
-  private static final TemporalAdjuster s_dayOfMonth = TemporalAdjusters.dayOfWeekInMonth(3, DayOfWeek.WEDNESDAY);
+  private static final TemporalAdjuster DAY_OF_MONTH = TemporalAdjusters.dayOfWeekInMonth(3, DayOfWeek.WEDNESDAY);
 
   /** An adjuster moving to the next quarter. */
-  private static final TemporalAdjuster s_nextMonthAdjuster = new NextMonthAdjuster();
+  private static final TemporalAdjuster NEXT_MONTH_ADJUSTER = new NextMonthAdjuster();
 
   /** The IMM Expiry months  */
   private final Set<Month> _futureQuarters = EnumSet.of(Month.MARCH, Month.JUNE, Month.SEPTEMBER, Month.DECEMBER);
@@ -34,10 +34,10 @@ public class NextMonthlyExpiryAdjuster implements TemporalAdjuster {
   public Temporal adjustInto(Temporal temporal) {
     LocalDate date = LocalDate.from(temporal);
     if (_futureQuarters.contains(date.getMonth()) &&
-        date.with(s_dayOfMonth).isAfter(date)) { // in a quarter
-      return temporal.with(date.with(s_dayOfMonth));
+        date.with(DAY_OF_MONTH).isAfter(date)) { // in a quarter
+      return temporal.with(date.with(DAY_OF_MONTH));
     } else {
-      return temporal.with(date.with(s_nextMonthAdjuster).with(s_dayOfMonth));
+      return temporal.with(date.with(NEXT_MONTH_ADJUSTER).with(DAY_OF_MONTH));
     }
   }
 

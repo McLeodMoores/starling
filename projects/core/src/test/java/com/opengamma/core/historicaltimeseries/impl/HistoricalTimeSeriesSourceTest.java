@@ -39,7 +39,7 @@ import com.opengamma.util.tuple.Pairs;
 @Test(groups = {TestGroup.INTEGRATION, "ehcache"})  // this fails randomly
 public class HistoricalTimeSeriesSourceTest {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(HistoricalTimeSeriesSourceTest.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(HistoricalTimeSeriesSourceTest.class);
   private static final String ALPHAS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
   private Set<String> _usedIds = new HashSet<String>();
 
@@ -83,7 +83,7 @@ public class HistoricalTimeSeriesSourceTest {
     String id;
     do {
       id = makeRandomId();
-      s_logger.info(id);
+      LOGGER.info(id);
     } while (_usedIds.contains(id));
     _usedIds.add(id);
     return id;

@@ -49,7 +49,7 @@ public class EquityDividendYieldFuturesFunction<T> extends FuturesFunction<T> {
   /** The calculation method name */
   public static final String CALCULATION_METHOD_NAME = "DividendYield";
   /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(EquityDividendYieldFuturesFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(EquityDividendYieldFuturesFunction.class);
 
   /**
    * @param valueRequirementName String describes the value requested
@@ -143,7 +143,7 @@ public class EquityDividendYieldFuturesFunction<T> extends FuturesFunction<T> {
   private String getFundingCurveName(final ValueRequirement desiredValue) {
     final Set<String> fundingCurves = desiredValue.getConstraints().getValues(ValuePropertyNames.CURVE);
     if (fundingCurves == null || fundingCurves.size() != 1) {
-      s_logger.info("Could not find {} requirement. Looking for a default..", ValuePropertyNames.CURVE);
+      LOGGER.info("Could not find {} requirement. Looking for a default..", ValuePropertyNames.CURVE);
       return null;
     }
     final String fundingCurveName = fundingCurves.iterator().next();
@@ -153,7 +153,7 @@ public class EquityDividendYieldFuturesFunction<T> extends FuturesFunction<T> {
   private String getCurveConfigName(final ValueRequirement desiredValue) {
     final Set<String> curveConfigNames = desiredValue.getConstraints().getValues(ValuePropertyNames.CURVE_CALCULATION_CONFIG);
     if (curveConfigNames == null || curveConfigNames.size() != 1) {
-      s_logger.info("Could not find {} requirement. Looking for a default..", ValuePropertyNames.CURVE_CALCULATION_CONFIG);
+      LOGGER.info("Could not find {} requirement. Looking for a default..", ValuePropertyNames.CURVE_CALCULATION_CONFIG);
       return null;
     }
     final String curveConfigName = curveConfigNames.iterator().next();

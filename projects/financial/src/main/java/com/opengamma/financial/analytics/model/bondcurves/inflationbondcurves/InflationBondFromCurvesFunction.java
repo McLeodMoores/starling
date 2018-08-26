@@ -58,7 +58,7 @@ import com.opengamma.util.async.AsynchronousExecution;
  */
 public abstract class InflationBondFromCurvesFunction<S extends InflationIssuerProviderInterface, T> extends AbstractFunction.NonCompiledInvoker {
   /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(InflationBondFromCurvesFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(InflationBondFromCurvesFunction.class);
   /** The value requirement name */
   private final String _valueRequirementName;
   /** The calculator */
@@ -132,7 +132,7 @@ public abstract class InflationBondFromCurvesFunction<S extends InflationIssuerP
       for (final String curveExposureConfig : curveExposureConfigs) {
         final Set<String> curveConstructionConfigurationNames = _instrumentExposuresProvider.getCurveConstructionConfigurationsForConfig(curveExposureConfig, target.getTrade());
         if (curveConstructionConfigurationNames == null) {
-          s_logger.error("Could not get curve construction configuration names for curve exposure configuration called {}", curveExposureConfig);
+          LOGGER.error("Could not get curve construction configuration names for curve exposure configuration called {}", curveExposureConfig);
           return null;
         }
         for (final String curveConstructionConfigurationName : curveConstructionConfigurationNames) {
@@ -148,7 +148,7 @@ public abstract class InflationBondFromCurvesFunction<S extends InflationIssuerP
       requirements.addAll(BondAndBondFutureFunctionUtils.getConversionRequirements(security, timeSeriesResolver));
       return requirements;
     } catch (final Exception e) {
-      s_logger.error(e.getMessage());
+      LOGGER.error(e.getMessage());
       return null;
     }
   }

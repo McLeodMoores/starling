@@ -37,7 +37,7 @@ public final class PrimitivesGridStructure extends MainGridStructure {
           .or(ComputationTargetType.SECURITY);
 
   /** Creates names for the label column in the grid. */
-  private static final ComputationTargetReferenceVisitor<String> s_nameVisitor = new ComputationTargetReferenceVisitor<String>() {
+  private static final ComputationTargetReferenceVisitor<String> NAME_VISITOR = new ComputationTargetReferenceVisitor<String>() {
 
     @Override
     public String visitComputationTargetRequirement(ComputationTargetRequirement requirement) {
@@ -107,7 +107,7 @@ public final class PrimitivesGridStructure extends MainGridStructure {
     }
     List<MainGridStructure.Row> rows = Lists.newArrayList();
     for (ComputationTargetReference targetRef : targetRefs) {
-      rows.add(new Row(targetRef, targetRef.accept(s_nameVisitor)));
+      rows.add(new Row(targetRef, targetRef.accept(NAME_VISITOR)));
     }
     return rows;
   }

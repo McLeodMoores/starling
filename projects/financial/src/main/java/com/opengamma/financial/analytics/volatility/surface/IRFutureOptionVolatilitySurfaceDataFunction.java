@@ -62,7 +62,7 @@ import com.opengamma.util.tuple.Pairs;
  */
 public class IRFutureOptionVolatilitySurfaceDataFunction extends AbstractFunction.NonCompiledInvoker {
   /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(IRFutureOptionVolatilitySurfaceDataFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(IRFutureOptionVolatilitySurfaceDataFunction.class);
 
   private ConfigDBVolatilitySurfaceSpecificationSource _volatilitySurfaceSpecificationSource;
 
@@ -152,7 +152,7 @@ public class IRFutureOptionVolatilitySurfaceDataFunction extends AbstractFunctio
     final VolatilitySurfaceSpecification specification = _volatilitySurfaceSpecificationSource.getSpecification(fullSpecificationName, InstrumentTypeProperties.IR_FUTURE_OPTION, context
         .getComputationTargetResolver().getVersionCorrection());
     if (specification == null) {
-      s_logger.error("Could not get volatility surface specification named {}", fullSpecificationName);
+      LOGGER.error("Could not get volatility surface specification named {}", fullSpecificationName);
       return null;
     }
     final Set<ValueRequirement> requirements = new HashSet<>();
@@ -229,7 +229,7 @@ public class IRFutureOptionVolatilitySurfaceDataFunction extends AbstractFunctio
       final Double[] futureExpiries = futurePrices.getXData();
       final int nFutures = futureExpiries.length;
       if (nFutures == 0) {
-        s_logger.info("No future prices found for surface : " + specification.getName());
+        LOGGER.info("No future prices found for surface : " + specification.getName());
         return null;
       }
       // Loop over strikes
@@ -249,15 +249,15 @@ public class IRFutureOptionVolatilitySurfaceDataFunction extends AbstractFunctio
                 volatilityValues.put(Pairs.of(optionTtm, y / 100.), volatility);
               }
             } catch (final MathException e) {
-              s_logger.info("Could not imply volatility for ({}, {}); error was {}", new Object[] {x, y, e.getMessage() });
+              LOGGER.info("Could not imply volatility for ({}, {}); error was {}", new Object[] {x, y, e.getMessage() });
             } catch (final IllegalArgumentException e) {
-              s_logger.info("Could not imply volatility for ({}, {}); error was {}", new Object[] {x, y, e.getMessage() });
+              LOGGER.info("Could not imply volatility for ({}, {}); error was {}", new Object[] {x, y, e.getMessage() });
             }
           }
         } catch (final IllegalArgumentException e) {
-          s_logger.info("Could not imply volatility for ({}, {}); error was {}", new Object[] {x, y, e.getMessage() });
+          LOGGER.info("Could not imply volatility for ({}, {}); error was {}", new Object[] {x, y, e.getMessage() });
         } catch (final OpenGammaRuntimeException e) {
-          s_logger.info("Could not imply volatility for ({}, {}); error was {}", new Object[] {x, y, e.getMessage() });
+          LOGGER.info("Could not imply volatility for ({}, {}); error was {}", new Object[] {x, y, e.getMessage() });
         }
       }
     }
@@ -298,7 +298,7 @@ public class IRFutureOptionVolatilitySurfaceDataFunction extends AbstractFunctio
     } while (underlyingExpiry < optionTtm && i < nFutures);
 
     if (underlyingExpiry < optionTtm) {
-      s_logger.info("Requesting an option price where the underlying future price isn't available. "
+      LOGGER.info("Requesting an option price where the underlying future price isn't available. "
           + "Either there are too many expiries in VolatilitySurfaceDefinition or too few in the corresponding FuturePriceCurveDefinition");
 
     }

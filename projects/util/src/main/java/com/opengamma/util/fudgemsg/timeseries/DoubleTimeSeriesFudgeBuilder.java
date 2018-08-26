@@ -51,7 +51,7 @@ public class DoubleTimeSeriesFudgeBuilder implements FudgeBuilder<DoubleTimeSeri
   static final DoubleTimeSeriesFudgeBuilder INSTANCE = new DoubleTimeSeriesFudgeBuilder();
 
   @Override
-  public MutableFudgeMsg buildMessage(FudgeSerializer serializer, DoubleTimeSeries<?> object) {
+  public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final DoubleTimeSeries<?> object) {
     final MutableFudgeMsg message = serializer.newMessage();
     message.add(null, 0, FudgeWireType.STRING, DoubleTimeSeries.class.getName()); // we need to stick the class name in so receiver knows.
     if (object instanceof DateDoubleTimeSeries) {
@@ -66,7 +66,7 @@ public class DoubleTimeSeriesFudgeBuilder implements FudgeBuilder<DoubleTimeSeri
     return message;
   }
 
-  void buildMessage(final MutableFudgeMsg message, DateDoubleTimeSeries<?> series) {
+  void buildMessage(final MutableFudgeMsg message, final DateDoubleTimeSeries<?> series) {
     final double[] values = series.valuesArrayFast();
     if (values.length > 0) {
       message.add(DATES, null, FudgeWireType.INT_ARRAY, series.timesArrayFast());
@@ -77,7 +77,7 @@ public class DoubleTimeSeriesFudgeBuilder implements FudgeBuilder<DoubleTimeSeri
     }
   }
 
-  void buildMessage(final MutableFudgeMsg message, PreciseDoubleTimeSeries<?> series) {
+  void buildMessage(final MutableFudgeMsg message, final PreciseDoubleTimeSeries<?> series) {
     final double[] values = series.valuesArrayFast();
     if (values.length > 0) {
       message.add(INSTANTS, null, FudgeWireType.LONG_ARRAY, series.timesArrayFast());
@@ -88,7 +88,7 @@ public class DoubleTimeSeriesFudgeBuilder implements FudgeBuilder<DoubleTimeSeri
     }
   }
 
-  void buildMessage(final MutableFudgeMsg message, ZonedDateTimeDoubleTimeSeries series) {
+  void buildMessage(final MutableFudgeMsg message, final ZonedDateTimeDoubleTimeSeries series) {
     final double[] values = series.valuesArrayFast();
     if (values.length > 0) {
       message.add(INSTANTS, null, FudgeWireType.LONG_ARRAY, series.timesArrayFast());
@@ -114,19 +114,19 @@ public class DoubleTimeSeriesFudgeBuilder implements FudgeBuilder<DoubleTimeSeri
   }
 
   @Override
-  public DoubleTimeSeries<?> buildObject(FudgeDeserializer deserializer, FudgeMsg message) {
+  public DoubleTimeSeries<?> buildObject(final FudgeDeserializer deserializer, final FudgeMsg message) {
     // read old LocalDateDoubleTimeSeries, see OpenGammaFudgeContext
     if (message.getByOrdinal(0).toString().contains("ArrayLocalDateDoubleTimeSeries") || message.getByOrdinal(0).toString().contains("ListLocalDateDoubleTimeSeries") ||
         message.getByOrdinal(0).toString().contains("MapLocalDateDoubleTimeSeries")) {
-      FudgeMsg fastSeries = message.getMessage(2);
-      String encoding = fastSeries.getMessage(1).getString(1);
-      int[] dates = (int[]) fastSeries.getValue(2);
-      double[] values = (double[]) fastSeries.getValue(3);
+      final FudgeMsg fastSeries = message.getMessage(2);
+      final String encoding = fastSeries.getMessage(1).getString(1);
+      final int[] dates = (int[]) fastSeries.getValue(2);
+      final double[] values = (double[]) fastSeries.getValue(3);
       if (encoding.equals("DATE_DDMMYYYY")) { // CSIGNORE
         // correct encoding
       } else if (encoding.equals("DATE_EPOCH_DAYS")) {
         for (int i = 0; i < dates.length; i++) {
-          LocalDate d = LocalDate.ofEpochDay(dates[i]);
+          final LocalDate d = LocalDate.ofEpochDay(dates[i]);
           dates[i] = LocalDateToIntConverter.convertToInt(d);
         }
       } else {
@@ -139,15 +139,15 @@ public class DoubleTimeSeriesFudgeBuilder implements FudgeBuilder<DoubleTimeSeri
     if (message.getByOrdinal(0).toString().contains("ZonedDateTimeDoubleTimeSeries")) {
       ZoneId zone = ZoneOffset.UTC;
       try {
-        FudgeMsg converter = message.getMessage(1);
+        final FudgeMsg converter = message.getMessage(1);
         zone = ZoneId.of(converter.getString(1));
-      } catch (RuntimeException ex) {
+      } catch (final RuntimeException ex) {
         // ignore
       }
-      FudgeMsg fastSeries = message.getMessage(2);
-      String encoding = fastSeries.getMessage(1).getString(1);
-      long[] instants = (long[]) fastSeries.getValue(2);
-      double[] values = (double[]) fastSeries.getValue(3);
+      final FudgeMsg fastSeries = message.getMessage(2);
+      final String encoding = fastSeries.getMessage(1).getString(1);
+      final long[] instants = (long[]) fastSeries.getValue(2);
+      final double[] values = (double[]) fastSeries.getValue(3);
       if (encoding.equals("TIME_EPOCH_NANOS")) { // CSIGNORE
         // correct encoding
       } else if (encoding.equals("TIME_EPOCH_MILLIS")) {
@@ -165,16 +165,16 @@ public class DoubleTimeSeriesFudgeBuilder implements FudgeBuilder<DoubleTimeSeri
     }
 
     // read new format
-    int[] dates = value(message, DATES, EMPTY_INTEGER_ARRAY);
-    long[] instants = value(message, INSTANTS, EMPTY_LONG_ARRAY);
-    double[] values = value(message, VALUES, EMPTY_DOUBLE_ARRAY);
-    String zoneId = message.getString(ZONE);
+    final int[] dates = value(message, DATES, EMPTY_INTEGER_ARRAY);
+    final long[] instants = value(message, INSTANTS, EMPTY_LONG_ARRAY);
+    final double[] values = value(message, VALUES, EMPTY_DOUBLE_ARRAY);
+    final String zoneId = message.getString(ZONE);
     if (dates != null) {
       return ImmutableLocalDateDoubleTimeSeries.of(dates, values);
     }
     if (instants != null) {
       if (zoneId != null) {
-        ZoneId zone = ZoneId.of(zoneId);
+        final ZoneId zone = ZoneId.of(zoneId);
         return ImmutableZonedDateTimeDoubleTimeSeries.of(instants, values, zone);
       } else {
         return ImmutableInstantDoubleTimeSeries.of(instants, values);

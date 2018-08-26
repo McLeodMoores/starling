@@ -16,7 +16,7 @@ import com.opengamma.util.jms.JmsConnector;
  */
 public final class DBMasterComponentUtils {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(DBMasterComponentUtils.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(DBMasterComponentUtils.class);
   
   private DBMasterComponentUtils() {}
   
@@ -33,7 +33,7 @@ public final class DBMasterComponentUtils {
     
     boolean valid = jmsConnector != null && jmsChangeManagerTopic != null;
     if (!valid) {
-      s_logger.warn("Change management for master enabled in {} (classifier '{}') " + 
+      LOGGER.warn("Change management for master enabled in {} (classifier '{}') " + 
              "but not all jms settings present: jmsChangeManagerTopic={}, jmsConnector={}. " + 
              "Will be disabled. Set enableChangeManagement=false to suppress this warning.", 
              cfClazz,

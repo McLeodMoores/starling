@@ -16,7 +16,7 @@ import com.opengamma.engine.value.ValueSpecification;
  */
 /* package */ class BucketedGreekResultCollectionFormatter extends AbstractFormatter<BucketedGreekResultCollection> {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(BucketedGreekResultCollectionFormatter.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(BucketedGreekResultCollectionFormatter.class);
 
   /* package */ BucketedGreekResultCollectionFormatter() {
     super(BucketedGreekResultCollection.class);
@@ -30,7 +30,7 @@ import com.opengamma.engine.value.ValueSpecification;
       double[] uniqueStrikes = strikes[0];
       for (int i = 1; i < strikes.length; i++) {
         if (strikes[i].length != uniqueStrikes.length) {
-          s_logger.warn("Did not have a rectangular bucketed vega surface");
+          LOGGER.warn("Did not have a rectangular bucketed vega surface");
           return FORMATTING_ERROR;
         }
       }

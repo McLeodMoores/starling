@@ -30,7 +30,7 @@ import com.opengamma.util.SingletonFactoryBean;
  */
 public class AnnotationScanningStringListFactoryBean extends SingletonFactoryBean<List<String>> {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(AnnotationScanningStringListFactoryBean.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(AnnotationScanningStringListFactoryBean.class);
   
   private String _cacheFile;
   private String _forceScanSystemProperty;
@@ -68,25 +68,25 @@ public class AnnotationScanningStringListFactoryBean extends SingletonFactoryBea
         ClassPathResource cacheFileResource = new ClassPathResource(getCacheFile());
         if (cacheFileResource.exists()) {
           File cacheFile = cacheFileResource.getFile();
-          s_logger.debug("Getting classes containing annotation {} from cache {}", getAnnotationClassName(), cacheFile.getAbsoluteFile());
+          LOGGER.debug("Getting classes containing annotation {} from cache {}", getAnnotationClassName(), cacheFile.getAbsoluteFile());
           return getFromCache(cacheFile);
         }
       }
-      s_logger.debug("Scanning for classes containing annotation {}", getAnnotationClassName());
+      LOGGER.debug("Scanning for classes containing annotation {}", getAnnotationClassName());
       return new ArrayList<>(getByScanning(getAnnotationClassName()));
     } catch (Exception e) {
-      s_logger.warn("Unable to retrieve classes containing annotation " + getAnnotationClassName(), e);
+      LOGGER.warn("Unable to retrieve classes containing annotation " + getAnnotationClassName(), e);
       return Collections.emptyList();
     }
   }
   
   private boolean shouldForceScan() {
     if (getForceScanSystemProperty() == null) {
-      s_logger.debug("Force scan system property not specified");
+      LOGGER.debug("Force scan system property not specified");
       return false;
     }
     String forceScanPropertyValue = System.getProperty(getForceScanSystemProperty());
-    s_logger.debug("Force scan system property set to '{}'", forceScanPropertyValue);
+    LOGGER.debug("Force scan system property set to '{}'", forceScanPropertyValue);
     return forceScanPropertyValue != null;
   }
 
@@ -117,7 +117,7 @@ public class AnnotationScanningStringListFactoryBean extends SingletonFactoryBea
     for (Class<?> clazz : annotated) {
       annotatedNames.add(clazz.getName());
     }
-    s_logger.debug("Found {} classes containing annotation: {}", annotated.size(), annotated);
+    LOGGER.debug("Found {} classes containing annotation: {}", annotated.size(), annotated);
     return annotatedNames;
   }
 

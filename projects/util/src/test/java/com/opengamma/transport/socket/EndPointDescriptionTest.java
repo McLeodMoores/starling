@@ -28,7 +28,7 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.INTEGRATION)
 public class EndPointDescriptionTest {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(EndPointDescriptionTest.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(EndPointDescriptionTest.class);
 
   private void testEndPoints(boolean bind) throws IOException {
     final AbstractServerSocketProcess server = new AbstractServerSocketProcess() {
@@ -44,7 +44,7 @@ public class EndPointDescriptionTest {
     server.start();
     final FudgeMsg serverEndPoint = server.getEndPointDescription(FudgeContext.GLOBAL_DEFAULT);
     assertNotNull(serverEndPoint);
-    s_logger.info("Server end point {}", serverEndPoint);
+    LOGGER.info("Server end point {}", serverEndPoint);
     final AbstractSocketProcess client = new AbstractSocketProcess() {
 
       @Override
@@ -57,7 +57,7 @@ public class EndPointDescriptionTest {
     client.start();
     final FudgeMsg clientEndPoint = client.getEndPointDescription(FudgeContext.GLOBAL_DEFAULT);
     assertNotNull(clientEndPoint);
-    s_logger.info("Client end point {} ", clientEndPoint);
+    LOGGER.info("Client end point {} ", clientEndPoint);
     assertEquals(serverEndPoint.getString(SocketEndPointDescriptionProvider.TYPE_KEY), clientEndPoint.getString(SocketEndPointDescriptionProvider.TYPE_KEY));
     assertEquals(serverEndPoint.getInt(SocketEndPointDescriptionProvider.PORT_KEY), clientEndPoint.getInt(SocketEndPointDescriptionProvider.PORT_KEY));
     client.stop();
@@ -83,7 +83,7 @@ public class EndPointDescriptionTest {
     server.start();
     final FudgeMsg serverEndPoint = server.getEndPointDescription(FudgeContext.GLOBAL_DEFAULT);
     assertNotNull(serverEndPoint);
-    s_logger.info("Server end point {}", serverEndPoint);
+    LOGGER.info("Server end point {}", serverEndPoint);
     final AbstractSocketProcess client = new AbstractSocketProcess() {
 
       @Override
@@ -95,7 +95,7 @@ public class EndPointDescriptionTest {
     client.start();
     final FudgeMsg clientEndPoint = client.getEndPointDescription(FudgeContext.GLOBAL_DEFAULT);
     assertNotNull(clientEndPoint);
-    s_logger.info("Client end point {} ", clientEndPoint);
+    LOGGER.info("Client end point {} ", clientEndPoint);
     client.stop();
     server.stop();
   }
@@ -114,7 +114,7 @@ public class EndPointDescriptionTest {
     serverEndPointDescriptor.setPort(server.getPortNumber());
     final FudgeMsg serverEndPoint = serverEndPointDescriptor.getEndPointDescription(FudgeContext.GLOBAL_DEFAULT);
     assertNotNull(serverEndPoint);
-    s_logger.info("Server end point {}", serverEndPoint);
+    LOGGER.info("Server end point {}", serverEndPoint);
     final AbstractSocketProcess client = new AbstractSocketProcess() {
 
       @Override
@@ -126,7 +126,7 @@ public class EndPointDescriptionTest {
     client.start();
     final FudgeMsg clientEndPoint = client.getEndPointDescription(FudgeContext.GLOBAL_DEFAULT);
     assertNotNull(clientEndPoint);
-    s_logger.info("Client end point {} ", clientEndPoint);
+    LOGGER.info("Client end point {} ", clientEndPoint);
     client.stop();
     server.stop();
   }

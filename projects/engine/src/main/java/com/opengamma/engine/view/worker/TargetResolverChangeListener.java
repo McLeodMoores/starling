@@ -22,7 +22,7 @@ import com.opengamma.id.ObjectId;
  */
 public abstract class TargetResolverChangeListener implements ChangeListener {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(TargetResolverChangeListener.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(TargetResolverChangeListener.class);
 
   /**
    * Marker for the state of watched targets.
@@ -69,11 +69,11 @@ public abstract class TargetResolverChangeListener implements ChangeListener {
   public boolean isChanged(final ObjectId identifier) {
     TargetState state = _targets.get(identifier);
     if (state == TargetState.WAITING) {
-      s_logger.debug("No change to {}", identifier);
+      LOGGER.debug("No change to {}", identifier);
       return false;
     }
     // Either new, or has changed; set to WAITING and return TRUE
-    s_logger.debug("New or changed identifier {} ({})", identifier, state);
+    LOGGER.debug("New or changed identifier {} ({})", identifier, state);
     _targets.put(identifier, TargetState.WAITING);
     return true;
   }
@@ -134,7 +134,7 @@ public abstract class TargetResolverChangeListener implements ChangeListener {
       if (_targets.replace(oid, state, TargetState.CHANGED)) {
         // If the state changed to anything else, we either don't need the notification or another change message overtook
         // this one and a cycle has already been triggered.
-        s_logger.info("Received change notification for {}", oid);
+        LOGGER.info("Received change notification for {}", oid);
         _hasPending = true;
         onChanged();
       }

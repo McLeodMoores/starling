@@ -30,7 +30,7 @@ import com.opengamma.util.ArgumentChecker;
  *
  */
 public class EquityVarianceSwapDefaults extends DefaultPropertyFunction {
-  private static final Logger s_logger = LoggerFactory.getLogger(EquityVarianceSwapDefaults.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(EquityVarianceSwapDefaults.class);
   private static final String[] VALUE_REQUIREMENTS = new String[] {
     ValueRequirementNames.PRESENT_VALUE
   };
@@ -91,7 +91,7 @@ public class EquityVarianceSwapDefaults extends DefaultPropertyFunction {
       final String propertyName) {
     final String underlyingEquity = EquitySecurityUtils.getIndexOrEquityNameFromUnderlying(target.getSecurity());
     if (!_discountingCurveNames.containsKey(underlyingEquity)) {
-      s_logger.error("Could not get config for underlying equity " + underlyingEquity + "; should never happen");
+      LOGGER.error("Could not get config for underlying equity " + underlyingEquity + "; should never happen");
       return null;
     }
     if (PDEPropertyNamesAndValues.PROPERTY_DISCOUNTING_CURVE_NAME.equals(propertyName)) {
@@ -112,7 +112,7 @@ public class EquityVarianceSwapDefaults extends DefaultPropertyFunction {
     if (ValuePropertyNames.SURFACE.equals(propertyName)) {
       return Collections.singleton(_surfaceNames.get(underlyingEquity));
     }
-    s_logger.error("Could not get default values for " + propertyName);
+    LOGGER.error("Could not get default values for " + propertyName);
     return null;
   }
 

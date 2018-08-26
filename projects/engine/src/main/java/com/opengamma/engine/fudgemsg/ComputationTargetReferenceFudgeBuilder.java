@@ -58,7 +58,7 @@ public class ComputationTargetReferenceFudgeBuilder implements FudgeBuilder<Comp
   private static final String IDENTIFIER_FIELD_NAME = "computationTargetIdentifier";
   private static final String TYPE_FIELD_NAME = "computationTargetType";
 
-  private static final ComputationTargetReferenceVisitor<Object> s_encodeIdentifier = new ComputationTargetReferenceVisitor<Object>() {
+  private static final ComputationTargetReferenceVisitor<Object> ENCODE_IDENTIFIER = new ComputationTargetReferenceVisitor<Object>() {
 
     @Override
     public Object visitComputationTargetRequirement(final ComputationTargetRequirement requirement) {
@@ -76,7 +76,7 @@ public class ComputationTargetReferenceFudgeBuilder implements FudgeBuilder<Comp
     if (object.getParent() != null) {
       encodeIdentifiers(serializer, msg, object.getParent());
     }
-    serializer.addToMessage(msg, IDENTIFIER_FIELD_NAME, null, object.accept(s_encodeIdentifier));
+    serializer.addToMessage(msg, IDENTIFIER_FIELD_NAME, null, object.accept(ENCODE_IDENTIFIER));
   }
 
   public static void buildMessageImpl(final FudgeSerializer serializer, final MutableFudgeMsg msg, final ComputationTargetReference object) {

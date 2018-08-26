@@ -31,7 +31,7 @@ import com.opengamma.util.redis.RedisConnector;
  */
 public class RedisLKVSnapshotter {
   
-  private static final Logger s_logger = LoggerFactory.getLogger(RedisLKVSnapshotter.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(RedisLKVSnapshotter.class);
   
   private final Map<String, Boolean> _dataFieldBlackList = Maps.newHashMap();
   private final Map<String, Boolean> _schemeBlackList = Maps.newHashMap();
@@ -83,10 +83,10 @@ public class RedisLKVSnapshotter {
   }
 
   public Map<ExternalId, Map<String, String>> getLastKnownValues() {
-    s_logger.debug("Reading Redis LKV values for normalizationRuleSetId:{} globalPrefix:{} dataFieldBlackList:{} schemeBlackList:{}", 
+    LOGGER.debug("Reading Redis LKV values for normalizationRuleSetId:{} globalPrefix:{} dataFieldBlackList:{} schemeBlackList:{}", 
         new Object[] {getNormalizationRuleSetId(), getGlobalPrefix(), _dataFieldBlackList.keySet(), _schemeBlackList.keySet()});
     List<ExternalId> allSecurities = getAllSecurities();
-    OperationTimer timer = new OperationTimer(s_logger, "Reading LKV for {} securities", allSecurities.size());
+    OperationTimer timer = new OperationTimer(LOGGER, "Reading LKV for {} securities", allSecurities.size());
     Map<ExternalId, Map<String, String>> result = getLastKnownValues(allSecurities);
     timer.finished();
     return result;
@@ -162,9 +162,9 @@ public class RedisLKVSnapshotter {
     Jedis jedis = jedisPool.getResource();
     Set<String> allMembers = jedis.smembers(generateAllSchemesKey());
     jedisPool.returnResource(jedis);
-    s_logger.info("Loaded {} schemes from Jedis (full contents in Debug level log)", allMembers.size());
-    if (s_logger.isDebugEnabled()) {
-      s_logger.debug("Loaded schemes from Jedis: {}", allMembers);
+    LOGGER.info("Loaded {} schemes from Jedis (full contents in Debug level log)", allMembers.size());
+    if (LOGGER.isDebugEnabled()) {
+      LOGGER.debug("Loaded schemes from Jedis: {}", allMembers);
     }
     return allMembers;
   }
@@ -175,7 +175,7 @@ public class RedisLKVSnapshotter {
       sb.append(getGlobalPrefix());
     }
     sb.append("-<ALL_SCHEMES>");
-    s_logger.debug("AllSchemeKey: {}", sb.toString());
+    LOGGER.debug("AllSchemeKey: {}", sb.toString());
     return sb.toString();
   }
   
@@ -187,7 +187,7 @@ public class RedisLKVSnapshotter {
     sb.append(scheme);
     sb.append("-");
     sb.append("<ALL_IDENTIFIERS>");
-    s_logger.debug("PerSchemeKey: {}", sb.toString());
+    LOGGER.debug("PerSchemeKey: {}", sb.toString());
     return sb.toString();
   }
   
@@ -196,9 +196,9 @@ public class RedisLKVSnapshotter {
     Jedis jedis = jedisPool.getResource();
     Set<String> allMembers = jedis.smembers(generatePerSchemeKey(identifierScheme));
     jedisPool.returnResource(jedis);
-    s_logger.info("Loaded {} identifiers from Jedis (full contents in Debug level log)", allMembers.size());
-    if (s_logger.isDebugEnabled()) {
-      s_logger.debug("Loaded identifiers from Jedis: {}", allMembers);
+    LOGGER.info("Loaded {} identifiers from Jedis (full contents in Debug level log)", allMembers.size());
+    if (LOGGER.isDebugEnabled()) {
+      LOGGER.debug("Loaded identifiers from Jedis: {}", allMembers);
     }
     return allMembers;
   }

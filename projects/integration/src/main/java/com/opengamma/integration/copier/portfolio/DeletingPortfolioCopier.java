@@ -25,7 +25,7 @@ import com.opengamma.util.tuple.ObjectsPair;
  */
 public class DeletingPortfolioCopier implements PortfolioCopier {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(DeletingPortfolioCopier.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(DeletingPortfolioCopier.class);
 
   private SecurityMaster _securityMaster;
   private PositionMaster _positionMaster;
@@ -74,13 +74,13 @@ public class DeletingPortfolioCopier implements PortfolioCopier {
           if (_write) {
             try {
               _positionMaster.remove(next.getFirst().getUniqueId());
-              s_logger.warn("Deleted " + next.getFirst().getUniqueId() + " (" + next.getFirst().getName() + ")");
+              LOGGER.warn("Deleted " + next.getFirst().getUniqueId() + " (" + next.getFirst().getName() + ")");
             } catch (Throwable e) {
               throw new OpenGammaRuntimeException("Could not remove position " + 
                   next.getFirst().getName() + " (" + next.getFirst().getUniqueId().toString() + ")");          
             }
           } else {
-            s_logger.warn("Matched " + next.getFirst().getUniqueId() + " (" + next.getFirst().getName() + ")");
+            LOGGER.warn("Matched " + next.getFirst().getUniqueId() + " (" + next.getFirst().getName() + ")");
           }
         }
         
@@ -90,13 +90,13 @@ public class DeletingPortfolioCopier implements PortfolioCopier {
             if (_write) {
               try {
                 _securityMaster.remove(security.getUniqueId());
-                s_logger.warn("Deleted " + security.getUniqueId() + " (" + security.getName() + ")");
+                LOGGER.warn("Deleted " + security.getUniqueId() + " (" + security.getName() + ")");
               } catch (Throwable e) {
                 throw new OpenGammaRuntimeException("Could not remove security " + 
                     security.getName() + " (" + security.getUniqueId().toString() + ")");          
               }
             } else {
-              s_logger.warn("Matched " + security.getUniqueId() + " (" + security.getName() + ")");            
+              LOGGER.warn("Matched " + security.getUniqueId() + " (" + security.getName() + ")");            
             }
           }
         }

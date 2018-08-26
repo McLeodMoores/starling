@@ -32,7 +32,7 @@ import com.opengamma.util.ArgumentChecker;
 public class HibernateAuditLogger extends AbstractAuditLogger implements Closeable {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(HibernateAuditLogger.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(HibernateAuditLogger.class);
   
   private HibernateTemplate _hibernateTemplate;
 
@@ -149,7 +149,7 @@ public class HibernateAuditLogger extends AbstractAuditLogger implements Closeab
       // If this happens, for now, assume that there was something wrong 
       // with one of the log messages. Therefore do NOT re-insert 
       // the messages into _auditLogCache.
-      s_logger.error("Failed to commit batch to Hibernate", e);
+      LOGGER.error("Failed to commit batch to Hibernate", e);
       if (tx != null) {
         tx.rollback();
       }
@@ -170,12 +170,12 @@ public class HibernateAuditLogger extends AbstractAuditLogger implements Closeab
       try {
         _timer.cancel();
       } catch (Throwable ex) {
-        s_logger.info("Error during timer cancellation", ex);
+        LOGGER.info("Error during timer cancellation", ex);
       }
       try {
         flushCache();
       } catch (Throwable ex) {
-        s_logger.info("Error during flush", ex);
+        LOGGER.info("Error during flush", ex);
       }
     }
   }

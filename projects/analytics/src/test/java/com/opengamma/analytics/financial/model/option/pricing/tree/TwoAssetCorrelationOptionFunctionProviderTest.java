@@ -20,9 +20,9 @@ import com.opengamma.util.test.TestGroup;
  */
 @Test(groups = TestGroup.UNIT)
 public class TwoAssetCorrelationOptionFunctionProviderTest {
-  private static final BivariateNormalDistribution _bivariate = new BivariateNormalDistribution();
-  private static final BinomialTreeOptionPricingModel _model = new BinomialTreeOptionPricingModel();
-  private static final TrinomialTreeOptionPricingModel _modelTri = new TrinomialTreeOptionPricingModel();
+  private static final BivariateNormalDistribution BIVARIATE = new BivariateNormalDistribution();
+  private static final BinomialTreeOptionPricingModel MODEL = new BinomialTreeOptionPricingModel();
+  private static final TrinomialTreeOptionPricingModel MODEL_TRI = new TrinomialTreeOptionPricingModel();
   private static final double SPOT = 105.;
   private static final double[] STRIKES1 = new double[] {95., 105., 115. };
   private static final double TIME = 4.2;
@@ -55,12 +55,12 @@ public class TwoAssetCorrelationOptionFunctionProviderTest {
                 for (final double dividend : DIVIDENDS) {
                   final OptionFunctionProvider2D function = new TwoAssetCorrelationOptionFunctionProvider(strike1, strike2, TIME, nSteps, isCall);
                   double exactDiv = price(SPOT, spot2, strike1, strike2, TIME, vol, sigma2, rho, interest, interest - dividend, interest - div2, isCall);
-                  final double resDiv = _model.getPrice(function, SPOT, spot2, vol, sigma2, rho, interest, dividend, div2);
+                  final double resDiv = MODEL.getPrice(function, SPOT, spot2, vol, sigma2, rho, interest, dividend, div2);
                   final double refDiv = Math.max(exactDiv, 1.) * 0.2;
                   assertEquals(resDiv, exactDiv, refDiv);
 
                   final OptionFunctionProvider2D functionTri = new TwoAssetCorrelationOptionFunctionProvider(strike1, strike2, TIME, nStepsTri, isCall);
-                  final double resDivTri = _modelTri.getPrice(functionTri, SPOT, spot2, vol, sigma2, rho, interest, dividend, div2);
+                  final double resDivTri = MODEL_TRI.getPrice(functionTri, SPOT, spot2, vol, sigma2, rho, interest, dividend, div2);
                   assertEquals(resDivTri, exactDiv, refDiv);
                 }
               }
@@ -113,11 +113,11 @@ public class TwoAssetCorrelationOptionFunctionProviderTest {
                   final double cross = 0.5 * (upForCross - downForCross) / eps;
 
                   final double[] ref = new double[] {price, delta1, delta2, theta, gamma1, gamma2, cross };
-                  final double[] res = _model.getGreeks(function, SPOT, spot2, vol, sigma2, rho, interest, dividend, div2);
+                  final double[] res = MODEL.getGreeks(function, SPOT, spot2, vol, sigma2, rho, interest, dividend, div2);
                   assertGreeks(res, ref, 1.e-1);
 
                   final OptionFunctionProvider2D functionTri = new TwoAssetCorrelationOptionFunctionProvider(strike1, strike2, TIME, nStepsTri, isCall);
-                  final double[] resTri = _modelTri.getGreeks(functionTri, SPOT, spot2, vol, sigma2, rho, interest, dividend, div2);
+                  final double[] resTri = MODEL_TRI.getGreeks(functionTri, SPOT, spot2, vol, sigma2, rho, interest, dividend, div2);
                   /*
                    * asset1 gamma is poorly approximated for cetain data sets
                    */
@@ -206,8 +206,8 @@ public class TwoAssetCorrelationOptionFunctionProviderTest {
     final double sign = isCall ? 1. : -1.;
 
     final double res = sign *
-        (_bivariate.getCDF(new double[] {sign * (y2 + sigmaRootT2), sign * (y1 + cor * sigmaRootT2), cor }) * spot2 * Math.exp((cost2 - interest) * time) - strike2 * Math.exp(-interest * time) *
-            _bivariate.getCDF(new double[] {sign * y2, sign * y1, cor }));
+        (BIVARIATE.getCDF(new double[] {sign * (y2 + sigmaRootT2), sign * (y1 + cor * sigmaRootT2), cor }) * spot2 * Math.exp((cost2 - interest) * time) - strike2 * Math.exp(-interest * time) *
+            BIVARIATE.getCDF(new double[] {sign * y2, sign * y1, cor }));
     return res;
   }
 

@@ -25,7 +25,7 @@ import com.opengamma.engine.value.ValueSpecification;
  */
 public class EquityVanillaBarrierOptionPresentValueFunction extends EquityVanillaBarrierOptionBlackFunction {
   /** The present value calculator */
-  private static final EquityOptionBlackPresentValueCalculator s_calculator = EquityOptionBlackPresentValueCalculator.getInstance();
+  private static final EquityOptionBlackPresentValueCalculator CALCULATOR = EquityOptionBlackPresentValueCalculator.getInstance();
 
   /**
    * Default constructor
@@ -40,7 +40,7 @@ public class EquityVanillaBarrierOptionPresentValueFunction extends EquityVanill
     final ValueSpecification resultSpec = new ValueSpecification(getValueRequirementNames()[0], targetSpec, resultProperties);
     double pv = 0.0;
     for (final EquityIndexOption derivative : vanillaOptions) {
-      pv += s_calculator.visitEquityIndexOption(derivative, market);
+      pv += CALCULATOR.visitEquityIndexOption(derivative, market);
     }
     return Collections.singleton(new ComputedValue(resultSpec, pv));
   }

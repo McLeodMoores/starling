@@ -54,7 +54,7 @@ import com.opengamma.util.tuple.Pair;
  */
 /* package */class SingleComputationCycleExecutor implements DependencyGraphExecutionFuture.Listener {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(SingleComputationCycleExecutor.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(SingleComputationCycleExecutor.class);
 
   private abstract static class Event {
 
@@ -72,7 +72,7 @@ import com.opengamma.util.tuple.Pair;
 
     @Override
     public void run(final SingleComputationCycleExecutor executor) {
-      s_logger.info("Execution of {} complete", _calculationConfiguration);
+      LOGGER.info("Execution of {} complete", _calculationConfiguration);
       final ExecutingCalculationConfiguration calcConfig = executor._executing.remove(_calculationConfiguration);
 
       if (calcConfig != null) {
@@ -99,7 +99,7 @@ import com.opengamma.util.tuple.Pair;
 
     @Override
     public void run(final SingleComputationCycleExecutor executor) {
-      s_logger.debug("Execution of {} complete", _job);
+      LOGGER.debug("Execution of {} complete", _job);
       executor.buildResults(_job, _jobResult);
     }
 
@@ -170,11 +170,11 @@ import com.opengamma.util.tuple.Pair;
   public void execute() throws InterruptedException {
     final DependencyGraphExecutor executor = getCycle().getViewProcessContext().getDependencyGraphExecutorFactory().createExecutor(getCycle());
     for (final String calcConfigurationName : getCycle().getAllCalculationConfigurationNames()) {
-      s_logger.info("Executing plans for calculation configuration {}", calcConfigurationName);
+      LOGGER.info("Executing plans for calculation configuration {}", calcConfigurationName);
       final DependencyGraph depGraph = getCycle().getDependencyGraph(calcConfigurationName);
       final Set<ValueSpecification> sharedData = getCycle().getSharedValues(calcConfigurationName);
       final Map<ValueSpecification, FunctionParameters> parameters = getCycle().createFunctionParameters(calcConfigurationName);
-      s_logger.info("Submitting {} for execution by {}", depGraph, executor);
+      LOGGER.info("Submitting {} for execution by {}", depGraph, executor);
       final DependencyGraphExecutionFuture future = executor.execute(depGraph, sharedData, parameters);
       _executing.put(calcConfigurationName, new ExecutingCalculationConfiguration(getCycle(), depGraph, future));
       future.setListener(this);
@@ -191,15 +191,15 @@ import com.opengamma.util.tuple.Pair;
         }
         if (_issueFragmentResults) {
           if (_executing.isEmpty()) {
-            s_logger.info("Discarding fragment completion message - overall execution is complete");
+            LOGGER.info("Discarding fragment completion message - overall execution is complete");
           } else {
-            s_logger.debug("Building result fragment");
+            LOGGER.debug("Building result fragment");
             final InMemoryViewComputationResultModel fragmentResultModel = getCycle().constructTemplateResultModel();
             final InMemoryViewComputationResultModel fullResultModel = getCycle().getResultModel();
             for (ExecutingCalculationConfiguration calcConfig : _executing.values()) {
               calcConfig.buildResults(fragmentResultModel, fullResultModel);
             }
-            s_logger.info("Fragment execution complete");
+            LOGGER.info("Fragment execution complete");
             // TODO: Populate the calculation duration with information from the component jobs
             fragmentResultModel.setCalculationTime(Instant.now());
             getCycle().notifyFragmentCompleted(fragmentResultModel);
@@ -244,7 +244,7 @@ import com.opengamma.util.tuple.Pair;
     final String calculationConfiguration = jobResult.getSpecification().getCalcConfigName();
     final ExecutingCalculationConfiguration calcConfig = _executing.get(calculationConfiguration);
     if (calcConfig == null) {
-      s_logger.warn("Job fragment result for already completed configuration {}", calculationConfiguration);
+      LOGGER.warn("Job fragment result for already completed configuration {}", calculationConfiguration);
       return;
     }
     final DependencyGraph graph = calcConfig.getDependencyGraph();

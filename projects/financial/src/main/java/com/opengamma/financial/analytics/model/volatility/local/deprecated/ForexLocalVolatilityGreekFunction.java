@@ -53,6 +53,7 @@ import com.opengamma.financial.security.FinancialSecurityTypes;
 import com.opengamma.financial.security.option.FXOptionSecurity;
 import com.opengamma.util.money.Currency;
 
+// CSOFF
 /**
  * @deprecated Deprecated
  */
@@ -62,7 +63,7 @@ public class ForexLocalVolatilityGreekFunction extends AbstractFunction.NonCompi
   private static final Map<String, Greek> s_greekNamesToGreeks;
 
   static {
-    s_greekNamesToGreeks = new HashMap<String, Greek>();
+    s_greekNamesToGreeks = new HashMap<>();
     s_greekNamesToGreeks.put(ValueRequirementNames.LOCAL_VOLATILITY_DELTA, PDEResultCollection.GRID_DELTA);
     s_greekNamesToGreeks.put(ValueRequirementNames.LOCAL_VOLATILITY_DUAL_DELTA, PDEResultCollection.GRID_DUAL_DELTA);
     s_greekNamesToGreeks.put(ValueRequirementNames.LOCAL_VOLATILITY_DUAL_GAMMA, PDEResultCollection.GRID_DUAL_GAMMA);
@@ -99,7 +100,7 @@ public class ForexLocalVolatilityGreekFunction extends AbstractFunction.NonCompi
     final String spaceGridBunching = desiredValue.getConstraint(PROPERTY_SPACE_GRID_BUNCHING);
     final String maxMoneyness = desiredValue.getConstraint(PROPERTY_MAX_MONEYNESS);
     final String pdeDirection = desiredValue.getConstraint(PROPERTY_PDE_DIRECTION);
-    if (!(pdeDirection.equals(LocalVolatilityPDEValuePropertyNames.FORWARD_PDE))) {
+    if (!pdeDirection.equals(LocalVolatilityPDEValuePropertyNames.FORWARD_PDE)) {
       throw new OpenGammaRuntimeException("Can only use forward PDE; should never ask for this direction: " + pdeDirection);
     }
     final ValueRequirement gridGreekRequirement = getGridGreeksRequirement(target, surfaceName, surfaceType, xAxis, yAxis, yAxisType,
@@ -113,7 +114,7 @@ public class ForexLocalVolatilityGreekFunction extends AbstractFunction.NonCompi
     final double strike = getStrike(fxOption, currencyPair);
     final PDEResultCollection gridGreeks = (PDEResultCollection) gridGreeksObject;
     final ComputationTargetSpecification spec = target.toSpecification();
-    final Set<ComputedValue> result = new HashSet<ComputedValue>();
+    final Set<ComputedValue> result = new HashSet<>();
     for (final ValueRequirement value : desiredValues) {
       final Greek greek = s_greekNamesToGreeks.get(value.getValueName());
       final String strikeInterpolatorName = value.getConstraint(PROPERTY_RESULT_STRIKE_INTERPOLATOR);
@@ -134,7 +135,7 @@ public class ForexLocalVolatilityGreekFunction extends AbstractFunction.NonCompi
 
   @Override
   public Set<ValueSpecification> getResults(final FunctionCompilationContext context, final ComputationTarget target) {
-    final Set<ValueSpecification> results = new HashSet<ValueSpecification>();
+    final Set<ValueSpecification> results = new HashSet<>();
     final ValueProperties properties = createValueProperties()
         .withAny(InstrumentTypeProperties.PROPERTY_SURFACE_INSTRUMENT_TYPE) //TODO can be more specific?
         .with(ValuePropertyNames.CALCULATION_METHOD, LocalVolatilityPDEValuePropertyNames.LOCAL_VOLATILITY_METHOD)
@@ -392,7 +393,7 @@ public class ForexLocalVolatilityGreekFunction extends AbstractFunction.NonCompi
     final ComputationTargetSpecification specification = target.toSpecification();
     final ValueProperties properties = getResultProperties(surfaceName, surfaceType, xAxis, yAxis, yAxisType, forwardCurveCalculationMethod, h,
         forwardCurveName, theta, timeSteps, spaceSteps, timeGridBunching, spaceGridBunching, maxMoneyness, pdeDirection);
-    final Set<ValueSpecification> results = new HashSet<ValueSpecification>();
+    final Set<ValueSpecification> results = new HashSet<>();
     for (final String requirement : s_greekNamesToGreeks.keySet()) {
       results.add(new ValueSpecification(requirement, specification, properties));
     }

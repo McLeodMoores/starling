@@ -30,12 +30,12 @@ import com.opengamma.util.test.TestGroup;
 public class QueryConfigDbConfigMasterWorkerSearchTest extends AbstractDbConfigMasterWorkerTest {
   // superclass sets up dummy database
 
-  private static final Logger s_logger = LoggerFactory.getLogger(QueryConfigDbConfigMasterWorkerSearchTest.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(QueryConfigDbConfigMasterWorkerSearchTest.class);
 
   @Factory(dataProvider = "databases", dataProviderClass = DbTest.class)
   public QueryConfigDbConfigMasterWorkerSearchTest(String databaseType, String databaseVersion) {
     super(databaseType, databaseVersion, true);
-    s_logger.info("running testcases for {}", databaseType);
+    LOGGER.info("running testcases for {}", databaseType);
   }
   
   //-------------------------------------------------------------------------

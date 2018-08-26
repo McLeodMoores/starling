@@ -27,10 +27,10 @@ import com.opengamma.engine.value.ValueSpecification;
  */
 /*package*/ class FudgeMsgFormatter extends AbstractFormatter<FudgeMsg> {
 
-  private static final Comparator<FudgeField> s_nameComparator;
+  private static final Comparator<FudgeField> NAME_COMPARATOR;
 
   static {
-    s_nameComparator = new Comparator<FudgeField>() {
+    NAME_COMPARATOR = new Comparator<FudgeField>() {
       @Override
       public int compare(final FudgeField msg1, final FudgeField msg2) {
         return msg1.getName().compareTo(msg2.getName());
@@ -50,7 +50,7 @@ import com.opengamma.engine.value.ValueSpecification;
         // Sorting fields to ensure a consistent order for display purposes.
         // This could change the meaning of the Fudge message so assumes no repeated fields.
         final List<FudgeField> orderedFields = new ArrayList<FudgeField>(msg.getAllFields());
-        Collections.sort(orderedFields, s_nameComparator);
+        Collections.sort(orderedFields, NAME_COMPARATOR);
         for (final FudgeField field : orderedFields) {
           final List<String> row = Lists.newArrayListWithCapacity(2);
           row.add(field.getType().getJavaType().getSimpleName());

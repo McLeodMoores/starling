@@ -34,7 +34,7 @@ import com.opengamma.financial.analytics.model.black.BlackDiscountingPositionDel
 @Deprecated
 public class InterestRateFutureOptionBlackPositionDeltaFunction extends InterestRateFutureOptionBlackFunction {
   /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(InterestRateFutureOptionBlackPositionDeltaFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(InterestRateFutureOptionBlackPositionDeltaFunction.class);
   /** The calculator to compute the delta value */
   private static final PresentValueBlackDeltaForTransactionCalculator CALCULATOR = PresentValueBlackDeltaForTransactionCalculator.getInstance();
 
@@ -51,7 +51,7 @@ public class InterestRateFutureOptionBlackPositionDeltaFunction extends Interest
     final ValueProperties constraints = desiredValue.getConstraints();
     final Set<String> scale = constraints.getValues(ValuePropertyNames.SCALE);
     if (scale == null || scale.size() != 1) {
-      s_logger.info("Could not find {} requirement. Looking for a default..", ValuePropertyNames.SCALE);
+      LOGGER.info("Could not find {} requirement. Looking for a default..", ValuePropertyNames.SCALE);
       return null;
     }
     // Then get typical requirements

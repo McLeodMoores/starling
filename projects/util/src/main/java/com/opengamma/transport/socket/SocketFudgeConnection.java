@@ -32,7 +32,7 @@ import com.opengamma.util.TerminatableJob;
  */
 public class SocketFudgeConnection extends AbstractSocketProcess implements FudgeConnection {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(SocketFudgeConnection.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(SocketFudgeConnection.class);
 
   private final FudgeContext _fudgeContext;
   private final ExecutorService _executorService;
@@ -81,9 +81,9 @@ public class SocketFudgeConnection extends AbstractSocketProcess implements Fudg
         _writer.write(message);
       } catch (FudgeRuntimeIOException e) {
         if (exceptionForcedByClose(e.getCause())) {
-          s_logger.info("Connection terminated - message not sent");
+          LOGGER.info("Connection terminated - message not sent");
         } else {
-          s_logger.warn("I/O exception during send - {} - stopping socket to flush error", e.getCause().getMessage());
+          LOGGER.warn("I/O exception during send - {} - stopping socket to flush error", e.getCause().getMessage());
           stop();
           notifyConnectionFailed(e);
         }
@@ -158,16 +158,16 @@ public class SocketFudgeConnection extends AbstractSocketProcess implements Fudg
           envelope = reader.nextMessageEnvelope();
         } catch (FudgeRuntimeIOException e) {
           if (exceptionForcedByClose(e.getCause())) {
-            s_logger.info("Connection terminated");
+            LOGGER.info("Connection terminated");
           } else {
-            s_logger.warn("I/O exception during recv - {} - stopping socket to flush error", e.getCause());
+            LOGGER.warn("I/O exception during recv - {} - stopping socket to flush error", e.getCause());
             stop();
             notifyConnectionFailed(e);
           }
           return;
         }
         if (envelope == null) {
-          s_logger.info("Nothing available on stream. Terminating connection");
+          LOGGER.info("Nothing available on stream. Terminating connection");
           stop();
           return;
         }
@@ -190,7 +190,7 @@ public class SocketFudgeConnection extends AbstractSocketProcess implements Fudg
         try {
           receiver.messageReceived(_fudgeContext, envelope);
         } catch (Exception e) {
-          s_logger.warn("Unable to dispatch message to receiver", e);
+          LOGGER.warn("Unable to dispatch message to receiver", e);
         }
       }
 
@@ -235,7 +235,7 @@ public class SocketFudgeConnection extends AbstractSocketProcess implements Fudg
       try {
         stateListener.connectionFailed(SocketFudgeConnection.this, e);
       } catch (Exception e2) {
-        s_logger.warn("Error notifying state listener of connection failure", e2);
+        LOGGER.warn("Error notifying state listener of connection failure", e2);
       }
     }
   }

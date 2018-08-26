@@ -27,7 +27,7 @@ import com.opengamma.util.ArgumentChecker;
 public class MarketDataDistributor {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(MarketDataDistributor.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(MarketDataDistributor.class);
 
   /**
    * What data should be distributed, how and where.
@@ -217,7 +217,7 @@ public class MarketDataDistributor {
     try {
       normalizedMsg = normalize(liveDataFields);
     } catch (RuntimeException e) {
-      s_logger.error("Normalizing " + liveDataFields + " to " + this + " failed.", e);
+      LOGGER.error("Normalizing " + liveDataFields + " to " + this + " failed.", e);
       return;
     }
     
@@ -229,20 +229,20 @@ public class MarketDataDistributor {
           getDistributionSpec().getFullyQualifiedLiveDataSpecification(),
           normalizedMsg);
       
-      s_logger.debug("{}: Sending Live Data update {}", this, data);
+      LOGGER.debug("{}: Sending Live Data update {}", this, data);
       
       for (MarketDataSender sender : _marketDataSenders) {
         try {
           sender.sendMarketData(data);
         } catch (RuntimeException e) {
-          s_logger.error(sender + " failed", e);
+          LOGGER.error(sender + " failed", e);
         }
       }
       
       _numMessagesSent.incrementAndGet();
     
     } else {
-      s_logger.debug("{}: Not sending Live Data update (message extinguished).", this);
+      LOGGER.debug("{}: Not sending Live Data update (message extinguished).", this);
     }
   }
 

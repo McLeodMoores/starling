@@ -28,7 +28,7 @@ import com.opengamma.analytics.financial.model.option.definition.SABRInterestRat
 import com.opengamma.analytics.financial.model.option.definition.SABRInterestRateDataBundle;
 import com.opengamma.analytics.financial.provider.description.interestrate.ParameterProviderInterface;
 import com.opengamma.util.tuple.DoublesPair;
-
+//CSOFF
 /**
  * Present value curve sensitivity calculator for interest rate instruments using SABR volatility formula.
  * @deprecated Use the calculators that reference {@link ParameterProviderInterface}

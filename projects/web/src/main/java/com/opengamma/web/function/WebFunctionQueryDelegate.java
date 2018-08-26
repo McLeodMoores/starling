@@ -31,7 +31,7 @@ import com.opengamma.engine.function.config.StaticFunctionConfiguration;
  */
 class WebFunctionQueryDelegate {
 
-  private static final Pattern s_simpleName = Pattern.compile("([^\\.]+)$");
+  private static final Pattern SIMPLE_NAME = Pattern.compile("([^\\.]+)$");
 
   private final FunctionConfigurationSource _functionConfigurationSource;
 
@@ -61,7 +61,7 @@ class WebFunctionQueryDelegate {
       StaticFunctionConfiguration config = ((StaticFunctionConfiguration) input);
       String fullName = config.getDefinitionClassName();
 
-      Matcher matcher = s_simpleName.matcher(fullName);
+      Matcher matcher = SIMPLE_NAME.matcher(fullName);
       String simpleName = matcher.find() ? matcher.group(1) : "Unknown";
 
       WebFunctionTypeDetails typeDetails = new WebFunctionTypeDetails();

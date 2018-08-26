@@ -48,7 +48,7 @@ import com.opengamma.util.tuple.Pairs;
  */
 public class TwoStateMarkovChainFitter {
   /** A logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(TwoStateMarkovChainFitter.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(TwoStateMarkovChainFitter.class);
   /** The Black implied volatility calculator */
   private static final BlackImpliedVolatilityFormula BLACK_IMPLIED_VOL = new BlackImpliedVolatilityFormula();
   /** The interpolator */
@@ -191,7 +191,7 @@ public class TwoStateMarkovChainFitter {
           try {
             modVols[i] = GRID_INTERPOLATOR2D.interpolate(dataBundle, tk);
           } catch (final Exception e) {
-            s_logger.error(e.getMessage());
+            LOGGER.error(e.getMessage());
           }
         }
         return new DoubleMatrix1D(modVols);
@@ -243,7 +243,7 @@ public class TwoStateMarkovChainFitter {
               final Pair<double[], Double> pair = Pairs.of(new double[] {prices.getTimeValue(i), prices.getSpaceValue(j)}, impVol);
               out.add(pair);
             } catch (final Exception e) {
-              s_logger.error("can't find vol for strike: " + prices.getSpaceValue(j) + " and expiry " + prices.getTimeValue(i) + " . Not added to data set");
+              LOGGER.error("can't find vol for strike: " + prices.getSpaceValue(j) + " and expiry " + prices.getTimeValue(i) + " . Not added to data set");
             }
           }
         }

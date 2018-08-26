@@ -30,7 +30,7 @@ import com.opengamma.scripts.Scriptable;
 public class MarketDataSnapshotExportTool extends AbstractTool<ToolContext> {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(MarketDataSnapshotExportTool.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(MarketDataSnapshotExportTool.class);
 
   /** File name option flag */
   private static final String FILE_NAME_OPTION = "f";
@@ -76,7 +76,7 @@ public class MarketDataSnapshotExportTool extends AbstractTool<ToolContext> {
   private static SnapshotReader constructSnapshotReader(UniqueId uniqueId) {
     MarketDataSnapshotMaster marketDataSnapshotMaster = s_context.getMarketDataSnapshotMaster();
     if (marketDataSnapshotMaster == null) {
-      s_logger.warn("No market data snapshot masters found at {}", s_context);
+      LOGGER.warn("No market data snapshot masters found at {}", s_context);
 
     }
     return new MasterSnapshotReader(uniqueId, marketDataSnapshotMaster);
@@ -85,7 +85,7 @@ public class MarketDataSnapshotExportTool extends AbstractTool<ToolContext> {
   private static SnapshotWriter constructSnapshotWriter(String filename) {
     MarketDataSnapshotMaster marketDataSnapshotMaster = s_context.getMarketDataSnapshotMaster();
     if (marketDataSnapshotMaster == null) {
-      s_logger.warn("No market data snapshot masters found at {}", s_context);
+      LOGGER.warn("No market data snapshot masters found at {}", s_context);
     }
 
     if (SheetFormat.of(filename) == SheetFormat.CSV) {

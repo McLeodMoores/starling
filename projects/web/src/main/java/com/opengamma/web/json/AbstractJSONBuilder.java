@@ -21,22 +21,22 @@ import com.opengamma.util.fudgemsg.OpenGammaFudgeContext;
  */
 public abstract class AbstractJSONBuilder<T> implements JSONBuilder<T> {
 
-  private static final FudgeContext s_fudgeContext = OpenGammaFudgeContext.getInstance();
+  private static final FudgeContext FUDGE_CONTEXT = OpenGammaFudgeContext.getInstance();
 
   protected <E> E fromJSON(final Class<E> clazz, final String json) {
     final FudgeMsg fudgeMsg = toFudgeMsg(json);
-    return new FudgeDeserializer(s_fudgeContext).fudgeMsgToObject(clazz, fudgeMsg);
+    return new FudgeDeserializer(FUDGE_CONTEXT).fudgeMsgToObject(clazz, fudgeMsg);
   }
 
   private FudgeMsg toFudgeMsg(final String json) {
-    final FudgeMsgJSONReader fudgeJSONReader = new FudgeMsgJSONReader(s_fudgeContext, new StringReader(json));
+    final FudgeMsgJSONReader fudgeJSONReader = new FudgeMsgJSONReader(FUDGE_CONTEXT, new StringReader(json));
     return fudgeJSONReader.readMessage();
   }
 
   public static String fudgeToJson(final Object configObj) {
-    final FudgeMsg fudgeMsg = s_fudgeContext.toFudgeMsg(configObj).getMessage();
+    final FudgeMsg fudgeMsg = FUDGE_CONTEXT.toFudgeMsg(configObj).getMessage();
     final StringWriter sw = new StringWriter();
-    try (FudgeMsgJSONWriter fudgeJSONWriter = new FudgeMsgJSONWriter(s_fudgeContext, sw)) {
+    try (FudgeMsgJSONWriter fudgeJSONWriter = new FudgeMsgJSONWriter(FUDGE_CONTEXT, sw)) {
       fudgeJSONWriter.writeMessage(fudgeMsg);
       return sw.toString();
     }

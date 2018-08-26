@@ -55,7 +55,7 @@ import com.opengamma.util.money.Currency;
 public abstract class SimpleFutureFunction extends NonCompiledInvoker {
   /** Calculation method name */
   public static final String MARKET_METHOD = "Market";
-  private static final Logger s_logger = LoggerFactory.getLogger(SimpleFutureFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(SimpleFutureFunction.class);
   private static final FutureSecurityConverter CONVERTER = new FutureSecurityConverter();
   private final String _valueRequirementName;
 
@@ -143,7 +143,7 @@ public abstract class SimpleFutureFunction extends NonCompiledInvoker {
     final ExternalIdBundle idBundle = security.getExternalIdBundle();
     final HistoricalTimeSeriesResolutionResult timeSeries = resolver.resolve(security.getExternalIdBundle(), null, null, null, MarketDataRequirementNames.MARKET_VALUE, null);
     if (timeSeries == null) {
-      s_logger.warn("Failed to find time series for: " + idBundle.toString());
+      LOGGER.warn("Failed to find time series for: " + idBundle.toString());
       return null;
     }
     return HistoricalTimeSeriesFunctionUtils.createHTSRequirement(timeSeries, MarketDataRequirementNames.MARKET_VALUE,

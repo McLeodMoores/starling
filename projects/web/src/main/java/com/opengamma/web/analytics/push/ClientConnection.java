@@ -36,7 +36,7 @@ import com.opengamma.web.analytics.rest.MasterType;
  */
 public class ClientConnection implements ChangeListener, MasterChangeListener, UpdateListener {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(ClientConnection.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ClientConnection.class);
   
   /** Login ID of the user that owns this connection TODO this isn't used yet */
   private final String _userId;
@@ -73,7 +73,7 @@ public class ClientConnection implements ChangeListener, MasterChangeListener, U
     ArgumentChecker.notNull(listener, "listener");
     ArgumentChecker.notNull(clientId, "clientId");
     ArgumentChecker.notNull(timeoutTask, "timeoutTask");
-    s_logger.debug("Creating new client connection. userId: {}, clientId: {}", userId, clientId);
+    LOGGER.debug("Creating new client connection. userId: {}, clientId: {}", userId, clientId);
     _userId = userId;
     _listener = listener;
     _clientId = clientId;
@@ -91,7 +91,7 @@ public class ClientConnection implements ChangeListener, MasterChangeListener, U
    * Disconnects this client.
    */
   /* package */ void disconnect() {
-    s_logger.debug("Disconnecting client connection, userId: {}, clientId: {}", _userId, _clientId);
+    LOGGER.debug("Disconnecting client connection, userId: {}, clientId: {}", _userId, _clientId);
     synchronized (_lock) {
       _connected = false;
       _timeoutTask.cancel();
@@ -99,7 +99,7 @@ public class ClientConnection implements ChangeListener, MasterChangeListener, U
         try {
           listener.clientDisconnected();
         } catch (Exception e) {
-          s_logger.warn("Problem calling disconnection listener", e);
+          LOGGER.warn("Problem calling disconnection listener", e);
         }
       }
     }
@@ -114,7 +114,7 @@ public class ClientConnection implements ChangeListener, MasterChangeListener, U
   /* package */ void subscribe(UniqueId uid, String url) {
     ArgumentChecker.notNull(uid, "uid");
     ArgumentChecker.notNull(url, "url");
-    s_logger.debug("Client ID {} subscribing for changes to {}, URL: {}", new Object[]{_clientId, uid, url});
+    LOGGER.debug("Client ID {} subscribing for changes to {}, URL: {}", new Object[]{_clientId, uid, url});
     synchronized (_lock) {
       _timeoutTask.reset();
       ObjectId objectId = uid.getObjectId();
@@ -125,7 +125,7 @@ public class ClientConnection implements ChangeListener, MasterChangeListener, U
 
   @Override
   public void entityChanged(ChangeEvent event) {
-    s_logger.debug("Received ChangeEvent {}", event);
+    LOGGER.debug("Received ChangeEvent {}", event);
     synchronized (_lock) {
       ObjectId objectId = event.getObjectId();      
       Collection<String> urls = _entityUrls.removeAll(objectId);
@@ -146,7 +146,7 @@ public class ClientConnection implements ChangeListener, MasterChangeListener, U
   /* package */ void subscribe(MasterType masterType, String url) {
     ArgumentChecker.notNull(masterType, "masterType");
     ArgumentChecker.notNull(url, "url");
-    s_logger.debug("Subscribing to notifications for changes to {} master, notification URL: {}", masterType, url);
+    LOGGER.debug("Subscribing to notifications for changes to {} master, notification URL: {}", masterType, url);
     synchronized (_lock) {
       _timeoutTask.reset();
       _masterUrls.put(masterType, url);
@@ -156,7 +156,7 @@ public class ClientConnection implements ChangeListener, MasterChangeListener, U
 
   @Override
   public void masterChanged(MasterType masterType) {
-    s_logger.debug("Received notification {} master changed", masterType);
+    LOGGER.debug("Received notification {} master changed", masterType);
     synchronized (_lock) {
       Collection<String> urls = _masterUrls.removeAll(masterType);
       removeSubscriptions(urls);

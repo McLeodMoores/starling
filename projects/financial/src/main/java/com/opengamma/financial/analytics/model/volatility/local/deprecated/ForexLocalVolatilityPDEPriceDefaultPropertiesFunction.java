@@ -17,7 +17,7 @@ import com.opengamma.financial.analytics.OpenGammaFunctionExclusions;
 import com.opengamma.financial.property.DefaultPropertyFunction;
 import com.opengamma.financial.security.FinancialSecurityTypes;
 import com.opengamma.util.ArgumentChecker;
-
+// CSOFF
 /**
  *
  * @deprecated Deprecated

@@ -29,8 +29,8 @@ import com.google.common.collect.Maps;
  */
 public class ValueTypes {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(ValueTypes.class);
-  private static final Map<String, Class<?>> s_valueNameToType = Maps.newHashMap();
+  private static final Logger LOGGER = LoggerFactory.getLogger(ValueTypes.class);
+  private static final Map<String, Class<?>> VALUE_NAME_TO_TYPE = Maps.newHashMap();
 
   static {
     BufferedReader reader = null;
@@ -49,13 +49,13 @@ public class ValueTypes {
         try {
           valueType = Class.forName(className);
         } catch (ClassNotFoundException e) {
-          s_logger.warn("Failed to load class " + className, e);
+          LOGGER.warn("Failed to load class " + className, e);
           continue;
         }
-        s_valueNameToType.put(valueName, valueType);
+        VALUE_NAME_TO_TYPE.put(valueName, valueType);
       }
     } catch (IOException e) {
-      s_logger.warn("Failed to load type mappings for value names", e);
+      LOGGER.warn("Failed to load type mappings for value names", e);
     } finally {
       IOUtils.closeQuietly(reader);
     }
@@ -95,6 +95,6 @@ public class ValueTypes {
   }*/
 
   public static Class<?> getTypeForValueName(String valueName) {
-    return s_valueNameToType.get(valueName);
+    return VALUE_NAME_TO_TYPE.get(valueName);
   }
 }

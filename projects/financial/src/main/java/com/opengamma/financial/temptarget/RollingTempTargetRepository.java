@@ -29,7 +29,7 @@ import com.opengamma.util.async.AbstractHousekeeper;
  */
 public abstract class RollingTempTargetRepository implements TempTargetRepository {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(RollingTempTargetRepository.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(RollingTempTargetRepository.class);
 
   // Note that the temp targets can be a bottleneck during graph construction if used heavily. If there are multiple nodes involved
   // in graph construction (e.g. multiple view processors) then it might make sense to have a repository on each one which gets used
@@ -180,25 +180,25 @@ public abstract class RollingTempTargetRepository implements TempTargetRepositor
     final List<Long> deletes = new LinkedList<Long>();
     _shared.lock();
     try {
-      s_logger.info("Copying live objects to new generation");
+      LOGGER.info("Copying live objects to new generation");
       if (!copyOldToNewGeneration(System.nanoTime() - _ttlPeriod, deletes)) {
-        s_logger.info("Skipping housekeep operation");
+        LOGGER.info("Skipping housekeep operation");
         assert deletes.isEmpty();
         return;
       }
     } finally {
       _shared.unlock();
     }
-    s_logger.info("Evicted {} dead objects", deletes.size());
+    LOGGER.info("Evicted {} dead objects", deletes.size());
     _exclusive.lock();
     try {
-      s_logger.info("Creating new generation");
+      LOGGER.info("Creating new generation");
       nextGeneration();
       _lastOldIdentifier = _nextNewIdentifier.get() - 1;
     } finally {
       _exclusive.unlock();
     }
-    s_logger.debug("Notifying subscribed listeners");
+    LOGGER.debug("Notifying subscribed listeners");
     final Instant now = Instant.now();
     for (final Long deleted : deletes) {
       _changeManager.entityChanged(ChangeType.REMOVED, ObjectId.of(_scheme, deleted.toString()), now, null, now);

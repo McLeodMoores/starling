@@ -58,7 +58,7 @@ import com.opengamma.util.money.Currency;
 public class MarkToMarketPnLFunction extends AbstractFunction.NonCompiledInvoker {
 
   /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(MarkToMarketPnLFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(MarkToMarketPnLFunction.class);
 
   private final String _costOfCarryField;
   private final String _closingPriceField;

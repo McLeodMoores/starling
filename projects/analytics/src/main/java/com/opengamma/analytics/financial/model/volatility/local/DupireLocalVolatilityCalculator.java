@@ -27,7 +27,7 @@ import com.opengamma.util.ArgumentChecker;
  * 
  */
 public class DupireLocalVolatilityCalculator {
-  private static final Logger s_logger = LoggerFactory.getLogger(DupireLocalVolatilityCalculator.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(DupireLocalVolatilityCalculator.class);
   private final double _eps;
 
   public DupireLocalVolatilityCalculator() {
@@ -63,7 +63,7 @@ public class DupireLocalVolatilityCalculator {
         final double divK2 = getSecondStrikeDev(priceSurface.getSurface(), t, k, price, spot);
         final double var = 2. * (divT + q * price + (r - q) * k * divK) / (k * k * divK2);
         if (var < 0) {
-          s_logger.info("Negative variance; returning 0");
+          LOGGER.info("Negative variance; returning 0");
           return 0.;
         }
         return Math.sqrt(var);
@@ -115,7 +115,7 @@ public class DupireLocalVolatilityCalculator {
           final double h2 = h1 - vol * t;
           var = (vol * vol + 2 * vol * t * (divT + rate * s * divK)) / (1 + 2 * h1 * s * divK + s * s * (h1 * h2 * divK * divK + t * vol * divK2));
           if (var < 0.0) {
-            s_logger.info("negative variance; returning 0");
+            LOGGER.info("negative variance; returning 0");
             return 0.;
           }
         }
@@ -169,7 +169,7 @@ public class DupireLocalVolatilityCalculator {
           final double h2 = h1 - vol * t;
           var = (vol * vol + 2 * vol * t * (divT + drift * s * divK)) / (1 + 2 * h1 * s * divK + s * s * (h1 * h2 * divK * divK + t * vol * divK2));
           if (var < 0.0) {
-            s_logger.error("Negative variance; returning 0");
+            LOGGER.error("Negative variance; returning 0");
             var = 0.0;
           }
         }
@@ -232,7 +232,7 @@ public class DupireLocalVolatilityCalculator {
           final double h2 = h1 - vol * t;
           var = (vol * vol + 2 * vol * t * (divT + k * drift * divK)) / (1 + 2 * h1 * k * divK + k * k * (h1 * h2 * divK * divK + t * vol * divK2));
           if (var < 0.0) {
-            s_logger.info("Negative variance; returning 0");
+            LOGGER.info("Negative variance; returning 0");
             var = 0.0;
           }
         }
@@ -435,7 +435,7 @@ public class DupireLocalVolatilityCalculator {
           final double h2 = h1 - vol * t;
           var = (vol * vol + 2 * vol * t * divT) / (1 + 2 * h1 * m * divM + m * m * (h1 * h2 * divM * divM + t * vol * divM2));
           if (var < 0.0) {
-            s_logger.info("Negative variance; returning 0");
+            LOGGER.info("Negative variance; returning 0");
             var = 0.0;
           }
         }

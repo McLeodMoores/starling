@@ -57,7 +57,7 @@ import com.opengamma.util.ArgumentChecker;
 public class MarketDataSnapshotterImpl implements MarketDataSnapshotter {
   // TODO: reimplement this in a javalike way, transliterating LINQ is dirty.
   /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(MarketDataSnapshotterImpl.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(MarketDataSnapshotterImpl.class);
 
   /** The computation target resolver */
   private final ComputationTargetResolver _resolver;
@@ -216,7 +216,7 @@ public class MarketDataSnapshotterImpl implements MarketDataSnapshotter {
         if (output.getValueName() == snapper.getRequirementName()) {
           if (outputs != 1) {
             //TODO this is a bit fragile, but if this isn't true all sorts of things are broken
-            s_logger.error("Structured market data node produced more than one output {} - {}", node, DependencyNodeImpl.getOutputValues(node));
+            LOGGER.error("Structured market data node produced more than one output {} - {}", node, DependencyNodeImpl.getOutputValues(node));
             throw new OpenGammaRuntimeException("Structured market data node produced more than one output");
           }
           return true;

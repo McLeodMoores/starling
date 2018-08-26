@@ -36,7 +36,7 @@ import com.opengamma.util.tuple.Pairs;
  *
  */
 public class FXOptionBlackPnLCurveDefaults extends DefaultPropertyFunction {
-  private static final Logger s_logger = LoggerFactory.getLogger(FXOptionBlackPnLCurveDefaults.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(FXOptionBlackPnLCurveDefaults.class);
   private final Map<String, Pair<String, String>> _currencyCurveConfigAndDiscountingCurveNames;
 
   public FXOptionBlackPnLCurveDefaults(final String... currencyCurveConfigAndDiscountingCurveNames) {
@@ -83,11 +83,11 @@ public class FXOptionBlackPnLCurveDefaults extends DefaultPropertyFunction {
     final String putCurrency = security.accept(ForexVisitors.getPutCurrencyVisitor()).getCode();
     final String callCurrency = security.accept(ForexVisitors.getCallCurrencyVisitor()).getCode();
     if (!_currencyCurveConfigAndDiscountingCurveNames.containsKey(putCurrency)) {
-      s_logger.error("Could not get config for put currency " + putCurrency + "; should never happen");
+      LOGGER.error("Could not get config for put currency " + putCurrency + "; should never happen");
       return null;
     }
     if (!_currencyCurveConfigAndDiscountingCurveNames.containsKey(callCurrency)) {
-      s_logger.error("Could not get config for call currency " + callCurrency + "; should never happen");
+      LOGGER.error("Could not get config for call currency " + callCurrency + "; should never happen");
       return null;
     }
     final String putCurveConfig, callCurveConfig, putCurve, callCurve;

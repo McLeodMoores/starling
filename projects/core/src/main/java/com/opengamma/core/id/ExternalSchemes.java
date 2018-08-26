@@ -29,7 +29,7 @@ import com.opengamma.util.money.Currency;
 public class ExternalSchemes {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(ExternalSchemes.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ExternalSchemes.class);
 
   // --------------------------- SCHEMES FOR USER IDENTITY ------------------------------------
   /**
@@ -366,13 +366,13 @@ public class ExternalSchemes {
     } catch (final NumberFormatException ex) {
       throw new IllegalArgumentException("Coupon must be a valid double, ticker=" + tickerWithoutSector + ", coupon=" + coupon, ex);
     }
-    if (s_logger.isDebugEnabled()) {
+    if (LOGGER.isDebugEnabled()) {
       try {
         LocalDate.parse(maturity, DateTimeFormatter.ofPattern("MM/dd/yy"));
       } catch (final UnsupportedOperationException uoe) {
-        s_logger.warn("Problem parsing maturity " + maturity + " ticker=" + tickerWithoutSector + ", coupon=" + coupon);
+        LOGGER.warn("Problem parsing maturity " + maturity + " ticker=" + tickerWithoutSector + ", coupon=" + coupon);
       } catch (final DateTimeException ex) {
-        s_logger.warn("Problem parsing maturity " + maturity + " ticker=" + tickerWithoutSector + ", coupon=" + coupon);
+        LOGGER.warn("Problem parsing maturity " + maturity + " ticker=" + tickerWithoutSector + ", coupon=" + coupon);
       }
     }
     return ExternalId.of(BLOOMBERG_TCM, tickerWithoutSector + " " + couponDbl + " " + maturity + " " + marketSector);

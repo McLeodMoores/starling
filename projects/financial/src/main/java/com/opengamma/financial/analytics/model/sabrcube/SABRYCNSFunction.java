@@ -80,7 +80,7 @@ import com.opengamma.util.money.Currency;
  */
 @Deprecated
 public abstract class SABRYCNSFunction extends AbstractFunction.NonCompiledInvoker {
-  private static final Logger s_logger = LoggerFactory.getLogger(SABRYCNSFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(SABRYCNSFunction.class);
   private static final InstrumentSensitivityCalculator CALCULATOR = InstrumentSensitivityCalculator.getInstance();
   private static final String PROPERTY_REQUESTED_CURVE = ValuePropertyNames.OUTPUT_RESERVED_PREFIX + "RequestedCurve";
 
@@ -198,7 +198,7 @@ public abstract class SABRYCNSFunction extends AbstractFunction.NonCompiledInvok
     Set<String> requestedCurveNames = constraints.getValues(ValuePropertyNames.CURVE);
     final boolean permissive = OpenGammaCompilationContext.isPermissive(context);
     if (!permissive && ((requestedCurveNames == null) || requestedCurveNames.isEmpty())) {
-      s_logger.error("Must ask for a single named curve");
+      LOGGER.error("Must ask for a single named curve");
       return null;
     }
     final Set<String> cubeDefinitionNames = constraints.getValues(PROPERTY_CUBE_DEFINITION);
@@ -228,12 +228,12 @@ public abstract class SABRYCNSFunction extends AbstractFunction.NonCompiledInvok
     final String curveCalculationConfigName = curveCalculationConfigNames.iterator().next();
     final MultiCurveCalculationConfig curveCalculationConfig = _curveCalculationConfigSource.getConfig(curveCalculationConfigName);
     if (curveCalculationConfig == null) {
-      s_logger.error("Could not find curve calculation configuration named " + curveCalculationConfigName);
+      LOGGER.error("Could not find curve calculation configuration named " + curveCalculationConfigName);
       return null;
     }
     final Currency currency = FinancialSecurityUtils.getCurrency(target.getSecurity());
     if (!ComputationTargetSpecification.of(currency).equals(curveCalculationConfig.getTarget())) {
-      s_logger.error("Security currency and curve calculation config id were not equal; have {} and {}", currency, curveCalculationConfig.getTarget());
+      LOGGER.error("Security currency and curve calculation config id were not equal; have {} and {}", currency, curveCalculationConfig.getTarget());
       return null;
     }
     final String[] availableCurveNames = curveCalculationConfig.getYieldCurveNames();
@@ -242,13 +242,13 @@ public abstract class SABRYCNSFunction extends AbstractFunction.NonCompiledInvok
     } else {
       final Set<String> intersection = YieldCurveFunctionUtils.intersection(requestedCurveNames, availableCurveNames);
       if (intersection.isEmpty()) {
-        s_logger.error("None of the requested curves {} are available in curve calculation configuration called {}", requestedCurveNames, curveCalculationConfigName);
+        LOGGER.error("None of the requested curves {} are available in curve calculation configuration called {}", requestedCurveNames, curveCalculationConfigName);
         return null;
       }
       requestedCurveNames = intersection;
     }
     if (!permissive && (requestedCurveNames.size() != 1)) {
-      s_logger.error("Must specify single curve name constraint, got {}", requestedCurveNames);
+      LOGGER.error("Must specify single curve name constraint, got {}", requestedCurveNames);
       return null;
     }
     final String curveName = requestedCurveNames.iterator().next();

@@ -28,7 +28,7 @@ import com.opengamma.util.auth.AuthUtils;
  */
 public class LongPollingServlet extends HttpServlet {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(LongPollingServlet.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(LongPollingServlet.class);
 
   /** Key for storing the results as an attribute of the continuation. */
   /* package */ static final String RESULTS = "RESULTS";
@@ -85,7 +85,7 @@ public class LongPollingServlet extends HttpServlet {
       setUpConnection(continuation, request, response);
     } else {
       // Send the results
-      s_logger.debug("Writing results to HTTP response {}", results);
+      LOGGER.debug("Writing results to HTTP response {}", results);
       response.getWriter().write(results);
     }
   }

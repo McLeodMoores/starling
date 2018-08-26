@@ -30,7 +30,7 @@ import com.opengamma.util.test.TestGroup;
 // main() method prevents placing "unit" annotation here
 public class CompressorTest {
 
-  private static final String s_json = "[" +
+  private static final String JSON = "[" +
       "{\"baz\":0.9866,\"foo\":0.9154,\"bar\":[0.10325,0.74086,0.17289]}," +
       "{\"baz\":0.7032,\"foo\":0.53177,\"bar\":[0.40283,0.71098,0.3727,0.61233,0.95098,0.40499]}," +
       "{\"baz\":0.48626,\"foo\":0.81458,\"bar\":[0.29502,0.72687,0.17658,0.03358,0.70506]}," +
@@ -39,14 +39,14 @@ public class CompressorTest {
 
   @Test(groups = TestGroup.UNIT)
   public void roundTrip() throws IOException {
-    InputStream source1 = new ByteArrayInputStream(s_json.getBytes());
+    InputStream source1 = new ByteArrayInputStream(JSON.getBytes());
     ByteArrayOutputStream sink1 = new ByteArrayOutputStream();
     Compressor.compressStream(source1, sink1);
 
     InputStream source2 = new ByteArrayInputStream(sink1.toByteArray());
     ByteArrayOutputStream sink2 = new ByteArrayOutputStream();
     Compressor.decompressStream(source2, sink2);
-    assertEquals(s_json, sink2.toString());
+    assertEquals(JSON, sink2.toString());
   }
 
   private static List<Object> randomObjects() {
@@ -80,10 +80,10 @@ public class CompressorTest {
   public static void main(String[] args) throws IOException {
     InputStream source1 = new ByteArrayInputStream(new JSONArray(randomObjects()).toString().getBytes());
     ByteArrayOutputStream sink1 = new ByteArrayOutputStream();
-    System.out.println(s_json);
+    System.out.println(JSON);
     Compressor.compressStream(source1, sink1);
-    System.out.println("JSON size: " + s_json.length());
+    System.out.println("JSON size: " + JSON.length());
     System.out.println("compressed size: " + sink1.size());
-    System.out.println("ratio: " + ((double) sink1.size() / (double) s_json.length()));
+    System.out.println("ratio: " + ((double) sink1.size() / (double) JSON.length()));
   }
 }

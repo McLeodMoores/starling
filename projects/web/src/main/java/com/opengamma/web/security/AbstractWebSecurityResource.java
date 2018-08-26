@@ -45,7 +45,7 @@ public abstract class AbstractWebSecurityResource
     extends AbstractPerRequestWebResource<WebSecuritiesData> {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(AbstractWebSecurityResource.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(AbstractWebSecurityResource.class);
   /**
    * Security XML parameter name
    */
@@ -132,11 +132,11 @@ public abstract class AbstractWebSecurityResource
           FudgeMsgEnvelope factorIdMsg = OpenGammaFudgeContext.getInstance().deserialize(underlyingRawSecurity.getRawData());
           @SuppressWarnings("unchecked")
           List<FactorExposureData> factorExposureDataList = OpenGammaFudgeContext.getInstance().fromFudgeMsg(List.class, factorIdMsg.getMessage());
-          s_logger.error(factorExposureDataList.toString());
+          LOGGER.error(factorExposureDataList.toString());
           List<FactorExposure> factorExposuresList = convertToFactorExposure(factorExposureDataList);
           out.put("factorExposuresList", factorExposuresList);
         } else {
-          s_logger.error("Couldn't find security");
+          LOGGER.error("Couldn't find security");
         }
 
       }

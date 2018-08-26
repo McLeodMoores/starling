@@ -23,7 +23,7 @@ import com.opengamma.util.beancompare.BeanDifference;
  */
 public class SecurityMasterUtils {
   
-  private static final Logger s_logger = LoggerFactory.getLogger(SecurityMasterUtils.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(SecurityMasterUtils.class);
   
   /**
    * Adds a security if not present, otherwise creates a new version of an existing security if it's changed (by comparing all fields except the UniqueId
@@ -65,7 +65,7 @@ public class SecurityMasterUtils {
           try {
             differences = beanCompare.compare(foundSecurity, security);
           } catch (Exception e) {
-            s_logger.error("Error comparing securities with ID bundle " + security.getExternalIdBundle(), e);
+            LOGGER.error("Error comparing securities with ID bundle " + security.getExternalIdBundle(), e);
             return null;
           }
         }
@@ -83,7 +83,7 @@ public class SecurityMasterUtils {
             security.setUniqueId(newId);
             return security;
           } catch (Throwable t) {
-            s_logger.error("Unable to update security " + security.getUniqueId() + ": " + t.getMessage(), t);
+            LOGGER.error("Unable to update security " + security.getUniqueId() + ": " + t.getMessage(), t);
             return null;
           }
         }
@@ -96,7 +96,7 @@ public class SecurityMasterUtils {
       SecurityDocument result = securityMaster.add(addDoc);
       return result.getSecurity();
     } catch (Exception e) {
-      s_logger.error("Failed to write security " + security + " to the security master", e);
+      LOGGER.error("Failed to write security " + security + " to the security master", e);
       return null;
     }
   }

@@ -70,7 +70,7 @@ import com.opengamma.util.jms.JmsConnectorFactoryBean;
  */
 public class WatchListRecorder {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(WatchListRecorder.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(WatchListRecorder.class);
   private static final int VALIDITY_PERIOD_DAYS = 1;
 
   private final ViewProcessor _viewProcessor;
@@ -146,7 +146,7 @@ public class WatchListRecorder {
     final Set<ExternalId> emitted = Sets.newHashSet();
     final Set<ExternalId> emittedRecently = Sets.newHashSet();
     final Instant now = OffsetDateTime.ofInstant(Instant.now(), ZoneOffset.UTC).with(LocalTime.NOON).toInstant();
-    s_logger.info("{} view(s) defined in demo view processor", viewDefinitions.size());
+    LOGGER.info("{} view(s) defined in demo view processor", viewDefinitions.size());
     _writer.println("# Automatically generated");
 
     final ViewClient client = _viewProcessor.createViewClient(UserPrincipal.getLocalUser());
@@ -165,7 +165,7 @@ public class WatchListRecorder {
 
       @Override
       public void viewDefinitionCompilationFailed(final Instant valuationTime, final Exception exception) {
-        s_logger.error("Error while compiling view definition " + viewDefinitions + " for instant " + valuationTime, exception);
+        LOGGER.error("Error while compiling view definition " + viewDefinitions + " for instant " + valuationTime, exception);
       }
 
     });
@@ -174,14 +174,14 @@ public class WatchListRecorder {
 
       if (viewDefinition.getName().startsWith("10K")) {
         // Don't do the huge ones!
-        s_logger.warn("Skipping {}", viewDefinition);
+        LOGGER.warn("Skipping {}", viewDefinition);
         _writer.println();
         _writer.print("# Skipping ");
         _writer.println(viewDefinition);
         continue;
       }
 
-      s_logger.debug("Compiling view {}", viewDefinition);
+      LOGGER.debug("Compiling view {}", viewDefinition);
       _writer.println();
       _writer.println("# " + viewDefinition);
 
@@ -189,7 +189,7 @@ public class WatchListRecorder {
       try {
         client.waitForCompletion();
       } catch (final InterruptedException e) {
-        s_logger.warn("Interrupted while waiting for '{}' to complete" + viewDefinition);
+        LOGGER.warn("Interrupted while waiting for '{}' to complete" + viewDefinition);
       }
       client.detachFromViewProcess();
 
@@ -202,10 +202,10 @@ public class WatchListRecorder {
       for (int i = 0; i < compilations.size(); i++) {
         final CompiledViewDefinition compilation = compilations.get(i);
         final Set<ValueSpecification> liveData = compilation.getMarketDataRequirements();
-        s_logger.info("{} live data requirements for view {} for compilation {}", new Object[] {liveData.size(), viewDefinition, compilation.toString() });
+        LOGGER.info("{} live data requirements for view {} for compilation {}", new Object[] {liveData.size(), viewDefinition, compilation.toString() });
         _writer.println("# " + (i + 1) + " of " + compilations.size() + " - " + compilation);
         for (final ValueSpecification specification : liveData) {
-          s_logger.debug("Specification {}", specification);
+          LOGGER.debug("Specification {}", specification);
           emitSpecification(specification, emitted, emittedRecently);
         }
         _writer.flush();
@@ -251,7 +251,7 @@ public class WatchListRecorder {
       outputFile = cmd.getOptionValue("output");
       url = cmd.getOptionValue("url");
     } catch (final ParseException exp) {
-      s_logger.error("Option parsing failed: {}", exp.getMessage());
+      LOGGER.error("Option parsing failed: {}", exp.getMessage());
       System.exit(0);
     }
 

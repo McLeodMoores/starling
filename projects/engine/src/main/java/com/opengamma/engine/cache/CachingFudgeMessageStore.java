@@ -26,7 +26,7 @@ import com.opengamma.util.ehcache.EHCacheUtils;
  */
 public class CachingFudgeMessageStore implements FudgeMessageStore {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(CachingFudgeMessageStore.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(CachingFudgeMessageStore.class);
 
   private final FudgeMessageStore _underlying;
   private final CacheManager _cacheManager;
@@ -55,7 +55,7 @@ public class CachingFudgeMessageStore implements FudgeMessageStore {
 
   @Override
   public void delete() {
-    s_logger.info("Delete on {}", this);
+    LOGGER.info("Delete on {}", this);
     getCacheManager().removeCache(getCache().getName());
     getUnderlying().delete();
   }

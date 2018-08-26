@@ -74,7 +74,7 @@ import com.sun.jersey.api.client.ClientResponse.Status;
 public class WebAllHistoricalTimeSeriesResource extends AbstractWebHistoricalTimeSeriesResource {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(WebAllHistoricalTimeSeriesResource.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(WebAllHistoricalTimeSeriesResource.class);
 
   /**
    * Creates the resource.
@@ -230,7 +230,7 @@ public class WebAllHistoricalTimeSeriesResource extends AbstractWebHistoricalTim
         if (uniqueId != null) {
           uri = data().getUriInfo().getAbsolutePathBuilder().path(uniqueId.toString()).build();
         } else {
-          s_logger.warn("No time-series added for {} ", requestIdentifier);
+          LOGGER.warn("No time-series added for {} ", requestIdentifier);
           uri = uri(data());
         }
       } else {

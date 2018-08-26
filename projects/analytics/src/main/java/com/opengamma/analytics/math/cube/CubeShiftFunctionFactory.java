@@ -30,18 +30,18 @@ public class CubeShiftFunctionFactory {
   public static final NodalCubeAdditiveShiftFunction NODAL_ADDITIVE = new NodalCubeAdditiveShiftFunction();
   /** Multiplicative shift function for {@link NodalDoublesCube} */
   public static final NodalCubeMultiplicativeShiftFunction NODAL_MULTIPLICATIVE = new NodalCubeMultiplicativeShiftFunction();
-  private static final Map<Class<?>, CubeShiftFunction<?>> s_instances = new HashMap<>();
+  private static final Map<Class<?>, CubeShiftFunction<?>> INSTANCES = new HashMap<>();
 
   static {
-    s_instances.put(ConstantCubeAdditiveShiftFunction.class, CONSTANT_ADDITIVE);
-    s_instances.put(ConstantCubeMultiplicativeShiftFunction.class, CONSTANT_MULTIPLICATIVE);
-    s_instances.put(FunctionalCubeAdditiveShiftFunction.class, FUNCTIONAL_ADDITIVE);
-    s_instances.put(FunctionalCubeMultiplicativeShiftFunction.class, FUNCTIONAL_MULTIPLICATIVE);
-    s_instances.put(InterpolatedCubeAdditiveShiftFunction.class, INTERPOLATED_ADDITIVE);
-    s_instances.put(InterpolatedCubeMultiplicativeShiftFunction.class, INTERPOLATED_MULTIPLICATIVE);
-    s_instances.put(InterpolatedFromSurfacesCubeAdditiveShiftFunction.class, INTERPOLATED_FROM_CURVES_ADDITIVE);
-    s_instances.put(NodalCubeAdditiveShiftFunction.class, NODAL_ADDITIVE);
-    s_instances.put(NodalCubeMultiplicativeShiftFunction.class, NODAL_MULTIPLICATIVE);
+    INSTANCES.put(ConstantCubeAdditiveShiftFunction.class, CONSTANT_ADDITIVE);
+    INSTANCES.put(ConstantCubeMultiplicativeShiftFunction.class, CONSTANT_MULTIPLICATIVE);
+    INSTANCES.put(FunctionalCubeAdditiveShiftFunction.class, FUNCTIONAL_ADDITIVE);
+    INSTANCES.put(FunctionalCubeMultiplicativeShiftFunction.class, FUNCTIONAL_MULTIPLICATIVE);
+    INSTANCES.put(InterpolatedCubeAdditiveShiftFunction.class, INTERPOLATED_ADDITIVE);
+    INSTANCES.put(InterpolatedCubeMultiplicativeShiftFunction.class, INTERPOLATED_MULTIPLICATIVE);
+    INSTANCES.put(InterpolatedFromSurfacesCubeAdditiveShiftFunction.class, INTERPOLATED_FROM_CURVES_ADDITIVE);
+    INSTANCES.put(NodalCubeAdditiveShiftFunction.class, NODAL_ADDITIVE);
+    INSTANCES.put(NodalCubeMultiplicativeShiftFunction.class, NODAL_MULTIPLICATIVE);
   }
 
   /**
@@ -51,7 +51,7 @@ public class CubeShiftFunctionFactory {
    * @throws IllegalArgumentException If the function is not one of the static instances
    */
   public static CubeShiftFunction<?> getFunction(final Class<?> clazz) {
-    final CubeShiftFunction<?> f = s_instances.get(clazz);
+    final CubeShiftFunction<?> f = INSTANCES.get(clazz);
     if (f == null) {
       throw new IllegalArgumentException("Could not get function for " + clazz.getName());
     }

@@ -46,7 +46,7 @@ import com.opengamma.util.jms.JmsConnector;
 public class ActiveMQLiveDataClient extends JmsLiveDataClient {
   //TODO: Could migrate to individual/smaller subscriptions in background 
 
-  private static final Logger s_logger = LoggerFactory.getLogger(ActiveMQLiveDataClient.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ActiveMQLiveDataClient.class);
 
   
   public ActiveMQLiveDataClient(FudgeRequestSender subscriptionRequestSender,
@@ -134,14 +134,14 @@ public class ActiveMQLiveDataClient extends JmsLiveDataClient {
       public void run() {
         record.getReceiving().remove(tickDistributionSpecification);
         if (record.getReceiving().isEmpty()) {
-          s_logger.debug("Closing connection after last unsubscribe {}", tickDistributionSpecification);
+          LOGGER.debug("Closing connection after last unsubscribe {}", tickDistributionSpecification);
           JmsUtils.closeMessageConsumer(record.getConsumer());
           for (String receiving : record.getAllReceiving()) {
             _messageConsumersBySpec.remove(receiving);
           }
         } else {
           //TODO: Should I shrink the subscription? 
-          s_logger.debug("Not closing composite connection remaining subscribtions {}", record.getReceiving());
+          LOGGER.debug("Not closing composite connection remaining subscribtions {}", record.getReceiving());
         }
       }
     };

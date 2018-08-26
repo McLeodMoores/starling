@@ -48,7 +48,7 @@ import com.opengamma.util.tuple.Pairs;
  */
 public class CsvSnapshotReader implements SnapshotReader {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(CsvSnapshotReader.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(CsvSnapshotReader.class);
 
   private CsvSheetReader _sheetReader;
   private Map<CurveKey, CurveSnapshot> _curves;
@@ -120,7 +120,7 @@ public class CsvSnapshotReader implements SnapshotReader {
             break;
         }
       } else {
-        s_logger.error("Unknown snapshot element of type {}", type);
+        LOGGER.error("Unknown snapshot element of type {}", type);
       }
     }
   }

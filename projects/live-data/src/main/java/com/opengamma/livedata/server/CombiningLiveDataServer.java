@@ -43,9 +43,9 @@ import net.sf.ehcache.CacheManager;
  */
 public abstract class CombiningLiveDataServer extends StandardLiveDataServer {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(CombiningLiveDataServer.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(CombiningLiveDataServer.class);
 
-  private static final ExecutorService s_subscriptionExecutor = NamedThreadPoolFactory.newCachedThreadPool("CombiningLiveDataServer", true);
+  private static final ExecutorService SUBSCRIPTION_EXECUTOR = NamedThreadPoolFactory.newCachedThreadPool("CombiningLiveDataServer", true);
 
   private final Set<StandardLiveDataServer> _underlyings;
 
@@ -142,7 +142,7 @@ public abstract class CombiningLiveDataServer extends StandardLiveDataServer {
       public Collection<LiveDataSubscriptionResponse> apply(Pair<StandardLiveDataServer, Collection<LiveDataSpecification>> input) {
         StandardLiveDataServer specs = input.getFirst();
         Collection<LiveDataSpecification> server = input.getSecond();
-        s_logger.debug("Sending subscription ({}) for {} to underlying server {}", new Object[] {action.getName(), specs, server });
+        LOGGER.debug("Sending subscription ({}) for {} to underlying server {}", new Object[] {action.getName(), specs, server });
         return action.subscribe(specs, server);
       }
     });
@@ -157,7 +157,7 @@ public abstract class CombiningLiveDataServer extends StandardLiveDataServer {
       if (entry.getValue().isEmpty()) {
         continue;
       }
-      Future<Collection<T>> future = s_subscriptionExecutor.submit(new Callable<Collection<T>>() {
+      Future<Collection<T>> future = SUBSCRIPTION_EXECUTOR.submit(new Callable<Collection<T>>() {
 
         @Override
         public Collection<T> call() throws Exception {
@@ -173,11 +173,11 @@ public abstract class CombiningLiveDataServer extends StandardLiveDataServer {
         responses.addAll(future.get());
       } catch (InterruptedException ex) {
         //Should be rare, since the subscription methods should bundle everything into the response
-        s_logger.error("Unexpected exception when delegating subscription", ex);
+        LOGGER.error("Unexpected exception when delegating subscription", ex);
         throw new OpenGammaRuntimeException(ex.getMessage(), ex);
       } catch (ExecutionException ex) {
         //Should be rare, since the subscription methods should bundle everything into the response
-        s_logger.error("Unexpected exception when delegating subscription", ex);
+        LOGGER.error("Unexpected exception when delegating subscription", ex);
         throw new OpenGammaRuntimeException(ex.getMessage(), ex);
       }
     }
@@ -209,7 +209,7 @@ public abstract class CombiningLiveDataServer extends StandardLiveDataServer {
     Set<Subscription> ret = new HashSet<Subscription>();
     for (StandardLiveDataServer server : _underlyings) {
       Set<Subscription> serversSubscriptions = server.getSubscriptions();
-      s_logger.debug("Server {} has {} subscriptions", server, serversSubscriptions.size());
+      LOGGER.debug("Server {} has {} subscriptions", server, serversSubscriptions.size());
       ret.addAll(serversSubscriptions);
     }
     return ret;

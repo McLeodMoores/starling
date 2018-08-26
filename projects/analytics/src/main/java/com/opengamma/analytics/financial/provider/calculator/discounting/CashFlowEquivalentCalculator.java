@@ -36,14 +36,14 @@ public class CashFlowEquivalentCalculator extends InstrumentDerivativeVisitorAda
   /**
    * The unique instance of the calculator.
    */
-  private static final CashFlowEquivalentCalculator s_instance = new CashFlowEquivalentCalculator();
+  private static final CashFlowEquivalentCalculator INSTANCE = new CashFlowEquivalentCalculator();
 
   /**
    * Gets the calculator instance.
    * @return The calculator.
    */
   public static CashFlowEquivalentCalculator getInstance() {
-    return s_instance;
+    return INSTANCE;
   }
 
   /**

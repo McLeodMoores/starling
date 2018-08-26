@@ -19,7 +19,7 @@ import com.opengamma.scripts.Scriptable;
 public class OrphanedPositionDeleteTool extends AbstractTool<ToolContext> {
 
   /** Logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(OrphanedPositionDeleteTool.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(OrphanedPositionDeleteTool.class);
 
   //-------------------------------------------------------------------------
   /**
@@ -36,7 +36,7 @@ public class OrphanedPositionDeleteTool extends AbstractTool<ToolContext> {
   protected void doRun() throws Exception {
     final ToolContext toolContext = getToolContext();
     final OrphanedPositionRemover orphanedPositionRemover = new OrphanedPositionRemover(toolContext.getPortfolioMaster(), toolContext.getPositionMaster());
-    s_logger.info("running orphanedPositionRemover");
+    LOGGER.info("running orphanedPositionRemover");
     orphanedPositionRemover.run();
     toolContext.close();
   }

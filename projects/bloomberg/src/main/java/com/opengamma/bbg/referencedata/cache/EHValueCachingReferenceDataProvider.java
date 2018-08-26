@@ -36,7 +36,7 @@ import com.opengamma.util.fudgemsg.OpenGammaFudgeContext;
 public class EHValueCachingReferenceDataProvider extends AbstractValueCachingReferenceDataProvider {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(EHValueCachingReferenceDataProvider.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(EHValueCachingReferenceDataProvider.class);
   /**
    * Cache key for reference data.
    */
@@ -106,9 +106,9 @@ public class EHValueCachingReferenceDataProvider extends AbstractValueCachingRef
     FudgeMsg fieldData = result.getFieldValues();
     
     if (identifier != null && fieldData != null) {
-      s_logger.info("Persisting fields for \"{}\": {}", identifier, result.getFieldValues());
+      LOGGER.info("Persisting fields for \"{}\": {}", identifier, result.getFieldValues());
       Object cachedObject = createCachedObject(result);
-      s_logger.debug("cachedObject={}", cachedObject);
+      LOGGER.debug("cachedObject={}", cachedObject);
       Element element = new Element(identifier, cachedObject);
       _cache.put(element);
     }
@@ -125,9 +125,9 @@ public class EHValueCachingReferenceDataProvider extends AbstractValueCachingRef
   protected ReferenceData loadStateFromCache(FudgeSerializer serializer, String identifier) {
     Element element = _cache.get(identifier);
     if (element != null) {
-      s_logger.debug("Have security data for des {} in cache", identifier);
+      LOGGER.debug("Have security data for des {} in cache", identifier);
       Object fromCache = element.getObjectValue();
-      s_logger.debug("cachedObject={}", fromCache);
+      LOGGER.debug("cachedObject={}", fromCache);
       return parseCachedObject(fromCache);
     }
     return null;

@@ -28,7 +28,7 @@ import com.opengamma.engine.value.ValueSpecification;
 public class EquityOptionBAWImpliedVolatilityFunction extends EquityOptionBAWFunction {
 
   /** The Barone-Adesi Whaley present value calculator */
-  private static final EqyOptBaroneAdesiWhaleyPresentValueCalculator s_pvCalculator = EqyOptBaroneAdesiWhaleyPresentValueCalculator.getInstance();
+  private static final EqyOptBaroneAdesiWhaleyPresentValueCalculator PV_CALCULATOR = EqyOptBaroneAdesiWhaleyPresentValueCalculator.getInstance();
   
   /** Default constructor */
   public EquityOptionBAWImpliedVolatilityFunction() {
@@ -48,19 +48,19 @@ public class EquityOptionBAWImpliedVolatilityFunction extends EquityOptionBAWFun
       strike = option.getStrike();
       timeToExpiry = option.getTimeToExpiry();
       isCall = option.isCall();
-      optionPrice = derivative.accept(s_pvCalculator, market) / option.getUnitAmount();
+      optionPrice = derivative.accept(PV_CALCULATOR, market) / option.getUnitAmount();
     } else if (derivative instanceof EquityIndexOption) {
       final EquityIndexOption option = (EquityIndexOption) derivative;
       strike = option.getStrike();
       timeToExpiry = option.getTimeToExpiry();
       isCall = option.isCall();
-      optionPrice = derivative.accept(s_pvCalculator, market) / option.getUnitAmount();
+      optionPrice = derivative.accept(PV_CALCULATOR, market) / option.getUnitAmount();
     } else if (derivative instanceof EquityIndexFutureOption) {
       final EquityIndexFutureOption option = (EquityIndexFutureOption) derivative;
       strike = option.getStrike();
       timeToExpiry = option.getExpiry();
       isCall = option.isCall();
-      optionPrice = derivative.accept(s_pvCalculator, market) / option.getPointValue();
+      optionPrice = derivative.accept(PV_CALCULATOR, market) / option.getPointValue();
     } else {
       throw new OpenGammaRuntimeException("Unexpected InstrumentDerivative type");
     }

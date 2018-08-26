@@ -34,7 +34,7 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT_DB)
 public abstract class AbstractDbPortfolioMasterWorkerTest extends AbstractDbTest {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(AbstractDbPortfolioMasterWorkerTest.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(AbstractDbPortfolioMasterWorkerTest.class);
 
   protected DbPortfolioMaster _prtMaster;
   protected Instant _version1Instant;
@@ -47,7 +47,7 @@ public abstract class AbstractDbPortfolioMasterWorkerTest extends AbstractDbTest
 
   public AbstractDbPortfolioMasterWorkerTest(String databaseType, String databaseVersion, boolean readOnly) {
     super(databaseType, databaseVersion);
-    s_logger.info("running testcases for {}", databaseType);
+    LOGGER.info("running testcases for {}", databaseType);
   }
 
   //-------------------------------------------------------------------------
@@ -75,8 +75,8 @@ public abstract class AbstractDbPortfolioMasterWorkerTest extends AbstractDbTest
     _prtMaster.setClock(Clock.fixed(_now.toInstant(), ZoneOffset.UTC));
     _version1Instant = _now.toInstant().minusSeconds(100);
     _version2Instant = _now.toInstant().minusSeconds(50);
-    s_logger.debug("test data now:   {}", _version1Instant);
-    s_logger.debug("test data later: {}", _version2Instant);
+    LOGGER.debug("test data now:   {}", _version1Instant);
+    LOGGER.debug("test data later: {}", _version2Instant);
     final JdbcOperations template = _prtMaster.getDbConnector().getJdbcOperations();
     template.update("INSERT INTO prt_portfolio VALUES (?,?,?,?,?, ?,?,?)",
         101, 101, toSqlTimestamp(_version1Instant), MAX_SQL_TIMESTAMP, toSqlTimestamp(_version1Instant), MAX_SQL_TIMESTAMP, "TestPortfolio101", 25);

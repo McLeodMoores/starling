@@ -40,7 +40,7 @@ import com.opengamma.engine.value.ValueSpecification;
 public class EquityOptionBjerksundStenslandGreeksFunction extends EquityOptionBjerksundStenslandFunction {
   
   /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(EquityOptionBjerksundStenslandGreeksFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(EquityOptionBjerksundStenslandGreeksFunction.class);
   
   /** Value requirement names */
   private static final String[] GREEK_NAMES = new String[] {

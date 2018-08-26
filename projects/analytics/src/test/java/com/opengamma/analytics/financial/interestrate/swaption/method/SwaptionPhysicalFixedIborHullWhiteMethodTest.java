@@ -7,16 +7,12 @@ package com.opengamma.analytics.financial.interestrate.swaption.method;
 
 import static com.opengamma.analytics.financial.interestrate.TestUtils.assertSensitivityEquals;
 import static org.testng.AssertJUnit.assertEquals;
-import it.unimi.dsi.fastutil.doubles.DoubleAVLTreeSet;
 
 import java.util.List;
 
 import org.testng.annotations.Test;
 import org.threeten.bp.Period;
 import org.threeten.bp.ZonedDateTime;
-
-import cern.colt.Arrays;
-import cern.jet.random.engine.MersenneTwister;
 
 import com.opengamma.analytics.financial.instrument.index.IborIndex;
 import com.opengamma.analytics.financial.instrument.index.IndexSwap;
@@ -58,6 +54,10 @@ import com.opengamma.util.money.CurrencyAmount;
 import com.opengamma.util.test.TestGroup;
 import com.opengamma.util.time.DateUtils;
 import com.opengamma.util.tuple.DoublesPair;
+
+import cern.colt.Arrays;
+import cern.jet.random.engine.MersenneTwister;
+import it.unimi.dsi.fastutil.doubles.DoubleAVLTreeSet;
 
 /**
  * Tests related to the pricing of physical delivery swaption in Hull-White one factor model.
@@ -126,8 +126,8 @@ public class SwaptionPhysicalFixedIborHullWhiteMethodTest {
     final double timeToExpiry = SWAPTION_PAYER_LONG.getTimeToExpiry();
     final AnnuityPaymentFixed cfe = CFEC.visitSwap(SWAPTION_PAYER_LONG.getUnderlyingSwap(), CURVES);
     final int numberOfPayments = cfe.getNumberOfPayments();
-    final double alpha[] = new double[numberOfPayments];
-    final double disccf[] = new double[numberOfPayments];
+    final double[] alpha = new double[numberOfPayments];
+    final double[] disccf = new double[numberOfPayments];
     for (int loopcf = 0; loopcf < numberOfPayments; loopcf++) {
       alpha[loopcf] = MODEL.alpha(PARAMETERS_HW, 0.0, timeToExpiry, timeToExpiry, cfe.getNthPayment(loopcf).getPaymentTime());
       disccf[loopcf] = CURVES.getCurve(FUNDING_CURVE_NAME).getDiscountFactor(cfe.getNthPayment(loopcf).getPaymentTime()) * cfe.getNthPayment(loopcf).getAmount();

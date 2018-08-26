@@ -90,7 +90,7 @@ public class UserMarketDataSnapshot extends AbstractMarketDataSnapshot {
   /** The cube specification property */
   private static final String CUBE_SPECIFICATION_PROPERTY = "VolatiltyCubeSpecification";
 
-  private static final Map<String, StructuredMarketDataHandler> s_structuredDataHandlers =
+  private static final Map<String, StructuredMarketDataHandler> STRUCTURED_DATA_HANDLERS =
       ImmutableMap.of(ValueRequirementNames.YIELD_CURVE_MARKET_DATA, new YieldCurveDataHandler(),
           ValueRequirementNames.CURVE_MARKET_DATA, new CurveDataHandler(),
           ValueRequirementNames.VOLATILITY_SURFACE_DATA, new SurfaceDataHandler(),
@@ -248,7 +248,7 @@ public class UserMarketDataSnapshot extends AbstractMarketDataSnapshot {
 
   @Override
   public Object query(final ValueSpecification valueSpecification) {
-    final StructuredMarketDataHandler handler = s_structuredDataHandlers.get(valueSpecification.getValueName());
+    final StructuredMarketDataHandler handler = STRUCTURED_DATA_HANDLERS.get(valueSpecification.getValueName());
     if (handler == null) {
       return _unstructured.getCurrentValue(valueSpecification);
     } else {
@@ -267,7 +267,7 @@ public class UserMarketDataSnapshot extends AbstractMarketDataSnapshot {
       public ValueSpecification getAvailability(final ComputationTargetSpecification targetSpec,
           final Object target,
           final ValueRequirement desiredValue) {
-        final StructuredMarketDataHandler handler = s_structuredDataHandlers.get(desiredValue.getValueName());
+        final StructuredMarketDataHandler handler = STRUCTURED_DATA_HANDLERS.get(desiredValue.getValueName());
         if (handler == null) {
           return unstructured.getAvailability(targetSpec, target, desiredValue);
         } else {

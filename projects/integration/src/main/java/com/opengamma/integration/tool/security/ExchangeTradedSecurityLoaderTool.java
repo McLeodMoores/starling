@@ -32,7 +32,7 @@ import com.opengamma.scripts.Scriptable;
  */
 @Scriptable
 public class ExchangeTradedSecurityLoaderTool extends AbstractTool<ToolContext> {
-  private static final Logger s_logger = LoggerFactory.getLogger(ExchangeTradedSecurityLoaderTool.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ExchangeTradedSecurityLoaderTool.class);
   /** File name option flag */
   private static final String FILE_NAME_OPT = "f";
   /** Time series data provider option flag*/
@@ -78,22 +78,22 @@ public class ExchangeTradedSecurityLoaderTool extends AbstractTool<ToolContext> 
             externalIdBundles.add(externalId.toBundle());
             externalIds.add(externalId);
           } catch (final IllegalArgumentException iae) {
-            s_logger.error("Couldn't parse identifier {}, skipping", line);
+            LOGGER.error("Couldn't parse identifier {}, skipping", line);
           }
         }
       } catch (final IOException ioe) {
-        s_logger.error("Problem reading file");
+        LOGGER.error("Problem reading file");
         System.exit(1);
       }
     } else {
-      s_logger.error("File not found");
+      LOGGER.error("File not found");
       System.exit(1);
     }
 
-    s_logger.info("Starting to load securities");
+    LOGGER.info("Starting to load securities");
     final Map<ExternalIdBundle, UniqueId> loadSecurities = loader.loadSecurities(externalIdBundles);
-    s_logger.info("Loaded {} securities", loadSecurities.size());
-    s_logger.info("Finished loading securities");
+    LOGGER.info("Loaded {} securities", loadSecurities.size());
+    LOGGER.info("Finished loading securities");
 
     if (getCommandLine().hasOption(POPULATE_TIME_SERIES_OPT)) {
       // Load time series
@@ -101,14 +101,14 @@ public class ExchangeTradedSecurityLoaderTool extends AbstractTool<ToolContext> 
       final String dataProvider = getCommandLine().getOptionValue(TIME_SERIES_DATAPROVIDER_OPT, DEFAULT_DATA_PROVIDER);
       final String dataField = getCommandLine().getOptionValue(TIME_SERIES_DATAFIELD_OPT, DEFAULT_DATA_FIELD);
 
-      s_logger.info("Starting to load time series from data provider {} using field {}", dataProvider, dataField);
+      LOGGER.info("Starting to load time series from data provider {} using field {}", dataProvider, dataField);
       final Map<ExternalId, UniqueId> loadTimeSeries = tsLoader.loadTimeSeries(externalIds, dataProvider, dataField, null, null);
-      s_logger.info("Loaded {} time series", loadTimeSeries.size());
-      s_logger.info("Finished loading time series");
+      LOGGER.info("Loaded {} time series", loadTimeSeries.size());
+      LOGGER.info("Finished loading time series");
     } else {
-      s_logger.info("Time series load not requested, skipping");
+      LOGGER.info("Time series load not requested, skipping");
     }
-    s_logger.info("Done.");
+    LOGGER.info("Done.");
   }
 
   @Override

@@ -49,7 +49,7 @@ import com.opengamma.util.time.Expiry;
 public class InterestRateFutureLoader extends SecurityLoader {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(InterestRateFutureLoader.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(InterestRateFutureLoader.class);
 
   /**
    * The fields to load from Bloomberg.
@@ -100,7 +100,7 @@ public class InterestRateFutureLoader extends SecurityLoader {
    * @param referenceDataProvider  the provider, not null
    */
   public InterestRateFutureLoader(ReferenceDataProvider referenceDataProvider) {
-    super(s_logger, referenceDataProvider, SecurityType.INTEREST_RATE_FUTURE);
+    super(LOGGER, referenceDataProvider, SecurityType.INTEREST_RATE_FUTURE);
   }
 
   //-------------------------------------------------------------------------
@@ -124,38 +124,38 @@ public class InterestRateFutureLoader extends SecurityLoader {
     unitAmount *= 100.0; // Scale unitAmount as we quote prices without units, while Bloomberg's is in percent, ie. Bbg's 99.5 is our 0.995
 
     if (!isValidField(bbgUnique)) {
-      s_logger.warn("bbgUnique is null. Cannot construct interest rate future security.");
+      LOGGER.warn("bbgUnique is null. Cannot construct interest rate future security.");
       return null;
     }
     if (!isValidField(expiryDate)) {
-      s_logger.warn("expiry date is null. Cannot construct interest rate future security.");
+      LOGGER.warn("expiry date is null. Cannot construct interest rate future security.");
       return null;
     }
     if (!isValidField(futureTradingHours)) {
-      s_logger.warn("futures trading hours is null. Cannot construct interest rate future security.");
+      LOGGER.warn("futures trading hours is null. Cannot construct interest rate future security.");
       return null;
     }
     if (!isValidField(micExchangeCode)) {
-      s_logger.warn("settlement exchange is null. Cannot construct interest rate future security.");
+      LOGGER.warn("settlement exchange is null. Cannot construct interest rate future security.");
       return null;
     }
     if (!isValidField(currencyStr)) {
-      s_logger.warn("currency is null. Cannot construct interest rate future security.");
+      LOGGER.warn("currency is null. Cannot construct interest rate future security.");
       return null;
     }
     if (!isValidField(category)) {
-      s_logger.warn("No category provided from field {}. Cannot construct interest rate future security.", FIELD_FUTURES_CATEGORY);
+      LOGGER.warn("No category provided from field {}. Cannot construct interest rate future security.", FIELD_FUTURES_CATEGORY);
       return null;
     }
 
     Expiry expiry = decodeExpiry(expiryDate, futureTradingHours);
     if (expiry == null) {
-      s_logger.warn("expiry is null. Cannot construct interest rate future security.");
+      LOGGER.warn("expiry is null. Cannot construct interest rate future security.");
       return null;
     }
     
     if (!isValidField(name)) {
-      s_logger.warn("name is null. Cannot construct interest rate future security.");
+      LOGGER.warn("name is null. Cannot construct interest rate future security.");
       return null;
     }
     
@@ -164,7 +164,7 @@ public class InterestRateFutureLoader extends SecurityLoader {
     String bbgCode2 = bbgCode.substring(0, 2); // 2 first char
     String id = BBGCODE_UNDERLYING.get(bbgCode2);
     if (id == null) {
-      s_logger.warn("Cannot get underlying for future " + bbgCode2);
+      LOGGER.warn("Cannot get underlying for future " + bbgCode2);
       return null;
     }
     ExternalId underlyingIdentifier = ExternalId.of(ExternalSchemes.BLOOMBERG_TICKER, id);

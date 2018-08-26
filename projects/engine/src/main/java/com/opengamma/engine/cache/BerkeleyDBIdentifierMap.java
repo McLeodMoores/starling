@@ -60,7 +60,7 @@ import com.sleepycat.je.OperationStatus;
  */
 public class BerkeleyDBIdentifierMap implements IdentifierMap, Lifecycle {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(BerkeleyDBIdentifierMap.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(BerkeleyDBIdentifierMap.class);
 
   private static final String VALUE_SPECIFICATION_TO_IDENTIFIER_DATABASE = "value_specification_identifier";
   private static final String IDENTIFIER_TO_VALUE_SPECIFICATION_DATABASE = "identifier_value_specification";
@@ -92,12 +92,12 @@ public class BerkeleyDBIdentifierMap implements IdentifierMap, Lifecycle {
       _valueSpecValue.setData(convertSpecificationToByteArray(valueSpec));
       OperationStatus status = _identifierToValueSpecification.getDatabase().put(getTransaction(), _identifier, _valueSpecValue);
       if (status != OperationStatus.SUCCESS) {
-        s_logger.error("Unable to write identifier {} -> specification {} - {}", identifier, valueSpec, status);
+        LOGGER.error("Unable to write identifier {} -> specification {} - {}", identifier, valueSpec, status);
         throw new OpenGammaRuntimeException("Unable to write new identifier");
       }
       status = _valueSpecificationToIdentifier.getDatabase().put(getTransaction(), _valueSpecKey, _identifier);
       if (status != OperationStatus.SUCCESS) {
-        s_logger.error("Unable to write new value {} for spec {} - {}", identifier, valueSpec, status);
+        LOGGER.error("Unable to write new value {} for spec {} - {}", identifier, valueSpec, status);
         throw new OpenGammaRuntimeException("Unable to write new value");
       }
       return identifier;
@@ -114,7 +114,7 @@ public class BerkeleyDBIdentifierMap implements IdentifierMap, Lifecycle {
           case SUCCESS:
             return LongBinding.entryToLong(_identifier);
           default:
-            s_logger.warn("Unexpected operation status on load {}, assuming we have to insert a new record", status);
+            LOGGER.warn("Unexpected operation status on load {}, assuming we have to insert a new record", status);
             return allocateNewIdentifier(spec);
         }
       }
@@ -134,7 +134,7 @@ public class BerkeleyDBIdentifierMap implements IdentifierMap, Lifecycle {
       if (status == OperationStatus.SUCCESS) {
         return convertByteArrayToSpecification(_valueSpecValue.getData());
       }
-      s_logger.warn("Couldn't resolve identifier {} - {}", identifier, status);
+      LOGGER.warn("Couldn't resolve identifier {} - {}", identifier, status);
       return null;
     }
 
@@ -213,7 +213,7 @@ public class BerkeleyDBIdentifierMap implements IdentifierMap, Lifecycle {
   public long getIdentifier(final ValueSpecification spec) {
     ArgumentChecker.notNull(spec, "spec");
     if (!isRunning()) {
-      s_logger.info("Starting on first call as wasn't called as part of lifecycle interface");
+      LOGGER.info("Starting on first call as wasn't called as part of lifecycle interface");
       start();
     }
     return new GetIdentifierRequest(spec).run(_requests);
@@ -245,7 +245,7 @@ public class BerkeleyDBIdentifierMap implements IdentifierMap, Lifecycle {
   public Object2LongMap<ValueSpecification> getIdentifiers(Collection<ValueSpecification> specs) {
     ArgumentChecker.notNull(specs, "specs");
     if (!isRunning()) {
-      s_logger.info("Starting on first call as wasn't called as part of lifecycle interface");
+      LOGGER.info("Starting on first call as wasn't called as part of lifecycle interface");
       start();
     }
     return new GetIdentifiersRequest(specs).run(_requests);
@@ -276,7 +276,7 @@ public class BerkeleyDBIdentifierMap implements IdentifierMap, Lifecycle {
   @Override
   public ValueSpecification getValueSpecification(final long identifier) {
     if (!isRunning()) {
-      s_logger.info("Starting on first call as wasn't called as part of lifecycle interface");
+      LOGGER.info("Starting on first call as wasn't called as part of lifecycle interface");
       start();
     }
     return new GetValueSpecificationRequest(identifier).run(_requests);
@@ -307,7 +307,7 @@ public class BerkeleyDBIdentifierMap implements IdentifierMap, Lifecycle {
   @Override
   public Long2ObjectMap<ValueSpecification> getValueSpecifications(LongCollection identifiers) {
     if (!isRunning()) {
-      s_logger.info("Starting on first call as wasn't called as part of lifecycle interface");
+      LOGGER.info("Starting on first call as wasn't called as part of lifecycle interface");
       start();
     }
     return new GetValueSpecificationsRequest(identifiers.toLongArray()).run(_requests);
@@ -359,7 +359,7 @@ public class BerkeleyDBIdentifierMap implements IdentifierMap, Lifecycle {
       try {
         _worker.join(5000L);
       } catch (InterruptedException ie) {
-        s_logger.warn("Interrupted while waiting for worker to finish.");
+        LOGGER.warn("Interrupted while waiting for worker to finish.");
       }
       _worker = null;
     }
@@ -374,7 +374,7 @@ public class BerkeleyDBIdentifierMap implements IdentifierMap, Lifecycle {
  */
 /* package */class ValueSpecificationStringEncoder {
 
-  private static final ComputationTargetTypeVisitor<StringBuilder, Void> s_typeToString = new ComputationTargetTypeVisitor<StringBuilder, Void>() {
+  private static final ComputationTargetTypeVisitor<StringBuilder, Void> TYPE_TO_STRING = new ComputationTargetTypeVisitor<StringBuilder, Void>() {
 
     @Override
     public Void visitMultipleComputationTargetTypes(final Set<ComputationTargetType> types, final StringBuilder builder) {
@@ -429,11 +429,11 @@ public class BerkeleyDBIdentifierMap implements IdentifierMap, Lifecycle {
 
   };
 
-  private static final ComputationTargetReferenceVisitor<String> s_refToString = new ComputationTargetReferenceVisitor<String>() {
+  private static final ComputationTargetReferenceVisitor<String> REF_TO_STRING = new ComputationTargetReferenceVisitor<String>() {
 
     private String createResult(final ComputationTargetReference reference, final String toString) {
       if (reference.getParent() != null) {
-        final StringBuilder sb = new StringBuilder(reference.getParent().accept(s_refToString));
+        final StringBuilder sb = new StringBuilder(reference.getParent().accept(REF_TO_STRING));
         return sb.append(',').append(toString).toString();
       } else {
         return toString;
@@ -486,9 +486,9 @@ public class BerkeleyDBIdentifierMap implements IdentifierMap, Lifecycle {
 
   private static void encodeAsString(final StringBuilder builder, final ComputationTargetSpecification targetSpec) {
     builder.append('(');
-    builder.append(targetSpec.accept(s_refToString));
+    builder.append(targetSpec.accept(REF_TO_STRING));
     builder.append(',');
-    targetSpec.getType().accept(s_typeToString, builder);
+    targetSpec.getType().accept(TYPE_TO_STRING, builder);
     builder.append(')');
   }
 

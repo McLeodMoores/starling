@@ -46,7 +46,7 @@ import com.opengamma.util.money.Currency;
  */
 public class SABRFittingPropertyUtils {
   /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(SABRFittingPropertyUtils.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(SABRFittingPropertyUtils.class);
 
   public static ValueProperties.Builder addNLSSFittingProperties(final ValueProperties.Builder properties) {
     return properties
@@ -137,7 +137,7 @@ public class SABRFittingPropertyUtils {
     final ValueProperties constraints = desiredValue.getConstraints();
     final String fittingMethod = desiredValue.getConstraint(SmileFittingPropertyNamesAndValues.PROPERTY_FITTING_METHOD);
     if (fittingMethod == null) {
-      s_logger.error("No value set for SABR fitting method");
+      LOGGER.error("No value set for SABR fitting method");
       return null;
     }
     if (fittingMethod.equals(SmileFittingPropertyNamesAndValues.NON_LINEAR_LEAST_SQUARES)) {
@@ -156,7 +156,7 @@ public class SABRFittingPropertyUtils {
       }
       return new ValueRequirement(ValueRequirementNames.SABR_SURFACES, ComputationTargetSpecification.of(currency), allProperties.get());
     }
-    s_logger.error("Could not handle fitting method {}", fittingMethod);
+    LOGGER.error("Could not handle fitting method {}", fittingMethod);
     return null;
   }
 

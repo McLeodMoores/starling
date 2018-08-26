@@ -14,6 +14,7 @@ import com.opengamma.analytics.financial.interestrate.future.derivative.Interest
 import com.opengamma.analytics.financial.interestrate.future.method.BondFutureDiscountingMethod;
 import com.opengamma.analytics.financial.interestrate.future.method.InterestRateFutureTransactionDiscountingMethod;
 
+// CSOFF
 /**
  * Calculate present value for futures from the quoted price.
  * @deprecated {@link YieldCurveBundle} is deprecated

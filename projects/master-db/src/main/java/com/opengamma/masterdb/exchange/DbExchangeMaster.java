@@ -63,7 +63,7 @@ import com.opengamma.util.paging.Paging;
 public class DbExchangeMaster extends AbstractDocumentDbMaster<ExchangeDocument> implements ExchangeMaster {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(DbExchangeMaster.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(DbExchangeMaster.class);
 
   /**
    * The default scheme for unique identifiers.
@@ -103,7 +103,7 @@ public class DbExchangeMaster extends AbstractDocumentDbMaster<ExchangeDocument>
     ArgumentChecker.notNull(request, "request");
     ArgumentChecker.notNull(request.getPagingRequest(), "request.pagingRequest");
     ArgumentChecker.notNull(request.getVersionCorrection(), "request.versionCorrection");
-    s_logger.debug("search {}", request);
+    LOGGER.debug("search {}", request);
     
     final VersionCorrection vc = request.getVersionCorrection().withLatestFixed(now());
     final ExchangeSearchResult result = new ExchangeSearchResult(vc);

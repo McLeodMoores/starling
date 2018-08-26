@@ -34,7 +34,7 @@ import com.opengamma.util.monitor.OperationTimer;
  */
 public class CompiledFunctionService implements Lifecycle {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(CompiledFunctionService.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(CompiledFunctionService.class);
 
   private final FunctionRepositoryFactory _functionRepositoryFactory;
   private FunctionRepository _rawFunctionRepository;
@@ -55,7 +55,7 @@ public class CompiledFunctionService implements Lifecycle {
 
     @Override
     public synchronized void reinitializeFunction(final FunctionDefinition function, final ObjectId identifier) {
-      s_logger.debug("Re-initialize function {} on change to {}", function, identifier);
+      LOGGER.debug("Re-initialize function {} on change to {}", function, identifier);
       ArgumentChecker.notNull(function, "function");
       _reinitializingFunctionDefinitions.add(function);
       _reinitializingFunctionRequirements.add(identifier);
@@ -63,7 +63,7 @@ public class CompiledFunctionService implements Lifecycle {
 
     @Override
     public synchronized void reinitializeFunction(final FunctionDefinition function, final Collection<ObjectId> identifiers) {
-      s_logger.debug("Re-initialize function {} on changes to {}", function, identifiers);
+      LOGGER.debug("Re-initialize function {} on changes to {}", function, identifiers);
       ArgumentChecker.notNull(function, "function");
       _reinitializingFunctionDefinitions.add(function);
       _reinitializingFunctionRequirements.addAll(identifiers);
@@ -204,7 +204,7 @@ public class CompiledFunctionService implements Lifecycle {
   }
 
   protected void initializeImpl(final long initId, final Collection<FunctionDefinition> functions) {
-    final OperationTimer timer = new OperationTimer(s_logger, "Initializing {} function definitions", functions.size());
+    final OperationTimer timer = new OperationTimer(LOGGER, "Initializing {} function definitions", functions.size());
     _reinitializingFunctionDefinitions.clear();
     _reinitializingFunctionRequirements.clear();
     final StaticFunctionRepository initialized = new StaticFunctionRepository(_initializedFunctionRepository);
@@ -221,7 +221,7 @@ public class CompiledFunctionService implements Lifecycle {
 
       @Override
       public void failure(final Throwable error) {
-        s_logger.warn("Couldn't initialize function", error);
+        LOGGER.warn("Couldn't initialize function", error);
         // Don't take any further action - the error has been logged and the function is not in the "initialized" set
       }
 
@@ -241,11 +241,11 @@ public class CompiledFunctionService implements Lifecycle {
             definition.init(getFunctionCompilationContext());
             return definition;
           } catch (final UnsupportedOperationException e) {
-            s_logger.warn("Function {}, is not supported in this configuration - {}", definition.getUniqueId(), e.getMessage());
-            s_logger.info("Caught exception", e);
+            LOGGER.warn("Function {}, is not supported in this configuration - {}", definition.getUniqueId(), e.getMessage());
+            LOGGER.info("Caught exception", e);
             return null;
           } catch (final Exception e) {
-            s_logger.error("Couldn't initialize function {}", definition.getUniqueId());
+            LOGGER.error("Couldn't initialize function {}", definition.getUniqueId());
             throw new OpenGammaRuntimeException("Couldn't initialize " + definition.getShortName(), e);
           }
         }
@@ -255,7 +255,7 @@ public class CompiledFunctionService implements Lifecycle {
       jobs.join();
     } catch (final InterruptedException e) {
       Thread.interrupted();
-      s_logger.warn("Interrupted while initializing function definitions.");
+      LOGGER.warn("Interrupted while initializing function definitions.");
       throw new OpenGammaRuntimeException("Interrupted while initializing function definitions. ViewProcessor not safe to use.");
     }
     _initializedFunctionRepository = initialized;
@@ -279,7 +279,7 @@ public class CompiledFunctionService implements Lifecycle {
    * @return the set of object identifiers that should trigger re-initialization
    */
   public synchronized Set<ObjectId> initialize(final long initId) {
-    s_logger.info("Initializing all function definitions to {}", initId);
+    LOGGER.info("Initializing all function definitions to {}", initId);
     _rawFunctionRepository = getFunctionRepositoryFactory().constructRepository(Instant.ofEpochMilli(initId));
     _initializedFunctionRepository = null;
     initializeImpl(initId, _rawFunctionRepository.getAllFunctions());
@@ -292,7 +292,7 @@ public class CompiledFunctionService implements Lifecycle {
       // Same repository; just reinitialization of some functions
       final Set<FunctionDefinition> reinitialize = _reinitializingFunctionDefinitions;
       if (reinitialize.isEmpty()) {
-        s_logger.warn("No functions registered for re-initialization");
+        LOGGER.warn("No functions registered for re-initialization");
         getFunctionCompilationContext().setFunctionInitId(initId);
       } else {
         initializeImpl(initId, new ArrayList<FunctionDefinition>(reinitialize));
@@ -307,7 +307,7 @@ public class CompiledFunctionService implements Lifecycle {
 
   public synchronized void reinitializeIfNeeded(final long initId) {
     if (getFunctionCompilationContext().getFunctionInitId() != initId) {
-      s_logger.info("Re-initializing function definitions - was {} required {}", getFunctionCompilationContext().getFunctionInitId(), initId);
+      LOGGER.info("Re-initializing function definitions - was {} required {}", getFunctionCompilationContext().getFunctionInitId(), initId);
       reinitializeImpl(initId);
     }
   }
@@ -327,7 +327,7 @@ public class CompiledFunctionService implements Lifecycle {
       }
       initId = System.currentTimeMillis();
     }
-    s_logger.info("Re-initializing all function definitions to {}", initId);
+    LOGGER.info("Re-initializing all function definitions to {}", initId);
     reinitializeImpl(initId);
     return _reinitializingFunctionRequirements;
   }

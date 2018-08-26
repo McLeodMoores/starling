@@ -31,7 +31,7 @@ import com.opengamma.util.ArgumentChecker;
  */
 public class FixedMarketDataAvailabilityProvider extends AbstractMarketDataAvailabilityProvider {
 
-  private static final AtomicInteger s_nextIdentifier = new AtomicInteger();
+  private static final AtomicInteger NEXT_IDENTIFIER = new AtomicInteger();
 
   private static class TargetData extends ConcurrentHashMap<String, Set<ValueSpecification>> {
     
@@ -82,7 +82,7 @@ public class FixedMarketDataAvailabilityProvider extends AbstractMarketDataAvail
 
   }
 
-  private final String _syntheticScheme = "InMemoryLKV" + s_nextIdentifier.getAndIncrement();
+  private final String _syntheticScheme = "InMemoryLKV" + NEXT_IDENTIFIER.getAndIncrement();
   private final AtomicInteger _nextSyntheticIdentifier = new AtomicInteger();
   private final ConcurrentMap<ExternalId, ComputationTargetSpecification> _weakIndex;
   private final ConcurrentMap<ComputationTargetSpecification, TargetData> _strictIndex;

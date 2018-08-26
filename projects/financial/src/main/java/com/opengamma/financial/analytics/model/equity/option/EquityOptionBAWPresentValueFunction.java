@@ -24,7 +24,7 @@ import com.opengamma.engine.value.ValueSpecification;
  */
 public class EquityOptionBAWPresentValueFunction extends EquityOptionBAWFunction {
   /** The Barone-Adesi Whaley present value calculator */
-  private static final EqyOptBaroneAdesiWhaleyPresentValueCalculator s_calculator = EqyOptBaroneAdesiWhaleyPresentValueCalculator.getInstance();
+  private static final EqyOptBaroneAdesiWhaleyPresentValueCalculator CALCULATOR = EqyOptBaroneAdesiWhaleyPresentValueCalculator.getInstance();
 
   /**
    * Default constructor
@@ -37,7 +37,7 @@ public class EquityOptionBAWPresentValueFunction extends EquityOptionBAWFunction
   protected Set<ComputedValue> computeValues(final InstrumentDerivative derivative, final StaticReplicationDataBundle market, final FunctionInputs inputs,
       final Set<ValueRequirement> desiredValues, final ComputationTargetSpecification targetSpec, final ValueProperties resultProperties) {
     final ValueSpecification resultSpec = new ValueSpecification(getValueRequirementNames()[0], targetSpec, resultProperties);
-    final double pv = derivative.accept(s_calculator, market);
+    final double pv = derivative.accept(CALCULATOR, market);
     return Collections.singleton(new ComputedValue(resultSpec, pv));
   }
 

@@ -44,7 +44,7 @@ import com.opengamma.util.money.Currency;
  *
  */
 public class IRFutureOptionSABRYCNSFunction extends IRFutureOptionSABRFunction {
-  private static final Logger s_logger = LoggerFactory.getLogger(IRFutureOptionSABRYCNSFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(IRFutureOptionSABRYCNSFunction.class);
   private static final InstrumentSensitivityCalculator CALCULATOR = InstrumentSensitivityCalculator.getInstance();
   private static final PresentValueNodeSensitivityCalculator NSC = PresentValueNodeSensitivityCalculator.using(PresentValueCurveSensitivitySABRCalculator.getInstance());
 
@@ -110,13 +110,13 @@ public class IRFutureOptionSABRYCNSFunction extends IRFutureOptionSABRFunction {
     }
     final String curveName = desiredValue.getConstraint(ValuePropertyNames.CURVE);
     if (curveName == null) {
-      s_logger.error("Must specify yield curve name");
+      LOGGER.error("Must specify yield curve name");
       return null;
     }
     final String curveCalculationConfigName = desiredValue.getConstraint(ValuePropertyNames.CURVE_CALCULATION_CONFIG);
     final MultiCurveCalculationConfig curveCalculationConfig = getCurveCalculationConfigSource().getConfig(curveCalculationConfigName);
     if (curveCalculationConfig == null) {
-      s_logger.error("Could not find curve calculation configuration named " + curveCalculationConfigName);
+      LOGGER.error("Could not find curve calculation configuration named " + curveCalculationConfigName);
       return null;
     }
     final String curveCalculationMethod = curveCalculationConfig.getCalculationMethod();

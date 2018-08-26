@@ -43,7 +43,7 @@ import com.opengamma.util.TerminatableJobContainer;
  * @author kirk
  */
 public class ServerSocketFudgeMessageReceiver extends AbstractServerSocketProcess {
-  private static final Logger s_logger = LoggerFactory.getLogger(ServerSocketFudgeMessageReceiver.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ServerSocketFudgeMessageReceiver.class);
   private final FudgeMessageReceiver _underlying;
   private final FudgeContext _context;
 
@@ -81,12 +81,12 @@ public class ServerSocketFudgeMessageReceiver extends AbstractServerSocketProces
   @Override
   protected synchronized void socketOpened(Socket socket) {
     ArgumentChecker.notNull(socket, "socket");
-    s_logger.info("Opened socket to remote side {}", socket.getRemoteSocketAddress());
+    LOGGER.info("Opened socket to remote side {}", socket.getRemoteSocketAddress());
     InputStream is;
     try {
       is = socket.getInputStream();
     } catch (IOException e) {
-      s_logger.warn("Unable to open InputStream for socket {}", new Object[]{socket}, e);
+      LOGGER.warn("Unable to open InputStream for socket {}", new Object[]{socket}, e);
       return;
     }
 
@@ -124,12 +124,12 @@ public class ServerSocketFudgeMessageReceiver extends AbstractServerSocketProces
       try {
         envelope = _reader.nextMessageEnvelope();
       } catch (Exception e) {
-        s_logger.warn("Unable to read message from underlying stream", e);
+        LOGGER.warn("Unable to read message from underlying stream", e);
         return;
       }
       
       if (envelope == null) {
-        s_logger.info("Nothing available on the stream. Returning and terminating.");
+        LOGGER.info("Nothing available on the stream. Returning and terminating.");
         terminate();
         return;
       }
@@ -149,10 +149,10 @@ public class ServerSocketFudgeMessageReceiver extends AbstractServerSocketProces
 
     private void dispatch(final FudgeMsgEnvelope envelope) {
       try {
-        s_logger.debug("Received message with {} fields. Dispatching to underlying.", envelope.getMessage().getNumFields());
+        LOGGER.debug("Received message with {} fields. Dispatching to underlying.", envelope.getMessage().getNumFields());
         getUnderlying().messageReceived(getContext(), envelope);
       } catch (Exception e) {
-        s_logger.warn("Unable to dispatch message to underlying receiver", e);
+        LOGGER.warn("Unable to dispatch message to underlying receiver", e);
       }
     }
   }

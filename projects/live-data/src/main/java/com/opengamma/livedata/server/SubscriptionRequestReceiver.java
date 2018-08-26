@@ -24,7 +24,7 @@ import com.opengamma.util.ArgumentChecker;
 public class SubscriptionRequestReceiver implements FudgeRequestReceiver {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(SubscriptionRequestReceiver.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(SubscriptionRequestReceiver.class);
 
   /**
    * The underlying server.
@@ -58,13 +58,13 @@ public class SubscriptionRequestReceiver implements FudgeRequestReceiver {
     try {
       FudgeMsg requestFudgeMsg = requestEnvelope.getMessage();
       LiveDataSubscriptionRequest subscriptionRequest = LiveDataSubscriptionRequest.fromFudgeMsg(deserializer, requestFudgeMsg);
-      s_logger.debug("Received subscription request {}", subscriptionRequest);
+      LOGGER.debug("Received subscription request {}", subscriptionRequest);
       LiveDataSubscriptionResponseMsg subscriptionResponse = getLiveDataServer().subscriptionRequestMade(subscriptionRequest);
-      s_logger.debug("Sending subscription response {}", subscriptionResponse);
+      LOGGER.debug("Sending subscription response {}", subscriptionResponse);
       FudgeMsg responseFudgeMsg = subscriptionResponse.toFudgeMsg(new FudgeSerializer(deserializer.getFudgeContext()));
       return responseFudgeMsg;
     } catch (RuntimeException e) {
-      s_logger.error("Unexpected exception when processing subscription request", e);
+      LOGGER.error("Unexpected exception when processing subscription request", e);
       throw e;      
     }
   }

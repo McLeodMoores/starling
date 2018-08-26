@@ -26,7 +26,7 @@ import com.opengamma.util.OpenGammaClock;
  */
 class DbClock extends Clock {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(DbClock.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(DbClock.class);
 
   /**
    * The connector.
@@ -134,7 +134,7 @@ class DbClock extends Clock {
     do {
       if (previous.isAfter(instant)) {
         // Can't have time going backwards; have it stand still instead
-        s_logger.debug("Returning previous time instant {} instead of {}", previous, instant);
+        LOGGER.debug("Returning previous time instant {} instead of {}", previous, instant);
         return previous;
       }
       // Time has progressed; update the reference

@@ -58,7 +58,7 @@ import com.opengamma.util.metric.OpenGammaMetricRegistry;
  * backing store.
  */
 public class NonVersionedRedisSecuritySource implements SecuritySource {
-  private static final Logger s_logger = LoggerFactory.getLogger(NonVersionedRedisSecuritySource.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(NonVersionedRedisSecuritySource.class);
   private final JedisPool _jedisPool;
   private final FudgeContext _fudgeContext;
   private final String _redisPrefix;
@@ -186,7 +186,7 @@ public class NonVersionedRedisSecuritySource implements SecuritySource {
           
           jedis.sadd(redisKey, uniqueId.toString());
           if (jedis.scard(redisKey) > 1) {
-            s_logger.warn("Multiple securities with same ExternalId {}. Probable misuse.", externalId);
+            LOGGER.warn("Multiple securities with same ExternalId {}. Probable misuse.", externalId);
           }
         }
         
@@ -196,7 +196,7 @@ public class NonVersionedRedisSecuritySource implements SecuritySource {
         
         getJedisPool().returnResource(jedis);
       } catch (Exception e) {
-        s_logger.error("Unable to put security " + security, e);
+        LOGGER.error("Unable to put security " + security, e);
         getJedisPool().returnBrokenResource(jedis);
         throw new OpenGammaRuntimeException("Unable to put security " + security, e);
       }
@@ -222,7 +222,7 @@ public class NonVersionedRedisSecuritySource implements SecuritySource {
         result = getWorker.query(jedis);
         getJedisPool().returnResource(jedis);
       } catch (Exception e) {
-        s_logger.error("Unable to execute get", e);
+        LOGGER.error("Unable to execute get", e);
         getJedisPool().returnBrokenResource(jedis);
         throw new OpenGammaRuntimeException("Unable to execute get()", e);
       }
@@ -262,7 +262,7 @@ public class NonVersionedRedisSecuritySource implements SecuritySource {
     ArgumentChecker.notNull(bundle, "bundle");
     
     if (bundle.size() != 1) {
-      s_logger.warn("Possible bad use of NonVersionedRedisSecuritySource: bundle size {} not equal to 1.", bundle);
+      LOGGER.warn("Possible bad use of NonVersionedRedisSecuritySource: bundle size {} not equal to 1.", bundle);
     }
     
     final ExternalId externalId = bundle.iterator().next();
@@ -274,7 +274,7 @@ public class NonVersionedRedisSecuritySource implements SecuritySource {
           return null;
         }
         if (uniqueIds.size() > 1) {
-          s_logger.info("Following unique IDs for externalId {} : {}. Choosing randomly.", externalId, uniqueIds);
+          LOGGER.info("Following unique IDs for externalId {} : {}. Choosing randomly.", externalId, uniqueIds);
         }
         UniqueId uniqueId = UniqueId.parse(uniqueIds.iterator().next());
         
@@ -358,7 +358,7 @@ public class NonVersionedRedisSecuritySource implements SecuritySource {
     byte[] securityData = jedis.hget(redisKey, DATA_NAME_AS_BYTES);
     byte[] classNameData = jedis.hget(redisKey, CLASS_NAME_AS_BYTES);
     if (securityData == null) {
-      s_logger.warn("No data for security unique ID {}", uniqueId);
+      LOGGER.warn("No data for security unique ID {}", uniqueId);
       return null;
     } else {
       String className = Charsets.UTF_8.decode(ByteBuffer.wrap(classNameData)).toString();
@@ -366,7 +366,7 @@ public class NonVersionedRedisSecuritySource implements SecuritySource {
       try {
         security = SecurityFudgeUtil.convertFromFudge(getFudgeContext(), className, securityData);
       } catch (Exception ex) {
-        s_logger.warn("Unable to convert from fudge for security unique ID " + uniqueId, ex);
+        LOGGER.warn("Unable to convert from fudge for security unique ID " + uniqueId, ex);
       }
       return security;
     }

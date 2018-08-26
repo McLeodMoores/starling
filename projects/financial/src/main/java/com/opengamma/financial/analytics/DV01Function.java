@@ -34,7 +34,7 @@ import com.opengamma.engine.value.ValueSpecification;
  */
 public class DV01Function extends AbstractFunction.NonCompiledInvoker {
   /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(DV01Function.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(DV01Function.class);
 
   @Override
   public String getShortName() {
@@ -91,7 +91,7 @@ public class DV01Function extends AbstractFunction.NonCompiledInvoker {
         try {
           shift = Double.parseDouble(shiftStr);
         } catch (final NumberFormatException nfe) {
-          s_logger.error("Constraint Shift on DV01 not a value double, defaulting to 1d");
+          LOGGER.error("Constraint Shift on DV01 not a value double, defaulting to 1d");
           shift = 1d;
         }
       } else {
@@ -100,7 +100,7 @@ public class DV01Function extends AbstractFunction.NonCompiledInvoker {
       doubleValue *= shift;
       scaledValue = new ComputedValue(specification, doubleValue);
     } else {
-      s_logger.error("DV01 is non numeric type {}, value {}", value.getClass(), value);
+      LOGGER.error("DV01 is non numeric type {}, value {}", value.getClass(), value);
     }
     return Collections.singleton(scaledValue);
   }

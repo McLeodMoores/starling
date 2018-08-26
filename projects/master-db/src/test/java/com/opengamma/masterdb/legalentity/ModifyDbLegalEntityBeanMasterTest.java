@@ -44,12 +44,12 @@ import com.opengamma.util.test.TestGroup;
 public class ModifyDbLegalEntityBeanMasterTest extends AbstractDbLegalEntityBeanMasterTest {
   // superclass sets up dummy database
 
-  private static final Logger s_logger = LoggerFactory.getLogger(ModifyDbLegalEntityBeanMasterTest.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ModifyDbLegalEntityBeanMasterTest.class);
 
   @Factory(dataProvider = "databases", dataProviderClass = DbTest.class)
   public ModifyDbLegalEntityBeanMasterTest(String databaseType, String databaseVersion) {
     super(databaseType, databaseVersion, false);
-    s_logger.info("running testcases for {}", databaseType);
+    LOGGER.info("running testcases for {}", databaseType);
   }
 
   //-------------------------------------------------------------------------

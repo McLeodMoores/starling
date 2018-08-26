@@ -32,7 +32,7 @@ import com.opengamma.util.PoolExecutor;
  */
 /* package */final class InvalidMarketDataDependencyNodeFilter extends RootDiscardingSubgrapher {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(InvalidMarketDataDependencyNodeFilter.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(InvalidMarketDataDependencyNodeFilter.class);
 
   private final ComputationTargetResolver.AtVersionCorrection _targetResolver;
   private final MarketDataAvailabilityProvider _marketData;
@@ -112,7 +112,7 @@ import com.opengamma.util.PoolExecutor;
     if (target == null) {
       // This shouldn't normally happen (a default target specification will always be created that gives a stub Primitive instance) unless
       // the target specification cannot be resolved by the target resolver any more.
-      s_logger.warn("Couldn't resolve {}", alias.getTargetSpecification());
+      LOGGER.warn("Couldn't resolve {}", alias.getTargetSpecification());
       _valid.put(alias, Boolean.FALSE);
       _invalidNodes = true;
       return;
@@ -121,10 +121,10 @@ import com.opengamma.util.PoolExecutor;
     final ValueRequirement desiredValue = new ValueRequirement(alias.getValueName(), alias.getTargetSpecification(), alias.getProperties().withoutAny(ValuePropertyNames.DATA_PROVIDER));
     final ValueSpecification requiredMarketData = _marketData.getAvailability(alias.getTargetSpecification(), targetValue, desiredValue);
     if (marketData.equals(requiredMarketData)) {
-      s_logger.debug("Market data entry {} still available for {}", marketData, desiredValue);
+      LOGGER.debug("Market data entry {} still available for {}", marketData, desiredValue);
       _valid.put(alias, Boolean.TRUE);
     } else {
-      s_logger.debug("New market data {} required for {}", requiredMarketData, desiredValue);
+      LOGGER.debug("New market data {} required for {}", requiredMarketData, desiredValue);
       _valid.put(alias, Boolean.FALSE);
       _invalidNodes = true;
     }

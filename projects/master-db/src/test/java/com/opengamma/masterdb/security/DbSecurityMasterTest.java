@@ -44,14 +44,14 @@ import com.opengamma.util.time.Expiry;
 @Test(groups = TestGroup.UNIT_DB)
 public class DbSecurityMasterTest extends AbstractDbSecurityTest {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(DbSecurityMasterTest.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(DbSecurityMasterTest.class);
 
   private DbSecurityMaster _secMaster;
 
   @Factory(dataProvider = "databases", dataProviderClass = DbTest.class)
   public DbSecurityMasterTest(String databaseType, String databaseVersion) {
     super(databaseType, databaseVersion);
-    s_logger.info("running testcases for {}", databaseType);
+    LOGGER.info("running testcases for {}", databaseType);
   }
 
   //-------------------------------------------------------------------------
@@ -194,7 +194,7 @@ public class DbSecurityMasterTest extends AbstractDbSecurityTest {
       try {
         future.get();
       } catch (Throwable t) {
-        s_logger.error("Exception waiting for task to complete", t);
+        LOGGER.error("Exception waiting for task to complete", t);
       }
     }
     

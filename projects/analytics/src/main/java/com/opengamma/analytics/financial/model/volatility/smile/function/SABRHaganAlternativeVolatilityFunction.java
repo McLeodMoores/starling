@@ -18,7 +18,7 @@ import com.opengamma.util.CompareUtils;
  * {@link SABRBerestyckiVolatilityFunction}
  */
 public class SABRHaganAlternativeVolatilityFunction extends VolatilityFunctionProvider<SABRFormulaData> {
-  private static final Logger s_logger = LoggerFactory.getLogger(SABRHaganAlternativeVolatilityFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(SABRHaganAlternativeVolatilityFunction.class);
 
   private static final double CUTOFF_MONEYNESS = 1e-6;
 
@@ -43,7 +43,7 @@ public class SABRHaganAlternativeVolatilityFunction extends VolatilityFunctionPr
         final double cutoff = forward * CUTOFF_MONEYNESS;
         final double k;
         if (strike < cutoff) {
-          s_logger.info("Given strike of " + strike + " is less than cutoff at " + cutoff + ", therefore the strike is taken as " + cutoff);
+          LOGGER.info("Given strike of " + strike + " is less than cutoff at " + cutoff + ", therefore the strike is taken as " + cutoff);
           k = cutoff;
         } else {
           k = strike;

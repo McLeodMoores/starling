@@ -64,7 +64,7 @@ import com.opengamma.util.ArgumentChecker;
  */
 /* package */class DatabaseDump {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(DatabaseDump.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(DatabaseDump.class);
 
   private final RegressionIO _io;
   private final SecurityMaster _securityMaster;
@@ -163,7 +163,7 @@ import com.opengamma.util.ArgumentChecker;
     } else {
       _idMappings = new IdMappings();
     }
-    s_logger.info("Dumping database to {}", _io.getBaseFile().getAbsolutePath());
+    LOGGER.info("Dumping database to {}", _io.getBaseFile().getAbsolutePath());
   }
 
   public static void main(String[] args) throws IOException {
@@ -186,7 +186,7 @@ import com.opengamma.util.ArgumentChecker;
         io.endWrite();
       }
     } catch (Exception e) {
-      s_logger.warn("Failed to write data", e);
+      LOGGER.warn("Failed to write data", e);
       exitCode = 1;
     }
     System.exit(exitCode);
@@ -274,7 +274,7 @@ import com.opengamma.util.ArgumentChecker;
     List<UniqueIdentifiable> sortedObjects = Lists.newArrayList(objects);
     // sort the objects so two dumps of the same database put the same objects in the same files
     Collections.sort(sortedObjects, new UniqueIdentifiableComparator());
-    s_logger.info("Writing {} to {}", type, _io.getBaseFile().getAbsolutePath());
+    LOGGER.info("Writing {} to {}", type, _io.getBaseFile().getAbsolutePath());
     final Map<ObjectId, Integer> ids = Maps.newHashMap();
     final Map<String, Object> toWrite = Maps.newHashMap();
     int count = 0;
@@ -292,7 +292,7 @@ import com.opengamma.util.ArgumentChecker;
       count++;
     }
     _io.write(type, toWrite);
-    s_logger.info("Wrote {} objects", count);
+    LOGGER.info("Wrote {} objects", count);
     return ids;
   }
 

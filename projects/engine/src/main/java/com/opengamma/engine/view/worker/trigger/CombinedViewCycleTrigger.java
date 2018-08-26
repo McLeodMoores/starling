@@ -16,18 +16,18 @@ import org.slf4j.LoggerFactory;
  */
 public class CombinedViewCycleTrigger implements ViewCycleTrigger {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(CombinedViewCycleTrigger.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(CombinedViewCycleTrigger.class);
   
   private List<ViewCycleTrigger> _triggers = new ArrayList<ViewCycleTrigger>();
   
   @Override
   public ViewCycleTriggerResult query(long cycleTimeNanos) {
-    s_logger.debug("Querying triggers for cycle time {}", cycleTimeNanos);
+    LOGGER.debug("Querying triggers for cycle time {}", cycleTimeNanos);
     // Use a 'not bothered' result as the base which neither prevents nor forces a cycle and indicates no future state change
     ViewCycleTriggerResult mergedResult = new ViewCycleTriggerResult(ViewCycleEligibility.ELIGIBLE, ViewCycleType.DELTA, Long.MAX_VALUE);
     for (ViewCycleTrigger trigger : _triggers) {
       ViewCycleTriggerResult triggerResult = trigger.query(cycleTimeNanos);
-      s_logger.debug("Trigger {} returned result {}", trigger, triggerResult);
+      LOGGER.debug("Trigger {} returned result {}", trigger, triggerResult);
       mergedResult = mergeTriggerResults(mergedResult, triggerResult);
     }
     return mergedResult;

@@ -18,7 +18,7 @@ import com.opengamma.livedata.server.LiveDataServerMBean;
 public class BloombergLiveDataServerMBean extends LiveDataServerMBean {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(BloombergLiveDataServerMBean.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(BloombergLiveDataServerMBean.class);
 
   private final BloombergLiveDataServer _server;
 
@@ -32,7 +32,7 @@ public class BloombergLiveDataServerMBean extends LiveDataServerMBean {
     try {
       return _server.getSubscriptionLimit();
     } catch (RuntimeException e) {
-      s_logger.error("getConnectionStatus() failed", e);
+      LOGGER.error("getConnectionStatus() failed", e);
       throw new RuntimeException(e.getMessage());
     }
   }
@@ -41,7 +41,7 @@ public class BloombergLiveDataServerMBean extends LiveDataServerMBean {
     try {
       _server.setSubscriptionLimit(subscriptionLimit);
     } catch (RuntimeException e) {
-      s_logger.error("getConnectionStatus() failed", e);
+      LOGGER.error("getConnectionStatus() failed", e);
       throw new RuntimeException(e.getMessage());
     }
   }

@@ -40,7 +40,7 @@ import com.opengamma.util.tuple.IntObjectPair;
 public class EHCachingConventionMaster extends AbstractEHCachingMaster<ConventionDocument> implements ConventionMaster {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(EHCachingConventionMaster.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(EHCachingConventionMaster.class);
 
   /** The document search cache */
   private EHCachingSearchCache _documentSearchCache;
@@ -126,11 +126,11 @@ public class EHCachingConventionMaster extends AbstractEHCachingMaster<Conventio
     if (EHCachingSearchCache.TEST_AGAINST_UNDERLYING) {
       ConventionSearchResult check = ((ConventionMaster) getUnderlying()).search(request);
       if (!result.getPaging().equals(check.getPaging())) {
-        s_logger.error("_documentSearchCache.getCache().getName() + \" returned paging:\\n\"" + result.getPaging() +
+        LOGGER.error("_documentSearchCache.getCache().getName() + \" returned paging:\\n\"" + result.getPaging() +
                            "\nbut the underlying master returned paging:\n" + check.getPaging());
       }
       if (!result.getDocuments().equals(check.getDocuments())) {
-        s_logger.error(_documentSearchCache.getCache().getName() + " returned documents:\n" + result.getDocuments() +
+        LOGGER.error(_documentSearchCache.getCache().getName() + " returned documents:\n" + result.getDocuments() +
                            "\nbut the underlying master returned documents:\n" + check.getDocuments());
       }
     }

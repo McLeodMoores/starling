@@ -25,7 +25,7 @@ import com.opengamma.engine.view.compilation.CompiledViewDefinition;
  */
 public class ValueMappings {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(ValueMappings.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ValueMappings.class);
   
   private final class ConfigurationData {
     
@@ -36,7 +36,7 @@ public class ValueMappings {
       for (Map.Entry<ValueSpecification, Set<ValueRequirement>> entry : terminalOutputs.entrySet()) {
         Set<ValueRequirement> requirements = entry.getValue();
         if (requirements == null) {
-          s_logger.error("Unexpected set of null requirements in terminal outputs map from " + entry.getKey() + ". This is a bug in incremental dependency graph compilation.");
+          LOGGER.error("Unexpected set of null requirements in terminal outputs map from " + entry.getKey() + ". This is a bug in incremental dependency graph compilation.");
           continue;
         }
         for (ValueRequirement valueRequirement : requirements) {

@@ -15,7 +15,7 @@ import com.opengamma.util.ArgumentChecker;
  * Utility class to enable easy fetching of display comparator for externalId bundles.
  */
 public class ExternalIdDisplayComparatorUtils {
-  private static final Logger s_logger = LoggerFactory.getLogger(ExternalIdDisplayComparatorUtils.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ExternalIdDisplayComparatorUtils.class);
   
   /**
    * Default name for config object defining behavior of ExternalIdDisplayComparator
@@ -26,7 +26,7 @@ public class ExternalIdDisplayComparatorUtils {
     ArgumentChecker.notNull(name, "name");
     ExternalIdOrderConfig config = null;
     if (configSource == null) {
-      s_logger.error("null config source, defaulting to default configuration");
+      LOGGER.error("null config source, defaulting to default configuration");
       return new ExternalIdDisplayComparator(ExternalIdOrderConfig.DEFAULT_CONFIG);
     } else {
       try {
@@ -36,7 +36,7 @@ public class ExternalIdDisplayComparatorUtils {
         config = null;
       }
       if (config == null) {
-        s_logger.error("No ExternalIdOrderConfig object called " + name + " in config database, defaulting");
+        LOGGER.error("No ExternalIdOrderConfig object called " + name + " in config database, defaulting");
         return new ExternalIdDisplayComparator(ExternalIdOrderConfig.DEFAULT_CONFIG); 
       } else {
         return new ExternalIdDisplayComparator(config);

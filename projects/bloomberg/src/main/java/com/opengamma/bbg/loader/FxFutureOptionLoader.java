@@ -48,7 +48,7 @@ import com.opengamma.util.time.Expiry;
 public class FxFutureOptionLoader extends SecurityLoader {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(FxFutureOptionLoader.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(FxFutureOptionLoader.class);
   /**
    * The fields to load from Bloomberg.
    */
@@ -76,7 +76,7 @@ public class FxFutureOptionLoader extends SecurityLoader {
    * @param referenceDataProvider  the provider, not null
    */
   public FxFutureOptionLoader(ReferenceDataProvider referenceDataProvider) {
-    super(s_logger, referenceDataProvider, SecurityType.FX_FUTURE_OPTION);
+    super(LOGGER, referenceDataProvider, SecurityType.FX_FUTURE_OPTION);
   }
 
   //-------------------------------------------------------------------------
@@ -96,39 +96,39 @@ public class FxFutureOptionLoader extends SecurityLoader {
     String secDes = fieldData.getString(FIELD_PARSEKYABLE_DES);
 
     if (!BloombergDataUtils.isValidField(bbgUniqueID)) {
-      s_logger.warn("bloomberg UniqueID is missing, cannot construct irFutureOption security");
+      LOGGER.warn("bloomberg UniqueID is missing, cannot construct irFutureOption security");
       return null;
     }
     if (!BloombergDataUtils.isValidField(rootTicker)) {
-      s_logger.warn("option root ticker is missing, cannot construct irFutureOption security");
+      LOGGER.warn("option root ticker is missing, cannot construct irFutureOption security");
       return null;
     }
     if (!BloombergDataUtils.isValidField(underlyingUniqueID)) {
-      s_logger.warn("bloomberg UniqueID for Underlying Security is missing, cannot construct irFutureOption security");
+      LOGGER.warn("bloomberg UniqueID for Underlying Security is missing, cannot construct irFutureOption security");
       return null;
     }
     if (!BloombergDataUtils.isValidField(putOrCall)) {
-      s_logger.warn("option type is missing, cannot construct irFutureOption security");
+      LOGGER.warn("option type is missing, cannot construct irFutureOption security");
       return null;
     }
     if (!BloombergDataUtils.isValidField(exchangeCode)) {
-      s_logger.warn("exchange is missing, cannot construct irFutureOption security");
+      LOGGER.warn("exchange is missing, cannot construct irFutureOption security");
       return null;
     }
     if (!BloombergDataUtils.isValidField(expiryDate)) {
-      s_logger.warn("option expiry date is missing, cannot construct irFutureOption security");
+      LOGGER.warn("option expiry date is missing, cannot construct irFutureOption security");
       return null;
     }
     if (!BloombergDataUtils.isValidField(underlingTicker)) {
-      s_logger.warn("option underlying ticker is missing, cannot construct irFutureOption security");
+      LOGGER.warn("option underlying ticker is missing, cannot construct irFutureOption security");
       return null;
     }
     if (!BloombergDataUtils.isValidField(currency)) {
-      s_logger.warn("option currency is missing, cannot construct irFutureOption security");
+      LOGGER.warn("option currency is missing, cannot construct irFutureOption security");
       return null;
     }
     if (!BloombergDataUtils.isValidField(optionExerciseType)) {
-      s_logger.warn("option exercise type is missing, cannot construct irFutureOption security");
+      LOGGER.warn("option exercise type is missing, cannot construct irFutureOption security");
       return null;
     }
     OptionType optionType = getOptionType(putOrCall);

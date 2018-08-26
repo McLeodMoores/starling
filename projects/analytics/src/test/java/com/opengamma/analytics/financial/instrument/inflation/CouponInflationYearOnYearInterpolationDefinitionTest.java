@@ -60,7 +60,7 @@ public class CouponInflationYearOnYearInterpolationDefinitionTest {
   }
   private static final double WEIGHT_START = 0.2;
   private static final double WEIGHT_END = 0.8;
-  private static final CouponInflationYearOnYearInterpolationDefinition YoY_COUPON_DEFINITION = new CouponInflationYearOnYearInterpolationDefinition(CUR, PAYMENT_DATE, ACCRUAL_START_DATE,
+  private static final CouponInflationYearOnYearInterpolationDefinition YOY_COUPON_DEFINITION = new CouponInflationYearOnYearInterpolationDefinition(CUR, PAYMENT_DATE, ACCRUAL_START_DATE,
       ACCRUAL_END_DATE, 1.0, NOTIONAL, PRICE_INDEX, MONTH_LAG, 3, REFERENCE_START_DATE, REFERENCE_END_DATE, false, WEIGHT_START, WEIGHT_END);
   private static final DayCount ACT_ACT = DayCounts.ACT_ACT_ISDA;
 
@@ -111,16 +111,16 @@ public class CouponInflationYearOnYearInterpolationDefinitionTest {
    * Tests the class getter.
    */
   public void getter() {
-    assertEquals("Inflation Year on Year coupon: getter", CUR, YoY_COUPON_DEFINITION.getCurrency());
-    assertEquals("Inflation Year on Year coupon: getter", PAYMENT_DATE, YoY_COUPON_DEFINITION.getPaymentDate());
-    assertEquals("Inflation Year on Year coupon: getter", ACCRUAL_START_DATE, YoY_COUPON_DEFINITION.getAccrualStartDate());
-    assertEquals("Inflation Year on Year coupon: getter", ACCRUAL_END_DATE, YoY_COUPON_DEFINITION.getAccrualEndDate());
-    assertEquals("Inflation Year on Year coupon: getter", 1.0, YoY_COUPON_DEFINITION.getPaymentYearFraction());
-    assertEquals("Inflation Year on Year coupon: getter", NOTIONAL, YoY_COUPON_DEFINITION.getNotional());
-    assertEquals("Inflation Year on Year coupon: getter", PRICE_INDEX, YoY_COUPON_DEFINITION.getPriceIndex());
-    assertEquals("Inflation Year on Year coupon: getter", REFERENCE_START_DATE, YoY_COUPON_DEFINITION.getReferenceStartDates());
-    assertEquals("Inflation Year on Year coupon: getter", REFERENCE_END_DATE, YoY_COUPON_DEFINITION.getReferenceEndDate());
-    assertEquals("Inflation Year on Year coupon: getter", MONTH_LAG, YoY_COUPON_DEFINITION.getConventionalMonthLag());
+    assertEquals("Inflation Year on Year coupon: getter", CUR, YOY_COUPON_DEFINITION.getCurrency());
+    assertEquals("Inflation Year on Year coupon: getter", PAYMENT_DATE, YOY_COUPON_DEFINITION.getPaymentDate());
+    assertEquals("Inflation Year on Year coupon: getter", ACCRUAL_START_DATE, YOY_COUPON_DEFINITION.getAccrualStartDate());
+    assertEquals("Inflation Year on Year coupon: getter", ACCRUAL_END_DATE, YOY_COUPON_DEFINITION.getAccrualEndDate());
+    assertEquals("Inflation Year on Year coupon: getter", 1.0, YOY_COUPON_DEFINITION.getPaymentYearFraction());
+    assertEquals("Inflation Year on Year coupon: getter", NOTIONAL, YOY_COUPON_DEFINITION.getNotional());
+    assertEquals("Inflation Year on Year coupon: getter", PRICE_INDEX, YOY_COUPON_DEFINITION.getPriceIndex());
+    assertEquals("Inflation Year on Year coupon: getter", REFERENCE_START_DATE, YOY_COUPON_DEFINITION.getReferenceStartDates());
+    assertEquals("Inflation Year on Year coupon: getter", REFERENCE_END_DATE, YOY_COUPON_DEFINITION.getReferenceEndDate());
+    assertEquals("Inflation Year on Year coupon: getter", MONTH_LAG, YOY_COUPON_DEFINITION.getConventionalMonthLag());
   }
 
   @Test
@@ -128,46 +128,46 @@ public class CouponInflationYearOnYearInterpolationDefinitionTest {
    * Tests the equal and hash-code methods.
    */
   public void equalHash() {
-    assertEquals(YoY_COUPON_DEFINITION, YoY_COUPON_DEFINITION);
+    assertEquals(YOY_COUPON_DEFINITION, YOY_COUPON_DEFINITION);
     final CouponInflationYearOnYearInterpolationDefinition couponDuplicate = new CouponInflationYearOnYearInterpolationDefinition(CUR, PAYMENT_DATE, ACCRUAL_START_DATE, ACCRUAL_END_DATE, 1.0,
         NOTIONAL,
         PRICE_INDEX, MONTH_LAG, 3, REFERENCE_START_DATE, REFERENCE_END_DATE, false, WEIGHT_START, WEIGHT_END);
-    assertEquals(YoY_COUPON_DEFINITION, couponDuplicate);
-    assertEquals(YoY_COUPON_DEFINITION.hashCode(), couponDuplicate.hashCode());
+    assertEquals(YOY_COUPON_DEFINITION, couponDuplicate);
+    assertEquals(YOY_COUPON_DEFINITION.hashCode(), couponDuplicate.hashCode());
     CouponInflationYearOnYearInterpolationDefinition modified;
     modified = new CouponInflationYearOnYearInterpolationDefinition(CUR, ACCRUAL_END_DATE.minusDays(1), ACCRUAL_START_DATE, ACCRUAL_END_DATE, 1.0, NOTIONAL, PRICE_INDEX, MONTH_LAG,
         3, REFERENCE_START_DATE, REFERENCE_END_DATE, false, WEIGHT_START, WEIGHT_END);
-    assertFalse(YoY_COUPON_DEFINITION.equals(modified));
+    assertFalse(YOY_COUPON_DEFINITION.equals(modified));
     modified = new CouponInflationYearOnYearInterpolationDefinition(CUR, PAYMENT_DATE, ACCRUAL_START_DATE.minusDays(1), ACCRUAL_END_DATE, 1.0, NOTIONAL, PRICE_INDEX, MONTH_LAG, 3,
         REFERENCE_START_DATE, REFERENCE_END_DATE, false, WEIGHT_START, WEIGHT_END);
-    assertFalse(YoY_COUPON_DEFINITION.equals(modified));
+    assertFalse(YOY_COUPON_DEFINITION.equals(modified));
     modified = new CouponInflationYearOnYearInterpolationDefinition(CUR, PAYMENT_DATE, ACCRUAL_START_DATE, ACCRUAL_END_DATE.minusDays(1), 1.0, NOTIONAL, PRICE_INDEX, MONTH_LAG, 3,
         REFERENCE_START_DATE, REFERENCE_END_DATE, false, WEIGHT_START, WEIGHT_END);
-    assertFalse(YoY_COUPON_DEFINITION.equals(modified));
+    assertFalse(YOY_COUPON_DEFINITION.equals(modified));
     final ZonedDateTime[] modifiedReferenceStartTime = new ZonedDateTime[2];
     modifiedReferenceStartTime[0] = REFERENCE_START_DATE[0];
     modifiedReferenceStartTime[1] = REFERENCE_START_DATE[1].minusDays(1);
     modified = new CouponInflationYearOnYearInterpolationDefinition(CUR, PAYMENT_DATE, ACCRUAL_START_DATE, ACCRUAL_END_DATE, 1.0, NOTIONAL, PRICE_INDEX, MONTH_LAG,
         3, modifiedReferenceStartTime, REFERENCE_END_DATE, false, WEIGHT_START, WEIGHT_END);
-    assertFalse(YoY_COUPON_DEFINITION.equals(modified));
+    assertFalse(YOY_COUPON_DEFINITION.equals(modified));
     final ZonedDateTime[] modifiedReferenceEndTime = new ZonedDateTime[2];
     modifiedReferenceEndTime[0] = REFERENCE_START_DATE[0];
     modifiedReferenceEndTime[1] = REFERENCE_START_DATE[1].minusDays(1);
     modified = new CouponInflationYearOnYearInterpolationDefinition(CUR, PAYMENT_DATE, ACCRUAL_START_DATE, ACCRUAL_END_DATE, 1.0, NOTIONAL, PRICE_INDEX, MONTH_LAG, 3,
         REFERENCE_START_DATE, modifiedReferenceEndTime, false, WEIGHT_START, WEIGHT_END);
-    assertFalse(YoY_COUPON_DEFINITION.equals(modified));
+    assertFalse(YOY_COUPON_DEFINITION.equals(modified));
     modified = new CouponInflationYearOnYearInterpolationDefinition(CUR, PAYMENT_DATE, ACCRUAL_START_DATE, ACCRUAL_END_DATE, 2.0, NOTIONAL, PRICE_INDEX, MONTH_LAG, 3,
         REFERENCE_START_DATE, REFERENCE_END_DATE, false, WEIGHT_START, WEIGHT_END);
-    assertFalse(YoY_COUPON_DEFINITION.equals(modified));
+    assertFalse(YOY_COUPON_DEFINITION.equals(modified));
     modified = new CouponInflationYearOnYearInterpolationDefinition(CUR, PAYMENT_DATE, ACCRUAL_START_DATE, ACCRUAL_END_DATE, 1.0, NOTIONAL + 10.0, PRICE_INDEX, MONTH_LAG, 3,
         REFERENCE_START_DATE, REFERENCE_END_DATE, false, WEIGHT_START, WEIGHT_END);
-    assertFalse(YoY_COUPON_DEFINITION.equals(modified));
+    assertFalse(YOY_COUPON_DEFINITION.equals(modified));
     modified = new CouponInflationYearOnYearInterpolationDefinition(CUR, PAYMENT_DATE, ACCRUAL_START_DATE, ACCRUAL_END_DATE, 1.0, NOTIONAL, PRICE_INDEX, MONTH_LAG, 3,
         REFERENCE_START_DATE, REFERENCE_END_DATE, false, WEIGHT_START + .1, WEIGHT_END);
-    assertFalse(YoY_COUPON_DEFINITION.equals(modified));
+    assertFalse(YOY_COUPON_DEFINITION.equals(modified));
     modified = new CouponInflationYearOnYearInterpolationDefinition(CUR, PAYMENT_DATE, ACCRUAL_START_DATE, ACCRUAL_END_DATE, 1.0, NOTIONAL, PRICE_INDEX, MONTH_LAG, 3,
         REFERENCE_START_DATE, REFERENCE_END_DATE, false, WEIGHT_START, WEIGHT_END + .1);
-    assertFalse(YoY_COUPON_DEFINITION.equals(modified));
+    assertFalse(YOY_COUPON_DEFINITION.equals(modified));
   }
 
   @Test
@@ -185,7 +185,7 @@ public class CouponInflationYearOnYearInterpolationDefinitionTest {
   @Test
   public void toDerivativesNoData() {
     final ZonedDateTime pricingDate = DateUtils.getUTCDate(2011, 7, 29);
-    final Coupon yearOnYearCouponConverted = YoY_COUPON_DEFINITION.toDerivative(pricingDate);
+    final Coupon yearOnYearCouponConverted = YOY_COUPON_DEFINITION.toDerivative(pricingDate);
     final double paymentTime = ACT_ACT.getDayCountFraction(pricingDate, PAYMENT_DATE);
     final double referenceStartTime0 = ACT_ACT.getDayCountFraction(pricingDate, REFERENCE_START_DATE[0]);
     final double referenceEndTime0 = ACT_ACT.getDayCountFraction(pricingDate, REFERENCE_END_DATE[0]);
@@ -211,7 +211,7 @@ public class CouponInflationYearOnYearInterpolationDefinitionTest {
       DateUtils.getUTCDate(2017, 6, 1), DateUtils.getUTCDate(2018, 5, 1), DateUtils.getUTCDate(2018, 6, 1) },
         new double[] {
           127.23, 127.43, 128.23, 128.43 });
-    final Coupon yearOnYearCouponConverted = YoY_COUPON_DEFINITION.toDerivative(pricingDate, priceIndexTS);
+    final Coupon yearOnYearCouponConverted = YOY_COUPON_DEFINITION.toDerivative(pricingDate, priceIndexTS);
     final double paymentTime = ACT_ACT.getDayCountFraction(pricingDate, PAYMENT_DATE);
     final double referenceStartTime0 = ACT_ACT.getDayCountFraction(pricingDate, REFERENCE_START_DATE[0]);
     final double referenceEndTime0 = ACT_ACT.getDayCountFraction(pricingDate, REFERENCE_END_DATE[0]);
@@ -237,7 +237,7 @@ public class CouponInflationYearOnYearInterpolationDefinitionTest {
       DateUtils.getUTCDate(2017, 6, 30), DateUtils.getUTCDate(2018, 5, 31), DateUtils.getUTCDate(2018, 6, 30) },
         new double[] {
           127.23, 127.43, 128.23, 128.43 });
-    final Coupon zeroCouponConverted = YoY_COUPON_DEFINITION.toDerivative(pricingDate, priceIndexTS);
+    final Coupon zeroCouponConverted = YOY_COUPON_DEFINITION.toDerivative(pricingDate, priceIndexTS);
     final double paymentTime = ACT_ACT.getDayCountFraction(pricingDate, PAYMENT_DATE);
     final CouponFixed zeroCoupon = new CouponFixed(CUR, paymentTime, 1.0, NOTIONAL, (WEIGHT_END * 128.23 + (1 - WEIGHT_END) * 128.43) /
         (WEIGHT_START * 127.23 + (1 - WEIGHT_START) * 127.43) - 1.0);

@@ -32,7 +32,7 @@ import com.opengamma.util.tuple.Pairs;
  * Default properties for FX options priced using the Black functions.
  */
 public class FXOptionBlackSurfaceDefaults extends DefaultPropertyFunction {
-  private static final Logger s_logger = LoggerFactory.getLogger(FXOptionBlackSurfaceDefaults.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(FXOptionBlackSurfaceDefaults.class);
   private static final String[] VALUE_REQUIREMENTS = new String[] {
     ValueRequirementNames.PRESENT_VALUE,
     ValueRequirementNames.FX_PRESENT_VALUE,
@@ -143,7 +143,7 @@ public class FXOptionBlackSurfaceDefaults extends DefaultPropertyFunction {
       if (_surfaceNameByCurrencyPair.containsKey(pair)) {
         return Collections.singleton(_surfaceNameByCurrencyPair.get(pair));
       }
-      s_logger.error("Could not get surface name for currency pair {}, {}; should never happen", putCurrency, callCurrency);
+      LOGGER.error("Could not get surface name for currency pair {}, {}; should never happen", putCurrency, callCurrency);
     }
     return null;
   }

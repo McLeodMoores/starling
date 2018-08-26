@@ -106,7 +106,7 @@ import com.opengamma.util.money.Currency;
  */
 public abstract class MultiCurvePricingFunction extends AbstractFunction {
   /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(MultiCurvePricingFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(MultiCurvePricingFunction.class);
   /** The value requirements produced by this function */
   private final String[] _valueRequirements;
   /** The curve construction configuration source */
@@ -258,7 +258,7 @@ public abstract class MultiCurvePricingFunction extends AbstractFunction {
             final CurveConstructionConfiguration curveConstructionConfiguration =
                 _curveConstructionConfigurationSource.getCurveConstructionConfiguration(curveConstructionConfigurationName);
             if (curveConstructionConfiguration == null) {
-              s_logger.error("Could not get curve construction configuration called {} from config master", curveConstructionConfigurationName);
+              LOGGER.error("Could not get curve construction configuration called {} from config master", curveConstructionConfigurationName);
               return null;
             }
             final String[] curveNames = CurveUtils.getCurveNamesForConstructionConfiguration(curveConstructionConfiguration);
@@ -275,13 +275,13 @@ public abstract class MultiCurvePricingFunction extends AbstractFunction {
         requirements.addAll(getFXRequirements(security, securitySource));
         final Set<ValueRequirement> timeSeriesRequirements = getTimeSeriesRequirements(context, target);
         if (timeSeriesRequirements == null) {
-          s_logger.error("getRequirements returned null as timeSeriesRequirements is null for {}", security);
+          LOGGER.error("getRequirements returned null as timeSeriesRequirements is null for {}", security);
           return null;
         }
         requirements.addAll(timeSeriesRequirements);
         return requirements;
       } catch (final Exception e) {
-        s_logger.error(e.getMessage());
+        LOGGER.error(e.getMessage());
         return null;
       }
     }

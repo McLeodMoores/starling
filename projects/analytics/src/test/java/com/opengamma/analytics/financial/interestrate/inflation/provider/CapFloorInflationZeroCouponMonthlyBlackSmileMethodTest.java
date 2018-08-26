@@ -79,10 +79,10 @@ public class CapFloorInflationZeroCouponMonthlyBlackSmileMethodTest {
   private static final CapFloorInflationZeroCouponMonthlyDefinition ZERO_COUPON_DEFINITION_CAP = CapFloorInflationZeroCouponMonthlyDefinition.from(ZERO_COUPON_DEFINITION,
       LAST_KNOWN_FIXING_DATE, MATURITY, STRIKE, IS_CAP);
 
-  private static final DoubleTimeSeries<ZonedDateTime> priceIndexTS = ImmutableZonedDateTimeDoubleTimeSeries.ofUTC(
+  private static final DoubleTimeSeries<ZonedDateTime> PRICE_INDEX_TS = ImmutableZonedDateTimeDoubleTimeSeries.ofUTC(
       new ZonedDateTime[] {DateUtils.getUTCDate(2008, 5, 31), DateUtils.getUTCDate(2018, 5, 31), DateUtils.getUTCDate(2018, 6, 30) }, new double[] {108.23, 128.23, 128.43 });
 
-  private static final CapFloorInflationZeroCouponMonthly ZERO_COUPON_CAP = (CapFloorInflationZeroCouponMonthly) ZERO_COUPON_DEFINITION_CAP.toDerivative(PRICING_DATE, priceIndexTS);
+  private static final CapFloorInflationZeroCouponMonthly ZERO_COUPON_CAP = (CapFloorInflationZeroCouponMonthly) ZERO_COUPON_DEFINITION_CAP.toDerivative(PRICING_DATE, PRICE_INDEX_TS);
 
   private static final CapFloorInflationZeroCouponMonthlyBlackSmileMethod METHOD = CapFloorInflationZeroCouponMonthlyBlackSmileMethod.getInstance();
   private static final PresentValueBlackSmileInflationZeroCouponCalculator PVIC = PresentValueBlackSmileInflationZeroCouponCalculator.getInstance();

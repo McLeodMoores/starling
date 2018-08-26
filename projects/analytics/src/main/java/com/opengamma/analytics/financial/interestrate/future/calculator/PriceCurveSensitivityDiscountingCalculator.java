@@ -13,6 +13,7 @@ import com.opengamma.analytics.financial.interestrate.YieldCurveBundle;
 import com.opengamma.analytics.financial.interestrate.future.derivative.BondFuture;
 import com.opengamma.analytics.financial.interestrate.future.method.BondFutureDiscountingMethod;
 
+//CSOFF
 /**
  * Calculate security prices curve sensitivity for futures (bond and interest rate).
  * @deprecated {@link YieldCurveBundle} is deprecated

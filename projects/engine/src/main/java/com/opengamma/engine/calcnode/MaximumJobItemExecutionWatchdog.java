@@ -24,7 +24,7 @@ import com.opengamma.util.ArgumentChecker;
  */
 public class MaximumJobItemExecutionWatchdog {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(MaximumJobItemExecutionWatchdog.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(MaximumJobItemExecutionWatchdog.class);
 
   /**
    * Callback for the action to take when the watchdog is triggered.
@@ -80,7 +80,7 @@ public class MaximumJobItemExecutionWatchdog {
   private Action _action = new Action() {
     @Override
     public void jobItemExecutionLimitExceeded(final CalculationJobItem jobItem, final Thread thread) {
-      s_logger.error("Job item execution limit exceeded on {} by {}", jobItem, thread);
+      LOGGER.error("Job item execution limit exceeded on {} by {}", jobItem, thread);
       thread.interrupt();
     }
   };
@@ -123,19 +123,19 @@ public class MaximumJobItemExecutionWatchdog {
         final Map.Entry<Thread, ThreadInfo> thread = itr.next();
         if (thread.getKey().isAlive()) {
           if (thread.getValue().getJobItem() == null) {
-            s_logger.debug("Thread {} alive but not executing any job items", thread.getKey());
+            LOGGER.debug("Thread {} alive but not executing any job items", thread.getKey());
           } else {
             final long elapsed = thread.getValue().getElapsed(time);
             if (elapsed > limit) {
-              s_logger.warn("Thread {} has been executing {} for {}ms", new Object[] {thread.getKey(), thread.getValue().getJobItem(), (double) elapsed / 1e6 });
+              LOGGER.warn("Thread {} has been executing {} for {}ms", new Object[] {thread.getKey(), thread.getValue().getJobItem(), (double) elapsed / 1e6 });
               thread.getValue().incrementFault();
               getTimeoutAction().jobItemExecutionLimitExceeded(thread.getValue().getJobItem(), thread.getKey());
             } else {
-              s_logger.debug("Thread {} within job limit", thread.getKey());
+              LOGGER.debug("Thread {} within job limit", thread.getKey());
             }
           }
         } else {
-          s_logger.info("Removed terminated thread {} from watchlist", thread.getKey());
+          LOGGER.info("Removed terminated thread {} from watchlist", thread.getKey());
           itr.remove();
         }
       }

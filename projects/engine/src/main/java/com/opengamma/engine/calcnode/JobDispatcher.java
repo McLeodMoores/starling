@@ -31,7 +31,7 @@ import com.opengamma.util.async.Cancelable;
  */
 public class JobDispatcher implements JobInvokerRegister {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(JobDispatcher.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(JobDispatcher.class);
 
   /* package */static final int DEFAULT_MAX_JOB_ATTEMPTS = 2;
   /* package */static final long DEFAULT_MAX_JOB_EXECUTION_QUERY_TIMEOUT = 5000;
@@ -165,7 +165,7 @@ public class JobDispatcher implements JobInvokerRegister {
   @Override
   public synchronized void registerJobInvoker(final JobInvoker invoker) {
     ArgumentChecker.notNull(invoker, "invoker");
-    s_logger.debug("Registering job invoker {}", invoker);
+    LOGGER.debug("Registering job invoker {}", invoker);
     getInvokers().add(invoker);
     getCapabilityCache().put(invoker, invoker.getCapabilities());
     if (!getPending().isEmpty()) {
@@ -175,7 +175,7 @@ public class JobDispatcher implements JobInvokerRegister {
 
   // caller must already own monitor
   private void retryPending(final long failJobsBefore) {
-    s_logger.debug("Retrying pending operations");
+    LOGGER.debug("Retrying pending operations");
     final Iterator<DispatchableJob> iterator = getPending().iterator();
     while (iterator.hasNext()) {
       final DispatchableJob job = iterator.next();
@@ -184,7 +184,7 @@ public class JobDispatcher implements JobInvokerRegister {
       } else {
         if (failJobsBefore <= 0) {
           if (getInvokers().isEmpty()) {
-            s_logger.debug("No invokers available - not retrying operations");
+            LOGGER.debug("No invokers available - not retrying operations");
             break;
           }
         } else if (job.getJobCreationTime() < failJobsBefore) {
@@ -202,7 +202,7 @@ public class JobDispatcher implements JobInvokerRegister {
   // caller must already own monitor
   private boolean invoke(final DispatchableJob job) {
     if (job.isCompleted()) {
-      s_logger.info("Job {} cancelled", job);
+      LOGGER.info("Job {} cancelled", job);
       return true;
     }
     Collection<JobInvoker> retry = null;
@@ -212,16 +212,16 @@ public class JobDispatcher implements JobInvokerRegister {
         final JobInvoker jobInvoker = iterator.next();
         if (job.canRunOn(jobInvoker)) {
           if (job.runOn(jobInvoker)) {
-            s_logger.debug("Invoker {} accepted job {}", jobInvoker, job);
+            LOGGER.debug("Invoker {} accepted job {}", jobInvoker, job);
             // put invoker to the end of the list
             iterator.remove();
             getInvokers().add(jobInvoker);
             return true;
           } else {
-            s_logger.debug("Invoker {} refused to execute job {}", jobInvoker, job);
+            LOGGER.debug("Invoker {} refused to execute job {}", jobInvoker, job);
             iterator.remove();
             if (jobInvoker.notifyWhenAvailable(this)) {
-              s_logger.info("Invoker {} requested immediate retry", jobInvoker);
+              LOGGER.info("Invoker {} requested immediate retry", jobInvoker);
               if (retry == null) {
                 retry = new LinkedList<JobInvoker>();
               }
@@ -237,13 +237,13 @@ public class JobDispatcher implements JobInvokerRegister {
         break;
       }
     } while (true);
-    s_logger.debug("No invokers available for job {}", job);
+    LOGGER.debug("No invokers available for job {}", job);
     return false;
   }
 
   protected synchronized void dispatchJobImpl(final DispatchableJob job) {
     if (!invoke(job)) {
-      s_logger.debug("Adding job to pending set");
+      LOGGER.debug("Adding job to pending set");
       getPending().add(job);
       if (getInvokers() != null) {
         retryPending(0L);
@@ -265,7 +265,7 @@ public class JobDispatcher implements JobInvokerRegister {
   public Cancelable dispatchJob(final CalculationJob job, final JobResultReceiver resultReceiver) {
     ArgumentChecker.notNull(job, "job");
     ArgumentChecker.notNull(resultReceiver, "resultReceiver");
-    s_logger.info("Dispatching job {}", job.getSpecification().getJobId());
+    LOGGER.info("Dispatching job {}", job.getSpecification().getJobId());
     final DispatchableJob dispatchJob = new StandardJob(this, job, resultReceiver);
     dispatchJobImpl(dispatchJob);
     return dispatchJob.getCancelHandle();

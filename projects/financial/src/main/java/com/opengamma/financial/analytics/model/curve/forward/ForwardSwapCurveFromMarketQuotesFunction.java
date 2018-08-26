@@ -65,7 +65,7 @@ import com.opengamma.util.time.Tenor;
  *
  */
 public class ForwardSwapCurveFromMarketQuotesFunction extends AbstractFunction {
-  private static final Logger s_logger = LoggerFactory.getLogger(ForwardSwapCurveFromMarketQuotesFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ForwardSwapCurveFromMarketQuotesFunction.class);
 
   private ConfigDBForwardSwapCurveDefinitionSource _forwardSwapCurveDefinitionSource;
   private ConfigDBForwardSwapCurveSpecificationSource _forwardSwapCurveSpecificationSource;
@@ -100,12 +100,12 @@ public class ForwardSwapCurveFromMarketQuotesFunction extends AbstractFunction {
         final ValueProperties constraints = desiredValue.getConstraints();
         final Set<String> curveNames = constraints.getValues(ValuePropertyNames.CURVE);
         if (curveNames == null || curveNames.size() != 1) {
-          s_logger.error("Did not supply a single curve name; asked for {}", curveNames);
+          LOGGER.error("Did not supply a single curve name; asked for {}", curveNames);
           return null;
         }
         final Set<String> forwardTenors = constraints.getValues(ForwardSwapCurveMarketDataFunction.PROPERTY_FORWARD_TENOR);
         if (forwardTenors == null || forwardTenors.size() != 1) {
-          s_logger.error("Did not supply a single forward tenor; asked for {}", forwardTenors);
+          LOGGER.error("Did not supply a single forward tenor; asked for {}", forwardTenors);
           return null;
         }
         final Set<String> forwardCurveInterpolatorNames = constraints.getValues(PROPERTY_FORWARD_CURVE_INTERPOLATOR);

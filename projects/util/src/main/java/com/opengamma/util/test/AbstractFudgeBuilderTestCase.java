@@ -39,7 +39,7 @@ import com.opengamma.util.test.BuilderTestProxyFactory.BuilderTestProxy;
 public abstract class AbstractFudgeBuilderTestCase {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(AbstractFudgeBuilderTestCase.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(AbstractFudgeBuilderTestCase.class);
 
   private FudgeContext _context;
   private FudgeSerializer _serializer;
@@ -71,7 +71,7 @@ public abstract class AbstractFudgeBuilderTestCase {
   }
 
   protected Logger getLogger() {
-    return s_logger;
+    return LOGGER;
   }
 
   //-------------------------------------------------------------------------

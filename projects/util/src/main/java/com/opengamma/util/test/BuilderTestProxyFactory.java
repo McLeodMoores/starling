@@ -50,7 +50,7 @@ public class BuilderTestProxyFactory {
   }
 
   private static class ExecBuilderTestProxy implements BuilderTestProxy {
-    private static final Logger s_logger = LoggerFactory.getLogger(ExecBuilderTestProxy.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ExecBuilderTestProxy.class);
 
     private final String _execPath;
 
@@ -98,7 +98,7 @@ public class BuilderTestProxyFactory {
               });
               
               for (String err : errFuture.get()) {
-                s_logger.warn(err);
+                LOGGER.warn(err);
               }
               int ret = proc.waitFor();
               if (ret != 0) {

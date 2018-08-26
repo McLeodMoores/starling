@@ -31,7 +31,7 @@ import com.opengamma.engine.view.impl.ExecutionLogModeSource;
  */
 public class SingleNodeExecutionPlanner implements GraphExecutionPlanner {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(SingleNodeExecutionPlanner.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(SingleNodeExecutionPlanner.class);
 
   private static final class JobBuilder {
 
@@ -89,7 +89,7 @@ public class SingleNodeExecutionPlanner implements GraphExecutionPlanner {
     }
 
     public CacheSelectHint getCacheHint() {
-      s_logger.debug("{} private values, {} shared values in graph", _privateValues.size(), _sharedValues.size());
+      LOGGER.debug("{} private values, {} shared values in graph", _privateValues.size(), _sharedValues.size());
       if (_privateValues.size() < _sharedValues.size()) {
         return CacheSelectHint.privateValues(_privateValues);
       } else {

@@ -43,7 +43,7 @@ import com.opengamma.scripts.Scriptable;
 public class SimulationTool extends AbstractTool<ToolContext> {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(SimulationTool.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(SimulationTool.class);
 
   /** Command line option for view definition name. */
   private static final String VIEW_DEF_NAME_OPTION = "v";
@@ -88,7 +88,7 @@ public class SimulationTool extends AbstractTool<ToolContext> {
       try {
         marketDataSpecs.add(MarketDataSpecificationParser.parse(marketDataSpecStr));
       } catch (IllegalArgumentException e) {
-        s_logger.warn(MarketDataSpecificationParser.getUsageMessage());
+        LOGGER.warn(MarketDataSpecificationParser.getUsageMessage());
         throw e;
       }
     }
@@ -110,7 +110,7 @@ public class SimulationTool extends AbstractTool<ToolContext> {
     }
     ConfigItem<ViewDefinition> viewDef = viewDefs.iterator().next();
     UniqueId viewDefId = viewDef.getUniqueId();
-    s_logger.info("Running simulation using script {}, view '{}', market data {}, batch mode {}",
+    LOGGER.info("Running simulation using script {}, view '{}', market data {}, batch mode {}",
                   simulationScript, viewDefName, marketDataSpecs, batchMode);
     simulation.run(viewDefId, marketDataSpecs, batchMode, listener, viewProcessor);
   }

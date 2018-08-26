@@ -20,7 +20,7 @@ import com.opengamma.util.tuple.Pairs;
  * Utilities for working with Exchanges.
  */
 public class ExchangeUtils {
-  private static final Logger s_logger = LoggerFactory.getLogger(ExchangeUtils.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ExchangeUtils.class);
   /**
    * THIS IS NOT READY FOR PRIME TIME YET
    * @param exchangeSource a source of exchanges, we assume it provides ManageableExchanges
@@ -42,7 +42,7 @@ public class ExchangeUtils {
           }
         }
       }
-      s_logger.warn("Couldn't find exchagne close time for {}, defaulting to supplied default", isoMic);
+      LOGGER.warn("Couldn't find exchagne close time for {}, defaulting to supplied default", isoMic);
       return Pairs.of(defaultTime, exchange.getTimeZone());
     } else {
       return null;       

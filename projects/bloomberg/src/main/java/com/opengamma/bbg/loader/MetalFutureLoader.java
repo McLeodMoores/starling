@@ -49,7 +49,7 @@ import com.opengamma.util.time.Expiry;
 public class MetalFutureLoader extends SecurityLoader {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(MetalFutureLoader.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(MetalFutureLoader.class);
   /**
    * The fields to load from Bloomberg.
    */
@@ -88,7 +88,7 @@ public class MetalFutureLoader extends SecurityLoader {
    * @param referenceDataProvider  the provider, not null
    */
   public MetalFutureLoader(ReferenceDataProvider referenceDataProvider) {
-    super(s_logger, referenceDataProvider, SecurityType.METAL_FUTURE);
+    super(LOGGER, referenceDataProvider, SecurityType.METAL_FUTURE);
   }
 
   //-------------------------------------------------------------------------
@@ -107,35 +107,35 @@ public class MetalFutureLoader extends SecurityLoader {
     double unitAmount = Double.valueOf(fieldData.getString(FIELD_FUT_VAL_PT));
 
     if (!isValidField(bbgUnique)) {
-      s_logger.warn("bbgUnique is null, cannot construct metal future security");
+      LOGGER.warn("bbgUnique is null, cannot construct metal future security");
       return null;
     }
     if (!isValidField(expiryDate)) {
-      s_logger.warn("expiry date is null, cannot construct metal future security");
+      LOGGER.warn("expiry date is null, cannot construct metal future security");
       return null;
     }
     if (!isValidField(futureTradingHours)) {
-      s_logger.warn("futures trading hours is null, cannot construct metal index future security");
+      LOGGER.warn("futures trading hours is null, cannot construct metal index future security");
       return null;
     }
     if (!isValidField(micExchangeCode)) {
-      s_logger.warn("settlement exchange is null, cannot construct metal future security");
+      LOGGER.warn("settlement exchange is null, cannot construct metal future security");
       return null;
     }
     if (!isValidField(currencyStr)) {
-      s_logger.info("currency is null, cannot construct metal future security");
+      LOGGER.info("currency is null, cannot construct metal future security");
       return null;
     }
     if (!isValidField(category)) {
-      s_logger.info("category is null, cannot construct metal future security");
+      LOGGER.info("category is null, cannot construct metal future security");
       return null;
     }
     if (!isValidField(unitName)) {
-      s_logger.info("unitName is null, cannot construct metal future security");
+      LOGGER.info("unitName is null, cannot construct metal future security");
       return null;
     }
     if (unitNumber == null) {
-      s_logger.info("unitNumber is null, cannot construct metal future security");
+      LOGGER.info("unitNumber is null, cannot construct metal future security");
       return null;
     }
     ExternalId underlying = null;

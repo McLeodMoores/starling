@@ -50,7 +50,7 @@ import it.unimi.dsi.fastutil.objects.ObjectArrayList;
  */
 public abstract class RawVolatilitySurfaceDataFunction extends AbstractFunction {
   /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(RawVolatilitySurfaceDataFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(RawVolatilitySurfaceDataFunction.class);
   /**
    * Value specification property for the surface result. This allows surface to be distinguished by instrument type (e.g. an FX volatility surface, swaption ATM volatility surface).
    */
@@ -145,11 +145,11 @@ public abstract class RawVolatilitySurfaceDataFunction extends AbstractFunction 
   public static <X, Y> Set<ValueRequirement> buildDataRequirements(final VolatilitySurfaceSpecification specification, final VolatilitySurfaceDefinition<X, Y> definition,
       final ZonedDateTime atInstant, final String surfaceName, final String instrumentType) {
     if (specification == null) {
-      s_logger.error("Volatility surface specification called {} for instrument type {} was null", surfaceName, instrumentType);
+      LOGGER.error("Volatility surface specification called {} for instrument type {} was null", surfaceName, instrumentType);
       return null;
     }
     if (definition == null) {
-      s_logger.error("Volatility surface definition called {} for instrument type {} was null", surfaceName, instrumentType);
+      LOGGER.error("Volatility surface definition called {} for instrument type {} was null", surfaceName, instrumentType);
       return null;
     }
     final Set<ValueRequirement> result = new HashSet<>();
@@ -218,7 +218,7 @@ public abstract class RawVolatilitySurfaceDataFunction extends AbstractFunction 
         return null;
       }
       if (!_instrumentType.equals(instrumentType)) {
-        s_logger.error("Instrument type {} did not match that required {}", instrumentType, _instrumentType);
+        LOGGER.error("Instrument type {} did not match that required {}", instrumentType, _instrumentType);
         return null;
       }
       final String surfaceName = desiredValue.getConstraints().getStrictValue(ValuePropertyNames.SURFACE);
@@ -228,12 +228,12 @@ public abstract class RawVolatilitySurfaceDataFunction extends AbstractFunction 
       try {
         final VolatilitySurfaceDefinition<?, ?> definition = getDefinition(_definitionSource, context.getComputationTargetResolver().getVersionCorrection(), target, surfaceName);
         if (definition == null) {
-          s_logger.error("Could not get volatility surface definition for instrument type {} with target {} called {}", new Object[] {target, _instrumentType, surfaceName });
+          LOGGER.error("Could not get volatility surface definition for instrument type {} with target {} called {}", new Object[] {target, _instrumentType, surfaceName });
           return null;
         }
         final VolatilitySurfaceSpecification specification = getSpecification(_specificationSource, context.getComputationTargetResolver().getVersionCorrection(), target, surfaceName);
         if (specification == null) {
-          s_logger.error("Could not get volatility surface specification for instrument type {} with target {} called {}", new Object[] {target, _instrumentType, surfaceName });
+          LOGGER.error("Could not get volatility surface specification for instrument type {} with target {} called {}", new Object[] {target, _instrumentType, surfaceName });
           return null;
         }
         final Set<ValueRequirement> requirements = buildDataRequirements(specification, definition, _now, surfaceName, instrumentType);
@@ -247,7 +247,7 @@ public abstract class RawVolatilitySurfaceDataFunction extends AbstractFunction 
         requirements.add(new ValueRequirement(ValueRequirementNames.VOLATILITY_SURFACE_DEFINITION, target.toSpecification(), definitionProperties));
         return requirements;
       } catch (final Exception e) {
-        s_logger.error(e.getMessage());
+        LOGGER.error(e.getMessage());
         return null;
       }
     }
@@ -319,7 +319,7 @@ public abstract class RawVolatilitySurfaceDataFunction extends AbstractFunction 
             yList.add(y);
             volatilityValues.put(Pairs.of(x, y), volatility);
           } else {
-            s_logger.info("Missing value {}", identifier.toString());
+            LOGGER.info("Missing value {}", identifier.toString());
           }
         }
       }

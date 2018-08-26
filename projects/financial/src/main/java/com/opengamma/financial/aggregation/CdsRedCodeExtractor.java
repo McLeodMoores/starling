@@ -19,7 +19,7 @@ import com.opengamma.id.ExternalId;
  */
 public class CdsRedCodeExtractor<T> {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(CdsRedCodeExtractor.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(CdsRedCodeExtractor.class);
 
   /**
    * Handler which will perform further processing of the red code.
@@ -48,7 +48,7 @@ public class CdsRedCodeExtractor<T> {
 
       return _redCodeHandler.extract(refEntityId.getValue());
     } else {
-      s_logger.warn("Unable to lookup RED code as reference entity external id uses scheme: {}", refEntityId.getScheme());
+      LOGGER.warn("Unable to lookup RED code as reference entity external id uses scheme: {}", refEntityId.getScheme());
       return null;
     }
   }

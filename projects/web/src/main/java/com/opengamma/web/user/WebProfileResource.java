@@ -41,7 +41,7 @@ import com.opengamma.web.WebHomeUris;
 public class WebProfileResource extends AbstractSingletonWebResource {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(WebProfileResource.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(WebProfileResource.class);
   /**
    * The ftl file.
    */
@@ -99,7 +99,7 @@ public class WebProfileResource extends AbstractSingletonWebResource {
       return Response.seeOther(new WebHomeUris(uriInfo).home()).build();
       
     } catch (UserFormException ex) {
-      ex.logUnexpected(s_logger);
+      ex.logUnexpected(LOGGER);
       FlexiBean out = createRootData(uriInfo);
       out.put("email", email);
       out.put("displayname", displayName);
@@ -130,7 +130,7 @@ public class WebProfileResource extends AbstractSingletonWebResource {
       return Response.seeOther(new WebHomeUris(uriInfo).home()).build();
       
     } catch (UserFormException ex) {
-      ex.logUnexpected(s_logger);
+      ex.logUnexpected(LOGGER);
       FlexiBean out = createStandardRootData(uriInfo);
       out.put("err", ex.getErrors().size() > 0);
       for (UserFormError error : ex.getErrors()) {

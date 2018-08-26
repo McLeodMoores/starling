@@ -25,7 +25,7 @@ import com.opengamma.util.ArgumentChecker;
  */
 /* package */ class LongPollingUpdateListener implements UpdateListener {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(LongPollingUpdateListener.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(LongPollingUpdateListener.class);
 
   /** Key for the array of updated URLs in the JSON */
   static final String UPDATES = "updates";
@@ -68,7 +68,7 @@ import com.opengamma.util.ArgumentChecker;
           sendUpdate(formatUpdate(callbackId));
         } catch (JSONException e) {
           // this shouldn't ever happen
-          s_logger.warn("Unable to format callback ID as JSON: " + callbackId, e);
+          LOGGER.warn("Unable to format callback ID as JSON: " + callbackId, e);
         }
       } else {
         _updates.add(callbackId);
@@ -94,7 +94,7 @@ import com.opengamma.util.ArgumentChecker;
           sendUpdate(formatUpdate(callbackIds));
         } catch (JSONException e) {
           // this shouldn't ever happen, the updates are all URLs
-          s_logger.warn("Unable to format URLs as JSON. URLs: " + callbackIds, e);
+          LOGGER.warn("Unable to format URLs as JSON. URLs: " + callbackIds, e);
         }
       } else {
         _updates.addAll(callbackIds);
@@ -108,7 +108,7 @@ import com.opengamma.util.ArgumentChecker;
    */
   /* package */ void connect(Continuation continuation) {
     synchronized (_lock) {
-      s_logger.debug("Long polling connection established, resetting timeout task {}", _timeoutTask);
+      LOGGER.debug("Long polling connection established, resetting timeout task {}", _timeoutTask);
       _timeoutTask.reset();
       _continuation = continuation;
       _continuation.setTimeout(10000);
@@ -118,7 +118,7 @@ import com.opengamma.util.ArgumentChecker;
           sendUpdate(formatUpdate(_updates));
         } catch (JSONException e) {
           // this shouldn't ever happen, the updates are all URLs
-          s_logger.warn("Unable to format updates as JSON. updates: " + _updates, e);
+          LOGGER.warn("Unable to format updates as JSON. updates: " + _updates, e);
         }
         _updates.clear();
       }
@@ -133,7 +133,7 @@ import com.opengamma.util.ArgumentChecker;
     _continuation.setAttribute(LongPollingServlet.RESULTS, update);
     _continuation.resume();
     _continuation = null;
-    s_logger.debug("Sent update to client {}: {}", _clientId, update);
+    LOGGER.debug("Sent update to client {}: {}", _clientId, update);
   }
 
   // for testing

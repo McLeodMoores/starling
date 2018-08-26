@@ -22,7 +22,7 @@ import org.slf4j.LoggerFactory;
  */
 public class AnnotationScannerTask extends Task {
   
-  private static final Logger s_logger = LoggerFactory.getLogger(AnnotationScannerTask.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(AnnotationScannerTask.class);
   
   private String _outputFile;
   private String _annotationClassName;
@@ -78,7 +78,7 @@ public class AnnotationScannerTask extends Task {
       }
       writer.close();
     } catch (IOException e) {
-      s_logger.error("Error writing to output file", e);
+      LOGGER.error("Error writing to output file", e);
       throw new BuildException("Error writing to output file", e);
     }
 

@@ -55,7 +55,7 @@ public class ComponentRepository implements Lifecycle, ServletContextAware {
   /**
    * The thread-local instance.
    */
-  private static final ThreadLocal<ComponentRepository> s_threadRepo = new InheritableThreadLocal<>();
+  private static final ThreadLocal<ComponentRepository> THREAD_REPO = new InheritableThreadLocal<>();
 
   /**
    * The logger to use.
@@ -924,7 +924,7 @@ public class ComponentRepository implements Lifecycle, ServletContextAware {
    * Sets the thread-loal instance.
    */
   public void pushThreadLocal() {
-    s_threadRepo.set(this);
+    THREAD_REPO.set(this);
   }
 
   /**
@@ -933,7 +933,7 @@ public class ComponentRepository implements Lifecycle, ServletContextAware {
    * @return the thread-local instance, not null
    */
   public static ComponentRepository getThreadLocal() {
-    ComponentRepository repo = s_threadRepo.get();
+    ComponentRepository repo = THREAD_REPO.get();
     if (repo == null) {
       throw new IllegalStateException("ComponentRepository thread-local not set");
     }

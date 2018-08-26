@@ -108,7 +108,7 @@ public class LazyResolveContext {
 
   private final SecuritySource _securities;
   private final CachingComputationTargetResolver _targetResolver;
-  private static final ThreadLocal<AtomicInteger> s_writeCount = new ThreadLocal<AtomicInteger>();
+  private static final ThreadLocal<AtomicInteger> WRITE_COUNT = new ThreadLocal<AtomicInteger>();
 
   public LazyResolveContext(final SecuritySource securities, final CachingComputationTargetResolver targetResolver) {
     _securities = securities;
@@ -132,10 +132,10 @@ public class LazyResolveContext {
    * re-entrance problems that its underlying implementation might otherwise experience. Each call from a thread must be balanced by a call to {@link #endWrite}.
    */
   public static void beginWrite() {
-    AtomicInteger c = s_writeCount.get();
+    AtomicInteger c = WRITE_COUNT.get();
     if (c == null) {
       c = new AtomicInteger(1);
-      s_writeCount.set(c);
+      WRITE_COUNT.set(c);
     } else {
       c.incrementAndGet();
     }
@@ -148,7 +148,7 @@ public class LazyResolveContext {
    * @return true if the thread is engaged in serialization behavior, false otherwise
    */
   public static boolean isWriting() {
-    final AtomicInteger c = s_writeCount.get();
+    final AtomicInteger c = WRITE_COUNT.get();
     return (c != null) && (c.get() > 0);
   }
 
@@ -156,7 +156,7 @@ public class LazyResolveContext {
    * Called by a thread at the end of any serialization operations flagged by a previous call to {@link #beginWrite}.
    */
   public static void endWrite() {
-    s_writeCount.get().decrementAndGet();
+    WRITE_COUNT.get().decrementAndGet();
   }
 
 }

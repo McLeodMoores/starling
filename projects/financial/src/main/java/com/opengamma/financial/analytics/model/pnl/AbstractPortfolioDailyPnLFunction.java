@@ -39,7 +39,7 @@ import com.opengamma.util.money.MoneyCalculationUtils;
 public abstract class AbstractPortfolioDailyPnLFunction extends AbstractFunction.NonCompiledInvoker {
 
   @SuppressWarnings("unused")
-  private static final Logger s_logger = LoggerFactory.getLogger(AbstractPortfolioDailyPnLFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(AbstractPortfolioDailyPnLFunction.class);
 
   @Override
   public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {

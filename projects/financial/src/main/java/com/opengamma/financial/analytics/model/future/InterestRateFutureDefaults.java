@@ -33,8 +33,8 @@ import com.opengamma.util.ArgumentChecker;
  */
 @Deprecated
 public class InterestRateFutureDefaults extends DefaultPropertyFunction {
-  private static final Logger s_logger = LoggerFactory.getLogger(InterestRateFutureDefaults.class);
-  private static final String[] s_valueNames = new String[] {
+  private static final Logger LOGGER = LoggerFactory.getLogger(InterestRateFutureDefaults.class);
+  private static final String[] VALUE_NAMES = new String[] {
     ValueRequirementNames.PRESENT_VALUE,
     ValueRequirementNames.PV01,
     ValueRequirementNames.YIELD_CURVE_NODE_SENSITIVITIES,
@@ -64,7 +64,7 @@ public class InterestRateFutureDefaults extends DefaultPropertyFunction {
 
   @Override
   protected void getDefaults(final PropertyDefaults defaults) {
-    for (final String valueName : s_valueNames) {
+    for (final String valueName : VALUE_NAMES) {
       defaults.addValuePropertyName(valueName, ValuePropertyNames.CURVE_CALCULATION_CONFIG);
     }
   }
@@ -75,7 +75,7 @@ public class InterestRateFutureDefaults extends DefaultPropertyFunction {
       final String currencyName = FinancialSecurityUtils.getCurrency(target.getTrade().getSecurity()).getCode();
       final String configName = _currencyAndCurveConfigNames.get(currencyName);
       if (configName == null) {
-        s_logger.error("Could not get config for currency " + currencyName + "; should never happen");
+        LOGGER.error("Could not get config for currency " + currencyName + "; should never happen");
         return null;
       }
       return Collections.singleton(configName);

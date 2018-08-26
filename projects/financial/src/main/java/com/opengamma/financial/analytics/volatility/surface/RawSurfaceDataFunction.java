@@ -57,7 +57,7 @@ import com.opengamma.util.tuple.Pairs;
  */
 public class RawSurfaceDataFunction extends AbstractFunction.NonCompiledInvoker {
   /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(RawSurfaceDataFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(RawSurfaceDataFunction.class);
   /** The surface definition source */
   private SurfaceDefinitionSource _surfaceDefinitionSource;
   /** The surface specification source */
@@ -148,11 +148,11 @@ public class RawSurfaceDataFunction extends AbstractFunction.NonCompiledInvoker 
             final Pair<Tenor, Tenor> coordinate = Pairs.<Tenor, Tenor>of(xTenor, yTenor);
             data.put(coordinate, volatility);
           } else {
-            s_logger.info("Could not get market data for {}", identifier);
+            LOGGER.info("Could not get market data for {}", identifier);
           }
         } catch (final Exception e) {
           final ExternalId identifier = provider.getInstrument(x, y);
-          s_logger.warn("Could not get market data for ticker {}. expiry = {}, maturity = {}", identifier, x, y);
+          LOGGER.warn("Could not get market data for ticker {}. expiry = {}, maturity = {}", identifier, x, y);
         }
       }
     }

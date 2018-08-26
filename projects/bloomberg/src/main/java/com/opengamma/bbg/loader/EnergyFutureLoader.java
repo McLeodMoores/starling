@@ -49,7 +49,7 @@ import com.opengamma.util.time.Expiry;
 public final class EnergyFutureLoader extends SecurityLoader {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(EnergyFutureLoader.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(EnergyFutureLoader.class);
   /**
    * The fields to load from Bloomberg.
    */
@@ -80,7 +80,7 @@ public final class EnergyFutureLoader extends SecurityLoader {
    * @param referenceDataProvider  the provider, not null
    */
   public EnergyFutureLoader(ReferenceDataProvider referenceDataProvider) {
-    super(s_logger, referenceDataProvider, SecurityType.ENERGY_FUTURE);
+    super(LOGGER, referenceDataProvider, SecurityType.ENERGY_FUTURE);
   }
 
   //-------------------------------------------------------------------------
@@ -99,35 +99,35 @@ public final class EnergyFutureLoader extends SecurityLoader {
     double unitAmount = Double.valueOf(fieldData.getString(FIELD_FUT_VAL_PT));
 
     if (!isValidField(bbgUnique)) {
-      s_logger.warn("bbgUnique is null, cannot construct energy future security");
+      LOGGER.warn("bbgUnique is null, cannot construct energy future security");
       return null;
     }
     if (!isValidField(expiryDate)) {
-      s_logger.warn("expiry date is null, cannot construct energy future security");
+      LOGGER.warn("expiry date is null, cannot construct energy future security");
       return null;
     }
     if (!isValidField(futureTradingHours)) {
-      s_logger.warn("futures trading hours is null, cannot construct energy future security");
+      LOGGER.warn("futures trading hours is null, cannot construct energy future security");
       return null;
     }
     if (!isValidField(micExchangeCode)) {
-      s_logger.warn("settlement exchange is null, cannot construct energy future security");
+      LOGGER.warn("settlement exchange is null, cannot construct energy future security");
       return null;
     }
     if (!isValidField(currencyStr)) {
-      s_logger.info("currency is null, cannot construct energy future security");
+      LOGGER.info("currency is null, cannot construct energy future security");
       return null;
     }
     if (!isValidField(category)) {
-      s_logger.info("category is null, cannot construct energy future security");
+      LOGGER.info("category is null, cannot construct energy future security");
       return null;
     }
     if (!isValidField(unitName)) {
-      s_logger.info("unitName is null, cannot construct energy future security");
+      LOGGER.info("unitName is null, cannot construct energy future security");
       return null;
     }
     if (unitNumber == null) {
-      s_logger.info("unitNumber is null, cannot construct energy future security");
+      LOGGER.info("unitNumber is null, cannot construct energy future security");
       return null;
     }
     ExternalId underlying = null;

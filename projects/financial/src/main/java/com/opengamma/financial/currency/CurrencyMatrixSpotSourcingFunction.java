@@ -30,7 +30,7 @@ import com.opengamma.util.tuple.Pairs;
  */
 public class CurrencyMatrixSpotSourcingFunction extends AbstractCurrencyMatrixSourcingFunction {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(CurrencyMatrixSpotSourcingFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(CurrencyMatrixSpotSourcingFunction.class);
 
   public CurrencyMatrixSpotSourcingFunction() {
     super(ValueRequirementNames.SPOT_RATE);
@@ -122,7 +122,7 @@ public class CurrencyMatrixSpotSourcingFunction extends AbstractCurrencyMatrixSo
       }
 
     });
-    s_logger.debug("{} to {} = {}", new Object[] {source, target, rate });
+    LOGGER.debug("{} to {} = {}", new Object[] {source, target, rate });
     return rate;
   }
 

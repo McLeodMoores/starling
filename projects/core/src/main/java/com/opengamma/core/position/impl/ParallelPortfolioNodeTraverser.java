@@ -22,7 +22,7 @@ import com.opengamma.util.PoolExecutor;
  */
 public class ParallelPortfolioNodeTraverser extends PortfolioNodeTraverser {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(ParallelPortfolioNodeTraverser.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ParallelPortfolioNodeTraverser.class);
 
   private final PoolExecutor _pool;
 
@@ -77,7 +77,7 @@ public class ParallelPortfolioNodeTraverser extends PortfolioNodeTraverser {
               try {
                 _callback.preOrderOperation(_node, position);
               } catch (Exception e) {
-                s_logger.warn("Failed preOrderOperation", e);
+                LOGGER.warn("Failed preOrderOperation", e);
               } finally {
                 childDone();
               }
@@ -95,7 +95,7 @@ public class ParallelPortfolioNodeTraverser extends PortfolioNodeTraverser {
             try {
               _callback.postOrderOperation(_node);
             } catch (Exception e) {
-              s_logger.warn("Failed preOrderOperation", e);
+              LOGGER.warn("Failed preOrderOperation", e);
             } finally {
               if (_parent != null) {
                 _parent.childDone();
@@ -108,7 +108,7 @@ public class ParallelPortfolioNodeTraverser extends PortfolioNodeTraverser {
               try {
                 _callback.postOrderOperation(_node);
               } catch (Exception e) {
-                s_logger.warn("Failed postOrderOperation", e);
+                LOGGER.warn("Failed postOrderOperation", e);
               } finally {
                 if (_parent != null) {
                   _parent.childDone();
@@ -123,7 +123,7 @@ public class ParallelPortfolioNodeTraverser extends PortfolioNodeTraverser {
                     try {
                       _callback.postOrderOperation(_node, position);
                     } catch (Exception e) {
-                      s_logger.warn("Failed postOrderOperation", e);
+                      LOGGER.warn("Failed postOrderOperation", e);
                     } finally {
                       childDone();
                     }
@@ -145,7 +145,7 @@ public class ParallelPortfolioNodeTraverser extends PortfolioNodeTraverser {
       try {
         _executorService.join();
       } catch (InterruptedException e) {
-        s_logger.info("Interrupted waiting for completion");
+        LOGGER.info("Interrupted waiting for completion");
         throw new OpenGammaRuntimeException("interrupted", e);
       }
     }

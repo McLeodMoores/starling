@@ -150,7 +150,7 @@ public class ExpressionPortfolioFilter extends AbstractFilteringFunction {
 
   }
 
-  private static final DynamicAttributes s_dynamicAttributes = new DynamicAttributes() {
+  private static final DynamicAttributes DYNAMIC_ATTRIBUTES = new DynamicAttributes() {
 
     @Override
     public Object getValue(final Object object, final String name) {
@@ -212,10 +212,10 @@ public class ExpressionPortfolioFilter extends AbstractFilteringFunction {
     eval.setDynamicVariables(new DynamicVariables() {
       @Override
       public Object getValue(final String name) {
-        return s_dynamicAttributes.getValue(position, name);
+        return DYNAMIC_ATTRIBUTES.getValue(position, name);
       }
     });
-    eval.setDynamicAttributes(s_dynamicAttributes);
+    eval.setDynamicAttributes(DYNAMIC_ATTRIBUTES);
     return Boolean.TRUE.equals(eval.evaluate());
   }
 

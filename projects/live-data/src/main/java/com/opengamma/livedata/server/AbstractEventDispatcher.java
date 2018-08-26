@@ -18,7 +18,7 @@ import com.opengamma.util.TerminatableJob;
  */
 public abstract class AbstractEventDispatcher extends TerminatableJob {
   
-  private static final Logger s_logger = LoggerFactory
+  private static final Logger LOGGER = LoggerFactory
     .getLogger(AbstractEventDispatcher.class);
   
   private static final long MAX_WAIT_MILLISECONDS = 1000;
@@ -58,15 +58,15 @@ public abstract class AbstractEventDispatcher extends TerminatableJob {
     try {
       dispatch(MAX_WAIT_MILLISECONDS);
     } catch (ConnectionUnavailableException e) {
-      s_logger.warn("No connection to underlying data provider available, failed to dispatch. Waiting for "
+      LOGGER.warn("No connection to underlying data provider available, failed to dispatch. Waiting for "
                         + _retryPeriod + "ms before retrying", e);
       try {
         Thread.sleep(_retryPeriod);
       } catch (InterruptedException e1) {
-        s_logger.warn("Interrupted waiting to retry", e1);
+        LOGGER.warn("Interrupted waiting to retry", e1);
       }
     } catch (RuntimeException e) {
-      s_logger.error("Failed to dispatch", e);
+      LOGGER.error("Failed to dispatch", e);
     }
   }
   

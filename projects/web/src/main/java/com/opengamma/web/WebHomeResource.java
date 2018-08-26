@@ -72,7 +72,7 @@ import com.opengamma.web.user.WebUsersResource;
 public class WebHomeResource extends AbstractSingletonWebResource {
 
   private static final ImmutableList<ResourceConfig> RESOURCE_CONFIGS;
-  private static final List<ResourceConfig> s_resourceConfigs = new CopyOnWriteArrayList<>();
+  private static final List<ResourceConfig> RESOURCE_CONFIG_LIST = new CopyOnWriteArrayList<>();
   static {
     ImmutableList.Builder<ResourceConfig> builder = ImmutableList.builder();
     builder.add(new ResourceConfig(WebConfigsResource.class, WebConfigData.class, WebConfigUris.class, "configUris"));
@@ -108,7 +108,7 @@ public class WebHomeResource extends AbstractSingletonWebResource {
       Class<?> resourceType, Class<? extends Bean> dataType, Class<?> urisType, String name) {
     
     ResourceConfig config = new ResourceConfig(resourceType, dataType, urisType, name);
-    s_resourceConfigs.add(config);
+    RESOURCE_CONFIG_LIST.add(config);
   }
 
   //-------------------------------------------------------------------------
@@ -146,7 +146,7 @@ public class WebHomeResource extends AbstractSingletonWebResource {
         out.put(config._name, uriObj);
       }
     }
-    for (ResourceConfig config : s_resourceConfigs) {
+    for (ResourceConfig config : RESOURCE_CONFIG_LIST) {
       Object uriObj = createUriObj(config, uriInfo);
       out.put(config._name, uriObj);
     }

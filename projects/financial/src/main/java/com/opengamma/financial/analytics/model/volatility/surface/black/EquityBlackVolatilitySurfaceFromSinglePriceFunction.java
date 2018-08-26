@@ -60,7 +60,7 @@ import com.opengamma.util.time.ExpiryAccuracy;
 */
 public class EquityBlackVolatilitySurfaceFromSinglePriceFunction extends AbstractFunction.NonCompiledInvoker {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(EquityOptionFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(EquityOptionFunction.class);
 
   /**
    * Property name for what to do if Implied Vol is undefined <p>
@@ -148,19 +148,19 @@ public class EquityBlackVolatilitySurfaceFromSinglePriceFunction extends Abstrac
     // Next we need to determine the correct target for the ForwardCurve
     final ExternalId underlyingId = FinancialSecurityUtils.getUnderlyingId(security);
     if (underlyingId == null) {
-      s_logger.debug("Did not find ExternalId for Security: {}", security);
+      LOGGER.debug("Did not find ExternalId for Security: {}", security);
       return null;
     }
     if (security instanceof EquityIndexFutureOptionSecurity) {
       final SecuritySource securitySource = context.getSecuritySource();
       IndexFutureSecurity future = (IndexFutureSecurity) securitySource.getSingle(ExternalIdBundle.of(underlyingId), context.getComputationTargetResolver().getVersionCorrection());
       if (future == null) {
-        s_logger.debug("Did not find anything in SecuritySource for ExternalId: {}", underlyingId);
+        LOGGER.debug("Did not find anything in SecuritySource for ExternalId: {}", underlyingId);
         return null;
       }
       final ExternalId indexId = future.getUnderlyingId();
       if (indexId == null) {
-        s_logger.debug("Did not find ExternalId for underlying future security: {}", future);
+        LOGGER.debug("Did not find ExternalId for underlying future security: {}", future);
         return null;
       }
       requirements.add(new ValueRequirement(ValueRequirementNames.FORWARD_CURVE, ComputationTargetType.PRIMITIVE, indexId, forwardCurveProperties));
@@ -190,7 +190,7 @@ public class EquityBlackVolatilitySurfaceFromSinglePriceFunction extends Abstrac
     // First, get the market value
     final ComputedValue optionPriceValue = inputs.getComputedValue(new ValueRequirement(MarketDataRequirementNames.MARKET_VALUE, target.toSpecification()));
     if (optionPriceValue == null) {
-      s_logger.error("Could not get value of security: {}", target.getSecurity());
+      LOGGER.error("Could not get value of security: {}", target.getSecurity());
       return null;
     }
     final Double spotOptionPrice = (Double) optionPriceValue.getValue();
@@ -238,13 +238,13 @@ public class EquityBlackVolatilitySurfaceFromSinglePriceFunction extends Abstrac
     final Double impliedVol;
     final double intrinsic = Math.max(0.0, (forward - strike) * (isCall ? 1.0 : -1.0));
     if (intrinsic >= forwardOptionPrice) {
-      s_logger.info("Implied Vol Error: " + security.getName() + " - Intrinsic value (" + intrinsic + ") > price (" + forwardOptionPrice + ")!");
+      LOGGER.info("Implied Vol Error: " + security.getName() + " - Intrinsic value (" + intrinsic + ") > price (" + forwardOptionPrice + ")!");
       impliedVol = getImpliedVolIfPriceBelowPayoff(inputs, target, discountFactor, forward, strike, timeToExpiry, isCall);
     } else {
       impliedVol = BlackFormulaRepository.impliedVolatility(forwardOptionPrice, forward, strike, timeToExpiry, isCall);
     }
     if (impliedVol == null) {
-      s_logger.error("Unable to compute implied vol");
+      LOGGER.error("Unable to compute implied vol");
       return null;
     }
     final Surface<Double, Double, Double> surface = ConstantDoublesSurface.from(impliedVol);
@@ -254,7 +254,7 @@ public class EquityBlackVolatilitySurfaceFromSinglePriceFunction extends Abstrac
   
   protected Double getImpliedVolIfPriceBelowPayoff(final FunctionInputs inputs, final ComputationTarget target, 
       final double discountFactor, final double forward, final double strike, final double timeToExpiry, final boolean isCall) {
-    s_logger.error("Setting implied volatility to null");
+    LOGGER.error("Setting implied volatility to null");
     return null;
   }
   

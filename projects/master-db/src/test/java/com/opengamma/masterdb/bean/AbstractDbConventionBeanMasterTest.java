@@ -39,7 +39,7 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT_DB)
 public abstract class AbstractDbConventionBeanMasterTest extends AbstractDbTest {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(AbstractDbConventionBeanMasterTest.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(AbstractDbConventionBeanMasterTest.class);
 
   private static final ExternalIdBundle BUNDLE_201 = ExternalIdBundle.of(ExternalId.of("C", "D"), ExternalId.of("E", "F"));
   private static final ExternalIdBundle BUNDLE_102 = ExternalIdBundle.of(ExternalId.of("A", "B"), ExternalId.of("C", "D"), ExternalId.of("GH", "HI"));
@@ -52,7 +52,7 @@ public abstract class AbstractDbConventionBeanMasterTest extends AbstractDbTest 
 
   public AbstractDbConventionBeanMasterTest(String databaseType, String databaseVersion, boolean readOnly) {
     super(databaseType, databaseVersion);
-    s_logger.info("running testcases for {}", databaseType);
+    LOGGER.info("running testcases for {}", databaseType);
   }
 
   //-------------------------------------------------------------------------
@@ -90,8 +90,8 @@ public abstract class AbstractDbConventionBeanMasterTest extends AbstractDbTest 
     _cnvMaster.setClock(Clock.fixed(now, ZoneOffset.UTC));
     _version1Instant = now.minusSeconds(100);
     _version2Instant = now.minusSeconds(50);
-    s_logger.debug("test data now:   {}", _version1Instant);
-    s_logger.debug("test data later: {}", _version2Instant);
+    LOGGER.debug("test data now:   {}", _version1Instant);
+    LOGGER.debug("test data later: {}", _version2Instant);
     final JdbcOperations template = _cnvMaster.getDbConnector().getJdbcOperations();
     template.update("INSERT INTO cnv_document VALUES (?,?,?,?,?, ?,?,?,?,?, ?)",
         101, 101, toSqlTimestamp(_version1Instant), MAX_SQL_TIMESTAMP, toSqlTimestamp(_version1Instant), MAX_SQL_TIMESTAMP,

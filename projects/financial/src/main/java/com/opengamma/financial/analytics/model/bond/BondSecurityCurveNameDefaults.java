@@ -29,7 +29,7 @@ import com.opengamma.util.tuple.Pairs;
  */
 public class BondSecurityCurveNameDefaults extends DefaultPropertyFunction {
 
-  private static final String[] s_bondValueNames = new String[] {
+  private static final String[] BOND_VALUE_NAMES = new String[] {
     ValueRequirementNames.CLEAN_PRICE,
     ValueRequirementNames.DIRTY_PRICE,
     ValueRequirementNames.MACAULAY_DURATION,
@@ -44,7 +44,7 @@ public class BondSecurityCurveNameDefaults extends DefaultPropertyFunction {
     ValueRequirementNames.DV01,
   };
 
-  private static final String[] s_bondFutureValueNames = new String[] {
+  private static final String[] BOND_FUTURE_VALUE_NAMES = new String[] {
     ValueRequirementNames.GROSS_BASIS,
     ValueRequirementNames.NET_BASIS
   };
@@ -89,10 +89,10 @@ public class BondSecurityCurveNameDefaults extends DefaultPropertyFunction {
   protected void getDefaults(final PropertyDefaults defaults) {
     final Security target = defaults.getTarget().getSecurity();
     if (target instanceof BondSecurity) {
-      addProperties(defaults, s_bondValueNames);
+      addProperties(defaults, BOND_VALUE_NAMES);
     } else {
       assert target instanceof BondFutureSecurity;
-      addProperties(defaults, s_bondFutureValueNames);
+      addProperties(defaults, BOND_FUTURE_VALUE_NAMES);
     }
   }
 

@@ -23,7 +23,7 @@ import com.opengamma.util.test.TestGroup;
  */
 @Test(groups = TestGroup.UNIT)
 public class CarrLeeSeasonedSyntheticVolatilitySwapCalculatorTest {
-  private static final CarrLeeSeasonedSyntheticVolatilitySwapCalculator calculator = new CarrLeeSeasonedSyntheticVolatilitySwapCalculator();
+  private static final CarrLeeSeasonedSyntheticVolatilitySwapCalculator CALCULATOR = new CarrLeeSeasonedSyntheticVolatilitySwapCalculator();
   private static final double EPS = 1.e-10;
 
   /**
@@ -108,7 +108,7 @@ public class CarrLeeSeasonedSyntheticVolatilitySwapCalculatorTest {
     final double optionTotalExp = 3.441793507870262;
     final double fairValueExp = 6.741918505540522;
 
-    final VolatilitySwapCalculatorResult res = calculator.evaluate(s0, putStrikes, callStrikes, time, timeS, rd, rf, putVols, callVols, rQV);
+    final VolatilitySwapCalculatorResult res = CALCULATOR.evaluate(s0, putStrikes, callStrikes, time, timeS, rd, rf, putVols, callVols, rQV);
 
     final double[] putWeights = res.getPutWeights();
     final double[] callWeights = res.getCallWeights();
@@ -158,7 +158,7 @@ public class CarrLeeSeasonedSyntheticVolatilitySwapCalculatorTest {
     final double optionTotalExp = 4.065625310961250;
     final double fairValueExp = 8.778270965598562;
 
-    final VolatilitySwapCalculatorResult res = calculator.evaluate(s0, putStrikes, callStrikes, time, timeS, rate, 0., putVols, callVols, rQV);
+    final VolatilitySwapCalculatorResult res = CALCULATOR.evaluate(s0, putStrikes, callStrikes, time, timeS, rate, 0., putVols, callVols, rQV);
     final double[] putWeights = res.getPutWeights();
     final double[] callWeights = res.getCallWeights();
     final double[] putPrices = res.getPutPrices();
@@ -251,7 +251,7 @@ public class CarrLeeSeasonedSyntheticVolatilitySwapCalculatorTest {
     final double optionTotalExp = 0.778792024176818;
     final double fairValueExp = 10.046668111866955;
 
-    final VolatilitySwapCalculatorResult res = calculator.evaluate(s0, putStrikes, callStrikes, time, timeS, rd, rf, putVols, callVols, rQV);
+    final VolatilitySwapCalculatorResult res = CALCULATOR.evaluate(s0, putStrikes, callStrikes, time, timeS, rd, rf, putVols, callVols, rQV);
 
     final double[] putWeights = res.getPutWeights();
     final double[] callWeights = res.getCallWeights();
@@ -302,98 +302,98 @@ public class CarrLeeSeasonedSyntheticVolatilitySwapCalculatorTest {
     }
 
     try {
-      calculator.evaluate(spot, putStrikes, new double[] {50., 55., 60. }, timeToExpiry, timeSeasoned, interestRate, dividend, putVols, callVols, rvReturns);
+      CALCULATOR.evaluate(spot, putStrikes, new double[] {50., 55., 60. }, timeToExpiry, timeSeasoned, interestRate, dividend, putVols, callVols, rvReturns);
       throw new RuntimeException();
     } catch (Exception e) {
       assertTrue(e instanceof IllegalArgumentException);
     }
 
     try {
-      calculator.evaluate(spot, new double[] {30., 35., 40., 45, }, callStrikes, timeToExpiry, timeSeasoned, interestRate, dividend, putVols, callVols, rvReturns);
+      CALCULATOR.evaluate(spot, new double[] {30., 35., 40., 45, }, callStrikes, timeToExpiry, timeSeasoned, interestRate, dividend, putVols, callVols, rvReturns);
       throw new RuntimeException();
     } catch (Exception e) {
       assertTrue(e instanceof IllegalArgumentException);
     }
 
     try {
-      calculator.evaluate(-spot, putStrikes, callStrikes, timeToExpiry, timeSeasoned, interestRate, dividend, putVols, callVols, rvReturns);
+      CALCULATOR.evaluate(-spot, putStrikes, callStrikes, timeToExpiry, timeSeasoned, interestRate, dividend, putVols, callVols, rvReturns);
       throw new RuntimeException();
     } catch (Exception e) {
       assertTrue(e instanceof IllegalArgumentException);
     }
 
     try {
-      calculator.evaluate(spot, putStrikes, callStrikes, -timeToExpiry, timeSeasoned, interestRate, dividend, putVols, callVols, rvReturns);
+      CALCULATOR.evaluate(spot, putStrikes, callStrikes, -timeToExpiry, timeSeasoned, interestRate, dividend, putVols, callVols, rvReturns);
       throw new RuntimeException();
     } catch (Exception e) {
       assertTrue(e instanceof IllegalArgumentException);
     }
 
     try {
-      calculator.evaluate(spot, putStrikes, callStrikes, timeToExpiry, -timeSeasoned, interestRate, dividend, putVols, callVols, rvReturns);
+      CALCULATOR.evaluate(spot, putStrikes, callStrikes, timeToExpiry, -timeSeasoned, interestRate, dividend, putVols, callVols, rvReturns);
       throw new RuntimeException();
     } catch (Exception e) {
       assertTrue(e instanceof IllegalArgumentException);
     }
 
     try {
-      calculator.evaluate(spot, putStrikes, callStrikes, timeToExpiry, timeSeasoned, interestRate, dividend, putVols, callVols, -rvReturns);
+      CALCULATOR.evaluate(spot, putStrikes, callStrikes, timeToExpiry, timeSeasoned, interestRate, dividend, putVols, callVols, -rvReturns);
       throw new RuntimeException();
     } catch (Exception e) {
       assertTrue(e instanceof IllegalArgumentException);
     }
 
     try {
-      calculator.evaluate(spot, putStrikes, new double[] {-50., 55. }, timeToExpiry, timeSeasoned, interestRate, dividend, putVols, callVols, rvReturns);
+      CALCULATOR.evaluate(spot, putStrikes, new double[] {-50., 55. }, timeToExpiry, timeSeasoned, interestRate, dividend, putVols, callVols, rvReturns);
       throw new RuntimeException();
     } catch (Exception e) {
       assertTrue(e instanceof IllegalArgumentException);
     }
 
     try {
-      calculator.evaluate(spot, new double[] {-10., -5., 0., }, new double[] {5., 10. }, timeToExpiry, timeSeasoned, interestRate, dividend, putVols, callVols, rvReturns);
+      CALCULATOR.evaluate(spot, new double[] {-10., -5., 0., }, new double[] {5., 10. }, timeToExpiry, timeSeasoned, interestRate, dividend, putVols, callVols, rvReturns);
       throw new RuntimeException();
     } catch (Exception e) {
       assertTrue(e instanceof IllegalArgumentException);
     }
 
     try {
-      calculator.evaluate(spot, new double[] {35., 40., 43, }, callStrikes, timeToExpiry, timeSeasoned, interestRate, dividend, putVols, callVols, rvReturns);
+      CALCULATOR.evaluate(spot, new double[] {35., 40., 43, }, callStrikes, timeToExpiry, timeSeasoned, interestRate, dividend, putVols, callVols, rvReturns);
       throw new RuntimeException();
     } catch (Exception e) {
       assertTrue(e instanceof IllegalArgumentException);
     }
 
     try {
-      calculator.evaluate(spot, putStrikes, new double[] {50., 60. }, timeToExpiry, timeSeasoned, interestRate, dividend, putVols, callVols, rvReturns);
+      CALCULATOR.evaluate(spot, putStrikes, new double[] {50., 60. }, timeToExpiry, timeSeasoned, interestRate, dividend, putVols, callVols, rvReturns);
       throw new RuntimeException();
     } catch (Exception e) {
       assertTrue(e instanceof IllegalArgumentException);
     }
 
     try {
-      calculator.evaluate(spot - 10., putStrikes, callStrikes, timeToExpiry, timeSeasoned, interestRate, dividend, putVols, callVols, rvReturns);
+      CALCULATOR.evaluate(spot - 10., putStrikes, callStrikes, timeToExpiry, timeSeasoned, interestRate, dividend, putVols, callVols, rvReturns);
       throw new RuntimeException();
     } catch (Exception e) {
       assertTrue(e instanceof IllegalArgumentException);
     }
 
     try {
-      calculator.evaluate(spot + 10., putStrikes, callStrikes, timeToExpiry, timeSeasoned, interestRate, dividend, putVols, callVols, rvReturns);
+      CALCULATOR.evaluate(spot + 10., putStrikes, callStrikes, timeToExpiry, timeSeasoned, interestRate, dividend, putVols, callVols, rvReturns);
       throw new RuntimeException();
     } catch (Exception e) {
       assertTrue(e instanceof IllegalArgumentException);
     }
 
     try {
-      calculator.evaluate(spot, putStrikes, callStrikes, timeToExpiry, timeSeasoned, interestRate, dividend, putVols, new double[] {-15., 20. }, rvReturns);
+      CALCULATOR.evaluate(spot, putStrikes, callStrikes, timeToExpiry, timeSeasoned, interestRate, dividend, putVols, new double[] {-15., 20. }, rvReturns);
       throw new RuntimeException();
     } catch (Exception e) {
       assertTrue(e instanceof IllegalArgumentException);
     }
 
     try {
-      calculator.evaluate(spot, putStrikes, callStrikes, timeToExpiry, timeSeasoned, interestRate, dividend, new double[] {-15., 20., 10 }, callVols, rvReturns);
+      CALCULATOR.evaluate(spot, putStrikes, callStrikes, timeToExpiry, timeSeasoned, interestRate, dividend, new double[] {-15., 20., 10 }, callVols, rvReturns);
       throw new RuntimeException();
     } catch (Exception e) {
       assertTrue(e instanceof IllegalArgumentException);

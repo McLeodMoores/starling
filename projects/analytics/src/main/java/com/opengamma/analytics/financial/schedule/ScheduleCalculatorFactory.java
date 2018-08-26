@@ -75,26 +75,26 @@ public class ScheduleCalculatorFactory {
   /** Annual EOM calculator */
   public static final EndOfMonthAnnualScheduleCalculator ANNUAL_EOM_CALCULATOR = new EndOfMonthAnnualScheduleCalculator();
 
-  private static final Map<String, Schedule> s_instances = new HashMap<>();
+  private static final Map<String, Schedule> INSTANCES = new HashMap<>();
 
   static {
-    s_instances.put(DAILY, DAILY_CALCULATOR);
-    s_instances.put(END_OF_MONTH, END_OF_MONTH_CALCULATOR);
-    s_instances.put(END_OF_YEAR, END_OF_YEAR_CALCULATOR);
-    s_instances.put(FIRST_OF_MONTH, FIRST_OF_MONTH_CALCULATOR);
-    s_instances.put(FIRST_OF_YEAR, FIRST_OF_YEAR_CALCULATOR);
-    s_instances.put(MONTHLY, MONTHLY_CALCULATOR);
-    s_instances.put(WEEKLY, WEEKLY_CALCULATOR);
-    s_instances.put(ANNUAL, ANNUAL_CALCULATOR);
-    s_instances.put(QUARTERLY, QUARTERLY_CALCULATOR);
-    s_instances.put(QUARTERLY_EOM, QUARTERLY_EOM_CALCULATOR);
-    s_instances.put(SEMI_ANNUAL, SEMI_ANNUAL_CALCULATOR);
-    s_instances.put(SEMI_ANNUAL_EOM, SEMI_ANNUAL_EOM_CALCULATOR);
-    s_instances.put(ANNUAL_EOM, ANNUAL_EOM_CALCULATOR);
+    INSTANCES.put(DAILY, DAILY_CALCULATOR);
+    INSTANCES.put(END_OF_MONTH, END_OF_MONTH_CALCULATOR);
+    INSTANCES.put(END_OF_YEAR, END_OF_YEAR_CALCULATOR);
+    INSTANCES.put(FIRST_OF_MONTH, FIRST_OF_MONTH_CALCULATOR);
+    INSTANCES.put(FIRST_OF_YEAR, FIRST_OF_YEAR_CALCULATOR);
+    INSTANCES.put(MONTHLY, MONTHLY_CALCULATOR);
+    INSTANCES.put(WEEKLY, WEEKLY_CALCULATOR);
+    INSTANCES.put(ANNUAL, ANNUAL_CALCULATOR);
+    INSTANCES.put(QUARTERLY, QUARTERLY_CALCULATOR);
+    INSTANCES.put(QUARTERLY_EOM, QUARTERLY_EOM_CALCULATOR);
+    INSTANCES.put(SEMI_ANNUAL, SEMI_ANNUAL_CALCULATOR);
+    INSTANCES.put(SEMI_ANNUAL_EOM, SEMI_ANNUAL_EOM_CALCULATOR);
+    INSTANCES.put(ANNUAL_EOM, ANNUAL_EOM_CALCULATOR);
   }
 
   public static Schedule getScheduleCalculator(final String name) {
-    final Schedule schedule = s_instances.get(name);
+    final Schedule schedule = INSTANCES.get(name);
     if (schedule == null) {
       throw new IllegalArgumentException("Could not get schedule calculator with name " + name);
     }

@@ -65,7 +65,7 @@ import com.opengamma.util.monitor.OperationTimer;
  */
 public class DatabasePopulatorTool extends AbstractTool<ToolContext> {
   
-  private static final Logger s_logger = LoggerFactory.getLogger(DatabasePopulatorTool.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(DatabasePopulatorTool.class);
   /**
    * Demo function configuration object name.
    */
@@ -111,7 +111,7 @@ public class DatabasePopulatorTool extends AbstractTool<ToolContext> {
   }
 
   protected void loadSecurity(final SecurityMaster demoSecurityMaster) {
-    s_logger.info("loading securities");
+    LOGGER.info("loading securities");
     AbstractTool<ToolContext> remoteServerTool = new AbstractTool<ToolContext>() {
 
       @Override
@@ -129,7 +129,7 @@ public class DatabasePopulatorTool extends AbstractTool<ToolContext> {
   
   protected void loadPortfolio(final PortfolioMaster demoPortfolioMaster, final PositionMaster demoPositionMaster,
       final SecurityMaster demoSecurityMaster, final SecuritySource demoSecuritySource) {
-    s_logger.info("loading portfolios");
+    LOGGER.info("loading portfolios");
     AbstractTool<ToolContext> remoteServerTool = new AbstractTool<ToolContext>() {
 
       @Override
@@ -145,7 +145,7 @@ public class DatabasePopulatorTool extends AbstractTool<ToolContext> {
           try {
             resolvePortfolio = PortfolioCompiler.resolvePortfolio(portfolio, _executorService, getToolContext().getSecuritySource());
           } catch (Exception ex) {
-            s_logger.warn(String.format("Error resolving porfolio %s", portfolio.getName()), ex);
+            LOGGER.warn(String.format("Error resolving porfolio %s", portfolio.getName()), ex);
             continue;
           }
           SavePortfolio savePortfolio = new SavePortfolio(_executorService, demoPortfolioMaster, demoPositionMaster);
@@ -158,7 +158,7 @@ public class DatabasePopulatorTool extends AbstractTool<ToolContext> {
   }
   
   protected void loadConfig(final ConfigMaster configMaster, final PortfolioMaster portfolioMaster) {
-    s_logger.info("loading configs");
+    LOGGER.info("loading configs");
     AbstractTool<ToolContext> remoteServerTool = new AbstractTool<ToolContext>() {
 
       @Override
@@ -178,8 +178,8 @@ public class DatabasePopulatorTool extends AbstractTool<ToolContext> {
   }
   
   protected void loadHistoricalTimeSeries(final HistoricalTimeSeriesMaster htsMaster) {
-    s_logger.info("loading timeseries");
-    final OperationTimer timer = new OperationTimer(s_logger, "Loading time series");
+    LOGGER.info("loading timeseries");
+    final OperationTimer timer = new OperationTimer(LOGGER, "Loading time series");
     AbstractTool<ToolContext> remoteServerTool = new AbstractTool<ToolContext>() {
       
       @Override
@@ -219,7 +219,7 @@ public class DatabasePopulatorTool extends AbstractTool<ToolContext> {
   }
 
   protected void loadSnapshot(final MarketDataSnapshotMaster marketDataSnapshotMaster) {
-    s_logger.info("loading market data snapshots");
+    LOGGER.info("loading market data snapshots");
     AbstractTool<ToolContext> remoteServerTool = new AbstractTool<ToolContext>() {
 
       @Override

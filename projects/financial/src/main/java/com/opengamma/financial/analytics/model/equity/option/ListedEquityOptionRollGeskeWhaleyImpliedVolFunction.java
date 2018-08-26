@@ -33,12 +33,12 @@ import com.opengamma.financial.security.FinancialSecurity;
  */
 public class ListedEquityOptionRollGeskeWhaleyImpliedVolFunction extends ListedEquityOptionRollGeskeWhaleyFunction {
   /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(ListedEquityOptionRollGeskeWhaleyImpliedVolFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ListedEquityOptionRollGeskeWhaleyImpliedVolFunction.class);
 
   /**
    * Implied volatility calculator
    */
-  private static final EqyOptRollGeskeWhaleyImpliedVolatilityCalculator s_volCalculator = EqyOptRollGeskeWhaleyImpliedVolatilityCalculator.getInstance();
+  private static final EqyOptRollGeskeWhaleyImpliedVolatilityCalculator VOL_CALCULATOR = EqyOptRollGeskeWhaleyImpliedVolatilityCalculator.getInstance();
 
   /** Default constructor */
   public ListedEquityOptionRollGeskeWhaleyImpliedVolFunction() {
@@ -52,17 +52,17 @@ public class ListedEquityOptionRollGeskeWhaleyImpliedVolFunction extends ListedE
     Double marketPrice = null;
     final ComputedValue mktPriceObj = inputs.getComputedValue(MarketDataRequirementNames.MARKET_VALUE);
     if (mktPriceObj == null) {
-      s_logger.info(MarketDataRequirementNames.MARKET_VALUE + " not available," + targetSpec);
+      LOGGER.info(MarketDataRequirementNames.MARKET_VALUE + " not available," + targetSpec);
     } else {
       marketPrice = (Double) mktPriceObj.getValue();
     }
 
     Double impliedVol = null;
     try {
-      impliedVol = s_volCalculator.getRollGeskeWhaleyImpliedVol(derivative, market, marketPrice);
+      impliedVol = VOL_CALCULATOR.getRollGeskeWhaleyImpliedVol(derivative, market, marketPrice);
     } catch (final IllegalArgumentException e) {
-      s_logger.info(MarketDataRequirementNames.IMPLIED_VOLATILITY + " undefined" + targetSpec);
-      impliedVol = derivative.accept(s_volCalculator, market);
+      LOGGER.info(MarketDataRequirementNames.IMPLIED_VOLATILITY + " undefined" + targetSpec);
+      impliedVol = derivative.accept(VOL_CALCULATOR, market);
     }
 
     final ValueSpecification resultSpec = new ValueSpecification(getValueRequirementNames()[0], targetSpec, resultProperties);

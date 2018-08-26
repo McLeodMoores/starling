@@ -28,7 +28,7 @@ import com.opengamma.util.rest.AbstractDataResource;
  */
 public abstract class AbstractRestfulJmsResultPublisher extends AbstractDataResource {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(AbstractRestfulJmsResultPublisher.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(AbstractRestfulJmsResultPublisher.class);
   
   //CSOFF: just constants
   public static final String PATH_HEARTBEAT = "heartbeat";
@@ -102,7 +102,7 @@ public abstract class AbstractRestfulJmsResultPublisher extends AbstractDataReso
         try {
           startPublishingResults(destination);
         } catch (Exception e) {
-          s_logger.error("Error starting result publisher", e);
+          LOGGER.error("Error starting result publisher", e);
         }
       }
       
@@ -124,7 +124,7 @@ public abstract class AbstractRestfulJmsResultPublisher extends AbstractDataReso
         try {
           stopPublishingResults();
         } catch (Exception e) {
-          s_logger.error("Error stopping result publisher", e);
+          LOGGER.error("Error stopping result publisher", e);
         }
       }
       

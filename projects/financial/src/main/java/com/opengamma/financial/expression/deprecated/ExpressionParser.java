@@ -31,7 +31,7 @@ import com.opengamma.financial.expression.UserExpressionParser;
 @Deprecated
 public final class ExpressionParser extends UserExpressionParser {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(ExpressionParser.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ExpressionParser.class);
 
   private final Map<String, Object> _constants = new HashMap<String, Object>();
 
@@ -107,7 +107,7 @@ public final class ExpressionParser extends UserExpressionParser {
       final ExprParser.root_return root = parser.root();
       return build(((Tree) root.getTree()).getChild(0));
     } catch (Throwable e) {
-      s_logger.warn("Couldn't parse expression {} - {}", expression, e);
+      LOGGER.warn("Couldn't parse expression {} - {}", expression, e);
       throw new IllegalArgumentException(expression);
     }
   }

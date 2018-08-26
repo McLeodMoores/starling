@@ -73,7 +73,7 @@ import com.opengamma.util.fudgemsg.OpenGammaFudgeContext;
 public class CogdaLiveDataClient extends AbstractLiveDataClient implements Lifecycle, FudgeMessageReceiver {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(CogdaLiveDataClient.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(CogdaLiveDataClient.class);
 
   // Injected parameters:
   /**
@@ -253,7 +253,7 @@ public class CogdaLiveDataClient extends AbstractLiveDataClient implements Lifec
 
   @Override
   public void messageReceived(FudgeContext fudgeContext, FudgeMsgEnvelope msgEnvelope) {
-    s_logger.info("Got message {}", msgEnvelope);
+    LOGGER.info("Got message {}", msgEnvelope);
     FudgeMsg msg = msgEnvelope.getMessage();
     CogdaMessageType msgType = CogdaMessageType.getFromMessage(msg);
     switch (msgType) {
@@ -265,7 +265,7 @@ public class CogdaLiveDataClient extends AbstractLiveDataClient implements Lifec
         dispatchLiveDataUpdate(msg);
         break;
       default:
-        s_logger.warn("Received message that wasn't understood: {}", msg);
+        LOGGER.warn("Received message that wasn't understood: {}", msg);
     }
   }
 
@@ -289,14 +289,14 @@ public class CogdaLiveDataClient extends AbstractLiveDataClient implements Lifec
    */
   private void dispatchCommandResponse(CogdaMessageType msgType, FudgeMsg msg) {
     if (!msg.hasField("correlationId")) {
-      s_logger.warn("Received subscription response message without correlationId: {}", msg);
+      LOGGER.warn("Received subscription response message without correlationId: {}", msg);
       return;
     }
     long correlationId = msg.getLong("correlationId");
     
     SubscriptionHandle subHandle = _activeSubscriptionRequests.remove(correlationId);
     if (subHandle == null) {
-      s_logger.warn("Got subscription result on correlationId {} without active subscription: {}", correlationId, msg);
+      LOGGER.warn("Got subscription result on correlationId {} without active subscription: {}", correlationId, msg);
       return;
     }
     
@@ -308,7 +308,7 @@ public class CogdaLiveDataClient extends AbstractLiveDataClient implements Lifec
         dispatchSnapshotResponse(msg, subHandle);
         break;
       default:
-        s_logger.warn("Got unexpected msg type {} as a command response - {}", msgType, msg);
+        LOGGER.warn("Got unexpected msg type {} as a command response - {}", msgType, msg);
         break;
     }
   }
@@ -373,7 +373,7 @@ public class CogdaLiveDataClient extends AbstractLiveDataClient implements Lifec
     try {
       serverAddress = InetAddress.getByName(getServerName());
     } catch (UnknownHostException ex) {
-      s_logger.error("Illegal host name: " + getServerName(), ex);
+      LOGGER.error("Illegal host name: " + getServerName(), ex);
       throw new IllegalArgumentException("Cannot identify host " + getServerName());
     }
     try {
@@ -392,7 +392,7 @@ public class CogdaLiveDataClient extends AbstractLiveDataClient implements Lifec
       
       _socket = socket;
     } catch (IOException ioe) {
-      s_logger.error("Unable to establish connection to" + getServerName() + ":" + getServerPort(), ioe);
+      LOGGER.error("Unable to establish connection to" + getServerName() + ":" + getServerPort(), ioe);
       throw new OpenGammaRuntimeException("Unable to establish connection to" + getServerName() + ":" + getServerPort());
     }
     
@@ -411,7 +411,7 @@ public class CogdaLiveDataClient extends AbstractLiveDataClient implements Lifec
       case EXISTING_CONNECTION_RESTART:
         // We're good to go!
         // TODO kirk 2012-08-15 -- Add logic eventually for connection restart semantics.
-        s_logger.warn("Successfully logged into server.");
+        LOGGER.warn("Successfully logged into server.");
         break;
       case NOT_AUTHORIZED:
         // REVIEW kirk 2012-08-15 -- Is this the right error?
@@ -442,7 +442,7 @@ public class CogdaLiveDataClient extends AbstractLiveDataClient implements Lifec
     
     LiveDataSpecification lds = new LiveDataSpecification("OpenGamma", ExternalId.of("SURF", "FV2DBEURUSD12M"));
     LiveDataSubscriptionResponse response = client.snapshot(UserPrincipal.getLocalUser(), lds, 60000L);
-    s_logger.warn("Snapshot {}", response);
+    LOGGER.warn("Snapshot {}", response);
     List<LiveDataSpecification> subs = new LinkedList<LiveDataSpecification>();
     subs.add(lds);
     subs.add(new LiveDataSpecification("OpenGamma", ExternalId.of("SURF", "ASIRSEUR49Y30A03L")));
@@ -453,22 +453,22 @@ public class CogdaLiveDataClient extends AbstractLiveDataClient implements Lifec
     LiveDataListener ldl = new LiveDataListener() {
       @Override
       public void subscriptionResultReceived(LiveDataSubscriptionResponse subscriptionResult) {
-        s_logger.warn("Sub result {}", subscriptionResult);
+        LOGGER.warn("Sub result {}", subscriptionResult);
       }
 
       @Override
       public void subscriptionResultsReceived(final Collection<LiveDataSubscriptionResponse> subscriptionResults) {
-        s_logger.warn("Sub result {}", subscriptionResults);
+        LOGGER.warn("Sub result {}", subscriptionResults);
       }
 
       @Override
       public void subscriptionStopped(LiveDataSpecification fullyQualifiedSpecification) {
-        s_logger.warn("Sub stopped {}", fullyQualifiedSpecification);
+        LOGGER.warn("Sub stopped {}", fullyQualifiedSpecification);
       }
 
       @Override
       public void valueUpdate(LiveDataValueUpdate valueUpdate) {
-        s_logger.warn("Data received {}", valueUpdate);
+        LOGGER.warn("Data received {}", valueUpdate);
       }
       
     }; 

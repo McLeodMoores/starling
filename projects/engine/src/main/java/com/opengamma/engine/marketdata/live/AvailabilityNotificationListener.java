@@ -29,7 +29,7 @@ import com.opengamma.util.jms.JmsTopicContainer;
 /* package */ abstract class AvailabilityNotificationListener implements Lifecycle {
 
   /** Logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(LiveDataAvailabilityNotificationListener.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(LiveDataAvailabilityNotificationListener.class);
 
   /** For receiving JMS messages. */
   private final JmsTopicContainer _jmsTopicContainer;
@@ -77,7 +77,7 @@ import com.opengamma.util.jms.JmsTopicContainer;
       FudgeMsg msg = msgEnvelope.getMessage();
       MarketDataAvailabilityNotification notification =
           deserializer.fudgeMsgToObject(MarketDataAvailabilityNotification.class, msg);
-      s_logger.info("Received notification of market data availability: {}", notification);
+      LOGGER.info("Received notification of market data availability: {}", notification);
       Set<ExternalScheme> schemes = notification.getSchemes();
       notificationReceived(schemes);
     }

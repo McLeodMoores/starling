@@ -30,7 +30,7 @@ import com.opengamma.util.tuple.Pairs;
  *
  */
 public class BondFutureOptionBlackYieldCurveNodePnLDefaults extends DefaultPropertyFunction {
-  private static final Logger s_logger = LoggerFactory.getLogger(BondFutureOptionBlackYieldCurveNodePnLDefaults.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(BondFutureOptionBlackYieldCurveNodePnLDefaults.class);
   private final String _samplingPeriod;
   private final String _scheduleCalculator;
   private final String _samplingFunction;
@@ -88,7 +88,7 @@ public class BondFutureOptionBlackYieldCurveNodePnLDefaults extends DefaultPrope
     }
     final String currencyName = FinancialSecurityUtils.getCurrency(target.getPositionOrTrade().getSecurity()).getCode();
     if (!_currencyCurveConfigAndSurfaceNames.containsKey(currencyName)) {
-      s_logger.error("Could not config and surface names for currency " + currencyName + "; should never happen");
+      LOGGER.error("Could not config and surface names for currency " + currencyName + "; should never happen");
       return null;
     }
     final Pair<String, String> pair = _currencyCurveConfigAndSurfaceNames.get(currencyName);

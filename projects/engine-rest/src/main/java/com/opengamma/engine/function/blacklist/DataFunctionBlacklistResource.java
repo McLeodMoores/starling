@@ -38,7 +38,7 @@ import com.opengamma.util.rest.AbstractDataResource;
  */
 public class DataFunctionBlacklistResource extends AbstractDataResource implements FunctionBlacklistRuleListener {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(DataFunctionBlacklistResource.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(DataFunctionBlacklistResource.class);
 
   private final FunctionBlacklist _underlying;
   private final FudgeContext _fudgeContext;
@@ -112,7 +112,7 @@ public class DataFunctionBlacklistResource extends AbstractDataResource implemen
       try {
         _publish.send(_msg);
       } catch (RuntimeException e) {
-        s_logger.warn("Error publishing JMS message", e);
+        LOGGER.warn("Error publishing JMS message", e);
       }
     }
 

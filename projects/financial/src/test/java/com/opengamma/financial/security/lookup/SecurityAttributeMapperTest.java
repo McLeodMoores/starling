@@ -34,24 +34,24 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT)
 public class SecurityAttributeMapperTest {
 
-  private static final CurrencyPairs s_currencyPairs = CurrencyPairs.of(ImmutableSet.of(CurrencyPair.of(Currency.GBP,
+  private static final CurrencyPairs CURRENCY_PAIRS = CurrencyPairs.of(ImmutableSet.of(CurrencyPair.of(Currency.GBP,
                                                                                                         Currency.USD)));
-  private static final SecurityAttributeMapper s_defaultMappings = DefaultSecurityAttributeMappings.create(s_currencyPairs);
+  private static final SecurityAttributeMapper DEFAULT_MAPPINGS = DefaultSecurityAttributeMappings.create(CURRENCY_PAIRS);
 
   /**
-   * Simple security where fields are mapped using bean properties
+   * Simple security where fields are mapped using bean properties.
    */
   @Test
   public void fra() {
-    ExternalId regionId = ExternalId.of("Reg", "123");
-    ExternalId underlyingId = ExternalId.of("Und", "321");
-    ZonedDateTime startDate = zdt(2012, 12, 21, 11, 0, 0, 0, ZoneOffset.UTC);
-    ZonedDateTime endDate = zdt(2013, 12, 21, 11, 0, 0, 0, ZoneOffset.UTC);
-    ZonedDateTime fixingDate = zdt(2013, 12, 20, 11, 0, 0, 0, ZoneOffset.UTC);
-    FRASecurity security = new FRASecurity(Currency.AUD, regionId, startDate, endDate, 0.1, 1000, underlyingId, fixingDate);
-    assertEquals("FRA", s_defaultMappings.valueFor(TYPE, security));
-    assertEquals(Currency.AUD, s_defaultMappings.valueFor(PRODUCT, security));
-    assertEquals(1000d, s_defaultMappings.valueFor(QUANTITY, security));
+    final ExternalId regionId = ExternalId.of("Reg", "123");
+    final ExternalId underlyingId = ExternalId.of("Und", "321");
+    final ZonedDateTime startDate = zdt(2012, 12, 21, 11, 0, 0, 0, ZoneOffset.UTC);
+    final ZonedDateTime endDate = zdt(2013, 12, 21, 11, 0, 0, 0, ZoneOffset.UTC);
+    final ZonedDateTime fixingDate = zdt(2013, 12, 20, 11, 0, 0, 0, ZoneOffset.UTC);
+    final FRASecurity security = new FRASecurity(Currency.AUD, regionId, startDate, endDate, 0.1, 1000, underlyingId, fixingDate);
+    assertEquals("FRA", DEFAULT_MAPPINGS.valueFor(TYPE, security));
+    assertEquals(Currency.AUD, DEFAULT_MAPPINGS.valueFor(PRODUCT, security));
+    assertEquals(1000d, DEFAULT_MAPPINGS.valueFor(QUANTITY, security));
   }
 
   /**
@@ -59,19 +59,19 @@ public class SecurityAttributeMapperTest {
    */
   @Test
   public void fxForward() {
-    ZonedDateTime forwardDate = zdt(2012, 12, 21, 11, 0, 0, 0, ZoneOffset.UTC);
-    ExternalId regionId = ExternalId.of("Reg", "123");
-    FXForwardSecurity security = new FXForwardSecurity(Currency.USD, 150, Currency.GBP, 100, forwardDate, regionId);
-    assertEquals("FX Forward", s_defaultMappings.valueFor(TYPE, security));
-    assertEquals("GBP/USD", s_defaultMappings.valueFor(PRODUCT, security));
-    assertEquals(forwardDate, s_defaultMappings.valueFor(MATURITY, security));
-    FXAmounts expected = FXAmounts.forForward(security.getPayCurrency(),
+    final ZonedDateTime forwardDate = zdt(2012, 12, 21, 11, 0, 0, 0, ZoneOffset.UTC);
+    final ExternalId regionId = ExternalId.of("Reg", "123");
+    final FXForwardSecurity security = new FXForwardSecurity(Currency.USD, 150, Currency.GBP, 100, forwardDate, regionId);
+    assertEquals("FX Forward", DEFAULT_MAPPINGS.valueFor(TYPE, security));
+    assertEquals("GBP/USD", DEFAULT_MAPPINGS.valueFor(PRODUCT, security));
+    assertEquals(forwardDate, DEFAULT_MAPPINGS.valueFor(MATURITY, security));
+    final FXAmounts expected = FXAmounts.forForward(security.getPayCurrency(),
                                               security.getReceiveCurrency(),
                                               security.getPayAmount(),
                                               security.getReceiveAmount(),
-                                              s_currencyPairs);
-    assertEquals(expected, s_defaultMappings.valueFor(QUANTITY, security));
-    assertEquals(1.5d, s_defaultMappings.valueFor(RATE, security));
+                                              CURRENCY_PAIRS);
+    assertEquals(expected, DEFAULT_MAPPINGS.valueFor(QUANTITY, security));
+    assertEquals(1.5d, DEFAULT_MAPPINGS.valueFor(RATE, security));
   }
 
   /**
@@ -88,19 +88,19 @@ public class SecurityAttributeMapperTest {
     class C extends B {
       private static final long serialVersionUID = 1L;
     }
-    SecurityAttributeMapper mapper = new SecurityAttributeMapper();
-    String aType = "A type";
-    String bProduct = "B product";
+    final SecurityAttributeMapper mapper = new SecurityAttributeMapper();
+    final String aType = "A type";
+    final String bProduct = "B product";
     mapper.mapColumn(TYPE, A.class, aType);
     mapper.mapColumn(PRODUCT, B.class, bProduct);
-    C c = new C();
+    final C c = new C();
 
     // check the case where there are no columns mapped for a subtype
     assertEquals(aType, mapper.valueFor(TYPE, c));
     assertEquals(bProduct, mapper.valueFor(PRODUCT, c));
 
     // add a mapping for the subtype and check the supertype mappings are still picked up
-    String cMaturity = "C maturity";
+    final String cMaturity = "C maturity";
     mapper.mapColumn(MATURITY, C.class, cMaturity);
 
     assertEquals(aType, mapper.valueFor(TYPE, c));
@@ -108,13 +108,13 @@ public class SecurityAttributeMapperTest {
     assertEquals(cMaturity, mapper.valueFor(MATURITY, c));
 
     // check overriding works
-    String cType = "C type";
+    final String cType = "C type";
     mapper.mapColumn(TYPE, C.class, cType);
     assertEquals(cType, mapper.valueFor(TYPE, c));
   }
 
   //-------------------------------------------------------------------------
-  private static ZonedDateTime zdt(int y, int m, int d, int hr, int min, int sec, int nanos, ZoneId zone) {
+  private static ZonedDateTime zdt(final int y, final int m, final int d, final int hr, final int min, final int sec, final int nanos, final ZoneId zone) {
     return LocalDateTime.of(y, m, d, hr, min, sec, nanos).atZone(zone);
   }
 

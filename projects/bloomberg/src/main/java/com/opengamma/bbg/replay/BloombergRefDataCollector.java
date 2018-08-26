@@ -43,9 +43,9 @@ import com.opengamma.util.fudgemsg.OpenGammaFudgeContext;
 public class BloombergRefDataCollector implements Lifecycle {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(BloombergRefDataCollector.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(BloombergRefDataCollector.class);
   /** Fudge context. */
-  private static final FudgeContext s_fudgeContext = OpenGammaFudgeContext.getInstance();
+  private static final FudgeContext FUDGE_CONTEXT = OpenGammaFudgeContext.getInstance();
 
   /**
    * The watch list file.
@@ -98,15 +98,15 @@ public class BloombergRefDataCollector implements Lifecycle {
    * @param outputFile  the output file, not null
    */
   public BloombergRefDataCollector(File watchListFile, ReferenceDataProvider refDataProvider, File fieldsFile, File outputFile) {
-    this(s_fudgeContext, watchListFile, refDataProvider, fieldsFile, outputFile);
+    this(FUDGE_CONTEXT, watchListFile, refDataProvider, fieldsFile, outputFile);
   }
 
   //-------------------------------------------------------------------------
   @Override
   public synchronized void start() {
-    s_logger.info("starting bloombergRefDataCollector");
+    LOGGER.info("starting bloombergRefDataCollector");
     if (isRunning()) {
-      s_logger.info("bloombergRefDataCollector is already running");
+      LOGGER.info("bloombergRefDataCollector is already running");
       return;
     }
     _started.set(true);
@@ -150,7 +150,7 @@ public class BloombergRefDataCollector implements Lifecycle {
 
   @Override
   public synchronized void stop() {
-    s_logger.info("stopping bloombergRefDataCollector");
+    LOGGER.info("stopping bloombergRefDataCollector");
     _started.set(false);
   }
 
@@ -190,7 +190,7 @@ public class BloombergRefDataCollector implements Lifecycle {
       port = BloombergConstants.DEFAULT_PORT;
     }
     
-    s_logger.info("loading ref data with host: {} port: {} fields: {} identifies: {} outputfile {}", new Object[]{host, port, dataFieldFile, identifiersFile, outputFile});
+    LOGGER.info("loading ref data with host: {} port: {} fields: {} identifies: {} outputfile {}", new Object[]{host, port, dataFieldFile, identifiersFile, outputFile});
     
     BloombergConnectorFactoryBean factory = new BloombergConnectorFactoryBean("BloombergRefDataCollector", host, Integer.valueOf(port));
     BloombergConnector bloombergConnector = factory.getObjectCreating();

@@ -58,7 +58,7 @@ import com.opengamma.util.money.UnorderedCurrencyPair;
  */
 public class FXForwardCurrencyExposurePnLFunction extends AbstractFunction {
   /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(FXForwardCurrencyExposurePnLFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(FXForwardCurrencyExposurePnLFunction.class);
 
   @Override
   public CompiledFunctionDefinition compile(final FunctionCompilationContext context, final Instant atInstant) {
@@ -258,7 +258,7 @@ public class FXForwardCurrencyExposurePnLFunction extends AbstractFunction {
 
       final ValueSpecification spec = new ValueSpecification(ValueRequirementNames.PNL_SERIES, target.toSpecification(), desiredValue.getConstraints());
       if (resultCurrencies == null || resultCurrencies.size() != 1) {
-        s_logger.warn("No Currency property - returning result in base currency");
+        LOGGER.warn("No Currency property - returning result in base currency");
         final LocalDateDoubleTimeSeries fxSpotReturnSeries = (LocalDateDoubleTimeSeries) inputs.getValue(ValueRequirementNames.RETURN_SERIES);
         final LocalDateDoubleTimeSeries pnlSeries = fxSpotReturnSeries.multiply(position.getQuantity().doubleValue() * exposure); // The P/L time series is in the base currency
         return Collections.singleton(new ComputedValue(spec, pnlSeries));

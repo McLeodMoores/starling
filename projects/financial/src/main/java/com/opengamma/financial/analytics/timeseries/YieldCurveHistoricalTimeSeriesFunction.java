@@ -42,7 +42,7 @@ import com.opengamma.util.ArgumentChecker;
  */
 public class YieldCurveHistoricalTimeSeriesFunction extends AbstractFunction.NonCompiledInvoker {
   /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(YieldCurveHistoricalTimeSeriesFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(YieldCurveHistoricalTimeSeriesFunction.class);
   /** The excluded curve names */
   private final String[] _excludedCurves;
 
@@ -91,12 +91,12 @@ public class YieldCurveHistoricalTimeSeriesFunction extends AbstractFunction.Non
       final HistoricalTimeSeries timeSeries = timeSeriesSource.getHistoricalTimeSeries(dataField, id, resolutionKey, startDate, includeStart, endDate, includeEnd);
       if (timeSeries != null) {
         if (timeSeries.getTimeSeries().isEmpty()) {
-          s_logger.warn("Time series for {} is empty", id);
+          LOGGER.warn("Time series for {} is empty", id);
         } else {
           bundle.add(dataField, id, timeSeries);
         }
       } else {
-        s_logger.warn("Couldn't get time series for {}", id);
+        LOGGER.warn("Couldn't get time series for {}", id);
       }
     }
     return Collections.singleton(new ComputedValue(new ValueSpecification(ValueRequirementNames.YIELD_CURVE_HISTORICAL_TIME_SERIES, target.toSpecification(),

@@ -46,7 +46,7 @@ public class XlsSnapshotWriter implements SnapshotWriter {
   private XlsSheetWriter _globalsSheet;
   private XlsSheetWriter _surfaceSheet;
 
-  private static final Logger s_logger = LoggerFactory.getLogger(XlsSnapshotWriter.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(XlsSnapshotWriter.class);
 
   public XlsSnapshotWriter(String filename) {
 
@@ -92,7 +92,7 @@ public class XlsSnapshotWriter implements SnapshotWriter {
   public void writeVolatilitySurface(Map<VolatilitySurfaceKey, VolatilitySurfaceSnapshot> volatilitySurface) {
 
     if (volatilitySurface == null || volatilitySurface.isEmpty()) {
-      s_logger.warn("Snapshot does not contain any Volatility Surfaces.");
+      LOGGER.warn("Snapshot does not contain any Volatility Surfaces.");
       return;
     }
 
@@ -137,7 +137,7 @@ public class XlsSnapshotWriter implements SnapshotWriter {
   public void writeGlobalValues(UnstructuredMarketDataSnapshot globalValues) {
 
     if (globalValues == null || globalValues.isEmpty()) {
-      s_logger.warn("Snapshot does not contain any Global Values.");
+      LOGGER.warn("Snapshot does not contain any Global Values.");
       return;
     }
     _globalsSheet.writeKeyPairBlock(buildUnstructuredMarketDataSnapshotMap(globalValues));
@@ -148,7 +148,7 @@ public class XlsSnapshotWriter implements SnapshotWriter {
   public void writeYieldCurves(Map<YieldCurveKey, YieldCurveSnapshot> yieldCurves) {
 
     if (yieldCurves == null || yieldCurves.isEmpty()) {
-      s_logger.warn("Snapshot does not contain any Yield Curve Snapshots.");
+      LOGGER.warn("Snapshot does not contain any Yield Curve Snapshots.");
       return;
     }
 
@@ -167,7 +167,7 @@ public class XlsSnapshotWriter implements SnapshotWriter {
   public void writeCurves(Map<CurveKey, CurveSnapshot> curves) {
 
     if (curves == null || curves.isEmpty()) {
-      s_logger.warn("Snapshot does not contain any Curve Snapshots.");
+      LOGGER.warn("Snapshot does not contain any Curve Snapshots.");
       return;
     }
 

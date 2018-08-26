@@ -62,29 +62,31 @@ public class CouponONArithmeticAverageDiscountingMethodTest {
   private static final double NOTIONAL = 100000000; // 100m
   private static final double SPREAD = 0.0010; // 10 bps
 
-  private static final CouponONArithmeticAverageDefinition FEDFUND_CPN_3M_DEF = CouponONArithmeticAverageDefinition.from(FEDFUND, REFERENCE_DATE, TENOR_3M, NOTIONAL, 0,
+  private static final CouponONArithmeticAverageDefinition FEDFUND_CPN_3M_DEF =
+      CouponONArithmeticAverageDefinition.from(FEDFUND, REFERENCE_DATE, TENOR_3M, NOTIONAL, 0,
       USDLIBOR3M.getBusinessDayConvention(), true, NYC);
   private static final CouponONArithmeticAverage FEDFUND_CPN_3M = FEDFUND_CPN_3M_DEF.toDerivative(REFERENCE_DATE);
 
   private static final ZonedDateTime FORWARD_DATE = ScheduleCalculator.getAdjustedDate(REFERENCE_DATE, TENOR_1Y, USDLIBOR3M, NYC);
-  private static final CouponONArithmeticAverageSpreadSimplifiedDefinition FEDFUND_CPN_3M_SIMPL0_DEFINITION = CouponONArithmeticAverageSpreadSimplifiedDefinition.from(FEDFUND,
-      FORWARD_DATE, FORWARD_DATE.plusMonths(3), NOTIONAL, 0, 0.0, NYC);
+  private static final CouponONArithmeticAverageSpreadSimplifiedDefinition FEDFUND_CPN_3M_SIMPL0_DEFINITION =
+      CouponONArithmeticAverageSpreadSimplifiedDefinition.from(FEDFUND, FORWARD_DATE, FORWARD_DATE.plusMonths(3), NOTIONAL, 0, 0.0, NYC);
   private static final CouponONArithmeticAverageSpreadSimplified FEDFUND_CPN_3M_SIMPL0 = FEDFUND_CPN_3M_SIMPL0_DEFINITION.toDerivative(REFERENCE_DATE);
-  private static final CouponONArithmeticAverageSpreadSimplifiedDefinition FEDFUND_CPN_3M_SIMPL_DEFINITION = CouponONArithmeticAverageSpreadSimplifiedDefinition.from(FEDFUND,
-      FORWARD_DATE, FORWARD_DATE.plusMonths(3), NOTIONAL, 0, SPREAD, NYC);
+  private static final CouponONArithmeticAverageSpreadSimplifiedDefinition FEDFUND_CPN_3M_SIMPL_DEFINITION =
+      CouponONArithmeticAverageSpreadSimplifiedDefinition.from(FEDFUND, FORWARD_DATE, FORWARD_DATE.plusMonths(3), NOTIONAL, 0, SPREAD, NYC);
   private static final CouponONArithmeticAverageSpreadSimplified FEDFUND_CPN_3M_SIMPL = FEDFUND_CPN_3M_SIMPL_DEFINITION.toDerivative(REFERENCE_DATE);
   private static final CouponONArithmeticAverageDefinition FEDFUND_CPN_3MFWD_DEF = CouponONArithmeticAverageDefinition.from(FEDFUND,
       FORWARD_DATE, TENOR_3M, NOTIONAL, 0,
       USDLIBOR3M.getBusinessDayConvention(), true, NYC);
   private static final CouponONArithmeticAverage FEDFUND_CPN_3MFWD = FEDFUND_CPN_3MFWD_DEF.toDerivative(REFERENCE_DATE);
 
-  private static final CouponONArithmeticAverageDefinition FEDFUND_CPN_1Y_DEF = CouponONArithmeticAverageDefinition.from(FEDFUND, REFERENCE_DATE, TENOR_1Y, NOTIONAL, 0,
-      USDLIBOR3M.getBusinessDayConvention(), true, NYC);
+  private static final CouponONArithmeticAverageDefinition FEDFUND_CPN_1Y_DEF =
+      CouponONArithmeticAverageDefinition.from(FEDFUND, REFERENCE_DATE, TENOR_1Y, NOTIONAL, 0, USDLIBOR3M.getBusinessDayConvention(), true, NYC);
   private static final CouponONArithmeticAverage FEDFUND_CPN_1Y = FEDFUND_CPN_1Y_DEF.toDerivative(REFERENCE_DATE);
 
   private static final CouponONArithmeticAverageDiscountingMethod METHOD_FF_EXACT = CouponONArithmeticAverageDiscountingMethod.getInstance();
   private static final CouponONArithmeticAverageDiscountingApproxMethod METHOD_FF_APPRO = CouponONArithmeticAverageDiscountingApproxMethod.getInstance();
-  private static final CouponONArithmeticAverageSpreadSimplifiedDiscountingApproxMethod METHOD_AA_SIMPL = CouponONArithmeticAverageSpreadSimplifiedDiscountingApproxMethod.getInstance();
+  private static final CouponONArithmeticAverageSpreadSimplifiedDiscountingApproxMethod METHOD_AA_SIMPL =
+      CouponONArithmeticAverageSpreadSimplifiedDiscountingApproxMethod.getInstance();
 
   private static final PresentValueDiscountingCalculator PVDC = PresentValueDiscountingCalculator.getInstance();
   private static final PresentValueCurveSensitivityDiscountingCalculator PVCSDC = PresentValueCurveSensitivityDiscountingCalculator.getInstance();
@@ -93,7 +95,8 @@ public class CouponONArithmeticAverageDiscountingMethodTest {
   private static final ParameterSensitivityParameterCalculator<MulticurveProviderInterface> PSC = new ParameterSensitivityParameterCalculator<>(PVCSDC);
   private static final ParameterSensitivityParameterCalculator<MulticurveProviderInterface> PSC2 = new ParameterSensitivityParameterCalculator<>(PVCSD2C);
   private static final double SHIFT = 1.0E-6;
-  private static final ParameterSensitivityMulticurveDiscountInterpolatedFDCalculator PSC_DSC_FD = new ParameterSensitivityMulticurveDiscountInterpolatedFDCalculator(PVDC, SHIFT);
+  private static final ParameterSensitivityMulticurveDiscountInterpolatedFDCalculator PSC_DSC_FD =
+      new ParameterSensitivityMulticurveDiscountInterpolatedFDCalculator(PVDC, SHIFT);
 
   private static final double TOLERANCE_PV = 1.0E-2;
   private static final double TOLERANCE_PV_DELTA = 1.0E+2;
@@ -124,7 +127,8 @@ public class CouponONArithmeticAverageDiscountingMethodTest {
     final MultipleCurrencyAmount pv3MSimp = METHOD_AA_SIMPL.presentValue(FEDFUND_CPN_3M_SIMPL, MULTICURVES);
     final PaymentFixed spreadPayment = new PaymentFixed(USD, FEDFUND_CPN_3M_SIMPL.getPaymentTime(), FEDFUND_CPN_3M_SIMPL.getSpreadAmount());
     final MultipleCurrencyAmount pvSpread = spreadPayment.accept(PVDC, MULTICURVES);
-    assertEquals("CouponONArithmeticAverageSpreadSimpleDiscountingMethod: present value", pv3MSimp0.plus(pvSpread).getAmount(USD), pv3MSimp.getAmount(USD), TOLERANCE_PV);
+    assertEquals("CouponONArithmeticAverageSpreadSimpleDiscountingMethod: present value",
+        pv3MSimp0.plus(pvSpread).getAmount(USD), pv3MSimp.getAmount(USD), TOLERANCE_PV);
   }
 
   @Test
@@ -169,10 +173,10 @@ public class CouponONArithmeticAverageDiscountingMethodTest {
         TOLERANCE_REL_DELTA * NOTIONAL * FEDFUND_CPN_3MFWD.getFixingPeriodRemainingAccrualFactor());
   }
 
-  @Test(enabled = false)
   /**
    * Compare the performance of the approximated method to the exact method.
    */
+  @Test(enabled = false)
   public void performance() {
 
     long startTime, endTime;
@@ -188,7 +192,8 @@ public class CouponONArithmeticAverageDiscountingMethodTest {
 
     startTime = System.currentTimeMillis();
     for (int looptest = 0; looptest < nbTest; looptest++) {
-      final CouponONArithmeticAverageDefinition ffDefinition = CouponONArithmeticAverageDefinition.from(FEDFUND, ScheduleCalculator.getAdjustedDate(REFERENCE_DATE, TENOR_1Y, USDLIBOR3M, NYC),
+      final CouponONArithmeticAverageDefinition ffDefinition =
+          CouponONArithmeticAverageDefinition.from(FEDFUND, ScheduleCalculator.getAdjustedDate(REFERENCE_DATE, TENOR_1Y, USDLIBOR3M, NYC),
           TENOR_3M,
           NOTIONAL, 0, USDLIBOR3M.getBusinessDayConvention(), true, NYC);
       final CouponONArithmeticAverage ff = ffDefinition.toDerivative(REFERENCE_DATE);
@@ -227,15 +232,16 @@ public class CouponONArithmeticAverageDiscountingMethodTest {
       pvcsAppro = METHOD_FF_APPRO.presentValueCurveSensitivity(FEDFUND_CPN_3MFWD, MULTICURVES);
     }
     endTime = System.currentTimeMillis();
-    System.out.println("CouponArithmeticAverageONDiscountingMethod: " + nbTest + " pvcs Arithmetic Average ON - Approximation: " + (endTime - startTime) + " ms");
+    System.out.println(
+        "CouponArithmeticAverageONDiscountingMethod: " + nbTest + " pvcs Arithmetic Average ON - Approximation: " + (endTime - startTime) + " ms");
     // Performance note: AA ON approx pvcs: 26-Mar-2013: On Mac Pro 3.2 GHz Quad-Core Intel Xeon: 12 ms for 10000 coupons.
 
   }
 
-  @Test(enabled = false)
   /**
    * Reports the error of the arithmetic average approximation by the log of the compounded rate.
    */
+  @Test(enabled = false)
   public void averageApproximation() {
 
     final MulticurveProviderDiscount multicurvesCst = new MulticurveProviderDiscount();
@@ -263,19 +269,20 @@ public class CouponONArithmeticAverageDiscountingMethodTest {
       for (int loopstart = 0; loopstart < nbStart; loopstart++) {
         effectiveDate[loopstart] = ScheduleCalculator.getAdjustedDate(effectiveDate[0], step.multipliedBy(loopstart), USDLIBOR3M, NYC);
         final ZonedDateTime endDate = ScheduleCalculator.getAdjustedDate(effectiveDate[loopstart], TENOR_3M, USDLIBOR3M, NYC);
-        final CouponONArithmeticAverageDefinition cpnONDefinition = CouponONArithmeticAverageDefinition.from(FEDFUND, effectiveDate[loopstart], endDate, NOTIONAL, 0, NYC);
+        final CouponONArithmeticAverageDefinition cpnONDefinition =
+            CouponONArithmeticAverageDefinition.from(FEDFUND, effectiveDate[loopstart], endDate, NOTIONAL, 0, NYC);
         final CouponONArithmeticAverage cpnON = cpnONDefinition.toDerivative(REFERENCE_DATE);
         // Compute daily forwards
         final int nbON = cpnON.getFixingPeriodAccrualFactors().length;
-        final double fwdON[] = new double[nbON];
+        final double[] fwdON = new double[nbON];
         for (int loopon = 0; loopon < nbON; loopon++) {
-          fwdON[loopon] = multicurvesCst.getSimplyCompoundForwardRate(FEDFUND, cpnON.getFixingPeriodStartTimes()[loopon], cpnON.getFixingPeriodEndTimes()[loopon], cpnON.getFixingPeriodAccrualFactors()[loopon]);
+          fwdON[loopon] = multicurvesCst.getSimplyCompoundForwardRate(FEDFUND, cpnON.getFixingPeriodStartTimes()[loopon],
+              cpnON.getFixingPeriodEndTimes()[loopon], cpnON.getFixingPeriodAccrualFactors()[loopon]);
         }
         // Compounded period forward
-        payComp[looplevel][loopstart] = multicurvesCst.getSimplyCompoundForwardRate(FEDFUND, cpnON.getFixingPeriodStartTimes()[0], cpnON.getFixingPeriodStartTimes()[nbON],
-            cpnON.getFixingPeriodRemainingAccrualFactor())
-            *
-            cpnON.getFixingPeriodRemainingAccrualFactor();
+        payComp[looplevel][loopstart] = multicurvesCst.getSimplyCompoundForwardRate(FEDFUND,
+            cpnON.getFixingPeriodStartTimes()[0], cpnON.getFixingPeriodStartTimes()[nbON],
+            cpnON.getFixingPeriodRemainingAccrualFactor()) * cpnON.getFixingPeriodRemainingAccrualFactor();
         payAA[looplevel][loopstart] = 0;
         for (int loopon = 0; loopon < nbON; loopon++) {
           payAA[looplevel][loopstart] += fwdON[loopon] * cpnON.getFixingPeriodAccrualFactors()[loopon];

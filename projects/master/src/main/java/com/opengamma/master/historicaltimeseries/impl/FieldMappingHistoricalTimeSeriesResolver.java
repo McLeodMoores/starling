@@ -30,7 +30,7 @@ import com.opengamma.util.ArgumentChecker;
  */
 public class FieldMappingHistoricalTimeSeriesResolver extends DefaultHistoricalTimeSeriesResolver {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(FieldMappingHistoricalTimeSeriesResolver.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(FieldMappingHistoricalTimeSeriesResolver.class);
   
   private final Map<String, HistoricalTimeSeriesFieldAdjustmentMap> _fieldMaps;
   
@@ -73,7 +73,7 @@ public class FieldMappingHistoricalTimeSeriesResolver extends DefaultHistoricalT
       }
       ManageableHistoricalTimeSeriesInfo selectedResult = select(timeSeriesCandidates, resolutionKey);
       if (selectedResult == null) {
-        s_logger.debug("Resolver failed to find any time-series for {} using {}/{}", new Object[] {identifierBundle, dataField, resolutionKey });
+        LOGGER.debug("Resolver failed to find any time-series for {} using {}/{}", new Object[] {identifierBundle, dataField, resolutionKey });
         return null;
       }
       HistoricalTimeSeriesFieldAdjustment fieldAdjustment = fieldMappings.get(selectedResult.getDataSource());

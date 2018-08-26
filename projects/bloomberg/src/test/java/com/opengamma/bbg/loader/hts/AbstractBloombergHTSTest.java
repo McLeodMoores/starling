@@ -56,13 +56,13 @@ import com.opengamma.util.tuple.Pairs;
  */
 public abstract class AbstractBloombergHTSTest {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(AbstractBloombergHTSTest.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(AbstractBloombergHTSTest.class);
   
   protected static final String[] DATA_FIELDS = new String[] {"PX_LAST", "VOLUME"};
   protected static final String[] DATA_PROVIDERS = new String[] {"UNKNOWN", "CMPL", "CMPT", "DEFAULT"};
   protected static final String[] DATA_SOURCES = new String[] {BLOOMBERG_DATA_SOURCE_NAME, "REUTERS", "JPM"};
   protected static final int TS_DATASET_SIZE = 2;
-  protected static final Map<String, String> s_provider2ObservationTime = ImmutableMap.of("UNKNOWN", "UNKNOWN",
+  protected static final Map<String, String> PROVIDER_TO_OBSERVATION_TIME = ImmutableMap.of("UNKNOWN", "UNKNOWN",
       "CMPL", "LONDON_CLOSE",
       "CMPT", "TOKYO_CLOSE",
       "DEFAULT", "DEFAULT");
@@ -104,7 +104,7 @@ public abstract class AbstractBloombergHTSTest {
       Map<ExternalIdBundle, LocalDateDoubleTimeSeries> tsMap = Maps.newHashMap();
       LocalDate start = request.getDateRange().getStartDateInclusive();
       LocalDate end = request.getDateRange().getEndDateInclusive();
-      s_logger.debug("producing TS for startDate={} endDate={}", start, end);
+      LOGGER.debug("producing TS for startDate={} endDate={}", start, end);
       for (ExternalIdBundle identifiers : request.getExternalIdBundles()) {
         LocalDate cachedStart = MapUtils.putIfAbsentGet(_startDateMap, identifiers, start);
 
@@ -153,7 +153,7 @@ public abstract class AbstractBloombergHTSTest {
             info.setDataField(dataField);
             info.setDataProvider(dataProvider);
             info.setDataSource(dataSource);
-            info.setObservationTime(s_provider2ObservationTime.get(dataProvider));
+            info.setObservationTime(PROVIDER_TO_OBSERVATION_TIME.get(dataProvider));
             
             ExternalId ticker = ExternalSchemes.bloombergTickerSecurityId("ticker" + i);
             ExternalId buid = ExternalSchemes.bloombergBuidSecurityId("buid" + i);

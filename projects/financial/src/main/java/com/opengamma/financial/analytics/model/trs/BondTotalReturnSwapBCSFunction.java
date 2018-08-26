@@ -47,7 +47,7 @@ import com.opengamma.financial.security.swap.BondTotalReturnSwapSecurity;
  */
 public class BondTotalReturnSwapBCSFunction extends BondTotalReturnSwapFunction {
   
-  private static final Logger s_logger = LoggerFactory.getLogger(BondTotalReturnSwapBCSFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(BondTotalReturnSwapBCSFunction.class);
   
   /** The curve sensitivity calculator */
   private static final InstrumentDerivativeVisitor<ParameterIssuerProviderInterface, MultipleCurrencyMulticurveSensitivity> PVCSDC =

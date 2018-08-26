@@ -32,7 +32,7 @@ import com.opengamma.util.tuple.Pairs;
  *
  */
 public class FXPDECurveDefaults extends DefaultPropertyFunction {
-  private static final Logger s_logger = LoggerFactory.getLogger(FXPDECurveDefaults.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(FXPDECurveDefaults.class);
   private static final String[] VALUE_REQUIREMENTS = new String[] {
       ValueRequirementNames.FORWARD_DELTA,
       ValueRequirementNames.DUAL_DELTA,
@@ -91,7 +91,7 @@ public class FXPDECurveDefaults extends DefaultPropertyFunction {
     final FXOptionSecurity security = (FXOptionSecurity) target.getSecurity();
     final String callCurrency = security.getCallCurrency().getCode();
     if (!_currencyCurveConfigAndDiscountingCurveNames.containsKey(callCurrency)) {
-      s_logger.error("Could not get config for call currency " + callCurrency + "; should never happen");
+      LOGGER.error("Could not get config for call currency " + callCurrency + "; should never happen");
       return null;
     }
     final Pair<String, String> pair = _currencyCurveConfigAndDiscountingCurveNames.get(callCurrency);

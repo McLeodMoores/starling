@@ -18,25 +18,25 @@ import com.opengamma.financial.security.bond.InflationBondSecurity;
  * Utility methods for establishing if a bond or bill is supported.
  */
 public class InflationBondSupportUtils {
-  private static final Set<YieldConvention> s_supportedYieldConventions = new HashSet<>();
-  private static final Set<String> s_supportedCouponTypes = new HashSet<>();
+  private static final Set<YieldConvention> SUPPORTED_YIELD_CONVENTIONS = new HashSet<>();
+  private static final Set<String> SUPPORTED_COUPON_TYPES = new HashSet<>();
 
   static {
-    s_supportedYieldConventions.add(SimpleYieldConvention.US_STREET);
-    s_supportedYieldConventions.add(SimpleYieldConvention.GERMAN_BOND);
-    s_supportedYieldConventions.add(SimpleYieldConvention.AUSTRALIA_EX_DIVIDEND);
-    s_supportedYieldConventions.add(SimpleYieldConvention.UK_BUMP_DMO_METHOD);
-    s_supportedYieldConventions.add(SimpleYieldConvention.FRANCE_COMPOUND_METHOD);
-    s_supportedYieldConventions.add(SimpleYieldConvention.ITALY_TREASURY_BONDS);
-    s_supportedYieldConventions.add(SimpleYieldConvention.INDEX_LINKED_FLOAT);
-    s_supportedYieldConventions.add(SimpleYieldConvention.UK_IL_BOND);
-    s_supportedCouponTypes.add("FIXED");
+    SUPPORTED_YIELD_CONVENTIONS.add(SimpleYieldConvention.US_STREET);
+    SUPPORTED_YIELD_CONVENTIONS.add(SimpleYieldConvention.GERMAN_BOND);
+    SUPPORTED_YIELD_CONVENTIONS.add(SimpleYieldConvention.AUSTRALIA_EX_DIVIDEND);
+    SUPPORTED_YIELD_CONVENTIONS.add(SimpleYieldConvention.UK_BUMP_DMO_METHOD);
+    SUPPORTED_YIELD_CONVENTIONS.add(SimpleYieldConvention.FRANCE_COMPOUND_METHOD);
+    SUPPORTED_YIELD_CONVENTIONS.add(SimpleYieldConvention.ITALY_TREASURY_BONDS);
+    SUPPORTED_YIELD_CONVENTIONS.add(SimpleYieldConvention.INDEX_LINKED_FLOAT);
+    SUPPORTED_YIELD_CONVENTIONS.add(SimpleYieldConvention.UK_IL_BOND);
+    SUPPORTED_COUPON_TYPES.add("FIXED");
   }
 
   public static boolean isSupported(Security security) {
     if (security instanceof InflationBondSecurity) {
       BondSecurity bondSecurity = (BondSecurity) security;
-      if (s_supportedYieldConventions.contains(bondSecurity.getYieldConvention()) && s_supportedCouponTypes.contains(bondSecurity.getCouponType())) {
+      if (SUPPORTED_YIELD_CONVENTIONS.contains(bondSecurity.getYieldConvention()) && SUPPORTED_COUPON_TYPES.contains(bondSecurity.getCouponType())) {
         return true;
       }
       return false;

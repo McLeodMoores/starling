@@ -36,7 +36,7 @@ import com.opengamma.util.tuple.Pair;
  */
 public class MergedOutputPositionFunction extends AbstractFunction.NonCompiledInvoker {
   /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(MergedOutputPositionFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(MergedOutputPositionFunction.class);
 
   @Override
   public ComputationTargetType getTargetType() {
@@ -71,7 +71,7 @@ public class MergedOutputPositionFunction extends AbstractFunction.NonCompiledIn
       return null;
     }
     if (inputs.size() > 1) {
-      s_logger.error("Expected requirements for merged output to be mutually exclusive, but multiple resolved successfully: " + inputs);
+      LOGGER.error("Expected requirements for merged output to be mutually exclusive, but multiple resolved successfully: " + inputs);
       return null;
     }
     final ValueRequirement inputRequirement = Iterables.getOnlyElement(inputs.values());

@@ -48,7 +48,7 @@ import com.opengamma.util.tuple.IntObjectPair;
 public class EHCachingSearchCache {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(EHCachingSearchCache.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(EHCachingSearchCache.class);
   /** The number of units to prefetch on either side of the current paging request */
   protected static final int PREFETCH_RADIUS = 2;
   /** The size of a prefetch unit */
@@ -58,7 +58,7 @@ public class EHCachingSearchCache {
   /** Cache name. */
   private static final String CACHE_NAME_SUFFIX = "PagedSearchCache";
   /** Check cached results against results from underlying */
-  public static final boolean TEST_AGAINST_UNDERLYING = false; //s_logger.isDebugEnabled();
+  public static final boolean TEST_AGAINST_UNDERLYING = false; //LOGGER.isDebugEnabled();
 
   /** The cache manager */
   private final CacheManager _cacheManager;
@@ -105,7 +105,7 @@ public class EHCachingSearchCache {
     // Load cache configuration
     if (cacheManager.getCache(name + CACHE_NAME_SUFFIX) == null) {
       // If cache config not found, set up programmatically
-      s_logger.warn("Could not load a cache configuration for " + name + CACHE_NAME_SUFFIX
+      LOGGER.warn("Could not load a cache configuration for " + name + CACHE_NAME_SUFFIX
                   + ", building a default configuration programmatically instead");
       getCacheManager().addCache(new Cache(tweakCacheConfiguration(new CacheConfiguration(name + CACHE_NAME_SUFFIX,
                                                                                           10000))));

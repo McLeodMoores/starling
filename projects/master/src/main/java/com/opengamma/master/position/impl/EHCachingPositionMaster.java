@@ -39,7 +39,7 @@ import com.opengamma.util.tuple.IntObjectPair;
 public class EHCachingPositionMaster extends AbstractEHCachingMaster<PositionDocument> implements PositionMaster {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(EHCachingPositionMaster.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(EHCachingPositionMaster.class);
 
   /** The document search cache */
   private EHCachingSearchCache _documentSearchCache;
@@ -126,7 +126,7 @@ public class EHCachingPositionMaster extends AbstractEHCachingMaster<PositionDoc
     if (EHCachingSearchCache.TEST_AGAINST_UNDERLYING) {
       PositionSearchResult check = ((PositionMaster) getUnderlying()).search(request);
       if (!result.getPaging().equals(check.getPaging())) {
-        s_logger.error(_documentSearchCache.getCache().getName()
+        LOGGER.error(_documentSearchCache.getCache().getName()
                            + "\n\tCache:\t" + result.getPaging()
                            + "\n\tUnderlying:\t" + check.getPaging());
       }

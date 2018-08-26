@@ -54,7 +54,7 @@ import com.opengamma.util.tuple.Pair;
  */
 public class HullWhiteDiscountingYCNSFunction extends HullWhiteDiscountingFunction {
   /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(HullWhiteDiscountingYCNSFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(HullWhiteDiscountingYCNSFunction.class);
 
   /**
    * Sets the value requirements to {@link ValueRequirementNames#YIELD_CURVE_NODE_SENSITIVITIES}
@@ -85,7 +85,7 @@ public class HullWhiteDiscountingYCNSFunction extends HullWhiteDiscountingFuncti
             return Collections.singleton(new ComputedValue(spec, ycns));
           }
         }
-        s_logger.info("Could not get sensitivities to " + curveName + " for " + target.getName());
+        LOGGER.info("Could not get sensitivities to " + curveName + " for " + target.getName());
         return Collections.emptySet();
       }
 

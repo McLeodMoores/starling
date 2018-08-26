@@ -54,7 +54,7 @@ import com.opengamma.util.money.Currency;
  * 
  */
 public class IRSwapTradeParser {
-  private static final Logger s_logger = LoggerFactory.getLogger(IRSwapTradeParser.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(IRSwapTradeParser.class);
   
   private static final String EFFECTIVE_DATE = "Effective Date";
   private static final String MATURITY_DATE = "Maturity Date";
@@ -87,13 +87,13 @@ public class IRSwapTradeParser {
   private static final String CME_SWAP_INDICATOR = "CME Swap Indicator";
   private static final String CLIENT_ID = "Client ID";
  
-  private static final DateTimeFormatter s_dateFormatter = DateTimeFormatter.ofPattern("d/M/yyyy");
-  private static final Properties s_dayCountMapping = getDayCountMapping();
-  private static final Properties s_businessDayConventionMapping = getBusinessDayConventionMapping();
-  private static final Map<String, com.opengamma.financial.convention.FloatingIndex> s_floatingIndexMapping = getFloatingIndexMapping();
-  private static final List<String> s_unSupportedProductTypes = Lists.newArrayList("FRA", "ZCS");
-  private static final List<String> s_stubTrades = Lists.newArrayList("shortfront", "longfront", "shortback", "longback");
-  private static final List<String> s_compoundTrades = Lists.newArrayList("cmpd", "straightcmpnd", "flatcmpnd");
+  private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("d/M/yyyy");
+  private static final Properties DAY_COUNT_MAPPING = getDayCountMapping();
+  private static final Properties BUSINESS_DAY_CONVENTION_MAPPING = getBusinessDayConventionMapping();
+  private static final Map<String, com.opengamma.financial.convention.FloatingIndex> FLOATING_INDEX_MAPPING = getFloatingIndexMapping();
+  private static final List<String> UNSUPPORTED_PRODUCT_TYPES = Lists.newArrayList("FRA", "ZCS");
+  private static final List<String> STUB_TRADES = Lists.newArrayList("shortfront", "longfront", "shortback", "longback");
+  private static final List<String> COMPOUND_TRADES = Lists.newArrayList("cmpd", "straightcmpnd", "flatcmpnd");
 
   private final Random _random = new Random();
 
@@ -151,17 +151,17 @@ public class IRSwapTradeParser {
     logErrors("missingPV", missingPV, count);
     logErrors("terminatedTrades", terminatedTrades, count);
         
-    s_logger.warn("Total unprocessed rows: {} out of {}", rowsWithError.size(), count);
+    LOGGER.warn("Total unprocessed rows: {} out of {}", rowsWithError.size(), count);
     for (FudgeMsg fudgeMsg : rowsWithError) {
-      s_logger.warn("{}", fudgeMsg);
+      LOGGER.warn("{}", fudgeMsg);
     }
     return trades;
   }
 
   private void logErrors(String type, List<FudgeMsg> unsupportedProdTypes, int totalRows) {
-    s_logger.warn("Total {} rows: {} out of {}", type, unsupportedProdTypes.size(), totalRows);
+    LOGGER.warn("Total {} rows: {} out of {}", type, unsupportedProdTypes.size(), totalRows);
     for (FudgeMsg fudgeMsg : unsupportedProdTypes) {
-      s_logger.warn("{}", fudgeMsg);
+      LOGGER.warn("{}", fudgeMsg);
     }
   }
 
@@ -177,7 +177,7 @@ public class IRSwapTradeParser {
   private boolean isCompoundTrade(FudgeMsg row) {
     String clientId = row.getString(CLIENT_ID);
     if (clientId != null) {
-      for (String cmpKeyWord : s_compoundTrades) {
+      for (String cmpKeyWord : COMPOUND_TRADES) {
         if (clientId.toLowerCase().contains(cmpKeyWord)) {
           return true;
         }
@@ -189,7 +189,7 @@ public class IRSwapTradeParser {
   private boolean isStubTrade(FudgeMsg row) {
     String clientId = row.getString(CLIENT_ID);
     if (clientId != null) {
-      for (String stubKeyWord : s_stubTrades) {
+      for (String stubKeyWord : STUB_TRADES) {
         if (clientId.toLowerCase().contains(stubKeyWord)) {
           return true;
         }
@@ -203,7 +203,7 @@ public class IRSwapTradeParser {
     if (productType == null) {
       return true;
     }
-    return s_unSupportedProductTypes.contains(productType.toUpperCase());
+    return UNSUPPORTED_PRODUCT_TYPES.contains(productType.toUpperCase());
   }
 
   private static Map<String, FloatingIndex> getFloatingIndexMapping() {
@@ -297,7 +297,7 @@ public class IRSwapTradeParser {
             swapLeg = new FixedInterestRateLeg(payDayCount, payFrequency, payRegionId, 
                 payDayConvention, payNotional, payEom, payFixedRate);
           } catch (Exception ex) {
-            s_logger.warn(String.format("Error creating swap security from %s", row), ex);
+            LOGGER.warn(String.format("Error creating swap security from %s", row), ex);
           }
           break;
         case "FLOAT":
@@ -306,15 +306,15 @@ public class IRSwapTradeParser {
             swapLeg = new FloatingInterestRateLeg(payDayCount, payFrequency, payRegionId, payDayConvention, 
                 payNotional, payEom, payFloatingRateId, FloatingRateType.IBOR);
           } catch (Exception ex) {
-            s_logger.warn(String.format("Error creating swap security from %s", row), ex);
+            LOGGER.warn(String.format("Error creating swap security from %s", row), ex);
           }
           break;
         default:
-          s_logger.warn("Unsupported leg type: {} in {}", legType, row);
+          LOGGER.warn("Unsupported leg type: {} in {}", legType, row);
           break;
       }
     } else {
-      s_logger.warn("Missing leg type value in column:{} in row:{}", RECIEVE_LEG_TYPE, row);
+      LOGGER.warn("Missing leg type value in column:{} in row:{}", RECIEVE_LEG_TYPE, row);
     }
     return swapLeg;
   }
@@ -336,7 +336,7 @@ public class IRSwapTradeParser {
             swapLeg = new FixedInterestRateLeg(payDayCount, payFrequency, payRegionId, 
                 payDayConvention, payNotional, payEom, payFixedRate);
           } catch (Exception ex) {
-            s_logger.warn(String.format("Error creating swap security from %s", row), ex);
+            LOGGER.warn(String.format("Error creating swap security from %s", row), ex);
           }
           break;
         case "FLOAT":
@@ -345,15 +345,15 @@ public class IRSwapTradeParser {
             swapLeg = new FloatingInterestRateLeg(payDayCount, payFrequency, payRegionId, payDayConvention, 
                 payNotional, payEom, payFloatingRateId, FloatingRateType.IBOR);
           } catch (Exception ex) {
-            s_logger.warn(String.format("Error creating swap security from %s", row), ex);
+            LOGGER.warn(String.format("Error creating swap security from %s", row), ex);
           }
           break;
         default:
-          s_logger.warn("Unsupported leg type:{} in {}", legType, row);
+          LOGGER.warn("Unsupported leg type:{} in {}", legType, row);
           break;
       }
     } else {
-      s_logger.warn("Missing leg type value in column:{} in row:{}", PAY_LEG_TYPE, row);
+      LOGGER.warn("Missing leg type value in column:{} in row:{}", PAY_LEG_TYPE, row);
     }
     return swapLeg;
   }
@@ -363,11 +363,11 @@ public class IRSwapTradeParser {
     if (frequency != null) {
       String floatingIndexStr = row.getString(columnName);
       if (floatingIndexStr != null) {
-        FloatingIndex floatingIndex = s_floatingIndexMapping.get(floatingIndexStr.toUpperCase());
+        FloatingIndex floatingIndex = FLOATING_INDEX_MAPPING.get(floatingIndexStr.toUpperCase());
         if (floatingIndex != null) {
           floatingRateId = floatingIndex.toFrequencySpecificExternalId(frequency);
         } else {
-          s_logger.warn("Unsupported floating Index: {} in row:{}", floatingIndexStr, row);
+          LOGGER.warn("Unsupported floating Index: {} in row:{}", floatingIndexStr, row);
         }
       }
     }
@@ -380,7 +380,7 @@ public class IRSwapTradeParser {
     try {
       rate = Double.parseDouble(rateStr);
     } catch (Exception ex) {
-      s_logger.warn("Missing or invalid value for fixed rate in column:{} in row:{}", columnName, row);
+      LOGGER.warn("Missing or invalid value for fixed rate in column:{} in row:{}", columnName, row);
     }
     return rate;
   }
@@ -391,7 +391,7 @@ public class IRSwapTradeParser {
     if (rollConvStr != null) {
       isEom = rollConvStr.equals("EOM");
     } else {
-      s_logger.warn("Missing roll convention in column:{} in row:{}", columnName, row);
+      LOGGER.warn("Missing roll convention in column:{} in row:{}", columnName, row);
     }
     return isEom;
   }
@@ -406,10 +406,10 @@ public class IRSwapTradeParser {
       if (notionalAmount != null) {
         notional = new InterestRateNotional(currency, Double.valueOf(notionalAmount));
       } else {
-        s_logger.warn("Missing notional value in column:{} in row:{}", notionalColumn, row);
+        LOGGER.warn("Missing notional value in column:{} in row:{}", notionalColumn, row);
       }
     } else {
-      s_logger.warn("Missing currency in column:{} in row:{}", ccyColumn, row);
+      LOGGER.warn("Missing currency in column:{} in row:{}", ccyColumn, row);
     }
     return notional;
   }
@@ -421,7 +421,7 @@ public class IRSwapTradeParser {
       String[] ids = regionIdStr.split(",");
       regionId = ExternalSchemes.isdaHoliday(ids[0]);
     } else {
-      s_logger.warn("Missing RegionId in column:{} in row:{}", columnName, row);
+      LOGGER.warn("Missing RegionId in column:{} in row:{}", columnName, row);
     }
     return regionId;
   }
@@ -433,10 +433,10 @@ public class IRSwapTradeParser {
       try {
         frequency = SimpleFrequencyFactory.of(frequencyStr.toLowerCase());
       } catch (IllegalArgumentException ex) {
-        s_logger.warn("Unknown freqency: {} in  column: {} in row: {}", frequencyStr, columnName, row);
+        LOGGER.warn("Unknown freqency: {} in  column: {} in row: {}", frequencyStr, columnName, row);
       }
     } else {
-      s_logger.warn("Missing frequency in column:{} in row:{}", columnName, row);
+      LOGGER.warn("Missing frequency in column:{} in row:{}", columnName, row);
     }
     return frequency;
   }
@@ -445,15 +445,15 @@ public class IRSwapTradeParser {
     DayCount dayCount = null;
     String dayCountStr = row.getString(columnName);
     if (dayCountStr != null) {
-      String ogDayCount = s_dayCountMapping.getProperty(dayCountStr, null);
+      String ogDayCount = DAY_COUNT_MAPPING.getProperty(dayCountStr, null);
       if (ogDayCount != null) {
         dayCount = DayCountFactory.of(ogDayCount);
       } else {
-        s_logger.warn("Missing dayCount mapping for {} in column:{} in row:{}", dayCountStr, columnName, row);
+        LOGGER.warn("Missing dayCount mapping for {} in column:{} in row:{}", dayCountStr, columnName, row);
       }
       
     } else {
-      s_logger.warn("Missing day count in column:{} in row:{}", columnName, row);
+      LOGGER.warn("Missing day count in column:{} in row:{}", columnName, row);
     }
     return dayCount;
   }
@@ -462,15 +462,15 @@ public class IRSwapTradeParser {
     BusinessDayConvention convention = null;
     String conventionStr = row.getString(columnName);
     if (conventionStr != null) {
-      String ogBusDayConvention = s_businessDayConventionMapping.getProperty(conventionStr, null);
+      String ogBusDayConvention = BUSINESS_DAY_CONVENTION_MAPPING.getProperty(conventionStr, null);
       if (ogBusDayConvention != null) {
         convention = BusinessDayConventionFactory.of(ogBusDayConvention);
       } else {
-        s_logger.warn("Missing convention mapping for {}", conventionStr);
+        LOGGER.warn("Missing convention mapping for {}", conventionStr);
       }
       
     } else {
-      s_logger.warn("Missing business day convention in column:{}", columnName);
+      LOGGER.warn("Missing business day convention in column:{}", columnName);
     }
     return convention;
   }
@@ -480,9 +480,9 @@ public class IRSwapTradeParser {
     String dateStr = row.getString(columnName);
     if (dateStr != null) {
       try {
-        result = LocalDate.parse(dateStr, s_dateFormatter);
+        result = LocalDate.parse(dateStr, DATE_FORMATTER);
       } catch (DateTimeParseException ex) {
-        s_logger.error("Invalid dateValue:{} in column:{}, skipping...", dateStr, columnName);
+        LOGGER.error("Invalid dateValue:{} in column:{}, skipping...", dateStr, columnName);
       }
     }
     return result;

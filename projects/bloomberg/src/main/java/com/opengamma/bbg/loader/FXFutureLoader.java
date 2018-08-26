@@ -46,7 +46,7 @@ import com.opengamma.util.time.Expiry;
 public class FXFutureLoader extends SecurityLoader {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(FXFutureLoader.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(FXFutureLoader.class);
 
   /**
    * The fields to load from Bloomberg.
@@ -88,7 +88,7 @@ public class FXFutureLoader extends SecurityLoader {
    * @param referenceDataProvider  the provider, not null
    */
   public FXFutureLoader(ReferenceDataProvider referenceDataProvider) {
-    super(s_logger, referenceDataProvider, SecurityType.FX_FUTURE);
+    super(LOGGER, referenceDataProvider, SecurityType.FX_FUTURE);
   }
 
   //-------------------------------------------------------------------------
@@ -142,13 +142,13 @@ public class FXFutureLoader extends SecurityLoader {
     
     Double unitAmount = UNIT_AMOUNT_MAP.get(quoteUnits);
     if (unitAmount == null) {
-      s_logger.warn("Unknown quote units: " + quoteUnits);
+      LOGGER.warn("Unknown quote units: " + quoteUnits);
       return null;
     }
     
     Expiry expiry = decodeExpiry(expiryDate, futureTradingHours);
     if (expiry == null) {
-      s_logger.warn("Unable to decode expiry '" + expiryDate + "' against trading hours '" + futureTradingHours + "'");
+      LOGGER.warn("Unable to decode expiry '" + expiryDate + "' against trading hours '" + futureTradingHours + "'");
       return null;
     }
     Currency currency = Currency.parse(currencyCode);
@@ -162,7 +162,7 @@ public class FXFutureLoader extends SecurityLoader {
   }
   
   private void logMissingData(String fieldName, String securityName) {
-    s_logger.warn("Cannot construct FX Future security '" + securityName + "' as " + fieldName + " is missing");
+    LOGGER.warn("Cannot construct FX Future security '" + securityName + "' as " + fieldName + " is missing");
   }
 
   @Override

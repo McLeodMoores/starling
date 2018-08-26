@@ -28,7 +28,7 @@ import com.opengamma.util.ArgumentChecker;
  *
  */
 public abstract class FXForwardCurveDefaults extends DefaultPropertyFunction {
-  private static final Logger s_logger = LoggerFactory.getLogger(FXForwardCurveDefaults.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(FXForwardCurveDefaults.class);
   private static final String[] VALUE_REQUIREMENTS = new String[] {
     ValueRequirementNames.FORWARD_CURVE,
     ValueRequirementNames.BLACK_VOLATILITY_SURFACE,
@@ -90,7 +90,7 @@ public abstract class FXForwardCurveDefaults extends DefaultPropertyFunction {
     final String currencyPair = getCurrencyPair(target);
     final String curveName = _currencyPairToCurveName.get(currencyPair);
     if (curveName == null) {
-      s_logger.error("Could not get curve name for {}; should never happen", target.getValue());
+      LOGGER.error("Could not get curve name for {}; should never happen", target.getValue());
       return null;
     }
     if (ValuePropertyNames.CURVE.equals(propertyName)) {
@@ -99,7 +99,7 @@ public abstract class FXForwardCurveDefaults extends DefaultPropertyFunction {
     if (ForwardCurveValuePropertyNames.PROPERTY_FORWARD_CURVE_CALCULATION_METHOD.equals(propertyName)) {
       return Collections.singleton(_currencyPairToCurveCalculationMethodName.get(currencyPair));
     }
-    s_logger.error("Could not find default value for {} in this function", propertyName);
+    LOGGER.error("Could not find default value for {} in this function", propertyName);
     return null;
   }
 

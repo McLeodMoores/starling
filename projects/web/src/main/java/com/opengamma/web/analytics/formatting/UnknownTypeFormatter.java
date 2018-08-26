@@ -15,7 +15,7 @@ import com.opengamma.engine.value.ValueSpecification;
  */
 /* package */ class UnknownTypeFormatter extends DefaultFormatter {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(UnknownTypeFormatter.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(UnknownTypeFormatter.class);
 
   @Override
   public String formatCell(Object value, ValueSpecification valueSpec, Object inlineKey) {
@@ -31,7 +31,7 @@ import com.opengamma.engine.value.ValueSpecification;
 
   private static void logType(Object value, ValueSpecification valueSpec) {
     String typeName = value == null ? null : value.getClass().getName();
-    s_logger.info("Value received for unknown type, value name: {}, type: {}", valueSpec.getValueName(), typeName);
+    LOGGER.info("Value received for unknown type, value name: {}, type: {}", valueSpec.getValueName(), typeName);
   }
 
   @Override

@@ -34,12 +34,12 @@ public class FuturesPricingDefaults extends StaticDefaultPropertyFunction {
   private final Set<String> _calculationMethod;
 
   /** The value requirements for which these defaults apply */
-  private static final String[] s_valueNames = new String[] {
+  private static final String[] VALUE_NAMES = new String[] {
       ValueRequirementNames.PRESENT_VALUE,
   };
 
   public FuturesPricingDefaults(final String priority, final String calculationMethod) {
-    super(ComputationTargetType.TRADE, ValuePropertyNames.CALCULATION_METHOD, true, s_valueNames);
+    super(ComputationTargetType.TRADE, ValuePropertyNames.CALCULATION_METHOD, true, VALUE_NAMES);
     ArgumentChecker.notNull(priority, "No priority was provided.");
     ArgumentChecker.notNull(calculationMethod, "No calculationMethod was provided. Try MarkToMarket");
     _priority = PriorityClass.valueOf(priority);

@@ -55,7 +55,7 @@ import com.opengamma.util.money.Currency;
 @Deprecated
 public abstract class FXForwardFunction extends AbstractFunction.NonCompiledInvoker {
   /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(FXForwardFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(FXForwardFunction.class);
   /**
    * @deprecated Deprecated value property name - has been moved to {@link ValuePropertyNames#PAY_CURVE_CALCULATION_CONFIG}
    */
@@ -213,7 +213,7 @@ public abstract class FXForwardFunction extends AbstractFunction.NonCompiledInvo
     final Currency receiveCurrency = security.accept(ForexVisitors.getReceiveCurrencyVisitor());
     final CurrencyPair baseQuotePair = baseQuotePairs.getCurrencyPair(payCurrency, receiveCurrency);
     if (baseQuotePair == null) {
-      s_logger.error("Could not get base/quote pair for currency pair (" + payCurrency + ", " + receiveCurrency + ")");
+      LOGGER.error("Could not get base/quote pair for currency pair (" + payCurrency + ", " + receiveCurrency + ")");
       return null;
     }
     final ValueSpecification resultSpec = new ValueSpecification(getValueRequirementName(), target.toSpecification(), getResultProperties(target,

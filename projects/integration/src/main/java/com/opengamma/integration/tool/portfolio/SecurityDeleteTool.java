@@ -29,7 +29,7 @@ import com.opengamma.scripts.Scriptable;
 public class SecurityDeleteTool extends AbstractTool<ToolContext> {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(SecurityDeleteTool.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(SecurityDeleteTool.class);
 
   /** Delete securities option flag */
   private static final String SECURITY_NAMES_OPT = "n";
@@ -86,10 +86,10 @@ public class SecurityDeleteTool extends AbstractTool<ToolContext> {
     for (SecurityDocument securityDocument : SecuritySearchIterator.iterable(securityMaster, securitySearchRequest)) {
       if (getCommandLine().hasOption(WRITE_OPT)) {
         securityMaster.remove(securityDocument.getUniqueId());
-        s_logger.warn("Deleted " + securityDocument.getSecurity().getUniqueId() + 
+        LOGGER.warn("Deleted " + securityDocument.getSecurity().getUniqueId() + 
             " (" + securityDocument.getSecurity().getName() + ")");
       } else {
-        s_logger.warn("Matched " + securityDocument.getSecurity().getUniqueId() + 
+        LOGGER.warn("Matched " + securityDocument.getSecurity().getUniqueId() + 
             " (" + securityDocument.getSecurity().getName() + ")");
       }
 

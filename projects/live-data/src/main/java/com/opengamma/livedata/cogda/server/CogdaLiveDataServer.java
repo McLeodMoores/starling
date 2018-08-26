@@ -59,7 +59,7 @@ import com.opengamma.util.metric.MetricProducer;
 public class CogdaLiveDataServer implements LiveDataServer, FudgeConnectionReceiver, Lifecycle, MetricProducer {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(CogdaLiveDataServer.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(CogdaLiveDataServer.class);
   /**
    * The default port on which the server will listen for inbound connections.
    */
@@ -217,7 +217,7 @@ public class CogdaLiveDataServer implements LiveDataServer, FudgeConnectionRecei
       return getUserSource().getAccount(userName);
       
     } catch (RuntimeException ex) {
-      s_logger.warn("Authentication could not find user {}", userName);
+      LOGGER.warn("Authentication could not find user {}", userName);
       return null;
     }
   }
@@ -231,7 +231,7 @@ public class CogdaLiveDataServer implements LiveDataServer, FudgeConnectionRecei
     
     UserAccount user = getUserAccount(userId);
     if (user == null) {
-      s_logger.info("Not allowing login for {} because no user in UserSource", userId);
+      LOGGER.info("Not allowing login for {} because no user in UserSource", userId);
       return null;
     }
     // password check not supported

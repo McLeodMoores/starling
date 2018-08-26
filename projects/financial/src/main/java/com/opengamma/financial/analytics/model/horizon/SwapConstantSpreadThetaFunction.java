@@ -76,7 +76,7 @@ import com.opengamma.util.money.MultipleCurrencyAmount;
 @Deprecated
 public class SwapConstantSpreadThetaFunction extends AbstractFunction.NonCompiledInvoker {
   /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(SwapConstantSpreadThetaFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(SwapConstantSpreadThetaFunction.class);
   /** Converts securities to definitions */
   private FinancialSecurityVisitor<InstrumentDefinition<?>> _visitor;
   /** Converts definitions to derivatives */
@@ -174,12 +174,12 @@ public class SwapConstantSpreadThetaFunction extends AbstractFunction.NonCompile
     final String curveCalculationConfigName = curveCalculationConfigNames.iterator().next();
     final MultiCurveCalculationConfig curveCalculationConfig = _curveCalculationConfigSource.getConfig(curveCalculationConfigName);
     if (curveCalculationConfig == null) {
-      s_logger.error("Could not find curve calculation configuration named " + curveCalculationConfigName);
+      LOGGER.error("Could not find curve calculation configuration named " + curveCalculationConfigName);
       return null;
     }
     final Currency currency = FinancialSecurityUtils.getCurrency(security);
     if (!ComputationTargetSpecification.of(currency).equals(curveCalculationConfig.getTarget())) {
-      s_logger.info("Security currency and curve calculation config id were not equal; have {} and {}", currency, curveCalculationConfig.getTarget());
+      LOGGER.info("Security currency and curve calculation config id were not equal; have {} and {}", currency, curveCalculationConfig.getTarget());
       return null;
     }
     final Set<ValueRequirement> requirements = YieldCurveFunctionUtils.getCurveRequirements(curveCalculationConfig, _curveCalculationConfigSource);
@@ -197,7 +197,7 @@ public class SwapConstantSpreadThetaFunction extends AbstractFunction.NonCompile
       requirements.addAll(timeSeriesRequirements);
       return requirements;
     } catch (final Exception e) {
-      s_logger.error(e.getMessage());
+      LOGGER.error(e.getMessage());
       return null;
     }
   }

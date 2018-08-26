@@ -21,7 +21,7 @@ public abstract class AbstractSpecificExceptionMapper<T extends Throwable>
     extends AbstractExceptionMapper<T> {
 
   /** Logger. */
-  protected static final Logger s_logger = LoggerFactory.getLogger(AbstractSpecificExceptionMapper.class);
+  protected static final Logger LOGGER = LoggerFactory.getLogger(AbstractSpecificExceptionMapper.class);
 
   /**
    * The status to use.

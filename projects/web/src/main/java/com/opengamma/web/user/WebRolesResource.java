@@ -50,7 +50,7 @@ import com.opengamma.web.WebPaging;
 public class WebRolesResource extends AbstractWebRoleResource {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(WebRolesResource.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(WebRolesResource.class);
   /**
    * The ftl file.
    */
@@ -132,7 +132,7 @@ public class WebRolesResource extends AbstractWebRoleResource {
       return Response.seeOther(uri).build();
       
     } catch (RoleFormException ex) {
-      ex.logUnexpected(s_logger);
+      ex.logUnexpected(LOGGER);
       FlexiBean out = createRootData();
       out.put("rolename", roleName);
       out.put("description", description);

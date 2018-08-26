@@ -135,7 +135,7 @@ public class DbBatchWriter extends AbstractDbMaster {
   private final Map<Long, Map<ComputeFailureKey, ComputeFailure>> _computeFailureCacheByRunId = newConcurrentMap();
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(DbBatchWriter.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(DbBatchWriter.class);
   private final ComputationTargetResolver _computationTargetResolver;
 
   /**
@@ -564,7 +564,7 @@ public class DbBatchWriter extends AbstractDbMaster {
 
   public void endBatchInTransaction(final ObjectId batchUniqueId) {
     ArgumentChecker.notNull(batchUniqueId, "uniqueId");
-    s_logger.info("Ending batch {}", batchUniqueId);
+    LOGGER.info("Ending batch {}", batchUniqueId);
     final RiskRun run = getRiskRun(batchUniqueId);
     //
     _statusCacheByRunId.remove(run.getId());
@@ -591,7 +591,7 @@ public class DbBatchWriter extends AbstractDbMaster {
   }
 
   protected void deleteRunInTransaction(final RiskRun run) {
-    s_logger.info("Deleting run {}", run);
+    LOGGER.info("Deleting run {}", run);
     deleteRiskValuesInTransaction(run);
     deleteRiskFailuresInTransaction(run);
     getHibernateTemplate().deleteAll(run.getProperties());
@@ -601,7 +601,7 @@ public class DbBatchWriter extends AbstractDbMaster {
   }
 
   public void deleteBatchInTransaction(final ObjectId batchUniqueId) {
-    s_logger.info("Deleting batch {}", batchUniqueId);
+    LOGGER.info("Deleting batch {}", batchUniqueId);
     final RiskRun run = getRiskRun(batchUniqueId);
     deleteRunInTransaction(run);
   }
@@ -699,7 +699,7 @@ public class DbBatchWriter extends AbstractDbMaster {
   }
 
   public synchronized RiskRun startBatchInTransaction(final ViewCycleMetadata cycleMetadata, final Map<String, String> batchParameters, final RunCreationMode runCreationMode, final SnapshotMode snapshotMode) {
-    s_logger.info("Starting batch ... {}", cycleMetadata);
+    LOGGER.info("Starting batch ... {}", cycleMetadata);
 
     RiskRun run;
     switch (runCreationMode) {
@@ -772,7 +772,7 @@ public class DbBatchWriter extends AbstractDbMaster {
   }
 
   public MarketData createOrGetMarketDataInTransaction(final UniqueId baseUid) {
-    s_logger.info("Creating Market Data {} ", baseUid);
+    LOGGER.info("Creating Market Data {} ", baseUid);
     MarketData marketData = getHibernateTemplate().execute(new HibernateCallback<MarketData>() {
       @Override
       public MarketData doInHibernate(final Session session) throws HibernateException {
@@ -792,7 +792,7 @@ public class DbBatchWriter extends AbstractDbMaster {
       }
     });
     if (marketData != null) {
-      s_logger.info("Snapshot " + baseUid + " already exists. No need to create.");
+      LOGGER.info("Snapshot " + baseUid + " already exists. No need to create.");
     } else {
       marketData = new MarketData();
       marketData.setBaseUid(baseUid);
@@ -810,14 +810,14 @@ public class DbBatchWriter extends AbstractDbMaster {
     final Set<MarketDataValue> marketDataValues = newHashSet();
     for (final ComputedValue value : values) {
       if (value.getValue() != null && SKIP_MARKET_DATA_WRITE_TYPES.contains(value.getValue().getClass())) {
-        s_logger.debug("Skipping market data value " + value + " because market data already persisted in snapshot");
+        LOGGER.debug("Skipping market data value " + value + " because market data already persisted in snapshot");
         continue;
       }
       final ResultConverter<Object> resultConverter;
       try {
         resultConverter = _resultConverterCache.getConverter(value.getValue());
       } catch (final IllegalArgumentException e) {
-        s_logger.error("No converter for market data value of type " + value.getValue().getClass() + " for " + value.getSpecification());
+        LOGGER.error("No converter for market data value of type " + value.getValue().getClass() + " for " + value.getSpecification());
         continue;
       }
       final Map<String, Double> valueAsDoublesMap = resultConverter.convert(value.getSpecification().getValueName(), value.getValue());
@@ -838,7 +838,7 @@ public class DbBatchWriter extends AbstractDbMaster {
     if (values == null || values.isEmpty()) {
       return;
     }
-    s_logger.info("Adding {} market data values to {}", values.size(), marketDataId);
+    LOGGER.info("Adding {} market data values to {}", values.size(), marketDataId);
 
     final MarketData marketData = getMarketDataInTransaction(marketDataId);
     if (marketData == null) {
@@ -924,13 +924,13 @@ public class DbBatchWriter extends AbstractDbMaster {
             try {
               resultConverter = _resultConverterCache.getConverter(computedValue.getValue());
             } catch (final IllegalArgumentException e) {
-              s_logger.info("No converter for value of type " + computedValue.getValue().getClass() + " for " + computedValue.getSpecification());
+              LOGGER.info("No converter for value of type " + computedValue.getValue().getClass() + " for " + computedValue.getSpecification());
             }
           }
 
           final ValueSpecification specification = computedValue.getSpecification();
           if (!_riskValueSpecifications.containsKey(specification)) {
-            s_logger.error("Unexpected result specification " + specification + ". Result cannot be written. Result value was " + computedValue.getValue());
+            LOGGER.error("Unexpected result specification " + specification + ". Result cannot be written. Result value was " + computedValue.getValue());
             continue;
           }
           final long valueSpecificationId = _riskValueSpecifications.get(specification);
@@ -938,7 +938,7 @@ public class DbBatchWriter extends AbstractDbMaster {
           final long computeNodeId = getOrCreateComputeNode(computedValue.getComputeNodeId()).getId();
 
           if (resultConverter != null && computedValue.getInvocationResult() == InvocationResult.SUCCESS) {
-            s_logger.debug("Writing value {} for value spec {}", computedValue.getValue(), specification);
+            LOGGER.debug("Writing value {} for value spec {}", computedValue.getValue(), specification);
             final Map<String, Double> valueAsDoublesMap = resultConverter.convert(computedValue.getSpecification().getValueName(), computedValue.getValue());
             for (final Map.Entry<String, Double> valueEntry : valueAsDoublesMap.entrySet()) {
               final String valueName = valueEntry.getKey();
@@ -947,7 +947,7 @@ public class DbBatchWriter extends AbstractDbMaster {
               successes.add(getSuccessArgs(successId, riskRunId, evalInstant, calcConfId, computationTargetId, valueSpecificationId, functionUniqueId, computeNodeId, valueName, doubleValue));
             }
           } else {
-            s_logger.info("Writing failure for {} with invocation result {}, {} ",
+            LOGGER.info("Writing failure for {} with invocation result {}, {} ",
                 newArray(computedValue.getSpecification(), computedValue.getInvocationResult(), computedValue.getAggregatedExecutionLog()));
             specFailures = true;
 
@@ -990,7 +990,7 @@ public class DbBatchWriter extends AbstractDbMaster {
           && failureReasons.isEmpty()
           && successfulTargets.isEmpty()
           && failedTargets.isEmpty()) {
-        s_logger.debug("Nothing to write to DB for {}", resultModel);
+        LOGGER.debug("Nothing to write to DB for {}", resultModel);
         return;
       }
 
@@ -998,7 +998,7 @@ public class DbBatchWriter extends AbstractDbMaster {
       try {
         getJdbcTemplate().batchUpdate(getElSqlBundle().getSql("InsertRiskSuccess"), successes.toArray(new DbMapSqlParameterSource[successes.size()]));
       } catch (final Exception e) {
-        s_logger.error("Failed to write successful calculations to batch database. Converting to failures.", e);
+        LOGGER.error("Failed to write successful calculations to batch database. Converting to failures.", e);
         transactionStatus.rollbackToSavepoint(preSuccessSavepoint);
         if (!successes.isEmpty()) {
           final String exceptionClass = e.getClass().getName();
@@ -1027,7 +1027,7 @@ public class DbBatchWriter extends AbstractDbMaster {
       try {
         getJdbcTemplate().batchUpdate(getElSqlBundle().getSql("InsertTargetProperties"), targetProperties.toArray(new DbMapSqlParameterSource[targetProperties.size()]));
       } catch (final Exception e) {
-        s_logger.error("Failed to write target properties to batch database", e);
+        LOGGER.error("Failed to write target properties to batch database", e);
         transactionStatus.rollbackToSavepoint(preTargetPropertiesFailureSavepoint);
       }
       final Object preFailureSavepoint = transactionStatus.createSavepoint();
@@ -1035,7 +1035,7 @@ public class DbBatchWriter extends AbstractDbMaster {
         getJdbcTemplate().batchUpdate(getElSqlBundle().getSql("InsertRiskFailure"), failures.toArray(new DbMapSqlParameterSource[failures.size()]));
         getJdbcTemplate().batchUpdate(getElSqlBundle().getSql("InsertRiskFailureReason"), failureReasons.toArray(new DbMapSqlParameterSource[failureReasons.size()]));
       } catch (final Exception e) {
-        s_logger.error("Failed to write failures to batch database", e);
+        LOGGER.error("Failed to write failures to batch database", e);
         transactionStatus.rollbackToSavepoint(preFailureSavepoint);
       }
 
@@ -1180,7 +1180,7 @@ public class DbBatchWriter extends AbstractDbMaster {
 
     }
 
-    s_logger.info("Inserting {} and updating {} {} status entries", (Object[]) newArray(inserts.size(), updates.size(), status));
+    LOGGER.info("Inserting {} and updating {} {} status entries", (Object[]) newArray(inserts.size(), updates.size(), status));
 
     SqlParameterSource[] batchArgsArray = inserts.toArray(new DbMapSqlParameterSource[inserts.size()]);
     int[] counts = getJdbcTemplate().batchUpdate(getElSqlBundle().getSql("InsertFromRunStatus"), batchArgsArray);
@@ -1190,7 +1190,7 @@ public class DbBatchWriter extends AbstractDbMaster {
     counts = getJdbcTemplate().batchUpdate(getElSqlBundle().getSql("UpdateFromRunStatus"), batchArgsArray);
     checkCount(status + " update", batchArgsArray, counts);
 
-    s_logger.info("Inserted {} and updated {} {} status entries", (Object[]) newArray(inserts.size(), updates.size(), status));
+    LOGGER.info("Inserted {} and updated {} {} status entries", (Object[]) newArray(inserts.size(), updates.size(), status));
   }
 
   private int checkCount(final String rowType, final SqlParameterSource[] batchArgsArray, final int[] counts) {
@@ -1349,7 +1349,7 @@ public class DbBatchWriter extends AbstractDbMaster {
         computeFailure = saveComputeFailure(computeFailureCache, computeFailureKey);
         return computeFailure;
       } catch (final DataAccessException e2) {
-        s_logger.error("Failed to save compute failure", e2);
+        LOGGER.error("Failed to save compute failure", e2);
         throw new RuntimeException("Failed to save compute failure", e2);
       }
     }

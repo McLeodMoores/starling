@@ -18,7 +18,7 @@ import com.opengamma.engine.view.compilation.CompiledViewDefinitionWithGraphs;
  */
 public class InMemoryViewExecutionCache implements ViewExecutionCache {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(InMemoryViewExecutionCache.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(InMemoryViewExecutionCache.class);
 
   /**
    * The buffer to hold compiled view definitions.
@@ -28,11 +28,11 @@ public class InMemoryViewExecutionCache implements ViewExecutionCache {
   @Override
   public CompiledViewDefinitionWithGraphs getCompiledViewDefinitionWithGraphs(ViewExecutionCacheKey key) {
     CompiledViewDefinitionWithGraphs viewDefinition = _compiledViewDefinitions.get(key);
-    if (s_logger.isDebugEnabled()) {
+    if (LOGGER.isDebugEnabled()) {
       if (viewDefinition == null) {
-        s_logger.debug("Cache miss CompiledViewDefinitionWithGraphs for {}", key);
+        LOGGER.debug("Cache miss CompiledViewDefinitionWithGraphs for {}", key);
       } else {
-        s_logger.debug("Cache hit CompiledViewDefinitionWithGraphs for {}", key);
+        LOGGER.debug("Cache hit CompiledViewDefinitionWithGraphs for {}", key);
       }
     }
     return viewDefinition;
@@ -40,13 +40,13 @@ public class InMemoryViewExecutionCache implements ViewExecutionCache {
 
   @Override
   public void setCompiledViewDefinitionWithGraphs(ViewExecutionCacheKey key, CompiledViewDefinitionWithGraphs viewDefinition) {
-    s_logger.info("Storing CompiledViewDefinitionWithGraphs for {}", key);
+    LOGGER.info("Storing CompiledViewDefinitionWithGraphs for {}", key);
     _compiledViewDefinitions.put(key, viewDefinition);
   }
 
   @Override
   public void clear() {
-    s_logger.info("Clearing all CompiledViewDefinitionWithGraphs");
+    LOGGER.info("Clearing all CompiledViewDefinitionWithGraphs");
     _compiledViewDefinitions.clear();
   }
 

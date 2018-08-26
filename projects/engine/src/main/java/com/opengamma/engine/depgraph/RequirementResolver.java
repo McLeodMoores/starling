@@ -19,7 +19,7 @@ import com.opengamma.engine.value.ValueRequirement;
  */
 /* package */final class RequirementResolver extends AggregateResolvedValueProducer {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(RequirementResolver.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(RequirementResolver.class);
 
   private final ResolveTask _parentTask;
   private final Collection<FunctionExclusionGroup> _functionExclusion;
@@ -30,7 +30,7 @@ import com.opengamma.engine.value.ValueRequirement;
 
   public RequirementResolver(final ValueRequirement valueRequirement, final ResolveTask parentTask, final Collection<FunctionExclusionGroup> functionExclusion) {
     super(valueRequirement);
-    s_logger.debug("Created requirement resolver {}/{}", valueRequirement, parentTask);
+    LOGGER.debug("Created requirement resolver {}/{}", valueRequirement, parentTask);
     _parentTask = parentTask;
     _functionExclusion = functionExclusion;
   }
@@ -68,7 +68,7 @@ import com.opengamma.engine.value.ValueRequirement;
       final int pendingTasks = getPendingTasks();
       if (pendingTasks == Integer.MIN_VALUE) {
         // We've already been discarded (everything was released when we went to rc=0)
-        s_logger.debug("Ignoring finish on discarded {}", this);
+        LOGGER.debug("Ignoring finish on discarded {}", this);
         return;
       }
       assert (pendingTasks == 0) || (pendingTasks == 1); // Either the final pending task running with the "lastValue" flag, or all tasks have finished
@@ -90,7 +90,7 @@ import com.opengamma.engine.value.ValueRequirement;
     }
     if ((fallback == null) && useFallback) {
       fallback = context.getOrCreateTaskResolving(getValueRequirement(), _parentTask, _functionExclusion);
-      s_logger.debug("Creating fallback task {}", fallback);
+      LOGGER.debug("Creating fallback task {}", fallback);
       synchronized (this) {
         assert _fallback == null;
         // _fallback takes the open reference from the local variable
@@ -108,7 +108,7 @@ import com.opengamma.engine.value.ValueRequirement;
         // If this resolver was ref-counted to zero (nothing subscribed to it) then the results can be null at this point
         if ((fallbackResults == null) || (fallbackResults.length == 0)) {
           // Task produced no new results - discard
-          s_logger.debug("Discarding fallback task {} by {}", fallback, this);
+          LOGGER.debug("Discarding fallback task {} by {}", fallback, this);
           context.discardTask(fallback);
         } else {
           boolean matched = true;
@@ -133,7 +133,7 @@ import com.opengamma.engine.value.ValueRequirement;
           }
         }
       } else {
-        s_logger.debug("Keeping fallback task {} by {}", fallback, this);
+        LOGGER.debug("Keeping fallback task {} by {}", fallback, this);
       }
       fallback.release(context);
     }

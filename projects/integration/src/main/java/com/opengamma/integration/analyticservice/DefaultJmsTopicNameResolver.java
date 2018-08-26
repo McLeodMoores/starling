@@ -25,7 +25,7 @@ import com.opengamma.util.ArgumentChecker;
 public class DefaultJmsTopicNameResolver extends AbstractResolver<JmsTopicNameResolveRequest, String> implements JmsTopicNameResolver {
   
   /** Logger **/
-  private static final Logger s_logger = LoggerFactory.getLogger(DefaultJmsTopicNameResolver.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(DefaultJmsTopicNameResolver.class);
 
   private static final String PROVIDER_ID_FIELD = "providerId";
   private static final String PREFIX = "OGAnalytics";
@@ -47,7 +47,7 @@ public class DefaultJmsTopicNameResolver extends AbstractResolver<JmsTopicNameRe
 //    if (request.getValueSpecification().getProperties() != null) {
 //      result += SEPARATOR + request.getValueSpecification().getProperties().toSimpleString();
 //    }
-    s_logger.debug("{} resolved to {}", request, result);
+    LOGGER.debug("{} resolved to {}", request, result);
     return result;
     
   }

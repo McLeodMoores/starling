@@ -24,7 +24,7 @@ import com.opengamma.util.ArgumentChecker;
  */
 public class HistoricalMarketDataSnapshot extends AbstractMarketDataSnapshot {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(HistoricalMarketDataSnapshot.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(HistoricalMarketDataSnapshot.class);
 
   private final HistoricalTimeSeriesSource _timeSeriesSource;
   private final Instant _snapshotInstant;
@@ -76,7 +76,7 @@ public class HistoricalMarketDataSnapshot extends AbstractMarketDataSnapshot {
     final UniqueId htsIdentifier = specification.getTargetSpecification().getUniqueId();
     final HistoricalTimeSeries hts = getTimeSeriesSource().getHistoricalTimeSeries(htsIdentifier, _snapshotDate, true, _snapshotDate, true);
     if (hts == null || hts.getTimeSeries().isEmpty()) {
-      s_logger.info("No time-series for {}", specification);
+      LOGGER.info("No time-series for {}", specification);
       return null;
     }
     final Double value = (_snapshotDate != null) ? hts.getTimeSeries().getValue(_snapshotDate) : hts.getTimeSeries().getLatestValue();

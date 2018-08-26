@@ -43,7 +43,7 @@ import com.opengamma.provider.livedata.LiveDataMetaDataProvider;
 @BeanDefinition
 public class IntegrationToolContext extends ToolContext implements BloombergToolContext {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(IntegrationToolContext.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(IntegrationToolContext.class);
   /**
    * Link back to the component server providing the implementations.  Useful if you need a specific classifier/instance.
    */
@@ -75,7 +75,7 @@ public class IntegrationToolContext extends ToolContext implements BloombergTool
         final LiveDataMetaDataProvider ldMetaDataProvider = (LiveDataMetaDataProvider) clazz.getConstructor(URI.class).newInstance(info.getUri());
         results.add(ldMetaDataProvider);
       } catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException | ClassNotFoundException ex) {
-        s_logger.error("Couldn't create instance of {}", info.getAttribute(null));
+        LOGGER.error("Couldn't create instance of {}", info.getAttribute(null));
       }
     }
     return results;

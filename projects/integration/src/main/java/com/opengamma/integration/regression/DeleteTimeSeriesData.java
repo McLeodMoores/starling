@@ -22,7 +22,7 @@ import com.opengamma.util.ArgumentChecker;
  */
 /* package */class DeleteTimeSeriesData {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(DeleteTimeSeriesData.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(DeleteTimeSeriesData.class);
 
   private final RegressionIO _io;
 
@@ -56,7 +56,7 @@ import com.opengamma.util.ArgumentChecker;
       final ManageableHistoricalTimeSeries hts = tswi.getTimeSeries();
       final LocalDateDoubleTimeSeries ts = hts.getTimeSeries();
       if (!ts.isEmpty()) {
-        s_logger.debug("Deleting data from {}", timeSeriesEntry.getKey());
+        LOGGER.debug("Deleting data from {}", timeSeriesEntry.getKey());
         hts.setTimeSeries(ImmutableLocalDateDoubleTimeSeries.EMPTY_SERIES);
         deleted++;
       } else {
@@ -67,7 +67,7 @@ import com.opengamma.util.ArgumentChecker;
     _io.beginWrite();
     // Write the modified map back out
     _io.write(RegressionUtils.HISTORICAL_TIME_SERIES_MASTER_DATA, timeSeriesMap);
-    s_logger.info("Deleted data from {} time-series, skipped {}", deleted, skipped);
+    LOGGER.info("Deleted data from {} time-series, skipped {}", deleted, skipped);
     _io.endWrite();
   }
 

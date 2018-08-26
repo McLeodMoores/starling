@@ -48,7 +48,7 @@ import com.opengamma.util.time.Tenor;
  * 
  */
 public class ForwardSwapCurveMarketDataFunction extends AbstractFunction {
-  private static final Logger s_logger = LoggerFactory.getLogger(ForwardSwapCurveMarketDataFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ForwardSwapCurveMarketDataFunction.class);
   /** Name of the calculation method */
   public static final String FORWARD_SWAP_QUOTES = "ForwardSwapQuotes";
   /** Name of the forward tenor property */

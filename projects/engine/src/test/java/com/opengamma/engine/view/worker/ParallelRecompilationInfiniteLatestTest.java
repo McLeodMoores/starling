@@ -63,7 +63,7 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT_SLOW)
 public class ParallelRecompilationInfiniteLatestTest extends AbstractParallelRecompilationTest {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(ParallelRecompilationInfiniteLatestTest.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ParallelRecompilationInfiniteLatestTest.class);
 
   private CompiledViewDefinitionWithGraphs compiledViewDefinition(final ViewDefinition viewDefinition, final Map<ComputationTargetReference, UniqueId> resolutions) {
     final VersionCorrection versionCorrection = VersionCorrection.of(Instant.now(), Instant.now());
@@ -102,9 +102,9 @@ public class ParallelRecompilationInfiniteLatestTest extends AbstractParallelRec
                 Thread.sleep(rand.nextInt(300) + 50);
               }
             } catch (InterruptedException e) {
-              s_logger.debug("Interrupted", e);
+              LOGGER.debug("Interrupted", e);
             } catch (RuntimeException e) {
-              s_logger.error("Caught exception", e);
+              LOGGER.error("Caught exception", e);
             }
           }
         });
@@ -188,35 +188,35 @@ public class ParallelRecompilationInfiniteLatestTest extends AbstractParallelRec
       final ViewDefinition viewDefinition = Mockito.mock(ViewDefinition.class);
       final ParallelRecompilationViewProcessWorker worker = new ParallelRecompilationViewProcessWorker(workerFactory(executor, resolutions), context, options, viewDefinition);
       callback.execute(worker, options);
-      s_logger.debug("Waiting for initial compilation");
+      LOGGER.debug("Waiting for initial compilation");
       assertEquals(context.event(), "view definition compiled"); // From primary worker
       for (int j = 0; j < 5; j++) {
         // Expect a sequence of operations
         for (int i = 0; i < 3; i++) {
-          s_logger.debug("Waiting for cycle to start");
+          LOGGER.debug("Waiting for cycle to start");
           assertEquals(context.event(), "cycle started"); // From primary worker
-          s_logger.info("Cycle started");
+          LOGGER.info("Cycle started");
           assertEquals(context.event(), "cycle fragment completed");
-          s_logger.info("Cycle fragment completed");
+          LOGGER.info("Cycle fragment completed");
           assertEquals(context.event(), "cycle completed");
-          s_logger.info("Cycle completed");
+          LOGGER.info("Cycle completed");
         }
         // Signal change ...
-        s_logger.debug("Signalling change");
+        LOGGER.debug("Signalling change");
         resolutions.put(new ComputationTargetSpecification(ComputationTargetType.PORTFOLIO, UniqueId.of("Test", "0")), UniqueId.of("Test", "0", Integer.toString(j + 1)));
         changeManager.entityChanged(ChangeType.CHANGED, ObjectId.of("Test", "0"), Instant.now(), Instant.now(), Instant.now());
-        s_logger.info("Change signalled");
+        LOGGER.info("Change signalled");
         // ... and expect a view definition compiled to interrupt the sequence 
         String event = context.event();
         for (int i = 0; i < 20; i++) {
           if (event.equals("cycle started")) {
-            s_logger.info("Legacy cycle started");
+            LOGGER.info("Legacy cycle started");
             event = context.event();
             if (event.equals("cycle fragment completed")) {
-              s_logger.info("Legacy fragment completed");
+              LOGGER.info("Legacy fragment completed");
               event = context.event();
               if (event.equals("cycle completed")) {
-                s_logger.info("Legacy cycle completed");
+                LOGGER.info("Legacy cycle completed");
                 event = context.event();
               } else {
                 break;
@@ -229,7 +229,7 @@ public class ParallelRecompilationInfiniteLatestTest extends AbstractParallelRec
           }
         }
         assertEquals(event, "view definition compiled");
-        s_logger.info("New compilation");
+        LOGGER.info("New compilation");
       }
     } finally {
       executor.shutdownNow();

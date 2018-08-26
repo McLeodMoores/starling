@@ -34,7 +34,7 @@ import com.opengamma.util.PublicSPI;
 @PublicSPI
 public class MasterDelegatingPositionSource extends AbstractMasterPositionSource implements PositionSource {
   
-  private static final Logger s_logger = LoggerFactory.getLogger(MasterDelegatingPositionSource.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(MasterDelegatingPositionSource.class);
  
   private final DelegatingPositionSource _delegatingPositionSource;
   
@@ -46,14 +46,14 @@ public class MasterDelegatingPositionSource extends AbstractMasterPositionSource
   }
   
   protected Collection<Position> positions(PositionSearchRequest positionSearch) {
-    s_logger.debug("findPositions.positionSearchRequest {}", positionSearch);
+    LOGGER.debug("findPositions.positionSearchRequest {}", positionSearch);
     List<Position> positions = Lists.newArrayList();
     for (ObjectId positionObjectId : positionSearch.getPositionObjectIds()) {
       Position position = getDelegatingPositionSource().getPosition(positionObjectId, VersionCorrection.LATEST);
       if (position != null) {
         positions.add(position);
       } else {
-        s_logger.warn("Position {} cannot be found in DelegatingPositionSource {}", positionObjectId, getDelegatingPositionSource());
+        LOGGER.warn("Position {} cannot be found in DelegatingPositionSource {}", positionObjectId, getDelegatingPositionSource());
       }
     }
     return positions;

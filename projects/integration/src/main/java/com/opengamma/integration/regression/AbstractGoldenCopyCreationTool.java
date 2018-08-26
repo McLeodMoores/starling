@@ -34,7 +34,7 @@ public abstract class AbstractGoldenCopyCreationTool<T extends ToolContext> exte
   public static final String GOLDEN_COPY_VERSION_NAME = "Golden Copy";
 
   /** Logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(AbstractGoldenCopyCreationTool.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(AbstractGoldenCopyCreationTool.class);
   /** Unsupported character sequence */
   private static final ImmutableSet<CharSequence> UNSUPPORTED_CHAR_SEQUENCES = ImmutableSet.<CharSequence>of("/");
 
@@ -60,11 +60,11 @@ public abstract class AbstractGoldenCopyCreationTool<T extends ToolContext> exte
     for (int i = 0; i < viewSnapshotPairs.length; i += 2) {
       final String viewName = viewSnapshotPairs[i];
       final String snapshotName = viewSnapshotPairs[i + 1];
-      s_logger.info("Executing {} against snapshot {}", viewName, snapshotName);
+      LOGGER.info("Executing {} against snapshot {}", viewName, snapshotName);
       final GoldenCopy goldenCopy = goldenCopyCreator.run(viewName, snapshotName, GOLDEN_COPY_VERSION_NAME);
-      s_logger.info("Persisting golden copy for {} against snapshot {}", viewName, snapshotName);
+      LOGGER.info("Persisting golden copy for {} against snapshot {}", viewName, snapshotName);
       new GoldenCopyPersistenceHelper(new File(regressionDirectory)).save(goldenCopy);
-      s_logger.info("Persisted golden copy for {} against snapshot {}", viewName, snapshotName);
+      LOGGER.info("Persisted golden copy for {} against snapshot {}", viewName, snapshotName);
     }
     createDump(regressionDirectory);
   }

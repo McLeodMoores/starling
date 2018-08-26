@@ -35,7 +35,7 @@ import com.opengamma.util.test.AbstractTestResultListener;
  */
 public class TestViewResultListener extends AbstractTestResultListener implements ViewResultListener {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(TestViewResultListener.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(TestViewResultListener.class);
 
   public ViewDefinitionCompiledCall getViewDefinitionCompiled(long timeoutMillis) throws InterruptedException {
     return expectNextCall(ViewDefinitionCompiledCall.class, timeoutMillis);
@@ -248,55 +248,55 @@ public class TestViewResultListener extends AbstractTestResultListener implement
 
   @Override
   public void viewDefinitionCompiled(CompiledViewDefinition compiledViewDefinition, boolean hasMarketDataPermissions) {
-    s_logger.debug("viewDefinitionCompiled ({}, {})", compiledViewDefinition, hasMarketDataPermissions);
+    LOGGER.debug("viewDefinitionCompiled ({}, {})", compiledViewDefinition, hasMarketDataPermissions);
     callReceived(new ViewDefinitionCompiledCall(compiledViewDefinition, hasMarketDataPermissions));
   }
 
   @Override
   public void viewDefinitionCompilationFailed(Instant valuationTime, Exception exception) {
-    s_logger.debug("viewDefinitionCompilationFailed ({}, {})", valuationTime, exception);
+    LOGGER.debug("viewDefinitionCompilationFailed ({}, {})", valuationTime, exception);
     callReceived(new ViewDefinitionCompilationFailedCall(valuationTime, exception));
   }
 
   @Override
   public void cycleStarted(ViewCycleMetadata cycleMetadata) {
-    s_logger.debug("cycleStarted ({})", cycleMetadata);
+    LOGGER.debug("cycleStarted ({})", cycleMetadata);
     callReceived(new CycleStartedCall(cycleMetadata), true);
   }
 
   @Override
   public void cycleCompleted(ViewComputationResultModel fullResult, ViewDeltaResultModel deltaResult) {
-    s_logger.debug("cycleCompleted ({}, {})", fullResult, deltaResult);
+    LOGGER.debug("cycleCompleted ({}, {})", fullResult, deltaResult);
     callReceived(new CycleCompletedCall(fullResult, deltaResult), true);
   }
 
   @Override
   public void cycleExecutionFailed(ViewCycleExecutionOptions executionOptions, Exception exception) {
-    s_logger.debug("cycleExecutionFailed ({}, {})", executionOptions, exception);
+    LOGGER.debug("cycleExecutionFailed ({}, {})", executionOptions, exception);
     callReceived(new CycleExecutionFailedCall(executionOptions, exception));
   }
 
   @Override
   public void processCompleted() {
-    s_logger.debug("processCompleted ()");
+    LOGGER.debug("processCompleted ()");
     callReceived(new ProcessCompletedCall());
   }
 
   @Override
   public void cycleFragmentCompleted(ViewComputationResultModel fullResult, ViewDeltaResultModel deltaResult) {
-    s_logger.debug("cycleFragmentCompleted ({}, {})", fullResult, deltaResult);
+    LOGGER.debug("cycleFragmentCompleted ({}, {})", fullResult, deltaResult);
     callReceived(new CycleFragmentCompletedCall(fullResult, deltaResult), true);
   }
 
   @Override
   public void processTerminated(boolean executionInterrupted) {
-    s_logger.debug("processTerminated ({})", executionInterrupted);
+    LOGGER.debug("processTerminated ({})", executionInterrupted);
     callReceived(new ProcessTerminatedCall(executionInterrupted));
   }
 
   @Override
   public void clientShutdown(Exception e) {
-    s_logger.debug("clientShutdown ()", e);
+    LOGGER.debug("clientShutdown ()", e);
     callReceived(new ClientShutdownCall(e));
   }
 

@@ -24,10 +24,10 @@ import com.opengamma.financial.analytics.ircurve.NextQuarterAdjuster;
 public class NextEquityExpiryAdjuster implements TemporalAdjuster {
 
   /** An adjuster finding the Saturday following the 3rd Friday in a month. May be before or after date */
-  private static final TemporalAdjuster s_dayOfMonth = new DayOfWeekInMonthPlusOffsetAdjuster(3, DayOfWeek.FRIDAY, 1);
+  private static final TemporalAdjuster DAY_OF_MONTH = new DayOfWeekInMonthPlusOffsetAdjuster(3, DayOfWeek.FRIDAY, 1);
 
   /** An adjuster moving to the next quarter */
-  private static final TemporalAdjuster s_nextQuarterAdjuster = new NextQuarterAdjuster();
+  private static final TemporalAdjuster NEXT_QUARTER_ADJUSTER = new NextQuarterAdjuster();
 
   /** The IMM Expiry months  */
   private final Set<Month> _immFutureQuarters = EnumSet.of(Month.MARCH, Month.JUNE, Month.SEPTEMBER, Month.DECEMBER);
@@ -36,10 +36,10 @@ public class NextEquityExpiryAdjuster implements TemporalAdjuster {
   public Temporal adjustInto(Temporal temporal) {
     LocalDate date = LocalDate.from(temporal);
     if (_immFutureQuarters.contains(date.getMonth()) &&
-        date.with(s_dayOfMonth).isAfter(date)) { // in a quarter
-      date = date.with(s_dayOfMonth);
+        date.with(DAY_OF_MONTH).isAfter(date)) { // in a quarter
+      date = date.with(DAY_OF_MONTH);
     } else {
-      date = date.with(s_nextQuarterAdjuster).with(s_dayOfMonth);
+      date = date.with(NEXT_QUARTER_ADJUSTER).with(DAY_OF_MONTH);
     }
     return temporal.with(date);
   }

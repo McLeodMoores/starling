@@ -32,12 +32,12 @@ import com.opengamma.util.ArgumentChecker;
  * 
  */
 public class BloombergEquityScaleResolver {
-  private static final Logger s_logger = LoggerFactory.getLogger(BloombergEquityScaleResolver.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(BloombergEquityScaleResolver.class);
   private static final Set<String> BBG_FIELD = Collections.singleton(BloombergConstants.FIELD_CRNCY);
   private final ReferenceDataProvider _referenceDataProvider;
   private final boolean _useTickerSubscriptions;
   
-  private static final ImmutableSet<ExternalScheme> s_tickerSchemes = ImmutableSet.of(ExternalSchemes.BLOOMBERG_TICKER, ExternalSchemes.BLOOMBERG_TICKER_WEAK);
+  private static final ImmutableSet<ExternalScheme> TICKER_SCHEMES = ImmutableSet.of(ExternalSchemes.BLOOMBERG_TICKER, ExternalSchemes.BLOOMBERG_TICKER_WEAK);
 
   /**
    * Creates a BloombergSecurityTypeResolver
@@ -49,7 +49,7 @@ public class BloombergEquityScaleResolver {
     ArgumentChecker.notNull(referenceDataProvider, "referenceDataProvider");
     ArgumentChecker.notNull(bbgScheme, "bbgScheme");
     _referenceDataProvider = referenceDataProvider;
-    _useTickerSubscriptions = s_tickerSchemes.contains(bbgScheme);
+    _useTickerSubscriptions = TICKER_SCHEMES.contains(bbgScheme);
   }
 
   public Map<ExternalIdBundle, Integer> getBloombergEquityScale(final Collection<ExternalIdBundle> identifiers) {
@@ -74,7 +74,7 @@ public class BloombergEquityScaleResolver {
             }
             result.put(identifierBundle, scale);
           } catch (NumberFormatException | IndexOutOfBoundsException e) {
-            s_logger.warn("Could not parse CURNCY with value {}", bbgCurncy);
+            LOGGER.warn("Could not parse CURNCY with value {}", bbgCurncy);
           } 
         }
       }
@@ -88,7 +88,7 @@ public class BloombergEquityScaleResolver {
       BiMap<String, ExternalIdBundle> result = HashBiMap.create();
       for (ExternalIdBundle bundle : identifiers) {
         for (ExternalId id : bundle) {
-          if (s_tickerSchemes.contains(id.getScheme())) {
+          if (TICKER_SCHEMES.contains(id.getScheme())) {
             result.put(id.getValue(), bundle);
             break;
           }

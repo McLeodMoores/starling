@@ -22,7 +22,7 @@ import com.opengamma.util.ArgumentChecker;
 public class DirectInvocationByteArrayMessageSender implements ByteArrayMessageSender {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(DirectInvocationByteArrayMessageSender.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(DirectInvocationByteArrayMessageSender.class);
 
   /**
    * The list of receivers. Not synchronized!
@@ -75,7 +75,7 @@ public class DirectInvocationByteArrayMessageSender implements ByteArrayMessageS
       try {
         receiver.messageReceived(message);
       } catch (Exception e) {
-        s_logger.warn("Unable to dispatch message to receiver " + receiver, e);
+        LOGGER.warn("Unable to dispatch message to receiver " + receiver, e);
       }
     }
   }

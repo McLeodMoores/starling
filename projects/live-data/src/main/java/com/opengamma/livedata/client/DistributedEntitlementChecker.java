@@ -41,7 +41,7 @@ public class DistributedEntitlementChecker {
    */
   public static final long TIMEOUT_MS = 5000;
   
-  private static final Logger s_logger = LoggerFactory.getLogger(DistributedEntitlementChecker.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(DistributedEntitlementChecker.class);
   private final FudgeRequestSender _requestSender;
   private final FudgeContext _fudgeContext;
   
@@ -58,7 +58,7 @@ public class DistributedEntitlementChecker {
 
   public Map<LiveDataSpecification, Boolean> isEntitled(UserPrincipal user,
       Collection<LiveDataSpecification> specifications) {
-    s_logger.info("Checking entitlements by {} to {}", user, specifications);
+    LOGGER.info("Checking entitlements by {} to {}", user, specifications);
 
     final Map<LiveDataSpecification, Boolean> returnValue = new HashMap<>();
 
@@ -99,7 +99,7 @@ public class DistributedEntitlementChecker {
       throw new OpenGammaRuntimeException("Timeout. Waited for entitlement response for " + TIMEOUT_MS + " with no response.");
     }
     
-    s_logger.info("Got entitlement response {}", returnValue);
+    LOGGER.info("Got entitlement response {}", returnValue);
     return returnValue;
   }
   

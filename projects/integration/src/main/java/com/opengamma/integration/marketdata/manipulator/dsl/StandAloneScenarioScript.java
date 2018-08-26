@@ -219,7 +219,7 @@ public abstract class StandAloneScenarioScript extends Script {
 
 /* package */ class ShocksDelegate extends GroovyObjectSupport {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(ShocksDelegate.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ShocksDelegate.class);
 
   /**
    * Shock variables. Keys are the variable names, values must be lists of values. It's a linked map so the declaration
@@ -230,11 +230,11 @@ public abstract class StandAloneScenarioScript extends Script {
   @Override
   public void setProperty(String property, Object newValue) {
     if (!(newValue instanceof List)) {
-      s_logger.warn("Shocks must be a list, type=" + newValue.getClass().getName() + ", value=" + newValue);
+      LOGGER.warn("Shocks must be a list, type=" + newValue.getClass().getName() + ", value=" + newValue);
       return;
     }
     if (((List) newValue).size() == 0) {
-      s_logger.warn("Shocks must have at least one value");
+      LOGGER.warn("Shocks must have at least one value");
       return;
     }
     _vars.put(property, (List<?>) newValue);

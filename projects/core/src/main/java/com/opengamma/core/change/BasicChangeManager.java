@@ -27,7 +27,7 @@ import com.opengamma.util.PublicSPI;
 @PublicSPI
 public class BasicChangeManager implements ChangeManager {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(BasicChangeManager.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(BasicChangeManager.class);
   
   /**
    * The listeners.
@@ -115,7 +115,7 @@ public class BasicChangeManager implements ChangeManager {
       try {
         listener.entityChanged(event);
       } catch (Exception e) {
-        s_logger.error("Error while calling listener " + listener + " on entity changed", e);
+        LOGGER.error("Error while calling listener " + listener + " on entity changed", e);
       }
     }
   }

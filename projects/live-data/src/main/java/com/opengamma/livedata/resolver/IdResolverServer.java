@@ -27,7 +27,7 @@ import com.opengamma.util.ArgumentChecker;
  */
 public class IdResolverServer implements FudgeRequestReceiver {
   
-  private static final Logger s_logger = LoggerFactory.getLogger(IdResolverServer.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(IdResolverServer.class);
   private final IdResolver _delegate;
   
   public IdResolverServer(IdResolver delegate) {
@@ -39,7 +39,7 @@ public class IdResolverServer implements FudgeRequestReceiver {
   public FudgeMsg requestReceived(FudgeDeserializer deserializer, FudgeMsgEnvelope requestEnvelope) {
     FudgeMsg requestFudgeMsg = requestEnvelope.getMessage();
     ResolveRequest resolveRequest = ResolveRequest.fromFudgeMsg(deserializer, requestFudgeMsg);
-    s_logger.debug("Received resolve request for {}", resolveRequest.getRequestedSpecification());
+    LOGGER.debug("Received resolve request for {}", resolveRequest.getRequestedSpecification());
     
     LiveDataSpecification requestedSpec = resolveRequest.getRequestedSpecification();
     ExternalId resolvedId = _delegate.resolve(requestedSpec.getIdentifiers());

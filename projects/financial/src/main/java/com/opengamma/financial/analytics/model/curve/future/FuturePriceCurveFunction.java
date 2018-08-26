@@ -61,7 +61,7 @@ import com.opengamma.util.money.Currency;
  */
 public abstract class FuturePriceCurveFunction extends AbstractFunction {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(FuturePriceCurveFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(FuturePriceCurveFunction.class);
 
   private ConfigDBFuturePriceCurveDefinitionSource _futurePriceCurveDefinitionSource;
   private ConfigDBFuturePriceCurveSpecificationSource _futurePriceCurveSpecificationSource;
@@ -140,12 +140,12 @@ public abstract class FuturePriceCurveFunction extends AbstractFunction {
         final VersionCorrection versionCorrection = myContext.getComputationTargetResolver().getVersionCorrection();
         final FuturePriceCurveDefinition<Object> priceCurveDefinition = getCurveDefinition(target, curveDefinitionName, versionCorrection);
         if (priceCurveDefinition == null) {
-          s_logger.error("Price curve definition for target {} with curve name {} and instrument type {} was null", new Object[] {target, curveDefinitionName, getInstrumentType() });
+          LOGGER.error("Price curve definition for target {} with curve name {} and instrument type {} was null", new Object[] {target, curveDefinitionName, getInstrumentType() });
           return null;
         }
         final FuturePriceCurveSpecification priceCurveSpecification = getCurveSpecification(target, curveSpecificationName, versionCorrection);
         if (priceCurveSpecification == null) {
-          s_logger.error("Price curve specification for target {} with curve name {} and instrument type {} was null", new Object[] {target, curveSpecificationName, getInstrumentType() });
+          LOGGER.error("Price curve specification for target {} with curve name {} and instrument type {} was null", new Object[] {target, curveSpecificationName, getInstrumentType() });
           return null;
         }
         final Set<ValueRequirement> requirements = Collections.unmodifiableSet(buildRequirements(priceCurveSpecification, priceCurveDefinition, atZDT));

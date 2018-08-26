@@ -58,7 +58,7 @@ public class MarketDataManager implements MarketDataListener, Lifecycle, Subscri
   /**
    * Logger for the class.
    */
-  private static final Logger s_logger = LoggerFactory.getLogger(MarketDataManager.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(MarketDataManager.class);
 
   /**
    * Maximum number of subscriptions to make in a single request.
@@ -81,7 +81,7 @@ public class MarketDataManager implements MarketDataListener, Lifecycle, Subscri
    * The shared "housekeeper" pool is not suitable for use by this class as it will block during the calls while subscriptions are made to the underlying provider, or while waiting for said locks in
    * order to ever do the log reporting.
    */
-  private static final ScheduledExecutorService s_submonitor = Executors.newScheduledThreadPool(1, new NamedThreadPoolFactory("Subscription Monitor"));
+  private static final ScheduledExecutorService SUBMONITOR = Executors.newScheduledThreadPool(1, new NamedThreadPoolFactory("Subscription Monitor"));
 
   /**
    * The set of market data subscriptions which have been successfully
@@ -187,7 +187,7 @@ public class MarketDataManager implements MarketDataListener, Lifecycle, Subscri
     try {
       return ManagementFactory.getPlatformMBeanServer();
     } catch (SecurityException e) {
-      s_logger.warn("No permissions for platform MBean server - JMX will not be available", e);
+      LOGGER.warn("No permissions for platform MBean server - JMX will not be available", e);
       return null;
     }
   }
@@ -218,7 +218,7 @@ public class MarketDataManager implements MarketDataListener, Lifecycle, Subscri
       try {
         _jmxServer.unregisterMBean(_objectName);
       } catch (InstanceNotFoundException | MBeanRegistrationException e) {
-        s_logger.warn("Unable to unregister object: {} from MBeanServer", _objectName);
+        LOGGER.warn("Unable to unregister object: {} from MBeanServer", _objectName);
       }
     }
   }
@@ -230,11 +230,11 @@ public class MarketDataManager implements MarketDataListener, Lifecycle, Subscri
       public void run() {
         _subscriptionsLock.lock();
         try {
-          s_logger.info("Pending subscriptions for {}: {}", MarketDataManager.this, _pendingSubscriptions.size());
+          LOGGER.info("Pending subscriptions for {}: {}", MarketDataManager.this, _pendingSubscriptions.size());
           if (!_pendingSubscriptions.isEmpty()) {
-            s_logger.info(_pendingSubscriptions.size() > 20 ? "First 20 pending: " : "All {} pending: ", _pendingSubscriptions.size());
+            LOGGER.info(_pendingSubscriptions.size() > 20 ? "First 20 pending: " : "All {} pending: ", _pendingSubscriptions.size());
             for (Map.Entry<ValueSpecification, ZonedDateTime> entry : Iterables.limit(_pendingSubscriptions.entrySet(), 20)) {
-              s_logger.info(" - {} in cache since: {}", entry.getKey(), entry.getValue());
+              LOGGER.info(" - {} in cache since: {}", entry.getKey(), entry.getValue());
             }
           }
         } finally {
@@ -264,13 +264,13 @@ public class MarketDataManager implements MarketDataListener, Lifecycle, Subscri
             // so do nothing
           }
           if (!toAbandon.isEmpty()) {
-            s_logger.warn("Giving up waiting on {} subscriptions - maybe they don't exist", toAbandon.size());
-            s_logger.info("No longer waiting for subscriptions: {}", toAbandon);
+            LOGGER.warn("Giving up waiting on {} subscriptions - maybe they don't exist", toAbandon.size());
+            LOGGER.info("No longer waiting for subscriptions: {}", toAbandon);
             removePendingSubscriptions(toAbandon, false);
           }
           if (!toRetry.isEmpty()) {
-            s_logger.info("Retrying {} subscriptions as no responses received yet", toRetry.size());
-            s_logger.info("Retrying subscriptions: {}", toRetry);
+            LOGGER.info("Retrying {} subscriptions as no responses received yet", toRetry.size());
+            LOGGER.info("Retrying subscriptions: {}", toRetry);
             makeSubscriptionRequest(toRetry);
           }
         } finally {
@@ -323,14 +323,14 @@ public class MarketDataManager implements MarketDataListener, Lifecycle, Subscri
   @Override
   public void subscriptionsSucceeded(final Collection<ValueSpecification> valueSpecifications) {
     removePendingSubscriptions(valueSpecifications, true);
-    s_logger.info("{} subscription succeeded - {} pending subscriptions remaining", valueSpecifications.size(), _pendingSubscriptions.size());
+    LOGGER.info("{} subscription succeeded - {} pending subscriptions remaining", valueSpecifications.size(), _pendingSubscriptions.size());
   }
 
   @Override
   public void subscriptionFailed(final ValueSpecification valueSpecification, final String msg) {
     removePendingSubscriptions(ImmutableSet.of(valueSpecification), false);
-    s_logger.info("Market data subscription to {} failed. This market data may be missing from computation cycles. Reason: {}", valueSpecification, msg);
-    s_logger.info("{} pending subscriptions remaining", _pendingSubscriptions.size());
+    LOGGER.info("Market data subscription to {} failed. This market data may be missing from computation cycles. Reason: {}", valueSpecification, msg);
+    LOGGER.info("{} pending subscriptions remaining", _pendingSubscriptions.size());
   }
 
   @Override
@@ -340,7 +340,7 @@ public class MarketDataManager implements MarketDataListener, Lifecycle, Subscri
 
   @Override
   public void valuesChanged(Collection<ValueSpecification> specifications) {
-    s_logger.debug("Received change notification for {} specifications", specifications.size());
+    LOGGER.debug("Received change notification for {} specifications", specifications.size());
     _marketDataChangeListener.onMarketDataValuesChanged(specifications);
   }
 
@@ -365,7 +365,7 @@ public class MarketDataManager implements MarketDataListener, Lifecycle, Subscri
         batch = null;
       }
     }
-    s_logger.info("Partitioned original set of {} items into {} batches of max size {}", originalSet.size(), result.size(), maxBatchSize);
+    LOGGER.info("Partitioned original set of {} items into {} batches of max size {}", originalSet.size(), result.size(), maxBatchSize);
     return result;
   }
 
@@ -392,7 +392,7 @@ public class MarketDataManager implements MarketDataListener, Lifecycle, Subscri
   }
 
   private void removeMarketDataSubscriptions(final Set<ValueSpecification> unusedSubscriptions) {
-    final OperationTimer timer = new OperationTimer(s_logger, "Removing {} market data subscriptions", unusedSubscriptions.size());
+    final OperationTimer timer = new OperationTimer(LOGGER, "Removing {} market data subscriptions", unusedSubscriptions.size());
     _subscriptionsLock.lock();
     try {
       _marketDataProvider.unsubscribe(unusedSubscriptions);
@@ -433,7 +433,7 @@ public class MarketDataManager implements MarketDataListener, Lifecycle, Subscri
   private void replaceMarketDataProvider(UserPrincipal marketDataUser, List<MarketDataSpecification> specifications) {
     // Lock held by calling methods
     if (_marketDataProvider != null) {
-      s_logger.info("Replacing market data provider between cycles");
+      LOGGER.info("Replacing market data provider between cycles");
     }
     removeMarketDataProvider();
     setMarketDataProvider(marketDataUser, specifications);
@@ -463,7 +463,7 @@ public class MarketDataManager implements MarketDataListener, Lifecycle, Subscri
     try {
       _marketDataProvider = new SnapshottingViewExecutionDataProvider(marketDataUser, marketDataSpecs, _marketDataProviderResolver);
     } catch (final Exception e) {
-      s_logger.error("Failed to create data provider", e);
+      LOGGER.error("Failed to create data provider", e);
       _marketDataProvider = null;
     }
     if (_marketDataProvider != null) {
@@ -489,7 +489,7 @@ public class MarketDataManager implements MarketDataListener, Lifecycle, Subscri
     // lock otherwise we can hit deadlocks when two similar views (e.g. same view, different
     // valuation times) are launched.
     if (!newSubscriptions.isEmpty()) {
-      OperationTimer timer = new OperationTimer(s_logger, "Adding {} market data subscriptions", newSubscriptions.size());
+      OperationTimer timer = new OperationTimer(LOGGER, "Adding {} market data subscriptions", newSubscriptions.size());
       makeSubscriptionRequest(newSubscriptions);
       timer.finished();
     }
@@ -515,13 +515,13 @@ public class MarketDataManager implements MarketDataListener, Lifecycle, Subscri
 
       Set<ValueSpecification> unusedSubscriptions = Sets.difference(currentSubscriptions, requiredSubscriptions).immutableCopy();
       if (!unusedSubscriptions.isEmpty()) {
-        s_logger.info("{} unused market data subscriptions", unusedSubscriptions.size());
+        LOGGER.info("{} unused market data subscriptions", unusedSubscriptions.size());
         removeMarketDataSubscriptions(unusedSubscriptions);
       }
 
       final Set<ValueSpecification> newMarketData = Sets.difference(requiredSubscriptions, currentSubscriptions).immutableCopy();
       if (!newMarketData.isEmpty()) {
-        s_logger.info("{} new market data requirements", newMarketData.size());
+        LOGGER.info("{} new market data requirements", newMarketData.size());
         ZonedDateTime now = ZonedDateTime.now();
         for (ValueSpecification specification : newMarketData) {
           _pendingSubscriptions.put(specification, now);
@@ -551,7 +551,7 @@ public class MarketDataManager implements MarketDataListener, Lifecycle, Subscri
       _subscriptionsLock.unlock();
     }
     if (!subscriptions.isEmpty()) {      
-      OperationTimer timer = new OperationTimer(s_logger, "Retrying {} market data subscriptions which have previously failed", subscriptions.size());
+      OperationTimer timer = new OperationTimer(LOGGER, "Retrying {} market data subscriptions which have previously failed", subscriptions.size());
       _marketDataProvider.unsubscribe(subscriptions);
       makeSubscriptionRequest(subscriptions);
       timer.finished();
@@ -609,7 +609,7 @@ public class MarketDataManager implements MarketDataListener, Lifecycle, Subscri
     String userName = userPrincipal.getUserName();
     if (userName == null || "".equals(userName)) {
       UserPrincipal testUser = UserPrincipal.getTestUser();
-      s_logger.info("UserName undefined for {}. Will use test user {} instead.", userPrincipal, UserPrincipal.getTestUser());
+      LOGGER.info("UserName undefined for {}. Will use test user {} instead.", userPrincipal, UserPrincipal.getTestUser());
       return testUser;
     } else {
       return userPrincipal;
@@ -620,20 +620,20 @@ public class MarketDataManager implements MarketDataListener, Lifecycle, Subscri
 
   @Override
   public synchronized void start() {
-    s_logger.debug("Starting {}", this);
+    LOGGER.debug("Starting {}", this);
     if (_monitorLoggingTask != null) {
-      if (s_logger.isInfoEnabled()) {
-        _monitorLoggingTask = s_submonitor.scheduleAtFixedRate(createSubscriptionMonitorLogging(), 0, 15, TimeUnit.SECONDS);
+      if (LOGGER.isInfoEnabled()) {
+        _monitorLoggingTask = SUBMONITOR.scheduleAtFixedRate(createSubscriptionMonitorLogging(), 0, 15, TimeUnit.SECONDS);
       }
     }
     if (_monitorTask != null) {
-      _monitorTask = s_submonitor.scheduleAtFixedRate(createSubscriptionMonitor(), 0, SUBSCRIPTION_RETRY_DURATION.get(ChronoUnit.SECONDS), TimeUnit.SECONDS);
+      _monitorTask = SUBMONITOR.scheduleAtFixedRate(createSubscriptionMonitor(), 0, SUBSCRIPTION_RETRY_DURATION.get(ChronoUnit.SECONDS), TimeUnit.SECONDS);
     }
   }
 
   @Override
   public synchronized void stop() {
-    s_logger.debug("Stopping {}", this);
+    LOGGER.debug("Stopping {}", this);
     if (_monitorLoggingTask != null) {
       _monitorLoggingTask.cancel(true);
       _monitorLoggingTask = null;
@@ -647,7 +647,7 @@ public class MarketDataManager implements MarketDataListener, Lifecycle, Subscri
 
     // removeMarketDataProvider may block until the lock can be obtained; post it to the detach queue instead rather than
     // block the caller
-    s_submonitor.submit(new Runnable() {
+    SUBMONITOR.submit(new Runnable() {
       @Override
       public void run() {
         removeMarketDataProvider();

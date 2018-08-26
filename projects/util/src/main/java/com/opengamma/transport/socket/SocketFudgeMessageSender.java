@@ -28,7 +28,7 @@ import com.opengamma.util.ArgumentChecker;
  *
  */
 public class SocketFudgeMessageSender extends AbstractSocketProcess implements FudgeMessageSender {
-  private static final Logger s_logger = LoggerFactory.getLogger(SocketFudgeMessageSender.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(SocketFudgeMessageSender.class);
   private final FudgeContext _fudgeContext;
 
   private MessageBatchingWriter _writer;
@@ -57,7 +57,7 @@ public class SocketFudgeMessageSender extends AbstractSocketProcess implements F
   @Override
   public void send(FudgeMsg message) {
     startIfNecessary();
-    s_logger.info("Sending message with {} fields", message.getNumFields());
+    LOGGER.info("Sending message with {} fields", message.getNumFields());
     _writer.write(message);
   }
 

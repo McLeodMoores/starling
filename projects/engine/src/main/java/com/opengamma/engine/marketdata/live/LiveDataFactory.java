@@ -26,7 +26,7 @@ import com.opengamma.util.ArgumentChecker;
 public class LiveDataFactory {
 
   /** Logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(LiveDataFactory.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(LiveDataFactory.class);
 
   /** Underlying source of the live data. */
   private final LiveDataClient _liveDataClient;
@@ -70,7 +70,7 @@ public class LiveDataFactory {
    */
   /* package */ void resubscribe(Set<ExternalScheme> schemes) {
     synchronized (_providerListLock) {
-      s_logger.info("Telling providers to resubscribe to data for schemes: {}", schemes);
+      LOGGER.info("Telling providers to resubscribe to data for schemes: {}", schemes);
       for (Iterator<WeakReference<InMemoryLKVLiveMarketDataProvider>> it = _providers.iterator(); it.hasNext(); ) {
         WeakReference<InMemoryLKVLiveMarketDataProvider> ref = it.next();
         InMemoryLKVLiveMarketDataProvider provider = ref.get();

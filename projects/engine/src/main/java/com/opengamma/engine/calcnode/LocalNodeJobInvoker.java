@@ -19,7 +19,7 @@ import com.opengamma.util.ArgumentChecker;
  */
 public class LocalNodeJobInvoker extends SimpleCalculationNodeInvocationContainer implements JobInvoker {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(LocalNodeJobInvoker.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(LocalNodeJobInvoker.class);
 
   private final AtomicReference<JobInvokerRegister> _notifyWhenAvailable = new AtomicReference<JobInvokerRegister>();
   private final CapabilitySet _capabilitySet = new CapabilitySet();
@@ -102,7 +102,7 @@ public class LocalNodeJobInvoker extends SimpleCalculationNodeInvocationContaine
 
       @Override
       public void executionFailed(SimpleCalculationNode node, Exception exception) {
-        s_logger.warn("Exception thrown by job execution", exception);
+        LOGGER.warn("Exception thrown by job execution", exception);
         receiver.jobFailed(LocalNodeJobInvoker.this, node.getNodeId(), exception);
       }
 

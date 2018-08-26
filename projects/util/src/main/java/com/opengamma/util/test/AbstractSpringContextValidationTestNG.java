@@ -32,7 +32,7 @@ import com.opengamma.OpenGammaRuntimeException;
  */
 public abstract class AbstractSpringContextValidationTestNG {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(AbstractSpringContextValidationTestNG.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(AbstractSpringContextValidationTestNG.class);
   private ThreadLocal<GenericApplicationContext> _springContext = new ThreadLocal<GenericApplicationContext>();
 
   @DataProvider(name = "runModes")
@@ -124,9 +124,9 @@ public abstract class AbstractSpringContextValidationTestNG {
     if (beans.length == 0) {
       fail("No beans created");
     }
-    s_logger.info("{} beans created by {}", beans.length, getClass());
+    LOGGER.info("{} beans created by {}", beans.length, getClass());
     for (String bean : beans) {
-      s_logger.debug("Bean name {}", bean);
+      LOGGER.debug("Bean name {}", bean);
     }
   }
 

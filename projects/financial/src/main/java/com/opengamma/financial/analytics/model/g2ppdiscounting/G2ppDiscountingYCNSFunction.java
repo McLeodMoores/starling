@@ -55,7 +55,7 @@ import com.opengamma.util.tuple.Pair;
  */
 public class G2ppDiscountingYCNSFunction extends G2ppDiscountingFunction {
   /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(G2ppDiscountingYCNSFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(G2ppDiscountingYCNSFunction.class);
 
   /**
    * Sets the value requirements to {@link ValueRequirementNames#YIELD_CURVE_NODE_SENSITIVITIES}
@@ -86,7 +86,7 @@ public class G2ppDiscountingYCNSFunction extends G2ppDiscountingFunction {
             return Collections.singleton(new ComputedValue(spec, ycns));
           }
         }
-        s_logger.info("Could not get sensitivities to " + curveName + " for " + target.getName());
+        LOGGER.info("Could not get sensitivities to " + curveName + " for " + target.getName());
         return Collections.emptySet();
       }
 

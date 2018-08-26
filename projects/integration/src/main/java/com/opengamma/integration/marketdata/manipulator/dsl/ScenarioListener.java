@@ -29,7 +29,7 @@ import com.opengamma.util.ArgumentChecker;
  */
 public class ScenarioListener extends AbstractViewResultListener {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(ScenarioListener.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ScenarioListener.class);
 
   /**
    * Single element blocking queue to hold the complete set of results. This allows the {@link #getResults()} method
@@ -64,25 +64,25 @@ public class ScenarioListener extends AbstractViewResultListener {
 
   @Override
   public void viewDefinitionCompilationFailed(Instant valuationTime, Exception exception) {
-    s_logger.warn("View compilation failed", exception);
+    LOGGER.warn("View compilation failed", exception);
   }
 
   @Override
   public void cycleCompleted(ViewComputationResultModel fullResult, ViewDeltaResultModel deltaResult) {
     String scenarioName = fullResult.getViewCycleExecutionOptions().getName();
-    s_logger.info("cycle completed for scenario {}", scenarioName);
+    LOGGER.info("cycle completed for scenario {}", scenarioName);
     SimpleResultModel resultModel = _resultsBuilder.build(fullResult);
     _results.put(resultModel.getCycleName(), resultModel);
   }
 
   @Override
   public void processCompleted() {
-    s_logger.info("process completed");
+    LOGGER.info("process completed");
     List<SimpleResultModel> resultModels = Lists.newArrayListWithCapacity(_results.size());
     for (String scenarioName : _scenarioNames) {
       SimpleResultModel resultModel = _results.get(scenarioName);
       if (resultModel == null) {
-        s_logger.warn("No results found for scenario '{}'", scenarioName);
+        LOGGER.warn("No results found for scenario '{}'", scenarioName);
       } else {
         resultModels.add(resultModel);
       }

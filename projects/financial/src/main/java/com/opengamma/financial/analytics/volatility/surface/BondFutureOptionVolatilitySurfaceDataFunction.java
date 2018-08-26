@@ -52,7 +52,7 @@ import com.opengamma.util.tuple.Pairs;
  *
  */
 public class BondFutureOptionVolatilitySurfaceDataFunction extends AbstractFunction.NonCompiledInvoker {
-  private static final Logger s_logger = LoggerFactory.getLogger(BondFutureOptionVolatilitySurfaceDataFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(BondFutureOptionVolatilitySurfaceDataFunction.class);
 
   private ConfigDBVolatilitySurfaceSpecificationSource _volatilitySurfaceSpecificationSource;
 
@@ -132,14 +132,14 @@ public class BondFutureOptionVolatilitySurfaceDataFunction extends AbstractFunct
   public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
     final Set<String> surfaceNames = desiredValue.getConstraints().getValues(ValuePropertyNames.SURFACE);
     if (surfaceNames == null || surfaceNames.size() != 1) {
-      s_logger.error("Can only get a single surface; asked for {}", surfaceNames);
+      LOGGER.error("Can only get a single surface; asked for {}", surfaceNames);
       return null;
     }
     final String surfaceName = surfaceNames.iterator().next();
     final String fullSpecificationName = surfaceName + "_" + target.getUniqueId().getValue();
     final VolatilitySurfaceSpecification specification = _volatilitySurfaceSpecificationSource.getSpecification(fullSpecificationName, InstrumentTypeProperties.BOND_FUTURE_OPTION);
     if (specification == null) {
-      s_logger.error("Could not get volatility surface specification named {}", fullSpecificationName);
+      LOGGER.error("Could not get volatility surface specification named {}", fullSpecificationName);
       return null;
     }
     final Set<ValueRequirement> requirements = new HashSet<ValueRequirement>();
@@ -238,9 +238,9 @@ public class BondFutureOptionVolatilitySurfaceDataFunction extends AbstractFunct
               volatilityValues.put(Pairs.of(optionExpiry, y / 100.), volatility);
             }
           } catch (final MathException e) {
-            s_logger.info("Could not imply volatility for ({}, {}); error was {}", new Object[] {x, y, e.getMessage() });
+            LOGGER.info("Could not imply volatility for ({}, {}); error was {}", new Object[] {x, y, e.getMessage() });
           } catch (final IllegalArgumentException e) {
-            s_logger.error("Could not imply volatility for future option number={}, strike={}; error was {}", new Object[] {x, y, e.getMessage() });
+            LOGGER.error("Could not imply volatility for future option number={}, strike={}; error was {}", new Object[] {x, y, e.getMessage() });
           }
         }
       }

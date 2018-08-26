@@ -51,7 +51,7 @@ import com.opengamma.util.fudgemsg.OpenGammaFudgeContext;
 public class BloombergTickWriter extends TerminatableJob {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(BloombergTickWriter.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(BloombergTickWriter.class);
   //interval in millis
   private static final long DEFAULT_REPORT_INTERVAL = 10000L;
   /**
@@ -101,7 +101,7 @@ public class BloombergTickWriter extends TerminatableJob {
     _reportInterval = reportInterval;
     _storageMode = storageMode;
     _ticker2Buid = ImmutableMap.<String, String>builder().putAll(ticker2Buid).build();
-    s_logger.info("BloombergTickWriter started in {} mode writing to {}", _storageMode, _rootDir);
+    LOGGER.info("BloombergTickWriter started in {} mode writing to {}", _storageMode, _rootDir);
   }
   
   private FudgeContext getFudgeContext() {
@@ -123,11 +123,11 @@ public class BloombergTickWriter extends TerminatableJob {
       buildSecurityMapQueue(ticks);
       writeOutSecurityMapQueue();
     }
-    if (s_logger.isDebugEnabled()) {
+    if (LOGGER.isDebugEnabled()) {
       writeReport();
     }
     if (msg != null && BloombergTickReplayUtils.isTerminateMsg(msg)) {
-      s_logger.info("received terminate message, ..terminating");
+      LOGGER.info("received terminate message, ..terminating");
       terminate();
     }
     ticks.clear();
@@ -146,7 +146,7 @@ public class BloombergTickWriter extends TerminatableJob {
           queue.put(fudgeMsg);
         } catch (InterruptedException e) {
           Thread.interrupted();
-          s_logger.warn("interrupted from putting message on queue");
+          LOGGER.warn("interrupted from putting message on queue");
         }
       } else {
         LinkedBlockingQueue<FudgeMsg> queue = new LinkedBlockingQueue<FudgeMsg>();
@@ -154,7 +154,7 @@ public class BloombergTickWriter extends TerminatableJob {
           queue.put(fudgeMsg);
         } catch (InterruptedException e) {
           Thread.interrupted();
-          s_logger.warn("interrupted from putting message on queue");
+          LOGGER.warn("interrupted from putting message on queue");
         }
         _securityMapQueue.put(securityDes, queue);
       }
@@ -165,7 +165,7 @@ public class BloombergTickWriter extends TerminatableJob {
     if (tickMsgList.isEmpty()) {
       return;
     }
-    s_logger.debug("writing {} messages for {}:{}", new Object[]{tickMsgList.size(), securityDes, buid});
+    LOGGER.debug("writing {} messages for {}:{}", new Object[]{tickMsgList.size(), securityDes, buid});
     //sort ticks per time
     Map<String, List<FudgeMsg>> fileTicksMap = new HashMap<String, List<FudgeMsg>>();
     for (FudgeMsg tickMsg : tickMsgList) {
@@ -196,14 +196,14 @@ public class BloombergTickWriter extends TerminatableJob {
         }
         _nWrites++;
       } catch (FileNotFoundException e) {
-        s_logger.warn("cannot open file {} for writing", fullPath);
+        LOGGER.warn("cannot open file {} for writing", fullPath);
         throw new OpenGammaRuntimeException("Cannot open " + fullPath + " for writing", e);
       } finally {
         if (fos != null) {
           try {
             fos.close();
           } catch (IOException e) {
-            s_logger.warn("cannot close file {}", fullPath);
+            LOGGER.warn("cannot close file {}", fullPath);
           }
         }
       }
@@ -236,14 +236,14 @@ public class BloombergTickWriter extends TerminatableJob {
       }
       _nWrites++;
     } catch (FileNotFoundException e) {
-      s_logger.warn("cannot open file {} for writing", fullPath);
+      LOGGER.warn("cannot open file {} for writing", fullPath);
       throw new OpenGammaRuntimeException("Cannot open file " + fullPath + " for writing", e);
     } finally {
       if (fos != null) {
         try {
           fos.close();
         } catch (IOException e) {
-          s_logger.warn("cannot close {}", fullPath);
+          LOGGER.warn("cannot close {}", fullPath);
         }
       }
       
@@ -324,16 +324,16 @@ public class BloombergTickWriter extends TerminatableJob {
    * 
    */
   private void writeReport() {
-    s_logger.debug("writing reports");
+    LOGGER.debug("writing reports");
     _stopWatch.suspend();
     long time = _stopWatch.getTime();
     if (time >= _reportInterval) {
       double result = ((double) _nTicks / (double) time) * 1000.;
-      s_logger.debug("ticks {}/s", result);
+      LOGGER.debug("ticks {}/s", result);
       result = ((double) _nWrites / (double) time) * 1000.;
-      s_logger.debug("fileOperations {}/s", result);
+      LOGGER.debug("fileOperations {}/s", result);
       result = (double) _nBlocks / (double) _nWrites;
-      s_logger.debug("average blocks {}bytes", result);
+      LOGGER.debug("average blocks {}bytes", result);
       _nWrites = 0;
       _nTicks = 0;
       _nBlocks = 0;
@@ -411,7 +411,7 @@ public class BloombergTickWriter extends TerminatableJob {
    */
   private String makeFileNameFromReceivedTimeStamp(FudgeMsg tickMsg) {
     String result = null;
-    //s_logger.warn("cannot determine event time in msg {}, using received timestamp", tickMsg); // Andrew - uncomment before checking back in
+    //LOGGER.warn("cannot determine event time in msg {}, using received timestamp", tickMsg); // Andrew - uncomment before checking back in
     Long epochMillis = tickMsg.getLong(RECEIVED_TS_KEY);
     Instant instant = Instant.ofEpochMilli(epochMillis);
     ZonedDateTime dateTime = ZonedDateTime.ofInstant(instant, ZoneOffset.UTC);
@@ -435,7 +435,7 @@ public class BloombergTickWriter extends TerminatableJob {
     if (split.length == 4) {
       result = split[0];
     } else {
-      s_logger.warn("time {} is not in expected format", eventTime);
+      LOGGER.warn("time {} is not in expected format", eventTime);
     }
     return result;
   }
@@ -445,7 +445,7 @@ public class BloombergTickWriter extends TerminatableJob {
    */
   private void createDirectory(File dir) {
     if (!dir.mkdirs()) {
-      s_logger.warn("cannot create {}", dir);
+      LOGGER.warn("cannot create {}", dir);
       throw new OpenGammaRuntimeException("cannot create directory " + dir);
     }
   }

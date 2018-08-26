@@ -23,7 +23,7 @@ import com.opengamma.util.ArgumentChecker;
  * Base implementation for all Newton-Raphson style multi-dimensional root finding (i.e. using the Jacobian matrix as a basis for some iterative process)
  */
 public class NewtonVectorRootFinder extends VectorRootFinder {
-  private static final Logger s_logger = LoggerFactory.getLogger(NewtonVectorRootFinder.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(NewtonVectorRootFinder.class);
   private static final double ALPHA = 1e-4;
   private static final double BETA = 1.5;
   private static final int FULL_RECALC_FREQ = 20;
@@ -98,7 +98,7 @@ public class NewtonVectorRootFinder extends VectorRootFinder {
             return data.getX(); //non-standard exit. Cannot find an improvement from this position, so provided we are close enough to the root, exit.
           }
           String msg = "Failed to converge in backtracking, even after a Jacobian recalculation." + getErrorMessage(data, jacobianFunction);
-          s_logger.info(msg);
+          LOGGER.info(msg);
           throw new MathException(msg);
         }
       }

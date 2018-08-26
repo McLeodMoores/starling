@@ -23,14 +23,14 @@ public final class CleanPriceFromCurvesCalculator extends InstrumentDerivativeVi
   /**
    * The calculator instance.
    */
-  private static final CleanPriceFromCurvesCalculator s_instance = new CleanPriceFromCurvesCalculator();
+  private static final CleanPriceFromCurvesCalculator INSTANCE = new CleanPriceFromCurvesCalculator();
 
   /**
    * Return the calculator instance.
    * @return The instance.
    */
   public static CleanPriceFromCurvesCalculator getInstance() {
-    return s_instance;
+    return INSTANCE;
   }
 
   /**

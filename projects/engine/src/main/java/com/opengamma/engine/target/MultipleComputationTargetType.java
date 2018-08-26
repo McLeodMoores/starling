@@ -22,7 +22,7 @@ import com.opengamma.util.ArgumentChecker;
 
   private final Set<ComputationTargetType> _target;
 
-  private static final ComputationTargetTypeVisitor<Set<ComputationTargetType>, Boolean> s_construct = new ComputationTargetTypeVisitor<Set<ComputationTargetType>, Boolean>() {
+  private static final ComputationTargetTypeVisitor<Set<ComputationTargetType>, Boolean> CONSTRUCT = new ComputationTargetTypeVisitor<Set<ComputationTargetType>, Boolean>() {
 
     @Override
     public Boolean visitMultipleComputationTargetTypes(final Set<ComputationTargetType> types, final Set<ComputationTargetType> data) {
@@ -62,10 +62,10 @@ import com.opengamma.util.ArgumentChecker;
 
   private static Set<ComputationTargetType> copy(final ComputationTargetType a, final ComputationTargetType b) {
     final Set<ComputationTargetType> copy = new HashSet<ComputationTargetType>();
-    if (a.accept(s_construct, copy)) {
+    if (a.accept(CONSTRUCT, copy)) {
       copy.add(a);
     }
-    if (b.accept(s_construct, copy)) {
+    if (b.accept(CONSTRUCT, copy)) {
       copy.add(b);
     }
     ArgumentChecker.isTrue(copy.size() >= 2, "target");
@@ -85,7 +85,7 @@ import com.opengamma.util.ArgumentChecker;
   private static Set<ComputationTargetType> copy(final ComputationTargetType[] types) {
     final Set<ComputationTargetType> copy = new HashSet<ComputationTargetType>();
     for (ComputationTargetType type : types) {
-      if (type.accept(s_construct, copy)) {
+      if (type.accept(CONSTRUCT, copy)) {
         copy.add(type);
       }
     }
@@ -213,7 +213,7 @@ import com.opengamma.util.ArgumentChecker;
     }
   }
 
-  private static final ComputationTargetTypeVisitor<MultipleComputationTargetType, Boolean> s_equals = new ComputationTargetTypeVisitor<MultipleComputationTargetType, Boolean>() {
+  private static final ComputationTargetTypeVisitor<MultipleComputationTargetType, Boolean> EQUALS = new ComputationTargetTypeVisitor<MultipleComputationTargetType, Boolean>() {
 
     @Override
     public Boolean visitMultipleComputationTargetTypes(final Set<ComputationTargetType> types, final MultipleComputationTargetType self) {
@@ -243,7 +243,7 @@ import com.opengamma.util.ArgumentChecker;
       return true;
     }
     if (o instanceof ComputationTargetType) {
-      return ((ComputationTargetType) o).accept(s_equals, this).booleanValue();
+      return ((ComputationTargetType) o).accept(EQUALS, this).booleanValue();
     } else {
       return false;
     }

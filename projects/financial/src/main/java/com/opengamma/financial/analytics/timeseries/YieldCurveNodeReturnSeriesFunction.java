@@ -56,7 +56,7 @@ import com.opengamma.util.time.Tenor;
  * Calculates return series for the market instruments at the nodal points of a yield curve.
  */
 public class YieldCurveNodeReturnSeriesFunction extends AbstractFunction.NonCompiledInvoker {
-  private static final Logger s_logger = LoggerFactory.getLogger(YieldCurveNodeReturnSeriesFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(YieldCurveNodeReturnSeriesFunction.class);
   private static final TimeSeriesDifferenceOperator DIFFERENCE = new TimeSeriesDifferenceOperator();
   private static final HolidayDateRemovalFunction HOLIDAY_REMOVER = HolidayDateRemovalFunction.getInstance();
   private static final Calendar WEEKEND_CALENDAR = new MondayToFridayCalendar("Weekend");
@@ -142,7 +142,7 @@ public class YieldCurveNodeReturnSeriesFunction extends AbstractFunction.NonComp
 
     final MultiCurveCalculationConfig curveCalculationConfig = _curveCalculationConfigSource.getConfig(curveCalculationConfigName);
     if (curveCalculationConfig == null) {
-      s_logger.error("Could not get curve calculation config called " + curveCalculationConfigName);
+      LOGGER.error("Could not get curve calculation config called " + curveCalculationConfigName);
       return null;
     }
     if (FXImpliedYieldCurveFunction.FX_IMPLIED.equals(curveCalculationConfig.getCalculationMethod())) {

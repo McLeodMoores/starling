@@ -26,7 +26,7 @@ import com.opengamma.util.jms.JmsConnector;
 public class ViewProcessAvailabilityNotificationListener extends AvailabilityNotificationListener {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(ViewProcessAvailabilityNotificationListener.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ViewProcessAvailabilityNotificationListener.class);
 
   /** The view processor, used to obtain the running view processes. */
   private final ViewProcessorInternal _viewProcessor;
@@ -48,7 +48,7 @@ public class ViewProcessAvailabilityNotificationListener extends AvailabilityNot
   protected void notificationReceived(Set<ExternalScheme> schemes) {
     for (ViewProcess viewProcess : _viewProcessor.getViewProcesses()) {
       if (viewProcess instanceof ViewProcessImpl) {
-        s_logger.info("Forcing graph rebuild for {}", viewProcess);
+        LOGGER.info("Forcing graph rebuild for {}", viewProcess);
         ((ViewProcessImpl) viewProcess).forceGraphRebuild();
       }
     }

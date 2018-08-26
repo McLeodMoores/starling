@@ -39,7 +39,7 @@ public class FudgeXMLFormat implements RegressionIO.Format {
    */
   /* package */static final String FILE_EXTENSION = ".xml";
 
-  private static final Logger s_logger = LoggerFactory.getLogger(FudgeXMLFormat.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(FudgeXMLFormat.class);
 
   private static final class Context {
 
@@ -110,7 +110,7 @@ public class FudgeXMLFormat implements RegressionIO.Format {
     fudgeMsgWriter.writeMessage(msg);
     fudgeMsgWriter.flush();
     writer.append("\n");
-    s_logger.debug("Wrote object {}", o);
+    LOGGER.debug("Wrote object {}", o);
   }
 
   @Override
@@ -123,7 +123,7 @@ public class FudgeXMLFormat implements RegressionIO.Format {
     FudgeMsgReader fudgeMsgReader = new FudgeMsgReader(streamReader);
     FudgeMsg msg = fudgeMsgReader.nextMessage();
     final Object object = ctx._deserializer.fudgeMsgToObject(msg);
-    s_logger.debug("Read object {}", object);
+    LOGGER.debug("Read object {}", object);
     return object;
   }
 

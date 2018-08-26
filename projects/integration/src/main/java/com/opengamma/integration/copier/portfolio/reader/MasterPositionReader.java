@@ -36,7 +36,7 @@ import com.opengamma.util.tuple.ObjectsPair;
  */
 public class MasterPositionReader implements PositionReader {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(PositionReader.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(PositionReader.class);
 
   private PortfolioMaster _portfolioMaster;
   private PositionMaster _positionMaster;
@@ -108,18 +108,18 @@ public class MasterPositionReader implements PositionReader {
               return ObjectsPair.of(position, 
                   new ManageableSecurity[] {(ManageableSecurity) security, (ManageableSecurity) underlying});
             } else {
-              s_logger.warn("Could not resolve underlying " + id + " for security " + security.getName());
+              LOGGER.warn("Could not resolve underlying " + id + " for security " + security.getName());
             }
           } catch (Throwable e) {
             // Underlying not found
-            s_logger.warn("Error trying to resolve underlying " + id + " for security " + security.getName());
+            LOGGER.warn("Error trying to resolve underlying " + id + " for security " + security.getName());
           }
         }
         return ObjectsPair.of(position, 
               new ManageableSecurity[] {(ManageableSecurity) security});
 
       } else {
-        s_logger.warn("Could not resolve security relating to position " + position.getName());
+        LOGGER.warn("Could not resolve security relating to position " + position.getName());
         return ObjectsPair.of(null, null);
       }
     }

@@ -23,7 +23,7 @@ import com.opengamma.util.fudgemsg.OpenGammaFudgeContext;
 public class HeartbeatReceiver implements ByteArrayMessageReceiver {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(HeartbeatReceiver.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(HeartbeatReceiver.class);
 
   /**
    * The expiration manager.
@@ -85,7 +85,7 @@ public class HeartbeatReceiver implements ByteArrayMessageReceiver {
 
   public void messageReceived(FudgeMsg msg) {
     Heartbeat heartbeat = Heartbeat.fromFudgeMsg(new FudgeDeserializer(_fudgeContext), msg);
-    s_logger.debug("Heartbeat received for: {}", heartbeat.getLiveDataSpecifications());
+    LOGGER.debug("Heartbeat received for: {}", heartbeat.getLiveDataSpecifications());
     getActiveSecurityPublicationManager().extendPublicationTimeout(heartbeat.getLiveDataSpecifications());
   }
 

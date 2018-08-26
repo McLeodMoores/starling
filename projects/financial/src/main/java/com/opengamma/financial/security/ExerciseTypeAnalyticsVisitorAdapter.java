@@ -18,10 +18,10 @@ import com.opengamma.financial.security.option.ExerciseTypeVisitor;
  *
  */
 public final class ExerciseTypeAnalyticsVisitorAdapter implements ExerciseTypeVisitor<ExerciseDecisionType> {
-  private static final ExerciseTypeAnalyticsVisitorAdapter s_instance = new ExerciseTypeAnalyticsVisitorAdapter();
+  private static final ExerciseTypeAnalyticsVisitorAdapter INSTANCE = new ExerciseTypeAnalyticsVisitorAdapter();
 
   public static ExerciseTypeAnalyticsVisitorAdapter getInstance() {
-    return s_instance;
+    return INSTANCE;
   }
   /**
    *

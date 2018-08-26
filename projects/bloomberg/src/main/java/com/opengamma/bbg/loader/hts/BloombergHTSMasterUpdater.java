@@ -60,7 +60,7 @@ import com.opengamma.util.time.LocalDateRange;
 public class BloombergHTSMasterUpdater {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(BloombergHTSMasterUpdater.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(BloombergHTSMasterUpdater.class);
 
   private final HistoricalTimeSeriesMaster _timeSeriesMaster;
   private final HistoricalTimeSeriesProvider _historicalTimeSeriesProvider;
@@ -137,10 +137,10 @@ public class BloombergHTSMasterUpdater {
       UniqueId htsId = doc.getInfo().getUniqueId();
       LocalDate latestDate = getLatestDate(htsId);
       if (isUpToDate(latestDate, doc.getInfo().getObservationTime())) {
-        s_logger.debug("Not scheduling update for up to date series {} from {}", htsId, latestDate);
+        LOGGER.debug("Not scheduling update for up to date series {} from {}", htsId, latestDate);
         return false; // up to date, so do not fetch
       }
-      s_logger.debug("Scheduling update for series {} from {}", htsId, latestDate);
+      LOGGER.debug("Scheduling update for series {} from {}", htsId, latestDate);
       startDate = DateUtils.nextWeekDay(latestDate);
     }
     String dataProvider = info.getDataProvider();
@@ -157,7 +157,7 @@ public class BloombergHTSMasterUpdater {
       ObjectId objectId = doc.getInfo().getTimeSeriesObjectId();
       Set<ObjectId> objectIds = MapUtils.putIfAbsentGet(metaDataKeyMap, metaDataKey, Sets.newHashSet(objectId));
       if (objectIds != null) {
-        s_logger.warn("Duplicate time series for {}", metaDataKey._identifiers);
+        LOGGER.warn("Duplicate time series for {}", metaDataKey._identifiers);
         objectIds.add(objectId);
       }
     }
@@ -213,9 +213,9 @@ public class BloombergHTSMasterUpdater {
 
   protected void updateTimeSeries() {
     // load the info documents for all Bloomberg series that can be updated
-    s_logger.info("Loading all time series information...");
+    LOGGER.info("Loading all time series information...");
     List<HistoricalTimeSeriesInfoDocument> documents = getCurrentTimeSeriesDocuments();
-    s_logger.info("Loaded {} time series.", documents.size());
+    LOGGER.info("Loaded {} time series.", documents.size());
     // group Bloomberg request by dates/dataProviders/dataFields
     Map<LocalDate, Map<String, Map<String, Set<ExternalIdBundle>>>> bbgTSRequest = Maps.newHashMap();
     // store identifier to UID map for timeseries update
@@ -226,7 +226,7 @@ public class BloombergHTSMasterUpdater {
     checkForUpdates(documents, metaDataKeyMap, bbgTSRequest);
     // select end date
     LocalDate endDate = resolveEndDate();
-    s_logger.info("Updating {} time series to {}", metaDataKeyMap, endDate);
+    LOGGER.info("Updating {} time series to {}", metaDataKeyMap, endDate);
     // load from Bloomberg and store in database
     getAndUpdateHistoricalData(bbgTSRequest, metaDataKeyMap, endDate);
   }
@@ -274,7 +274,7 @@ public class BloombergHTSMasterUpdater {
       if (valid) {
         result.add(htsInfoDoc);
       } else {
-        s_logger.debug("Time series {} is not valid on {}", tsInfo.getUniqueId(), previousWeekDay);
+        LOGGER.debug("Time series {} is not valid on {}", tsInfo.getUniqueId(), previousWeekDay);
       }
     }
     return result;
@@ -301,16 +301,16 @@ public class BloombergHTSMasterUpdater {
       Map<MetaDataKey, Set<ObjectId>> metaDataKeyMap, LocalDate endDate) {
     // process the request
     for (Entry<LocalDate, Map<String, Map<String, Set<ExternalIdBundle>>>> entry : bbgTSRequest.entrySet()) {
-      s_logger.debug("processing {}", entry);
+      LOGGER.debug("processing {}", entry);
       // if we're reloading we should get the whole ts, not just the end...
       LocalDate startDate = _reload ? DEFAULT_START_DATE : entry.getKey();
 
       for (Entry<String, Map<String, Set<ExternalIdBundle>>> providerFieldIdentifiers : entry.getValue().entrySet()) {
-        s_logger.debug("processing {}", providerFieldIdentifiers);
+        LOGGER.debug("processing {}", providerFieldIdentifiers);
         String dataProvider = providerFieldIdentifiers.getKey();
 
         for (Entry<String, Set<ExternalIdBundle>> fieldIdentifiers : providerFieldIdentifiers.getValue().entrySet()) {
-          s_logger.debug("processing {}", fieldIdentifiers);
+          LOGGER.debug("processing {}", fieldIdentifiers);
           String dataField = fieldIdentifiers.getKey();
           Set<ExternalIdBundle> identifiers = fieldIdentifiers.getValue();
 
@@ -318,7 +318,7 @@ public class BloombergHTSMasterUpdater {
           Map<ExternalIdBundle, LocalDateDoubleTimeSeries> bbgLoadedTS = getTimeSeries(dataField, startDate, endDate, bbgDataProvider, identifiers);
           if (bbgLoadedTS.size() < identifiers.size()) {
             for (ExternalIdBundle failure : Sets.difference(identifiers, bbgLoadedTS.keySet())) {
-              s_logger.error("Failed to load time series for {}, {}, {}", failure, dataProvider, dataField);
+              LOGGER.error("Failed to load time series for {}, {}, {}", failure, dataProvider, dataField);
               errorLoading(new MetaDataKey(failure, dataProvider, dataField));
             }
           }
@@ -333,10 +333,10 @@ public class BloombergHTSMasterUpdater {
       // ensure data points are after the last stored data point
       LocalDateDoubleTimeSeries timeSeries = identifierTS.getValue();
       if (timeSeries.isEmpty()) {
-        s_logger.info("No new data for series {} {}", dataField, identifierTS.getKey());
+        LOGGER.info("No new data for series {} {}", dataField, identifierTS.getKey());
         continue; // avoids errors in getLatestTime()
       }
-      s_logger.info("Got {} new points for series {} {}", new Object[] {timeSeries.size(), dataField, identifierTS.getKey() });
+      LOGGER.info("Got {} new points for series {} {}", new Object[] {timeSeries.size(), dataField, identifierTS.getKey() });
 
       LocalDate latestTime = timeSeries.getLatestTime();
       LocalDate startDate = (_startDate != null ? _startDate : DEFAULT_START_DATE);
@@ -353,9 +353,9 @@ public class BloombergHTSMasterUpdater {
               _timeSeriesMaster.updateTimeSeriesDataPoints(oid, timeSeries);
             }
           } catch (Exception ex) {
-            s_logger.error("Error writing time-series " + oid, ex);
+            LOGGER.error("Error writing time-series " + oid, ex);
             if (metaDataKeyMap.get(metaDataKey).size() > 1) {
-              s_logger.error("This is probably because there are multiple time series for {} with differing lengths.  Manually delete one or the other.", metaDataKey._identifiers);
+              LOGGER.error("This is probably because there are multiple time series for {} with differing lengths.  Manually delete one or the other.", metaDataKey._identifiers);
             }
             errorLoading(metaDataKey);
           }
@@ -434,7 +434,7 @@ public class BloombergHTSMasterUpdater {
   //-------------------------------------------------------------------------
   protected Map<ExternalIdBundle, LocalDateDoubleTimeSeries> getTimeSeries(
       final String dataField, final LocalDate startDate, final LocalDate endDate, String bbgDataProvider, Set<ExternalIdBundle> identifierSet) {
-    s_logger.debug("Loading time series {} ({}-{}) {}: {}", new Object[] {dataField, startDate, endDate, bbgDataProvider, identifierSet });
+    LOGGER.debug("Loading time series {} ({}-{}) {}: {}", new Object[] {dataField, startDate, endDate, bbgDataProvider, identifierSet });
     LocalDateRange dateRange = LocalDateRange.of(startDate, endDate, true);
     return _historicalTimeSeriesProvider.getHistoricalTimeSeries(identifierSet, BloombergConstants.BLOOMBERG_DATA_SOURCE_NAME, bbgDataProvider, dataField, dateRange);
   }

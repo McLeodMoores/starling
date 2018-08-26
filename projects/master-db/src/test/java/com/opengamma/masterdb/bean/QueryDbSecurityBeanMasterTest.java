@@ -39,12 +39,12 @@ import com.opengamma.util.test.TestGroup;
 public class QueryDbSecurityBeanMasterTest extends AbstractDbSecurityBeanMasterTest {
   // superclass sets up dummy database
 
-  private static final Logger s_logger = LoggerFactory.getLogger(QueryDbSecurityBeanMasterTest.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(QueryDbSecurityBeanMasterTest.class);
 
   @Factory(dataProvider = "databases", dataProviderClass = DbTest.class)
   public QueryDbSecurityBeanMasterTest(String databaseType, String databaseVersion) {
     super(databaseType, databaseVersion, true);
-    s_logger.info("running testcases for {}", databaseType);
+    LOGGER.info("running testcases for {}", databaseType);
   }
 
   //-------------------------------------------------------------------------

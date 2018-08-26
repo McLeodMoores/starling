@@ -31,7 +31,7 @@ import com.opengamma.analytics.math.util.wrapper.CommonsMathWrapper;
  * of Simpson integration.
  */
 public class SimpsonIntegrator1D extends Integrator1D<Double, Double> {
-  private static final Logger s_logger = LoggerFactory.getLogger(SimpsonIntegrator1D.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(SimpsonIntegrator1D.class);
   private final UnivariateRealIntegrator _integrator = new SimpsonIntegrator();
 
   /**
@@ -51,7 +51,7 @@ public class SimpsonIntegrator1D extends Integrator1D<Double, Double> {
       if (lower < upper) {
         return _integrator.integrate(CommonsMathWrapper.wrapUnivariate(f), lower, upper);
       }
-      s_logger.info("Upper bound was less than lower bound; swapping bounds and negating result");
+      LOGGER.info("Upper bound was less than lower bound; swapping bounds and negating result");
       return -_integrator.integrate(CommonsMathWrapper.wrapUnivariate(f), upper, lower);
     } catch (final FunctionEvaluationException e) {
       throw new MathException(e);

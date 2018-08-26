@@ -35,7 +35,7 @@ public final class ExternalScheme implements Serializable, Comparable<ExternalSc
   /**
    * Computing cache for the schemes.
    */
-  private static final LoadingCache<String, ExternalScheme> s_cache =
+  private static final LoadingCache<String, ExternalScheme> CACHE =
       CacheBuilder.newBuilder().initialCapacity(256).concurrencyLevel(4).build(
           new CacheLoader<String, ExternalScheme>() {
             public ExternalScheme load(String key) {
@@ -57,7 +57,7 @@ public final class ExternalScheme implements Serializable, Comparable<ExternalSc
   @FromString
   public static ExternalScheme of(final String name) {
     ArgumentChecker.notEmpty(name, "name");
-    return s_cache.getUnchecked(name);
+    return CACHE.getUnchecked(name);
   }
 
   /**

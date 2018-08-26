@@ -41,7 +41,7 @@ import com.opengamma.util.ArgumentChecker;
  */
 public abstract class AbstractHistoricalMarketDataProvider extends AbstractMarketDataProvider {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(AbstractHistoricalMarketDataProvider.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(AbstractHistoricalMarketDataProvider.class);
 
   /**
    * The property put onto the value specifications created.
@@ -76,24 +76,24 @@ public abstract class AbstractHistoricalMarketDataProvider extends AbstractMarke
 
   @Override
   public void subscribe(final ValueSpecification valueSpecification) {
-    s_logger.debug("Added subscriptions to {}", valueSpecification);
+    LOGGER.debug("Added subscriptions to {}", valueSpecification);
     subscriptionSucceeded(valueSpecification);
   }
 
   @Override
   public void subscribe(final Set<ValueSpecification> valueSpecifications) {
-    s_logger.debug("Added subscriptions to {}", valueSpecifications);
+    LOGGER.debug("Added subscriptions to {}", valueSpecifications);
     subscriptionsSucceeded(valueSpecifications);
   }
 
   @Override
   public void unsubscribe(final ValueSpecification valueSpecification) {
-    s_logger.debug("Removed subscription from {}", valueSpecification);
+    LOGGER.debug("Removed subscription from {}", valueSpecification);
   }
 
   @Override
   public void unsubscribe(final Set<ValueSpecification> valueSpecifications) {
-    s_logger.debug("Removed subscriptions from {}", valueSpecifications);
+    LOGGER.debug("Removed subscriptions from {}", valueSpecifications);
   }
 
   protected abstract LocalDate getHistoricalResolutionDate(final MarketDataSpecification marketDataSpec);
@@ -112,8 +112,8 @@ public abstract class AbstractHistoricalMarketDataProvider extends AbstractMarke
       protected ValueSpecification getAvailability(final ComputationTargetSpecification targetSpec, final ExternalIdBundle identifiers, final ValueRequirement desiredValue) {
         HistoricalTimeSeriesResolutionResult resolved = getTimeSeriesResolver().resolve(identifiers, date, null, null, desiredValue.getValueName(), getTimeSeriesResolverKey());
         if (resolved == null) {
-          if (s_logger.isDebugEnabled() && desiredValue.getValueName().equals(MarketDataRequirementNames.MARKET_VALUE)) {
-            s_logger.debug("Missing market data {}", desiredValue);
+          if (LOGGER.isDebugEnabled() && desiredValue.getValueName().equals(MarketDataRequirementNames.MARKET_VALUE)) {
+            LOGGER.debug("Missing market data {}", desiredValue);
           }
           return null;
         } else {

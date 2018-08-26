@@ -50,7 +50,7 @@ import com.opengamma.util.tuple.Triple;
  */
 public class RawVolatilityCubeDataFunction extends AbstractFunction.NonCompiledInvoker {
   /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(RawVolatilityCubeDataFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(RawVolatilityCubeDataFunction.class);
   /** The volatility cube definition source */
   private VolatilityCubeDefinitionSource _volatilityCubeDefinitionSource;
   /** The volatility cube specification source */
@@ -149,7 +149,7 @@ public class RawVolatilityCubeDataFunction extends AbstractFunction.NonCompiledI
             final Triple<Tenor, Tenor, Double> coordinate = Triple.of(x, y, z);
             data.put(coordinate, volatility);
           } else {
-            s_logger.info("Could not get market data for {}", identifier);
+            LOGGER.info("Could not get market data for {}", identifier);
           }
         }
       }

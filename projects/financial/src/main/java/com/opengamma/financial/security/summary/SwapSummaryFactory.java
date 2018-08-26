@@ -29,7 +29,7 @@ import com.opengamma.id.ExternalId;
  */
 public class SwapSummaryFactory implements SummaryFactory<SwapSecurity> {
 
-  private static final NotionalVisitor<Double> s_notionalVisitor = new NotionalVisitor<Double>() {
+  private static final NotionalVisitor<Double> NOTIONAL_VISITOR = new NotionalVisitor<Double>() {
 
     @Override
     public Double visitCommodityNotional(final CommodityNotional notional) {
@@ -53,7 +53,7 @@ public class SwapSummaryFactory implements SummaryFactory<SwapSecurity> {
 
   };
 
-  private static final SwapLegVisitor<String> s_legNameVisitor = new SwapLegVisitor<String>() {
+  private static final SwapLegVisitor<String> LEG_NAME_VISITOR = new SwapLegVisitor<String>() {
 
     @Override
     public String visitFixedInterestRateLeg(final FixedInterestRateLeg swapLeg) {
@@ -123,17 +123,17 @@ public class SwapSummaryFactory implements SummaryFactory<SwapSecurity> {
   }
 
   private static String getLegName(final SwapLeg leg) {
-    return leg.accept(s_legNameVisitor);
+    return leg.accept(LEG_NAME_VISITOR);
   }
 
   private static Double getNotional(final SwapSecurity security) {
     if (SwapSecurityUtils.isFloatFloat(security)) {
-      return security.getPayLeg().getNotional().accept(s_notionalVisitor);
+      return security.getPayLeg().getNotional().accept(NOTIONAL_VISITOR);
     }
 
     final boolean isPayFixed = isFixedLeg(security.getPayLeg());
     final SwapLeg fixedLeg = isPayFixed ? security.getPayLeg() : security.getReceiveLeg();
-    Double notional = fixedLeg.getNotional().accept(s_notionalVisitor);
+    Double notional = fixedLeg.getNotional().accept(NOTIONAL_VISITOR);
     if (notional != null && !isPayFixed) {
       notional *= -1;
     }

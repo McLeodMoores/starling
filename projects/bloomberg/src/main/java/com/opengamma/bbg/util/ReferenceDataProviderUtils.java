@@ -26,7 +26,7 @@ import com.opengamma.util.ArgumentChecker;
 public final class ReferenceDataProviderUtils {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(ReferenceDataProviderUtils.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ReferenceDataProviderUtils.class);
 
   /**
    * Restricted constructor.
@@ -60,7 +60,7 @@ public final class ReferenceDataProviderUtils {
     ArgumentChecker.notNull(refDataProvider, "Reference Data Provider");
     FudgeMsg fieldData = getFields(securityID, Collections.singleton(fieldID), refDataProvider);
     if (fieldData == null) {
-      s_logger.info("Reference data for security {} field {} returned null", securityID, fieldID);
+      LOGGER.info("Reference data for security {} field {} returned null", securityID, fieldID);
       return null;
     }
     return fieldData.getString(fieldID);
@@ -74,7 +74,7 @@ public final class ReferenceDataProviderUtils {
     Map<String, FudgeMsg> map = refDataProvider.getReferenceDataIgnoreCache(Collections.singleton(securityID), Collections.singleton(fieldID));
     FudgeMsg fieldData = map.get(securityID);
     if (fieldData == null) {
-      s_logger.info("Reference data for security {} field {} returned null", securityID, fieldID);
+      LOGGER.info("Reference data for security {} field {} returned null", securityID, fieldID);
       return null;
     }
     return fieldData.getString(fieldID);

@@ -56,7 +56,7 @@ public class WebLoginResource extends AbstractSingletonWebResource {
   private static final String HEADER_X_FORWARDED_FOR = "X-FORWARDED-FOR";
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(WebLoginResource.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(WebLoginResource.class);
 
   // one resource class handles two ftl files
   private static final String LOGIN_GREEN = "users/html/login.ftl";
@@ -237,7 +237,7 @@ public class WebLoginResource extends AbstractSingletonWebResource {
       }
       return localHost.getHostAddress();
     } catch (Exception ex) {
-      s_logger.warn("Unable to obtain suitable local host address", ex);
+      LOGGER.warn("Unable to obtain suitable local host address", ex);
       return (remoteIp != null ? remoteIp : "0:0:0:0:0:0:0:1");
     }
   }

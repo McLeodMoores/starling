@@ -1,11 +1,10 @@
 /**
  * Copyright (C) 2014 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics.isda.credit;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
@@ -27,33 +26,33 @@ import com.opengamma.core.marketdatasnapshot.NamedSnapshot;
 import com.opengamma.id.UniqueId;
 
 /**
- * A snapshot containing credit curve market data. This defines a set of credit curves 
+ * A snapshot containing credit curve market data. This defines a set of credit curves
  * which can be bootstrapped and used in a pricing environment. Curves are indexed
  * using {@link CreditCurveDataKey}s.
  */
 @BeanDefinition
 public final class CreditCurveDataSnapshot implements NamedSnapshot, ImmutableBean {
-  
+
   /**
    * The unique id of the snapshot.
    */
   @PropertyDefinition
   private final UniqueId _uniqueId;
-  
+
   /**
    * The name of the snapshot.
    */
   @PropertyDefinition(validate = "notNull")
   private final String _name;
-  
+
   /**
    * The full set of credit curves defined by the snapshot.
    */
   @PropertyDefinition(validate = "notNull")
   private final ImmutableMap<CreditCurveDataKey, CreditCurveData> _creditCurves;
-  
+
   @Override
-  public NamedSnapshot withUniqueId(UniqueId uniqueId) {
+  public NamedSnapshot withUniqueId(final UniqueId uniqueId) {
     return new Builder(this).uniqueId(uniqueId).build();
   }
 

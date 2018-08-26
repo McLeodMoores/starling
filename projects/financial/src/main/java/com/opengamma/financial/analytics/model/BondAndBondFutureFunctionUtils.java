@@ -61,7 +61,7 @@ import com.opengamma.util.ArgumentChecker;
  */
 public class BondAndBondFutureFunctionUtils {
   /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(BondAndBondFutureFunctionUtils.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(BondAndBondFutureFunctionUtils.class);
 
   /**
    * Gets any additional value requirements that are required for conversion from securities
@@ -79,7 +79,7 @@ public class BondAndBondFutureFunctionUtils {
       final HistoricalTimeSeriesResolutionResult timeSeries = timeSeriesResolver.resolve(externalIdBundle, null, null, null,
           MarketDataRequirementNames.MARKET_VALUE, null);
       if (timeSeries == null) {
-        s_logger.error("Could not resolve time series for {}", externalIdBundle);
+        LOGGER.error("Could not resolve time series for {}", externalIdBundle);
         return Collections.emptySet();
       }
       return Collections.singleton(HistoricalTimeSeriesFunctionUtils.createHTSRequirement(timeSeries, MarketDataRequirementNames.MARKET_VALUE,
@@ -90,7 +90,7 @@ public class BondAndBondFutureFunctionUtils {
       final ExternalIdBundle externalIdBundle = ExternalIdBundle.of(ExternalId.parse(((InflationBondSecurity) security).attributes().get().get("ReferenceIndexId")));
       final HistoricalTimeSeriesResolutionResult timeSeries = timeSeriesResolver.resolve(externalIdBundle, null, null, null, MarketDataRequirementNames.MARKET_VALUE, null);
       if (timeSeries == null) {
-        s_logger.error("Could not resolve time series for {}", externalIdBundle);
+        LOGGER.error("Could not resolve time series for {}", externalIdBundle);
         return Collections.emptySet();
       }
       return Collections.singleton(HistoricalTimeSeriesFunctionUtils.createHTSRequirement(timeSeries, MarketDataRequirementNames.MARKET_VALUE,

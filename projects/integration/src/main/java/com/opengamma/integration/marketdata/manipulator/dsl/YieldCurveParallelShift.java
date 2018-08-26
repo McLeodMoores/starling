@@ -38,7 +38,7 @@ import com.opengamma.util.ArgumentChecker;
 @BeanDefinition
 public final class YieldCurveParallelShift implements StructureManipulator<YieldCurve>, ImmutableBean {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(YieldCurveParallelShift.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(YieldCurveParallelShift.class);
 
   /** How the shift should be applied */
   @PropertyDefinition(validate = "notNull")
@@ -58,7 +58,7 @@ public final class YieldCurveParallelShift implements StructureManipulator<Yield
   public YieldCurve execute(YieldCurve structure,
                             ValueSpecification valueSpecification,
                             FunctionExecutionContext executionContext) {
-    s_logger.debug("Shifting curve {} by {}, {}", structure.getName(), _shift, _shiftType);
+    LOGGER.debug("Shifting curve {} by {}, {}", structure.getName(), _shift, _shiftType);
     return YieldCurveUtils.withParallelShift(structure, _shift, _shiftType.toAnalyticsType());
   }
 

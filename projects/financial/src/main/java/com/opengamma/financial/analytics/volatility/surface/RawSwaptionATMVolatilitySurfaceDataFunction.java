@@ -19,7 +19,7 @@ import com.opengamma.id.VersionCorrection;
  */
 public class RawSwaptionATMVolatilitySurfaceDataFunction extends RawVolatilitySurfaceDataFunction {
   /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(RawSwaptionATMVolatilitySurfaceDataFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(RawSwaptionATMVolatilitySurfaceDataFunction.class);
 
   /**
    * Default constructor

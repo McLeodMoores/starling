@@ -38,7 +38,7 @@ import com.opengamma.util.ArgumentChecker;
 @BeanDefinition
 public final class YieldCurveDataParallelShift implements StructureManipulator<YieldCurveData>, ImmutableBean {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(YieldCurveDataParallelShift.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(YieldCurveDataParallelShift.class);
 
   /** How the shift should be applied */
   @PropertyDefinition(validate = "notNull")
@@ -58,7 +58,7 @@ public final class YieldCurveDataParallelShift implements StructureManipulator<Y
   public YieldCurveData execute(YieldCurveData curveData,
                                 ValueSpecification valueSpec,
                                 FunctionExecutionContext executionContext) {
-    s_logger.debug("Shifting curve data {} by {}", curveData.getCurveSpecification().getName(), _shift);
+    LOGGER.debug("Shifting curve data {} by {}", curveData.getCurveSpecification().getName(), _shift);
     Map<ExternalIdBundle, Double> dataPoints = curveData.getDataPoints();
     Map<ExternalIdBundle, Double> shiftedPoints = Maps.newHashMapWithExpectedSize(dataPoints.size());
     for (Map.Entry<ExternalIdBundle, Double> entry : dataPoints.entrySet()) {

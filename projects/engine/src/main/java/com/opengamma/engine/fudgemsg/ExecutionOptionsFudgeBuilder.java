@@ -46,7 +46,7 @@ public class ExecutionOptionsFudgeBuilder implements FudgeBuilder<ExecutionOptio
   private static final String DEFAULT_EXECUTION_OPTIONS_FIELD = "defaultExecutionOptions";
   private static final String BATCH_FIELD = "batch";
 
-  private static final Collection<Pair<String, ViewExecutionFlags>> s_flags = Arrays.<Pair<String, ViewExecutionFlags>>asList(
+  private static final Collection<Pair<String, ViewExecutionFlags>> FLAGS = Arrays.<Pair<String, ViewExecutionFlags>>asList(
       Pairs.of(AWAIT_MARKET_DATA_FIELD, ViewExecutionFlags.AWAIT_MARKET_DATA),
       Pairs.of(TRIGGER_CYCLE_ON_LIVE_DATA_CHANGED_FIELD, ViewExecutionFlags.TRIGGER_CYCLE_ON_MARKET_DATA_CHANGED),
       Pairs.of(TRIGGER_CYCLE_ON_TIME_ELAPSED_FIELD, ViewExecutionFlags.TRIGGER_CYCLE_ON_TIME_ELAPSED),
@@ -61,7 +61,7 @@ public class ExecutionOptionsFudgeBuilder implements FudgeBuilder<ExecutionOptio
   public MutableFudgeMsg buildMessage(FudgeSerializer serializer, ExecutionOptions object) {
     MutableFudgeMsg msg = serializer.newMessage();
     serializer.addToMessageWithClassHeaders(msg, EXECUTION_SEQUENCE_FIELD, null, object.getExecutionSequence());
-    for (Pair<String, ViewExecutionFlags> flags : s_flags) {
+    for (Pair<String, ViewExecutionFlags> flags : FLAGS) {
       if (object.getFlags().contains(flags.getSecond())) {
         msg.add(flags.getFirst(), Boolean.TRUE);
       }
@@ -80,7 +80,7 @@ public class ExecutionOptionsFudgeBuilder implements FudgeBuilder<ExecutionOptio
   public ExecutionOptions buildObject(FudgeDeserializer deserializer, FudgeMsg message) {
     ViewCycleExecutionSequence executionSequence = deserializer.fudgeMsgToObject(ViewCycleExecutionSequence.class, message.getMessage(EXECUTION_SEQUENCE_FIELD));
     EnumSet<ViewExecutionFlags> flags = EnumSet.noneOf(ViewExecutionFlags.class);
-    for (Pair<String, ViewExecutionFlags> flagField : s_flags) {
+    for (Pair<String, ViewExecutionFlags> flagField : FLAGS) {
       if (BooleanUtils.isTrue(message.getBoolean(flagField.getFirst()))) {
         flags.add(flagField.getSecond());
       }

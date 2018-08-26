@@ -33,7 +33,7 @@ import com.opengamma.util.tuple.Pairs;
  */
 public class ViewRegressionTest {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(ViewRegressionTest.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ViewRegressionTest.class);
   // TODO arg for this? different deltas for different values and/or object types?
 
   private final String _dbDumpDir;
@@ -86,7 +86,7 @@ public class ViewRegressionTest {
       CalculationResults testViewResult = entry.getValue();
       CalculationResults baseViewResult = baseResults.get(entry.getKey());
       if (baseViewResult == null) {
-        s_logger.warn("No base result for {}", entry.getKey());
+        LOGGER.warn("No base result for {}", entry.getKey());
         continue;
       }
       results.add(CalculationDifference.between(baseViewResult, testViewResult, ViewRegressionTestTool.DELTA));
@@ -151,7 +151,7 @@ public class ViewRegressionTest {
         configRequest.setName(basisViewName);
         ConfigSearchResult<ViewDefinition> configResult = configMaster.search(configRequest);
         if (configResult.getValues().size() > 1) {
-          s_logger.warn("Multiple view definitions found with the same name '{}'", basisViewName);
+          LOGGER.warn("Multiple view definitions found with the same name '{}'", basisViewName);
           continue;
         }
         String viewDefName = configResult.getSingleValue().getName();

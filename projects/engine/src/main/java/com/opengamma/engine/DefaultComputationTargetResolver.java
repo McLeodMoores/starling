@@ -49,7 +49,7 @@ public class DefaultComputationTargetResolver implements ComputationTargetResolv
   // [PLAT-444]: move to com.opengamma.engine.target
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(DefaultComputationTargetResolver.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(DefaultComputationTargetResolver.class);
 
   /**
    * The security source.
@@ -193,7 +193,7 @@ public class DefaultComputationTargetResolver implements ComputationTargetResolv
         if (resolved != null) {
           return ComputationTargetResolverUtils.createResolvedTarget(specification, resolved);
         } else {
-          s_logger.info("Unable to resolve {}", specification);
+          LOGGER.info("Unable to resolve {}", specification);
           return null;
         }
       } else {
@@ -212,7 +212,7 @@ public class DefaultComputationTargetResolver implements ComputationTargetResolv
     }
   }
 
-  private static final ComputationTargetTypeVisitor<ComputationTargetTypeMap<ComputationTargetType>, ComputationTargetType> s_simplifyType =
+  private static final ComputationTargetTypeVisitor<ComputationTargetTypeMap<ComputationTargetType>, ComputationTargetType> SIMPLIFY_TYPE =
       new ComputationTargetTypeVisitor<ComputationTargetTypeMap<ComputationTargetType>, ComputationTargetType>() {
 
         @Override
@@ -274,7 +274,7 @@ public class DefaultComputationTargetResolver implements ComputationTargetResolv
 
   @Override
   public ComputationTargetType simplifyType(final ComputationTargetType type) {
-    final ComputationTargetType newType = type.accept(s_simplifyType, _baseTypes);
+    final ComputationTargetType newType = type.accept(SIMPLIFY_TYPE, _baseTypes);
     if (newType != null) {
       return newType;
     } else {

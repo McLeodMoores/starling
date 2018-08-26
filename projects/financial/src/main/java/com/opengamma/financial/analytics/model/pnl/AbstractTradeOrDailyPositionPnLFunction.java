@@ -52,7 +52,7 @@ import com.opengamma.util.money.MoneyCalculationUtils;
  */
 public abstract class AbstractTradeOrDailyPositionPnLFunction extends AbstractFunction.NonCompiledInvoker {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(AbstractTradeOrDailyPositionPnLFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(AbstractTradeOrDailyPositionPnLFunction.class);
 
   private final String _mark2MarketField;
   private final String _costOfCarryField;
@@ -117,7 +117,7 @@ public abstract class AbstractTradeOrDailyPositionPnLFunction extends AbstractFu
       markToMarket = markToMarket * futureSecurity.getUnitAmount();
     }
     final BigDecimal dailyPnL = tradeValue.subtract(trade.getQuantity().multiply(BigDecimal.valueOf(markToMarket + costOfCarry)));
-    s_logger.debug("{}  security: {} quantity: {} fairValue: {} markToMarket: {} costOfCarry: {} dailyPnL: {}",
+    LOGGER.debug("{}  security: {} quantity: {} fairValue: {} markToMarket: {} costOfCarry: {} dailyPnL: {}",
           new Object[] {trade.getUniqueId(), trade.getSecurity().getExternalIdBundle(), trade.getQuantity(), tradeValue, markToMarket, costOfCarry, dailyPnL });
     final ComputedValue result = new ComputedValue(valueSpecification, MoneyCalculationUtils.rounded(dailyPnL).doubleValue());
     return Sets.newHashSet(result);

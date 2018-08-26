@@ -30,7 +30,7 @@ public class SchemaVersionParser {
 
   private static final String EXPECTED_ROOT_ELEMENT = "og-portfolio";
 
-  private static final Logger s_logger = LoggerFactory.getLogger(SchemaVersionParser.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(SchemaVersionParser.class);
 
   private static final QName SCHEMA_VERSION_QNAME = new QName("schemaVersion");
 
@@ -70,7 +70,7 @@ public class SchemaVersionParser {
 
   private StartElement findRootElement() throws XMLStreamException {
 
-    s_logger.debug("Attempting to find root element for document");
+    LOGGER.debug("Attempting to find root element for document");
 
     // Work through the elements in the document until we hit a start element
     for (XMLEventReader eventReader = createXmlEventReader(); eventReader.hasNext(); ) {
@@ -80,7 +80,7 @@ public class SchemaVersionParser {
         // We've found the first proper element in the document, it may be
         // what we're looking for or it may be incorrect but either way we
         // don't need to read any more of the file
-        s_logger.debug("Found root element: [{}]", event);
+        LOGGER.debug("Found root element: [{}]", event);
         return (StartElement) event;
       }
     }

@@ -111,7 +111,7 @@ public class MasterSnapshotSource
     /**
      * Logger for the class.
      */
-    private static final Logger s_logger = LoggerFactory.getLogger(TypedSnapshotSearcher.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(TypedSnapshotSearcher.class);
 
     /**
      * The master to search for data in.
@@ -192,7 +192,7 @@ public class MasterSnapshotSource
     private S selectResult(List<NamedSnapshot> results, boolean warnOnTypeMismatch) {
       List<S> filtered = filterForCorrectType(results, warnOnTypeMismatch);
       if (filtered.size() < results.size()) {
-        s_logger.info("Filtered out {} snapshot(s) where type is not: {}", results.size() - filtered.size(), _type);
+        LOGGER.info("Filtered out {} snapshot(s) where type is not: {}", results.size() - filtered.size(), _type);
       }
 
       return selectFirst(filtered);
@@ -207,7 +207,7 @@ public class MasterSnapshotSource
         if (_type.isAssignableFrom(snapshot.getClass())) {
           builder.add(_type.cast(snapshot));
         } else if (warnOnTypeMismatch) {
-          s_logger.warn("Found matching snapshot with expected type: {} and name: {} - but actual type was: {}",
+          LOGGER.warn("Found matching snapshot with expected type: {} and name: {} - but actual type was: {}",
                         _type.getName(), _snapshotName, snapshot.getClass().getName());
         }
       }
@@ -221,7 +221,7 @@ public class MasterSnapshotSource
       }
 
       if (filtered.size() > 1) {
-        s_logger.warn("Found multiple matching snapshot results for type: {} and name: {} - returning first match found",
+        LOGGER.warn("Found multiple matching snapshot results for type: {} and name: {} - returning first match found",
                       _type.getName(), _snapshotName);
       }
 

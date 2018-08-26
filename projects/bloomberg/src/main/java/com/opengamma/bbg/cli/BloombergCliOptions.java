@@ -24,7 +24,7 @@ import com.opengamma.util.ArgumentChecker;
 public final class BloombergCliOptions {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(BloombergCliOptions.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(BloombergCliOptions.class);
   /**
    * Fields option name.
    */
@@ -370,7 +370,7 @@ public final class BloombergCliOptions {
     try {
       result = parser.parse(_options, args);
     } catch (ParseException e) {
-      s_logger.warn("error parsing command line arguments {}", new Object[]{args});
+      LOGGER.warn("error parsing command line arguments {}", new Object[]{args});
     }
     return result;
   }

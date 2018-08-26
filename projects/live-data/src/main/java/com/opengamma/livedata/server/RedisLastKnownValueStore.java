@@ -32,7 +32,7 @@ import com.opengamma.util.fudgemsg.OpenGammaFudgeContext;
  * 
  */
 public class RedisLastKnownValueStore implements LastKnownValueStore {
-  private static final Logger s_logger = LoggerFactory.getLogger(RedisLastKnownValueStore.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(RedisLastKnownValueStore.class);
   private final FieldHistoryStore _inMemoryStore = new FieldHistoryStore();
   private final JedisPool _jedisPool;
   //private final byte[] _jedisKey;
@@ -104,11 +104,11 @@ public class RedisLastKnownValueStore implements LastKnownValueStore {
           try {
             jedis.hset(getJedisKey(), field.getName(), redisValue);
           } catch (JedisDataException jde) {
-            s_logger.warn("Unable to write stuff yo.");
+            LOGGER.warn("Unable to write stuff yo.");
           }
         }
       } catch (Exception e) {
-        s_logger.error("Unable to write fields to Redis : " + _jedisKey, e);
+        LOGGER.error("Unable to write fields to Redis : " + _jedisKey, e);
       } finally {
         getJedisPool().returnResource(jedis);
       }
@@ -132,7 +132,7 @@ public class RedisLastKnownValueStore implements LastKnownValueStore {
       case FudgeWireType.STRING_TYPE_ID:
         return (String) field.getValue();
       default:
-        s_logger.info("Redis encoding Key {} Field {} - can only handle double, double[], and String. Discarding.", jedisKey, field);
+        LOGGER.info("Redis encoding Key {} Field {} - can only handle double, double[], and String. Discarding.", jedisKey, field);
         return null;
     }
   }
@@ -160,14 +160,14 @@ public class RedisLastKnownValueStore implements LastKnownValueStore {
       // TODO kirk 2012-07-16 -- Give this a FudgeContext.
       MutableFudgeMsg fudgeMsg = OpenGammaFudgeContext.getInstance().newMessage();
       Map<String, String> allFields = jedis.hgetAll(getJedisKey());
-      s_logger.debug("Updating {} from Jedis: {}", getJedisKey(), allFields);
+      LOGGER.debug("Updating {} from Jedis: {}", getJedisKey(), allFields);
       for (Map.Entry<String, String> fieldEntry : allFields.entrySet()) {
         Object parsedRedisObject = fromRedisTextValue(fieldEntry.getValue());
         fudgeMsg.add(fieldEntry.getKey(), parsedRedisObject);
       }
       _inMemoryStore.liveDataReceived(fudgeMsg);
     } catch (Exception e) {
-      s_logger.error("Unable to update from Redis", e);
+      LOGGER.error("Unable to update from Redis", e);
       if (failOnError) {
         throw new OpenGammaRuntimeException("Unable to load state from underlying Redis instance on " + _jedisKey, e);
       }
@@ -215,7 +215,7 @@ public class RedisLastKnownValueStore implements LastKnownValueStore {
         return doubleValues;
       } catch (Exception e) {
         // Not a double array. Ignore.
-        s_logger.debug("String " + value + " looks like a double array but couldn't be parsed", e);
+        LOGGER.debug("String " + value + " looks like a double array but couldn't be parsed", e);
       }
     }
     

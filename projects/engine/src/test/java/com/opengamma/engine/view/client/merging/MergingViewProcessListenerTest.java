@@ -54,7 +54,7 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT)
 public class MergingViewProcessListenerTest {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(MergingViewProcessListenerTest.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(MergingViewProcessListenerTest.class);
 
   private Instant _nowish;
 
@@ -425,7 +425,7 @@ public class MergingViewProcessListenerTest {
   }
 
   private void testCalls(final MergingViewProcessListener listener, final Function<ViewResultListener, ?>[] calls, final int start, final int end) {
-    s_logger.debug("Apply calls {} to {}", start, end);
+    LOGGER.debug("Apply calls {} to {}", start, end);
     listener.setPassThrough(false);
     for (int i = start; i < end; i++) {
       calls[i].apply(listener);

@@ -27,7 +27,7 @@ import com.opengamma.master.marketdatasnapshot.MarketDataSnapshotMaster;
  */
 public class MasterSnapshotWriter implements SnapshotWriter {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(MasterSnapshotWriter.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(MasterSnapshotWriter.class);
 
   private final MarketDataSnapshotMaster _snapshotMaster;
   private ManageableMarketDataSnapshot _snapshot;

@@ -55,7 +55,7 @@ public class ExchangeTradedRowParser extends RowParser {
     }
   }
 
-  private static final Logger s_logger = LoggerFactory.getLogger(ExchangeTradedRowParser.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ExchangeTradedRowParser.class);
   
   private static final String TICKER = "ticker";
   private static final String ATTRIBUTES = "attributes";
@@ -82,7 +82,7 @@ public class ExchangeTradedRowParser extends RowParser {
    _securityProvider = securityProvider;
   }
 
-  private static final ExternalScheme[] s_schemeWaterfall = {
+  private static final ExternalScheme[] SCHEME_WATERFALL = {
     ExternalSchemes.BLOOMBERG_TICKER,
     ExternalSchemes.BLOOMBERG_TCM,
     ExternalSchemes.BLOOMBERG_BUID,
@@ -96,7 +96,7 @@ public class ExchangeTradedRowParser extends RowParser {
     ArgumentChecker.notNull(row, "row");
     String idStr = getWithException(row, TICKER);
     if (idStr == null) {
-      s_logger.error("Ticker column contained no value, skipping row");
+      LOGGER.error("Ticker column contained no value, skipping row");
       return new ManageableSecurity[] {};
     }
     try {
@@ -106,7 +106,7 @@ public class ExchangeTradedRowParser extends RowParser {
         return new ManageableSecurity[] {(ManageableSecurity) security};
       }
     } catch (IllegalArgumentException iae) {
-      for (ExternalScheme scheme : s_schemeWaterfall) {
+      for (ExternalScheme scheme : SCHEME_WATERFALL) {
         ExternalIdBundle id = ExternalId.of(scheme, idStr).toBundle();
         Security security = _securityProvider.getSecurity(id);
         if (security != null && security instanceof ManageableSecurity) {

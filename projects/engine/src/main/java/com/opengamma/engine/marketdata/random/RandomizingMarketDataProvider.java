@@ -42,9 +42,9 @@ import com.opengamma.util.OpenGammaClock;
  */
 /* package */ class RandomizingMarketDataProvider extends AbstractMarketDataProvider {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(RandomizingMarketDataProvider.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(RandomizingMarketDataProvider.class);
 
-  private static final Timer s_timer = new Timer();
+  private static final Timer TIMER = new Timer();
 
   private final MarketDataProvider _underlying;
   private final RandomizingMarketDataSpecification _marketDataSpec;
@@ -149,7 +149,7 @@ import com.opengamma.util.OpenGammaClock;
    * {@link RandomizingMarketDataSpecification#getAverageCycleInterval()} +/-50%
    */
   private void scheduleRandomizingTask() {
-    s_timer.schedule(new RandomizingTask(), ((long) (_marketDataSpec.getAverageCycleInterval() * (0.5 + Math.random()))));
+    TIMER.schedule(new RandomizingTask(), ((long) (_marketDataSpec.getAverageCycleInterval() * (0.5 + Math.random()))));
   }
 
   /**
@@ -159,7 +159,7 @@ import com.opengamma.util.OpenGammaClock;
   private void randomizeSnapshot() {
     Set<ValueSpecification> updatedSpecs = Sets.newHashSet();
     synchronized (_valuesLock) {
-      s_logger.debug("Randomizing snapshot");
+      LOGGER.debug("Randomizing snapshot");
       _randomizedValues.clear();
       for (Map.Entry<ValueSpecification, Object> entry : _values.entrySet()) {
         ValueSpecification spec = entry.getKey();
@@ -167,13 +167,13 @@ import com.opengamma.util.OpenGammaClock;
         Object randomizedValue = randomize(value);
         if (randomizedValue != null) {
           _randomizedValues.put(spec, randomizedValue);
-          s_logger.debug("Created random value {} for spec {}", randomizedValue, spec);
+          LOGGER.debug("Created random value {} for spec {}", randomizedValue, spec);
           updatedSpecs.add(spec);
         }
       }
     }
     valuesChanged(updatedSpecs);
-    s_logger.debug("Notified listeners of updates to specs {}", updatedSpecs);
+    LOGGER.debug("Notified listeners of updates to specs {}", updatedSpecs);
     scheduleRandomizingTask();
   }
 
@@ -252,7 +252,7 @@ import com.opengamma.util.OpenGammaClock;
           // if there is a randomized value for a spec use that instead of the underlying value
           if (_randomizedValues.containsKey(spec)) {
             value = _randomizedValues.get(spec);
-            s_logger.debug("Using randomized value {} for spec {}", value, spec);
+            LOGGER.debug("Using randomized value {} for spec {}", value, spec);
           } else {
             value = underlyingValue;
           }

@@ -30,7 +30,7 @@ public class PortfolioGridViewport extends MainGridViewport {
       String>> _currentExpandedPaths;
   /** Row and column structure of the grid. */
   private MainGridStructure _gridStructure;
-  private static final Logger s_logger = LoggerFactory.getLogger(PortfolioGridViewport.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(PortfolioGridViewport.class);
 
   /**
    * @param gridStructure Row and column structure of the grid
@@ -112,16 +112,16 @@ public class PortfolioGridViewport extends MainGridViewport {
         // was it expanded or collapsed
         Boolean expanded = changedNode.getSecond();
         List<String> path = _nodeStructure.getPathForRow(rowIndex);
-        s_logger.debug("Node at row {} {}", rowIndex.toString(), expanded ? "expanded" : "collapsed");
+        LOGGER.debug("Node at row {} {}", rowIndex.toString(), expanded ? "expanded" : "collapsed");
         //System.out.println("Row: " + rowIndex.toString() + " Expanded: " + expanded.toString() + " Path: " + path);
         if (expanded) {
           _currentExpandedPaths.add(path);
-          s_logger.debug("Expanding {}", path);
+          LOGGER.debug("Expanding {}", path);
         } else {
           _currentExpandedPaths.remove(path);
-          s_logger.debug("Collapsing {}", path);
+          LOGGER.debug("Collapsing {}", path);
         }
-        s_logger.debug("Current expanded set of nodes {}", _currentExpandedPaths);
+        LOGGER.debug("Current expanded set of nodes {}", _currentExpandedPaths);
       }
     }
     setViewportDefinition(viewportDefinition);

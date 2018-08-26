@@ -19,14 +19,14 @@ public final class DirtyPriceFromCurvesCalculator extends InstrumentDerivativeVi
   /**
    * The calculator instance.
    */
-  private static final DirtyPriceFromCurvesCalculator s_instance = new DirtyPriceFromCurvesCalculator();
+  private static final DirtyPriceFromCurvesCalculator INSTANCE = new DirtyPriceFromCurvesCalculator();
 
   /**
    * Return the calculator instance.
    * @return The instance.
    */
   public static DirtyPriceFromCurvesCalculator getInstance() {
-    return s_instance;
+    return INSTANCE;
   }
 
   /**

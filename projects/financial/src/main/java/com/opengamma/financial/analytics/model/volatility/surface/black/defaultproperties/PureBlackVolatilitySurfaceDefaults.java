@@ -28,7 +28,7 @@ import com.opengamma.util.ArgumentChecker;
  *
  */
 public abstract class PureBlackVolatilitySurfaceDefaults extends DefaultPropertyFunction {
-  private static final Logger s_logger = LoggerFactory.getLogger(PureBlackVolatilitySurfaceDefaults.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(PureBlackVolatilitySurfaceDefaults.class);
   private static final String[] VALUE_REQUIREMENTS = new String[] {
     ValueRequirementNames.PURE_VOLATILITY_SURFACE,
   };
@@ -73,7 +73,7 @@ public abstract class PureBlackVolatilitySurfaceDefaults extends DefaultProperty
     final String ticker = getTicker(target);
     final String curveName = _tickerToCurveName.get(ticker);
     if (curveName == null) {
-      s_logger.error("Could not get curve name for {}; should never happen", target.getValue());
+      LOGGER.error("Could not get curve name for {}; should never happen", target.getValue());
       return null;
     }
     if (ValuePropertyNames.CURVE.equals(propertyName)) {
@@ -88,7 +88,7 @@ public abstract class PureBlackVolatilitySurfaceDefaults extends DefaultProperty
     if (ValuePropertyNames.SURFACE.equals(propertyName)) {
       return Collections.singleton(_tickerToSurfaceName.get(ticker));
     }
-    s_logger.error("Could not find default value for {} in this function", propertyName);
+    LOGGER.error("Could not find default value for {} in this function", propertyName);
     return null;
   }
 

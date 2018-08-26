@@ -38,7 +38,7 @@ import com.opengamma.util.ArgumentChecker;
 public final class ManagementService implements ViewProcessorEventListener {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(ManagementService.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ManagementService.class);
 
   /**
    * The underlying view processor.
@@ -222,14 +222,14 @@ public final class ManagementService implements ViewProcessorEventListener {
     try {
       registerViewProcess(viewManagement);
     } catch (Exception e) {
-      s_logger.warn("Error registering view for management for " + viewManagement.getObjectName() + " . Error was " + e.getMessage(), e);
+      LOGGER.warn("Error registering view for management for " + viewManagement.getObjectName() + " . Error was " + e.getMessage(), e);
     }
     ViewDefinition definition;
     try {
       definition = view.getLatestViewDefinition();
     } catch (DataNotFoundException e) {
       definition = null;
-      s_logger.error("View process {} does not have a valid view definition", viewProcessId);
+      LOGGER.error("View process {} does not have a valid view definition", viewProcessId);
     }
     Set<String> configurationNames = Collections.emptySet();
     if (definition != null) {
@@ -241,7 +241,7 @@ public final class ManagementService implements ViewProcessorEventListener {
       try {
         registerGraphStatistics(graphStatistics);
       } catch (Exception e) {
-        s_logger.warn("Error registering GraphExecutionStatistics for management for " + graphStatistics.getObjectName() + " . Error was " + e.getMessage(), e);
+        LOGGER.warn("Error registering GraphExecutionStatistics for management for " + graphStatistics.getObjectName() + " . Error was " + e.getMessage(), e);
       }
     }
   }
@@ -258,7 +258,7 @@ public final class ManagementService implements ViewProcessorEventListener {
       String beanName = beanNamePrefix + ",AutoStartViews=AutoStartViews,name=AutoStart [" + autoStartName + "]";
       registerViewProcess(viewManagement, new ObjectName(beanName));
     } catch (Exception e) {
-      s_logger.warn("Error registering view for management for " + viewManagement.getObjectName() + " . Error was " + e.getMessage(), e);
+      LOGGER.warn("Error registering view for management for " + viewManagement.getObjectName() + " . Error was " + e.getMessage(), e);
     }
   }
 
@@ -269,7 +269,7 @@ public final class ManagementService implements ViewProcessorEventListener {
       objectName = ViewProcessMXBeanImpl.createObjectName(_viewProcessor.getName(), viewProcessId, _splitByViewProcessor);
       _mBeanServer.unregisterMBean(objectName);
     } catch (Exception e) {
-      s_logger.warn("Error unregistering view for management for " + objectName + " . Error was " + e.getMessage(), e);
+      LOGGER.warn("Error unregistering view for management for " + objectName + " . Error was " + e.getMessage(), e);
     }
     Set<String> configurationNames = _calcConfigByViewProcessId.get(viewProcessId);
     if (configurationNames != null) {
@@ -279,7 +279,7 @@ public final class ManagementService implements ViewProcessorEventListener {
         try {
           _mBeanServer.unregisterMBean(objectName);
         } catch (Exception e) {
-          s_logger.warn("Error unregistering view for GraphExecutionStatistics for " + objectName + " . Error was " + e.getMessage(), e);
+          LOGGER.warn("Error unregistering view for GraphExecutionStatistics for " + objectName + " . Error was " + e.getMessage(), e);
         }
       }
     }
@@ -293,7 +293,7 @@ public final class ManagementService implements ViewProcessorEventListener {
     try {
       registerViewClient(viewClientBean);
     } catch (Exception e) {
-      s_logger.warn("Error registering view client for management for " + viewClientBean.getObjectName() + ". Error was " + e.getMessage(), e);
+      LOGGER.warn("Error registering view client for management for " + viewClientBean.getObjectName() + ". Error was " + e.getMessage(), e);
     }
   }
 
@@ -304,7 +304,7 @@ public final class ManagementService implements ViewProcessorEventListener {
       objectName = ViewClientMBeanImpl.createObjectName(_viewProcessor.getName(), viewClientId, _splitByViewProcessor);
       _mBeanServer.unregisterMBean(objectName);
     } catch (Exception e) {
-      s_logger.warn("Error unregistering view client for management for " + objectName + ". Error was " + e.getMessage(), e);
+      LOGGER.warn("Error unregistering view client for management for " + objectName + ". Error was " + e.getMessage(), e);
     }
   }
 
@@ -327,14 +327,14 @@ public final class ManagementService implements ViewProcessorEventListener {
       registeredObjectNames.addAll(_mBeanServer.queryNames(new ObjectName("com.opengamma:*,ViewProcessor=" + _viewProcessor.toString()), null));
     } catch (MalformedObjectNameException e) {
       // this should not happen
-      s_logger.warn("Error querying MBeanServer. Error was " + e.getMessage(), e);
+      LOGGER.warn("Error querying MBeanServer. Error was " + e.getMessage(), e);
     }
 
     for (ObjectName objectName : registeredObjectNames) {
       try {
         _mBeanServer.unregisterMBean(objectName);
       } catch (Exception e) {
-        s_logger.warn("Error unregistering object instance " + objectName + " . Error was " + e.getMessage(), e);
+        LOGGER.warn("Error unregistering object instance " + objectName + " . Error was " + e.getMessage(), e);
       }
     }
 

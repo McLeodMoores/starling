@@ -21,7 +21,7 @@ import com.opengamma.util.ArgumentChecker;
  *
  */
 public class BlackVolatilitySurfaceSABRDefaults extends BlackVolatilitySurfaceDefaults {
-  private static final Logger s_logger = LoggerFactory.getLogger(BlackVolatilitySurfaceSABRDefaults.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(BlackVolatilitySurfaceSABRDefaults.class);
   private final String _sabrModel;
   private final String _weightingFunction;
   private final String _useExternalBeta;
@@ -69,7 +69,7 @@ public class BlackVolatilitySurfaceSABRDefaults extends BlackVolatilitySurfaceDe
     if (BlackVolatilitySurfacePropertyNamesAndValues.PROPERTY_SABR_EXTERNAL_BETA.equals(propertyName)) {
       return Collections.singleton(_externalBeta);
     }
-    s_logger.error("Could not get default value for {}", propertyName);
+    LOGGER.error("Could not get default value for {}", propertyName);
     return null;
   }
 }

@@ -35,7 +35,7 @@ import com.opengamma.util.db.tool.DbToolContext;
 @Scriptable
 public class DbConvertOrganisationsToLegalEntitiesTool extends AbstractDbTool<DbToolContext> {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(DbConvertOrganisationsToLegalEntitiesTool.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(DbConvertOrganisationsToLegalEntitiesTool.class);
 
   @Override
   protected void doRun(boolean write, File outputFile) throws Exception {

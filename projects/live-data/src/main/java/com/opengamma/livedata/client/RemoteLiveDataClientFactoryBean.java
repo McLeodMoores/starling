@@ -27,7 +27,7 @@ import com.opengamma.util.jms.JmsConnector;
  * Creates a {@link JmsLiveDataClient}.
  */
 public class RemoteLiveDataClientFactoryBean extends SingletonFactoryBean<DistributedLiveDataClient> implements DisposableBean {
-  private static final Logger s_logger = LoggerFactory.getLogger(RemoteLiveDataClientFactoryBean.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(RemoteLiveDataClientFactoryBean.class);
 
   private JmsConnector _jmsConnector;
   private String _subscriptionTopic;
@@ -107,7 +107,7 @@ public class RemoteLiveDataClientFactoryBean extends SingletonFactoryBean<Distri
       liveDataClient.setHeartbeatMessageSender(jmsHeartbeatSender);
     }
     liveDataClient.start();
-    s_logger.debug("Created and started live data client using {} subscription topic {}, entitlement topic {} and heartbeat topic {}", new Object[] {getJmsConnector().getClientBrokerUri(),
+    LOGGER.debug("Created and started live data client using {} subscription topic {}, entitlement topic {} and heartbeat topic {}", new Object[] {getJmsConnector().getClientBrokerUri(),
         getSubscriptionTopic(), getEntitlementTopic(), getHeartbeatTopic() });
     return liveDataClient;
   }

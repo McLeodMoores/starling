@@ -26,6 +26,7 @@ import com.opengamma.financial.fudgemsg.CurveSpecificationBuilderConfigurationFu
 import com.opengamma.id.ExternalId;
 import com.opengamma.util.time.Tenor;
 
+// CSOFF
 /**
  *
  */
@@ -562,7 +563,7 @@ public class CurveSpecificationBuilderConfiguration {
    * @return the sorted tenors
    */
   public SortedSet<Tenor> getAllTenors() {
-    final SortedSet<Tenor> allTenors = new TreeSet<Tenor>();
+    final SortedSet<Tenor> allTenors = new TreeSet<>();
     if (getBasisSwapInstrumentProviders() != null) {
       allTenors.addAll(getBasisSwapInstrumentProviders().keySet());
     }
@@ -632,7 +633,7 @@ public class CurveSpecificationBuilderConfiguration {
       return false;
     }
     final CurveSpecificationBuilderConfiguration other = (CurveSpecificationBuilderConfiguration) o;
-    return (ObjectUtils.equals(getCashInstrumentProviders(), other.getCashInstrumentProviders())
+    return ObjectUtils.equals(getCashInstrumentProviders(), other.getCashInstrumentProviders())
         && ObjectUtils.equals(getFra3MInstrumentProviders(), other.getFra3MInstrumentProviders())
         && ObjectUtils.equals(getFra6MInstrumentProviders(), other.getFra6MInstrumentProviders())
         && ObjectUtils.equals(getFutureInstrumentProviders(), other.getFutureInstrumentProviders())
@@ -645,7 +646,7 @@ public class CurveSpecificationBuilderConfiguration {
         && ObjectUtils.equals(getSwap6MInstrumentProviders(), other.getSwap6MInstrumentProviders())
         && ObjectUtils.equals(getSwap3MInstrumentProviders(), other.getSwap3MInstrumentProviders())
         && ObjectUtils.equals(getBasisSwapInstrumentProviders(), other.getBasisSwapInstrumentProviders())
-        && ObjectUtils.equals(getTenorSwapInstrumentProviders(), other.getTenorSwapInstrumentProviders()))
+        && ObjectUtils.equals(getTenorSwapInstrumentProviders(), other.getTenorSwapInstrumentProviders())
         && ObjectUtils.equals(getOISSwapInstrumentProviders(), other.getOISSwapInstrumentProviders())
         && ObjectUtils.equals(getSimpleZeroDepositInstrumentProviders(), other.getSimpleZeroDepositInstrumentProviders())
         && ObjectUtils.equals(getPeriodicZeroDepositInstrumentProviders(), other.getPeriodicZeroDepositInstrumentProviders())
@@ -662,25 +663,25 @@ public class CurveSpecificationBuilderConfiguration {
   public int hashCode() {
     final int prime = 31;
     int result = 1;
-    result = prime * result + ((_basisSwapInstrumentProviders == null) ? 0 : _basisSwapInstrumentProviders.hashCode());
-    result = prime * result + ((_cashInstrumentProviders == null) ? 0 : _cashInstrumentProviders.hashCode());
-    result = prime * result + ((_cdorInstrumentProviders == null) ? 0 : _cdorInstrumentProviders.hashCode());
-    result = prime * result + ((_ciborInstrumentProviders == null) ? 0 : _ciborInstrumentProviders.hashCode());
-    result = prime * result + ((_continuousZeroDepositInstrumentProviders == null) ? 0 : _continuousZeroDepositInstrumentProviders.hashCode());
-    result = prime * result + ((_euriborInstrumentProviders == null) ? 0 : _euriborInstrumentProviders.hashCode());
-    result = prime * result + ((_fra3MInstrumentProviders == null) ? 0 : _fra3MInstrumentProviders.hashCode());
-    result = prime * result + ((_fra6MInstrumentProviders == null) ? 0 : _fra6MInstrumentProviders.hashCode());
-    result = prime * result + ((_futureInstrumentProviders == null) ? 0 : _futureInstrumentProviders.hashCode());
-    result = prime * result + ((_liborInstrumentProviders == null) ? 0 : _liborInstrumentProviders.hashCode());
-    result = prime * result + ((_oisSwapInstrumentProviders == null) ? 0 : _oisSwapInstrumentProviders.hashCode());
-    result = prime * result + ((_periodicZeroDepositInstrumentProviders == null) ? 0 : _periodicZeroDepositInstrumentProviders.hashCode());
-    result = prime * result + ((_simpleZeroDepositInstrumentProviders == null) ? 0 : _simpleZeroDepositInstrumentProviders.hashCode());
-    result = prime * result + ((_stiborInstrumentProviders == null) ? 0 : _stiborInstrumentProviders.hashCode());
-    result = prime * result + ((_swap12MInstrumentProviders == null) ? 0 : _swap12MInstrumentProviders.hashCode());
-    result = prime * result + ((_swap28DInstrumentProviders == null) ? 0 : _swap28DInstrumentProviders.hashCode());
-    result = prime * result + ((_swap3MInstrumentProviders == null) ? 0 : _swap3MInstrumentProviders.hashCode());
-    result = prime * result + ((_swap6MInstrumentProviders == null) ? 0 : _swap6MInstrumentProviders.hashCode());
-    result = prime * result + ((_tenorSwapInstrumentProviders == null) ? 0 : _tenorSwapInstrumentProviders.hashCode());
+    result = prime * result + (_basisSwapInstrumentProviders == null ? 0 : _basisSwapInstrumentProviders.hashCode());
+    result = prime * result + (_cashInstrumentProviders == null ? 0 : _cashInstrumentProviders.hashCode());
+    result = prime * result + (_cdorInstrumentProviders == null ? 0 : _cdorInstrumentProviders.hashCode());
+    result = prime * result + (_ciborInstrumentProviders == null ? 0 : _ciborInstrumentProviders.hashCode());
+    result = prime * result + (_continuousZeroDepositInstrumentProviders == null ? 0 : _continuousZeroDepositInstrumentProviders.hashCode());
+    result = prime * result + (_euriborInstrumentProviders == null ? 0 : _euriborInstrumentProviders.hashCode());
+    result = prime * result + (_fra3MInstrumentProviders == null ? 0 : _fra3MInstrumentProviders.hashCode());
+    result = prime * result + (_fra6MInstrumentProviders == null ? 0 : _fra6MInstrumentProviders.hashCode());
+    result = prime * result + (_futureInstrumentProviders == null ? 0 : _futureInstrumentProviders.hashCode());
+    result = prime * result + (_liborInstrumentProviders == null ? 0 : _liborInstrumentProviders.hashCode());
+    result = prime * result + (_oisSwapInstrumentProviders == null ? 0 : _oisSwapInstrumentProviders.hashCode());
+    result = prime * result + (_periodicZeroDepositInstrumentProviders == null ? 0 : _periodicZeroDepositInstrumentProviders.hashCode());
+    result = prime * result + (_simpleZeroDepositInstrumentProviders == null ? 0 : _simpleZeroDepositInstrumentProviders.hashCode());
+    result = prime * result + (_stiborInstrumentProviders == null ? 0 : _stiborInstrumentProviders.hashCode());
+    result = prime * result + (_swap12MInstrumentProviders == null ? 0 : _swap12MInstrumentProviders.hashCode());
+    result = prime * result + (_swap28DInstrumentProviders == null ? 0 : _swap28DInstrumentProviders.hashCode());
+    result = prime * result + (_swap3MInstrumentProviders == null ? 0 : _swap3MInstrumentProviders.hashCode());
+    result = prime * result + (_swap6MInstrumentProviders == null ? 0 : _swap6MInstrumentProviders.hashCode());
+    result = prime * result + (_tenorSwapInstrumentProviders == null ? 0 : _tenorSwapInstrumentProviders.hashCode());
     return result;
   }
 

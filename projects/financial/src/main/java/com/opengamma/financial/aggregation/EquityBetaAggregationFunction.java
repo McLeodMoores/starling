@@ -32,7 +32,7 @@ import com.opengamma.util.tuple.Pair;
  *
  */
 public class EquityBetaAggregationFunction implements AggregationFunction<String> {
-  private static final Logger s_logger = LoggerFactory.getLogger(EquityBetaAggregationFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(EquityBetaAggregationFunction.class);
 
   private final boolean _useAttributes;
   private final boolean _includeEmptyCategories;
@@ -113,7 +113,7 @@ public class EquityBetaAggregationFunction implements AggregationFunction<String
       if (sec == null) {
         sec = position.getSecurityLink().resolve(_secSource);
         if (sec == null) {
-          s_logger.error("Position security is null");
+          LOGGER.error("Position security is null");
           return null;
         }
       }

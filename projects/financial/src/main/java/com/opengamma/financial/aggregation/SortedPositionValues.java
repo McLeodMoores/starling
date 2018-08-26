@@ -44,7 +44,7 @@ public class SortedPositionValues extends AbstractSortedPositionValues {
    */
   public static final String VALUE_NAME = "SortedPositionValues";
 
-  private static final Comparator<ComputedValue> s_comparator = new Comparator<ComputedValue>() {
+  private static final Comparator<ComputedValue> COMPARATOR = new Comparator<ComputedValue>() {
     @SuppressWarnings("unchecked")
     @Override
     public int compare(final ComputedValue o1, final ComputedValue o2) {
@@ -119,7 +119,7 @@ public class SortedPositionValues extends AbstractSortedPositionValues {
     for (ComputedValue value : values) {
       composeValueProperties(properties, value.getSpecification());
     }
-    Collections.sort(values, s_comparator);
+    Collections.sort(values, COMPARATOR);
     return Collections.singleton(new ComputedValue(ValueSpecification.of(getValueName(), ComputationTargetType.PORTFOLIO_NODE, target.getUniqueId(), properties.get()), values));
   }
 

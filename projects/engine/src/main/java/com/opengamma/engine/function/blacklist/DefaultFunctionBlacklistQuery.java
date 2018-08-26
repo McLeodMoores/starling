@@ -25,7 +25,7 @@ import com.opengamma.engine.value.ValueSpecification;
  */
 public class DefaultFunctionBlacklistQuery extends AbstractFunctionBlacklistQuery {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(DefaultFunctionBlacklistQuery.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(DefaultFunctionBlacklistQuery.class);
 
   /**
    * Field used for the pivot in the tree used to index the rules.
@@ -940,7 +940,7 @@ public class DefaultFunctionBlacklistQuery extends AbstractFunctionBlacklistQuer
    */
   private void addRuleImpl(final FunctionBlacklistRule rule) {
     if (((rule.getInputs() != null) && !rule.isInputsExactMatch()) || ((rule.getOutputs() != null) && !rule.isOutputsExactMatch())) {
-      s_logger.warn("Rule {} specifies partial input/output match", rule);
+      LOGGER.warn("Rule {} specifies partial input/output match", rule);
     }
     if (_root == null) {
       _root = new MidTreeEntry(PivotField.FUNCTION_IDENTIFIER);

@@ -27,12 +27,12 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT_DB)
 public class QueryConfigDbConfigMasterWorkerMetaDataTest extends AbstractDbConfigMasterWorkerTest {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(QueryConfigDbConfigMasterWorkerMetaDataTest.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(QueryConfigDbConfigMasterWorkerMetaDataTest.class);
 
   @Factory(dataProvider = "databases", dataProviderClass = DbTest.class)
   public QueryConfigDbConfigMasterWorkerMetaDataTest(String databaseType, String databaseVersion) {
     super(databaseType, databaseVersion, true);
-    s_logger.info("running testcases for {}", databaseType);
+    LOGGER.info("running testcases for {}", databaseType);
   }
 
   @Test

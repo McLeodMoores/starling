@@ -31,7 +31,7 @@ import com.opengamma.util.ArgumentChecker;
  */
 public class SubscriptionHandle {
   
-  private static final Logger s_logger = LoggerFactory.getLogger(SubscriptionHandle.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(SubscriptionHandle.class);
   
   private final UserPrincipal _user;
   private final SubscriptionType _subscriptionType;
@@ -91,22 +91,22 @@ public class SubscriptionHandle {
    * @param response Response received, not null
    */
   public void subscriptionResultReceived(LiveDataSubscriptionResponse response) {
-    if (s_logger.isDebugEnabled()) {
+    if (LOGGER.isDebugEnabled()) {
       if (_subscriptionType == SubscriptionType.SNAPSHOT) {
         if (response.getSubscriptionResult() == LiveDataSubscriptionResult.SUCCESS) {
-          s_logger.debug("Got snapshot {}", getRequestedSpecification());
+          LOGGER.debug("Got snapshot {}", getRequestedSpecification());
         } else {
-          s_logger.debug("Failed to snapshot {}. Result was {}, msg = {}",
+          LOGGER.debug("Failed to snapshot {}. Result was {}, msg = {}",
               new Object[] {getRequestedSpecification(), response.getSubscriptionResult(), response.getUserMessage() });
         }
       } else {
         if (response.getSubscriptionResult() == LiveDataSubscriptionResult.SUCCESS) {
-          s_logger.debug("Established subscription to {}", getRequestedSpecification());
+          LOGGER.debug("Established subscription to {}", getRequestedSpecification());
         } else if (response.getSubscriptionResult() == LiveDataSubscriptionResult.INTERNAL_ERROR) {
-          s_logger.debug("Failed to establish subscription, {} {}, request = {}",
+          LOGGER.debug("Failed to establish subscription, {} {}, request = {}",
               new Object[] {response.getSubscriptionResult(), response.getUserMessage(), getRequestedSpecification() });
         } else {
-          s_logger.debug("Failed to establish subscription, {} {}, request = {}",
+          LOGGER.debug("Failed to establish subscription, {} {}, request = {}",
               new Object[] {response.getSubscriptionResult(), response.getUserMessage(), getRequestedSpecification() });
         }
       }
@@ -152,7 +152,7 @@ public class SubscriptionHandle {
   public synchronized void releaseTicksOnHold() {
     if (_snapshotOnHold == null) {
       // this will happen if the snapshot failed.
-      s_logger.debug("No ticks to send to {}. {}", getListener(), getRequestedSpecification());
+      LOGGER.debug("No ticks to send to {}. {}", getListener(), getRequestedSpecification());
       return; 
     }
     
@@ -169,7 +169,7 @@ public class SubscriptionHandle {
     }
     
     if (resetIndex == null) {
-      s_logger.debug("{}: Sending snapshot and {} ticks on hold to {}", 
+      LOGGER.debug("{}: Sending snapshot and {} ticks on hold to {}", 
           new Object[] {getRequestedSpecification(), _ticksOnHold.size(), getListener() });
       
       // No resets. This is the normal case. Use the snapshot
@@ -184,7 +184,7 @@ public class SubscriptionHandle {
         }
       }
     } else {
-      s_logger.debug("{}: Reset detected. Sending {} ticks on hold to {}", 
+      LOGGER.debug("{}: Reset detected. Sending {} ticks on hold to {}", 
           new Object[] {getRequestedSpecification(), _ticksOnHold.size() - resetIndex, getListener() });
       
       // This happens when the server is reset (rebooted/migrated) while subscribing.

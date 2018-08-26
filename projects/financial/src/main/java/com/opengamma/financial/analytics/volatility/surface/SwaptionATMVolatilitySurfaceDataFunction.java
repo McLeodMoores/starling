@@ -42,7 +42,7 @@ import com.opengamma.util.tuple.Pair;
  * 
  */
 public class SwaptionATMVolatilitySurfaceDataFunction extends AbstractFunction.NonCompiledInvoker {
-  private static final Logger s_logger = LoggerFactory.getLogger(SwaptionATMVolatilitySurfaceDataFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(SwaptionATMVolatilitySurfaceDataFunction.class);
 
   private ConfigDBVolatilitySurfaceSpecificationSource _volatilitySurfaceSpecificationSource;
 
@@ -109,17 +109,17 @@ public class SwaptionATMVolatilitySurfaceDataFunction extends AbstractFunction.N
     final String fullSpecificationName = surfaceName + "_" + target.getUniqueId().getValue();
     final VolatilitySurfaceSpecification specification = _volatilitySurfaceSpecificationSource.getSpecification(fullSpecificationName, InstrumentTypeProperties.SWAPTION_ATM);
     if (specification == null) {
-      s_logger.error("Could not get volatility surface specification named " + fullSpecificationName);
+      LOGGER.error("Could not get volatility surface specification named " + fullSpecificationName);
       return null;
     }
     final String surfaceQuoteType = specification.getSurfaceQuoteType();
     final String surfaceQuoteUnits = specification.getQuoteUnits();
     if (!surfaceQuoteType.equals(SurfaceAndCubeQuoteType.EXPIRY_MATURITY_ATM)) {
-      s_logger.error("Cannot use this function for surfaces with quote types other than {}, asked for {}", SurfaceAndCubeQuoteType.EXPIRY_MATURITY_ATM, surfaceQuoteType);
+      LOGGER.error("Cannot use this function for surfaces with quote types other than {}, asked for {}", SurfaceAndCubeQuoteType.EXPIRY_MATURITY_ATM, surfaceQuoteType);
       return null;
     }
     if (!surfaceQuoteUnits.equals(SurfaceAndCubePropertyNames.VOLATILITY_QUOTE)) {
-      s_logger.error("Cannot use this function for surfaces with quote types other than {}, asked for {}", SurfaceAndCubePropertyNames.VOLATILITY_QUOTE, surfaceQuoteUnits);
+      LOGGER.error("Cannot use this function for surfaces with quote types other than {}, asked for {}", SurfaceAndCubePropertyNames.VOLATILITY_QUOTE, surfaceQuoteUnits);
       return null;
     }
     final ValueProperties surfaceProperties = ValueProperties.builder().with(ValuePropertyNames.SURFACE, surfaceName)

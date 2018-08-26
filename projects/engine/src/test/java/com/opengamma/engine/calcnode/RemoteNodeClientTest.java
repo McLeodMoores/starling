@@ -50,7 +50,7 @@ import com.opengamma.util.test.Timeout;
 @Test(groups = TestGroup.UNIT)
 public class RemoteNodeClientTest {
 
-  private static final FudgeContext s_fudgeContext = OpenGammaFudgeContext.getInstance();
+  private static final FudgeContext FUDGE_CONTEXT = OpenGammaFudgeContext.getInstance();
   private static final long TIMEOUT = Timeout.standardTimeoutMillis();
 
   protected static CalculationJob createTestCalculationJob() {
@@ -61,7 +61,7 @@ public class RemoteNodeClientTest {
     TestLifecycle.begin();
     try {
       final IdentifierMap identifierMap = new InMemoryIdentifierMap();
-      final DirectFudgeConnection conduit = new DirectFudgeConnection(s_fudgeContext);
+      final DirectFudgeConnection conduit = new DirectFudgeConnection(FUDGE_CONTEXT);
       final CollectingFudgeMessageReceiver messages = new CollectingFudgeMessageReceiver();
       conduit.getEnd2().setFudgeMessageReceiver(messages);
       final CompiledFunctionService cfs = new CompiledFunctionService(new InMemoryFunctionRepository(), new CachingFunctionRepositoryCompiler(), new FunctionCompilationContext());
@@ -77,8 +77,8 @@ public class RemoteNodeClientTest {
       assertEquals(1, messages.getMessages().size());
       final FudgeMsgEnvelope readyMsgEnvelope = messages.getMessages().get(0);
       messages.clear();
-      final FudgeDeserializer dcontext = new FudgeDeserializer(s_fudgeContext);
-      final FudgeSerializer scontext = new FudgeSerializer(s_fudgeContext);
+      final FudgeDeserializer dcontext = new FudgeDeserializer(FUDGE_CONTEXT);
+      final FudgeSerializer scontext = new FudgeSerializer(FUDGE_CONTEXT);
       final RemoteCalcNodeMessage readyMessage = dcontext.fudgeMsgToObject(RemoteCalcNodeMessage.class, readyMsgEnvelope.getMessage());
       assertTrue(readyMessage instanceof Ready);
       final Ready ready = (Ready) readyMessage;
@@ -102,7 +102,7 @@ public class RemoteNodeClientTest {
     TestLifecycle.begin();
     try {
       final IdentifierMap identifierMap = new InMemoryIdentifierMap();
-      final DirectFudgeConnection conduit = new DirectFudgeConnection(s_fudgeContext);
+      final DirectFudgeConnection conduit = new DirectFudgeConnection(FUDGE_CONTEXT);
       final CollectingFudgeMessageReceiver messages = new CollectingFudgeMessageReceiver();
       conduit.getEnd2().setFudgeMessageReceiver(messages);
       final CompiledFunctionService cfs = new CompiledFunctionService(new InMemoryFunctionRepository(), new CachingFunctionRepositoryCompiler(), new FunctionCompilationContext());
@@ -113,8 +113,8 @@ public class RemoteNodeClientTest {
       assertEquals(1, messages.getMessages().size());
       final FudgeMsgEnvelope readyMsgEnvelope = messages.getMessages().get(0);
       messages.clear();
-      final FudgeDeserializer dcontext = new FudgeDeserializer(s_fudgeContext);
-      final FudgeSerializer scontext = new FudgeSerializer(s_fudgeContext);
+      final FudgeDeserializer dcontext = new FudgeDeserializer(FUDGE_CONTEXT);
+      final FudgeSerializer scontext = new FudgeSerializer(FUDGE_CONTEXT);
       final RemoteCalcNodeMessage readyMessage = dcontext.fudgeMsgToObject(RemoteCalcNodeMessage.class, readyMsgEnvelope.getMessage());
       assertTrue(readyMessage instanceof Ready);
       conduit.getEnd2().getFudgeMessageSender().send(FudgeSerializer.addClassHeader(scontext.objectToFudgeMsg(new Init(0)), Init.class, RemoteCalcNodeMessage.class));
@@ -145,7 +145,7 @@ public class RemoteNodeClientTest {
     TestLifecycle.begin();
     try {
       final IdentifierMap identifierMap = new InMemoryIdentifierMap();
-      final DirectFudgeConnection conduit = new DirectFudgeConnection(s_fudgeContext);
+      final DirectFudgeConnection conduit = new DirectFudgeConnection(FUDGE_CONTEXT);
       final CollectingFudgeMessageReceiver messages = new CollectingFudgeMessageReceiver();
       conduit.getEnd2().setFudgeMessageReceiver(messages);
       final CompiledFunctionService cfs = new CompiledFunctionService(new InMemoryFunctionRepository(), new CachingFunctionRepositoryCompiler(), new FunctionCompilationContext());
@@ -168,8 +168,8 @@ public class RemoteNodeClientTest {
       assertEquals(1, messages.getMessages().size());
       final FudgeMsgEnvelope readyMsgEnvelope = messages.getMessages().get(0);
       messages.clear();
-      final FudgeDeserializer dcontext = new FudgeDeserializer(s_fudgeContext);
-      final FudgeSerializer scontext = new FudgeSerializer(s_fudgeContext);
+      final FudgeDeserializer dcontext = new FudgeDeserializer(FUDGE_CONTEXT);
+      final FudgeSerializer scontext = new FudgeSerializer(FUDGE_CONTEXT);
       final RemoteCalcNodeMessage readyMessage = dcontext.fudgeMsgToObject(RemoteCalcNodeMessage.class, readyMsgEnvelope.getMessage());
       assertTrue(readyMessage instanceof Ready);
       final Ready ready = (Ready) readyMessage;

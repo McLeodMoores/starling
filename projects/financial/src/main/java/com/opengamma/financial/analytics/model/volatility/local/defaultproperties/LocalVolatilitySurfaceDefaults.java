@@ -26,7 +26,7 @@ import com.opengamma.util.ArgumentChecker;
  *
  */
 public class LocalVolatilitySurfaceDefaults extends DefaultPropertyFunction {
-  private static final Logger s_logger = LoggerFactory.getLogger(LocalVolatilitySurfaceDefaults.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(LocalVolatilitySurfaceDefaults.class);
   private static final String[] VALUE_REQUIREMENTS = new String[] {
       ValueRequirementNames.LOCAL_VOLATILITY_SURFACE,
       ValueRequirementNames.FORWARD_DELTA,
@@ -74,7 +74,7 @@ public class LocalVolatilitySurfaceDefaults extends DefaultPropertyFunction {
     if (LocalVolatilitySurfacePropertyNamesAndValues.PROPERTY_DERIVATIVE_EPS.equals(propertyName)) {
       return Collections.singleton(_eps);
     }
-    s_logger.error("Could not get default value for {}", propertyName);
+    LOGGER.error("Could not get default value for {}", propertyName);
     return null;
   }
 

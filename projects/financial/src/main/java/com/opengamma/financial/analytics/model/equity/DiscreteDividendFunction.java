@@ -60,8 +60,8 @@ public class DiscreteDividendFunction extends AbstractFunction.NonCompiledInvoke
     _dividendHorizon = 2.0;
     _timeThatProportionalDividendsBegin = 2.0;    
   }
-  private static final Logger s_logger = LoggerFactory.getLogger(DiscreteDividendFunction.class);
-  private static final Set<ExternalScheme> s_validSchemes = ImmutableSet.of(ExternalSchemes.BLOOMBERG_TICKER, ExternalSchemes.BLOOMBERG_TICKER_WEAK, ExternalSchemes.ACTIVFEED_TICKER);
+  private static final Logger LOGGER = LoggerFactory.getLogger(DiscreteDividendFunction.class);
+  private static final Set<ExternalScheme> VALID_SCHEMES = ImmutableSet.of(ExternalSchemes.BLOOMBERG_TICKER, ExternalSchemes.BLOOMBERG_TICKER_WEAK, ExternalSchemes.ACTIVFEED_TICKER);
   
   @Override
   public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
@@ -70,7 +70,7 @@ public class DiscreteDividendFunction extends AbstractFunction.NonCompiledInvoke
     // The frequency sets up an interval 
     Double nDividendsPerYear = (Double) inputs.getValue(MarketDataRequirementNames.DIVIDEND_FREQUENCY);
     if (nDividendsPerYear == null) {
-      s_logger.debug("No dividend frequency - defaulting to 4 per year");
+      LOGGER.debug("No dividend frequency - defaulting to 4 per year");
       nDividendsPerYear = 4.0;
     }
     final double dividendInterval = 1.0 / nDividendsPerYear;
@@ -84,7 +84,7 @@ public class DiscreteDividendFunction extends AbstractFunction.NonCompiledInvoke
       final LocalDate valuationDate = ZonedDateTime.now(executionContext.getValuationClock()).toLocalDate();
       firstDivTime = TimeCalculator.getTimeBetween(valuationDate, nextDividendDate);
       if (firstDivTime < 0.0) {
-        s_logger.warn("Next_Dividend Date is in the past. We will estimate next future date and continue. See [ACTIV-62]");
+        LOGGER.warn("Next_Dividend Date is in the past. We will estimate next future date and continue. See [ACTIV-62]");
         firstDivTime = dividendInterval; // TODO: Review [ACTIV-62]
       }
     } else {
@@ -136,7 +136,7 @@ public class DiscreteDividendFunction extends AbstractFunction.NonCompiledInvoke
   public boolean canApplyTo(final FunctionCompilationContext context, final ComputationTarget target) {
     if (target.getValue() instanceof ExternalIdentifiable) {
       final ExternalId identifier = ((ExternalIdentifiable) target.getValue()).getExternalId();
-      return s_validSchemes.contains(identifier.getScheme());
+      return VALID_SCHEMES.contains(identifier.getScheme());
     }
     return false;
   }

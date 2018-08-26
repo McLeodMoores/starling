@@ -32,7 +32,7 @@ import com.opengamma.util.ArgumentChecker;
  */
 @Deprecated
 public class CrossCurrencySwapDefaults extends DefaultPropertyFunction {
-  private static final Logger s_logger = LoggerFactory.getLogger(CrossCurrencySwapDefaults.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(CrossCurrencySwapDefaults.class);
   private static final String[] VALUE_REQUIREMENTS = new String[] {
     ValueRequirementNames.FX_PRESENT_VALUE,
     ValueRequirementNames.FX_CURRENCY_EXPOSURE,
@@ -84,11 +84,11 @@ public class CrossCurrencySwapDefaults extends DefaultPropertyFunction {
     final String payCurrency = security.accept(ForexVisitors.getPayCurrencyVisitor()).getCode();
     final String receiveCurrency = security.accept(ForexVisitors.getReceiveCurrencyVisitor()).getCode();
     if (!_currencyAndCurveConfigNames.containsKey(payCurrency)) {
-      s_logger.error("Could not get config for pay currency " + payCurrency + "; should never happen");
+      LOGGER.error("Could not get config for pay currency " + payCurrency + "; should never happen");
       return null;
     }
     if (!_currencyAndCurveConfigNames.containsKey(receiveCurrency)) {
-      s_logger.error("Could not get config for receive currency " + receiveCurrency + "; should never happen");
+      LOGGER.error("Could not get config for receive currency " + receiveCurrency + "; should never happen");
       return null;
     }
     final String payConfig = _currencyAndCurveConfigNames.get(payCurrency);

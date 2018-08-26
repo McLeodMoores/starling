@@ -27,7 +27,7 @@ import com.opengamma.util.rest.FudgeRestClient;
  */
 public abstract class RemoteEngineResourceReference<T extends UniqueIdentifiable> implements EngineResourceReference<T> {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(RemoteEngineResourceReference.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(RemoteEngineResourceReference.class);
 
   private final URI _baseUri;
   private final FudgeRestClient _client;
@@ -51,10 +51,10 @@ public abstract class RemoteEngineResourceReference<T extends UniqueIdentifiable
   }
 
   private void releaseImpl() {
-    s_logger.debug("Releasing {}", this);
+    LOGGER.debug("Releasing {}", this);
     try {
       getClient().accessFudge(_baseUri).delete();
-      s_logger.debug("Remote for {}", this);
+      LOGGER.debug("Remote for {}", this);
     } finally {
       stopHeartbeating();
     }
@@ -63,7 +63,7 @@ public abstract class RemoteEngineResourceReference<T extends UniqueIdentifiable
   @Override
   protected void finalize() throws Throwable {
     if (_isReleased.getAndSet(true) == false) {
-      s_logger.warn("{} has open reference at garbage collection time", this);
+      LOGGER.warn("{} has open reference at garbage collection time", this);
       releaseImpl();
     }
     super.finalize();
@@ -83,7 +83,7 @@ public abstract class RemoteEngineResourceReference<T extends UniqueIdentifiable
   @Override
   public void release() {
     if (_isReleased.getAndSet(true)) {
-      s_logger.warn("{} already released", this);
+      LOGGER.warn("{} already released", this);
       return;
     }
     releaseImpl();
@@ -93,7 +93,7 @@ public abstract class RemoteEngineResourceReference<T extends UniqueIdentifiable
    * For testing
    */
   public void stopHeartbeating() {
-    s_logger.debug("Stopping heartbeating of {}", this);
+    LOGGER.debug("Stopping heartbeating of {}", this);
     _scheduledHeartbeat.cancel(true);
   }
 
@@ -112,7 +112,7 @@ public abstract class RemoteEngineResourceReference<T extends UniqueIdentifiable
       try {
         _client.accessFudge(_baseUri).post();
       } catch (Exception e) {
-        s_logger.warn("Failed to heartbeat view cycle reference", e);
+        LOGGER.warn("Failed to heartbeat view cycle reference", e);
       }
     }
 

@@ -41,7 +41,7 @@ import com.opengamma.util.tuple.IntObjectPair;
 public class EHCachingSecurityMaster extends AbstractEHCachingMaster<SecurityDocument> implements SecurityMaster {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(EHCachingSecurityMaster.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(EHCachingSecurityMaster.class);
 
   /** The document search cache */
   private EHCachingSearchCache _documentSearchCache;
@@ -124,7 +124,7 @@ public class EHCachingSecurityMaster extends AbstractEHCachingMaster<SecurityDoc
     if (EHCachingSearchCache.TEST_AGAINST_UNDERLYING) {
       SecuritySearchResult check = ((SecurityMaster) getUnderlying()).search(request);
       if (!result.getPaging().equals(check.getPaging())) {
-        s_logger.error(_documentSearchCache.getCache().getName()
+        LOGGER.error(_documentSearchCache.getCache().getName()
                            + "\n\tCache:\t" + result.getPaging()
                            + "\n\tUnderlying:\t" + check.getPaging());
       }

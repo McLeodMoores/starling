@@ -28,7 +28,7 @@ import com.opengamma.util.ArgumentChecker;
  */
 public class VolatilitySurfaceSelector implements DistinctMarketDataSelector {
 
-  private static final ImmutableSet<String> s_compatibleVRNames = ImmutableSet.of(INTERPOLATED_VOLATILITY_SURFACE, 
+  private static final ImmutableSet<String> COMPATIBLE_VR_NAMES = ImmutableSet.of(INTERPOLATED_VOLATILITY_SURFACE, 
                                                                                   VOLATILITY_SURFACE, 
                                                                                   BLACK_VOLATILITY_SURFACE);
   
@@ -69,7 +69,7 @@ public class VolatilitySurfaceSelector implements DistinctMarketDataSelector {
     if (_calcConfigNames != null && !_calcConfigNames.contains(calculationConfigurationName)) {
       return null;
     }
-    if (!s_compatibleVRNames.contains(valueSpecification.getValueName())) {
+    if (!COMPATIBLE_VR_NAMES.contains(valueSpecification.getValueName())) {
       return null;
     }
     VolatilitySurfaceKey key = createKey(valueSpecification);

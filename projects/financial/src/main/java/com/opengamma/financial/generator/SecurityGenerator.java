@@ -101,7 +101,7 @@ import com.opengamma.util.tuple.Pair;
  */
 public abstract class SecurityGenerator<T extends ManageableSecurity> {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(SecurityGenerator.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(SecurityGenerator.class);
 
   /**
    * Format dates.
@@ -370,14 +370,14 @@ public abstract class SecurityGenerator<T extends ManageableSecurity> {
   }
 
   private ComputedValue[] findMarketData(final FunctionCompilationContext compilationContext, final Collection<ValueRequirement> requirements) {
-    s_logger.debug("Resolving {}", requirements);
+    LOGGER.debug("Resolving {}", requirements);
     final ExternalIdBundleResolver lookup = new ExternalIdBundleResolver(compilationContext.getComputationTargetResolver());
     final ComputedValue[] values = new ComputedValue[requirements.size()];
     int i = 0;
     for (final ValueRequirement requirement : requirements) {
       final ComputedValue value = findMarketData(lookup, requirement);
       if (value == null) {
-        s_logger.debug("Couldn't resolve {}", requirement);
+        LOGGER.debug("Couldn't resolve {}", requirement);
         return null;
       }
       values[i++] = value;
@@ -399,10 +399,10 @@ public abstract class SecurityGenerator<T extends ManageableSecurity> {
     final Pair<LocalDate, Double> spotRate = getHistoricalSource().getLatestDataPoint(MarketDataRequirementNames.MARKET_VALUE,
         spotRateIdentifier.toBundle(), null);
     if (spotRate == null) {
-      s_logger.debug("No spot rate for {}", spotRateIdentifier);
+      LOGGER.debug("No spot rate for {}", spotRateIdentifier);
       return null;
     }
-    s_logger.debug("Got spot rate {} for {}", spotRate, spotRateIdentifier);
+    LOGGER.debug("Got spot rate {} for {}", spotRate, spotRateIdentifier);
     final FunctionExecutionContext execContext = createFunctionExecutionContext(spotRate.getFirst());
     final FunctionCompilationContext compContext = createFunctionCompilationContext();
     final CompiledFunctionDefinition payYieldCurveSpecificationFunction = createFunction(compContext, execContext, new YieldCurveDataFunction(payCurrency, getCurrencyCurveName()));
@@ -417,7 +417,7 @@ public abstract class SecurityGenerator<T extends ManageableSecurity> {
     // PAY - YieldCurveMarketDataFunction
     final ComputedValue[] payCurveDataRequirements = findMarketData(compContext, payYieldCurveMarketDataFunction.getRequirements(compContext, target, null));
     if (payCurveDataRequirements == null) {
-      s_logger.debug("Missing market data for curve on {}", payCurrency);
+      LOGGER.debug("Missing market data for curve on {}", payCurrency);
       return null;
     }
     final ComputedValue payCurveMarketData = execute(execContext, payYieldCurveMarketDataFunction, target,
@@ -444,7 +444,7 @@ public abstract class SecurityGenerator<T extends ManageableSecurity> {
     // RECEIVE - YieldCurveMarketDataFunction
     final ComputedValue[] receiveCurveDataRequirements = findMarketData(compContext, receiveYieldCurveMarketDataFunction.getRequirements(compContext, target, null));
     if (receiveCurveDataRequirements == null) {
-      s_logger.debug("Missing market data for curve on {}", receiveCurrency);
+      LOGGER.debug("Missing market data for curve on {}", receiveCurrency);
       return null;
     }
     final ComputedValue receiveCurveMarketData = execute(execContext, receiveYieldCurveMarketDataFunction, target,
@@ -482,7 +482,7 @@ public abstract class SecurityGenerator<T extends ManageableSecurity> {
     if (!FXUtils.isInBaseQuoteOrder(currencies.getFirst(), currencies.getSecond())) {
       rate = 1 / rate;
     }
-    s_logger.debug("Calculated rate {} for {} on {}", new Object[] {rate, currencies, date });
+    LOGGER.debug("Calculated rate {} for {} on {}", new Object[] {rate, currencies, date });
     return rate;
   }
 

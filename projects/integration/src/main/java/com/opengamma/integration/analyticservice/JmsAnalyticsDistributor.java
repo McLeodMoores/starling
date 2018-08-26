@@ -31,7 +31,7 @@ import com.opengamma.util.jms.JmsConnector;
 public class JmsAnalyticsDistributor implements AnalyticResultReceiver {
   
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(JmsAnalyticsDistributor.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(JmsAnalyticsDistributor.class);
   
   /**
    * The JMS connector.
@@ -56,7 +56,7 @@ public class JmsAnalyticsDistributor implements AnalyticResultReceiver {
   @Override
   public void analyticReceived(List<ViewResultEntry> allResults) {
     ArgumentChecker.notNull(allResults, "viewResultEntries");
-    s_logger.debug("analytic receivied {} view results", allResults.size());
+    LOGGER.debug("analytic receivied {} view results", allResults.size());
     for (ViewResultEntry viewResultEntry : allResults) {
       String calcConfig = viewResultEntry.getCalculationConfiguration();
       ValueSpecification valueSpec = viewResultEntry.getComputedValue().getSpecification();
@@ -70,7 +70,7 @@ public class JmsAnalyticsDistributor implements AnalyticResultReceiver {
         FudgeMsg fudgeMsg = _fudgeContext.toFudgeMsg(computedValue).getMessage();
         final byte[] bytes = _fudgeContext.toByteArray(fudgeMsg);
         
-        s_logger.debug("sending {} to {}", fudgeMsg, destinationName);
+        LOGGER.debug("sending {} to {}", fudgeMsg, destinationName);
         
         _jmsConnector.getJmsTemplateTopic().send(destinationName, new MessageCreator() {
           @Override

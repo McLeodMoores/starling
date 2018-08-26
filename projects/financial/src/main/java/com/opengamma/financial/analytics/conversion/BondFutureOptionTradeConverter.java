@@ -60,7 +60,7 @@ public class BondFutureOptionTradeConverter implements TradeConverter {
     if (tradeDateLocal == null) {
       throw new OpenGammaRuntimeException("Trade did not contain a tradeDate:" +  trade.getUniqueId());
     } else if (tradeTime == null) {
-      s_logger.debug("Trade did not contain a tradeTime. Using noon UTC. " +  trade.getUniqueId()); 
+      LOGGER.debug("Trade did not contain a tradeTime. Using noon UTC. " +  trade.getUniqueId()); 
       tradeDate = ZonedDateTime.of(tradeDateLocal, LocalTime.of(12, 0), ZoneId.of("UTC"));
     } else {
       tradeDate = trade.getTradeDate().atTime(trade.getTradeTime()).atZoneSameInstant(ZoneOffset.UTC); //TODO get the real time zone    
@@ -74,5 +74,5 @@ public class BondFutureOptionTradeConverter implements TradeConverter {
     return new BondFutureOptionPremiumTransactionDefinition(underlyingOption, quantity, tradeDate, premium);
   }
   
-  private static final Logger s_logger = LoggerFactory.getLogger(BondFutureOptionTradeConverter.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(BondFutureOptionTradeConverter.class);
 }

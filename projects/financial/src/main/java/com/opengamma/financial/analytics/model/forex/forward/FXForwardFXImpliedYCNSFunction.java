@@ -71,7 +71,7 @@ public class FXForwardFXImpliedYCNSFunction extends FXForwardSingleValuedFunctio
   /** Property for the currency that underlies the FX-implied curve */
   private static final String UNDERLYING_CURRENCY = "UnderlyingCurrency";
 
-  private static final Logger s_logger = LoggerFactory.getLogger(FXForwardFXImpliedYCNSFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(FXForwardFXImpliedYCNSFunction.class);
   private static final MarketQuoteSensitivityCalculator CALCULATOR = new MarketQuoteSensitivityCalculator(new ParameterSensitivityCalculator(
       PresentValueCurveSensitivityIRSCalculator.getInstance()));
 
@@ -150,19 +150,19 @@ public class FXForwardFXImpliedYCNSFunction extends FXForwardSingleValuedFunctio
     final ValueProperties constraints = desiredValue.getConstraints();
     final Set<String> curveNames = constraints.getValues(ValuePropertyNames.CURVE);
     if (curveNames == null || curveNames.size() != 1) {
-      s_logger.error("Did not specify a curve name for requirement {}", desiredValue);
+      LOGGER.error("Did not specify a curve name for requirement {}", desiredValue);
       return null;
     }
     final Set<String> curveCurrencies = constraints.getValues(ValuePropertyNames.CURVE_CURRENCY);
     if (curveCurrencies == null || curveCurrencies.size() != 1) {
-      s_logger.error("Did not specify a curve currency for requirement {}", desiredValue);
+      LOGGER.error("Did not specify a curve currency for requirement {}", desiredValue);
       return null;
     }
     final String payCurveName = Iterables.getOnlyElement(constraints.getValues(PAY_CURVE));
     final String receiveCurveName = Iterables.getOnlyElement(constraints.getValues(RECEIVE_CURVE));
     final String curveName = Iterables.getOnlyElement(curveNames);
     if (!(curveName.equals(payCurveName) || curveName.equals(receiveCurveName))) {
-      s_logger.info("Curve name {} did not match either pay curve name {} or receive curve name {}", new Object[] {curveName, payCurveName, receiveCurveName });
+      LOGGER.info("Curve name {} did not match either pay curve name {} or receive curve name {}", new Object[] {curveName, payCurveName, receiveCurveName });
       return null;
     }
     final String payCurveCalculationConfig = Iterables.getOnlyElement(constraints.getValues(PAY_CURVE_CALCULATION_CONFIG));

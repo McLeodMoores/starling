@@ -34,7 +34,7 @@ import com.opengamma.util.Connector;
 public class BloombergConnector implements Connector {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(BloombergConnector.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(BloombergConnector.class);
 
   /**
    * Callback interface for listeners which wish to be notified when the Bloomberg connection is available.
@@ -169,20 +169,20 @@ public class BloombergConnector implements Connector {
     } catch (InterruptedException ex) {
       // Interruption may mean that threads have still been created which must be killed. See PLAT-5309.
       try {
-        s_logger.debug("Attempting to stop session which was created but not started");
+        LOGGER.debug("Attempting to stop session which was created but not started");
         session.stop();
       } catch (Exception e) {
-        s_logger.error("Can't stop session", e);
+        LOGGER.error("Can't stop session", e);
       }
       Thread.interrupted();
       throw new OpenGammaRuntimeException("Bloomberg session failed to start: " + SessionOptionsUtils.toString(getSessionOptions()), ex);
     } catch (Exception ex) {
       // Failure from "start" to connect may mean that threads have still been created which must be killed. See PLAT-5309.
       try {
-        s_logger.debug("Attempting to stop session which was created but not started");
+        LOGGER.debug("Attempting to stop session which was created but not started");
         session.stop();
       } catch (Exception e) {
-        s_logger.error("Can't stop session", e);
+        LOGGER.error("Can't stop session", e);
       }
       throw new OpenGammaRuntimeException("Bloomberg session failed to start: " + SessionOptionsUtils.toString(getSessionOptions()), ex);
     }
@@ -258,7 +258,7 @@ public class BloombergConnector implements Connector {
    */
   public void notifyAvailabilityListeners() {
     for (AvailabilityListener listener : _listeners) {
-      s_logger.debug("Notifying availability to {}", listener);
+      LOGGER.debug("Notifying availability to {}", listener);
       listener.bloombergAvailable();
     }
   }

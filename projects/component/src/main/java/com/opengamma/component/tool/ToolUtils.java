@@ -15,7 +15,7 @@ import com.opengamma.util.LogUtils;
  */
 public final class ToolUtils {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(ToolUtils.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ToolUtils.class);
   
   /**
    * Default logback file.
@@ -30,7 +30,7 @@ public final class ToolUtils {
   
   //-------------------------------------------------------------------------
   public static boolean initLogback(String logbackResource) {
-    s_logger.trace("Configuring logging from {}", logbackResource);
+    LOGGER.trace("Configuring logging from {}", logbackResource);
     // Don't reconfigure if already configured from the default property or any existing loggers will break
     // and stop reporting anything.
     return logbackResource.equals(getSystemDefaultLogbackConfiguration()) ? true : LogUtils.configureLogger(logbackResource);

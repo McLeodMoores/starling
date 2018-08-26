@@ -92,8 +92,8 @@ public class CommodityBuildingCurveSimpleTestUS {
   public static final GeneratorPriceIndexCurve[][][] GENERATORS_UNITS = new GeneratorPriceIndexCurve[NB_BLOCKS][][];
   public static final String[][][] NAMES_UNITS = new String[NB_BLOCKS][][];
 
-  public static final MulticurveProviderDiscount usMulticurveProviderDiscount = MulticurveProviderDiscountDataSets.createMulticurveEurUsd().copy();
-  public static final InflationProviderDiscount KNOWN_DATA = new InflationProviderDiscount(usMulticurveProviderDiscount);
+  public static final MulticurveProviderDiscount US_MULTICURVE_PROVIDER = MulticurveProviderDiscountDataSets.createMulticurveEurUsd().copy();
+  public static final InflationProviderDiscount KNOWN_DATA = new InflationProviderDiscount(US_MULTICURVE_PROVIDER);
 
   public static final LinkedHashMap<String, IndexPrice[]> US_CPI_MAP = new LinkedHashMap<>();
 

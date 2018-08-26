@@ -39,13 +39,10 @@ import com.opengamma.engine.value.ValueRequirementNames;
 import com.opengamma.engine.value.ValueSpecification;
 import com.opengamma.financial.OpenGammaExecutionContext;
 import com.opengamma.financial.analytics.ircurve.FixedIncomeStripWithSecurity;
-import com.opengamma.financial.analytics.ircurve.InterpolatedYieldCurveSpecification;
-import com.opengamma.financial.analytics.ircurve.InterpolatedYieldCurveSpecificationBuilder;
 import com.opengamma.financial.analytics.ircurve.InterpolatedYieldCurveSpecificationWithSecurities;
 import com.opengamma.financial.analytics.ircurve.YieldCurveData;
 import com.opengamma.financial.analytics.ircurve.YieldCurveDefinition;
 import com.opengamma.financial.analytics.model.cds.ISDAFunctionConstants;
-import com.opengamma.financial.analytics.timeseries.HistoricalTimeSeriesBundle;
 import com.opengamma.financial.config.ConfigSourceQuery;
 import com.opengamma.financial.convention.HolidaySourceCalendarAdapter;
 import com.opengamma.financial.convention.businessday.BusinessDayConvention;
@@ -61,22 +58,18 @@ import com.opengamma.util.async.AsynchronousExecution;
 import com.opengamma.util.money.Currency;
 
 /**
- * Function to return a @{code ISDACompliantYieldCurve}
+ * Function to return a @{code ISDACompliantYieldCurve}.
  */
 public class ISDACompliantYieldCurveFunction extends AbstractFunction {
-  private static final BusinessDayConvention badDayConv = BusinessDayConventions.MODIFIED_FOLLOWING;
-  private static final DateTimeFormatter dateFormatter = new DateTimeFormatterBuilder().appendPattern("yyyyMMdd").toFormatter();
+  private static final BusinessDayConvention BAD_DAY_CONV = BusinessDayConventions.MODIFIED_FOLLOWING;
+  private static final DateTimeFormatter DATE_FORMATTER = new DateTimeFormatterBuilder().appendPattern("yyyyMMdd").toFormatter();
   private static final DayCount ACT_365 = DayCounts.ACT_365;
-  private static final DayCount ACT_360 = DayCounts.ACT_360;
-  private static final DayCount DCC_30_360 = DayCounts.THIRTY_U_360;
   private static final DayCount CURVE_DCC = ACT_365;
 
-  private InterpolatedYieldCurveSpecificationBuilder.AtVersionCorrection _interpolatedYieldCurveSpecificationBuilder;
   private ConfigSourceQuery<YieldCurveDefinition> _yieldCurveDefinitionSource;
 
   @Override
   public void init(final FunctionCompilationContext compilationContext) {
-    _interpolatedYieldCurveSpecificationBuilder = InterpolatedYieldCurveSpecificationBuilder.AtVersionCorrection.init(compilationContext, this);
     _yieldCurveDefinitionSource = ConfigSourceQuery.init(compilationContext, this, YieldCurveDefinition.class);
   }
 
@@ -85,18 +78,15 @@ public class ISDACompliantYieldCurveFunction extends AbstractFunction {
     final ZonedDateTime atZDT = ZonedDateTime.ofInstant(atInstant, ZoneOffset.UTC);
     return new AbstractInvokingCompiledFunction(atZDT.with(LocalTime.MIDNIGHT), atZDT.plusDays(1).with(LocalTime.MIDNIGHT).minusNanos(1000000)) {
 
-      @SuppressWarnings("synthetic-access")
       @Override
       public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
           final Set<ValueRequirement> desiredValues) throws AsynchronousExecution {
         final ZonedDateTime valuationDate = ZonedDateTime.now(executionContext.getValuationClock());
-        final HistoricalTimeSeriesBundle timeSeries = (HistoricalTimeSeriesBundle) inputs.getValue(ValueRequirementNames.YIELD_CURVE_INSTRUMENT_CONVERSION_HISTORICAL_TIME_SERIES);
         final ValueRequirement desiredValue = desiredValues.iterator().next();
         final String curveName = desiredValue.getConstraint(ValuePropertyNames.CURVE);
         final String spotDateString = desiredValue.getConstraint(ISDAFunctionConstants.ISDA_CURVE_DATE);
-        final LocalDate spotDate = LocalDate.parse(spotDateString, dateFormatter);
+        final LocalDate spotDate = LocalDate.parse(spotDateString, DATE_FORMATTER);
         final String offsetString = desiredValue.getConstraint(ISDAFunctionConstants.ISDA_CURVE_OFFSET);
-        final int offset = Integer.parseInt(offsetString); //TODO: Is this still used???
         final Object definitionObject = inputs.getValue(ValueRequirementNames.TARGET);
         if (definitionObject == null) {
           throw new OpenGammaRuntimeException("Couldn't get interpolated yield curve specification: " + curveName);
@@ -107,7 +97,6 @@ public class ISDACompliantYieldCurveFunction extends AbstractFunction {
           throw new OpenGammaRuntimeException("Couldn't get yield curve data for " + curveName);
         }
         final YieldCurveData marketData = (YieldCurveData) dataObject;
-        final InterpolatedYieldCurveSpecification specification = getCurveSpecification(curveDefinition, spotDate);
         final InterpolatedYieldCurveSpecificationWithSecurities specificationWithSecurities = marketData.getCurveSpecification();
         final ISDAInstrumentTypes[] instruments = new ISDAInstrumentTypes[specificationWithSecurities.getStrips().size()];
         final Period[] tenors = new Period[specificationWithSecurities.getStrips().size()];
@@ -142,11 +131,16 @@ public class ISDACompliantYieldCurveFunction extends AbstractFunction {
         }
         final Calendar calendar = new HolidaySourceCalendarAdapter(OpenGammaExecutionContext.getHolidaySource(executionContext), curveDefinition.getCurrency());
 
-        final ISDACompliantYieldCurve yieldCurve = new ISDACompliantYieldCurveBuild(valuationDate.toLocalDate(), spotDate, instruments, tenors, moneyDCC, swapFixLegDCC, swapIvl, CURVE_DCC,
-            badDayConv, calendar).build(values);
+        final ISDACompliantYieldCurve yieldCurve =
+            new ISDACompliantYieldCurveBuild(valuationDate.toLocalDate(), spotDate, instruments, tenors, moneyDCC, swapFixLegDCC, swapIvl, CURVE_DCC,
+            BAD_DAY_CONV, calendar).build(values);
 
-        final ValueProperties properties = createValueProperties().with(ValuePropertyNames.CURVE, curveName).with(ISDAFunctionConstants.ISDA_CURVE_OFFSET, offsetString)
-            .with(ISDAFunctionConstants.ISDA_CURVE_DATE, spotDateString).with(ISDAFunctionConstants.ISDA_IMPLEMENTATION, ISDAFunctionConstants.ISDA_IMPLEMENTATION_NEW)
+        final ValueProperties properties =
+            createValueProperties()
+            .with(ValuePropertyNames.CURVE, curveName)
+            .with(ISDAFunctionConstants.ISDA_CURVE_OFFSET, offsetString)
+            .with(ISDAFunctionConstants.ISDA_CURVE_DATE, spotDateString)
+            .with(ISDAFunctionConstants.ISDA_IMPLEMENTATION, ISDAFunctionConstants.ISDA_IMPLEMENTATION_NEW)
             .with(ValuePropertyNames.CURVE_CALCULATION_METHOD, ISDAFunctionConstants.ISDA_METHOD_NAME).get();
         final ValueSpecification spec = new ValueSpecification(ValueRequirementNames.YIELD_CURVE, target.toSpecification(), properties);
         return Collections.singleton(new ComputedValue(spec, yieldCurve));
@@ -154,10 +148,10 @@ public class ISDACompliantYieldCurveFunction extends AbstractFunction {
 
       private Period getFixedLegPaymentTenor(final SwapSecurity swap) {
         if (swap.getReceiveLeg() instanceof FixedInterestRateLeg) {
-          FixedInterestRateLeg fixLeg = (FixedInterestRateLeg) swap.getReceiveLeg();
+          final FixedInterestRateLeg fixLeg = (FixedInterestRateLeg) swap.getReceiveLeg();
           return PeriodFrequency.convertToPeriodFrequency(fixLeg.getFrequency()).getPeriod();
         } else if (swap.getPayLeg() instanceof FixedInterestRateLeg) {
-          FixedInterestRateLeg fixLeg = (FixedInterestRateLeg) swap.getPayLeg();
+          final FixedInterestRateLeg fixLeg = (FixedInterestRateLeg) swap.getPayLeg();
           return PeriodFrequency.convertToPeriodFrequency(fixLeg.getFrequency()).getPeriod();
         } else {
           throw new OpenGammaRuntimeException("Got a swap without a fixed leg " + swap);
@@ -166,10 +160,10 @@ public class ISDACompliantYieldCurveFunction extends AbstractFunction {
 
       private DayCount getFixedLegDCC(final SwapSecurity swap) {
         if (swap.getReceiveLeg() instanceof FixedInterestRateLeg) {
-          FixedInterestRateLeg fixLeg = (FixedInterestRateLeg) swap.getReceiveLeg();
+          final FixedInterestRateLeg fixLeg = (FixedInterestRateLeg) swap.getReceiveLeg();
           return fixLeg.getDayCount();
         } else if (swap.getPayLeg() instanceof FixedInterestRateLeg) {
-          FixedInterestRateLeg fixLeg = (FixedInterestRateLeg) swap.getPayLeg();
+          final FixedInterestRateLeg fixLeg = (FixedInterestRateLeg) swap.getPayLeg();
           return fixLeg.getDayCount();
         } else {
           throw new OpenGammaRuntimeException("Got a swap without a fixed leg " + swap);
@@ -196,7 +190,8 @@ public class ISDACompliantYieldCurveFunction extends AbstractFunction {
       }
 
       @Override
-      public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue) {
+      public Set<ValueRequirement> getRequirements(final FunctionCompilationContext context, final ComputationTarget target,
+          final ValueRequirement desiredValue) {
         final ValueProperties constraints = desiredValue.getConstraints();
         final Set<String> curveNames = constraints.getValues(ValuePropertyNames.CURVE);
         if (curveNames == null || curveNames.size() != 1) {
@@ -215,13 +210,9 @@ public class ISDACompliantYieldCurveFunction extends AbstractFunction {
         final Set<ValueRequirement> requirements = Sets.newHashSetWithExpectedSize(2);
         final ComputationTargetSpecification targetSpec = target.toSpecification();
         requirements.add(new ValueRequirement(ValueRequirementNames.YIELD_CURVE_DATA, targetSpec, properties));
-        requirements.add(new ValueRequirement(ValueRequirementNames.TARGET, ComputationTargetType.of(YieldCurveDefinition.class), curveDefinition.getUniqueId()));
+        requirements.add(new ValueRequirement(ValueRequirementNames.TARGET, ComputationTargetType.of(YieldCurveDefinition.class),
+            curveDefinition.getUniqueId()));
         return requirements;
-      }
-
-      private InterpolatedYieldCurveSpecification getCurveSpecification(final YieldCurveDefinition curveDefinition, final LocalDate curveDate) {
-        final InterpolatedYieldCurveSpecification curveSpec = _interpolatedYieldCurveSpecificationBuilder.buildCurve(curveDate, curveDefinition);
-        return curveSpec;
       }
 
     };

@@ -31,7 +31,7 @@ import com.opengamma.util.ArgumentChecker;
  */
 public class IRFutureOptionSABRDefaults extends DefaultPropertyFunction {
   /** A logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(IRFutureOptionSABRDefaults.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(IRFutureOptionSABRDefaults.class);
   /** The value requirement names for which these defaults apply */
   private static final String[] VALUE_REQUIREMENTS = new String[] {
     ValueRequirementNames.PRESENT_VALUE,
@@ -103,7 +103,7 @@ public class IRFutureOptionSABRDefaults extends DefaultPropertyFunction {
     if (SmileFittingPropertyNamesAndValues.PROPERTY_FITTING_METHOD.equals(propertyName)) {
       return Collections.singleton(_fittingMethodPerCurrency.get(currency));
     }
-    s_logger.error("Could not get default value for {}", propertyName);
+    LOGGER.error("Could not get default value for {}", propertyName);
     return null;
   }
 

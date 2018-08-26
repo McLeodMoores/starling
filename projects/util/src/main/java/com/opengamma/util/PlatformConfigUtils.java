@@ -26,7 +26,7 @@ public final class PlatformConfigUtils {
   }
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(PlatformConfigUtils.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(PlatformConfigUtils.class);
   /**
    * The prefix for the property.
    */
@@ -96,7 +96,7 @@ public final class PlatformConfigUtils {
   }
 
   private static void logPlatformConfiguration() {
-    if (!s_logger.isInfoEnabled()) {
+    if (!LOGGER.isInfoEnabled()) {
       return;
     }
     StringBuilder sb = new StringBuilder("\nOpenGamma platform configuration: \n");
@@ -105,7 +105,7 @@ public final class PlatformConfigUtils {
         sb.append("\t").append(propertyName).append(" = ").append(System.getProperty(propertyName)).append("\n");
       }
     }
-    s_logger.info(sb.toString());
+    LOGGER.info(sb.toString());
   }
 
 }

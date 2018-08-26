@@ -47,7 +47,7 @@ import com.opengamma.util.time.Tenor;
  * 
  */
 public class FXForwardPointsCurveMarketDataFunction extends AbstractFunction {
-  private static final Logger s_logger = LoggerFactory.getLogger(FXForwardPointsCurveMarketDataFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(FXForwardPointsCurveMarketDataFunction.class);
   /** Name of the calculation method */
   public static final String FX_FORWARD_QUOTES = "FXForwardQuotes";
 
@@ -84,24 +84,24 @@ public class FXForwardPointsCurveMarketDataFunction extends AbstractFunction {
         final ValueProperties constraints = desiredValue.getConstraints();
         final Set<String> curveNames = constraints.getValues(ValuePropertyNames.CURVE);
         if (curveNames == null || curveNames.size() != 1) {
-          s_logger.error("Asked for FX forward curve market data, but did not supply a single FX forward curve name. The property Curve must be set.");
+          LOGGER.error("Asked for FX forward curve market data, but did not supply a single FX forward curve name. The property Curve must be set.");
           return null;
         }
         final UnorderedCurrencyPair currencyPair = UnorderedCurrencyPair.of(target.getUniqueId());
         final String curveName = curveNames.iterator().next();
         final FXForwardCurveDefinition definition = _fxForwardCurveDefinitionSource.getDefinition(curveName, currencyPair.toString());
         if (definition == null) {
-          s_logger.error("Couldn't find FX forward curve definition called " + curveName + " with target " + target);
+          LOGGER.error("Couldn't find FX forward curve definition called " + curveName + " with target " + target);
           return null;
         }
         final FXForwardCurveSpecification specification = _fxForwardCurveSpecificationSource.getSpecification(curveName, currencyPair.toString());
         if (specification == null) {
-          s_logger.error("Couldn't find FX forward curve specification called " + curveName + " with target " + target);
+          LOGGER.error("Couldn't find FX forward curve specification called " + curveName + " with target " + target);
           return null;
         }
         final QuoteType quoteType = specification.getQuoteType();
         if (quoteType != FXForwardCurveSpecification.QuoteType.Points) {
-          s_logger.error("Cannot handle quote type " + quoteType);
+          LOGGER.error("Cannot handle quote type " + quoteType);
           return null;
         }
         final Set<ValueRequirement> requirements = new HashSet<>();

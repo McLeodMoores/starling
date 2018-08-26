@@ -30,8 +30,8 @@ import com.opengamma.util.tuple.Pairs;
  *
  */
 public class InterestRateFutureOptionHestonDefaults extends DefaultPropertyFunction {
-  private static final Logger s_logger = LoggerFactory.getLogger(InterestRateFutureOptionBlackDefaults.class);
-  private static final String[] s_valueRequirements = new String[] {
+  private static final Logger LOGGER = LoggerFactory.getLogger(InterestRateFutureOptionHestonDefaults.class);
+  private static final String[] VALUE_REQUIREMENTS = new String[] {
     ValueRequirementNames.PRESENT_VALUE,
   };
   private final HashMap<String, Pair<String, String>> _currencyCurveConfigAndSurfaceNames;
@@ -60,7 +60,7 @@ public class InterestRateFutureOptionHestonDefaults extends DefaultPropertyFunct
 
   @Override
   protected void getDefaults(final PropertyDefaults defaults) {
-    for (final String valueRequirement : s_valueRequirements) {
+    for (final String valueRequirement : VALUE_REQUIREMENTS) {
       defaults.addValuePropertyName(valueRequirement, ValuePropertyNames.CURVE_CALCULATION_CONFIG);
       defaults.addValuePropertyName(valueRequirement, ValuePropertyNames.SURFACE);
     }
@@ -70,7 +70,7 @@ public class InterestRateFutureOptionHestonDefaults extends DefaultPropertyFunct
   protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue, final String propertyName) {
     final String currencyName = FinancialSecurityUtils.getCurrency(target.getTrade().getSecurity()).getCode();
     if (!_currencyCurveConfigAndSurfaceNames.containsKey(currencyName)) {
-      s_logger.error("Could not config and surface names for currency " + currencyName + "; should never happen");
+      LOGGER.error("Could not config and surface names for currency " + currencyName + "; should never happen");
       return null;
     }
     final Pair<String, String> pair = _currencyCurveConfigAndSurfaceNames.get(currencyName);

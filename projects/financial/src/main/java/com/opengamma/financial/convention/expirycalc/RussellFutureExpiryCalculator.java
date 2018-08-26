@@ -29,8 +29,8 @@ import com.opengamma.util.ArgumentChecker;
 public final class RussellFutureExpiryCalculator implements ExchangeTradedInstrumentExpiryCalculator {
 
   private static final Set<Month> QUARTERLY_CYCLE_MONTHS = EnumSet.of(Month.MARCH, Month.JUNE, Month.SEPTEMBER, Month.DECEMBER); 
-  private static final NextQuarterAdjuster s_nextQuarterAdjuster = new NextQuarterAdjuster(QUARTERLY_CYCLE_MONTHS);
-  private static final TemporalAdjuster s_dayOfMonthAdjuster = TemporalAdjusters.dayOfWeekInMonth(3, DayOfWeek.FRIDAY);
+  private static final NextQuarterAdjuster NEXT_QUARTER_ADJUSTER = new NextQuarterAdjuster(QUARTERLY_CYCLE_MONTHS);
+  private static final TemporalAdjuster DAY_OF_MONTH_ADJUSTER = TemporalAdjusters.dayOfWeekInMonth(3, DayOfWeek.FRIDAY);
 
   private static final RussellFutureExpiryCalculator INSTANCE = new RussellFutureExpiryCalculator();
   
@@ -78,7 +78,7 @@ public final class RussellFutureExpiryCalculator implements ExchangeTradedInstru
   // Return expiryDate that is the 3rd Friday (or previous good day if holiday) of month in which date falls
   private LocalDate getThirdFriday(final LocalDate date, final Calendar holidayCalendar) {
     // Compute the expiry of valuationDate's month
-    LocalDate following3rdFriday = date.with(s_dayOfMonthAdjuster); // 3rd Friday of month in which date falls
+    LocalDate following3rdFriday = date.with(DAY_OF_MONTH_ADJUSTER); // 3rd Friday of month in which date falls
     while (!holidayCalendar.isWorkingDay(following3rdFriday)) {
       following3rdFriday = following3rdFriday.minusDays(1); // previous good day
     }
@@ -89,7 +89,7 @@ public final class RussellFutureExpiryCalculator implements ExchangeTradedInstru
     // First find the nth quarter after the lastSerialExpiry
     LocalDate nthExpiryMonth = lastSerialExpiry;
     for (int n = nthExpiryAfterSerialContracts; n > 0; n--) {
-      nthExpiryMonth = nthExpiryMonth.with(s_nextQuarterAdjuster);
+      nthExpiryMonth = nthExpiryMonth.with(NEXT_QUARTER_ADJUSTER);
     }
     // Then find the expiry date in that month
     return getThirdFriday(nthExpiryMonth, holidayCalendar);

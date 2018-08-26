@@ -5,13 +5,15 @@
  */
 package com.opengamma.component.factory.tool;
 
+import static com.opengamma.component.factory.tool.DbToolContextComponentFactory.getCatalog;
+import static com.opengamma.component.factory.tool.DbToolContextComponentFactory.getMSSQLCatalog;
+import static com.opengamma.component.factory.tool.DbToolContextComponentFactory.getStandardCatalog;
+
 import org.apache.commons.lang.Validate;
 import org.testng.annotations.Test;
 
 import com.opengamma.OpenGammaRuntimeException;
 import com.opengamma.util.test.TestGroup;
-
-import static com.opengamma.component.factory.tool.DbToolContextComponentFactory.*;
 
 /** Test. */
 @Test(groups = TestGroup.UNIT)
@@ -77,7 +79,7 @@ public class DbToolContextComponentFactoryTest {
 
   @Test
   public void test_handleNull() {
-    Validate.isTrue((getCatalog(null) == null), "null did not work");
+    Validate.isTrue(getCatalog(null) == null, "null did not work");
   }
 
   @Test(expectedExceptions = OpenGammaRuntimeException.class)

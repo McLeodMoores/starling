@@ -25,11 +25,11 @@ import com.opengamma.core.config.Config;
 public final class ConfigTypesProvider {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(ConfigTypesProvider.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ConfigTypesProvider.class);
   /**
    * Singleton instance.
    */
-  private static final ConfigTypesProvider s_instance = new ConfigTypesProvider();
+  private static final ConfigTypesProvider INSTANCE = new ConfigTypesProvider();
 
   /**
    * Map of config types.
@@ -51,7 +51,7 @@ public final class ConfigTypesProvider {
    * @return the provider, not null
    */
   public static ConfigTypesProvider getInstance() {
-    return s_instance;
+    return INSTANCE;
   }
 
   //-------------------------------------------------------------------------
@@ -82,7 +82,7 @@ public final class ConfigTypesProvider {
         // store
         final Class<?> old = result.put(configType.getSimpleName(), configType);
         if (old != null) {
-          s_logger.warn("Two classes exist with the same name: " + configType.getSimpleName());
+          LOGGER.warn("Two classes exist with the same name: " + configType.getSimpleName());
         }
         descriptions.put(configType.getSimpleName(), description);
         if (_configGroupMap.containsKey(group)) {

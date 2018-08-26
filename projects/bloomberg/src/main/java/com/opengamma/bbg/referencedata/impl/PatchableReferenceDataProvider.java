@@ -30,7 +30,7 @@ import com.opengamma.util.tuple.Pairs;
 public class PatchableReferenceDataProvider extends AbstractReferenceDataProvider {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(PatchableReferenceDataProvider.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(PatchableReferenceDataProvider.class);
 
   private Map<Pair<String, String>, Object> _patches = new HashMap<Pair<String, String>, Object>();
   private Set<String> _securities = new HashSet<String>();
@@ -78,7 +78,7 @@ public class PatchableReferenceDataProvider extends AbstractReferenceDataProvide
             refData.removeErrors(field);
           }
         }
-        s_logger.debug("Patching {} with {}", new Object[] {fieldData, alteredFieldData });
+        LOGGER.debug("Patching {} with {}", new Object[] {fieldData, alteredFieldData });
         refData.setFieldValues(alteredFieldData);
       }
       newResult.addReferenceData(refData);

@@ -25,7 +25,7 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT)
 public class DistributedAuditLoggerTest {
 
-  private static final FudgeContext s_fudgeContext = new FudgeContext ();
+  private static final FudgeContext FUDGE_CONTEXT = new FudgeContext ();
 
   public void testClientServerAuditLogging() {
     CollectingByteArrayMessageSender msgStore = new CollectingByteArrayMessageSender();
@@ -35,13 +35,13 @@ public class DistributedAuditLoggerTest {
     client.log("lisa", "testobject", "testop", "testdescription", true);
     assertEquals(1, msgStore.getMessages().size());
     
-    FudgeMsgEnvelope fudgeMsgEnvelope = s_fudgeContext.deserialize(msgStore.getMessages().get(0));
+    FudgeMsgEnvelope fudgeMsgEnvelope = FUDGE_CONTEXT.deserialize(msgStore.getMessages().get(0));
     
     InMemoryAuditLogger memoryAuditLogger = new InMemoryAuditLogger();
     assertEquals(0, memoryAuditLogger.getMessages().size());
     
     DistributedAuditLoggerServer server = new DistributedAuditLoggerServer(memoryAuditLogger);
-    server.messageReceived(s_fudgeContext, fudgeMsgEnvelope);
+    server.messageReceived(FUDGE_CONTEXT, fudgeMsgEnvelope);
     assertEquals(1, memoryAuditLogger.getMessages().size());
     
     AuditLogEntry entry = memoryAuditLogger.getMessages().get(0);
@@ -56,7 +56,7 @@ public class DistributedAuditLoggerTest {
     msgEnvelopes.add(fudgeMsgEnvelope);
     msgEnvelopes.add(fudgeMsgEnvelope);
     msgEnvelopes.add(fudgeMsgEnvelope);
-    server.messagesReceived(s_fudgeContext, msgEnvelopes);
+    server.messagesReceived(FUDGE_CONTEXT, msgEnvelopes);
     assertEquals(4, memoryAuditLogger.getMessages().size()); // 1 from messageReceived() + 3 from messagesReceived()
   }
 

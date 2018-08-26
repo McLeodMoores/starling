@@ -43,7 +43,7 @@ public class ComputationTargetFudgeBuilder implements FudgeBuilder<ComputationTa
     return msg;
   }
 
-  private static final ComputationTargetTypeVisitor<Void, Class<? extends UniqueIdentifiable>> s_getLeafType = new ComputationTargetTypeVisitor<Void, Class<? extends UniqueIdentifiable>>() {
+  private static final ComputationTargetTypeVisitor<Void, Class<? extends UniqueIdentifiable>> GET_LEAF_TYPE = new ComputationTargetTypeVisitor<Void, Class<? extends UniqueIdentifiable>>() {
 
     @Override
     public Class<? extends UniqueIdentifiable> visitMultipleComputationTargetTypes(final Set<ComputationTargetType> types, final Void data) {
@@ -70,7 +70,7 @@ public class ComputationTargetFudgeBuilder implements FudgeBuilder<ComputationTa
   @Override
   public ComputationTarget buildObject(FudgeDeserializer deserializer, FudgeMsg message) {
     final ComputationTargetSpecification specification = ComputationTargetReferenceFudgeBuilder.buildObjectImpl(deserializer, message).getSpecification();
-    final Class<? extends UniqueIdentifiable> valueType = specification.getType().accept(s_getLeafType, null);
+    final Class<? extends UniqueIdentifiable> valueType = specification.getType().accept(GET_LEAF_TYPE, null);
     if (valueType != null) {
       final UniqueIdentifiable value = deserializer.fieldValueToObject(valueType, message.getByName(VALUE_FIELD));
       return new ComputationTarget(specification, value);

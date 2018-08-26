@@ -29,7 +29,7 @@ import com.opengamma.util.async.BlockingOperation;
 public class BoneCPHack implements ConnectionHook {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(BoneCPHack.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(BoneCPHack.class);
 
   private static final Object HACK_PARTITION_FLAG = new Object();
 
@@ -92,7 +92,7 @@ public class BoneCPHack implements ConnectionHook {
           }
         }
       } catch (Exception e) {
-        s_logger.error("Couldn't hack BlockingOperation call into BoneCP", e);
+        LOGGER.error("Couldn't hack BlockingOperation call into BoneCP", e);
       }
       connection.setDebugHandle(null);
     }

@@ -70,7 +70,7 @@ public class DbPortfolioMaster
     implements PortfolioMaster {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(DbPortfolioMaster.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(DbPortfolioMaster.class);
 
   /**
    * The default scheme for unique identifiers.
@@ -106,7 +106,7 @@ public class DbPortfolioMaster
     ArgumentChecker.notNull(request, "request");
     ArgumentChecker.notNull(request.getPagingRequest(), "request.pagingRequest");
     ArgumentChecker.notNull(request.getVersionCorrection(), "request.versionCorrection");
-    s_logger.debug("search {}", request);
+    LOGGER.debug("search {}", request);
 
     final VersionCorrection vc = request.getVersionCorrection().withLatestFixed(now());
     final PortfolioSearchResult result = new PortfolioSearchResult(vc);
@@ -331,7 +331,7 @@ public class DbPortfolioMaster
    * @return the node, null if not found
    */
   protected ManageablePortfolioNode getNodeByInstants(final UniqueId uniqueId, final Instant versionAsOf, final Instant correctedTo) {
-    s_logger.debug("getNodeByLatest {}", uniqueId);
+    LOGGER.debug("getNodeByLatest {}", uniqueId);
     final Instant now = now();
     final DbMapSqlParameterSource args = createParameterSource()
         .addValue("node_oid", extractOid(uniqueId))
@@ -354,7 +354,7 @@ public class DbPortfolioMaster
    * @return the node, null if not found
    */
   protected ManageablePortfolioNode getNodeById(final UniqueId uniqueId) {
-    s_logger.debug("getNodeById {}", uniqueId);
+    LOGGER.debug("getNodeById {}", uniqueId);
     final DbMapSqlParameterSource args = createParameterSource()
         .addValue("node_id", extractRowId(uniqueId));
     final PortfolioDocumentExtractor extractor = new PortfolioDocumentExtractor(true, false);

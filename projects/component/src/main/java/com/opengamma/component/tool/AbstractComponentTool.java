@@ -30,7 +30,7 @@ import com.opengamma.util.StartupUtils;
 @Deprecated
 public abstract class AbstractComponentTool {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(AbstractComponentTool.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(AbstractComponentTool.class);
   /**
    * Default logback file.
    */
@@ -63,7 +63,7 @@ public abstract class AbstractComponentTool {
    * @return true if successful
    */
   public static final boolean init(final String logbackResource) {
-    s_logger.debug("Configuring logging from {}", logbackResource);
+    LOGGER.debug("Configuring logging from {}", logbackResource);
     // Don't reconfigure if already configured from the default property or any existing loggers will break
     // and stop reporting anything.
     return logbackResource.equals(getSystemDefaultLogbackConfiguration()) ? true : LogUtils.configureLogger(logbackResource);
@@ -157,12 +157,12 @@ public abstract class AbstractComponentTool {
   public final boolean run(String componentServerUri) {
     try {
       ArgumentChecker.notNull(componentServerUri, "componentServerUri");
-      s_logger.info("Starting " + getClass().getSimpleName());
+      LOGGER.info("Starting " + getClass().getSimpleName());
       componentServerUri = resolveComponentServerUri(componentServerUri);
       RemoteComponentFactory remoteComponentFactory = new RemoteComponentFactory(componentServerUri);
-      s_logger.info("Running " + getClass().getSimpleName());
+      LOGGER.info("Running " + getClass().getSimpleName());
       run(remoteComponentFactory);
-      s_logger.info("Finished " + getClass().getSimpleName());
+      LOGGER.info("Finished " + getClass().getSimpleName());
       return true;
     } catch (Exception ex) {
       ex.printStackTrace();

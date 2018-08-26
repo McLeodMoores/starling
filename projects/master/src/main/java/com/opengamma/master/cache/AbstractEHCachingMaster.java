@@ -57,11 +57,11 @@ import com.opengamma.util.ArgumentChecker;
 public abstract class AbstractEHCachingMaster<D extends AbstractDocument> implements AbstractChangeProvidingMaster<D> {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(AbstractEHCachingMaster.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(AbstractEHCachingMaster.class);
   /** Cache name. */
   private static final String CACHE_NAME_SUFFIX = "UidToDocumentCache";
   /** Check cached results against results from underlying */
-  public static final boolean TEST_AGAINST_UNDERLYING = false; //s_logger.isDebugEnabled();
+  public static final boolean TEST_AGAINST_UNDERLYING = false; //LOGGER.isDebugEnabled();
 
   /** The underlying master. */
   private final AbstractChangeProvidingMaster<D> _underlying;
@@ -92,7 +92,7 @@ public abstract class AbstractEHCachingMaster<D extends AbstractDocument> implem
     // Load cache configuration
     if (cacheManager.getCache(name + CACHE_NAME_SUFFIX) == null) {
       // If cache config not found, set up programmatically
-      s_logger.warn("Could not load a cache configuration for " + name + CACHE_NAME_SUFFIX
+      LOGGER.warn("Could not load a cache configuration for " + name + CACHE_NAME_SUFFIX
                   + ", building a default configuration programmatically instead");
       getCacheManager().addCache(new Cache(tweakCacheConfiguration(new CacheConfiguration(name + CACHE_NAME_SUFFIX,
                                                                                           10000))));
@@ -181,7 +181,7 @@ public abstract class AbstractEHCachingMaster<D extends AbstractDocument> implem
       if (TEST_AGAINST_UNDERLYING) {
         D check = getUnderlying().get(objectId, versionCorrection);
         if (!result.equals(check)) {
-          s_logger.error(getUidToDocumentCache().getName() + " returned:\n" + result + "\nbut the underlying master returned:\n" + check);
+          LOGGER.error(getUidToDocumentCache().getName() + " returned:\n" + result + "\nbut the underlying master returned:\n" + check);
         }
       }
 
@@ -226,7 +226,7 @@ public abstract class AbstractEHCachingMaster<D extends AbstractDocument> implem
       if (TEST_AGAINST_UNDERLYING) {
         D check = getUnderlying().get(uniqueId);
         if (!((D) element.getObjectValue()).equals(check)) {
-          s_logger.error(getUidToDocumentCache().getName() + " returned:\n" + ((D) element.getObjectValue()) + "\nbut the underlying master returned:\n"  + check);
+          LOGGER.error(getUidToDocumentCache().getName() + " returned:\n" + ((D) element.getObjectValue()) + "\nbut the underlying master returned:\n"  + check);
         }
       }
       return (D) element.getObjectValue();

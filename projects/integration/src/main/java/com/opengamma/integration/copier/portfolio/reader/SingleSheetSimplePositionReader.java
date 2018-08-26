@@ -27,7 +27,7 @@ import com.opengamma.util.tuple.ObjectsPair;
  */
 public class SingleSheetSimplePositionReader extends SingleSheetPositionReader {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(SingleSheetSimplePositionReader.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(SingleSheetSimplePositionReader.class);
 
   /*
    * Load one or more parsers for different types of securities/trades/whatever here
@@ -90,7 +90,7 @@ public class SingleSheetSimplePositionReader extends SingleSheetPositionReader {
       return ObjectsPair.of(position, securities);
       
     } else {
-      s_logger.warn("Row parser was unable to construct a security from row " + row);
+      LOGGER.warn("Row parser was unable to construct a security from row " + row);
       return ObjectsPair.of(null, null);
     }
     

@@ -29,7 +29,7 @@ import com.opengamma.util.TerminatableJob;
 public abstract class AbstractBatchMessageDispatcher implements Lifecycle {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(AbstractBatchMessageDispatcher.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(AbstractBatchMessageDispatcher.class);
 
   /**
    * The source of data.
@@ -38,7 +38,7 @@ public abstract class AbstractBatchMessageDispatcher implements Lifecycle {
   /**
    * The message receivers.
    */
-  private final Set<BatchByteArrayMessageReceiver> _receivers = new HashSet<BatchByteArrayMessageReceiver>();
+  private final Set<BatchByteArrayMessageReceiver> _receivers = new HashSet<>();
   /**
    * The job for collecting messages.
    */
@@ -54,10 +54,10 @@ public abstract class AbstractBatchMessageDispatcher implements Lifecycle {
 
   /**
    * Creates a dispatcher.
-   * 
+   *
    * @param source  the data source, not null
    */
-  protected AbstractBatchMessageDispatcher(ByteArraySource source) {
+  protected AbstractBatchMessageDispatcher(final ByteArraySource source) {
     ArgumentChecker.notNull(source, "source");
     _source = source;
   }
@@ -65,10 +65,10 @@ public abstract class AbstractBatchMessageDispatcher implements Lifecycle {
   //-------------------------------------------------------------------------
   /**
    * Adds a receiver to the dispatcher.
-   * 
+   *
    * @param receiver  the message receiver, not null
    */
-  public void addReceiver(BatchByteArrayMessageReceiver receiver) {
+  public void addReceiver(final BatchByteArrayMessageReceiver receiver) {
     ArgumentChecker.notNull(receiver, "receiver");
     synchronized (_receivers) {
       _receivers.add(receiver);
@@ -77,13 +77,13 @@ public abstract class AbstractBatchMessageDispatcher implements Lifecycle {
 
   /**
    * Gets a copy of the set of receivers.
-   * 
+   *
    * @return the receivers, modifiable copy, not null
    */
   public Set<BatchByteArrayMessageReceiver> getReceivers() {
     final Set<BatchByteArrayMessageReceiver> receivers;
     synchronized (_receivers) {
-      receivers = new HashSet<BatchByteArrayMessageReceiver>(_receivers);
+      receivers = new HashSet<>(_receivers);
     }
     return receivers;
   }
@@ -91,7 +91,7 @@ public abstract class AbstractBatchMessageDispatcher implements Lifecycle {
   //-------------------------------------------------------------------------
   /**
    * Gets the source of data.
-   * 
+   *
    * @return the array source, not null
    */
   public ByteArraySource getSource() {
@@ -100,7 +100,7 @@ public abstract class AbstractBatchMessageDispatcher implements Lifecycle {
 
   /**
    * Gets the job being used.
-   * 
+   *
    * @return the collection job, not null
    */
   public MessageCollectionJob getCollectionJob() {
@@ -109,7 +109,7 @@ public abstract class AbstractBatchMessageDispatcher implements Lifecycle {
 
   /**
    * Gets the name.
-   * 
+   *
    * @return the name, not null
    */
   public String getName() {
@@ -118,17 +118,17 @@ public abstract class AbstractBatchMessageDispatcher implements Lifecycle {
 
   /**
    * Sets the name.
-   * 
+   *
    * @param name the name to set, not null
    */
-  public void setName(String name) {
+  public void setName(final String name) {
     ArgumentChecker.notNull(name, "name");
     _name = name;
   }
 
   /**
    * Gets the thread in use.
-   * 
+   *
    * @return the dispatch thread, null if not running
    */
   public Thread getDispatchThread() {
@@ -138,7 +138,7 @@ public abstract class AbstractBatchMessageDispatcher implements Lifecycle {
   //-------------------------------------------------------------------------
   @Override
   public boolean isRunning() {
-    return (getDispatchThread() != null && getDispatchThread().isAlive());
+    return getDispatchThread() != null && getDispatchThread().isAlive();
   }
 
   @Override
@@ -160,27 +160,27 @@ public abstract class AbstractBatchMessageDispatcher implements Lifecycle {
     getCollectionJob().terminate();
     try {
       getDispatchThread().join(30000L);
-    } catch (InterruptedException e) {
+    } catch (final InterruptedException e) {
       Thread.interrupted();
-      s_logger.info("Interrupted while waiting for dispatch thread to finish");
+      LOGGER.info("Interrupted while waiting for dispatch thread to finish");
     }
     if (getDispatchThread().isAlive()) {
-      s_logger.warn("Waited 30 seconds for dispatch thread to finish, but it didn't terminate normally");
+      LOGGER.warn("Waited 30 seconds for dispatch thread to finish, but it didn't terminate normally");
     }
     _dispatchThread = null;
   }
 
   /**
    * Dispatch messages to the receivers.
-   * 
+   *
    * @param messages  the messages, not null
    */
   protected void dispatchMessages(final List<byte[]> messages) {
     final BatchByteArrayMessageReceiver[] receivers;
     synchronized (_receivers) {
-      receivers = (BatchByteArrayMessageReceiver[]) _receivers.toArray(new BatchByteArrayMessageReceiver[_receivers.size()]);
+      receivers = _receivers.toArray(new BatchByteArrayMessageReceiver[_receivers.size()]);
     }
-    for (BatchByteArrayMessageReceiver receiver : receivers) {
+    for (final BatchByteArrayMessageReceiver receiver : receivers) {
       receiver.messagesReceived(messages);
     }
   }

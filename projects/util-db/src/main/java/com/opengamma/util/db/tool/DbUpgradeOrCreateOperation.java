@@ -21,7 +21,7 @@ import com.opengamma.util.db.script.DbScript;
  */
 public class DbUpgradeOrCreateOperation extends AbstractDbScriptOperation<DbToolContext> {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(DbUpgradeOrCreateOperation.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(DbUpgradeOrCreateOperation.class);
 
   private boolean _upgradeRequired;
 
@@ -61,26 +61,26 @@ public class DbUpgradeOrCreateOperation extends AbstractDbScriptOperation<DbTool
         Integer currentVersion = getCurrentGroupVersion(schema);
         if (currentVersion == null) {
           //craete
-          s_logger.info("Processing schema " + schema);
+          LOGGER.info("Processing schema " + schema);
           DbScript script = getCreationScript(schema);
-          s_logger.debug("Using script: " + script);
+          LOGGER.debug("Using script: " + script);
           writer.write(schema, script);
         } else {
           //update
           List<DbScript> scripts = getMigrationScripts(schema);
           if (scripts == null) {
-            s_logger.info(schema + " does not support migration");
+            LOGGER.info(schema + " does not support migration");
             continue;
           }
           if (scripts.isEmpty()) {
-            s_logger.info(schema + " already at latest version");
+            LOGGER.info(schema + " already at latest version");
             continue;
           }
           upgradeRequired = true;
-          s_logger.info(schema + " is behind by " + scripts.size() + " versions");
+          LOGGER.info(schema + " is behind by " + scripts.size() + " versions");
           for (int i = 0; i < scripts.size(); i++) {
             DbScript script = scripts.get(i);
-            s_logger.debug("Using schema migration file: " + script);
+            LOGGER.debug("Using schema migration file: " + script);
             writer.write(schema + " - " + (i + 1) + " of " + scripts.size(), script);
           }
         }
@@ -92,7 +92,7 @@ public class DbUpgradeOrCreateOperation extends AbstractDbScriptOperation<DbTool
       try {
         writer.close();
       } catch (IOException e) {
-        s_logger.error("Error closing SQL script writer", e);
+        LOGGER.error("Error closing SQL script writer", e);
       }
     }
   }

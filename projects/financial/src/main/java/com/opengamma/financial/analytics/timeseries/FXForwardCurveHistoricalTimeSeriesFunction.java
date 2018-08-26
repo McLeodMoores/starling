@@ -42,7 +42,7 @@ import com.opengamma.util.time.Tenor;
  */
 public class FXForwardCurveHistoricalTimeSeriesFunction extends AbstractFunction.NonCompiledInvoker {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(FXForwardCurveHistoricalTimeSeriesFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(FXForwardCurveHistoricalTimeSeriesFunction.class);
 
   private static String parseString(final String str) {
     if (str.length() == 0) {
@@ -71,24 +71,24 @@ public class FXForwardCurveHistoricalTimeSeriesFunction extends AbstractFunction
       final HistoricalTimeSeries timeSeries = timeSeriesSource.getHistoricalTimeSeries(dataField, id, resolutionKey, startDate, includeStart, endDate, includeEnd);
       if (timeSeries != null) {
         if (timeSeries.getTimeSeries().isEmpty()) {
-          s_logger.warn("Time series for {} is empty", id);
+          LOGGER.warn("Time series for {} is empty", id);
         } else {
           bundle.add(dataField, id, timeSeries);
         }
       } else {
-        s_logger.warn("Couldn't get time series for {}", id);
+        LOGGER.warn("Couldn't get time series for {}", id);
       }
     }
     final ExternalIdBundle id = ExternalIdBundle.of(curveInstrumentProvider.getSpotInstrument());
     final HistoricalTimeSeries timeSeries = timeSeriesSource.getHistoricalTimeSeries(dataField, id, resolutionKey, startDate, includeStart, endDate, includeEnd);
     if (timeSeries != null) {
       if (timeSeries.getTimeSeries().isEmpty()) {
-        s_logger.warn("Time series for {} is empty", id);
+        LOGGER.warn("Time series for {} is empty", id);
       } else {
         bundle.add(dataField, id, timeSeries);
       }
     } else {
-      s_logger.warn("Couldn't get time series for {}", id);
+      LOGGER.warn("Couldn't get time series for {}", id);
     }
     return Collections.singleton(new ComputedValue(new ValueSpecification(ValueRequirementNames.FX_FORWARD_CURVE_HISTORICAL_TIME_SERIES, target.toSpecification(),
         desiredValue.getConstraints()), bundle));

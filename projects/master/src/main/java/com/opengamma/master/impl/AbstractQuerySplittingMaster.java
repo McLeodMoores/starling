@@ -37,9 +37,9 @@ import com.opengamma.util.async.BlockingOperation;
  */
 public abstract class AbstractQuerySplittingMaster<D extends AbstractDocument, M extends AbstractChangeProvidingMaster<D>> implements AbstractChangeProvidingMaster<D> {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(AbstractQuerySplittingMaster.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(AbstractQuerySplittingMaster.class);
 
-  private static final PoolExecutor s_executor = new PoolExecutor(8, "QuerySplittingMaster");
+  private static final PoolExecutor EXECUTOR = new PoolExecutor(8, "QuerySplittingMaster");
 
   /**
    * The pool executor, if a sub-class does parallel operations.
@@ -63,12 +63,12 @@ public abstract class AbstractQuerySplittingMaster<D extends AbstractDocument, M
    */
   public AbstractQuerySplittingMaster(final M underlying) {
     _underlying = ArgumentChecker.notNull(underlying, "underlying");
-    _executor = s_executor;
+    _executor = EXECUTOR;
   }
 
   public void setPoolExecutor(final PoolExecutor executor) {
     if (executor == null) {
-      _executor = s_executor;
+      _executor = EXECUTOR;
     } else {
       _executor = executor;
     }
@@ -193,20 +193,20 @@ public abstract class AbstractQuerySplittingMaster<D extends AbstractDocument, M
 
       @Override
       public void failure(final Throwable error) {
-        s_logger.error("Caught exception", error);
+        LOGGER.error("Caught exception", error);
       }
 
     });
-    s_logger.debug("Issuing {} parallel queries", requests.size());
+    LOGGER.debug("Issuing {} parallel queries", requests.size());
     long t = System.nanoTime();
     for (final Collection<UniqueId> request : requests) {
       service.execute(new Callable<Map<UniqueId, D>>() {
         @Override
         public Map<UniqueId, D> call() throws Exception {
-          s_logger.debug("Requesting {} records", request.size());
+          LOGGER.debug("Requesting {} records", request.size());
           long t = System.nanoTime();
           final Map<UniqueId, D> result = getUnderlying().get(request);
-          s_logger.info("{} records queried in {}ms", request.size(), (double) (System.nanoTime() - t) / 1e6);
+          LOGGER.info("{} records queried in {}ms", request.size(), (double) (System.nanoTime() - t) / 1e6);
           return result;
         }
       });
@@ -216,7 +216,7 @@ public abstract class AbstractQuerySplittingMaster<D extends AbstractDocument, M
     } catch (InterruptedException e) {
       throw new OpenGammaRuntimeException("Interrupted", e);
     }
-    s_logger.info("Finished queries for {} records in {}ms", mergedResult.size(), (double) (System.nanoTime() - t) / 1e6);
+    LOGGER.info("Finished queries for {} records in {}ms", mergedResult.size(), (double) (System.nanoTime() - t) / 1e6);
     return mergedResult;
   }
 

@@ -68,7 +68,7 @@ import com.opengamma.util.fudgemsg.OpenGammaFudgeContext;
  */
 public class JodaBeanRowParser extends RowParser {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(JodaBeanRowParser.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(JodaBeanRowParser.class);
 
   /**
    * Security properties to ignore when scanning
@@ -214,7 +214,7 @@ public class JodaBeanRowParser extends RowParser {
         if (underlying != null) {
           securities.add(underlying);
         } else {
-          s_logger.warn("Could not populate underlying security of type " + underlyingClass);
+          LOGGER.warn("Could not populate underlying security of type " + underlyingClass);
         }
       }
       return securities.toArray(new ManageableSecurity[securities.size()]);
@@ -397,7 +397,7 @@ public class JodaBeanRowParser extends RowParser {
                 builder.set(metaProperty.name(),
                     JodaBeanUtils.stringConverter().convertFromString(metaProperty.propertyType(), rawValue));
               } else {
-                s_logger.info("Skipping empty or null value for " + prefix + metaProperty.name());
+                LOGGER.info("Skipping empty or null value for " + prefix + metaProperty.name());
               }
             } else if (List.class.isAssignableFrom(metaProperty.propertyType()) &&
                 isConvertible(JodaBeanUtils.collectionType(metaProperty, metaProperty.propertyType()))) {
@@ -416,7 +416,7 @@ public class JodaBeanRowParser extends RowParser {
       return builder.build();
 
     } catch (final Throwable ex) {
-      s_logger.warn("Not creating a " + clazz.getSimpleName(), ex);
+      LOGGER.warn("Not creating a " + clazz.getSimpleName(), ex);
       return null;
     }
   }
@@ -464,7 +464,7 @@ public class JodaBeanRowParser extends RowParser {
               throw new OpenGammaRuntimeException("Property '" + prefix + metaProperty.name() + "' (" + metaProperty.propertyType() + ") cannot be converted to a string");
             }
           } else {
-            s_logger.info("No matching column found for property " + prefix + metaProperty.name());
+            LOGGER.info("No matching column found for property " + prefix + metaProperty.name());
           }
         }
       }

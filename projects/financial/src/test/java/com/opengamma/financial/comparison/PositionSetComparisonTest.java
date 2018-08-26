@@ -34,7 +34,7 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT)
 public class PositionSetComparisonTest extends AbstractTest {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(PositionSetComparisonTest.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(PositionSetComparisonTest.class);
 
   private Set<Position> createPositionSetA() {
     final Set<Position> set = new HashSet<Position>();
@@ -76,7 +76,7 @@ public class PositionSetComparisonTest extends AbstractTest {
   }
 
   private static void assertACompareB(final PositionSetComparison result) {
-    s_logger.debug("A.B = {}", result);
+    LOGGER.debug("A.B = {}", result);
     // Check the identical positions
     expect(result.getIdentical(), Arrays.asList("A3", "A6"));
     // Check those present in A but not B
@@ -101,7 +101,7 @@ public class PositionSetComparisonTest extends AbstractTest {
     final Set<Position> a = createPositionSetA();
     final PositionSetComparator comparator = new PositionSetComparator(OpenGammaFudgeContext.getInstance());
     final PositionSetComparison result = comparator.compare(a, Collections.<Position>emptySet());
-    s_logger.debug("A.e = {}", result);
+    LOGGER.debug("A.e = {}", result);
     assertFalse(result.isEqual());
     assertTrue(result.getChanged().isEmpty());
     assertEquals(new HashSet<Position>(result.getOnlyInFirst()), a);
@@ -113,7 +113,7 @@ public class PositionSetComparisonTest extends AbstractTest {
     final Set<Position> a = createPositionSetA();
     final PositionSetComparator comparator = new PositionSetComparator(OpenGammaFudgeContext.getInstance());
     final PositionSetComparison result = comparator.compare(a, a);
-    s_logger.debug("A.A = {}", result);
+    LOGGER.debug("A.A = {}", result);
     assertNotNull(result);
     assertTrue(result.isEqual());
     assertTrue(result.getChanged().isEmpty());
@@ -127,7 +127,7 @@ public class PositionSetComparisonTest extends AbstractTest {
     final Set<Position> a2 = createPositionSetA();
     final PositionSetComparator comparator = new PositionSetComparator(OpenGammaFudgeContext.getInstance());
     final PositionSetComparison result = comparator.compare(a1, a2);
-    s_logger.debug("A.A' = {}", result);
+    LOGGER.debug("A.A' = {}", result);
     assertNotNull(result);
     assertTrue(result.isEqual());
     assertTrue(result.getChanged().isEmpty());
@@ -139,7 +139,7 @@ public class PositionSetComparisonTest extends AbstractTest {
   public void testEqualsEmpty() {
     final PositionSetComparator comparator = new PositionSetComparator(OpenGammaFudgeContext.getInstance());
     final PositionSetComparison result = comparator.compare(Collections.<Position>emptySet(), Collections.<Position>emptySet());
-    s_logger.debug("e.e = {}", result);
+    LOGGER.debug("e.e = {}", result);
     assertNotNull(result);
     assertTrue(result.isEqual());
     assertTrue(result.getChanged().isEmpty());

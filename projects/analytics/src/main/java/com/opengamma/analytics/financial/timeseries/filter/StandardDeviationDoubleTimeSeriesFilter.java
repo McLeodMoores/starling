@@ -22,7 +22,7 @@ import com.opengamma.util.ArgumentChecker;
 public class StandardDeviationDoubleTimeSeriesFilter extends TimeSeriesFilter {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(StandardDeviationDoubleTimeSeriesFilter.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(StandardDeviationDoubleTimeSeriesFilter.class);
   private static final LocalDateDoubleTimeSeries EMPTY_SERIES = ImmutableLocalDateDoubleTimeSeries.EMPTY_SERIES;
 
   private final DoubleTimeSeriesStatisticsCalculator _meanCalculator = new DoubleTimeSeriesStatisticsCalculator(new MeanCalculator());
@@ -36,7 +36,7 @@ public class StandardDeviationDoubleTimeSeriesFilter extends TimeSeriesFilter {
    */
   public StandardDeviationDoubleTimeSeriesFilter(final double standardDeviations) {
     if (standardDeviations < 0) {
-      s_logger.info("Standard deviation was negative; using absolute value");
+      LOGGER.info("Standard deviation was negative; using absolute value");
     }
     _standardDeviations = Math.abs(standardDeviations);
   }
@@ -44,7 +44,7 @@ public class StandardDeviationDoubleTimeSeriesFilter extends TimeSeriesFilter {
   //-------------------------------------------------------------------------
   public void setStandardDeviations(final double standardDeviations) {
     if (standardDeviations < 0) {
-      s_logger.info("Standard deviation was negative; using absolute value");
+      LOGGER.info("Standard deviation was negative; using absolute value");
     }
     _standardDeviations = Math.abs(standardDeviations);
   }
@@ -54,7 +54,7 @@ public class StandardDeviationDoubleTimeSeriesFilter extends TimeSeriesFilter {
   public FilteredTimeSeries evaluate(final LocalDateDoubleTimeSeries ts) {
     ArgumentChecker.notNull(ts, "ts");
     if (ts.isEmpty()) {
-      s_logger.info("Time series was empty");
+      LOGGER.info("Time series was empty");
       return new FilteredTimeSeries(EMPTY_SERIES, EMPTY_SERIES);
     }
     final double mean = _meanCalculator.evaluate(ts);

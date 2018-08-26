@@ -77,7 +77,7 @@ import com.opengamma.scripts.Scriptable;
 public class EngineDebugger extends AbstractTool<IntegrationToolContext> {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(EngineDebugger.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(EngineDebugger.class);
 
   private static final String DEFAULT_VALUE_REQUIREMENT = "Present Value";
 
@@ -276,7 +276,7 @@ public class EngineDebugger extends AbstractTool<IntegrationToolContext> {
               JOptionPane.showMessageDialog(null, "Thread interrupted while getting graph trace", "Thread Interrupted", JOptionPane.ERROR_MESSAGE);
             } catch (final ExecutionException ex) {
               JOptionPane.showMessageDialog(null, "Execution execption while getting graph trace", "Execution Exception", JOptionPane.ERROR_MESSAGE);
-              s_logger.error("Execution exception while getting graph trace", ex);
+              LOGGER.error("Execution exception while getting graph trace", ex);
             }
           }
 

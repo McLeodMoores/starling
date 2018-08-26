@@ -27,7 +27,7 @@ import com.opengamma.util.ArgumentChecker;
 
   // TODO: Note that this might not be correct with regard to the Java Memory Model. 
 
-  private static final ComputationTargetTypeMap<Integer> s_priority;
+  private static final ComputationTargetTypeMap<Integer> PRIORITY;
 
   private final int _maxUnsorted;
   private ContextRunnable[] _buffer;
@@ -37,13 +37,13 @@ import com.opengamma.util.ArgumentChecker;
   private final Object _sortingLock = new Object();
 
   static {
-    s_priority = new ComputationTargetTypeMap<Integer>();
-    s_priority.put(ComputationTargetType.PORTFOLIO_NODE, 1);
-    s_priority.put(ComputationTargetType.NULL, 2);
-    s_priority.put(ComputationTargetType.ANYTHING, 3);
-    s_priority.put(ComputationTargetType.SECURITY, 4);
-    s_priority.put(ComputationTargetType.TRADE, 5);
-    s_priority.put(ComputationTargetType.POSITION, 6);
+    PRIORITY = new ComputationTargetTypeMap<Integer>();
+    PRIORITY.put(ComputationTargetType.PORTFOLIO_NODE, 1);
+    PRIORITY.put(ComputationTargetType.NULL, 2);
+    PRIORITY.put(ComputationTargetType.ANYTHING, 3);
+    PRIORITY.put(ComputationTargetType.SECURITY, 4);
+    PRIORITY.put(ComputationTargetType.TRADE, 5);
+    PRIORITY.put(ComputationTargetType.POSITION, 6);
   }
 
   public OrderedRunQueue(final int initialBuffer, final int maxUnsorted) {
@@ -199,8 +199,8 @@ import com.opengamma.util.ArgumentChecker;
         final ResolveTask rt2 = (ResolveTask) r2;
         final ComputationTargetReference ctr1 = rt1.getValueRequirement().getTargetReference();
         final ComputationTargetReference ctr2 = rt2.getValueRequirement().getTargetReference();
-        final Integer p1 = s_priority.get(ctr1.getType());
-        final Integer p2 = s_priority.get(ctr2.getType());
+        final Integer p1 = PRIORITY.get(ctr1.getType());
+        final Integer p2 = PRIORITY.get(ctr2.getType());
         if (p1.intValue() < p2.intValue()) {
           return 1;
         } else if (p1.intValue() > p2.intValue()) {

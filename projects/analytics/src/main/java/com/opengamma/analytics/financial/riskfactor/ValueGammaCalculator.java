@@ -22,16 +22,16 @@ import com.opengamma.util.ArgumentChecker;
  */
 public final class ValueGammaCalculator implements ValueGreekCalculator {
   /** Static instance */
-  private static final ValueGammaCalculator s_instance = new ValueGammaCalculator();
+  private static final ValueGammaCalculator INSTANCE = new ValueGammaCalculator();
   /** Calculates the multiplier for converting delta to value delta */
-  private static final MultiplierCalculator s_multiplierCalculator = new MultiplierCalculator();
+  private static final MultiplierCalculator MULTIPLIER_CALCULATOR = new MultiplierCalculator();
 
   /**
    * Gets an instance of this calculator
    * @return The (singleton) instance
    */
   public static ValueGammaCalculator getInstance() {
-    return s_instance;
+    return INSTANCE;
   }
 
   private ValueGammaCalculator() {
@@ -41,7 +41,7 @@ public final class ValueGammaCalculator implements ValueGreekCalculator {
   public double valueGreek(final InstrumentDerivative derivative, final StaticReplicationDataBundle market, final double gamma) {
     ArgumentChecker.notNull(derivative, "derivative");
     ArgumentChecker.notNull(market, "market");
-    return gamma * derivative.accept(s_multiplierCalculator, market);
+    return gamma * derivative.accept(MULTIPLIER_CALCULATOR, market);
   }
 
   /**

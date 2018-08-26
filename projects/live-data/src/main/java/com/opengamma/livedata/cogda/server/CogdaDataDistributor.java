@@ -50,7 +50,7 @@ import com.opengamma.util.metric.MetricProducer;
  * sufficient.
  */
 public abstract class CogdaDataDistributor implements Lifecycle, MetricProducer {
-  private static final Logger s_logger = LoggerFactory.getLogger(CogdaDataDistributor.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(CogdaDataDistributor.class);
   // Constructor injectors:
   private final String _externalIdScheme;
   private final LastKnownValueStoreProvider _lastKnownValueStoreProvider;
@@ -179,7 +179,7 @@ public abstract class CogdaDataDistributor implements Lifecycle, MetricProducer 
     LastKnownValueStore lkvStore = _lastKnownValueStoreProvider.newInstance(id, normalizationScheme);
     LiveDataSpecification ldspec = new LiveDataSpecification(normalizationScheme, id);
     if (_valueStores.putIfAbsent(ldspec, lkvStore) == null) {
-      s_logger.debug("Created new LKV store and history state for {}", ldspec);
+      LOGGER.debug("Created new LKV store and history state for {}", ldspec);
       // We actually did the creation. Also create the field history map.
       FieldHistoryStore historyStore = new FieldHistoryStore(lkvStore.getFields());
       _normalizationState.put(ldspec, historyStore);

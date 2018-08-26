@@ -26,7 +26,7 @@ import de.odysseus.el.util.SimpleResolver;
  */
 /* package */class ELExpression extends UserExpression {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(ELExpression.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ELExpression.class);
 
   private final ELExpressionParser _parser;
   private final ValueExpression _expr;
@@ -157,9 +157,9 @@ import de.odysseus.el.util.SimpleResolver;
     try {
       return getExpr().getValue((ELContext) getContext(evaluator));
     } catch (PropertyNotFoundException e) {
-      s_logger.debug("Property not found - {}", e.getMessage());
+      LOGGER.debug("Property not found - {}", e.getMessage());
     } catch (ELException e) {
-      s_logger.warn("EL exception", e);
+      LOGGER.warn("EL exception", e);
     }
     return NA;
   }

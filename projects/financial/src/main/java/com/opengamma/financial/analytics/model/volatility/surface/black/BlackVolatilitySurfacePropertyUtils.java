@@ -54,7 +54,7 @@ import com.opengamma.id.ExternalId;
  *
  */
 public class BlackVolatilitySurfacePropertyUtils {
-  private static final Logger s_logger = LoggerFactory.getLogger(BlackVolatilitySurfacePropertyUtils.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(BlackVolatilitySurfacePropertyUtils.class);
 
   static boolean useLogTime(final String property) {
     if (property.equals(LOG_TIME)) {
@@ -365,7 +365,7 @@ public class BlackVolatilitySurfacePropertyUtils {
     }
     final String interpolationMethod = desiredValue.getConstraint(PROPERTY_SMILE_INTERPOLATOR);
     if (interpolationMethod == null) {
-      s_logger.error("No value set for interpolation method");
+      LOGGER.error("No value set for interpolation method");
       return null;
     }
     ValueProperties interpolationProperties = addBlackSurfaceProperties(additionalConstraints, instrumentType).get();
@@ -376,7 +376,7 @@ public class BlackVolatilitySurfacePropertyUtils {
     } else if (interpolationMethod.equals(MIXED_LOG_NORMAL)) {
       interpolationProperties = addMixedLogNormalVolatilityInterpolatorProperties(interpolationProperties).get();
     } else {
-      s_logger.error("Could not handle interpolation method {}", interpolationMethod);
+      LOGGER.error("Could not handle interpolation method {}", interpolationMethod);
       return null;
     }
     final ValueProperties.Builder allProperties = interpolationProperties.copy()

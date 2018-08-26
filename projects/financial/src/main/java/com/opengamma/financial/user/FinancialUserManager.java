@@ -24,7 +24,7 @@ import org.threeten.bp.Instant;
 public class FinancialUserManager {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(FinancialUserManager.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(FinancialUserManager.class);
   /**
    * The map of users.
    */
@@ -123,10 +123,10 @@ public class FinancialUserManager {
     final Iterator<Map.Entry<String, FinancialUser>> userIterator = _userMap.entrySet().iterator();
     while (userIterator.hasNext()) {
       final Map.Entry<String, FinancialUser> userEntry = userIterator.next();
-      s_logger.debug("deleting clients for user {}", userEntry.getKey());
+      LOGGER.debug("deleting clients for user {}", userEntry.getKey());
       int activeClients = userEntry.getValue().getClientManager().deleteClients(timestamp);
       if (activeClients == 0) {
-        s_logger.debug("deleting user {}", userEntry.getKey());
+        LOGGER.debug("deleting user {}", userEntry.getKey());
         userIterator.remove();
         getClientTracker().userDiscarded(userEntry.getKey());
       }

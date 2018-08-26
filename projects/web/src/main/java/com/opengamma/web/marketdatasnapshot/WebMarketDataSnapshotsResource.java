@@ -91,7 +91,7 @@ import com.opengamma.web.analytics.rest.SubscribeMaster;
 public class WebMarketDataSnapshotsResource extends AbstractWebMarketDataSnapshotResource {
   
   private static final String CUSTOM_DATE_SUFFIX = "_CustomDate";
-  private static final Logger s_logger = LoggerFactory.getLogger(WebMarketDataSnapshotsResource.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(WebMarketDataSnapshotsResource.class);
   /** Time format: HH:mm:ss */
   private static final DateTimeFormatter VALUATION_TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm:ss");
   private static final DateTimeFormatter HISORICAL_SNAPSHOT_DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -262,7 +262,7 @@ public class WebMarketDataSnapshotsResource extends AbstractWebMarketDataSnapsho
         final LocalTime time = LocalTime.parse(valuationTime, VALUATION_TIME_FORMATTER);
         valuationInstant = ZonedDateTime.now().with(time.truncatedTo(SECONDS)).toInstant();
       } catch (Exception ex) {
-        s_logger.warn("Invalid valuation time {}", valuationTime);
+        LOGGER.warn("Invalid valuation time {}", valuationTime);
       }
     } else {
       valuationInstant = Instant.now();
@@ -300,7 +300,7 @@ public class WebMarketDataSnapshotsResource extends AbstractWebMarketDataSnapsho
     try {
       snapshot = createSnapshot(name, view, valuationInstant, marketDataSpecs);
     } catch (Exception ex) {
-      s_logger.error("Unable to create market data snapshot");
+      LOGGER.error("Unable to create market data snapshot");
       throw new OpenGammaRuntimeException("Unable to create market data snapshot");
     }
     URI uri = data().getUriInfo().getAbsolutePathBuilder().path(snapshot.getUniqueId().toLatest().toString()).build();
@@ -345,7 +345,7 @@ public class WebMarketDataSnapshotsResource extends AbstractWebMarketDataSnapsho
         try {
           marketDataSpecs.add(UserMarketDataSpecification.of(UniqueId.parse(userSnapshotId)));
         } catch (IllegalArgumentException ex) {
-          s_logger.warn("Illegal format in snapshot {}, ignorning... ", userSnapshotId);
+          LOGGER.warn("Illegal format in snapshot {}, ignorning... ", userSnapshotId);
         }
       }
     }

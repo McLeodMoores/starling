@@ -40,7 +40,7 @@ import com.opengamma.timeseries.DoubleTimeSeriesOperators.UnaryOperator;
  */
 public abstract class AbstractHistoricalTimeSeriesShiftFunction<T> extends AbstractFunction.NonCompiledInvoker {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(AbstractHistoricalTimeSeriesShiftFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(AbstractHistoricalTimeSeriesShiftFunction.class);
 
   /**
    * Property to shift a time series.
@@ -89,7 +89,7 @@ public abstract class AbstractHistoricalTimeSeriesShiftFunction<T> extends Abstr
   protected HistoricalTimeSeries applyOverride(final FunctionExecutionContext context, final OverrideOperation operation, final String field, final ExternalIdBundle identifiers,
       final HistoricalTimeSeries value) {
     final ValueRequirement requirement = createRequirement(context, field, identifiers);
-    s_logger.debug("Synthetic requirement {} on {}", requirement, value);
+    LOGGER.debug("Synthetic requirement {} on {}", requirement, value);
     return new SimpleHistoricalTimeSeries(value.getUniqueId(), value.getTimeSeries().operate(new UnaryOperator() {
       @Override
       public double operate(final double a) {
@@ -100,7 +100,7 @@ public abstract class AbstractHistoricalTimeSeriesShiftFunction<T> extends Abstr
 
   protected Double applyOverride(final FunctionExecutionContext context, final OverrideOperation operation, final String field, final ExternalIdBundle identifiers, final Double value) {
     final ValueRequirement requirement = createRequirement(context, field, identifiers);
-    s_logger.debug("Synthetic requirement {} on {}", requirement, value);
+    LOGGER.debug("Synthetic requirement {} on {}", requirement, value);
     return (Double) operation.apply(requirement, value);
   }
 
@@ -126,9 +126,9 @@ public abstract class AbstractHistoricalTimeSeriesShiftFunction<T> extends Abstr
     if (compiler == null) {
       throw new IllegalStateException("No override operation compiler for " + shift + " in execution context");
     }
-    s_logger.debug("Applying {} to yield curve {}", shift, inputValue);
+    LOGGER.debug("Applying {} to yield curve {}", shift, inputValue);
     final T result = apply(executionContext, compiler.compile(shift, executionContext.getComputationTargetResolver()), inputValue, input.getSpecification());
-    s_logger.debug("Got result {}", result);
+    LOGGER.debug("Got result {}", result);
     return Collections.singleton(new ComputedValue(new ValueSpecification(desiredValue.getValueName(), target.toSpecification(), desiredValue.getConstraints()), result));
   }
 

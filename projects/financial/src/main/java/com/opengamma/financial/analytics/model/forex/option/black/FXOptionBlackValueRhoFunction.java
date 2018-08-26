@@ -51,7 +51,7 @@ import com.opengamma.util.tuple.DoublesPair;
 @Deprecated
 public class FXOptionBlackValueRhoFunction extends AbstractFunction.NonCompiledInvoker {
   /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(FXOptionBlackValueRhoFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(FXOptionBlackValueRhoFunction.class);
 
   @Override
   public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target,
@@ -163,7 +163,7 @@ public class FXOptionBlackValueRhoFunction extends AbstractFunction.NonCompiledI
     final Currency callCurrency = security.accept(ForexVisitors.getCallCurrencyVisitor());
     final CurrencyPair baseQuotePair = baseQuotePairs.getCurrencyPair(putCurrency, callCurrency);
     if (baseQuotePair == null) {
-      s_logger.error("Could not get base/quote pair for currency pair (" + putCurrency + ", " + callCurrency + ")");
+      LOGGER.error("Could not get base/quote pair for currency pair (" + putCurrency + ", " + callCurrency + ")");
       return null;
     }
     final String resultCurrency = getResultCurrency(target, baseQuotePair);

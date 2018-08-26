@@ -81,8 +81,8 @@ public class SwaptionPhysicalFixedIborSABRMethodE2ETest {
   private static final double FIXED_RATE_3M = 0.0350;
   private static final GeneratorAttributeIR ATTRIBUTE_3M = new GeneratorAttributeIR(TENOR_SWAP_3M);
   private static final SwapFixedIborDefinition SWAP_PAYER_DEFINITION = USD6MLIBOR3M.generateInstrument(EXPIRY_DATE, FIXED_RATE_3M, NOTIONAL, ATTRIBUTE_3M);
-  private static final SwaptionPhysicalFixedIborDefinition SWAPTION_P_2Yx7Y_DEFINITION = SwaptionPhysicalFixedIborDefinition.from(EXPIRY_DATE, SWAP_PAYER_DEFINITION, true, true);
-  private static final SwaptionPhysicalFixedIbor SWAPTION_P_2Yx7Y = SWAPTION_P_2Yx7Y_DEFINITION.toDerivative(REFERENCE_DATE);
+  private static final SwaptionPhysicalFixedIborDefinition SWAPTION_P_2YX7Y_DEFINITION = SwaptionPhysicalFixedIborDefinition.from(EXPIRY_DATE, SWAP_PAYER_DEFINITION, true, true);
+  private static final SwaptionPhysicalFixedIbor SWAPTION_P_2YX7Y = SWAPTION_P_2YX7Y_DEFINITION.toDerivative(REFERENCE_DATE);
 
   private static final SwaptionPhysicalFixedIborSABRMethod METHOD_SWPT_SABR = SwaptionPhysicalFixedIborSABRMethod.getInstance();
   private static final PresentValueSABRSwaptionCalculator PVSSC = PresentValueSABRSwaptionCalculator.getInstance();
@@ -99,7 +99,7 @@ public class SwaptionPhysicalFixedIborSABRMethodE2ETest {
   private static final double BP1 = 1.0E-4;
 
   public void presentValue() {
-    final MultipleCurrencyAmount pvComputed = SWAPTION_P_2Yx7Y.accept(PVSSC, MULTICURVE_SABR);
+    final MultipleCurrencyAmount pvComputed = SWAPTION_P_2YX7Y.accept(PVSSC, MULTICURVE_SABR);
     final MultipleCurrencyAmount pvExpected = MultipleCurrencyAmount.of(USD, 3156216.4895777884);
     //    final double pr = SWAPTION_P_2Yx7Y.getUnderlyingSwap().accept(PRDC, MULTICURVE);
     assertEquals("SwaptionPhysicalFixedIborSABRMethod: present value from standard curves", pvExpected.getAmount(USD), pvComputed.getAmount(USD), TOLERANCE_PV);
@@ -107,7 +107,7 @@ public class SwaptionPhysicalFixedIborSABRMethodE2ETest {
 
   public void impliedVolatility() {
     final double volExpected = 0.29809226250599946;
-    final double volComputed = METHOD_SWPT_SABR.impliedVolatility(SWAPTION_P_2Yx7Y, MULTICURVE_SABR);
+    final double volComputed = METHOD_SWPT_SABR.impliedVolatility(SWAPTION_P_2YX7Y, MULTICURVE_SABR);
     assertEquals("SwaptionPhysicalFixedIborSABRMethod: present value from standard curves", volExpected, volComputed, TOLERANCE_RATE);
   }
 
@@ -117,7 +117,7 @@ public class SwaptionPhysicalFixedIborSABRMethodE2ETest {
   public void pv01() {
     final double pv01dsc = -2253.115361063714;
     final double pv01fwd = 32885.97222733803;
-    final ReferenceAmount<Pair<String, Currency>> pv01Computed = SWAPTION_P_2Yx7Y.accept(PV01C, MULTICURVE_SABR);
+    final ReferenceAmount<Pair<String, Currency>> pv01Computed = SWAPTION_P_2YX7Y.accept(PV01C, MULTICURVE_SABR);
     assertEquals("SwaptionPhysicalFixedIborSABRMethod: pv01 from standard curves", pv01dsc, pv01Computed.getMap().get(Pairs.of(MULTICURVE.getName(USD), USD)), TOLERANCE_RATE);
     assertEquals("SwaptionPhysicalFixedIborSABRMethod: pv01 from standard curves", pv01fwd, pv01Computed.getMap().get(Pairs.of(MULTICURVE.getName(USDLIBOR3M), USD)), TOLERANCE_RATE);
   }
@@ -135,12 +135,12 @@ public class SwaptionPhysicalFixedIborSABRMethodE2ETest {
     sensitivity.put(ObjectsPair.of(MULTICURVE.getName(USD), USD), new DoubleMatrix1D(deltaDsc));
     sensitivity.put(ObjectsPair.of(MULTICURVE.getName(USDLIBOR3M), USD), new DoubleMatrix1D(deltaFwd3));
     final MultipleCurrencyParameterSensitivity pvpsExpected = new MultipleCurrencyParameterSensitivity(sensitivity);
-    final MultipleCurrencyParameterSensitivity pvpsComputed = MQSBC.fromInstrument(SWAPTION_P_2Yx7Y, MULTICURVE_SABR, BLOCK).multipliedBy(BP1);
+    final MultipleCurrencyParameterSensitivity pvpsComputed = MQSBC.fromInstrument(SWAPTION_P_2YX7Y, MULTICURVE_SABR, BLOCK).multipliedBy(BP1);
     AssertSensitivityObjects.assertEquals("SwaptionPhysicalFixedIborSABRMethod: bucketed deltas from standard curves", pvpsExpected, pvpsComputed, TOLERANCE_PV_DELTA);
   }
 
   public void BucketedSABRRisk() {
-    final PresentValueSABRSensitivityDataBundle pvssComputed = SWAPTION_P_2Yx7Y.accept(PVSSSSC, MULTICURVE_SABR);
+    final PresentValueSABRSensitivityDataBundle pvssComputed = SWAPTION_P_2YX7Y.accept(PVSSSSC, MULTICURVE_SABR);
     final PresentValueSABRSensitivityDataBundle pvssNodeComputed = SABRSensitivityNodeCalculator.calculateNodeSensitivities(pvssComputed, SABR_PARAMETER);
     Map<DoublesPair, Double> alphaRiskExpected = new HashMap<>();
     alphaRiskExpected.put(DoublesPair.of(1.0, 5.0), 6204.475194599176);

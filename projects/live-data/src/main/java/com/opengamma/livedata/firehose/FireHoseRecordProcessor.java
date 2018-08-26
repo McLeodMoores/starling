@@ -23,7 +23,7 @@ import com.opengamma.util.ArgumentChecker;
  * @param <TRecord> The type of the actual record that will be processed.
  */
 public class FireHoseRecordProcessor<TRecord> implements Lifecycle {
-  private static final Logger s_logger = LoggerFactory.getLogger(FireHoseRecordProcessor.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(FireHoseRecordProcessor.class);
 
   /**
    * The non-blocking size of the internal queue.
@@ -99,7 +99,7 @@ public class FireHoseRecordProcessor<TRecord> implements Lifecycle {
       _recordConsumptionThread.join(10000L);
     } catch (InterruptedException e) {
       Thread.interrupted();
-      s_logger.warn("Interrupted while killing record consumption thread", e);
+      LOGGER.warn("Interrupted while killing record consumption thread", e);
     }
     _recordConsumptionThread = null;
     try {
@@ -107,7 +107,7 @@ public class FireHoseRecordProcessor<TRecord> implements Lifecycle {
       _recordDispatchThread.join(10000L);
     } catch (InterruptedException e) {
       Thread.interrupted();
-      s_logger.warn("Interrupted while killing record processing/dispatch thread", e);
+      LOGGER.warn("Interrupted while killing record processing/dispatch thread", e);
     }
     _recordDispatchThread = null;
   }

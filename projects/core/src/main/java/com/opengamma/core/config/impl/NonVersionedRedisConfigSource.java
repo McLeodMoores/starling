@@ -63,7 +63,7 @@ import com.opengamma.util.fudgemsg.OpenGammaFudgeContext;
  * backing store.
  */
 public class NonVersionedRedisConfigSource implements ConfigSource {
-  private static final Logger s_logger = LoggerFactory.getLogger(NonVersionedRedisConfigSource.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(NonVersionedRedisConfigSource.class);
   private final JedisPool _jedisPool;
   private final FudgeContext _fudgeContext;
   private final String _redisPrefix;
@@ -211,7 +211,7 @@ public class NonVersionedRedisConfigSource implements ConfigSource {
       
       getJedisPool().returnResource(jedis);
     } catch (Exception e) {
-      s_logger.warn("Unable to persist to Redis - " + clazz + " - " + configName, e);
+      LOGGER.warn("Unable to persist to Redis - " + clazz + " - " + configName, e);
       getJedisPool().returnBrokenResource(jedis);
       throw new OpenGammaRuntimeException("Unable to persist to Redis - " + clazz + " - " + configName, e);
     }
@@ -239,7 +239,7 @@ public class NonVersionedRedisConfigSource implements ConfigSource {
       
       getJedisPool().returnResource(jedis);
     } catch (Exception e) {
-      s_logger.warn("Unable to delete from Redis - " + clazz + " - " + configName, e);
+      LOGGER.warn("Unable to delete from Redis - " + clazz + " - " + configName, e);
       getJedisPool().returnBrokenResource(jedis);
       throw new OpenGammaRuntimeException("Unable to persist from Redis - " + clazz + " - " + configName, e);
     }
@@ -289,7 +289,7 @@ public class NonVersionedRedisConfigSource implements ConfigSource {
       
       getJedisPool().returnResource(jedis);
     } catch (Exception e) {
-      s_logger.warn("Unable to lookup from Redis - " + clazz, e);
+      LOGGER.warn("Unable to lookup from Redis - " + clazz, e);
       getJedisPool().returnBrokenResource(jedis);
       throw new OpenGammaRuntimeException("Unable to lookup from Redis - " + clazz, e);
     }
@@ -340,19 +340,19 @@ public class NonVersionedRedisConfigSource implements ConfigSource {
             dataAsBytes = jedis.hget(uniqueIdKey, DATA_NAME_AS_BYTES);
           }
         } else {
-          s_logger.debug("No config named {} for class {}", configName, clazz);
+          LOGGER.debug("No config named {} for class {}", configName, clazz);
         }
       }
       
       getJedisPool().returnResource(jedis);
     } catch (Exception e) {
-      s_logger.warn("Unable to lookup latest by name from Redis - " + clazz + " - " + configName, e);
+      LOGGER.warn("Unable to lookup latest by name from Redis - " + clazz + " - " + configName, e);
       getJedisPool().returnBrokenResource(jedis);
       throw new OpenGammaRuntimeException("Unable to lookup latest by name from Redis - " + clazz + " - " + configName, e);
     }
     
     if (dataAsBytes == null) {
-      s_logger.debug("No data for config named {} for class {}", configName, clazz);
+      LOGGER.debug("No data for config named {} for class {}", configName, clazz);
       return null;
     }
     
@@ -407,7 +407,7 @@ public class NonVersionedRedisConfigSource implements ConfigSource {
       className = new String(jedis.hget(uniqueIdKey, CLASS_NAME_AS_BYTES), Charsets.UTF_8);
       getJedisPool().returnResource(jedis);
     } catch (Exception e) {
-      s_logger.warn("Unable to lookup by unique id - " + uniqueId, e);
+      LOGGER.warn("Unable to lookup by unique id - " + uniqueId, e);
       getJedisPool().returnBrokenResource(jedis);
       throw new OpenGammaRuntimeException("Unable to lookup by unique id - " + uniqueId, e);
     }
@@ -420,7 +420,7 @@ public class NonVersionedRedisConfigSource implements ConfigSource {
     try {
       clazz = Class.forName(className);
     } catch (ClassNotFoundException ex) {
-      s_logger.warn("Found config item of type {} which we can't load.", className);
+      LOGGER.warn("Found config item of type {} which we can't load.", className);
       return null;
     }
     

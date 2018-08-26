@@ -28,7 +28,7 @@ import com.opengamma.util.ArgumentChecker;
 public class DefaultFinancialUsersTracker implements FinancialUserDataTracker, FinancialClientTracker {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(DefaultFinancialUsersTracker.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(DefaultFinancialUsersTracker.class);
 
   private final ConcurrentMap<String, Set<String>> _username2clients = new ConcurrentHashMap<String, Set<String>>();
   private final ConcurrentMap<ExternalId, Set<ObjectId>> _viewDefinitionIds = new ConcurrentHashMap<ExternalId, Set<ObjectId>>();
@@ -65,10 +65,10 @@ public class DefaultFinancialUsersTracker implements FinancialUserDataTracker, F
     Set<String> clients = _username2clients.get(userName);
     if (clients != null) {
       if (clients.contains(clientName)) {
-        s_logger.debug("{} created by {}", identifier, userName);
+        LOGGER.debug("{} created by {}", identifier, userName);
       }
     } else {
-      s_logger.debug("Late creation of {} by {}", identifier, userName);
+      LOGGER.debug("Late creation of {} by {}", identifier, userName);
     }
   }
 
@@ -79,7 +79,7 @@ public class DefaultFinancialUsersTracker implements FinancialUserDataTracker, F
       marketDataSnapshotIds = freshIds;
     }
     marketDataSnapshotIds.add(identifier);
-    s_logger.debug("{} marketdatasnapshot created by {}", identifier, userName);
+    LOGGER.debug("{} marketdatasnapshot created by {}", identifier, userName);
   }
 
   private void trackCreatedViewDefinition(String userName, String clientName, ObjectId identifier) {
@@ -89,7 +89,7 @@ public class DefaultFinancialUsersTracker implements FinancialUserDataTracker, F
       viewDefinitions = freshDefinitions;
     }
     viewDefinitions.add(identifier);
-    s_logger.debug("{} view created by {}", identifier, userName);
+    LOGGER.debug("{} view created by {}", identifier, userName);
   }
 
   @Override
@@ -97,32 +97,32 @@ public class DefaultFinancialUsersTracker implements FinancialUserDataTracker, F
     Set<String> clients = _username2clients.get(userName);
     if (clients != null) {
       if (clients.contains(clientName)) {
-        s_logger.debug("{} deleted by {}", identifier, userName);
+        LOGGER.debug("{} deleted by {}", identifier, userName);
         return;
       }
     }
-    s_logger.debug("Late deletion of {} by {}", identifier, userName);
+    LOGGER.debug("Late deletion of {} by {}", identifier, userName);
   }
 
   @Override
   public void clientCreated(String userName, String clientName) {
     Set<String> clients = _username2clients.get(userName);
     if (clients == null) {
-      s_logger.debug("Late client construction for discarded user {}", userName);
+      LOGGER.debug("Late client construction for discarded user {}", userName);
       return;
     }
     clients.add(clientName);
-    s_logger.debug("Client {} created for user {}", clientName, userName);
+    LOGGER.debug("Client {} created for user {}", clientName, userName);
   }
 
   @Override
   public void clientDiscarded(String userName, String clientName) {
     Set<String> clients = _username2clients.get(userName);
     if (clients == null) {
-      s_logger.debug("Late client discard for discarded user {}", userName);
+      LOGGER.debug("Late client discard for discarded user {}", userName);
     } else {
       clients.remove(clientName);
-      s_logger.debug("Client {} discarded for user {}", clientName, userName);
+      LOGGER.debug("Client {} discarded for user {}", clientName, userName);
     }
     removeUserViewDefinitions(userName, clientName);
     removeUserMarketDataSnapshot(userName, clientName);
@@ -134,7 +134,7 @@ public class DefaultFinancialUsersTracker implements FinancialUserDataTracker, F
       Set<ObjectId> snapshotIds = _marketDataSnapShots.remove(ExternalId.of(userName, clientName));
       for (ObjectId oid : snapshotIds) {
         marketDataSnapshotMaster.remove(oid);
-        s_logger.debug("market data snapshot {} discarded for {}/{}", new Object[]{oid, userName, clientName});
+        LOGGER.debug("market data snapshot {} discarded for {}/{}", new Object[]{oid, userName, clientName});
       }
     }
   }
@@ -150,7 +150,7 @@ public class DefaultFinancialUsersTracker implements FinancialUserDataTracker, F
           Set<ObjectId> oids = entry.getValue();
           for (ObjectId oid : oids) {
             marketDataSnapshotMaster.remove(oid);
-            s_logger.debug("market data snapshot {} discarded for {}/{}", new Object[]{oid, userName, identifier.getValue()});
+            LOGGER.debug("market data snapshot {} discarded for {}/{}", new Object[]{oid, userName, identifier.getValue()});
           }
           iterator.remove();
         }
@@ -162,13 +162,13 @@ public class DefaultFinancialUsersTracker implements FinancialUserDataTracker, F
   public void userCreated(String userName) {
     Set<String> clients = Collections.newSetFromMap(new ConcurrentHashMap<String, Boolean>());
     _username2clients.putIfAbsent(userName, clients);
-    s_logger.debug("User {} created", userName);
+    LOGGER.debug("User {} created", userName);
   }
 
   @Override
   public void userDiscarded(String userName) {
     Set<String> removedClients = _username2clients.remove(userName);
-    s_logger.debug("User {} discarded", userName);
+    LOGGER.debug("User {} discarded", userName);
     if (removedClients != null) {
       for (String clientName : removedClients) {
         removeUserViewDefinitions(userName, clientName);
@@ -191,7 +191,7 @@ public class DefaultFinancialUsersTracker implements FinancialUserDataTracker, F
           Set<ObjectId> viewDefinitions = entry.getValue();
           for (ObjectId viewDefinitionId : viewDefinitions) {
             configMaster.remove(viewDefinitionId);
-            s_logger.debug("View definition {} discarded for {}/{}", new Object[]{viewDefinitionId, userName, identifier.getValue()});
+            LOGGER.debug("View definition {} discarded for {}/{}", new Object[]{viewDefinitionId, userName, identifier.getValue()});
           }
           iterator.remove();
         }
@@ -205,7 +205,7 @@ public class DefaultFinancialUsersTracker implements FinancialUserDataTracker, F
       Set<ObjectId> viewDefinitions = _viewDefinitionIds.remove(ExternalId.of(userName, clientName));
       for (ObjectId viewDefinitionId : viewDefinitions) {
         configMaster.remove(viewDefinitionId);
-        s_logger.debug("View definition {} discarded for {}/{}", new Object[]{viewDefinitionId, userName, clientName});
+        LOGGER.debug("View definition {} discarded for {}/{}", new Object[]{viewDefinitionId, userName, clientName});
       }
     }
   }

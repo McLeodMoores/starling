@@ -25,7 +25,7 @@ import com.opengamma.util.time.Tenor;
  */
 public class CapFloorSecurityGenerator extends SecurityGenerator<CapFloorSecurity> {
   
-  private static final Logger s_logger = LoggerFactory.getLogger(CapFloorSecurityGenerator.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(CapFloorSecurityGenerator.class);
 
   private static final DayCount[] DAY_COUNT = new DayCount[] {DayCounts.ACT_360, DayCounts.THIRTY_U_360 };
   private static final Frequency[] FREQUENCY = new Frequency[] {SimpleFrequency.QUARTERLY, SimpleFrequency.SEMI_ANNUAL, SimpleFrequency.ANNUAL };
@@ -78,7 +78,7 @@ public class CapFloorSecurityGenerator extends SecurityGenerator<CapFloorSecurit
         return null;
       }
     } catch (Exception ex) {
-      s_logger.warn("Unable to obtain underlying id for " + currency + " " + startDate.toLocalDate() + " " + tenor, ex);
+      LOGGER.warn("Unable to obtain underlying id for " + currency + " " + startDate.toLocalDate() + " " + tenor, ex);
       return null;
     }
     final double strike = 0.01 + (double) getRandom(6) / 200;

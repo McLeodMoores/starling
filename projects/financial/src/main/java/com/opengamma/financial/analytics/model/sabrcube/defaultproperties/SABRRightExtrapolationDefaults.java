@@ -41,7 +41,7 @@ import com.opengamma.util.money.Currency;
 @Deprecated
 public class SABRRightExtrapolationDefaults extends DefaultPropertyFunction {
   /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(SABRRightExtrapolationDefaults.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(SABRRightExtrapolationDefaults.class);
   /** The value requirements for which these defaults apply */
   private static final String[] VALUE_REQUIREMENTS = new String[] {
     ValueRequirementNames.PRESENT_VALUE,
@@ -156,7 +156,7 @@ public class SABRRightExtrapolationDefaults extends DefaultPropertyFunction {
   protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue, final String propertyName) {
     final String currencyName = FinancialSecurityUtils.getCurrency(target.getSecurity()).getCode();
     if (!_currencyAndConfigNames.containsKey(currencyName)) {
-      s_logger.error("Could not get configs for currency " + currencyName + "; should never happen");
+      LOGGER.error("Could not get configs for currency " + currencyName + "; should never happen");
       return null;
     }
     if (SmileFittingPropertyNamesAndValues.PROPERTY_FITTING_METHOD.equals(propertyName)) {

@@ -26,13 +26,13 @@ import com.opengamma.util.tuple.Pairs;
  */
 public class WriteThroughViewComputationCache implements ViewComputationCache {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(WriteThroughViewComputationCache.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(WriteThroughViewComputationCache.class);
 
   private static final Object NULL = new Object();
 
   private static final Object PENDING = new Object();
 
-  private static final ConcurrentMap<ViewComputationCache, WriteThroughViewComputationCache> s_instances = new MapMaker().weakKeys().weakValues().makeMap();
+  private static final ConcurrentMap<ViewComputationCache, WriteThroughViewComputationCache> INSTANCES = new MapMaker().weakKeys().weakValues().makeMap();
 
   /* package */static final class Pending {
 
@@ -45,7 +45,7 @@ public class WriteThroughViewComputationCache implements ViewComputationCache {
 
     public synchronized Object waitFor() {
       try {
-        s_logger.debug("Waiting for {}", _specification);
+        LOGGER.debug("Waiting for {}", _specification);
         while (_value == null) {
           wait();
         }
@@ -65,7 +65,7 @@ public class WriteThroughViewComputationCache implements ViewComputationCache {
     }
 
     public synchronized void post(final Object value) {
-      s_logger.debug("Posting result for {}", _specification);
+      LOGGER.debug("Posting result for {}", _specification);
       _value = value;
       notifyAll();
     }
@@ -84,12 +84,12 @@ public class WriteThroughViewComputationCache implements ViewComputationCache {
   }
 
   public static WriteThroughViewComputationCache of(final ViewComputationCache underlying) {
-    WriteThroughViewComputationCache cached = s_instances.get(underlying);
+    WriteThroughViewComputationCache cached = INSTANCES.get(underlying);
     if (cached != null) {
       return cached;
     }
     cached = new WriteThroughViewComputationCache(underlying);
-    final WriteThroughViewComputationCache existing = s_instances.putIfAbsent(underlying, cached);
+    final WriteThroughViewComputationCache existing = INSTANCES.putIfAbsent(underlying, cached);
     if (existing == null) {
       return cached;
     } else {
@@ -102,10 +102,10 @@ public class WriteThroughViewComputationCache implements ViewComputationCache {
    * Processor configurations.
    */
   public static void clearAllWriteThroughCaches() {
-    for (WriteThroughViewComputationCache cache : s_instances.values()) {
+    for (WriteThroughViewComputationCache cache : INSTANCES.values()) {
       cache.clear();
     }
-    s_instances.clear();
+    INSTANCES.clear();
   }
 
   public void clear() {
@@ -148,14 +148,14 @@ public class WriteThroughViewComputationCache implements ViewComputationCache {
       }
     }
     if (value == NULL) {
-      //s_logger.debug("Cached NULL for {}", specification);
+      //LOGGER.debug("Cached NULL for {}", specification);
       value = null;
     } else if (value == null) {
-      //s_logger.debug("Cached miss for {}", specification);
+      //LOGGER.debug("Cached miss for {}", specification);
       value = getUnderlying().getValue(specification);
       post(specification, value);
     } else {
-      s_logger.debug("Cache hit for {}", specification);
+      LOGGER.debug("Cache hit for {}", specification);
     }
     return value;
   }
@@ -171,14 +171,14 @@ public class WriteThroughViewComputationCache implements ViewComputationCache {
       }
     }
     if (value == NULL) {
-      //s_logger.debug("Cached NULL for {}", specification);
+      //LOGGER.debug("Cached NULL for {}", specification);
       value = null;
     } else if (value == null) {
-      //s_logger.debug("Cached miss for {}", specification);
+      //LOGGER.debug("Cached miss for {}", specification);
       value = getUnderlying().getValue(specification, filter);
       post(specification, value);
     } else {
-      s_logger.debug("Cache hit for {}", specification);
+      LOGGER.debug("Cache hit for {}", specification);
     }
     return value;
   }
@@ -202,16 +202,16 @@ public class WriteThroughViewComputationCache implements ViewComputationCache {
         }
       }
       if (value == NULL) {
-        //s_logger.debug("Cached NULL for {}", specification);
+        //LOGGER.debug("Cached NULL for {}", specification);
         result.add(Pairs.of(specification, null));
       } else if (value == null) {
-        //s_logger.debug("Cache miss for {}", specification);
+        //LOGGER.debug("Cache miss for {}", specification);
         if (query == null) {
           query = Sets.<ValueSpecification>newHashSetWithExpectedSize(specifications.size());
         }
         query.add(specification);
       } else {
-        s_logger.debug("Cache hit for {}", specification);
+        LOGGER.debug("Cache hit for {}", specification);
         result.add(Pairs.of(specification, value));
       }
     }
@@ -256,16 +256,16 @@ public class WriteThroughViewComputationCache implements ViewComputationCache {
         }
       }
       if (value == NULL) {
-        //s_logger.debug("Cached NULL for {}", specification);
+        //LOGGER.debug("Cached NULL for {}", specification);
         result.add(Pairs.of(specification, null));
       } else if (value == null) {
-        //s_logger.debug("Cache miss for {}", specification);
+        //LOGGER.debug("Cache miss for {}", specification);
         if (query == null) {
           query = Sets.<ValueSpecification>newHashSetWithExpectedSize(specifications.size());
         }
         query.add(specification);
       } else {
-        s_logger.debug("Cache hit for {}", specification);
+        LOGGER.debug("Cache hit for {}", specification);
         result.add(Pairs.of(specification, value));
       }
     }

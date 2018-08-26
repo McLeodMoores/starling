@@ -27,7 +27,7 @@ public final class BloombergTicksCollectorLauncher {
   private ConfigurableApplicationContext _context;
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(BloombergTicksCollectorLauncher.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(BloombergTicksCollectorLauncher.class);
 
   /**
    * 
@@ -63,7 +63,7 @@ public final class BloombergTicksCollectorLauncher {
         duration = Integer.parseInt(cmd.getOptionValue("duration"));
       }
     } catch (ParseException exp) {
-      s_logger.error("Option parsing failed: {}", exp.getMessage());
+      LOGGER.error("Option parsing failed: {}", exp.getMessage());
       return;
     }
 

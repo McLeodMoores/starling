@@ -44,7 +44,7 @@ import com.opengamma.id.ExternalIdBundle;
  */
 public class GICSAggregationFunction implements AggregationFunction<String> {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(GICSAggregationFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(GICSAggregationFunction.class);
 
   private static final String UNKNOWN = "Unknown";
   private boolean _useAttributes;
@@ -143,7 +143,7 @@ public class GICSAggregationFunction implements AggregationFunction<String> {
     _includeEmptyCategories = includeEmptyCategories;
     if (legalEntitySource == null) {
       if (_level == Level.SECTOR) {
-        s_logger.warn("No organization source supplied - will be unable to show sectors for CDS reference entities");
+        LOGGER.warn("No organization source supplied - will be unable to show sectors for CDS reference entities");
       }
       _obligorSectorExtractor = null;
       _cdsOptionSectorExtractor = null;

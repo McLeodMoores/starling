@@ -21,13 +21,13 @@ import com.opengamma.id.UniqueIdentifiable;
  */
 public class ComputationTargetResolverUtils {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(ComputationTargetResolverUtils.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ComputationTargetResolverUtils.class);
 
   /**
    * Visitor to remove any union selections from the leaf. Returns null if the type did not match the resolved object, {@link ComputationTargetType#NULL} if the object did match, or the correct type
    * selection if it was modified.
    */
-  private static final ComputationTargetTypeVisitor<UniqueIdentifiable, ComputationTargetType> s_resolveType = new ComputationTargetTypeVisitor<UniqueIdentifiable, ComputationTargetType>() {
+  private static final ComputationTargetTypeVisitor<UniqueIdentifiable, ComputationTargetType> RESOLVE_TYPE = new ComputationTargetTypeVisitor<UniqueIdentifiable, ComputationTargetType>() {
 
     @Override
     public ComputationTargetType visitMultipleComputationTargetTypes(final Set<ComputationTargetType> types, final UniqueIdentifiable resolved) {
@@ -97,11 +97,11 @@ public class ComputationTargetResolverUtils {
   public static ComputationTarget createResolvedTarget(final ComputationTargetSpecification requestedSpecification, final UniqueIdentifiable target) {
     ComputationTargetSpecification resolvedSpecification;
     final ComputationTargetType requestedType = requestedSpecification.getType();
-    final ComputationTargetType resolvedType = requestedType.accept(s_resolveType, target);
+    final ComputationTargetType resolvedType = requestedType.accept(RESOLVE_TYPE, target);
     if (resolvedType == null) {
       // Error
-      if (s_logger.isWarnEnabled()) {
-        s_logger.warn("Resolved {} to {}, not instanceof {}", new Object[] {requestedSpecification.getUniqueId(), target, requestedType });
+      if (LOGGER.isWarnEnabled()) {
+        LOGGER.warn("Resolved {} to {}, not instanceof {}", new Object[] {requestedSpecification.getUniqueId(), target, requestedType });
       }
       resolvedSpecification = requestedSpecification;
     } else if (resolvedType == ComputationTargetType.NULL) {

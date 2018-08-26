@@ -25,7 +25,7 @@ import com.opengamma.util.ArgumentChecker;
  *
  */
 public class ForwardPDEDefaults extends DefaultPropertyFunction {
-  private static final Logger s_logger = LoggerFactory.getLogger(ForwardPDEDefaults.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ForwardPDEDefaults.class);
   private static final String[] VALUE_REQUIREMENT_NAMES = new String[] {
     ValueRequirementNames.FORWARD_DELTA,
     ValueRequirementNames.DUAL_DELTA,
@@ -119,7 +119,7 @@ public class ForwardPDEDefaults extends DefaultPropertyFunction {
     if (PDEPropertyNamesAndValues.PROPERTY_TIME_STEP_BUNCHING.equals(propertyName)) {
       return Collections.singleton(_timeStepBunching);
     }
-    s_logger.error("Could not get default value for {}", propertyName);
+    LOGGER.error("Could not get default value for {}", propertyName);
     return null;
   }
 

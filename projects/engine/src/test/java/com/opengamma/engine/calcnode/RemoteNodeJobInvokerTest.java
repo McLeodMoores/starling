@@ -41,8 +41,8 @@ import com.opengamma.util.test.Timeout;
 @Test(groups = TestGroup.UNIT)
 public class RemoteNodeJobInvokerTest {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(RemoteNodeJobInvokerTest.class);
-  private static final FudgeContext s_fudgeContext = OpenGammaFudgeContext.getInstance();
+  private static final Logger LOGGER = LoggerFactory.getLogger(RemoteNodeJobInvokerTest.class);
+  private static final FudgeContext FUDGE_CONTEXT = OpenGammaFudgeContext.getInstance();
   private static final long TIMEOUT = Timeout.standardTimeoutMillis();
 
   public void simpleInvocation() {
@@ -50,7 +50,7 @@ public class RemoteNodeJobInvokerTest {
     try {
       final JobDispatcher jobDispatcher = new JobDispatcher();
       final Ready initialMessage = new Ready(1, "Test");
-      final DirectFudgeConnection conduit = new DirectFudgeConnection(s_fudgeContext);
+      final DirectFudgeConnection conduit = new DirectFudgeConnection(FUDGE_CONTEXT);
       final RemoteNodeJobInvoker jobInvoker = new RemoteNodeJobInvoker(executor, initialMessage, conduit.getEnd1(), new InMemoryIdentifierMap(), new FunctionCosts(),
           new DummyFunctionBlacklistQuery(), new DummyFunctionBlacklistMaintainer());
       jobDispatcher.registerJobInvoker(jobInvoker);
@@ -60,10 +60,10 @@ public class RemoteNodeJobInvokerTest {
         @Override
         public void messageReceived(FudgeContext fudgeContext, FudgeMsgEnvelope msgEnvelope) {
           final FudgeDeserializer dcontext = new FudgeDeserializer(fudgeContext);
-          s_logger.debug("message = {}", msgEnvelope.getMessage());
+          LOGGER.debug("message = {}", msgEnvelope.getMessage());
           final RemoteCalcNodeMessage message = dcontext.fudgeMsgToObject(RemoteCalcNodeMessage.class, msgEnvelope.getMessage());
           assertNotNull(message);
-          s_logger.debug("request = {}", message);
+          LOGGER.debug("request = {}", message);
           assertTrue(message instanceof Execute);
           final Execute job = (Execute) message;
           final Result result = new Result(JobDispatcherTest.createTestJobResult(job.getJob().getSpecification(), 0, "Test"));
@@ -83,7 +83,7 @@ public class RemoteNodeJobInvokerTest {
     try {
       final JobDispatcher jobDispatcher = new JobDispatcher();
       final Ready initialMessage = new Ready(3, "Test");
-      final DirectFudgeConnection conduit = new DirectFudgeConnection(s_fudgeContext);
+      final DirectFudgeConnection conduit = new DirectFudgeConnection(FUDGE_CONTEXT);
       final RemoteNodeJobInvoker jobInvoker = new RemoteNodeJobInvoker(executor, initialMessage, conduit.getEnd1(), new InMemoryIdentifierMap(), new FunctionCosts(),
           new DummyFunctionBlacklistQuery(), new DummyFunctionBlacklistMaintainer());
       jobDispatcher.registerJobInvoker(jobInvoker);

@@ -25,7 +25,7 @@ import com.yahoo.platform.yui.compressor.JavaScriptCompressor;
 public class YUIBundleCompressor implements BundleCompressor {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(YUIBundleCompressor.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(YUIBundleCompressor.class);
 
   /**
    * The compressor options.
@@ -69,7 +69,7 @@ public class YUIBundleCompressor implements BundleCompressor {
       jsCompressor.compress(writer, _compressorOptions.getLineBreakPosition(), _compressorOptions.isMunge(), _compressorOptions.isWarn(), 
           _compressorOptions.isPreserveAllSemiColons(), !_compressorOptions.isOptimize());
     } catch (IOException ex) {
-      s_logger.error("Unexpected IOException", ex);
+      LOGGER.error("Unexpected IOException", ex);
     }
     return writer.toString();
   }
@@ -88,18 +88,18 @@ public class YUIBundleCompressor implements BundleCompressor {
       
       @Override
       public void warning(String message, String sourceName, int line, String lineSource, int lineOffset) {
-        s_logger.warn(getMessage(sourceName, message, line, lineOffset));
+        LOGGER.warn(getMessage(sourceName, message, line, lineOffset));
       }
       
       @Override
       public EvaluatorException runtimeError(String message, String sourceName, int line, String lineSource, int lineOffset) {
-        s_logger.error(getMessage(sourceName, message, line, lineOffset));
+        LOGGER.error(getMessage(sourceName, message, line, lineOffset));
         return new EvaluatorException(message);
       }
       
       @Override
       public void error(String message, String sourceName, int line, String lineSource, int lineOffset) {
-        s_logger.error(getMessage(sourceName, message, line, lineOffset));
+        LOGGER.error(getMessage(sourceName, message, line, lineOffset));
       }
     });
   }
@@ -110,7 +110,7 @@ public class YUIBundleCompressor implements BundleCompressor {
       CssCompressor compressor = new CssCompressor(new StringReader(content));
       compressor.compress(stringWriter, _compressorOptions.getLineBreakPosition());
     } catch (IOException ex) {
-      s_logger.error("Unexpected IOException", ex);
+      LOGGER.error("Unexpected IOException", ex);
     }
     return stringWriter.toString();
   }

@@ -160,12 +160,12 @@ public abstract class FXOneLookBarrierOptionBlackFunction extends FXOptionBlackS
     // Return null if they haven't been set so that FXOneLookBarrierOptionDefaultPropertiesFunction can set them
     final Set<String> overhedgeSet = desiredValue.getConstraints().getValues(ValuePropertyNames.BINARY_OVERHEDGE);
     if (overhedgeSet == null || overhedgeSet.size() != 1) {
-      s_logger.info("Could not find {} requirement. Looking for a default..", ValuePropertyNames.BINARY_OVERHEDGE);
+      LOGGER.info("Could not find {} requirement. Looking for a default..", ValuePropertyNames.BINARY_OVERHEDGE);
       return null;
     }
     final Set<String> smoothingSet = desiredValue.getConstraints().getValues(ValuePropertyNames.BINARY_SMOOTHING_FULLWIDTH);
     if (smoothingSet == null || smoothingSet.size() != 1) {
-      s_logger.info("Could not find {} requirement. Looking for a default..", ValuePropertyNames.BINARY_SMOOTHING_FULLWIDTH);
+      LOGGER.info("Could not find {} requirement. Looking for a default..", ValuePropertyNames.BINARY_SMOOTHING_FULLWIDTH);
       return null;
     }
     return commonReqs;
@@ -314,7 +314,7 @@ public abstract class FXOneLookBarrierOptionBlackFunction extends FXOptionBlackS
   }
 
 
-  private static final Logger s_logger = LoggerFactory.getLogger(EquityVanillaBarrierOptionBlackFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(EquityVanillaBarrierOptionBlackFunction.class);
 
   @Override
   protected Set<ComputedValue> getResult(final InstrumentDerivative forex, final ForexOptionDataBundle<?> data, final ComputationTarget target, final Set<ValueRequirement> desiredValues,

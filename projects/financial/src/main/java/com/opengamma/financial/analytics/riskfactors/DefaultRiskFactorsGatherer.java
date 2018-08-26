@@ -85,7 +85,7 @@ import com.opengamma.util.tuple.Pairs;
  * Default implementation of {@link RiskFactorsGatherer}.
  */
 public class DefaultRiskFactorsGatherer extends FinancialSecurityVisitorAdapter<Set<Pair<String, ValueProperties>>> implements RiskFactorsGatherer {
-  private static final Logger s_logger = LoggerFactory.getLogger(DefaultRiskFactorsGatherer.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(DefaultRiskFactorsGatherer.class);
   private final SecuritySource _securities;
   private final RiskFactorsConfigurationProvider _configProvider;
 
@@ -320,7 +320,7 @@ public class DefaultRiskFactorsGatherer extends FinancialSecurityVisitorAdapter<
       builder.add(getFXVegaMatrix(ValueProperties
           .with(ValuePropertyNames.SURFACE, surfaceName)));
     } else {
-      s_logger.warn("Could not build surface name for {}", security);
+      LOGGER.warn("Could not build surface name for {}", security);
     }
     return builder.build();
   }
@@ -340,7 +340,7 @@ public class DefaultRiskFactorsGatherer extends FinancialSecurityVisitorAdapter<
       builder.add(getFXVegaMatrix(ValueProperties
           .with(ValuePropertyNames.SURFACE, surfaceName)));
     } else {
-      s_logger.warn("Could not build surface name for {}", security);
+      LOGGER.warn("Could not build surface name for {}", security);
     }
     return builder.build();
   }
@@ -360,7 +360,7 @@ public class DefaultRiskFactorsGatherer extends FinancialSecurityVisitorAdapter<
       builder.add(getFXVegaMatrix(ValueProperties
           .with(ValuePropertyNames.SURFACE, surfaceName)));
     } else {
-      s_logger.warn("Could not build surface name for {}", security);
+      LOGGER.warn("Could not build surface name for {}", security);
     }
     return builder.build();
   }
@@ -394,18 +394,18 @@ public class DefaultRiskFactorsGatherer extends FinancialSecurityVisitorAdapter<
 
   @Override
   public Set<Pair<String, ValueProperties>> visitCommodityFutureOptionSecurity(final CommodityFutureOptionSecurity commodityFutureOptionSecurity) {
-    s_logger.warn("Commodity Future Option risk factors not implemented");
+    LOGGER.warn("Commodity Future Option risk factors not implemented");
     return Collections.emptySet();
   }
 
   @Override
   public Set<Pair<String, ValueProperties>> visitFxFutureOptionSecurity(final FxFutureOptionSecurity security) {
-    s_logger.warn("FX Future Option risk factors not implemented");
+    LOGGER.warn("FX Future Option risk factors not implemented");
     return Collections.emptySet();  }
 
   @Override
   public Set<Pair<String, ValueProperties>> visitEquityIndexDividendFutureOptionSecurity(final EquityIndexDividendFutureOptionSecurity equityIndexDividendFutureOptionSecurity) {
-    s_logger.warn("Equity index dividend future option risk factors not implemented");
+    LOGGER.warn("Equity index dividend future option risk factors not implemented");
     return Collections.emptySet();
   }
 
@@ -424,7 +424,7 @@ public class DefaultRiskFactorsGatherer extends FinancialSecurityVisitorAdapter<
       builder.add(getFXVegaMatrix(ValueProperties
           .with(ValuePropertyNames.SURFACE, surfaceName)));
     } else {
-      s_logger.warn("Could not build surface name for {}", security);
+      LOGGER.warn("Could not build surface name for {}", security);
     }
     return builder.build();
   }
@@ -444,7 +444,7 @@ public class DefaultRiskFactorsGatherer extends FinancialSecurityVisitorAdapter<
       builder.add(getFXVegaMatrix(ValueProperties
           .with(ValuePropertyNames.SURFACE, surfaceName)));
     } else {
-      s_logger.warn("Could not build surface name for {}", security);
+      LOGGER.warn("Could not build surface name for {}", security);
     }
     return builder.build();
   }
@@ -502,7 +502,7 @@ public class DefaultRiskFactorsGatherer extends FinancialSecurityVisitorAdapter<
           .with(ValuePropertyNames.SURFACE, "DEFAULT")
             .with(InstrumentTypeProperties.PROPERTY_SURFACE_INSTRUMENT_TYPE, "EQUITY_OPTION"))).build();
     }
-    s_logger.warn("Could not get underlying ticker for equity variance swap security, so excluding surface");
+    LOGGER.warn("Could not get underlying ticker for equity variance swap security, so excluding surface");
     return ImmutableSet.<Pair<String, ValueProperties>>builder()
         .add(getPresentValue(ValueProperties.builder()))
         .add(getYieldCurveNodeSensitivities(getFundingCurve(), security.getCurrency())).build();

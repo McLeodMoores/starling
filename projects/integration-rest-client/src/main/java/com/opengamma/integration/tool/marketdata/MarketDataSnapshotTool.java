@@ -43,7 +43,7 @@ import com.opengamma.scripts.Scriptable;
 public class MarketDataSnapshotTool extends AbstractTool<ToolContext> {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(MarketDataSnapshotTool.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(MarketDataSnapshotTool.class);
 
   /** Snapshot name command line option. */
   private static final String SNAPSHOT_NAME_OPTION = "s";
@@ -83,12 +83,12 @@ public class MarketDataSnapshotTool extends AbstractTool<ToolContext> {
 
     final RemoteViewProcessor viewProcessor = (RemoteViewProcessor) s_context.getViewProcessor();
     if (viewProcessor == null) {
-      s_logger.warn("No view processors found at {}", s_context);
+      LOGGER.warn("No view processors found at {}", s_context);
       return;
     }
     final MarketDataSnapshotMaster marketDataSnapshotMaster = s_context.getMarketDataSnapshotMaster();
     if (marketDataSnapshotMaster == null) {
-      s_logger.warn("No market data snapshot masters found at {}", s_context);
+      LOGGER.warn("No market data snapshot masters found at {}", s_context);
       return;
     }
     final MarketDataSnapshotter marketDataSnapshotter;
@@ -103,7 +103,7 @@ public class MarketDataSnapshotTool extends AbstractTool<ToolContext> {
 
     if (getCommandLine().hasOption(VIEW_PROCESS_ID_OPTION)) {
       final UniqueId viewProcessId = UniqueId.parse(getCommandLine().getOptionValue(VIEW_PROCESS_ID_OPTION));
-      s_logger.info("Creating snapshot from existing view process " + viewProcessId);
+      LOGGER.info("Creating snapshot from existing view process " + viewProcessId);
       try {
         snapshotSaver.createSnapshot(null, viewProcessId);
       } catch (final Exception e) {
@@ -112,7 +112,7 @@ public class MarketDataSnapshotTool extends AbstractTool<ToolContext> {
     } else {
       final String viewDefinitionName = StringUtils.trimToNull(getCommandLine().getOptionValue(VIEW_NAME_OPTION));
       if (viewDefinitionName == null) {
-        s_logger.warn("Given view definition name is blank");
+        LOGGER.warn("Given view definition name is blank");
         return;
       }
       final String valuationTimeArg = StringUtils.trimToNull(getCommandLine().getOptionValue(VALUATION_TIME_OPTION));
@@ -131,11 +131,11 @@ public class MarketDataSnapshotTool extends AbstractTool<ToolContext> {
         marketDataSpecs.addAll(getMarketDataSpecs());
       }
 
-      s_logger.info("Creating snapshot for view definition " + viewDefinitionName);
+      LOGGER.info("Creating snapshot for view definition " + viewDefinitionName);
       try {
         String snapshotName = StringUtils.trimToNull(getCommandLine().getOptionValue(SNAPSHOT_NAME_OPTION));
         if (snapshotName == null) {
-          s_logger.warn("Given snapshot name is blank, using {}/{}", viewDefinitionName, valuationInstant);
+          LOGGER.warn("Given snapshot name is blank, using {}/{}", viewDefinitionName, valuationInstant);
           snapshotName = viewDefinitionName + "/" + valuationInstant;
         }
         snapshotSaver.createSnapshot(snapshotName, viewDefinitionName, valuationInstant, marketDataSpecs);
@@ -152,7 +152,7 @@ public class MarketDataSnapshotTool extends AbstractTool<ToolContext> {
   private void endWithError(final String message, final Object... messageArgs) {
     final String formattedMessage = format(message, messageArgs);
     System.err.println(formattedMessage);
-    s_logger.error(formattedMessage);
+    LOGGER.error(formattedMessage);
     System.exit(1);
   }
 

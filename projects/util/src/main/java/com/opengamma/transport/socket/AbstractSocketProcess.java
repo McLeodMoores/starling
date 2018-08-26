@@ -40,7 +40,7 @@ import com.opengamma.util.monitor.ReportingOutputStream;
  *
  */
 public abstract class AbstractSocketProcess implements Lifecycle, EndPointDescriptionProvider {
-  private static final Logger s_logger = LoggerFactory.getLogger(AbstractSocketProcess.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(AbstractSocketProcess.class);
   private Collection<InetAddress> _inetAddresses;
   private int _portNumber;
 
@@ -99,12 +99,12 @@ public abstract class AbstractSocketProcess implements Lifecycle, EndPointDescri
       try {
         addresses.addAll(Arrays.asList(InetAddress.getAllByName(host)));
       } catch (UnknownHostException e) {
-        s_logger.warn("Unknown host {}", host);
+        LOGGER.warn("Unknown host {}", host);
       }
     }
     setPortNumber(endPoint.getInt(SocketEndPointDescriptionProvider.PORT_KEY));
     setInetAddresses(addresses);
-    s_logger.debug("End point {} resolved to {}:{}", new Object[] {endPoint, getInetAddresses(), getPortNumber() });
+    LOGGER.debug("End point {} resolved to {}:{}", new Object[] {endPoint, getInetAddresses(), getPortNumber() });
   }
 
   protected Socket getSocket() {
@@ -113,7 +113,7 @@ public abstract class AbstractSocketProcess implements Lifecycle, EndPointDescri
 
   protected void startIfNecessary() {
     if (!isRunning()) {
-      s_logger.debug("Starting implicitly as start() was not called before use.");
+      LOGGER.debug("Starting implicitly as start() was not called before use.");
       start();
     }
   }
@@ -128,7 +128,7 @@ public abstract class AbstractSocketProcess implements Lifecycle, EndPointDescri
     ArgumentChecker.notNullInjected(getInetAddresses(), "Remote InetAddress");
     ArgumentChecker.isTrue(getPortNumber() > 0, "Must specify valid portNumber property");
     if (_started && (_socket != null)) {
-      s_logger.warn("Already connected to {}", _socket.getRemoteSocketAddress());
+      LOGGER.warn("Already connected to {}", _socket.getRemoteSocketAddress());
     } else {
       openRemoteConnection();
       _started = true;
@@ -136,19 +136,19 @@ public abstract class AbstractSocketProcess implements Lifecycle, EndPointDescri
   }
 
   protected synchronized void openRemoteConnection() {
-    s_logger.info("Opening remote connection to {}:{}", getInetAddresses(), getPortNumber());
+    LOGGER.info("Opening remote connection to {}:{}", getInetAddresses(), getPortNumber());
     OutputStream os = null;
     InputStream is = null;
     for (InetAddress addr : getInetAddresses()) {
       try {
         _socket = new Socket();
         _socket.connect(new InetSocketAddress(addr, getPortNumber()), 3000);
-        s_logger.debug("Connected to {}:{}", addr, getPortNumber());
+        LOGGER.debug("Connected to {}:{}", addr, getPortNumber());
         os = _socket.getOutputStream();
         is = _socket.getInputStream();
         break;
       } catch (IOException ioe) {
-        s_logger.debug("Couldn't connect to {}:{}", addr, getPortNumber());
+        LOGGER.debug("Couldn't connect to {}:{}", addr, getPortNumber());
         if (_socket != null) {
           try {
             _socket.close();
@@ -162,8 +162,8 @@ public abstract class AbstractSocketProcess implements Lifecycle, EndPointDescri
     if (_socket == null) {
       throw new OpenGammaRuntimeException("Unable to open remote connection to " + getInetAddresses() + ":" + getPortNumber());
     }
-    is = new ReportingInputStream(s_logger, _socket.getRemoteSocketAddress().toString(), is);
-    os = new ReportingOutputStream(s_logger, _socket.getRemoteSocketAddress().toString(), os);
+    is = new ReportingInputStream(LOGGER, _socket.getRemoteSocketAddress().toString(), is);
+    os = new ReportingOutputStream(LOGGER, _socket.getRemoteSocketAddress().toString(), os);
     socketOpened(_socket, new BufferedOutputStream(os), new BufferedInputStream(is));
   }
 
@@ -175,7 +175,7 @@ public abstract class AbstractSocketProcess implements Lifecycle, EndPointDescri
           try {
             _socket.close();
           } catch (IOException e) {
-            s_logger.warn("Unable to close connected socket to {}", new Object[] {_socket.getRemoteSocketAddress() }, e);
+            LOGGER.warn("Unable to close connected socket to {}", new Object[] {_socket.getRemoteSocketAddress() }, e);
           }
         }
         _socket = null;
@@ -183,7 +183,7 @@ public abstract class AbstractSocketProcess implements Lifecycle, EndPointDescri
       _started = false;
       socketClosed();
     } else {
-      s_logger.warn("Already stopped {}:{}", getInetAddresses(), getPortNumber());
+      LOGGER.warn("Already stopped {}:{}", getInetAddresses(), getPortNumber());
     }
   }
 

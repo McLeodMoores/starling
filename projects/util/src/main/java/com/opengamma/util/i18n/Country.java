@@ -38,7 +38,7 @@ public final class Country implements ObjectIdentifiable, UniqueIdentifiable, Co
   /**
    * A cache of instances.
    */
-  private static final ConcurrentMap<String, Country> s_instanceMap = new ConcurrentHashMap<>(16, 0.75f, 4);
+  private static final ConcurrentMap<String, Country> INSTANCE_MAP = new ConcurrentHashMap<>(16, 0.75f, 4);
   /**
    * The scheme to use in object identifiers.
    */
@@ -198,7 +198,7 @@ public final class Country implements ObjectIdentifiable, UniqueIdentifiable, Co
    * @return an immutable set containing all registered countries, not null
    */
   public static Set<Country> getAvailableCountries() {
-    return ImmutableSet.copyOf(s_instanceMap.values());
+    return ImmutableSet.copyOf(INSTANCE_MAP.values());
   }
 
   //-----------------------------------------------------------------------
@@ -219,8 +219,8 @@ public final class Country implements ObjectIdentifiable, UniqueIdentifiable, Co
     if (countryCode.matches("[A-Z][A-Z]") == false) {
       throw new IllegalArgumentException("Invalid country code: " + countryCode);
     }
-    s_instanceMap.putIfAbsent(countryCode, new Country(countryCode));
-    return s_instanceMap.get(countryCode);
+    INSTANCE_MAP.putIfAbsent(countryCode, new Country(countryCode));
+    return INSTANCE_MAP.get(countryCode);
   }
 
   /**

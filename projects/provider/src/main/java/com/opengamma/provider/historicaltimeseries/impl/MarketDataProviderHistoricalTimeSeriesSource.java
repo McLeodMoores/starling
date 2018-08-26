@@ -36,7 +36,7 @@ public abstract class MarketDataProviderHistoricalTimeSeriesSource implements Hi
   /**
    * Logger.
    */
-  private static final Logger s_logger = LoggerFactory.getLogger(MarketDataProviderHistoricalTimeSeriesSource.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(MarketDataProviderHistoricalTimeSeriesSource.class);
 
   /**
    * The id supplier service.
@@ -105,14 +105,14 @@ public abstract class MarketDataProviderHistoricalTimeSeriesSource implements Hi
       ExternalIdBundle externalIdBundle, String dataSource, String dataProvider, String dataField,
       LocalDateRange dateRange, Integer maxPoints) {
 
-    s_logger.info("Getting HistoricalTimeSeries for security {}", externalIdBundle);
+    LOGGER.info("Getting HistoricalTimeSeries for security {}", externalIdBundle);
 
     HistoricalTimeSeriesProviderGetRequest request = HistoricalTimeSeriesProviderGetRequest.createGet(externalIdBundle, dataSource, dataProvider, dataField, dateRange);
     request.setMaxPoints(maxPoints);
     HistoricalTimeSeriesProviderGetResult result = _provider.getHistoricalTimeSeries(request);
     LocalDateDoubleTimeSeries timeSeries = result.getResultMap().get(externalIdBundle);
     if (timeSeries == null) {
-      s_logger.info("Unable to get HistoricalTimeSeries for {}", externalIdBundle);
+      LOGGER.info("Unable to get HistoricalTimeSeries for {}", externalIdBundle);
       return null;
     }
     return new SimpleHistoricalTimeSeries(_uniqueIdSupplier.get(), timeSeries);
@@ -287,7 +287,7 @@ public abstract class MarketDataProviderHistoricalTimeSeriesSource implements Hi
       start = start.plusDays(1);
     }
     LocalDateRange dateRange = LocalDateRange.ofNullUnbounded(start, end, includeEnd);
-    s_logger.info("Getting HistoricalTimeSeries for securities {}", externalIdBundles);
+    LOGGER.info("Getting HistoricalTimeSeries for securities {}", externalIdBundles);
 
     Map<ExternalIdBundle, LocalDateDoubleTimeSeries> map = _provider.getHistoricalTimeSeries(externalIdBundles, dataSource, dataProvider, dataField, dateRange);
     Map<ExternalIdBundle, HistoricalTimeSeries> result = Maps.newHashMap();

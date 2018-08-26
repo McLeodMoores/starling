@@ -20,7 +20,7 @@ import com.opengamma.engine.exec.MultipleNodeExecutorFactory;
  */
 public final class MultipleNodeExecutor implements MultipleNodeExecutorMBean {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(MultipleNodeExecutor.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(MultipleNodeExecutor.class);
 
   private final MultipleNodeExecutorFactory _underlying;
 
@@ -38,7 +38,7 @@ public final class MultipleNodeExecutor implements MultipleNodeExecutorMBean {
     try {
       server.registerMBean(instance, name);
     } catch (InstanceAlreadyExistsException e) {
-      s_logger.warn("JMX MBean {} already exists - replacing", name);
+      LOGGER.warn("JMX MBean {} already exists - replacing", name);
       server.unregisterMBean(name);
       server.registerMBean(instance, name);
     }

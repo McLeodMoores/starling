@@ -87,50 +87,50 @@ import com.opengamma.web.analytics.OtcSecurityVisitor;
 public class BlotterResource {
 
   /** Map of underlying security types keyed by the owning security type. */
-  private static final Map<Class<?>, Class<?>> s_underlyingSecurityTypes = ImmutableMap.<Class<?>, Class<?>>of(
+  private static final Map<Class<?>, Class<?>> UNDERLYING_SECURITY_TYPES = ImmutableMap.<Class<?>, Class<?>>of(
       IRFutureOptionSecurity.class, InterestRateFutureSecurity.class,
       SwaptionSecurity.class, SwapSecurity.class,
       CreditDefaultSwapOptionSecurity.class, AbstractCreditDefaultSwapSecurity.class);
 
   /** Map of paths to the endpoints for looking up values, keyed by the value class. */
-  private static final Map<Class<?>, String> s_endpoints = Maps.newHashMap();
+  private static final Map<Class<?>, String> ENDPOINTS = Maps.newHashMap();
   /** OTC Security types that can be created by the trade entry froms. */
-  private static final List<String> s_securityTypeNames = Lists.newArrayList();
+  private static final List<String> SECURITY_TYPE_NAMES = Lists.newArrayList();
   /** Types that can be created by the trade entry forms that aren't securities by are required by them (e.g. legs). */
-  private static final List<String> s_otherTypeNames = Lists.newArrayList();
+  private static final List<String> OTHER_TYPE_NAMES = Lists.newArrayList();
   /** Meta beans for types that can be created by the trade entry forms keyed by type name. */
-  private static final Map<String, MetaBean> s_metaBeansByTypeName = Maps.newHashMap();
+  private static final Map<String, MetaBean> META_BEANS_BY_TYPE_NAME = Maps.newHashMap();
 
   static {
-    s_endpoints.put(Frequency.class, "frequencies");
-    s_endpoints.put(ExerciseType.class, "exercisetypes");
-    s_endpoints.put(DayCount.class, "daycountconventions");
-    s_endpoints.put(BusinessDayConvention.class, "businessdayconventions");
-    s_endpoints.put(BarrierType.class, "barriertypes");
-    s_endpoints.put(BarrierDirection.class, "barrierdirections");
-    s_endpoints.put(SamplingFrequency.class, "samplingfrequencies");
-    s_endpoints.put(FloatingRateType.class, "floatingratetypes");
-    s_endpoints.put(LongShort.class, "longshort");
-    s_endpoints.put(MonitoringType.class, "monitoringtype");
-    s_endpoints.put(DebtSeniority.class, "debtseniority");
-    s_endpoints.put(RestructuringClause.class, "restructuringclause");
-    s_endpoints.put(StubType.class, "stubtype");
-    s_endpoints.put(InterpolationMethod.class, "interpolationmethods");
+    ENDPOINTS.put(Frequency.class, "frequencies");
+    ENDPOINTS.put(ExerciseType.class, "exercisetypes");
+    ENDPOINTS.put(DayCount.class, "daycountconventions");
+    ENDPOINTS.put(BusinessDayConvention.class, "businessdayconventions");
+    ENDPOINTS.put(BarrierType.class, "barriertypes");
+    ENDPOINTS.put(BarrierDirection.class, "barrierdirections");
+    ENDPOINTS.put(SamplingFrequency.class, "samplingfrequencies");
+    ENDPOINTS.put(FloatingRateType.class, "floatingratetypes");
+    ENDPOINTS.put(LongShort.class, "longshort");
+    ENDPOINTS.put(MonitoringType.class, "monitoringtype");
+    ENDPOINTS.put(DebtSeniority.class, "debtseniority");
+    ENDPOINTS.put(RestructuringClause.class, "restructuringclause");
+    ENDPOINTS.put(StubType.class, "stubtype");
+    ENDPOINTS.put(InterpolationMethod.class, "interpolationmethods");
 
     for (MetaBean metaBean : BlotterUtils.getMetaBeans()) {
       Class<? extends Bean> beanType = metaBean.beanType();
       String typeName = beanType.getSimpleName();
-      s_metaBeansByTypeName.put(typeName, metaBean);
+      META_BEANS_BY_TYPE_NAME.put(typeName, metaBean);
       if (isSecurity(beanType)) {
-        s_securityTypeNames.add(typeName);
+        SECURITY_TYPE_NAMES.add(typeName);
       } else {
-        s_otherTypeNames.add(typeName);
+        OTHER_TYPE_NAMES.add(typeName);
       }
     }
-    s_otherTypeNames.add(OtcTradeBuilder.TRADE_TYPE_NAME);
-    s_otherTypeNames.add(FungibleTradeBuilder.TRADE_TYPE_NAME);
-    Collections.sort(s_otherTypeNames);
-    Collections.sort(s_securityTypeNames);
+    OTHER_TYPE_NAMES.add(OtcTradeBuilder.TRADE_TYPE_NAME);
+    OTHER_TYPE_NAMES.add(FungibleTradeBuilder.TRADE_TYPE_NAME);
+    Collections.sort(OTHER_TYPE_NAMES);
+    Collections.sort(SECURITY_TYPE_NAMES);
   }
 
   /** For loading and saving securities. */
@@ -185,8 +185,8 @@ public class BlotterResource {
   @Path("types")
   public String getTypes() {
     Map<Object, Object> data = map("title", "Types",
-                                   "securityTypeNames", s_securityTypeNames,
-                                   "otherTypeNames", s_otherTypeNames);
+                                   "securityTypeNames", SECURITY_TYPE_NAMES,
+                                   "otherTypeNames", OTHER_TYPE_NAMES);
     return _freemarker.build("blotter/bean-types.ftl", data);
   }
 
@@ -202,13 +202,13 @@ public class BlotterResource {
     } else if (typeName.equals(FungibleTradeBuilder.TRADE_TYPE_NAME)) {
       beanData = FungibleTradeBuilder.tradeStructure();
     } else {
-      MetaBean metaBean = s_metaBeansByTypeName.get(typeName);
+      MetaBean metaBean = META_BEANS_BY_TYPE_NAME.get(typeName);
       if (metaBean == null) {
         throw new DataNotFoundException("Unknown type name " + typeName);
       }
       BeanStructureBuilder structureBuilder = new BeanStructureBuilder(BlotterUtils.getMetaBeans(),
-                                                                       s_underlyingSecurityTypes,
-                                                                       s_endpoints,
+                                                                       UNDERLYING_SECURITY_TYPES,
+                                                                       ENDPOINTS,
                                                                        BlotterUtils.getStringConvert());
       BeanTraverser traverser = BlotterUtils.structureBuildingTraverser();
       beanData = (Map<String, Object>) traverser.traverse(metaBean, structureBuilder);
@@ -295,7 +295,7 @@ public class BlotterResource {
       JsonDataSink tradeSink = new JsonDataSink(BlotterUtils.getJsonBuildingConverters());
       if (isOtc(security)) {
         _otcTradeBuilder.extractTradeData(trade, tradeSink);
-        MetaBean securityMetaBean = s_metaBeansByTypeName.get(security.getClass().getSimpleName());
+        MetaBean securityMetaBean = META_BEANS_BY_TYPE_NAME.get(security.getClass().getSimpleName());
         if (securityMetaBean == null) {
           throw new DataNotFoundException("No MetaBean is registered for security type " + security.getClass().getName());
         }
@@ -309,7 +309,7 @@ public class BlotterResource {
           if (underlying != null) {
             BeanVisitor<JSONObject> underlyingVisitor =
                 new BuildingBeanVisitor<>(underlying, new JsonDataSink(BlotterUtils.getJsonBuildingConverters()));
-            MetaBean underlyingMetaBean = s_metaBeansByTypeName.get(underlying.getClass().getSimpleName());
+            MetaBean underlyingMetaBean = META_BEANS_BY_TYPE_NAME.get(underlying.getClass().getSimpleName());
             JSONObject underlyingJson = (JSONObject) securityTraverser.traverse(underlyingMetaBean, underlyingVisitor);
             root.put("underlying", underlyingJson);
           }

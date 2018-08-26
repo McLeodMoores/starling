@@ -53,7 +53,7 @@ import com.opengamma.util.tuple.Triple;
 public class InterpolatedYieldAndDiscountCurveFunction extends AbstractFunction {
 
   @SuppressWarnings("unused")
-  private static final Logger s_logger = LoggerFactory.getLogger(InterpolatedYieldAndDiscountCurveFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(InterpolatedYieldAndDiscountCurveFunction.class);
   /** Name of the calculation method */
   public static final String INTERPOLATED_CALCULATION_METHOD = "Interpolated";
 

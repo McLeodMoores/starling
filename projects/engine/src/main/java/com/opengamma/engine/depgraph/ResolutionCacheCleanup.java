@@ -20,8 +20,8 @@ import org.slf4j.LoggerFactory;
    */
   public static final ResolutionCacheCleanup INSTANCE = new ResolutionCacheCleanup();
 
-  private static final Logger s_logger = LoggerFactory.getLogger(ResolutionCacheCleanup.class);
-  private static final Runtime s_runtime = Runtime.getRuntime();
+  private static final Logger LOGGER = LoggerFactory.getLogger(ResolutionCacheCleanup.class);
+  private static final Runtime RUNTIME = Runtime.getRuntime();
   /**
    * Run cleanup whenever the free memory is below this threshold. For example 0.3 gives 300Mb on a 1Gb VM.
    */
@@ -39,16 +39,16 @@ import org.slf4j.LoggerFactory;
   }
 
   private boolean isLowMemory() {
-    final long free = s_runtime.freeMemory();
+    final long free = RUNTIME.freeMemory();
     if (free >= MAX_FREE) {
       return false;
     }
     if (free < MIN_FREE) {
       return true;
     }
-    final double fractionFree = (double) s_runtime.freeMemory() / (double) s_runtime.totalMemory();
-    if (s_logger.isInfoEnabled()) {
-      s_logger.info("Free memory = {}", fractionFree);
+    final double fractionFree = (double) RUNTIME.freeMemory() / (double) RUNTIME.totalMemory();
+    if (LOGGER.isInfoEnabled()) {
+      LOGGER.info("Free memory = {}", fractionFree);
     }
     return fractionFree < THRESHOLD;
   }
@@ -59,11 +59,11 @@ import org.slf4j.LoggerFactory;
       final int originalActive = builder.getActiveResolveTasks();
       if (builder.flushCachedStates()) {
         final int freedActive = originalActive - builder.getActiveResolveTasks();
-        if (s_logger.isInfoEnabled()) {
-          s_logger.info("Freed {} tasks for {}", freedActive, builder);
+        if (LOGGER.isInfoEnabled()) {
+          LOGGER.info("Freed {} tasks for {}", freedActive, builder);
         }
       } else {
-        s_logger.warn("Low memory detected, but no intermediate state to flush");
+        LOGGER.warn("Low memory detected, but no intermediate state to flush");
       }
     }
     builder.reportStateSize();

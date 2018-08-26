@@ -10,9 +10,6 @@ import static org.testng.AssertJUnit.assertTrue;
 
 import org.testng.annotations.Test;
 
-import cern.jet.random.engine.MersenneTwister;
-import cern.jet.random.engine.MersenneTwister64;
-
 import com.opengamma.analytics.financial.model.option.pricing.analytic.formula.EuropeanVanillaOption;
 import com.opengamma.analytics.financial.model.volatility.BlackFormulaRepository;
 import com.opengamma.analytics.math.MathException;
@@ -23,6 +20,9 @@ import com.opengamma.analytics.math.rootfinding.BracketRoot;
 import com.opengamma.analytics.math.statistics.distribution.NormalDistribution;
 import com.opengamma.analytics.math.statistics.distribution.ProbabilityDistribution;
 import com.opengamma.util.test.TestGroup;
+
+import cern.jet.random.engine.MersenneTwister;
+import cern.jet.random.engine.MersenneTwister64;
 
 /**
  * Tests related to the Hagan et al. approximation of the SABR implied volatility.
@@ -53,10 +53,10 @@ public class SABRHaganVolatilityFunctionTest extends SABRVolatilityFunctionTestC
     return FUNCTION;
   }
 
-  @Test
   /**
    * Test if the Hagan volatility function implementation around ATM is numerically stable enough (the finite difference slope should be small enough).
    */
+  @Test
   public void testATMSmoothness() {
     final double timeToExpiry = 1;
     final boolean isCall = true;
@@ -69,22 +69,23 @@ public class SABRHaganVolatilityFunctionTest extends SABRVolatilityFunctionTestC
     final double forward = 0.05;
     final double[] sabrVolatilty = new double[2 * nbPoints + 1];
     final double range = 5E-9;
-    final double strike[] = new double[2 * nbPoints + 1];
+    final double[] strike = new double[2 * nbPoints + 1];
     for (int looppts = -nbPoints; looppts <= nbPoints; looppts++) {
-      strike[looppts + nbPoints] = forward + ((double) looppts) / nbPoints * range;
+      strike[looppts + nbPoints] = forward + (double) looppts / nbPoints * range;
       option = new EuropeanVanillaOption(strike[looppts + nbPoints], timeToExpiry, isCall);
-      final SABRFormulaData SabrData = new SABRFormulaData(alpha, beta, rho, nu);
-      sabrVolatilty[looppts + nbPoints] = FUNCTION.getVolatilityFunction(option, forward).evaluate(SabrData);
+      final SABRFormulaData sabrData = new SABRFormulaData(alpha, beta, rho, nu);
+      sabrVolatilty[looppts + nbPoints] = FUNCTION.getVolatilityFunction(option, forward).evaluate(sabrData);
     }
     for (int looppts = -nbPoints; looppts < nbPoints; looppts++) {
-      assertTrue(Math.abs(sabrVolatilty[looppts + nbPoints + 1] - sabrVolatilty[looppts + nbPoints]) / (strike[looppts + nbPoints + 1] - strike[looppts + nbPoints]) < 20.0);
+      assertTrue(Math.abs(sabrVolatilty[looppts + nbPoints + 1]
+          - sabrVolatilty[looppts + nbPoints]) / (strike[looppts + nbPoints + 1] - strike[looppts + nbPoints]) < 20.0);
     }
   }
 
-  @Test(enabled = false)
   /**
    * Produce the smile for a given set of strikes.
    */
+  @Test(enabled = false)
   public void smile() {
     final double alpha = 0.04079820992199477;
     final double beta = 0.5;
@@ -95,22 +96,22 @@ public class SABRHaganVolatilityFunctionTest extends SABRVolatilityFunctionTestC
     final int nbpoints = 20;
     final double startStrike = 0.0001;
     final double endStrike = 0.2500;
-    final SABRFormulaData SabrData = new SABRFormulaData(alpha, beta, rho, nu);
+    final SABRFormulaData sabrData = new SABRFormulaData(alpha, beta, rho, nu);
     final double[] strikes = new double[nbpoints + 1];
     final double[] sabrVolatilty = new double[nbpoints + 1];
     EuropeanVanillaOption option;
     for (int loopstrike = 0; loopstrike <= nbpoints; loopstrike++) {
       strikes[loopstrike] = startStrike + loopstrike * (endStrike - startStrike) / nbpoints;
       option = new EuropeanVanillaOption(strikes[loopstrike], timeToExpiry, true);
-      sabrVolatilty[loopstrike] = FUNCTION.getVolatilityFunction(option, forward).evaluate(SabrData);
+      sabrVolatilty[loopstrike] = FUNCTION.getVolatilityFunction(option, forward).evaluate(sabrData);
     }
   }
 
-  @Test
   /**
    * Tests the first order adjoint derivatives for the SABR Hagan volatility function.
    * The derivatives with respect to the forward, strike, alpha, beta, rho and nu are provided.
    */
+  @Test
   public void testVolatilityAdjointDebug() {
     final double eps = 1e-6;
     final double tol = 1e-5;
@@ -166,7 +167,7 @@ public class SABRHaganVolatilityFunctionTest extends SABRVolatilityFunctionTestC
   }
 
   /**
-   *Test the beta = 0 edge case
+   * Test the beta = 0 edge case.
    */
   @Test
   public void testVolatilityAdjointBeta0() {
@@ -179,7 +180,7 @@ public class SABRHaganVolatilityFunctionTest extends SABRVolatilityFunctionTestC
   }
 
   /**
-   *Test the beta = 1 edge case
+   * Test the beta = 1 edge case.
    */
   @Test
   public void testVolatilityAdjointBeta1() {
@@ -192,7 +193,7 @@ public class SABRHaganVolatilityFunctionTest extends SABRVolatilityFunctionTestC
   }
 
   /**
-   *Test the nu = 0 edge case
+   * Test the nu = 0 edge case.
    */
   @Test
   public void testVolatilityAdjointNu0() {
@@ -205,7 +206,7 @@ public class SABRHaganVolatilityFunctionTest extends SABRVolatilityFunctionTestC
   }
 
   /**
-   *Test the rho = -1 edge case
+   * Test the rho = -1 edge case.
    */
   @Test
   public void testVolatilityAdjointRhoM1() {
@@ -218,7 +219,7 @@ public class SABRHaganVolatilityFunctionTest extends SABRVolatilityFunctionTestC
   }
 
   /**
-   *Test the rho = 1 edge case
+   * Test the rho = 1 edge case.
    */
   @Test
   public void testVolatilityAdjointRho1() {
@@ -661,12 +662,12 @@ public class SABRHaganVolatilityFunctionTest extends SABRVolatilityFunctionTestC
         break;
       case Rho:
         final double r = sabrData.getRho();
-        if ((r + 1) < delta) {
+        if (r + 1 < delta) {
           fdType = FiniteDifferenceType.FORWARD;
           dataA = sabrData;
           dataB = sabrData.withRho(r + delta);
           dataC = sabrData.withRho(r + 2 * delta);
-        } else if ((1 - r) < delta) {
+        } else if (1 - r < delta) {
           fdType = FiniteDifferenceType.BACKWARD;
           dataA = sabrData.withRho(r - 2 * delta);
           dataB = sabrData.withRho(r - delta);

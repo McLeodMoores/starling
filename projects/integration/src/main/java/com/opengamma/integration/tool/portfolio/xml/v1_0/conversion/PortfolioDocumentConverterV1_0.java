@@ -29,7 +29,7 @@ import com.opengamma.integration.tool.portfolio.xml.v1_0.jaxb.Position;
 public class PortfolioDocumentConverterV1_0  // CSIGNORE underscore in class name
     implements PortfolioDocumentConverter<PortfolioDocumentV1_0> {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(PortfolioDocumentConverterV1_0.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(PortfolioDocumentConverterV1_0.class);
 
   @Override
   public Iterable<VersionedPortfolioHandler> convert(PortfolioDocumentV1_0 portfolioDocument) {
@@ -104,7 +104,7 @@ public class PortfolioDocumentConverterV1_0  // CSIGNORE underscore in class nam
             positions);
 
       } catch (PortfolioParsingException e) {
-        s_logger.error("Unable to parse portfolio [" + portfolio.getName() + "] - it will be skipped", e);
+        LOGGER.error("Unable to parse portfolio [" + portfolio.getName() + "] - it will be skipped", e);
         return null;
       }
     }

@@ -30,7 +30,7 @@ public class PersistentObjectId implements EnhancedUserType {
    */
   public static final PersistentObjectId INSTANCE = new PersistentObjectId();
 
-  private static final Logger s_logger = LoggerFactory.getLogger(PersistentObjectId.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(PersistentObjectId.class);
 
   private static final int[] SQL_TYPES = new int[] {Types.VARCHAR };
 
@@ -80,10 +80,10 @@ public class PersistentObjectId implements EnhancedUserType {
   public void nullSafeSet(final PreparedStatement preparedStatement, final Object value, final int index,
       final SharedSessionContractImplementor session) throws HibernateException, SQLException {
     if (value == null) {
-      s_logger.debug("ObjectId -> String : NULL -> NULL");
+      LOGGER.debug("ObjectId -> String : NULL -> NULL");
       new StringType().nullSafeSet(preparedStatement, null, index, session);
     } else {
-      s_logger.debug("ObjectId -> String : {}   ->  {}", value, ObjectId.parse((String) value));
+      LOGGER.debug("ObjectId -> String : {}   ->  {}", value, ObjectId.parse((String) value));
       new StringType().nullSafeSet(preparedStatement, ObjectId.parse((String) value), index, session);
     }
   }

@@ -34,7 +34,7 @@ import com.opengamma.id.ExternalId;
 public class BondFutureOptionBlackFromFuturePresentValueFunction extends BondFutureOptionBlackFunction {
   /** String indicating the calculation method */
   public static final String FUTURES_PRICE = "FromFuturePrice";
-  private static final PresentValueBlackCalculator s_calculator = PresentValueBlackCalculator.getInstance();
+  private static final PresentValueBlackCalculator CALCULATOR = PresentValueBlackCalculator.getInstance();
 
   public BondFutureOptionBlackFromFuturePresentValueFunction() {
     super(ValueRequirementNames.PRESENT_VALUE);
@@ -49,7 +49,7 @@ public class BondFutureOptionBlackFromFuturePresentValueFunction extends BondFut
     }
     final double futurePrice = (Double) underlyingValue;
     final YieldCurveWithBlackCubeAndForwardBundle dataWithFuture = YieldCurveWithBlackCubeAndForwardBundle.from(data, futurePrice);
-    final double pv = bondFutureOption.accept(s_calculator, dataWithFuture);
+    final double pv = bondFutureOption.accept(CALCULATOR, dataWithFuture);
     return Collections.singleton(new ComputedValue(spec, pv));
   }
 

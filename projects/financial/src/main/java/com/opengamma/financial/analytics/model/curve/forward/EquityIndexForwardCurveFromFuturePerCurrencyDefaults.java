@@ -28,7 +28,7 @@ import com.opengamma.util.ArgumentChecker;
  */
 public class EquityIndexForwardCurveFromFuturePerCurrencyDefaults extends DefaultPropertyFunction {
   /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(EquityIndexForwardCurveFromFuturePerCurrencyDefaults.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(EquityIndexForwardCurveFromFuturePerCurrencyDefaults.class);
   /** Value requirements for which these defaults apply */
   private static final String[] VALUE_REQUIREMENTS = new String[] {
     ValueRequirementNames.FORWARD_CURVE
@@ -79,7 +79,7 @@ public class EquityIndexForwardCurveFromFuturePerCurrencyDefaults extends Defaul
     final String currency = target.getUniqueId().getValue();
     final String forwardCurveName = _forwardCurveNames.get(currency);
     if (forwardCurveName == null) {
-      s_logger.error("Could not get defaults for {}; should never happen", currency);
+      LOGGER.error("Could not get defaults for {}; should never happen", currency);
       return null;
     }
     if (ValuePropertyNames.CURVE.equals(propertyName)) {
@@ -88,7 +88,7 @@ public class EquityIndexForwardCurveFromFuturePerCurrencyDefaults extends Defaul
     if (ForwardCurveValuePropertyNames.PROPERTY_FORWARD_CURVE_CALCULATION_METHOD.equals(propertyName)) {
       return Collections.singleton(_forwardCurveCalculationMethods.get(currency));
     }
-    s_logger.error("Could not get default value for {}", propertyName);
+    LOGGER.error("Could not get default value for {}", propertyName);
     return null;
   }
 

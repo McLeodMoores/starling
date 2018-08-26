@@ -32,7 +32,7 @@ public class PersistentVersionCorrection implements EnhancedUserType {
    */
   public static final PersistentVersionCorrection INSTANCE = new PersistentVersionCorrection();
 
-  private static final Logger s_logger = LoggerFactory.getLogger(PersistentVersionCorrection.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(PersistentVersionCorrection.class);
 
   private static final int[] SQL_TYPES = new int[]{Types.VARCHAR};
 
@@ -82,10 +82,10 @@ public class PersistentVersionCorrection implements EnhancedUserType {
   public void nullSafeSet(final PreparedStatement preparedStatement, final Object value, final int index,
       final SharedSessionContractImplementor session) throws HibernateException, SQLException {
     if (value == null) {
-      s_logger.debug("VersionCorrection -> String : NULL -> NULL");
+      LOGGER.debug("VersionCorrection -> String : NULL -> NULL");
       new StringType().nullSafeSet(preparedStatement, null, index, session);
     } else {
-      s_logger.debug("VersionCorrection -> String : {}   ->  {}", value, value);
+      LOGGER.debug("VersionCorrection -> String : {}   ->  {}", value, value);
       new StringType().nullSafeSet(preparedStatement, value.toString(), index, session);
     }
   }

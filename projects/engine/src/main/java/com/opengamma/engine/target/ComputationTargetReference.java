@@ -60,7 +60,7 @@ public abstract class ComputationTargetReference implements Serializable {
   private static final Integer ZERO = 0;
   private static final Integer ONE = 1;
 
-  private static final ComputationTargetTypeVisitor<Void, Integer> s_getTypeDepth = new ComputationTargetTypeVisitor<Void, Integer>() {
+  private static final ComputationTargetTypeVisitor<Void, Integer> GET_TYPE_DEPTH = new ComputationTargetTypeVisitor<Void, Integer>() {
 
     @Override
     public Integer visitMultipleComputationTargetTypes(final Set<ComputationTargetType> types, final Void data) {
@@ -105,7 +105,7 @@ public abstract class ComputationTargetReference implements Serializable {
    * @throws IllegalArgumentException if the type does not have a uniform depth
    */
   public/* should be package visible */static int getTypeDepth(final ComputationTargetType type) {
-    return type.accept(s_getTypeDepth, null);
+    return type.accept(GET_TYPE_DEPTH, null);
   }
 
   public ComputationTargetRequirement containing(final ComputationTargetType type, final ExternalId identifier) {
@@ -203,7 +203,7 @@ public abstract class ComputationTargetReference implements Serializable {
     }
   }
 
-  private static final ComputationTargetTypeVisitor<Void, ComputationTargetType> s_getParentType = new ComputationTargetTypeVisitor<Void, ComputationTargetType>() {
+  private static final ComputationTargetTypeVisitor<Void, ComputationTargetType> GET_PARENT_TYPE = new ComputationTargetTypeVisitor<Void, ComputationTargetType>() {
 
     @Override
     public ComputationTargetType visitMultipleComputationTargetTypes(final Set<ComputationTargetType> types, final Void data) {
@@ -245,7 +245,7 @@ public abstract class ComputationTargetReference implements Serializable {
       // TODO: should be checking the type
       final ComputationTargetReference parent = getParent();
       if (parent != null) {
-        final ComputationTargetType parentType = newType.accept(s_getParentType, null);
+        final ComputationTargetType parentType = newType.accept(GET_PARENT_TYPE, null);
         if (parentType == null) {
           // Truncate the parent
           return create(null, newType);

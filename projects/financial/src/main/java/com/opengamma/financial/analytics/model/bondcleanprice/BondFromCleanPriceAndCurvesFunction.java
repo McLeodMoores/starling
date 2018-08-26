@@ -53,7 +53,7 @@ import com.opengamma.util.async.AsynchronousExecution;
  */
 public abstract class BondFromCleanPriceAndCurvesFunction extends AbstractFunction.NonCompiledInvoker {
   /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(BondFromCleanPriceAndCurvesFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(BondFromCleanPriceAndCurvesFunction.class);
   /** The value requirement name */
   private final String _valueRequirementName;
   /** The instrument exposures provider */
@@ -135,7 +135,7 @@ public abstract class BondFromCleanPriceAndCurvesFunction extends AbstractFuncti
       }
       return requirements;
     } catch (final Exception e) {
-      s_logger.error(e.getMessage(), e);
+      LOGGER.error(e.getMessage(), e);
       return null;
     }
   }

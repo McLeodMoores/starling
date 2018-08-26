@@ -29,8 +29,8 @@ import com.opengamma.util.money.Currency;
  * Provides defaults for externally provided sensitivities values
  */
 public class ExternallyProvidedSensitivitiesDefaultPropertiesFunction extends DefaultPropertyFunction {
-  private static final Logger s_logger = LoggerFactory.getLogger(ExternallyProvidedSensitivitiesDefaultPropertiesFunction.class);
-  private static final String[] s_valueNames = {
+  private static final Logger LOGGER = LoggerFactory.getLogger(ExternallyProvidedSensitivitiesDefaultPropertiesFunction.class);
+  private static final String[] VALUE_NAMES = {
     "Present Value",
     "PV01",
     "CS01",
@@ -70,7 +70,7 @@ public class ExternallyProvidedSensitivitiesDefaultPropertiesFunction extends De
 
   @Override
   protected void getDefaults(final DefaultPropertyFunction.PropertyDefaults defaults) {
-    for (final String valueName : s_valueNames) {
+    for (final String valueName : VALUE_NAMES) {
       defaults.addValuePropertyName(valueName, "CurveCalculationConfig");
     }
   }
@@ -81,7 +81,7 @@ public class ExternallyProvidedSensitivitiesDefaultPropertiesFunction extends De
       final String currencyName = FinancialSecurityUtils.getCurrency(target.getPosition().getSecurity()).getCode();
       final String configName = _currencyAndCurveConfigNames.get(currencyName);
       if (configName == null) {
-        s_logger.error("Could not get config for currency " + currencyName + "; should never happen");
+        LOGGER.error("Could not get config for currency " + currencyName + "; should never happen");
         return null;
       }
       return Collections.singleton(configName);

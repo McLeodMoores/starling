@@ -31,7 +31,7 @@ public class PersistentInstant implements EnhancedUserType {
    */
   public static final PersistentInstant INSTANCE = new PersistentInstant();
 
-  private static final Logger s_logger = LoggerFactory.getLogger(PersistentInstant.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(PersistentInstant.class);
 
   private static final int[] SQL_TYPES = new int[] {Types.TIMESTAMP };
 
@@ -81,10 +81,10 @@ public class PersistentInstant implements EnhancedUserType {
   public void nullSafeSet(final PreparedStatement preparedStatement, final Object value, final int index,
       final SharedSessionContractImplementor session) throws HibernateException, SQLException {
     if (value == null) {
-      s_logger.debug("INSTANT -> TIMESTAMP : NULL -> NULL");
+      LOGGER.debug("INSTANT -> TIMESTAMP : NULL -> NULL");
       new TimestampType().nullSafeSet(preparedStatement, null, index, session);
     } else {
-      s_logger.debug("INSTANT -> TIMESTAMP : {}   ->  {}", value, DbDateUtils.toSqlTimestamp((Instant) value));
+      LOGGER.debug("INSTANT -> TIMESTAMP : {}   ->  {}", value, DbDateUtils.toSqlTimestamp((Instant) value));
       new TimestampType().nullSafeSet(preparedStatement, DbDateUtils.toSqlTimestamp((Instant) value), index, session);
     }
   }

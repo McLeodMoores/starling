@@ -36,7 +36,7 @@ public class ISDAModelTest {
   // -----------------------------------------------------------------------------------------------------------
 
   // Flag to control if any test results are output to the console
-  private static final boolean outputResults = false;
+  private static final boolean OUTPUT_RESULTS = false;
 
   // -----------------------------------------------------------------------------------------------------------
 
@@ -289,7 +289,7 @@ public class ISDAModelTest {
       final double cleanPrice = method.calculateUpfrontCharge(cds, discountCurve, hazardRateCurve, true);
       final double dirtyPrice = method.calculateUpfrontCharge(cds, discountCurve, hazardRateCurve, false);
 
-      if (outputResults) {
+      if (OUTPUT_RESULTS) {
         //System.out.println(rollingDate + "\t" + "Dirty Price = " + "\t" + dirtyPrice);
         System.out.println(rollingDate + "\t" + "clean Price = " + "\t" + cleanPrice);
       }

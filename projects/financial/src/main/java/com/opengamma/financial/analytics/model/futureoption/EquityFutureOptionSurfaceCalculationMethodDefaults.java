@@ -31,14 +31,14 @@ import com.opengamma.util.ArgumentChecker;
  */
 public class EquityFutureOptionSurfaceCalculationMethodDefaults extends StaticDefaultPropertyFunction {
   /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(EquityFutureOptionSurfaceCalculationMethodDefaults.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(EquityFutureOptionSurfaceCalculationMethodDefaults.class);
   /** Map of currency name to surface calculation method */
   private final Map<String, Set<String>> _currencyToSurfaceCalculationMethod;
   /** The priority of this set of defaults */
   private final PriorityClass _priority;
 
   /** The value requirement names for which these defaults apply */
-  private static final String[] s_valueNames = new String[] {
+  private static final String[] VALUE_NAMES = new String[] {
       ValueRequirementNames.PRESENT_VALUE,
       ValueRequirementNames.VEGA_QUOTE_MATRIX,
       ValueRequirementNames.VALUE_VEGA,
@@ -70,7 +70,7 @@ public class EquityFutureOptionSurfaceCalculationMethodDefaults extends StaticDe
    * @param perCurrencyConfig Default values of surface calculation method per currency, not null
    */
   public EquityFutureOptionSurfaceCalculationMethodDefaults(final String priority, final String... perCurrencyConfig) {
-    super(FinancialSecurityTypes.EQUITY_INDEX_FUTURE_OPTION_SECURITY, ValuePropertyNames.SURFACE_CALCULATION_METHOD, true, s_valueNames);
+    super(FinancialSecurityTypes.EQUITY_INDEX_FUTURE_OPTION_SECURITY, ValuePropertyNames.SURFACE_CALCULATION_METHOD, true, VALUE_NAMES);
     ArgumentChecker.notNull(priority, "priority");
     ArgumentChecker.notNull(perCurrencyConfig, "per currency configuration");
     _priority = PriorityClass.valueOf(priority);

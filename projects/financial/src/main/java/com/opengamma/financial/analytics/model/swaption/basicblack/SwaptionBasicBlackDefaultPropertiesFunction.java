@@ -18,13 +18,12 @@ import com.opengamma.engine.function.FunctionCompilationContext;
 import com.opengamma.engine.value.ValuePropertyNames;
 import com.opengamma.engine.value.ValueRequirement;
 import com.opengamma.engine.value.ValueRequirementNames;
-import com.opengamma.financial.analytics.OpenGammaFunctionExclusions;
 import com.opengamma.financial.property.DefaultPropertyFunction;
 import com.opengamma.financial.security.FinancialSecurityTypes;
 import com.opengamma.financial.security.FinancialSecurityUtils;
 import com.opengamma.financial.security.option.SwaptionSecurity;
 import com.opengamma.util.ArgumentChecker;
-
+//CSOFF
 /**
  * Default properties function for swaptions that are to be priced using the basic Black method.
  * @deprecated The functions for which these default properties apply are deprecated.
@@ -32,7 +31,7 @@ import com.opengamma.util.ArgumentChecker;
 @Deprecated
 public class SwaptionBasicBlackDefaultPropertiesFunction extends DefaultPropertyFunction {
   /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(SwaptionBasicBlackDefaultPropertiesFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(SwaptionBasicBlackDefaultPropertiesFunction.class);
   /** The requirements for which these defaults apply */
   private static final String[] s_valueRequirements = new String[] {
     ValueRequirementNames.PRESENT_VALUE,
@@ -76,7 +75,7 @@ public class SwaptionBasicBlackDefaultPropertiesFunction extends DefaultProperty
   protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue, final String propertyName) {
     final String currencyName = FinancialSecurityUtils.getCurrency(target.getSecurity()).getCode();
     if (!_currencyAndCurveConfigNames.containsKey(currencyName)) {
-      s_logger.error("Could not config and surface names for currency " + currencyName + "; should never happen");
+      LOGGER.error("Could not config and surface names for currency " + currencyName + "; should never happen");
       return null;
     }
     if (ValuePropertyNames.CURVE_CALCULATION_CONFIG.equals(propertyName)) {

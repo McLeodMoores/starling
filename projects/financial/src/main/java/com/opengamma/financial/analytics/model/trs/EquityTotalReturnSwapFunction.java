@@ -40,7 +40,7 @@ import com.opengamma.id.ExternalIdBundle;
  */
 public abstract class EquityTotalReturnSwapFunction extends DiscountingFunction {
   /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(EquityTotalReturnSwapFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(EquityTotalReturnSwapFunction.class);
 
   /**
    * @param valueRequirements The value requirement names, not null
@@ -108,7 +108,7 @@ public abstract class EquityTotalReturnSwapFunction extends DiscountingFunction 
         final Security equitySecurity = securitySource.getSingle(equityId);
         return new ValueRequirement(MARKET_VALUE, ComputationTargetType.SECURITY, equitySecurity.getUniqueId());
       } catch (final Exception e) {
-        s_logger.error(e.getMessage());
+        LOGGER.error(e.getMessage());
         return null;
       }
     }

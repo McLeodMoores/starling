@@ -11,7 +11,7 @@ import com.opengamma.analytics.financial.interestrate.InstrumentDerivativeVisito
 import com.opengamma.analytics.financial.interestrate.YieldCurveBundle;
 import com.opengamma.analytics.financial.interestrate.bond.definition.BondFixedSecurity;
 import com.opengamma.analytics.financial.interestrate.bond.method.BondSecurityDiscountingMethod;
-
+//CSOFF
 /**
  * Calculate dirty price for bonds.
  * @deprecated Use {@link com.opengamma.analytics.financial.provider.calculator.issuer.DirtyPriceFromCurvesCalculator}

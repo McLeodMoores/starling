@@ -38,7 +38,7 @@ import com.opengamma.util.db.DbMapSqlParameterSource;
 public abstract class AbstractDbMaster implements ConfigurableDbMaster {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(AbstractDbMaster.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(AbstractDbMaster.class);
 
   /**
    * The database connector.
@@ -76,7 +76,7 @@ public abstract class AbstractDbMaster implements ConfigurableDbMaster {
    */
   public AbstractDbMaster(final DbConnector dbConnector, final String defaultScheme) {
     ArgumentChecker.notNull(dbConnector, "dbConnector");
-    s_logger.debug("installed DbConnector: {}", dbConnector);
+    LOGGER.debug("installed DbConnector: {}", dbConnector);
     _dbConnector = dbConnector;
     _clock = dbConnector.timeSource();
     _uniqueIdScheme = defaultScheme;
@@ -175,7 +175,7 @@ public abstract class AbstractDbMaster implements ConfigurableDbMaster {
   @Override
   public void setClock(final Clock clock) {
     ArgumentChecker.notNull(clock, "clock");
-    s_logger.debug("installed Clock: {}", clock);
+    LOGGER.debug("installed Clock: {}", clock);
     _clock = clock;
   }
 
@@ -290,7 +290,7 @@ public abstract class AbstractDbMaster implements ConfigurableDbMaster {
   @Override
   public void setUniqueIdScheme(final String scheme) {
     ArgumentChecker.notNull(scheme, "scheme");
-    s_logger.debug("installed scheme: {}", scheme);
+    LOGGER.debug("installed scheme: {}", scheme);
     _uniqueIdScheme = scheme;
   }
 
@@ -388,7 +388,7 @@ public abstract class AbstractDbMaster implements ConfigurableDbMaster {
       final String version = getJdbcTemplate().queryForObject(sql, args, String.class);
       return Integer.parseInt(version);
     } catch (final Exception e) {
-      s_logger.debug("Error reading schema version from database", e);
+      LOGGER.debug("Error reading schema version from database", e);
       return null;
     }
   }

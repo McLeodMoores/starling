@@ -68,7 +68,7 @@ import com.opengamma.util.tuple.Triple;
  */
 public class SABRNonLinearLeastSquaresSwaptionCubeFittingFunction extends AbstractFunction.NonCompiledInvoker {
   /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(SABRNonLinearLeastSquaresSwaptionCubeFittingFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(SABRNonLinearLeastSquaresSwaptionCubeFittingFunction.class);
   /** The error on volatility quotes */
   private static final double ERROR = 0.0001;
   /** The fixed parameters, where 1 means fixed. The order is (alpha, beta, nu, rho) */
@@ -112,7 +112,7 @@ public class SABRNonLinearLeastSquaresSwaptionCubeFittingFunction extends Abstra
           final List<ObjectsPair<Double, Double>> strikeVol = volatilityCubeData.getZValuesForXandY(expiry, maturity);
           final int nVols = strikeVol.size();
           if (nVols < 4) {
-            s_logger.info("Smile had less than 4 points for expiry = {} and maturity = {}", expiry, maturity);
+            LOGGER.info("Smile had less than 4 points for expiry = {} and maturity = {}", expiry, maturity);
             continue;
           }
           final double[] strikes = new double[nVols];

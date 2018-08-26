@@ -49,7 +49,7 @@ import com.opengamma.util.metric.MetricProducer;
  */
 @PublicAPI
 public abstract class AbstractLiveDataClient implements LiveDataClient, MetricProducer {
-  private static final Logger s_logger = LoggerFactory.getLogger(AbstractLiveDataClient.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(AbstractLiveDataClient.class);
   // Injected Inputs:
   private long _heartbeatPeriod = Heartbeater.DEFAULT_PERIOD;
   private FudgeContext _fudgeContext = OpenGammaFudgeContext.getInstance();
@@ -420,7 +420,7 @@ public abstract class AbstractLiveDataClient implements LiveDataClient, MetricPr
   @Override
   public void unsubscribe(UserPrincipal user, Collection<LiveDataSpecification> fullyQualifiedSpecifications, LiveDataListener listener) {
     for (LiveDataSpecification fullyQualifiedSpecification : fullyQualifiedSpecifications) {
-      s_logger.info("Unsubscribing by {} to {} delivered to {}", new Object[] {user, fullyQualifiedSpecification, listener });
+      LOGGER.info("Unsubscribing by {} to {} delivered to {}", new Object[] {user, fullyQualifiedSpecification, listener });
       boolean unsubscribeToSpec = false;
       _subscriptionLock.lock();
       try {
@@ -458,7 +458,7 @@ public abstract class AbstractLiveDataClient implements LiveDataClient, MetricPr
     if (_inboundTickMeter != null) {
       _inboundTickMeter.mark();
     }
-    s_logger.debug("{}", update);
+    LOGGER.debug("{}", update);
 
     _pendingSubscriptionReadLock.lock();
     try {

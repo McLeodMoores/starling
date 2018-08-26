@@ -19,7 +19,7 @@ import com.opengamma.util.ArgumentChecker;
     description = "CogdaDataDistributor attributes and operations that can be managed via JMX"
     )
 public class CogdaDataDistributorMBean {
-  private static final Logger s_logger = LoggerFactory.getLogger(CogdaDataDistributorMBean.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(CogdaDataDistributorMBean.class);
   private final CogdaDataDistributor _distributor;
   
   public CogdaDataDistributorMBean(CogdaDataDistributor distributor) {
@@ -40,7 +40,7 @@ public class CogdaDataDistributorMBean {
     try {
       return getDistributor().getExternalIdScheme();
     } catch (RuntimeException e) {
-      s_logger.error("getExternalIdScheme() failed", e);
+      LOGGER.error("getExternalIdScheme() failed", e);
       throw new RuntimeException(e.getMessage());
     }
   }

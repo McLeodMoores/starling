@@ -37,7 +37,7 @@ import com.opengamma.util.tuple.Pairs;
  * Class to analyze view processor result sets and return statistics about available results.
  */
 public class ViewProcessStatsProcessor {
-  private static final Logger s_logger = LoggerFactory.getLogger(ViewProcessStatsProcessor.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ViewProcessStatsProcessor.class);
   
   private CompiledViewDefinition _compiledViewDef;
   private ViewComputationResultModel _viewComputationResultModel;
@@ -71,13 +71,13 @@ public class ViewProcessStatsProcessor {
           Map<Pair<String, ValueProperties>, ComputedValueResult> values = calculationResult.getValues(targetSpec);
           String securityType = position.getSecurity().getSecurityType();
           Set<Pair<String, ValueProperties>> valueRequirements = portfolioRequirementsBySecurityType.get(securityType);
-          s_logger.info("Processing valueRequirement " + valueRequirements + " for security type " + securityType);
+          LOGGER.info("Processing valueRequirement " + valueRequirements + " for security type " + securityType);
           if (valueRequirements != null) {
             for (Pair<String, ValueProperties> valueRequirement : valueRequirements) {
               ValueRequirement valueReq = new ValueRequirement(valueRequirement.getFirst(), breadcrumbTargetSpec, valueRequirement.getSecond());
               ValueSpecification valueSpec = valueMappings.getValueSpecification(calcConfigName, valueReq);
               if (valueSpec == null) {
-                s_logger.debug("Couldn't get reverse value spec mapping from requirement: " + valueReq.toString());
+                LOGGER.debug("Couldn't get reverse value spec mapping from requirement: " + valueReq.toString());
                 _failures++;
               } else {
                 Pair<String, ValueProperties> valueKey = Pairs.of(valueSpec.getValueName(), valueSpec.getProperties());

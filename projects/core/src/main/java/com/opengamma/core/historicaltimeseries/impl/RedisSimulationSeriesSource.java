@@ -56,7 +56,7 @@ import com.opengamma.util.ArgumentChecker;
  * requirement.
  */
 public class RedisSimulationSeriesSource extends NonVersionedRedisHistoricalTimeSeriesSource implements SimulationSeriesSource {
-  private static final Logger s_logger = LoggerFactory.getLogger(RedisSimulationSeriesSource.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(RedisSimulationSeriesSource.class);
   private LocalDate _currentSimulationExecutionDate = LocalDate.now();
 
   public RedisSimulationSeriesSource(JedisPool jedisPool) {
@@ -130,7 +130,7 @@ public class RedisSimulationSeriesSource extends NonVersionedRedisHistoricalTime
       }
       getJedisPool().returnResource(jedis);
     } catch (Exception e) {
-      s_logger.error("Unable to clear execution date " + simulationExecutionDate, e);
+      LOGGER.error("Unable to clear execution date " + simulationExecutionDate, e);
       getJedisPool().returnBrokenResource(jedis);
       throw new OpenGammaRuntimeException("Unable to clear execution date " + simulationExecutionDate, e);
     }

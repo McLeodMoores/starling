@@ -36,7 +36,7 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT_DB)
 public abstract class AbstractDbHistoricalTimeSeriesMasterWorkerTest extends AbstractDbTest {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(AbstractDbHistoricalTimeSeriesMasterWorkerTest.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(AbstractDbHistoricalTimeSeriesMasterWorkerTest.class);
 
   protected DbHistoricalTimeSeriesMaster _htsMaster;
   protected Instant _version1Instant;
@@ -49,7 +49,7 @@ public abstract class AbstractDbHistoricalTimeSeriesMasterWorkerTest extends Abs
 
   public AbstractDbHistoricalTimeSeriesMasterWorkerTest(String databaseType, String databaseVersion) {
     super(databaseType, databaseVersion);
-    s_logger.info("running testcases for {}", databaseType);
+    LOGGER.info("running testcases for {}", databaseType);
   }
 
   //-------------------------------------------------------------------------
@@ -63,11 +63,11 @@ public abstract class AbstractDbHistoricalTimeSeriesMasterWorkerTest extends Abs
     _version2Instant = _now.toInstant().minusSeconds(50);
     _version3Instant = _now.toInstant().minusSeconds(40);
     _version4Instant = _now.toInstant().minusSeconds(30);
-    s_logger.debug("test data now:   {}", _now);
-    s_logger.debug("test data 1: {}", _version1Instant);
-    s_logger.debug("test data 2: {}", _version2Instant);
-    s_logger.debug("test data 3: {}", _version3Instant);
-    s_logger.debug("test data 4: {}", _version4Instant);
+    LOGGER.debug("test data now:   {}", _now);
+    LOGGER.debug("test data 1: {}", _version1Instant);
+    LOGGER.debug("test data 2: {}", _version2Instant);
+    LOGGER.debug("test data 3: {}", _version3Instant);
+    LOGGER.debug("test data 4: {}", _version4Instant);
     final JdbcOperations template = _htsMaster.getDbConnector().getJdbcOperations();
     template.update("INSERT INTO hts_name VALUES (?,?)",
         1, "N101");

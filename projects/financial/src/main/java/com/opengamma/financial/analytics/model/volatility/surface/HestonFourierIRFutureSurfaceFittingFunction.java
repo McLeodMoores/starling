@@ -54,7 +54,7 @@ import com.opengamma.util.tuple.ObjectsPair;
  * 
  */
 public class HestonFourierIRFutureSurfaceFittingFunction extends AbstractFunction.NonCompiledInvoker {
-  private static final Logger s_logger = LoggerFactory.getLogger(HestonFourierIRFutureSurfaceFittingFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(HestonFourierIRFutureSurfaceFittingFunction.class);
   private static final double ERROR = 0.001;
   private static final HestonVolatilityFunction HESTON_FUNCTION = new HestonVolatilityFunction();
   private static final DoubleMatrix1D HESTON_INITIAL_VALUES = new DoubleMatrix1D(new double[] {1.5, 0.1, 0.1, 0.5, 0.0});

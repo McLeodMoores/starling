@@ -33,7 +33,7 @@ import com.opengamma.financial.OpenGammaExecutionContext;
  */
 public class YieldCurveShiftFunction extends AbstractFunction.NonCompiledInvoker {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(YieldCurveShiftFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(YieldCurveShiftFunction.class);
 
   /**
    * Property to shift a yield curve.
@@ -89,9 +89,9 @@ public class YieldCurveShiftFunction extends AbstractFunction.NonCompiledInvoker
     if (compiler == null) {
       throw new IllegalStateException("No override operation compiler for " + shift + " in execution context");
     }
-    s_logger.debug("Applying {} to yield curve {}", shift, curve);
+    LOGGER.debug("Applying {} to yield curve {}", shift, curve);
     final Object result = compiler.compile(shift, executionContext.getComputationTargetResolver()).apply(desiredValue, curve);
-    s_logger.debug("Got result {}", result);
+    LOGGER.debug("Got result {}", result);
     return Collections.singleton(new ComputedValue(new ValueSpecification(inputSpec.getValueName(), inputSpec.getTargetSpecification(), properties.get()), result));
   }
 

@@ -36,7 +36,7 @@ import com.opengamma.util.tuple.Pairs;
 public final class FunctionCosts implements FunctionInvocationStatisticsGatherer {
 
   /** Logger. */
-  static final Logger s_logger = LoggerFactory.getLogger(FunctionCosts.class);
+  static final Logger LOGGER = LoggerFactory.getLogger(FunctionCosts.class);
   /**
    * Name used for the mean.
    */
@@ -81,10 +81,10 @@ public final class FunctionCosts implements FunctionInvocationStatisticsGatherer
    * Loads the mean statistics.
    */
   private FunctionInvocationStatistics loadMeanStatistics() {
-    s_logger.debug("Loading initial mean statistics");
+    LOGGER.debug("Loading initial mean statistics");
     FunctionCostsDocument doc = _costsMaster.load(MEAN_STATISTICS, MEAN_STATISTICS, null);
     if (doc == null) {
-      s_logger.debug("No initial mean statistics");
+      LOGGER.debug("No initial mean statistics");
       doc = new FunctionCostsDocument(MEAN_STATISTICS, MEAN_STATISTICS);
       new FunctionInvocationStatistics(MEAN_STATISTICS).populateDocument(doc);
     }
@@ -154,14 +154,14 @@ public final class FunctionCosts implements FunctionInvocationStatisticsGatherer
    */
   /* package */ FunctionInvocationStatistics loadStatistics(final FunctionCostsPerConfiguration configurationCosts, final String functionId) {
     final String configurationName = configurationCosts.getConfigurationName();
-    s_logger.debug("Loading statistics for {}/{}", configurationName, functionId);
+    LOGGER.debug("Loading statistics for {}/{}", configurationName, functionId);
     final FunctionCostsDocument doc = _costsMaster.load(configurationName, functionId, null);
     final FunctionInvocationStatistics stats;
     if (doc != null) {
-      s_logger.debug("Found previous statistics for {}/{}", configurationName, functionId);
+      LOGGER.debug("Found previous statistics for {}/{}", configurationName, functionId);
       stats = new FunctionInvocationStatistics(doc);
     } else {
-      s_logger.debug("No previous statistics for {}/{}", configurationName, functionId);
+      LOGGER.debug("No previous statistics for {}/{}", configurationName, functionId);
       stats = new FunctionInvocationStatistics(functionId);
       stats.setCosts(_meanStatistics.getInvocationCost(), _meanStatistics.getDataInputCost(), _meanStatistics.getDataOutputCost());
     }
@@ -185,7 +185,7 @@ public final class FunctionCosts implements FunctionInvocationStatisticsGatherer
     return new Runnable() {
       @Override
       public void run() {
-        s_logger.info("Persisting function execution statistics");
+        LOGGER.info("Persisting function execution statistics");
         final FunctionInvocationStatistics meanStatistics = _meanStatistics;
         final long lastUpdate = meanStatistics.getLastUpdateNanos();
         // [PLAT-882] Temporary hack until JMX support is property implemented
@@ -199,7 +199,7 @@ public final class FunctionCosts implements FunctionInvocationStatisticsGatherer
           final FunctionInvocationStatistics stats = pair.getSecond();
           if (stats.getLastUpdateNanos() > lastUpdate) {
             // store
-            s_logger.debug("Storing {}/{}", pair.getFirst(), stats.getFunctionId());
+            LOGGER.debug("Storing {}/{}", pair.getFirst(), stats.getFunctionId());
             final FunctionCostsDocument doc = new FunctionCostsDocument(pair.getFirst(), stats.getFunctionId());
             stats.populateDocument(doc);
             _costsMaster.store(doc);
@@ -209,20 +209,20 @@ public final class FunctionCosts implements FunctionInvocationStatisticsGatherer
             dataOutputCost += stats.getDataOutputCost();
             count++;
             // [PLAT-882] Temporary hack until JMX support is properly implemented
-            if (s_logger.isInfoEnabled()) {
+            if (LOGGER.isInfoEnabled()) {
               report.put(stats.getFunctionId() + "\t" + pair.getFirst(), stats.toFudgeMsg(FudgeContext.GLOBAL_DEFAULT));
             }
           }
         }
         meanStatistics.setCosts(invocationCost / count, dataInputCost / count, dataOutputCost / count);
         if (count > 1) {
-          s_logger.debug("Storing new mean statistics {}", meanStatistics);
+          LOGGER.debug("Storing new mean statistics {}", meanStatistics);
           final FunctionCostsDocument doc = new FunctionCostsDocument(MEAN_STATISTICS, MEAN_STATISTICS);
           meanStatistics.populateDocument(doc);
           _costsMaster.store(doc);
         }
         // [PLAT-882] Temporary hack until JMX support is property implemented
-        if (s_logger.isInfoEnabled()) {
+        if (LOGGER.isInfoEnabled()) {
           final List<String> keys = new ArrayList<String>(report.keySet());
           Collections.sort(keys, new Comparator<String>() {
             @Override
@@ -238,7 +238,7 @@ public final class FunctionCosts implements FunctionInvocationStatisticsGatherer
             }
           });
           for (final String key : keys) {
-            s_logger.info("{}\t{}", key, report.get(key));
+            LOGGER.info("{}\t{}", key, report.get(key));
           }
         }
       }

@@ -44,7 +44,7 @@ import com.opengamma.util.tuple.DoublesPair;
  *
  */
 public class YieldCurveNodeSensitivitiesHelper {
-  private static final DecimalFormat s_formatter = new DecimalFormat("##.######");
+  private static final DecimalFormat FORMATTER = new DecimalFormat("##.######");
 
   /**
    * @deprecated Use {@link #getInstrumentLabelledSensitivitiesForCurve(String, YieldCurveBundle, DoubleMatrix1D, InterpolatedYieldCurveSpecificationWithSecurities, ValueSpecification)} instead
@@ -146,8 +146,8 @@ public class YieldCurveNodeSensitivitiesHelper {
       final DoublesPair pair = resultList.get(i);
       keys[i] = pair.first;
       values[i] = pair.second;
-      labels[i] = s_formatter.format(pair.first);
-      labelledMatrix = labelledMatrix.add(pair.first, s_formatter.format(pair.first), pair.second, 1e-16);
+      labels[i] = FORMATTER.format(pair.first);
+      labelledMatrix = labelledMatrix.add(pair.first, FORMATTER.format(pair.first), pair.second, 1e-16);
     }
     return Collections.singleton(new ComputedValue(resultSpec, labelledMatrix));
   }

@@ -24,7 +24,7 @@ import com.google.common.base.Supplier;
  */
 public class ActiveMQJmsConfiguration implements Supplier<String> {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(ActiveMQJmsConfiguration.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ActiveMQJmsConfiguration.class);
 
   private static final int DEFAULT_PORT = 61616;
 
@@ -104,7 +104,7 @@ public class ActiveMQJmsConfiguration implements Supplier<String> {
         getLocalHosts(ni.nextElement(), hosts);
       }
     } catch (final IOException e) {
-      s_logger.warn("Error resolving local addresses", e);
+      LOGGER.warn("Error resolving local addresses", e);
     }
   }
 

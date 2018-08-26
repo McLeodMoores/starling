@@ -130,8 +130,8 @@ public class BondSecurityDiscountingMethodTest {
   private static final ModifiedDurationFromCurvesCalculator MDFC = ModifiedDurationFromCurvesCalculator.getInstance();
   private static final ModifiedDurationFromCleanPriceCalculator MDFP = ModifiedDurationFromCleanPriceCalculator.getInstance();
   private static final ModifiedDurationFromYieldCalculator MDFY = ModifiedDurationFromYieldCalculator.getInstance();
-  private static final MacaulayDurationFromCurvesCalculator McDFC = MacaulayDurationFromCurvesCalculator.getInstance();
-  private static final MacaulayDurationFromYieldCalculator McDFY = MacaulayDurationFromYieldCalculator.getInstance();
+  private static final MacaulayDurationFromCurvesCalculator MCDFC = MacaulayDurationFromCurvesCalculator.getInstance();
+  private static final MacaulayDurationFromYieldCalculator MCDFY = MacaulayDurationFromYieldCalculator.getInstance();
   private static final DirtyPriceFromYieldCalculator DPFY = DirtyPriceFromYieldCalculator.getInstance();
   private static final DirtyPriceFromCurvesCalculator DPFC = DirtyPriceFromCurvesCalculator.getInstance();
   private static final ConvexityFromCurvesCalculator CFC = ConvexityFromCurvesCalculator.getInstance();
@@ -751,10 +751,10 @@ public class BondSecurityDiscountingMethodTest {
   @Test
   public void macaulayDurationMethodVsCalculator() {
     double method = METHOD_BOND_SECURITY.macaulayDurationFromCurves(BOND_FIXED_SECURITY_G2, ISSUER_SPECIFIC_MULTICURVES);
-    double calculator = BOND_FIXED_SECURITY_G2.accept(McDFC, ISSUER_SPECIFIC_MULTICURVES);
+    double calculator = BOND_FIXED_SECURITY_G2.accept(MCDFC, ISSUER_SPECIFIC_MULTICURVES);
     assertEquals("bond Security: discounting method - macaulay duration", method, calculator, 1e-9);
     method = METHOD_BOND_SECURITY.macaulayDurationFromYield(BOND_FIXED_SECURITY_G2, 0.05);
-    calculator = BOND_FIXED_SECURITY_G2.accept(McDFY, 0.05);
+    calculator = BOND_FIXED_SECURITY_G2.accept(MCDFY, 0.05);
     assertEquals("bond Security: discounting method - macaulay duration", method, calculator, 1e-9);
   }
 

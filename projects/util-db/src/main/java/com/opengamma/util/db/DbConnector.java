@@ -44,7 +44,7 @@ import com.opengamma.util.time.DateUtils;
 public class DbConnector implements Connector {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(DbConnector.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(DbConnector.class);
 
   static {
     DateUtils.initTimeZone();
@@ -327,7 +327,7 @@ public class DbConnector implements Connector {
           if (retry == _retries) {
             throw ex;
           }
-          s_logger.warn("Execution failure on attempt " + retry + " of " + _retries, ex);
+          LOGGER.warn("Execution failure on attempt " + retry + " of " + _retries, ex);
         } catch (final DataAccessException ex) {
           throw fixSQLExceptionCause(ex);
         }

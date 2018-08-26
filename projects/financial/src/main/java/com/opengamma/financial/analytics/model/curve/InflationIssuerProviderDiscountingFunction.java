@@ -108,7 +108,7 @@ public class InflationIssuerProviderDiscountingFunction extends
 
   /** The logger */
 
-  private static final Logger s_logger = LoggerFactory.getLogger(InflationIssuerProviderDiscountingFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(InflationIssuerProviderDiscountingFunction.class);
   /** The calculator */
 
   private static final ParSpreadInflationMarketQuoteIssuerDiscountingCalculator PSIMQC = ParSpreadInflationMarketQuoteIssuerDiscountingCalculator.getInstance();
@@ -395,7 +395,7 @@ public class InflationIssuerProviderDiscountingFunction extends
             .get();
         final PriceIndexCurve curve = provider.getInflationProvider().getCurve(curveName);
         if (curve == null) {
-          s_logger.error("Could not get curve called {} from configuration {}", curveName, getCurveConstructionConfigurationName());
+          LOGGER.error("Could not get curve called {} from configuration {}", curveName, getCurveConstructionConfigurationName());
         } else {
           final ValueSpecification curveSpec = new ValueSpecification(PRICE_INDEX_CURVE, ComputationTargetSpecification.NULL, curveProperties);
           result.add(new ComputedValue(curveSpec, curve));

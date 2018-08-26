@@ -67,7 +67,7 @@ import com.opengamma.util.time.LocalDateRange;
 public class BloombergHistoricalTimeSeriesProvider extends AbstractHistoricalTimeSeriesProvider implements Lifecycle {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(BloombergHistoricalTimeSeriesProvider.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(BloombergHistoricalTimeSeriesProvider.class);
 
   /**
    * Default start date for loading time-series
@@ -159,7 +159,7 @@ public class BloombergHistoricalTimeSeriesProvider extends AbstractHistoricalTim
     //-------------------------------------------------------------------------
     @Override
     protected Logger getLogger() {
-      return s_logger;
+      return LOGGER;
     }
 
     //-------------------------------------------------------------------------
@@ -371,7 +371,7 @@ public class BloombergHistoricalTimeSeriesProvider extends AbstractHistoricalTim
       String message = element.getElementAsString("message");
 
       String errorMessage = MessageFormat.format(ERROR_MESSAGE_FORMAT, code, category, subcategory, message);
-      s_logger.warn(errorMessage);
+      LOGGER.warn(errorMessage);
     }
 
     protected Map<ExternalIdBundle, Set<String>> extractPermissions(Map<String, ExternalIdBundle> reverseBundleMap, List<Element> responseElements) {

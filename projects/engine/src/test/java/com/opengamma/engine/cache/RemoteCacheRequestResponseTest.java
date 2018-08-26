@@ -51,12 +51,12 @@ import com.opengamma.util.test.TestGroup;
  */
 @Test(groups = TestGroup.INTEGRATION)
 public class RemoteCacheRequestResponseTest {
-  private static final Logger s_logger = LoggerFactory.getLogger(RemoteCacheRequestResponseTest.class);
-  private static final FudgeContext s_fudgeContext = OpenGammaFudgeContext.getInstance();
+  private static final Logger LOGGER = LoggerFactory.getLogger(RemoteCacheRequestResponseTest.class);
+  private static final FudgeContext FUDGE_CONTEXT = OpenGammaFudgeContext.getInstance();
 
   @Test(timeOut = 10000l)
   public void singleThreadSpecLookupDifferentIdentifierValues() {
-    InMemoryViewComputationCacheSource cache = new InMemoryViewComputationCacheSource(s_fudgeContext);
+    InMemoryViewComputationCacheSource cache = new InMemoryViewComputationCacheSource(FUDGE_CONTEXT);
     ViewComputationCacheServer server = new ViewComputationCacheServer(cache);
     DirectFudgeConnection conduit = new DirectFudgeConnection(cache.getFudgeContext());
     RemoteCacheClient client = new RemoteCacheClient(conduit.getEnd1());
@@ -69,7 +69,7 @@ public class RemoteCacheRequestResponseTest {
           ValueProperties.with(ValuePropertyNames.FUNCTION, "mockFunctionId").get());
     }
     // Make single value calls
-    s_logger.debug("Begin single value lookup");
+    LOGGER.debug("Begin single value lookup");
     final BitSet seenIds = new BitSet();
     for (int i = 0; i < valueSpec.length; i++) {
       long id = identifierMap.getIdentifier(valueSpec[i]);
@@ -77,9 +77,9 @@ public class RemoteCacheRequestResponseTest {
       assertFalse(seenIds.get((int) id));
       seenIds.set((int) id);
     }
-    s_logger.debug("End single value lookup");
+    LOGGER.debug("End single value lookup");
     // Make a bulk lookup call
-    s_logger.debug("Begin bulk lookup");
+    LOGGER.debug("Begin bulk lookup");
     final Map<ValueSpecification, Long> identifiers = identifierMap.getIdentifiers(Arrays.asList(valueSpec));
     assertNotNull(identifiers);
     assertEquals(valueSpec.length, identifiers.size());
@@ -87,12 +87,12 @@ public class RemoteCacheRequestResponseTest {
       assertTrue(identifiers.containsKey(spec));
       assertTrue(seenIds.get((int) (long) identifiers.get(spec)));
     }
-    s_logger.debug("End bulk lookup");
+    LOGGER.debug("End bulk lookup");
   }
 
   @Test(timeOut = 10000l)
   public void singleThreadLookupDifferentIdentifierValuesRepeated() {
-    InMemoryViewComputationCacheSource cache = new InMemoryViewComputationCacheSource(s_fudgeContext);
+    InMemoryViewComputationCacheSource cache = new InMemoryViewComputationCacheSource(FUDGE_CONTEXT);
     ViewComputationCacheServer server = new ViewComputationCacheServer(cache);
     DirectFudgeConnection conduit = new DirectFudgeConnection(cache.getFudgeContext());
     conduit.connectEnd2(server);
@@ -119,7 +119,7 @@ public class RemoteCacheRequestResponseTest {
 
   @Test(timeOut = 30000l)
   public void multiThreadLookupDifferentIdentifierValuesRepeatedSharedClient() throws InterruptedException {
-    InMemoryViewComputationCacheSource cache = new InMemoryViewComputationCacheSource(s_fudgeContext);
+    InMemoryViewComputationCacheSource cache = new InMemoryViewComputationCacheSource(FUDGE_CONTEXT);
     ViewComputationCacheServer server = new ViewComputationCacheServer(cache);
     DirectFudgeConnection conduit1 = new DirectFudgeConnection(cache.getFudgeContext());
     conduit1.connectEnd2(server);
@@ -149,7 +149,7 @@ public class RemoteCacheRequestResponseTest {
               }
             }
           } catch (Exception e) {
-            s_logger.error("Failed", e);
+            LOGGER.error("Failed", e);
             failed.set(true);
           }
         }
@@ -167,7 +167,7 @@ public class RemoteCacheRequestResponseTest {
 
   @Test(timeOut = 30000l)
   public void multiThreadLookupDifferentIdentifierValuesRepeatedDifferentClient() throws InterruptedException {
-    InMemoryViewComputationCacheSource cache = new InMemoryViewComputationCacheSource(s_fudgeContext);
+    InMemoryViewComputationCacheSource cache = new InMemoryViewComputationCacheSource(FUDGE_CONTEXT);
     final ViewComputationCacheServer server = new ViewComputationCacheServer(cache);
 
     final ConcurrentMap<String, Long> _idsByValueName = new ConcurrentHashMap<String, Long>();
@@ -195,7 +195,7 @@ public class RemoteCacheRequestResponseTest {
               }
             }
           } catch (Exception e) {
-            s_logger.error("Failed", e);
+            LOGGER.error("Failed", e);
             failed.set(true);
           }
         }
@@ -214,7 +214,7 @@ public class RemoteCacheRequestResponseTest {
   // @Test(timeout=10000l)
   @Test
   public void singleThreadPutLoad() throws InterruptedException {
-    InMemoryViewComputationCacheSource cache = new InMemoryViewComputationCacheSource(s_fudgeContext);
+    InMemoryViewComputationCacheSource cache = new InMemoryViewComputationCacheSource(FUDGE_CONTEXT);
     ViewComputationCacheServer server = new ViewComputationCacheServer(cache);
     DirectFudgeConnection conduit = new DirectFudgeConnection(cache.getFudgeContext());
     conduit.connectEnd2(server);
@@ -222,7 +222,7 @@ public class RemoteCacheRequestResponseTest {
     FudgeMessageStore dataStore = new RemoteFudgeMessageStore(client, new ViewComputationCacheKey(UniqueId.of("Test", "ViewCycle1"), "Config1"));
 
     // Single value
-    final MutableFudgeMsg inputValue1 = s_fudgeContext.newMessage();
+    final MutableFudgeMsg inputValue1 = FUDGE_CONTEXT.newMessage();
     for (int i = 0; i < 32; i++) {
       inputValue1.add(i, Integer.toString(i));
     }
@@ -241,7 +241,7 @@ public class RemoteCacheRequestResponseTest {
     assertEquals(inputValue1.getAllFields(), outputValue.getAllFields());
 
     // Multiple value
-    final MutableFudgeMsg inputValue2 = s_fudgeContext.newMessage();
+    final MutableFudgeMsg inputValue2 = FUDGE_CONTEXT.newMessage();
     for (int i = 32; i < 64; i++) {
       inputValue2.add(i, Integer.toString(i));
     }
@@ -260,14 +260,14 @@ public class RemoteCacheRequestResponseTest {
 
   @Test(timeOut = 10000l)
   public void singleThreadPutLoadPurgeLoad() throws InterruptedException {
-    InMemoryViewComputationCacheSource cache = new InMemoryViewComputationCacheSource(s_fudgeContext);
+    InMemoryViewComputationCacheSource cache = new InMemoryViewComputationCacheSource(FUDGE_CONTEXT);
     ViewComputationCacheServer server = new ViewComputationCacheServer(cache);
     DirectFudgeConnection conduit = new DirectFudgeConnection(cache.getFudgeContext());
     conduit.connectEnd2(server);
     RemoteCacheClient client = new RemoteCacheClient(conduit.getEnd1());
     FudgeMessageStore dataStore = new RemoteFudgeMessageStore(client, new ViewComputationCacheKey(
         UniqueId.of("Test", "ViewCycle1"), "Config1"));
-    final MutableFudgeMsg inputValue = s_fudgeContext.newMessage();
+    final MutableFudgeMsg inputValue = FUDGE_CONTEXT.newMessage();
     for (int i = 0; i < 32; i++) {
       inputValue.add(i, Integer.toString(i));
     }

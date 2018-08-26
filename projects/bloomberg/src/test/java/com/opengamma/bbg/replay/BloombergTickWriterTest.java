@@ -49,9 +49,9 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT_SLOW)
 public class BloombergTickWriterTest {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(BloombergTickWriterTest.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(BloombergTickWriterTest.class);
 
-  private static final FudgeContext s_fudgeContext = OpenGammaFudgeContext.getInstance();
+  private static final FudgeContext FUDGE_CONTEXT = OpenGammaFudgeContext.getInstance();
 
   private static final int TICKS_GENERATOR_THREAD_SIZE = 1;
   private static final int RUN_DURATION = 5000;
@@ -67,7 +67,7 @@ public class BloombergTickWriterTest {
 
   @BeforeMethod
   public void setUp(Method m) throws Exception {
-    _writer = new BloombergTickWriter(s_fudgeContext, _allTicksQueue, _ticker2buid, _rootDir.getAbsolutePath(), StorageMode.MULTI);
+    _writer = new BloombergTickWriter(FUDGE_CONTEXT, _allTicksQueue, _ticker2buid, _rootDir.getAbsolutePath(), StorageMode.MULTI);
     _ticksGenerator = new RandomTicksGeneratorJob(new ArrayList<String>(_ticker2buid.keySet()), _allTicksQueue);
     makeRootDir();
   }
@@ -103,7 +103,7 @@ public class BloombergTickWriterTest {
     ExecutorService ticksGeneratorExec = Executors.newSingleThreadExecutor();
     Future<?> ticksGenFuture = ticksGeneratorExec.submit(_ticksGenerator);
     
-    s_logger.info("Test running for {}ms to generate ticks", runTime);
+    LOGGER.info("Test running for {}ms to generate ticks", runTime);
     Thread.sleep(runTime);
     
     //terminate ticks generation after 1mins
@@ -151,7 +151,7 @@ public class BloombergTickWriterTest {
       ticksGeneratorThreads.add(thread);
     }
     
-    s_logger.info("Test running for 1min to gather stats");
+    LOGGER.info("Test running for 1min to gather stats");
     Thread.sleep(RUN_DURATION);
     
     for (RandomTicksGeneratorJob ticksGeneratorJob : ticksGeneratorsList) {
@@ -174,15 +174,15 @@ public class BloombergTickWriterTest {
     double nRunDuration = System.currentTimeMillis () - nStartTime;
     
     double nTicks = ((double)_writer.getNTicks()/nRunDuration) * 1000;
-    s_logger.info("ticks {}/s", nTicks);
+    LOGGER.info("ticks {}/s", nTicks);
     double nWrites = ((double)_writer.getNWrites()/nRunDuration) * 1000;
-    s_logger.info("fileOperations {}/s", nWrites);
+    LOGGER.info("fileOperations {}/s", nWrites);
     double nBlocks = (double)_writer.getNBlocks()/(double)_writer.getNWrites();
-    s_logger.info("average blocks {}bytes", nBlocks);
+    LOGGER.info("average blocks {}bytes", nBlocks);
     
     assertTrue("reportInterval > testRunTime", REPORT_INTERVAL > nRunDuration);
     if ((nWrites * nBlocks) < WRITER_SPEED_THRESHOLD) {
-      s_logger.warn("BloombergTickWriter looks like running really slower than {}b/s", WRITER_SPEED_THRESHOLD);
+      LOGGER.warn("BloombergTickWriter looks like running really slower than {}b/s", WRITER_SPEED_THRESHOLD);
     }
   }
 
@@ -196,7 +196,7 @@ public class BloombergTickWriterTest {
     
     public void tickReceived(BloombergTick msg) {
       _count++;
-      FudgeMsg randomStandardTick = BloombergTestUtils.makeRandomStandardTick(_valueGenerator, s_fudgeContext);
+      FudgeMsg randomStandardTick = BloombergTestUtils.makeRandomStandardTick(_valueGenerator, FUDGE_CONTEXT);
       FudgeMsg actual = msg.getFields();
       FudgeMsg expected = randomStandardTick.getMessage(FIELDS_KEY);
       assertAllFieldsMatch(expected, actual);

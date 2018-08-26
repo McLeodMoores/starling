@@ -46,7 +46,7 @@ import com.opengamma.util.tuple.Pair;
  */
 public abstract class StructuredSnapper<TKey, TCalculatedValue, TSnapshot> {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(StructuredSnapper.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(StructuredSnapper.class);
 
   private final String _requirementName;
 
@@ -106,7 +106,7 @@ public abstract class StructuredSnapper<TKey, TCalculatedValue, TSnapshot> {
       final ComputationCacheResponse computationCacheResponse = viewCycle.queryComputationCaches(cacheQuery);
 
       if (computationCacheResponse.getResults().size() != requiredSpecs.size()) {
-        s_logger.debug("Failed to get all results from computation cache");
+        LOGGER.debug("Failed to get all results from computation cache");
       }
 
       final Map<TKey, Pair<ValueSpecification, Object>> infos = Maps.uniqueIndex(computationCacheResponse.getResults(),

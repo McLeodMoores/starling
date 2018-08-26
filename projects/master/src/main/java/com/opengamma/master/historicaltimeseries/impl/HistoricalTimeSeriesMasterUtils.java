@@ -31,7 +31,7 @@ import com.opengamma.util.ArgumentChecker;
  */
 public class HistoricalTimeSeriesMasterUtils {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(HistoricalTimeSeriesMasterUtils.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(HistoricalTimeSeriesMasterUtils.class);
   
   private final HistoricalTimeSeriesMaster _htsMaster;
   
@@ -65,20 +65,20 @@ public class HistoricalTimeSeriesMasterUtils {
 
     if (existingTs.isEmpty()) {
       uId = _htsMaster.updateTimeSeriesDataPoints(oId, timeSeries);
-      s_logger.debug("Updating time series " + oId + "[" + dataField + "] with all as currently emtpy)");
+      LOGGER.debug("Updating time series " + oId + "[" + dataField + "] with all as currently emtpy)");
     } else {
       // There is a non-empty matching time-series already in the master so update it to reflect the new time-series
       // 1: 'correct' any differences in the subseries already present
       LocalDateDoubleTimeSeries tsIntersection = timeSeries.subSeries(existingTs.getEarliestTime(), true, existingTs.getLatestTime(), true);
       if (!tsIntersection.equals(existingTs)) {
-        s_logger.debug("Correcting time series " + oId + "[" + dataField + "] from " + existingTs.getEarliestTime() + " to " + existingTs.getLatestTime());
+        LOGGER.debug("Correcting time series " + oId + "[" + dataField + "] from " + existingTs.getEarliestTime() + " to " + existingTs.getLatestTime());
         uId = _htsMaster.correctTimeSeriesDataPoints(oId, tsIntersection);
       }
       // 2: 'update' the time-series to add any new, later points
       if (existingTs.getLatestTime().isBefore(timeSeries.getLatestTime())) {
         LocalDateDoubleTimeSeries newSeries = timeSeries.subSeries(existingTs.getLatestTime(), false, timeSeries.getLatestTime(), true);
         if (newSeries.size() > 0) {
-          s_logger.debug("Updating time series " + oId + "[" + dataField + "] from " + newSeries.getEarliestTime() + " to " + newSeries.getLatestTime());
+          LOGGER.debug("Updating time series " + oId + "[" + dataField + "] from " + newSeries.getEarliestTime() + " to " + newSeries.getLatestTime());
           uId = _htsMaster.updateTimeSeriesDataPoints(oId, newSeries);
         }
       }
@@ -86,7 +86,7 @@ public class HistoricalTimeSeriesMasterUtils {
       if (timeSeries.getEarliestTime().isBefore(existingTs.getEarliestTime())) {
         LocalDateDoubleTimeSeries newSeries = timeSeries.subSeries(timeSeries.getEarliestTime(), true, existingTs.getEarliestTime(), false);
         if (newSeries.size() > 0) {
-          s_logger.debug("Updating time series " + oId + "[" + dataField + "] from " + newSeries.getEarliestTime() + " to " + newSeries.getLatestTime());
+          LOGGER.debug("Updating time series " + oId + "[" + dataField + "] from " + newSeries.getEarliestTime() + " to " + newSeries.getLatestTime());
           uId = _htsMaster.updateTimeSeriesDataPoints(oId, newSeries);
         }  
       }
@@ -106,20 +106,20 @@ public class HistoricalTimeSeriesMasterUtils {
     LocalDateDoubleTimeSeries existingTs = existingManageableTs.getTimeSeries();
     if (existingTs.isEmpty()) {
       _htsMaster.updateTimeSeriesDataPoints(uniqueId, timeSeries);
-      s_logger.debug("Updating time series " + uniqueId + " with all as currently emtpy)");
+      LOGGER.debug("Updating time series " + uniqueId + " with all as currently emtpy)");
     } else {
       // There is a matching time-series already in the master so update it to reflect the new time-series
       // 1: 'correct' any differences in the subseries already present
       LocalDateDoubleTimeSeries tsIntersection = timeSeries.subSeries(existingTs.getEarliestTime(), true, existingTs.getLatestTime(), true);
       if (!tsIntersection.equals(existingTs)) {
-        s_logger.debug("Correcting time series " + uniqueId + " from " + existingTs.getEarliestTime() + " to " + existingTs.getLatestTime());
+        LOGGER.debug("Correcting time series " + uniqueId + " from " + existingTs.getEarliestTime() + " to " + existingTs.getLatestTime());
         uniqueId = _htsMaster.correctTimeSeriesDataPoints(uniqueId.getObjectId(), tsIntersection);
       }
       // 2: 'update' the time-series to add any new, later points
       if (existingTs.getLatestTime().isBefore(timeSeries.getLatestTime())) {
         LocalDateDoubleTimeSeries newSeries = timeSeries.subSeries(existingTs.getLatestTime(), false, timeSeries.getLatestTime(), true);
         if (newSeries.size() > 0) {
-          s_logger.debug("Updating time series " + uniqueId + " from " + newSeries.getEarliestTime() + " to " + newSeries.getLatestTime());
+          LOGGER.debug("Updating time series " + uniqueId + " from " + newSeries.getEarliestTime() + " to " + newSeries.getLatestTime());
           uniqueId = _htsMaster.updateTimeSeriesDataPoints(uniqueId, newSeries);
         }
       }
@@ -185,7 +185,7 @@ public class HistoricalTimeSeriesMasterUtils {
     HistoricalTimeSeriesInfoSearchResult searchResult = _htsMaster.search(htsSearchReq);
     if (searchResult.getDocuments().size() > 0) {
       if (searchResult.getDocuments().size() > 1) {
-        s_logger.warn("Found multiple time-series matching search. Will only update the first. Search {} returned {}", htsSearchReq, searchResult.getInfoList());
+        LOGGER.warn("Found multiple time-series matching search. Will only update the first. Search {} returned {}", htsSearchReq, searchResult.getInfoList());
       }
       // update existing time series
       HistoricalTimeSeriesInfoDocument existingTsDoc = searchResult.getFirstDocument();
@@ -203,7 +203,7 @@ public class HistoricalTimeSeriesMasterUtils {
       htsInfoDoc.setInfo(info);
       
       HistoricalTimeSeriesInfoDocument addedInfoDoc = _htsMaster.add(htsInfoDoc);
-      s_logger.debug("Adding time series " + externalIdBundle + " from " + timeSeries.getEarliestTime() + " to " + timeSeries.getLatestTime());
+      LOGGER.debug("Adding time series " + externalIdBundle + " from " + timeSeries.getEarliestTime() + " to " + timeSeries.getLatestTime());
       return _htsMaster.updateTimeSeriesDataPoints(addedInfoDoc.getInfo().getTimeSeriesObjectId(), timeSeries);
     }
   }

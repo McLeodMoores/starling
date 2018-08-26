@@ -23,7 +23,7 @@ import com.opengamma.util.fudgemsg.OpenGammaFudgeContext;
 public class TicksPlayerJob extends TerminatableJob {
 
   /** Logger/ */
-  private static final Logger s_logger = LoggerFactory.getLogger(TicksPlayerJob.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(TicksPlayerJob.class);
 
   private BlockingQueue<FudgeMsg> _ticksQueue;
   private BloombergTickReceiver _tickReceiver;
@@ -43,7 +43,7 @@ public class TicksPlayerJob extends TerminatableJob {
 
   @Override
   public void terminate() {
-    s_logger.debug("ticksPlayer terminating...");
+    LOGGER.debug("ticksPlayer terminating...");
     super.terminate();
   }
 
@@ -68,7 +68,7 @@ public class TicksPlayerJob extends TerminatableJob {
         try {
           FudgeMsg msg = _ticksQueue.take();
           if (msg != null && BloombergTickReplayUtils.isTerminateMsg(msg)) {
-            s_logger.debug("received terminate message");
+            LOGGER.debug("received terminate message");
             terminate();
             return;
           }
@@ -81,19 +81,19 @@ public class TicksPlayerJob extends TerminatableJob {
             BloombergTick nextTick = BloombergTick.fromFudgeMsg(deserializer, nextMsg);
             long tickLatency = nextTick.getReceivedTS() - currentTick.getReceivedTS();
             long sleepTime = tickLatency - (ts2 - ts1);
-            s_logger.debug("sleeping for {}ms,", sleepTime);
+            LOGGER.debug("sleeping for {}ms,", sleepTime);
             if (sleepTime > 0) {
               try {
                 Thread.sleep(sleepTime);
               } catch (InterruptedException e) {
                 Thread.interrupted();
-                s_logger.warn("interrupted from keeping time difference between ticks");
+                LOGGER.warn("interrupted from keeping time difference between ticks");
               }
             }
           }
         } catch (InterruptedException e1) {
           Thread.interrupted();
-          s_logger.warn("interrupted while waiting to read ticks to play");
+          LOGGER.warn("interrupted while waiting to read ticks to play");
         }
         break;
       case AS_FAST_AS_POSSIBLE:
@@ -101,7 +101,7 @@ public class TicksPlayerJob extends TerminatableJob {
         try {
           FudgeMsg msg = _ticksQueue.take();
           if (msg != null && BloombergTickReplayUtils.isTerminateMsg(msg)) {
-            s_logger.debug("received terminate message");
+            LOGGER.debug("received terminate message");
             terminate();
             return;
           }
@@ -109,7 +109,7 @@ public class TicksPlayerJob extends TerminatableJob {
           _tickReceiver.tickReceived(tick);
         } catch (InterruptedException e) {
           Thread.interrupted();
-          s_logger.warn("interrupted while waiting to read ticks to play");
+          LOGGER.warn("interrupted while waiting to read ticks to play");
         }
         break;
       default:

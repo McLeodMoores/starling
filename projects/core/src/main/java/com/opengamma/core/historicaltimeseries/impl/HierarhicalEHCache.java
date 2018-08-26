@@ -45,7 +45,7 @@ public abstract class HierarhicalEHCache<A, B> {
   private long _timeout = 1000;
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(HierarhicalEHCache.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(HierarhicalEHCache.class);
 
   public HierarhicalEHCache(CacheManager cacheManager) {
     EHCacheUtils.addCache(cacheManager, _cacheNameA);
@@ -78,7 +78,7 @@ public abstract class HierarhicalEHCache<A, B> {
       } else {
         map = new HashMap<>();
       }
-      s_logger.debug(getCachePrefix() + ": Caching value {}", value);
+      LOGGER.debug(getCachePrefix() + ": Caching value {}", value);
       map.put(aKey, value);
       // reinsert the map into cache
       _bCache.put(new Element(bKey, map));
@@ -118,7 +118,7 @@ public abstract class HierarhicalEHCache<A, B> {
       } else {
         map = new HashMap<>();
       }
-      s_logger.debug(getCachePrefix() + ": Caching value {}", value);
+      LOGGER.debug(getCachePrefix() + ": Caching value {}", value);
       map.put(bKey, value);
       // reinsert the map into cache
       _bCache.put(new Element(bKey, map));
@@ -146,7 +146,7 @@ public abstract class HierarhicalEHCache<A, B> {
 
   public B get(A aKey, Function0<B> closure) {
     if (_missedCache.isKeyInCache(aKey)) {
-      s_logger.debug(getCachePrefix() + ": Caching miss on {}", aKey);
+      LOGGER.debug(getCachePrefix() + ": Caching miss on {}", aKey);
       return null;
     }
     Element aElement = _aCache.get(aKey);
@@ -169,7 +169,7 @@ public abstract class HierarhicalEHCache<A, B> {
 
   public B getBySecondKey(Object bKey, Function0<B> closure) {
     if (_missedCache.isKeyInCache(bKey)) {
-      s_logger.debug(getCachePrefix() + ": Caching miss on {}", bKey);
+      LOGGER.debug(getCachePrefix() + ": Caching miss on {}", bKey);
       return null;
     }
     Element bElement = _bCache.get(bKey);

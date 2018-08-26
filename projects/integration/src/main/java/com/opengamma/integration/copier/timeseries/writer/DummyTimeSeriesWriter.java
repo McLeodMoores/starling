@@ -18,12 +18,12 @@ import com.opengamma.timeseries.date.localdate.LocalDateDoubleTimeSeries;
  */
 public class DummyTimeSeriesWriter implements TimeSeriesWriter {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(DummyTimeSeriesWriter.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(DummyTimeSeriesWriter.class);
 
   @Override
   public LocalDateDoubleTimeSeries writeDataPoints(ExternalId htsId, String dataSource, String dataProvider, String dataField, 
       String observationTime, LocalDateDoubleTimeSeries series) {
-    s_logger.info("Time Series: (id " + htsId + ", Field " + dataField + ") " + series.timesArray().toString() + Arrays.toString(series.valuesArray()));
+    LOGGER.info("Time Series: (id " + htsId + ", Field " + dataField + ") " + series.timesArray().toString() + Arrays.toString(series.valuesArray()));
     return series;
   }
 

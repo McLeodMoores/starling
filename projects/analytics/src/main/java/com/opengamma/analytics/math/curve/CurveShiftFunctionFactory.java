@@ -20,13 +20,13 @@ public class CurveShiftFunctionFactory {
   public static final InterpolatedCurveShiftFunction INTERPOLATED = new InterpolatedCurveShiftFunction();
   /** Shift function for {@link SpreadDoublesCurve} */
   public static final SpreadCurveShiftFunction SPREAD = new SpreadCurveShiftFunction();
-  private static final Map<Class<?>, CurveShiftFunction<?>> s_instances = new HashMap<>();
+  private static final Map<Class<?>, CurveShiftFunction<?>> INSTANCES = new HashMap<>();
 
   static {
-    s_instances.put(ConstantCurveShiftFunction.class, CONSTANT);
-    s_instances.put(FunctionalCurveShiftFunction.class, FUNCTIONAL);
-    s_instances.put(InterpolatedCurveShiftFunction.class, INTERPOLATED);
-    s_instances.put(SpreadCurveShiftFunction.class, SPREAD);
+    INSTANCES.put(ConstantCurveShiftFunction.class, CONSTANT);
+    INSTANCES.put(FunctionalCurveShiftFunction.class, FUNCTIONAL);
+    INSTANCES.put(InterpolatedCurveShiftFunction.class, INTERPOLATED);
+    INSTANCES.put(SpreadCurveShiftFunction.class, SPREAD);
   }
 
   /**
@@ -36,7 +36,7 @@ public class CurveShiftFunctionFactory {
    * @throws IllegalArgumentException If the function is not one of the static instances
    */
   public static CurveShiftFunction<?> getFunction(final Class<?> clazz) {
-    final CurveShiftFunction<?> f = s_instances.get(clazz);
+    final CurveShiftFunction<?> f = INSTANCES.get(clazz);
     if (f == null) {
       throw new IllegalArgumentException("Could not get function for " + clazz.getName());
     }

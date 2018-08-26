@@ -29,7 +29,7 @@ public class DefaultDistributionSpecificationResolver
   extends AbstractResolver<LiveDataSpecification, DistributionSpecification> 
   implements DistributionSpecificationResolver {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(DefaultDistributionSpecificationResolver.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(DefaultDistributionSpecificationResolver.class);
 
   private final IdResolver _idResolver;
   private final NormalizationRuleResolver _normalizationRuleResolver;
@@ -116,7 +116,7 @@ public class DefaultDistributionSpecificationResolver
       NormalizationRuleSet normalizationRule = liveDataSec2NormalizationRule.get(liveDataSpec);
       String jmsTopicName = liveDataSec2JmsTopicName.get(liveDataSpec);
       if (identifier == null || normalizationRule == null || jmsTopicName == null) {
-        s_logger.info("Unable to resolve liveDataSpec: {} - identifier: {}, normalizationRule: {}, jmsTopicName: {}",
+        LOGGER.info("Unable to resolve liveDataSpec: {} - identifier: {}, normalizationRule: {}, jmsTopicName: {}",
                       liveDataSpec, identifier, normalizationRule, jmsTopicName);
         returnValue.put(liveDataSpec, null);
       } else {

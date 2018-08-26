@@ -33,7 +33,7 @@ import com.opengamma.util.tuple.ObjectsPair;
  */
 public class ResolvingPortfolioCopier implements PortfolioCopier {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(ResolvingPortfolioCopier.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ResolvingPortfolioCopier.class);
 
   private HistoricalTimeSeriesMaster _htsMaster;
   private HistoricalTimeSeriesProvider _htsProvider;
@@ -127,7 +127,7 @@ public class ResolvingPortfolioCopier implements PortfolioCopier {
         final String message = "historical time series " + id.toString() + ", fields " + dataField +
             " from " + dataProvider;
         if (tsMap.size() > 0) {
-          s_logger.info("Loaded " + message + ": " + tsMap);
+          LOGGER.info("Loaded " + message + ": " + tsMap);
           if (visitor != null) {
             visitor.info("Loaded " + message);
           }
@@ -135,7 +135,7 @@ public class ResolvingPortfolioCopier implements PortfolioCopier {
         }
       }
       if (tsMap == null || tsMap.size() == 0) {
-        s_logger.warn("Could not load historical time series for security " + security);
+        LOGGER.warn("Could not load historical time series for security " + security);
         if (visitor != null) {
           visitor.error("Could not load historical time series for security " + security);
         }

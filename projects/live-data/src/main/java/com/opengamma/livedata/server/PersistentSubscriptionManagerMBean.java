@@ -27,7 +27,7 @@ import com.opengamma.util.ArgumentChecker;
 public class PersistentSubscriptionManagerMBean {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(PersistentSubscriptionManagerMBean.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(PersistentSubscriptionManagerMBean.class);
 
   /**
    * The underlying persistent subscription manager.
@@ -50,7 +50,7 @@ public class PersistentSubscriptionManagerMBean {
     try {
       return _manager.getApproximateNumberOfPersistentSubscriptions();
     } catch (RuntimeException e) {
-      s_logger.error("getNumberOfPersistentSubscriptions() failed", e);
+      LOGGER.error("getNumberOfPersistentSubscriptions() failed", e);
       throw new RuntimeException(e.getMessage());
     }
   }
@@ -60,7 +60,7 @@ public class PersistentSubscriptionManagerMBean {
     try {
       return _manager.getPersistentSubscriptions();
     } catch (RuntimeException e) {
-      s_logger.error("getPersistentSubscriptions() failed", e);
+      LOGGER.error("getPersistentSubscriptions() failed", e);
       throw new RuntimeException(e.getMessage());
     }
   }
@@ -71,7 +71,7 @@ public class PersistentSubscriptionManagerMBean {
     try {
       _manager.refresh();
     } catch (RuntimeException e) {
-      s_logger.error("refresh() failed", e);
+      LOGGER.error("refresh() failed", e);
       throw new RuntimeException(e.getMessage());
     }
   }
@@ -81,7 +81,7 @@ public class PersistentSubscriptionManagerMBean {
     try {
       _manager.save();
     } catch (RuntimeException e) {
-      s_logger.error("save() failed", e);
+      LOGGER.error("save() failed", e);
       throw new RuntimeException(e.getMessage());
     }
   }
@@ -93,7 +93,7 @@ public class PersistentSubscriptionManagerMBean {
     try {
       _manager.addPersistentSubscription(securityUniqueId);
     } catch (RuntimeException e) {
-      s_logger.error("addPersistentSubscription(" + securityUniqueId + ")  failed", e);
+      LOGGER.error("addPersistentSubscription(" + securityUniqueId + ")  failed", e);
       throw new RuntimeException(e.getMessage());
     }
   }
@@ -106,7 +106,7 @@ public class PersistentSubscriptionManagerMBean {
     try {
       return _manager.removePersistentSubscription(securityUniqueId);
     } catch (RuntimeException e) {
-      s_logger.error("removePersistentSubscription(" + securityUniqueId + ") failed", e);
+      LOGGER.error("removePersistentSubscription(" + securityUniqueId + ") failed", e);
       throw new RuntimeException(e.getMessage());
     }
   }

@@ -26,7 +26,7 @@ import com.opengamma.analytics.math.integration.Integrator1D;
  * 
  */
 public class FourierOptionModel implements OptionModel<EuropeanVanillaOptionDefinition, BlackOptionDataBundle> {
-  private static final Logger s_logger = LoggerFactory.getLogger(FourierOptionModel.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(FourierOptionModel.class);
   private static final double DEFAULT_ALPHA = -0.5;
   private static final double DEFAULT_LIMIT_TOLERANCE = 1e-8;
   private static final boolean DEFAULT_USE_VARIANCE_REDUCTION = false;
@@ -85,7 +85,7 @@ public class FourierOptionModel implements OptionModel<EuropeanVanillaOptionDefi
       throw new NotImplementedException("Can only calculate fair price at the moment: asked for " + requiredGreeks);
     }
     if (requiredGreeks.size() > 1) {
-      s_logger.warn("Can only calculate fair price - ignoring other greeks");
+      LOGGER.warn("Can only calculate fair price - ignoring other greeks");
     }
     final ZonedDateTime date = dataBundle.getDate();
     final EuropeanVanillaOption option = EuropeanVanillaOption.fromDefinition(definition, date);

@@ -28,7 +28,7 @@ import com.opengamma.util.fudgemsg.OpenGammaFudgeContext;
  */
 public class FudgeMsgCSVIterator implements Iterator<FudgeMsg> {
   
-  private static final FudgeContext s_fudgeContext = OpenGammaFudgeContext.getInstance();
+  private static final FudgeContext FUDGE_CONTEXT = OpenGammaFudgeContext.getInstance();
   
   private CSVReader _csvReader;
   private String[] _header;
@@ -75,7 +75,7 @@ public class FudgeMsgCSVIterator implements Iterator<FudgeMsg> {
 
   @Override
   public FudgeMsg next() {
-    MutableFudgeMsg currentMsg = s_fudgeContext.newMessage();
+    MutableFudgeMsg currentMsg = FUDGE_CONTEXT.newMessage();
     int size = getMessageSize();
     for (int i = 0; i < size; i++) {
       String currentRow = StringUtils.trimToNull(_currentRow[i]);

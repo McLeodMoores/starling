@@ -25,18 +25,18 @@ public final class MatrixAlgebraFactory {
   public static final CommonsMatrixAlgebra COMMONS_ALGEBRA = new CommonsMatrixAlgebra();
   /** {@link OGMatrixAlgebra} */
   public static final OGMatrixAlgebra OG_ALGEBRA = new OGMatrixAlgebra();
-  private static final Map<String, MatrixAlgebra> s_staticInstances;
-  private static final Map<Class<?>, String> s_instanceNames;
+  private static final Map<String, MatrixAlgebra> INSTANCES;
+  private static final Map<Class<?>, String> INSTANCE_NAMES;
 
   static {
-    s_staticInstances = new HashMap<>();
-    s_instanceNames = new HashMap<>();
-    s_staticInstances.put(COLT, COLT_ALGEBRA);
-    s_instanceNames.put(ColtMatrixAlgebra.class, COLT);
-    s_staticInstances.put(COMMONS, COMMONS_ALGEBRA);
-    s_instanceNames.put(CommonsMatrixAlgebra.class, COMMONS);
-    s_staticInstances.put(OG, OG_ALGEBRA);
-    s_instanceNames.put(OGMatrixAlgebra.class, OG);
+    INSTANCES = new HashMap<>();
+    INSTANCE_NAMES = new HashMap<>();
+    INSTANCES.put(COLT, COLT_ALGEBRA);
+    INSTANCE_NAMES.put(ColtMatrixAlgebra.class, COLT);
+    INSTANCES.put(COMMONS, COMMONS_ALGEBRA);
+    INSTANCE_NAMES.put(CommonsMatrixAlgebra.class, COMMONS);
+    INSTANCES.put(OG, OG_ALGEBRA);
+    INSTANCE_NAMES.put(OGMatrixAlgebra.class, OG);
   }
 
   private MatrixAlgebraFactory() {
@@ -49,8 +49,8 @@ public final class MatrixAlgebraFactory {
    * @throws IllegalArgumentException If the calculator name is null or there is no calculator for that name
    */
   public static MatrixAlgebra getMatrixAlgebra(final String algebraName) {
-    if (s_staticInstances.containsKey(algebraName)) {
-      return s_staticInstances.get(algebraName);
+    if (INSTANCES.containsKey(algebraName)) {
+      return INSTANCES.get(algebraName);
     }
     throw new IllegalArgumentException("Matrix algebra " + algebraName + " not found");
   }
@@ -64,6 +64,6 @@ public final class MatrixAlgebraFactory {
     if (algebra == null) {
       return null;
     }
-    return s_instanceNames.get(algebra.getClass());
+    return INSTANCE_NAMES.get(algebra.getClass());
   }
 }

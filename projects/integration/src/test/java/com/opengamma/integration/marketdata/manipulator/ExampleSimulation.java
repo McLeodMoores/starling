@@ -41,7 +41,7 @@ import com.opengamma.livedata.UserPrincipal;
  */
 /* package */ class ExampleSimulation {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(ExampleSimulation.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ExampleSimulation.class);
 
   private static final Set<String> CURRENCY_PAIRS = ImmutableSet.of("GBPUSD", "EURUSD", "USDJPY", "CHFUSD");
   private static final List<Double> SCALING_FACTORS = ImmutableList.of(0.95, 1.0, 1.05);
@@ -98,17 +98,17 @@ import com.opengamma.livedata.UserPrincipal;
 
       @Override
       public void viewDefinitionCompiled(CompiledViewDefinition compiledViewDefinition, boolean hasMarketDataPermissions) {
-        s_logger.info("view definition compiled");
+        LOGGER.info("view definition compiled");
       }
 
       @Override
       public void viewDefinitionCompilationFailed(Instant valuationTime, Exception exception) {
-        s_logger.warn("view definition compilation failed", exception);
+        LOGGER.warn("view definition compilation failed", exception);
       }
 
       @Override
       public void cycleCompleted(ViewComputationResultModel fullResult, ViewDeltaResultModel deltaResult) {
-        s_logger.info("cycle completed");
+        LOGGER.info("cycle completed");
       }
     }
 

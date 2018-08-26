@@ -26,7 +26,9 @@ import com.opengamma.util.ArgumentChecker;
 
 /**
  * Contains information used to construct standard versions of AUD instruments.
+ * @deprecated  use {@FinancialConvention}
  */
+@Deprecated
 public class AUConventions {
 
   /**

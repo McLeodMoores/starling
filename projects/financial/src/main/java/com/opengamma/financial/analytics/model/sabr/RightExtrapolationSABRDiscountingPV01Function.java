@@ -49,7 +49,7 @@ import com.opengamma.util.tuple.Pair;
  */
 public class RightExtrapolationSABRDiscountingPV01Function extends RightExtrapolationSABRDiscountingFunction {
   /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(RightExtrapolationSABRDiscountingPV01Function.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(RightExtrapolationSABRDiscountingPV01Function.class);
 
   /**
    * Sets the value requirements to {@link ValueRequirementNames#PV01}
@@ -87,7 +87,7 @@ public class RightExtrapolationSABRDiscountingPV01Function extends RightExtrapol
           results.add(new ComputedValue(spec, entry.getValue()));
         }
         if (!curveNameFound) {
-          s_logger.info("Could not get sensitivities to " + desiredCurveName + " for " + target.getName());
+          LOGGER.info("Could not get sensitivities to " + desiredCurveName + " for " + target.getName());
           return Collections.emptySet();
         }
         return results;

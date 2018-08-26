@@ -105,7 +105,7 @@ public final class PeriodFrequency implements Frequency, Serializable {
   public static final PeriodFrequency NEVER = new PeriodFrequency(NEVER_NAME, Period.ZERO);
 
   /** A map containing all of the frequency */
-  public static final Map<PeriodFrequency, PeriodFrequency> s_cache =
+  public static final Map<PeriodFrequency, PeriodFrequency> CACHE =
       ImmutableMap.<PeriodFrequency, PeriodFrequency>builder()
       .put(ANNUAL, ANNUAL)
       .put(SEMI_ANNUAL, SEMI_ANNUAL)
@@ -148,7 +148,7 @@ public final class PeriodFrequency implements Frequency, Serializable {
   @FromString
   public static PeriodFrequency of(final String name) {
     String nameLower = name.toLowerCase(Locale.ENGLISH);
-    for (PeriodFrequency freq : s_cache.keySet()) {
+    for (PeriodFrequency freq : CACHE.keySet()) {
       if (freq.getName().toLowerCase(Locale.ENGLISH).equals(nameLower)) {
         return freq;
       }
@@ -165,8 +165,8 @@ public final class PeriodFrequency implements Frequency, Serializable {
    */
   public static PeriodFrequency of(final String name, final Period period) {
     final PeriodFrequency temp = new PeriodFrequency(name, period);
-    if (s_cache.containsKey(temp)) {
-      return s_cache.get(temp);
+    if (CACHE.containsKey(temp)) {
+      return CACHE.get(temp);
     }
     return temp;
   }
@@ -179,7 +179,7 @@ public final class PeriodFrequency implements Frequency, Serializable {
    */
   public static PeriodFrequency of(final Period period) {
     ArgumentChecker.notNull(period, "period");
-    for (final Map.Entry<PeriodFrequency, PeriodFrequency> entry : s_cache.entrySet()) {
+    for (final Map.Entry<PeriodFrequency, PeriodFrequency> entry : CACHE.entrySet()) {
       if (entry.getKey().getPeriod().normalized().equals(period.normalized())) {
         return entry.getValue();
       }

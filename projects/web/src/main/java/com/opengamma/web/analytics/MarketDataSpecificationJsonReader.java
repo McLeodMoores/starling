@@ -56,7 +56,7 @@ public class MarketDataSpecificationJsonReader {
   private static final String AVERAGE_CYCLE_INTERVAL = "averageCycleInterval";
 
   /** Builders keyed by the name of the market data type. */
-  private static final Map<String, SpecificationBuilder> s_builders = ImmutableMap.of(
+  private static final Map<String, SpecificationBuilder> BUILDERS = ImmutableMap.of(
       LIVE, new LiveSpecificationBuilder(),
       LATEST_HISTORICAL, new LatestHistoricalSpecificationBuilder(),
       FIXED_HISTORICAL, new FixedHistoricalSpecificationBuilder(),
@@ -70,7 +70,7 @@ public class MarketDataSpecificationJsonReader {
 
   private static MarketDataSpecification buildSpecification(JSONObject json) throws JSONException {
     String marketDataType = json.getString(MARKET_DATA_TYPE);
-    SpecificationBuilder builder = s_builders.get(marketDataType);
+    SpecificationBuilder builder = BUILDERS.get(marketDataType);
     if (builder == null) {
       throw new IllegalArgumentException("No builder found for market data type " + marketDataType);
     }

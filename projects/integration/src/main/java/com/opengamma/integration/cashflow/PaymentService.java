@@ -54,7 +54,7 @@ import com.opengamma.util.tuple.Pair;
  */
 public class PaymentService {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(PaymentService.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(PaymentService.class);
 
   private static final String VIEW_DEFINITION_PREFIX = "Cash flows for ";
   private static final String CALC_CONFIG_NAME = "Default";
@@ -146,14 +146,14 @@ public class PaymentService {
         switch (paymentType) {
           case FIXED:
             if (!(targetResult.getValue() instanceof FixedPaymentMatrix)) {
-              s_logger.error("Skipping result with unexpected type: " + targetResult);
+              LOGGER.error("Skipping result with unexpected type: " + targetResult);
               continue;
             }
             addFixedPayments((FixedPaymentMatrix) targetResult.getValue(), direction, position, paymentDiary);
             break;
           case FLOAT:
             if (!(targetResult.getValue() instanceof FloatingPaymentMatrix)) {
-              s_logger.error("Skipping result with unexpected type: " + targetResult);
+              LOGGER.error("Skipping result with unexpected type: " + targetResult);
               continue;
             }
             addFloatingPayments((FloatingPaymentMatrix) targetResult.getValue(), direction, position, paymentDiary);

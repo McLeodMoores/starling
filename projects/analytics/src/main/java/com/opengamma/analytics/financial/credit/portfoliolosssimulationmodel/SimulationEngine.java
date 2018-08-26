@@ -17,7 +17,7 @@ public class SimulationEngine {
 
   // ----------------------------------------------------------------------------------------------------------------------------------------
 
-  private static final StatisticsCalculator statisticsCalculator = new StatisticsCalculator();
+  private static final StatisticsCalculator STATISTICS_CALCULATOR = new StatisticsCalculator();
 
   // ----------------------------------------------------------------------------------------------------------------------------------------
 
@@ -55,7 +55,7 @@ public class SimulationEngine {
     // Compute the simulated P/L statistics
 
     // Compute the number of simulated defaults per scenario
-    final int[] numberOfDefaultsPerScenario = statisticsCalculator.getNumberOfDefaultsPerScenario(scenarioGenerator, simulatedDefaultScenarios);
+    final int[] numberOfDefaultsPerScenario = STATISTICS_CALCULATOR.getNumberOfDefaultsPerScenario(scenarioGenerator, simulatedDefaultScenarios);
 
     // ----------------------------------------------------------------------------------------------------------------------------------------
 

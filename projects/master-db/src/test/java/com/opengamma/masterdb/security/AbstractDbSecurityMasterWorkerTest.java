@@ -36,7 +36,7 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT_DB)
 public abstract class AbstractDbSecurityMasterWorkerTest extends AbstractDbSecurityTest {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(AbstractDbSecurityMasterWorkerTest.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(AbstractDbSecurityMasterWorkerTest.class);
 
   private static ConcurrentMap<String, DbConnector> _dbConnectors = new ConcurrentHashMap<>();  // local cache for Hibernate reasons, closed in DbTest
   protected DbSecurityMaster _secMaster;
@@ -46,7 +46,7 @@ public abstract class AbstractDbSecurityMasterWorkerTest extends AbstractDbSecur
 
   public AbstractDbSecurityMasterWorkerTest(String databaseType, String databaseVersion, boolean readOnly) {
     super(databaseType, databaseVersion);
-    s_logger.info("running testcases for {}", databaseType);
+    LOGGER.info("running testcases for {}", databaseType);
   }
 
   //-------------------------------------------------------------------------
@@ -88,8 +88,8 @@ public abstract class AbstractDbSecurityMasterWorkerTest extends AbstractDbSecur
     _secMaster.setClock(Clock.fixed(now, ZoneOffset.UTC));
     _version1Instant = now.minusSeconds(100);
     _version2Instant = now.minusSeconds(50);
-    s_logger.debug("test data now:   {}", _version1Instant);
-    s_logger.debug("test data later: {}", _version2Instant);
+    LOGGER.debug("test data now:   {}", _version1Instant);
+    LOGGER.debug("test data later: {}", _version2Instant);
     final JdbcOperations template = _secMaster.getDbConnector().getJdbcOperations();
     template.update("INSERT INTO sec_security VALUES (?,?,?,?,?, ?,?,?,?)",
         101, 101, toSqlTimestamp(_version1Instant), MAX_SQL_TIMESTAMP, toSqlTimestamp(_version1Instant), MAX_SQL_TIMESTAMP, "TestSecurity101", "EQUITY", "D");

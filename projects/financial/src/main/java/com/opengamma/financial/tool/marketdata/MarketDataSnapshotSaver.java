@@ -72,7 +72,7 @@ import com.opengamma.util.ArgumentChecker;
 public final class MarketDataSnapshotSaver implements ImmutableBean {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(MarketDataSnapshotSaver.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(MarketDataSnapshotSaver.class);
   /**
    * The view processor.
    */
@@ -217,9 +217,9 @@ public final class MarketDataSnapshotSaver implements ImmutableBean {
   }
 
   private static ManageableMarketDataSnapshot takeSnapshot(final MarketDataSnapshotter marketDataSnapshotter, String name, final ViewClient viewClient, final ViewCycle viewCycle) {
-    s_logger.debug("Taking snapshot");
+    LOGGER.debug("Taking snapshot");
     final StructuredMarketDataSnapshot snapshot = marketDataSnapshotter.createSnapshot(viewClient, viewCycle);
-    s_logger.debug("Snapshot complete");
+    LOGGER.debug("Snapshot complete");
     final ManageableMarketDataSnapshot manageableMarketDataSnapshot = new ManageableMarketDataSnapshot(snapshot);
     if (name == null) {
       name = snapshot.getBasisViewName() + "/" + viewCycle.getExecutionOptions().getValuationTime();
@@ -229,7 +229,7 @@ public final class MarketDataSnapshotSaver implements ImmutableBean {
   }
 
   private void endWithError(final String message, final Object... messageArgs) {
-    s_logger.error(message, messageArgs);
+    LOGGER.error(message, messageArgs);
     throw new OpenGammaRuntimeException(format(message, messageArgs));
   }
 
@@ -259,20 +259,20 @@ public final class MarketDataSnapshotSaver implements ImmutableBean {
 
     @Override
     public void viewDefinitionCompilationFailed(final Instant valuationTime, final Exception exception) {
-      s_logger.error(exception.getMessage() + "\n\n" + (exception.getCause() == null ? "" : exception.getCause().getMessage()));
+      LOGGER.error(exception.getMessage() + "\n\n" + (exception.getCause() == null ? "" : exception.getCause().getMessage()));
       _latch.countDown();
     }
 
     @Override
     public void cycleCompleted(final ViewComputationResultModel fullResult, final ViewDeltaResultModel deltaResult) {
-      s_logger.info("cycle completed");
+      LOGGER.info("cycle completed");
       _success = true;
       _latch.countDown();
     }
 
     @Override
     public void cycleExecutionFailed(final ViewCycleExecutionOptions executionOptions, final Exception exception) {
-      s_logger.error(exception.getMessage() + "\n\n" + (exception.getCause() == null ? "" : exception.getCause().getMessage()));
+      LOGGER.error(exception.getMessage() + "\n\n" + (exception.getCause() == null ? "" : exception.getCause().getMessage()));
       _latch.countDown();
     }
 

@@ -17,7 +17,7 @@ import com.opengamma.analytics.math.function.Function1D;
  * The integrator in individual intervals (base integrator) should be specified by constructor
  */
 public class AdaptiveCompositeIntegrator1D extends Integrator1D<Double, Double> {
-  private static final Logger s_logger = LoggerFactory.getLogger(AdaptiveCompositeIntegrator1D.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(AdaptiveCompositeIntegrator1D.class);
   private final Integrator1D<Double, Double> _integrator;
   private static final int MAX_IT = 15;
   private final double _gain;
@@ -54,7 +54,7 @@ public class AdaptiveCompositeIntegrator1D extends Integrator1D<Double, Double> 
       if (lower < upper) {
         return integration(f, lower, upper);
       }
-      s_logger.info("Upper bound was less than lower bound; swapping bounds and negating result");
+      LOGGER.info("Upper bound was less than lower bound; swapping bounds and negating result");
       return -integration(f, upper, lower);
     } catch (final Exception e) {
       throw new OpenGammaRuntimeException("function evaluation returned NaN or Inf");

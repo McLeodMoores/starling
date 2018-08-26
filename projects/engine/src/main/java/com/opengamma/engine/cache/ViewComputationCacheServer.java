@@ -26,7 +26,7 @@ import com.opengamma.transport.FudgeMessageReceiver;
  */
 public class ViewComputationCacheServer implements FudgeConnectionReceiver, FudgeConnectionStateListener {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(ViewComputationCacheServer.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ViewComputationCacheServer.class);
 
   private final IdentifierMapServer _identifierMap;
   private final FudgeMessageStoreServer _binaryDataStore;
@@ -68,7 +68,7 @@ public class ViewComputationCacheServer implements FudgeConnectionReceiver, Fudg
 
     @Override
     protected <T extends CacheMessage> T visitUnexpectedMessage(final CacheMessage message) {
-      s_logger.warn("Unexpected message - {}", message);
+      LOGGER.warn("Unexpected message - {}", message);
       return null;
     }
 

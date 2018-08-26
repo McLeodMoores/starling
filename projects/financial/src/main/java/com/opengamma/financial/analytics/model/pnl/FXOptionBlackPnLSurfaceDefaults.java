@@ -37,7 +37,7 @@ import com.opengamma.util.tuple.Pairs;
  *
  */
 public class FXOptionBlackPnLSurfaceDefaults extends DefaultPropertyFunction {
-  private static final Logger s_logger = LoggerFactory.getLogger(FXOptionBlackPnLSurfaceDefaults.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(FXOptionBlackPnLSurfaceDefaults.class);
   private final String _interpolatorName;
   private final String _leftExtrapolatorName;
   private final String _rightExtrapolatorName;
@@ -118,7 +118,7 @@ public class FXOptionBlackPnLSurfaceDefaults extends DefaultPropertyFunction {
       if (_surfaceNameByCurrencyPair.containsKey(pair)) {
         return Collections.singleton(_surfaceNameByCurrencyPair.get(pair));
       }
-      s_logger.error("Could not get surface name for currency pair {}, {}; should never happen", putCurrency, callCurrency);
+      LOGGER.error("Could not get surface name for currency pair {}, {}; should never happen", putCurrency, callCurrency);
     }
     return null;
 

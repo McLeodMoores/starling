@@ -21,14 +21,14 @@ public final class MacaulayDurationFromYieldCalculator extends InstrumentDerivat
   /**
    * The calculator instance.
    */
-  private static final MacaulayDurationFromYieldCalculator s_instance = new MacaulayDurationFromYieldCalculator();
+  private static final MacaulayDurationFromYieldCalculator INSTANCE = new MacaulayDurationFromYieldCalculator();
 
   /**
    * Return the calculator instance.
    * @return The instance.
    */
   public static MacaulayDurationFromYieldCalculator getInstance() {
-    return s_instance;
+    return INSTANCE;
   }
 
   /**

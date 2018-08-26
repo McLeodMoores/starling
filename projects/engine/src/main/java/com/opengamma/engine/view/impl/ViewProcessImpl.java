@@ -60,7 +60,7 @@ import com.opengamma.util.tuple.Pairs;
  */
 public class ViewProcessImpl implements ViewProcessInternal, Lifecycle, ViewProcessWorkerContext {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(ViewProcess.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ViewProcess.class);
 
   private final UniqueId _viewDefinitionId;
   private final ViewExecutionOptions _executionOptions;
@@ -179,7 +179,7 @@ public class ViewProcessImpl implements ViewProcessInternal, Lifecycle, ViewProc
           if (viewDefinitionObject.equals(event.getObjectId())) {
             switch (event.getType()) {
               case REMOVED:
-                s_logger.error("Shutting down view process after removal of view definition {}", viewDefinitionObject);
+                LOGGER.error("Shutting down view process after removal of view definition {}", viewDefinitionObject);
                 shutdown();
                 break;
               case CHANGED:
@@ -236,7 +236,7 @@ public class ViewProcessImpl implements ViewProcessInternal, Lifecycle, ViewProc
     try {
       viewDefinition = getProcessContext().getConfigSource().getConfig(ViewDefinition.class, viewDefinitionId);
     } catch (DataNotFoundException e) {
-      s_logger.error("Shutting down view process after failure to retrieve view definition {}", viewDefinitionId);
+      LOGGER.error("Shutting down view process after failure to retrieve view definition {}", viewDefinitionId);
       shutdown();
       return;
     }
@@ -335,7 +335,7 @@ public class ViewProcessImpl implements ViewProcessInternal, Lifecycle, ViewProc
   @Override
   public void suspend() {
     // Caller MUST NOT hold the semaphore
-    s_logger.info("Suspending view process {}", getUniqueId());
+    LOGGER.info("Suspending view process {}", getUniqueId());
     try {
       _processLock.acquire();
     } catch (InterruptedException e) {
@@ -343,29 +343,29 @@ public class ViewProcessImpl implements ViewProcessInternal, Lifecycle, ViewProc
     }
     final ViewProcessWorker worker = getWorker();
     if (worker != null) {
-      s_logger.debug("Suspending calculation job");
+      LOGGER.debug("Suspending calculation job");
       setWorker(null);
       worker.terminate();
       try {
-        s_logger.debug("Waiting for calculation thread(s) to finish");
+        LOGGER.debug("Waiting for calculation thread(s) to finish");
         worker.join();
       } catch (final InterruptedException e) {
-        s_logger.warn("Interrupted waiting for calculation thread(s)");
+        LOGGER.warn("Interrupted waiting for calculation thread(s)");
         _processLock.release();
         throw new OpenGammaRuntimeException("Couldn't suspend view process", e);
       }
     }
-    s_logger.info("View process {} suspended", getUniqueId());
+    LOGGER.info("View process {} suspended", getUniqueId());
   }
 
   @Override
   public void resume() {
     // Caller MUST still hold the semaphore (from the previous call to suspend)
-    s_logger.info("Resuming view process {}", getUniqueId());
+    LOGGER.info("Resuming view process {}", getUniqueId());
     if (getState() == ViewProcessState.RUNNING) {
-      s_logger.info("Restarting computation job for view process {}", getUniqueId());
+      LOGGER.info("Restarting computation job for view process {}", getUniqueId());
       startComputationJobImpl();
-      s_logger.info("Restarted computation job for view process {}", getUniqueId());
+      LOGGER.info("Restarted computation job for view process {}", getUniqueId());
     }
     _processLock.release();
   }
@@ -417,7 +417,7 @@ public class ViewProcessImpl implements ViewProcessInternal, Lifecycle, ViewProc
 
   @Override
   public void viewDefinitionCompilationFailed(final Instant valuationTime, final Exception exception) {
-    s_logger.error("View definition compilation failed for " + valuationTime + ": ", exception);
+    LOGGER.error("View definition compilation failed for " + valuationTime + ": ", exception);
     final ViewResultListener[] listeners;
     _internalLock.lock();
     try {
@@ -439,7 +439,7 @@ public class ViewProcessImpl implements ViewProcessInternal, Lifecycle, ViewProc
 
   @Override
   public void cycleCompleted(final ViewCycle cycle) {
-    s_logger.debug("View cycle {} completed on view process {}", cycle.getUniqueId(), getUniqueId());
+    LOGGER.debug("View cycle {} completed on view process {}", cycle.getUniqueId(), getUniqueId());
     final ViewComputationResultModel result;
     ViewDeltaResultModel deltaResult = null;
     final ViewResultListener[] listeners;
@@ -487,7 +487,7 @@ public class ViewProcessImpl implements ViewProcessInternal, Lifecycle, ViewProc
       // No permissions checking if we're not logging in
       return true;
     } else if (isPermissionCheckDue || !_userPermissions.containsKey(user)) {
-      s_logger.info("Performing permissions check for market data");
+      LOGGER.info("Performing permissions check for market data");
       final boolean allowed = permissionProvider.checkMarketDataPermissions(user, marketDataRequirements).isEmpty();
       _userPermissions.put(user, allowed);
       return allowed;
@@ -502,7 +502,7 @@ public class ViewProcessImpl implements ViewProcessInternal, Lifecycle, ViewProc
 
   @Override
   public void cycleStarted(final ViewCycleMetadata cycleInfo) {
-    s_logger.debug("View cycle {} initiated on view process {}", cycleInfo, getUniqueId());
+    LOGGER.debug("View cycle {} initiated on view process {}", cycleInfo, getUniqueId());
     final ViewResultListener[] listeners;
     _internalLock.lock();
     try {
@@ -524,7 +524,7 @@ public class ViewProcessImpl implements ViewProcessInternal, Lifecycle, ViewProc
 
   @Override
   public void cycleFragmentCompleted(final ViewComputationResultModel fullFragment, ViewDefinition viewDefinition) {
-    s_logger.debug("Result fragment from cycle {} received on view process {}", fullFragment.getViewCycleId(), getUniqueId());
+    LOGGER.debug("Result fragment from cycle {} received on view process {}", fullFragment.getViewCycleId(), getUniqueId());
     final ViewDeltaResultModel deltaFragment;
     final ViewResultListener[] listeners;
     _internalLock.lock();
@@ -550,7 +550,7 @@ public class ViewProcessImpl implements ViewProcessInternal, Lifecycle, ViewProc
 
   @Override
   public void cycleExecutionFailed(final ViewCycleExecutionOptions executionOptions, final Exception exception) {
-    s_logger.error("Cycle execution failed for " + executionOptions + ": ", exception);
+    LOGGER.error("Cycle execution failed for " + executionOptions + ": ", exception);
     final ViewResultListener[] listeners;
     _internalLock.lock();
     try {
@@ -572,7 +572,7 @@ public class ViewProcessImpl implements ViewProcessInternal, Lifecycle, ViewProc
 
   @Override
   public void workerCompleted() {
-    s_logger.debug("Computation job completed on view {}. No further cycles to run.", this);
+    LOGGER.debug("Computation job completed on view {}. No further cycles to run.", this);
     final ViewResultListener[] listeners;
     _internalLock.lock();
     try {
@@ -667,7 +667,7 @@ public class ViewProcessImpl implements ViewProcessInternal, Lifecycle, ViewProc
               } catch (final Exception e) {
                 // Roll-back
                 _listeners.remove(listener);
-                s_logger.error("Failed to start computation job while adding listener for view process {}", this);
+                LOGGER.error("Failed to start computation job while adding listener for view process {}", this);
                 throw new OpenGammaRuntimeException("Failed to start computation job while adding listener for view process " + toString(), e);
               }
             }
@@ -708,7 +708,7 @@ public class ViewProcessImpl implements ViewProcessInternal, Lifecycle, ViewProc
           }
         }
       } catch (final Exception e) {
-        s_logger.error("Failed to push initial state to listener during attachment");
+        LOGGER.error("Failed to push initial state to listener during attachment");
         logListenerError(listener, e);
       }
     }
@@ -807,7 +807,7 @@ public class ViewProcessImpl implements ViewProcessInternal, Lifecycle, ViewProc
       setWorker(worker);
       rollback = false;
     } catch (final Exception e) {
-      s_logger.error("Failed to start computation job for view process " + toString(), e);
+      LOGGER.error("Failed to start computation job for view process " + toString(), e);
       throw new OpenGammaRuntimeException("Failed to start computation job for view process " + toString(), e);
     } finally {
       if (rollback && (_viewDefinitionChangeListener != null)) {
@@ -821,7 +821,7 @@ public class ViewProcessImpl implements ViewProcessInternal, Lifecycle, ViewProc
    */
   private void startComputationJobIfRequired() {
     // Caller MUST hold the semaphore
-    s_logger.info("Starting computation on view process {}...", this);
+    LOGGER.info("Starting computation on view process {}...", this);
     switch (getState()) {
       case STOPPED:
         // Normal state of play. Continue as normal.
@@ -835,7 +835,7 @@ public class ViewProcessImpl implements ViewProcessInternal, Lifecycle, ViewProc
     }
     setState(ViewProcessState.RUNNING);
     startComputationJobImpl();
-    s_logger.info("Started computation job for view process {}", this);
+    LOGGER.info("Started computation job for view process {}", this);
   }
 
   /**
@@ -847,17 +847,17 @@ public class ViewProcessImpl implements ViewProcessInternal, Lifecycle, ViewProc
     if (getLatestViewDefinition().isPersistent() || _isPersistentViewProcess) {
       return;
     }
-    s_logger.info("Stopping computation on view process {}...", this);
+    LOGGER.info("Stopping computation on view process {}...", this);
     if (getState() != ViewProcessState.RUNNING) {
       return;
     }
     terminateComputationJob();
     setState(ViewProcessState.STOPPED);
-    s_logger.info("Stopped.");
+    LOGGER.info("Stopped.");
   }
 
   private void logListenerError(final ViewResultListener listener, final Exception e) {
-    s_logger.error("Error while calling listener " + listener, e);
+    LOGGER.error("Error while calling listener " + listener, e);
   }
 
   private void terminateComputationJob() {

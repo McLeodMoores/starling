@@ -53,7 +53,7 @@ public class MarketDataSnapshotToolUtils {
   private static final String SNAPSHOT_QUERY_OPTION = "q";
   /** Snapshot version list option flag */
   private static final String SNAPSHOT_VERSION_LIST_OPTION = "v";
-  private static final Logger s_logger = LoggerFactory.getLogger(MarketDataSnapshotToolUtils.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(MarketDataSnapshotToolUtils.class);
   
   public static Option createSnapshotListOption() {
     final Option option = new Option(SNAPSHOT_LIST_OPTION, "snapshot-list", false, "List the snapshots available");
@@ -201,7 +201,7 @@ public class MarketDataSnapshotToolUtils {
         try {
           marketValue = LocalDate.parse(market);
         } catch (IllegalArgumentException e)  {
-          s_logger.error("Market value {} should be a Double, LocalDate or empty.", market);
+          LOGGER.error("Market value {} should be a Double, LocalDate or empty.", market);
         }
       }
     }
@@ -214,7 +214,7 @@ public class MarketDataSnapshotToolUtils {
         try {
           overrideValue = LocalDate.parse(override);
         } catch (IllegalArgumentException e)  {
-          s_logger.error("Override value {} should be a Double, LocalDate or empty.", override);
+          LOGGER.error("Override value {} should be a Double, LocalDate or empty.", override);
         }
       }
     }
@@ -242,7 +242,7 @@ public class MarketDataSnapshotToolUtils {
       } else if (isTenor(xValue)) {
         surfaceX = Tenor.parse(xValue);
       } else {
-        s_logger.error("Volatility surface X ordinate {} should be a Double, Tenor or empty.", xValue);
+        LOGGER.error("Volatility surface X ordinate {} should be a Double, Tenor or empty.", xValue);
       }
     }
 
@@ -251,7 +251,7 @@ public class MarketDataSnapshotToolUtils {
         try {
           surfaceY = createYOrdinatePair(yValues);
         } catch (IllegalArgumentException e)  {
-          s_logger.error("Volatility surface Y ordinate {} should be a Double, Pair<Number, FXVolQuoteType> or empty.", xValue);
+          LOGGER.error("Volatility surface Y ordinate {} should be a Double, Pair<Number, FXVolQuoteType> or empty.", xValue);
         }
       } else if (yValues.length == 1) {
         if (NumberUtils.isNumber(yValues[0])) {

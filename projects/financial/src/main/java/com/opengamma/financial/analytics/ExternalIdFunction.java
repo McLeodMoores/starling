@@ -36,7 +36,7 @@ import com.opengamma.id.ExternalScheme;
 public class ExternalIdFunction extends AbstractFunction.NonCompiledInvoker {
   /** The attribute property name */
   public static final String EXTERNAL_SCHEME_NAME = "ExternalScheme";
-  private static final Logger s_logger = LoggerFactory.getLogger(ExternalIdFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ExternalIdFunction.class);
 
   @Override
   public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
@@ -80,7 +80,7 @@ public class ExternalIdFunction extends AbstractFunction.NonCompiledInvoker {
     final Set<String> schemeNames = constraints.getValues(EXTERNAL_SCHEME_NAME);
     if (!OpenGammaCompilationContext.isPermissive(context)) {
       if (schemeNames == null || schemeNames.size() != 1) {
-        s_logger.error("Did not specify a single attribute name");
+        LOGGER.error("Did not specify a single attribute name");
         return null;
       }
     }

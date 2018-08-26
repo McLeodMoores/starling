@@ -29,7 +29,7 @@ import com.opengamma.util.ArgumentChecker;
  *
  */
 public abstract class FXBlackVolatilitySurfaceDefaults extends DefaultPropertyFunction {
-  private static final Logger s_logger = LoggerFactory.getLogger(FXBlackVolatilitySurfaceDefaults.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(FXBlackVolatilitySurfaceDefaults.class);
   private static final String[] VALUE_REQUIREMENTS = new String[] {
       ValueRequirementNames.BLACK_VOLATILITY_SURFACE,
       ValueRequirementNames.LOCAL_VOLATILITY_SURFACE,
@@ -98,7 +98,7 @@ public abstract class FXBlackVolatilitySurfaceDefaults extends DefaultPropertyFu
       case ValuePropertyNames.SURFACE:
         return _currencyPairToSurfaceName.get(currencyPair);
       default:
-        s_logger.error("Could not find default value for {} in this function", propertyName);
+        LOGGER.error("Could not find default value for {} in this function", propertyName);
         return null;
     }
   }

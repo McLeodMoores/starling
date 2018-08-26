@@ -33,7 +33,7 @@ import com.opengamma.util.time.Tenor;
  */
 public class ForwardSwapSecurityGenerator extends SecurityGenerator<ForwardSwapSecurity> {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(ForwardSwapSecurityGenerator.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ForwardSwapSecurityGenerator.class);
   private static final Tenor[] TENORS = new Tenor[] {Tenor.THREE_MONTHS, Tenor.SIX_MONTHS, Tenor.NINE_MONTHS, Tenor.ONE_YEAR, Tenor.TWO_YEARS };
   private static final Tenor[] FORWARDS = new Tenor[] {Tenor.THREE_MONTHS, Tenor.SIX_MONTHS, Tenor.NINE_MONTHS };
 
@@ -94,14 +94,14 @@ public class ForwardSwapSecurityGenerator extends SecurityGenerator<ForwardSwapS
     final ZonedDateTime forwardDate = nextWorkingDay(now.plus(forward.getPeriod()), ccy);
     ConventionBundle swapConvention = getConventionBundleSource().getConventionBundle(ExternalId.of(InMemoryConventionBundleMaster.SIMPLE_NAME_SCHEME, ccy.getCode() + "_SWAP"));
     if (swapConvention == null) {
-      s_logger.error("Couldn't get swap convention for {}", ccy.getCode());
+      LOGGER.error("Couldn't get swap convention for {}", ccy.getCode());
       return null;
     }
     final Tenor maturity = getRandom(TENORS);
     // get the convention of the identifier of the initial rate
     ConventionBundle liborConvention = getConventionBundleSource().getConventionBundle(swapConvention.getSwapFloatingLegInitialRate());
     if (liborConvention == null) {
-      s_logger.error("Couldn't get libor convention for {}", swapConvention.getSwapFloatingLegInitialRate());
+      LOGGER.error("Couldn't get libor convention for {}", swapConvention.getSwapFloatingLegInitialRate());
       return null;
     }
     // look up the rate timeseries identifier out of the bundle
@@ -110,21 +110,21 @@ public class ForwardSwapSecurityGenerator extends SecurityGenerator<ForwardSwapS
     final HistoricalTimeSeries initialRateSeries = getHistoricalSource().getHistoricalTimeSeries(MarketDataRequirementNames.MARKET_VALUE, tsIdentifier.toBundle(), null, tradeDate.toLocalDate(),
         true, tradeDate.toLocalDate(), true);
     if (initialRateSeries == null || initialRateSeries.getTimeSeries().isEmpty()) {
-      s_logger.error("couldn't get series for {} on {}", tsIdentifier, tradeDate);
+      LOGGER.error("couldn't get series for {} on {}", tsIdentifier, tradeDate);
       return null;
     }
     Double initialRate = initialRateSeries.getTimeSeries().getEarliestValue();
     // get the identifier for the swap rate for the maturity we're interested in (assuming the fixed rate will be =~ swap rate)
     final ExternalId swapRateForMaturityIdentifier = getSwapRateFor(ccy, tradeDate.toLocalDate(), maturity, forward);
     if (swapRateForMaturityIdentifier == null) {
-      s_logger.error("Couldn't get swap rate identifier for {} [{}] from {}", new Object[] {ccy, maturity, tradeDate });
+      LOGGER.error("Couldn't get swap rate identifier for {} [{}] from {}", new Object[] {ccy, maturity, tradeDate });
       return null;
     }
     final HistoricalTimeSeries fixedRateSeries = getHistoricalSource().getHistoricalTimeSeries(MarketDataRequirementNames.MARKET_VALUE, swapRateForMaturityIdentifier.toBundle(),
         null, tradeDate.toLocalDate(), true,
         tradeDate.toLocalDate(), true);
     if (fixedRateSeries == null) {
-      s_logger.error("can't find time series for {} on {}", swapRateForMaturityIdentifier, tradeDate);
+      LOGGER.error("can't find time series for {} on {}", swapRateForMaturityIdentifier, tradeDate);
       return null;
     }
     Double fixedRate = (fixedRateSeries.getTimeSeries().getEarliestValue() + getRandom().nextDouble()) / 100d;

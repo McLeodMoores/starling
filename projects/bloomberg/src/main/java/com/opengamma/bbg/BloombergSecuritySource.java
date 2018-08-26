@@ -41,7 +41,7 @@ import com.opengamma.util.ArgumentChecker;
 public final class BloombergSecuritySource extends AbstractSecuritySource implements SecuritySource {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(BloombergSecuritySource.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(BloombergSecuritySource.class);
   /**
    * Bloomberg scheme.
    */
@@ -120,7 +120,7 @@ public final class BloombergSecuritySource extends AbstractSecuritySource implem
     if (securities.size() == 1) {
       return securities.get(bundle);
     } else {
-      s_logger.warn("Bloomberg return security={} for id={}", securities.values(), bundle);
+      LOGGER.warn("Bloomberg return security={} for id={}", securities.values(), bundle);
       return null;
     }
   }

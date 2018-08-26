@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.core.position;
@@ -33,7 +33,7 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT)
 public class PortfolioNodeAndPositionFudgeEncodingTest extends AbstractFudgeBuilderTestCase {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(PortfolioNodeAndPositionFudgeEncodingTest.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(PortfolioNodeAndPositionFudgeEncodingTest.class);
 
   private UniqueIdSupplier _uniqueIdSupplier;
 
@@ -52,7 +52,7 @@ public class PortfolioNodeAndPositionFudgeEncodingTest extends AbstractFudgeBuil
   }
 
   private SimplePortfolioNode[] createPortfolioNodes() {
-    final SimplePortfolioNode nodes[] = new SimplePortfolioNode[7];
+    final SimplePortfolioNode[] nodes = new SimplePortfolioNode[7];
     for (int i = 0; i < nodes.length; i++) {
       nodes[i] = new SimplePortfolioNode(nextUniqueId(), "node " + i);
     }
@@ -83,7 +83,7 @@ public class PortfolioNodeAndPositionFudgeEncodingTest extends AbstractFudgeBuil
   private void assertPortfolioNodeEquals(final PortfolioNode expected, final PortfolioNode actual) {
     assertNotNull(expected);
     assertNotNull(actual);
-    s_logger.debug("testing portfolio node {}", expected.getUniqueId());
+    LOGGER.debug("testing portfolio node {}", expected.getUniqueId());
     assertEquals(expected.getUniqueId(), actual.getUniqueId());
     assertEquals(expected.getName(), actual.getName());
     assertEquals(expected.size(), actual.size());
@@ -94,7 +94,7 @@ public class PortfolioNodeAndPositionFudgeEncodingTest extends AbstractFudgeBuil
     assertNotNull(actualChildren);
     assertEquals(expectedChildren.size(), actualChildren.size());
     for (int i = 0; i < expectedChildren.size(); i++) {
-      s_logger.debug("testing child {} of {}", i, actual.getUniqueId());
+      LOGGER.debug("testing child {} of {}", i, actual.getUniqueId());
       assertPortfolioNodeEquals(expectedChildren.get(i), actualChildren.get(i));
     }
     final List<Position> expectedPositions = expected.getPositions();
@@ -103,7 +103,7 @@ public class PortfolioNodeAndPositionFudgeEncodingTest extends AbstractFudgeBuil
     assertNotNull(actualPositions);
     assertEquals(expectedPositions.size(), actualPositions.size());
     for (int i = 0; i < expectedPositions.size(); i++) {
-      s_logger.debug("testing position {} of {}", i, actual.getUniqueId());
+      LOGGER.debug("testing position {} of {}", i, actual.getUniqueId());
       assertPositionEquals(expectedPositions.get(i), actualPositions.get(i));
     }
   }
@@ -111,7 +111,7 @@ public class PortfolioNodeAndPositionFudgeEncodingTest extends AbstractFudgeBuil
   private void assertPositionEquals(final Position expected, final Position actual) {
     assertNotNull(expected);
     assertNotNull(actual);
-    s_logger.debug("testing position {}", expected.getUniqueId());
+    LOGGER.debug("testing position {}", expected.getUniqueId());
     assertEquals(expected.getUniqueId(), actual.getUniqueId());
     assertEquals(expected.getQuantity(), actual.getQuantity());
     assertEquals(expected.getSecurityLink(), actual.getSecurityLink());
@@ -119,7 +119,7 @@ public class PortfolioNodeAndPositionFudgeEncodingTest extends AbstractFudgeBuil
 
   private FudgeMsg runPortfolioNodeTest(final PortfolioNode original) {
     final FudgeMsg message = getFudgeSerializer().objectToFudgeMsg(original);
-    s_logger.debug("Message = {}", message);
+    LOGGER.debug("Message = {}", message);
     final PortfolioNode portfolio = getFudgeDeserializer().fudgeMsgToObject(PortfolioNode.class, message);
     assertPortfolioNodeEquals(original, portfolio);
     return message;
@@ -127,9 +127,9 @@ public class PortfolioNodeAndPositionFudgeEncodingTest extends AbstractFudgeBuil
 
   private int countParents(final FudgeMsg message) {
     int count = 0;
-    for (FudgeField field : message) {
+    for (final FudgeField field : message) {
       if (PortfolioNodeFudgeBuilder.PARENT_FIELD_NAME.equals(field.getName())) {
-        s_logger.debug("Found parent ref {}", field.getValue());
+        LOGGER.debug("Found parent ref {}", field.getValue());
         count++;
       } else if (field.getValue() instanceof FudgeMsg) {
         count += countParents((FudgeMsg) field.getValue());
@@ -157,7 +157,7 @@ public class PortfolioNodeAndPositionFudgeEncodingTest extends AbstractFudgeBuil
 
   private FudgeMsg runPositionTest(final Position original) {
     final FudgeMsg message = getFudgeSerializer().objectToFudgeMsg(original);
-    s_logger.debug("Message = {}", message);
+    LOGGER.debug("Message = {}", message);
     final Position position = getFudgeDeserializer().fudgeMsgToObject(Position.class, message);
     assertPositionEquals(original, position);
     return message;

@@ -29,7 +29,7 @@ import com.opengamma.util.ArgumentChecker;
  */
 public final class AnnotationCache {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(AnnotationCache.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(AnnotationCache.class);
 
   /**
    * The cache path property name
@@ -103,7 +103,7 @@ public final class AnnotationCache {
       try {
         classes.add(Class.forName(className));
       } catch (ClassNotFoundException e) {
-        s_logger.info("Class not found", e);
+        LOGGER.info("Class not found", e);
       }
     }
     return classes;
@@ -123,7 +123,7 @@ public final class AnnotationCache {
     ArgumentChecker.notNull(annotationClass, "annotation class");
     final String path = System.getProperty(CACHE_PATH_PROPERTY);
     if (path == null) {
-      s_logger.warn("No cache path set in system property {}", CACHE_PATH_PROPERTY);
+      LOGGER.warn("No cache path set in system property {}", CACHE_PATH_PROPERTY);
       return new AnnotationCache(Instant.EPOCH, annotationClass);
     }
     final File cacheFile = new File(new File(path), getCacheFileName(annotationClass));
@@ -140,7 +140,7 @@ public final class AnnotationCache {
       br.close();
       return cache;
     } catch (Throwable t) {
-      s_logger.warn("Couldn't read cache file", t);
+      LOGGER.warn("Couldn't read cache file", t);
       return new AnnotationCache(Instant.EPOCH, annotationClass);
     }
   }
@@ -151,7 +151,7 @@ public final class AnnotationCache {
   public void save() {
     final String path = System.getProperty(CACHE_PATH_PROPERTY);
     if (path == null) {
-      s_logger.warn("No cache path set in system property {}", CACHE_PATH_PROPERTY);
+      LOGGER.warn("No cache path set in system property {}", CACHE_PATH_PROPERTY);
       return;
     }
     final File cacheFile = new File(new File(path), getCacheFileName());
@@ -164,7 +164,7 @@ public final class AnnotationCache {
       pw.flush();
       pw.close();
     } catch (Throwable t) {
-      s_logger.warn("Couldn't write cache file", t);
+      LOGGER.warn("Couldn't write cache file", t);
     }
   }
 

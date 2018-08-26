@@ -26,7 +26,7 @@ import com.opengamma.util.tuple.Pairs;
  */
 public class StandardCurrencyPairs {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(StandardCurrencyPairs.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(StandardCurrencyPairs.class);
   private static Set<Pair<Currency, Currency>> s_currencyPairs = new HashSet<Pair<Currency, Currency>>();
 
   static {
@@ -45,12 +45,12 @@ public class StandardCurrencyPairs {
         try {
           s_currencyPairs.add(Pairs.of(Currency.of(numerator), Currency.of(denominator)));
         } catch (IllegalArgumentException iae) {
-          s_logger.warn("Couldn't create currency from " + filename + ":" + line);
+          LOGGER.warn("Couldn't create currency from " + filename + ":" + line);
         }
         line++;
       }
     } catch (IOException ex) {
-      s_logger.warn("Couldn't read " + filename);
+      LOGGER.warn("Couldn't read " + filename);
     }    
   }
 

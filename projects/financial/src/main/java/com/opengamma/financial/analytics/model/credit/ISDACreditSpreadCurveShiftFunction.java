@@ -39,7 +39,7 @@ import com.opengamma.util.time.Tenor;
  * 
  */
 public class ISDACreditSpreadCurveShiftFunction extends AbstractFunction.NonCompiledInvoker {
-  private static final Logger s_logger = LoggerFactory.getLogger(ISDACreditSpreadCurveFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ISDACreditSpreadCurveFunction.class);
   private static final String PREFIX = "Shifted ";
 
   @Override
@@ -105,7 +105,7 @@ public class ISDACreditSpreadCurveShiftFunction extends AbstractFunction.NonComp
     }
     final String shiftType = Iterables.getOnlyElement(shiftTypes);
     if (!(shiftType.equals(ADDITIVE_SPREAD_CURVE_SHIFT) || shiftType.equals(MULTIPLICATIVE_SPREAD_CURVE_SHIFT))) {
-      s_logger.error("Spread curve shift type {} not recognised", shiftType);
+      LOGGER.error("Spread curve shift type {} not recognised", shiftType);
       return null;
     }
     final ValueProperties properties = constraints.copy()

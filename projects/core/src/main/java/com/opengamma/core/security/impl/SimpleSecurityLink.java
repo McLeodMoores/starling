@@ -48,7 +48,7 @@ public class SimpleSecurityLink extends AbstractLink<Security>
   /** Serialization version. */
   private static final long serialVersionUID = 1L;
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(SimpleSecurityLink.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(SimpleSecurityLink.class);
 
   /**
    * The target security.
@@ -201,10 +201,10 @@ public class SimpleSecurityLink extends AbstractLink<Security>
     try {
       return resolve(source);
     } catch (DataNotFoundException ex) {
-      s_logger.warn("Unable to resolve security {}", this);
+      LOGGER.warn("Unable to resolve security {}", this);
       return null;
     } catch (RuntimeException ex) {
-      s_logger.warn("Unable to resolve security {}: {}", this, ex);
+      LOGGER.warn("Unable to resolve security {}: {}", this, ex);
       return null;
     }
   }

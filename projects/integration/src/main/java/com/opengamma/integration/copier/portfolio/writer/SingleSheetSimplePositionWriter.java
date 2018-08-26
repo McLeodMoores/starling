@@ -30,7 +30,7 @@ import com.opengamma.util.tuple.ObjectsPair;
  */
 public class SingleSheetSimplePositionWriter extends SingleSheetPositionWriter {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(SingleSheetSimplePositionWriter.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(SingleSheetSimplePositionWriter.class);
 
   private RowParser _rowParser;
   
@@ -148,7 +148,7 @@ public class SingleSheetSimplePositionWriter extends SingleSheetPositionWriter {
         _currentRow.putAll(_rowParser.constructRow(position.getTrades().get(0)));
       }
       if (position.getTrades().size() > 1) {
-        s_logger.warn("Omitting extra trades: only one trade per position is supported in the current mode");
+        LOGGER.warn("Omitting extra trades: only one trade per position is supported in the current mode");
       }
       if (!_currentRow.isEmpty()) {
         getSheet().writeNextRow(_currentRow);

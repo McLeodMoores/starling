@@ -23,7 +23,7 @@ import com.opengamma.util.ArgumentChecker;
  */
 public abstract class DynamicFunctionConfigurationSource implements FunctionConfigurationSource {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(DynamicFunctionConfigurationSource.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(DynamicFunctionConfigurationSource.class);
 
   private final ChangeManager _underlying;
 
@@ -31,10 +31,10 @@ public abstract class DynamicFunctionConfigurationSource implements FunctionConf
     @Override
     public void entityChanged(final ChangeEvent event) {
       if (isPropogateEvent(event)) {
-        s_logger.info("Function configuration change at {} caused by {}", DynamicFunctionConfigurationSource.this, event);
+        LOGGER.info("Function configuration change at {} caused by {}", DynamicFunctionConfigurationSource.this, event);
         _changeManager.entityChanged(ChangeType.CHANGED, FunctionConfigurationSource.OBJECT_ID, event.getVersionFrom(), event.getVersionTo(), event.getVersionInstant());
       } else {
-        s_logger.debug("Ignoring event {} at {}", event, DynamicFunctionConfigurationSource.this);
+        LOGGER.debug("Ignoring event {} at {}", event, DynamicFunctionConfigurationSource.this);
       }
     }
   };
@@ -45,7 +45,7 @@ public abstract class DynamicFunctionConfigurationSource implements FunctionConf
     public synchronized void addChangeListener(final ChangeListener listener) {
       ArgumentChecker.notNull(listener, "listener");
       if (getListeners().isEmpty()) {
-        s_logger.info("Registering listener for {}", DynamicFunctionConfigurationSource.this);
+        LOGGER.info("Registering listener for {}", DynamicFunctionConfigurationSource.this);
         _underlying.addChangeListener(_changeListener);
       }
       super.addChangeListener(listener);
@@ -55,7 +55,7 @@ public abstract class DynamicFunctionConfigurationSource implements FunctionConf
     public synchronized void removeChangeListener(final ChangeListener listener) {
       super.removeChangeListener(listener);
       if (getListeners().isEmpty()) {
-        s_logger.info("Removing listener for {}", DynamicFunctionConfigurationSource.this);
+        LOGGER.info("Removing listener for {}", DynamicFunctionConfigurationSource.this);
         _underlying.removeChangeListener(_changeListener);
       }
     }

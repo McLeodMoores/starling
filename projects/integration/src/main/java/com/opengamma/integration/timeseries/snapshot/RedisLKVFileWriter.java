@@ -42,8 +42,8 @@ import com.opengamma.util.redis.RedisConnector;
  */
 public class RedisLKVFileWriter implements Runnable {
   
-  private static final Logger s_logger = LoggerFactory.getLogger(RedisLKVFileWriter.class);
-  private static final FudgeContext s_fudgeContext = OpenGammaFudgeContext.getInstance();
+  private static final Logger LOGGER = LoggerFactory.getLogger(RedisLKVFileWriter.class);
+  private static final FudgeContext FUDGE_CONTEXT = OpenGammaFudgeContext.getInstance();
   /**
    * Ticks field name
    */
@@ -182,12 +182,12 @@ public class RedisLKVFileWriter implements Runnable {
     
     final File outputFile = getOutputFile();
     ensureParentDirectory(outputFile);
-    OperationTimer timer = new OperationTimer(s_logger, "Writing LKV for {} securities to disk", messages.size());
+    OperationTimer timer = new OperationTimer(LOGGER, "Writing LKV for {} securities to disk", messages.size());
     FileOutputStream fos = null;
     try {
       fos = new FileOutputStream(outputFile);
       BufferedOutputStream bos = new BufferedOutputStream(fos, 4096);
-      FudgeMsgWriter fmsw = s_fudgeContext.createMessageWriter(bos);
+      FudgeMsgWriter fmsw = FUDGE_CONTEXT.createMessageWriter(bos);
       for (FudgeMsg tick : messages) {
         fmsw.writeMessage(tick);
       }
@@ -202,9 +202,9 @@ public class RedisLKVFileWriter implements Runnable {
 
   private void ensureParentDirectory(final File outputFile) {
     try {
-      s_logger.debug("creating directory {}", outputFile.getParent());
+      LOGGER.debug("creating directory {}", outputFile.getParent());
       FileUtils.forceMkdir(outputFile.getParentFile());
-      s_logger.debug("directory created");
+      LOGGER.debug("directory created");
     } catch (IOException ex) {
       throw new OpenGammaRuntimeException("Error creating directory " + outputFile.getParent(), ex);
     }
@@ -213,7 +213,7 @@ public class RedisLKVFileWriter implements Runnable {
   private List<FudgeMsg> toFudgeMsg(Map<ExternalId, Map<String, String>> redisLKV) {
     List<FudgeMsg> result = Lists.newArrayList();
     for (Entry<ExternalId, Map<String, String>> ticksEntry : redisLKV.entrySet()) {
-      MutableFudgeMsg msg = s_fudgeContext.newMessage();
+      MutableFudgeMsg msg = FUDGE_CONTEXT.newMessage();
       ExternalId externalId = ticksEntry.getKey();
       msg.add(SECURITY, externalId.toString());
       msg.add(TICKS, ticksToFudgeMsg(ticksEntry.getValue()));
@@ -234,7 +234,7 @@ public class RedisLKVFileWriter implements Runnable {
   }
 
   private FudgeMsg ticksToFudgeMsg(Map<String, String> ticks) {
-    MutableFudgeMsg ticksMsg = s_fudgeContext.newMessage();
+    MutableFudgeMsg ticksMsg = FUDGE_CONTEXT.newMessage();
     for (Entry<String, String> tickEntry : ticks.entrySet()) {
       ticksMsg.add(tickEntry.getKey(), Double.valueOf(tickEntry.getValue()));
     }

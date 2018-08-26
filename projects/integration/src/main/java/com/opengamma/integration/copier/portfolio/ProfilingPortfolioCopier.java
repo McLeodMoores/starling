@@ -23,7 +23,7 @@ import com.opengamma.util.tuple.ObjectsPair;
  */
 public class ProfilingPortfolioCopier implements PortfolioCopier {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(ProfilingPortfolioCopier.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ProfilingPortfolioCopier.class);
   private String[] _structure;
 
   private int _readTime;
@@ -60,7 +60,7 @@ public class ProfilingPortfolioCopier implements PortfolioCopier {
         next = positionReader.readNext();
       } catch (Exception e) {
         // skip to next row on uncaught exception while parsing row
-        s_logger.error("Unable to parse row", e);
+        LOGGER.error("Unable to parse row", e);
         continue;
       }
       if (next == null) {

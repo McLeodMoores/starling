@@ -38,7 +38,7 @@ import com.opengamma.id.ExternalIdBundle;
  */
 public class YieldCurveMarketDataShiftFunction extends AbstractFunction.NonCompiledInvoker {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(YieldCurveMarketDataShiftFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(YieldCurveMarketDataShiftFunction.class);
 
   /**
    * Property to shift a yield curve's market data.
@@ -94,17 +94,17 @@ public class YieldCurveMarketDataShiftFunction extends AbstractFunction.NonCompi
     if (compiler == null) {
       throw new IllegalStateException("No override operation compiler for " + shift + " in execution context");
     }
-    s_logger.debug("Applying {} to {}", shift, marketData);
+    LOGGER.debug("Applying {} to {}", shift, marketData);
     final OverrideOperation operation = compiler.compile(shift, executionContext.getComputationTargetResolver());
     for (final Map.Entry<ExternalIdBundle, Double> dataPoint : marketData.getDataPointSet()) {
-      s_logger.debug("Applying to {}", dataPoint);
+      LOGGER.debug("Applying to {}", dataPoint);
       final Object result = operation.apply(new ValueRequirement(MarketDataRequirementNames.MARKET_VALUE, ComputationTargetType.PRIMITIVE, dataPoint.getKey()),
           dataPoint.getValue());
-      s_logger.debug("Got result {}", result);
+      LOGGER.debug("Got result {}", result);
       if (result instanceof Number) {
         dataPoint.setValue(((Number) result).doubleValue());
       } else {
-        s_logger.warn("Result of override operation was not numeric");
+        LOGGER.warn("Result of override operation was not numeric");
       }
     }
     return Collections.singleton(new ComputedValue(new ValueSpecification(inputSpec.getValueName(), inputSpec.getTargetSpecification(), properties.get()), marketData));

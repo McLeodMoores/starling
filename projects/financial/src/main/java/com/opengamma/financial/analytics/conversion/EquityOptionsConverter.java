@@ -118,7 +118,7 @@ public class EquityOptionsConverter extends FinancialSecurityVisitorAdapter<Inst
 
   }
   
-  private static final Logger s_logger = LoggerFactory.getLogger(EquityOptionsConverter.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(EquityOptionsConverter.class);
 
 }
 

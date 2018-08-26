@@ -15,7 +15,7 @@ import com.opengamma.engine.value.ValueSpecification;
  */
 /* package */ class ZonedDateTimeFormatter extends AbstractFormatter<ZonedDateTime> {
 
-  private static final DateTimeFormatter s_formatter = DateTimeFormatter.ISO_LOCAL_DATE;
+  private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ISO_LOCAL_DATE;
 
   /* package */ ZonedDateTimeFormatter() {
     super(ZonedDateTime.class);
@@ -23,7 +23,7 @@ import com.opengamma.engine.value.ValueSpecification;
 
   @Override
   public Object formatCell(ZonedDateTime value, ValueSpecification valueSpec, Object inlineKey) {
-    return s_formatter.format(value);
+    return FORMATTER.format(value);
   }
 
   @Override

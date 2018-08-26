@@ -31,7 +31,7 @@ import com.opengamma.util.ArgumentChecker;
 public class BloombergBulkSecurityLoader {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(BloombergBulkSecurityLoader.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(BloombergBulkSecurityLoader.class);
 
   private final Set<SecurityType> _ignoredSecurityTypes;
   private final Map<SecurityType, SecurityLoader> _securityLoaderMap;
@@ -107,12 +107,12 @@ public class BloombergBulkSecurityLoader {
       final SecurityType secType = entry.getKey();
       final Set<String> bbgkeys = entry.getValue();
       if (_ignoredSecurityTypes.contains(secType)) {
-        s_logger.info("Skipping securities {} of type {} which does not require loading", bbgkeys, secType);
+        LOGGER.info("Skipping securities {} of type {} which does not require loading", bbgkeys, secType);
         continue;
       }
       final SecurityLoader loader = _securityLoaderMap.get(secType);
       if (loader == null) {
-        s_logger.warn("Unable to load security type {} mapped from {} as no loader is registered", secType, bbgkeys);
+        LOGGER.warn("Unable to load security type {} mapped from {} as no loader is registered", secType, bbgkeys);
         continue;
       }
       final Map<String, ManageableSecurity> securities = loader.loadSecurities(bbgkeys);

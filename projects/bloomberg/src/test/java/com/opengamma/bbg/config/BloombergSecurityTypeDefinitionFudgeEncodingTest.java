@@ -72,7 +72,7 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT)
 public class BloombergSecurityTypeDefinitionFudgeEncodingTest {
 
-  private static final FudgeContext s_fudgeContext = OpenGammaFudgeContext.getInstance();
+  private static final FudgeContext FUDGE_CONTEXT = OpenGammaFudgeContext.getInstance();
 
   public void fudgeEncodingWithoutID() {
     BloombergSecurityTypeDefinition definition = createDefinition();
@@ -86,12 +86,12 @@ public class BloombergSecurityTypeDefinitionFudgeEncodingTest {
   }
   
   private void assertDefinition(BloombergSecurityTypeDefinition inDefinition) {
-    FudgeSerializer serializationContext = new FudgeSerializer(s_fudgeContext);
+    FudgeSerializer serializationContext = new FudgeSerializer(FUDGE_CONTEXT);
     MutableFudgeMsg inputMsg = serializationContext.objectToFudgeMsg(inDefinition);
-    FudgeMsg outputMsg = s_fudgeContext.deserialize(s_fudgeContext.toByteArray(inputMsg)).getMessage();
+    FudgeMsg outputMsg = FUDGE_CONTEXT.deserialize(FUDGE_CONTEXT.toByteArray(inputMsg)).getMessage();
     assertNotNull(outputMsg);
     
-    FudgeDeserializer deserializationContext = new FudgeDeserializer(s_fudgeContext);
+    FudgeDeserializer deserializationContext = new FudgeDeserializer(FUDGE_CONTEXT);
     BloombergSecurityTypeDefinition outDefinition = deserializationContext.fudgeMsgToObject(BloombergSecurityTypeDefinition.class, outputMsg);
     
     assertEquals(inDefinition, outDefinition);

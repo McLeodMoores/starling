@@ -30,18 +30,18 @@ public class SurfaceShiftFunctionFactory {
   public static final NodalSurfaceAdditiveShiftFunction NODAL_ADDITIVE = new NodalSurfaceAdditiveShiftFunction();
   /** Multiplicative shift function for {@link NodalDoublesSurface} */
   public static final NodalSurfaceMultiplicativeShiftFunction NODAL_MULTIPLICATIVE = new NodalSurfaceMultiplicativeShiftFunction();
-  private static final Map<Class<?>, SurfaceShiftFunction<?>> s_instances = new HashMap<>();
+  private static final Map<Class<?>, SurfaceShiftFunction<?>> INSTANCES = new HashMap<>();
 
   static {
-    s_instances.put(ConstantSurfaceAdditiveShiftFunction.class, CONSTANT_ADDITIVE);
-    s_instances.put(ConstantSurfaceMultiplicativeShiftFunction.class, CONSTANT_MULTIPLICATIVE);
-    s_instances.put(FunctionalSurfaceAdditiveShiftFunction.class, FUNCTIONAL_ADDITIVE);
-    s_instances.put(FunctionalSurfaceMultiplicativeShiftFunction.class, FUNCTIONAL_MULTIPLICATIVE);
-    s_instances.put(InterpolatedSurfaceAdditiveShiftFunction.class, INTERPOLATED_ADDITIVE);
-    s_instances.put(InterpolatedSurfaceMultiplicativeShiftFunction.class, INTERPOLATED_MULTIPLICATIVE);
-    s_instances.put(InterpolatedFromCurvesSurfaceAdditiveShiftFunction.class, INTERPOLATED_FROM_CURVES_ADDITIVE);
-    s_instances.put(NodalSurfaceAdditiveShiftFunction.class, NODAL_ADDITIVE);
-    s_instances.put(NodalSurfaceMultiplicativeShiftFunction.class, NODAL_MULTIPLICATIVE);
+    INSTANCES.put(ConstantSurfaceAdditiveShiftFunction.class, CONSTANT_ADDITIVE);
+    INSTANCES.put(ConstantSurfaceMultiplicativeShiftFunction.class, CONSTANT_MULTIPLICATIVE);
+    INSTANCES.put(FunctionalSurfaceAdditiveShiftFunction.class, FUNCTIONAL_ADDITIVE);
+    INSTANCES.put(FunctionalSurfaceMultiplicativeShiftFunction.class, FUNCTIONAL_MULTIPLICATIVE);
+    INSTANCES.put(InterpolatedSurfaceAdditiveShiftFunction.class, INTERPOLATED_ADDITIVE);
+    INSTANCES.put(InterpolatedSurfaceMultiplicativeShiftFunction.class, INTERPOLATED_MULTIPLICATIVE);
+    INSTANCES.put(InterpolatedFromCurvesSurfaceAdditiveShiftFunction.class, INTERPOLATED_FROM_CURVES_ADDITIVE);
+    INSTANCES.put(NodalSurfaceAdditiveShiftFunction.class, NODAL_ADDITIVE);
+    INSTANCES.put(NodalSurfaceMultiplicativeShiftFunction.class, NODAL_MULTIPLICATIVE);
   }
 
   /**
@@ -51,7 +51,7 @@ public class SurfaceShiftFunctionFactory {
    * @throws IllegalArgumentException If the function is not one of the static instances
    */
   public static SurfaceShiftFunction<?> getFunction(final Class<?> clazz) {
-    final SurfaceShiftFunction<?> f = s_instances.get(clazz);
+    final SurfaceShiftFunction<?> f = INSTANCES.get(clazz);
     if (f == null) {
       throw new IllegalArgumentException("Could not get function for " + clazz.getName());
     }

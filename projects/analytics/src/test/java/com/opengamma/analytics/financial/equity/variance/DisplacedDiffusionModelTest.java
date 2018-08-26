@@ -40,8 +40,8 @@ public class DisplacedDiffusionModelTest {
   // The derivative
   //  private static final double varStrike = 0.05;
   //  private static final double varNotional = 3150;
-  private static final double expiry1 = 1;
-  private static final double expiry5 = 5;
+  private static final double EXPIRY_1 = 1;
+  private static final double EXPIRY_5 = 5;
   //  private static final int nObsExpected = 750;
   //  private static final int nObsDisrupted = 0;
   //  private static final double[] observations = {};
@@ -92,13 +92,13 @@ public class DisplacedDiffusionModelTest {
   public void testFlatSurfaceReproducesVolAndZeroShift() {
 
     final double delta1 = 0.75;
-    final double forward = FORWARD_CURVE.getForward(expiry1);
-    final double vol1 = DELTA_VOLSURFACE.getVolatility(expiry1, delta1);
-    final double strike1 = BlackFormulaRepository.impliedStrike(delta1, true, forward, expiry1, vol1);
+    final double forward = FORWARD_CURVE.getForward(EXPIRY_1);
+    final double vol1 = DELTA_VOLSURFACE.getVolatility(EXPIRY_1, delta1);
+    final double strike1 = BlackFormulaRepository.impliedStrike(delta1, true, forward, EXPIRY_1, vol1);
     final double delta2 = 0.5;
-    final double vol2 = DELTA_VOLSURFACE.getVolatility(expiry1, delta2);
-    final double strike2 = BlackFormulaRepository.impliedStrike(delta2, true, forward, expiry1, vol2);
-    final DisplacedDiffusionModel logBlack = new DisplacedDiffusionModel(forward, expiry1, strike1, vol1, strike2, vol2);
+    final double vol2 = DELTA_VOLSURFACE.getVolatility(EXPIRY_1, delta2);
+    final double strike2 = BlackFormulaRepository.impliedStrike(delta2, true, forward, EXPIRY_1, vol2);
+    final DisplacedDiffusionModel logBlack = new DisplacedDiffusionModel(forward, EXPIRY_1, strike1, vol1, strike2, vol2);
 
     assertEquals(logBlack.getVol(), 0.25, 1e-9);
     assertEquals(logBlack.getShift(), 0.0, 1e-9);
@@ -107,14 +107,14 @@ public class DisplacedDiffusionModelTest {
   @Test
   public void testConstantDoublesSurface() {
     final BlackVolatilitySurface<?> constVolSurf = new BlackVolatilitySurfaceDelta(ConstantDoublesSurface.from(0.25), FORWARD_CURVE);
-    final double forward = FORWARD_CURVE.getForward(expiry1);
+    final double forward = FORWARD_CURVE.getForward(EXPIRY_1);
     final double delta1 = 0.75;
-    final double vol1 = constVolSurf.getVolatility(expiry1, delta1);
-    final double strike1 = BlackFormulaRepository.impliedStrike(delta1, true, forward, expiry1, vol1);
+    final double vol1 = constVolSurf.getVolatility(EXPIRY_1, delta1);
+    final double strike1 = BlackFormulaRepository.impliedStrike(delta1, true, forward, EXPIRY_1, vol1);
     final double delta2 = 0.5;
-    final double vol2 = constVolSurf.getVolatility(expiry1, delta2);
-    final double strike2 = BlackFormulaRepository.impliedStrike(delta2, true, forward, expiry1, vol2);
-    final DisplacedDiffusionModel logBlack = new DisplacedDiffusionModel(forward, expiry1, strike1, vol1, strike2, vol2);
+    final double vol2 = constVolSurf.getVolatility(EXPIRY_1, delta2);
+    final double strike2 = BlackFormulaRepository.impliedStrike(delta2, true, forward, EXPIRY_1, vol2);
+    final DisplacedDiffusionModel logBlack = new DisplacedDiffusionModel(forward, EXPIRY_1, strike1, vol1, strike2, vol2);
 
     assertEquals(logBlack.getVol(), 0.25, 1e-9);
     assertEquals(logBlack.getShift(), 0.0, 1e-9);
@@ -122,17 +122,17 @@ public class DisplacedDiffusionModelTest {
 
   @Test
   public void testOnSmileySurface() {
-    final double forward = FORWARD_CURVE.getForward(expiry5);
+    final double forward = FORWARD_CURVE.getForward(EXPIRY_5);
     final VectorRootFinder testSolver = new BroydenVectorRootFinder(1.0e-6, 1.0e-6, 50000);
-    final double vol1 = STRIKE_VOLSURFACE.getVolatility(expiry5, 40);
-    final double vol2 = STRIKE_VOLSURFACE.getVolatility(expiry5, 41);
-    final DisplacedDiffusionModel logBlack = new DisplacedDiffusionModel(forward, expiry5, 40, vol1, 41, vol2, 0.26, 0.01, testSolver);
+    final double vol1 = STRIKE_VOLSURFACE.getVolatility(EXPIRY_5, 40);
+    final double vol2 = STRIKE_VOLSURFACE.getVolatility(EXPIRY_5, 41);
+    final DisplacedDiffusionModel logBlack = new DisplacedDiffusionModel(forward, EXPIRY_5, 40, vol1, 41, vol2, 0.26, 0.01, testSolver);
 
     //TODO really - more magic numbers
     assertEquals(0.21148605807417542, logBlack.getVol(), 1e-8);
     assertEquals(8.183093915461424, logBlack.getShift(), 1e-8);
 
-    final DisplacedDiffusionModel logBlackDef = new DisplacedDiffusionModel(forward, expiry5, 40, vol1, 41, vol2);
+    final DisplacedDiffusionModel logBlackDef = new DisplacedDiffusionModel(forward, EXPIRY_5, 40, vol1, 41, vol2);
     assertEquals(logBlackDef.getVol(), logBlack.getVol(), 1e-8);
     assertEquals(logBlackDef.getShift(), logBlack.getShift(), 1e-8);
 
@@ -156,10 +156,10 @@ public class DisplacedDiffusionModelTest {
     };
 
     final BlackVolatilitySurface<?> volSurface = new BlackVolatilitySurfaceStrike(FunctionalDoublesSurface.from(surf));
-    final double forward = FORWARD_CURVE.getForward(expiry5);
-    final double vol1 = volSurface.getVolatility(expiry5, 40);
-    final double vol2 = volSurface.getVolatility(expiry5, 41);
-    final DisplacedDiffusionModel logBlackDef = new DisplacedDiffusionModel(forward, expiry5, 40, vol1, 41, vol2);
+    final double forward = FORWARD_CURVE.getForward(EXPIRY_5);
+    final double vol1 = volSurface.getVolatility(EXPIRY_5, 40);
+    final double vol2 = volSurface.getVolatility(EXPIRY_5, 41);
+    final DisplacedDiffusionModel logBlackDef = new DisplacedDiffusionModel(forward, EXPIRY_5, 40, vol1, 41, vol2);
     assertEquals(sigma, logBlackDef.getVol(), 1e-8);
     assertEquals(displacement, logBlackDef.getShift(), 1e-6);
   }

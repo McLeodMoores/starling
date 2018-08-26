@@ -35,7 +35,7 @@ import com.opengamma.util.test.TestGroup;
  */
 @Test(groups = TestGroup.INTEGRATION)
 public abstract class AbstractIdentifierMapTest {
-  private static final Logger s_logger = LoggerFactory.getLogger(AbstractIdentifierMapTest.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(AbstractIdentifierMapTest.class);
 
   protected abstract IdentifierMap createIdentifierMap(String testName);
 
@@ -126,7 +126,7 @@ public abstract class AbstractIdentifierMapTest {
     final long numSpecifications = ((long) numRequirementNames) * ((long) numIdentifiers);
     IdentifierMap idMap = createIdentifierMap("putPerformanceTestImpl-" + bulkOperation);
 
-    OperationTimer timer = new OperationTimer(s_logger, "Put performance test with {} elements", numSpecifications);
+    OperationTimer timer = new OperationTimer(LOGGER, "Put performance test with {} elements", numSpecifications);
 
     if (bulkOperation) {
       bulkOperationGetIdentifier(numRequirementNames, numIdentifiers, idMap);
@@ -140,7 +140,7 @@ public abstract class AbstractIdentifierMapTest {
     double msPerPut = ((double) numMillis) / ((double) numSpecifications);
     double putsPerSecond = 1000.0 / msPerPut;
 
-    s_logger.warn("put {}-{} ({}) Split time was {} ms/put, {} puts/sec", new Object[] {numRequirementNames, numIdentifiers, bulkOperation, msPerPut, putsPerSecond });
+    LOGGER.warn("put {}-{} ({}) Split time was {} ms/put, {} puts/sec", new Object[] {numRequirementNames, numIdentifiers, bulkOperation, msPerPut, putsPerSecond });
   }
 
   protected void getPerformanceTestImpl(final boolean bulkOperation) {
@@ -154,7 +154,7 @@ public abstract class AbstractIdentifierMapTest {
       } else {
         singleOperationGetIdentifier(numRequirementNames, numIdentifiers, idMap);
       }
-      final OperationTimer timer = new OperationTimer(s_logger, "Get performance test with {} elements", numSpecifications);
+      final OperationTimer timer = new OperationTimer(LOGGER, "Get performance test with {} elements", numSpecifications);
       if (bulkOperation) {
         bulkOperationGetIdentifier(numRequirementNames, numIdentifiers, idMap);
       } else {
@@ -163,7 +163,7 @@ public abstract class AbstractIdentifierMapTest {
       final long numMillis = timer.finished();
       final double msPerPut = ((double) numMillis) / ((double) numSpecifications);
       final double putsPerSecond = 1000.0 / msPerPut;
-      s_logger.warn("get {}-{} ({}) Split time was {} ms/get, {} gets/sec", new Object[] {numRequirementNames, numIdentifiers, bulkOperation, msPerPut, putsPerSecond });
+      LOGGER.warn("get {}-{} ({}) Split time was {} ms/get, {} gets/sec", new Object[] {numRequirementNames, numIdentifiers, bulkOperation, msPerPut, putsPerSecond });
     } finally {
       stopIdentifierMap(idMap);
     }

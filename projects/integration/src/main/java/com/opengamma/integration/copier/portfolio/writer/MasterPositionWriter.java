@@ -64,7 +64,7 @@ import com.opengamma.util.tuple.ObjectsPair;
  */
 public class MasterPositionWriter implements PositionWriter {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(MasterPositionWriter.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(MasterPositionWriter.class);
 
   private static final int NUMBER_OF_THREADS = 30;
 
@@ -237,7 +237,7 @@ public class MasterPositionWriter implements PositionWriter {
       if (!_multithread) {
         // Save the updated existing position to the position master
         PositionDocument addedDoc = _positionMaster.update(new PositionDocument(existingPosition));
-        s_logger.debug("Updated position {}, delta position {}", addedDoc.getPosition(), position);
+        LOGGER.debug("Updated position {}, delta position {}", addedDoc.getPosition(), position);
 
         // update position map (huh?)
         _securityIdToPosition.put(writtenSecurities.get(0).getUniqueId().getObjectId(), addedDoc.getPosition());
@@ -277,9 +277,9 @@ public class MasterPositionWriter implements PositionWriter {
     PositionDocument addedDoc;
     try {
       addedDoc = _positionMaster.add(new PositionDocument(position));
-      s_logger.debug("Added position {}", position);
+      LOGGER.debug("Added position {}", position);
     } catch (Exception e) {
-      s_logger.error("Unable to add position " + position.getUniqueId() + ": " + e.getMessage());
+      LOGGER.error("Unable to add position " + position.getUniqueId() + ": " + e.getMessage());
       return null;
     }
     // Add the new position to the portfolio
@@ -379,7 +379,7 @@ public class MasterPositionWriter implements PositionWriter {
       SecurityDocument result = _securityMaster.add(addDoc);
       return result.getSecurity();
     } catch (Exception e) {
-      s_logger.error("Failed to write security " + security + " to the security master", e);
+      LOGGER.error("Failed to write security " + security + " to the security master", e);
       return null;
     }
   }
@@ -398,7 +398,7 @@ public class MasterPositionWriter implements PositionWriter {
   protected ManageableSecurity updateSecurityVersionIfFound(ManageableSecurity security, SecuritySearchResult searchResult) {
     for (ManageableSecurity foundSecurity : searchResult.getSecurities()) {
       if (foundSecurity.getClass().equals(security.getClass())) {
-        s_logger.info("Returning existing security " + foundSecurity);
+        LOGGER.info("Returning existing security " + foundSecurity);
         return foundSecurity;
       }
     }
@@ -410,7 +410,7 @@ public class MasterPositionWriter implements PositionWriter {
         try {
           differences = _beanCompare.compare(foundSecurity, security);
         } catch (Exception e) {
-          s_logger.error("Error comparing securities with ID bundle " + security.getExternalIdBundle(), e);
+          LOGGER.error("Error comparing securities with ID bundle " + security.getExternalIdBundle(), e);
           return null;
         }
       }
@@ -418,7 +418,7 @@ public class MasterPositionWriter implements PositionWriter {
         // It's already there, don't update or add it
         return foundSecurity;
       } else {
-        s_logger.debug("Updating security " + foundSecurity + " due to differences: " + differences);
+        LOGGER.debug("Updating security " + foundSecurity + " due to differences: " + differences);
         SecurityDocument updateDoc = new SecurityDocument(security);
         updateDoc.setVersionFromInstant(Instant.now());
         try {
@@ -428,7 +428,7 @@ public class MasterPositionWriter implements PositionWriter {
           security.setUniqueId(newId);
           return security;
         } catch (Throwable t) {
-          s_logger.error("Unable to update security " + security.getUniqueId() + ": " + t.getMessage());
+          LOGGER.error("Unable to update security " + security.getUniqueId() + ": " + t.getMessage());
           return null;
         }
       }
@@ -461,7 +461,7 @@ public class MasterPositionWriter implements PositionWriter {
       tradeQty += trade.getQuantity().intValue();
     }
     if (tradeQty != position.getQuantity().intValue()) {
-      s_logger.warn("Position quantity and total trade quantities do not match for " + position);
+      LOGGER.warn("Position quantity and total trade quantities do not match for " + position);
     }
   }
 
@@ -494,11 +494,11 @@ public class MasterPositionWriter implements PositionWriter {
               try {
                 // Update the position in the position master
                 PositionDocument addedDoc = _positionMaster.update(new PositionDocument(position));
-                s_logger.debug("Updated position {}", position);
+                LOGGER.debug("Updated position {}", position);
                  // Add the new position to the portfolio node
                 _currentNode.addPosition(addedDoc.getUniqueId());
               } catch (Exception e) {
-                s_logger.error("Unable to update position " + position.getUniqueId() + ": " + e.getMessage());
+                LOGGER.error("Unable to update position " + position.getUniqueId() + ": " + e.getMessage());
               }
               return 0;
             }
@@ -507,7 +507,7 @@ public class MasterPositionWriter implements PositionWriter {
         try {
           List<Future<Integer>> futures = _executorService.invokeAll(tasks);
         } catch (Exception e) {
-          s_logger.warn("ExecutorService invokeAll failed: " + e.getMessage());
+          LOGGER.warn("ExecutorService invokeAll failed: " + e.getMessage());
         }
       }
 
@@ -523,21 +523,21 @@ public class MasterPositionWriter implements PositionWriter {
 
       // If keeping original portfolio nodes and merging positions, populate position map with existing positions in node
       if (_keepCurrentPositions && _mergePositions && _originalNode != null) {
-        s_logger.debug("Storing security associations for positions " + _originalNode.getPositionIds() + " at path " + StringUtils.join(newPath, '/'));
+        LOGGER.debug("Storing security associations for positions " + _originalNode.getPositionIds() + " at path " + StringUtils.join(newPath, '/'));
         for (ObjectId positionId : _originalNode.getPositionIds()) {
           ManageablePosition position = null;
           try {
             position = _positionMaster.get(positionId, VersionCorrection.LATEST).getPosition();
           } catch (Exception e) {
             // no action
-            s_logger.error("Exception retrieving position " + positionId, e);
+            LOGGER.error("Exception retrieving position " + positionId, e);
           }
           if (position != null) {
             position.getSecurityLink().resolve(_securitySource);
             if (position.getSecurity() != null) {
               if (_securityIdToPosition.containsKey(position.getSecurity())) {
                 ManageablePosition existing = _securityIdToPosition.get(position.getSecurity());
-                s_logger.warn("Merging positions but found existing duplicates under path " + StringUtils.join(newPath, '/') + ": " + position + " and " + existing
+                LOGGER.warn("Merging positions but found existing duplicates under path " + StringUtils.join(newPath, '/') + ": " + position + " and " + existing
                     + ".  New trades for security " + position.getSecurity().getUniqueId().getObjectId() + " will be added to position " + position.getUniqueId());
               
               } else {
@@ -546,12 +546,12 @@ public class MasterPositionWriter implements PositionWriter {
             }
           }
         }
-        if (s_logger.isDebugEnabled()) {
+        if (LOGGER.isDebugEnabled()) {
           StringBuilder sb = new StringBuilder("Cached security to position mappings at path ").append(StringUtils.join(newPath, '/')).append(":");
           for (Map.Entry<ObjectId, ManageablePosition> entry : _securityIdToPosition.entrySet()) {
             sb.append(System.lineSeparator()).append("  ").append(entry.getKey()).append(" = ").append(entry.getValue().getUniqueId());
           }
-          s_logger.debug(sb.toString());
+          LOGGER.debug(sb.toString());
         }
       }
 

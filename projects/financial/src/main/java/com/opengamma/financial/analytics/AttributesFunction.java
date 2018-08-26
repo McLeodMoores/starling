@@ -37,7 +37,7 @@ import com.opengamma.financial.OpenGammaCompilationContext;
 public class AttributesFunction extends AbstractFunction.NonCompiledInvoker {
   /** The attribute property name */
   public static final String PROPERTY_ATTRIBUTE_NAME = "AttributeName";
-  private static final Logger s_logger = LoggerFactory.getLogger(AttributesFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(AttributesFunction.class);
 
   @Override
   public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
@@ -98,7 +98,7 @@ public class AttributesFunction extends AbstractFunction.NonCompiledInvoker {
     final Set<String> attributeNames = constraints.getValues(PROPERTY_ATTRIBUTE_NAME);
     if (!OpenGammaCompilationContext.isPermissive(context)) {
       if (attributeNames == null || attributeNames.size() != 1) {
-        s_logger.error("Did not specify a single attribute name");
+        LOGGER.error("Did not specify a single attribute name");
         return null;
       }
     }

@@ -48,7 +48,7 @@ import com.opengamma.util.tuple.Pairs;
  *
  */
 public class CommodityOptionVolatilitySurfaceDataFunction extends AbstractFunction.NonCompiledInvoker {
-  private static final Logger s_logger = LoggerFactory.getLogger(CommodityOptionVolatilitySurfaceDataFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(CommodityOptionVolatilitySurfaceDataFunction.class);
 
   private ConfigDBVolatilitySurfaceSpecificationSource _volatilitySurfaceSpecificationSource;
 
@@ -183,7 +183,7 @@ public class CommodityOptionVolatilitySurfaceDataFunction extends AbstractFuncti
     // 2. Look up the specification
     final VolatilitySurfaceSpecification specification = _volatilitySurfaceSpecificationSource.getSpecification(fullName, InstrumentTypeProperties.COMMODITY_FUTURE_OPTION);
     if (specification == null) {
-      s_logger.error("Could not get volatility surface specification with name " + fullName);
+      LOGGER.error("Could not get volatility surface specification with name " + fullName);
       return null;
     }
 

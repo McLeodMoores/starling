@@ -21,8 +21,8 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT)
 public class RelativeOutperformanceOptionFunctionProviderTest {
 
-  private static final BinomialTreeOptionPricingModel _model = new BinomialTreeOptionPricingModel();
-  private static final TrinomialTreeOptionPricingModel _modelTri = new TrinomialTreeOptionPricingModel();
+  private static final BinomialTreeOptionPricingModel MODEL = new BinomialTreeOptionPricingModel();
+  private static final TrinomialTreeOptionPricingModel TRINOMIAL = new TrinomialTreeOptionPricingModel();
   private static final double SPOT = 105.;
   private static final double[] STRIKES = new double[] {0.9, 1., 1.1 };
   private static final double TIME = 4.2;
@@ -56,12 +56,12 @@ public class RelativeOutperformanceOptionFunctionProviderTest {
                   final double fValue = SPOT * Math.exp((div2 - dividend + sigma2 * sigma2 - rhoVols) * TIME) / spot2;
                   final double exactDiv = Math.exp(-interest * TIME) * BlackFormulaRepository.price(fValue, strike, TIME,
                       Math.sqrt(vol * vol + sigma2 * sigma2 - 2. * rhoVols), isCall);
-                  final double resDiv = _model.getPrice(function, SPOT, spot2, vol, sigma2, rho, interest, dividend, div2);
+                  final double resDiv = MODEL.getPrice(function, SPOT, spot2, vol, sigma2, rho, interest, dividend, div2);
                   final double refDiv = Math.max(exactDiv, 1.) * 1.e-3;
                   assertEquals(resDiv, exactDiv, refDiv);
 
                   final OptionFunctionProvider2D functionTri = new RelativeOutperformanceOptionFunctionProvider(strike, TIME, nStepsTri, isCall);
-                  final double resDivTri = _modelTri.getPrice(functionTri, SPOT, spot2, vol, sigma2, rho, interest, dividend, div2);
+                  final double resDivTri = TRINOMIAL.getPrice(functionTri, SPOT, spot2, vol, sigma2, rho, interest, dividend, div2);
                   assertEquals(resDivTri, exactDiv, refDiv);
                 }
               }
@@ -124,11 +124,11 @@ public class RelativeOutperformanceOptionFunctionProviderTest {
                   final double cross = 0.5 * (upForCross - downForCross) / eps;
 
                   final double[] ref = new double[] {price, delta1, delta2, theta, gamma1, gamma2, cross };
-                  final double[] res = _model.getGreeks(function, SPOT, spot2, vol, sigma2, rho, interest, dividend, div2);
+                  final double[] res = MODEL.getGreeks(function, SPOT, spot2, vol, sigma2, rho, interest, dividend, div2);
                   assertGreeks(res, ref, 1.e-3);
 
                   final OptionFunctionProvider2D functionTri = new RelativeOutperformanceOptionFunctionProvider(strike, TIME, nStepsTri, isCall);
-                  final double[] resTri = _modelTri.getGreeks(functionTri, SPOT, spot2, vol, sigma2, rho, interest, dividend, div2);
+                  final double[] resTri = TRINOMIAL.getGreeks(functionTri, SPOT, spot2, vol, sigma2, rho, interest, dividend, div2);
                   assertGreeks(resTri, ref, 1.e-3);
                 }
               }

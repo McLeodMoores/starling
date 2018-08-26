@@ -102,7 +102,7 @@ import com.opengamma.util.tuple.Pairs;
 public class HullWhiteOneFactorDiscountingCurveFunction extends
   MultiCurveFunction<HullWhiteOneFactorProviderInterface, HullWhiteProviderDiscountBuildingRepository, GeneratorYDCurve, MulticurveSensitivity> {
   /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(HullWhiteOneFactorDiscountingCurveFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(HullWhiteOneFactorDiscountingCurveFunction.class);
   /** The calculator */
   private static final ParSpreadMarketQuoteHullWhiteCalculator PSMQHWC = ParSpreadMarketQuoteHullWhiteCalculator.getInstance();
   /** The sensitivity calculator */
@@ -395,7 +395,7 @@ public class HullWhiteOneFactorDiscountingCurveFunction extends
             .get();
         final YieldAndDiscountCurve curve = provider.getMulticurveProvider().getCurve(curveName);
         if (curve == null) {
-          s_logger.error("Could not get curve called {} from configuration {}", curveName, getCurveConstructionConfigurationName());
+          LOGGER.error("Could not get curve called {} from configuration {}", curveName, getCurveConstructionConfigurationName());
         } else {
           final ValueSpecification curveSpec = new ValueSpecification(YIELD_CURVE, ComputationTargetSpecification.NULL, curveProperties);
           result.add(new ComputedValue(curveSpec, curve));

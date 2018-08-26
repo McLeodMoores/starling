@@ -39,7 +39,7 @@ public class OpenGammaSpringServlet extends SpringServlet {
   /** Serialization version. */
   private static final long serialVersionUID = 1L;
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(OpenGammaSpringServlet.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(OpenGammaSpringServlet.class);
 
   public OpenGammaSpringServlet() {
     super();
@@ -77,7 +77,7 @@ public class OpenGammaSpringServlet extends SpringServlet {
       wa.initiate(rc, new SpringComponentProviderFactory(rc, getContext()));
       
     } catch (RuntimeException ex) {
-      s_logger.error("Exception occurred during intialization", ex);
+      LOGGER.error("Exception occurred during intialization", ex);
       throw ex;
     }
   }

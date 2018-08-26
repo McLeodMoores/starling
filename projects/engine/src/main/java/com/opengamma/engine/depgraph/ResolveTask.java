@@ -29,15 +29,15 @@ import com.opengamma.engine.value.ValueSpecification;
  */
 /* package */final class ResolveTask extends DirectResolvedValueProducer implements ContextRunnable {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(ResolveTask.class);
-  private static final AtomicInteger s_nextObjectId = new AtomicInteger();
+  private static final Logger LOGGER = LoggerFactory.getLogger(ResolveTask.class);
+  private static final AtomicInteger NEXT_OBJECT_ID = new AtomicInteger();
 
   /**
    * State within a task. As the task executes, the execution is delegated to the current state object.
    */
   protected abstract static class State implements ResolvedValueProducer.Chain {
 
-    private final int _objectId = s_nextObjectId.getAndIncrement();
+    private final int _objectId = NEXT_OBJECT_ID.getAndIncrement();
     private final ResolveTask _task;
 
     //private final InstanceCount _instanceCount = new InstanceCount(this);
@@ -113,7 +113,7 @@ import com.opengamma.engine.value.ValueSpecification;
       }
       final ComputationTarget target = LazyComputationTargetResolver.resolve(context.getCompilationContext().getComputationTargetResolver(), specification);
       if (target == null) {
-        s_logger.warn("Computation target {} not found", specification);
+        LOGGER.warn("Computation target {} not found", specification);
       }
       return target;
     }
@@ -196,7 +196,7 @@ import com.opengamma.engine.value.ValueSpecification;
   private synchronized boolean setState(final State previousState, final State nextState) {
     assert nextState != null;
     if (_state == previousState) {
-      s_logger.debug("State transition {} to {}", previousState, nextState);
+      LOGGER.debug("State transition {} to {}", previousState, nextState);
       _state = nextState;
       return true;
     } else {
@@ -317,7 +317,7 @@ import com.opengamma.engine.value.ValueSpecification;
 
   @Override
   protected void pumpImpl(final GraphBuildingContext context) {
-    s_logger.debug("Pump called on {}", this);
+    LOGGER.debug("Pump called on {}", this);
     final State state = getState();
     if (state != null) {
       state.pump(context);

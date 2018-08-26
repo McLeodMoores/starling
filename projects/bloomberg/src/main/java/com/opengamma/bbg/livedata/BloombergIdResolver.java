@@ -41,7 +41,7 @@ import com.opengamma.util.ArgumentChecker;
 public class BloombergIdResolver extends AbstractResolver<ExternalIdBundle, ExternalId> implements IdResolver {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(BloombergIdResolver.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(BloombergIdResolver.class);
   private final ReferenceDataProvider _referenceDataProvider;
   
   public BloombergIdResolver(ReferenceDataProvider referenceDataProvider) {
@@ -84,7 +84,7 @@ public class BloombergIdResolver extends AbstractResolver<ExternalIdBundle, Exte
           result.put(bundle, ExternalSchemes.bloombergBuidSecurityId(bbgUniqueId));
         }
       } else {
-        s_logger.info("Unable to identify any Bloomberg compatible identifier for {}", bundle);
+        LOGGER.info("Unable to identify any Bloomberg compatible identifier for {}", bundle);
         result.put(bundle, null);
       }
     }
@@ -103,7 +103,7 @@ public class BloombergIdResolver extends AbstractResolver<ExternalIdBundle, Exte
       
       for (ExternalIdBundle bundle : bbgKey2Bundle.get(bbgKey)) {
         if (identifier == null) {
-          s_logger.warn("Unable to get Bloomberg unique ID for {}", bundle);
+          LOGGER.warn("Unable to get Bloomberg unique ID for {}", bundle);
         }
         
         result.put(bundle, identifier);          

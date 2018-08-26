@@ -46,7 +46,7 @@ import com.opengamma.util.time.Expiry;
 public class EquityDividendFutureLoader extends SecurityLoader {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(EquityDividendFutureLoader.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(EquityDividendFutureLoader.class);
   /**
    * The fields to load from Bloomberg.
    */
@@ -81,7 +81,7 @@ public class EquityDividendFutureLoader extends SecurityLoader {
    * @param referenceDataProvider  the provider, not null
    */
   public EquityDividendFutureLoader(ReferenceDataProvider referenceDataProvider) {
-    super(s_logger, referenceDataProvider, SecurityType.EQUITY_DIVIDEND_FUTURE);
+    super(LOGGER, referenceDataProvider, SecurityType.EQUITY_DIVIDEND_FUTURE);
   }
 
   //-------------------------------------------------------------------------
@@ -102,44 +102,44 @@ public class EquityDividendFutureLoader extends SecurityLoader {
     double unitAmount = Double.valueOf(fieldData.getString(FIELD_FUT_VAL_PT));
     
     if (!isValidField(marketSectorDes)) {
-      s_logger.warn("market sector description is null, cannot construct equity dividend future security");
+      LOGGER.warn("market sector description is null, cannot construct equity dividend future security");
       return null;
     }
 
     if (!isValidField(bbgUnique)) {
-      s_logger.warn("bbgUnique is null, cannot construct equity dividend future security");
+      LOGGER.warn("bbgUnique is null, cannot construct equity dividend future security");
       return null;
     }
     if (!isValidField(expiryDate)) {
-      s_logger.warn("expiry date is null, cannot construct equity dividend future security");
+      LOGGER.warn("expiry date is null, cannot construct equity dividend future security");
       return null;
     }
     if (!isValidField(settleDate)) {
-      s_logger.warn("settle date is null, cannot construct equity dividend future security");
+      LOGGER.warn("settle date is null, cannot construct equity dividend future security");
       return null;
     }
     if (!isValidField(category)) {
-      s_logger.warn("futures category is null, cannot construct equity dividend index future security");
+      LOGGER.warn("futures category is null, cannot construct equity dividend index future security");
       return null;
     }
     if (!isValidField(futureTradingHours)) {
-      s_logger.warn("futures trading hours is null, cannot construct equity dividend index future security");
+      LOGGER.warn("futures trading hours is null, cannot construct equity dividend index future security");
       return null;
     }
     if (!isValidField(micExchangeCode)) {
-      s_logger.warn("settlement exchange is null, cannot construct equity dividend future security");
+      LOGGER.warn("settlement exchange is null, cannot construct equity dividend future security");
       return null;
     }
     if (!isValidField(currencyStr)) {
-      s_logger.info("currency is null, cannot construct equity dividend future security");
+      LOGGER.info("currency is null, cannot construct equity dividend future security");
       return null;
     }
 //    if (!isValidField(unitName)) {
-//      s_logger.info("unitName is null, cannot construct equity dividend future security");
+//      LOGGER.info("unitName is null, cannot construct equity dividend future security");
 //      return null;
 //    }
 //    if (unitNumber == null) {
-//      s_logger.info("unitNumber is null, cannot construct equity dividend future security");
+//      LOGGER.info("unitNumber is null, cannot construct equity dividend future security");
 //      return null;
 //    }
     ExternalId underlying = null;
@@ -156,7 +156,7 @@ public class EquityDividendFutureLoader extends SecurityLoader {
     }
     Expiry settle = decodeExpiry(settleDate, futureTradingHours);
     if (settle == null) {
-      s_logger.info("Invalid settlement date, cannot construct equity dividend future security");
+      LOGGER.info("Invalid settlement date, cannot construct equity dividend future security");
       return null;
     }
     Currency currency = Currency.parse(currencyStr);

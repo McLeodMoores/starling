@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2012 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.credit.underlyingpool;
@@ -16,6 +16,7 @@ import com.opengamma.util.test.TestGroup;
  * Tests to verify the calculation of descriptive statistics for an UnderlyingPool object
  */
 @Test(groups = TestGroup.UNIT)
+// CSOFF
 public class UnderlyingPoolDescriptiveStatisticsTest {
 
   //--------------------------------------------------------------------------------------------------------------------------------------------------
@@ -352,33 +353,33 @@ public class UnderlyingPoolDescriptiveStatisticsTest {
   @Test
   public void testUnderlyingPoolDescriptiveStatisticsCalculations() {
 
-    double underlyingPoolTotalNotional = underlyingPoolDescriptiveStatistics.getUnderlyingPoolTotalNotional(dummyPool);
-    double underlyingPoolNotionalMean = underlyingPoolDescriptiveStatistics.getUnderlyingPoolNotionalMean(dummyPool);
+    final double underlyingPoolTotalNotional = underlyingPoolDescriptiveStatistics.getUnderlyingPoolTotalNotional(dummyPool);
+    final double underlyingPoolNotionalMean = underlyingPoolDescriptiveStatistics.getUnderlyingPoolNotionalMean(dummyPool);
 
-    double underlyingPoolRecoveryRateMean = underlyingPoolDescriptiveStatistics.getUnderlyingPoolRecoveryRateMean(dummyPool);
+    final double underlyingPoolRecoveryRateMean = underlyingPoolDescriptiveStatistics.getUnderlyingPoolRecoveryRateMean(dummyPool);
 
-    double underlyingPoolCreditSpreadMinimum = underlyingPoolDescriptiveStatistics.getUnderlyingPoolCreditSpreadMinimum(dummyPool, dummyCreditSpreadTenors, dummyCreditSpreadTermStructures,
+    final double underlyingPoolCreditSpreadMinimum = underlyingPoolDescriptiveStatistics.getUnderlyingPoolCreditSpreadMinimum(dummyPool, dummyCreditSpreadTenors, dummyCreditSpreadTermStructures,
         dummyCreditSpreadTenor);
-    double underlyingPoolCreditSpreadMaximum = underlyingPoolDescriptiveStatistics.getUnderlyingPoolCreditSpreadMaximum(dummyPool, dummyCreditSpreadTenors, dummyCreditSpreadTermStructures,
+    final double underlyingPoolCreditSpreadMaximum = underlyingPoolDescriptiveStatistics.getUnderlyingPoolCreditSpreadMaximum(dummyPool, dummyCreditSpreadTenors, dummyCreditSpreadTermStructures,
         dummyCreditSpreadTenor);
 
-    double underlyingPoolCreditSpreadMean = underlyingPoolDescriptiveStatistics.getUnderlyingPoolCreditSpreadMean(dummyPool, dummyCreditSpreadTenors, dummyCreditSpreadTermStructures,
+    final double underlyingPoolCreditSpreadMean = underlyingPoolDescriptiveStatistics.getUnderlyingPoolCreditSpreadMean(dummyPool, dummyCreditSpreadTenors, dummyCreditSpreadTermStructures,
         dummyCreditSpreadTenor);
-    double underlyingPoolCreditSpreadMedian = underlyingPoolDescriptiveStatistics.getUnderlyingPoolCreditSpreadMedian(dummyPool, dummyCreditSpreadTenors, dummyCreditSpreadTermStructures,
+    final double underlyingPoolCreditSpreadMedian = underlyingPoolDescriptiveStatistics.getUnderlyingPoolCreditSpreadMedian(dummyPool, dummyCreditSpreadTenors, dummyCreditSpreadTermStructures,
         dummyCreditSpreadTenor);
     //double underlyingPoolCreditSpreadMode = underlyingPoolStatistics.getUnderlyingPoolCreditSpreadMode(dummyPool, dummyCreditSpreadTenors, dummyCreditSpreadTermStructures, dummyCreditSpreadTenor);
 
-    double underlyingPoolCreditSpreadVariance = underlyingPoolDescriptiveStatistics.getUnderlyingPoolCreditSpreadVariance(dummyPool, dummyCreditSpreadTenors, dummyCreditSpreadTermStructures,
+    final double underlyingPoolCreditSpreadVariance = underlyingPoolDescriptiveStatistics.getUnderlyingPoolCreditSpreadVariance(dummyPool, dummyCreditSpreadTenors, dummyCreditSpreadTermStructures,
         dummyCreditSpreadTenor);
-    double underlyingPoolCreditSpreadStandardDeviation = underlyingPoolDescriptiveStatistics.getUnderlyingPoolCreditSpreadStandardDeviation(dummyPool, dummyCreditSpreadTenors,
+    final double underlyingPoolCreditSpreadStandardDeviation = underlyingPoolDescriptiveStatistics.getUnderlyingPoolCreditSpreadStandardDeviation(dummyPool, dummyCreditSpreadTenors,
         dummyCreditSpreadTermStructures, dummyCreditSpreadTenor);
 
-    double underlyingPoolCreditSpreadSkewness = underlyingPoolDescriptiveStatistics.getUnderlyingPoolCreditSpreadSkewness(dummyPool, dummyCreditSpreadTenors, dummyCreditSpreadTermStructures,
+    final double underlyingPoolCreditSpreadSkewness = underlyingPoolDescriptiveStatistics.getUnderlyingPoolCreditSpreadSkewness(dummyPool, dummyCreditSpreadTenors, dummyCreditSpreadTermStructures,
         dummyCreditSpreadTenor);
-    double underlyingPoolCreditSpreadKurtosis = underlyingPoolDescriptiveStatistics.getUnderlyingPoolCreditSpreadKurtosis(dummyPool, dummyCreditSpreadTenors, dummyCreditSpreadTermStructures,
+    final double underlyingPoolCreditSpreadKurtosis = underlyingPoolDescriptiveStatistics.getUnderlyingPoolCreditSpreadKurtosis(dummyPool, dummyCreditSpreadTenors, dummyCreditSpreadTermStructures,
         dummyCreditSpreadTenor);
 
-    double underlyingPoolCreditSpreadqPercentile = underlyingPoolDescriptiveStatistics.getUnderlyingPoolCreditSpreadPercentile(dummyPool, dummyCreditSpreadTenors, dummyCreditSpreadTermStructures,
+    final double underlyingPoolCreditSpreadqPercentile = underlyingPoolDescriptiveStatistics.getUnderlyingPoolCreditSpreadPercentile(dummyPool, dummyCreditSpreadTenors, dummyCreditSpreadTermStructures,
         dummyCreditSpreadTenor, q);
 
     if (outputResults) {

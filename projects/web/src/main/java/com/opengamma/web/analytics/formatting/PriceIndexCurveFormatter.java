@@ -27,7 +27,7 @@ import com.opengamma.financial.analytics.ircurve.YieldCurveInterpolatingFunction
  */
 /* package */ class PriceIndexCurveFormatter extends AbstractFormatter<PriceIndexCurve> {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(PriceIndexCurveFormatter.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(PriceIndexCurveFormatter.class);
 
   /* package */ PriceIndexCurveFormatter() {
     super(PriceIndexCurve.class);
@@ -73,7 +73,7 @@ import com.opengamma.financial.analytics.ircurve.YieldCurveInterpolatingFunction
       }
       return data;
     } else {
-      s_logger.warn("Unable to format curve of type {}", value.getCurve().getClass());
+      LOGGER.warn("Unable to format curve of type {}", value.getCurve().getClass());
       return null;
     }
   }

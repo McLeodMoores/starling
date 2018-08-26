@@ -25,7 +25,7 @@ import com.opengamma.util.tuple.Pair;
  */
 /* package */ class LoggingViewportListener implements ViewportListener {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(LoggingViewportListener.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(LoggingViewportListener.class);
 
   private final ViewClient _viewClient;
   private final Map<Pair<String, ValueSpecification>, Integer> _refCounts = Maps.newHashMap();
@@ -60,7 +60,7 @@ import com.opengamma.util.tuple.Pair;
       }
       _refCounts.put(valueSpec, newRefCount);
     }
-    s_logger.debug("Setting log mode to FULL for {}", newVals);
+    LOGGER.debug("Setting log mode to FULL for {}", newVals);
     _viewClient.setMinimumLogMode(ExecutionLogMode.FULL, newVals);
   }
 
@@ -138,7 +138,7 @@ import com.opengamma.util.tuple.Pair;
         }
       }
     }
-    s_logger.debug("Setting log mode to INDICATORS for {}", dereferenced);
+    LOGGER.debug("Setting log mode to INDICATORS for {}", dereferenced);
     _viewClient.setMinimumLogMode(ExecutionLogMode.INDICATORS, dereferenced);
   }
 }

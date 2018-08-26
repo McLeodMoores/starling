@@ -38,7 +38,7 @@ import com.opengamma.util.tuple.Pairs;
 public class DefaultViewComputationCache implements ViewComputationCache,
     Iterable<Pair<ValueSpecification, FudgeMsg>> {
   
-  private static final Logger s_logger = LoggerFactory.getLogger(DefaultViewComputationCache.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(DefaultViewComputationCache.class);
 
   /**
    * Callback to locate missing data.
@@ -418,8 +418,8 @@ public class DefaultViewComputationCache implements ViewComputationCache,
     try {
       serializer.addToMessageWithClassHeaders(message, null, NATIVE_FIELD_INDEX, WriteReplaceHelper.writeReplace(value));
     } catch (FudgeRuntimeException e) {
-      s_logger.error("Can't encode value {}", value);
-      s_logger.warn("Caught exception", e);
+      LOGGER.error("Can't encode value {}", value);
+      LOGGER.warn("Caught exception", e);
     }
     // Optimize the "value encoded as sub-message" case to reduce space requirement
     final Object svalue = message.getValue(NATIVE_FIELD_INDEX);

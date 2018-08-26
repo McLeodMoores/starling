@@ -74,7 +74,7 @@ import com.opengamma.util.money.Currency;
 @Deprecated
 public abstract class CrossCurrencySwapFunction extends AbstractFunction.NonCompiledInvoker {
   /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(CrossCurrencySwapFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(CrossCurrencySwapFunction.class);
   /** The value requirements this function produces */
   private final String[] _valueRequirements;
   /** Converts securities to definitions */
@@ -213,12 +213,12 @@ public abstract class CrossCurrencySwapFunction extends AbstractFunction.NonComp
     final SecuritySource securitySource = OpenGammaCompilationContext.getSecuritySource(context);
     final MultiCurveCalculationConfig payCurveCalculationConfig = _curveCalculationConfigSource.getConfig(payCurveCalculationConfigName);
     if (payCurveCalculationConfig == null) {
-      s_logger.info("Could not find curve calculation configuration named " + payCurveCalculationConfigName);
+      LOGGER.info("Could not find curve calculation configuration named " + payCurveCalculationConfigName);
       return null;
     }
     final MultiCurveCalculationConfig receiveCurveCalculationConfig = _curveCalculationConfigSource.getConfig(receiveCurveCalculationConfigName);
     if (receiveCurveCalculationConfig == null) {
-      s_logger.info("Could not find curve calculation configuration named " + receiveCurveCalculationConfigName);
+      LOGGER.info("Could not find curve calculation configuration named " + receiveCurveCalculationConfigName);
       return null;
     }
     final FinancialSecurity security = (FinancialSecurity) target.getSecurity();
@@ -234,11 +234,11 @@ public abstract class CrossCurrencySwapFunction extends AbstractFunction.NonComp
       }
     }
     if (!payCurrencyMatched) {
-      s_logger.info("Pay currency calculation config target {} was not found in {}", payCurveCalculationConfig.getTarget().getUniqueId().getValue(), currencies);
+      LOGGER.info("Pay currency calculation config target {} was not found in {}", payCurveCalculationConfig.getTarget().getUniqueId().getValue(), currencies);
       return null;
     }
     if (!receiveCurrencyMatched) {
-      s_logger.info("Receive currency calculation config target {} was not found in {}", receiveCurveCalculationConfig.getTarget().getUniqueId().getValue(), currencies);
+      LOGGER.info("Receive currency calculation config target {} was not found in {}", receiveCurveCalculationConfig.getTarget().getUniqueId().getValue(), currencies);
       return null;
     }
     final Set<ValueRequirement> requirements = new HashSet<>();
@@ -252,7 +252,7 @@ public abstract class CrossCurrencySwapFunction extends AbstractFunction.NonComp
       requirements.addAll(timeSeriesRequirements);
       return requirements;
     } catch (final Exception e) {
-      s_logger.error(e.getMessage());
+      LOGGER.error(e.getMessage());
       return null;
     }
   }

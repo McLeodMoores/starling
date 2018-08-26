@@ -27,7 +27,7 @@ import com.opengamma.util.ArgumentChecker;
 public class JmsByteArrayRequestDispatcher implements SessionAwareMessageListener<Message> {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(JmsByteArrayRequestDispatcher.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(JmsByteArrayRequestDispatcher.class);
 
   /**
    * The underlying request receiver.
@@ -60,9 +60,9 @@ public class JmsByteArrayRequestDispatcher implements SessionAwareMessageListene
       throw new IllegalArgumentException("No JMSReplyTo destination set.");
     }
     final byte[] requestBytes = JmsByteArrayHelper.extractBytes(message);
-    s_logger.debug("Dispatching request {} of size {} to underlying", message.getJMSMessageID(), requestBytes.length);
+    LOGGER.debug("Dispatching request {} of size {} to underlying", message.getJMSMessageID(), requestBytes.length);
     final byte[] responseBytes = getUnderlying().requestReceived(requestBytes);
-    s_logger.debug("Returning response of size {} to {}", responseBytes.length, replyTo);
+    LOGGER.debug("Returning response of size {} to {}", responseBytes.length, replyTo);
     final MessageProducer mp = session.createProducer(replyTo);
     try {
       final BytesMessage bytesMessage = session.createBytesMessage();

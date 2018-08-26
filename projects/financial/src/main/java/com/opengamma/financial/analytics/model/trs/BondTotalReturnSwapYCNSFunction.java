@@ -61,7 +61,7 @@ import com.opengamma.util.tuple.Pair;
 public class BondTotalReturnSwapYCNSFunction extends BondTotalReturnSwapFunction {
 
 
-  private static final Logger s_logger = LoggerFactory.getLogger(BondTotalReturnSwapYCNSFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(BondTotalReturnSwapYCNSFunction.class);
 
   /**
    *
@@ -142,7 +142,7 @@ public class BondTotalReturnSwapYCNSFunction extends BondTotalReturnSwapFunction
           }
         }
         if (ccyCurvePairs.isEmpty()) {
-          s_logger.error("Could not get currencies or curve name properties; have not been set in function(s) called {}", functionNames);
+          LOGGER.error("Could not get currencies or curve name properties; have not been set in function(s) called {}", functionNames);
           return null;
         }
         final Set<ValueSpecification> results = new HashSet<>();

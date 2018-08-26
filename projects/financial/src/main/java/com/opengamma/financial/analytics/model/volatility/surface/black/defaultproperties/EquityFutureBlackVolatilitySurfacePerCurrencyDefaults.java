@@ -33,7 +33,7 @@ import com.opengamma.util.ArgumentChecker;
  */
 public class EquityFutureBlackVolatilitySurfacePerCurrencyDefaults extends DefaultPropertyFunction {
   /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(EquityFutureBlackVolatilitySurfacePerCurrencyDefaults.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(EquityFutureBlackVolatilitySurfacePerCurrencyDefaults.class);
   /** The value requirements for which these defaults apply */
   private static final String[] VALUE_REQUIREMENTS = new String[] {
       ValueRequirementNames.BLACK_VOLATILITY_SURFACE,
@@ -116,7 +116,7 @@ public class EquityFutureBlackVolatilitySurfacePerCurrencyDefaults extends Defau
     final SecuritySource securitySource = OpenGammaCompilationContext.getSecuritySource(context);
     final String currency = EquitySecurityUtils.getCurrency(securitySource, target.getUniqueId());
     if (currency == null) {
-      s_logger.error("Could not get currency for {}; should never happen", target.getUniqueId());
+      LOGGER.error("Could not get currency for {}; should never happen", target.getUniqueId());
       return null;
     }
     switch (propertyName) {
@@ -127,7 +127,7 @@ public class EquityFutureBlackVolatilitySurfacePerCurrencyDefaults extends Defau
       case ValuePropertyNames.SURFACE:
         return _surfaceNames.get(currency);
       default:
-        s_logger.error("Could not find default value for {} in this function", propertyName);
+        LOGGER.error("Could not find default value for {} in this function", propertyName);
         return null;
     }
   }

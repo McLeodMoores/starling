@@ -38,7 +38,7 @@ import com.opengamma.util.tuple.Pair;
  * The forward rate are computed as the ratio of discount factors stored in YieldAndDiscountCurve.
  */
 public class InflationIssuerProviderDiscount implements InflationIssuerProviderInterface {
-  private static final Logger s_logger = LoggerFactory.getLogger(InflationIssuerProviderDiscount.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(InflationIssuerProviderDiscount.class);
   /**
    * The multicurve provider.
    */
@@ -181,9 +181,9 @@ public class InflationIssuerProviderDiscount implements InflationIssuerProviderI
         return entry.getValue().getDiscountFactor(time);
       }
     }
-    s_logger.error("Could not find issuer discounting curve for {}. There are {} curve available", issuer, _issuerCurves.size());
+    LOGGER.error("Could not find issuer discounting curve for {}. There are {} curve available", issuer, _issuerCurves.size());
     for (final Map.Entry<Pair<Object, LegalEntityFilter<LegalEntity>>, YieldAndDiscountCurve> entry : _issuerCurves.entrySet()) {
-      s_logger.error("matching key = {}, filter {} matches = {}", entry.getKey().getFirst(), issuer, entry.getKey().getSecond().getFilteredData(issuer));
+      LOGGER.error("matching key = {}, filter {} matches = {}", entry.getKey().getFirst(), issuer, entry.getKey().getSecond().getFilteredData(issuer));
     }
     throw new IllegalArgumentException("Issuer discounting curve not found for " + issuer);
   }

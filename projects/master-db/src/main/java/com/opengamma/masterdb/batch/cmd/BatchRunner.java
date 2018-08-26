@@ -117,10 +117,10 @@ public class BatchRunner {
     }
 
     /*if (failed) {
-      s_logger.error("Batch failed.");
+      LOGGER.error("Batch failed.");
       System.exit(-1);
     } else {
-      s_logger.info("Batch succeeded.");
+      LOGGER.info("Batch succeeded.");
       System.exit(0);
     }*/
   }

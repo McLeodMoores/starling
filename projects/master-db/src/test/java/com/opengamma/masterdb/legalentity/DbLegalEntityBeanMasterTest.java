@@ -33,14 +33,14 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT_DB)
 public class DbLegalEntityBeanMasterTest extends AbstractDbTest {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(DbLegalEntityBeanMasterTest.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(DbLegalEntityBeanMasterTest.class);
 
   private DbLegalEntityBeanMaster _lenMaster;
 
   @Factory(dataProvider = "databases", dataProviderClass = DbTest.class)
   public DbLegalEntityBeanMasterTest(String databaseType, String databaseVersion) {
     super(databaseType, databaseVersion);
-    s_logger.info("running testcases for {}", databaseType);
+    LOGGER.info("running testcases for {}", databaseType);
   }
 
   //-------------------------------------------------------------------------
@@ -109,7 +109,7 @@ public class DbLegalEntityBeanMasterTest extends AbstractDbTest {
       try {
         future.get();
       } catch (Throwable t) {
-        s_logger.error("Exception waiting for task to complete", t);
+        LOGGER.error("Exception waiting for task to complete", t);
       }
     }
 

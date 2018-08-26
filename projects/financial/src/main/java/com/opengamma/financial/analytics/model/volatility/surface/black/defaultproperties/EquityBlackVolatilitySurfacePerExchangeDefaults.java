@@ -33,7 +33,7 @@ import com.opengamma.util.ArgumentChecker;
  */
 public class EquityBlackVolatilitySurfacePerExchangeDefaults extends DefaultPropertyFunction {
   /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(EquityBlackVolatilitySurfacePerExchangeDefaults.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(EquityBlackVolatilitySurfacePerExchangeDefaults.class);
   /** The value requirements for which these defaults apply */
   private static final String[] VALUE_REQUIREMENTS = new String[] {
       ValueRequirementNames.BLACK_VOLATILITY_SURFACE,
@@ -121,7 +121,7 @@ public class EquityBlackVolatilitySurfacePerExchangeDefaults extends DefaultProp
       case ValuePropertyNames.SURFACE:
         return _surfaceNames.get(exchange);
       default:
-        s_logger.error("Could not find default value for {} in this function", propertyName);
+        LOGGER.error("Could not find default value for {} in this function", propertyName);
         return null;
     }
   }

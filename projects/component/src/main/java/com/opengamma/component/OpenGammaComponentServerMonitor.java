@@ -21,7 +21,7 @@ import com.opengamma.util.StartupUtils;
  */
 public final class OpenGammaComponentServerMonitor extends Thread {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(ComponentManager.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ComponentManager.class);
   private static final String SECRET_PROPERTY = "commandmonitor.secret";
   private static final String PORT_PROPERTY = "commandmonitor.port";
   private static final int DEFAULT_PORT = 8079;
@@ -51,7 +51,7 @@ public final class OpenGammaComponentServerMonitor extends Thread {
     try {
       _socket = new DatagramSocket(port, InetAddress.getByName("127.0.0.1"));
     } catch (Exception e) {
-      s_logger.warn("Failed to create listening socket, monitor will not be available");
+      LOGGER.warn("Failed to create listening socket, monitor will not be available");
       return;
     }
   }
@@ -67,25 +67,25 @@ public final class OpenGammaComponentServerMonitor extends Thread {
       try {
         _socket.receive(packet);
       } catch (IOException ex) {
-        s_logger.warn("Error while receiving command packet");
+        LOGGER.warn("Error while receiving command packet");
         continue;
       }
       String received = new String(packet.getData(), 0, packet.getLength());
       
       if (received.matches("secret:" + _secret + "\\s+command:\\w+\\s*") == false) {
-        s_logger.debug("Malformed command or wrong secret");
+        LOGGER.debug("Malformed command or wrong secret");
         continue;
       }
       
       String command = received.replaceAll("secret:" + _secret + "\\s+command:(\\w+)\\s*", "$1");
-      s_logger.debug("Received command \"{}\"", command);
+      LOGGER.debug("Received command \"{}\"", command);
       
       if (command.equals("stop")) {
         handleStop();
       } else if (command.equals("exit")) {
         handleExit();
       } else {
-        s_logger.debug("Unknown command \"{}\"", command);
+        LOGGER.debug("Unknown command \"{}\"", command);
       }
     }
   }

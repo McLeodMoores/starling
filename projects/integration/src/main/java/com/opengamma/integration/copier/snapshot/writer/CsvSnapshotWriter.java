@@ -36,7 +36,7 @@ import com.opengamma.util.tuple.Pair;
 public class CsvSnapshotWriter implements SnapshotWriter {
 
   private final CsvSheetWriter _sheetWriter;
-  private static final Logger s_logger = LoggerFactory.getLogger(CsvSnapshotWriter.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(CsvSnapshotWriter.class);
 
   public CsvSnapshotWriter(String filename) {
 
@@ -140,7 +140,7 @@ public class CsvSnapshotWriter implements SnapshotWriter {
   public void writeCurves(Map<CurveKey, CurveSnapshot> curves) {
 
     if (curves == null || curves.isEmpty()) {
-      s_logger.warn("Snapshot does not contain any Curve Snapshots.");
+      LOGGER.warn("Snapshot does not contain any Curve Snapshots.");
       return;
     }
 
@@ -159,7 +159,7 @@ public class CsvSnapshotWriter implements SnapshotWriter {
   public void writeGlobalValues(UnstructuredMarketDataSnapshot globalValues) {
 
     if (globalValues == null || globalValues.isEmpty()) {
-      s_logger.warn("Snapshot does not contain any Global Values.");
+      LOGGER.warn("Snapshot does not contain any Global Values.");
       return;
     }
 
@@ -173,7 +173,7 @@ public class CsvSnapshotWriter implements SnapshotWriter {
   public void writeVolatilitySurface(Map<VolatilitySurfaceKey, VolatilitySurfaceSnapshot> volatilitySurface) {
 
     if (volatilitySurface == null || volatilitySurface.isEmpty()) {
-      s_logger.warn("Snapshot does not contain any Volatility Surfaces.");
+      LOGGER.warn("Snapshot does not contain any Volatility Surfaces.");
       return;
     }
 
@@ -195,7 +195,7 @@ public class CsvSnapshotWriter implements SnapshotWriter {
   public void writeYieldCurves(Map<YieldCurveKey, YieldCurveSnapshot> yieldCurves) {
 
     if (yieldCurves == null || yieldCurves.isEmpty()) {
-      s_logger.warn("Snapshot does not contain any Yield Curve Snapshots.");
+      LOGGER.warn("Snapshot does not contain any Yield Curve Snapshots.");
       return;
     }
 
@@ -215,7 +215,7 @@ public class CsvSnapshotWriter implements SnapshotWriter {
   public void writeName(String name) {
 
     if (name == null || name.isEmpty()) {
-      s_logger.warn("Snapshot does not contain name.");
+      LOGGER.warn("Snapshot does not contain name.");
       return;
     }
 
@@ -229,7 +229,7 @@ public class CsvSnapshotWriter implements SnapshotWriter {
   public void writeBasisViewName(String basisName) {
 
     if (basisName == null || basisName.isEmpty()) {
-      s_logger.warn("Snapshot does not contain basis name.");
+      LOGGER.warn("Snapshot does not contain basis name.");
       return;
     }
 

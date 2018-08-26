@@ -34,7 +34,7 @@ import com.opengamma.util.tuple.Triple;
  */
 /* package */final class StandardJob extends DispatchableJob {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(StandardJob.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(StandardJob.class);
 
   private final ConcurrentMap<CalculationJobSpecification, JobResultReceiver> _resultReceivers;
   private Set<String> _usedJobInvoker;
@@ -137,7 +137,7 @@ import com.opengamma.util.tuple.Triple;
     } else {
       newHint = CacheSelectHint.privateValues(jobValues.getSecond());
     }
-    s_logger.debug("Rewriting {} to {}", hint, newHint);
+    LOGGER.debug("Rewriting {} to {}", hint, newHint);
     // Construct the rewritten job
     final CalculationJob newJob = new CalculationJob(job.getSpecification(), job.getFunctionInitializationIdentifier(), job.getResolverVersionCorrection(), job.getRequiredJobIds(), job.getJobItems(),
         newHint);
@@ -253,7 +253,7 @@ import com.opengamma.util.tuple.Triple;
         if (!blocked.isEmpty()) {
           for (BlockedJob job : blocked) {
             if (job._count == 0) {
-              s_logger.debug("Releasing blocked job {} from {}", job._job, this);
+              LOGGER.debug("Releasing blocked job {} from {}", job._job, this);
               getDispatcher().dispatchJobImpl(new WholeWatchedJob(this, job._job, _context));
             }
           }
@@ -262,7 +262,7 @@ import com.opengamma.util.tuple.Triple;
         if (_tail != null) {
           for (CalculationJob job : _tail) {
             if (_context.isRunnable(job)) {
-              s_logger.debug("Submitting tail job {} from {}", job, this);
+              LOGGER.debug("Submitting tail job {} from {}", job, this);
               getDispatcher().dispatchJobImpl(new WholeWatchedJob(this, job, _context));
             }
           }
@@ -270,13 +270,13 @@ import com.opengamma.util.tuple.Triple;
         // Notify the original receiver of the job that completed
         final JobResultReceiver receiver = _context.getResultReceiver(result);
         if (receiver != null) {
-          s_logger.debug("Watched job {} complete", this);
+          LOGGER.debug("Watched job {} complete", this);
           receiver.resultReceived(result);
         } else {
-          s_logger.warn("Result already dispatched for watched job {} completed on node {}", this, result.getComputeNodeId());
+          LOGGER.warn("Result already dispatched for watched job {} completed on node {}", this, result.getComputeNodeId());
         }
       } else {
-        s_logger.warn("Watched job {} completed on node {} but is not currently pending", this, result.getComputeNodeId());
+        LOGGER.warn("Watched job {} completed on node {} but is not currently pending", this, result.getComputeNodeId());
       }
     }
 
@@ -301,7 +301,7 @@ import com.opengamma.util.tuple.Triple;
           // Job had no tails, so don't need to rewrite the caching
           final JobResultReceiver receiver = _resultReceivers.remove(getJob().getSpecification());
           if (receiver != null) {
-            s_logger.debug("Submitting watched job for {}", this);
+            LOGGER.debug("Submitting watched job for {}", this);
             return new WatchedJob.Whole(this, getJob(), receiver);
           } else {
             // No result receiver means we've already completed/aborted or are about to do so
@@ -312,7 +312,7 @@ import com.opengamma.util.tuple.Triple;
       // Rewrite the private/shared caching information and submit a watched job for the root. Any tail jobs will be submitted after their
       // parent jobs complete
       final CalculationJob job = adjustCacheHints(getJob(), new HashMap<ValueSpecification, Triple<CalculationJob, ? extends Set<ValueSpecification>, ? extends Set<ValueSpecification>>>());
-      s_logger.debug("Submitting adjusted watched job for {}", this);
+      LOGGER.debug("Submitting adjusted watched job for {}", this);
       return createWholeWatchedJob(job);
     }
   }
@@ -326,7 +326,7 @@ import com.opengamma.util.tuple.Triple;
       if (_rescheduled >= getDispatcher().getMaxJobAttempts()) {
         return createWatchedJob();
       } else {
-        s_logger.info("Retrying job {}", this);
+        LOGGER.info("Retrying job {}", this);
         if (_usedJobInvoker == null) {
           _usedJobInvoker = new HashSet<String>();
         }
@@ -342,7 +342,7 @@ import com.opengamma.util.tuple.Triple;
     if (resultReceiver != null) {
       notifyFailure(job, failure, resultReceiver);
     } else {
-      s_logger.warn("Job {} already completed at propogation of failure", this);
+      LOGGER.warn("Job {} already completed at propogation of failure", this);
       // This can happen if the root job timed out but things had started to complete
     }
     if (job.getTail() != null) {

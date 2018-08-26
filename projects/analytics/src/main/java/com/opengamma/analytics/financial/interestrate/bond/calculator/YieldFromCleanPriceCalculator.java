@@ -24,14 +24,14 @@ public final class YieldFromCleanPriceCalculator extends InstrumentDerivativeVis
   /**
    * The calculator instance.
    */
-  private static final YieldFromCleanPriceCalculator s_instance = new YieldFromCleanPriceCalculator();
+  private static final YieldFromCleanPriceCalculator INSTANCE = new YieldFromCleanPriceCalculator();
 
   /**
    * Return the calculator instance.
    * @return The instance.
    */
   public static YieldFromCleanPriceCalculator getInstance() {
-    return s_instance;
+    return INSTANCE;
   }
 
   /**

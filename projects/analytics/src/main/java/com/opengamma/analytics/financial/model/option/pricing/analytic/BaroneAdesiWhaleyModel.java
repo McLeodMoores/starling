@@ -22,7 +22,7 @@ import com.opengamma.util.ArgumentChecker;
  */
 public class BaroneAdesiWhaleyModel {
   /** A logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(BaroneAdesiWhaleyModel.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(BaroneAdesiWhaleyModel.class);
   /** Normal probability distribution */
   private static final ProbabilityDistribution<Double> NORMAL = new NormalDistribution(0, 1);
 
@@ -186,7 +186,7 @@ public class BaroneAdesiWhaleyModel {
     ArgumentChecker.isTrue(t > 0.0, "t must be greater than zero");
 
     if ((isCall && Double.compare(price, s0 - k) == 0) || (!isCall && Double.compare(price, k - s0) == 0)) {
-      s_logger.warn("The price indicates that this option should be exercised immediately, therefore there is no implied volatility. Zero is returned.");
+      LOGGER.warn("The price indicates that this option should be exercised immediately, therefore there is no implied volatility. Zero is returned.");
       return 0.0;
     }
     final Function1D<Double, double[]> func = getPriceAndVegaFunction(s0, k, r, b, t, isCall);

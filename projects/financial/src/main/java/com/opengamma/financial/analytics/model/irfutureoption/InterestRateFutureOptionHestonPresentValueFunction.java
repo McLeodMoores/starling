@@ -70,7 +70,7 @@ import com.opengamma.util.money.Currency;
 /**
  */
 public class InterestRateFutureOptionHestonPresentValueFunction extends AbstractFunction.NonCompiledInvoker {
-  private static final Logger s_logger = LoggerFactory.getLogger(InterestRateFutureOptionHestonPresentValueFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(InterestRateFutureOptionHestonPresentValueFunction.class);
   private FixedIncomeConverterDataProvider _dataConverter;
   private ConfigDBCurveCalculationConfigSource _curveCalculationConfigSource;
 
@@ -153,7 +153,7 @@ public class InterestRateFutureOptionHestonPresentValueFunction extends Abstract
     final String curveCalculationConfigName = curveCalculationConfigNames.iterator().next();
     final MultiCurveCalculationConfig curveCalculationConfig = _curveCalculationConfigSource.getConfig(curveCalculationConfigName);
     if (curveCalculationConfig == null) {
-      s_logger.error("Could not find curve calculation configuration named " + curveCalculationConfigName);
+      LOGGER.error("Could not find curve calculation configuration named " + curveCalculationConfigName);
       return null;
     }
     final ComputationTargetSpecification curveCalculationTarget = curveCalculationConfig.getTarget();

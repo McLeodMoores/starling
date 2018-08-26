@@ -27,7 +27,7 @@ import com.opengamma.util.StartupUtils;
  */
 public abstract class AbstractDualComponentTool {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(AbstractTool.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(AbstractTool.class);
   /**
    * Default logback file.
    */
@@ -140,14 +140,14 @@ public abstract class AbstractDualComponentTool {
     try {
       ArgumentChecker.notNull(srcComponentServerUri, "srcComponentServerUri");
       ArgumentChecker.notNull(destComponentServerUri, "destComponentServerUri");
-      s_logger.info("Starting " + getClass().getSimpleName());
+      LOGGER.info("Starting " + getClass().getSimpleName());
       srcComponentServerUri = resolveComponentServerUri(srcComponentServerUri);
       RemoteComponentFactory srcRemoteComponentFactory = new RemoteComponentFactory(srcComponentServerUri);
       destComponentServerUri = resolveComponentServerUri(destComponentServerUri);
       RemoteComponentFactory destRemoteComponentFactory = new RemoteComponentFactory(destComponentServerUri);
-      s_logger.info("Running " + getClass().getSimpleName());
+      LOGGER.info("Running " + getClass().getSimpleName());
       run(srcRemoteComponentFactory, destRemoteComponentFactory);
-      s_logger.info("Finished " + getClass().getSimpleName());
+      LOGGER.info("Finished " + getClass().getSimpleName());
       return true;
     } catch (Exception ex) {
       ex.printStackTrace();

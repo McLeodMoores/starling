@@ -31,9 +31,9 @@ public final class DbScriptUtils {
   private static final String METADATA_FILE = "ogdb-metadata.properties";
   private static final String METADATA_RESOURCE_PATH = "db/" + METADATA_FILE;
 
-  private static final Logger s_logger = LoggerFactory.getLogger(DbScriptUtils.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(DbScriptUtils.class);
   
-  private static final Map<String, DbSchemaGroupMetadata> s_dbSchemaGroupMetadata;
+  private static final Map<String, DbSchemaGroupMetadata> DB_SCHEMA_GROUP_META_DATA;
   
   static {
     Map<String, DbSchemaGroupMetadata> schemaGroupMetadata = Maps.newTreeMap(new Comparator<String>() {
@@ -73,19 +73,19 @@ public final class DbScriptUtils {
               schemaGroupMetadata.put(schemaGroupName, new DbSchemaGroupMetadata(schemaGroupName, baseResourceUrlString, currentVersion));
             }
           } catch (Exception e) {
-            s_logger.error("Error reading database metadata resource at " + metadataResourceUrl, e);
+            LOGGER.error("Error reading database metadata resource at " + metadataResourceUrl, e);
           } finally {
             in.close();
           }
         } catch (IOException e) {
-          s_logger.error("Error opening database metadata resource at " + metadataResourceUrl, e);
+          LOGGER.error("Error opening database metadata resource at " + metadataResourceUrl, e);
         }
       }
     } catch (IOException e) {
-      s_logger.error("Error looking for database metadata resources", e);
+      LOGGER.error("Error looking for database metadata resources", e);
     }
 
-    s_dbSchemaGroupMetadata = ImmutableMap.copyOf(schemaGroupMetadata);
+    DB_SCHEMA_GROUP_META_DATA = ImmutableMap.copyOf(schemaGroupMetadata);
   }
   
   private DbScriptUtils() {
@@ -100,12 +100,12 @@ public final class DbScriptUtils {
   }
   
   public static Set<String> getAllSchemaNames() {
-    return s_dbSchemaGroupMetadata.keySet();
+    return DB_SCHEMA_GROUP_META_DATA.keySet();
   }
   
   public static List<DbSchemaGroupMetadata> getAllSchemaGroupMetadata() {
-    List<DbSchemaGroupMetadata> allSchemaGroupMetadata = Lists.newArrayListWithCapacity(s_dbSchemaGroupMetadata.size());
-    for (Entry<String, DbSchemaGroupMetadata> entry : s_dbSchemaGroupMetadata.entrySet()) {
+    List<DbSchemaGroupMetadata> allSchemaGroupMetadata = Lists.newArrayListWithCapacity(DB_SCHEMA_GROUP_META_DATA.size());
+    for (Entry<String, DbSchemaGroupMetadata> entry : DB_SCHEMA_GROUP_META_DATA.entrySet()) {
       allSchemaGroupMetadata.add(entry.getValue());
     }
     return allSchemaGroupMetadata;
@@ -116,7 +116,7 @@ public final class DbScriptUtils {
   }
   
   private static Map<String, DbSchemaGroupMetadata> getDbSchemaGroupMetadata() {
-    return s_dbSchemaGroupMetadata;
+    return DB_SCHEMA_GROUP_META_DATA;
   }
 
 }

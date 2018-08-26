@@ -24,14 +24,14 @@ public final class AccruedInterestFromCleanPriceCalculator extends InstrumentDer
   /**
    * The calculator instance.
    */
-  private static final AccruedInterestFromCleanPriceCalculator s_instance = new AccruedInterestFromCleanPriceCalculator();
+  private static final AccruedInterestFromCleanPriceCalculator INSTANCE = new AccruedInterestFromCleanPriceCalculator();
 
   /**
    * Return the calculator instance.
    * @return The instance.
    */
   public static AccruedInterestFromCleanPriceCalculator getInstance() {
-    return s_instance;
+    return INSTANCE;
   }
 
   /**

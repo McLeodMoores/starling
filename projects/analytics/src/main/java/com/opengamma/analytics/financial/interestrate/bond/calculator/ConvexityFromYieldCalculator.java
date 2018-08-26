@@ -24,7 +24,7 @@ public final class ConvexityFromYieldCalculator extends InstrumentDerivativeVisi
   /**
    * The calculator instance.
    */
-  private static final ConvexityFromYieldCalculator s_instance = new ConvexityFromYieldCalculator();
+  private static final ConvexityFromYieldCalculator INSTANCE = new ConvexityFromYieldCalculator();
   /**
    * The fixed coupon bond method.
    */
@@ -36,7 +36,7 @@ public final class ConvexityFromYieldCalculator extends InstrumentDerivativeVisi
    * @return The instance.
    */
   public static ConvexityFromYieldCalculator getInstance() {
-    return s_instance;
+    return INSTANCE;
   }
 
   /**

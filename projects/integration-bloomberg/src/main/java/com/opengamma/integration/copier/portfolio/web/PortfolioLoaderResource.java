@@ -52,7 +52,7 @@ import com.sun.jersey.multipart.FormDataMultiPart;
 @Path("portfolioupload")
 public class PortfolioLoaderResource {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(PortfolioLoaderResource.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(PortfolioLoaderResource.class);
 
   private final PortfolioMaster _portfolioMaster;
   private final PositionMaster _positionMaster;
@@ -123,7 +123,7 @@ public class PortfolioLoaderResource {
       // fields can be separated by whitespace or a comma with whitespace
       final String[] dataFields = dataField.split("(\\s*,\\s*|\\s+)");
 
-      s_logger.info("Portfolio uploaded. fileName: {}, portfolioName: {}, dataField: {}, dataProvider: {}",
+      LOGGER.info("Portfolio uploaded. fileName: {}, portfolioName: {}, dataField: {}, dataProvider: {}",
                     fileName, portfolioName, dataField, dataProvider);
 
       if (fileEntity == null) {

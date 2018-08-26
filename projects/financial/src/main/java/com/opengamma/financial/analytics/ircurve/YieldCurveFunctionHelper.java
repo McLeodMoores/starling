@@ -32,7 +32,7 @@ import com.opengamma.util.tuple.Triple;
  *
  */
 public class YieldCurveFunctionHelper {
-  private static final Logger s_logger = LoggerFactory.getLogger(YieldCurveFunctionHelper.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(YieldCurveFunctionHelper.class);
 
   private final Currency _currency;
   private final String _curveName;

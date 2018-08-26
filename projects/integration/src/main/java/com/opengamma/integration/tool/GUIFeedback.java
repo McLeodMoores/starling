@@ -33,7 +33,7 @@ import org.slf4j.LoggerFactory;
  */
 public class GUIFeedback implements AutoCloseable {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(GUIFeedback.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(GUIFeedback.class);
 
   private static final boolean ENABLED = System.getProperty("tool.gui", "FALSE").equalsIgnoreCase("TRUE");
 
@@ -124,7 +124,7 @@ public class GUIFeedback implements AutoCloseable {
     }
 
     private void showWindow(final String message) {
-      s_logger.info("Showing window");
+      LOGGER.info("Showing window");
       setTitle("OpenGamma Platform");
       final Container inner = getContentPane();
       inner.setLayout(new BorderLayout());
@@ -146,12 +146,12 @@ public class GUIFeedback implements AutoCloseable {
     }
 
     private void hideWindow() {
-      s_logger.info("Hiding window");
+      LOGGER.info("Hiding window");
       setVisible(false);
     }
 
     private void messageBox(final String message) {
-      s_logger.info("Showing message box '{}'", message);
+      LOGGER.info("Showing message box '{}'", message);
       final String previous = _message.getText();
       _message.setText(message);
       _button.setVisible(true);
@@ -167,7 +167,7 @@ public class GUIFeedback implements AutoCloseable {
       try {
         buttonActions.take();
       } catch (InterruptedException ex) {
-        s_logger.error("Interrupted", ex);
+        LOGGER.error("Interrupted", ex);
       }
       _button.removeActionListener(listener);
       _button.setVisible(false);
@@ -176,7 +176,7 @@ public class GUIFeedback implements AutoCloseable {
     }
 
     private void sayImpl(final String message) {
-      s_logger.info("Displaying text '{}'", message);
+      LOGGER.info("Displaying text '{}'", message);
       _message.setText(message);
       repack();
     }
@@ -201,7 +201,7 @@ public class GUIFeedback implements AutoCloseable {
       _progress.setMaximum(_totalWork);
       _completedWork += completed;
       _progress.setValue(_completedWork);
-      s_logger.debug("Update progress bar - {} of {}", _completedWork, _totalWork);
+      LOGGER.debug("Update progress bar - {} of {}", _completedWork, _totalWork);
     }
 
   }
@@ -210,8 +210,8 @@ public class GUIFeedback implements AutoCloseable {
   private boolean _closed;
 
   public GUIFeedback(final String message) {
-    s_logger.debug("Creating instance");
-    s_logger.info("{}", message);
+    LOGGER.debug("Creating instance");
+    LOGGER.info("{}", message);
     if (ENABLED) {
       _impl = new Impl();
       synchronized (LOCK) {
@@ -234,7 +234,7 @@ public class GUIFeedback implements AutoCloseable {
    * @param message the message to write, not null
    */
   public static void say(final String message) {
-    s_logger.info("{}", message);
+    LOGGER.info("{}", message);
     if (ENABLED) {
       synchronized (LOCK) {
         if (s_instance != null) {
@@ -250,7 +250,7 @@ public class GUIFeedback implements AutoCloseable {
    * @param message the message to write, not null
    */
   public static void shout(final String message) {
-    s_logger.error("{}", message);
+    LOGGER.error("{}", message);
     if (ENABLED) {
       synchronized (LOCK) {
         if (s_instance != null) {
@@ -307,7 +307,7 @@ public class GUIFeedback implements AutoCloseable {
    * @param message the message to display, not null
    */
   public void done(final String message) {
-    s_logger.info("{}", message);
+    LOGGER.info("{}", message);
     if (ENABLED) {
       if (!_closed) {
         _closed = true;
@@ -330,7 +330,7 @@ public class GUIFeedback implements AutoCloseable {
         }
       }
     }
-    s_logger.debug("Destroyed feedback instance");
+    LOGGER.debug("Destroyed feedback instance");
   }
 
 }

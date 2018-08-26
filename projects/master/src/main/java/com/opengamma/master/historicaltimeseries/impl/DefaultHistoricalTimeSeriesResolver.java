@@ -37,7 +37,7 @@ import com.opengamma.util.paging.PagingRequest;
  */
 public class DefaultHistoricalTimeSeriesResolver extends HistoricalTimeSeriesResolverWithBasicChangeManager {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(DefaultHistoricalTimeSeriesResolver.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(DefaultHistoricalTimeSeriesResolver.class);
 
   private final HistoricalTimeSeriesSelector _selector;
   private final HistoricalTimeSeriesMaster _master;
@@ -67,7 +67,7 @@ public class DefaultHistoricalTimeSeriesResolver extends HistoricalTimeSeriesRes
       final Collection<ManageableHistoricalTimeSeriesInfo> timeSeriesCandidates = search(identifierBundle, identifierValidityDate, dataSource, dataProvider, dataField);
       final ManageableHistoricalTimeSeriesInfo selectedResult = select(timeSeriesCandidates, resolutionKey);
       if (selectedResult == null) {
-        s_logger.warn("Resolver failed to find any time-series for {} using {}/{}", new Object[] {identifierBundle, dataField, resolutionKey });
+        LOGGER.warn("Resolver failed to find any time-series for {} using {}/{}", new Object[] {identifierBundle, dataField, resolutionKey });
         return null;
       }
       return new HistoricalTimeSeriesResolutionResult(selectedResult);

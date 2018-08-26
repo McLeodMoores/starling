@@ -20,7 +20,7 @@ import com.sleepycat.je.Transaction;
  */
 public class AbstractBerkeleyDBWorker implements Runnable {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(AbstractBerkeleyDBWorker.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(AbstractBerkeleyDBWorker.class);
 
   /**
    * Requests that this worker will satisfy.
@@ -80,14 +80,14 @@ public class AbstractBerkeleyDBWorker implements Runnable {
 
   @Override
   public void run() {
-    s_logger.info("Worker started");
+    LOGGER.info("Worker started");
     _poisoned = null;
     do {
       Request req = null;
       try {
         req = _requests.take();
         if (req == null) {
-          s_logger.info("Worker poisoned");
+          LOGGER.info("Worker poisoned");
           return;
         }
         boolean rollback = true;
@@ -102,7 +102,7 @@ public class AbstractBerkeleyDBWorker implements Runnable {
         } finally {
           if (_transaction != null) {
             if (rollback) {
-              s_logger.error("Rolling back transaction");
+              LOGGER.error("Rolling back transaction");
               _transaction.abort();
             } else {
               _transaction.commit();
@@ -111,7 +111,7 @@ public class AbstractBerkeleyDBWorker implements Runnable {
           }
         }
       } catch (Throwable t) {
-        s_logger.error("Caught exception", t);
+        LOGGER.error("Caught exception", t);
       } finally {
         if (req != null) {
           req.signal();

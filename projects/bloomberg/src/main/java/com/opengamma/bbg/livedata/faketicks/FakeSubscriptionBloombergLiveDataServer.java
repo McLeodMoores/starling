@@ -50,7 +50,7 @@ import com.opengamma.util.fudgemsg.OpenGammaFudgeContext;
 public class FakeSubscriptionBloombergLiveDataServer extends StandardLiveDataServer {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(FakeSubscriptionBloombergLiveDataServer.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(FakeSubscriptionBloombergLiveDataServer.class);
 
   /**
    * Timer period.
@@ -125,7 +125,7 @@ public class FakeSubscriptionBloombergLiveDataServer extends StandardLiveDataSer
 
   private void updateAll() {
     Set<String> idsToUpdate = _subscriptions.keySet();
-    s_logger.info("Requerying {} in order to fake ticks", idsToUpdate);
+    LOGGER.info("Requerying {} in order to fake ticks", idsToUpdate);
     Map<String, FudgeMsg> doSnapshot = doUnderlyingSnapshot(idsToUpdate);
     for (Entry<String, FudgeMsg> entry : doSnapshot.entrySet()) {
       liveDataReceived(entry.getKey(), entry.getValue());
@@ -223,18 +223,18 @@ public class FakeSubscriptionBloombergLiveDataServer extends StandardLiveDataSer
       
       @Override
       public void run() {
-        s_logger.info("Cancelling fake subscriptions");
+        LOGGER.info("Cancelling fake subscriptions");
         _timer.cancel(); // NOTE doing this here  "absolutely guarantees that the ongoing task execution is the last task execution"
         timerCancelledLatch.countDown();
       }
     }, 0);
     try {
-      s_logger.info("Waiting for fake subscriptions to stop");
+      LOGGER.info("Waiting for fake subscriptions to stop");
       timerCancelledLatch.await();
     } catch (InterruptedException ex) {
       throw new OpenGammaRuntimeException("Interrupted whilst disconnecting", ex);
     }
-    s_logger.info("Fake subscriptions to stopped");
+    LOGGER.info("Fake subscriptions to stopped");
     _timer = null;
   }
 
@@ -247,7 +247,7 @@ public class FakeSubscriptionBloombergLiveDataServer extends StandardLiveDataSer
     
     Map<String, Object> subscriptions = new HashMap<String, Object>();
     for (String uniqueId : uniqueIds) {
-      s_logger.info("Faking subscription to {}", uniqueId);
+      LOGGER.info("Faking subscription to {}", uniqueId);
       subscriptions.put(uniqueId, uniqueId);
     }
     
@@ -263,7 +263,7 @@ public class FakeSubscriptionBloombergLiveDataServer extends StandardLiveDataSer
     }
     
     for (Object subscriptionHandle : subscriptionHandles) {
-      s_logger.info("Removing fake subscription to {}", subscriptionHandle);
+      LOGGER.info("Removing fake subscription to {}", subscriptionHandle);
       _subscriptions.remove(subscriptionHandle);
     }
   }

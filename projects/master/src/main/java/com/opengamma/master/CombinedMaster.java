@@ -42,7 +42,7 @@ import com.opengamma.util.paging.PagingRequest;
  */
 public abstract class CombinedMaster<D extends AbstractDocument, M extends AbstractMaster<D>> implements AbstractMaster<D> {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(CombinedMaster.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(CombinedMaster.class);
 
   private final List<M> _masterList;
   private final ConcurrentMap<String, M> _schemeToMaster = Maps.newConcurrentMap();
@@ -83,7 +83,7 @@ public abstract class CombinedMaster<D extends AbstractDocument, M extends Abstr
           setMasterScheme(scheme, master);
           return result;
         } catch (IllegalArgumentException e) {
-          s_logger.debug("Illegal argument exception from master", e);
+          LOGGER.debug("Illegal argument exception from master", e);
         }
       }
       throw new IllegalArgumentException("No masters accepted request on scheme " + scheme);
@@ -372,7 +372,7 @@ public abstract class CombinedMaster<D extends AbstractDocument, M extends Abstr
       assert remainingIterators >= 0;
       
       if (remainingIterators < 0) {
-        s_logger.error("Illegal state - number of remaining iterators is negative.");
+        LOGGER.error("Illegal state - number of remaining iterators is negative.");
         //allow to continue in the interest of providing a result...
       }
       if (remainingIterators <= 0) {

@@ -27,10 +27,10 @@ import com.opengamma.util.SingletonFactoryBean;
  */
 public class UriEndPointDescriptionProviderFactoryBean extends SingletonFactoryBean<UriEndPointDescriptionProvider> {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(UriEndPointDescriptionProviderFactoryBean.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(UriEndPointDescriptionProviderFactoryBean.class);
 
-  private static final boolean s_enableIPv4 = System.getProperty("com.opengamma.transport.jaxrs.UriEndPointDescriptionProviderFactoryBean.disableIPv4") == null;
-  private static final boolean s_enableIPv6 = System.getProperty("com.opengamma.transport.jaxrs.UriEndPointDescriptionProviderFactoryBean.enableIPv6") != null;
+  private static final boolean ENABLE_IPV4 = System.getProperty("com.opengamma.transport.jaxrs.UriEndPointDescriptionProviderFactoryBean.disableIPv4") == null;
+  private static final boolean ENABLE_IPV6 = System.getProperty("com.opengamma.transport.jaxrs.UriEndPointDescriptionProviderFactoryBean.enableIPv6") != null;
 
   private final List<String> _uris = new LinkedList<String>();
 
@@ -92,13 +92,13 @@ public class UriEndPointDescriptionProviderFactoryBean extends SingletonFactoryB
   protected UriEndPointDescriptionProvider createObject() {
     if (_local != null) {
       if (_secure) {
-        s_logger.warn("Secure local connections not available - using unsecured connections");
+        LOGGER.warn("Secure local connections not available - using unsecured connections");
       }
       Collection<String> localAddresses = getLocalNetworkAddresses();
       for (String address : localAddresses) {
         String uri = "http://" + address + ":" + _port + _local;
         _uris.add(uri);
-        s_logger.debug("Publishing {}", uri);
+        LOGGER.debug("Publishing {}", uri);
       }
     }
     return new UriEndPointDescriptionProvider(_uris);
@@ -113,7 +113,7 @@ public class UriEndPointDescriptionProviderFactoryBean extends SingletonFactoryB
         loadInterfaceAddress(ni.nextElement(), addresses);
       }
     } catch (IOException e) {
-      s_logger.warn("Error resolving local addresses; no local connections available", e);
+      LOGGER.warn("Error resolving local addresses; no local connections available", e);
       return Collections.emptySet();
     }
     return addresses;
@@ -131,11 +131,11 @@ public class UriEndPointDescriptionProviderFactoryBean extends SingletonFactoryB
         continue;
       }
       if (a instanceof Inet4Address) {
-        if (s_enableIPv4) {
+        if (ENABLE_IPV4) {
           addresses.add(a.getHostAddress());
         }
       } else if (a instanceof Inet6Address) {
-        if (s_enableIPv6) {
+        if (ENABLE_IPV6) {
           addresses.add("[" + a.getHostAddress() + "]");
         }
       }

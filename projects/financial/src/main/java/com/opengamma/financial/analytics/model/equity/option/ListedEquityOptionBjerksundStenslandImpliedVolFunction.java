@@ -44,7 +44,7 @@ import com.opengamma.financial.security.FinancialSecurity;
 public class ListedEquityOptionBjerksundStenslandImpliedVolFunction extends ListedEquityOptionBjerksundStenslandFunction {
 
   /** The BjerksundStensland present value calculator */
-  private static final EqyOptBjerksundStenslandPresentValueCalculator s_pvCalculator = EqyOptBjerksundStenslandPresentValueCalculator.getInstance();
+  private static final EqyOptBjerksundStenslandPresentValueCalculator PV_CALCULATOR = EqyOptBjerksundStenslandPresentValueCalculator.getInstance();
 
   /** Default constructor */
   public ListedEquityOptionBjerksundStenslandImpliedVolFunction() {
@@ -59,7 +59,7 @@ public class ListedEquityOptionBjerksundStenslandImpliedVolFunction extends List
     Double marketPrice = null;
     final ComputedValue mktPriceObj = inputs.getComputedValue(MarketDataRequirementNames.MARKET_VALUE);
     if (mktPriceObj == null) {
-      s_logger.info(MarketDataRequirementNames.MARKET_VALUE + " not available," + targetSpec);
+      LOGGER.info(MarketDataRequirementNames.MARKET_VALUE + " not available," + targetSpec);
     } else {
       marketPrice = (Double) mktPriceObj.getValue();
     }
@@ -75,7 +75,7 @@ public class ListedEquityOptionBjerksundStenslandImpliedVolFunction extends List
       timeToExpiry = option.getTimeToExpiry();
       isCall = option.isCall();
       if (marketPrice == null) {
-        optionPrice = derivative.accept(s_pvCalculator, market) / option.getUnitAmount();
+        optionPrice = derivative.accept(PV_CALCULATOR, market) / option.getUnitAmount();
       } else {
         optionPrice = marketPrice;
       }
@@ -85,7 +85,7 @@ public class ListedEquityOptionBjerksundStenslandImpliedVolFunction extends List
       timeToExpiry = option.getTimeToExpiry();
       isCall = option.isCall();
       if (marketPrice == null) {
-        optionPrice = derivative.accept(s_pvCalculator, market) / option.getUnitAmount();
+        optionPrice = derivative.accept(PV_CALCULATOR, market) / option.getUnitAmount();
       } else {
         optionPrice = marketPrice;
       }
@@ -95,7 +95,7 @@ public class ListedEquityOptionBjerksundStenslandImpliedVolFunction extends List
       timeToExpiry = option.getExpiry();
       isCall = option.isCall();
       if (marketPrice == null) {
-        optionPrice = derivative.accept(s_pvCalculator, market) / option.getPointValue();
+        optionPrice = derivative.accept(PV_CALCULATOR, market) / option.getPointValue();
       } else {
         optionPrice = marketPrice;
       }
@@ -137,7 +137,7 @@ public class ListedEquityOptionBjerksundStenslandImpliedVolFunction extends List
         if (inputs.getComputedValue(MarketDataRequirementNames.MARKET_VALUE) == null) {
           impliedVol = null;
         } else {
-          s_logger.warn(MarketDataRequirementNames.IMPLIED_VOLATILITY + " undefined" + targetSpec);
+          LOGGER.warn(MarketDataRequirementNames.IMPLIED_VOLATILITY + " undefined" + targetSpec);
           impliedVol = 0.;
         }
       }
@@ -164,6 +164,6 @@ public class ListedEquityOptionBjerksundStenslandImpliedVolFunction extends List
   }
 
   /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(ListedEquityOptionBjerksundStenslandImpliedVolFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ListedEquityOptionBjerksundStenslandImpliedVolFunction.class);
 
 }

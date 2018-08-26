@@ -103,7 +103,7 @@ import com.opengamma.util.time.ExpiryAccuracy;
 public class BondLoader extends SecurityLoader {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(BondLoader.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(BondLoader.class);
   /**
    * The fields to load from Bloomberg.
    */
@@ -195,12 +195,12 @@ public class BondLoader extends SecurityLoader {
    * @param referenceDataProvider  the provider, not null
    */
   public BondLoader(final ReferenceDataProvider referenceDataProvider) {
-    super(s_logger, referenceDataProvider, SecurityType.BOND);
+    super(LOGGER, referenceDataProvider, SecurityType.BOND);
   }
 
   private String validateAndGetStringField(final FudgeMsg fieldData, final String fieldName) {
     if (!isValidField(fieldData.getString(fieldName))) {
-      s_logger.warn(fieldName + " is null, cannot construct bond security");
+      LOGGER.warn(fieldName + " is null, cannot construct bond security");
       throw new OpenGammaRuntimeException(fieldName + " is null, cannot construct bond security");
     }
     return fieldData.getString(fieldName);
@@ -215,7 +215,7 @@ public class BondLoader extends SecurityLoader {
 
   private Double validateAndGetDoubleField(final FudgeMsg fieldData, final String fieldName) {
     if (!isValidField(fieldData.getString(fieldName))) {
-      s_logger.warn(fieldName + " is null, cannot construct bond security");
+      LOGGER.warn(fieldName + " is null, cannot construct bond security");
       throw new OpenGammaRuntimeException(fieldName + " is null, cannot construct bond security");
     }
     return fieldData.getDouble(fieldName);
@@ -249,7 +249,7 @@ public class BondLoader extends SecurityLoader {
 
   private Integer validateAndGetIntegerField(final FudgeMsg fieldData, final String fieldName) {
     if (!isValidField(fieldData.getString(fieldName))) {
-      s_logger.warn(fieldName + " is null, cannot construct bond security");
+      LOGGER.warn(fieldName + " is null, cannot construct bond security");
       throw new OpenGammaRuntimeException(fieldName + " is null, cannot construct bond security");
     }
     return fieldData.getInt(fieldName);
@@ -427,7 +427,7 @@ public class BondLoader extends SecurityLoader {
       parseIdentifiers(fieldData, bondSecurity);
       return bondSecurity;
     } catch (final OpenGammaRuntimeException ogre) {
-      s_logger.error("Error loading bond {} - {} - FLOATER={}, Fields are {}",
+      LOGGER.error("Error loading bond {} - {} - FLOATER={}, Fields are {}",
           new Object[] {fieldData.getValue(FIELD_ID_ISIN), ogre.getMessage(), fieldData.getString(FIELD_FLOATER), null }); //fieldData });
       return null;
     }
@@ -468,7 +468,7 @@ public class BondLoader extends SecurityLoader {
     if (isValidField(idBbSecNumDes) && isValidField(marketSector)) {
       identifiers.add(ExternalSchemes.bloombergTickerSecurityId(idBbSecNumDes.replaceAll("\\s+", " ").concat(" ").concat(marketSector.trim())));      
     } else if (isValidField(parsekyableDes)) {
-      s_logger.warn("For {} Could not find valid field BB_SEC_NUM_DES and/or MARKET_SECTOR " + 
+      LOGGER.warn("For {} Could not find valid field BB_SEC_NUM_DES and/or MARKET_SECTOR " + 
                     "(essentially the Ticker, coupon, maturity + yellow key) so falling back to PARSEKYABLE_DES.  " + 
                     " This may mean bond future baskets won't link to the underlying correctly as they are in the TCM format.", parsekyableDes);
       identifiers.add(ExternalSchemes.bloombergTickerSecurityId(parsekyableDes.replaceAll("\\s+", " ")));
@@ -477,7 +477,7 @@ public class BondLoader extends SecurityLoader {
       try {
         identifiers.add(ExternalSchemes.bloombergTCMSecurityId(ticker, coupon, maturity, marketSector));
       } catch (final Exception e) {
-        s_logger.warn("Couldn't add Bloomberg TCM to bond", e);
+        LOGGER.warn("Couldn't add Bloomberg TCM to bond", e);
       }
     }
     security.setExternalIdBundle(ExternalIdBundle.of(identifiers));

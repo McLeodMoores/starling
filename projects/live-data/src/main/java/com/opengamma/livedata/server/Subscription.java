@@ -26,7 +26,7 @@ import com.opengamma.util.ArgumentChecker;
 public class Subscription {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(Subscription.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(Subscription.class);
 
   /**
    * The unique ID that was subscribed to, specific to the market data provider, such as Bloomberg/Reuters.
@@ -196,9 +196,9 @@ public class Subscription {
       distributor = new MarketDataDistributor(spec, this, getMarketDataSenderFactory(), persistent, getLkvStoreProvider());
       MarketDataDistributor previous = _distributors.putIfAbsent(spec, distributor);
       if (previous == null) {
-        s_logger.info("Added {} to {}", distributor, this);
+        LOGGER.info("Added {} to {}", distributor, this);
       } else {
-        s_logger.debug("Lost race to create distributor {} to {}", previous, this);
+        LOGGER.debug("Lost race to create distributor {} to {}", previous, this);
         distributor = previous;
       }
     }
@@ -206,7 +206,7 @@ public class Subscription {
     // never turn it back from persistent to non-persistent, however.
     if (!distributor.isPersistent() && persistent) {
       distributor.setPersistent(persistent);
-      s_logger.info("Made {} persistent", distributor);
+      LOGGER.info("Made {} persistent", distributor);
     }
     return distributor;
   }
@@ -218,14 +218,14 @@ public class Subscription {
   /*package*/ void removeDistributor(DistributionSpecification spec) {
     MarketDataDistributor removed = _distributors.remove(spec);
     if (removed != null) {
-      s_logger.info("Removed {} from {}", removed, this);      
+      LOGGER.info("Removed {} from {}", removed, this);      
     } else {
-      s_logger.info("Removed distribution spec {} from {} (no-op)", spec, this);
+      LOGGER.info("Removed distribution spec {} from {} (no-op)", spec, this);
     }
   }
 
   /*package*/ void removeAllDistributors() {
-    s_logger.info("Removed {} from {}", _distributors, this);
+    LOGGER.info("Removed {} from {}", _distributors, this);
     _distributors.clear();
   }
 

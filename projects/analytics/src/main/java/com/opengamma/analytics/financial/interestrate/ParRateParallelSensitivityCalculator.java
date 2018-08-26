@@ -11,7 +11,7 @@ import java.util.Map;
 
 import com.opengamma.analytics.financial.provider.description.interestrate.ParameterProviderInterface;
 import com.opengamma.util.tuple.DoublesPair;
-
+//CSOFF
 /**
  * Calculates the change in par rate of an instrument (the exact meaning of par rate depends on the instrument - for swaps it is the par swap rate) due to a parallel move of each yield curve
  * that the instrument is sensitive to - dPar/dR where dR is a movement of the whole curve. The return format is a Map with curve names (String) as keys and a sensitivities as values.

@@ -20,7 +20,7 @@ import cern.colt.matrix.linalg.Algebra;
  * 
  */
 public class WeightedLeastSquaresRegression extends LeastSquaresRegression {
-  private static final Logger s_logger = LoggerFactory.getLogger(WeightedLeastSquaresRegression.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(WeightedLeastSquaresRegression.class);
   private final Algebra _algebra = new Algebra();
 
   @Override
@@ -29,7 +29,7 @@ public class WeightedLeastSquaresRegression extends LeastSquaresRegression {
       throw new IllegalArgumentException("Cannot perform WLS regression without an array of weights");
     }
     checkData(x, weights, y);
-    s_logger
+    LOGGER
         .info("Have a two-dimensional array for what should be a one-dimensional array of weights. The weights used in this regression will be the diagonal elements only");
     final double[] w = new double[weights.length];
     for (int i = 0; i < w.length; i++) {

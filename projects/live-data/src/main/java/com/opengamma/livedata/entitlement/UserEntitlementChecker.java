@@ -36,7 +36,7 @@ import com.opengamma.util.ArgumentChecker;
 public class UserEntitlementChecker extends AbstractEntitlementChecker {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(UserEntitlementChecker.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(UserEntitlementChecker.class);
 
   /**
    * The user manager.
@@ -64,7 +64,7 @@ public class UserEntitlementChecker extends AbstractEntitlementChecker {
     Map<LiveDataSpecification, Boolean> returnValue = new HashMap<>();
     User user = _userManager.getUser(userPrincipal.getUserName());
     if (user == null) {
-      s_logger.warn("User {} does not exist - no permissions are granted", userPrincipal.getUserName());
+      LOGGER.warn("User {} does not exist - no permissions are granted", userPrincipal.getUserName());
       for (LiveDataSpecification spec : requestedSpecifications) {
         returnValue.put(spec, false);                
       }

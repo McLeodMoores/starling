@@ -35,7 +35,7 @@ import com.opengamma.util.tuple.Pairs;
  *
  */
 public class FXForwardPnLDefaults extends DefaultPropertyFunction {
-  private static final Logger s_logger = LoggerFactory.getLogger(FXForwardPnLDefaults.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(FXForwardPnLDefaults.class);
   private final String _start;
   private final String _end;
   private final String _scheduleCalculator;
@@ -107,11 +107,11 @@ public class FXForwardPnLDefaults extends DefaultPropertyFunction {
     final String payCurrency = security.accept(ForexVisitors.getPayCurrencyVisitor()).getCode();
     final String receiveCurrency = security.accept(ForexVisitors.getReceiveCurrencyVisitor()).getCode();
     if (!_currencyCurveConfigAndDiscountingCurveNames.containsKey(payCurrency)) {
-      s_logger.error("Could not get config for pay currency " + payCurrency + "; should never happen");
+      LOGGER.error("Could not get config for pay currency " + payCurrency + "; should never happen");
       return null;
     }
     if (!_currencyCurveConfigAndDiscountingCurveNames.containsKey(receiveCurrency)) {
-      s_logger.error("Could not get config for receive currency " + receiveCurrency + "; should never happen");
+      LOGGER.error("Could not get config for receive currency " + receiveCurrency + "; should never happen");
       return null;
     }
     final Pair<String, String> payPair = _currencyCurveConfigAndDiscountingCurveNames.get(payCurrency);

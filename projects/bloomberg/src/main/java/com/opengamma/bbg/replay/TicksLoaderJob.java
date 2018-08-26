@@ -40,9 +40,9 @@ import com.opengamma.util.time.DateUtils;
 public class TicksLoaderJob extends TerminatableJob {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(TicksLoaderJob.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(TicksLoaderJob.class);
 
-  private static final FudgeContext s_fudgeContext = new FudgeContext();
+  private static final FudgeContext FUDGE_CONTEXT = new FudgeContext();
   
   private final String _rootDir;
   private final Set<String> _securities;
@@ -73,7 +73,7 @@ public class TicksLoaderJob extends TerminatableJob {
   
   @Override
   public void terminate() {
-    s_logger.debug("ticksLoader terminating...");
+    LOGGER.debug("ticksLoader terminating...");
     super.terminate();
   }
 
@@ -85,7 +85,7 @@ public class TicksLoaderJob extends TerminatableJob {
       _ticksQueue.put(BloombergTickReplayUtils.getTerminateMessage());
     } catch (InterruptedException e) {
       Thread.interrupted();
-      s_logger.warn("interrupted while putting terminate message on queue");
+      LOGGER.warn("interrupted while putting terminate message on queue");
     }
   }
 
@@ -117,7 +117,7 @@ public class TicksLoaderJob extends TerminatableJob {
   private boolean loadTicks(String fullPath) {
     try {
       FileInputStream fis = new FileInputStream(fullPath);
-      FudgeMsgReader reader = s_fudgeContext.createMessageReader(fis);
+      FudgeMsgReader reader = FUDGE_CONTEXT.createMessageReader(fis);
       try {
         while (reader.hasNext()) {
           FudgeMsg message = reader.nextMessage();
@@ -132,7 +132,7 @@ public class TicksLoaderJob extends TerminatableJob {
               _ticksQueue.put(message);
             } catch (InterruptedException e) {
               Thread.interrupted();
-              s_logger.warn("interrupted waiting to write to ticks queue");
+              LOGGER.warn("interrupted waiting to write to ticks queue");
             }
           }
         }
@@ -141,11 +141,11 @@ public class TicksLoaderJob extends TerminatableJob {
         try {
           fis.close();
         } catch (IOException e) {
-          s_logger.warn("cannot close {}", fullPath);
+          LOGGER.warn("cannot close {}", fullPath);
         }
       }
     } catch (FileNotFoundException e) {
-      s_logger.warn("{} not found", fullPath);
+      LOGGER.warn("{} not found", fullPath);
       throw new OpenGammaRuntimeException(fullPath + " not found", e);
     }
     
@@ -190,7 +190,7 @@ public class TicksLoaderJob extends TerminatableJob {
       if (file.exists()) {
         reverseOrder.add(fullPath);
       } else {
-        s_logger.warn("{} does not exists ", file);
+        LOGGER.warn("{} does not exists ", file);
       }
       current = DateUtils.previousWeekDay(current);
     }

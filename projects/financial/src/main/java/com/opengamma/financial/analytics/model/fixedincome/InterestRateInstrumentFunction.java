@@ -74,7 +74,7 @@ import com.opengamma.util.money.Currency;
 @Deprecated
 public abstract class InterestRateInstrumentFunction extends AbstractFunction.NonCompiledInvoker {
   /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(InterestRateInstrumentFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(InterestRateInstrumentFunction.class);
   /** Converts instrument definitions to instrument derivatives */
   private FixedIncomeConverterDataProvider _definitionConverter;
   /** The value requirement produced by this function */
@@ -188,13 +188,13 @@ public abstract class InterestRateInstrumentFunction extends AbstractFunction.No
     }
     final MultiCurveCalculationConfig curveCalculationConfig = _curveCalculationConfigSource.getConfig(curveCalculationConfigName);
     if (curveCalculationConfig == null) {
-      s_logger.debug("Could not find curve calculation configuration named {}", curveCalculationConfigName);
+      LOGGER.debug("Could not find curve calculation configuration named {}", curveCalculationConfigName);
       return null;
     }
     final FinancialSecurity security = (FinancialSecurity) target.getSecurity();
     final Currency currency = FinancialSecurityUtils.getCurrency(security);
     if (!ComputationTargetSpecification.of(currency).equals(curveCalculationConfig.getTarget())) {
-      s_logger.info("Security currency and curve calculation config id were not equal; have {} and {}", currency, curveCalculationConfig.getTarget());
+      LOGGER.info("Security currency and curve calculation config id were not equal; have {} and {}", currency, curveCalculationConfig.getTarget());
       return null;
     }
     final Set<ValueRequirement> requirements = new HashSet<>();
@@ -207,7 +207,7 @@ public abstract class InterestRateInstrumentFunction extends AbstractFunction.No
       requirements.addAll(timeSeriesRequirements);
       return requirements;
     } catch (final Exception e) {
-      s_logger.error(e.getMessage());
+      LOGGER.error(e.getMessage());
       return null;
     }
   }

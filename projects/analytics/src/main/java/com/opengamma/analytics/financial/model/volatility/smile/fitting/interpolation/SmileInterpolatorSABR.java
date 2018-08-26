@@ -146,7 +146,7 @@ public class SmileInterpolatorSABR extends SmileInterpolator<SABRFormulaData> {
     }
     if (Math.abs(b) < 1e-3 && Math.abs(c) < 1e-3) { //almost flat smile
       if (_externalBeta && _beta != 1.0) {
-        s_logger.warn("Smile almost flat. Cannot use beta = ", +_beta + " so extenal value ignored, and beta = 1.0 used");
+        LOGGER.warn("Smile almost flat. Cannot use beta = ", +_beta + " so extenal value ignored, and beta = 1.0 used");
       }
       return new DoubleMatrix1D(a, 1.0, 0.0, Math.max(0.0, 4 * c));
     }

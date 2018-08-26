@@ -39,7 +39,7 @@ import com.opengamma.id.ExternalId;
  * 
  */
 public class RedisLastKnownValueStoreProvider implements LastKnownValueStoreProvider {
-  private static final Logger s_logger = LoggerFactory.getLogger(RedisLastKnownValueStoreProvider.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(RedisLastKnownValueStoreProvider.class);
   private String _server = "localhost";
   private int _port = 6379;
   private String _globalPrefix = "";
@@ -115,7 +115,7 @@ public class RedisLastKnownValueStoreProvider implements LastKnownValueStoreProv
   public LastKnownValueStore newInstance(ExternalId security, String normalizationRuleSetId) {
     initIfNecessary();
     String redisKey = generateRedisKey(security, normalizationRuleSetId);
-    s_logger.debug("Creating Redis LKV store on {}/{} with key name {}", new Object[] {security, normalizationRuleSetId, redisKey});
+    LOGGER.debug("Creating Redis LKV store on {}/{} with key name {}", new Object[] {security, normalizationRuleSetId, redisKey});
     updateIdentifiers(security);
     RedisLastKnownValueStore store = new RedisLastKnownValueStore(_jedisPool, redisKey, isWriteThrough());
     return store;
@@ -166,7 +166,7 @@ public class RedisLastKnownValueStoreProvider implements LastKnownValueStoreProv
     }
     synchronized (this) {
       assert _jedisPool == null;
-      s_logger.info("Connecting to {}:{}. Write-through set to: {}", new Object[] {getServer(), getPort(), _writeThrough});
+      LOGGER.info("Connecting to {}:{}. Write-through set to: {}", new Object[] {getServer(), getPort(), _writeThrough});
       JedisPoolConfig poolConfig = new JedisPoolConfig();
       //poolConfig.set...
       JedisPool pool = new JedisPool(poolConfig, getServer(), getPort());
@@ -189,9 +189,9 @@ public class RedisLastKnownValueStoreProvider implements LastKnownValueStoreProv
     Jedis jedis = _jedisPool.getResource();
     Set<String> allMembers = jedis.smembers(generatePerSchemeKey(identifierScheme));
     _jedisPool.returnResource(jedis);
-    s_logger.info("Loaded {} identifiers from Jedis (full contents in Debug level log)", allMembers.size());
-    if (s_logger.isDebugEnabled()) {
-      s_logger.debug("Loaded identifiers from Jedis: {}", allMembers);
+    LOGGER.info("Loaded {} identifiers from Jedis (full contents in Debug level log)", allMembers.size());
+    if (LOGGER.isDebugEnabled()) {
+      LOGGER.debug("Loaded identifiers from Jedis: {}", allMembers);
     }
     return allMembers;
   }

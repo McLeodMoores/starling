@@ -63,7 +63,7 @@ import com.opengamma.util.money.Currency;
  */
 @Deprecated
 public class InterestRateInstrumentYieldCurveNodeSensitivitiesFunction extends InterestRateInstrumentCurveSpecificFunction {
-  private static final Logger s_logger = LoggerFactory.getLogger(InterestRateInstrumentYieldCurveNodeSensitivitiesFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(InterestRateInstrumentYieldCurveNodeSensitivitiesFunction.class);
   private static final PresentValueNodeSensitivityCalculator NSC = PresentValueNodeSensitivityCalculator.using(PresentValueCurveSensitivitySABRCalculator.getInstance());
   private static final InstrumentSensitivityCalculator CALCULATOR = InstrumentSensitivityCalculator.getInstance();
 
@@ -161,12 +161,12 @@ public class InterestRateInstrumentYieldCurveNodeSensitivitiesFunction extends I
     final boolean permissive = OpenGammaCompilationContext.isPermissive(context);
     Set<String> requestedCurveNames = constraints.getValues(ValuePropertyNames.CURVE);
     if (!permissive && (requestedCurveNames == null || requestedCurveNames.isEmpty())) {
-      s_logger.info("Must specify a single curve name; have {}", requestedCurveNames);
+      LOGGER.info("Must specify a single curve name; have {}", requestedCurveNames);
       return null;
     }
     final MultiCurveCalculationConfig curveCalculationConfig = getCurveCalculationConfigSource().getConfig(curveCalculationConfigName);
     if (curveCalculationConfig == null) {
-      s_logger.info("Could not find curve calculation configuration named " + curveCalculationConfigName);
+      LOGGER.info("Could not find curve calculation configuration named " + curveCalculationConfigName);
       return null;
     }
     if (!ComputationTargetSpecification.of(currency).equals(curveCalculationConfig.getTarget())) {
@@ -178,13 +178,13 @@ public class InterestRateInstrumentYieldCurveNodeSensitivitiesFunction extends I
     } else {
       final Set<String> intersection = YieldCurveFunctionUtils.intersection(requestedCurveNames, availableCurveNames);
       if (intersection.isEmpty()) {
-        s_logger.info("None of the requested curves {} are available in curve calculation configuration called {}", requestedCurveNames, curveCalculationConfigName);
+        LOGGER.info("None of the requested curves {} are available in curve calculation configuration called {}", requestedCurveNames, curveCalculationConfigName);
         return null;
       }
       requestedCurveNames = intersection;
     }
     if (!permissive && (requestedCurveNames.size() != 1)) {
-      s_logger.info("Must specify single curve name constraint, got {}", requestedCurveNames);
+      LOGGER.info("Must specify single curve name constraint, got {}", requestedCurveNames);
       return null;
     }
     final String curve = requestedCurveNames.iterator().next();
@@ -211,7 +211,7 @@ public class InterestRateInstrumentYieldCurveNodeSensitivitiesFunction extends I
       }
       requirements.addAll(timeSeriesRequirements);
     } catch (final OpenGammaRuntimeException e) {
-      s_logger.error("Could not get time series requirements; error was {}", e.getMessage());
+      LOGGER.error("Could not get time series requirements; error was {}", e.getMessage());
       return null;
     }
     return requirements;

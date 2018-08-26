@@ -52,7 +52,7 @@ import com.opengamma.util.tuple.Pair;
  */
 @Deprecated
 public abstract class ForexLocalVolatilityPDEGridFunction extends LocalVolatilityPDEGridFunction {
-  private static final Logger s_logger = LoggerFactory.getLogger(ForexLocalVolatilityPDEGridFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ForexLocalVolatilityPDEGridFunction.class);
 
   public ForexLocalVolatilityPDEGridFunction() {
     super(InstrumentTypeProperties.FOREX);
@@ -142,7 +142,7 @@ public abstract class ForexLocalVolatilityPDEGridFunction extends LocalVolatilit
             riskReversalList.add(rr);
             strangleList.add(s);
           } else {
-            s_logger.info("Had a null value for tenor number " + j);
+            LOGGER.info("Had a null value for tenor number " + j);
           }
         }
         riskReversals[i] = riskReversalList.toDoubleArray();

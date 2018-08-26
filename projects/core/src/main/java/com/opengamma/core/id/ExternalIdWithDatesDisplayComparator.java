@@ -17,7 +17,7 @@ import com.opengamma.id.ExternalScheme;
  * Here we're defining a table of scores for each scheme
  */
 public class ExternalIdWithDatesDisplayComparator implements Comparator<ExternalIdWithDates> {
-  static final Map<ExternalScheme, Integer> s_scoreMap = Maps.newHashMap();
+  static final Map<ExternalScheme, Integer> SCORE_MAP = Maps.newHashMap();
   private Map<ExternalScheme, Integer> _scoreMap;
   private ExternalIdOrderConfig _orderConfig;
     

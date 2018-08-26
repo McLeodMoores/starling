@@ -40,7 +40,7 @@ import com.opengamma.util.tuple.Pairs;
 @PublicAPI
 public class ViewCalculationConfiguration implements Serializable {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(ViewCalculationConfiguration.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ViewCalculationConfiguration.class);
 
   /**
    * Dummy "security type" constant to request a value at the aggregate level only.
@@ -501,7 +501,7 @@ public class ViewCalculationConfiguration implements Serializable {
 
   @Override
   public String toString() {
-    if (s_logger.isDebugEnabled()) {
+    if (LOGGER.isDebugEnabled()) {
       return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE, false);
     } else {
       return "ViewCalculationConfiguration[" + getName() + "]";

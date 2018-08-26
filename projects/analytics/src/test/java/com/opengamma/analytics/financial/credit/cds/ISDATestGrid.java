@@ -44,14 +44,14 @@ public class ISDATestGrid {
 		}
 	}
 
-	private static final Logger s_logger = LoggerFactory
+	private static final Logger LOGGER = LoggerFactory
 			.getLogger(ISDATestGrid.class);
 
-	public static final ISDATestGridFields[] headingNames = { ISDATestGridFields.TRADE_DATE, ISDATestGridFields.MATURITY_DATE,
+	public static final ISDATestGridFields[] HEADING_NAMES = { ISDATestGridFields.TRADE_DATE, ISDATestGridFields.MATURITY_DATE,
 		ISDATestGridFields.CURRENCY, ISDATestGridFields.COUPON, ISDATestGridFields.QUOTED_SPREAD, ISDATestGridFields.RECOVERY, ISDATestGridFields.UPFRONT,
 		ISDATestGridFields.CLEAN_PRICE, ISDATestGridFields.DAYS_ACCRUED, ISDATestGridFields.ACCRUED_PREMIUM, ISDATestGridFields.CASH_SETTLE,
 		ISDATestGridFields.START_DATE };
-	public static final DataTypes[] headingTypes = { DataTypes.DATE, DataTypes.DATE,
+	public static final DataTypes[] HEADING_TYPES = { DataTypes.DATE, DataTypes.DATE,
 			DataTypes.STRING, DataTypes.NUMBER, DataTypes.NUMBER,
 			DataTypes.NUMBER, DataTypes.NUMBER, DataTypes.NUMBER,
 			DataTypes.NUMBER, DataTypes.NUMBER, DataTypes.DATE, DataTypes.DATE };
@@ -75,8 +75,8 @@ public class ISDATestGrid {
 		if(headingIndex == null)
 		{
 			headingIndex = new TreeMap<>();
-			for (int i = 0; i < headingNames.length; i++) {
-				headingIndex.put(headingNames[i], i);
+			for (int i = 0; i < HEADING_NAMES.length; i++) {
+				headingIndex.put(HEADING_NAMES[i], i);
 			}
 		}
 
@@ -87,10 +87,10 @@ public class ISDATestGrid {
 		for (final Cell cell : row) {
 			final int index = cell.getColumnIndex();
 			final String colName = cell.getStringCellValue();
-			if (!colName.trim().startsWith(headingNames[index].getHeading())) {
+			if (!colName.trim().startsWith(HEADING_NAMES[index].getHeading())) {
 				throw new IllegalArgumentException("Heading name " + colName
 						+ " does not match column name in the expected header "
-						+ headingNames[index]);
+						+ HEADING_NAMES[index]);
 			}
 		}
 	}
@@ -134,7 +134,7 @@ public class ISDATestGrid {
 			dt = dt.minusDays(2);
 		}
 
-		s_logger.info("Trade date = " + getTradeDate()
+		LOGGER.info("Trade date = " + getTradeDate()
 				+ ", interest rate curve date = " + dt);
 
 		return dt;
@@ -168,7 +168,7 @@ public class ISDATestGrid {
 	}
 
 	private void processRow(final Row row) {
-		final Object[] rowData = new Object[headingNames.length];
+		final Object[] rowData = new Object[HEADING_NAMES.length];
 		for (final Cell cell : row) {
 			final int colIndex = cell.getColumnIndex();
 			final int type = cell.getCellType();
@@ -176,13 +176,13 @@ public class ISDATestGrid {
 				return;
 			}
 
-			if (type != headingTypes[colIndex].getPoiType()) {
+			if (type != HEADING_TYPES[colIndex].getPoiType()) {
 				throw new IllegalArgumentException("Row type for "
-						+ headingNames[colIndex] + " was wrong on row "
+						+ HEADING_NAMES[colIndex] + " was wrong on row "
 						+ row.getRowNum() + " type is " + type);
 			}
 
-			switch (headingTypes[colIndex]) {
+			switch (HEADING_TYPES[colIndex]) {
 			case DATE:
 				final Integer originalDate = (int) cell.getNumericCellValue();
 				final LocalDate date = LocalDate.parse(originalDate.toString(),

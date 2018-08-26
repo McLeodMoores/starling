@@ -22,7 +22,7 @@ import com.opengamma.master.security.ManageableSecurity;
  */
 public class FraTradeSecurityExtractor extends TradeSecurityExtractor<FraTrade> {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(FraTradeSecurityExtractor.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(FraTradeSecurityExtractor.class);
   
   /**
    * Create an extractor for the given trade.
@@ -82,7 +82,7 @@ public class FraTradeSecurityExtractor extends TradeSecurityExtractor<FraTrade> 
     //TODO would be better to check values against conventions here.
     //this will require a refactor to get access to the ToolContext.
     if (fraTrade.getBusinessDayConvention() != null || fraTrade.getDayCount() != null) {
-      s_logger.warn("businessDayConvention and/or dayCount specified for trade %s. " +
+      LOGGER.warn("businessDayConvention and/or dayCount specified for trade %s. " +
           "Note: this is currently ignored in favour of index defaults.", tradeId);
     }
     

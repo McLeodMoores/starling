@@ -47,7 +47,7 @@ import com.opengamma.web.analytics.formatting.TypeFormatter;
  */
 /* package */class SimpleAnalyticsView implements AnalyticsView {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(SimpleAnalyticsView.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(SimpleAnalyticsView.class);
   private static final Portfolio EMPTY_PORTFOLIO = new SimplePortfolio("", new SimplePortfolioNode(UniqueId.of("EMPTY", "EMPTY"), ""));
 
   private final ResultsCache _cache = new ResultsCache();
@@ -132,7 +132,7 @@ import com.opengamma.web.analytics.formatting.TypeFormatter;
 
   @Override
   public String viewCompilationFailed(Throwable t) {
-    s_logger.warn("View compilation failed, adding error {}", t);
+    LOGGER.warn("View compilation failed, adding error {}", t);
     return _errorManager.add(t);
   }
 
@@ -211,45 +211,45 @@ import com.opengamma.web.analytics.formatting.TypeFormatter;
   @Override
   public GridStructure getGridStructure(GridType gridType, int viewportId) {
     GridStructure gridStructure = getGrid(gridType).getViewport(viewportId).getGridStructure();
-    s_logger.debug("Viewport {} and view {} returning grid structure for the {} grid: {}", viewportId, _viewId, gridType, gridStructure);
+    LOGGER.debug("Viewport {} and view {} returning grid structure for the {} grid: {}", viewportId, _viewId, gridType, gridStructure);
     return gridStructure;
   }
 
   @Override
   public GridStructure getInitialGridStructure(GridType gridType) {
     GridStructure gridStructure = getGrid(gridType).getGridStructure();
-    s_logger.debug("View {} returning grid structure for the {} grid: {}", _viewId, gridType, gridStructure);
+    LOGGER.debug("View {} returning grid structure for the {} grid: {}", _viewId, gridType, gridStructure);
     return gridStructure;
   }
 
   @Override
   public boolean createViewport(int requestId, GridType gridType, int viewportId, String callbackId, String structureCallbackId, ViewportDefinition viewportDefinition) {
     boolean hasData = getGrid(gridType).createViewport(viewportId, callbackId, structureCallbackId, viewportDefinition, _cache);
-    s_logger.debug("View {} created viewport ID {} for the {} grid from {}", _viewId, viewportId, gridType, viewportDefinition);
+    LOGGER.debug("View {} created viewport ID {} for the {} grid from {}", _viewId, viewportId, gridType, viewportDefinition);
     return hasData;
   }
 
   @Override
   public String updateViewport(GridType gridType, int viewportId, ViewportDefinition viewportDefinition) {
-    s_logger.debug("View {} updating viewport {} for {} grid to {}", _viewId, viewportId, gridType, viewportDefinition);
+    LOGGER.debug("View {} updating viewport {} for {} grid to {}", _viewId, viewportId, gridType, viewportDefinition);
     return getGrid(gridType).updateViewport(viewportId, viewportDefinition, _cache);
   }
 
   @Override
   public void deleteViewport(GridType gridType, int viewportId) {
-    s_logger.debug("View {} deleting viewport {} from the {} grid", _viewId, viewportId, gridType);
+    LOGGER.debug("View {} deleting viewport {} from the {} grid", _viewId, viewportId, gridType);
     getGrid(gridType).deleteViewport(viewportId);
   }
 
   @Override
   public ViewportResults getData(GridType gridType, int viewportId) {
-    s_logger.debug("View {} getting data for viewport {} of the {} grid", _viewId, viewportId, gridType);
+    LOGGER.debug("View {} getting data for viewport {} of the {} grid", _viewId, viewportId, gridType);
     return getGrid(gridType).getData(viewportId);
   }
 
   @Override
   public void openDependencyGraph(int requestId, GridType gridType, int graphId, String callbackId, int row, int col) {
-    s_logger.debug("View {} opening dependency graph {} for cell ({}, {}) of the {} grid", _viewId, graphId, row, col, gridType);
+    LOGGER.debug("View {} opening dependency graph {} for cell ({}, {}) of the {} grid", _viewId, graphId, row, col, gridType);
     getGrid(gridType).openDependencyGraph(graphId, callbackId, row, col, _compiledViewDefinition, _viewportListener);
   }
 
@@ -260,46 +260,46 @@ import com.opengamma.web.analytics.formatting.TypeFormatter;
 
   @Override
   public void closeDependencyGraph(GridType gridType, int graphId) {
-    s_logger.debug("View {} closing dependency graph {} of the {} grid", _viewId, graphId, gridType);
+    LOGGER.debug("View {} closing dependency graph {} of the {} grid", _viewId, graphId, gridType);
     getGrid(gridType).closeDependencyGraph(graphId);
   }
 
   @Override
   public GridStructure getGridStructure(GridType gridType, int graphId, int viewportId) {
     DependencyGraphGridStructure gridStructure = getGrid(gridType).getGridStructure(graphId, viewportId);
-    s_logger.debug("Viewport {} and view {} returning grid structure for dependency graph {} of the {} grid: {}", viewportId, _viewId, graphId, gridType, gridStructure);
+    LOGGER.debug("Viewport {} and view {} returning grid structure for dependency graph {} of the {} grid: {}", viewportId, _viewId, graphId, gridType, gridStructure);
     return gridStructure;
   }
 
   @Override
   public GridStructure getInitialGridStructure(GridType gridType, int graphId) {
     DependencyGraphGridStructure gridStructure = getGrid(gridType).getGridStructure(graphId);
-    s_logger.debug("View {} returning grid structure for dependency graph {} of the {} grid: {}", _viewId, graphId, gridType, gridStructure);
+    LOGGER.debug("View {} returning grid structure for dependency graph {} of the {} grid: {}", _viewId, graphId, gridType, gridStructure);
     return gridStructure;
   }
 
   @Override
   public boolean createViewport(int requestId, GridType gridType, int graphId, int viewportId, String callbackId, String structureCallbackId, ViewportDefinition viewportDefinition) {
     boolean hasData = getGrid(gridType).createViewport(graphId, viewportId, callbackId, structureCallbackId, viewportDefinition, _cache);
-    s_logger.debug("View {} created viewport ID {} for dependency graph {} of the {} grid using {}", _viewId, viewportId, graphId, gridType, viewportDefinition);
+    LOGGER.debug("View {} created viewport ID {} for dependency graph {} of the {} grid using {}", _viewId, viewportId, graphId, gridType, viewportDefinition);
     return hasData;
   }
 
   @Override
   public String updateViewport(GridType gridType, int graphId, int viewportId, ViewportDefinition viewportDefinition) {
-    s_logger.debug("View {} updating viewport for dependency graph {} of the {} grid using {}", _viewId, graphId, gridType, viewportDefinition);
+    LOGGER.debug("View {} updating viewport for dependency graph {} of the {} grid using {}", _viewId, graphId, gridType, viewportDefinition);
     return getGrid(gridType).updateViewport(graphId, viewportId, viewportDefinition, _cache);
   }
 
   @Override
   public void deleteViewport(GridType gridType, int graphId, int viewportId) {
-    s_logger.debug("View {} deleting viewport {} from dependency graph {} of the {} grid", _viewId, viewportId, graphId, gridType);
+    LOGGER.debug("View {} deleting viewport {} from dependency graph {} of the {} grid", _viewId, viewportId, graphId, gridType);
     getGrid(gridType).deleteViewport(graphId, viewportId);
   }
 
   @Override
   public ViewportResults getData(GridType gridType, int graphId, int viewportId) {
-    s_logger.debug("View {} getting data for viewport {} of dependency graph {} of the {} grid", _viewId, viewportId, graphId, gridType);
+    LOGGER.debug("View {} getting data for viewport {} of dependency graph {} of the {} grid", _viewId, viewportId, graphId, gridType);
     return getGrid(gridType).getData(graphId, viewportId);
   }
 
@@ -345,7 +345,7 @@ import com.opengamma.web.analytics.formatting.TypeFormatter;
           }
         }
         List<String> ids = _portfolioGrid.updateEntities(_cache, entityIds);
-        s_logger.debug("Entity changed {}, firing updates for viewports {}", notification.getEntity().getUniqueId(), ids);
+        LOGGER.debug("Entity changed {}, firing updates for viewports {}", notification.getEntity().getUniqueId(), ids);
         return ids;
       }
     } else {

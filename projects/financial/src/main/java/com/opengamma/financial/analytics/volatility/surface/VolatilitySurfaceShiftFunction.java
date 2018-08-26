@@ -31,7 +31,7 @@ import com.opengamma.engine.value.ValueSpecification;
  */
 public class VolatilitySurfaceShiftFunction extends AbstractFunction.NonCompiledInvoker {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(VolatilitySurfaceShiftFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(VolatilitySurfaceShiftFunction.class);
 
   /**
    * Property to shift a volatility surface.
@@ -87,7 +87,7 @@ public class VolatilitySurfaceShiftFunction extends AbstractFunction.NonCompiled
       final double shiftAmount = Double.parseDouble(shift);
       volatilitySurface = volatilitySurface.withConstantMultiplicativeShift(shiftAmount);
     } catch (NumberFormatException e) {
-      s_logger.error("Volatility surface shift not valid - {}", shift);
+      LOGGER.error("Volatility surface shift not valid - {}", shift);
     }
     return Collections.singleton(new ComputedValue(new ValueSpecification(inputSpec.getValueName(), inputSpec.getTargetSpecification(), properties.get()), volatilitySurface));
   }

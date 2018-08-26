@@ -54,7 +54,7 @@ import com.opengamma.util.tuple.ObjectsPair;
 public class PortfolioZipFormatExamplesGenerator extends AbstractTool<ToolContext> {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(PortfolioZipFormatExamplesGenerator.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(PortfolioZipFormatExamplesGenerator.class);
   /** File name option flag */
   private static final String FILE_NAME_OPT = "f";
   /** Write option flag */
@@ -109,24 +109,24 @@ public class PortfolioZipFormatExamplesGenerator extends AbstractTool<ToolContex
       if (UNSUPPORTED_SECURITY_TYPES.contains(securityType)) {
         continue;
       }
-      s_logger.info("Processing security type " + securityType);
+      LOGGER.info("Processing security type " + securityType);
       SecuritySearchRequest searchRequest = new SecuritySearchRequest();
       searchRequest.setName("*");
       searchRequest.setSecurityType(securityType);
       searchRequest.setPagingRequest(PagingRequest.FIRST_PAGE);
       SecuritySearchResult search = securityMaster.search(searchRequest);
-      s_logger.info("Search returned " + search.getPaging().getTotalItems() + " securities");
+      LOGGER.info("Search returned " + search.getPaging().getTotalItems() + " securities");
       List<ManageableSecurity> securities = search.getSecurities();
       int count = 0;
       for (ManageableSecurity security : securities) {
         if (security == null) {
-          s_logger.error("null security of type " + securityType);
+          LOGGER.error("null security of type " + securityType);
           continue;
         }
         count++;
         positions.add(createPosition(security, includeTrades));
         if (count == 3) {
-          s_logger.info("Reached count of 3");
+          LOGGER.info("Reached count of 3");
           break;
         }
       }
@@ -169,18 +169,18 @@ public class PortfolioZipFormatExamplesGenerator extends AbstractTool<ToolContex
               return ObjectsPair.of(position,
                   new ManageableSecurity[] {(ManageableSecurity) security, (ManageableSecurity) underlying });
             } else {
-              s_logger.warn("Could not resolve underlying " + id + " for security " + security.getName());
+              LOGGER.warn("Could not resolve underlying " + id + " for security " + security.getName());
             }
           } catch (Throwable e) {
             // Underlying not found
-            s_logger.warn("Error trying to resolve underlying " + id + " for security " + security.getName());
+            LOGGER.warn("Error trying to resolve underlying " + id + " for security " + security.getName());
           }
         }
         return ObjectsPair.of(position,
             new ManageableSecurity[] {(ManageableSecurity) security });
 
       } else {
-        s_logger.warn("Could not resolve security relating to position " + position.getName());
+        LOGGER.warn("Could not resolve security relating to position " + position.getName());
         return ObjectsPair.of(null, null);
       }
     }

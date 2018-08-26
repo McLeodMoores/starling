@@ -64,7 +64,7 @@ public class DbBeanMaster<D extends AbstractDocument, V extends Bean>
     extends AbstractDocumentDbMaster<D> {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(DbBeanMaster.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(DbBeanMaster.class);
 
   /**
    * The database table prefix.
@@ -174,7 +174,7 @@ public class DbBeanMaster<D extends AbstractDocument, V extends Bean>
     ArgumentChecker.notNull(request, "request");
     ArgumentChecker.notNull(request.getPagingRequest(), "request.pagingRequest");
     ArgumentChecker.notNull(request.getVersionCorrection(), "request.versionCorrection");
-    s_logger.debug("search {}", request);
+    LOGGER.debug("search {}", request);
     
     final VersionCorrection vc = request.getVersionCorrection().withLatestFixed(now());
     result.setVersionCorrection(vc);

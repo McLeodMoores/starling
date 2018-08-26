@@ -37,20 +37,20 @@ public class FunctionInputsImplTest {
       .get());
   private static final ComputedValue VALUE1 = new ComputedValue(SPEC1, "1");
   private static final ComputedValue VALUE2 = new ComputedValue(SPEC2, "2");
-  private static final ComputationTargetSpecificationResolver s_resolver = new DefaultComputationTargetSpecificationResolver();
+  private static final ComputationTargetSpecificationResolver RESOLVER = new DefaultComputationTargetSpecificationResolver();
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void nullValue() {
-    new FunctionInputsImpl(s_resolver.atVersionCorrection(VersionCorrection.LATEST), (ComputedValue) null);
+    new FunctionInputsImpl(RESOLVER.atVersionCorrection(VersionCorrection.LATEST), (ComputedValue) null);
   }
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void cyclicalValue() {
-    new FunctionInputsImpl(s_resolver.atVersionCorrection(VersionCorrection.LATEST), new ComputedValue(SPEC1, new ComputedValue(SPEC1, "")));
+    new FunctionInputsImpl(RESOLVER.atVersionCorrection(VersionCorrection.LATEST), new ComputedValue(SPEC1, new ComputedValue(SPEC1, "")));
   }
 
   public void getAll() {
-    FunctionInputsImpl inputs = new FunctionInputsImpl(s_resolver.atVersionCorrection(VersionCorrection.LATEST), Arrays.asList(VALUE1, VALUE2));
+    FunctionInputsImpl inputs = new FunctionInputsImpl(RESOLVER.atVersionCorrection(VersionCorrection.LATEST), Arrays.asList(VALUE1, VALUE2));
 
     Collection<ComputedValue> values = inputs.getAllValues();
     assertNotNull(values);
@@ -60,7 +60,7 @@ public class FunctionInputsImplTest {
   }
 
   public void getByName() {
-    FunctionInputsImpl inputs = new FunctionInputsImpl(s_resolver.atVersionCorrection(VersionCorrection.LATEST), Arrays.asList(VALUE1, VALUE2));
+    FunctionInputsImpl inputs = new FunctionInputsImpl(RESOLVER.atVersionCorrection(VersionCorrection.LATEST), Arrays.asList(VALUE1, VALUE2));
 
     assertEquals("1", inputs.getValue("foo-1"));
     assertEquals("2", inputs.getValue("foo-2"));
@@ -68,7 +68,7 @@ public class FunctionInputsImplTest {
   }
 
   public void getBySpec() {
-    FunctionInputsImpl inputs = new FunctionInputsImpl(s_resolver.atVersionCorrection(VersionCorrection.LATEST), Arrays.asList(VALUE1, VALUE2));
+    FunctionInputsImpl inputs = new FunctionInputsImpl(RESOLVER.atVersionCorrection(VersionCorrection.LATEST), Arrays.asList(VALUE1, VALUE2));
 
     assertEquals("1", inputs.getValue(REQ1));
     assertEquals("2", inputs.getValue(REQ2));

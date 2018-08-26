@@ -32,7 +32,7 @@ import org.apache.commons.lang.builder.ToStringStyle;
  */
 public final class VariantType implements WildcardType {
 
-  private static final Type[] s_lower = new Type[0];
+  private static final Type[] LOWER = new Type[0];
 
   private final Type _upper;
   private final Type[] _logicalTypes;
@@ -144,7 +144,7 @@ public final class VariantType implements WildcardType {
 
   @Override
   public Type[] getLowerBounds() {
-    return s_lower;
+    return LOWER;
   }
 
   public Type[] getLogicalTypes() {

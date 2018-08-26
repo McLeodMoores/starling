@@ -29,7 +29,7 @@ import com.opengamma.util.ArgumentChecker;
 
 public class CurveFixingTSLoader {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(CurveFixingTSLoader.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(CurveFixingTSLoader.class);
   private final NonVersionedRedisHistoricalTimeSeriesSource _timeSeriesSource;
 
   public CurveFixingTSLoader(NonVersionedRedisHistoricalTimeSeriesSource timeSeriesSource) {
@@ -50,11 +50,11 @@ public class CurveFixingTSLoader {
   }
 
   public void loadCurveFixingCSVFile(File file) {
-    s_logger.info("Loading from file {}", file.getAbsolutePath());
+    LOGGER.info("Loading from file {}", file.getAbsolutePath());
     try (InputStream stream = new BufferedInputStream(new FileInputStream(file))) {
       loadCurveFixingCSVFile(stream);
     } catch (IOException ioe) {
-      s_logger.error("Unable to open file " + file, ioe);
+      LOGGER.error("Unable to open file " + file, ioe);
       throw new OpenGammaRuntimeException("Unable to open file " + file, ioe);
     }
   }
@@ -72,18 +72,18 @@ public class CurveFixingTSLoader {
     while ((currLine = csvReader.readNext()) != null) {
       lineNum++;
       if ((currLine.length == 0) || currLine[0].startsWith("#")) {
-        s_logger.debug("Empty line on {}", lineNum);
+        LOGGER.debug("Empty line on {}", lineNum);
       } else if (currLine.length != 4) {
-        s_logger.error("Invalid number of fields ({}) in CSV on line {}", currLine.length, lineNum);
+        LOGGER.error("Invalid number of fields ({}) in CSV on line {}", currLine.length, lineNum);
       } else {
         final String curveName = StringUtils.trimToNull(currLine[0]);
         if (curveName == null) {
-          s_logger.error("Invalid curve name in CSV on line {}", lineNum);
+          LOGGER.error("Invalid curve name in CSV on line {}", lineNum);
           continue;
         }
         final String tenor = StringUtils.trimToNull(currLine[1]);
         if (tenor == null) {
-          s_logger.error("Invalid tenor: {} in CSV on line {}", currLine[1], lineNum);
+          LOGGER.error("Invalid tenor: {} in CSV on line {}", currLine[1], lineNum);
           continue;
         }
         final String dateStr = StringUtils.trimToNull(currLine[2]);
@@ -91,7 +91,7 @@ public class CurveFixingTSLoader {
         try {
           date = LocalDate.parse(dateStr);
         } catch (DateTimeParseException ex) {
-          s_logger.error("Invalid date format in CSV on line {}", lineNum);
+          LOGGER.error("Invalid date format in CSV on line {}", lineNum);
           continue;
         }
         final String valueStr = StringUtils.trimToNull(currLine[3]);
@@ -99,7 +99,7 @@ public class CurveFixingTSLoader {
         try {
           value = Double.parseDouble(valueStr);
         } catch (NumberFormatException ex) {
-          s_logger.error("Invalid amount in CSV on line {}", lineNum);
+          LOGGER.error("Invalid amount in CSV on line {}", lineNum);
           continue;
         }
         String idName = String.format("%s-%s", curveName, tenor);
@@ -113,9 +113,9 @@ public class CurveFixingTSLoader {
         tsBuilder.put(date, value);
       }
     }
-    s_logger.info("Populating {} time series for fixing data", timeseriesMap.size());
+    LOGGER.info("Populating {} time series for fixing data", timeseriesMap.size());
     for (Entry<UniqueId, LocalDateDoubleTimeSeriesBuilder> entry : timeseriesMap.entrySet()) {
-      s_logger.info("Fixing series {} has {} elements", entry.getKey(), entry.getValue().size());
+      LOGGER.info("Fixing series {} has {} elements", entry.getKey(), entry.getValue().size());
       getTimeSeriesSource().updateTimeSeries(entry.getKey(), entry.getValue().build());
     }
   }

@@ -32,7 +32,7 @@ import com.opengamma.util.ArgumentChecker;
  */
 public class EquityForwardCurveYieldCurveImpliedDefaults extends DefaultPropertyFunction {
   /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(EquityForwardCurveYieldCurveImpliedDefaults.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(EquityForwardCurveYieldCurveImpliedDefaults.class);
   /** The value requirements for which these defaults apply */
   private static final String[] VALUE_REQUIREMENTS = new String[] {
     ValueRequirementNames.FORWARD_CURVE,
@@ -47,7 +47,7 @@ public class EquityForwardCurveYieldCurveImpliedDefaults extends DefaultProperty
   private final String _dividendType;
   /** The possible schemes of the primitive target */
   /** The supported schemes */
-  private static final Set<ExternalScheme> s_validSchemes = ImmutableSet.of(ExternalSchemes.BLOOMBERG_TICKER, ExternalSchemes.BLOOMBERG_TICKER_WEAK, ExternalSchemes.ACTIVFEED_TICKER);
+  private static final Set<ExternalScheme> VALID_SCHEMES = ImmutableSet.of(ExternalSchemes.BLOOMBERG_TICKER, ExternalSchemes.BLOOMBERG_TICKER_WEAK, ExternalSchemes.ACTIVFEED_TICKER);
 
   /**
    * @param priority The priority, not null
@@ -72,7 +72,7 @@ public class EquityForwardCurveYieldCurveImpliedDefaults extends DefaultProperty
   public boolean canApplyTo(final FunctionCompilationContext context, final ComputationTarget target) {
     if (target.getValue() instanceof ExternalIdentifiable) {
       final ExternalId identifier = ((ExternalIdentifiable) target.getValue()).getExternalId();
-      return s_validSchemes.contains(identifier.getScheme());
+      return VALID_SCHEMES.contains(identifier.getScheme());
     }
     return false;
   }
@@ -111,7 +111,7 @@ public class EquityForwardCurveYieldCurveImpliedDefaults extends DefaultProperty
       case ForwardCurveValuePropertyNames.PROPERTY_FORWARD_CURVE_CALCULATION_METHOD:
         return  Collections.singleton(ForwardCurveValuePropertyNames.PROPERTY_YIELD_CURVE_IMPLIED_METHOD);
       default:
-        s_logger.error("Could not find default value for {} in this function", propertyName);
+        LOGGER.error("Could not find default value for {} in this function", propertyName);
         return null;
     }
   }

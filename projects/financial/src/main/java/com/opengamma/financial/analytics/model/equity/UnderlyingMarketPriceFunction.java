@@ -41,7 +41,7 @@ public class UnderlyingMarketPriceFunction extends AbstractFunction.NonCompiledI
   /** Determines whether a security is market-traded */
   private static MarketSecurityVisitor s_judgeOfMarketSecurities = new MarketSecurityVisitor();
   /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(UnderlyingMarketPriceFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(UnderlyingMarketPriceFunction.class);
 
   @Override
   public ComputationTargetType getTargetType() {
@@ -95,7 +95,7 @@ public class UnderlyingMarketPriceFunction extends AbstractFunction.NonCompiledI
     if (underlyingId != null) {
       return Collections.singleton(new ValueRequirement(MarketDataRequirementNames.MARKET_VALUE, ComputationTargetType.SECURITY, underlyingId));
     }
-    s_logger.info("No underlying found for {}. The security itself will be used as its own underlying", security.getName());
+    LOGGER.info("No underlying found for {}. The security itself will be used as its own underlying", security.getName());
     return Collections.singleton(new ValueRequirement(MarketDataRequirementNames.MARKET_VALUE, ComputationTargetType.SECURITY, security.getUniqueId()));
   }
 

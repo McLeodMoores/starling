@@ -32,7 +32,7 @@ import com.opengamma.util.ArgumentChecker;
 public class EntitlementServer implements FudgeRequestReceiver {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(EntitlementServer.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(EntitlementServer.class);
 
   /**
    * The underlying implementation.
@@ -55,7 +55,7 @@ public class EntitlementServer implements FudgeRequestReceiver {
   public FudgeMsg requestReceived(FudgeDeserializer deserializer, FudgeMsgEnvelope requestEnvelope) {
     FudgeMsg requestFudgeMsg = requestEnvelope.getMessage();
     EntitlementRequest entitlementRequest = EntitlementRequest.fromFudgeMsg(deserializer, requestFudgeMsg);
-    s_logger.debug("Received entitlement request {}", entitlementRequest);
+    LOGGER.debug("Received entitlement request {}", entitlementRequest);
     
     Map<LiveDataSpecification, Boolean> isEntitledMap = _delegate.isEntitled(entitlementRequest.getUser(), entitlementRequest.getLiveDataSpecifications());
     

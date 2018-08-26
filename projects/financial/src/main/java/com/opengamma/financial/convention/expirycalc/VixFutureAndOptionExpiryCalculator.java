@@ -33,8 +33,8 @@ public final class VixFutureAndOptionExpiryCalculator implements ExchangeTradedI
 
   private static final int N_SERIAL_EXPIRIES = 9;
   private static final Set<Month> QUARTERLY_CYCLE_MONTHS = EnumSet.of(Month.FEBRUARY, Month.MAY, Month.AUGUST, Month.NOVEMBER); 
-  private static final NextQuarterAdjuster s_nextQuarterAdjuster = new NextQuarterAdjuster(QUARTERLY_CYCLE_MONTHS);
-  private static final TemporalAdjuster s_dayOfMonthAdjuster = TemporalAdjusters.dayOfWeekInMonth(3, DayOfWeek.FRIDAY);
+  private static final NextQuarterAdjuster NEXT_QUARTER_ADJUSTER = new NextQuarterAdjuster(QUARTERLY_CYCLE_MONTHS);
+  private static final TemporalAdjuster DAY_OF_MONTH_ADJUSTER = TemporalAdjusters.dayOfWeekInMonth(3, DayOfWeek.FRIDAY);
 
   private static final VixFutureAndOptionExpiryCalculator INSTANCE = new VixFutureAndOptionExpiryCalculator();
   
@@ -98,7 +98,7 @@ public final class VixFutureAndOptionExpiryCalculator implements ExchangeTradedI
   // Return expiryDate that is 30 days before the 3rd Friday (or previous good day if holiday) of month following date
   private LocalDate getNextSerialExpiry(final LocalDate date, final Calendar holidayCalendar) {
     // Compute the expiry of valuationDate's month
-    LocalDate following3rdFriday = date.plusMonths(1).with(s_dayOfMonthAdjuster); // 3rd Friday of following month
+    LocalDate following3rdFriday = date.plusMonths(1).with(DAY_OF_MONTH_ADJUSTER); // 3rd Friday of following month
     while (!holidayCalendar.isWorkingDay(following3rdFriday)) {
       following3rdFriday = following3rdFriday.minusDays(1); // previous good day
     }
@@ -108,7 +108,7 @@ public final class VixFutureAndOptionExpiryCalculator implements ExchangeTradedI
     // First find the nth quarter after the lastSerialExpiry
     LocalDate nthExpiryMonth = lastSerialExpiry;
     for (int n = nthExpiryAfterSerialContracts; n > 0; n--) {
-      nthExpiryMonth = nthExpiryMonth.with(s_nextQuarterAdjuster);
+      nthExpiryMonth = nthExpiryMonth.with(NEXT_QUARTER_ADJUSTER);
     }
     // Then find the expiry date in that month
     return getNextSerialExpiry(nthExpiryMonth, holidayCalendar);

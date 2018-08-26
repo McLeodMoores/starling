@@ -28,7 +28,7 @@ import com.opengamma.util.tuple.Triple;
  */
 /* package */abstract class FunctionIterationStep extends ResolveTask.State {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(FunctionIterationStep.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(FunctionIterationStep.class);
 
   public abstract static class IterationBaseStep extends ResolveTask.State {
 
@@ -52,22 +52,22 @@ import com.opengamma.util.tuple.Triple;
         final ResolvedValue existingValue = context.getProduction(resolvedOutput);
         if (existingValue == null) {
           // We're going to work on producing
-          s_logger.debug("Creating producer for {}", resolvedOutput);
+          LOGGER.debug("Creating producer for {}", resolvedOutput);
           setRunnableTaskState(new FunctionApplicationStep(getTask(), this, resolvedFunction, resolvedOutput), context);
         } else {
           // Value has already been produced
-          s_logger.debug("Using existing production of {}", resolvedOutput);
+          LOGGER.debug("Using existing production of {}", resolvedOutput);
           final ResolveTask.State state = new ExistingProductionStep(getTask(), this, resolvedFunction, resolvedOutput);
           if (setTaskState(state)) {
             if (!pushResult(context, existingValue, false)) {
-              s_logger.debug("Production not accepted - rescheduling");
+              LOGGER.debug("Production not accepted - rescheduling");
               state.setRunnableTaskState(this, context);
             }
           }
         }
       } else {
         // Other tasks are working on it, or have already worked on it
-        s_logger.debug("Delegating to existing producers for {}", resolvedOutput);
+        LOGGER.debug("Delegating to existing producers for {}", resolvedOutput);
         final ExistingResolutionsStep state = new ExistingResolutionsStep(getTask(), this, resolvedFunction, resolvedOutput);
         if (setTaskState(state)) {
           ResolvedValueProducer singleTask = null;
@@ -103,7 +103,7 @@ import com.opengamma.util.tuple.Triple;
               singleTask.release(context);
             } else {
               // Other threads haven't progressed to completion - try and produce the value ourselves
-              s_logger.debug("No suitable delegate found - creating producer");
+              LOGGER.debug("No suitable delegate found - creating producer");
               state.setRunnableTaskState(new FunctionApplicationStep(getTask(), this, resolvedFunction, resolvedOutput), context);
             }
           }

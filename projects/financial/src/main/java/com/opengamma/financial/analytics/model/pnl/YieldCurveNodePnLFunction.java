@@ -79,7 +79,7 @@ import com.opengamma.util.money.UnorderedCurrencyPair;
  */
 public class YieldCurveNodePnLFunction extends AbstractFunction.NonCompiledInvoker {
   /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(YieldCurveNodePnLFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(YieldCurveNodePnLFunction.class);
   // Please see http://jira.opengamma.com/browse/PLAT-2330 for information about this constant.
   /**
    * Property name of the contribution to the P&L (e.g. yield curve, FX rate)
@@ -224,7 +224,7 @@ public class YieldCurveNodePnLFunction extends AbstractFunction.NonCompiledInvok
     final String curveCalculationConfigName = curveCalculationConfigNames.iterator().next();
     final MultiCurveCalculationConfig curveCalculationConfig = _curveCalculationConfigSource.getConfig(curveCalculationConfigName);
     if (curveCalculationConfig == null) {
-      s_logger.error("Could not find curve calculation configuration named " + curveCalculationConfigName);
+      LOGGER.error("Could not find curve calculation configuration named " + curveCalculationConfigName);
       return null;
     }
     final Set<String> periodNames = constraints.getValues(ValuePropertyNames.SAMPLING_PERIOD);
@@ -242,7 +242,7 @@ public class YieldCurveNodePnLFunction extends AbstractFunction.NonCompiledInvok
     }
     final String[] yieldCurveNames = curveCalculationConfig.getYieldCurveNames();
     if (yieldCurveNames.length == 0) {
-      s_logger.error("Curve calculation configuration called {} did not contain any yield curve names", curveCalculationConfigName);
+      LOGGER.error("Curve calculation configuration called {} did not contain any yield curve names", curveCalculationConfigName);
       return null;
     }
     final Set<ValueRequirement> requirements = new HashSet<>();
@@ -293,7 +293,7 @@ public class YieldCurveNodePnLFunction extends AbstractFunction.NonCompiledInvok
       }
     }
     if (curveNames.isEmpty()) {
-      s_logger.error("Curves names not specified in any of " + inputs);
+      LOGGER.error("Curves names not specified in any of " + inputs);
       return null;
     }
     final ValueProperties properties = createValueProperties().withAny(ValuePropertyNames.CURRENCY).withAny(ValuePropertyNames.CURVE_CALCULATION_CONFIG)

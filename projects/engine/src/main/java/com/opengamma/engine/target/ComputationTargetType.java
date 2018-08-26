@@ -43,7 +43,7 @@ public abstract class ComputationTargetType implements Serializable {
   /**
    * Try to keep the instances unique. This reduces the operating memory footprint.
    */
-  private static final ConcurrentMap<?, ?> s_computationTargetTypes = new ConcurrentHashMap<Object, Object>() {
+  private static final ConcurrentMap<?, ?> COMPUTATION_TARGET_TYPES = new ConcurrentHashMap<Object, Object>() {
 
     private static final long serialVersionUID = 1L;
 
@@ -66,7 +66,7 @@ public abstract class ComputationTargetType implements Serializable {
    * A map of classes to the computation target types. This is to optimize the {@link #of(Class)} method for common cases used during target resolution. To modify the map, use a copy-and-replace
    * approach.
    */
-  private static final AtomicReference<Map<Class<?>, ComputationTargetType>> s_classTypes = new AtomicReference<Map<Class<?>, ComputationTargetType>>(new HashMap<Class<?>, ComputationTargetType>());
+  private static final AtomicReference<Map<Class<?>, ComputationTargetType>> CLASS_TYPES = new AtomicReference<Map<Class<?>, ComputationTargetType>>(new HashMap<Class<?>, ComputationTargetType>());
 
   /**
    * A full portfolio structure. This will seldom be needed for calculations - the root node is usually more important from an aggregation perspective.
@@ -149,7 +149,7 @@ public abstract class ComputationTargetType implements Serializable {
   private static <T extends UniqueIdentifiable> ComputationTargetType defaultType(final Class<T> clazz, final String name) {
     final ComputationTargetType type = of(clazz, name, true);
     // This is safe; we only get called like this during class initialization
-    s_classTypes.get().put(clazz, type);
+    CLASS_TYPES.get().put(clazz, type);
     return type;
   }
 
@@ -162,11 +162,11 @@ public abstract class ComputationTargetType implements Serializable {
   }
 
   private static ComputationTargetType of(final Class<? extends UniqueIdentifiable> clazz, final String name, final boolean nameWellKnown) {
-    return (ComputationTargetType) s_computationTargetTypes.get(new ClassComputationTargetType(clazz, name, nameWellKnown));
+    return (ComputationTargetType) COMPUTATION_TARGET_TYPES.get(new ClassComputationTargetType(clazz, name, nameWellKnown));
   }
 
   public static <T extends UniqueIdentifiable> ComputationTargetType of(final Class<T> clazz) {
-    Map<Class<?>, ComputationTargetType> cache = s_classTypes.get();
+    Map<Class<?>, ComputationTargetType> cache = CLASS_TYPES.get();
     ComputationTargetType type = cache.get(clazz);
     if (type != null) {
       return type;
@@ -175,7 +175,7 @@ public abstract class ComputationTargetType implements Serializable {
     type = of(clazz, clazz.getSimpleName(), false);
     final Map<Class<?>, ComputationTargetType> updatedCache = new HashMap<Class<?>, ComputationTargetType>(cache);
     updatedCache.put(clazz, type);
-    s_classTypes.compareAndSet(cache, updatedCache);
+    CLASS_TYPES.compareAndSet(cache, updatedCache);
     return type;
   }
 
@@ -185,7 +185,7 @@ public abstract class ComputationTargetType implements Serializable {
 
   public ComputationTargetType containing(final ComputationTargetType inner) {
     ArgumentChecker.notNull(inner, "inner");
-    return (ComputationTargetType) s_computationTargetTypes.get(new NestedComputationTargetType(this, inner));
+    return (ComputationTargetType) COMPUTATION_TARGET_TYPES.get(new NestedComputationTargetType(this, inner));
   }
 
   public ComputationTargetType or(final Class<? extends UniqueIdentifiable> clazz) {
@@ -200,7 +200,7 @@ public abstract class ComputationTargetType implements Serializable {
    */
   public ComputationTargetType or(final ComputationTargetType alternative) {
     ArgumentChecker.notNull(alternative, "alternative");
-    return (ComputationTargetType) s_computationTargetTypes.get(new MultipleComputationTargetType(this, alternative));
+    return (ComputationTargetType) COMPUTATION_TARGET_TYPES.get(new MultipleComputationTargetType(this, alternative));
   }
 
   /**
@@ -213,7 +213,7 @@ public abstract class ComputationTargetType implements Serializable {
    */
   public static ComputationTargetType multiple(final ComputationTargetType... alternatives) {
     ArgumentChecker.notNull(alternatives, "alternatives");
-    return (ComputationTargetType) s_computationTargetTypes.get(new MultipleComputationTargetType(alternatives));
+    return (ComputationTargetType) COMPUTATION_TARGET_TYPES.get(new MultipleComputationTargetType(alternatives));
   }
 
   /**
@@ -380,7 +380,7 @@ public abstract class ComputationTargetType implements Serializable {
   public abstract boolean isTargetType(Class<? extends UniqueIdentifiable> type);
 
   protected Object readResolve() throws ObjectStreamException {
-    return s_computationTargetTypes.get(this);
+    return COMPUTATION_TARGET_TYPES.get(this);
   }
 
 }

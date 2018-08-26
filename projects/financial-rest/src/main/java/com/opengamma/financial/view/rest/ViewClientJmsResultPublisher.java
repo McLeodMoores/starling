@@ -36,7 +36,7 @@ import com.opengamma.util.jms.JmsConnector;
 public class ViewClientJmsResultPublisher extends AbstractJmsResultPublisher implements ViewResultListener  {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(ViewClientJmsResultPublisher.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ViewClientJmsResultPublisher.class);
 
   /**
    * The view client.
@@ -58,13 +58,13 @@ public class ViewClientJmsResultPublisher extends AbstractJmsResultPublisher imp
   //-------------------------------------------------------------------------
   @Override
   protected void startListener() {
-    s_logger.debug("Setting listener {} on view client {}'s results", this, _viewClient);
+    LOGGER.debug("Setting listener {} on view client {}'s results", this, _viewClient);
     _viewClient.setResultListener(this);
   }
 
   @Override
   protected void stopListener() {
-    s_logger.debug("Removing listener {} on view client {}'s results", this, _viewClient);
+    LOGGER.debug("Removing listener {} on view client {}'s results", this, _viewClient);
     _viewClient.setResultListener(null);
   }
 

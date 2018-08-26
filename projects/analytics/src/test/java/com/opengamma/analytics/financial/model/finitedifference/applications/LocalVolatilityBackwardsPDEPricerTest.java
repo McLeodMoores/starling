@@ -63,15 +63,15 @@ public class LocalVolatilityBackwardsPDEPricerTest {
 
     final Function1D<Double, Double> volTS = new Function1D<Double, Double>() {
 
-      private final static double a = -0.1;
-      private final static double b = 0.3;
-      private final static double c = 0.4;
-      private final static double d = 0.3;
+      private final static double A = -0.1;
+      private final static double B = 0.3;
+      private final static double C = 0.4;
+      private final static double D = 0.3;
 
       @Override
       public Double evaluate(final Double t) {
         final double tau = T - t;
-        return (a + b * tau) * Math.exp(-c * tau) + d;
+        return (A + B * tau) * Math.exp(-C * tau) + D;
       }
     };
 

@@ -21,7 +21,7 @@ import com.opengamma.util.ArgumentChecker;
     description = "CogdaRecordChunker attributes and operations that can be managed via JMX"
     )
 public class CogdaRecordChunkerMBean {
-  private static final Logger s_logger = LoggerFactory.getLogger(CogdaRecordChunkerMBean.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(CogdaRecordChunkerMBean.class);
   private final CogdaRecordChunker _chunker;
   
   public CogdaRecordChunkerMBean(CogdaRecordChunker chunker) {
@@ -42,7 +42,7 @@ public class CogdaRecordChunkerMBean {
     try {
       return getChunker().getNumActiveSymbols();
     } catch (RuntimeException e) {
-      s_logger.error("getNumActiveSymbols() failed", e);
+      LOGGER.error("getNumActiveSymbols() failed", e);
       throw new RuntimeException(e.getMessage());
     }
   }
@@ -52,7 +52,7 @@ public class CogdaRecordChunkerMBean {
     try {
       return getChunker().getAllSymbols();
     } catch (RuntimeException e) {
-      s_logger.error("getAllSymbols() failed", e);
+      LOGGER.error("getAllSymbols() failed", e);
       throw new RuntimeException(e.getMessage());
     }
   }
@@ -62,7 +62,7 @@ public class CogdaRecordChunkerMBean {
     try {
       return getChunker().getRemoteServerConnectionName();
     } catch (RuntimeException e) {
-      s_logger.error("getRemoteServerConnectionName() failed", e);
+      LOGGER.error("getRemoteServerConnectionName() failed", e);
       throw new RuntimeException(e.getMessage());
     }
   }

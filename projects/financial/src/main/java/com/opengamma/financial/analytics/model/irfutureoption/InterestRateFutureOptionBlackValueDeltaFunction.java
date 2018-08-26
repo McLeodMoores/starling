@@ -37,7 +37,7 @@ import com.opengamma.financial.security.option.IRFutureOptionSecurity;
 @Deprecated
 public class InterestRateFutureOptionBlackValueDeltaFunction extends InterestRateFutureOptionBlackFunction {
   /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(InterestRateFutureOptionBlackValueDeltaFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(InterestRateFutureOptionBlackValueDeltaFunction.class);
 
   /**
    * Sets the value requirement name to {@link ValueRequirementNames#VALUE_DELTA}
@@ -54,7 +54,7 @@ public class InterestRateFutureOptionBlackValueDeltaFunction extends InterestRat
     if (scale != null) {
       // changed because want to use a default directly in the function
       if (scale.size() != 1) {
-        s_logger.info("Could not find {} requirement. Looking for a default..", ValuePropertyNames.SCALE);
+        LOGGER.info("Could not find {} requirement. Looking for a default..", ValuePropertyNames.SCALE);
         return null;
       }
     }

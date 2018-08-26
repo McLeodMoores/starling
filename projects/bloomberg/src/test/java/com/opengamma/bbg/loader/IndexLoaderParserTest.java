@@ -106,7 +106,7 @@ import com.opengamma.util.time.Tenor;
 @Test(groups = TestGroup.UNIT, singleThreaded = true)
 public class IndexLoaderParserTest {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(IndexLoaderParserTest.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(IndexLoaderParserTest.class);
 
   @Test
   public void testMonths() {

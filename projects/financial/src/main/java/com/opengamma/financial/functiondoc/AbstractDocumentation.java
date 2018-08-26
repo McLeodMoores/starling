@@ -50,7 +50,7 @@ import com.opengamma.util.tuple.Pairs;
  */
 public abstract class AbstractDocumentation implements Runnable {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(AbstractDocumentation.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(AbstractDocumentation.class);
   private static final int MAX_SECURITIES_PER_TYPE = 20;
   private static final int MAX_PROPERTY_EXAMPLES = 5;
 
@@ -197,9 +197,9 @@ public abstract class AbstractDocumentation implements Runnable {
       filtered = new PortfolioFilter(_securityTypePortfolioFilter).filter(portfolio);
     }
     if (filtered.getRootNode().getChildNodes().isEmpty() && filtered.getRootNode().getPositions().isEmpty()) {
-      s_logger.debug("Ignoring {} ({})", portfolio.getName(), portfolio.getUniqueId());
+      LOGGER.debug("Ignoring {} ({})", portfolio.getName(), portfolio.getUniqueId());
     } else {
-      s_logger.info("Calculating available outputs from {} ({})", portfolio.getName(), portfolio.getUniqueId());
+      LOGGER.info("Calculating available outputs from {} ({})", portfolio.getName(), portfolio.getUniqueId());
       final AvailableOutputs outputs = new AvailablePortfolioOutputs(filtered, getFunctionRepository(), getFunctionExclusionGroups(), getMarketDataAvailability(), null);
       synchronized (_availableOutputsBySecurityType) {
         for (final AvailableOutput output : outputs.getOutputs()) {
@@ -438,7 +438,7 @@ public abstract class AbstractDocumentation implements Runnable {
         }
         final int eq = s.indexOf('=');
         if (eq < 0) {
-          s_logger.error("Invalid line {} in {}", line, path);
+          LOGGER.error("Invalid line {} in {}", line, path);
         } else {
           final String k = s.substring(0, eq).trim();
           final String v = s.substring(eq + 1).trim();
@@ -475,7 +475,7 @@ public abstract class AbstractDocumentation implements Runnable {
       for (final ValueRequirementInfo info : _valueRequirementByCategory.get(category)) {
         sb.append("| ").append(info.getName()).append(" | ").append(info.getSymbol()).append(" | ");
         if (info.getJavadoc().startsWith("TODO")) {
-          s_logger.error("Missing javadoc for " + info.getSymbol());
+          LOGGER.error("Missing javadoc for " + info.getSymbol());
           sb.append("|\n");
         } else {
           final int dot = info.getJavadoc().indexOf('.');
@@ -561,7 +561,7 @@ public abstract class AbstractDocumentation implements Runnable {
         // TODO: construct links to any additional data that is specific to this asset class as the javadoc is the generic
         // blob from ValueRequirementNames
       } else {
-        s_logger.error("No value requirement info for {}", valueName);
+        LOGGER.error("No value requirement info for {}", valueName);
       }
       sbTable.append("| [").append(valueName).append("|#").append(valueName.replace(" ", "")).append("] | ");
       final Map<String, Set<String>> propertyValues = new HashMap<String, Set<String>>();
@@ -607,7 +607,7 @@ public abstract class AbstractDocumentation implements Runnable {
           }
         }
         if (s != null) {
-          s_logger.warn("No property description for {}", s);
+          LOGGER.warn("No property description for {}", s);
           incrementAndGet(propertyName, _undocumentedProperties);
         }
         final Set<String> exampleValues = propertyValues.get(propertyName);
@@ -700,7 +700,7 @@ public abstract class AbstractDocumentation implements Runnable {
       }
     });
     for (final Map.Entry<String, AtomicInteger> property : properties) {
-      s_logger.error("No property description for {} ({} times)", property.getKey(), property.getValue());
+      LOGGER.error("No property description for {} ({} times)", property.getKey(), property.getValue());
     }
   }
 
@@ -708,14 +708,14 @@ public abstract class AbstractDocumentation implements Runnable {
     int i = 0;
     for (final Pair<Pattern, String> entry : _valuePropertyDescription) {
       if (_valuePropertyDescriptionUsed[i++] == 0) {
-        s_logger.warn("Entry {} never used ({})", entry.getFirst().pattern(), entry.getSecond());
+        LOGGER.warn("Entry {} never used ({})", entry.getFirst().pattern(), entry.getSecond());
       }
     }
   }
 
   @Override
   public void run() {
-    s_logger.info("Publishing stored documentation state");
+    LOGGER.info("Publishing stored documentation state");
     _valuePropertyDescriptionUsed = new int[_valuePropertyDescription.size()];
     emitAllValueRequirementNames();
     emitTopLevelRequirementsPage();

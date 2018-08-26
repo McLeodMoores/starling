@@ -61,7 +61,7 @@ import com.opengamma.util.money.Currency;
  */
 public class HistoricalValuationFunction extends AbstractFunction.NonCompiledInvoker {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(HistoricalValuationFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(HistoricalValuationFunction.class);
 
   /**
    * Property naming the value produced on the target to generate the time series. For example {@code Historical Series[Value=FairValue]} will produce a time series based on evaluating
@@ -103,7 +103,7 @@ public class HistoricalValuationFunction extends AbstractFunction.NonCompiledInv
    */
   public static final String MARKET_DATA_MODE_PROPERTY = "MarketDataMode";
 
-  private static final Set<String> s_ignoreConstraints = ImmutableSet.of(HistoricalTimeSeriesFunctionUtils.START_DATE_PROPERTY, HistoricalTimeSeriesFunctionUtils.END_DATE_PROPERTY,
+  private static final Set<String> IGNORE_CONSTRAINTS = ImmutableSet.of(HistoricalTimeSeriesFunctionUtils.START_DATE_PROPERTY, HistoricalTimeSeriesFunctionUtils.END_DATE_PROPERTY,
       HistoricalTimeSeriesFunctionUtils.INCLUDE_START_PROPERTY, HistoricalTimeSeriesFunctionUtils.INCLUDE_END_PROPERTY, MARKET_DATA_MODE_PROPERTY, ValuePropertyNames.FUNCTION);
 
   protected ValueRequirement getNestedRequirement(final ComputationTargetResolver.AtVersionCorrection resolver, final ComputationTarget target, final ValueProperties constraints) {
@@ -166,7 +166,7 @@ public class HistoricalValuationFunction extends AbstractFunction.NonCompiledInv
           if (constraints.isOptional(constraintName)) {
             requirementConstraints.withOptional(name);
           }
-        } else if (!constraints.isOptional(constraintName) && !s_ignoreConstraints.contains(constraintName)) {
+        } else if (!constraints.isOptional(constraintName) && !IGNORE_CONSTRAINTS.contains(constraintName)) {
           // Not an optional constraint, not one recognized here, and not one ignored by the main getRequirements method
           return null;
         }
@@ -406,10 +406,10 @@ public class HistoricalValuationFunction extends AbstractFunction.NonCompiledInv
         if (ts != null) {
           results.add(new ComputedValue(new ValueSpecification(desiredValue.getValueName(), targetSpec, desiredValue.getConstraints()), ts));
         } else {
-          s_logger.warn("Nested requirement {} did not produce a time series for {}", requirement, desiredValue);
+          LOGGER.warn("Nested requirement {} did not produce a time series for {}", requirement, desiredValue);
         }
       } else {
-        s_logger.error("Couldn't produce nested requirement for {}", desiredValue);
+        LOGGER.error("Couldn't produce nested requirement for {}", desiredValue);
       }
     }
     return results;

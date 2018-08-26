@@ -30,7 +30,7 @@ import com.opengamma.util.test.TestGroup;
  */
 @Test(groups = TestGroup.INTEGRATION, enabled = true)
 public class RedisSimulationSeriesSourceTest extends AbstractRedisTestCase {
-  private static final Logger s_logger = LoggerFactory.getLogger(RedisSimulationSeriesSourceTest.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(RedisSimulationSeriesSourceTest.class);
   
   public void basicOperation() {
     LocalDate simulationSeriesDate = LocalDate.of(2013, 4, 24);
@@ -111,7 +111,7 @@ public class RedisSimulationSeriesSourceTest extends AbstractRedisTestCase {
       simulationSeriesDate = simulationSeriesDate.minusDays(1);
     }
     
-    OperationTimer timer = new OperationTimer(s_logger, "Loading TS");
+    OperationTimer timer = new OperationTimer(LOGGER, "Loading TS");
     Random random = new Random();
     for (int i = 0; i < 1000; i++) {
       LocalDate seriesDate = simulationSeriesDate.minusDays(random.nextInt(numDaysHistory));
@@ -123,7 +123,7 @@ public class RedisSimulationSeriesSourceTest extends AbstractRedisTestCase {
   }
 
   private void writeOneSimulationSeriesDate(RedisSimulationSeriesSource simulationSource, LocalDate simulationSeriesDate, int nSeries) {
-    OperationTimer timer = new OperationTimer(s_logger, "Storing many time series");
+    OperationTimer timer = new OperationTimer(LOGGER, "Storing many time series");
     
     // 20 points, 10 curves
     for (int i = 0; i < nSeries; i++) {

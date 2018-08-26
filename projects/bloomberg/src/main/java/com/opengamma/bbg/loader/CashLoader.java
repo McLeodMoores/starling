@@ -31,7 +31,7 @@ import com.opengamma.master.security.ManageableSecurity;
 public final class CashLoader extends SecurityLoader {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(CashLoader.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(CashLoader.class);
   /**
    * The fields to load from Bloomberg.
    */
@@ -49,7 +49,7 @@ public final class CashLoader extends SecurityLoader {
    * @param referenceDataProvider  the provider, not null
    */
   public CashLoader(ReferenceDataProvider referenceDataProvider) {
-    super(s_logger, referenceDataProvider, SecurityType.CASH);
+    super(LOGGER, referenceDataProvider, SecurityType.CASH);
   }
 
   //-------------------------------------------------------------------------
@@ -65,22 +65,22 @@ public final class CashLoader extends SecurityLoader {
     String bbgUniqueID = fieldData.getString(FIELD_ID_BBG_UNIQUE);
     String name = fieldData.getString(FIELD_NAME);
     if (!isValidField(bbgUniqueID)) {
-      s_logger.warn("bbgUniqueID is missing, cannot construct cash security");
+      LOGGER.warn("bbgUniqueID is missing, cannot construct cash security");
       return null;
     }
     if (!isValidField(name)) {
-      s_logger.warn("name is missing, cannot construct cash security");
+      LOGGER.warn("name is missing, cannot construct cash security");
     }
     if (!BloombergDataUtils.isValidField(ticker)) {
-      s_logger.warn("equity ticker is missing, cannot construct cash security");
+      LOGGER.warn("equity ticker is missing, cannot construct cash security");
       return null;
     }
     if (!BloombergDataUtils.isValidField(countryIso)) {
-      s_logger.warn("equity exchange is missing, cannot construct cash security");
+      LOGGER.warn("equity exchange is missing, cannot construct cash security");
       return null;
     }
     if (!BloombergDataUtils.isValidField(currency)) {
-      s_logger.warn("equity currency is missing, cannot construct cash security");
+      LOGGER.warn("equity currency is missing, cannot construct cash security");
       return null;
     }
 //    CashSecurity security = new CashSecurity(Currency.getInstance(currency), Identifier.of(InMemoryRegionRepository.ISO_COUNTRY_2, countryIso));

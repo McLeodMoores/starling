@@ -75,7 +75,7 @@ import com.opengamma.util.tuple.Pairs;
 public class DbBatchMaster extends AbstractDbMaster implements BatchMasterWriter {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(DbBatchMaster.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(DbBatchMaster.class);
 
   /**
    * The batch writer.
@@ -98,7 +98,7 @@ public class DbBatchMaster extends AbstractDbMaster implements BatchMasterWriter
   @Override
   public RiskRun getRiskRun(final ObjectId uniqueId) {
     ArgumentChecker.notNull(uniqueId, "uniqueId");
-    s_logger.info("Getting BatchDocument by unique id: ", uniqueId);
+    LOGGER.info("Getting BatchDocument by unique id: ", uniqueId);
     final Long id = extractOid(uniqueId);
     return getHibernateTransactionTemplate().execute(new HibernateCallback<RiskRun>() {
       @Override
@@ -116,7 +116,7 @@ public class DbBatchMaster extends AbstractDbMaster implements BatchMasterWriter
   @Override
   @SuppressWarnings("unchecked")
   public Pair<List<MarketData>, Paging> getMarketData(final PagingRequest pagingRequest) {
-    s_logger.info("Getting markte datas: ", pagingRequest);
+    LOGGER.info("Getting markte datas: ", pagingRequest);
 
     return getTransactionTemplateRetrying(getMaxRetries()).execute(new TransactionCallback<Pair<List<MarketData>, Paging>>() {
       @Override
@@ -147,7 +147,7 @@ public class DbBatchMaster extends AbstractDbMaster implements BatchMasterWriter
 
   @Override
   public MarketData getMarketDataById(final ObjectId batchSnapshotId) {
-    s_logger.info("Getting the batch data snapshot: {}", batchSnapshotId);
+    LOGGER.info("Getting the batch data snapshot: {}", batchSnapshotId);
 
     final Long marketDataPK = extractOid(batchSnapshotId);
 
@@ -162,7 +162,7 @@ public class DbBatchMaster extends AbstractDbMaster implements BatchMasterWriter
   @Override
   @SuppressWarnings("unchecked")
   public Pair<List<MarketDataValue>, Paging> getMarketDataValues(final ObjectId marketDataId, final PagingRequest pagingRequest) {
-    s_logger.info("Getting the batch data snapshot: {}", marketDataId);
+    LOGGER.info("Getting the batch data snapshot: {}", marketDataId);
 
     final Long marketDataPK = extractOid(marketDataId);
 
@@ -197,7 +197,7 @@ public class DbBatchMaster extends AbstractDbMaster implements BatchMasterWriter
 
   @Override
   public void deleteMarketData(final ObjectId batchSnapshotId) {
-    s_logger.info("Deleting market data snapshot: ", batchSnapshotId);
+    LOGGER.info("Deleting market data snapshot: ", batchSnapshotId);
     getTransactionTemplateRetrying(getMaxRetries()).execute(new TransactionCallback<Void>() {
       @Override
       public Void doInTransaction(final TransactionStatus status) {
@@ -211,7 +211,7 @@ public class DbBatchMaster extends AbstractDbMaster implements BatchMasterWriter
   @Override
   @SuppressWarnings("unchecked")
   public Pair<List<RiskRun>, Paging> searchRiskRun(final BatchRunSearchRequest request) {
-    s_logger.info("Searching BatchDocuments: ", request);
+    LOGGER.info("Searching BatchDocuments: ", request);
 
     final DetachedCriteria criteria = DetachedCriteria.forClass(RiskRun.class);
 
@@ -331,17 +331,17 @@ public class DbBatchMaster extends AbstractDbMaster implements BatchMasterWriter
       public Pair<List<D>, Paging> doInTransaction(final TransactionStatus status) {
         final List<D> result = newArrayList();
         Paging paging;
-        s_logger.debug("with args {}", args);
+        LOGGER.debug("with args {}", args);
         final NamedParameterJdbcOperations namedJdbc = getDbConnector().getJdbcTemplate();
         if (pagingRequest.equals(PagingRequest.ALL)) {
           result.addAll(namedJdbc.query(sql[0], args, extractor));
           paging = Paging.of(pagingRequest, result);
         } else {
-          s_logger.debug("executing sql {}", sql[1]);
+          LOGGER.debug("executing sql {}", sql[1]);
           final int count = namedJdbc.queryForObject(sql[1], args, Integer.class);
           paging = Paging.of(pagingRequest, count);
           if (count > 0 && !pagingRequest.equals(PagingRequest.NONE)) {
-            s_logger.debug("executing sql {}", sql[0]);
+            LOGGER.debug("executing sql {}", sql[0]);
             result.addAll(namedJdbc.query(sql[0], args, extractor));
           }
         }
@@ -352,7 +352,7 @@ public class DbBatchMaster extends AbstractDbMaster implements BatchMasterWriter
 
   @Override
   public Pair<List<ViewResultEntry>, Paging> getBatchValues(final ObjectId batchId, final PagingRequest pagingRequest) {
-    s_logger.info("Getting Batch values: ", pagingRequest);
+    LOGGER.info("Getting Batch values: ", pagingRequest);
 
     final Long runId = extractOid(batchId);
     final DbMapSqlParameterSource args = createParameterSource();

@@ -19,10 +19,10 @@ import com.opengamma.engine.value.ValueRequirement;
  */
 /* package */final class PendingRequirements implements ResolvedValueCallback {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(PendingRequirements.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(PendingRequirements.class);
   private static final int REPORT_PERIOD = 10; // Only report every Nth housekeeping tick (1s per tick)
 
-  private static final Housekeeper.Callback<PendingRequirements> s_report = new Housekeeper.Callback<PendingRequirements>() {
+  private static final Housekeeper.Callback<PendingRequirements> REPORT = new Housekeeper.Callback<PendingRequirements>() {
 
     @Override
     public boolean tick(final DependencyGraphBuilder builder, final PendingRequirements data) {
@@ -47,7 +47,7 @@ import com.opengamma.engine.value.ValueRequirement;
   private int _tick;
 
   public PendingRequirements(final DependencyGraphBuilder builder) {
-    _monitor = Housekeeper.of(builder, s_report, this);
+    _monitor = Housekeeper.of(builder, REPORT, this);
   }
 
   @Override
@@ -70,10 +70,10 @@ import com.opengamma.engine.value.ValueRequirement;
 
   private void tick() {
     if ((++_tick % REPORT_PERIOD) == 0) {
-      if (s_logger.isDebugEnabled()) {
-        s_logger.debug("{} pending in run queue", _valueRequirements);
+      if (LOGGER.isDebugEnabled()) {
+        LOGGER.debug("{} pending in run queue", _valueRequirements);
       } else {
-        s_logger.info("{} requirements pending in run queue", _valueRequirements.size());
+        LOGGER.info("{} requirements pending in run queue", _valueRequirements.size());
       }
     }
   }
@@ -81,7 +81,7 @@ import com.opengamma.engine.value.ValueRequirement;
   public void add(final GraphBuildingContext context, final ResolvedValueProducer producer) {
     _valueRequirements.put(producer.getValueRequirement(), producer.getValueRequirement());
     producer.addCallback(context, this);
-    if (s_logger.isDebugEnabled() || s_logger.isInfoEnabled()) {
+    if (LOGGER.isDebugEnabled() || LOGGER.isInfoEnabled()) {
       _monitor.start();
     }
   }

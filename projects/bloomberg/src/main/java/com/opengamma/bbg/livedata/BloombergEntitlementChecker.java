@@ -49,7 +49,7 @@ import com.opengamma.util.ArgumentChecker;
 public class BloombergEntitlementChecker extends AbstractBloombergStaticDataProvider implements LiveDataEntitlementChecker {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(BloombergEntitlementChecker.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(BloombergEntitlementChecker.class);
   /**
    * The length of half a day in seconds.
    */
@@ -98,7 +98,7 @@ public class BloombergEntitlementChecker extends AbstractBloombergStaticDataProv
 
   @Override
   protected Logger getLogger() {
-    return s_logger;
+    return LOGGER;
   }
 
   //-------------------------------------------------------------------------
@@ -133,7 +133,7 @@ public class BloombergEntitlementChecker extends AbstractBloombergStaticDataProv
     List<Integer> failedEntitlements = new ArrayList<Integer>();
     boolean isEntitled = userIdentity.hasEntitlements(Ints.toArray(neededEntitlements), getService(), failedEntitlements);
     if (!failedEntitlements.isEmpty()) {
-      s_logger.warn("user: {} is missing entitlements: {}", user, failedEntitlements);
+      LOGGER.warn("user: {} is missing entitlements: {}", user, failedEntitlements);
     }
     return isEntitled;
   }
@@ -147,7 +147,7 @@ public class BloombergEntitlementChecker extends AbstractBloombergStaticDataProv
       try {
         uuid = Integer.parseInt(user.getUserName());
       } catch (NumberFormatException e) {
-        s_logger.info("Bloomberg user IDs are integers - so " + user.getUserName() + " cannot be entitled to anything");
+        LOGGER.info("Bloomberg user IDs are integers - so " + user.getUserName() + " cannot be entitled to anything");
         return null;
       }
 
@@ -158,7 +158,7 @@ public class BloombergEntitlementChecker extends AbstractBloombergStaticDataProv
       try {
         List<Element> resultElements = submitAuthorizationRequest(authorizationRequest, userIdentity).get();
         if (resultElements == null || resultElements.isEmpty()) {
-          s_logger.info("Unable to get authorization info from Bloomberg for {}", user);
+          LOGGER.info("Unable to get authorization info from Bloomberg for {}", user);
           return null;
         }
 
@@ -171,10 +171,10 @@ public class BloombergEntitlementChecker extends AbstractBloombergStaticDataProv
 
           } else if (resultElem.name().equals(BloombergConstants.AUTHORIZATION_FAILURE)) {
             Element reasonElem = resultElem.getElement(BloombergConstants.REASON);
-            s_logger.info("Bloomberg authorization failed {}", reasonElem);
+            LOGGER.info("Bloomberg authorization failed {}", reasonElem);
 
           } else {
-            s_logger.info("Bloomberg authorization result {}", resultElem);
+            LOGGER.info("Bloomberg authorization result {}", resultElem);
           }
         }
 
@@ -182,7 +182,7 @@ public class BloombergEntitlementChecker extends AbstractBloombergStaticDataProv
           return null;
         }
       } catch (InterruptedException | ExecutionException ex) {
-        s_logger.warn(String.format("Error authenticating user:%s", user), ex);
+        LOGGER.warn(String.format("Error authenticating user:%s", user), ex);
         return null;
       }
     }

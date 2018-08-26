@@ -40,7 +40,7 @@ import com.opengamma.util.NamedThreadPoolFactory;
  */
 public class ViewStatusCalculationWorker {
   
-  private static final Logger s_logger = LoggerFactory.getLogger(ViewStatusCalculationWorker.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ViewStatusCalculationWorker.class);
   
   private static final ExecutorService DEFAULT_EXECUTOR = NamedThreadPoolFactory.newCachedThreadPool("ViewStatus");
   
@@ -73,13 +73,13 @@ public class ViewStatusCalculationWorker {
     _user = option.getUser();
     _marketDataSpecification = option.getMarketDataSpecification();
     Map<String, Collection<String>> valueRequirementBySecType = scanValueRequirementBySecType(portfolioId, toolContext);
-    if (s_logger.isDebugEnabled()) {
+    if (LOGGER.isDebugEnabled()) {
       StringBuilder strBuf = new StringBuilder();
       for (String securityType : Sets.newTreeSet(valueRequirementBySecType.keySet())) {
         Set<String> valueNames = Sets.newTreeSet(valueRequirementBySecType.get(securityType));
         strBuf.append(String.format("%s\t%s\n", StringUtils.rightPad(securityType, 40), valueNames.toString()));
       }
-      s_logger.debug("\n{}\n", strBuf.toString());
+      LOGGER.debug("\n{}\n", strBuf.toString());
     }
     _toolContext = toolContext;
     _executor = executorService;

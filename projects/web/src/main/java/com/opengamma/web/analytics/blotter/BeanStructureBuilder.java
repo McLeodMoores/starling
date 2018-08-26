@@ -34,31 +34,31 @@ import com.opengamma.util.OpenGammaClock;
  */
 /* package */ class BeanStructureBuilder implements BeanVisitor<Map<String, Object>> {
 
-  private static final Map<Class<?>, String> s_types = Maps.newHashMap();
+  private static final Map<Class<?>, String> TYPES = Maps.newHashMap();
 
   private static final String NUMBER = "number";
   private static final String BOOLEAN = "boolean";
   private static final String STRING = "string";
 
   static {
-    s_types.put(Double.TYPE, NUMBER);
-    s_types.put(Double.class, NUMBER);
-    s_types.put(Float.TYPE, NUMBER);
-    s_types.put(Float.class, NUMBER);
-    s_types.put(Long.TYPE, NUMBER);
-    s_types.put(Long.class, NUMBER);
-    s_types.put(Short.TYPE, NUMBER);
-    s_types.put(Short.class, NUMBER);
-    s_types.put(Integer.TYPE, NUMBER);
-    s_types.put(Integer.class, NUMBER);
-    s_types.put(Byte.TYPE, NUMBER);
-    s_types.put(Byte.class, NUMBER);
-    s_types.put(BigDecimal.class, NUMBER);
-    s_types.put(Boolean.TYPE, BOOLEAN);
-    s_types.put(Boolean.class, BOOLEAN);
-    s_types.put(Character.TYPE, STRING);
-    s_types.put(Character.class, STRING);
-    s_types.put(String.class, STRING);
+    TYPES.put(Double.TYPE, NUMBER);
+    TYPES.put(Double.class, NUMBER);
+    TYPES.put(Float.TYPE, NUMBER);
+    TYPES.put(Float.class, NUMBER);
+    TYPES.put(Long.TYPE, NUMBER);
+    TYPES.put(Long.class, NUMBER);
+    TYPES.put(Short.TYPE, NUMBER);
+    TYPES.put(Short.class, NUMBER);
+    TYPES.put(Integer.TYPE, NUMBER);
+    TYPES.put(Integer.class, NUMBER);
+    TYPES.put(Byte.TYPE, NUMBER);
+    TYPES.put(Byte.class, NUMBER);
+    TYPES.put(BigDecimal.class, NUMBER);
+    TYPES.put(Boolean.TYPE, BOOLEAN);
+    TYPES.put(Boolean.class, BOOLEAN);
+    TYPES.put(Character.TYPE, STRING);
+    TYPES.put(Character.class, STRING);
+    TYPES.put(String.class, STRING);
   }
 
   private final StringConvert _stringConvert;
@@ -167,7 +167,7 @@ import com.opengamma.util.OpenGammaClock;
   }
 
   /* package */ List<Map<String, Object>> typesFor(Class<?> type) {
-    String typeName = s_types.get(type);
+    String typeName = TYPES.get(type);
     if (typeName != null) {
       return ImmutableList.of(typeInfo(typeName, null, null, false));
     } else {

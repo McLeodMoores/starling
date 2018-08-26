@@ -54,7 +54,7 @@ import com.opengamma.util.tuple.Pair;
  */
 public class G2ppParametersFunction extends AbstractFunction {
   /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(G2ppParametersFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(G2ppParametersFunction.class);
   /** The default first volatility term structure */
   private static final Map<Tenor, Double> FIRST_VOLATILITY_TERMS = new LinkedHashMap<>();
   /** The default second volatility term structure */
@@ -198,11 +198,11 @@ public class G2ppParametersFunction extends AbstractFunction {
             secondVolatilityObject = SECOND_VOLATILITY_TERMS.get(entry.getKey());
           }
           if (firstVolatilityObject == null) {
-            s_logger.error("Could not get value for " + firstTenorAppendedId);
+            LOGGER.error("Could not get value for " + firstTenorAppendedId);
             continue;
           }
           if (secondVolatilityObject == null) {
-            s_logger.error("Could not get value for " + secondTenorAppendedId);
+            LOGGER.error("Could not get value for " + secondTenorAppendedId);
           } else {
             final double t = TimeCalculator.getTimeBetween(now, now.plus(entry.getKey().getPeriod()));
             firstVolatility.add((Double) firstVolatilityObject);

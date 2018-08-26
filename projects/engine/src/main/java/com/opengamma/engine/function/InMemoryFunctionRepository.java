@@ -24,7 +24,7 @@ import com.opengamma.util.ArgumentChecker;
  */
 public class InMemoryFunctionRepository implements FunctionRepository {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(InMemoryFunctionRepository.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(InMemoryFunctionRepository.class);
 
   private final Map<String, FunctionDefinition> _functions = new HashMap<String, FunctionDefinition>();
   private final AtomicInteger _nextIdentifier = new AtomicInteger();
@@ -119,8 +119,8 @@ public class InMemoryFunctionRepository implements FunctionRepository {
       try {
         function.init(compilationContext);
       } catch (Throwable t) {
-        s_logger.warn("Couldn't initialise function {}", function);
-        s_logger.debug("Caught exception", t);
+        LOGGER.warn("Couldn't initialise function {}", function);
+        LOGGER.debug("Caught exception", t);
       }
     }
     compilationContext.setFunctionReinitializer(null);

@@ -62,7 +62,7 @@ import com.opengamma.util.money.Currency;
  */
 @Deprecated
 public abstract class BondTradeCurveSpecificFunction extends AbstractFunction.NonCompiledInvoker {
-  private static final Logger s_logger = LoggerFactory.getLogger(BondTradeCurveSpecificFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(BondTradeCurveSpecificFunction.class);
   /** The requested curve property */
   protected static final String PROPERTY_REQUESTED_CURVE = ValuePropertyNames.OUTPUT_RESERVED_PREFIX + "RequestedCurve";
 
@@ -162,24 +162,24 @@ public abstract class BondTradeCurveSpecificFunction extends AbstractFunction.No
     Set<String> requestedCurveNames = constraints.getValues(ValuePropertyNames.CURVE);
     final boolean permissive = OpenGammaCompilationContext.isPermissive(context);
     if (!permissive && ((requestedCurveNames == null) || requestedCurveNames.isEmpty())) {
-      s_logger.debug("Must specify a curve name");
+      LOGGER.debug("Must specify a curve name");
       return null;
     }
     final Set<String> curveCalculationConfigNames = constraints.getValues(ValuePropertyNames.CURVE_CALCULATION_CONFIG);
     if (curveCalculationConfigNames == null || curveCalculationConfigNames.size() != 1) {
-      s_logger.debug("Must specify a curve calculation config");
+      LOGGER.debug("Must specify a curve calculation config");
       return null;
     }
     final String curveCalculationConfigName = curveCalculationConfigNames.iterator().next();
     final MultiCurveCalculationConfig curveCalculationConfig = _curveCalculationConfigSource.getConfig(curveCalculationConfigName);
     if (curveCalculationConfig == null) {
-      s_logger.debug("Could not find curve calculation configuration named " + curveCalculationConfigName);
+      LOGGER.debug("Could not find curve calculation configuration named " + curveCalculationConfigName);
       return null;
     }
     final FinancialSecurity security = (FinancialSecurity) target.getTrade().getSecurity();
     final Currency currency = FinancialSecurityUtils.getCurrency(security);
     if (!ComputationTargetSpecification.of(currency).equals(curveCalculationConfig.getTarget())) {
-      s_logger.error("Security currency and curve calculation config id were not equal; have {} and {}", currency, curveCalculationConfig.getTarget());
+      LOGGER.error("Security currency and curve calculation config id were not equal; have {} and {}", currency, curveCalculationConfig.getTarget());
       return null;
     }
     final String[] availableCurveNames = curveCalculationConfig.getYieldCurveNames();
@@ -188,7 +188,7 @@ public abstract class BondTradeCurveSpecificFunction extends AbstractFunction.No
     } else {
       final Set<String> intersection = YieldCurveFunctionUtils.intersection(requestedCurveNames, availableCurveNames);
       if (intersection.isEmpty()) {
-        s_logger.debug("None of the requested curves {} are available in curve calculation configuration called {}", requestedCurveNames, curveCalculationConfigName);
+        LOGGER.debug("None of the requested curves {} are available in curve calculation configuration called {}", requestedCurveNames, curveCalculationConfigName);
         return null;
       }
       requestedCurveNames = intersection;
@@ -196,11 +196,11 @@ public abstract class BondTradeCurveSpecificFunction extends AbstractFunction.No
     final String[] applicableCurveNames = FixedIncomeInstrumentCurveExposureHelper.getCurveNamesForSecurity(security, availableCurveNames);
     final Set<String> curveNames = YieldCurveFunctionUtils.intersection(requestedCurveNames, applicableCurveNames);
     if (curveNames.isEmpty()) {
-      s_logger.debug("{} {} security is not sensitive to the curves {}", new Object[] {currency, security.getClass(), curveNames });
+      LOGGER.debug("{} {} security is not sensitive to the curves {}", new Object[] {currency, security.getClass(), curveNames });
       return null;
     }
     if (!permissive && (curveNames.size() != 1)) {
-      s_logger.debug("Must specify single curve name constraint, got {}", curveNames);
+      LOGGER.debug("Must specify single curve name constraint, got {}", curveNames);
       return null;
     }
     final String curve = curveNames.iterator().next();
@@ -219,7 +219,7 @@ public abstract class BondTradeCurveSpecificFunction extends AbstractFunction.No
       requirements.addAll(timeSeriesRequirements);
       return requirements;
     } catch (final Exception e) {
-      s_logger.error(e.getMessage());
+      LOGGER.error(e.getMessage());
       return null;
     }
   }

@@ -60,7 +60,7 @@ import com.opengamma.util.ArgumentChecker;
  * observation time with the name of the hour on which it fires <b>IN UTC</b>.
  */
 public class PeriodicLiveDataTimeSeriesStorageServer implements Lifecycle {
-  private static final Logger s_logger = LoggerFactory.getLogger(PeriodicLiveDataTimeSeriesStorageServer.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(PeriodicLiveDataTimeSeriesStorageServer.class);
   private final UserPrincipal _liveDataUser;
   private final LiveDataClient _liveDataClient;
   private final HistoricalTimeSeriesMaster _historicalTimeSeriesMaster;
@@ -187,22 +187,22 @@ public class PeriodicLiveDataTimeSeriesStorageServer implements Lifecycle {
 
   public void addSubscription(ExternalId id, String normalizationSet) {
     LiveDataSpecification ldSpec = new LiveDataSpecification(normalizationSet, id);
-    s_logger.warn("Subscribing to {}", ldSpec);
+    LOGGER.warn("Subscribing to {}", ldSpec);
     getLiveDataClient().subscribe(getLiveDataUser(), ldSpec, new LiveDataListener() {
 
       @Override
       public void subscriptionResultReceived(LiveDataSubscriptionResponse subscriptionResult) {
-        s_logger.warn("Subscription result of {}", subscriptionResult);
+        LOGGER.warn("Subscription result of {}", subscriptionResult);
       }
 
       @Override
       public void subscriptionResultsReceived(Collection<LiveDataSubscriptionResponse> subscriptionResults) {
-        s_logger.warn("Sub result {}", subscriptionResults);
+        LOGGER.warn("Sub result {}", subscriptionResults);
       }
 
       @Override
       public void subscriptionStopped(LiveDataSpecification fullyQualifiedSpecification) {
-        s_logger.warn("Subscription stopped to {}", fullyQualifiedSpecification);
+        LOGGER.warn("Subscription stopped to {}", fullyQualifiedSpecification);
       }
 
       @Override
@@ -235,7 +235,7 @@ public class PeriodicLiveDataTimeSeriesStorageServer implements Lifecycle {
         try {
           _storageExecutor.execute(new StorageTask(entry.getKey(), entry.getValue(), atTheHour.toLocalDate(), observationTimeName));
         } catch (Exception e) {
-          s_logger.error("Unable to submit a storage task to store {} {}", entry.getKey(), entry.getValue());
+          LOGGER.error("Unable to submit a storage task to store {} {}", entry.getKey(), entry.getValue());
         }
       }
     }
@@ -276,7 +276,7 @@ public class PeriodicLiveDataTimeSeriesStorageServer implements Lifecycle {
               _date,
               (Double) field.getValue());
         } else {
-          s_logger.error("Would write {} {} {} {} {} {} {} {}",
+          LOGGER.error("Would write {} {} {} {} {} {} {} {}",
               new Object[] {description, getDataSource(), getDataProvider(), field.getName(), _observationTimeName,
                             _liveDataSpecification.getIdentifiers().toString(), _date, field.getValue()});
         }
@@ -291,7 +291,7 @@ public class PeriodicLiveDataTimeSeriesStorageServer implements Lifecycle {
     LocalDateTime nextHour = now.truncatedTo(HOURS).plusHours(1);
     Duration delay = Duration.between(now.atOffset(ZoneOffset.UTC), nextHour.atOffset(ZoneOffset.UTC));
     Duration oneHour = Duration.ofHours(1);
-    s_logger.warn("Now {} Next {} Delay {} {}", new Object[] {now, nextHour, delay, delay.toMillis() });
+    LOGGER.warn("Now {} Next {} Delay {} {}", new Object[] {now, nextHour, delay, delay.toMillis() });
     _timerExecutor.scheduleAtFixedRate(new SnapshotTask(), delay.toMillis(), oneHour.toMillis(), TimeUnit.MILLISECONDS);
     if (getInitializationFileName() != null) {
       initializeFromFile(getInitializationFileName());
@@ -308,14 +308,14 @@ public class PeriodicLiveDataTimeSeriesStorageServer implements Lifecycle {
       fis = new FileInputStream(f);
       initializeFromStream(fis);
     } catch (IOException ioe) {
-      s_logger.error("Unable to load subscriptions from file", ioe);
+      LOGGER.error("Unable to load subscriptions from file", ioe);
     } finally {
       try {
         if (fis != null) {
           fis.close();
         }
       } catch (IOException ioe) {
-        s_logger.warn("Unable to close initialization file", ioe);
+        LOGGER.warn("Unable to close initialization file", ioe);
       }
     }
   }
@@ -330,7 +330,7 @@ public class PeriodicLiveDataTimeSeriesStorageServer implements Lifecycle {
     while (line != null) {
       String[] fields = parser.parseLine(line);
       if (fields.length != 3) {
-        s_logger.warn("Line {} not in proper format.", line);
+        LOGGER.warn("Line {} not in proper format.", line);
       } else {
         String scheme = fields[0];
         String id = fields[1];

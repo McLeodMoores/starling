@@ -28,7 +28,7 @@ import com.opengamma.util.ArgumentChecker;
  *
  */
 public abstract class CommodityBlackVolatilitySurfaceDefaults extends DefaultPropertyFunction {
-  private static final Logger s_logger = LoggerFactory.getLogger(CommodityBlackVolatilitySurfaceDefaults.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(CommodityBlackVolatilitySurfaceDefaults.class);
   private final String[] _valueRequirementNames;
   private final Map<String, Set<String>> _currencyToCurveName;
   private final Map<String, Set<String>> _currencyToCurveCalculationMethodName;
@@ -75,7 +75,7 @@ public abstract class CommodityBlackVolatilitySurfaceDefaults extends DefaultPro
       case ValuePropertyNames.SURFACE:
         return _currencyToSurfaceName.get(currencyPair);
       default:
-        s_logger.error("Could not find default value for {} in this function", propertyName);
+        LOGGER.error("Could not find default value for {} in this function", propertyName);
         return null;
     }
   }

@@ -26,7 +26,7 @@ import com.opengamma.util.ArgumentChecker;
  */
 public class EquityVanillaBarrierOptionDefaults extends DefaultPropertyFunction {
   /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(EquityVanillaBarrierOptionDefaults.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(EquityVanillaBarrierOptionDefaults.class);
   /** Default value for the call spread width */
   private final String _callSpreadFullWidth;
   /** Default value for the overhedge */
@@ -35,7 +35,7 @@ public class EquityVanillaBarrierOptionDefaults extends DefaultPropertyFunction 
   /**
    * Value requirement names for which these properties apply
    */
-  private static final String[] s_valueNames = new String[] {
+  private static final String[] VALUE_NAMES = new String[] {
     ValueRequirementNames.PRESENT_VALUE,
     ValueRequirementNames.FORWARD,
     ValueRequirementNames.SPOT,
@@ -67,7 +67,7 @@ public class EquityVanillaBarrierOptionDefaults extends DefaultPropertyFunction 
 
   @Override
   protected void getDefaults(final PropertyDefaults defaults) {
-    for (final String valueName : s_valueNames) {
+    for (final String valueName : VALUE_NAMES) {
       defaults.addValuePropertyName(valueName, ValuePropertyNames.BINARY_OVERHEDGE);
       defaults.addValuePropertyName(valueName, ValuePropertyNames.BINARY_SMOOTHING_FULLWIDTH);
     }
@@ -81,7 +81,7 @@ public class EquityVanillaBarrierOptionDefaults extends DefaultPropertyFunction 
     if (ValuePropertyNames.BINARY_SMOOTHING_FULLWIDTH.equals(propertyName)) {
       return Collections.singleton(_callSpreadFullWidth);
     }
-    s_logger.error("Could not get default value for {}", propertyName);
+    LOGGER.error("Could not get default value for {}", propertyName);
     return null;
   }
 

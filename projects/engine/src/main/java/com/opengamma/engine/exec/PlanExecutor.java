@@ -33,7 +33,7 @@ import com.opengamma.util.async.Cancelable;
  */
 public class PlanExecutor implements JobResultReceiver, Cancelable, DependencyGraphExecutionFuture {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(PlanExecutor.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(PlanExecutor.class);
 
   private static final class ExecutingJob implements Cancelable {
 
@@ -62,7 +62,7 @@ public class PlanExecutor implements JobResultReceiver, Cancelable, DependencyGr
     public boolean cancel(final boolean mayInterruptedIfRunning) {
       Cancelable cancel = getCancel();
       if (cancel != null) {
-        s_logger.debug("Cancelling {} for job {}", _cancel, _job);
+        LOGGER.debug("Cancelling {} for job {}", _cancel, _job);
         return cancel.cancel(mayInterruptedIfRunning);
       } else {
         return false;
@@ -132,10 +132,10 @@ public class PlanExecutor implements JobResultReceiver, Cancelable, DependencyGr
     synchronized (this) {
       if (_executing == null) {
         // Already complete or cancelled; don't submit anything new
-        s_logger.debug("Not submitting {} - already completed or cancelled", job);
+        LOGGER.debug("Not submitting {} - already completed or cancelled", job);
         return;
       }
-      s_logger.debug("Submitting {}", job);
+      LOGGER.debug("Submitting {}", job);
       executing = new ExecutingJob(job);
       _executing.put(job.getSpecification(), executing);
       if (job.getTail() != null) {
@@ -164,23 +164,23 @@ public class PlanExecutor implements JobResultReceiver, Cancelable, DependencyGr
       nextJob = getGraph().nextExecutableJob();
       count++;
     }
-    s_logger.info("Submitted {} executable jobs for {}", count, this);
+    LOGGER.info("Submitted {} executable jobs for {}", count, this);
   }
 
   public void start() {
     synchronized (this) {
       if (_state != State.NOT_STARTED) {
-        s_logger.error("Already started executing {}", this);
+        LOGGER.error("Already started executing {}", this);
         throw new IllegalStateException(_state.toString());
       }
       _state = State.EXECUTING;
       _startTime = System.nanoTime();
     }
     if (getGraph().isFinished()) {
-      s_logger.info("Execution plan {} is empty", this);
+      LOGGER.info("Execution plan {} is empty", this);
       notifyComplete();
     } else {
-      s_logger.info("Starting executing {}", this);
+      LOGGER.info("Starting executing {}", this);
       submitExecutableJobs();
     }
   }
@@ -190,11 +190,11 @@ public class PlanExecutor implements JobResultReceiver, Cancelable, DependencyGr
     final Listener listener;
     synchronized (this) {
       if (_executing != null) {
-        s_logger.info("Finished executing {}", this);
+        LOGGER.info("Finished executing {}", this);
         _state = State.FINISHED;
         _executing = null;
       } else {
-        s_logger.info("Already completed or cancelled execution of {}", this);
+        LOGGER.info("Already completed or cancelled execution of {}", this);
       }
       notifyAll();
       startTime = _startTime;
@@ -215,7 +215,7 @@ public class PlanExecutor implements JobResultReceiver, Cancelable, DependencyGr
     synchronized (this) {
       if (_executing == null) {
         // Already complete or cancelled
-        s_logger.warn("Can't cancel - already completed or previously cancelled execution of {}", this);
+        LOGGER.warn("Can't cancel - already completed or previously cancelled execution of {}", this);
         return false;
       }
       jobs = _executing.values();
@@ -223,7 +223,7 @@ public class PlanExecutor implements JobResultReceiver, Cancelable, DependencyGr
       _state = State.CANCELLED;
       notifyAll();
     }
-    s_logger.info("Cancelling current jobs of {}", this);
+    LOGGER.info("Cancelling current jobs of {}", this);
     for (ExecutingJob job : jobs) {
       job.cancel(mayInterruptIfRunning);
     }
@@ -238,12 +238,12 @@ public class PlanExecutor implements JobResultReceiver, Cancelable, DependencyGr
     synchronized (this) {
       if (_executing == null) {
         // Already cancelled (or complete)
-        s_logger.debug("Ignoring result for already completed (or cancelled) {}", this);
+        LOGGER.debug("Ignoring result for already completed (or cancelled) {}", this);
         return;
       }
       job = _executing.remove(result.getSpecification());
       if (job == null) {
-        s_logger.warn("Unexpected (or duplicate completion of) {} for {}", result, this);
+        LOGGER.warn("Unexpected (or duplicate completion of) {} for {}", result, this);
         return;
       }
       _nodeCount += result.getResultItems().size();
@@ -252,7 +252,7 @@ public class PlanExecutor implements JobResultReceiver, Cancelable, DependencyGr
     final ExecutingGraph graph = getGraph();
     _notifyLock.incrementAndGet();
     graph.jobCompleted(result.getSpecification());
-    s_logger.debug("{} completed for {}", result, this);
+    LOGGER.debug("{} completed for {}", result, this);
     submitExecutableJobs();
     getCycle().jobCompleted(job.getJob(), result);
     if (_notifyLock.decrementAndGet() == 0) {
@@ -283,11 +283,11 @@ public class PlanExecutor implements JobResultReceiver, Cancelable, DependencyGr
   @Override
   public synchronized String get() throws InterruptedException, ExecutionException {
     while (_executing != null) {
-      s_logger.debug("Waiting for completion of {}", this);
+      LOGGER.debug("Waiting for completion of {}", this);
       wait();
     }
     if (_state == State.CANCELLED) {
-      s_logger.info("Cancelled {}", this);
+      LOGGER.info("Cancelled {}", this);
       throw new CancellationException();
     }
     return getGraph().getCalculationConfiguration();
@@ -296,15 +296,15 @@ public class PlanExecutor implements JobResultReceiver, Cancelable, DependencyGr
   @Override
   public synchronized String get(final long timeout, final TimeUnit unit) throws InterruptedException, ExecutionException, TimeoutException {
     if (_executing != null) {
-      s_logger.debug("Waiting for completion of {}", this);
+      LOGGER.debug("Waiting for completion of {}", this);
       wait(unit.toMillis(timeout));
       if (_executing != null) {
-        s_logger.info("Timeout on {}", this);
+        LOGGER.info("Timeout on {}", this);
         throw new TimeoutException();
       }
     }
     if (_state == State.CANCELLED) {
-      s_logger.warn("Cancelled {}", this);
+      LOGGER.warn("Cancelled {}", this);
       throw new CancellationException();
     }
     return getGraph().getCalculationConfiguration();

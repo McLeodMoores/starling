@@ -37,7 +37,7 @@ import com.opengamma.util.tuple.Pair;
 
 class PortfolioTreeTableModel extends AbstractTreeTableModel implements ViewResultListener {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(PortfolioTreeTableModel.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(PortfolioTreeTableModel.class);
   private static final String UNAVAILABLE_VALUE = "N/A";
   
   private ViewerColumnModel _columnModel;
@@ -71,10 +71,10 @@ class PortfolioTreeTableModel extends AbstractTreeTableModel implements ViewResu
   private void dumpPortfolio(PortfolioNode node, int depth) {
     StringBuilder indent = new StringBuilder();
     for (int i=0; i<depth; i++) indent.append(" ");
-    s_logger.info("{}{}", indent.toString(), node);
+    LOGGER.info("{}{}", indent.toString(), node);
     if (node.getPositions() != null) {
       for (Position position : node.getPositions()) {
-        s_logger.info("{}  {}", indent.toString(), position);
+        LOGGER.info("{}  {}", indent.toString(), position);
       }
     }
     if (node.getSubNodes() != null) {
@@ -154,14 +154,14 @@ class PortfolioTreeTableModel extends AbstractTreeTableModel implements ViewResu
     String requirementName = _columnModel.getRequirementName(column);
 
     if (_resultModel == null || calcConfigName == null || requirementName == null) {
-      s_logger.warn("Unhandled column {}", column);
+      LOGGER.warn("Unhandled column {}", column);
       return UNAVAILABLE_VALUE;
     }
 
     ViewCalculationResultModel calcResultModel = _resultModel.getCalculationResult(calcConfigName);
     Map<Pair<String, ValueProperties>, ComputedValueResult> values = calcResultModel.getValues(targetSpec);
     if (values == null) {
-      s_logger.debug("No values available for {}", targetSpec);
+      LOGGER.debug("No values available for {}", targetSpec);
       return UNAVAILABLE_VALUE;
     }
     // TODO 2011-06-15 -- support value name AND value properties so that the required value can be looked up directly
@@ -187,7 +187,7 @@ class PortfolioTreeTableModel extends AbstractTreeTableModel implements ViewResu
 
   @Override
   public synchronized Object getValueAt(Object node, int column) {
-    //s_logger.info("getValueAt({}, {})", node, column);
+    //LOGGER.info("getValueAt({}, {})", node, column);
     if (node == null) {
       return null;
     }
@@ -203,7 +203,7 @@ class PortfolioTreeTableModel extends AbstractTreeTableModel implements ViewResu
 
   @Override
   public synchronized Object getChild(Object parent, int index) {
-    //s_logger.info("getChild({}, {})", parent, index);
+    //LOGGER.info("getChild({}, {})", parent, index);
     if (parent == null) {
       return null;
     }
@@ -223,7 +223,7 @@ class PortfolioTreeTableModel extends AbstractTreeTableModel implements ViewResu
 
   @Override
   public synchronized int getChildCount(Object parent) {
-    //s_logger.info("getChildCount({})", parent);
+    //LOGGER.info("getChildCount({})", parent);
     if (parent == null) {
       return 0;
     }
@@ -239,7 +239,7 @@ class PortfolioTreeTableModel extends AbstractTreeTableModel implements ViewResu
 
   @Override
   public synchronized int getIndexOfChild(Object parent, Object child) {
-    //s_logger.info("getIndexOfChild({}, {})", parent, child);
+    //LOGGER.info("getIndexOfChild({}, {})", parent, child);
     if (parent == null) {
       return 0;
     }

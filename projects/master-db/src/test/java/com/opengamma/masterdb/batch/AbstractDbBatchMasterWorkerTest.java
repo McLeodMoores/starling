@@ -25,7 +25,7 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT_DB)
 public abstract class AbstractDbBatchMasterWorkerTest extends AbstractDbBatchTest {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(AbstractDbBatchMasterWorkerTest.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(AbstractDbBatchMasterWorkerTest.class);
 
   protected DbBatchMaster _batchMaster;
   protected UniqueId _marketDataSnapshotUid = UniqueId.of("MrkDta", "market_data_snapshot_uid");
@@ -35,7 +35,7 @@ public abstract class AbstractDbBatchMasterWorkerTest extends AbstractDbBatchTes
 
   public AbstractDbBatchMasterWorkerTest(String databaseType, String databaseVersion) {
     super(databaseType, databaseVersion);
-    s_logger.info("running testcases for {}", databaseType);
+    LOGGER.info("running testcases for {}", databaseType);
   }
 
   //-------------------------------------------------------------------------

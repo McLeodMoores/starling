@@ -33,7 +33,7 @@ import com.opengamma.util.ArgumentChecker;
  */
 public class EquityForwardCurveFuturePriceImpliedPerTickerDefaults extends DefaultPropertyFunction {
   /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(EquityForwardCurveFuturePriceImpliedPerTickerDefaults.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(EquityForwardCurveFuturePriceImpliedPerTickerDefaults.class);
   /** The value requirements for which these defaults apply */
   private static final String[] VALUE_REQUIREMENTS = new String[] {
     ValueRequirementNames.FORWARD_CURVE,
@@ -97,7 +97,7 @@ public class EquityForwardCurveFuturePriceImpliedPerTickerDefaults extends Defau
       final String propertyName) {
     final String tickerId = EquitySecurityUtils.getIndexOrEquityName(((ExternalIdentifiable) target.getValue()).getExternalId());
     if (!_perTickerConfig.containsKey(tickerId)) {
-      s_logger.error("Could not get config for ticker " + tickerId + "; should never happen");
+      LOGGER.error("Could not get config for ticker " + tickerId + "; should never happen");
       return null;
     }
     final String[] config = _perTickerConfig.get(tickerId);
@@ -119,7 +119,7 @@ public class EquityForwardCurveFuturePriceImpliedPerTickerDefaults extends Defau
       case InstrumentTypeProperties.PROPERTY_SURFACE_INSTRUMENT_TYPE:
         return Collections.singleton(InstrumentTypeProperties.EQUITY_FUTURE_PRICE);
       default:
-        s_logger.error("Cannot get a default value for {}", propertyName);
+        LOGGER.error("Cannot get a default value for {}", propertyName);
         return null;
     }
   }

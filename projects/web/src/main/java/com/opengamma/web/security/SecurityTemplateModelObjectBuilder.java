@@ -71,7 +71,7 @@ import com.opengamma.util.time.Tenor;
  */
 public class SecurityTemplateModelObjectBuilder extends FinancialSecurityVisitorSameValueAdapter<Void> {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(SecurityTemplateModelObjectBuilder.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(SecurityTemplateModelObjectBuilder.class);
   
   private final FlexiBean _out;
   private final SecurityMaster _securityMaster;
@@ -269,7 +269,7 @@ public class SecurityTemplateModelObjectBuilder extends FinancialSecurityVisitor
           _out.put("underlyingOrganization", organization);
         }
       } else {
-        s_logger.warn("{} does not currently support CDSOption underlying lookup based on {}", WebSecuritiesResource.class, underlyingId.getScheme().getName());
+        LOGGER.warn("{} does not currently support CDSOption underlying lookup based on {}", WebSecuritiesResource.class, underlyingId.getScheme().getName());
       }
     }
     return null;

@@ -53,7 +53,7 @@ import com.opengamma.util.async.AsynchronousExecution;
  */
 public abstract class BondFromYieldAndCurvesFunction extends AbstractFunction.NonCompiledInvoker {
   /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(BondFromYieldAndCurvesFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(BondFromYieldAndCurvesFunction.class);
   /** The value requirement name */
   private final String _valueRequirementName;
   /** The instrument exposures provider */
@@ -136,7 +136,7 @@ public abstract class BondFromYieldAndCurvesFunction extends AbstractFunction.No
       }
       return requirements;
     } catch (final Exception e) {
-      s_logger.error(e.getMessage());
+      LOGGER.error(e.getMessage());
       return null;
     }
   }

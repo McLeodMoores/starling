@@ -30,7 +30,7 @@ import com.opengamma.master.historicaltimeseries.impl.HistoricalTimeSeriesMaster
  * Class to copy all HTS from one master to another.
  */
 public class HistoricalTimeSeriesMasterCopier {
-  private static final Logger s_logger = LoggerFactory.getLogger(HistoricalTimeSeriesMasterCopier.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(HistoricalTimeSeriesMasterCopier.class);
   
   private HistoricalTimeSeriesMaster _sourceMaster;
   private HistoricalTimeSeriesMaster _destinationMaster;
@@ -134,7 +134,7 @@ public class HistoricalTimeSeriesMasterCopier {
           }
           return true;
         } else {
-          s_logger.warn("Destination for " + destinationId + " has more up to date data than source, skipping!");
+          LOGGER.warn("Destination for " + destinationId + " has more up to date data than source, skipping!");
           return false;
         }
       } else {

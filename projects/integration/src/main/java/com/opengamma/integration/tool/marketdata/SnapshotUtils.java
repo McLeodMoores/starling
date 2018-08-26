@@ -29,7 +29,7 @@ import com.opengamma.master.marketdatasnapshot.MarketDataSnapshotSearchResult;
  * Utility class to provide services to snapshot command line tools (and potentially UI tools too).
  */
 public final class SnapshotUtils {
-  private static final Logger s_logger = LoggerFactory.getLogger(SnapshotUtils.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(SnapshotUtils.class);
   
   private MarketDataSnapshotMaster _snapshotMaster;
 
@@ -131,7 +131,7 @@ public final class SnapshotUtils {
     searchRequest.setIncludeData(false);
     MarketDataSnapshotSearchResult searchResult = _snapshotMaster.search(searchRequest);
     if (searchResult.getDocuments().size() > 1) {
-      s_logger.warn("More than one snapshot matches supplied name, using first");
+      LOGGER.warn("More than one snapshot matches supplied name, using first");
     }
     if (searchResult.getDocuments().size() == 0) {
       return Collections.emptyList();

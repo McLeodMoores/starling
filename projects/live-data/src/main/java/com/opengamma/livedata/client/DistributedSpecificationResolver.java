@@ -31,7 +31,7 @@ import com.opengamma.util.fudgemsg.OpenGammaFudgeContext;
  */
 public class DistributedSpecificationResolver {
   private static final long TIMEOUT_MS = 5 * 60 * 100L;
-  private static final Logger s_logger = LoggerFactory.getLogger(DistributedSpecificationResolver.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(DistributedSpecificationResolver.class);
   private final FudgeRequestSender _requestSender;
   private final FudgeContext _fudgeContext;
   
@@ -49,7 +49,7 @@ public class DistributedSpecificationResolver {
   public LiveDataSpecification resolve(
       LiveDataSpecification spec) {
     
-    s_logger.info("Sending message to resolve ", spec);
+    LOGGER.info("Sending message to resolve ", spec);
     ResolveRequest resolveRequest = new ResolveRequest(spec);
     FudgeMsg requestMessage = resolveRequest.toFudgeMsg(new FudgeSerializer(_fudgeContext));
     final AtomicBoolean responseReceived = new AtomicBoolean(false);

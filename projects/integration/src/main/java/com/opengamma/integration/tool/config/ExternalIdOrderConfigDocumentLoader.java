@@ -19,7 +19,7 @@ import com.opengamma.master.config.ConfigMasterUtils;
  */
 public class ExternalIdOrderConfigDocumentLoader {
   @SuppressWarnings("unused")
-  private static final Logger s_logger = LoggerFactory.getLogger(CurrencyPairsConfigDocumentLoader.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(CurrencyPairsConfigDocumentLoader.class);
   
   private final ConfigMaster _configMaster;
   private final String _configName;

@@ -35,7 +35,7 @@ import com.opengamma.util.time.LocalDateRange;
 public class EHCachingHistoricalTimeSeriesProvider extends AbstractHistoricalTimeSeriesProvider {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(EHCachingHistoricalTimeSeriesProvider.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(EHCachingHistoricalTimeSeriesProvider.class);
 
   /**
    * The cache name.
@@ -152,7 +152,7 @@ public class EHCachingHistoricalTimeSeriesProvider extends AbstractHistoricalTim
     // find in cache
     Element cacheElement = _cache.get(requestKey);
     if (cacheElement != null) {
-      s_logger.debug("Found time-series in cache: {}", requestKey);
+      LOGGER.debug("Found time-series in cache: {}", requestKey);
       return (LocalDateDoubleTimeSeries) cacheElement.getObjectValue();
     }
     
@@ -167,7 +167,7 @@ public class EHCachingHistoricalTimeSeriesProvider extends AbstractHistoricalTim
         LocalDateDoubleTimeSeries wholeHts = (LocalDateDoubleTimeSeries) cacheElement.getObjectValue();
         LocalDateDoubleTimeSeries filteredHts = filterResult(wholeHts, requestKey.getDateRange(), requestKey.getMaxPoints());
         _cache.put(new Element(requestKey, filteredHts));  // re-cache under filtered values
-        s_logger.debug("Derived time-series from cache: {}", requestKey);
+        LOGGER.debug("Derived time-series from cache: {}", requestKey);
         return filteredHts;
       }
     }

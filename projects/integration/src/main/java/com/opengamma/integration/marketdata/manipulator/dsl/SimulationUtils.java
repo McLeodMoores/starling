@@ -45,7 +45,7 @@ import com.opengamma.id.VersionCorrection;
  */
 public final class SimulationUtils {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(SimulationUtils.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(SimulationUtils.class);
 
   private static List<GroovyAliasable> s_aliases = Lists.newArrayList();
 
@@ -172,7 +172,7 @@ public final class SimulationUtils {
 
       String alias = aliasable.getGroovyAlias();
       if (binding.hasVariable(alias)) {
-        s_logger.warn("Unable to register default alias {}. Already set in the context as '{}'", alias, binding.getVariable(alias));
+        LOGGER.warn("Unable to register default alias {}. Already set in the context as '{}'", alias, binding.getVariable(alias));
         continue;
       }
 

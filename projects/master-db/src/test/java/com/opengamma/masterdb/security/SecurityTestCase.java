@@ -164,7 +164,7 @@ import com.opengamma.util.tuple.Pairs;
 @Test(groups = TestGroup.UNIT)
 public abstract class SecurityTestCase extends AbstractSecurityTestCaseAdapter implements SecurityTestCaseMethods {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(SecurityTestCase.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(SecurityTestCase.class);
 
   private static interface TestDataProvider<T> {
     void getValues(Collection<T> values);
@@ -277,7 +277,7 @@ public abstract class SecurityTestCase extends AbstractSecurityTestCaseAdapter i
 
   static {
     final long seed = s_random.nextLong();
-    s_logger.info("Random seed = {}", seed);
+    LOGGER.info("Random seed = {}", seed);
     s_random.setSeed(seed);
     TestDataProvider<?> provider;
     s_dataProviders.put(String.class, new TestDataProvider<String>() {
@@ -707,9 +707,9 @@ public abstract class SecurityTestCase extends AbstractSecurityTestCaseAdapter i
       }
       throw new IllegalArgumentException("couldn't create test objects");
     }
-    s_logger.info("{} objects created for {}", objects.size(), clazz);
+    LOGGER.info("{} objects created for {}", objects.size(), clazz);
     for (final Object o : objects) {
-      s_logger.debug("{}", o);
+      LOGGER.debug("{}", o);
     }
     return objects;
   }
@@ -768,9 +768,9 @@ public abstract class SecurityTestCase extends AbstractSecurityTestCaseAdapter i
       }
       throw new IllegalArgumentException("couldn't create test objects");
     }
-    s_logger.info("{} objects created for {}", objects.size(), clazz);
+    LOGGER.info("{} objects created for {}", objects.size(), clazz);
     for (final Object o : objects) {
-      s_logger.debug("{}", o);
+      LOGGER.debug("{}", o);
     }
     return objects;
   }

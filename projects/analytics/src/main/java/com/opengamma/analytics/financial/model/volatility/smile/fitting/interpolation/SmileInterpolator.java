@@ -47,7 +47,7 @@ public abstract class SmileInterpolator<T extends SmileModelData> implements Gen
   /**
    * The logger
    */
-  protected static final Logger s_logger = LoggerFactory.getLogger(SmileInterpolator.class);
+  protected static final Logger LOGGER = LoggerFactory.getLogger(SmileInterpolator.class);
 
   private final VolatilityFunctionProvider<T> _model;
   private final WeightingFunction _weightingFunction;
@@ -115,7 +115,7 @@ public abstract class SmileInterpolator<T extends SmileModelData> implements Gen
     }
     if (n == 3) {
       if (gBest.getChiSq() / n > 1.0) {
-        s_logger.debug("chi^2 on fit to ", +n + " points is " + gBest.getChiSq());
+        LOGGER.debug("chi^2 on fit to ", +n + " points is " + gBest.getChiSq());
       }
       modelParameters.add(toSmileModelData(gBest.getModelParameters()));
     } else {
@@ -141,7 +141,7 @@ public abstract class SmileInterpolator<T extends SmileModelData> implements Gen
         }
 
         if (best.getChiSq() > 3.0) {
-          s_logger.debug("chi^2 on 3-point fit #" + i + " is " + best.getChiSq());
+          LOGGER.debug("chi^2 on 3-point fit #" + i + " is " + best.getChiSq());
         }
         modelParameters.add(toSmileModelData(best.getModelParameters()));
       }

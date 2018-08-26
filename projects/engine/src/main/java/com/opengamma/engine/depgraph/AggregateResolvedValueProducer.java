@@ -18,7 +18,7 @@ import com.opengamma.engine.value.ValueRequirement;
 
 /* package */class AggregateResolvedValueProducer extends AbstractResolvedValueProducer implements ResolvedValueCallbackChain {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(AggregateResolvedValueProducer.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(AggregateResolvedValueProducer.class);
 
   private int _pendingTasks = 1;
   private boolean _wantResult = true;
@@ -37,25 +37,25 @@ import com.opengamma.engine.value.ValueRequirement;
 
   @Override
   public void failed(final GraphBuildingContext context, final ValueRequirement value, final ResolutionFailure failure) {
-    s_logger.debug("Failed on {} for {}", value, this);
+    LOGGER.debug("Failed on {} for {}", value, this);
     Collection<ResolutionPump> pumps = null;
     synchronized (this) {
       if (_pendingTasks == Integer.MIN_VALUE) {
         // We were discarded after we requested the callback
-        s_logger.debug("Failed resolution after discard of {}", this);
+        LOGGER.debug("Failed resolution after discard of {}", this);
         return;
       }
       assert _pendingTasks > 0;
       if (--_pendingTasks == 0) {
         if (_wantResult) {
-          s_logger.debug("Pumping underlying after last input failed for {}", this);
+          LOGGER.debug("Pumping underlying after last input failed for {}", this);
           pumps = pumpImpl();
         } else {
-          s_logger.debug("No pending tasks after last input failed for {} but no results requested", this);
+          LOGGER.debug("No pending tasks after last input failed for {} but no results requested", this);
         }
       } else {
-        if (s_logger.isDebugEnabled()) {
-          s_logger.debug("{} pending tasks for {}", _pendingTasks, this);
+        if (LOGGER.isDebugEnabled()) {
+          LOGGER.debug("{} pending tasks for {}", _pendingTasks, this);
         }
       }
     }
@@ -78,18 +78,18 @@ import com.opengamma.engine.value.ValueRequirement;
   @Override
   public void resolved(final GraphBuildingContext context, final ValueRequirement valueRequirement, final ResolvedValue value, final ResolutionPump pump) {
     do {
-      s_logger.debug("Received {} for {}", value, valueRequirement);
+      LOGGER.debug("Received {} for {}", value, valueRequirement);
       boolean wantedResult = false;
       final boolean lastResult;
       synchronized (this) {
         if (_pendingTasks == Integer.MIN_VALUE) {
           // We were discarded after we requested the callback
-          s_logger.debug("Successful resolution after discard of {}", this);
+          LOGGER.debug("Successful resolution after discard of {}", this);
           break;
         }
         assert _pendingTasks > 0;
         if (_wantResult) {
-          s_logger.debug("Clearing \"want result\" flag for {}", this);
+          LOGGER.debug("Clearing \"want result\" flag for {}", this);
           wantedResult = true;
           _wantResult = false;
         }
@@ -103,7 +103,7 @@ import com.opengamma.engine.value.ValueRequirement;
         synchronized (this) {
           if (_pendingTasks == Integer.MIN_VALUE) {
             // We were discarded while the result was handled
-            s_logger.debug("Discard of {} while pushing result", this);
+            LOGGER.debug("Discard of {} while pushing result", this);
             break;
           }
           assert _pendingTasks > 0;
@@ -112,10 +112,10 @@ import com.opengamma.engine.value.ValueRequirement;
           }
           if (--_pendingTasks == 0) {
             if (_wantResult && !lastResult) {
-              s_logger.debug("Pumping underlying after last input resolved for {}", this);
+              LOGGER.debug("Pumping underlying after last input resolved for {}", this);
               pumps = pumpImpl();
             } else {
-              s_logger.debug("No pending tasks after last input resolved for {} but no further results requested", this);
+              LOGGER.debug("No pending tasks after last input resolved for {} but no further results requested", this);
             }
           }
         }
@@ -125,11 +125,11 @@ import com.opengamma.engine.value.ValueRequirement;
           synchronized (this) {
             if (_pendingTasks == Integer.MIN_VALUE) {
               // We were discarded while the result was rejected
-              s_logger.debug("Discard of {} while pushing rejected result", this);
+              LOGGER.debug("Discard of {} while pushing rejected result", this);
               break;
             }
             assert _pendingTasks > 0;
-            s_logger.debug("Reinstating \"want result\" flag for {}", this);
+            LOGGER.debug("Reinstating \"want result\" flag for {}", this);
             _wantResult = true;
           }
         }
@@ -157,11 +157,11 @@ import com.opengamma.engine.value.ValueRequirement;
     synchronized (this) {
       assert _pendingTasks >= 0;
       if (_pendingTasks == 0) {
-        s_logger.debug("Pumping underlying since no pending tasks for {}", this);
+        LOGGER.debug("Pumping underlying since no pending tasks for {}", this);
         pumps = pumpImpl();
       } else {
-        if (s_logger.isDebugEnabled()) {
-          s_logger.debug("Deferring pump while {} task(s) pending for {}", _pendingTasks, this);
+        if (LOGGER.isDebugEnabled()) {
+          LOGGER.debug("Deferring pump while {} task(s) pending for {}", _pendingTasks, this);
         }
         _wantResult = true;
       }
@@ -186,11 +186,11 @@ import com.opengamma.engine.value.ValueRequirement;
     if (pumps != null) {
       if (pumps.isEmpty()) {
         // We have nothing to pump, so must have finished (failed)
-        s_logger.debug("Finished {}", this);
+        LOGGER.debug("Finished {}", this);
         finished(context);
       } else {
-        if (s_logger.isDebugEnabled()) {
-          s_logger.debug("Pumping {} origin tasks from {}", pumps.size(), this);
+        if (LOGGER.isDebugEnabled()) {
+          LOGGER.debug("Pumping {} origin tasks from {}", pumps.size(), this);
         }
         for (ResolutionPump pump : pumps) {
           context.pump(pump);
@@ -202,7 +202,7 @@ import com.opengamma.engine.value.ValueRequirement;
   public void addProducer(final GraphBuildingContext context, final ResolvedValueProducer producer) {
     synchronized (this) {
       if (_pendingTasks == Integer.MIN_VALUE) {
-        s_logger.debug("Discarded before fallback producer {} added to {}", producer, this);
+        LOGGER.debug("Discarded before fallback producer {} added to {}", producer, this);
         return;
       }
       assert _pendingTasks >= 0;
@@ -210,8 +210,8 @@ import com.opengamma.engine.value.ValueRequirement;
         _wantResult = true;
       }
       _pendingTasks++;
-      if (s_logger.isDebugEnabled()) {
-        s_logger.debug("{} pending tasks for {}", _pendingTasks, this);
+      if (LOGGER.isDebugEnabled()) {
+        LOGGER.debug("{} pending tasks for {}", _pendingTasks, this);
       }
     }
     producer.addCallback(context, this);
@@ -223,10 +223,10 @@ import com.opengamma.engine.value.ValueRequirement;
       assert _pendingTasks >= 1;
       if (--_pendingTasks == 0) {
         if (_wantResult) {
-          s_logger.debug("Pumping underlying after startup tasks completed for {}", this);
+          LOGGER.debug("Pumping underlying after startup tasks completed for {}", this);
           pumps = pumpImpl();
         } else {
-          s_logger.debug("Startup tasks completed for {} but no further results requested", this);
+          LOGGER.debug("Startup tasks completed for {} but no further results requested", this);
         }
       }
     }
@@ -245,8 +245,8 @@ import com.opengamma.engine.value.ValueRequirement;
     if (count == 0) {
       List<ResolutionPump> pumps;
       synchronized (this) {
-        if (s_logger.isDebugEnabled()) {
-          s_logger.debug("Releasing {} - with {} pumped inputs", this, _pumps.size());
+        if (LOGGER.isDebugEnabled()) {
+          LOGGER.debug("Releasing {} - with {} pumped inputs", this, _pumps.size());
         }
         // If _pendingTasks > 0 then there may be calls to failure or resolved from one or more of them. Setting _pendingTasks to
         // Integer.MIN_VALUE means we can detect these and discard them. Our reference count is zero so nothing subscribing to us

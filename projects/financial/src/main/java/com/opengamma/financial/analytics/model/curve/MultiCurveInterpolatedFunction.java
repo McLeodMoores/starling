@@ -86,7 +86,7 @@ import com.opengamma.util.tuple.Pairs;
 public class MultiCurveInterpolatedFunction extends
   MultiCurveFunction<MulticurveProviderInterface, MulticurveDiscountBuildingRepository, GeneratorYDCurve, MulticurveSensitivity> {
   /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(MultiCurveInterpolatedFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(MultiCurveInterpolatedFunction.class);
   /**
    * @param curveConfigurationName The curve configuration name, not null
    */
@@ -363,7 +363,7 @@ public class MultiCurveInterpolatedFunction extends
             .get();
         final YieldAndDiscountCurve curve = provider.getCurve(curveName);
         if (curve == null) {
-          s_logger.error("Could not get curve called {} from configuration {}", curveName, getCurveConstructionConfigurationName());
+          LOGGER.error("Could not get curve called {} from configuration {}", curveName, getCurveConstructionConfigurationName());
         } else {
           final ValueSpecification curveSpec = new ValueSpecification(YIELD_CURVE, ComputationTargetSpecification.NULL, curveProperties);
           result.add(new ComputedValue(curveSpec, curve));

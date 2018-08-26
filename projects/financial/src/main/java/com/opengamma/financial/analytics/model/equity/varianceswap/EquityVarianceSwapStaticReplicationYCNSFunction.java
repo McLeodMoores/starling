@@ -40,7 +40,7 @@ import com.opengamma.util.money.Currency;
  * i.e. We are using the rates to infer the forward: spot / Z(t,T).
 */
 public class EquityVarianceSwapStaticReplicationYCNSFunction extends EquityVarianceSwapStaticReplicationFunction {
-  private static final Logger s_logger = LoggerFactory.getLogger(EquityVarianceSwapStaticReplicationYCNSFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(EquityVarianceSwapStaticReplicationYCNSFunction.class);
   private static final EquityDerivativeSensitivityCalculator CALCULATOR = new EquityDerivativeSensitivityCalculator(VarianceSwapPresentValueCalculator.getInstance());
 
   public EquityVarianceSwapStaticReplicationYCNSFunction() {
@@ -69,7 +69,7 @@ public class EquityVarianceSwapStaticReplicationYCNSFunction extends EquityVaria
     }
     final Set<String> curves = desiredValue.getConstraints().getValues(ValuePropertyNames.CURVE);
     if (curves == null || curves.size() != 1) {
-      s_logger.error("Must specify a curve name");
+      LOGGER.error("Must specify a curve name");
       return null;
     }
     final String curveName = Iterables.getOnlyElement(curves);

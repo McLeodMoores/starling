@@ -61,7 +61,7 @@ import com.opengamma.util.tuple.Pairs;
 public class DbHistoricalTimeSeriesDataPointsWorker extends AbstractDbMaster {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(DbHistoricalTimeSeriesDataPointsWorker.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(DbHistoricalTimeSeriesDataPointsWorker.class);
 
   /**
    * The prefix used for data point unique identifiers.
@@ -170,7 +170,7 @@ public class DbHistoricalTimeSeriesDataPointsWorker extends AbstractDbMaster {
   public UniqueId updateTimeSeriesDataPoints(final ObjectIdentifiable objectId, final LocalDateDoubleTimeSeries series) {
     ArgumentChecker.notNull(objectId, "objectId");
     ArgumentChecker.notNull(series, "series");
-    s_logger.debug("add time-series data points to {}", objectId);
+    LOGGER.debug("add time-series data points to {}", objectId);
 
     final UniqueId uniqueId = resolveObjectId(objectId, VersionCorrection.LATEST);
     if (series.isEmpty()) {
@@ -248,7 +248,7 @@ public class DbHistoricalTimeSeriesDataPointsWorker extends AbstractDbMaster {
   public UniqueId correctTimeSeriesDataPoints(final ObjectIdentifiable objectId, final LocalDateDoubleTimeSeries series) {
     ArgumentChecker.notNull(objectId, "objectId");
     ArgumentChecker.notNull(series, "series");
-    s_logger.debug("add time-series data points to {}", objectId);
+    LOGGER.debug("add time-series data points to {}", objectId);
     final UniqueId uniqueId = resolveObjectId(objectId, VersionCorrection.LATEST);
     if (series.isEmpty()) {
       return uniqueId;
@@ -300,7 +300,7 @@ public class DbHistoricalTimeSeriesDataPointsWorker extends AbstractDbMaster {
     if (fromDateInclusive != null && toDateInclusive != null) {
       ArgumentChecker.inOrderOrEqual(fromDateInclusive, toDateInclusive, "fromDateInclusive", "toDateInclusive");
     }
-    s_logger.debug("removing time-series data points from {}", objectId);
+    LOGGER.debug("removing time-series data points from {}", objectId);
 
     final UniqueId uniqueId = resolveObjectId(objectId, VersionCorrection.LATEST);
     Pair<UniqueId, Instant> result = getTransactionTemplateRetrying(getMaxRetries()).execute(new TransactionCallback<Pair<UniqueId, Instant>>() {

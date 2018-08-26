@@ -44,12 +44,12 @@ import com.opengamma.util.money.CurrencyAmount;
 
   // is this likely to change? will it ever by dynamic? i.e. client specifies what types it wants history for?
   /** Types of result values for which history is stored. */
-  private static final Set<Class<?>> s_historyTypes =
+  private static final Set<Class<?>> HISTORY_TYPES =
       ImmutableSet.of(Double.class, BigDecimal.class, CurrencyAmount.class, LocalDateLabelledMatrix1D.class);
   /** Empty result for types that don't have history, makes for cleaner code than using null. */
-  private static final Result s_emptyResult = Result.empty();
+  private static final Result EMPTY_RESULT = Result.empty();
   /** Empty result for types that have history, makes for cleaner code than using null. */
-  private static final Result s_emptyResultWithHistory = Result.emptyWithHistory();
+  private static final Result EMPTY_RESULT_WITH_HISTORY = Result.emptyWithHistory();
 
   /** The cached results. */
   private final Map<ResultKey, CacheItem> _results = Maps.newHashMap();
@@ -159,7 +159,7 @@ import com.opengamma.util.money.CurrencyAmount;
       boolean updatedByLastResults = (item.getLastUpdateId() == _lastUpdateId);
       return Result.forValue(item.getValue(), null, null, updatedByLastResults);
     } else {
-      return s_emptyResult;
+      return EMPTY_RESULT;
     }
   }
 
@@ -179,10 +179,10 @@ import com.opengamma.util.money.CurrencyAmount;
       boolean updatedByLastResults = (item.getLastUpdateId() == _lastUpdateId);
       return Result.forValue(item.getValue(), item.getHistory(), item.getAggregatedExecutionLog(), updatedByLastResults);
     } else {
-      if (s_historyTypes.contains(columnType)) {
-        return s_emptyResultWithHistory;
+      if (HISTORY_TYPES.contains(columnType)) {
+        return EMPTY_RESULT_WITH_HISTORY;
       } else {
-        return s_emptyResult;
+        return EMPTY_RESULT;
       }
     }
   }
@@ -209,7 +209,7 @@ import com.opengamma.util.money.CurrencyAmount;
    * @return The history, possibly null
    */
   /* package */ Collection<Object> emptyHistory(Class<?> type) {
-    if (s_historyTypes.contains(type)) {
+    if (HISTORY_TYPES.contains(type)) {
       return Collections.emptyList();
     } else {
       return null;
@@ -313,7 +313,7 @@ import com.opengamma.util.money.CurrencyAmount;
       // data subscriptions take time to set up. in that case the history will initially be null (because error
       // sentinel types aren't in s_historyTypes) and then when a valid value arrives the type can be checked and
       // history created if required
-      if (_history == null && s_historyTypes.contains(latestValue.getClass())) {
+      if (_history == null && HISTORY_TYPES.contains(latestValue.getClass())) {
         _history = new CircularFifoBuffer(MAX_HISTORY_SIZE);
       }
       if (_history != null) {

@@ -47,7 +47,7 @@ import com.opengamma.util.test.TestLifecycle;
 @Test(groups = TestGroup.UNIT)
 public class DepGraphConversionTest extends AbstractDependencyGraphBuilderTest {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(DepGraphConversionTest.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(DepGraphConversionTest.class);
 
   public void functionWithStaticConversion() {
     TestLifecycle.begin();
@@ -101,7 +101,7 @@ public class DepGraphConversionTest extends AbstractDependencyGraphBuilderTest {
 
         @Override
         public Set<ValueSpecification> getResults(FunctionCompilationContext context, ComputationTarget target, Map<ValueSpecification, ValueRequirement> inputs) {
-          s_logger.debug("fnConv late resolving with inputs {}");
+          LOGGER.debug("fnConv late resolving with inputs {}");
           getResultsCalled.set(true);
           return super.getResults(context, target, inputs);
         }
@@ -146,7 +146,7 @@ public class DepGraphConversionTest extends AbstractDependencyGraphBuilderTest {
 
         @Override
         public Set<ValueSpecification> getResults(FunctionCompilationContext context, ComputationTarget target, Map<ValueSpecification, ValueRequirement> inputs) {
-          s_logger.debug("fnConv1 late resolving with inputs {}", inputs);
+          LOGGER.debug("fnConv1 late resolving with inputs {}", inputs);
           assertEquals(1, inputs.size());
           final ValueSpecification input = inputs.keySet().iterator().next();
           return Collections.singleton(new ValueSpecification(helper.getRequirement2().getValueName(), target.toSpecification(), ValueProperties
@@ -169,7 +169,7 @@ public class DepGraphConversionTest extends AbstractDependencyGraphBuilderTest {
 
         @Override
         public Set<ValueSpecification> getResults(FunctionCompilationContext context, ComputationTarget target, Map<ValueSpecification, ValueRequirement> inputs) {
-          s_logger.debug("fnConv2 late resolving with inputs {}", inputs);
+          LOGGER.debug("fnConv2 late resolving with inputs {}", inputs);
           assertEquals(1, inputs.size());
           return super.getResults(context, target, inputs);
         }
@@ -191,19 +191,19 @@ public class DepGraphConversionTest extends AbstractDependencyGraphBuilderTest {
       assertNotNull(graph);
       graph = DependencyGraphImpl.removeUnnecessaryValues(graph);
       Map<MockFunction, DependencyNode> nodes = assertGraphContains(graph, fn1, fnConv1);
-      s_logger.debug("fnConv1 - inputs = {}", DependencyNodeImpl.getInputValues(nodes.get(fnConv1)));
-      s_logger.debug("fnConv1 - outputs = {}", DependencyNodeImpl.getOutputValues(nodes.get(fnConv1)));
+      LOGGER.debug("fnConv1 - inputs = {}", DependencyNodeImpl.getInputValues(nodes.get(fnConv1)));
+      LOGGER.debug("fnConv1 - outputs = {}", DependencyNodeImpl.getOutputValues(nodes.get(fnConv1)));
       assertTrue(nodes.get(fnConv1).getOutputValue(0).getProperties().getValues("TEST").contains("Foo"));
       builder.addTarget(helper.getRequirement2Bar());
       graph = builder.getDependencyGraph();
       assertNotNull(graph);
       graph = DependencyGraphImpl.removeUnnecessaryValues(graph);
       nodes = assertGraphContains(graph, fn1, fnConv1, fnConv2);
-      s_logger.debug("fnConv1 - inputs = {}", DependencyNodeImpl.getInputValues(nodes.get(fnConv1)));
-      s_logger.debug("fnConv1 - outputs = {}", DependencyNodeImpl.getOutputValues(nodes.get(fnConv1)));
+      LOGGER.debug("fnConv1 - inputs = {}", DependencyNodeImpl.getInputValues(nodes.get(fnConv1)));
+      LOGGER.debug("fnConv1 - outputs = {}", DependencyNodeImpl.getOutputValues(nodes.get(fnConv1)));
       assertTrue(nodes.get(fnConv1).getOutputValue(0).getProperties().getValues("TEST").contains("Foo"));
-      s_logger.debug("fnConv2 - inputs = {}", DependencyNodeImpl.getInputValues(nodes.get(fnConv2)));
-      s_logger.debug("fnConv2 - outputs = {}", DependencyNodeImpl.getOutputValues(nodes.get(fnConv2)));
+      LOGGER.debug("fnConv2 - inputs = {}", DependencyNodeImpl.getInputValues(nodes.get(fnConv2)));
+      LOGGER.debug("fnConv2 - outputs = {}", DependencyNodeImpl.getOutputValues(nodes.get(fnConv2)));
       assertTrue(nodes.get(fnConv2).getOutputValue(0).getProperties().getValues("TEST").contains("Bar"));
     } finally {
       TestLifecycle.end();
@@ -227,7 +227,7 @@ public class DepGraphConversionTest extends AbstractDependencyGraphBuilderTest {
 
         @Override
         public Set<ValueSpecification> getResults(FunctionCompilationContext context, ComputationTarget target, Map<ValueSpecification, ValueRequirement> inputs) {
-          s_logger.debug("fnConv late resolving with inputs {}", inputs);
+          LOGGER.debug("fnConv late resolving with inputs {}", inputs);
           assertEquals(1, inputs.size());
           getResultsInvoked.incrementAndGet();
           return super.getResults(context, target, inputs);
@@ -243,8 +243,8 @@ public class DepGraphConversionTest extends AbstractDependencyGraphBuilderTest {
       assertNotNull(graph);
       graph = DependencyGraphImpl.removeUnnecessaryValues(graph);
       Map<MockFunction, DependencyNode> nodes = assertGraphContains(graph, fn1, fnConv, fnConv);
-      s_logger.debug("fnConv - inputs = {}", DependencyNodeImpl.getInputValues(nodes.get(fnConv)));
-      s_logger.debug("fnConv - outputs = {}", DependencyNodeImpl.getOutputValues(nodes.get(fnConv)));
+      LOGGER.debug("fnConv - inputs = {}", DependencyNodeImpl.getInputValues(nodes.get(fnConv)));
+      LOGGER.debug("fnConv - outputs = {}", DependencyNodeImpl.getOutputValues(nodes.get(fnConv)));
       assertEquals(2, getResultsInvoked.get());
     } finally {
       TestLifecycle.end();
@@ -452,7 +452,7 @@ public class DepGraphConversionTest extends AbstractDependencyGraphBuilderTest {
       DependencyGraph graph = builder.getDependencyGraph();
       assertNotNull(graph);
       graph = DependencyGraphImpl.removeUnnecessaryValues(graph);
-      s_logger.debug("After removeUnnecessaryValues");
+      LOGGER.debug("After removeUnnecessaryValues");
       //graph.dumpStructureASCII(System.out);
     } finally {
       TestLifecycle.end();

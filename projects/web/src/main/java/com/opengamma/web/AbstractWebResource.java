@@ -46,7 +46,7 @@ public abstract class AbstractWebResource {
   /**
    * Logger.
    */
-  private static final Logger s_logger = LoggerFactory.getLogger(AbstractWebResource.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(AbstractWebResource.class);
   
   private static final int INDENTATION_SIZE = 4;
   /**
@@ -149,7 +149,7 @@ public abstract class AbstractWebResource {
         // NOTE jim 8-Jan-2014 -- changed last param from false to true so bean type is set.  Not necessary for UI, but enables easier parsing if cut and pasted elsewhere.
         return JodaBeanSerialization.serializer(true).xmlWriter().write((Bean) obj, true);
       } catch (RuntimeException ex) {
-        s_logger.warn("Error serialising bean to XML with JodaBean serializer", ex);
+        LOGGER.warn("Error serialising bean to XML with JodaBean serializer", ex);
         return createXML(obj);
       }
     }
@@ -159,12 +159,12 @@ public abstract class AbstractWebResource {
   protected String createXML(Object obj) {
     // get xml and pretty print it
     FudgeMsgEnvelope msg = getFudgeContext().toFudgeMsg(obj);
-    s_logger.debug("{} converted to fudge {}", obj, msg);
+    LOGGER.debug("{} converted to fudge {}", obj, msg);
     StringWriter buf = new StringWriter(1024);
     @SuppressWarnings("resource")
     FudgeMsgWriter writer = new FudgeMsgWriter(new FudgeXMLStreamWriter(getFudgeContext(), buf));
     writer.writeMessageEnvelope(msg);
-    s_logger.debug("{} converted to xmk {}", obj, buf.toString());
+    LOGGER.debug("{} converted to xmk {}", obj, buf.toString());
     try {
       return prettyXML(buf.toString(), INDENTATION_SIZE);
     } catch (Exception ex) {
@@ -194,11 +194,11 @@ public abstract class AbstractWebResource {
    * @return the configuration object
    */
   protected Object parseJSON(String json) {
-    s_logger.debug("converting JSON to java: " + json);
+    LOGGER.debug("converting JSON to java: " + json);
     FudgeMsgJSONReader fudgeJSONReader = new FudgeMsgJSONReader(getFudgeContext(), new StringReader(json));
     
     FudgeMsg fudgeMsg = fudgeJSONReader.readMessage();
-    s_logger.debug("converted FudgeMsg: " + fudgeMsg);
+    LOGGER.debug("converted FudgeMsg: " + fudgeMsg);
     
     return new FudgeDeserializer(getFudgeContext()).fudgeMsgToObject(fudgeMsg);
     

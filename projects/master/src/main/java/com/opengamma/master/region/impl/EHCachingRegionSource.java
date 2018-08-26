@@ -26,7 +26,7 @@ import com.opengamma.util.ehcache.EHCacheUtils;
  */
 public class EHCachingRegionSource extends AbstractEHCachingSourceWithExternalBundle<Region, RegionSource> implements RegionSource {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(EHCachingRegionSource.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(EHCachingRegionSource.class);
   /**
    * The cache name.
    */
@@ -59,12 +59,12 @@ public class EHCachingRegionSource extends AbstractEHCachingSourceWithExternalBu
     Region result = null;
     Element element = _cache.get(bundle);
     if (element != null) {
-      s_logger.debug("Cache hit on {}", bundle);
+      LOGGER.debug("Cache hit on {}", bundle);
       result = (Region) element.getObjectValue();
     } else {
-      s_logger.debug("Cache miss on {}", bundle);
+      LOGGER.debug("Cache miss on {}", bundle);
       result = getUnderlying().getHighestLevelRegion(bundle);
-      s_logger.debug("Caching regions {}", result);
+      LOGGER.debug("Caching regions {}", result);
       element = new Element(bundle, result);
       _cache.put(element);
       if (result != null) {

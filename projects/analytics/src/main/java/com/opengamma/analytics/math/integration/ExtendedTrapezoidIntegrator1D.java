@@ -29,7 +29,7 @@ import com.opengamma.analytics.math.util.wrapper.CommonsMathWrapper;
  * of trapezoidal integration.
  */
 public class ExtendedTrapezoidIntegrator1D extends Integrator1D<Double, Double> {
-  private static final Logger s_logger = LoggerFactory.getLogger(ExtendedTrapezoidIntegrator1D.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ExtendedTrapezoidIntegrator1D.class);
   private static final UnivariateRealIntegrator INTEGRATOR = new TrapezoidIntegrator();
 
   /**
@@ -46,7 +46,7 @@ public class ExtendedTrapezoidIntegrator1D extends Integrator1D<Double, Double> 
       if (lower < upper) {
         return INTEGRATOR.integrate(CommonsMathWrapper.wrapUnivariate(f), lower, upper);
       }
-      s_logger.info("Upper bound was less than lower bound; swapping bounds and negating result");
+      LOGGER.info("Upper bound was less than lower bound; swapping bounds and negating result");
       return -INTEGRATOR.integrate(CommonsMathWrapper.wrapUnivariate(f), upper, lower);
     } catch (final FunctionEvaluationException e) {
       throw new MathException(e);

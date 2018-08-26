@@ -46,7 +46,7 @@ public abstract class SimpleCalculationNodeInvocationContainer implements Lifecy
    */
   private static final long FAILURE_RETENTION = 5L * 60L * 100000000L; // 5m
 
-  private static final Logger s_logger = LoggerFactory.getLogger(SimpleCalculationNodeInvocationContainer.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(SimpleCalculationNodeInvocationContainer.class);
 
   // private static final int KILL_THRESHOLD_SECS = 120;
 
@@ -388,14 +388,14 @@ public abstract class SimpleCalculationNodeInvocationContainer implements Lifecy
         synchronized (this) {
           node = getNodes().poll();
           if (node == null) {
-            s_logger.debug("Adding job {} to runnable queue", jobexec.getJob().getSpecification().getJobId());
+            LOGGER.debug("Adding job {} to runnable queue", jobexec.getJob().getSpecification().getJobId());
             _runnableJobs.add(jobexec);
             return;
           }
         }
       }
     }
-    s_logger.debug("Spawning execution of job {}", jobexec.getJob().getSpecification().getJobId());
+    LOGGER.debug("Spawning execution of job {}", jobexec.getJob().getSpecification().getJobId());
     final SimpleCalculationNode parallelNode = node;
     getExecutorService().execute(new Runnable() {
       @Override
@@ -411,13 +411,13 @@ public abstract class SimpleCalculationNodeInvocationContainer implements Lifecy
       synchronized (this) {
         node = getNodes().poll();
         if (node == null) {
-          s_logger.debug("Adding job {} to partially run queue", jobexec.getEntry().getJob().getSpecification().getJobId());
+          LOGGER.debug("Adding job {} to partially run queue", jobexec.getEntry().getJob().getSpecification().getJobId());
           _partialJobs.add(jobexec);
           return;
         }
       }
     }
-    s_logger.debug("Spawning re-execution of job {}", jobexec.getEntry().getJob().getSpecification().getJobId());
+    LOGGER.debug("Spawning re-execution of job {}", jobexec.getEntry().getJob().getSpecification().getJobId());
     final SimpleCalculationNode parallelNode = node;
     getExecutorService().execute(new Runnable() {
       @Override
@@ -451,7 +451,7 @@ public abstract class SimpleCalculationNodeInvocationContainer implements Lifecy
       blocked = execution.getBlocked();
     }
     if (blocked != null) {
-      s_logger.info("Job {} completed - releasing blocked jobs", execution.getJobId());
+      LOGGER.info("Job {} completed - releasing blocked jobs", execution.getJobId());
       for (final JobEntry tail : blocked) {
         if (tail.getReceiver() != null) {
           if (tail.releaseBlockCount()) {
@@ -460,7 +460,7 @@ public abstract class SimpleCalculationNodeInvocationContainer implements Lifecy
         }
       }
     } else {
-      s_logger.info("Job {} completed - no tail jobs", execution.getJobId());
+      LOGGER.info("Job {} completed - no tail jobs", execution.getJobId());
     }
   }
 
@@ -483,18 +483,18 @@ public abstract class SimpleCalculationNodeInvocationContainer implements Lifecy
       boolean blocked = false;
       for (final Long requiredId : requiredJobIds) {
         JobExecution required = getExecution(requiredId);
-        s_logger.debug("Job {} requires {}", jobExecution.getJobId(), requiredId);
+        LOGGER.debug("Job {} requires {}", jobExecution.getJobId(), requiredId);
         if (required != null) {
           synchronized (required) {
             switch (required.getStatus()) {
               case COMPLETED:
                 // No action needed - we can continue
-                s_logger.debug("Required job {} completed (from execution cache)", requiredId);
+                LOGGER.debug("Required job {} completed (from execution cache)", requiredId);
                 break;
               case FAILED:
                 // We can't run
                 failed = true;
-                s_logger.debug("Required job {} failed (from execution cache)", requiredId);
+                LOGGER.debug("Required job {} failed (from execution cache)", requiredId);
                 break;
               case RUNNING:
                 // We're blocked
@@ -502,7 +502,7 @@ public abstract class SimpleCalculationNodeInvocationContainer implements Lifecy
                 // Will increment or initialize to 2
                 jobEntry.incrementBlockCount();
                 required.blockJob(jobEntry);
-                s_logger.debug("Required job {} blocking {}", requiredId, jobExecution.getJobId());
+                LOGGER.debug("Required job {} blocking {}", requiredId, jobExecution.getJobId());
                 break;
             }
           }
@@ -510,21 +510,21 @@ public abstract class SimpleCalculationNodeInvocationContainer implements Lifecy
           required = getFailure(requiredId);
           if (required != null) {
             failed = true;
-            s_logger.debug("Required job {} failed (from failure cache)", requiredId);
+            LOGGER.debug("Required job {} failed (from failure cache)", requiredId);
           } else {
-            s_logger.debug("Required job {} completion inferred", requiredId);
+            LOGGER.debug("Required job {} completion inferred", requiredId);
           }
         }
       }
       if (failed) {
-        s_logger.debug("Failing execution of {}", jobExecution.getJobId());
+        LOGGER.debug("Failing execution of {}", jobExecution.getJobId());
         failExecution(jobExecution);
         return;
       }
       if (blocked) {
         // Decrement the additional count from the initialization
         if (!jobEntry.releaseBlockCount()) {
-          s_logger.debug("Blocked execution of {}", jobExecution.getJobId());
+          LOGGER.debug("Blocked execution of {}", jobExecution.getJobId());
           return;
         }
       }
@@ -547,27 +547,27 @@ public abstract class SimpleCalculationNodeInvocationContainer implements Lifecy
       // Executor reference is null while the job is being canceled. An interrupt may be done as part of
       // this so we need to make sure we swallow it rather than leave ourselves in an interrupted state.
       if (Thread.interrupted()) {
-        s_logger.debug("Interrupt status cleared");
+        LOGGER.debug("Interrupt status cleared");
         return;
       }
       switch (spin) {
         case 0:
-          s_logger.debug("Waiting for interrupt");
+          LOGGER.debug("Waiting for interrupt");
           break;
         case 1:
-          s_logger.info("Waiting for interrupt");
+          LOGGER.info("Waiting for interrupt");
           break;
         case 2:
-          s_logger.warn("Waiting for interrupt");
+          LOGGER.warn("Waiting for interrupt");
           break;
         default:
-          s_logger.error("Waiting for interrupt");
+          LOGGER.error("Waiting for interrupt");
           break;
       }
       try {
         Thread.sleep(10);
       } catch (final InterruptedException e) {
-        s_logger.debug("Interrupt received");
+        LOGGER.debug("Interrupt received");
         return;
       }
     } while (++spin < 1000);
@@ -583,10 +583,10 @@ public abstract class SimpleCalculationNodeInvocationContainer implements Lifecy
   private void executeJobs(final SimpleCalculationNode node, JobEntry job, PartialJobEntry resumeJob) {
     do {
       if (resumeJob == null) {
-        s_logger.info("Executing job {} on {}", job.getExecution().getJobId(), node.getNodeId());
+        LOGGER.info("Executing job {} on {}", job.getExecution().getJobId(), node.getNodeId());
       } else {
         job = resumeJob.getEntry();
-        s_logger.info("Resuming job {} on {}", job.getExecution().getJobId(), node.getNodeId());
+        LOGGER.info("Resuming job {} on {}", job.getExecution().getJobId(), node.getNodeId());
       }
       CalculationJobResult result = null;
       if (job.getExecution().threadBusy(job.getJob())) {
@@ -604,7 +604,7 @@ public abstract class SimpleCalculationNodeInvocationContainer implements Lifecy
             // will give us a callable handle back to the job when it is ready to return to this thread. In the meantime we use
             // this thread to perform other work.
             threadFree(job.getExecution());
-            s_logger.debug("Job {} running asynchronously", job.getExecution().getJobId());
+            LOGGER.debug("Job {} running asynchronously", job.getExecution().getJobId());
             final SimpleCalculationNodeState state = node.saveState();
             final JobEntry originalJob = job;
             e.setResultListener(new ResultListener<SimpleCalculationNode.Deferred<CalculationJobResult>>() {
@@ -627,7 +627,7 @@ public abstract class SimpleCalculationNodeInvocationContainer implements Lifecy
                   result = aresult.getResult();
                 } catch (final RuntimeException e) {
                   // Don't fail the execution locally as we already declared it as completed; just report back to the receiver
-                  s_logger.warn("Jop {} failed: {}", originalJob.getExecution().getJobId(), e.getMessage());
+                  LOGGER.warn("Jop {} failed: {}", originalJob.getExecution().getJobId(), e.getMessage());
                   originalJob.getReceiver().executionFailed(node, e);
                   _executions.remove(originalJob.getExecution().getJobId());
                   return;
@@ -638,17 +638,17 @@ public abstract class SimpleCalculationNodeInvocationContainer implements Lifecy
             });
           }
         } catch (final CancellationException e) {
-          s_logger.debug("Job {} cancelled", job.getExecution().getJobId());
+          LOGGER.debug("Job {} cancelled", job.getExecution().getJobId());
         } catch (final Exception e) {
           // Any tail jobs will be abandoned
           threadFree(job.getExecution());
-          s_logger.warn("Job {} failed: {}", job.getExecution().getJobId(), e.getMessage());
+          LOGGER.warn("Job {} failed: {}", job.getExecution().getJobId(), e.getMessage());
           failExecution(job.getExecution());
           job.getReceiver().executionFailed(node, e);
           _executions.remove(job.getExecution().getJobId());
         }
       } else {
-        s_logger.debug("Job {} cancelled", job.getExecution().getJobId());
+        LOGGER.debug("Job {} cancelled", job.getExecution().getJobId());
       }
       if (result != null) {
         succeedExecution(job.getExecution());
@@ -672,7 +672,7 @@ public abstract class SimpleCalculationNodeInvocationContainer implements Lifecy
         }
       }
     } while (true);
-    s_logger.debug("Finished job execution on {}", node.getNodeId());
+    LOGGER.debug("Finished job execution on {}", node.getNodeId());
     onJobExecutionComplete();
     // Housekeeping
     if (_failureCount.get() > FAILURE_CLEANUP_PERIOD) {
@@ -682,43 +682,43 @@ public abstract class SimpleCalculationNodeInvocationContainer implements Lifecy
       while (entryIterator.hasNext()) {
         final Map.Entry<Long, JobExecution> entry = entryIterator.next();
         if (entry.getValue().getAge() > FAILURE_RETENTION) {
-          s_logger.debug("Removed job {} from failure set", entry.getKey());
+          LOGGER.debug("Removed job {} from failure set", entry.getKey());
           entryIterator.remove();
           count++;
         } else {
           break;
         }
       }
-      s_logger.info("Removed {} dead entries from failure map, {} remaining", count, _failures.size());
+      LOGGER.info("Removed {} dead entries from failure map, {} remaining", count, _failures.size());
     }
-    s_logger.debug("Failure map size = {}, execution map size = {}", _failures.size(), _executions.size());
+    LOGGER.debug("Failure map size = {}, execution map size = {}", _failures.size(), _executions.size());
   }
 
   public void cancel(final CalculationJobSpecification jobSpec) {
     final JobExecution jobExec = getExecution(jobSpec.getJobId());
     if (jobExec == null) {
-      s_logger.warn("Request to cancel job {} but already failed or completed", jobSpec.getJobId());
+      LOGGER.warn("Request to cancel job {} but already failed or completed", jobSpec.getJobId());
       return;
     }
-    s_logger.info("Cancelling job {}", jobSpec.getJobId());
+    LOGGER.info("Cancelling job {}", jobSpec.getJobId());
     failExecution(jobExec);
     Pair<Thread, CalculationJob> executor = jobExec.getAndSetExecutor(null);
     if (executor != null) {
-      s_logger.debug("Marking job {} cancelled", executor.getSecond().getSpecification().getJobId());
+      LOGGER.debug("Marking job {} cancelled", executor.getSecond().getSpecification().getJobId());
       executor.getSecond().cancel();
-      s_logger.info("Interrupting thread {}", executor.getFirst().getName());
+      LOGGER.info("Interrupting thread {}", executor.getFirst().getName());
       executor.getFirst().interrupt();
       // Need to wait for the execution thread to acknowledge the interrupt, or it may be canceled by us swapping the executor
       // reference back in and the interrupt will affect a subsequent wait causing erroneous behavior
       while (executor.getFirst().isInterrupted() && executor.getFirst().isAlive()) {
-        s_logger.debug("Waiting for thread {} to accept the interrupt", executor.getFirst().getName());
+        LOGGER.debug("Waiting for thread {} to accept the interrupt", executor.getFirst().getName());
         try {
           Thread.sleep(20);
         } catch (InterruptedException ex) {
-          s_logger.debug("cancel interrupted", ex);
+          LOGGER.debug("cancel interrupted", ex);
         }
       }
-      s_logger.debug("Thread {} interrupted", executor.getFirst().getName());
+      LOGGER.debug("Thread {} interrupted", executor.getFirst().getName());
       executor = jobExec.getAndSetExecutor(executor);
       assert executor == null;
     }

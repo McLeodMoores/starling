@@ -58,7 +58,7 @@ public class NettedFixedCashFlowFunction extends AbstractFunction {
 
   /** Property name for the date field */
   public static final String PROPERTY_DATE = "Date";
-  private static final Logger s_logger = LoggerFactory.getLogger(NettedFixedCashFlowFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(NettedFixedCashFlowFunction.class);
   private static final NettedFixedCashFlowFromDateCalculator NETTING_CASH_FLOW_CALCULATOR = NettedFixedCashFlowFromDateCalculator.getInstance();
 
   @Override
@@ -105,13 +105,13 @@ public class NettedFixedCashFlowFunction extends AbstractFunction {
       if (!OpenGammaCompilationContext.isPermissive(context)) {
         final String date = constraints.getStrictValue(PROPERTY_DATE);
         if (date == null) {
-          s_logger.error("Must supply a date from which to calculate the cash-flows");
+          LOGGER.error("Must supply a date from which to calculate the cash-flows");
           return null;
         }
         try {
           LocalDate.parse(date);
         } catch (final DateTimeException e) {
-          s_logger.error("Could not parse date {} - must be in form YYYY-MM-DD", date);
+          LOGGER.error("Could not parse date {} - must be in form YYYY-MM-DD", date);
           return null;
         }
       }

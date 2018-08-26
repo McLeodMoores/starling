@@ -39,7 +39,7 @@ import com.opengamma.util.time.Tenor;
  */
 public abstract class ForexPutCallDeltaVolatilitySurfaceFunction extends ForexVolatilitySurfaceFunction {
   /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(ForexPutCallDeltaVolatilitySurfaceFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ForexPutCallDeltaVolatilitySurfaceFunction.class);
 
   @Override
   public Set<ComputedValue> execute(final FunctionExecutionContext executionContext, final FunctionInputs inputs, final ComputationTarget target, final Set<ValueRequirement> desiredValues) {
@@ -92,7 +92,7 @@ public abstract class ForexPutCallDeltaVolatilitySurfaceFunction extends ForexVo
             volatilities.add(volatility);
           }
         } else {
-          s_logger.info("Had a null value for tenor number " + j);
+          LOGGER.info("Had a null value for tenor number " + j);
         }
       }
       smile[i] = new SmileDeltaParameters(t, deltas.toDoubleArray(), volatilities.toDoubleArray());

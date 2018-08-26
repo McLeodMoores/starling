@@ -29,7 +29,7 @@ import com.opengamma.util.ArgumentChecker;
 @Config(description = "Function configuration definition", group = ConfigGroups.MISC)
 public final class FunctionConfigurationDefinition {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(FunctionConfigurationDefinition.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(FunctionConfigurationDefinition.class);
 
   /**
    * Function bundle name.
@@ -155,7 +155,7 @@ public final class FunctionConfigurationDefinition {
       } else if (functionConfiguration instanceof StaticFunctionConfiguration) {
         staticFunctions.add((StaticFunctionConfiguration) functionConfiguration);
       } else {
-        s_logger.warn("Unsupported FunctionConfiguration type {} ", functionConfiguration.getClass());
+        LOGGER.warn("Unsupported FunctionConfiguration type {} ", functionConfiguration.getClass());
       }
     }
 

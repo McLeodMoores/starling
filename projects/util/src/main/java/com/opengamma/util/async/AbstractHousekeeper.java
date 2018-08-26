@@ -25,8 +25,8 @@ import com.opengamma.util.NamedThreadPoolFactory;
  */
 public abstract class AbstractHousekeeper<T> {
 
-  private static final ScheduledThreadPoolExecutor s_executor = new ScheduledThreadPoolExecutor(2, new NamedThreadPoolFactory("Housekeeper"));
-  private static final Logger s_logger = LoggerFactory.getLogger(AbstractHousekeeper.class);
+  private static final ScheduledThreadPoolExecutor EXECUTOR = new ScheduledThreadPoolExecutor(2, new NamedThreadPoolFactory("Housekeeper"));
+  private static final Logger LOGGER = LoggerFactory.getLogger(AbstractHousekeeper.class);
 
   private static final int PERIOD = Integer.parseInt(System.getProperty("Housekeeper.period", "3"));
 
@@ -40,7 +40,7 @@ public abstract class AbstractHousekeeper<T> {
    * @param target the target to perform the action on, not null
    */
   protected AbstractHousekeeper(final T target) {
-    s_logger.debug("Created housekeeper {} for {}", this, target);
+    LOGGER.debug("Created housekeeper {} for {}", this, target);
     _target = new WeakReference<T>(target);
   }
 
@@ -59,21 +59,21 @@ public abstract class AbstractHousekeeper<T> {
    */
   public synchronized void start() {
     if (_startCount++ == 0) {
-      s_logger.info("Starting housekeeper {} for {}", this, _target);
+      LOGGER.info("Starting housekeeper {} for {}", this, _target);
       final int period = getPeriodSeconds();
       if (period > 0) {
-        _cancel = s_executor.scheduleWithFixedDelay(new Runnable() {
+        _cancel = EXECUTOR.scheduleWithFixedDelay(new Runnable() {
           @Override
           public void run() {
             try {
               if (housekeep()) {
                 return;
               } else {
-                s_logger.info("Housekeeper {} for {} returned false", this, _target);
+                LOGGER.info("Housekeeper {} for {} returned false", this, _target);
               }
             } catch (Throwable t) {
-              s_logger.error("Cancelling errored {} for {}", this, _target);
-              s_logger.warn("Caught exception", t);
+              LOGGER.error("Cancelling errored {} for {}", this, _target);
+              LOGGER.warn("Caught exception", t);
             }
             cancel();
           }
@@ -97,7 +97,7 @@ public abstract class AbstractHousekeeper<T> {
    * Cancels the scheduling immediately, regardless of how many times {@link #start} was called.
    */
   protected synchronized void cancel() {
-    s_logger.info("Stopping housekeeper {} for {}", this, _target);
+    LOGGER.info("Stopping housekeeper {} for {}", this, _target);
     if (_cancel != null) {
       _cancel.cancel(false);
       _cancel = null;
@@ -130,10 +130,10 @@ public abstract class AbstractHousekeeper<T> {
   protected boolean housekeep() {
     final T target = getTarget();
     if (target != null) {
-      s_logger.debug("Tick {} for {}", this, target);
+      LOGGER.debug("Tick {} for {}", this, target);
       return housekeep(target);
     } else {
-      s_logger.info("Target discarded, releasing callback {}", this);
+      LOGGER.info("Target discarded, releasing callback {}", this);
       return false;
     }
   }

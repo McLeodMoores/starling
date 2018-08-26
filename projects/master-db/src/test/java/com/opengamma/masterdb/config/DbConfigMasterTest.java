@@ -27,14 +27,14 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT_DB)
 public class DbConfigMasterTest extends AbstractDbTest {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(DbConfigMasterTest.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(DbConfigMasterTest.class);
 
   private DbConfigMaster _cfgMaster;
 
   @Factory(dataProvider = "databases", dataProviderClass = DbTest.class)
   public DbConfigMasterTest(String databaseType, String databaseVersion) {
     super(databaseType, databaseVersion);
-    s_logger.info("running testcases for {}", databaseType);
+    LOGGER.info("running testcases for {}", databaseType);
   }
 
   //-------------------------------------------------------------------------

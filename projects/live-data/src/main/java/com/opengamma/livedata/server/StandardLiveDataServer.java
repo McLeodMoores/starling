@@ -63,7 +63,7 @@ import com.opengamma.util.PublicAPI;
 public abstract class StandardLiveDataServer implements LiveDataServer, Lifecycle, SubscriptionTracer {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(StandardLiveDataServer.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(StandardLiveDataServer.class);
 
   private volatile MarketDataSenderFactory _marketDataSenderFactory = new EmptyMarketDataSenderFactory();
   private final Collection<SubscriptionListener> _subscriptionListeners = new CopyOnWriteArrayList<>();
@@ -369,7 +369,7 @@ public abstract class StandardLiveDataServer implements LiveDataServer, Lifecycl
    */
   public void setConnectionStatus(ConnectionStatus connectionStatus) {
     _connectionStatus = connectionStatus;
-    s_logger.info("Connection status changed to " + connectionStatus);
+    LOGGER.info("Connection status changed to " + connectionStatus);
 
     if (connectionStatus == ConnectionStatus.NOT_CONNECTED) {
       for (Subscription subscription : getSubscriptions()) {
@@ -382,14 +382,14 @@ public abstract class StandardLiveDataServer implements LiveDataServer, Lifecycl
   public void reestablishSubscriptions() {
     _subscriptionLock.lock();
     try {
-      s_logger.warn("Attempting to re-establish subscriptions for {} securities", _securityUniqueId2Subscription.size());
+      LOGGER.warn("Attempting to re-establish subscriptions for {} securities", _securityUniqueId2Subscription.size());
 
       Set<String> securities = _securityUniqueId2Subscription.keySet();
       try {
         Map<String, Object> subscriptions = doSubscribe(securities);
 
         if (securities.size() != subscriptions.size()) {
-          s_logger.warn("Attempting to re-establish security subscriptions - have {} securities " +
+          LOGGER.warn("Attempting to re-establish security subscriptions - have {} securities " +
                             "but only managed to establish subscriptions to {}",
                         securities.size(), subscriptions.size());
         }
@@ -398,15 +398,15 @@ public abstract class StandardLiveDataServer implements LiveDataServer, Lifecycl
           final Map.Entry<String, Subscription> entry = it.next();
           final Object handle = subscriptions.get(entry.getKey());
           if (handle != null) {
-            s_logger.debug("Reconnected to {}", entry.getKey());
+            LOGGER.debug("Reconnected to {}", entry.getKey());
             entry.getValue().setHandle(handle);
           } else {
-            s_logger.warn("Couldn't reconnect to {} - removing from list of active subscriptions", entry.getKey());
+            LOGGER.warn("Couldn't reconnect to {} - removing from list of active subscriptions", entry.getKey());
             it.remove();
           }
         }
       } catch (RuntimeException e) {
-        s_logger.error("Could not reestablish subscription to {}", new Object[] {securities }, e);
+        LOGGER.error("Could not reestablish subscription to {}", new Object[] {securities }, e);
       }
     } finally {
       _subscriptionLock.unlock();
@@ -522,7 +522,7 @@ public abstract class StandardLiveDataServer implements LiveDataServer, Lifecycl
       Collection<LiveDataSpecification> liveDataSpecificationsFromClient, boolean persistent) {
     ArgumentChecker.notNull(liveDataSpecificationsFromClient, "Subscriptions to be created");
 
-    s_logger.info("Subscribe requested for {}, persistent = {}", liveDataSpecificationsFromClient, persistent);
+    LOGGER.info("Subscribe requested for {}, persistent = {}", liveDataSpecificationsFromClient, persistent);
 
     verifyConnectionOk();
 
@@ -538,14 +538,14 @@ public abstract class StandardLiveDataServer implements LiveDataServer, Lifecycl
         // this is the only place where subscribe() can 'partially' fail
         final DistributionSpecification distributionSpec = distrSpecs.get(specFromClient);
         if (distributionSpec == null) {
-          s_logger.info("Unable to work out distribution spec for specification " + specFromClient);
+          LOGGER.info("Unable to work out distribution spec for specification " + specFromClient);
           responses.put(specFromClient.getIdentifiers(), buildErrorMessageResponse(specFromClient, LiveDataSubscriptionResult.NOT_PRESENT, "Unable to work out distribution spec"));
           continue;
         }
         final LiveDataSpecification fullyQualifiedSpec = distributionSpec.getFullyQualifiedLiveDataSpecification();
         Subscription subscription = getSubscription(fullyQualifiedSpec);
         if (subscription != null) {
-          s_logger.info("Already subscribed to {}", fullyQualifiedSpec);
+          LOGGER.info("Already subscribed to {}", fullyQualifiedSpec);
           subscription.createDistributor(distributionSpec, persistent).setExpiry(distributionExpiryTime);
         } else {
           String securityUniqueId = fullyQualifiedSpec.getIdentifier(getUniqueIdDomain());
@@ -564,7 +564,7 @@ public abstract class StandardLiveDataServer implements LiveDataServer, Lifecycl
           // subscription then we reuse this new subscription rather than creating another  
           _fullyQualifiedSpec2Distributor.put(distributor.getFullyQualifiedLiveDataSpecification(), distributor);
           
-          s_logger.info("Created subscription for {}: {}", fullyQualifiedSpec, subscription);
+          LOGGER.info("Created subscription for {}: {}", fullyQualifiedSpec, subscription);
         }
         responses.put(specFromClient.getIdentifiers(), buildSubscriptionResponse(specFromClient, distributionSpec));
       }
@@ -581,7 +581,7 @@ public abstract class StandardLiveDataServer implements LiveDataServer, Lifecycl
         }
       }
 
-      s_logger.info("Subscription snapshot required for {}", newSubscriptionsForWhichSnapshotIsRequired);
+      LOGGER.info("Subscription snapshot required for {}", newSubscriptionsForWhichSnapshotIsRequired);
       Map<String, FudgeMsg> snapshots = doSnapshot(newSubscriptionsForWhichSnapshotIsRequired);
       for (Map.Entry<String, FudgeMsg> snapshot : snapshots.entrySet()) {
         Subscription subscription = securityUniqueId2NewSubscription.get(snapshot.getKey());
@@ -605,7 +605,7 @@ public abstract class StandardLiveDataServer implements LiveDataServer, Lifecycl
         _securityUniqueId2Subscription.put(subscription.getSecurityUniqueId(), subscription);
       }
 
-      s_logger.info("Creating underlying market data API subscription to {}", securityUniqueId2NewSubscription.keySet());
+      LOGGER.info("Creating underlying market data API subscription to {}", securityUniqueId2NewSubscription.keySet());
       Map<String, Object> subscriptionHandles = doSubscribe(securityUniqueId2NewSubscription.keySet());
 
       // Set up data structures
@@ -622,7 +622,7 @@ public abstract class StandardLiveDataServer implements LiveDataServer, Lifecycl
       }
 
     } catch (RuntimeException e) {
-      s_logger.info("Unexpected exception thrown when subscribing. Cleaning up.", e);
+      LOGGER.info("Unexpected exception thrown when subscribing. Cleaning up.", e);
 
       for (Subscription subscription : securityUniqueId2NewSubscription.values()) {
         _securityUniqueId2Subscription.remove(subscription.getSecurityUniqueId());
@@ -650,7 +650,7 @@ public abstract class StandardLiveDataServer implements LiveDataServer, Lifecycl
       try {
         listener.subscribed(subscription);
       } catch (RuntimeException e) {
-        s_logger.error("Listener " + listener + " subscribe failed", e);
+        LOGGER.error("Listener " + listener + " subscribe failed", e);
       }
     }
   }
@@ -684,7 +684,7 @@ public abstract class StandardLiveDataServer implements LiveDataServer, Lifecycl
   public Collection<LiveDataSubscriptionResponse> snapshot(Collection<LiveDataSpecification> liveDataSpecificationsFromClient) {
     ArgumentChecker.notNull(liveDataSpecificationsFromClient, "Snapshots to be obtained");
 
-    s_logger.info("Snapshot requested for {}", liveDataSpecificationsFromClient);
+    LOGGER.info("Snapshot requested for {}", liveDataSpecificationsFromClient);
 
     verifyConnectionOk();
 
@@ -702,19 +702,19 @@ public abstract class StandardLiveDataServer implements LiveDataServer, Lifecycl
       if (currentlyActiveDistributor != null) {
         if (currentlyActiveDistributor.getSnapshot() != null) {
           //NOTE simon 28/11/2011: We presume that all the fields were provided in one go, all or nothing.
-          s_logger.debug("Able to satisfy {} from existing LKV", liveDataSpecificationFromClient);
+          LOGGER.debug("Able to satisfy {} from existing LKV", liveDataSpecificationFromClient);
           LiveDataValueUpdateBean snapshot = currentlyActiveDistributor.getSnapshot();
           responses.add(buildSnapshotResponse(liveDataSpecificationFromClient, snapshot));
           continue;
         } else if (canSatisfySnapshotFromEmptySubscription(currentlyActiveDistributor)) {
           //BBG-91 - don't requery when an existing subscription indicates that the snapshot will fail
-          s_logger.debug("Able to satisfy failed snapshot {} from existing LKV", liveDataSpecificationFromClient);
+          LOGGER.debug("Able to satisfy failed snapshot {} from existing LKV", liveDataSpecificationFromClient);
           String errorMsg = "Existing subscription for " + currentlyActiveDistributor.getDistributionSpec().getMarketDataId() +
               " failed to retrieve a snapshot.  Perhaps required fields are unavailable.";
           responses.add(buildErrorMessageResponse(liveDataSpecificationFromClient, LiveDataSubscriptionResult.INTERNAL_ERROR, errorMsg));
           continue;
         } else {
-          s_logger.debug("Can't use existing subscription to satisfy {} from existing LKV", liveDataSpecificationFromClient);
+          LOGGER.debug("Can't use existing subscription to satisfy {} from existing LKV", liveDataSpecificationFromClient);
         }
       }
 
@@ -729,7 +729,7 @@ public abstract class StandardLiveDataServer implements LiveDataServer, Lifecycl
       securityUniqueId2LiveDataSpecificationFromClient.put(securityUniqueId, liveDataSpecificationFromClient);
     }
 
-    s_logger.debug("Need to actually snapshot {}", snapshotsToActuallyDo);
+    LOGGER.debug("Need to actually snapshot {}", snapshotsToActuallyDo);
     Map<String, FudgeMsg> snapshots = doSnapshot(snapshotsToActuallyDo);
     for (Map.Entry<String, FudgeMsg> snapshotEntry : snapshots.entrySet()) {
       String securityUniqueId = snapshotEntry.getKey();
@@ -782,7 +782,7 @@ public abstract class StandardLiveDataServer implements LiveDataServer, Lifecycl
       return subscriptionRequestMadeImpl(subscriptionRequest);
 
     } catch (Exception ex) {
-      s_logger.error("Failed to subscribe to " + subscriptionRequest, ex);
+      LOGGER.error("Failed to subscribe to " + subscriptionRequest, ex);
 
       ArrayList<LiveDataSubscriptionResponse> responses = new ArrayList<>();
       for (LiveDataSpecification requestedSpecification : subscriptionRequest.getSpecifications()) {
@@ -812,7 +812,7 @@ public abstract class StandardLiveDataServer implements LiveDataServer, Lifecycl
         DistributionSpecification spec = distributionSpecifications.get(requestedSpecification);
         if (spec == null) {
           String errorMsg = "Could not build distribution specification for " + requestedSpecification;
-          s_logger.debug(errorMsg);
+          LOGGER.debug(errorMsg);
           responses.add(buildErrorMessageResponse(requestedSpecification,
                                                   LiveDataSubscriptionResult.NOT_PRESENT,
                                                   errorMsg));
@@ -821,7 +821,7 @@ public abstract class StandardLiveDataServer implements LiveDataServer, Lifecycl
         }
 
       } catch (Exception ex) {
-        s_logger.error("Failed to subscribe to " + requestedSpecification, ex);
+        LOGGER.error("Failed to subscribe to " + requestedSpecification, ex);
         responses.add(buildErrorResponse(requestedSpecification, ex));
       }
     }
@@ -837,7 +837,7 @@ public abstract class StandardLiveDataServer implements LiveDataServer, Lifecycl
         Boolean entitlement = entry.getValue();
         if (!entitlement) {
           String errorMsg = subscriptionRequest.getUser() + " is not entitled to " + requestedSpecification;
-          s_logger.info(errorMsg);
+          LOGGER.info(errorMsg);
           responses.add(buildErrorMessageResponse(requestedSpecification,
                                                   LiveDataSubscriptionResult.NOT_AUTHORIZED,
                                                   errorMsg));
@@ -852,7 +852,7 @@ public abstract class StandardLiveDataServer implements LiveDataServer, Lifecycl
         }
 
       } catch (Exception ex) {
-        s_logger.error("Failed to subscribe to " + requestedSpecification, ex);
+        LOGGER.error("Failed to subscribe to " + requestedSpecification, ex);
         responses.add(buildErrorResponse(requestedSpecification, ex));
       }
     }
@@ -863,9 +863,9 @@ public abstract class StandardLiveDataServer implements LiveDataServer, Lifecycl
         responses.addAll(snapshot(snapshots));
 
       } catch (Exception ex) {
-        s_logger.error("Error obtaining snapshots for {}: {}", snapshots, ex.getMessage());
-        if (s_logger.isDebugEnabled()) {
-          s_logger.debug("Underlying exception in snapshot error " + snapshots, ex);
+        LOGGER.error("Error obtaining snapshots for {}: {}", snapshots, ex.getMessage());
+        if (LOGGER.isDebugEnabled()) {
+          LOGGER.debug("Underlying exception in snapshot error " + snapshots, ex);
         }
         // REVIEW kirk 2012-07-20 -- This doesn't really look like an InternalError,
         // but we have no way to discriminate in the response from doSnapshot at the moment.
@@ -884,11 +884,11 @@ public abstract class StandardLiveDataServer implements LiveDataServer, Lifecycl
         responses.addAll(subscribe(subscriptions, persistent));
 
       } catch (Exception ex) {
-        s_logger.error("Error obtaining subscriptions for {}: {}",
+        LOGGER.error("Error obtaining subscriptions for {}: {}",
                        subscriptions,
                        (ex.getMessage() != null ? ex.getMessage() : ex.getClass().getName()));
-        if (s_logger.isDebugEnabled()) {
-          s_logger.debug("Underlying exception in subscription error " + subscriptions, ex);
+        if (LOGGER.isDebugEnabled()) {
+          LOGGER.debug("Underlying exception in subscription error " + subscriptions, ex);
         }
         for (LiveDataSpecification requestedSpecification : subscriptions) {
           responses.add(buildErrorResponse(requestedSpecification, ex));
@@ -930,7 +930,7 @@ public abstract class StandardLiveDataServer implements LiveDataServer, Lifecycl
     try {
       if (isSubscribedTo(subscription)) {
 
-        s_logger.info("Unsubscribing from {}", subscription);
+        LOGGER.info("Unsubscribing from {}", subscription);
 
         actuallyUnsubscribed = true;
 
@@ -952,14 +952,14 @@ public abstract class StandardLiveDataServer implements LiveDataServer, Lifecycl
           try {
             listener.unsubscribed(subscription);
           } catch (RuntimeException e) {
-            s_logger.error("Listener unsubscribe failed", e);
+            LOGGER.error("Listener unsubscribe failed", e);
           }
         }
 
-        s_logger.info("Unsubscribed from {}", subscription);
+        LOGGER.info("Unsubscribed from {}", subscription);
 
       } else {
-        s_logger.warn("Received unsubscription request for non-active subscription: {}", subscription);
+        LOGGER.warn("Received unsubscription request for non-active subscription: {}", subscription);
       }
 
     } finally {
@@ -1044,7 +1044,7 @@ public abstract class StandardLiveDataServer implements LiveDataServer, Lifecycl
   }
 
   public void liveDataReceived(String securityUniqueId, FudgeMsg liveDataFields) {
-    s_logger.debug("Live data received: {}", liveDataFields);
+    LOGGER.debug("Live data received: {}", liveDataFields);
 
     _numMarketDataUpdatesReceived.incrementAndGet();
     if (_performanceCounter != null) {
@@ -1056,7 +1056,7 @@ public abstract class StandardLiveDataServer implements LiveDataServer, Lifecycl
       // REVIEW kirk 2013-04-26 -- Should this really be a WARN? I believe some gateway systems
       // handle unsubscribes asynchronously so it's totally valid to get a few ticks after
       // unsubscribe has pulled it out of the subscription list.
-      s_logger.warn("Unexpectedly got data for security unique ID {} - " +
+      LOGGER.warn("Unexpectedly got data for security unique ID {} - " +
                         "no subscription is held for this data (has it recently expired?)", securityUniqueId);
       return;
     }

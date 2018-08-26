@@ -33,7 +33,7 @@ import com.opengamma.util.ArgumentChecker;
 public class LoggedReferenceDataProvider extends AbstractReferenceDataProvider {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(LoggedReferenceDataProvider.class); 
+  private static final Logger LOGGER = LoggerFactory.getLogger(LoggedReferenceDataProvider.class); 
 
   /**
    * The Fudge contxet.
@@ -103,14 +103,14 @@ public class LoggedReferenceDataProvider extends AbstractReferenceDataProvider {
   }
 
 //  private void logAvailableData(Map<String, MutableFudgeMsg> dataMap) {
-//    if (!s_logger.isDebugEnabled()) {
+//    if (!LOGGER.isDebugEnabled()) {
 //      return;
 //    }
 //    StringBuilder sb = new StringBuilder("The following recorded reference data is available:\n");
 //    for (Map.Entry<String, MutableFudgeMsg> dataEntry : dataMap.entrySet()) {
 //      sb.append("\t").append(dataEntry.getKey()).append(": ").append(dataEntry.getValue()).append("\n");
 //    }
-//    s_logger.debug(sb.toString());
+//    LOGGER.debug(sb.toString());
 //  }
 
   /**
@@ -127,7 +127,7 @@ public class LoggedReferenceDataProvider extends AbstractReferenceDataProvider {
       dataMap.put(loggedData.getSecurity(), securityData);
     }
     if (securityData.hasField(loggedData.getField())) {
-      s_logger.warn("Skipping duplicate field " + loggedData.getField() + " for security " + loggedData.getSecurity());
+      LOGGER.warn("Skipping duplicate field " + loggedData.getField() + " for security " + loggedData.getSecurity());
       return;
     }
     securityData.add(loggedData.getField(), loggedData.getValue());

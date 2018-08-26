@@ -32,7 +32,7 @@ public class DefaultPropertiesFunctions extends AbstractFunctionConfigurationBea
    */
   public static class CurrencyInfo implements InitializingBean {
     /** The logger */
-    private static final Logger s_logger = LoggerFactory.getLogger(DefaultPropertiesFunctions.CurrencyInfo.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(DefaultPropertiesFunctions.CurrencyInfo.class);
     /** The curve configuration name */
     private String _curveConfiguration;
     /** The cube name. Left in for backwards compatibility */
@@ -89,22 +89,22 @@ public class DefaultPropertiesFunctions extends AbstractFunctionConfigurationBea
       _isCubeNameParameterSet = true;
       _cubeName = cubeName;
       if (_cubeDefinitionName != null) {
-        s_logger.error("Cube definition name was already set using the setCubeDefinitionName() method. This will" +
+        LOGGER.error("Cube definition name was already set using the setCubeDefinitionName() method. This will" +
             " almost certainly result in unexpected behaviour");
         _cubeDefinitionName = cubeName;
       }
       if (_cubeSpecificationName != null) {
-        s_logger.error("Cube specification name was already set using the setCubeSpecificationName() method. This will" +
+        LOGGER.error("Cube specification name was already set using the setCubeSpecificationName() method. This will" +
             " almost certainly result in unexpected behaviour");
         _cubeSpecificationName = cubeName;
       }
       if (_surfaceDefinitionName != null) {
-        s_logger.error("Surface definition name was already set using the setSurfaceDefinitionName() method. This will" +
+        LOGGER.error("Surface definition name was already set using the setSurfaceDefinitionName() method. This will" +
             " almost certainly result in unexpected behaviour");
         _surfaceDefinitionName = cubeName;
       }
       if (_surfaceSpecificationName != null) {
-        s_logger.error("Surface specification name was already set using the setSurfaceSpecificationName() method. This will" +
+        LOGGER.error("Surface specification name was already set using the setSurfaceSpecificationName() method. This will" +
             " almost certainly result in unexpected behaviour");
         _surfaceSpecificationName = cubeName;
       }
@@ -132,7 +132,7 @@ public class DefaultPropertiesFunctions extends AbstractFunctionConfigurationBea
      */
     public void setCubeDefinitionName(final String cubeDefinitionName) {
       if (_isCubeNameParameterSet) {
-        s_logger.error("Cube definition name was already set using the deprecated setCubeName() method. This will" +
+        LOGGER.error("Cube definition name was already set using the deprecated setCubeName() method. This will" +
             " almost certainly result in unexpected behaviour");
         _cubeDefinitionName = cubeDefinitionName;
         return;
@@ -154,7 +154,7 @@ public class DefaultPropertiesFunctions extends AbstractFunctionConfigurationBea
      */
     public void setCubeSpecificationName(final String cubeSpecificationName) {
       if (_isCubeNameParameterSet) {
-        s_logger.error("Cube specification name was already set using the deprecated setCubeName() method. This will" +
+        LOGGER.error("Cube specification name was already set using the deprecated setCubeName() method. This will" +
             " almost certainly result in unexpected behaviour");
         _cubeSpecificationName = cubeSpecificationName;
         return;
@@ -176,7 +176,7 @@ public class DefaultPropertiesFunctions extends AbstractFunctionConfigurationBea
      */
     public void setSurfaceDefinitionName(final String surfaceDefinitionName) {
       if (_isCubeNameParameterSet) {
-        s_logger.error("Surface definition name was already set using the deprecated setCubeName() method. This will" +
+        LOGGER.error("Surface definition name was already set using the deprecated setCubeName() method. This will" +
             " almost certainly result in unexpected behaviour");
         _surfaceDefinitionName = surfaceDefinitionName;
         return;
@@ -198,7 +198,7 @@ public class DefaultPropertiesFunctions extends AbstractFunctionConfigurationBea
      */
     public void setSurfaceSpecificationName(final String surfaceSpecificationName) {
       if (_isCubeNameParameterSet) {
-        s_logger.error("Surface specification name was already set using the deprecated setCubeName() method. This will" +
+        LOGGER.error("Surface specification name was already set using the deprecated setCubeName() method. This will" +
             " almost certainly result in unexpected behaviour");
         _surfaceSpecificationName = surfaceSpecificationName;
         return;

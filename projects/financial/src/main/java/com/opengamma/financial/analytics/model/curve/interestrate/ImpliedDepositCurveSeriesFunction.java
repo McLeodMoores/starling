@@ -130,7 +130,7 @@ public class ImpliedDepositCurveSeriesFunction extends AbstractFunction {
   /** The business day convention used for FX forward dates computation **/
   private static final BusinessDayConvention MOD_FOL = BusinessDayConventions.MODIFIED_FOLLOWING;
   /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(ImpliedDepositCurveSeriesFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ImpliedDepositCurveSeriesFunction.class);
   /** The curve name */
   private final String _impliedCurveCalculationConfig;
 
@@ -176,7 +176,7 @@ public class ImpliedDepositCurveSeriesFunction extends AbstractFunction {
     final Map.Entry<String, String[]> entry = Iterables.getOnlyElement(originalConfigurationName.entrySet());
     final String[] originalCurveNames = entry.getValue();
     if (originalCurveNames.length != 1) {
-      s_logger.warn("Found more than one exogenous configuration name; using only the first");
+      LOGGER.warn("Found more than one exogenous configuration name; using only the first");
     }
     final MultiCurveCalculationConfig originalConfiguration = _multiCurveCalculationConfig.get(entry.getKey());
     if (originalConfiguration == null) {
@@ -349,7 +349,7 @@ public class ImpliedDepositCurveSeriesFunction extends AbstractFunction {
               }
             }
           } catch (final Throwable t2) {
-            s_logger.error("Exception building implied deposit curve for valuation date " + valuationDate, t2);
+            LOGGER.error("Exception building implied deposit curve for valuation date " + valuationDate, t2);
             continue;
           }
         }
@@ -366,7 +366,7 @@ public class ImpliedDepositCurveSeriesFunction extends AbstractFunction {
 
             bundle.add(MarketDataRequirementNames.MARKET_VALUE, id, ts);
           } catch (final Exception e) {
-            s_logger.error("Exception building implied deposit curve series when adding timeseries to bundle for " + strip.getSecurityIdentifier(), e);
+            LOGGER.error("Exception building implied deposit curve series when adding timeseries to bundle for " + strip.getSecurityIdentifier(), e);
             break;
           }
         }
@@ -375,7 +375,7 @@ public class ImpliedDepositCurveSeriesFunction extends AbstractFunction {
         return Collections.singleton(new ComputedValue(curveSpec, bundle));
 
       } catch (final Throwable t3) {
-        s_logger.error("Exception building implied deposit curve series", t3);
+        LOGGER.error("Exception building implied deposit curve series", t3);
         throw t3;
       }
 
@@ -496,7 +496,7 @@ public class ImpliedDepositCurveSeriesFunction extends AbstractFunction {
         return null;
       }
       if (!_originalConfiguration.getTarget().equals(target.toSpecification())) {
-        s_logger.info("Invalid target, was {} - expected {}", target, _originalConfiguration.getTarget());
+        LOGGER.info("Invalid target, was {} - expected {}", target, _originalConfiguration.getTarget());
         return null;
       }
       final ValueProperties properties = constraints.copy().withoutAny(CURVE_CALCULATION_METHOD).with(CURVE_CALCULATION_METHOD, _originalConfiguration.getCalculationMethod())

@@ -32,7 +32,7 @@ import com.opengamma.util.ClassUtils;
 @Deprecated
 public class ConfigDocumentWatchSetProvider implements WatchSetProvider {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(ConfigDocumentWatchSetProvider.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ConfigDocumentWatchSetProvider.class);
 
   /**
    * The scheme used in object identifiers that this matches.
@@ -60,13 +60,13 @@ public class ConfigDocumentWatchSetProvider implements WatchSetProvider {
     Set<ObjectId> toWatch = new HashSet<ObjectId>();
     for (ObjectId watch : watchSet) {
       if (CONFIG_TYPE_SCHEME.equals(watch.getScheme())) {
-        s_logger.info("Creating watch on {}", watch);
+        LOGGER.info("Creating watch on {}", watch);
         final Class clazz;
         try {
           clazz = ClassUtils.loadClass(watch.getValue());
         } catch (ClassNotFoundException e) {
-          s_logger.error("Can't create watch for {}", watch);
-          s_logger.warn("Caught exception", e);
+          LOGGER.error("Can't create watch for {}", watch);
+          LOGGER.warn("Caught exception", e);
           continue;
         }
         final Collection items = getConfigSource().getAll(clazz, VersionCorrection.LATEST);
@@ -74,7 +74,7 @@ public class ConfigDocumentWatchSetProvider implements WatchSetProvider {
           for (Object item0 : items) {
             final ConfigItem item = (ConfigItem) item0;
             final ObjectId oid = item.getObjectId();
-            s_logger.debug("Watching {} for {}", oid, watch);
+            LOGGER.debug("Watching {} for {}", oid, watch);
             toWatch.add(oid);
           }
         }

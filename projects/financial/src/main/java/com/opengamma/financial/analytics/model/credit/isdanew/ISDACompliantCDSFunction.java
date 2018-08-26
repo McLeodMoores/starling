@@ -119,7 +119,7 @@ public class ISDACompliantCDSFunction extends NonCompiledInvoker {
                                                                      recoveryRateIdentifier.getExternalId()));
     if (recoveryRateObject == null) {
       throw new OpenGammaRuntimeException("Could not get recovery rate");
-      //s_logger.warn("Could not get recovery rate, defaulting to 0.4: " + recoveryRateIdentifier);
+      //LOGGER.warn("Could not get recovery rate, defaulting to 0.4: " + recoveryRateIdentifier);
       //recoveryRateObject = 0.4;
     }
     final double recoveryRate = (Double) recoveryRateObject;

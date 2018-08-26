@@ -83,7 +83,7 @@ public class DbUserMaster
   private static final String USR_USER_EVENT_SEQ = "usr_user_event_seq";
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(DbUserMaster.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(DbUserMaster.class);
 
   /**
    * The default scheme for unique identifiers.
@@ -145,7 +145,7 @@ public class DbUserMaster
   @Override
   public ManageableUser getByName(String userName) {
     ArgumentChecker.notNull(userName, "userName");
-    s_logger.debug("getByName {}", userName);
+    LOGGER.debug("getByName {}", userName);
     
     ObjectId oid = lookupName(userName, OnDeleted.EXCEPTION);
     return doGetById(oid, new UserExtractor());
@@ -154,7 +154,7 @@ public class DbUserMaster
   @Override
   public ManageableUser getById(ObjectId objectId) {
     ArgumentChecker.notNull(objectId, "objectId");
-    s_logger.debug("getById {}", objectId);
+    LOGGER.debug("getById {}", objectId);
     checkScheme(objectId);
     
     return doGetById(objectId, new UserExtractor());
@@ -348,7 +348,7 @@ public class DbUserMaster
   @Override
   public UniqueId save(ManageableUser user) {
     ArgumentChecker.notNull(user, "user");
-    s_logger.debug("save {}", user.getUserName());
+    LOGGER.debug("save {}", user.getUserName());
     if (user.getUniqueId() != null) {
       return update(user);
     } else {
@@ -396,7 +396,7 @@ public class DbUserMaster
   public UserSearchResult search(UserSearchRequest request) {
     ArgumentChecker.notNull(request, "request");
     ArgumentChecker.notNull(request.getPagingRequest(), "request.pagingRequest");
-    s_logger.debug("search {}", request);
+    LOGGER.debug("search {}", request);
     if ((request.getObjectIds() != null && request.getObjectIds().isEmpty())) {
       Paging paging = Paging.of(request.getPagingRequest(), 0);
       return new UserSearchResult(paging, new ArrayList<ManageableUser>());
@@ -438,11 +438,11 @@ public class DbUserMaster
       paging = Paging.of(pagingRequest, results);
       results.addAll(namedJdbc.query(sql[0], args, new UserExtractor()));
     } else {
-      s_logger.debug("executing sql {}", sql[1]);
+      LOGGER.debug("executing sql {}", sql[1]);
       final int count = namedJdbc.queryForObject(sql[1], args, Integer.class);
       paging = Paging.of(pagingRequest, count);
       if (count > 0 && pagingRequest.equals(PagingRequest.NONE) == false) {
-        s_logger.debug("executing sql {}", sql[0]);
+        LOGGER.debug("executing sql {}", sql[0]);
         results.addAll(namedJdbc.query(sql[0], args, new UserExtractor()));
       }
     }
@@ -453,7 +453,7 @@ public class DbUserMaster
   @Override
   public UserEventHistoryResult eventHistory(UserEventHistoryRequest request) {
     ArgumentChecker.notNull(request, "request");
-    s_logger.debug("eventHistory {}", request);
+    LOGGER.debug("eventHistory {}", request);
     ObjectId objectId = request.getObjectId();
     if (objectId == null) {
       objectId = lookupName(request.getUserName(), OnDeleted.RETURN_ID);

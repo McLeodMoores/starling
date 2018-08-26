@@ -30,7 +30,7 @@ import com.opengamma.util.tuple.Pairs;
  *
  */
 public abstract class FXForwardCurveFromYieldCurvesDefaults extends DefaultPropertyFunction {
-  private static final Logger s_logger = LoggerFactory.getLogger(FXForwardCurveFromYieldCurvesDefaults.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(FXForwardCurveFromYieldCurvesDefaults.class);
   private static final String[] VALUE_REQUIREMENTS = new String[] {
       ValueRequirementNames.FORWARD_CURVE,
       ValueRequirementNames.BLACK_VOLATILITY_SURFACE,
@@ -91,11 +91,11 @@ public abstract class FXForwardCurveFromYieldCurvesDefaults extends DefaultPrope
     final String firstCurrency = getFirstCurrency(target);
     final String secondCurrency = getSecondCurrency(target);
     if (!_currencyCurveConfigAndDiscountingCurveNames.containsKey(firstCurrency)) {
-      s_logger.error("Could not get config for currency " + firstCurrency + "; should never happen");
+      LOGGER.error("Could not get config for currency " + firstCurrency + "; should never happen");
       return null;
     }
     if (!_currencyCurveConfigAndDiscountingCurveNames.containsKey(secondCurrency)) {
-      s_logger.error("Could not get config for currency " + secondCurrency + "; should never happen");
+      LOGGER.error("Could not get config for currency " + secondCurrency + "; should never happen");
       return null;
     }
     final Pair<String, String> payPair = _currencyCurveConfigAndDiscountingCurveNames.get(firstCurrency);
@@ -112,7 +112,7 @@ public abstract class FXForwardCurveFromYieldCurvesDefaults extends DefaultPrope
     if (ValuePropertyNames.RECEIVE_CURVE_CALCULATION_CONFIG.equals(propertyName)) {
       return Collections.singleton(receivePair.getFirst());
     }
-    s_logger.error("Could not get default value for {}", propertyName);
+    LOGGER.error("Could not get default value for {}", propertyName);
     return null;
   }
 

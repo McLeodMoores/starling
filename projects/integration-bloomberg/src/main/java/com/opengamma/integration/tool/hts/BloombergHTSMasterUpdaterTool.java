@@ -44,7 +44,7 @@ import com.opengamma.util.time.DateUtils;
 public class BloombergHTSMasterUpdaterTool extends AbstractTool<IntegrationToolContext> {
 
   /** Logger. */
-  private static final Logger s_logger = LoggerFactory.getLogger(BloombergHTSMasterUpdaterTool.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(BloombergHTSMasterUpdaterTool.class);
 
   /** Command line option. */
   private static final String RELOAD_OPTION = "reload";
@@ -70,7 +70,7 @@ public class BloombergHTSMasterUpdaterTool extends AbstractTool<IntegrationToolC
    * @param args the command line arguments
    */
   public static void main(final String[] args) { // CSIGNORE
-    s_logger.info("Updating time-series data from Bloomberg");
+    LOGGER.info("Updating time-series data from Bloomberg");
     GUIFeedback feedback = null;
     try {
       feedback = new GUIFeedback("Updating time series database from Bloomberg");
@@ -85,7 +85,7 @@ public class BloombergHTSMasterUpdaterTool extends AbstractTool<IntegrationToolC
 
     } catch (final Exception ex) {
       GUIFeedback.shout(ex.getClass().getSimpleName() + " - " + ex.getMessage());
-      s_logger.error("Caught exception", ex);
+      LOGGER.error("Caught exception", ex);
       ex.printStackTrace();
     } finally {
       if (feedback != null) {

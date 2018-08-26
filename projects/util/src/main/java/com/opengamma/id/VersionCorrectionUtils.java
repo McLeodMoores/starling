@@ -27,7 +27,7 @@ import com.google.common.collect.Sets;
  */
 public final class VersionCorrectionUtils {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(VersionCorrectionUtils.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(VersionCorrectionUtils.class);
 
   /**
    * Listener for locking events.
@@ -44,13 +44,13 @@ public final class VersionCorrectionUtils {
 
   }
 
-  private static final Map<VersionCorrection, AtomicInteger> s_locks = new HashMap<VersionCorrection, AtomicInteger>();
+  private static final Map<VersionCorrection, AtomicInteger> LOCKS = new HashMap<VersionCorrection, AtomicInteger>();
 
-  private static final Set<VersionCorrectionLockListener> s_listeners = Sets.newSetFromMap(new MapMaker().weakKeys().<VersionCorrectionLockListener, Boolean>makeMap());
+  private static final Set<VersionCorrectionLockListener> LISTENERS = Sets.newSetFromMap(new MapMaker().weakKeys().<VersionCorrectionLockListener, Boolean>makeMap());
 
-  private static final Map<Reference<Object>, VersionCorrection> s_autoLocks = new ConcurrentHashMap<Reference<Object>, VersionCorrection>();
+  private static final Map<Reference<Object>, VersionCorrection> AUTO_LOCKS = new ConcurrentHashMap<Reference<Object>, VersionCorrection>();
 
-  private static final ReferenceQueue<Object> s_autoUnlocks = new ReferenceQueue<Object>();
+  private static final ReferenceQueue<Object> AUTO_UNLOCKS = new ReferenceQueue<Object>();
 
   /**
    * Prevents instantiation.
@@ -65,16 +65,16 @@ public final class VersionCorrectionUtils {
    * @param versionCorrection the version/correction pair to lock, not null
    */
   public static void lock(final VersionCorrection versionCorrection) {
-    synchronized (s_locks) {
-      s_logger.info("Acquiring lock on {}", versionCorrection);
-      AtomicInteger locked = s_locks.get(versionCorrection);
+    synchronized (LOCKS) {
+      LOGGER.info("Acquiring lock on {}", versionCorrection);
+      AtomicInteger locked = LOCKS.get(versionCorrection);
       if (locked == null) {
         locked = new AtomicInteger(1);
-        s_locks.put(versionCorrection, locked);
-        s_logger.debug("First lock acquired on {}", versionCorrection);
+        LOCKS.put(versionCorrection, locked);
+        LOGGER.debug("First lock acquired on {}", versionCorrection);
       } else {
         final int count = locked.incrementAndGet();
-        s_logger.debug("Lock {} acquired on {}", count);
+        LOGGER.debug("Lock {} acquired on {}", count);
       }
     }
   }
@@ -88,14 +88,14 @@ public final class VersionCorrectionUtils {
    */
   public static void lockForLifetime(VersionCorrection versionCorrection, final Object monitor) {
     lock(versionCorrection);
-    s_autoLocks.put(new PhantomReference<Object>(monitor, s_autoUnlocks), versionCorrection);
-    Reference<? extends Object> ref = s_autoUnlocks.poll();
+    AUTO_LOCKS.put(new PhantomReference<Object>(monitor, AUTO_UNLOCKS), versionCorrection);
+    Reference<? extends Object> ref = AUTO_UNLOCKS.poll();
     while (ref != null) {
-      versionCorrection = s_autoLocks.remove(ref);
+      versionCorrection = AUTO_LOCKS.remove(ref);
       if (versionCorrection != null) {
         unlock(versionCorrection);
       }
-      ref = s_autoUnlocks.poll();
+      ref = AUTO_UNLOCKS.poll();
     }
   }
 
@@ -107,34 +107,34 @@ public final class VersionCorrectionUtils {
    */
   public static void unlock(final VersionCorrection versionCorrection) {
     final Set<VersionCorrection> remaining;
-    synchronized (s_locks) {
-      s_logger.info("Releasing lock on {}", versionCorrection);
-      AtomicInteger locked = s_locks.get(versionCorrection);
+    synchronized (LOCKS) {
+      LOGGER.info("Releasing lock on {}", versionCorrection);
+      AtomicInteger locked = LOCKS.get(versionCorrection);
       if (locked == null) {
-        s_logger.warn("{} not locked", versionCorrection);
+        LOGGER.warn("{} not locked", versionCorrection);
         throw new IllegalStateException();
       }
       final int count = locked.decrementAndGet();
       if (count > 0) {
-        s_logger.debug("Released lock on {}, {} remaining", versionCorrection, count);
+        LOGGER.debug("Released lock on {}, {} remaining", versionCorrection, count);
         return;
       }
       assert count == 0;
-      s_logger.debug("Last lock on {} released", versionCorrection);
-      s_locks.remove(versionCorrection);
-      remaining = new HashSet<VersionCorrection>(s_locks.keySet());
+      LOGGER.debug("Last lock on {} released", versionCorrection);
+      LOCKS.remove(versionCorrection);
+      remaining = new HashSet<VersionCorrection>(LOCKS.keySet());
     }
-    for (VersionCorrectionLockListener listener : s_listeners) {
+    for (VersionCorrectionLockListener listener : LISTENERS) {
       listener.versionCorrectionUnlocked(versionCorrection, remaining);
     }
   }
 
   public static void addVersionCorrectionLockListener(final VersionCorrectionLockListener listener) {
-    s_listeners.add(listener);
+    LISTENERS.add(listener);
   }
 
   public static void removeVersionCorrectionLockListener(final VersionCorrectionLockListener listener) {
-    s_listeners.remove(listener);
+    LISTENERS.remove(listener);
   }
 
 }

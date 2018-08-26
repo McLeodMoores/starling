@@ -33,7 +33,7 @@ import com.opengamma.util.tuple.Pairs;
  */
 public class EquityVarianceSwapStaticReplicationDefaults extends DefaultPropertyFunction {
   /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(EquityForwardPerEquityDefaults.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(EquityForwardPerEquityDefaults.class);
   /** The value requirements for which these defaults are valid */
   private static final String[] VALUE_REQUIREMENTS = new String[] {
     ValueRequirementNames.PRESENT_VALUE,
@@ -85,7 +85,7 @@ public class EquityVarianceSwapStaticReplicationDefaults extends DefaultProperty
     final EquityVarianceSwapSecurity varianceSwap = (EquityVarianceSwapSecurity) target.getSecurity();
     final String underlyingEquity = EquitySecurityUtils.getIndexOrEquityNameFromUnderlying(varianceSwap);
     if (!_surfacesPerEquity.containsKey(underlyingEquity)) {
-      s_logger.error("Could not get config for underlying equity " + underlyingEquity + "; should never happen");
+      LOGGER.error("Could not get config for underlying equity " + underlyingEquity + "; should never happen");
       return null;
     }
     if (ValuePropertyNames.SURFACE.equals(propertyName)) {

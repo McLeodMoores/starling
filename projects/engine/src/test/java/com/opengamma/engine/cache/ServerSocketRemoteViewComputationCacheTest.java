@@ -51,8 +51,8 @@ import com.opengamma.util.tuple.Pairs;
  */
 @Test(groups = {TestGroup.INTEGRATION, "ehcache"})
 public class ServerSocketRemoteViewComputationCacheTest {
-  private static final Logger s_logger = LoggerFactory.getLogger(ServerSocketRemoteViewComputationCacheTest.class);
-  private static final FudgeContext s_fudgeContext = OpenGammaFudgeContext.getInstance();
+  private static final Logger LOGGER = LoggerFactory.getLogger(ServerSocketRemoteViewComputationCacheTest.class);
+  private static final FudgeContext FUDGE_CONTEXT = OpenGammaFudgeContext.getInstance();
   private static final int NUM_THREADS = 5;
   private static final int NUM_LOOKUPS = 1000;
   private static final int FLUSH_DELAY = 600;
@@ -79,7 +79,7 @@ public class ServerSocketRemoteViewComputationCacheTest {
 
   //-------------------------------------------------------------------------
   private void setupCacheSource(final boolean lazyReads, final int cacheSize, final int flushDelay) {
-    InMemoryViewComputationCacheSource cache = new InMemoryViewComputationCacheSource(s_fudgeContext);
+    InMemoryViewComputationCacheSource cache = new InMemoryViewComputationCacheSource(FUDGE_CONTEXT);
     ViewComputationCacheServer server = new ViewComputationCacheServer(cache);
     _serverSocket = new ServerSocketFudgeConnectionReceiver(cache.getFudgeContext(), server, Executors
         .newCachedThreadPool());
@@ -100,7 +100,7 @@ public class ServerSocketRemoteViewComputationCacheTest {
     cacheConfig.setMaxElementsInMemory(cacheSize);
     configuration.setDefaultCacheConfiguration(cacheConfig);
     _cacheSource = new RemoteViewComputationCacheSource(client, new DefaultFudgeMessageStoreFactory(
-        new InMemoryBinaryDataStoreFactory(), s_fudgeContext), _cacheManager);
+        new InMemoryBinaryDataStoreFactory(), FUDGE_CONTEXT), _cacheManager);
   }
 
   private void shutDown() {
@@ -175,11 +175,11 @@ public class ServerSocketRemoteViewComputationCacheTest {
                 tPut += System.nanoTime();
               }
             }
-            s_logger.debug("Get = {}ms, Put = {}ms", (double) tGet / 1e6, (double) tPut / 1e6);
+            LOGGER.debug("Get = {}ms, Put = {}ms", (double) tGet / 1e6, (double) tPut / 1e6);
             getTime.addAndGet(tGet);
             putTime.addAndGet(tPut);
           } catch (Throwable e) {
-            s_logger.error("Failed", e);
+            LOGGER.error("Failed", e);
             failed.set(true);
           }
         }
@@ -195,8 +195,8 @@ public class ServerSocketRemoteViewComputationCacheTest {
     assertFalse("One thread failed. Check logs.", failed.get());
     final double get = (double) getTime.get() / (1e6 * NUM_THREADS * NUM_LOOKUPS);
     final double put = (double) putTime.get() / (1e6 * NUM_THREADS * NUM_LOOKUPS);
-    s_logger.info("{} get operations @ {}ms", NUM_THREADS * NUM_LOOKUPS, get);
-    s_logger.info("{} put operations @ {}ms", NUM_THREADS * NUM_LOOKUPS, put);
+    LOGGER.info("{} get operations @ {}ms", NUM_THREADS * NUM_LOOKUPS, get);
+    LOGGER.info("{} put operations @ {}ms", NUM_THREADS * NUM_LOOKUPS, put);
     return Pairs.of(get, put);
   }
 
@@ -241,7 +241,7 @@ public class ServerSocketRemoteViewComputationCacheTest {
         result.append("\r\n").append("Delay=").append(delay).append("ms. Get=").append(times.getFirst()).append(
             "ms, Put=").append(times.getSecond()).append("ms");
       }
-      s_logger.info("{}", result);
+      LOGGER.info("{}", result);
     }
   }
 

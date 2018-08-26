@@ -13,7 +13,7 @@ import com.opengamma.analytics.financial.interestrate.future.derivative.BondFutu
 import com.opengamma.analytics.financial.interestrate.future.derivative.InterestRateFutureSecurity;
 import com.opengamma.analytics.financial.interestrate.future.method.BondFutureDiscountingMethod;
 import com.opengamma.analytics.financial.interestrate.future.method.InterestRateFutureSecurityDiscountingMethod;
-
+//CSOFF
 /**
  * Calculate security prices for futures (bond and interest rate).
  * @deprecated {@link YieldCurveBundle} is deprecated

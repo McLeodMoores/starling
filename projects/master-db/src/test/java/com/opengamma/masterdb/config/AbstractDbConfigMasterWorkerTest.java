@@ -46,8 +46,8 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT_DB)
 public abstract class AbstractDbConfigMasterWorkerTest extends AbstractDbTest {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(AbstractDbConfigMasterWorkerTest.class);
-  private static final FudgeContext s_fudgeContext = OpenGammaFudgeContext.getInstance();
+  private static final Logger LOGGER = LoggerFactory.getLogger(AbstractDbConfigMasterWorkerTest.class);
+  private static final FudgeContext FUDGE_CONTEXT = OpenGammaFudgeContext.getInstance();
 
   protected DbConfigMaster _cfgMaster;
   protected Instant _version1aInstant;
@@ -60,7 +60,7 @@ public abstract class AbstractDbConfigMasterWorkerTest extends AbstractDbTest {
 
   public AbstractDbConfigMasterWorkerTest(String databaseType, String databaseVersion, boolean readOnly) {
     super(databaseType, databaseVersion);
-    s_logger.info("running testcases for {}", databaseType);
+    LOGGER.info("running testcases for {}", databaseType);
   }
 
   //-------------------------------------------------------------------------
@@ -122,8 +122,8 @@ public abstract class AbstractDbConfigMasterWorkerTest extends AbstractDbTest {
   }
 
   private void addExternalIds() {
-    FudgeMsgEnvelope env = s_fudgeContext.toFudgeMsg(ExternalId.of("A", "B"));
-    byte[] bytes = s_fudgeContext.toByteArray(env.getMessage());
+    FudgeMsgEnvelope env = FUDGE_CONTEXT.toFudgeMsg(ExternalId.of("A", "B"));
+    byte[] bytes = FUDGE_CONTEXT.toByteArray(env.getMessage());
     String cls = ExternalId.class.getName();
     LobHandler lobHandler = new DefaultLobHandler();
     final JdbcOperations template = _cfgMaster.getDbConnector().getJdbcOperations();
@@ -143,8 +143,8 @@ public abstract class AbstractDbConfigMasterWorkerTest extends AbstractDbTest {
   }
   
   private void addExternalIdBundles() {
-    FudgeMsgEnvelope env = s_fudgeContext.toFudgeMsg(ExternalIdBundle.of(ExternalId.of("C", "D"), ExternalId.of("E", "F")));
-    byte[] bytes = s_fudgeContext.toByteArray(env.getMessage());
+    FudgeMsgEnvelope env = FUDGE_CONTEXT.toFudgeMsg(ExternalIdBundle.of(ExternalId.of("C", "D"), ExternalId.of("E", "F")));
+    byte[] bytes = FUDGE_CONTEXT.toByteArray(env.getMessage());
     String cls = ExternalIdBundle.class.getName();
     LobHandler lobHandler = new DefaultLobHandler();
     final JdbcOperations template = _cfgMaster.getDbConnector().getJdbcOperations();

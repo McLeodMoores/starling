@@ -49,7 +49,7 @@ public class MasterHistoricalTimeSeriesSource extends AbstractMasterSource<Manag
     HistoricalTimeSeriesSource {
 
   /** Loggr. */
-  private static final Logger s_logger = LoggerFactory.getLogger(MasterHistoricalTimeSeriesSource.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(MasterHistoricalTimeSeriesSource.class);
   /**
    * An empty time-series.
    */
@@ -390,7 +390,7 @@ public class MasterHistoricalTimeSeriesSource extends AbstractMasterSource<Manag
     HistoricalTimeSeriesResolutionResult resolutionResult = getResolver().resolve(identifierBundle, identifierValidityDate, null, null, dataField, resolutionKey);
     if (resolutionResult == null) {
       String message = String.format("Unable to resolve hts using resolutionKey[%s] dataField[%s] bundle[%s] date[%s]", resolutionKey, dataField, identifierBundle, identifierValidityDate);
-      s_logger.debug(message);
+      LOGGER.debug(message);
       return null;
     }
     if ((maxPoints == null) || (maxPoints != 0)) {
@@ -429,7 +429,7 @@ public class MasterHistoricalTimeSeriesSource extends AbstractMasterSource<Manag
     if (historicalTimeSeriesInfoDocument != null && historicalTimeSeriesInfoDocument.getInfo() != null && historicalTimeSeriesInfoDocument.getInfo().getExternalIdBundle() != null) {
       return historicalTimeSeriesInfoDocument.getInfo().getExternalIdBundle().toBundle();
     } else {
-      s_logger.warn("Cannot find time series info document, or info field is null, or id bundle is null, returning null");
+      LOGGER.warn("Cannot find time series info document, or info field is null, or id bundle is null, returning null");
       return null;
     }
   }

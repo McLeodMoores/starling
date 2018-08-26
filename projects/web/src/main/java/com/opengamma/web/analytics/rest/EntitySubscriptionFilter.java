@@ -33,7 +33,7 @@ import com.sun.jersey.spi.container.ResourceFilter;
  */
 public class EntitySubscriptionFilter implements ResourceFilter {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(EntitySubscriptionFilter.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(EntitySubscriptionFilter.class);
 
   private final HttpContext _httpContext;
   private final List<String> _uidParamNames;
@@ -114,19 +114,19 @@ public class EntitySubscriptionFilter implements ResourceFilter {
     private void subscribe(String userId, String clientId, String url, MultivaluedMap<String, String> pathParameters) {
       for (String paramName : uidParamNames) {
         List<String> uidStrs = pathParameters.get(paramName);
-        s_logger.debug(paramName + ": " + uidStrs);
+        LOGGER.debug(paramName + ": " + uidStrs);
         for (String uidStr : uidStrs) {
           UniqueId uniqueId = null;
           try {
             uniqueId = UniqueId.parse(uidStr);
           } catch (IllegalArgumentException e) {
-            s_logger.warn("Unable to parse unique ID: " + uidStr, e);
+            LOGGER.warn("Unable to parse unique ID: " + uidStr, e);
           }
           if (uniqueId != null) {
             try {
               _restUpdateManager.subscribe(userId, clientId, uniqueId, url);
             } catch (OpenGammaRuntimeException e) {
-              s_logger.warn("Failed to subscribe for updates to REST entity, userId: " + userId + ", clientId: "
+              LOGGER.warn("Failed to subscribe for updates to REST entity, userId: " + userId + ", clientId: "
                                 + clientId + ", url: " + url, e);
             }
           }

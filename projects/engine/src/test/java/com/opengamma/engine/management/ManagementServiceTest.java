@@ -39,7 +39,7 @@ import com.opengamma.util.test.TestLifecycle;
 public class ManagementServiceTest {
 
   private static final String ANOTHER_TEST_VIEW = "ANOTHER_TEST_VIEW";
-  private static final Logger s_logger = LoggerFactory.getLogger(ManagementServiceTest.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ManagementServiceTest.class);
   private static final int MBEANS_IN_TEST_VIEWPROCESSOR = 1;
   private MBeanServer _mBeanServer;
   private TotallingGraphStatisticsGathererProvider _statisticsProvider;
@@ -89,7 +89,7 @@ public class ManagementServiceTest {
     ManagementService.registerMBeans(viewProcessor, _statisticsProvider, _mBeanServer);
     assertMBeanCount(MBEANS_IN_TEST_VIEWPROCESSOR);
     addAnotherView(viewProcessor);
-    s_logger.debug("after adding new views");
+    LOGGER.debug("after adding new views");
     assertMBeanCount(MBEANS_IN_TEST_VIEWPROCESSOR + 3);
   }
 
@@ -130,11 +130,11 @@ public class ManagementServiceTest {
       registeredObjectNames.addAll(_mBeanServer.queryNames(new ObjectName("com.opengamma:*,ViewProcessor=" + _env.getViewProcessor().toString()), null));
     } catch (MalformedObjectNameException e) {
       // this should not happen
-      s_logger.warn("Error querying MBeanServer. Error was " + e.getMessage(), e);
+      LOGGER.warn("Error querying MBeanServer. Error was " + e.getMessage(), e);
     }
 
     for (ObjectName objectName : registeredObjectNames) {
-      s_logger.debug(objectName.toString());
+      LOGGER.debug(objectName.toString());
     }
   }
 

@@ -70,7 +70,7 @@ import com.opengamma.util.money.Currency;
 @Deprecated
 public abstract class SABRFunction extends AbstractFunction.NonCompiledInvoker {
   /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(SABRFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(SABRFunction.class);
   /** String labelling the type of SABR calculation (with right extrapolation) */
   public static final String SABR_RIGHT_EXTRAPOLATION = "SABRRightExtrapolation";
   /** String labelling the type of SABR extrapolation (none) */
@@ -168,12 +168,12 @@ public abstract class SABRFunction extends AbstractFunction.NonCompiledInvoker {
     final String curveCalculationConfigName = curveCalculationConfigNames.iterator().next();
     final MultiCurveCalculationConfig curveCalculationConfig = _curveCalculationConfigSource.getConfig(curveCalculationConfigName);
     if (curveCalculationConfig == null) {
-      s_logger.error("Could not find curve calculation configuration named " + curveCalculationConfigName);
+      LOGGER.error("Could not find curve calculation configuration named " + curveCalculationConfigName);
       return null;
     }
     final Currency currency = FinancialSecurityUtils.getCurrency(target.getSecurity());
     if (!ComputationTargetSpecification.of(currency).equals(curveCalculationConfig.getTarget())) {
-      s_logger.error("Security currency and curve calculation config id were not equal; have {} and {}", currency, curveCalculationConfig.getTarget());
+      LOGGER.error("Security currency and curve calculation config id were not equal; have {} and {}", currency, curveCalculationConfig.getTarget());
       return null;
     }
     final String cubeDefinitionName = Iterables.getOnlyElement(cubeDefinitionNames);
@@ -193,7 +193,7 @@ public abstract class SABRFunction extends AbstractFunction.NonCompiledInvoker {
       requirements.addAll(timeSeriesRequirements);
       return requirements;
     } catch (final Exception e) {
-      s_logger.error(e.getMessage());
+      LOGGER.error(e.getMessage());
       return null;
     }
   }

@@ -32,7 +32,7 @@ import com.opengamma.util.tuple.Pairs;
  */
 public class SwaptionBlackDefaultPropertiesFunction extends DefaultPropertyFunction {
   /** The logger */
-  private static final Logger s_logger = LoggerFactory.getLogger(SwaptionBlackDefaultPropertiesFunction.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(SwaptionBlackDefaultPropertiesFunction.class);
   /** The value requirement names */
   private static final String[] VALUE_REQUIREMENTS = new String[] {
     ValueRequirementNames.PRESENT_VALUE,
@@ -93,7 +93,7 @@ public class SwaptionBlackDefaultPropertiesFunction extends DefaultPropertyFunct
   protected Set<String> getDefaultValue(final FunctionCompilationContext context, final ComputationTarget target, final ValueRequirement desiredValue, final String propertyName) {
     final String currencyName = FinancialSecurityUtils.getCurrency(target.getSecurity()).getCode();
     if (!_currencyCurveConfigAndSurfaceNames.containsKey(currencyName)) {
-      s_logger.error("Could not config and surface names for currency " + currencyName + "; should never happen");
+      LOGGER.error("Could not config and surface names for currency " + currencyName + "; should never happen");
       return null;
     }
     final Pair<String, String> pair = _currencyCurveConfigAndSurfaceNames.get(currencyName);

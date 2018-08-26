@@ -49,7 +49,7 @@ import com.opengamma.util.ArgumentChecker;
  */
 public class SimpleRequirementAmbiguityChecker implements RequirementAmbiguityChecker {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(SimpleRequirementAmbiguityChecker.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(SimpleRequirementAmbiguityChecker.class);
   private static final ParameterizedFunction MARKET_DATA_SOURCING_FUNCTION = createParameterizedFunction(MarketDataSourcingFunction.INSTANCE);
 
   private static ParameterizedFunction createParameterizedFunction(final CompiledFunctionDefinition function) {
@@ -94,7 +94,7 @@ public class SimpleRequirementAmbiguityChecker implements RequirementAmbiguityCh
     _rules = buildRules(rules);
     final UniqueId portfolioId = calcConfig.getViewDefinition().getPortfolioId();
     if (portfolioId != null) {
-      s_logger.info("Resolving portflio {} for view definition", portfolioId);
+      LOGGER.info("Resolving portflio {} for view definition", portfolioId);
       ComputationTargetSpecification portfolioSpec = new ComputationTargetSpecification(ComputationTargetType.PORTFOLIO, portfolioId);
       if (portfolioId.isLatest()) {
         _compilationContext.getComputationTargetResolver().getSpecificationResolver().getTargetSpecification(portfolioSpec);
@@ -103,7 +103,7 @@ public class SimpleRequirementAmbiguityChecker implements RequirementAmbiguityCh
       if (target != null) {
         _compilationContext.setPortfolio(target.getValue(ComputationTargetType.PORTFOLIO));
       } else {
-        s_logger.error("Couldn't resolve portfolio {}", portfolioId);
+        LOGGER.error("Couldn't resolve portfolio {}", portfolioId);
       }
     }
   }
@@ -213,7 +213,7 @@ public class SimpleRequirementAmbiguityChecker implements RequirementAmbiguityCh
       final FunctionExclusionGroups util = getExclusions();
       final FunctionExclusionGroup exclusion = util.getExclusionGroup(rule.getParameterizedFunction().getFunction().getFunctionDefinition());
       if ((exclusion != null) && util.isExcluded(exclusion, exclusions)) {
-        s_logger.debug("Ignoring {} from exclusion group {}", rule, exclusion);
+        LOGGER.debug("Ignoring {} from exclusion group {}", rule, exclusion);
         return true;
       }
     }
@@ -289,16 +289,16 @@ public class SimpleRequirementAmbiguityChecker implements RequirementAmbiguityCh
   protected FullRequirementResolution resolve(final CheckingCache cache, final Collection<FunctionExclusionGroup> exclusions, final ValueRequirement requirement) {
     if (!cache.begin(requirement)) {
       // Recursive requirement; abort
-      s_logger.debug("Recursive requirement on {}", requirement);
+      LOGGER.debug("Recursive requirement on {}", requirement);
       return null;
     }
     FullRequirementResolution resolved = cache.get(requirement);
     if (resolved != null) {
-      s_logger.debug("Cached resolution {}", resolved);
+      LOGGER.debug("Cached resolution {}", resolved);
       cache.end(requirement);
       return resolved;
     }
-    s_logger.debug("Resolving {}", requirement);
+    LOGGER.debug("Resolving {}", requirement);
     resolved = new FullRequirementResolution(requirement);
     final ComputationTargetResolver.AtVersionCorrection resolver = getCompilationContext().getComputationTargetResolver();
     final ComputationTargetSpecification targetSpec = resolver.getSpecificationResolver().getTargetSpecification(requirement.getTargetReference());
@@ -306,7 +306,7 @@ public class SimpleRequirementAmbiguityChecker implements RequirementAmbiguityCh
       final ComputationTarget target = resolver.resolve(targetSpec);
       ValueSpecification marketData = getMarketDataAvailabilityProvider().getAvailability(targetSpec, (target != null) ? target.getValue() : null, requirement);
       if (marketData != null) {
-        s_logger.debug("Market data satisfies {} with {}", requirement, marketData);
+        LOGGER.debug("Market data satisfies {} with {}", requirement, marketData);
         marketData = alias(marketData, targetSpec, requirement);
         resolved.addResolutions(Collections.singleton(new RequirementResolution(marketData, MARKET_DATA_SOURCING_FUNCTION, Collections.<FullRequirementResolution>emptySet())));
       } else {
@@ -323,18 +323,18 @@ public class SimpleRequirementAmbiguityChecker implements RequirementAmbiguityCh
                 final ComputationTarget adjustedTarget = rule.adjustTarget(targetCache, target);
                 final ValueSpecification nominalResult = rule.getResult(requirement.getValueName(), adjustedTarget, requirement.getConstraints(), getCompilationContext());
                 if (nominalResult != null) {
-                  s_logger.debug("Possible resolution of {} to {}", requirement, nominalResult);
+                  LOGGER.debug("Possible resolution of {} to {}", requirement, nominalResult);
                   Set<ValueRequirement> inputs = null;
                   try {
                     inputs = rule.getParameterizedFunction().getFunction().getRequirements(getCompilationContext(), adjustedTarget, requirement);
                   } catch (Throwable t) {
-                    s_logger.debug("Exception thrown by getRequirements", t);
+                    LOGGER.debug("Exception thrown by getRequirements", t);
                   }
                   if (inputs != null) {
                     final Collection<FullRequirementResolution> resolvedInputs = resolve(cache, exclusions, target, requirement, rule, inputs);
                     if (resolvedInputs.size() != inputs.size()) {
                       if (!rule.getParameterizedFunction().getFunction().canHandleMissingRequirements()) {
-                        s_logger.debug("Couldn't resolve inputs for {}", rule);
+                        LOGGER.debug("Couldn't resolve inputs for {}", rule);
                         continue;
                       }
                     }
@@ -363,7 +363,7 @@ public class SimpleRequirementAmbiguityChecker implements RequirementAmbiguityCh
                         break;
                       }
                       if (ambiguous > 1) {
-                        s_logger.info("{} ambiguous input states discovered for {}", ambiguous, requirement);
+                        LOGGER.info("{} ambiguous input states discovered for {}", ambiguous, requirement);
                       }
                       boolean failed = false;
                       boolean succeeded = false;
@@ -378,7 +378,7 @@ public class SimpleRequirementAmbiguityChecker implements RequirementAmbiguityCh
                         try {
                           results = rule.getParameterizedFunction().getFunction().getResults(getCompilationContext(), adjustedTarget, inputMap);
                         } catch (Throwable t) {
-                          s_logger.debug("Exception thrown by getResults", t);
+                          LOGGER.debug("Exception thrown by getResults", t);
                         }
                         if (results != null) {
                           ValueSpecification finalResult = null;
@@ -395,7 +395,7 @@ public class SimpleRequirementAmbiguityChecker implements RequirementAmbiguityCh
                                 .getAdditionalRequirements(getCompilationContext(), adjustedTarget, inputMap.keySet(), results);
                             if (additionalRequirements != null) {
                               if (additionalRequirements.isEmpty()) {
-                                s_logger.debug("Resolved {} to {}", requirement, finalResult);
+                                LOGGER.debug("Resolved {} to {}", requirement, finalResult);
                                 if (resolutionIndex >= resolutions.size()) {
                                   resolutions.add(new HashSet<RequirementResolution>());
                                 }
@@ -405,7 +405,7 @@ public class SimpleRequirementAmbiguityChecker implements RequirementAmbiguityCh
                                 final Collection<FullRequirementResolution> additionalResolvedRequirements = resolve(cache, exclusions, target, requirement, rule, additionalRequirements);
                                 if ((additionalResolvedRequirements.size() == additionalRequirements.size()) || rule.getParameterizedFunction().getFunction().canHandleMissingRequirements()) {
                                   resolvedInputs.addAll(additionalResolvedRequirements);
-                                  s_logger.debug("Resolved {} to {}", requirement, finalResult);
+                                  LOGGER.debug("Resolved {} to {}", requirement, finalResult);
                                   if (resolutionIndex >= resolutions.size()) {
                                     resolutions.add(new HashSet<RequirementResolution>());
                                   }
@@ -436,16 +436,16 @@ public class SimpleRequirementAmbiguityChecker implements RequirementAmbiguityCh
                   }
                 }
               } catch (Throwable t) {
-                s_logger.error("Exception thrown by {} when handling {}", rule, requirement);
-                s_logger.warn("Exception", t);
+                LOGGER.error("Exception thrown by {} when handling {}", rule, requirement);
+                LOGGER.warn("Exception", t);
               }
             }
             if (!resolutions.isEmpty()) {
               for (Collection<RequirementResolution> resolution : resolutions) {
                 if (resolution.size() > 1) {
-                  s_logger.info("Got ambiguous resolution of {} to {}", requirement, resolutions);
+                  LOGGER.info("Got ambiguous resolution of {} to {}", requirement, resolutions);
                 } else {
-                  s_logger.debug("Unambiguous resolution of {} to {}", requirement, resolutions);
+                  LOGGER.debug("Unambiguous resolution of {} to {}", requirement, resolutions);
                 }
                 resolved.addResolutions(resolution);
               }
@@ -453,16 +453,16 @@ public class SimpleRequirementAmbiguityChecker implements RequirementAmbiguityCh
             }
           }
           if (resolved.isResolved()) {
-            s_logger.info("Resolved {}", requirement);
+            LOGGER.info("Resolved {}", requirement);
           } else {
-            s_logger.debug("No resolutions found for {}", requirement);
+            LOGGER.debug("No resolutions found for {}", requirement);
           }
         } else {
-          s_logger.warn("Couldn't resolve target for {}", requirement);
+          LOGGER.warn("Couldn't resolve target for {}", requirement);
         }
       }
     } else {
-      s_logger.warn("Couldn't resolve target specification for {}", requirement);
+      LOGGER.warn("Couldn't resolve target specification for {}", requirement);
     }
     cache.end(requirement);
     return cache.put(resolved);

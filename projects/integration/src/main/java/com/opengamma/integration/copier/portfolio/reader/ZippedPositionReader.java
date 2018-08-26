@@ -36,7 +36,7 @@ import com.opengamma.util.tuple.ObjectsPair;
  */
 public class ZippedPositionReader implements PositionReader {
 
-  private static final Logger s_logger = LoggerFactory.getLogger(ZippedPositionReader.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ZippedPositionReader.class);
 
   private static final String SHEET_EXTENSION = ".csv";
 
@@ -67,7 +67,7 @@ public class ZippedPositionReader implements PositionReader {
       readMetaData("METADATA.INI");
     }
 
-    s_logger.info("Using ZIP archive " + filename);
+    LOGGER.info("Using ZIP archive " + filename);
   }
 
   @Override
@@ -110,16 +110,16 @@ public class ZippedPositionReader implements PositionReader {
         
         RowParser parser = JodaBeanRowParser.newJodaBeanRowParser(secType);
         if (parser == null) {
-          s_logger.error("Could not build a row parser for security type '" + secType + "'");
+          LOGGER.error("Could not build a row parser for security type '" + secType + "'");
           return null; 
         }
         if (!_ignoreVersion) {
           if (_versionMap.get(secType) == null) {
-            s_logger.error("Versioning hash for security type '" + secType + "' could not be found");
+            LOGGER.error("Versioning hash for security type '" + secType + "' could not be found");
             return null;
           }
           if (parser.getSecurityHashCode() != _versionMap.get(secType)) {
-            s_logger.error("The parser version for the '" + secType + "' security (hash " +
+            LOGGER.error("The parser version for the '" + secType + "' security (hash " +
                 Integer.toHexString(parser.getSecurityHashCode()) +
                 ") does not match the data stored in the archive (hash " +
                 Integer.toHexString(_versionMap.get(secType)) + ")");
@@ -127,13 +127,13 @@ public class ZippedPositionReader implements PositionReader {
           }
         }
 
-        s_logger.info("Processing rows in archive entry " + entry.getName() + " as " + secType);
+        LOGGER.info("Processing rows in archive entry " + entry.getName() + " as " + secType);
 
         // Create a simple portfolio reader for the current sheet
         return new SingleSheetSimplePositionReader(sheet, parser);
         
       } catch (Throwable ex) {
-        s_logger.warn("Could not import from " + entry.getName() + ", skipping file (exception is " + ex + ")");
+        LOGGER.warn("Could not import from " + entry.getName() + ", skipping file (exception is " + ex + ")");
         return null;
       }
     } else {
