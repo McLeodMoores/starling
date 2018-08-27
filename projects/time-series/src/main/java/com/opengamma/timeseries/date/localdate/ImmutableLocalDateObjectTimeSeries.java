@@ -208,6 +208,12 @@ public final class ImmutableLocalDateObjectTimeSeries<V>
   }
 
   //-------------------------------------------------------------------------
+  /**
+   * Converts a collection of dates to an array of int.
+   *
+   * @param times  a collection of dates
+   * @return  an array of int
+   */
   static int[] convertToIntArray(final Collection<LocalDate> times) {
     final int[] timesArray = new int[times.size()];
     int i = 0;
@@ -217,6 +223,12 @@ public final class ImmutableLocalDateObjectTimeSeries<V>
     return timesArray;
   }
 
+  /**
+   * Converts an array of dates to an array of int.
+   *
+   * @param dates  a collection of dates
+   * @return  an array of int
+   */
   static int[] convertToIntArray(final LocalDate[] dates) {
     final int[] timesArray = new int[dates.length];
     for (int i = 0; i < timesArray.length; i++) {
@@ -225,6 +237,14 @@ public final class ImmutableLocalDateObjectTimeSeries<V>
     return timesArray;
   }
 
+  /**
+   * Creates an immutable entry of date and value.
+   *
+   * @param key  the key
+   * @param value  the value
+   * @return  an entry
+   * @param <V>  the type of the data
+   */
   static <V> Entry<LocalDate, V> makeMapEntry(final LocalDate key, final V value) {
     return new SimpleImmutableEntry<>(key, value);
   }
@@ -263,9 +283,8 @@ public final class ImmutableLocalDateObjectTimeSeries<V>
     final int binarySearch = Arrays.binarySearch(_times, date);
     if (binarySearch >= 0) {
       return _values[binarySearch];
-    } else {
-      return null;
     }
+    return null;
   }
 
   @Override
@@ -339,7 +358,7 @@ public final class ImmutableLocalDateObjectTimeSeries<V>
 
       @Override
       public Entry<LocalDate, V> next() {
-        if (hasNext() == false) {
+        if (!hasNext()) {
           throw new NoSuchElementException("No more elements in the iteration");
         }
         _index++;
@@ -350,7 +369,7 @@ public final class ImmutableLocalDateObjectTimeSeries<V>
 
       @Override
       public int nextTimeFast() {
-        if (hasNext() == false) {
+        if (!hasNext()) {
           throw new NoSuchElementException("No more elements in the iteration");
         }
         _index++;
@@ -412,9 +431,14 @@ public final class ImmutableLocalDateObjectTimeSeries<V>
   }
 
   @Override
-  public LocalDateObjectTimeSeries<V> subSeriesFast(int startTime, final boolean includeStart, int endTime, final boolean includeEnd) {
+  public LocalDateObjectTimeSeries<V> subSeriesFast(final int startTime, final boolean includeStart,
+      final int endTime, final boolean includeEnd) {
     if (endTime < startTime) {
       throw new IllegalArgumentException("Invalid subSeries: endTime < startTime");
+    }
+    // special case when this is empty
+    if (isEmpty()) {
+      return ofEmpty();
     }
     // special case for start equals end
     if (startTime == endTime) {
@@ -426,25 +450,23 @@ public final class ImmutableLocalDateObjectTimeSeries<V>
       }
       return ofEmpty();
     }
-    // special case when this is empty
-    if (isEmpty()) {
-      return ofEmpty();
-    }
     // normalize to include start and exclude end
-    if (includeStart == false) {
-      startTime++;
+    int start = startTime;
+    if (!includeStart) {
+      start++;
     }
+    int end = endTime;
     if (includeEnd) {
-      if (endTime != Integer.MAX_VALUE) {
-        endTime++;
+      if (end != Integer.MAX_VALUE) {
+        end++;
       }
     }
     // calculate
-    int startPos = Arrays.binarySearch(_times, startTime);
+    int startPos = Arrays.binarySearch(_times, start);
     startPos = startPos >= 0 ? startPos : -(startPos + 1);
-    int endPos = Arrays.binarySearch(_times, endTime);
+    int endPos = Arrays.binarySearch(_times, end);
     endPos = endPos >= 0 ? endPos : -(endPos + 1);
-    if (includeEnd && endTime == Integer.MAX_VALUE) {
+    if (includeEnd && end == Integer.MAX_VALUE) {
       endPos = _times.length;
     }
     final int[] timesArray = Arrays.copyOfRange(_times, startPos, endPos);
@@ -488,9 +510,8 @@ public final class ImmutableLocalDateObjectTimeSeries<V>
         final V[] resultValues = (V[]) new Object[times.length + days];
         System.arraycopy(values, -days, resultValues, 0, times.length + days);
         return new ImmutableLocalDateObjectTimeSeries<>(resultTimes, resultValues);
-      } else {
-        return ImmutableLocalDateObjectTimeSeries.ofEmpty();
       }
+      return ImmutableLocalDateObjectTimeSeries.ofEmpty();
     } else { // if (days > 0) {
       if (days < times.length) {
         final int[] resultTimes = new int[times.length - days]; // remember days is +ve
@@ -498,9 +519,8 @@ public final class ImmutableLocalDateObjectTimeSeries<V>
         final V[] resultValues = (V[]) new Object[times.length - days];
         System.arraycopy(values, 0, resultValues, 0, times.length - days);
         return new ImmutableLocalDateObjectTimeSeries<>(resultTimes, resultValues);
-      } else {
-        return ImmutableLocalDateObjectTimeSeries.ofEmpty();
       }
+      return ImmutableLocalDateObjectTimeSeries.ofEmpty();
     }
   }
 
@@ -641,13 +661,13 @@ public final class ImmutableLocalDateObjectTimeSeries<V>
     }
     if (obj instanceof ImmutableLocalDateObjectTimeSeries) {
       final ImmutableLocalDateObjectTimeSeries<?> other = (ImmutableLocalDateObjectTimeSeries<?>) obj;
-      return Arrays.equals(_times, other._times) &&
-              Arrays.equals(_values, other._values);
+      return Arrays.equals(_times, other._times)
+             && Arrays.equals(_values, other._values);
     }
     if (obj instanceof DateObjectTimeSeries) {
       final DateObjectTimeSeries<?, ?> other = (DateObjectTimeSeries<?, ?>) obj;
-      return Arrays.equals(timesArrayFast(), other.timesArrayFast()) &&
-              Arrays.equals(valuesArray(), other.valuesArray());
+      return Arrays.equals(timesArrayFast(), other.timesArrayFast())
+             && Arrays.equals(valuesArray(), other.valuesArray());
     }
     return false;
   }

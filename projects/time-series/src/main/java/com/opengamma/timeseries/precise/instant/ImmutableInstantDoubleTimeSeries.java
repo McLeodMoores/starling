@@ -23,7 +23,7 @@ import com.opengamma.timeseries.precise.PreciseDoubleTimeSeries;
  */
 public final class ImmutableInstantDoubleTimeSeries
     extends AbstractInstantDoubleTimeSeries
-    implements InstantDoubleTimeSeries, Serializable {
+    implements Serializable {
 
   /** Empty instance. */
   public static final ImmutableInstantDoubleTimeSeries EMPTY_SERIES = new ImmutableInstantDoubleTimeSeries(new long[0], new double[0]);
@@ -225,9 +225,8 @@ public final class ImmutableInstantDoubleTimeSeries
     final int binarySearch = Arrays.binarySearch(_times, instant);
     if (binarySearch >= 0) {
       return _values[binarySearch];
-    } else {
-      return null;
     }
+    return null;
   }
 
   @Override
@@ -290,7 +289,8 @@ public final class ImmutableInstantDoubleTimeSeries
 
   //-------------------------------------------------------------------------
   @Override
-  public InstantDoubleTimeSeries subSeriesFast(long startTime, final boolean includeStart, long endTime, final boolean includeEnd) {
+  public InstantDoubleTimeSeries subSeriesFast(final long startTime, final boolean includeStart,
+      final long endTime, final boolean includeEnd) {
     if (endTime < startTime) {
       throw new IllegalArgumentException("Invalid subSeries: endTime < startTime");
     }
@@ -308,21 +308,23 @@ public final class ImmutableInstantDoubleTimeSeries
     if (isEmpty()) {
       return EMPTY_SERIES;
     }
+    long start = startTime;
     // normalize to include start and exclude end
-    if (includeStart == false) {
-      startTime++;
+    if (!includeStart) {
+      start++;
     }
+    long end = endTime;
     if (includeEnd) {
-      if (endTime != Long.MAX_VALUE) {
-        endTime++;
+      if (end != Long.MAX_VALUE) {
+        end++;
       }
     }
     // calculate
-    int startPos = Arrays.binarySearch(_times, startTime);
+    int startPos = Arrays.binarySearch(_times, start);
     startPos = startPos >= 0 ? startPos : -(startPos + 1);
-    int endPos = Arrays.binarySearch(_times, endTime);
+    int endPos = Arrays.binarySearch(_times, end);
     endPos = endPos >= 0 ? endPos : -(endPos + 1);
-    if (includeEnd && endTime == Long.MAX_VALUE) {
+    if (includeEnd && end == Long.MAX_VALUE) {
       endPos = _times.length;
     }
     final long[] timesArray = Arrays.copyOfRange(_times, startPos, endPos);

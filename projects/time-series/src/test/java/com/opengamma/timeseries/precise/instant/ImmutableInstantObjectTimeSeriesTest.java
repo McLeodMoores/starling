@@ -162,7 +162,7 @@ public class ImmutableInstantObjectTimeSeriesTest extends InstantObjectTimeSerie
 
   //-------------------------------------------------------------------------
   @Override
-  public void test_iterator() {
+  public void testIterator() {
     final InstantObjectTimeSeriesBuilder<Float> bld = ImmutableInstantObjectTimeSeries.builder();
     bld.put(Instant.ofEpochSecond(2222), 2.0f).put(Instant.ofEpochSecond(3333), 3.0f).put(Instant.ofEpochSecond(1111), 1.0f);
     final InstantObjectEntryIterator<Float> it = bld.iterator();

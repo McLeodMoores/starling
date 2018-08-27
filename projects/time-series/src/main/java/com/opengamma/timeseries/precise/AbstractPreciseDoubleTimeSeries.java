@@ -110,7 +110,7 @@ public abstract class AbstractPreciseDoubleTimeSeries<T> implements PreciseDoubl
       }
       @Override
       public T next() {
-        if (hasNext() == false) {
+        if (!hasNext()) {
           throw new NoSuchElementException("No more elements");
         }
         _index++;
@@ -161,7 +161,7 @@ public abstract class AbstractPreciseDoubleTimeSeries<T> implements PreciseDoubl
       }
       @Override
       public Double next() {
-        if (hasNext() == false) {
+        if (!hasNext()) {
           throw new NoSuchElementException("No more elements");
         }
         _index++;
@@ -210,8 +210,8 @@ public abstract class AbstractPreciseDoubleTimeSeries<T> implements PreciseDoubl
     }
     if (obj instanceof PreciseDoubleTimeSeries) {
       final PreciseDoubleTimeSeries<?> other = (PreciseDoubleTimeSeries<?>) obj;
-      return Arrays.equals(timesArrayFast(), other.timesArrayFast()) &&
-              Arrays.equals(valuesArrayFast(), other.valuesArrayFast());
+      return Arrays.equals(timesArrayFast(), other.timesArrayFast())
+             && Arrays.equals(valuesArrayFast(), other.valuesArrayFast());
     }
     return false;
   }

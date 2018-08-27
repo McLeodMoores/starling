@@ -19,7 +19,10 @@ import com.opengamma.timeseries.precise.PreciseObjectTimeSeries;
 
 /**
  * Builder implementation for {@code ImmutableInstantObjectTimeSeries}.
+ *
+ * @param <V>  the type of the values
  */
+@SuppressWarnings("synthetic-access")
 final class ImmutableInstantObjectTimeSeriesBuilder<V>
     implements InstantObjectTimeSeriesBuilder<V> {
 
@@ -68,7 +71,7 @@ final class ImmutableInstantObjectTimeSeriesBuilder<V>
 
       @Override
       public long nextTimeFast() {
-        if (hasNext() == false) {
+        if (!hasNext()) {
           throw new NoSuchElementException("No more elements in the iteration");
         }
         _index++;

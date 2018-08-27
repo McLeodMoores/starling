@@ -260,7 +260,7 @@ public class ImmutableZonedDateTimeDoubleTimeSeriesTest extends ZonedDateTimeDou
 
   //-------------------------------------------------------------------------
   @Override
-  public void test_iterator() {
+  public void testIterator() {
     final ZonedDateTimeDoubleTimeSeriesBuilder bld = ImmutableZonedDateTimeDoubleTimeSeries.builder(ZoneOffset.UTC);
     bld.put(ZDT_2222, 2.0).put(ZDT_3333, 3.0).put(ZDT_1111, 1.0);
     final ZonedDateTimeDoubleEntryIterator it = bld.iterator();

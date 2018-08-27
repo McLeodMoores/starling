@@ -40,7 +40,7 @@ public class DoubleTimeSeriesOperators {
    */
   public static final BinaryOperator MAXIMUM_OPERATOR = new MaximumOperator();
   /**
-   * Binary operator to return the average of the two input parameters.
+   * Binary operator to return the arithmetic mean of the two input parameters.
    */
   public static final BinaryOperator AVERAGE_OPERATOR = new AverageOperator();
   /**
@@ -94,6 +94,9 @@ public class DoubleTimeSeriesOperators {
   }
 
   //-------------------------------------------------------------------------
+  /**
+   * Adds two numbers together.
+   */
   private static class AddOperator implements BinaryOperator {
     @Override
     public double operate(final double a, final double b) {
@@ -101,6 +104,9 @@ public class DoubleTimeSeriesOperators {
     }
   }
 
+  /**
+   * Subtracts the second from the first number.
+   */
   private static class SubtractOperator implements BinaryOperator {
     @Override
     public double operate(final double a, final double b) {
@@ -108,6 +114,9 @@ public class DoubleTimeSeriesOperators {
     }
   }
 
+  /**
+   * Multiplies two numbers together.
+   */
   private static class MultiplyOperator implements BinaryOperator {
     @Override
     public double operate(final double a, final double b) {
@@ -115,6 +124,9 @@ public class DoubleTimeSeriesOperators {
     }
   }
 
+  /**
+   * Divides the first number by the second.
+   */
   private static class DivideOperator implements BinaryOperator {
     @Override
     public double operate(final double a, final double b) {
@@ -122,6 +134,9 @@ public class DoubleTimeSeriesOperators {
     }
   }
 
+  /**
+   * Raises the first number to the power of the second.
+   */
   private static class PowerOperator implements BinaryOperator {
     @Override
     public double operate(final double a, final double b) {
@@ -129,6 +144,9 @@ public class DoubleTimeSeriesOperators {
     }
   }
 
+  /**
+   * Returns the minimum of two numbers.
+   */
   private static class MinimumOperator implements BinaryOperator {
     @Override
     public double operate(final double a, final double b) {
@@ -136,6 +154,9 @@ public class DoubleTimeSeriesOperators {
     }
   }
 
+  /**
+   * Returns the maximum of two numbers.
+   */
   private static class MaximumOperator implements BinaryOperator {
     @Override
     public double operate(final double a, final double b) {
@@ -143,6 +164,9 @@ public class DoubleTimeSeriesOperators {
     }
   }
 
+  /**
+   * Returns the arithmetic mean of two numbers.
+   */
   private static class AverageOperator implements BinaryOperator {
     @Override
     public double operate(final double a, final double b) {
@@ -150,6 +174,9 @@ public class DoubleTimeSeriesOperators {
     }
   }
 
+  /**
+   * Returns the first number.
+   */
   private static class FirstOperator implements BinaryOperator {
     @Override
     public double operate(final double a, final double b) {
@@ -157,6 +184,9 @@ public class DoubleTimeSeriesOperators {
     }
   }
 
+  /**
+   * Returns the second number.
+   */
   private static class SecondOperator implements BinaryOperator {
     @Override
     public double operate(final double a, final double b) {
@@ -164,6 +194,9 @@ public class DoubleTimeSeriesOperators {
     }
   }
 
+  /**
+   * Throws an exception.
+   */
   private static class NoIntersectionOperator implements BinaryOperator {
     @Override
     public double operate(final double a, final double b) {
@@ -187,6 +220,9 @@ public class DoubleTimeSeriesOperators {
   }
 
   //-------------------------------------------------------------------------
+  /**
+   * Calculates the reciprocal of a number.
+   */
   private static class ReciprocalOperator implements UnaryOperator {
     @Override
     public double operate(final double a) {
@@ -194,6 +230,9 @@ public class DoubleTimeSeriesOperators {
     }
   }
 
+  /**
+   * Negates a number.
+   */
   private static class NegateOperator implements UnaryOperator {
     @Override
     public double operate(final double a) {
@@ -201,6 +240,9 @@ public class DoubleTimeSeriesOperators {
     }
   }
 
+  /**
+   * Calculates the natural logarithm of a number.
+   */
   private static class LogOperator implements UnaryOperator {
     @Override
     public double operate(final double a) {
@@ -208,6 +250,9 @@ public class DoubleTimeSeriesOperators {
     }
   }
 
+  /**
+   * Calculates the base 10 log of a number.
+   */
   private static class Log10Operator implements UnaryOperator {
     @Override
     public double operate(final double a) {
@@ -215,6 +260,9 @@ public class DoubleTimeSeriesOperators {
     }
   }
 
+  /**
+   * Returns the absolute value of a number.
+   */
   private static class AbsOperator implements UnaryOperator {
     @Override
     public double operate(final double a) {

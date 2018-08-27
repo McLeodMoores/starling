@@ -45,10 +45,16 @@ abstract class AbstractInstantDoubleTimeSeries
   /**
    * Creates an instance.
    */
-  public AbstractInstantDoubleTimeSeries() {
+  AbstractInstantDoubleTimeSeries() {
   }
 
   //-------------------------------------------------------------------------
+  /**
+   * Converts a collection of instants to an array of long.
+   *
+   * @param instants  a collection of instants
+   * @return  an array of long
+   */
   static long[] convertToLongArray(final Collection<Instant> instants) {
     final long[] timesArray = new long[instants.size()];
     int i = 0;
@@ -58,6 +64,12 @@ abstract class AbstractInstantDoubleTimeSeries
     return timesArray;
   }
 
+  /**
+   * Converts an array of instants to an array of long.
+   *
+   * @param instants  a collection of instants
+   * @return  an array of long
+   */
   static long[] convertToLongArray(final Instant[] instants) {
     final long[] timesArray = new long[instants.length];
     for (int i = 0; i < timesArray.length; i++) {
@@ -66,6 +78,12 @@ abstract class AbstractInstantDoubleTimeSeries
     return timesArray;
   }
 
+  /**
+   * Converts a collection of Double to an array of primitive doubles.
+   *
+   * @param values  a collection of Double
+   * @return  an array of doubles
+   */
   static double[] convertToDoubleArray(final Collection<Double> values) {
     final double[] valuesArray = new double[values.size()];
     int i = 0;
@@ -75,6 +93,12 @@ abstract class AbstractInstantDoubleTimeSeries
     return valuesArray;
   }
 
+  /**
+   * Converts an array of Double to an array of primitive doubles.
+   *
+   * @param values  a collection of Double
+   * @return  an array of doubles
+   */
   static double[] convertToDoubleArray(final Double[] values) {
     final double[] valuesArray = new double[values.length];
     for (int i = 0; i < valuesArray.length; i++) {
@@ -83,6 +107,13 @@ abstract class AbstractInstantDoubleTimeSeries
     return valuesArray;
   }
 
+  /**
+   * Creates an immutable entry from an instant and value.
+   *
+   * @param key  an instant
+   * @param value  a value
+   * @return  an entry
+   */
   static Entry<Instant, Double> makeMapEntry(final Instant key, final Double value) {
     return new SimpleImmutableEntry<>(key, value);
   }
@@ -140,7 +171,7 @@ abstract class AbstractInstantDoubleTimeSeries
 
       @Override
       public Entry<Instant, Double> next() {
-        if (hasNext() == false) {
+        if (!hasNext()) {
           throw new NoSuchElementException("No more elements in the iteration");
         }
         _index++;
@@ -151,7 +182,7 @@ abstract class AbstractInstantDoubleTimeSeries
 
       @Override
       public long nextTimeFast() {
-        if (hasNext() == false) {
+        if (!hasNext()) {
           throw new NoSuchElementException("No more elements in the iteration");
         }
         _index++;
@@ -234,9 +265,8 @@ abstract class AbstractInstantDoubleTimeSeries
         final double[] resultValues = new double[times.length + days];
         System.arraycopy(values, -days, resultValues, 0, times.length + days);
         return newInstanceFast(resultTimes, resultValues);
-      } else {
-        return newInstanceFast(new long[0], new double[0]);
       }
+      return newInstanceFast(new long[0], new double[0]);
     } else { // if (days > 0) {
       if (days < times.length) {
         final long[] resultTimes = new long[times.length - days]; // remember days is +ve
@@ -244,9 +274,8 @@ abstract class AbstractInstantDoubleTimeSeries
         final double[] resultValues = new double[times.length - days];
         System.arraycopy(values, 0, resultValues, 0, times.length - days);
         return newInstanceFast(resultTimes, resultValues);
-      } else {
-        return newInstanceFast(new long[0], new double[0]);
       }
+      return newInstanceFast(new long[0], new double[0]);
     }
   }
 
@@ -577,13 +606,13 @@ abstract class AbstractInstantDoubleTimeSeries
     }
     if (obj instanceof AbstractInstantDoubleTimeSeries) {
       final AbstractInstantDoubleTimeSeries other = (AbstractInstantDoubleTimeSeries) obj;
-      return Arrays.equals(timesArrayFast0(), other.timesArrayFast0()) &&
-              Arrays.equals(valuesArrayFast0(), other.valuesArrayFast0());
+      return Arrays.equals(timesArrayFast0(), other.timesArrayFast0())
+             && Arrays.equals(valuesArrayFast0(), other.valuesArrayFast0());
     }
     if (obj instanceof PreciseDoubleTimeSeries) {
       final PreciseDoubleTimeSeries<?> other = (PreciseDoubleTimeSeries<?>) obj;
-      return Arrays.equals(timesArrayFast0(), other.timesArrayFast()) &&
-              Arrays.equals(valuesArrayFast0(), other.valuesArrayFast());
+      return Arrays.equals(timesArrayFast0(), other.timesArrayFast())
+             && Arrays.equals(valuesArrayFast0(), other.valuesArrayFast());
     }
     return false;
   }

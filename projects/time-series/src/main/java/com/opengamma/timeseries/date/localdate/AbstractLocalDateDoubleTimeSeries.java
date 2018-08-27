@@ -45,10 +45,16 @@ abstract class AbstractLocalDateDoubleTimeSeries
   /**
    * Creates an instance.
    */
-  public AbstractLocalDateDoubleTimeSeries() {
+  AbstractLocalDateDoubleTimeSeries() {
   }
 
   //-------------------------------------------------------------------------
+  /**
+   * Converts a collection of dates to an array of int.
+   *
+   * @param times  a collection of dates
+   * @return  an array of int
+   */
   static int[] convertToIntArray(final Collection<LocalDate> times) {
     final int[] timesArray = new int[times.size()];
     int i = 0;
@@ -58,6 +64,12 @@ abstract class AbstractLocalDateDoubleTimeSeries
     return timesArray;
   }
 
+  /**
+   * Converts an array of dates to an array of int.
+   *
+   * @param dates  a collection of dates
+   * @return  an array of int
+   */
   static int[] convertToIntArray(final LocalDate[] dates) {
     final int[] timesArray = new int[dates.length];
     for (int i = 0; i < timesArray.length; i++) {
@@ -66,6 +78,12 @@ abstract class AbstractLocalDateDoubleTimeSeries
     return timesArray;
   }
 
+  /**
+   * Converts a collection of Double to array of primitive doubles.
+   *
+   * @param values  a collection of Double
+   * @return  an array of doubles
+   */
   static double[] convertToDoubleArray(final Collection<Double> values) {
     final double[] valuesArray = new double[values.size()];
     int i = 0;
@@ -75,6 +93,12 @@ abstract class AbstractLocalDateDoubleTimeSeries
     return valuesArray;
   }
 
+  /**
+   * Converts an array of Double to an array of primitive doubles.
+   *
+   * @param values  a collection of Double
+   * @return  an array of doubles
+   */
   static double[] convertToDoubleArray(final Double[] values) {
     final double[] valuesArray = new double[values.length];
     for (int i = 0; i < valuesArray.length; i++) {
@@ -83,6 +107,13 @@ abstract class AbstractLocalDateDoubleTimeSeries
     return valuesArray;
   }
 
+  /**
+   * Creates an immutable entry from a date and value.
+   *
+   * @param key  a date
+   * @param value  a value
+   * @return  an entry
+   */
   static Entry<LocalDate, Double> makeMapEntry(final LocalDate key, final Double value) {
     return new SimpleImmutableEntry<>(key, value);
   }
@@ -140,7 +171,7 @@ abstract class AbstractLocalDateDoubleTimeSeries
 
       @Override
       public Entry<LocalDate, Double> next() {
-        if (hasNext() == false) {
+        if (!hasNext()) {
           throw new NoSuchElementException("No more elements in the iteration");
         }
         _index++;
@@ -151,7 +182,7 @@ abstract class AbstractLocalDateDoubleTimeSeries
 
       @Override
       public int nextTimeFast() {
-        if (hasNext() == false) {
+        if (!hasNext()) {
           throw new NoSuchElementException("No more elements in the iteration");
         }
         _index++;
@@ -234,9 +265,8 @@ abstract class AbstractLocalDateDoubleTimeSeries
         final double[] resultValues = new double[times.length + days];
         System.arraycopy(values, -days, resultValues, 0, times.length + days);
         return newInstanceFast(resultTimes, resultValues);
-      } else {
-        return newInstanceFast(new int[0], new double[0]);
       }
+      return newInstanceFast(new int[0], new double[0]);
     } else { // if (days > 0) {
       if (days < times.length) {
         final int[] resultTimes = new int[times.length - days]; // remember days is +ve
@@ -244,9 +274,8 @@ abstract class AbstractLocalDateDoubleTimeSeries
         final double[] resultValues = new double[times.length - days];
         System.arraycopy(values, 0, resultValues, 0, times.length - days);
         return newInstanceFast(resultTimes, resultValues);
-      } else {
-        return newInstanceFast(new int[0], new double[0]);
       }
+      return newInstanceFast(new int[0], new double[0]);
     }
   }
 
@@ -577,13 +606,13 @@ abstract class AbstractLocalDateDoubleTimeSeries
     }
     if (obj instanceof AbstractLocalDateDoubleTimeSeries) {
       final AbstractLocalDateDoubleTimeSeries other = (AbstractLocalDateDoubleTimeSeries) obj;
-      return Arrays.equals(timesArrayFast0(), other.timesArrayFast0()) &&
-              Arrays.equals(valuesArrayFast0(), other.valuesArrayFast0());
+      return Arrays.equals(timesArrayFast0(), other.timesArrayFast0())
+             && Arrays.equals(valuesArrayFast0(), other.valuesArrayFast0());
     }
     if (obj instanceof DateDoubleTimeSeries) {
       final DateDoubleTimeSeries<?> other = (DateDoubleTimeSeries<?>) obj;
-      return Arrays.equals(timesArrayFast0(), other.timesArrayFast()) &&
-              Arrays.equals(valuesArrayFast0(), other.valuesArrayFast());
+      return Arrays.equals(timesArrayFast0(), other.timesArrayFast())
+             && Arrays.equals(valuesArrayFast0(), other.valuesArrayFast());
     }
     return false;
   }

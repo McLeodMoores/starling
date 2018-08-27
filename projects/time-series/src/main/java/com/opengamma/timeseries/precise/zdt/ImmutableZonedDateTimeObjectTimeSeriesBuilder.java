@@ -21,6 +21,8 @@ import com.opengamma.timeseries.precise.PreciseObjectTimeSeries;
 
 /**
  * Builder implementation for {@code ImmutableZonedDateTimeObjectTimeSeries}.
+ *
+ * @param <V>  the type of the data
  */
 final class ImmutableZonedDateTimeObjectTimeSeriesBuilder<V>
     implements ZonedDateTimeObjectTimeSeriesBuilder<V> {
@@ -59,6 +61,7 @@ final class ImmutableZonedDateTimeObjectTimeSeriesBuilder<V>
   }
 
   @Override
+  @SuppressWarnings("synthetic-access")
   public ZonedDateTimeObjectEntryIterator<V> iterator() {
     return new ZonedDateTimeObjectEntryIterator<V>() {
       private final Iterator<Entry<Long, V>> _iterator = _series.entrySet().iterator();
@@ -77,7 +80,7 @@ final class ImmutableZonedDateTimeObjectTimeSeriesBuilder<V>
 
       @Override
       public long nextTimeFast() {
-        if (hasNext() == false) {
+        if (!hasNext()) {
           throw new NoSuchElementException("No more elements in the iteration");
         }
         _index++;

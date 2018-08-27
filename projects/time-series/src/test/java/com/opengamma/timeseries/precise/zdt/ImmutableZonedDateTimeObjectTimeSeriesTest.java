@@ -170,7 +170,7 @@ public class ImmutableZonedDateTimeObjectTimeSeriesTest extends ZonedDateTimeObj
 
   //-------------------------------------------------------------------------
   @Override
-  public void test_iterator() {
+  public void testIterator() {
     final ZonedDateTimeObjectTimeSeriesBuilder<Float> bld = ImmutableZonedDateTimeObjectTimeSeries.builder(ZoneOffset.UTC);
     bld.put(ZDT_2222, 2.0f).put(ZDT_3333, 3.0f).put(ZDT_1111, 1.0f);
     final ZonedDateTimeObjectEntryIterator<Float> it = bld.iterator();

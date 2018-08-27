@@ -95,7 +95,7 @@ public final class LocalDateToIntConverter {
     if (month < 1 || month > 12 || day < 1 || day > 31) {
       throw new IllegalArgumentException("Invalid month-day");
     }
-    if (day > 29 && VALID_MONTH_DAY[(month - 1) * 2 + day - 30] == false) {
+    if (day > 29 && !VALID_MONTH_DAY[(month - 1) * 2 + day - 30]) {
       throw new IllegalArgumentException("Invalid month-day");
     }
   }

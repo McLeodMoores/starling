@@ -45,10 +45,16 @@ abstract class AbstractZonedDateTimeDoubleTimeSeries
   /**
    * Creates an instance.
    */
-  public AbstractZonedDateTimeDoubleTimeSeries() {
+  AbstractZonedDateTimeDoubleTimeSeries() {
   }
 
   //-------------------------------------------------------------------------
+  /**
+   * Converts a collection of dates to an array of long.
+   *
+   * @param instants  a collection of dates
+   * @return  an array of long
+   */
   static long[] convertToLongArray(final Collection<ZonedDateTime> instants) {
     final long[] timesArray = new long[instants.size()];
     int i = 0;
@@ -58,6 +64,12 @@ abstract class AbstractZonedDateTimeDoubleTimeSeries
     return timesArray;
   }
 
+  /**
+   * Converts an array of dates to an array of long.
+   *
+   * @param instants  a collection of dates
+   * @return  an array of long
+   */
   static long[] convertToLongArray(final ZonedDateTime[] instants) {
     final long[] timesArray = new long[instants.length];
     for (int i = 0; i < timesArray.length; i++) {
@@ -66,6 +78,12 @@ abstract class AbstractZonedDateTimeDoubleTimeSeries
     return timesArray;
   }
 
+  /**
+   * Converts a collection of Double to array of primitive doubles.
+   *
+   * @param values  a collection of Double
+   * @return  an array of doubles
+   */
   static double[] convertToDoubleArray(final Collection<Double> values) {
     final double[] valuesArray = new double[values.size()];
     int i = 0;
@@ -75,6 +93,12 @@ abstract class AbstractZonedDateTimeDoubleTimeSeries
     return valuesArray;
   }
 
+  /**
+   * Converts an array of Double to an array of primitive doubles.
+   *
+   * @param values  a collection of Double
+   * @return  an array of doubles
+   */
   static double[] convertToDoubleArray(final Double[] values) {
     final double[] valuesArray = new double[values.length];
     for (int i = 0; i < valuesArray.length; i++) {
@@ -83,6 +107,13 @@ abstract class AbstractZonedDateTimeDoubleTimeSeries
     return valuesArray;
   }
 
+  /**
+   * Creates an immutable entry from a date and value.
+   *
+   * @param key  a date
+   * @param value  a value
+   * @return  an entry
+   */
   static Entry<ZonedDateTime, Double> makeMapEntry(final ZonedDateTime key, final Double value) {
     return new SimpleImmutableEntry<>(key, value);
   }
@@ -140,7 +171,7 @@ abstract class AbstractZonedDateTimeDoubleTimeSeries
 
       @Override
       public Entry<ZonedDateTime, Double> next() {
-        if (hasNext() == false) {
+        if (!hasNext()) {
           throw new NoSuchElementException("No more elements in the iteration");
         }
         _index++;
@@ -151,7 +182,7 @@ abstract class AbstractZonedDateTimeDoubleTimeSeries
 
       @Override
       public long nextTimeFast() {
-        if (hasNext() == false) {
+        if (!hasNext()) {
           throw new NoSuchElementException("No more elements in the iteration");
         }
         _index++;
@@ -211,7 +242,8 @@ abstract class AbstractZonedDateTimeDoubleTimeSeries
   }
 
   @Override
-  public ZonedDateTimeDoubleTimeSeries subSeries(final ZonedDateTime startZonedDateTime, final boolean includeStart, final ZonedDateTime endZonedDateTime, final boolean includeEnd) {
+  public ZonedDateTimeDoubleTimeSeries subSeries(final ZonedDateTime startZonedDateTime, final boolean includeStart,
+      final ZonedDateTime endZonedDateTime, final boolean includeEnd) {
     return subSeriesFast(convertToLong(startZonedDateTime), includeStart, convertToLong(endZonedDateTime), includeEnd);
   }
 
@@ -234,9 +266,8 @@ abstract class AbstractZonedDateTimeDoubleTimeSeries
         final double[] resultValues = new double[times.length + days];
         System.arraycopy(values, -days, resultValues, 0, times.length + days);
         return newInstanceFast(resultTimes, resultValues);
-      } else {
-        return newInstanceFast(new long[0], new double[0]);
       }
+      return newInstanceFast(new long[0], new double[0]);
     } else { // if (days > 0) {
       if (days < times.length) {
         final long[] resultTimes = new long[times.length - days]; // remember days is +ve
@@ -244,9 +275,8 @@ abstract class AbstractZonedDateTimeDoubleTimeSeries
         final double[] resultValues = new double[times.length - days];
         System.arraycopy(values, 0, resultValues, 0, times.length - days);
         return newInstanceFast(resultTimes, resultValues);
-      } else {
-        return newInstanceFast(new long[0], new double[0]);
       }
+      return newInstanceFast(new long[0], new double[0]);
     }
   }
 
@@ -577,13 +607,13 @@ abstract class AbstractZonedDateTimeDoubleTimeSeries
     }
     if (obj instanceof AbstractZonedDateTimeDoubleTimeSeries) {
       final AbstractZonedDateTimeDoubleTimeSeries other = (AbstractZonedDateTimeDoubleTimeSeries) obj;
-      return Arrays.equals(timesArrayFast0(), other.timesArrayFast0()) &&
-              Arrays.equals(valuesArrayFast0(), other.valuesArrayFast0());
+      return Arrays.equals(timesArrayFast0(), other.timesArrayFast0())
+             && Arrays.equals(valuesArrayFast0(), other.valuesArrayFast0());
     }
     if (obj instanceof PreciseDoubleTimeSeries) {
       final PreciseDoubleTimeSeries<?> other = (PreciseDoubleTimeSeries<?>) obj;
-      return Arrays.equals(timesArrayFast0(), other.timesArrayFast()) &&
-              Arrays.equals(valuesArrayFast0(), other.valuesArrayFast());
+      return Arrays.equals(timesArrayFast0(), other.timesArrayFast())
+             && Arrays.equals(valuesArrayFast0(), other.valuesArrayFast());
     }
     return false;
   }

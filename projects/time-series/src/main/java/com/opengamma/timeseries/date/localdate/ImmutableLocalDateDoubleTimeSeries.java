@@ -23,7 +23,7 @@ import com.opengamma.timeseries.date.DateDoubleTimeSeries;
  */
 public final class ImmutableLocalDateDoubleTimeSeries
     extends AbstractLocalDateDoubleTimeSeries
-    implements LocalDateDoubleTimeSeries, Serializable {
+    implements Serializable {
 
   /** Empty instance. */
   public static final ImmutableLocalDateDoubleTimeSeries EMPTY_SERIES = new ImmutableLocalDateDoubleTimeSeries(new int[0], new double[0]);
@@ -226,9 +226,8 @@ public final class ImmutableLocalDateDoubleTimeSeries
     final int binarySearch = Arrays.binarySearch(_times, date);
     if (binarySearch >= 0) {
       return _values[binarySearch];
-    } else {
-      return null;
     }
+    return null;
   }
 
   @Override
@@ -291,9 +290,14 @@ public final class ImmutableLocalDateDoubleTimeSeries
 
   //-------------------------------------------------------------------------
   @Override
-  public LocalDateDoubleTimeSeries subSeriesFast(int startTime, final boolean includeStart, int endTime, final boolean includeEnd) {
+  public LocalDateDoubleTimeSeries subSeriesFast(final int startTime, final boolean includeStart,
+      final int endTime, final boolean includeEnd) {
     if (endTime < startTime) {
       throw new IllegalArgumentException("Invalid subSeries: endTime < startTime");
+    }
+    // special case when this is empty
+    if (isEmpty()) {
+      return EMPTY_SERIES;
     }
     // special case for start equals end
     if (startTime == endTime) {
@@ -305,25 +309,23 @@ public final class ImmutableLocalDateDoubleTimeSeries
       }
       return EMPTY_SERIES;
     }
-    // special case when this is empty
-    if (isEmpty()) {
-      return EMPTY_SERIES;
-    }
     // normalize to include start and exclude end
-    if (includeStart == false) {
-      startTime++;
+    int start = startTime;
+    if (!includeStart) {
+      start++;
     }
+    int end = endTime;
     if (includeEnd) {
-      if (endTime != Integer.MAX_VALUE) {
-        endTime++;
+      if (end != Integer.MAX_VALUE) {
+        end++;
       }
     }
     // calculate
-    int startPos = Arrays.binarySearch(_times, startTime);
+    int startPos = Arrays.binarySearch(_times, start);
     startPos = startPos >= 0 ? startPos : -(startPos + 1);
-    int endPos = Arrays.binarySearch(_times, endTime);
+    int endPos = Arrays.binarySearch(_times, end);
     endPos = endPos >= 0 ? endPos : -(endPos + 1);
-    if (includeEnd && endTime == Integer.MAX_VALUE) {
+    if (includeEnd && end == Integer.MAX_VALUE) {
       endPos = _times.length;
     }
     final int[] timesArray = Arrays.copyOfRange(_times, startPos, endPos);

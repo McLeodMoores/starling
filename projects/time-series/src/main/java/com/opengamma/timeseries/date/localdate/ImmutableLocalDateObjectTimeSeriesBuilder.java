@@ -19,6 +19,8 @@ import com.opengamma.timeseries.date.DateObjectTimeSeries;
 
 /**
  * Builder implementation for {@code ImmutableLocalDateObjectTimeSeries}.
+ *
+ * @param <V>  the type of the values
  */
 final class ImmutableLocalDateObjectTimeSeriesBuilder<V>
     implements LocalDateObjectTimeSeriesBuilder<V> {
@@ -49,6 +51,7 @@ final class ImmutableLocalDateObjectTimeSeriesBuilder<V>
     return _series.size();
   }
 
+  @SuppressWarnings("synthetic-access")
   @Override
   public LocalDateObjectEntryIterator<V> iterator() {
     return new LocalDateObjectEntryIterator<V>() {
@@ -68,7 +71,7 @@ final class ImmutableLocalDateObjectTimeSeriesBuilder<V>
 
       @Override
       public int nextTimeFast() {
-        if (hasNext() == false) {
+        if (!hasNext()) {
           throw new NoSuchElementException("No more elements in the iteration");
         }
         _index++;

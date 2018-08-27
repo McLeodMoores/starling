@@ -29,25 +29,80 @@ import org.testng.annotations.Test;
 @Test(groups = "unit")
 public abstract class ObjectTimeSeriesTest<T, V> {
 
+  /**
+   * Creates an empty time series.
+   *
+   * @return  an empty time series
+   */
   protected abstract ObjectTimeSeries<T, V> createEmptyTimeSeries();
 
+  /**
+   * Creates a time series.
+   *
+   * @param times  the times
+   * @param values  the values
+   * @return  a time series
+   */
   protected abstract ObjectTimeSeries<T, V> createTimeSeries(T[] times, V[] values);
 
+  /**
+   * Creates a time series.
+   *
+   * @param times  the times
+   * @param values  the values
+   * @return  a time series
+   */
   protected abstract ObjectTimeSeries<T, V> createTimeSeries(List<T> times, List<V> values);
 
+  /**
+   * Creates a time series.
+   *
+   * @param dts  the original time series
+   * @return  a time series
+   */
   protected abstract ObjectTimeSeries<T, V> createTimeSeries(ObjectTimeSeries<T, V> dts);
 
+  /**
+   * Creates an empty array of times of the appropriate type.
+   *
+   * @return   an empty array
+   */
   protected abstract T[] emptyTimes();
 
+  /**
+   * Creates an array of times of the appropriate type.
+   *
+   * @return  an array of times
+   */
   protected abstract T[] testTimes();
 
+  /**
+   * Creates an array of times of the appropriate type. Should be different from the array returned
+   * from {@link #testTimes}.
+   *
+   * @return  an array of times
+   */
   protected abstract T[] testTimes2();
 
+  /**
+   * Creates an empty array of values of the appropriate type.
+   *
+   * @return  an empty array
+   */
   protected abstract V[] emptyValues();
 
+  /**
+   * Creates an array of values of the appropriate type.
+   *
+   * @return  an array of values
+   */
   protected abstract V[] testValues();
 
-  public void test_arrayConstructor() {
+  /**
+   * Tests the array constructor.
+   */
+  @Test
+  public void testArrayConstructor() {
     ObjectTimeSeries<T, V> dts = createTimeSeries(emptyTimes(), emptyValues());
     assertEquals(0, dts.size());
     final T[] times = testTimes();
@@ -60,7 +115,11 @@ public abstract class ObjectTimeSeriesTest<T, V> {
     }
   }
 
-  public void test_listConstructor() {
+  /**
+   * Tests the list constructor.
+   */
+  @Test
+  public void testListConstructor() {
     ObjectTimeSeries<T, V> dts = createTimeSeries(new ArrayList<T>(), new ArrayList<V>());
     assertEquals(0, dts.size());
     final T[] times = testTimes();
@@ -79,7 +138,11 @@ public abstract class ObjectTimeSeriesTest<T, V> {
     }
   }
 
-  public void test_timeSeriesConstructor() {
+  /**
+   * Tests the time series constructor.
+   */
+  @Test
+  public void testTimeSeriesConstructor() {
     ObjectTimeSeries<T, V> dts = createEmptyTimeSeries();
     ObjectTimeSeries<T, V> dts2 = createTimeSeries(dts);
     assertEquals(0, dts2.size());
@@ -94,12 +157,23 @@ public abstract class ObjectTimeSeriesTest<T, V> {
     }
   }
 
+  /**
+   * Creates a standard time series i.e. one that will not throw an exception on creation.
+   *
+   * @return  a time series
+   */
   protected ObjectTimeSeries<T, V> createStandardTimeSeries() {
     final T[] times = testTimes();
     final V[] values = testValues();
     return createTimeSeries(times, values);
   }
 
+  /**
+   * Creates a standard time series i.e. one that will not throw an exception on creation.
+   * Should be different from the series returned from {@link #createStandardTimeSeries()}.
+   *
+   * @return  a time series
+   */
   protected ObjectTimeSeries<T, V> createStandardTimeSeries2() {
     final T[] times = testTimes2();
     final V[] values = testValues();
@@ -107,7 +181,10 @@ public abstract class ObjectTimeSeriesTest<T, V> {
   }
 
   //-------------------------------------------------------------------------
-  public void test_head() {
+  /**
+   * Tests the head() method.
+   */
+  public void testHead() {
     final ObjectTimeSeries<T, V> dts = createStandardTimeSeries();
     final ObjectTimeSeries<T, V> head5 = dts.head(5);
     final Iterator<Entry<T, V>> iterator = head5.iterator();
@@ -120,7 +197,11 @@ public abstract class ObjectTimeSeriesTest<T, V> {
     assertEquals(createEmptyTimeSeries().head(0), createEmptyTimeSeries());
   }
 
-  public void test_tail() {
+  /**
+   * Tests the tail() method.
+   */
+  @Test
+  public void testTail() {
     final ObjectTimeSeries<T, V> dts = createStandardTimeSeries();
     final ObjectTimeSeries<T, V> tail5 = dts.tail(5);
     final Iterator<Entry<T, V>> iterator = tail5.iterator();
@@ -134,14 +215,22 @@ public abstract class ObjectTimeSeriesTest<T, V> {
   }
 
   //-------------------------------------------------------------------------
-  public void test_size() {
+  /**
+   * Tests the size() method.
+   */
+  @Test
+  public void testSize() {
     final ObjectTimeSeries<T, V> dts = createStandardTimeSeries();
     assertEquals(6, dts.size());
     final ObjectTimeSeries<T, V> emptyTS = createEmptyTimeSeries();
     assertEquals(0, emptyTS.size());
   }
 
-  public void test_isEmpty() {
+  /**
+   * Tests the isEmpty() method.
+   */
+  @Test
+  public void testIsEmpty() {
     final ObjectTimeSeries<T, V> empty = createEmptyTimeSeries();
     final ObjectTimeSeries<T, V> dts = createStandardTimeSeries();
     assertTrue(empty.isEmpty());
@@ -149,8 +238,11 @@ public abstract class ObjectTimeSeriesTest<T, V> {
   }
 
   //-------------------------------------------------------------------------
+  /**
+   * Tests the containsTime() method.
+   */
   @Test
-  public void test_containsTime() {
+  public void testContainsTime() {
     final ObjectTimeSeries<T, V> emptyTS = createEmptyTimeSeries();
     final ObjectTimeSeries<T, V> dts = createStandardTimeSeries();
     final T[] testDates = testTimes();
@@ -160,8 +252,11 @@ public abstract class ObjectTimeSeriesTest<T, V> {
     }
   }
 
+  /**
+   * Tests the getValue() method.
+   */
   @Test
-  public void test_getValue() {
+  public void testGetValue() {
     final ObjectTimeSeries<T, V> emptyTS = createEmptyTimeSeries();
     final ObjectTimeSeries<T, V> dts = createStandardTimeSeries();
     final T[] testDates = testTimes();
@@ -172,8 +267,11 @@ public abstract class ObjectTimeSeriesTest<T, V> {
     }
   }
 
+  /**
+   * Tests the getTimeAtIndex() method.
+   */
   @Test
-  public void test_getTimeAtIndex() {
+  public void testGetTimeAtIndex() {
     final ObjectTimeSeries<T, V> dts = createStandardTimeSeries();
     final T[] testDates = testTimes();
     for (int i = 0; i < 6; i++) {
@@ -194,8 +292,11 @@ public abstract class ObjectTimeSeriesTest<T, V> {
     }
   }
 
+  /**
+   * Tests the getValueAtIndex() method.
+   */
   @Test
-  public void test_getValueAtIndex() {
+  public void testGetValueAtIndex() {
     final ObjectTimeSeries<T, V> dts = createStandardTimeSeries();
     final V[] values = testValues();
     for (int i = 0; i < 6; i++) {
@@ -216,7 +317,11 @@ public abstract class ObjectTimeSeriesTest<T, V> {
   }
 
   //-------------------------------------------------------------------------
-  public void test_getLatestTime() {
+  /**
+   * Tests the getLatestTime() method.
+   */
+  @Test
+  public void testGetLatestTime() {
     final ObjectTimeSeries<T, V> empty = createEmptyTimeSeries();
     final ObjectTimeSeries<T, V> dts = createStandardTimeSeries();
     final T[] testDates = testTimes();
@@ -229,7 +334,11 @@ public abstract class ObjectTimeSeriesTest<T, V> {
     }
   }
 
-  public void test_getLatestValue() {
+  /**
+   * Tests the getLatestValue() method.
+   */
+  @Test
+  public void testGetLatestValue() {
     final ObjectTimeSeries<T, V> empty = createEmptyTimeSeries();
     final ObjectTimeSeries<T, V> dts = createStandardTimeSeries();
     final V[] values = testValues();
@@ -242,7 +351,11 @@ public abstract class ObjectTimeSeriesTest<T, V> {
     }
   }
 
-  public void test_getEarliestTime() {
+  /**
+   * Tests the getEarliestTime() method.
+   */
+  @Test
+  public void testGetEarliestTime() {
     final ObjectTimeSeries<T, V> empty = createEmptyTimeSeries();
     final ObjectTimeSeries<T, V> dts = createStandardTimeSeries();
     final T[] testDates = testTimes();
@@ -255,7 +368,11 @@ public abstract class ObjectTimeSeriesTest<T, V> {
     }
   }
 
-  public void test_getEarliestValue() {
+  /**
+   * Tests the getEarliestValue() method.
+   */
+  @Test
+  public void testGetEarliestValue() {
     final ObjectTimeSeries<T, V> empty = createEmptyTimeSeries();
     final ObjectTimeSeries<T, V> dts = createStandardTimeSeries();
     final V[] values = testValues();
@@ -269,7 +386,11 @@ public abstract class ObjectTimeSeriesTest<T, V> {
   }
 
   //-------------------------------------------------------------------------
-  public void test_timesIterator() {
+  /**
+   * Tests the timesIterator() method.
+   */
+  @Test
+  public void testTimesIterator() {
     final Iterator<T> emptyTimesIter = createEmptyTimeSeries().timesIterator();
     final Iterator<T> dtsTimesIter = createStandardTimeSeries().timesIterator();
     final T[] testDates = testTimes();
@@ -291,7 +412,11 @@ public abstract class ObjectTimeSeriesTest<T, V> {
     }
   }
 
-  public void test_valuesIterator() {
+  /**
+   * Tests the valuesIterator() method.
+   */
+  @Test
+  public void testValuesIterator() {
     final Iterator<V> emptyValuesIter = createEmptyTimeSeries().valuesIterator();
     final Iterator<V> dtsValuesIter = createStandardTimeSeries().valuesIterator();
     final V[] values = testValues();
@@ -313,7 +438,11 @@ public abstract class ObjectTimeSeriesTest<T, V> {
     }
   }
 
-  public void test_iterator() {
+  /**
+   * Tests the iterator.
+   */
+  @Test
+  public void testIterator() {
     final Iterator<Entry<T, V>> emptyIter = createEmptyTimeSeries().iterator();
     final Iterator<Entry<T, V>> dtsIter = createStandardTimeSeries().iterator();
     final T[] testDates = testTimes();
@@ -339,8 +468,13 @@ public abstract class ObjectTimeSeriesTest<T, V> {
   }
 
   //-------------------------------------------------------------------------
+  /**
+   * Gets a set of inputs for sub-series tests.
+   *
+   * @return  an array of (startIndex, startIndexInclusive, endIndex, endIndexInclusive, expectedSize, expectedFirstIndex} arrays
+   */
   @DataProvider(name = "subSeries")
-  static Object[][] data_subSeries() {
+  static Object[][] dataSubSeries() {
     return new Object[][] {
         {0, true, 4, false, 4, 0},
         {0, true, 4, true, 5, 0},
@@ -357,9 +491,19 @@ public abstract class ObjectTimeSeriesTest<T, V> {
     };
   }
 
-  @SuppressWarnings("cast")
+  /**
+   * Tests the sub-series method.
+   *
+   * @param startIndex  the start index
+   * @param startInclude  true to include the start index
+   * @param endIndex  the end index
+   * @param endInclude  true to include the end index
+   * @param expectedSize  the expected size of the resulting time series
+   * @param expectedFirstIndex  the expected first index of the resulting time series compared to the original
+   */
   @Test(dataProvider = "subSeries", dataProviderClass = ObjectTimeSeriesTest.class)
-  public void test_subSeriesInstantProviderInstantProvider(final int startIndex, final boolean startInclude, final int endIndex, final boolean endInclude, final int expectedSize, final int expectedFirstIndex) {
+  public void testSubSeriesInstantProviderInstantProvider(final int startIndex, final boolean startInclude,
+      final int endIndex, final boolean endInclude, final int expectedSize, final int expectedFirstIndex) {
     final ObjectTimeSeries<T, V> dts = createStandardTimeSeries();
     final T[] testDates = testTimes();
     final V[] testValues = testValues();
@@ -376,7 +520,7 @@ public abstract class ObjectTimeSeriesTest<T, V> {
     if (expectedFirstIndex >= 0) {
       assertEquals(testDates[expectedFirstIndex], sub.getTimeAtIndex(0));
     }
-    if (startInclude && endInclude == false) {
+    if (startInclude && !endInclude) {
       sub = dts.subSeries(testDates[startIndex], testDates[endIndex]);
       assertEquals(expectedSize, sub.size());
       if (expectedFirstIndex >= 0) {
@@ -385,12 +529,18 @@ public abstract class ObjectTimeSeriesTest<T, V> {
     }
   }
 
-  public void test_hashCode() {
+  /**
+   * Tests the hashCode() method.
+   */
+  public void testHashCode() {
     assertEquals(createStandardTimeSeries().hashCode(), createStandardTimeSeries().hashCode());
     assertEquals(createEmptyTimeSeries().hashCode(), createEmptyTimeSeries().hashCode());
   }
 
-  public void test_equals() {
+  /**
+   * Tests the equals() method.
+   */
+  public void testEquals() {
     assertEquals(createStandardTimeSeries(), createStandardTimeSeries());
     assertFalse(createStandardTimeSeries().equals(createEmptyTimeSeries()));
     assertFalse(createEmptyTimeSeries().equals(createStandardTimeSeries()));

@@ -50,10 +50,10 @@ final class ImmutableZonedDateTimeDoubleTimeSeriesBuilder
   }
 
   //-------------------------------------------------------------------------
-  private void ensureCapacity(int newSize) {
+  private void ensureCapacity(final int newSize) {
     if (newSize > _times.length) {
-      newSize = Math.max(newSize + 8, _size * 3 / 2);
-      _times = Arrays.copyOf(_times, newSize);
+      final int size = Math.max(newSize + 8, _size * 3 / 2);
+      _times = Arrays.copyOf(_times, size);
       _values = Arrays.copyOf(_values, _size * 2);
     }
   }
@@ -72,6 +72,7 @@ final class ImmutableZonedDateTimeDoubleTimeSeriesBuilder
     return _size;
   }
 
+  @SuppressWarnings("synthetic-access")
   @Override
   public ZonedDateTimeDoubleEntryIterator iterator() {
     return new ZonedDateTimeDoubleEntryIterator() {
@@ -84,7 +85,7 @@ final class ImmutableZonedDateTimeDoubleTimeSeriesBuilder
 
       @Override
       public Entry<ZonedDateTime, Double> next() {
-        if (hasNext() == false) {
+        if (!hasNext()) {
           throw new NoSuchElementException("No more elements in the iteration");
         }
         _index++;
@@ -99,7 +100,7 @@ final class ImmutableZonedDateTimeDoubleTimeSeriesBuilder
 
       @Override
       public long nextTimeFast() {
-        if (hasNext() == false) {
+        if (!hasNext()) {
           throw new NoSuchElementException("No more elements in the iteration");
         }
         _index++;

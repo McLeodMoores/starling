@@ -96,7 +96,7 @@ public abstract class AbstractPreciseObjectTimeSeries<T, V> implements PreciseOb
       }
       @Override
       public T next() {
-        if (hasNext() == false) {
+        if (!hasNext()) {
           throw new NoSuchElementException("No more elements");
         }
         _index++;
@@ -147,7 +147,7 @@ public abstract class AbstractPreciseObjectTimeSeries<T, V> implements PreciseOb
       }
       @Override
       public V next() {
-        if (hasNext() == false) {
+        if (!hasNext()) {
           throw new NoSuchElementException("No more elements");
         }
         _index++;
@@ -186,8 +186,8 @@ public abstract class AbstractPreciseObjectTimeSeries<T, V> implements PreciseOb
     }
     if (obj instanceof PreciseDoubleTimeSeries) {
       final PreciseDoubleTimeSeries<?> other = (PreciseDoubleTimeSeries<?>) obj;
-      return Arrays.equals(timesArrayFast(), other.timesArrayFast()) &&
-              Arrays.equals(valuesArray(), other.valuesArray());
+      return Arrays.equals(timesArrayFast(), other.timesArrayFast())
+             && Arrays.equals(valuesArray(), other.valuesArray());
     }
     return false;
   }

@@ -8,6 +8,7 @@ package com.opengamma.timeseries;
 /**
  * Unary and binary operators for time-series.
  */
+@SuppressWarnings("synthetic-access")
 public class ObjectTimeSeriesOperators {
 
   /**
@@ -80,6 +81,11 @@ public class ObjectTimeSeriesOperators {
 
   //-------------------------------------------------------------------------
   private static final FirstOperator<?> FIRST_OPERATOR = new FirstOperator<>();
+  /**
+   * Performs an operation only on the first variable.
+   *
+   * @param <E>  the type of the variables
+   */
   private static class FirstOperator<E> implements BinaryOperator<E> {
     @Override
     public E operate(final E a, final E b) {
@@ -88,6 +94,11 @@ public class ObjectTimeSeriesOperators {
   }
 
   private static final SecondOperator<?> SECOND_OPERATOR = new SecondOperator<>();
+  /**
+   * Performs an operation only on the second variable.
+   *
+   * @param <E>  the type of the variables
+   */
   private static class SecondOperator<E> implements BinaryOperator<E> {
     @Override
     public E operate(final E a, final E b) {
@@ -96,6 +107,11 @@ public class ObjectTimeSeriesOperators {
   }
 
   private static final NoIntersectionOperator<?> NO_INTERSECTION_OPERATOR = new NoIntersectionOperator<>();
+  /**
+   * Does not allow any operations.
+   *
+   * @param <E>  the type of the variables
+   */
   private static class NoIntersectionOperator<E> implements BinaryOperator<E> {
     @Override
     public E operate(final E a, final E b) {

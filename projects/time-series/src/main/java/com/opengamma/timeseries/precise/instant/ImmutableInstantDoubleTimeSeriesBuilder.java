@@ -41,10 +41,10 @@ final class ImmutableInstantDoubleTimeSeriesBuilder
   }
 
   //-------------------------------------------------------------------------
-  private void ensureCapacity(int newSize) {
+  private void ensureCapacity(final int newSize) {
     if (newSize > _times.length) {
-      newSize = Math.max(newSize + 8, _size * 3 / 2);
-      _times = Arrays.copyOf(_times, newSize);
+      final int size = Math.max(newSize + 8, _size * 3 / 2);
+      _times = Arrays.copyOf(_times, size);
       _values = Arrays.copyOf(_values, _size * 2);
     }
   }
@@ -63,6 +63,7 @@ final class ImmutableInstantDoubleTimeSeriesBuilder
     return _size;
   }
 
+  @SuppressWarnings("synthetic-access")
   @Override
   public InstantDoubleEntryIterator iterator() {
     return new InstantDoubleEntryIterator() {
@@ -75,7 +76,7 @@ final class ImmutableInstantDoubleTimeSeriesBuilder
 
       @Override
       public Entry<Instant, Double> next() {
-        if (hasNext() == false) {
+        if (!hasNext()) {
           throw new NoSuchElementException("No more elements in the iteration");
         }
         _index++;
@@ -90,7 +91,7 @@ final class ImmutableInstantDoubleTimeSeriesBuilder
 
       @Override
       public long nextTimeFast() {
-        if (hasNext() == false) {
+        if (!hasNext()) {
           throw new NoSuchElementException("No more elements in the iteration");
         }
         _index++;

@@ -41,11 +41,11 @@ final class ImmutableLocalDateDoubleTimeSeriesBuilder
   }
 
   //-------------------------------------------------------------------------
-  private void ensureCapacity(int newSize) {
+  private void ensureCapacity(final int newSize) {
     if (newSize > _times.length) {
-      newSize = Math.max(newSize + 8, _size * 3 / 2);
-      _times = Arrays.copyOf(_times, newSize);
-      _values = Arrays.copyOf(_values, newSize);
+      final int size = Math.max(newSize + 8, _size * 3 / 2);
+      _times = Arrays.copyOf(_times, size);
+      _values = Arrays.copyOf(_values, size);
     }
   }
 
@@ -63,6 +63,7 @@ final class ImmutableLocalDateDoubleTimeSeriesBuilder
     return _size;
   }
 
+  @SuppressWarnings("synthetic-access")
   @Override
   public LocalDateDoubleEntryIterator iterator() {
     return new LocalDateDoubleEntryIterator() {
@@ -75,7 +76,7 @@ final class ImmutableLocalDateDoubleTimeSeriesBuilder
 
       @Override
       public Entry<LocalDate, Double> next() {
-        if (hasNext() == false) {
+        if (!hasNext()) {
           throw new NoSuchElementException("No more elements in the iteration");
         }
         _index++;
@@ -90,7 +91,7 @@ final class ImmutableLocalDateDoubleTimeSeriesBuilder
 
       @Override
       public int nextTimeFast() {
-        if (hasNext() == false) {
+        if (!hasNext()) {
           throw new NoSuchElementException("No more elements in the iteration");
         }
         _index++;

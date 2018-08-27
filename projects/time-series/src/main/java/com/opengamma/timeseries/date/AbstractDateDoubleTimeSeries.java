@@ -110,7 +110,7 @@ public abstract class AbstractDateDoubleTimeSeries<T> implements DateDoubleTimeS
       }
       @Override
       public T next() {
-        if (hasNext() == false) {
+        if (!hasNext()) {
           throw new NoSuchElementException("No more elements");
         }
         _index++;
@@ -161,7 +161,7 @@ public abstract class AbstractDateDoubleTimeSeries<T> implements DateDoubleTimeS
       }
       @Override
       public Double next() {
-        if (hasNext() == false) {
+        if (!hasNext()) {
           throw new NoSuchElementException("No more elements");
         }
         _index++;
@@ -210,8 +210,8 @@ public abstract class AbstractDateDoubleTimeSeries<T> implements DateDoubleTimeS
     }
     if (obj instanceof DateDoubleTimeSeries) {
       final DateDoubleTimeSeries<?> other = (DateDoubleTimeSeries<?>) obj;
-      return Arrays.equals(timesArrayFast(), other.timesArrayFast()) &&
-              Arrays.equals(valuesArrayFast(), other.valuesArrayFast());
+      return Arrays.equals(timesArrayFast(), other.timesArrayFast())
+             && Arrays.equals(valuesArrayFast(), other.valuesArrayFast());
     }
     return false;
   }

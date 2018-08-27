@@ -192,31 +192,30 @@ public class SimpleMapTimeSeries<T, V> implements TimeSeries<T, V>, Serializable
   public TimeSeries<T, V> lag(final int lagCount) {
     if (lagCount == 0) {
       return this;
-    } else {
-      final NavigableMap<T, V> newMap = new TreeMap<>();
-      final Iterator<T> times = timesIterator();
-      final Iterator<V> values = valuesIterator();
-      if (lagCount > 0) {
-        if (lagCount < _times.length) {
-          for (int i = 0; i < lagCount; i++) {
-            times.next();
-          }
-          while (times.hasNext()) {
-            newMap.put(times.next(), values.next());
-          }
+    }
+    final NavigableMap<T, V> newMap = new TreeMap<>();
+    final Iterator<T> times = timesIterator();
+    final Iterator<V> values = valuesIterator();
+    if (lagCount > 0) {
+      if (lagCount < _times.length) {
+        for (int i = 0; i < lagCount; i++) {
+          times.next();
         }
-      } else {
-        if (-lagCount < _times.length) {
-          for (int i = lagCount; i < 0; i++) {
-            values.next();
-          }
-          while (values.hasNext()) {
-            newMap.put(times.next(), values.next());
-          }
+        while (times.hasNext()) {
+          newMap.put(times.next(), values.next());
         }
       }
-      return new SimpleMapTimeSeries<>(newMap, _times, _values);
+    } else {
+      if (-lagCount < _times.length) {
+        for (int i = lagCount; i < 0; i++) {
+          values.next();
+        }
+        while (values.hasNext()) {
+          newMap.put(times.next(), values.next());
+        }
+      }
     }
+    return new SimpleMapTimeSeries<>(newMap, _times, _values);
   }
 
   @Override
@@ -248,6 +247,36 @@ public class SimpleMapTimeSeries<T, V> implements TimeSeries<T, V>, Serializable
   @Override
   public String toString() {
     return TimeSeriesUtils.toString(this);
+  }
+
+  @Override
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + Arrays.hashCode(_times);
+    result = prime * result + Arrays.hashCode(_values);
+    return result;
+  }
+
+  @Override
+  public boolean equals(final Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (!(obj instanceof SimpleMapTimeSeries)) {
+      return false;
+    }
+    final SimpleMapTimeSeries<?, ?> other = (SimpleMapTimeSeries<?, ?>) obj;
+    if (!Arrays.equals(_times, other._times)) {
+      return false;
+    }
+    if (!Arrays.equals(_values, other._values)) {
+      return false;
+    }
+    return true;
   }
 
 }

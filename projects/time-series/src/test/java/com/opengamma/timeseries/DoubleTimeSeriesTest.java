@@ -317,7 +317,7 @@ public abstract class DoubleTimeSeriesTest<T> {
   }
 
   @Test
-  public void test_iterator() {
+  public void testIterator() {
     final Iterator<Entry<T, Double>> emptyIter = createEmptyTimeSeries().iterator();
     final Iterator<Entry<T, Double>> dtsIter = createStandardTimeSeries().iterator();
     final T[] testDates = testTimes();

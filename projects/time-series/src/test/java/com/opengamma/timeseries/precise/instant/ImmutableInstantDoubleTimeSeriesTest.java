@@ -252,7 +252,7 @@ public class ImmutableInstantDoubleTimeSeriesTest extends InstantDoubleTimeSerie
 
   //-------------------------------------------------------------------------
   @Override
-  public void test_iterator() {
+  public void testIterator() {
     final InstantDoubleTimeSeriesBuilder bld = ImmutableInstantDoubleTimeSeries.builder();
     bld.put(Instant.ofEpochSecond(2222), 2.0).put(Instant.ofEpochSecond(3333), 3.0).put(Instant.ofEpochSecond(1111), 1.0);
     final InstantDoubleEntryIterator it = bld.iterator();

@@ -103,12 +103,12 @@ public final class ImmutableZonedDateTimeObjectTimeSeries<V>
    * @return the time-series, not null
    * @throws IllegalArgumentException if the arrays are of different lengths
    */
-  public static <V> ImmutableZonedDateTimeObjectTimeSeries<V> of(final ZonedDateTime[] instants, final V[] values, ZoneId zone) {
+  public static <V> ImmutableZonedDateTimeObjectTimeSeries<V> of(final ZonedDateTime[] instants, final V[] values, final ZoneId zone) {
     final long[] timesArray = convertToLongArray(instants);
     final V[] valuesArray = values.clone();
     validate(timesArray, valuesArray);
-    zone = zone != null ? zone : instants[0].getZone();
-    return new ImmutableZonedDateTimeObjectTimeSeries<>(timesArray, valuesArray, zone);
+    final ZoneId zoneId = zone != null ? zone : instants[0].getZone();
+    return new ImmutableZonedDateTimeObjectTimeSeries<>(timesArray, valuesArray, zoneId);
   }
 
   /**
@@ -139,14 +139,14 @@ public final class ImmutableZonedDateTimeObjectTimeSeries<V>
    * @return the time-series, not null
    * @throws IllegalArgumentException if the collections are of different lengths
    */
-  public static <V> ImmutableZonedDateTimeObjectTimeSeries<V> of(final Collection<ZonedDateTime> instants, final Collection<V> values, ZoneId zone) {
+  public static <V> ImmutableZonedDateTimeObjectTimeSeries<V> of(final Collection<ZonedDateTime> instants, final Collection<V> values, final ZoneId zone) {
     final long[] timesArray = convertToLongArray(instants);
     @SuppressWarnings("unchecked")
     final
     V[] valuesArray = (V[]) values.toArray();
     validate(timesArray, valuesArray);
-    zone = zone != null ? zone : instants.iterator().next().getZone();
-    return new ImmutableZonedDateTimeObjectTimeSeries<>(timesArray, valuesArray, zone);
+    final ZoneId zoneId = zone != null ? zone : instants.iterator().next().getZone();
+    return new ImmutableZonedDateTimeObjectTimeSeries<>(timesArray, valuesArray, zoneId);
   }
 
   /**
@@ -160,8 +160,8 @@ public final class ImmutableZonedDateTimeObjectTimeSeries<V>
   @SuppressWarnings("unchecked")
   public static <V> ImmutableZonedDateTimeObjectTimeSeries<V> of(final PreciseObjectTimeSeries<?, V> timeSeries, final ZoneId zone) {
     Objects.requireNonNull(zone, "zone");
-    if (timeSeries instanceof ImmutableZonedDateTimeObjectTimeSeries &&
-        ((ImmutableZonedDateTimeObjectTimeSeries<V>) timeSeries).getZone().equals(zone)) {
+    if (timeSeries instanceof ImmutableZonedDateTimeObjectTimeSeries
+        && ((ImmutableZonedDateTimeObjectTimeSeries<V>) timeSeries).getZone().equals(zone)) {
       return (ImmutableZonedDateTimeObjectTimeSeries<V>) timeSeries;
     }
     final PreciseObjectTimeSeries<?, V> other = timeSeries;
@@ -229,6 +229,12 @@ public final class ImmutableZonedDateTimeObjectTimeSeries<V>
   }
 
   //-------------------------------------------------------------------------
+  /**
+   * Convert a collection of dates to an array of long.
+   *
+   * @param instants  a collection of dates
+   * @return  an array of long
+   */
   static long[] convertToLongArray(final Collection<ZonedDateTime> instants) {
     final long[] timesArray = new long[instants.size()];
     int i = 0;
@@ -238,6 +244,12 @@ public final class ImmutableZonedDateTimeObjectTimeSeries<V>
     return timesArray;
   }
 
+  /**
+   * Converts an array of dates to an array of long.
+   *
+   * @param instants  an array of dates
+   * @return  an array of long
+   */
   static long[] convertToLongArray(final ZonedDateTime[] instants) {
     final long[] timesArray = new long[instants.length];
     for (int i = 0; i < timesArray.length; i++) {
@@ -246,6 +258,14 @@ public final class ImmutableZonedDateTimeObjectTimeSeries<V>
     return timesArray;
   }
 
+  /**
+   * Creates an immutable entry of date and value.
+   *
+   * @param key  the key
+   * @param value  the value
+   * @return  an entry
+   * @param <V>  the type of the data
+   */
   static <V> Entry<ZonedDateTime, V> makeMapEntry(final ZonedDateTime key, final V value) {
     return new SimpleImmutableEntry<>(key, value);
   }
@@ -300,9 +320,8 @@ public final class ImmutableZonedDateTimeObjectTimeSeries<V>
     final int binarySearch = Arrays.binarySearch(_times, instant);
     if (binarySearch >= 0) {
       return _values[binarySearch];
-    } else {
-      return null;
     }
+    return null;
   }
 
   @Override
@@ -376,7 +395,7 @@ public final class ImmutableZonedDateTimeObjectTimeSeries<V>
 
       @Override
       public Entry<ZonedDateTime, V> next() {
-        if (hasNext() == false) {
+        if (!hasNext()) {
           throw new NoSuchElementException("No more elements in the iteration");
         }
         _index++;
@@ -387,7 +406,7 @@ public final class ImmutableZonedDateTimeObjectTimeSeries<V>
 
       @Override
       public long nextTimeFast() {
-        if (hasNext() == false) {
+        if (!hasNext()) {
           throw new NoSuchElementException("No more elements in the iteration");
         }
         _index++;
@@ -439,7 +458,8 @@ public final class ImmutableZonedDateTimeObjectTimeSeries<V>
   }
 
   @Override
-  public ZonedDateTimeObjectTimeSeries<V> subSeries(final ZonedDateTime startZonedDateTime, final boolean includeStart, final ZonedDateTime endZonedDateTime, final boolean includeEnd) {
+  public ZonedDateTimeObjectTimeSeries<V> subSeries(final ZonedDateTime startZonedDateTime, final boolean includeStart,
+      final ZonedDateTime endZonedDateTime, final boolean includeEnd) {
     return subSeriesFast(convertToLong(startZonedDateTime), includeStart, convertToLong(endZonedDateTime), includeEnd);
   }
 
@@ -449,7 +469,8 @@ public final class ImmutableZonedDateTimeObjectTimeSeries<V>
   }
 
   @Override
-  public ZonedDateTimeObjectTimeSeries<V> subSeriesFast(long startZonedDateTime, final boolean includeStart, long endZonedDateTime, final boolean includeEnd) {
+  public ZonedDateTimeObjectTimeSeries<V> subSeriesFast(final long startZonedDateTime, final boolean includeStart,
+      final long endZonedDateTime, final boolean includeEnd) {
     if (endZonedDateTime < startZonedDateTime) {
       throw new IllegalArgumentException("Invalid subSeries: endTime < startTime");
     }
@@ -468,20 +489,22 @@ public final class ImmutableZonedDateTimeObjectTimeSeries<V>
       return ofEmpty(_zone);
     }
     // normalize to include start and exclude end
-    if (includeStart == false) {
-      startZonedDateTime++;
+    long start = startZonedDateTime;
+    if (!includeStart) {
+      start++;
     }
+    long end = endZonedDateTime;
     if (includeEnd) {
-      if (endZonedDateTime != Long.MAX_VALUE) {
-        endZonedDateTime++;
+      if (end != Long.MAX_VALUE) {
+        end++;
       }
     }
     // calculate
-    int startPos = Arrays.binarySearch(_times, startZonedDateTime);
+    int startPos = Arrays.binarySearch(_times, start);
     startPos = startPos >= 0 ? startPos : -(startPos + 1);
-    int endPos = Arrays.binarySearch(_times, endZonedDateTime);
+    int endPos = Arrays.binarySearch(_times, end);
     endPos = endPos >= 0 ? endPos : -(endPos + 1);
-    if (includeEnd && endZonedDateTime == Long.MAX_VALUE) {
+    if (includeEnd && end == Long.MAX_VALUE) {
       endPos = _times.length;
     }
     final long[] timesArray = Arrays.copyOfRange(_times, startPos, endPos);
@@ -525,9 +548,8 @@ public final class ImmutableZonedDateTimeObjectTimeSeries<V>
         final V[] resultValues = (V[]) new Object[times.length + days];
         System.arraycopy(values, -days, resultValues, 0, times.length + days);
         return new ImmutableZonedDateTimeObjectTimeSeries<>(resultTimes, resultValues, _zone);
-      } else {
-        return ImmutableZonedDateTimeObjectTimeSeries.ofEmpty(_zone);
       }
+      return ImmutableZonedDateTimeObjectTimeSeries.ofEmpty(_zone);
     } else { // if (days > 0) {
       if (days < times.length) {
         final long[] resultTimes = new long[times.length - days]; // remember days is +ve
@@ -535,9 +557,8 @@ public final class ImmutableZonedDateTimeObjectTimeSeries<V>
         final V[] resultValues = (V[]) new Object[times.length - days];
         System.arraycopy(values, 0, resultValues, 0, times.length - days);
         return new ImmutableZonedDateTimeObjectTimeSeries<>(resultTimes, resultValues, _zone);
-      } else {
-        return ImmutableZonedDateTimeObjectTimeSeries.ofEmpty(_zone);
       }
+      return ImmutableZonedDateTimeObjectTimeSeries.ofEmpty(_zone);
     }
   }
 
@@ -678,13 +699,13 @@ public final class ImmutableZonedDateTimeObjectTimeSeries<V>
     }
     if (obj instanceof ImmutableZonedDateTimeObjectTimeSeries) {
       final ImmutableZonedDateTimeObjectTimeSeries<?> other = (ImmutableZonedDateTimeObjectTimeSeries<?>) obj;
-      return Arrays.equals(_times, other._times) &&
-              Arrays.equals(_values, other._values);
+      return Arrays.equals(_times, other._times)
+             && Arrays.equals(_values, other._values);
     }
     if (obj instanceof PreciseObjectTimeSeries) {
       final PreciseObjectTimeSeries<?, ?> other = (PreciseObjectTimeSeries<?, ?>) obj;
-      return Arrays.equals(timesArrayFast(), other.timesArrayFast()) &&
-              Arrays.equals(valuesArray(), other.valuesArray());
+      return Arrays.equals(timesArrayFast(), other.timesArrayFast())
+             && Arrays.equals(valuesArray(), other.valuesArray());
     }
     return false;
   }

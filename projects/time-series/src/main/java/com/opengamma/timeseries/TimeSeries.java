@@ -15,7 +15,7 @@ import java.util.Map;
  * This interface is similar to both a {@code SortedMap} of value keyed by date-time
  * and a {@code List} of date-time to value pairs.
  * As such, the date/times do not have to be evenly spread over time within the series.
- * 
+ *
  * @param <T> the date-time type, such as {@code Instant} or {@code LocalDate}
  * @param <V> the value being viewed over time, such as {@code Double}
  */
@@ -26,7 +26,7 @@ public interface TimeSeries<T, V> extends Iterable<Map.Entry<T, V>> {
    * Gets the size of the time-series.
    * <p>
    * This is the number of data points in the series.
-   * 
+   *
    * @return the size, zero or greater
    */
   int size();
@@ -35,7 +35,7 @@ public interface TimeSeries<T, V> extends Iterable<Map.Entry<T, V>> {
    * Checks if the series is empty.
    * <p>
    * This checks if there are no data points.
-   * 
+   *
    * @return true if the time-series is empty
    */
   boolean isEmpty();
@@ -46,7 +46,7 @@ public interface TimeSeries<T, V> extends Iterable<Map.Entry<T, V>> {
    * <p>
    * This method provides {@code Map} style {@code containsKey()} behavior.
    * The date/time is matched exactly, thus care must be taken with precision in times.
-   * 
+   *
    * @param dateTime  the date-time to retrieve, not null
    * @return true if the series contains the specified time, false if not
    */
@@ -58,7 +58,7 @@ public interface TimeSeries<T, V> extends Iterable<Map.Entry<T, V>> {
    * This method provides {@code Map} style lookup of values.
    * The date/time is matched exactly, thus care must be taken with precision in times.
    * If there is no entry at the date-time, then null is returned.
-   * 
+   *
    * @param dateTime  the date-time to retrieve, not null
    * @return the value at the date-time, null if date-time not present or
    *  if the implementation permits nulls
@@ -70,7 +70,7 @@ public interface TimeSeries<T, V> extends Iterable<Map.Entry<T, V>> {
    * <p>
    * This method provides {@code List} style lookup of date-times.
    * It is not guaranteed that the lookup is O(1), thus it should be avoided in loops.
-   * 
+   *
    * @param index  the zero-based index to retrieve, not null
    * @return the date-time at the index, null if the implementation permits nulls
    * @throws IndexOutOfBoundsException if the index is invalid
@@ -82,7 +82,7 @@ public interface TimeSeries<T, V> extends Iterable<Map.Entry<T, V>> {
    * <p>
    * This method provides {@code List} style lookup of values.
    * It is not guaranteed that the lookup is O(1), thus it should be avoided in loops.
-   * 
+   *
    * @param index  the zero-based index to retrieve, not null
    * @return the value at the index, null if the implementation permits nulls
    * @throws IndexOutOfBoundsException if the index is invalid
@@ -92,7 +92,7 @@ public interface TimeSeries<T, V> extends Iterable<Map.Entry<T, V>> {
   //-------------------------------------------------------------------------
   /**
    * Gets the earliest date-time for which there is a data point.
-   * 
+   *
    * @return the earliest date-time, not null
    * @throws java.util.NoSuchElementException if empty
    */
@@ -100,7 +100,7 @@ public interface TimeSeries<T, V> extends Iterable<Map.Entry<T, V>> {
 
   /**
    * Gets the value at the earliest date-time in the series.
-   * 
+   *
    * @return the value at the earliest date-time, not null
    * @throws java.util.NoSuchElementException if empty
    */
@@ -108,7 +108,7 @@ public interface TimeSeries<T, V> extends Iterable<Map.Entry<T, V>> {
 
   /**
    * Gets the latest date-time for which there is a data point.
-   * 
+   *
    * @return the latest date-time, not null
    * @throws java.util.NoSuchElementException if empty
    */
@@ -116,7 +116,7 @@ public interface TimeSeries<T, V> extends Iterable<Map.Entry<T, V>> {
 
   /**
    * Gets the value at the latest date-time in the series.
-   * 
+   *
    * @return the value at the latest date-time, not null
    * @throws java.util.NoSuchElementException if empty
    */
@@ -128,16 +128,17 @@ public interface TimeSeries<T, V> extends Iterable<Map.Entry<T, V>> {
    * <p>
    * The pairs are expressed as instances of {@code Map.Entry}.
    * The iterator is in date-time order.
-   * 
+   *
    * @return the pair iterator, not null
    */
+  @Override
   Iterator<Map.Entry<T, V>> iterator();
 
   /**
    * Gets an iterator over the date-times in the time-series from earliest to latest.
    * <p>
    * The iterator is in date-time order.
-   * 
+   *
    * @return the date-times iterator, not null
    */
   Iterator<T> timesIterator();
@@ -146,7 +147,7 @@ public interface TimeSeries<T, V> extends Iterable<Map.Entry<T, V>> {
    * Gets an iterator over the values in the time-series from earliest to latest.
    * <p>
    * The iterator is in date-time order.
-   * 
+   *
    * @return the values iterator, not null
    */
   Iterator<V> valuesIterator();
@@ -158,7 +159,7 @@ public interface TimeSeries<T, V> extends Iterable<Map.Entry<T, V>> {
    * The date-times do not have to match exactly.
    * The sub-series contains all entries between the two date-times via
    * {@code Comparable}, with inclusive start and exclusive end.
-   * 
+   *
    * @param startTimeInclusive  the start date-time, not null
    * @param endTimeExclusive  the end date-time, not null
    * @return the sub-series between the date-times, not null
@@ -171,7 +172,7 @@ public interface TimeSeries<T, V> extends Iterable<Map.Entry<T, V>> {
    * The date-times do not have to match exactly.
    * The sub-series contains all entries between the two date-times via
    * {@code Comparable}, as modified by the inclusive start/end flags.
-   * 
+   *
    * @param startTime  the start date-time, not null
    * @param includeStart  true to include the start date-time in the result
    * @param endTime  the end date-time, not null
@@ -185,7 +186,7 @@ public interface TimeSeries<T, V> extends Iterable<Map.Entry<T, V>> {
    * <p>
    * The sub-series contains the specified number of entries taken from the
    * earliest date-time in this series.
-   * 
+   *
    * @param numItems  the number of items to select, zero or greater
    * @return the sub-series of the requested size starting with the earliest entry, not null
    * @throws IndexOutOfBoundsException if the index is invalid, or the size of
@@ -198,7 +199,7 @@ public interface TimeSeries<T, V> extends Iterable<Map.Entry<T, V>> {
    * <p>
    * The sub-series contains the specified number of entries taken from the
    * latest date-time in this series.
-   * 
+   *
    * @param numItems  the number of items to select, zero or greater
    * @return the sub-series of the requested size ending with the latest entry, not null
    * @throws IndexOutOfBoundsException if the index is invalid, or the size of
@@ -215,7 +216,7 @@ public interface TimeSeries<T, V> extends Iterable<Map.Entry<T, V>> {
    * of +2 would result in [(May,6),(June,7)]. Similarly, a lag of -1 would result
    * in [(March,7),(April,8),(May,9)].
    * Note that this operates on the entries, which are not necessarily continuous.
-   * 
+   *
    * @param lagCount  the number of entries to lag by, positive or negative
    * @return the new time-series, not null
    */
@@ -226,7 +227,7 @@ public interface TimeSeries<T, V> extends Iterable<Map.Entry<T, V>> {
    * Gets a list of all date-times in this series.
    * <p>
    * The index of each entry will match that used by the index lookup methods.
-   * 
+   *
    * @return a list of all the date-times in order from earliest to latest, not null
    */
   List<T> times();
@@ -235,7 +236,7 @@ public interface TimeSeries<T, V> extends Iterable<Map.Entry<T, V>> {
    * Gets an array of all date-times in this series.
    * <p>
    * The index of each entry will match that used by the index lookup methods.
-   * 
+   *
    * @return an array of all the date-times in order from earliest to latest, not null
    */
   T[] timesArray();
@@ -245,7 +246,7 @@ public interface TimeSeries<T, V> extends Iterable<Map.Entry<T, V>> {
    * <p>
    * The index of each entry will match that used by the index lookup methods.
    * As such, the values will be in date-time order.
-   * 
+   *
    * @return a list of all the values in order from earliest to latest, not null
    */
   List<V> values();
@@ -255,7 +256,7 @@ public interface TimeSeries<T, V> extends Iterable<Map.Entry<T, V>> {
    * <p>
    * The index of each entry will match that used by the index lookup methods.
    * As such, the values will be in date-time order.
-   * 
+   *
    * @return an array of all the values in order from earliest to latest, not null
    */
   V[] valuesArray();
@@ -263,7 +264,7 @@ public interface TimeSeries<T, V> extends Iterable<Map.Entry<T, V>> {
   //-------------------------------------------------------------------------
   /**
    * Creates a new instance with a new set of date-times and values.
-   * 
+   *
    * @param dateTimes  the date-times, not null
    * @param values  the values, not null
    * @return the new time-series, not null

@@ -9,7 +9,7 @@ import java.util.Iterator;
 import java.util.Map.Entry;
 
 /**
- * Simple argument checker throwing {@code IllegalArgumentException}.
+ * Simple argument checkers throwing {@code IllegalArgumentException}.
  */
 public class TimeSeriesUtils {
 
@@ -152,7 +152,6 @@ public class TimeSeriesUtils {
    * This handles rounding errors which can mean the results of double precision computations
    * lead to small differences in results.
    * The definition 'close' is that the difference is less than 10^-15 (1E-15).
-   * If a different maximum allowed difference is required, use the other version of this method.
    *
    * @param a  the first value
    * @param b  the second value
@@ -204,7 +203,7 @@ public class TimeSeriesUtils {
    * @throws IllegalArgumentException if the test value is false
    */
   static void isTrue(final boolean trueIfValid, final String message) {
-    if (trueIfValid == false) {
+    if (!trueIfValid) {
       throw new IllegalArgumentException(message);
     }
   }
