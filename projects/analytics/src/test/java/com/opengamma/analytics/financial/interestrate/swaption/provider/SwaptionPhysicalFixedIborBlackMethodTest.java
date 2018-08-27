@@ -165,11 +165,11 @@ public class SwaptionPhysicalFixedIborBlackMethodTest {
   public void presentValueBlackSensitivity() {
     final double shift = 1.0E-6;
     final PresentValueBlackSwaptionSensitivity pvbvs = METHOD_BLACK.presentValueBlackSensitivity(SWAPTION_LONG_REC, BLACK_MULTICURVES);
-    final BlackFlatSwaptionParameters BlackP = BlackDataSets.createBlackSwaptionEUR6Shift(shift);
-    final BlackSwaptionFlatProviderDiscount curvesBlackP = new BlackSwaptionFlatProviderDiscount(MULTICURVES, BlackP);
+    final BlackFlatSwaptionParameters blackP = BlackDataSets.createBlackSwaptionEUR6Shift(shift);
+    final BlackSwaptionFlatProviderDiscount curvesBlackP = new BlackSwaptionFlatProviderDiscount(MULTICURVES, blackP);
     final MultipleCurrencyAmount pvP = METHOD_BLACK.presentValue(SWAPTION_LONG_REC, curvesBlackP);
-    final BlackFlatSwaptionParameters BlackM = BlackDataSets.createBlackSwaptionEUR6Shift(-shift);
-    final BlackSwaptionFlatProviderDiscount curvesBlackM = new BlackSwaptionFlatProviderDiscount(MULTICURVES, BlackM);
+    final BlackFlatSwaptionParameters blackM = BlackDataSets.createBlackSwaptionEUR6Shift(-shift);
+    final BlackSwaptionFlatProviderDiscount curvesBlackM = new BlackSwaptionFlatProviderDiscount(MULTICURVES, blackM);
     final MultipleCurrencyAmount pvM = METHOD_BLACK.presentValue(SWAPTION_LONG_REC, curvesBlackM);
     final DoublesPair point = DoublesPair.of(SWAPTION_LONG_REC.getTimeToExpiry(), SWAPTION_LONG_REC.getMaturityTime());
     assertEquals("Swaption Black method: present value volatility sensitivity", (pvP.getAmount(EUR) - pvM.getAmount(EUR)) / (2 * shift), pvbvs.getSensitivity().getMap().get(point), TOLERANCE_PV_DELTA);
@@ -196,11 +196,11 @@ public class SwaptionPhysicalFixedIborBlackMethodTest {
     final double[] x = ((InterpolatedDoublesSurface) BLACK.getVolatilitySurface()).getXDataAsPrimitive();
     final double[] y = ((InterpolatedDoublesSurface) BLACK.getVolatilitySurface()).getYDataAsPrimitive();
     for (int loopindex = 0; loopindex < x.length; loopindex++) {
-      final BlackFlatSwaptionParameters BlackP = BlackDataSets.createBlackSwaptionEUR6Shift(loopindex, shift);
-      final BlackSwaptionFlatProviderDiscount curvesBlackP = new BlackSwaptionFlatProviderDiscount(MULTICURVES, BlackP);
+      final BlackFlatSwaptionParameters blackP = BlackDataSets.createBlackSwaptionEUR6Shift(loopindex, shift);
+      final BlackSwaptionFlatProviderDiscount curvesBlackP = new BlackSwaptionFlatProviderDiscount(MULTICURVES, blackP);
       final MultipleCurrencyAmount pvP = METHOD_BLACK.presentValue(SWAPTION_LONG_REC, curvesBlackP);
-      final BlackFlatSwaptionParameters BlackM = BlackDataSets.createBlackSwaptionEUR6Shift(loopindex, -shift);
-      final BlackSwaptionFlatProviderDiscount curvesBlackM = new BlackSwaptionFlatProviderDiscount(MULTICURVES, BlackM);
+      final BlackFlatSwaptionParameters blackM = BlackDataSets.createBlackSwaptionEUR6Shift(loopindex, -shift);
+      final BlackSwaptionFlatProviderDiscount curvesBlackM = new BlackSwaptionFlatProviderDiscount(MULTICURVES, blackM);
       final MultipleCurrencyAmount pvM = METHOD_BLACK.presentValue(SWAPTION_LONG_REC, curvesBlackM);
       assertEquals("Swaption Black method: present value volatility sensitivity", (pvP.getAmount(EUR) - pvM.getAmount(EUR)) / (2 * shift),
           pvbns.getSensitivity().getMap().get(DoublesPair.of(x[loopindex], y[loopindex])), TOLERANCE_PV_DELTA);

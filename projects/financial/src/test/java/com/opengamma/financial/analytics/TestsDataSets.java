@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.financial.analytics;
@@ -19,10 +19,12 @@ import com.opengamma.analytics.math.interpolation.GridInterpolator2D;
 import com.opengamma.analytics.math.interpolation.LinearInterpolator1D;
 import com.opengamma.analytics.math.surface.InterpolatedDoublesSurface;
 import com.opengamma.util.test.TestGroup;
+//CSOFF
 
 /**
  * Sets of market data used in tests.
  */
+@Deprecated
 @Test(groups = TestGroup.UNIT)
 public class TestsDataSets {
 

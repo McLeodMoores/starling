@@ -8,7 +8,7 @@ package com.opengamma.analytics.financial.interestrate;
 import com.opengamma.analytics.financial.model.interestrate.curve.YieldAndDiscountCurve;
 import com.opengamma.analytics.financial.model.interestrate.curve.YieldCurve;
 import com.opengamma.analytics.math.curve.ConstantDoublesCurve;
-
+//CSOFF
 /**
  * Sets of market data used in tests.
  * @deprecated {@link YieldCurveBundle} is deprecated, as are the classes that use it.

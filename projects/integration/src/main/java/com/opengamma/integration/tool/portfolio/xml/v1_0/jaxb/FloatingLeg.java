@@ -43,7 +43,7 @@ public class FloatingLeg extends SwapLeg {
   @XmlElement(name = "calendar")
   private Set<Calendar> _fixingCalendars;
 
-  private FixingIndex _fixingIndex;
+  private FixingIndex fixingIndex;
 
   @XmlElement(name = "spread")
   private BigDecimal _spread;
@@ -115,11 +115,11 @@ public class FloatingLeg extends SwapLeg {
   }
 
   public FixingIndex getFixingIndex() {
-    return _fixingIndex;
+    return fixingIndex;
   }
 
   public void setFixingIndex(final FixingIndex fixingIndex) {
-    this._fixingIndex = fixingIndex;
+    this.fixingIndex = fixingIndex;
   }
 
   public BigDecimal getSpread() {

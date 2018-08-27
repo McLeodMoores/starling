@@ -138,12 +138,12 @@ public class CapFloorZeroCouponInterpolationCalibrationObjectiveTest {
     for (int loop1 = 0; loop1 < STRIKES.length; loop1++) {
       for (int loop2 = 0; loop2 < AVAILABLE_TENOR.length; loop2++) {
         final Interpolator2D interpolator = objective.getInflationCapZeroCouponProvider().getBlackParameters().getVolatilitySurface().getInterpolator();
-        final BlackSmileCapInflationZeroCouponParameters CalibratedBlackSmileCapInflationZeroCouponParameters = new BlackSmileCapInflationZeroCouponParameters(
+        final BlackSmileCapInflationZeroCouponParameters calibratedBlackSmileCapInflationZeroCouponParameters = new BlackSmileCapInflationZeroCouponParameters(
             objective.getInflationCapZeroCouponParameters(), interpolator);
-        final BlackSmileCapInflationZeroCouponProvider CalibratedBlackSmileCapInflationYearOnYearProvider = new BlackSmileCapInflationZeroCouponProvider(objective.getInflationCapZeroCouponProvider()
+        final BlackSmileCapInflationZeroCouponProvider calibratedBlackSmileCapInflationYearOnYearProvider = new BlackSmileCapInflationZeroCouponProvider(objective.getInflationCapZeroCouponProvider()
             .getInflationProvider(),
-            CalibratedBlackSmileCapInflationZeroCouponParameters);
-        pvCapYearOnYear[loop1][loop2] = METHOD.presentValue(CAPS[loop1][loop2], CalibratedBlackSmileCapInflationYearOnYearProvider);
+            calibratedBlackSmileCapInflationZeroCouponParameters);
+        pvCapYearOnYear[loop1][loop2] = METHOD.presentValue(CAPS[loop1][loop2], calibratedBlackSmileCapInflationYearOnYearProvider);
         assertEquals("Inflaiton year on year calibration: cap/floor " + loop1, pvCapYearOnYear[loop1][loop2].getAmount(CUR), marketPrices[loop1][loop2], 1E-2);
       }
     }

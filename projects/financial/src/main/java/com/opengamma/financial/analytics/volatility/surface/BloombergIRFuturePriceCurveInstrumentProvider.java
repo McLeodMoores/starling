@@ -23,7 +23,9 @@ import com.opengamma.id.ExternalScheme;
 public class BloombergIRFuturePriceCurveInstrumentProvider implements FuturePriceCurveInstrumentProvider<Number> {
 
   private static final DecimalFormat FORMATTER = new DecimalFormat("##.###");
-  static { FORMATTER.setMinimumFractionDigits(3); }
+  static {
+    FORMATTER.setMinimumFractionDigits(3);
+  }
 
   private final String _futurePrefix;
   private final String _postfix;

@@ -173,6 +173,7 @@ public class MinimalWebPositionsResource extends AbstractMinimalWebPositionResou
     String trimmedPositionXml;
     String trimmedQuantityStr;
     String trimmedIdScheme;
+    String trimmedIdValue;
     switch (trimmedType) {
       case "xml":
         trimmedPositionXml = StringUtils.trimToNull(positionXml);

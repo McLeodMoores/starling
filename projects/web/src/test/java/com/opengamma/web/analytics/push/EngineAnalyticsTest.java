@@ -13,8 +13,8 @@ import org.json.JSONObject;
 public class EngineAnalyticsTest {
 
   public static void main(final String[] args) throws IOException, JSONException {
-    final WebPushTestUtils _webPushTestUtils = new WebPushTestUtils();
-    final String clientId = _webPushTestUtils.handshake();
+    final WebPushTestUtils webPushTestUtils = new WebPushTestUtils();
+    final String clientId = webPushTestUtils.handshake();
     final String viewDefJson = "{" +
         "\"viewDefinitionName\": \"Single Swap Test View\", " +
         //"\"snapshotId\": \"Tst~123\", " + // use live data
@@ -24,20 +24,20 @@ public class EngineAnalyticsTest {
         "\"dependencyGraphCells\": [[0, 0], [1, 1]]" +
         "}" +
         "}";
-    final String viewportUrl = _webPushTestUtils.createViewport(clientId, viewDefJson);
+    final String viewportUrl = webPushTestUtils.createViewport(clientId, viewDefJson);
     // need to request data to activate the subscription
-    final String firstResults = _webPushTestUtils.readFromPath(viewportUrl + "/data", clientId);
+    final String firstResults = webPushTestUtils.readFromPath(viewportUrl + "/data", clientId);
     System.out.println("first results: " + firstResults);
     //noinspection InfiniteLoopStatement
     while (true) {
-      final String urlJson = _webPushTestUtils.readFromPath("/updates/" + clientId);
+      final String urlJson = webPushTestUtils.readFromPath("/updates/" + clientId);
       System.out.println("updates: " + urlJson);
       if (!StringUtils.isEmpty(urlJson)) {
         final JSONObject urlsObject = new JSONObject(urlJson);
         final JSONArray updates = urlsObject.getJSONArray("updates");
         for (int i = 0; i < updates.length(); i++) {
           final String url = updates.getString(i);
-          final String results = _webPushTestUtils.readFromPath(url, clientId);
+          final String results = webPushTestUtils.readFromPath(url, clientId);
           System.out.println("url: " + url + ", results: " + results);
         }
       }

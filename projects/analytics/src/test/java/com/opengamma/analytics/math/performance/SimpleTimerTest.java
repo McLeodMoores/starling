@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.math.performance;
@@ -38,8 +38,7 @@ public class SimpleTimerTest {
   private void pointlessWork() {
     long i;
     long count = 0;
-    for (i = 0; i < 2 >> 10; i++)
-    {
+    for (i = 0; i < 2 >> 10; i++) {
       count = count + 1;
     }
   }

@@ -24,7 +24,7 @@ import com.opengamma.analytics.math.surface.InterpolatedDoublesSurface;
 import com.opengamma.financial.convention.daycount.DayCount;
 import com.opengamma.financial.convention.daycount.DayCounts;
 import com.opengamma.util.money.Currency;
-
+//CSOFF
 /**
  * Sets of market data used in tests.
  * @deprecated {@link YieldCurveBundle} is deprecated, as are the classes that use it.

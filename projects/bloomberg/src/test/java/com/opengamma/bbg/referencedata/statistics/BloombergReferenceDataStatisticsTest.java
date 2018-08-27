@@ -134,16 +134,15 @@ public class BloombergReferenceDataStatisticsTest {
     final long baseline = getUsedMemory();
     for (int i = 0; i < blocks; i++) {
       final long start = System.currentTimeMillis();
-      for (int n=0;n<blockSize;n++) {
+      for (int n = 0; n < blockSize; n++) {
         list.add(factory.get());
       }
       final long elapsed = System.currentTimeMillis() - start;
       final long used = getUsedMemory() - baseline;
       final long usedPerUnit = used / ((i + 1) * blockSize);
       final long elapsedPerUnit = elapsed / blockSize;
-      System.out.println("Used ~" + usedPerUnit + "bytes and " + elapsedPerUnit + "ms per "+name);
-      if (maxSize != null)
-      {
+      System.out.println("Used ~" + usedPerUnit + "bytes and " + elapsedPerUnit + "ms per " + name);
+      if (maxSize != null) {
         assertLessThan(maxSize, usedPerUnit);
       }
       if (maxTime != null) {

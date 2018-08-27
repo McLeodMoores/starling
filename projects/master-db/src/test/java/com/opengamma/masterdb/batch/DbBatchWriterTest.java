@@ -102,7 +102,7 @@ public class DbBatchWriterTest extends AbstractDbBatchTest {
     _requirement = new ValueRequirement("FAIR_VALUE", _compTargetSpec);
     _specification = new ValueSpecification("FAIR_VALUE", _compTargetSpec, ValueProperties.with(ValuePropertyNames.FUNCTION, "IDENTITY_FUNCTION").get());
 
-    final Instant _valuationTime = Instant.parse("2011-12-14T14:20:17.143Z");
+    final Instant valuationTime = Instant.parse("2011-12-14T14:20:17.143Z");
 
     _cycleMetadataStub = new ViewCycleMetadata() {
 
@@ -137,7 +137,7 @@ public class DbBatchWriterTest extends AbstractDbBatchTest {
 
       @Override
       public Instant getValuationTime() {
-        return _valuationTime;
+        return valuationTime;
       }
 
       @Override

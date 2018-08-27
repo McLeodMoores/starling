@@ -213,8 +213,7 @@ public abstract class AbstractPersistentSubscriptionManager implements Lifecycle
     try {
       final Collection<LiveDataSubscriptionResponse> results = _server.subscribe(specs, true);
       for (final LiveDataSubscriptionResponse liveDataSubscriptionResponse : results) {
-        if (liveDataSubscriptionResponse.getSubscriptionResult() != LiveDataSubscriptionResult.SUCCESS)
-        {
+        if (liveDataSubscriptionResponse.getSubscriptionResult() != LiveDataSubscriptionResult.SUCCESS) {
           LOGGER.warn("Failed to create persistent subscription {}", liveDataSubscriptionResponse);
         }
       }

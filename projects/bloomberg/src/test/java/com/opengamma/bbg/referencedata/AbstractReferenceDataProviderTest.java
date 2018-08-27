@@ -102,7 +102,7 @@ public class AbstractReferenceDataProviderTest {
 
   //-------------------------------------------------------------------------
   @Test
-  public void singleIdMultipleFields_dataReturned() {;
+  public void singleIdMultipleFields_dataReturned() {
     final ReferenceDataProviderGetRequest request = ReferenceDataProviderGetRequest.createGet(ID1, ImmutableSet.of(FIELD1, FIELD2), true);
     final MutableFudgeMsg values = FUDGE_CONTEXT.newMessage();
     values.add(FIELD1, VALUE1);
@@ -118,7 +118,7 @@ public class AbstractReferenceDataProviderTest {
   }
 
   @Test
-  public void singleIdMultipleFields_idError() {;
+  public void singleIdMultipleFields_idError() {
     final ReferenceDataProviderGetRequest request = ReferenceDataProviderGetRequest.createGet(ID1, ImmutableSet.of(FIELD1, FIELD2), true);
     final MutableFudgeMsg values = FUDGE_CONTEXT.newMessage();
     values.add(FIELD1, VALUE1);
@@ -133,7 +133,7 @@ public class AbstractReferenceDataProviderTest {
   }
 
   @Test
-  public void singleIdMultipleFields_oneFieldError() {;
+  public void singleIdMultipleFields_oneFieldError() {
     final ReferenceDataProviderGetRequest request = ReferenceDataProviderGetRequest.createGet(ID1, ImmutableSet.of(FIELD1, FIELD2), true);
     final MutableFudgeMsg values = FUDGE_CONTEXT.newMessage();
     values.add(FIELD2, VALUE2);
@@ -150,7 +150,7 @@ public class AbstractReferenceDataProviderTest {
 
   //-------------------------------------------------------------------------
   @Test
-  public void multipleIdsSingleField_dataReturned() {;
+  public void multipleIdsSingleField_dataReturned() {
     final ReferenceDataProviderGetRequest request = ReferenceDataProviderGetRequest.createGet(ImmutableSet.of(ID1, ID2), ImmutableSet.of(FIELD1), true);
     final MutableFudgeMsg values1 = FUDGE_CONTEXT.newMessage();
     values1.add(FIELD1, VALUE1);
@@ -168,7 +168,7 @@ public class AbstractReferenceDataProviderTest {
   }
 
   @Test
-  public void multipleIdsSingleField_idError() {;
+  public void multipleIdsSingleField_idError() {
   final ReferenceDataProviderGetRequest request = ReferenceDataProviderGetRequest.createGet(ImmutableSet.of(ID1, ID2), ImmutableSet.of(FIELD1), true);
     final MutableFudgeMsg values = FUDGE_CONTEXT.newMessage();
     values.add(FIELD1, VALUE1);
@@ -204,7 +204,7 @@ public class AbstractReferenceDataProviderTest {
   }
 
   @Test
-  public void multipleIdsMultipleFields_idError() {;
+  public void multipleIdsMultipleFields_idError() {
   final ReferenceDataProviderGetRequest request = ReferenceDataProviderGetRequest.createGet(ImmutableSet.of(ID1, ID2), ImmutableSet.of(FIELD1, FIELD2), true);
     final MutableFudgeMsg values = FUDGE_CONTEXT.newMessage();
     values.add(FIELD1, VALUE1);

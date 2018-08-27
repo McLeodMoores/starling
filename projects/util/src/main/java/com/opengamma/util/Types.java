@@ -143,8 +143,7 @@ public class Types {
    * @param intfMethod  the method
    * @return the implementing method
    */
-  public static Method getImplementingMethod(final Class<?> clazz, final Method intfMethod)
-  {
+  public static Method getImplementingMethod(final Class<?> clazz, final Method intfMethod) {
     final Class<?> declaringClass = intfMethod.getDeclaringClass();
     if (declaringClass.equals(clazz)) {
       return intfMethod;
@@ -421,8 +420,7 @@ public class Types {
     return typeVarMap;
   }
 
-  public static Type[] findInterfaceParameterizedTypes(final Class<?> root, final ParameterizedType rootType, final Class<?> searchedForInterface)
-  {
+  public static Type[] findInterfaceParameterizedTypes(final Class<?> root, final ParameterizedType rootType, final Class<?> searchedForInterface) {
     final Map<String, Type> typeVarMap = populateParameterizedMap(root, rootType);
 
     for (int i = 0; i < root.getInterfaces().length; i++) {

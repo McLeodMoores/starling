@@ -148,7 +148,7 @@ public class RobustQuandlSession {
   private TabularResult mergeTables(final Map<QuandlCodeRequest, TabularResult> results, final SortOrder sortOrder) {
     int resultTableWidth = 1; // the date!
     final Map<QuandlCodeRequest, Integer> initialOffset = new HashMap<>();
-    final List<String> columnNames = new ArrayList<String>();
+    final List<String> columnNames = new ArrayList<>();
     columnNames.add("Date");
     for (final Map.Entry<QuandlCodeRequest, TabularResult> entry : results.entrySet()) {
       final QuandlCodeRequest codeRequest = entry.getKey();
@@ -159,7 +159,9 @@ public class RobustQuandlSession {
       resultTableWidth += table.getHeaderDefinition().size() - 1; // exclude the date column.
       final List<String> names = table.getHeaderDefinition().getColumnNames();
       final Iterator<String> iter = names.iterator();
-      if (!iter.hasNext()) { throw new Quandl4OpenGammaRuntimeException("table has no columns, expected at least date"); }
+      if (!iter.hasNext()) {
+        throw new Quandl4OpenGammaRuntimeException("table has no columns, expected at least date");
+      }
       iter.next(); // discard date column name
       while (iter.hasNext()) {
         final String colName = iter.next();

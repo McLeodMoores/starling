@@ -71,12 +71,12 @@ public class AnalyticSpreadSensitivityTest extends ISDABaseTest {
     }
 
     // compare with bump and reprice
-    final double[] an_CS01 = ANAL_CS01_CAL.bucketedCS01FromParSpreads(CDS, dealSpread, YIELD_CURVE, MARKET_CDS, mrkSpreads);
-    final double[] fd_CS01 = CS01_CAL.bucketedCS01FromParSpreads(CDS, dealSpread, YIELD_CURVE, MARKET_CDS, mrkSpreads, 1e-7, BumpType.ADDITIVE);
+    final double[] analyticCS01 = ANAL_CS01_CAL.bucketedCS01FromParSpreads(CDS, dealSpread, YIELD_CURVE, MARKET_CDS, mrkSpreads);
+    final double[] finiteDifferenceCS01 = CS01_CAL.bucketedCS01FromParSpreads(CDS, dealSpread, YIELD_CURVE, MARKET_CDS, mrkSpreads, 1e-7, BumpType.ADDITIVE);
 
-    final int n = fd_CS01.length;
+    final int n = finiteDifferenceCS01.length;
     for (int i = 0; i < n; i++) {
-      assertEquals(fd_CS01[i], an_CS01[i], 1e-6); // the fd is only forward difference - so accuracy is not great
+      assertEquals(finiteDifferenceCS01[i], analyticCS01[i], 1e-6); // the fd is only forward difference - so accuracy is not great
     }
   }
 

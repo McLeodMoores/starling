@@ -40,7 +40,7 @@ import com.opengamma.util.tuple.Pair;
 import com.opengamma.util.tuple.Pairs;
 
 /**
- * 
+ *
  */
 public class InflationDiscountBuildingRepositoryWithDiscount {
 
@@ -104,8 +104,7 @@ public class InflationDiscountBuildingRepositoryWithDiscount {
   private InflationProviderDiscount makeUnit(final InstrumentDerivative[] instruments, final double[] initGuess, final InflationProviderDiscount knownData,
       final LinkedHashMap<String, Currency> discountingMap, final LinkedHashMap<String, IndexON[]> forwardONMap, final LinkedHashMap<String, IndexPrice[]> inflationMap,
       final LinkedHashMap<String, GeneratorCurve> generatorsMap, final InstrumentDerivativeVisitor<InflationProviderInterface, Double> calculator,
-      final InstrumentDerivativeVisitor<InflationProviderInterface, InflationSensitivity> sensitivityCalculator)
-  {
+      final InstrumentDerivativeVisitor<InflationProviderInterface, InflationSensitivity> sensitivityCalculator) {
     final GeneratorInflationProviderDiscount generator = new GeneratorInflationProviderDiscount(knownData, discountingMap, forwardONMap, inflationMap, generatorsMap);
     final InflationDiscountBuildingData data = new InflationDiscountBuildingData(instruments, generator);
     final Function1D<DoubleMatrix1D, DoubleMatrix1D> curveCalculator = new InflationDiscountFinderFunction(calculator, data);
@@ -142,10 +141,10 @@ public class InflationDiscountBuildingRepositoryWithDiscount {
     beforeCurveName.removeAll(currentCurves);
     final LinkedHashSet<String> allCurveName = new LinkedHashSet<>(beforeCurveName);
     allCurveName.addAll(currentCurves); // Manipulation to ensure that the new curves are at the end.
-    //Implementation note : if blockBundle don't contain a block for a specific curve then we remove this curve from  beforeCurveName. 
+    //Implementation note : if blockBundle don't contain a block for a specific curve then we remove this curve from  beforeCurveName.
     //Because we can't compute the total bundle without the block for each curve. So we are computing a total bundle without this curve.
     for (final String name : beforeCurveName) {
-      if (!(blockBundle.getData().containsKey(name))) {
+      if (!blockBundle.getData().containsKey(name)) {
         beforeCurveName.remove(name);
       }
     }

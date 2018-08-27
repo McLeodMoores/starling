@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.option.pricing.analytic;
@@ -78,7 +78,7 @@ import com.opengamma.util.ArgumentChecker;
  *
  * The price of puts is calculated using the Bjerksund-Stensland put-call transformation
  * $p(S, K, T, r, b, \sigma) = c(K, S, T, r - b, -b, \sigma)$.
- * 
+ *
  * @deprecated Use {@link BjerksundStenslandModel} instead.
  */
 @Deprecated
@@ -201,8 +201,7 @@ public class BjerksundStenslandModelDeprecated extends AnalyticOptionModel<Ameri
    * @param isCall true for calls
    * @return length 2 arrays containing the price and vega
    */
-  public double[] getPriceAndVega(final double s0, final double k, final double r, final double b, final double t, final double sigma, final boolean isCall)
-  {
+  public double[] getPriceAndVega(final double s0, final double k, final double r, final double b, final double t, final double sigma, final boolean isCall) {
     return MODEL.getPriceAndVega(s0, k, r, b, t, sigma, isCall);
   }
 

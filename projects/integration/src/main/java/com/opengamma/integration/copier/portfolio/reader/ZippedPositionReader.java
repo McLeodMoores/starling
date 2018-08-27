@@ -151,8 +151,7 @@ public class ZippedPositionReader implements PositionReader {
         final BufferedReader cfgReader = new BufferedReader(new InputStreamReader(cfgInputStream));
 
         String input;
-        while ((input = cfgReader.readLine()) != null && !input.equals("[securityHashes]"))
-         {
+        while ((input = cfgReader.readLine()) != null && !input.equals("[securityHashes]")) {
           ; // CSIGNORE
         }
 

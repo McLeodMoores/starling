@@ -129,12 +129,12 @@ public class CapFloorYearOnYearCalibrationObjectiveTest {
       for (int loop2 = 0; loop2 < AVAILABLE_TENOR.length; loop2++) {
         for (int loop3 = 0; loop3 < CAPS[loop1][loop2].getNumberOfPayments(); loop3++) {
           final Interpolator2D interpolator = objective.getInflationCapYearOnYearProvider().getBlackParameters().getVolatilitySurface().getInterpolator();
-          final BlackSmileCapInflationYearOnYearParameters CalibratedBlackSmileCapInflationYearOnYearParameters = new BlackSmileCapInflationYearOnYearParameters(
+          final BlackSmileCapInflationYearOnYearParameters calibratedBlackSmileCapInflationYearOnYearParameters = new BlackSmileCapInflationYearOnYearParameters(
               objective.getInflationCapYearOnYearParameters(), interpolator);
-          final BlackSmileCapInflationYearOnYearProvider CalibratedBlackSmileCapInflationYearOnYearProvider = new BlackSmileCapInflationYearOnYearProvider(objective
+          final BlackSmileCapInflationYearOnYearProvider calibratedBlackSmileCapInflationYearOnYearProvider = new BlackSmileCapInflationYearOnYearProvider(objective
               .getInflationCapYearOnYearProvider().getInflationProvider(),
-              CalibratedBlackSmileCapInflationYearOnYearParameters);
-          pvCapYearOnYear[loop1][loop2][loop3] = METHOD.presentValue(CAPS[loop1][loop2].getNthPayment(loop3), CalibratedBlackSmileCapInflationYearOnYearProvider);
+              calibratedBlackSmileCapInflationYearOnYearParameters);
+          pvCapYearOnYear[loop1][loop2][loop3] = METHOD.presentValue(CAPS[loop1][loop2].getNthPayment(loop3), calibratedBlackSmileCapInflationYearOnYearProvider);
           assertEquals("Inflaiton year on year calibration: cap/floor " + loop1, pvCapYearOnYear[loop1][loop2][loop3].getAmount(CUR), marketPrices[loop1][loop2][loop3], 1E-2);
         }
       }
@@ -198,15 +198,15 @@ public class CapFloorYearOnYearCalibrationObjectiveTest {
       for (int loop2 = 0; loop2 < AVAILABLE_TENOR.length; loop2++) {
 
         final Interpolator2D interpolator = objective.getInflationCapYearOnYearProvider().getBlackParameters().getVolatilitySurface().getInterpolator();
-        final BlackSmileCapInflationYearOnYearParameters CalibratedBlackSmileCapInflationYearOnYearParameters = new BlackSmileCapInflationYearOnYearParameters(
+        final BlackSmileCapInflationYearOnYearParameters calibratedBlackSmileCapInflationYearOnYearParameters = new BlackSmileCapInflationYearOnYearParameters(
             objective.getInflationCapYearOnYearParameters(), interpolator);
-        final BlackSmileCapInflationYearOnYearProvider CalibratedBlackSmileCapInflationYearOnYearProvider = new BlackSmileCapInflationYearOnYearProvider(objective
+        final BlackSmileCapInflationYearOnYearProvider calibratedBlackSmileCapInflationYearOnYearProvider = new BlackSmileCapInflationYearOnYearProvider(objective
             .getInflationCapYearOnYearProvider().getInflationProvider(),
-            CalibratedBlackSmileCapInflationYearOnYearParameters);
-        pvCapYearOnYear[loop1][loop2] = METHOD.presentValue(CAPS_AVAILABLE[loop1][loop2].getNthPayment(0), CalibratedBlackSmileCapInflationYearOnYearProvider);
+            calibratedBlackSmileCapInflationYearOnYearParameters);
+        pvCapYearOnYear[loop1][loop2] = METHOD.presentValue(CAPS_AVAILABLE[loop1][loop2].getNthPayment(0), calibratedBlackSmileCapInflationYearOnYearProvider);
         for (int loop3 = 1; loop3 < CAPS_AVAILABLE[loop1][loop2].getNumberOfPayments(); loop3++) {
           pvCapYearOnYear[loop1][loop2] = pvCapYearOnYear[loop1][loop2]
-              .plus(METHOD.presentValue(CAPS_AVAILABLE[loop1][loop2].getNthPayment(loop3), CalibratedBlackSmileCapInflationYearOnYearProvider));
+              .plus(METHOD.presentValue(CAPS_AVAILABLE[loop1][loop2].getNthPayment(loop3), calibratedBlackSmileCapInflationYearOnYearProvider));
         }
         assertEquals("Inflaiton year on year calibration: cap/floor " + loop1, pvCapYearOnYear[loop1][loop2].getAmount(CUR), marketPrices_AVAILABLE[loop1][loop2], 1E-2);
 
@@ -264,15 +264,15 @@ public class CapFloorYearOnYearCalibrationObjectiveTest {
       for (int loop2 = 0; loop2 < AVAILABLE_TENOR.length; loop2++) {
 
         final Interpolator2D interpolator = objective.getInflationCapYearOnYearProvider().getBlackParameters().getVolatilitySurface().getInterpolator();
-        final BlackSmileCapInflationYearOnYearParameters CalibratedBlackSmileCapInflationYearOnYearParameters = new BlackSmileCapInflationYearOnYearParameters(
+        final BlackSmileCapInflationYearOnYearParameters calibratedBlackSmileCapInflationYearOnYearParameters = new BlackSmileCapInflationYearOnYearParameters(
             objective.getInflationCapYearOnYearParameters(), interpolator);
-        final BlackSmileCapInflationYearOnYearProvider CalibratedBlackSmileCapInflationYearOnYearProvider = new BlackSmileCapInflationYearOnYearProvider(objective
+        final BlackSmileCapInflationYearOnYearProvider calibratedBlackSmileCapInflationYearOnYearProvider = new BlackSmileCapInflationYearOnYearProvider(objective
             .getInflationCapYearOnYearProvider().getInflationProvider(),
-            CalibratedBlackSmileCapInflationYearOnYearParameters);
-        pvCapYearOnYear[loop1][loop2] = METHOD.presentValue(CAPS_AVAILABLE[loop1][loop2].getNthPayment(0), CalibratedBlackSmileCapInflationYearOnYearProvider);
+            calibratedBlackSmileCapInflationYearOnYearParameters);
+        pvCapYearOnYear[loop1][loop2] = METHOD.presentValue(CAPS_AVAILABLE[loop1][loop2].getNthPayment(0), calibratedBlackSmileCapInflationYearOnYearProvider);
         for (int loop3 = 1; loop3 < CAPS_AVAILABLE[loop1][loop2].getNumberOfPayments(); loop3++) {
           pvCapYearOnYear[loop1][loop2] = pvCapYearOnYear[loop1][loop2]
-              .plus(METHOD.presentValue(CAPS_AVAILABLE[loop1][loop2].getNthPayment(loop3), CalibratedBlackSmileCapInflationYearOnYearProvider));
+              .plus(METHOD.presentValue(CAPS_AVAILABLE[loop1][loop2].getNthPayment(loop3), calibratedBlackSmileCapInflationYearOnYearProvider));
         }
         assertEquals("Inflaiton year on year calibration: cap/floor " + loop1, pvCapYearOnYear[loop1][loop2].getAmount(CUR), marketPrices_AVAILABLE[loop1][loop2], 1E-2);
 

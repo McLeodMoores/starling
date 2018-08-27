@@ -113,50 +113,50 @@ public class ISDACompliantPresentValueCreditDefaultSwapTest {
       }
 
       // price with code written to mimic ISDA c - i.e. date logic in the analytics
-      final double rpv01_clean_ISDA = NOTIONAL *
+      final double rpv01CleanISDA = NOTIONAL *
           PRICER.pvPremiumLegPerUnitSpread(today, stepinDate, valueDate, startDate, endDate, true, tenor, stubType, yieldCurve, res.creditCurve, protectionStart, PriceType.CLEAN);
-      final double rpv01_clean_ISDA_noAccOnDefault = NOTIONAL *
+      final double rpv01CleanISDANoAccOnDefault = NOTIONAL *
           PRICER.pvPremiumLegPerUnitSpread(today, stepinDate, valueDate, startDate, endDate, false, tenor, stubType, yieldCurve, res.creditCurve, protectionStart, PriceType.CLEAN);
-      final double rpv01_dirty_ISDA = NOTIONAL *
+      final double rpv01DirtyISDA = NOTIONAL *
           PRICER.pvPremiumLegPerUnitSpread(today, stepinDate, valueDate, startDate, endDate, true, tenor, stubType, yieldCurve, res.creditCurve, protectionStart, PriceType.DIRTY);
-      final double contLeg_ISDA = NOTIONAL * PRICER.calculateProtectionLeg(today, stepinDate, valueDate, startDate, endDate, yieldCurve, res.creditCurve, RECOVERY_RATE, protectionStart);
+      final double contLegISDA = NOTIONAL * PRICER.calculateProtectionLeg(today, stepinDate, valueDate, startDate, endDate, yieldCurve, res.creditCurve, RECOVERY_RATE, protectionStart);
 
-      final double premLeg_clean_ISDA = res.fracSpread * rpv01_clean_ISDA;
-      final double defaultAcc = res.fracSpread * (rpv01_clean_ISDA - rpv01_clean_ISDA_noAccOnDefault);
-      final double rpv01_accrued = rpv01_dirty_ISDA - rpv01_clean_ISDA;
-      final double accruedPrem = rpv01_accrued * res.fracSpread;
+      final double premLegCleanISDA = res.fracSpread * rpv01CleanISDA;
+      final double defaultAcc = res.fracSpread * (rpv01CleanISDA - rpv01CleanISDANoAccOnDefault);
+      final double rpv01Accrued = rpv01DirtyISDA - rpv01CleanISDA;
+      final double accruedPrem = rpv01Accrued * res.fracSpread;
 
       // back out the accrued-days by inverting the accrued premium formula (which is ACT/360) - this matched the formula on the ISDA spread sheet
-      final int accruedDays = (int) Math.round(360 * rpv01_accrued / NOTIONAL);
+      final int accruedDays = (int) Math.round(360 * rpv01Accrued / NOTIONAL);
 
       if (debug) {
-        System.out.println(count + "\t" + res.premiumLeg + "\t" + premLeg_clean_ISDA + "\t" + premLeg_clean_new + "\t\t" + res.protectionLeg + "\t" + contLeg_ISDA + "\t" + protectionLeg_new + "\t\t" +
+        System.out.println(count + "\t" + res.premiumLeg + "\t" + premLegCleanISDA + "\t" + premLeg_clean_new + "\t\t" + res.protectionLeg + "\t" + contLegISDA + "\t" + protectionLeg_new + "\t\t" +
             res.defaultAcc + "\t" + defaultAcc + "\t\t" + res.accruedPremium + "\t" + accruedPrem + "\t\t" + res.accruedDays + "\t" + accruedDays);
         try {
           // tests against ISDA c
-          assertEquals("Premium Leg:", res.premiumLeg, premLeg_clean_ISDA, 1e-12 * NOTIONAL); // This should be 1e-15*NOTIONAL
-          assertEquals("Protection Leg:", res.protectionLeg, contLeg_ISDA, 1e-11 * NOTIONAL); // ditto
+          assertEquals("Premium Leg:", res.premiumLeg, premLegCleanISDA, 1e-12 * NOTIONAL); // This should be 1e-15*NOTIONAL
+          assertEquals("Protection Leg:", res.protectionLeg, contLegISDA, 1e-11 * NOTIONAL); // ditto
           assertEquals("Default Acc:", res.defaultAcc, defaultAcc, 1e-13 * NOTIONAL);
           assertEquals("Accrued Premium: ", res.accruedPremium, accruedPrem, 1e-15 * NOTIONAL); // the accrued is trivial, so should be highly accurate
           assertEquals("Accrued Days: ", res.accruedDays, accruedDays);
 
           // tests date free vs date-full code
-          assertEquals("Premium Leg:", premLeg_clean_ISDA, premLeg_clean_new, 1e-13 * NOTIONAL);
-          assertEquals("Protection Leg:", contLeg_ISDA, protectionLeg_new, 1e-16 * NOTIONAL);
+          assertEquals("Premium Leg:", premLegCleanISDA, premLeg_clean_new, 1e-13 * NOTIONAL);
+          assertEquals("Protection Leg:", contLegISDA, protectionLeg_new, 1e-16 * NOTIONAL);
         } catch (final AssertionError e) {
           failedList[failCount++] = count;
         }
       } else {
         // tests against ISDA c
-        assertEquals("Premium Leg:", res.premiumLeg, premLeg_clean_ISDA, 1e-12 * NOTIONAL); // This should be 1e-15*NOTIONAL
-        assertEquals("Protection Leg:", res.protectionLeg, contLeg_ISDA, 1e-11 * NOTIONAL); // ditto
+        assertEquals("Premium Leg:", res.premiumLeg, premLegCleanISDA, 1e-12 * NOTIONAL); // This should be 1e-15*NOTIONAL
+        assertEquals("Protection Leg:", res.protectionLeg, contLegISDA, 1e-11 * NOTIONAL); // ditto
         assertEquals("Default Acc:", res.defaultAcc, defaultAcc, 1e-13 * NOTIONAL);
         assertEquals("Accrued Premium: ", res.accruedPremium, accruedPrem, 1e-15 * NOTIONAL); // the accrued is trivial, so should be highly accurate
         assertEquals("Accrued Days: ", res.accruedDays, accruedDays);
 
         // tests date free vs date-full code
-        assertEquals("Premium Leg:", premLeg_clean_ISDA, premLeg_clean_new, 1e-13 * NOTIONAL);
-        assertEquals("Protection Leg:", contLeg_ISDA, protectionLeg_new, 1e-15 * NOTIONAL);
+        assertEquals("Premium Leg:", premLegCleanISDA, premLeg_clean_new, 1e-13 * NOTIONAL);
+        assertEquals("Protection Leg:", contLegISDA, protectionLeg_new, 1e-15 * NOTIONAL);
       }
     }
     if (debug) {

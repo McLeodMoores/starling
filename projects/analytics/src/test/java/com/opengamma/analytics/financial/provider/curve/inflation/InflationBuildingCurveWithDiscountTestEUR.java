@@ -312,48 +312,48 @@ public class InflationBuildingCurveWithDiscountTestEUR {
 
   }
 
-  @Test(enabled = true)
+  @Test
   public void blockBundlePriceIndexFiniteDifferenceTest() {
-    final double[] DSC_USD_MARKET_QUOTES_BUMPED_PLUS = new double[] {0.0400, 0.0400, 0.0400, 0.0400, 0.0400, 0.0400, 0.0400, 0.0400, 0.0400, 0.0400, 0.0400, 0.0400 };
-    final double[] DSC_USD_MARKET_QUOTES_BUMPED_MINUS = new double[] {0.0400, 0.0400, 0.0400, 0.0400, 0.0400, 0.0400, 0.0400, 0.0400, 0.0400, 0.0400, 0.0400, 0.0400 };
-    final double[] CPI_EUR_MARKET_QUOTES_PLUS = new double[] {0.0200, 0.0200, 0.0250, 0.0260, 0.0200, 0.0270, 0.0280, 0.0290, 0.0300, 0.0310, 0.0320, 0.0330, 0.0330, 0.0330, 0.0330 };
-    final double[] CPI_EUR_MARKET_QUOTES_MINUS = new double[] {0.0200, 0.0200, 0.0250, 0.0260, 0.0200, 0.0270, 0.0280, 0.0290, 0.0300, 0.0310, 0.0320, 0.0330, 0.0330, 0.0330, 0.0330 };
+    final double[] dscUsdMktQuotesUp = new double[] {0.0400, 0.0400, 0.0400, 0.0400, 0.0400, 0.0400, 0.0400, 0.0400, 0.0400, 0.0400, 0.0400, 0.0400 };
+    final double[] dscUsdMktQuotesDown = new double[] {0.0400, 0.0400, 0.0400, 0.0400, 0.0400, 0.0400, 0.0400, 0.0400, 0.0400, 0.0400, 0.0400, 0.0400 };
+    final double[] cpiEurMktQuotesUp = new double[] {0.0200, 0.0200, 0.0250, 0.0260, 0.0200, 0.0270, 0.0280, 0.0290, 0.0300, 0.0310, 0.0320, 0.0330, 0.0330, 0.0330, 0.0330 };
+    final double[] cpiEurMktQuotesDown = new double[] {0.0200, 0.0200, 0.0250, 0.0260, 0.0200, 0.0270, 0.0280, 0.0290, 0.0300, 0.0310, 0.0320, 0.0330, 0.0330, 0.0330, 0.0330 };
     final CurveBuildingBlockBundle blockBundles = CURVES_PAR_SPREAD_MQ_WITHOUT_TODAY_BLOCK.get(0).clone().getSecond();
     final double bump = 1e-5;
 
-    for (int k = 0; k < DSC_USD_MARKET_QUOTES_BUMPED_MINUS.length; k++) {
-      DSC_USD_MARKET_QUOTES_BUMPED_PLUS[k] += bump;
-      DSC_USD_MARKET_QUOTES_BUMPED_MINUS[k] -= bump;
+    for (int k = 0; k < dscUsdMktQuotesDown.length; k++) {
+      dscUsdMktQuotesUp[k] += bump;
+      dscUsdMktQuotesDown[k] -= bump;
       final List<Pair<InflationProviderDiscount, CurveBuildingBlockBundle>> blockBundlesPlus = new ArrayList<>();
       final List<Pair<InflationProviderDiscount, CurveBuildingBlockBundle>> blockBundlesMinus = new ArrayList<>();
-      final InstrumentDefinition<?>[] DEFINITIONS_DSC_USD_PLUS = getDefinitions(DSC_USD_MARKET_QUOTES_BUMPED_PLUS, DSC_EUR_GENERATORS, DSC_EUR_ATTR);
-      final InstrumentDefinition<?>[] DEFINITIONS_DSC_USD_MINUS = getDefinitions(DSC_USD_MARKET_QUOTES_BUMPED_MINUS, DSC_EUR_GENERATORS, DSC_EUR_ATTR);
-      final InstrumentDefinition<?>[][][] DEFINITIONS_UNITS_PLUS = new InstrumentDefinition<?>[2][][];
-      final InstrumentDefinition<?>[][][] DEFINITIONS_UNITS_MINUS = new InstrumentDefinition<?>[2][][];
-      DEFINITIONS_UNITS_PLUS[1] = new InstrumentDefinition<?>[][] {DEFINITIONS_CPI_EUR };
-      DEFINITIONS_UNITS_MINUS[1] = new InstrumentDefinition<?>[][] {DEFINITIONS_CPI_EUR };
-      DEFINITIONS_UNITS_PLUS[0] = new InstrumentDefinition<?>[][] {DEFINITIONS_DSC_USD_PLUS };
-      DEFINITIONS_UNITS_MINUS[0] = new InstrumentDefinition<?>[][] {DEFINITIONS_DSC_USD_MINUS };
-      blockBundlesPlus.add(makeCurvesFromDefinitions(DEFINITIONS_UNITS_PLUS, GENERATORS_UNITS[0], NAMES_UNITS[0], KNOWN_DATA, PSIMQC, PSIMQCSC));
+      final InstrumentDefinition<?>[] dscUsdUp = getDefinitions(dscUsdMktQuotesUp, DSC_EUR_GENERATORS, DSC_EUR_ATTR);
+      final InstrumentDefinition<?>[] dscUsdDown = getDefinitions(dscUsdMktQuotesDown, DSC_EUR_GENERATORS, DSC_EUR_ATTR);
+      final InstrumentDefinition<?>[][][] definitionsUp = new InstrumentDefinition<?>[2][][];
+      final InstrumentDefinition<?>[][][] definitionsDown = new InstrumentDefinition<?>[2][][];
+      definitionsUp[1] = new InstrumentDefinition<?>[][] {DEFINITIONS_CPI_EUR };
+      definitionsDown[1] = new InstrumentDefinition<?>[][] {DEFINITIONS_CPI_EUR };
+      definitionsUp[0] = new InstrumentDefinition<?>[][] {dscUsdUp };
+      definitionsDown[0] = new InstrumentDefinition<?>[][] {dscUsdDown };
+      blockBundlesPlus.add(makeCurvesFromDefinitions(definitionsUp, GENERATORS_UNITS[0], NAMES_UNITS[0], KNOWN_DATA, PSIMQC, PSIMQCSC));
       final Double[] parametersPlus = blockBundlesPlus.get(0).getFirst().getCurve(CURVE_NAME_CPI_EUR).getCurve().getYData();
-      blockBundlesMinus.add(makeCurvesFromDefinitions(DEFINITIONS_UNITS_MINUS, GENERATORS_UNITS[0], NAMES_UNITS[0], KNOWN_DATA, PSIMQC, PSIMQCSC));
+      blockBundlesMinus.add(makeCurvesFromDefinitions(definitionsDown, GENERATORS_UNITS[0], NAMES_UNITS[0], KNOWN_DATA, PSIMQC, PSIMQCSC));
       final Double[] parametersMinus = blockBundlesMinus.get(0).getFirst().getCurve(CURVE_NAME_CPI_EUR).getCurve().getYData();
       final Double[] parametersSensi = new Double[parametersMinus.length];
-      DSC_USD_MARKET_QUOTES_BUMPED_PLUS[k] -= bump;
-      DSC_USD_MARKET_QUOTES_BUMPED_MINUS[k] += bump;
+      dscUsdMktQuotesUp[k] -= bump;
+      dscUsdMktQuotesDown[k] += bump;
       for (int j = 0; j < blockBundles.getBlock(CURVE_NAME_CPI_EUR).getSecond().getData().length; j++) {
         parametersSensi[j] = (parametersPlus[j] - parametersMinus[j]) / (2 * bump);
         assertEquals("Curve construction: block " + CURVE_NAME_CPI_EUR + ", column " + j + " - line " + k, blockBundles.getBlock(CURVE_NAME_CPI_EUR).getSecond().getData()[j][k],
             parametersSensi[j], 3e-6);
       }
     }
-    for (int k = 0; k < CPI_EUR_MARKET_QUOTES_PLUS.length; k++) {
-      CPI_EUR_MARKET_QUOTES_PLUS[k] += bump;
-      CPI_EUR_MARKET_QUOTES_MINUS[k] -= bump;
+    for (int k = 0; k < cpiEurMktQuotesUp.length; k++) {
+      cpiEurMktQuotesUp[k] += bump;
+      cpiEurMktQuotesDown[k] -= bump;
       final List<Pair<InflationProviderDiscount, CurveBuildingBlockBundle>> blockBundlesPlus = new ArrayList<>();
       final List<Pair<InflationProviderDiscount, CurveBuildingBlockBundle>> blockBundlesMinus = new ArrayList<>();
-      final InstrumentDefinition<?>[] DEFINITIONS_FWD_USD_PLUS = getDefinitions(CPI_EUR_MARKET_QUOTES_PLUS, CPI_EUR_GENERATORS, CPI_EUR_ATTR);
-      final InstrumentDefinition<?>[] DEFINITIONS_FWD_USD_MINUS = getDefinitions(CPI_EUR_MARKET_QUOTES_MINUS, CPI_EUR_GENERATORS, CPI_EUR_ATTR);
+      final InstrumentDefinition<?>[] DEFINITIONS_FWD_USD_PLUS = getDefinitions(cpiEurMktQuotesUp, CPI_EUR_GENERATORS, CPI_EUR_ATTR);
+      final InstrumentDefinition<?>[] DEFINITIONS_FWD_USD_MINUS = getDefinitions(cpiEurMktQuotesDown, CPI_EUR_GENERATORS, CPI_EUR_ATTR);
       final InstrumentDefinition<?>[][][] DEFINITIONS_UNITS_PLUS = new InstrumentDefinition<?>[2][][];
       final InstrumentDefinition<?>[][][] DEFINITIONS_UNITS_MINUS = new InstrumentDefinition<?>[2][][];
       DEFINITIONS_UNITS_PLUS[0] = new InstrumentDefinition<?>[][] {DEFINITIONS_DSC_EUR };
@@ -365,12 +365,12 @@ public class InflationBuildingCurveWithDiscountTestEUR {
       blockBundlesMinus.add(makeCurvesFromDefinitions(DEFINITIONS_UNITS_MINUS, GENERATORS_UNITS[0], NAMES_UNITS[0], KNOWN_DATA, PSIMQC, PSIMQCSC));
       final Double[] parametersMinus = blockBundlesMinus.get(0).getFirst().getCurve(CURVE_NAME_CPI_EUR).getCurve().getYData();
       final Double[] parametersSensi = new Double[parametersMinus.length];
-      CPI_EUR_MARKET_QUOTES_PLUS[k] -= bump;
-      CPI_EUR_MARKET_QUOTES_MINUS[k] += bump;
+      cpiEurMktQuotesUp[k] -= bump;
+      cpiEurMktQuotesDown[k] += bump;
       for (int j = 0; j < blockBundles.getBlock(CURVE_NAME_CPI_EUR).getSecond().getData().length; j++) {
         parametersSensi[j] = (parametersPlus[j] - parametersMinus[j]) / (2 * bump);
         assertEquals("Curve construction: block " + CURVE_NAME_CPI_EUR + ", column " + j + " - line " + k, blockBundles.getBlock(CURVE_NAME_CPI_EUR).getSecond().getData()[j][k +
-            DSC_USD_MARKET_QUOTES_BUMPED_MINUS.length],
+            dscUsdMktQuotesDown.length],
             parametersSensi[j], 2e-3);
       }
     }

@@ -154,7 +154,7 @@ public class BondFixedSecurityDefinitionTest {
 
   @Test
   public void testDates() {
-    final BondFixedSecurityDefinition BOND_DEFINITION = BondFixedSecurityDefinition.from(CUR, MATURITY_DATE, START_ACCRUAL_DATE, PAYMENT_TENOR, RATE, SETTLEMENT_DAYS,
+    final BondFixedSecurityDefinition bondDefinition = BondFixedSecurityDefinition.from(CUR, MATURITY_DATE, START_ACCRUAL_DATE, PAYMENT_TENOR, RATE, SETTLEMENT_DAYS,
         CALENDAR, DAY_COUNT, BUSINESS_DAY, STREET_CONVENTION, IS_EOM, ISSUER_NAME);
     final ZonedDateTime[] expectedPaymentDates = new ZonedDateTime[] {DateUtils.getUTCDate(2012, 1, 13), DateUtils.getUTCDate(2012, 7, 13),
       DateUtils.getUTCDate(2013, 1, 14), DateUtils.getUTCDate(2013, 7, 15) };
@@ -162,10 +162,10 @@ public class BondFixedSecurityDefinitionTest {
       DateUtils.getUTCDate(2012, 7, 13), DateUtils.getUTCDate(2013, 1, 13) };
     final ZonedDateTime[] expectedEndDates = new ZonedDateTime[] {DateUtils.getUTCDate(2012, 1, 13), DateUtils.getUTCDate(2012, 7, 13),
       DateUtils.getUTCDate(2013, 1, 13), DateUtils.getUTCDate(2013, 7, 13) };
-    for (int loopcpn = 0; loopcpn < BOND_DEFINITION.getCoupons().getNumberOfPayments(); loopcpn++) {
-      assertEquals("Payment " + loopcpn, expectedPaymentDates[loopcpn], BOND_DEFINITION.getCoupons().getNthPayment(loopcpn).getPaymentDate());
-      assertEquals("Start accrual " + loopcpn, expectedStartDates[loopcpn], BOND_DEFINITION.getCoupons().getNthPayment(loopcpn).getAccrualStartDate());
-      assertEquals("End accrual " + loopcpn, expectedEndDates[loopcpn], BOND_DEFINITION.getCoupons().getNthPayment(loopcpn).getAccrualEndDate());
+    for (int loopcpn = 0; loopcpn < bondDefinition.getCoupons().getNumberOfPayments(); loopcpn++) {
+      assertEquals("Payment " + loopcpn, expectedPaymentDates[loopcpn], bondDefinition.getCoupons().getNthPayment(loopcpn).getPaymentDate());
+      assertEquals("Start accrual " + loopcpn, expectedStartDates[loopcpn], bondDefinition.getCoupons().getNthPayment(loopcpn).getAccrualStartDate());
+      assertEquals("End accrual " + loopcpn, expectedEndDates[loopcpn], bondDefinition.getCoupons().getNthPayment(loopcpn).getAccrualEndDate());
     }
   }
 

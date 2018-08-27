@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.analytics.financial.model.finitedifference;
@@ -49,7 +49,7 @@ public class FokkerPlankPDETest {
   private static final Function1D<Double, Double> INITAL_CONDITION = INITIAL_CONDITION_PROVIDER.getLogNormalDensity(SPOT, 0.001, ATM_VOL);
   private static final ConvectionDiffusionPDE1DFullCoefficients DATA;
   private static final PDE1DDataBundle<ConvectionDiffusionPDE1DCoefficients> PDE_DATA_BUNDLE;
-  private static final int T_NODES = 100;/*TODO this needs more time steps (up from 30) to pass time now using ExtendedThetaMethodFiniteDifference. Can be better to express problem in terms 
+  private static final int T_NODES = 100;/*TODO this needs more time steps (up from 30) to pass time now using ExtendedThetaMethodFiniteDifference. Can be better to express problem in terms
                                          in terms of ThetaMethodFiniteDifference (with ConvectionDiffusionPDEDataBundle)*/
   private static final int X_NODES = 101;
 
@@ -116,8 +116,8 @@ public class FokkerPlankPDETest {
 
     final BlackFunctionData data = new BlackFunctionData(SPOT / df, df, ATM_VOL);
     final Function1D<BlackFunctionData, Double> pricer = BLACK_FUNCTION.getPriceFunction(OPTION);
-    final double bs_price = pricer.evaluate(data);
-    assertEquals("Option price test", bs_price, price, 2e-2 * bs_price);//TODO This is not very accurate 
+    final double bsPrice = pricer.evaluate(data);
+    assertEquals("Option price test", bsPrice, price, 2e-2 * bsPrice); //TODO This is not very accurate
 
   }
 }

@@ -82,8 +82,7 @@ public class PriorityResolvingCombiningLiveDataServer extends CombiningLiveDataS
 
   }
 
-  private class DelegatingDistributionSpecificationResolver extends AbstractResolver<LiveDataSpecification, DistributionSpecification> implements DistributionSpecificationResolver
-  {
+  private class DelegatingDistributionSpecificationResolver extends AbstractResolver<LiveDataSpecification, DistributionSpecification> implements DistributionSpecificationResolver {
     //TODO: dedupe with group by ?
 
     @Override

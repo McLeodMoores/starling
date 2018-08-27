@@ -17,8 +17,8 @@ import com.opengamma.web.analytics.push.WebPushTestUtils;
 public class AnalyticsCsvTest {
 
   public static void main(final String[] args) throws IOException, JSONException, InterruptedException {
-    final WebPushTestUtils _webPushTestUtils = new WebPushTestUtils();
-    final String clientId = _webPushTestUtils.handshake();
+    final WebPushTestUtils webPushTestUtils = new WebPushTestUtils();
+    final String clientId = webPushTestUtils.handshake();
     final String viewDefJson = "{" +
         "\"viewDefinitionName\": \"Single Swap Test View\", " +
         //"\"snapshotId\": \"Tst~123\", " + // use live data
@@ -33,10 +33,10 @@ public class AnalyticsCsvTest {
         "\"dependencyGraphCells\": [[0, 0]]" +
         "}" +
         "}";
-    final String viewportUrl = _webPushTestUtils.createViewport(clientId, viewDefJson);
+    final String viewportUrl = webPushTestUtils.createViewport(clientId, viewDefJson);
     //noinspection InfiniteLoopStatement
     while (true) {
-      final String csv = _webPushTestUtils.readFromPath(viewportUrl + "/report/csv");
+      final String csv = webPushTestUtils.readFromPath(viewportUrl + "/report/csv");
       System.out.println(csv);
 
       Thread.sleep(2000);

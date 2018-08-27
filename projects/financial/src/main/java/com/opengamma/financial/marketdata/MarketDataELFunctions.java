@@ -89,8 +89,7 @@ public final class MarketDataELFunctions {
       }
       final String ccyPart = split[0];
       switch (ccyPart.length()) {
-        case 3:
-        {
+        case 3: {
           final Currency ccy = Currency.of(ccyPart);
           if (StandardCurrencyPairs.isSingleCurrencyNumerator(ccy)) {
             return Pairs.of(ccy, Currency.USD);
@@ -98,8 +97,7 @@ public final class MarketDataELFunctions {
             return Pairs.of(Currency.USD, ccy);
           }
         }
-        case 6:
-        {
+        case 6: {
           final Currency numerator = Currency.of(ccyPart.substring(0, 3));
           final Currency denominator = Currency.of(ccyPart.substring(3));
           return Pairs.of(numerator, denominator);

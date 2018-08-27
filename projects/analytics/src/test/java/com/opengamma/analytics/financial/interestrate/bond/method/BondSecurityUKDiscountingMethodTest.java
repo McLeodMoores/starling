@@ -107,8 +107,8 @@ public class BondSecurityUKDiscountingMethodTest {
     final double pv = METHOD.presentValue(BOND_FIXED_SECURITY_G, CURVES);
     final BondFixedSecurityDefinition bondNoExDefinition = BondFixedSecurityDefinition.from(CUR_G, MATURITY_DATE_G, START_ACCRUAL_DATE_G, PAYMENT_TENOR_G, RATE_G, SETTLEMENT_DAYS_G, NOTIONAL_G, 0,
         CALENDAR_G, DAY_COUNT_G, BUSINESS_DAY_G, YIELD_CONVENTION_G, IS_EOM_G, ISSUER_G, REPO_TYPE_G);
-    final BondFixedSecurity BondNoEx = bondNoExDefinition.toDerivative(REFERENCE_DATE_3, CURVES_NAME);
-    final double pvNoEx = METHOD.presentValue(BondNoEx, CURVES);
+    final BondFixedSecurity bondNoEx = bondNoExDefinition.toDerivative(REFERENCE_DATE_3, CURVES_NAME);
+    final double pvNoEx = METHOD.presentValue(bondNoEx, CURVES);
     final CouponFixedDefinition couponDefinitionEx = BOND_FIXED_SECURITY_DEFINITION_G.getCoupons().getNthPayment(17);
     final double pvCpn = couponDefinitionEx.toDerivative(REFERENCE_DATE_3, CURVES_NAME).accept(PVC, CURVES);
     assertEquals("Fixed coupon bond security: present value ex dividend", pvNoEx - pvCpn, pv, 1.0E-6);

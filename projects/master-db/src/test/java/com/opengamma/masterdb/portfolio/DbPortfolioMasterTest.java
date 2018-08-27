@@ -76,13 +76,12 @@ public class DbPortfolioMasterTest extends AbstractDbTest {
   public void test_duplicate_names_complex() throws Exception {
 
     //Try to make the table big enough that database looses presumed order guarantees
-    for (int i=0;i<10;i++)
-    {
+    for (int i = 0; i < 10; i++) {
       final String portfolioName = "Portfolio";
       final PortfolioDocument a = new PortfolioDocument();
-      a.setPortfolio( new ManageablePortfolio(portfolioName));
+      a.setPortfolio(new ManageablePortfolio(portfolioName));
       _prtMaster.add(a);
-      for (int j = 0;j<10;j++){
+      for (int j = 0; j < 10; j++) {
         final ManageablePortfolioNode child = new ManageablePortfolioNode("X");
         child.addChildNode(new ManageablePortfolioNode("Y"));
         a.getPortfolio().getRootNode().addChildNode(child);
@@ -90,15 +89,15 @@ public class DbPortfolioMasterTest extends AbstractDbTest {
       }
 
       final PortfolioDocument b = new PortfolioDocument();
-      b.setPortfolio( new ManageablePortfolio(portfolioName));
-      for (int j = 0;j<10;j++){
+      b.setPortfolio(new ManageablePortfolio(portfolioName));
+      for (int j = 0; j < 10; j++) {
         final ManageablePortfolioNode childB = new ManageablePortfolioNode("X");
         childB.addChildNode(new ManageablePortfolioNode("Y"));
         b.getPortfolio().getRootNode().addChildNode(childB);
       }
       _prtMaster.add(b);
 
-      for (int j = 0;j<10;j++){
+      for (int j = 0; j < 10; j++) {
         final ManageablePortfolioNode child = new ManageablePortfolioNode("X");
         child.addChildNode(new ManageablePortfolioNode("Y"));
         a.getPortfolio().getRootNode().addChildNode(child);

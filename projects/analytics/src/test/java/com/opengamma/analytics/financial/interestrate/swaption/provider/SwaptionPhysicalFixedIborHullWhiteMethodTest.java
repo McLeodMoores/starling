@@ -361,8 +361,8 @@ public class SwaptionPhysicalFixedIborHullWhiteMethodTest {
     final Period expirationPeriod = Period.ofDays(1); // Period.ofDays(1); Period.ofDays(7); Period.ofMonths(1); Period.ofYears(1); Period.ofYears(10);
     final ZonedDateTime expiryDateExp = ScheduleCalculator.getAdjustedDate(REFERENCE_DATE, expirationPeriod, EURIBOR6M, CALENDAR);
     final ZonedDateTime settlementDateExp = ScheduleCalculator.getAdjustedDate(expiryDateExp, SPOT_LAG, CALENDAR);
-    final double ATM = 0.0151; //  1W: 1.52% - 1M: 1.52% - 1Y: 1.51% - 10Y: 1.51%
-    final SwapFixedIborDefinition swapExpx5YDefinition = SwapFixedIborDefinition.from(settlementDateExp, SWAP_TENOR, EUR1YEURIBOR6M, NOTIONAL, ATM, !FIXED_IS_PAYER);
+    final double atm = 0.0151; //  1W: 1.52% - 1M: 1.52% - 1Y: 1.51% - 10Y: 1.51%
+    final SwapFixedIborDefinition swapExpx5YDefinition = SwapFixedIborDefinition.from(settlementDateExp, SWAP_TENOR, EUR1YEURIBOR6M, NOTIONAL, atm, !FIXED_IS_PAYER);
     final SwaptionPhysicalFixedIborDefinition swaptionExpx5YDefinition = SwaptionPhysicalFixedIborDefinition.from(EXPIRY_DATE, swapExpx5YDefinition, !FIXED_IS_PAYER, !IS_LONG);
     final SwaptionPhysicalFixedIbor swaptionExpx5Y = swaptionExpx5YDefinition.toDerivative(REFERENCE_DATE);
     //    final double forward = swaptionExpx5Y.getUnderlyingSwap().accept(PRDC, MULTICURVES);

@@ -135,8 +135,7 @@ public abstract class CombiningLiveDataServer extends StandardLiveDataServer {
     String getName();
   }
 
-  private Collection<LiveDataSubscriptionResponse> subscribeByServer(final Collection<LiveDataSpecification> specifications, final SubscribeAction action)
-  {
+  private Collection<LiveDataSubscriptionResponse> subscribeByServer(final Collection<LiveDataSpecification> specifications, final SubscribeAction action) {
     return forEachServer(specifications, new Function<Pair<StandardLiveDataServer, Collection<LiveDataSpecification>>, Collection<LiveDataSubscriptionResponse>>() {
       @Override
       public Collection<LiveDataSubscriptionResponse> apply(final Pair<StandardLiveDataServer, Collection<LiveDataSpecification>> input) {
@@ -148,8 +147,7 @@ public abstract class CombiningLiveDataServer extends StandardLiveDataServer {
     });
   }
 
-  private <T> Collection<T> forEachServer(final Collection<LiveDataSpecification> specifications, final Function<Pair<StandardLiveDataServer, Collection<LiveDataSpecification>>, Collection<T>> operation)
-  {
+  private <T> Collection<T> forEachServer(final Collection<LiveDataSpecification> specifications, final Function<Pair<StandardLiveDataServer, Collection<LiveDataSpecification>>, Collection<T>> operation) {
     final Map<StandardLiveDataServer, Collection<LiveDataSpecification>> mapped = groupByServer(specifications);
 
     final Collection<Future<Collection<T>>> futures = new ArrayList<>(mapped.size());

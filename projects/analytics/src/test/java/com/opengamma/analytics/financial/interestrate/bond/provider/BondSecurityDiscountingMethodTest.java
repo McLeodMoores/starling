@@ -621,8 +621,8 @@ public class BondSecurityDiscountingMethodTest {
     final MultipleCurrencyAmount pv = METHOD_BOND_SECURITY.presentValue(BOND_FIXED_SECURITY_UK, ISSUER_SPECIFIC_MULTICURVES);
     final BondFixedSecurityDefinition bondNoExDefinition = BondFixedSecurityDefinition.from(GBP, MATURITY_DATE_UK, START_ACCRUAL_DATE_UK, PAYMENT_TENOR_UK, RATE_UK, SETTLEMENT_DAYS_UK, NOTIONAL_UK,
         0, CALENDAR_UK, DAY_COUNT_UK, BUSINESS_DAY_UK, YIELD_CONVENTION_UK, IS_EOM_UK, ISSUER_UK_NAME, "RepoType");
-    final BondFixedSecurity BondNoEx = bondNoExDefinition.toDerivative(REFERENCE_DATE_3);
-    final MultipleCurrencyAmount pvNoEx = METHOD_BOND_SECURITY.presentValue(BondNoEx, ISSUER_SPECIFIC_MULTICURVES);
+    final BondFixedSecurity bondNoEx = bondNoExDefinition.toDerivative(REFERENCE_DATE_3);
+    final MultipleCurrencyAmount pvNoEx = METHOD_BOND_SECURITY.presentValue(bondNoEx, ISSUER_SPECIFIC_MULTICURVES);
     final CouponFixedDefinition couponDefinitionEx = BOND_FIXED_SECURITY_DEFINITION_UK.getCoupons().getNthPayment(17);
     final MulticurveProviderInterface multicurvesDecorated = new MulticurveProviderDiscountingDecoratedIssuer(ISSUER_SPECIFIC_MULTICURVES, GBP, ISSUER_UK);
     final MultipleCurrencyAmount pvCpn = couponDefinitionEx.toDerivative(REFERENCE_DATE_3).accept(PVDC, multicurvesDecorated);

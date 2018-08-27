@@ -7,7 +7,6 @@ package com.opengamma.analytics.financial.interestrate.swaption.method;
 
 import static com.opengamma.analytics.financial.interestrate.TestUtils.assertSensitivityEquals;
 import static org.testng.AssertJUnit.assertEquals;
-import it.unimi.dsi.fastutil.doubles.DoubleAVLTreeSet;
 
 import java.util.List;
 
@@ -51,6 +50,8 @@ import com.opengamma.util.money.MultipleCurrencyAmount;
 import com.opengamma.util.test.TestGroup;
 import com.opengamma.util.time.DateUtils;
 import com.opengamma.util.tuple.DoublesPair;
+
+import it.unimi.dsi.fastutil.doubles.DoubleAVLTreeSet;
 
 /**
  * @deprecated This class tests deprecated functionality.
@@ -181,11 +182,11 @@ public class SwaptionPhysicalFixedIborBlackMethodTest {
   public void presentValueBlackSensitivity() {
     final double shift = 1.0E-6;
     final PresentValueBlackSwaptionSensitivity pvbvs = METHOD_BLACK.presentValueBlackSensitivity(SWAPTION_LONG_REC, CURVES_BLACK);
-    final BlackFlatSwaptionParameters BlackP = TestsDataSetsBlack.createBlackSwaptionEUR6Shift(shift);
-    final YieldCurveWithBlackSwaptionBundle curvesBlackP = new YieldCurveWithBlackSwaptionBundle(BlackP, CURVES);
+    final BlackFlatSwaptionParameters blackP = TestsDataSetsBlack.createBlackSwaptionEUR6Shift(shift);
+    final YieldCurveWithBlackSwaptionBundle curvesBlackP = new YieldCurveWithBlackSwaptionBundle(blackP, CURVES);
     final CurrencyAmount pvP = METHOD_BLACK.presentValue(SWAPTION_LONG_REC, curvesBlackP);
-    final BlackFlatSwaptionParameters BlackM = TestsDataSetsBlack.createBlackSwaptionEUR6Shift(-shift);
-    final YieldCurveWithBlackSwaptionBundle curvesBlackM = new YieldCurveWithBlackSwaptionBundle(BlackM, CURVES);
+    final BlackFlatSwaptionParameters blackM = TestsDataSetsBlack.createBlackSwaptionEUR6Shift(-shift);
+    final YieldCurveWithBlackSwaptionBundle curvesBlackM = new YieldCurveWithBlackSwaptionBundle(blackM, CURVES);
     final CurrencyAmount pvM = METHOD_BLACK.presentValue(SWAPTION_LONG_REC, curvesBlackM);
     final DoublesPair point = DoublesPair.of(SWAPTION_LONG_REC.getTimeToExpiry(), SWAPTION_LONG_REC.getMaturityTime());
     assertEquals("Swaption Black method: present value volatility sensitivity", (pvP.getAmount() - pvM.getAmount()) / (2 * shift), pvbvs.getSensitivity().getMap().get(point), TOLERANCE_DELTA);
@@ -201,10 +202,10 @@ public class SwaptionPhysicalFixedIborBlackMethodTest {
     assertEquals("Swaption Black method: present value", pvbsMethod, pvbsCalculator);
   }
 
-  @Test
   /**
    * Tests the Black volatility sensitivity (vega).
    */
+  @Test
   public void presentValueBlackNodeSensitivity() {
     final double shift = 1.0E-6;
     final PresentValueBlackSwaptionSensitivity pvbvs = METHOD_BLACK.presentValueBlackSensitivity(SWAPTION_LONG_REC, CURVES_BLACK);
@@ -212,11 +213,11 @@ public class SwaptionPhysicalFixedIborBlackMethodTest {
     final double[] x = ((InterpolatedDoublesSurface) BLACK.getVolatilitySurface()).getXDataAsPrimitive();
     final double[] y = ((InterpolatedDoublesSurface) BLACK.getVolatilitySurface()).getYDataAsPrimitive();
     for (int loopindex = 0; loopindex < x.length; loopindex++) {
-      final BlackFlatSwaptionParameters BlackP = TestsDataSetsBlack.createBlackSwaptionEUR6Shift(loopindex, shift);
-      final YieldCurveWithBlackSwaptionBundle curvesBlackP = new YieldCurveWithBlackSwaptionBundle(BlackP, CURVES);
+      final BlackFlatSwaptionParameters blackP = TestsDataSetsBlack.createBlackSwaptionEUR6Shift(loopindex, shift);
+      final YieldCurveWithBlackSwaptionBundle curvesBlackP = new YieldCurveWithBlackSwaptionBundle(blackP, CURVES);
       final CurrencyAmount pvP = METHOD_BLACK.presentValue(SWAPTION_LONG_REC, curvesBlackP);
-      final BlackFlatSwaptionParameters BlackM = TestsDataSetsBlack.createBlackSwaptionEUR6Shift(loopindex, -shift);
-      final YieldCurveWithBlackSwaptionBundle curvesBlackM = new YieldCurveWithBlackSwaptionBundle(BlackM, CURVES);
+      final BlackFlatSwaptionParameters blackM = TestsDataSetsBlack.createBlackSwaptionEUR6Shift(loopindex, -shift);
+      final YieldCurveWithBlackSwaptionBundle curvesBlackM = new YieldCurveWithBlackSwaptionBundle(blackM, CURVES);
       final CurrencyAmount pvM = METHOD_BLACK.presentValue(SWAPTION_LONG_REC, curvesBlackM);
       assertEquals("Swaption Black method: present value volatility sensitivity", (pvP.getAmount() - pvM.getAmount()) / (2 * shift),
           pvbns.getSensitivity().getMap().get(DoublesPair.of(x[loopindex], y[loopindex])), TOLERANCE_DELTA);
