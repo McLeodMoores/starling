@@ -34,7 +34,7 @@ public class QueryPositionDbPositionMasterWorkerGetTest extends AbstractDbPositi
   //-------------------------------------------------------------------------
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void test_get_nullUID() {
-    _posMaster.get((UniqueId)null);
+    _posMaster.get((UniqueId) null);
   }
 
   @Test(expectedExceptions = DataNotFoundException.class)

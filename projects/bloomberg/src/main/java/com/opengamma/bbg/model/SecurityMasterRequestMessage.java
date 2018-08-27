@@ -106,7 +106,7 @@ public class SecurityMasterRequestMessage implements Serializable {
     }
     final MutableFudgeMsg msg = serializer.newMessage();
     msg.add(MESSAGE_TYPE_FIELD_NAME, getMessageType().name());
-    switch(getMessageType()) {
+    switch (getMessageType()) {
       case GET_SECURITIES_BY_KEY:
       case GET_SECURITY_BY_KEY:
         if (_secKey == null) {
@@ -142,7 +142,7 @@ public class SecurityMasterRequestMessage implements Serializable {
     final String msgTypeStr = (String) msg.getByName(MESSAGE_TYPE_FIELD_NAME).getValue();
     final MessageType msgType = MessageType.valueOf(msgTypeStr);
     request.setMessageType(msgType);
-    switch(msgType) {
+    switch (msgType) {
       case GET_SECURITIES_BY_KEY:
       case GET_SECURITY_BY_KEY:
       case GET_OPTION_CHAIN:

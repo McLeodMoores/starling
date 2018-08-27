@@ -58,7 +58,7 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT)
 public class OtcTradeBuilderTest {
 
-  private static final ImmutableMap<String,String> ATTRIBUTES = ImmutableMap.of("attr1", "val1", "attr2", "val2");
+  private static final ImmutableMap<String, String> ATTRIBUTES = ImmutableMap.of("attr1", "val1", "attr2", "val2");
   private static final OffsetTime PREMIUM_TIME = LocalTime.of(13, 0).atOffset(ZoneOffset.UTC);
   private static final OffsetTime TRADE_TIME = LocalTime.of(10, 0).atOffset(ZoneOffset.UTC);
   private static final LocalDate PREMIUM_DATE = LocalDate.of(2012, 12, 25);

@@ -542,7 +542,7 @@ public class ArgumentCheckerTest {
   public void test_notNegative_int_negative() {
     try {
       ArgumentChecker.notNegative(-1, "name");
-    } catch(final IllegalArgumentException iae) {
+    } catch (final IllegalArgumentException iae) {
       assertEquals(iae.getMessage().contains("'name'"), true);
       throw iae;
     }
@@ -557,7 +557,7 @@ public class ArgumentCheckerTest {
   public void test_notNegative_long_negative() {
     try {
       ArgumentChecker.notNegative(-1L, "name");
-    } catch(final IllegalArgumentException iae) {
+    } catch (final IllegalArgumentException iae) {
       assertEquals(iae.getMessage().contains("'name'"), true);
       throw iae;
     }
@@ -572,7 +572,7 @@ public class ArgumentCheckerTest {
   public void test_notNegative_double_negative() {
     try {
       ArgumentChecker.notNegative(-1.0d, "name");
-    } catch(final IllegalArgumentException iae) {
+    } catch (final IllegalArgumentException iae) {
       assertEquals(iae.getMessage().contains("'name'"), true);
       throw iae;
     }
@@ -587,7 +587,7 @@ public class ArgumentCheckerTest {
   public void test_notNegativeOrZero_int_zero() {
     try {
       ArgumentChecker.notNegativeOrZero(0, "name");
-    } catch(final IllegalArgumentException iae) {
+    } catch (final IllegalArgumentException iae) {
       assertEquals(iae.getMessage().contains("'name'"), true);
       throw iae;
     }
@@ -597,7 +597,7 @@ public class ArgumentCheckerTest {
   public void test_notNegativeOrZero_int_negative() {
     try {
       ArgumentChecker.notNegativeOrZero(-1, "name");
-    } catch(final IllegalArgumentException iae) {
+    } catch (final IllegalArgumentException iae) {
       assertEquals(iae.getMessage().contains("'name'"), true);
       throw iae;
     }
@@ -611,7 +611,7 @@ public class ArgumentCheckerTest {
   public void test_notNegativeOrZero_long_zero() {
     try {
       ArgumentChecker.notNegativeOrZero(0L, "name");
-    } catch(final IllegalArgumentException iae) {
+    } catch (final IllegalArgumentException iae) {
       assertEquals(iae.getMessage().contains("'name'"), true);
       throw iae;
     }
@@ -621,7 +621,7 @@ public class ArgumentCheckerTest {
   public void test_notNegativeOrZero_long_negative() {
     try {
       ArgumentChecker.notNegativeOrZero(-1L, "name");
-    } catch(final IllegalArgumentException iae) {
+    } catch (final IllegalArgumentException iae) {
       assertEquals(iae.getMessage().contains("'name'"), true);
       throw iae;
     }
@@ -635,7 +635,7 @@ public class ArgumentCheckerTest {
   public void test_notNegativeOrZero_double_zero() {
     try {
       ArgumentChecker.notNegativeOrZero(0.0d, "name");
-    } catch(final IllegalArgumentException iae) {
+    } catch (final IllegalArgumentException iae) {
       assertEquals(iae.getMessage().contains("'name'"), true);
       throw iae;
     }
@@ -645,7 +645,7 @@ public class ArgumentCheckerTest {
   public void test_notNegativeOrZero_double_negative() {
     try {
       ArgumentChecker.notNegativeOrZero(-1.0d, "name");
-    } catch(final IllegalArgumentException iae) {
+    } catch (final IllegalArgumentException iae) {
       assertEquals(iae.getMessage().contains("'name'"), true);
       throw iae;
     }
@@ -660,7 +660,7 @@ public class ArgumentCheckerTest {
   public void test_notNegativeOrZero_double_eps_zero() {
     try {
       ArgumentChecker.notNegativeOrZero(0.0000001d, 0.0001d, "name");
-    } catch(final IllegalArgumentException iae) {
+    } catch (final IllegalArgumentException iae) {
       assertEquals(iae.getMessage().contains("'name'"), true);
       throw iae;
     }
@@ -670,7 +670,7 @@ public class ArgumentCheckerTest {
   public void test_notNegativeOrZero_double_eps_negative() {
     try {
       ArgumentChecker.notNegativeOrZero(-1.0d, 0.0001d, "name");
-    } catch(final IllegalArgumentException iae) {
+    } catch (final IllegalArgumentException iae) {
       assertEquals(iae.getMessage().contains("'name'"), true);
       throw iae;
     }
@@ -685,7 +685,7 @@ public class ArgumentCheckerTest {
   public void test_notZero_double_zero() {
     try {
       ArgumentChecker.notZero(0d, 0.1d, "name");
-    } catch(final IllegalArgumentException iae) {
+    } catch (final IllegalArgumentException iae) {
       assertEquals(iae.getMessage().contains("'name'"), true);
       throw iae;
     }
@@ -694,7 +694,7 @@ public class ArgumentCheckerTest {
   public void test_notZero_double_negative() {
     try {
       ArgumentChecker.notZero(-1d, 0.1d, "name");
-    } catch(final IllegalArgumentException iae) {
+    } catch (final IllegalArgumentException iae) {
       assertEquals(iae.getMessage().contains("'name'"), true);
       throw iae;
     }

@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2009 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.engine.calcnode.stats;
@@ -58,7 +58,7 @@ public class FunctionInvocationStatistics {
 
   /**
    * Creates an instance for a specific function.
-   * 
+   *
    * @param functionId the function id, not null
    */
   public FunctionInvocationStatistics(final String functionId) {
@@ -68,7 +68,7 @@ public class FunctionInvocationStatistics {
 
   /**
    * Creates an instance from a document.
-   * 
+   *
    * @param doc the document, not null
    */
   public FunctionInvocationStatistics(final FunctionCostsDocument doc) {
@@ -82,7 +82,7 @@ public class FunctionInvocationStatistics {
    * Updates the statistics record with details of the costs.
    * <p>
    * This may be called directly, but is more typically called via {@link #recordInvocation}.
-   * 
+   *
    * @param invocationCost the invocation cost
    * @param dataInputCost the data input cost
    * @param dataOutputCost the data output cost
@@ -98,7 +98,7 @@ public class FunctionInvocationStatistics {
    * Updates the statistics with details of one or more invocations.
    * <p>
    * The data passed in is used to update the long-running cost values.
-   * 
+   *
    * @param invocationCount the number of invocations the data is for
    * @param invocationNanos the execution time, in nanoseconds, of the invocation(s)
    * @param dataInputBytes the mean data input, bytes per input node, or {@code NaN} if unavailable
@@ -108,8 +108,8 @@ public class FunctionInvocationStatistics {
       final int invocationCount, final double invocationNanos, final double dataInputBytes, final double dataOutputBytes) {
     _invocations += invocationCount;
     _invocationTime += invocationNanos;
-    _dataInput += Double.isNaN(dataInputBytes) ? ((_invocations > 0) ? (_dataInput / _invocations) : 0) : dataInputBytes;
-    _dataOutput += Double.isNaN(dataOutputBytes) ? ((_invocations > 0) ? (_dataOutput / _invocations) : 0) : dataOutputBytes;
+    _dataInput += Double.isNaN(dataInputBytes) ? _invocations > 0 ? _dataInput / _invocations : 0 : dataInputBytes;
+    _dataOutput += Double.isNaN(dataOutputBytes) ? _invocations > 0 ? _dataOutput / _invocations : 0 : dataOutputBytes;
     _cost += invocationCount;
     if (_cost >= SNAPSHOT_SAMPLES) {
       _cost = 0;
@@ -124,7 +124,7 @@ public class FunctionInvocationStatistics {
   //-------------------------------------------------------------------------
   /**
    * Gets the function identifier.
-   * 
+   *
    * @return the function identifier, not null
    */
   public String getFunctionId() {
@@ -133,7 +133,7 @@ public class FunctionInvocationStatistics {
 
   /**
    * Gets the invocation cost, a mean "standard" time to execute in nanoseconds.
-   * 
+   *
    * @return invocation cost in nanoseconds
    */
   public synchronized double getInvocationCost() {
@@ -142,7 +142,7 @@ public class FunctionInvocationStatistics {
 
   /**
    * Gets the data input cost, a mean bytes per input value.
-   * 
+   *
    * @return data input cost in bytes per value
    */
   public synchronized double getDataInputCost() {
@@ -151,7 +151,7 @@ public class FunctionInvocationStatistics {
 
   /**
    * Gets the data output cost, a mean bytes per output value.
-   * 
+   *
    * @return data output cost in bytes per value
    */
   public synchronized double getDataOutputCost() {
@@ -160,7 +160,7 @@ public class FunctionInvocationStatistics {
 
   /**
    * Gets the {@link System#nanoTime} timestamp of the last time the costs changed.
-   * 
+   *
    * @return the value of {@link System#nanoTime} of the last sample update
    */
   public synchronized long getLastUpdateNanos() {
@@ -170,7 +170,7 @@ public class FunctionInvocationStatistics {
   //-------------------------------------------------------------------------
   /**
    * Populates the document with a snapshot of the values from this class.
-   * 
+   *
    * @param document the document to populate, not null
    */
   public synchronized void populateDocument(final FunctionCostsDocument document) {
@@ -182,7 +182,7 @@ public class FunctionInvocationStatistics {
   //-------------------------------------------------------------------------
   /**
    * Returns a string suitable for debugging.
-   * 
+   *
    * @return a string, not null
    */
   @Override
@@ -192,7 +192,7 @@ public class FunctionInvocationStatistics {
   }
 
   // For debug purposes only, remove when PLAT-882 is complete
-  /* package */synchronized FudgeMsg toFudgeMsg(final FudgeMsgFactory factory) { ///CSIGNORE
+  /* package */ synchronized FudgeMsg toFudgeMsg(final FudgeMsgFactory factory) { ///CSIGNORE
     final MutableFudgeMsg message = factory.newMessage();
     message.add("invocationCost", _invocationCost);
     message.add("dataInputCost", _dataInputCost);

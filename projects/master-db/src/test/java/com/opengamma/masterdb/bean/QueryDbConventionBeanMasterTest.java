@@ -51,7 +51,7 @@ public class QueryDbConventionBeanMasterTest extends AbstractDbConventionBeanMas
   //-------------------------------------------------------------------------
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void test_getConvention_nullUID() {
-    _cnvMaster.get((UniqueId)null);
+    _cnvMaster.get((UniqueId) null);
   }
 
   @Test(expectedExceptions = DataNotFoundException.class)

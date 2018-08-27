@@ -129,13 +129,13 @@ public class SecurityMasterTestCase extends SecurityTestCase {
   private void normalizeSecurity (final Security security) {
     assertNotNull(security);
     if (security instanceof BondFutureSecurity) {
-      normalizeBondFutureSecurity ((BondFutureSecurity)security);
+      normalizeBondFutureSecurity ((BondFutureSecurity) security);
     }
   }
 
   @Override
   protected <T extends ManageableSecurity> void assertSecurity(final Class<T> securityClass, final T security) {
-    normalizeSecurity (security);
+    normalizeSecurity(security);
     LOGGER.debug("Testing {} instance {}", securityClass, security.hashCode());
     final UniqueId uniqueId = putSecurity(security);
     assertNotNull(uniqueId);

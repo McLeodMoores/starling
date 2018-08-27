@@ -130,27 +130,27 @@ public class LiveDataSubscriptionRequest implements java.io.Serializable {
     }
   }
   public static LiveDataSubscriptionRequest fromFudgeMsg (final org.fudgemsg.mapping.FudgeDeserializer deserializer, final org.fudgemsg.FudgeMsg fudgeMsg) {
-    final java.util.List<org.fudgemsg.FudgeField> types = fudgeMsg.getAllByOrdinal (0);
+    final java.util.List<org.fudgemsg.FudgeField> types = fudgeMsg.getAllByOrdinal(0);
     for (final org.fudgemsg.FudgeField field : types) {
-      final String className = (String)field.getValue ();
-      if ("com.opengamma.livedata.msg.LiveDataSubscriptionRequest".equals (className)) {
+      final String className = (String) field.getValue ();
+      if ("com.opengamma.livedata.msg.LiveDataSubscriptionRequest".equals(className)) {
         break;
       }
       try {
-        return (com.opengamma.livedata.msg.LiveDataSubscriptionRequest)Class.forName (className).getDeclaredMethod ("fromFudgeMsg", org.fudgemsg.mapping.FudgeDeserializer.class, org.fudgemsg.FudgeMsg.class).invoke (null, deserializer, fudgeMsg);
+        return (com.opengamma.livedata.msg.LiveDataSubscriptionRequest) Class.forName (className).getDeclaredMethod ("fromFudgeMsg", org.fudgemsg.mapping.FudgeDeserializer.class, org.fudgemsg.FudgeMsg.class).invoke (null, deserializer, fudgeMsg);
       }
       catch (final Throwable t) {
         // no-action
       }
     }
-    return new LiveDataSubscriptionRequest (deserializer, fudgeMsg);
+    return new LiveDataSubscriptionRequest(deserializer, fudgeMsg);
   }
   public com.opengamma.livedata.UserPrincipal getUser () {
     return _user;
   }
   public void setUser (final com.opengamma.livedata.UserPrincipal user) {
     if (user == null) {
-      throw new NullPointerException ("'user' cannot be null");
+      throw new NullPointerException("'user' cannot be null");
     } else {
       _user = user;
     }
@@ -210,7 +210,7 @@ public class LiveDataSubscriptionRequest implements java.io.Serializable {
     if (!(o instanceof LiveDataSubscriptionRequest)) {
       return false;
     }
-    final LiveDataSubscriptionRequest msg = (LiveDataSubscriptionRequest)o;
+    final LiveDataSubscriptionRequest msg = (LiveDataSubscriptionRequest) o;
     if (_user != null) {
       if (msg._user != null) {
         if (!_user.equals (msg._user)) {

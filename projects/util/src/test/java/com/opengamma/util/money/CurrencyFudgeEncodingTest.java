@@ -22,7 +22,7 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT)
 public class CurrencyFudgeEncodingTest extends AbstractFudgeBuilderTestCase {
 
-  private static final Currency REF= Currency.USD;
+  private static final Currency REF = Currency.USD;
 
   @Test
   public void testCycle() {

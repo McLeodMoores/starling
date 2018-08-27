@@ -104,25 +104,25 @@ public class EntitlementRequest implements java.io.Serializable {
   public static EntitlementRequest fromFudgeMsg (final org.fudgemsg.mapping.FudgeDeserializer deserializer, final org.fudgemsg.FudgeMsg fudgeMsg) {
     final java.util.List<org.fudgemsg.FudgeField> types = fudgeMsg.getAllByOrdinal (0);
     for (final org.fudgemsg.FudgeField field : types) {
-      final String className = (String)field.getValue ();
-      if ("com.opengamma.livedata.msg.EntitlementRequest".equals (className)) {
+      final String className = (String) field.getValue ();
+      if ("com.opengamma.livedata.msg.EntitlementRequest".equals(className)) {
         break;
       }
       try {
-        return (com.opengamma.livedata.msg.EntitlementRequest)Class.forName (className).getDeclaredMethod ("fromFudgeMsg", org.fudgemsg.mapping.FudgeDeserializer.class, org.fudgemsg.FudgeMsg.class).invoke (null, deserializer, fudgeMsg);
+        return (com.opengamma.livedata.msg.EntitlementRequest) Class.forName (className).getDeclaredMethod ("fromFudgeMsg", org.fudgemsg.mapping.FudgeDeserializer.class, org.fudgemsg.FudgeMsg.class).invoke (null, deserializer, fudgeMsg);
       }
       catch (final Throwable t) {
         // no-action
       }
     }
-    return new EntitlementRequest (deserializer, fudgeMsg);
+    return new EntitlementRequest(deserializer, fudgeMsg);
   }
   public com.opengamma.livedata.UserPrincipal getUser () {
     return _user;
   }
   public void setUser (final com.opengamma.livedata.UserPrincipal user) {
     if (user == null) {
-      throw new NullPointerException ("'user' cannot be null");
+      throw new NullPointerException("'user' cannot be null");
     } else {
       _user = user;
     }

@@ -178,7 +178,7 @@ public class CombiningBloombergLiveDataServerTest {
 
   @Test(groups = {"bbgSubscriptionTests" }, enabled = false)
   public void testBrokenSubscribe() throws Exception {
-    final ExternalId broken = ExternalId.of(ExternalSchemes.BLOOMBERG_TICKER, "USSV15F Curncy");//Broken
+    final ExternalId broken = ExternalId.of(ExternalSchemes.BLOOMBERG_TICKER, "USSV15F Curncy"); //Broken
     final ExternalId working = ExternalId.of(ExternalSchemes.BLOOMBERG_TICKER, "GBP Curncy");
 
     final List<ExternalId> instruments = Lists.newArrayList(broken, working);

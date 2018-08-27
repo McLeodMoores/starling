@@ -63,7 +63,7 @@ public class ModifyConfigDbConfigMasterWorkerReplaceVersionsTest extends Abstrac
       final List<ConfigDocument> replacement = newArrayList();
       for (int i = 0; i <= 10; i++) {
         final String val = "test" + i;
-        final ConfigDocument doc = new ConfigDocument(ConfigItem.of(val, "some_name_"+i));
+        final ConfigDocument doc = new ConfigDocument(ConfigItem.of(val, "some_name_" + i));
         doc.setVersionFromInstant(latestFrom.plus(i, MINUTES));
         replacement.add(doc);
       }
@@ -203,7 +203,7 @@ public class ModifyConfigDbConfigMasterWorkerReplaceVersionsTest extends Abstrac
       final List<ConfigDocument> replacement = newArrayList();
       for (int i = 0; i <= 10; i++) {
         final String val = "test" + i;
-        final ConfigDocument doc = new ConfigDocument(ConfigItem.of(val, "some_name_"+i));
+        final ConfigDocument doc = new ConfigDocument(ConfigItem.of(val, "some_name_" + i));
         doc.setVersionFromInstant(latestFrom.plus(i, SECONDS));
         replacement.add(doc);
       }
@@ -237,7 +237,7 @@ public class ModifyConfigDbConfigMasterWorkerReplaceVersionsTest extends Abstrac
       final List<ConfigDocument> replacement = newArrayList();
       for (int i = 0; i <= 10; i++) {
         final String val = "test" + i;
-        final ConfigDocument doc = new ConfigDocument(ConfigItem.of(val, "some_name_"+i));
+        final ConfigDocument doc = new ConfigDocument(ConfigItem.of(val, "some_name_" + i));
         doc.setVersionFromInstant(latestFrom.plus(i - 3, MINUTES));
         replacement.add(doc);
       }
@@ -315,7 +315,7 @@ public class ModifyConfigDbConfigMasterWorkerReplaceVersionsTest extends Abstrac
       final List<ConfigDocument> replacement = newArrayList();
       for (int i = 1; i <= 4; i++) {
         final String val = "replace_" + i;
-        final ConfigDocument doc = new ConfigDocument(ConfigItem.of(val, "some_name_"+i));
+        final ConfigDocument doc = new ConfigDocument(ConfigItem.of(val, "some_name_" + i));
         doc.setVersionFromInstant(now.plus(1, MINUTES).plus(i * 20, SECONDS));
         replacement.add(doc);
       }
@@ -416,7 +416,7 @@ public class ModifyConfigDbConfigMasterWorkerReplaceVersionsTest extends Abstrac
       final List<ConfigDocument> replacement = newArrayList();
       for (int i = 1; i <= 4; i++) {
         final String val = "replace_" + i;
-        final ConfigDocument doc = new ConfigDocument(ConfigItem.of(val, "some_name_"+i));
+        final ConfigDocument doc = new ConfigDocument(ConfigItem.of(val, "some_name_" + i));
         doc.setVersionFromInstant(now.plus(1, MINUTES).plus(i * 20, SECONDS));
         replacement.add(doc);
       }
@@ -465,7 +465,6 @@ public class ModifyConfigDbConfigMasterWorkerReplaceVersionsTest extends Abstrac
   }
 
 
-  @Test
   /**
    *
    *       |
@@ -500,6 +499,7 @@ public class ModifyConfigDbConfigMasterWorkerReplaceVersionsTest extends Abstrac
    *
    *
    */
+  @Test
   public void test_ReplaceVersions5() {
     final Clock origClock = _cfgMaster.getClock();
     try {
@@ -512,7 +512,7 @@ public class ModifyConfigDbConfigMasterWorkerReplaceVersionsTest extends Abstrac
       final List<ConfigDocument> replacement = newArrayList();
       for (int i = 1; i <= 4; i++) {
         final String val = "replace_" + i;
-        final ConfigDocument doc = new ConfigDocument(ConfigItem.of(val, "some_name_"+i));
+        final ConfigDocument doc = new ConfigDocument(ConfigItem.of(val, "some_name_" + i));
         doc.setVersionFromInstant(now.minus(60, SECONDS).plus(i * 30, SECONDS));
         replacement.add(doc);
       }

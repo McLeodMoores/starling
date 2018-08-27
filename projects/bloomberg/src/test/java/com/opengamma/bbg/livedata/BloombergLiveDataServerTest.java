@@ -152,14 +152,14 @@ public class BloombergLiveDataServerTest {
       assertEquals(LiveDataSubscriptionResult.SUCCESS, subscriptionResponse.getSubscriptionResult());
 
       assertFalse(listener.getValueUpdates().isEmpty());
-      for(final LiveDataValueUpdate valueUpdate : listener.getValueUpdates()) {
+      for (final LiveDataValueUpdate valueUpdate : listener.getValueUpdates()) {
         assertNotNull(valueUpdate);
         final Set<String> fieldNames = valueUpdate.getFields().getAllFieldNames();
         final boolean hasMarketValue = fieldNames.contains(MarketDataRequirementNames.MARKET_VALUE);
         assertTrue("Subscription " + subscription + " had field names " + fieldNames, hasMarketValue);
       }
 
-    } catch(final Exception e) {
+    } catch (final Exception e) {
       System.err.println("Didn't get valid response on subscription " + subscription);
       throw e;
     }

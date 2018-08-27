@@ -46,10 +46,10 @@ public class SocketFudgeMessageConduitTest {
     sender.send(msg);
 
     int nChecks = 0;
-    while(collectingReceiver.getMessages().size() < 2) {
+    while (collectingReceiver.getMessages().size() < 2) {
       Thread.sleep(100);
       nChecks++;
-      if(nChecks > 20) {
+      if (nChecks > 20) {
         fail("Didn't receive messages in 2 seconds");
       }
     }

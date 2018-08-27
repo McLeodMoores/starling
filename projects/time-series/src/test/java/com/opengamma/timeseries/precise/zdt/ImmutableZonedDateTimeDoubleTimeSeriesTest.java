@@ -66,7 +66,7 @@ public class ImmutableZonedDateTimeDoubleTimeSeriesTest extends ZonedDateTimeDou
   //-------------------------------------------------------------------------
   //-------------------------------------------------------------------------
   public void test_of_ZonedDateTime_double() {
-    final ZonedDateTimeDoubleTimeSeries ts= ImmutableZonedDateTimeDoubleTimeSeries.of(ZDT_12345, 2.0);
+    final ZonedDateTimeDoubleTimeSeries ts = ImmutableZonedDateTimeDoubleTimeSeries.of(ZDT_12345, 2.0);
     assertEquals(ts.size(), 1);
     assertEquals(ts.getTimeAtIndex(0), ZDT_12345);
     assertEquals(ts.getValueAtIndex(0), 2.0);
@@ -81,7 +81,7 @@ public class ImmutableZonedDateTimeDoubleTimeSeriesTest extends ZonedDateTimeDou
   public void test_of_ZonedDateTimeArray_DoubleArray() {
     final ZonedDateTime[] inDates = new ZonedDateTime[] {ZDT_2222, ZDT_3333};
     final Double[] inValues = new Double[] {2.0, 3.0};
-    final ZonedDateTimeDoubleTimeSeries ts= ImmutableZonedDateTimeDoubleTimeSeries.of(inDates, inValues, null);
+    final ZonedDateTimeDoubleTimeSeries ts = ImmutableZonedDateTimeDoubleTimeSeries.of(inDates, inValues, null);
     assertEquals(ts.size(), 2);
     assertEquals(ts.getTimeAtIndex(0), ZDT_2222);
     assertEquals(ts.getValueAtIndex(0), 2.0);
@@ -119,7 +119,7 @@ public class ImmutableZonedDateTimeDoubleTimeSeriesTest extends ZonedDateTimeDou
   public void test_of_ZonedDateTimeArray_doubleArray() {
     final ZonedDateTime[] inDates = new ZonedDateTime[] {ZDT_2222, ZDT_3333};
     final double[] inValues = new double[] {2.0, 3.0};
-    final ZonedDateTimeDoubleTimeSeries ts= ImmutableZonedDateTimeDoubleTimeSeries.of(inDates, inValues, null);
+    final ZonedDateTimeDoubleTimeSeries ts = ImmutableZonedDateTimeDoubleTimeSeries.of(inDates, inValues, null);
     assertEquals(ts.size(), 2);
     assertEquals(ts.getTimeAtIndex(0), ZDT_2222);
     assertEquals(ts.getValueAtIndex(0), 2.0);
@@ -157,7 +157,7 @@ public class ImmutableZonedDateTimeDoubleTimeSeriesTest extends ZonedDateTimeDou
   public void test_of_longArray_doubleArray() {
     final long[] inDates = new long[] {2222_000_000_000L, 3333_000_000_000L};
     final double[] inValues = new double[] {2.0, 3.0};
-    final ZonedDateTimeDoubleTimeSeries ts= ImmutableZonedDateTimeDoubleTimeSeries.of(inDates, inValues, ZoneOffset.UTC);
+    final ZonedDateTimeDoubleTimeSeries ts = ImmutableZonedDateTimeDoubleTimeSeries.of(inDates, inValues, ZoneOffset.UTC);
     assertEquals(ts.size(), 2);
     assertEquals(ts.getTimeAtIndex(0), ZDT_2222);
     assertEquals(ts.getValueAtIndex(0), 2.0);
@@ -246,7 +246,7 @@ public class ImmutableZonedDateTimeDoubleTimeSeriesTest extends ZonedDateTimeDou
 
   //-------------------------------------------------------------------------
   public void test_toString() {
-    final ZonedDateTimeDoubleTimeSeries ts= ImmutableZonedDateTimeDoubleTimeSeries.of(ZDT_2222, 2.0);
+    final ZonedDateTimeDoubleTimeSeries ts = ImmutableZonedDateTimeDoubleTimeSeries.of(ZDT_2222, 2.0);
     assertEquals("ImmutableZonedDateTimeDoubleTimeSeries[(" + ZDT_2222 + ", 2.0)]", ts.toString());
   }
 

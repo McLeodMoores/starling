@@ -37,9 +37,9 @@ import com.opengamma.OpenGammaRuntimeException;
 public final class InnerClassFudgeBuilder<T extends AutoFudgable<K>, K> implements FudgeBuilder<T> {
 
   /**
-   * Creates a builder for inner class
+   * Creates a builder for inner class.
    */
-  public InnerClassFudgeBuilder() {}
+  public InnerClassFudgeBuilder() { }
 
   @Override
   public MutableFudgeMsg buildMessage(final FudgeSerializer serializer, final T auto) {

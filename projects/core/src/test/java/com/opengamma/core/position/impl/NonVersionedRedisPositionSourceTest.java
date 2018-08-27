@@ -31,14 +31,14 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.INTEGRATION, enabled = false)
 public class NonVersionedRedisPositionSourceTest extends AbstractRedisTestCase {
 
-  @Test(expectedExceptions={DataNotFoundException.class})
+  @Test(expectedExceptions = {DataNotFoundException.class})
   public void emptyPortfolioSearch() {
     final NonVersionedRedisPositionSource source = new NonVersionedRedisPositionSource(getJedisPool(), getRedisPrefix());
 
     assertNull(source.getPortfolio(UniqueId.of("TEST", "NONE"), null));
   }
 
-  @Test(expectedExceptions={DataNotFoundException.class})
+  @Test(expectedExceptions = {DataNotFoundException.class})
   public void emptyPositionSearch() {
     final NonVersionedRedisPositionSource source = new NonVersionedRedisPositionSource(getJedisPool(), getRedisPrefix());
 

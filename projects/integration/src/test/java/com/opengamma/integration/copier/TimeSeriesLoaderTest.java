@@ -76,7 +76,7 @@ public class TimeSeriesLoaderTest {
   public void testTimeSeriesReaders() {
 
     // Build a mock sheet reader with some rows
-    final LocalDate[] dates = {LocalDate.of(2010,1,1), LocalDate.of(2011,1,1)};
+    final LocalDate[] dates = {LocalDate.of(2010, 1, 1), LocalDate.of(2011, 1, 1)};
     final double[] times = {1.0, 2.0};
     final LocalDateDoubleTimeSeries lddts = ImmutableLocalDateDoubleTimeSeries.of(dates, times);
     final SheetReader mockSheetReader = buildMockSheetReader(lddts);
@@ -106,11 +106,11 @@ public class TimeSeriesLoaderTest {
   public void testTimeSeriesWritersExistingHts() {
 
     // Build a mock master with an existing hts
-    final LocalDate[] existingDates = {LocalDate.of(2010,1,1), LocalDate.of(2011,1,1)};
+    final LocalDate[] existingDates = {LocalDate.of(2010, 1, 1), LocalDate.of(2011, 1, 1)};
     final double[] existingValues = {1.0, 2.0};
     final LocalDateDoubleTimeSeries existingDataPoints = ImmutableLocalDateDoubleTimeSeries.of(existingDates, existingValues);
 
-    final LocalDate[] newDates = {LocalDate.of(2010,2,1), LocalDate.of(2011,2,1)};
+    final LocalDate[] newDates = {LocalDate.of(2010, 2, 1), LocalDate.of(2011, 2, 1)};
     final double[] newValues = {1.5, 2.5};
     final LocalDateDoubleTimeSeries newDataPoints = ImmutableLocalDateDoubleTimeSeries.of(newDates, newValues);
     final HistoricalTimeSeriesMaster htsMaster = buildHistoricalTimeSeriesMaster(existingDataPoints);
@@ -131,7 +131,7 @@ public class TimeSeriesLoaderTest {
     }
 
     // Assert that the retrieved contents is as expected (combined existing and new dates/values)
-    final LocalDate[] combinedDates = {LocalDate.of(2010,1,1), LocalDate.of(2010,2,1), LocalDate.of(2011,1,1), LocalDate.of(2011,2,1)};
+    final LocalDate[] combinedDates = {LocalDate.of(2010, 1, 1), LocalDate.of(2010, 2, 1), LocalDate.of(2011, 1, 1), LocalDate.of(2011, 2, 1)};
     final double[] combinedValues = {1.0, 1.5, 2.0, 2.5};
     final LocalDateDoubleTimeSeries combinedDataPoints = ImmutableLocalDateDoubleTimeSeries.of(combinedDates, combinedValues);
     assert combinedDataPoints.equals(retrievedDataPoints);
@@ -150,7 +150,7 @@ public class TimeSeriesLoaderTest {
   public void testTimeSeriesWritersNewHts() {
 
     // Build a mock master with an existing hts
-    final LocalDate[] dates = {LocalDate.of(2010,1,1), LocalDate.of(2011,1,1)};
+    final LocalDate[] dates = {LocalDate.of(2010, 1, 1), LocalDate.of(2011, 1, 1)};
     final double[] values = {1.0, 2.0};
     final LocalDateDoubleTimeSeries dataPoints = ImmutableLocalDateDoubleTimeSeries.of(dates, values);
     final HistoricalTimeSeriesMaster htsMaster = buildHistoricalTimeSeriesMaster(dataPoints);
@@ -179,7 +179,7 @@ public class TimeSeriesLoaderTest {
   public void testTimeSeriesLoaderTool() throws FileNotFoundException {
 
     // Build a mock master with an existing hts
-    final LocalDate[] existingDates = {LocalDate.of(2010,1,1), LocalDate.of(2011,1,1)};
+    final LocalDate[] existingDates = {LocalDate.of(2010, 1, 1), LocalDate.of(2011, 1, 1)};
     final double[] existingValues = {1.0, 2.0};
     final LocalDateDoubleTimeSeries existingDataPoints = ImmutableLocalDateDoubleTimeSeries.of(existingDates, existingValues);
 

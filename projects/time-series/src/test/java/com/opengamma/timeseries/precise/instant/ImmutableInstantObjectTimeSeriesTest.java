@@ -59,7 +59,7 @@ public class ImmutableInstantObjectTimeSeriesTest extends InstantObjectTimeSerie
   //-------------------------------------------------------------------------
   //-------------------------------------------------------------------------
   public void test_of_Instant_value() {
-    final InstantObjectTimeSeries<Float> ts= ImmutableInstantObjectTimeSeries.of(Instant.ofEpochSecond(12345), 2.0f);
+    final InstantObjectTimeSeries<Float> ts = ImmutableInstantObjectTimeSeries.of(Instant.ofEpochSecond(12345), 2.0f);
     assertEquals(ts.size(), 1);
     assertEquals(ts.getTimeAtIndex(0), Instant.ofEpochSecond(12345));
     assertEquals(ts.getValueAtIndex(0), 2.0f);
@@ -74,7 +74,7 @@ public class ImmutableInstantObjectTimeSeriesTest extends InstantObjectTimeSerie
   public void test_of_InstantArray_valueArray() {
     final Instant[] inDates = new Instant[] {Instant.ofEpochSecond(2222), Instant.ofEpochSecond(3333)};
     final Float[] inValues = new Float[] {2.0f, 3.0f};
-    final InstantObjectTimeSeries<Float> ts= ImmutableInstantObjectTimeSeries.of(inDates, inValues);
+    final InstantObjectTimeSeries<Float> ts = ImmutableInstantObjectTimeSeries.of(inDates, inValues);
     assertEquals(ts.size(), 2);
     assertEquals(ts.getTimeAtIndex(0), Instant.ofEpochSecond(2222));
     assertEquals(ts.getValueAtIndex(0), 2.0f);
@@ -112,7 +112,7 @@ public class ImmutableInstantObjectTimeSeriesTest extends InstantObjectTimeSerie
   public void test_of_longArray_valueArray() {
     final long[] inDates = new long[] {2222_000_000_000L, 3333_000_000_000L};
     final Float[] inValues = new Float[] {2.0f, 3.0f};
-    final InstantObjectTimeSeries<Float> ts= ImmutableInstantObjectTimeSeries.of(inDates, inValues);
+    final InstantObjectTimeSeries<Float> ts = ImmutableInstantObjectTimeSeries.of(inDates, inValues);
     assertEquals(ts.size(), 2);
     assertEquals(ts.getTimeAtIndex(0), Instant.ofEpochSecond(2222));
     assertEquals(ts.getValueAtIndex(0), 2.0f);
@@ -148,7 +148,7 @@ public class ImmutableInstantObjectTimeSeriesTest extends InstantObjectTimeSerie
 
   //-------------------------------------------------------------------------
   public void test_toString() {
-    final InstantObjectTimeSeries<Float> ts= ImmutableInstantObjectTimeSeries.of(Instant.ofEpochSecond(2222), 2.0f);
+    final InstantObjectTimeSeries<Float> ts = ImmutableInstantObjectTimeSeries.of(Instant.ofEpochSecond(2222), 2.0f);
     assertEquals("ImmutableInstantObjectTimeSeries[(" + Instant.ofEpochSecond(2222) + ", 2.0)]", ts.toString());
   }
 

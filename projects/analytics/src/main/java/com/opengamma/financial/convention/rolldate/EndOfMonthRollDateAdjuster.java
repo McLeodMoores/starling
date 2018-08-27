@@ -32,7 +32,7 @@ public final class EndOfMonthRollDateAdjuster implements RollDateAdjuster {
   /**
    * Private constructor
    */
-  private EndOfMonthRollDateAdjuster() {}
+  private EndOfMonthRollDateAdjuster() { }
 
   @Override
   public Temporal adjustInto(final Temporal temporal) {

@@ -53,7 +53,7 @@ public class BloombergReferenceDataProviderTest {
   }
 
   //-------------------------------------------------------------------------
-  @Test(timeOut=30000)
+  @Test(timeOut = 30000)
   public void singleSecuritySingleField() {
     final String secName = "AAPL US Equity";
     final ReferenceDataProviderGetRequest request = ReferenceDataProviderGetRequest.createGet(secName, "SECURITY_TYP", false);
@@ -69,7 +69,7 @@ public class BloombergReferenceDataProviderTest {
     assertEquals("Common Stock", fieldData.getString("SECURITY_TYP"));
   }
 
-  @Test(timeOut=30000)
+  @Test(timeOut = 30000)
   public void optionExpiryDate() {
     final String secName = "AAPL 02/19/11 C320 Equity";
     final ReferenceDataProviderGetRequest request = ReferenceDataProviderGetRequest.createGet(secName, "OPT_EXPIRE_DT", false);
@@ -85,7 +85,7 @@ public class BloombergReferenceDataProviderTest {
     assertEquals("2011-02-19", fieldData.getString("OPT_EXPIRE_DT"));
   }
 
-  @Test(timeOut=30000)
+  @Test(timeOut = 30000)
   public void optionStrikePrice() {
     final String secName = "AAPL 02/19/11 C320 Equity";
     final ReferenceDataProviderGetRequest request = ReferenceDataProviderGetRequest.createGet(secName, "OPT_STRIKE_PX", false);
@@ -101,7 +101,7 @@ public class BloombergReferenceDataProviderTest {
     assertEquals(new Double(320.0), fieldData.getDouble("OPT_STRIKE_PX"));
   }
 
-  @Test(timeOut=30000)
+  @Test(timeOut = 30000)
   public void singleSecurityBulkDataField() {
     final String secName = "AAPL US Equity";
     final ReferenceDataProviderGetRequest request = ReferenceDataProviderGetRequest.createGet(secName, "OPT_CHAIN", false);
@@ -115,18 +115,18 @@ public class BloombergReferenceDataProviderTest {
     assertNotNull(fieldData);
     assertTrue("Bloomberg only returning these for AAPL Option Chain: " + fieldData, fieldData.getNumFields() > 10);
     boolean foundOptionChain = false;
-    for(final FudgeField field : fieldData.getAllByName("OPT_CHAIN")) {
+    for (final FudgeField field : fieldData.getAllByName("OPT_CHAIN")) {
       foundOptionChain = true;
       assertEquals("OPT_CHAIN", field.getName());
       assertTrue(field.getValue() instanceof FudgeMsg);
-      final FudgeMsg chainContainer = (FudgeMsg)field.getValue();
+      final FudgeMsg chainContainer = (FudgeMsg) field.getValue();
       assertEquals(1, chainContainer.getNumFields());
       assertNotNull(chainContainer.getString("Security Description"));
     }
     assertTrue(foundOptionChain);
   }
 
-  @Test(timeOut=3000000)
+  @Test(timeOut = 3000000)
   public void multipleSecuritySingleField() {
     final Set<String> securities = new TreeSet<>();
     securities.add("AAPL US Equity");
@@ -137,7 +137,7 @@ public class BloombergReferenceDataProviderTest {
     final ReferenceDataProviderGetResult result = _refDataProvider.getReferenceData(request);
     assertNotNull(result);
     assertEquals(securities.size(), result.getReferenceData().size());
-    for(final String secName : securities) {
+    for (final String secName : securities) {
       final ReferenceData perSecResult = result.getReferenceData(secName);
       assertEquals(secName, perSecResult.getIdentifier());
       assertTrue(perSecResult.getErrors().isEmpty());

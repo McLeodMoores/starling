@@ -406,7 +406,7 @@ public class CogdaLiveDataClient extends AbstractLiveDataClient implements Lifec
     final FudgeMsgReader reader = getFudgeContext().createMessageReader(is);
     final FudgeMsg msg = reader.nextMessage();
     final ConnectionResponseMessage response = ConnectionResponseBuilder.buildObjectStatic(new FudgeDeserializer(getFudgeContext()), msg);
-    switch(response.getResult()) {
+    switch (response.getResult()) {
       case NEW_CONNECTION_SUCCESS:
       case EXISTING_CONNECTION_RESTART:
         // We're good to go!

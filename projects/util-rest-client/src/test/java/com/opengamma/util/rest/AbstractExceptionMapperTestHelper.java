@@ -48,7 +48,7 @@ public abstract class AbstractExceptionMapperTestHelper {
     assertEquals(true, test.getMetadata().get(ExceptionThrowingClientFilter.EXCEPTION_POINT).get(0).toString().contains(".java"));
   }
 
-  @DataProvider(name="mediaTypes")
+  @DataProvider(name = "mediaTypes")
   public Object[][] data_mediaTypes() {
     return new Object[][] {
         {MediaType.APPLICATION_JSON_TYPE},

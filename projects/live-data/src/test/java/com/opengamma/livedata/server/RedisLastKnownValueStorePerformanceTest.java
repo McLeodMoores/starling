@@ -49,7 +49,7 @@ public class RedisLastKnownValueStorePerformanceTest {
 
       final MutableFudgeMsg msg = FUDGE_CONTEXT.newMessage();
       for (int j = 0; j < NUM_FIELDS_PER_SECURITY; j++) {
-        msg.add("Field-" + j, (double)System.nanoTime());
+        msg.add("Field-" + j, (double) System.nanoTime());
       }
       store.updateFields(msg);
     }
@@ -97,7 +97,7 @@ public class RedisLastKnownValueStorePerformanceTest {
     }
     final long endTime = System.nanoTime();
     final long delta = endTime - startTime;
-    double totalUpdates = (double)NUM_CYCLES * (double)NUM_FIELDS_PER_SECURITY;
+    double totalUpdates = (double) NUM_CYCLES * (double) NUM_FIELDS_PER_SECURITY;
     totalUpdates *= NUM_SECURITIES;
     totalUpdates *= nThreads;
     final double splitTime = delta / totalUpdates;

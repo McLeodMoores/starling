@@ -369,7 +369,7 @@ public class InterestRateSwapSecurityConverterTest {
 
     final StubCalculationMethod.Builder shortStubBuilder = StubCalculationMethod.builder()
         .type(StubType.BOTH)
-        .firstStubEndDate(LocalDate.of(2014,6,18))
+        .firstStubEndDate(LocalDate.of(2014, 6, 18))
         .firstStubStartReferenceRateId(ExternalId.of(TICKER, USDLIBOR1M_NAME))
         .firstStubEndReferenceRateId(ExternalId.of(TICKER, USDLIBOR6M_NAME))
         .lastStubEndDate(LocalDate.of(2014, 6, 18))

@@ -28,7 +28,7 @@ public class SimplePortfolioTest {
     assertEquals("Portfolio[]", test.toString());
   }
 
-  @Test(expectedExceptions=IllegalArgumentException.class)
+  @Test(expectedExceptions = IllegalArgumentException.class)
   public void test_construction_String_null() {
     new SimplePortfolio((String) null);
   }
@@ -43,12 +43,12 @@ public class SimplePortfolioTest {
     assertEquals("Portfolio[Scheme~Id]", test.toString());
   }
 
-  @Test(expectedExceptions=IllegalArgumentException.class)
+  @Test(expectedExceptions = IllegalArgumentException.class)
   public void test_construction_PortfolioIdString_nullId() {
     new SimplePortfolio(null, "Name");
   }
 
-  @Test(expectedExceptions=IllegalArgumentException.class)
+  @Test(expectedExceptions = IllegalArgumentException.class)
   public void test_construction_PortfolioIdString_nullName() {
     new SimplePortfolio(id("Scheme", "Id"), null);
   }
@@ -63,17 +63,17 @@ public class SimplePortfolioTest {
     assertEquals("Portfolio[Scheme~Id]", test.toString());
   }
 
-  @Test(expectedExceptions=IllegalArgumentException.class)
+  @Test(expectedExceptions = IllegalArgumentException.class)
   public void test_construction_PortfolioIdStringNode_nullId() {
     new SimplePortfolio(null, "Name", new SimplePortfolioNode());
   }
 
-  @Test(expectedExceptions=IllegalArgumentException.class)
+  @Test(expectedExceptions = IllegalArgumentException.class)
   public void test_construction_PortfolioIdStringNode_nullName() {
     new SimplePortfolio(id("Scheme", "Id"), null, new SimplePortfolioNode());
   }
 
-  @Test(expectedExceptions=IllegalArgumentException.class)
+  @Test(expectedExceptions = IllegalArgumentException.class)
   public void test_construction_PortfolioIdStringNode_nullRoot() {
     new SimplePortfolio(id("Scheme", "Id"), "Name", null);
   }
@@ -89,7 +89,7 @@ public class SimplePortfolioTest {
     assertEquals(id("Scheme2", "Id2"), test.getUniqueId());
   }
 
-  @Test(expectedExceptions=IllegalArgumentException.class)
+  @Test(expectedExceptions = IllegalArgumentException.class)
   public void test_setUniqueId_null() {
     final SimplePortfolio test = new SimplePortfolio(id("Scheme", "Id"), "Name");
     test.setUniqueId(null);
@@ -102,7 +102,7 @@ public class SimplePortfolioTest {
     assertEquals("Name2", test.getName());
   }
 
-  @Test(expectedExceptions=IllegalArgumentException.class)
+  @Test(expectedExceptions = IllegalArgumentException.class)
   public void test_setName_null() {
     final SimplePortfolio test = new SimplePortfolio(id("Scheme", "Id"), "Name");
     test.setName(null);
@@ -116,7 +116,7 @@ public class SimplePortfolioTest {
     assertSame(root, test.getRootNode());
   }
 
-  @Test(expectedExceptions=IllegalArgumentException.class)
+  @Test(expectedExceptions = IllegalArgumentException.class)
   public void test_setRootNode_null() {
     final SimplePortfolio test = new SimplePortfolio(id("Scheme", "Id"), "Name");
     test.setRootNode(null);

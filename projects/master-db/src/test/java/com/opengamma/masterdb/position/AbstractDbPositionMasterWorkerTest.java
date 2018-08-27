@@ -320,7 +320,7 @@ public abstract class AbstractDbPositionMasterWorkerTest extends AbstractDbTest 
     trade.setParentPositionId(uniqueId);
     assertTrue(trades.contains(trade));
 
-    trade = new ManageableTrade(BigDecimal.valueOf(300.987), secKey, _now.toLocalDate(), _now.toOffsetTime().minusSeconds(406),ExternalId.of("CPARTY", "C106"));
+    trade = new ManageableTrade(BigDecimal.valueOf(300.987), secKey, _now.toLocalDate(), _now.toOffsetTime().minusSeconds(406), ExternalId.of("CPARTY", "C106"));
     trade.setUniqueId(UniqueId.of("DbPos", "406", "0"));
     trade.setProviderId(ExternalId.of("B", "406"));
     trade.setParentPositionId(uniqueId);

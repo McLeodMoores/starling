@@ -28,7 +28,7 @@ import com.opengamma.util.test.ActiveMQTestUtils;
 import com.opengamma.util.test.TestGroup;
 
 /**
- * 
+ *
  */
 @Test(groups = TestGroup.INTEGRATION)
 // PL 24.6.2010: Putting on ignore as it's failing intermittently on Bamboo and I can't figure out why
@@ -41,14 +41,14 @@ public class JmsSenderTest {
 
   @BeforeClass
   public void setUpClass() {
-    JmsConnector jmsConnector = ActiveMQTestUtils.createTestJmsConnector();
-    
+    final JmsConnector jmsConnector = ActiveMQTestUtils.createTestJmsConnector();
+
     _factory = new JmsSenderFactory(jmsConnector);
     _mdd = MarketDataDistributorTest.getTestDistributor(_factory);
-    
+
     _collectingReceiver = new CollectingByteArrayMessageReceiver();
-    JmsByteArrayMessageDispatcher messageDispatcher = new JmsByteArrayMessageDispatcher(_collectingReceiver);
-    
+    final JmsByteArrayMessageDispatcher messageDispatcher = new JmsByteArrayMessageDispatcher(_collectingReceiver);
+
     _container = new DefaultMessageListenerContainer();
     _container.setConnectionFactory(jmsConnector.getConnectionFactory());
     _container.setMessageListener(messageDispatcher);
@@ -76,78 +76,78 @@ public class JmsSenderTest {
     assertEquals(1, _container.getActiveConsumerCount());
   }
 
-  @Test(timeOut=30000, enabled = false)
+  @Test(timeOut = 30000, enabled = false)
   public void simpleScenario() throws Exception {
     ensureStarted();
-    
-    FudgeContext fudgeContext = OpenGammaFudgeContext.getInstance();
-    MutableFudgeMsg msg = fudgeContext.newMessage();
+
+    final FudgeContext fudgeContext = OpenGammaFudgeContext.getInstance();
+    final MutableFudgeMsg msg = fudgeContext.newMessage();
     msg.add("name", "ruby");
-    
+
     _mdd.distributeLiveData(msg);
     _mdd.distributeLiveData(FudgeContext.EMPTY_MESSAGE); // empty message not sent
-    
+
     // allow data to flow through
     while (_collectingReceiver.getMessages().isEmpty()) {
       Thread.sleep(100);
     }
     Thread.sleep(100);
     assertEquals(1, _collectingReceiver.getMessages().size());
-    
-    FudgeDeserializer deserializer = new FudgeDeserializer(fudgeContext);
-    for (byte[] byteArray : _collectingReceiver.getMessages()) {
-      FudgeMsgEnvelope msgEnvelope = fudgeContext.deserialize(byteArray);
-      LiveDataValueUpdateBean update = LiveDataValueUpdateBeanFudgeBuilder.fromFudgeMsg(deserializer, msgEnvelope.getMessage());
+
+    final FudgeDeserializer deserializer = new FudgeDeserializer(fudgeContext);
+    for (final byte[] byteArray : _collectingReceiver.getMessages()) {
+      final FudgeMsgEnvelope msgEnvelope = fudgeContext.deserialize(byteArray);
+      final LiveDataValueUpdateBean update = LiveDataValueUpdateBeanFudgeBuilder.fromFudgeMsg(deserializer, msgEnvelope.getMessage());
       assertEquals(msg, update.getFields());
     }
   }
 
-  @Test(timeOut=30000, enabled = false)
+  @Test(timeOut = 30000, enabled = false)
   public void reconnectionScenario() throws Exception {
     ensureStarted();
-    
-    FudgeContext fudgeContext = OpenGammaFudgeContext.getInstance();
-    MutableFudgeMsg msg1 = fudgeContext.newMessage();
+
+    final FudgeContext fudgeContext = OpenGammaFudgeContext.getInstance();
+    final MutableFudgeMsg msg1 = fudgeContext.newMessage();
     msg1.add("name", "olivia");
-    
-    MutableFudgeMsg msg2 = fudgeContext.newMessage();
+
+    final MutableFudgeMsg msg2 = fudgeContext.newMessage();
     msg2.add("name", "ruby");
-    
-    MutableFudgeMsg msg3 = fudgeContext.newMessage();
+
+    final MutableFudgeMsg msg3 = fudgeContext.newMessage();
     msg3.add("name", "sophie"); // will overwrite ruby
     msg3.add("address", "london");
-    
-    MutableFudgeMsg msg4 = fudgeContext.newMessage();
+
+    final MutableFudgeMsg msg4 = fudgeContext.newMessage();
     msg4.add("name", "chloe");
-    
+
     _mdd.distributeLiveData(msg1);
     _factory.transportInterrupted();
     _mdd.distributeLiveData(msg2);
     _mdd.distributeLiveData(msg3);
     _factory.transportResumed();
     _mdd.distributeLiveData(msg4);
-    
+
     // allow data to flow through
     while (_collectingReceiver.getMessages().size() < 3) {
       Thread.sleep(100);
     }
     Thread.sleep(100);
     assertEquals(3, _collectingReceiver.getMessages().size());
-    LiveDataValueUpdateBean[] updates = new LiveDataValueUpdateBean[3]; 
-    
-    FudgeDeserializer deserializer = new FudgeDeserializer(fudgeContext);
+    final LiveDataValueUpdateBean[] updates = new LiveDataValueUpdateBean[3];
+
+    final FudgeDeserializer deserializer = new FudgeDeserializer(fudgeContext);
     for (int i = 0; i < _collectingReceiver.getMessages().size(); i++) {
-      FudgeMsgEnvelope msgEnvelope = fudgeContext.deserialize(_collectingReceiver.getMessages().get(i));
-      LiveDataValueUpdateBean update = LiveDataValueUpdateBeanFudgeBuilder.fromFudgeMsg(deserializer, msgEnvelope.getMessage());
+      final FudgeMsgEnvelope msgEnvelope = fudgeContext.deserialize(_collectingReceiver.getMessages().get(i));
+      final LiveDataValueUpdateBean update = LiveDataValueUpdateBeanFudgeBuilder.fromFudgeMsg(deserializer, msgEnvelope.getMessage());
       updates[i] = update;
     }
-    
+
     assertEquals(msg1, updates[0].getFields());
     assertEquals(1, updates[0].getSequenceNumber()); // starts from 1 because simpleScenario() already sent 1
-    
+
     assertEquals(msg3, updates[1].getFields());
     assertEquals(3, updates[1].getSequenceNumber());
-    
+
     assertEquals(msg4, updates[2].getFields());
     assertEquals(4, updates[2].getSequenceNumber());
   }

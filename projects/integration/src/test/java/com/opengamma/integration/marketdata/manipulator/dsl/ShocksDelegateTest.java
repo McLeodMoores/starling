@@ -24,10 +24,10 @@ public class ShocksDelegateTest {
 
   @Test
   public void list() {
-    ShocksDelegate delegate = new ShocksDelegate();
+    final ShocksDelegate delegate = new ShocksDelegate();
     delegate.setProperty(FOO, ImmutableList.of(1, 2, 3));
     delegate.setProperty(BAR, ImmutableList.of("a", "b", "c"));
-    List<Map<String,Object>> params = delegate.list();
+    final List<Map<String, Object>> params = delegate.list();
     assertEquals(3, params.size());
 
     assertEquals(1, params.get(0).get(FOO));
@@ -42,31 +42,31 @@ public class ShocksDelegateTest {
 
   @Test
   public void listKeyOrder() {
-    ShocksDelegate delegate1 = new ShocksDelegate();
+    final ShocksDelegate delegate1 = new ShocksDelegate();
     delegate1.setProperty(FOO, ImmutableList.of(1, 2, 3));
     delegate1.setProperty(BAR, ImmutableList.of("a", "b", "c"));
-    List<Map<String,Object>> params1 = delegate1.list();
+    final List<Map<String, Object>> params1 = delegate1.list();
     assertEquals(3, params1.size());
-    Iterator<Map.Entry<String, Object>> itr1 = params1.get(0).entrySet().iterator();
+    final Iterator<Map.Entry<String, Object>> itr1 = params1.get(0).entrySet().iterator();
     assertEquals(FOO, itr1.next().getKey());
     assertEquals(BAR, itr1.next().getKey());
 
-    ShocksDelegate delegate2 = new ShocksDelegate();
+    final ShocksDelegate delegate2 = new ShocksDelegate();
     delegate2.setProperty(BAR, ImmutableList.of("a", "b", "c"));
     delegate2.setProperty(FOO, ImmutableList.of(1, 2, 3));
-    List<Map<String,Object>> params2 = delegate2.list();
+    final List<Map<String, Object>> params2 = delegate2.list();
     assertEquals(3, params2.size());
-    Iterator<Map.Entry<String, Object>> itr2 = params2.get(0).entrySet().iterator();
+    final Iterator<Map.Entry<String, Object>> itr2 = params2.get(0).entrySet().iterator();
     assertEquals(BAR, itr2.next().getKey());
     assertEquals(FOO, itr2.next().getKey());
   }
 
   @Test
   public void cartesianProduct() {
-    ShocksDelegate delegate = new ShocksDelegate();
+    final ShocksDelegate delegate = new ShocksDelegate();
     delegate.setProperty(FOO, ImmutableList.of(1, 2));
     delegate.setProperty(BAR, ImmutableList.of("a", "b"));
-    List<Map<String,Object>> params = delegate.cartesianProduct();
+    final List<Map<String, Object>> params = delegate.cartesianProduct();
     assertEquals(4, params.size());
 
     assertEquals(1, params.get(0).get(FOO));
@@ -84,21 +84,21 @@ public class ShocksDelegateTest {
 
   @Test
   public void cartesianProductKeyOrder() {
-    ShocksDelegate delegate1 = new ShocksDelegate();
+    final ShocksDelegate delegate1 = new ShocksDelegate();
     delegate1.setProperty(FOO, ImmutableList.of(1, 2, 3));
     delegate1.setProperty(BAR, ImmutableList.of("a", "b", "c"));
-    List<Map<String,Object>> params1 = delegate1.cartesianProduct();
+    final List<Map<String, Object>> params1 = delegate1.cartesianProduct();
     assertEquals(9, params1.size());
-    Iterator<Map.Entry<String, Object>> itr1 = params1.get(0).entrySet().iterator();
+    final Iterator<Map.Entry<String, Object>> itr1 = params1.get(0).entrySet().iterator();
     assertEquals(FOO, itr1.next().getKey());
     assertEquals(BAR, itr1.next().getKey());
 
-    ShocksDelegate delegate2 = new ShocksDelegate();
+    final ShocksDelegate delegate2 = new ShocksDelegate();
     delegate2.setProperty(BAR, ImmutableList.of("a", "b", "c"));
     delegate2.setProperty(FOO, ImmutableList.of(1, 2, 3));
-    List<Map<String,Object>> params2 = delegate2.cartesianProduct();
+    final List<Map<String, Object>> params2 = delegate2.cartesianProduct();
     assertEquals(9, params2.size());
-    Iterator<Map.Entry<String, Object>> itr2 = params2.get(0).entrySet().iterator();
+    final Iterator<Map.Entry<String, Object>> itr2 = params2.get(0).entrySet().iterator();
     assertEquals(BAR, itr2.next().getKey());
     assertEquals(FOO, itr2.next().getKey());
   }

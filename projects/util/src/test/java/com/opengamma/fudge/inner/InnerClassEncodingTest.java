@@ -375,7 +375,7 @@ public class InnerClassEncodingTest extends AbstractFudgeBuilderTestCase {
     final
     Map cycled = cycleObjectOverBytes(map);
 
-    assertEquals(cycled.get((byte)1), (byte)2);
+    assertEquals(cycled.get((byte) 1), (byte) 2);
   }
 
 }

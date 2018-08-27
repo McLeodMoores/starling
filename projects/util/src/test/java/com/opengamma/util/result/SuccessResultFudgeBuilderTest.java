@@ -20,14 +20,14 @@ public class SuccessResultFudgeBuilderTest extends AbstractFudgeBuilderTestCase 
 
   @Test
   public void serializeResultWithCurrencyAmount() {
-    Result<CurrencyAmount> success = Result.success(CurrencyAmount.of(Currency.AUD, 12345));
+    final Result<CurrencyAmount> success = Result.success(CurrencyAmount.of(Currency.AUD, 12345));
     assertEncodeDecodeCycle(ResultContainer.class, ResultContainer.of(success));
   }
 
-  @Test(enabled=false)
+  @Test(enabled = false)
   public void serializeResultWithMapStringString() {
-    Map<String, String> map = ImmutableMap.of("one", "1", "two", "2");
-    Result<Map<String, String>> success = Result.success(map);
+    final Map<String, String> map = ImmutableMap.of("one", "1", "two", "2");
+    final Result<Map<String, String>> success = Result.success(map);
     assertEncodeDecodeCycle(ResultContainer.class, ResultContainer.of(success));
   }
 

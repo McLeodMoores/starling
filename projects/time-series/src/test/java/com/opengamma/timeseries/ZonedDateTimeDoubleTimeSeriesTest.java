@@ -15,7 +15,7 @@ import org.threeten.bp.ZonedDateTime;
 public abstract class ZonedDateTimeDoubleTimeSeriesTest extends DoubleTimeSeriesTest<ZonedDateTime> {
 
   protected ZonedDateTime makeDate(final int year, final int month, final int day) {
-    final ZonedDateTime one = ZonedDateTime.of(LocalDateTime.of(year, month, day, 0, 0), ZoneOffset.UTC);//ZoneId.of(java.util.TimeZone.getDefault().getID()));
+    final ZonedDateTime one = ZonedDateTime.of(LocalDateTime.of(year, month, day, 0, 0), ZoneOffset.UTC); //ZoneId.of(java.util.TimeZone.getDefault().getID()));
     return one;
   }
 

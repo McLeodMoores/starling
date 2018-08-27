@@ -20,7 +20,7 @@ import com.sun.jersey.api.client.ClientResponse.Status;
 @Test(groups = TestGroup.UNIT)
 public class AuthorizationExceptionMapperTest extends AbstractExceptionMapperTestHelper {
 
-  @Test(dataProvider="mediaTypes")
+  @Test(dataProvider = "mediaTypes")
   public void test_mapping(final MediaType mediaType) throws Exception {
     final AuthorizationException ex = new AuthorizationException("Test message");
     final AuthorizationExceptionMapper mapper = new AuthorizationExceptionMapper();

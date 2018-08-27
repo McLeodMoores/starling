@@ -121,7 +121,7 @@ public class CurveNodeIdMapper {
     /**
      * Private constructor.
      */
-    private Builder() {}
+    private Builder() { }
 
     /**
      * The name of this configuration

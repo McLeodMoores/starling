@@ -118,7 +118,7 @@ public class NodeCheckingPortfolioFilter implements PortfolioFilter {
   private Optional<? extends PortfolioNode> buildRestrictedRootNode(final PortfolioPermissionChecker checker,
                                                                     final PortfolioNode node) {
 
-    switch(checker.permissionCheck(node)) {
+    switch (checker.permissionCheck(node)) {
       case ALLOW:
         return Optional.of(node);
       case DENY:

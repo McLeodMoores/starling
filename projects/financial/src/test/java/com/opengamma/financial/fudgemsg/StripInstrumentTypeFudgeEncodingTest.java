@@ -20,7 +20,7 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT)
 public class StripInstrumentTypeFudgeEncodingTest extends FinancialTestBase {
 
-  private static final StripInstrumentType REF= StripInstrumentType.FUTURE;
+  private static final StripInstrumentType REF = StripInstrumentType.FUTURE;
 
   @Test
   public void testCycle() {

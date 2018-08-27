@@ -67,7 +67,7 @@ public class ImmutableZonedDateTimeObjectTimeSeriesTest extends ZonedDateTimeObj
   //-------------------------------------------------------------------------
   //-------------------------------------------------------------------------
   public void test_of_ZonedDateTime_value() {
-    final ZonedDateTimeObjectTimeSeries<Float> ts= ImmutableZonedDateTimeObjectTimeSeries.of(ZDT_12345, 2.0f);
+    final ZonedDateTimeObjectTimeSeries<Float> ts = ImmutableZonedDateTimeObjectTimeSeries.of(ZDT_12345, 2.0f);
     assertEquals(ts.size(), 1);
     assertEquals(ts.getTimeAtIndex(0), ZDT_12345);
     assertEquals(ts.getValueAtIndex(0), 2.0f);
@@ -82,7 +82,7 @@ public class ImmutableZonedDateTimeObjectTimeSeriesTest extends ZonedDateTimeObj
   public void test_of_ZonedDateTimeArray_valueArray() {
     final ZonedDateTime[] inDates = new ZonedDateTime[] {ZDT_2222, ZDT_3333};
     final Float[] inValues = new Float[] {2.0f, 3.0f};
-    final ZonedDateTimeObjectTimeSeries<Float> ts= ImmutableZonedDateTimeObjectTimeSeries.of(inDates, inValues, null);
+    final ZonedDateTimeObjectTimeSeries<Float> ts = ImmutableZonedDateTimeObjectTimeSeries.of(inDates, inValues, null);
     assertEquals(ts.size(), 2);
     assertEquals(ts.getTimeAtIndex(0), ZDT_2222);
     assertEquals(ts.getValueAtIndex(0), 2.0f);
@@ -120,7 +120,7 @@ public class ImmutableZonedDateTimeObjectTimeSeriesTest extends ZonedDateTimeObj
   public void test_of_longArray_valueArray() {
     final long[] inDates = new long[] {2222_000_000_000L, 3333_000_000_000L};
     final Float[] inValues = new Float[] {2.0f, 3.0f};
-    final ZonedDateTimeObjectTimeSeries<Float> ts= ImmutableZonedDateTimeObjectTimeSeries.of(inDates, inValues, ZoneOffset.UTC);
+    final ZonedDateTimeObjectTimeSeries<Float> ts = ImmutableZonedDateTimeObjectTimeSeries.of(inDates, inValues, ZoneOffset.UTC);
     assertEquals(ts.size(), 2);
     assertEquals(ts.getTimeAtIndex(0), ZDT_2222);
     assertEquals(ts.getValueAtIndex(0), 2.0f);
@@ -156,7 +156,7 @@ public class ImmutableZonedDateTimeObjectTimeSeriesTest extends ZonedDateTimeObj
 
   //-------------------------------------------------------------------------
   public void test_toString() {
-    final ZonedDateTimeObjectTimeSeries<Float> ts= ImmutableZonedDateTimeObjectTimeSeries.of(ZDT_2222, 2.0f);
+    final ZonedDateTimeObjectTimeSeries<Float> ts = ImmutableZonedDateTimeObjectTimeSeries.of(ZDT_2222, 2.0f);
     assertEquals("ImmutableZonedDateTimeObjectTimeSeries[(" + ZDT_2222 + ", 2.0)]", ts.toString());
   }
 

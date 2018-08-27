@@ -30,7 +30,7 @@ public class DynamicDelegatingPortfolioMasterTest {
 
   @Test(expectedExceptions = DataNotFoundException.class)
   void test_DefaultDelegateShouldNotFindAnyData() {
-    final UniqueId doesNotExist = UniqueId.of(schemeA,"DoesNotExist");
+    final UniqueId doesNotExist = UniqueId.of(schemeA, "DoesNotExist");
     final DynamicDelegatingPortfolioMaster sut = new DynamicDelegatingPortfolioMaster();
     sut.get(doesNotExist);
   }

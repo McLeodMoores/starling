@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2011 - present by OpenGamma Inc. and the OpenGamma group of companies
- * 
+ *
  * Please see distribution for license.
  */
 package com.opengamma.util.money;
@@ -52,7 +52,7 @@ public class MultipleCurrencyAmountTest {
     A_ARRAY = new double[] {A1, A2, A3 };
     CCY_LIST = Arrays.asList(CCY_ARRAY);
     A_LIST = Arrays.asList(A1, A2, A3);
-    CCY_A_MAP = new HashMap<Currency, Double>();
+    CCY_A_MAP = new HashMap<>();
     CCY_A_MAP.put(CCY1, A1);
     CCY_A_MAP.put(CCY2, A2);
     CCY_A_MAP.put(CCY3, A3);
@@ -119,7 +119,7 @@ public class MultipleCurrencyAmountTest {
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullCurrencyInMap() {
-    final Map<Currency, Double> map = new HashMap<Currency, Double>();
+    final Map<Currency, Double> map = new HashMap<>();
     map.put(CCY1, A1);
     map.put(null, A2);
     map.put(CCY3, A3);
@@ -128,7 +128,7 @@ public class MultipleCurrencyAmountTest {
 
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNullAmountInMap() {
-    final Map<Currency, Double> map = new HashMap<Currency, Double>();
+    final Map<Currency, Double> map = new HashMap<>();
     map.put(CCY1, A1);
     map.put(CCY2, null);
     map.put(CCY3, A3);
@@ -293,34 +293,34 @@ public class MultipleCurrencyAmountTest {
   @Test
   public void testPlus1() {
     final double a = 117;
-    CurrencyAmount ca = CurrencyAmount.of(Currency.CZK, a);
-    Set<CurrencyAmount> expected = new HashSet<CurrencyAmount>(CA_SET);
+    final CurrencyAmount ca = CurrencyAmount.of(Currency.CZK, a);
+    final Set<CurrencyAmount> expected = new HashSet<>(CA_SET);
     expected.add(ca);
-    MultipleCurrencyAmount mca = MultipleCurrencyAmount.of(CA_ARRAY);
-    MultipleCurrencyAmount test = mca.plus(ca);
+    final MultipleCurrencyAmount mca = MultipleCurrencyAmount.of(CA_ARRAY);
+    final MultipleCurrencyAmount test = mca.plus(ca);
     assertSameData(expected, test);
   }
 
   @Test
   public void testPlus2() {
     final double a = 117;
-    CurrencyAmount ca = CurrencyAmount.of(Currency.AUD, a);
-    Set<CurrencyAmount> expected = Sets.newHashSet(CA1.plus(ca), CA2, CA3);
-    MultipleCurrencyAmount mca = MultipleCurrencyAmount.of(CA_LIST);
-    MultipleCurrencyAmount test = mca.plus(ca);
+    final CurrencyAmount ca = CurrencyAmount.of(Currency.AUD, a);
+    final Set<CurrencyAmount> expected = Sets.newHashSet(CA1.plus(ca), CA2, CA3);
+    final MultipleCurrencyAmount mca = MultipleCurrencyAmount.of(CA_LIST);
+    final MultipleCurrencyAmount test = mca.plus(ca);
     assertSameData(expected, test);
   }
 
   @Test
   public void testPlus_CurrencyAmount() {
-    CurrencyAmount ca = CurrencyAmount.of(Currency.AUD, 117);
-    CurrencyAmount cb = CurrencyAmount.of(Currency.USD, 12);
-    CurrencyAmount cc = CurrencyAmount.of(Currency.AUD, 3);
-    CurrencyAmount cd = CurrencyAmount.of(Currency.NZD, 3);
-    MultipleCurrencyAmount mc1 = MultipleCurrencyAmount.of(ca, cb);
-    MultipleCurrencyAmount mc2 = MultipleCurrencyAmount.of(cc, cd);
-    Set<CurrencyAmount> expected = Sets.newHashSet(cb, cd, CurrencyAmount.of(Currency.AUD, 120));
-    MultipleCurrencyAmount test = mc1.plus(mc2);
+    final CurrencyAmount ca = CurrencyAmount.of(Currency.AUD, 117);
+    final CurrencyAmount cb = CurrencyAmount.of(Currency.USD, 12);
+    final CurrencyAmount cc = CurrencyAmount.of(Currency.AUD, 3);
+    final CurrencyAmount cd = CurrencyAmount.of(Currency.NZD, 3);
+    final MultipleCurrencyAmount mc1 = MultipleCurrencyAmount.of(ca, cb);
+    final MultipleCurrencyAmount mc2 = MultipleCurrencyAmount.of(cc, cd);
+    final Set<CurrencyAmount> expected = Sets.newHashSet(cb, cd, CurrencyAmount.of(Currency.AUD, 120));
+    final MultipleCurrencyAmount test = mc1.plus(mc2);
     assertSameData(expected, test);
   }
 
@@ -328,13 +328,13 @@ public class MultipleCurrencyAmountTest {
   @Test
   public void testMultipliedBy() {
     final double factor = 2.5;
-    MultipleCurrencyAmount mca1 = MultipleCurrencyAmount.of(CA1);
-    MultipleCurrencyAmount multiplied1 = mca1.multipliedBy(factor);
-    MultipleCurrencyAmount expected1 = MultipleCurrencyAmount.of(CCY1, A1*factor);
+    final MultipleCurrencyAmount mca1 = MultipleCurrencyAmount.of(CA1);
+    final MultipleCurrencyAmount multiplied1 = mca1.multipliedBy(factor);
+    final MultipleCurrencyAmount expected1 = MultipleCurrencyAmount.of(CCY1, A1 * factor);
     assertEquals(expected1, multiplied1, "MultipleCurrencyAmount: multipliedBy");
-    MultipleCurrencyAmount mca2 = MultipleCurrencyAmount.of(CA2, CA3);
-    MultipleCurrencyAmount multiplied2 = mca2.multipliedBy(factor);
-    MultipleCurrencyAmount expected2 = MultipleCurrencyAmount.of(CCY2, A2*factor).plus(CCY3, A3*factor);
+    final MultipleCurrencyAmount mca2 = MultipleCurrencyAmount.of(CA2, CA3);
+    final MultipleCurrencyAmount multiplied2 = mca2.multipliedBy(factor);
+    final MultipleCurrencyAmount expected2 = MultipleCurrencyAmount.of(CCY2, A2 * factor).plus(CCY3, A3 * factor);
     assertEquals(expected2, multiplied2, "MultipleCurrencyAmount: multipliedBy");
   }
 
@@ -382,7 +382,7 @@ public class MultipleCurrencyAmountTest {
   @Test
   public void testWithKeyNotPresent() {
     final Set<CurrencyAmount> expected = Sets.newHashSet(CA1, CA2, CA3, CurrencyAmount.of(Currency.DEM, A1));
-    MultipleCurrencyAmount test = MULTIPLE.with(Currency.DEM, A1);
+    final MultipleCurrencyAmount test = MULTIPLE.with(Currency.DEM, A1);
     assertSameData(expected, test);
   }
 

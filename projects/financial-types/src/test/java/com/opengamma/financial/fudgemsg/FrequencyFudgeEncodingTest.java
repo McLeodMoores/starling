@@ -22,7 +22,7 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT)
 public class FrequencyFudgeEncodingTest extends AbstractFudgeBuilderTestCase {
 
-  private static final Frequency REF= SimpleFrequency.BIMONTHLY;
+  private static final Frequency REF = SimpleFrequency.BIMONTHLY;
 
   @Test
   public void testCycle() {

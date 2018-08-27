@@ -97,14 +97,14 @@ public class CdsRedCodeAggregationFunctionTest {
   public void testPositionSecurityWithRedCodeIsUsed() {
 
     final SecurityDocument document = new SecurityDocument();
-    final ManageableSecurity cds = new StandardVanillaCDSSecurity(true, ExternalId.of("EXTERNAL_CODE" ,"ProtBuyer"),
-                                                                    ExternalId.of("EXTERNAL_CODE" ,"ProtSeller"), ExternalSchemes.markItRedCode("39FF64"),
-                                                                    DebtSeniority.SNRFOR, RestructuringClause.MM, ExternalSchemes.financialRegionId("US"),
-                                                                    createZdt(2013, 3, 20), createZdt(2013, 3, 21), createZdt(2014,3,20), StubType.SHORT_START,
-                                                                    SimpleFrequency.SEMI_ANNUAL, DayCounts.ACT_360,
-                                                                    BusinessDayConventions.FOLLOWING,
-                                                                    true, true, true, new InterestRateNotional(Currency.USD, 10000000), true, true, 500,
-                                                                    new InterestRateNotional(Currency.USD, 500000), 500, createZdt(2013,3,21), true);
+    final ManageableSecurity cds = new StandardVanillaCDSSecurity(true, ExternalId.of("EXTERNAL_CODE", "ProtBuyer"),
+                                                                  ExternalId.of("EXTERNAL_CODE", "ProtSeller"), ExternalSchemes.markItRedCode("39FF64"),
+                                                                  DebtSeniority.SNRFOR, RestructuringClause.MM, ExternalSchemes.financialRegionId("US"),
+                                                                  createZdt(2013, 3, 20), createZdt(2013, 3, 21), createZdt(2014, 3, 20), StubType.SHORT_START,
+                                                                  SimpleFrequency.SEMI_ANNUAL, DayCounts.ACT_360,
+                                                                  BusinessDayConventions.FOLLOWING,
+                                                                  true, true, true, new InterestRateNotional(Currency.USD, 10000000), true, true, 500,
+                                                                  new InterestRateNotional(Currency.USD, 500000), 500, createZdt(2013, 3, 21), true);
     final ExternalId secId = ExternalId.of("SEC_ID", "12345");
     cds.addExternalId(secId);
     document.setSecurity(cds);

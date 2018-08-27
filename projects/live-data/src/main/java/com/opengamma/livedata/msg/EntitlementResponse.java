@@ -92,27 +92,27 @@ public class EntitlementResponse implements java.io.Serializable {
     }
   }
   public static EntitlementResponse fromFudgeMsg (final org.fudgemsg.mapping.FudgeDeserializer deserializer, final org.fudgemsg.FudgeMsg fudgeMsg) {
-    final java.util.List<org.fudgemsg.FudgeField> types = fudgeMsg.getAllByOrdinal (0);
+    final java.util.List<org.fudgemsg.FudgeField> types = fudgeMsg.getAllByOrdinal(0);
     for (final org.fudgemsg.FudgeField field : types) {
-      final String className = (String)field.getValue ();
-      if ("com.opengamma.livedata.msg.EntitlementResponse".equals (className)) {
+      final String className = (String) field.getValue();
+      if ("com.opengamma.livedata.msg.EntitlementResponse".equals(className)) {
         break;
       }
       try {
-        return (com.opengamma.livedata.msg.EntitlementResponse)Class.forName (className).getDeclaredMethod ("fromFudgeMsg", org.fudgemsg.mapping.FudgeDeserializer.class, org.fudgemsg.FudgeMsg.class).invoke (null, deserializer, fudgeMsg);
+        return (com.opengamma.livedata.msg.EntitlementResponse) Class.forName (className).getDeclaredMethod ("fromFudgeMsg", org.fudgemsg.mapping.FudgeDeserializer.class, org.fudgemsg.FudgeMsg.class).invoke (null, deserializer, fudgeMsg);
       }
       catch (final Throwable t) {
         // no-action
       }
     }
-    return new EntitlementResponse (deserializer, fudgeMsg);
+    return new EntitlementResponse(deserializer, fudgeMsg);
   }
   public com.opengamma.livedata.LiveDataSpecification getLiveDataSpecification () {
     return _liveDataSpecification;
   }
   public void setLiveDataSpecification (final com.opengamma.livedata.LiveDataSpecification liveDataSpecification) {
     if (liveDataSpecification == null) {
-      throw new NullPointerException ("'liveDataSpecification' cannot be null");
+      throw new NullPointerException("'liveDataSpecification' cannot be null");
     } else {
       _liveDataSpecification = liveDataSpecification;
     }

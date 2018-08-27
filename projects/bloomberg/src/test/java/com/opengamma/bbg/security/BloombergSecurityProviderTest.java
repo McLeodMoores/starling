@@ -243,7 +243,7 @@ public class BloombergSecurityProviderTest {
   }
 
   //-------------------------------------------------------------------------
-  @Test(groups={"bbgSecurityFutureTests"})
+  @Test(groups = {"bbgSecurityFutureTests"})
   public void agricultureFuture() throws Exception {
     final Security wheat = _securityProvider.getSecurity(EXPECTED_WHEAT_FUTURE_SEC.getExternalIdBundle());
     assertNotNull(wheat);
@@ -251,7 +251,7 @@ public class BloombergSecurityProviderTest {
     assertSecurity(EXPECTED_WHEAT_FUTURE_SEC, wheat);
   }
 
-  @Test(groups={"bbgSecurityFutureTests"})
+  @Test(groups = {"bbgSecurityFutureTests"})
   public void equityFuture() throws Exception {
     final Security spIndex = _securityProvider.getSecurity(EXPECTED_EQUITY_FUTURE_SEC.getExternalIdBundle());
     assertNotNull(spIndex);
@@ -268,7 +268,7 @@ public class BloombergSecurityProviderTest {
     assertSecurity(EXPECTED_AUDUSD_FUTURE_SEC, audUsd);
   }
 
-  @Test(groups={"bbgSecurityFutureTests"})
+  @Test(groups = {"bbgSecurityFutureTests"})
   public void euroBondFuture() throws Exception {
     final ExternalIdBundle euroBund = ExternalIdBundle.of(ExternalSchemes.bloombergTickerSecurityId("RXA Comdty"));
     final Security bond = _securityProvider.getSecurity(euroBund);
@@ -310,7 +310,7 @@ public class BloombergSecurityProviderTest {
     return toDay;
   }
 
-  @Test(groups={"bbgSecurityFutureTests"})
+  @Test(groups = {"bbgSecurityFutureTests"})
   public void metalFuture() throws Exception {
     final Security silverFuture = _securityProvider.getSecurity(EXPECTED_SILVER_FUTURE.getExternalIdBundle());
     assertNotNull(silverFuture);
@@ -318,7 +318,7 @@ public class BloombergSecurityProviderTest {
     assertSecurity(EXPECTED_SILVER_FUTURE, silverFuture);
   }
 
-  @Test(groups={"bbgSecurityFutureTests"})
+  @Test(groups = {"bbgSecurityFutureTests"})
   public void energyFuture() throws Exception {
     final Security ethanolFuture = _securityProvider.getSecurity(EXPECTED_ETHANOL_FUTURE.getExternalIdBundle());
     assertNotNull(ethanolFuture);
@@ -326,7 +326,7 @@ public class BloombergSecurityProviderTest {
     assertSecurity(EXPECTED_ETHANOL_FUTURE, ethanolFuture);
   }
 
-  @Test(groups={"bbgSecurityFutureTests"})
+  @Test(groups = {"bbgSecurityFutureTests"})
   public void interestRateFuture() throws Exception {
     final Security euroDollar = _securityProvider.getSecurity(EXPECTED_EURODOLLAR_FUTURE.getExternalIdBundle());
     assertNotNull(euroDollar);

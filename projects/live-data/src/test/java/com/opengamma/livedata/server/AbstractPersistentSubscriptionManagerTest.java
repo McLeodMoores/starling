@@ -96,7 +96,7 @@ public class AbstractPersistentSubscriptionManagerTest {
     }
 
     private final Queue<Set<PersistentSubscription>> _pendingReads = new LinkedBlockingQueue<>();
-    private final Queue<Set<PersistentSubscription>> _pendingWrites= new LinkedBlockingQueue<>();
+    private final Queue<Set<PersistentSubscription>> _pendingWrites = new LinkedBlockingQueue<>();
 
     @Override
     protected void readFromStorage() {

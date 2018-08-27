@@ -59,7 +59,7 @@ public class CombinedMasterTest {
     d2 = mock(HolidayDocument.class);
     when(d1.getUniqueId()).thenReturn(u1);
     when(d1.getObjectId()).thenReturn(o1);
-    cMaster = new CombinedMaster<HolidayDocument, HolidayMaster>(ImmutableList.of(m1, m2)) {};
+    cMaster = new CombinedMaster<HolidayDocument, HolidayMaster>(ImmutableList.of(m1, m2)) { };
   }
 
   @Test
@@ -94,7 +94,7 @@ public class CombinedMasterTest {
     verify(m1).replaceVersions(o1, Collections.singletonList(d1));
   }
 
-  @Test(expectedExceptions= {IllegalArgumentException.class})
+  @Test(expectedExceptions = {IllegalArgumentException.class})
   public void addVersionException() {
 
     when(m1.replaceVersions(o1, Collections.singletonList(d1))).thenThrow(new IllegalArgumentException());

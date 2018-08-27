@@ -58,7 +58,7 @@ public class ImmutableInstantDoubleTimeSeriesTest extends InstantDoubleTimeSerie
   //-------------------------------------------------------------------------
   //-------------------------------------------------------------------------
   public void test_of_Instant_double() {
-    final InstantDoubleTimeSeries ts= ImmutableInstantDoubleTimeSeries.of(Instant.ofEpochSecond(12345), 2.0);
+    final InstantDoubleTimeSeries ts = ImmutableInstantDoubleTimeSeries.of(Instant.ofEpochSecond(12345), 2.0);
     assertEquals(ts.size(), 1);
     assertEquals(ts.getTimeAtIndex(0), Instant.ofEpochSecond(12345));
     assertEquals(ts.getValueAtIndex(0), 2.0);
@@ -73,7 +73,7 @@ public class ImmutableInstantDoubleTimeSeriesTest extends InstantDoubleTimeSerie
   public void test_of_InstantArray_DoubleArray() {
     final Instant[] inDates = new Instant[] {Instant.ofEpochSecond(2222), Instant.ofEpochSecond(3333)};
     final Double[] inValues = new Double[] {2.0, 3.0};
-    final InstantDoubleTimeSeries ts= ImmutableInstantDoubleTimeSeries.of(inDates, inValues);
+    final InstantDoubleTimeSeries ts = ImmutableInstantDoubleTimeSeries.of(inDates, inValues);
     assertEquals(ts.size(), 2);
     assertEquals(ts.getTimeAtIndex(0), Instant.ofEpochSecond(2222));
     assertEquals(ts.getValueAtIndex(0), 2.0);
@@ -111,7 +111,7 @@ public class ImmutableInstantDoubleTimeSeriesTest extends InstantDoubleTimeSerie
   public void test_of_InstantArray_doubleArray() {
     final Instant[] inDates = new Instant[] {Instant.ofEpochSecond(2222), Instant.ofEpochSecond(3333)};
     final double[] inValues = new double[] {2.0, 3.0};
-    final InstantDoubleTimeSeries ts= ImmutableInstantDoubleTimeSeries.of(inDates, inValues);
+    final InstantDoubleTimeSeries ts = ImmutableInstantDoubleTimeSeries.of(inDates, inValues);
     assertEquals(ts.size(), 2);
     assertEquals(ts.getTimeAtIndex(0), Instant.ofEpochSecond(2222));
     assertEquals(ts.getValueAtIndex(0), 2.0);
@@ -149,7 +149,7 @@ public class ImmutableInstantDoubleTimeSeriesTest extends InstantDoubleTimeSerie
   public void test_of_longArray_doubleArray() {
     final long[] inDates = new long[] {2222_000_000_000L, 3333_000_000_000L};
     final double[] inValues = new double[] {2.0, 3.0};
-    final InstantDoubleTimeSeries ts= ImmutableInstantDoubleTimeSeries.of(inDates, inValues);
+    final InstantDoubleTimeSeries ts = ImmutableInstantDoubleTimeSeries.of(inDates, inValues);
     assertEquals(ts.size(), 2);
     assertEquals(ts.getTimeAtIndex(0), Instant.ofEpochSecond(2222));
     assertEquals(ts.getValueAtIndex(0), 2.0);
@@ -238,7 +238,7 @@ public class ImmutableInstantDoubleTimeSeriesTest extends InstantDoubleTimeSerie
 
   //-------------------------------------------------------------------------
   public void test_toString() {
-    final InstantDoubleTimeSeries ts= ImmutableInstantDoubleTimeSeries.of(Instant.ofEpochSecond(2222), 2.0);
+    final InstantDoubleTimeSeries ts = ImmutableInstantDoubleTimeSeries.of(Instant.ofEpochSecond(2222), 2.0);
     assertEquals("ImmutableInstantDoubleTimeSeries[(" + Instant.ofEpochSecond(2222) + ", 2.0)]", ts.toString());
   }
 

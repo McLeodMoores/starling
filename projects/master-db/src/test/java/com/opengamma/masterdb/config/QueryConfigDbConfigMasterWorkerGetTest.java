@@ -39,7 +39,7 @@ public class QueryConfigDbConfigMasterWorkerGetTest extends AbstractDbConfigMast
   //-------------------------------------------------------------------------
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void test_getConfig_nullUID() {
-    _cfgMaster.get((UniqueId)null);
+    _cfgMaster.get((UniqueId) null);
   }
 
   @Test(expectedExceptions = DataNotFoundException.class)

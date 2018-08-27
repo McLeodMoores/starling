@@ -98,13 +98,13 @@ public class ViewProcessStatsProcessor {
         }
 
         @Override
-        public void preOrderOperation(final PortfolioNode portfolioNode) {}
+        public void preOrderOperation(final PortfolioNode portfolioNode) { }
 
         @Override
-        public void postOrderOperation(final PortfolioNode parentNode, final Position position) {}
+        public void postOrderOperation(final PortfolioNode parentNode, final Position position) { }
 
         @Override
-        public void postOrderOperation(final PortfolioNode portfolioNode) {}
+        public void postOrderOperation(final PortfolioNode portfolioNode) { }
 
       });
       traverser.traverse(portfolio.getRootNode());

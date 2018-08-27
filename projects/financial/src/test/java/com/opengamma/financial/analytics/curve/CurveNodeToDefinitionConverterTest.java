@@ -605,7 +605,7 @@ public class CurveNodeToDefinitionConverterTest {
       DateUtils.getUTCDate(2015, 6, 17), DateUtils.getUTCDate(2015, 9, 16), DateUtils.getUTCDate(2015, 12, 16), DateUtils.getUTCDate(2016, 3, 16),
       DateUtils.getUTCDate(2016, 6, 15), DateUtils.getUTCDate(2016, 9, 21), DateUtils.getUTCDate(2016, 9, 21)};
     final int nbTest = startNumbers.length;
-    for(int loopt=0; loopt<nbTest; loopt++) {
+    for (int loopt = 0; loopt < nbTest; loopt++) {
       final RollDateFRANode immFraNode = new RollDateFRANode(Tenor.ONE_DAY, Tenor.THREE_MONTHS, startNumbers[loopt], endNumbers[loopt], IMM_FRA_CONVENTION_ID, "Mapper", "IMM FRA 3M 1/2");
       final InstrumentDefinition<?> definition = immFraNode.accept(converter);
       assertTrue("IMMFRANodeConverter: testIMMFRA - FRA instanceof", definition instanceof ForwardRateAgreementDefinition);
@@ -891,19 +891,24 @@ public class CurveNodeToDefinitionConverterTest {
     assertTrue("FixedONCalendarSwap: instance", swap.getFirstLeg().getNthPayment(0) instanceof CouponFixedDefinition);
     final AnnuityCouponFixedDefinition fixedLeg = (AnnuityCouponFixedDefinition) swap.getFirstLeg();
     assertEquals("FixedONCalendarSwap: effective date", effectiveDate, fixedLeg.getNthPayment(0).getAccrualStartDate().toLocalDate());
-    assertEquals("FixedONCalendarSwap: maturity date", maturityDate, fixedLeg.getNthPayment(nbCpnFixed-1).getAccrualEndDate().toLocalDate());
+    assertEquals("FixedONCalendarSwap: maturity date", maturityDate, fixedLeg.getNthPayment(nbCpnFixed - 1).getAccrualEndDate().toLocalDate());
     assertTrue("FixedONCalendarSwap: instance", swap.getSecondLeg().getNthPayment(0) instanceof CouponONSpreadSimplifiedDefinition);
     final AnnuityDefinition<?> onLeg = swap.getSecondLeg();
     final int nbCpnON = onLeg.getNumberOfPayments();
     assertTrue("FixedONCalendarSwap: nb Coupon", nbCpnON == 1);
-    assertEquals("FixedONCalendarSwap: effective date", effectiveDate, ((CouponONSpreadSimplifiedDefinition)onLeg.getNthPayment(0)).getAccrualStartDate().toLocalDate());
-    assertEquals("FixedONCalendarSwap: effective date", effectiveDate, ((CouponONSpreadSimplifiedDefinition)onLeg.getNthPayment(0)).getFixingPeriodStartDate().toLocalDate());
-    assertEquals("FixedONCalendarSwap: effective date", maturityDate, ((CouponONSpreadSimplifiedDefinition)onLeg.getNthPayment(nbCpnON-1)).getAccrualEndDate().toLocalDate());
-    assertEquals("FixedONCalendarSwap: effective date", maturityDate, ((CouponONSpreadSimplifiedDefinition)onLeg.getNthPayment(nbCpnON-1)).getFixingPeriodEndDate().toLocalDate());
+    assertEquals("FixedONCalendarSwap: effective date",
+        effectiveDate, ((CouponONSpreadSimplifiedDefinition) onLeg.getNthPayment(0)).getAccrualStartDate().toLocalDate());
+    assertEquals("FixedONCalendarSwap: effective date",
+        effectiveDate, ((CouponONSpreadSimplifiedDefinition) onLeg.getNthPayment(0)).getFixingPeriodStartDate().toLocalDate());
+    assertEquals("FixedONCalendarSwap: effective date",
+        maturityDate, ((CouponONSpreadSimplifiedDefinition) onLeg.getNthPayment(nbCpnON - 1)).getAccrualEndDate().toLocalDate());
+    assertEquals("FixedONCalendarSwap: effective date",
+        maturityDate, ((CouponONSpreadSimplifiedDefinition) onLeg.getNthPayment(nbCpnON - 1)).getFixingPeriodEndDate().toLocalDate());
     final int startNumber2 = 1;
     final int endNumber2 = 14; // More than 1 Year: 2 cpn
     final Period startPeriod2 = Period.ofMonths(1);
-    final CalendarSwapNode swapNode2 = new CalendarSwapNode(ecbName, Tenor.of(startPeriod2), startNumber2, endNumber2, EUR_SWAP_1Y_ONCMP_ID, false, SCHEME, "CalendarSwapNode0204");
+    final CalendarSwapNode swapNode2 =
+        new CalendarSwapNode(ecbName, Tenor.of(startPeriod2), startNumber2, endNumber2, EUR_SWAP_1Y_ONCMP_ID, false, SCHEME, "CalendarSwapNode0204");
     final InstrumentDefinition<?> definition2 = swapNode2.accept(converter);
     assertTrue("FixedONCalendarSwap: instance", definition2 instanceof SwapDefinition);
     final SwapDefinition swap2 = (SwapDefinition) definition2;
@@ -915,15 +920,19 @@ public class CurveNodeToDefinitionConverterTest {
     assertTrue("FixedONCalendarSwap: instance", swap2.getFirstLeg().getNthPayment(0) instanceof CouponFixedDefinition);
     final AnnuityCouponFixedDefinition fixedLeg2 = (AnnuityCouponFixedDefinition) swap2.getFirstLeg();
     assertEquals("FixedONCalendarSwap: effective date", effectiveDate2, fixedLeg2.getNthPayment(0).getAccrualStartDate().toLocalDate());
-    assertEquals("FixedONCalendarSwap: maturity date", maturityDate2, fixedLeg2.getNthPayment(nbCpnFixed2-1).getAccrualEndDate().toLocalDate());
+    assertEquals("FixedONCalendarSwap: maturity date", maturityDate2, fixedLeg2.getNthPayment(nbCpnFixed2 - 1).getAccrualEndDate().toLocalDate());
     assertTrue("FixedONCalendarSwap: instance", swap2.getSecondLeg().getNthPayment(0) instanceof CouponONSpreadSimplifiedDefinition);
     final AnnuityDefinition<?> onLeg2 = swap2.getSecondLeg();
     final int nbCpnON2 = onLeg2.getNumberOfPayments();
     assertTrue("FixedONCalendarSwap: nb Coupon", nbCpnON2 == 2);
-    assertEquals("FixedONCalendarSwap: effective date", effectiveDate2, ((CouponONSpreadSimplifiedDefinition)onLeg2.getNthPayment(0)).getAccrualStartDate().toLocalDate());
-    assertEquals("FixedONCalendarSwap: effective date", effectiveDate2, ((CouponONSpreadSimplifiedDefinition)onLeg2.getNthPayment(0)).getFixingPeriodStartDate().toLocalDate());
-    assertEquals("FixedONCalendarSwap: effective date", maturityDate2, ((CouponONSpreadSimplifiedDefinition)onLeg2.getNthPayment(nbCpnON2-1)).getAccrualEndDate().toLocalDate());
-    assertEquals("FixedONCalendarSwap: effective date", maturityDate2, ((CouponONSpreadSimplifiedDefinition)onLeg2.getNthPayment(nbCpnON2-1)).getFixingPeriodEndDate().toLocalDate());
+    assertEquals("FixedONCalendarSwap: effective date",
+        effectiveDate2, ((CouponONSpreadSimplifiedDefinition) onLeg2.getNthPayment(0)).getAccrualStartDate().toLocalDate());
+    assertEquals("FixedONCalendarSwap: effective date",
+        effectiveDate2, ((CouponONSpreadSimplifiedDefinition) onLeg2.getNthPayment(0)).getFixingPeriodStartDate().toLocalDate());
+    assertEquals("FixedONCalendarSwap: effective date",
+        maturityDate2, ((CouponONSpreadSimplifiedDefinition) onLeg2.getNthPayment(nbCpnON2 - 1)).getAccrualEndDate().toLocalDate());
+    assertEquals("FixedONCalendarSwap: effective date",
+        maturityDate2, ((CouponONSpreadSimplifiedDefinition) onLeg2.getNthPayment(nbCpnON2 - 1)).getFixingPeriodEndDate().toLocalDate());
   }
 
   @Test
@@ -960,7 +969,7 @@ public class CurveNodeToDefinitionConverterTest {
     definition = swapNode.accept(converter);
     assertTrue("FixedIborSwap", definition instanceof SwapDefinition);
     fixedLeg = AnnuityDefinitionBuilder.couponFixed(Currency.USD, settlementDate, maturityDate, FIXED_LEG.getPaymentTenor().getPeriod(),
-        CALENDAR, FIXED_LEG.getDayCount(), FIXED_LEG.getBusinessDayConvention(), FIXED_LEG.isIsEOM(), 1.0d, rate,false, FIXED_LEG.getStubType(), FIXED_LEG.getPaymentLag());
+        CALENDAR, FIXED_LEG.getDayCount(), FIXED_LEG.getBusinessDayConvention(), FIXED_LEG.isIsEOM(), 1.0d, rate, false, FIXED_LEG.getStubType(), FIXED_LEG.getPaymentLag());
     floatLeg = AnnuityDefinitionBuilder.couponIbor(settlementDate, maturityDate, LEG_USDLIBOR3M.getResetTenor().getPeriod(), 1.0d, index, true,
         index.getDayCount(), index.getBusinessDayConvention(), index.isEndOfMonth(), CALENDAR, LEG_USDLIBOR3M.getStubType(), LEG_USDLIBOR3M.getPaymentLag());
     assertEquals("FixedIborSwap", new SwapDefinition(floatLeg, fixedLeg), definition);
@@ -1057,7 +1066,7 @@ public class CurveNodeToDefinitionConverterTest {
     final ZonedDateTime settlementDate = DateUtils.getUTCDate(2013, 3, 5);
     final CurveNodeVisitor<InstrumentDefinition<?>> converter = new SwapNodeConverter(SECURITY_SOURCE, CONVENTION_SOURCE, HOLIDAY_SOURCE, REGION_SOURCE, marketValues, marketDataId, now, FX_MATRIX);
     final Tenor tenor = Tenor.FIVE_YEARS;
-    final SwapNode swapNode = new SwapNode(Tenor.of(Period.ZERO), tenor,ON_AA_ID, LEG_USDLIBOR3M_ID, "Mapper");
+    final SwapNode swapNode = new SwapNode(Tenor.of(Period.ZERO), tenor, ON_AA_ID, LEG_USDLIBOR3M_ID, "Mapper");
     final InstrumentDefinition<?> definition = swapNode.accept(converter);
     assertTrue(definition instanceof SwapDefinition);
     final SwapDefinition swap = (SwapDefinition) definition;
@@ -1065,14 +1074,14 @@ public class CurveNodeToDefinitionConverterTest {
     final IndexON indexON = ConverterUtils.indexON(USD_FEDFUND_INDEX.getName(), USD_OVERNIGHT_CONVENTION);
     final AnnuityDefinition<CouponONArithmeticAverageSpreadSimplifiedDefinition> quoteLeg = AnnuityDefinitionBuilder.couponONArithmeticAverageSpreadSimplified(settlementDate, maturity,
         ON_AA.getPaymentTenor().getPeriod(), 1.0, spread, indexON, true, ON_AA.getBusinessDayConvention(), ON_AA.isIsEOM(), CALENDAR, ON_AA.getStubType());
-    for(int loopcpn=0; loopcpn<quoteLeg.getNumberOfPayments(); loopcpn++) {
-      assertEquals("IborONAASwap: second leg - cpn " + loopcpn, quoteLeg.getNthPayment(loopcpn), swap.getFirstLeg().getNthPayment(loopcpn));
+    for (int i = 0; i < quoteLeg.getNumberOfPayments(); i++) {
+      assertEquals("IborONAASwap: second leg - cpn " + i, quoteLeg.getNthPayment(i), swap.getFirstLeg().getNthPayment(i));
     }
     final IborIndex index3m = ConverterUtils.indexIbor(USDLIBOR3M_NAME, USDLIBOR_ACT_360, Tenor.THREE_MONTHS);
     final AnnuityDefinition<CouponIborDefinition> nonQuoteLeg = AnnuityDefinitionBuilder.couponIbor(settlementDate, maturity, LEG_USDLIBOR3M.getResetTenor().getPeriod(),
         1.0d, index3m, false, ACT_360, USDLIBOR_ACT_360.getBusinessDayConvention(), USDLIBOR_ACT_360.isIsEOM(), CALENDAR, LEG_USDLIBOR3M.getStubType(), LEG_USDLIBOR3M.getPaymentLag());
-    for(int loopcpn=0; loopcpn<nonQuoteLeg.getNumberOfPayments(); loopcpn++) {
-      assertEquals("IborONAASwap: first leg - cpn " + loopcpn, nonQuoteLeg.getNthPayment(loopcpn), swap.getSecondLeg().getNthPayment(loopcpn));
+    for (int i = 0; i < nonQuoteLeg.getNumberOfPayments(); i++) {
+      assertEquals("IborONAASwap: first leg - cpn " + i, nonQuoteLeg.getNthPayment(i), swap.getSecondLeg().getNthPayment(i));
     }
   }
 
@@ -1095,13 +1104,13 @@ public class CurveNodeToDefinitionConverterTest {
     final IborIndex index1m = ConverterUtils.indexIbor(USDLIBOR1M_NAME, USDLIBOR_ACT_360, Tenor.ONE_MONTH);
     final AnnuityDefinition<CouponIborCompoundingSpreadDefinition> quoteLeg = AnnuityDefinitionBuilder.couponIborCompoundingSpread(settlementDate, settlementDate.plus(legTenor.getPeriod()), paymentPeriod, 1, spread,
         index1m, StubType.SHORT_START, true, MODIFIED_FOLLOWING, true, CALENDAR, StubType.SHORT_START);
-    for(int loopcpn=0; loopcpn<quoteLeg.getNumberOfPayments(); loopcpn++) {
-      assertEquals("IborIborCompoundingSwap: quote leg - cpn " + loopcpn, quoteLeg.getNthPayment(loopcpn), ((SwapDefinition)definition).getFirstLeg().getNthPayment(loopcpn));
+    for (int i = 0; i < quoteLeg.getNumberOfPayments(); i++) {
+      assertEquals("IborIborCompoundingSwap: quote leg - cpn " + i, quoteLeg.getNthPayment(i), ((SwapDefinition) definition).getFirstLeg().getNthPayment(i));
     }
-    assertEquals("IborIborCompoundingSwap: quote leg", quoteLeg, ((SwapDefinition)definition).getFirstLeg());
+    assertEquals("IborIborCompoundingSwap: quote leg", quoteLeg, ((SwapDefinition) definition).getFirstLeg());
     final AnnuityCouponIborDefinition nonQuoteLeg = AnnuityDefinitionBuilder.couponIbor(settlementDate, maturityDate, LEG_USDLIBOR3M.getResetTenor().getPeriod(), 1.0d,
         index3m, false, index3m.getDayCount(), index3m.getBusinessDayConvention(), index3m.isEndOfMonth(), CALENDAR, LEG_USDLIBOR3M.getStubType(), LEG_USDLIBOR3M.getPaymentLag());
-    assertEquals("IborIborCompoundingSwap: non-quote leg", nonQuoteLeg, ((SwapDefinition)definition).getSecondLeg());
+    assertEquals("IborIborCompoundingSwap: non-quote leg", nonQuoteLeg, ((SwapDefinition) definition).getSecondLeg());
   }
 
   @Test
@@ -1125,11 +1134,11 @@ public class CurveNodeToDefinitionConverterTest {
         settlementDate.plus(legTenor.getPeriod()), paymentPeriod, 1, spread, index1m, StubType.SHORT_START, true, MODIFIED_FOLLOWING, true, CALENDAR, StubType.SHORT_START);
     final AnnuityCouponIborDefinition nonQuoteLeg = AnnuityDefinitionBuilder.couponIbor(settlementDate, maturityDate, LEG_USDLIBOR3M.getResetTenor().getPeriod(), 1.0d,
         index3m, false, index3m.getDayCount(), index3m.getBusinessDayConvention(), index3m.isEndOfMonth(), CALENDAR, LEG_USDLIBOR3M.getStubType(), LEG_USDLIBOR3M.getPaymentLag());
-    assertEquals("IborIborCompoundingSwap: first leg", nonQuoteLeg, ((SwapDefinition)definition).getSecondLeg());
-    for(int loopcpn=0; loopcpn<quoteLeg.getNumberOfPayments(); loopcpn++) {
-      assertEquals("IborIborCompoundingSwap: first leg - cpn " + loopcpn, quoteLeg.getNthPayment(loopcpn), ((SwapDefinition)definition).getFirstLeg().getNthPayment(loopcpn));
+    assertEquals("IborIborCompoundingSwap: first leg", nonQuoteLeg, ((SwapDefinition) definition).getSecondLeg());
+    for (int i = 0; i < quoteLeg.getNumberOfPayments(); i++) {
+      assertEquals("IborIborCompoundingSwap: first leg - cpn " + i, quoteLeg.getNthPayment(i), ((SwapDefinition) definition).getFirstLeg().getNthPayment(i));
     }
-    assertEquals("IborIborCompoundingSwap: first leg", quoteLeg, ((SwapDefinition)definition).getFirstLeg());
+    assertEquals("IborIborCompoundingSwap: first leg", quoteLeg, ((SwapDefinition) definition).getFirstLeg());
   }
 
   @Test

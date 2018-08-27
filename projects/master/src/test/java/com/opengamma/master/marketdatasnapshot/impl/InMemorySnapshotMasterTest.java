@@ -42,9 +42,9 @@ public class InMemorySnapshotMasterTest {
   // TODO Move the logical tests from here to the generic SnapshotMasterTestCase then we can just extend from that
 
   private static final UniqueId OTHER_UID = UniqueId.of("U", "1");
-  private static final ManageableMarketDataSnapshot SNAP1 = new ManageableMarketDataSnapshot("Test 1", new ManageableUnstructuredMarketDataSnapshot(),new HashMap<YieldCurveKey, YieldCurveSnapshot>(12));
-  private static final ManageableMarketDataSnapshot SNAP2 = new ManageableMarketDataSnapshot("Test 2", new ManageableUnstructuredMarketDataSnapshot(),new HashMap<YieldCurveKey, YieldCurveSnapshot>(12));
-  
+  private static final ManageableMarketDataSnapshot SNAP1 = new ManageableMarketDataSnapshot("Test 1", new ManageableUnstructuredMarketDataSnapshot(), new HashMap<YieldCurveKey, YieldCurveSnapshot>(12));
+  private static final ManageableMarketDataSnapshot SNAP2 = new ManageableMarketDataSnapshot("Test 2", new ManageableUnstructuredMarketDataSnapshot(), new HashMap<YieldCurveKey, YieldCurveSnapshot>(12));
+
 
   private InMemorySnapshotMaster _testEmpty;
   private InMemorySnapshotMaster _testPopulated;
@@ -70,70 +70,70 @@ public class InMemorySnapshotMasterTest {
   }
 
   public void test_defaultSupplier() {
-    InMemorySnapshotMaster master = new InMemorySnapshotMaster();
-    MarketDataSnapshotDocument doc = new MarketDataSnapshotDocument();
+    final InMemorySnapshotMaster master = new InMemorySnapshotMaster();
+    final MarketDataSnapshotDocument doc = new MarketDataSnapshotDocument();
     doc.setSnapshot(SNAP1);
-    MarketDataSnapshotDocument added = master.add(doc);
+    final MarketDataSnapshotDocument added = master.add(doc);
     assertEquals("MemSnap", added.getUniqueId().getScheme());
   }
 
   public void test_alternateSupplier() {
-    InMemorySnapshotMaster master = new InMemorySnapshotMaster(new ObjectIdSupplier("Hello"));
-    MarketDataSnapshotDocument doc = new MarketDataSnapshotDocument();
+    final InMemorySnapshotMaster master = new InMemorySnapshotMaster(new ObjectIdSupplier("Hello"));
+    final MarketDataSnapshotDocument doc = new MarketDataSnapshotDocument();
     doc.setSnapshot(SNAP1);
-    MarketDataSnapshotDocument added = master.add(doc);
+    final MarketDataSnapshotDocument added = master.add(doc);
     assertEquals("Hello", added.getUniqueId().getScheme());
   }
 
   //-------------------------------------------------------------------------
   public void test_search_emptyMaster() {
-    MarketDataSnapshotSearchRequest request = new MarketDataSnapshotSearchRequest();
-    MarketDataSnapshotSearchResult result = _testEmpty.search(request);
+    final MarketDataSnapshotSearchRequest request = new MarketDataSnapshotSearchRequest();
+    final MarketDataSnapshotSearchResult result = _testEmpty.search(request);
     assertEquals(0, result.getPaging().getTotalItems());
     assertEquals(0, result.getDocuments().size());
   }
 
   public void test_search_populatedMaster_all() {
-    MarketDataSnapshotSearchRequest request = new MarketDataSnapshotSearchRequest();
-    MarketDataSnapshotSearchResult result = _testPopulated.search(request);
+    final MarketDataSnapshotSearchRequest request = new MarketDataSnapshotSearchRequest();
+    final MarketDataSnapshotSearchResult result = _testPopulated.search(request);
     assertEquals(2, result.getPaging().getTotalItems());
-    List<MarketDataSnapshotDocument> docs = result.getDocuments();
+    final List<MarketDataSnapshotDocument> docs = result.getDocuments();
     assertEquals(2, docs.size());
     assertEquals(true, docs.contains(_doc1));
     assertEquals(true, docs.contains(_doc2));
   }
 
   public void test_search_populatedMaster_filterByName() {
-    MarketDataSnapshotSearchRequest request = new MarketDataSnapshotSearchRequest();
+    final MarketDataSnapshotSearchRequest request = new MarketDataSnapshotSearchRequest();
     request.setName("*est 2");
-    MarketDataSnapshotSearchResult result = _testPopulated.search(request);
+    final MarketDataSnapshotSearchResult result = _testPopulated.search(request);
     assertEquals(1, result.getPaging().getTotalItems());
-    List<MarketDataSnapshotDocument> docs = result.getDocuments();
+    final List<MarketDataSnapshotDocument> docs = result.getDocuments();
     assertEquals(1, docs.size());
     assertEquals(true, docs.contains(_doc2));
   }
-  
+
   public void test_search_populatedMaster_filterById() {
-    MarketDataSnapshotSearchRequest request = new MarketDataSnapshotSearchRequest();
+    final MarketDataSnapshotSearchRequest request = new MarketDataSnapshotSearchRequest();
     request.setSnapshotIds(ImmutableSet.of(_doc1.getUniqueId().getObjectId()));
-    MarketDataSnapshotSearchResult result = _testPopulated.search(request);
+    final MarketDataSnapshotSearchResult result = _testPopulated.search(request);
     assertEquals(1, result.getPaging().getTotalItems());
-    MarketDataSnapshotDocument doc = result.getFirstDocument();
+    final MarketDataSnapshotDocument doc = result.getFirstDocument();
     assertEquals(_doc1.getUniqueId(), doc.getUniqueId());
   }
 
   public void test_history_emptyMaster() {
-    MarketDataSnapshotHistoryRequest request = new MarketDataSnapshotHistoryRequest();
+    final MarketDataSnapshotHistoryRequest request = new MarketDataSnapshotHistoryRequest();
     request.setObjectId(_doc1.getUniqueId().getObjectId());
-    MarketDataSnapshotHistoryResult result = _testEmpty.history(request);
+    final MarketDataSnapshotHistoryResult result = _testEmpty.history(request);
     assertEquals(0, result.getPaging().getTotalItems());
     assertEquals(0, result.getDocuments().size());
   }
 
   public void test_history_populatedMaster() {
-    MarketDataSnapshotHistoryRequest request = new MarketDataSnapshotHistoryRequest();
+    final MarketDataSnapshotHistoryRequest request = new MarketDataSnapshotHistoryRequest();
     request.setObjectId(_doc1.getUniqueId().getObjectId());
-    MarketDataSnapshotHistoryResult result = _testPopulated.history(request);
+    final MarketDataSnapshotHistoryResult result = _testPopulated.history(request);
     assertEquals(1, result.getPaging().getTotalItems());
     assertEquals(1, result.getDocuments().size());
   }
@@ -151,9 +151,9 @@ public class InMemorySnapshotMasterTest {
 
   //-------------------------------------------------------------------------
   public void test_add_emptyMaster() {
-    MarketDataSnapshotDocument doc = new MarketDataSnapshotDocument();
+    final MarketDataSnapshotDocument doc = new MarketDataSnapshotDocument();
     doc.setSnapshot(SNAP1);
-    MarketDataSnapshotDocument added = _testEmpty.add(doc);
+    final MarketDataSnapshotDocument added = _testEmpty.add(doc);
     assertNotNull(added.getVersionFromInstant());
     assertNotNull(added.getCorrectionFromInstant());
     assertEquals(added.getVersionFromInstant(), added.getCorrectionFromInstant());
@@ -164,17 +164,17 @@ public class InMemorySnapshotMasterTest {
   //-------------------------------------------------------------------------
   @Test(expectedExceptions = DataNotFoundException.class)
   public void test_update_emptyMaster() {
-    MarketDataSnapshotDocument doc = new MarketDataSnapshotDocument();
+    final MarketDataSnapshotDocument doc = new MarketDataSnapshotDocument();
     doc.setSnapshot(SNAP1);
     doc.setUniqueId(OTHER_UID);
     _testEmpty.update(doc);
   }
 
   public void test_update_populatedMaster() {
-    MarketDataSnapshotDocument doc = new MarketDataSnapshotDocument();
+    final MarketDataSnapshotDocument doc = new MarketDataSnapshotDocument();
     doc.setSnapshot(SNAP1);
     doc.setUniqueId(_doc1.getUniqueId());
-    MarketDataSnapshotDocument updated = _testPopulated.update(doc);
+    final MarketDataSnapshotDocument updated = _testPopulated.update(doc);
     assertEquals(_doc1.getUniqueId(), updated.getUniqueId());
     assertNotNull(_doc1.getVersionFromInstant());
     assertNotNull(updated.getVersionFromInstant());
@@ -188,10 +188,10 @@ public class InMemorySnapshotMasterTest {
 
   public void test_remove_populatedMaster() {
     _testPopulated.remove(_doc1.getUniqueId());
-    MarketDataSnapshotSearchRequest request = new MarketDataSnapshotSearchRequest();
-    MarketDataSnapshotSearchResult result = _testPopulated.search(request);
+    final MarketDataSnapshotSearchRequest request = new MarketDataSnapshotSearchRequest();
+    final MarketDataSnapshotSearchResult result = _testPopulated.search(request);
     assertEquals(1, result.getPaging().getTotalItems());
-    List<MarketDataSnapshotDocument> docs = result.getDocuments();
+    final List<MarketDataSnapshotDocument> docs = result.getDocuments();
     assertEquals(1, docs.size());
     assertEquals(true, docs.contains(_doc2));
   }

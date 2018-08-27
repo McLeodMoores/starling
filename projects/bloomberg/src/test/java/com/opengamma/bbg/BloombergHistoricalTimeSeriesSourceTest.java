@@ -66,7 +66,7 @@ public class BloombergHistoricalTimeSeriesSourceTest {
   }
 
   //-------------------------------------------------------------------------
-  @Test(expectedExceptions=java.lang.IllegalArgumentException.class)
+  @Test(expectedExceptions = IllegalArgumentException.class)
   public void getHistoricalWithInvalidDates() throws Exception {
     //endDate before startDate
     final LocalDate startDate = LocalDate.of(2009, 11, 04);

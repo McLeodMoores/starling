@@ -39,7 +39,7 @@ public class CachingValueSpecificationIdentifierSourceTest {
     for (int i = 0; i < valueSpec.length; i++) {
       valueSpec[i] = new ValueSpecification("value" + i, ComputationTargetSpecification.of(UniqueId.of("scheme", "fibble")),
           ValueProperties.with(ValuePropertyNames.FUNCTION, "mockFunctionId").get());
-      realIdentifiers.put (valueSpec[i], (long)i);
+      realIdentifiers.put (valueSpec[i], (long) i);
     }
 
     final IdentifierMap underlying = new AbstractIdentifierMap() {
@@ -57,7 +57,7 @@ public class CachingValueSpecificationIdentifierSourceTest {
         if (shouldFail.get ()) {
           AssertJUnit.fail ("Should not have called underlying.");
         }
-        return valueSpec[(int)identifier];
+        return valueSpec[(int) identifier];
       }
 
     };

@@ -61,7 +61,7 @@ public class YieldCurveManipulatorBuilderTest {
   public void pointShifts() {
     _builder.pointShifts(ScenarioShiftType.ABSOLUTE, pointShift(1, 2));
 
-    final YieldCurvePointShiftManipulator result = (YieldCurvePointShiftManipulator)_manipulatorResult;
+    final YieldCurvePointShiftManipulator result = (YieldCurvePointShiftManipulator) _manipulatorResult;
 
     assertTrue("One shift expected", 1 == result.getPointShifts().size());
 

@@ -18,7 +18,7 @@ public final class DBMasterComponentUtils {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(DBMasterComponentUtils.class);
 
-  private DBMasterComponentUtils() {}
+  private DBMasterComponentUtils() { }
 
 
   /**

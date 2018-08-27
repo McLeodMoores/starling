@@ -20,7 +20,7 @@ import com.sun.jersey.api.client.ClientResponse.Status;
 @Test(groups = TestGroup.UNIT)
 public class DataVersionExceptionMapperTest extends AbstractExceptionMapperTestHelper {
 
-  @Test(dataProvider="mediaTypes")
+  @Test(dataProvider = "mediaTypes")
   public void test_mapping(final MediaType mediaType) throws Exception {
     final DataVersionException ex = new DataVersionException("Test message");
     final DataVersionExceptionMapper mapper = new DataVersionExceptionMapper();

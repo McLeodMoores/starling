@@ -58,25 +58,25 @@ public class JmsByteArrayTransportTest {
     final byte[] randomBytes = new byte[1024];
     random.nextBytes(randomBytes);
 
-    while(!container.isRunning()) {
-      Thread.sleep(10l);
+    while (!container.isRunning()) {
+      Thread.sleep(10L);
     }
     //TODO: this is a hack.  The context doesn't seem to have always set up the consumer completely yet
-    Thread.sleep(500l);
+    Thread.sleep(500L);
 
     messageSender.send(randomBytes);
     final long startTime = System.currentTimeMillis();
-    while(collectingReceiver.getMessages().isEmpty()) {
-      Thread.sleep(10l);
+    while (collectingReceiver.getMessages().isEmpty()) {
+      Thread.sleep(10L);
       if (System.currentTimeMillis() - startTime > TIMEOUT) {
         fail("Did not receive a message in " + TIMEOUT / 1000 + " seconds.");
       }
     }
-    LOGGER.debug ("topicConduit message received {}ms before timeout limit", TIMEOUT - (System.currentTimeMillis () - startTime));
+    LOGGER.debug("topicConduit message received {}ms before timeout limit", TIMEOUT - (System.currentTimeMillis() - startTime));
     assertEquals(1, collectingReceiver.getMessages().size());
     final byte[] receivedBytes = collectingReceiver.getMessages().get(0);
     assertEquals(randomBytes.length, receivedBytes.length);
-    for(int i = 0; i < randomBytes.length; i++) {
+    for (int i = 0; i < randomBytes.length; i++) {
       assertEquals(randomBytes[i], receivedBytes[i]);
     }
 
@@ -116,24 +116,24 @@ public class JmsByteArrayTransportTest {
     final byte[] randomBytes = new byte[1024];
     random.nextBytes(randomBytes);
 
-    while(!container.isRunning()) {
-      Thread.sleep(10l);
+    while (!container.isRunning()) {
+      Thread.sleep(10L);
     }
 
     final CollectingByteArrayMessageReceiver collectingReceiver = new CollectingByteArrayMessageReceiver();
     requestSender.sendRequest(randomBytes, collectingReceiver);
     final long startTime = System.currentTimeMillis();
-    while(collectingReceiver.getMessages().isEmpty()) {
-      Thread.sleep(10l);
+    while (collectingReceiver.getMessages().isEmpty()) {
+      Thread.sleep(10L);
       if (System.currentTimeMillis() - startTime > TIMEOUT) {
         fail("Did not receive a response in " + TIMEOUT / 1000 + " seconds.");
       }
     }
-    LOGGER.debug ("requestConduit message received {}ms before timeout limit", TIMEOUT - (System.currentTimeMillis () - startTime));
+    LOGGER.debug("requestConduit message received {}ms before timeout limit", TIMEOUT - (System.currentTimeMillis() - startTime));
     assertEquals(1, collectingReceiver.getMessages().size());
     final byte[] receivedBytes = collectingReceiver.getMessages().get(0);
     assertEquals(responseBytes.length, receivedBytes.length);
-    for(int i = 0; i < responseBytes.length; i++) {
+    for (int i = 0; i < responseBytes.length; i++) {
       assertEquals(responseBytes[i], receivedBytes[i]);
     }
 

@@ -19,7 +19,7 @@ import com.sun.jersey.api.client.ClientResponse.Status;
 @Test(groups = TestGroup.UNIT)
 public class UnsupportedOperationExceptionMapperTest extends AbstractExceptionMapperTestHelper {
 
-  @Test(dataProvider="mediaTypes")
+  @Test(dataProvider = "mediaTypes")
   public void test_mapping(final MediaType mediaType) throws Exception {
     final UnsupportedOperationException ex = new UnsupportedOperationException("Test message");
     final UnsupportedOperationExceptionMapper mapper = new UnsupportedOperationExceptionMapper();

@@ -19,7 +19,7 @@ import com.opengamma.util.time.Tenor;
 @Test(groups = TestGroup.UNIT)
 public class IndexFamilyFudgeEncodingTest extends AbstractFudgeBuilderTestCase {
 
-  private static final IndexFamily REF= new IndexFamily();
+  private static final IndexFamily REF = new IndexFamily();
 
   static {
     REF.setExternalIdBundle(ExternalId.of(ExternalSchemes.BLOOMBERG_INDEX_FAMILY, "ICE LIBOR USD").toBundle());

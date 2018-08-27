@@ -74,7 +74,7 @@ public class BloombergTickWriterTest {
 
   private void makeRootDir() {
     if (!_rootDir.exists()) {
-      if(!_rootDir.mkdirs()) {
+      if (!_rootDir.mkdirs()) {
         throw new OpenGammaRuntimeException("unable to create root dir " + _rootDir);
       }
     }
@@ -138,7 +138,7 @@ public class BloombergTickWriterTest {
     final ExecutorService writerExecutor = Executors.newSingleThreadExecutor();
     final Future<?> writerFuture = writerExecutor.submit(_writer);
 
-    final double nStartTime = System.currentTimeMillis ();
+    final double nStartTime = System.currentTimeMillis();
 
     //create ticks generators
     final List<RandomTicksGeneratorJob> ticksGeneratorsList = new ArrayList<>();
@@ -146,7 +146,7 @@ public class BloombergTickWriterTest {
     for (int i = 0; i < TICKS_GENERATOR_THREAD_SIZE; i++) {
       final RandomTicksGeneratorJob ticksGeneratorJob = new RandomTicksGeneratorJob(new ArrayList<>(_ticker2buid.keySet()), _allTicksQueue);
       ticksGeneratorsList.add(ticksGeneratorJob);
-      final Thread thread = new Thread(ticksGeneratorJob, "TicksGenerator"+i);
+      final Thread thread = new Thread(ticksGeneratorJob, "TicksGenerator" + i);
       thread.start();
       ticksGeneratorThreads.add(thread);
     }
@@ -171,13 +171,13 @@ public class BloombergTickWriterTest {
     writerExecutor.shutdown();
     writerExecutor.awaitTermination(1, TimeUnit.SECONDS);
 
-    final double nRunDuration = System.currentTimeMillis () - nStartTime;
+    final double nRunDuration = System.currentTimeMillis() - nStartTime;
 
-    final double nTicks = _writer.getNTicks()/nRunDuration * 1000;
+    final double nTicks = _writer.getNTicks() / nRunDuration * 1000;
     LOGGER.info("ticks {}/s", nTicks);
-    final double nWrites = _writer.getNWrites()/nRunDuration * 1000;
+    final double nWrites = _writer.getNWrites() / nRunDuration * 1000;
     LOGGER.info("fileOperations {}/s", nWrites);
-    final double nBlocks = (double)_writer.getNBlocks()/(double)_writer.getNWrites();
+    final double nBlocks = (double) _writer.getNBlocks() / (double) _writer.getNWrites();
     LOGGER.info("average blocks {}bytes", nBlocks);
 
     assertTrue("reportInterval > testRunTime", REPORT_INTERVAL > nRunDuration);

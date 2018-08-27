@@ -55,12 +55,12 @@ public class ResolveRequest implements java.io.Serializable {
   public static ResolveRequest fromFudgeMsg (final org.fudgemsg.mapping.FudgeDeserializer deserializer, final org.fudgemsg.FudgeMsg fudgeMsg) {
     final java.util.List<org.fudgemsg.FudgeField> types = fudgeMsg.getAllByOrdinal (0);
     for (final org.fudgemsg.FudgeField field : types) {
-      final String className = (String)field.getValue ();
+      final String className = (String) field.getValue ();
       if ("com.opengamma.livedata.msg.ResolveRequest".equals (className)) {
         break;
       }
       try {
-        return (com.opengamma.livedata.msg.ResolveRequest)Class.forName (className).getDeclaredMethod ("fromFudgeMsg", org.fudgemsg.mapping.FudgeDeserializer.class, org.fudgemsg.FudgeMsg.class).invoke (null, deserializer, fudgeMsg);
+        return (com.opengamma.livedata.msg.ResolveRequest) Class.forName (className).getDeclaredMethod ("fromFudgeMsg", org.fudgemsg.mapping.FudgeDeserializer.class, org.fudgemsg.FudgeMsg.class).invoke (null, deserializer, fudgeMsg);
       }
       catch (final Throwable t) {
         // no-action

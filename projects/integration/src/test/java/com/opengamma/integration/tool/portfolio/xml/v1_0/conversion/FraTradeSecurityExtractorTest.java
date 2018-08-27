@@ -36,7 +36,7 @@ public class FraTradeSecurityExtractorTest {
 
   }
 
-  @Test(expectedExceptions={OpenGammaRuntimeException.class})
+  @Test(expectedExceptions = {OpenGammaRuntimeException.class})
   public void testExtractSecuritiesBadPaymentDate() {
     final FraTrade fra = createBasicFra();
     fra.setPaymentDate(fra.getEffectiveDate().plusDays(1));
@@ -60,7 +60,7 @@ public class FraTradeSecurityExtractorTest {
   /**
    * @return a fra with some fields set
    */
-  private FraTrade createBasicFra(){
+  private FraTrade createBasicFra() {
     final FraTrade fra = new FraTrade();
 
     final IdWrapper tradeId = createExternalId("IdFromExternalSystem", "External");

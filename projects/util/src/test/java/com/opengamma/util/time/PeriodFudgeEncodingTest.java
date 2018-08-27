@@ -21,7 +21,7 @@ import com.opengamma.util.test.TestGroup;
 @Test(groups = TestGroup.UNIT)
 public class PeriodFudgeEncodingTest extends AbstractFudgeBuilderTestCase {
 
-  private static final Period REF= Period.ofDays(2);
+  private static final Period REF =  Period.ofDays(2);
 
   @Test
   public void testCycle() {

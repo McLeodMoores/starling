@@ -44,7 +44,7 @@ public class RedisSimulationSeriesSourceTest extends AbstractRedisTestCase {
 
     final LocalDateDoubleTimeSeriesBuilder timeSeriesBuilder = ImmutableLocalDateDoubleTimeSeries.builder();
     for (int i = 1; i < 30; i++) {
-      timeSeriesBuilder.put(LocalDate.of(2013,4,i), i);
+      timeSeriesBuilder.put(LocalDate.of(2013, 4, i), i);
     }
     simulationSource.updateTimeSeries(id, simulationSeriesDate, timeSeriesBuilder.build());
 
@@ -64,7 +64,7 @@ public class RedisSimulationSeriesSourceTest extends AbstractRedisTestCase {
     hts = simulationSource.getHistoricalTimeSeries(generateId(6), null, false, null, false);
     assertNull(hts);
 
-    simulationSource.setCurrentSimulationExecutionDate(LocalDate.of(2013,4,25));
+    simulationSource.setCurrentSimulationExecutionDate(LocalDate.of(2013, 4, 25));
     hts = simulationSource.getHistoricalTimeSeries(id, null, false, null, false);
     assertNull(hts);
 
@@ -99,7 +99,7 @@ public class RedisSimulationSeriesSourceTest extends AbstractRedisTestCase {
     assertNotNull(hts);
   }
 
-  @Test(enabled=false)
+  @Test(enabled = false)
   public void largePerformanceTest() {
     final RedisSimulationSeriesSource simulationSource = new RedisSimulationSeriesSource(getJedisPool());
     LocalDate simulationSeriesDate = LocalDate.now();
@@ -107,7 +107,7 @@ public class RedisSimulationSeriesSourceTest extends AbstractRedisTestCase {
     final int numDaysHistory = 20;
     for (int i = 0; i < numDaysHistory; i++) {
       // 20 points, 10 curves
-      writeOneSimulationSeriesDate(simulationSource, simulationSeriesDate, 20*10);
+      writeOneSimulationSeriesDate(simulationSource, simulationSeriesDate, 20 * 10);
       simulationSeriesDate = simulationSeriesDate.minusDays(1);
     }
 

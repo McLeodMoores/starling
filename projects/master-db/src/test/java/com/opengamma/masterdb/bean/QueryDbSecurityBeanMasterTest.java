@@ -50,7 +50,7 @@ public class QueryDbSecurityBeanMasterTest extends AbstractDbSecurityBeanMasterT
   //-------------------------------------------------------------------------
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void test_getSecurity_nullUID() {
-    _secMaster.get((UniqueId)null);
+    _secMaster.get((UniqueId) null);
   }
 
   @Test(expectedExceptions = DataNotFoundException.class)

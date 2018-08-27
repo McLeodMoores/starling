@@ -109,7 +109,7 @@ public class PriorityResolvingCombiningLiveDataServerTest {
         } else if (user == AUTHORIZED_USER) {
           return true;
         } else {
-          throw new OpenGammaRuntimeException("Unexpected request for user "+user);
+          throw new OpenGammaRuntimeException("Unexpected request for user " + user);
         }
       }
     };

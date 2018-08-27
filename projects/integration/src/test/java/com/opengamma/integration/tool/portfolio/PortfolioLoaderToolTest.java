@@ -212,7 +212,7 @@ public class PortfolioLoaderToolTest extends AbstractDbTest {
 
   private void populateFileWithData(final String data) {
 
-    try(BufferedWriter writer = new BufferedWriter(new FileWriter(_tempFile))) {
+    try (BufferedWriter writer = new BufferedWriter(new FileWriter(_tempFile))) {
       writer.write(data);
       writer.flush();
     } catch (final IOException e) {

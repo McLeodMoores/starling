@@ -153,7 +153,7 @@ public class BloombergReferenceDataStatisticsTest {
 
   private void assertLessThan(final long expected, final long actual) {
     if (actual > expected) {
-      throw new AssertionError(actual+" > "+expected);
+      throw new AssertionError(actual + " > " + expected);
     }
   }
 

@@ -94,7 +94,7 @@ public abstract class AbstractDbConfigMasterWorkerTest extends AbstractDbTest {
       final List<ConfigDocument> firstReplacement = newArrayList();
       for (int i = 0; i < 5; i++) {
         final String val = "setup_" + i;
-        final ConfigItem<String> item = ConfigItem.of(val, "some_name_"+i);
+        final ConfigItem<String> item = ConfigItem.of(val, "some_name_" + i);
         final ConfigDocument doc = new ConfigDocument(item);
         doc.setVersionFromInstant(now.plus(i, MINUTES));
         firstReplacement.add(doc);

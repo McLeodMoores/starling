@@ -106,13 +106,13 @@ public class DbPortfolioMasterTest extends AbstractDbTest {
         final PortfolioSearchRequest request = new PortfolioSearchRequest();
         request.setName(portfolioName);
         final PortfolioSearchResult search = _prtMaster.search(request);
-        assertEquals(2 * (i+1), search.getPortfolios().size());
+        assertEquals(2 * (i + 1), search.getPortfolios().size());
       }
 
       final PortfolioSearchRequest request = new PortfolioSearchRequest();
       request.setName(portfolioName);
       final PortfolioSearchResult search = _prtMaster.search(request);
-      assertEquals(2 * (i+1), search.getPortfolios().size());
+      assertEquals(2 * (i + 1), search.getPortfolios().size());
     }
   }
 

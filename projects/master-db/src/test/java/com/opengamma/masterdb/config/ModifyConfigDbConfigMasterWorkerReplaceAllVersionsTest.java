@@ -46,7 +46,6 @@ public class ModifyConfigDbConfigMasterWorkerReplaceAllVersionsTest extends Abst
   }
 
 
-  @Test
   /**
    *
    *       |                        |             |
@@ -79,6 +78,7 @@ public class ModifyConfigDbConfigMasterWorkerReplaceAllVersionsTest extends Abst
    *   NOW =================================================================================
    *
    */
+  @Test
   public void test_ReplaceAllVersions1() {
     final Clock origClock = _cfgMaster.getClock();
     try {
@@ -92,7 +92,7 @@ public class ModifyConfigDbConfigMasterWorkerReplaceAllVersionsTest extends Abst
       final List<ConfigDocument> replacement = newArrayList();
       for (int i = 1; i <= 4; i++) {
         final String val = "replace_" + i;
-        final ConfigDocument doc = new ConfigDocument(ConfigItem.of(val, "some_name_"+i));
+        final ConfigDocument doc = new ConfigDocument(ConfigItem.of(val, "some_name_" + i));
 
         doc.setVersionFromInstant(now.plus(2, MINUTES).plus(i * 20, SECONDS));
         replacement.add(doc);
@@ -176,7 +176,7 @@ public class ModifyConfigDbConfigMasterWorkerReplaceAllVersionsTest extends Abst
       final List<ConfigDocument> replacement = newArrayList();
       for (int i = 1; i <= 4; i++) {
         final String val = "replace_" + i;
-        final ConfigDocument doc = new ConfigDocument(ConfigItem.of(val,  "some_name_"+i));
+        final ConfigDocument doc = new ConfigDocument(ConfigItem.of(val,  "some_name_" + i));
 
         doc.setVersionFromInstant(now.plus(2, MINUTES).plus(i * 20, SECONDS));
         replacement.add(doc);
@@ -259,7 +259,7 @@ public class ModifyConfigDbConfigMasterWorkerReplaceAllVersionsTest extends Abst
       final List<ConfigDocument> replacement = newArrayList();
       for (int i = 1; i <= 4; i++) {
         final String val = "replace_" + i;
-        final ConfigDocument doc = new ConfigDocument(ConfigItem.of(val, "some_name_"+i));
+        final ConfigDocument doc = new ConfigDocument(ConfigItem.of(val, "some_name_" + i));
 
         doc.setVersionFromInstant(now.minus(60, SECONDS).plus(i * 30, SECONDS));
         replacement.add(doc);

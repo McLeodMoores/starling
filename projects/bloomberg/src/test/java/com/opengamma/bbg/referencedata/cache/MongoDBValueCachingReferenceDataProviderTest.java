@@ -16,7 +16,7 @@ import com.opengamma.util.test.TestGroup;
 /**
  * Test.
  */
-@Test(groups= {TestGroup.UNIT_DB, "mongodb"})
+@Test(groups = {TestGroup.UNIT_DB, "mongodb"})
 public class MongoDBValueCachingReferenceDataProviderTest extends AbstractValueCachingReferenceDataProviderTestCase {
 
   private MockReferenceDataProvider _underlyingProvider;
@@ -27,7 +27,7 @@ public class MongoDBValueCachingReferenceDataProviderTest extends AbstractValueC
   public void setUp() {
     _underlyingProvider = new MockReferenceDataProvider();
     _unitProvider = new UnitTestingReferenceDataProvider(_underlyingProvider);
-    boolean clearData = true; // This is why we make real queries
+    final boolean clearData = true; // This is why we make real queries
     _provider = MongoCachedReferenceData.makeMongoProvider(
         _unitProvider, MongoDBValueCachingReferenceDataProviderTest.class, clearData);
   }
@@ -49,27 +49,32 @@ public class MongoDBValueCachingReferenceDataProviderTest extends AbstractValueC
   }
 
   //-------------------------------------------------------------------------
-  @Test(groups= {TestGroup.UNIT_DB, "mongodb"})
+  @Override
+  @Test(groups = {TestGroup.UNIT_DB, "mongodb"})
   public void numberOfReturnedFields() {
     super.numberOfReturnedFields();
   }
 
-  @Test(groups= {TestGroup.UNIT_DB, "mongodb"})
+  @Override
+  @Test(groups = {TestGroup.UNIT_DB, "mongodb"})
   public void singleSecurityEscalatingFields() {
     super.numberOfReturnedFields();
   }
 
-  @Test(groups= {TestGroup.UNIT_DB, "mongodb"})
+  @Override
+  @Test(groups = {TestGroup.UNIT_DB, "mongodb"})
   public void fieldNotAvailable() {
     super.numberOfReturnedFields();
   }
 
-  @Test(groups= {TestGroup.UNIT_DB, "mongodb"})
+  @Override
+  @Test(groups = {TestGroup.UNIT_DB, "mongodb"})
   public void securityNotAvailable() {
     super.numberOfReturnedFields();
   }
 
-  @Test(groups= {TestGroup.UNIT_DB, "mongodb"})
+  @Override
+  @Test(groups = {TestGroup.UNIT_DB, "mongodb"})
   public void multipleSecuritiesSameEscalatingFields() {
     super.numberOfReturnedFields();
   }

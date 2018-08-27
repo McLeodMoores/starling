@@ -52,33 +52,33 @@ public class PortfolioWithTradesCopierTest {
 // MasterPositionReader, SingleSheetSimplePositionReader, ZippedPositionReader
 // MasterPositionWriter, SingleSheetSimplePositionWriter, SingleSheetMultiParserPositionWriter, ZippedPositionWriter
 // SimplePortfolioCopier, ResolvingPortfolioCopier
-  
+
   private static final String PORTFOLIO_NAME = "test";
   private static final String PORTFOLIO_FILE = "src/test/java/com/opengamma/integration/copier/TestPortfolioWithTrades.csv";
   private static final String SECURITY_TYPE = "StandardVanillaCDS";
-  
+
   @Test
   public void testCsvToMastersToCsv() throws Exception {
-    
-    PortfolioCopier portfolioCopier = new SimplePortfolioCopier();
 
-    PositionMaster positionMaster = new InMemoryPositionMaster();
-    SecurityMaster securityMaster = new InMemorySecurityMaster();
-    SecuritySource securitySource = new MasterSecuritySource(securityMaster);
-    
+    final PortfolioCopier portfolioCopier = new SimplePortfolioCopier();
+
+    final PositionMaster positionMaster = new InMemoryPositionMaster();
+    final SecurityMaster securityMaster = new InMemorySecurityMaster();
+    final SecuritySource securitySource = new MasterSecuritySource(securityMaster);
+
     // Set up mock portfolio master
-    PortfolioMaster portfolioMaster = mock(PortfolioMaster.class);
-    PortfolioSearchRequest portSearchRequest = new PortfolioSearchRequest();
+    final PortfolioMaster portfolioMaster = mock(PortfolioMaster.class);
+    final PortfolioSearchRequest portSearchRequest = new PortfolioSearchRequest();
     portSearchRequest.setName(PORTFOLIO_NAME);
-    PortfolioSearchResult portSearchResult = new PortfolioSearchResult();
+    final PortfolioSearchResult portSearchResult = new PortfolioSearchResult();
     when(portfolioMaster.search(portSearchRequest)).thenReturn(portSearchResult);
-    ManageablePortfolioNode rootNode = new ManageablePortfolioNode(PORTFOLIO_NAME);
+    final ManageablePortfolioNode rootNode = new ManageablePortfolioNode(PORTFOLIO_NAME);
     rootNode.setUniqueId(UniqueId.of("abc", "123"));
-    ManageablePortfolio portfolio = new ManageablePortfolio(PORTFOLIO_NAME, rootNode);
-    PortfolioDocument portfolioDocument = new PortfolioDocument();
+    final ManageablePortfolio portfolio = new ManageablePortfolio(PORTFOLIO_NAME, rootNode);
+    final PortfolioDocument portfolioDocument = new PortfolioDocument();
     portfolioDocument.setPortfolio(portfolio);
     when(portfolioMaster.add(any(PortfolioDocument.class))).thenReturn(portfolioDocument);
-    
+
     // file to masters
     PositionReader positionReader =
         new SingleSheetSimplePositionReader(PORTFOLIO_FILE, SECURITY_TYPE);
@@ -89,10 +89,10 @@ public class PortfolioWithTradesCopierTest {
     positionWriter.close();
 
     portSearchResult.setDocuments(Collections.singletonList(portfolioDocument));
-    
+
     // Masters to file
     positionReader = new MasterPositionReader(PORTFOLIO_NAME, portfolioMaster, positionMaster, securitySource);
-    ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+    final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
     positionWriter = new SingleSheetSimplePositionWriter(SheetFormat.CSV, outputStream, SECURITY_TYPE);
     portfolioCopier.copy(positionReader, positionWriter);
     positionReader.close();
@@ -108,17 +108,17 @@ public class PortfolioWithTradesCopierTest {
           try {
             sourceRow = sourceReader.readNext();
             destRow = destReader.readNext();
-          } catch (Throwable e) {
+          } catch (final Throwable e) {
             fail("Error reading the next rows: " + e);
             return;
           }
           if (sourceRow == null && destRow == null) {
             break;
           }
-          assert(sourceRow != null && destRow != null);
-          assertEquals(sourceRow.length, destRow.length, 
-                  "Row lengths do not match (source has " + 
-                  sourceRow.length + " columns while destination has " + 
+          assert sourceRow != null && destRow != null;
+          assertEquals(sourceRow.length, destRow.length,
+                  "Row lengths do not match (source has " +
+                  sourceRow.length + " columns while destination has " +
                   destRow.length + " columns)");
           for (int i = 0; i < sourceRow.length; i++) {
             assertEquals(sourceRow[i], destRow[i], "Differing contents in line " + j + ", column " + i);
@@ -128,5 +128,5 @@ public class PortfolioWithTradesCopierTest {
       }
     }
   }
-  
+
 }
